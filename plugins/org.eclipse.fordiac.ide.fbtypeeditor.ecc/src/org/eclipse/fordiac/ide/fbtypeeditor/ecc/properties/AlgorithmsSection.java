@@ -155,7 +155,7 @@ public class AlgorithmsSection extends ECCSection {
 		});
 	}
 
-	private CellEditor[] createAlgorithmCellEditors(final Table table) {
+	private static CellEditor[] createAlgorithmCellEditors(final Table table) {
 		TextCellEditor algorithmNameEditor = new TextCellEditor(table); 
 		((Text)algorithmNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
 		return new CellEditor[] { algorithmNameEditor, 
