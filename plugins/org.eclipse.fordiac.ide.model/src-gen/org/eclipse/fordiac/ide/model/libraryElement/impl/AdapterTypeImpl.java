@@ -105,7 +105,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	public AdapterFBType getPlugType() {
-				AdapterFBType temp = EcoreUtil.copy(getAdapterFBType());
+				AdapterFBType temp = (AdapterFBType)EcoreUtil.copy(getAdapterFBType());
 				// fetch the interface to invert it; 
 				ArrayList<Event> inputEvents =  new ArrayList<Event>(temp.getInterfaceList().getEventOutputs());
 				for (Event event : inputEvents) {
@@ -143,7 +143,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	public AdapterFBType getSocketType() {
-		return EcoreUtil.copy(getAdapterFBType());
+		return (AdapterFBType)EcoreUtil.copy(getAdapterFBType());
 	}
 
 	/**

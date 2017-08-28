@@ -87,7 +87,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if(null != getFbNetwork() && getFbNetwork().eContainer() instanceof Resource){\n\treturn (Resource)getFbNetwork().eContainer();\n} else if(isMapped()){\n\t//get the Resource of the mapped FB\n\treturn getMapping().getTo().getResource();\n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if(null != getFbNetwork() &amp;&amp; getFbNetwork().eContainer() instanceof Resource){\n\treturn (Resource)getFbNetwork().eContainer();\n} else if(isMapped()){\n\t//get the Resource of the mapped FB\n\treturn getMapping().getTo().getResource();\n}\nreturn null;'"
 	 * @generated
 	 */
 	Resource getResource();
@@ -122,7 +122,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='for (IInterfaceElement element : getInterface().getAllInterfaceElements()) {\r\n\t//todo when lambdas are better allowed in EMF replace with .forEach(conn -> conn.checkIfConnectionBroken());\r\n\tfor (org.eclipse.fordiac.ide.model.libraryElement.Connection conn : element.getInputConnections()) {\r\n\t\tconn.checkIfConnectionBroken();\r\n\t}\r\n\tfor (org.eclipse.fordiac.ide.model.libraryElement.Connection conn : element.getOutputConnections()) {\r\n\t\tconn.checkIfConnectionBroken();\r\n\t}\r\n}'"
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='for (IInterfaceElement element : getInterface().getAllInterfaceElements()) {\r\n\t//todo when lambdas are better allowed in EMF replace with .forEach(conn -&gt; conn.checkIfConnectionBroken());\r\n\tfor (org.eclipse.fordiac.ide.model.libraryElement.Connection conn : element.getInputConnections()) {\r\n\t\tconn.checkIfConnectionBroken();\r\n\t}\r\n\tfor (org.eclipse.fordiac.ide.model.libraryElement.Connection conn : element.getOutputConnections()) {\r\n\t\tconn.checkIfConnectionBroken();\r\n\t}\r\n}'"
 	 * @generated
 	 */
 	void checkConnections();

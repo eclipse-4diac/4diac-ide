@@ -143,7 +143,7 @@ public interface InterfaceList extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true" many="false"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='EList<IInterfaceElement> retVal = new BasicEList<IInterfaceElement>();\t\t\nretVal.addAll(getEventInputs());\nretVal.addAll(getEventOutputs());\nretVal.addAll(getInputVars());\nretVal.addAll(getOutputVars());\nretVal.addAll(getPlugs());\nretVal.addAll(getSockets());\nreturn retVal;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='EList&lt;IInterfaceElement&gt; retVal = new BasicEList&lt;IInterfaceElement&gt;();\t\t\nretVal.addAll(getEventInputs());\nretVal.addAll(getEventOutputs());\nretVal.addAll(getInputVars());\nretVal.addAll(getOutputVars());\nretVal.addAll(getPlugs());\nretVal.addAll(getSockets());\nreturn retVal;'"
 	 * @generated
 	 */
 	EList<IInterfaceElement> getAllInterfaceElements();

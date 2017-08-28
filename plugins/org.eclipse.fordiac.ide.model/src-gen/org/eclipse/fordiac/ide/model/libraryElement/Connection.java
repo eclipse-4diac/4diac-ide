@@ -150,7 +150,7 @@ public interface Connection extends ConfigurableObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//if source element is null it is a connection from a CFB interface element\nreturn (null != getSourceElement() && null != getSourceElement().getFbNetwork()) ? (getSourceElement().getFbNetwork().eContainer() instanceof Resource) : false;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//if source element is null it is a connection from a CFB interface element\nreturn (null != getSourceElement() &amp;&amp; null != getSourceElement().getFbNetwork()) ? (getSourceElement().getFbNetwork().eContainer() instanceof Resource) : false;'"
 	 * @generated
 	 */
 	boolean isResourceConnection();
@@ -167,7 +167,7 @@ public interface Connection extends ConfigurableObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if(!isResourceConnection()){\n\tResource sourceRes = (null != getSourceElement()) ? getSourceElement().getResource() : null;\n\tResource destinationRes = (null != getDestinationElement()) ? getDestinationElement().getResource() : null;\n\tsetBrokenConnection(((null != sourceRes) && (!sourceRes.equals(destinationRes))) ||\n\t   ((null != destinationRes) && (!destinationRes.equals(sourceRes))));\n}'"
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if(!isResourceConnection()){\n\tResource sourceRes = (null != getSourceElement()) ? getSourceElement().getResource() : null;\n\tResource destinationRes = (null != getDestinationElement()) ? getDestinationElement().getResource() : null;\n\tsetBrokenConnection(((null != sourceRes) &amp;&amp; (!sourceRes.equals(destinationRes))) ||\n\t   ((null != destinationRes) &amp;&amp; (!destinationRes.equals(sourceRes))));\n}'"
 	 * @generated
 	 */
 	void checkIfConnectionBroken();

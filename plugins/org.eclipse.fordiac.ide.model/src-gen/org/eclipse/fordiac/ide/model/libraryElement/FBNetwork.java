@@ -180,7 +180,7 @@ public interface FBNetwork extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (FBNetworkElement element : getNetworkElements()) {\n\tif((element instanceof FB) && (element.getName().equals(name))){\n\t\treturn (FB)element;\n\t}\n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (FBNetworkElement element : getNetworkElements()) {\n\tif((element instanceof FB) &amp;&amp; (element.getName().equals(name))){\n\t\treturn (FB)element;\n\t}\n}\nreturn null;'"
 	 * @generated
 	 */
 	FB getFBNamed(String name);

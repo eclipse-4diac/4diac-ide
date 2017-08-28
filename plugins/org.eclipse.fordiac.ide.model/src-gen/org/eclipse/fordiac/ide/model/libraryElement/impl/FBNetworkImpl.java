@@ -180,13 +180,13 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 */
 	public void removeConnection(final Connection connection) {
 		if (connection instanceof EventConnection) {
-			getEventConnections().remove(connection);
+			getEventConnections().remove((EventConnection)connection);
 		}
 		if (connection instanceof DataConnection) {
-			getDataConnections().remove(connection);
+			getDataConnections().remove((DataConnection)connection);
 		}
 		if (connection instanceof AdapterConnection) {
-			getAdapterConnections().remove(connection);
+			getAdapterConnections().remove((AdapterConnection)connection);
 		}
 	}
 
