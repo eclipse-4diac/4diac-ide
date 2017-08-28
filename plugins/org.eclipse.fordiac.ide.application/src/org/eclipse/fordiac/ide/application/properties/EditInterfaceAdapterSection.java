@@ -27,7 +27,12 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 		inputsViewer.setContentProvider(new InterfaceContentProvider(true, InterfaceContentProviderType.ADAPTER));
 		outputsViewer.setContentProvider(new InterfaceContentProvider(false, InterfaceContentProviderType.ADAPTER));
-		setCellEditors();
+	}
+
+	@Override
+	protected void setType(Object input) {
+		super.setType(input);
+		setCellEditors();  //only now the types are correctly set
 	}
 
 	@Override
