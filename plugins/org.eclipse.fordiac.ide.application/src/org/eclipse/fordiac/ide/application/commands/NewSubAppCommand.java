@@ -231,19 +231,20 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 				}
 				return newie;
 			}
+			if(ie instanceof AdapterDeclaration){
+				//Currently adapters need to be handled before vars
+				if(ie.isIsInput()){
+					getSubApp().getInterface().getSockets().add((AdapterDeclaration) newie);
+				}else{
+					getSubApp().getInterface().getPlugs().add((AdapterDeclaration) newie);
+				}
+				return newie;
+			}
 			if(ie instanceof VarDeclaration){
 				if(ie.isIsInput()){
 					getSubApp().getInterface().getInputVars().add((VarDeclaration) newie);
 				}else{
 					getSubApp().getInterface().getOutputVars().add((VarDeclaration) newie);
-				}
-				return newie;
-			}
-			if(ie instanceof AdapterDeclaration){
-				if(ie.isIsInput()){
-					getSubApp().getInterface().getSockets().add((AdapterDeclaration) newie);
-				}else{
-					getSubApp().getInterface().getPlugs().add((AdapterDeclaration) newie);
 				}
 				return newie;
 			}
