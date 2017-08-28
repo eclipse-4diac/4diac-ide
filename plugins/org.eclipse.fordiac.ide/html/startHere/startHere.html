@@ -1,0 +1,73 @@
+<!DOCTYPE html> 
+<!--
+ Copyright (c) 2017 fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Jose Cabral
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>START HERE</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+<body>
+
+<h1 id="topOfPage">Where to start</h1>
+
+<p>This page is intended to work as an overall index of the documentation about 4DIAC. Whenever you have doubts about something, come here and you might find the right page to go to. Depending of your background's area (automation, mechanics, informatics, or just curiosity), you will need more or less information to understand what 4DIAC is and its strengths. But since this might be the first page you arrived, there's a quick <a href="#quickIntro">intro</a> right below</p>
+
+<p>Here's a list of the main topics in the documentation:</p>
+
+<ul id="startHereMainList">
+
+<li><a href="../before4DIAC/iec61499.html">Learn about IEC 61499</a>: If you want to start using 4DIAC but you don't understand quite well the terms, and how the Function Blocks work, take a look at this explanation about the standards and technology related to 4DIAC.</li>
+
+<li><a href="../before4DIAC/4diacFramework.html">Understand the 4DIAC framework</a>: If you know about IEC 61499 and what PLCs are, but you don't understand what 4DIAC is, or what's the relation with FORTE, then you should take a look at this topic about the 4DIAC framework.</li>
+
+<li><a href="../installation/install.html">Install 4DIAC</a>: If you understand all of the above, and you want to star using 4DIAC, you will need to first install it.</li>
+
+<li><a href="../4diacIDE/overview.html">Step by step Tutorial</a>: To understand the basics of 4DIAC, the best is to start using it.</li>
+
+<li><a href="../examples/examplesIndex.html">4DIAC Examples</a>: If you want to see some examples using 4DIAC, this link is your friend.</li>
+
+<li><a href="../parameters/parameters.html">Parameters for different platforms</a>: If you have a specific platform that has input and outputs that is supported by FORTE, for example a Raspberry Pi or a PLC, and you want to use them, use this topic.</li>
+
+<li><a href="../communication/communicationIndex.html">Communication Protocols</a>: If you want to use a specific communication protocol supported by FORTE, for example MQTT, OPC UA, Modbus and so on, follow the link.</li>
+
+<li><a href="../development/developmentIndex.html">Development of FORTE and 4DIAC</a>: If you are a developer or you want to know more deep stuff about FORTE or 4DIAC, you'll fun here.</li>
+
+<li><a href="https://bugs.eclipse.org/bugs/buglist.cgi?list_id=16469727&product=4DIAC&query_format=advanced" target="_blank">File a bug for 4DIAC or FORTE</a>: You found a bug? File it here.</li>
+
+<li><a href="../faq/faq.html">FAQ</a>: If you have some trouble with something, visit the FAQ page.</li>
+
+<li><a href="https://www.eclipse.org/forums/index.php?t=thread&frm_id=308" target="_blank">4DIAC Forum</a>: And if you still have question or something you want to share, don't forget to participate in the forum.</li>
+
+</ul>
+
+<h1 id="quickIntro">Quick Intro</h1>
+
+<p>4DIAC is an open source IDE intended for distributed industrial systems. You can use also in other areas like home automation, electrical networks, or anywhere you think some automated system is needed. You can "program" an application using Function Blocks, and your program will look like the image below</p>
+
+<img src="../before4DIAC/img/genericApplication.png" alt="A generic application in IEC61499"/>
+
+<p>and then you can make this application run not only in one device, but you can distribute it to many devices, as shown in the picture below</p>
+
+<img src="../before4DIAC/img/iec61499Disitribution.png" alt="Distributing an application"/>
+
+<p>Quick reference: each Function Block (FB) is like a normal function that's is executed when an event (red incoming line on the left of the FB) arrives. The incoming blue lines are the data inputs (parameters to the function) and the outgoing blue lines are the parameters sent to other FBs (similar to return values, but don't always "return" but go forward).</p>
+
+<p>This application might be not just for one device, but for a whole system with many devices, so some FBs will need to run in one device, and some in others, making the system distributed. With 4DIAC you can design your distributed application and deploy.</p>
+
+<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+</body>
+</html>

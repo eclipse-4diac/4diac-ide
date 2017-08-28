@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Gerhard Ebenhofer, Thomas Strasser, Monika Wenger, Alois Zoitl, 
+   Gerd Kainz, Jose Cabral 
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>4DIAC Framework</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+<body>
+
+<p id="topOfPage">To understand what's next, you need to know about IEC 61499. Go to the following page to learn about it:</p>
+
+<p><a href="./iec61499.html">Learn about IEC 61499</a></p>
+
+<h1 id="iec61499Framework">IEC 61499 Framework</h1>
+
+<p>As seen in the IEC 61499 explanation, an application developed using this standard use Function Blocks (FB). There are ways of creating and defining FB, but at some point in the chain from FBs to actually controlling something physical, something has to actually implement the logic behind the network of FBs, and behind the FBs itself. That's where the runtime environment comes in. This piece of software loads the network of FBs somehow, and then execute the events and follows the rules of the standard like the one seen <a href="./iec61499.html#FBInternalSequence" target="_blank">here</a>. All this is known by the runtime environment.</p>
+
+<p>So, where is the runtime environment in the standard? Nowhere. Basically IEC 61499 says how to develop a distributed industrial system, but it doesn't say how to actually implemented. In the image below it's presented the idea behind this decoupling between the development of application and the its execution.</p>
+
+<img class="center" src="./img/iec61499Framework.png" alt="IEC 61499 framework" />
+
+<p>The rectangle on the top, is the representation of the system according to IEC 61499. Here you need a tool that allows you to create FBs and connect them. Also, it should represent the devices of your system, and some method to show which part of your application is to be deployed in each device. This is normally done in a normal computer.</p>
+
+<p>The big squares below represent real devices, like PLCs, some control hardware, a raspberry pi or similar. In these devices, a runtime environment we talked about should be able to run. This will receive the information from the top rectangle to create the network of FBs, execute them, make the events go from one to the other and so on. The devices, normally, have inputs and outputs, and these are accessed by the runtime environment. This is just the big picture from the design to actually controlling physical units.</p>
+
+<h1 id="4diacFramework">4DIAC Framework</h1>
+
+<p>The 4DIAC framework provides two projects and allows the development of distributed control systems compliant to the IEC 61499 standard:</p>
+<ul>
+	<li><span class="inlineTitle">4DIAC-RTE (FORTE):</span> The runtime environment is a small portable C++ implementation of an IEC 61499 runtime environment, which supports the execution of distributed control programs on small embedded devices. FORTE runs above a device's OS. It is a multi-threaded and less memory consuming runtime environment. The runtime environment has been tested on the following systems:
+	<ul>
+		<li>Windows Cygwin on i386, ppc and xScale</li>
+		<li>Linux on i386, ppc and xScale</li>
+		<li>NetOS </li>
+		<li>RTOS on IPC@chip </li>
+		<li>eCos ARM7 </li>
+		<li>rcX from Hilscher</li>
+		<li>vxworks</li>
+	</ul>
+	</li>
+	<li><span class="inlineTitle">4DIAC-IDE:</span> This is the IDE (Integrated Development Environment) that represents the top rectangle above. It's written in Java and based on the Eclipse framework and provides an extensible engineering environment for modeling distributed control applications compliant to the IEC 61499 standard. You use 4DIAC to create FBs, applications, configure the devices and all related to IEC 61499 and also download this to devices running FORTE.</li>
+</ul>
+
+<p>Because of the decoupling between developing of systems according to IEC 61499 and the runtime environment, some things have to be taken in account when developing the system. As seen, you can create FBs in the IDE, but the runtime environment doesn't know about it; it doesn't know how to execute it. For now, in 4DIAC you have the possibility to export your created FB into FORTE code (C++ files). In order to make it work, you need to add your exported code and compile it with the FORTE's source code. This is possible only for Basic and Composite Function Blocks (BFB and CFB), since both definitions are in the standard, but the Service Function Block (SFB) should be coded from scratch, since these are the FBs which definition is not in the standard.</p>
+
+<p>4DIAC is extensible, meaning that's is possible to easily extend it to support exporting to another runtime environment.</p>
+
+<h2>Human Machine Interface</h2>
+
+<p>FORTE is intended to run in PLCs, so Graphical User Interface as Human Machine Interface (HMI) is not possible with it. We therefore recommend to use the Function Block Development Kit (FBDK) by Dr. James H. Christensen for HMI. FBDK is a Java based IEC 61499 framework and can be downloaded from <a href="http://www.holobloc.com/" target="_blank">Holobloc Inc</a>. Its runtime environment FBRT can be started within the 4DIAC-IDE as well, whereas 4DIAC-IDE contains the HMI Function Blocks of FBDK within its library.</p>
+
+<p>In other words, FBDK is another tool similar to 4DIAC, and FBRT is a runtinme environment similar to FORTE, but it's written in Java and support Graphical User Interface. Since all these tools are developed according to same <a href="./iec61499.html#iec61499ComplianceProfiles" target="_blank">Compliance Profile</a>, there aren't problems using them together. In 4DIAC you find the Function Blocks for the Graphical User Interface that can be used by FBDK, but not in FORTE.</p>
+
+<img class="center" src="./img/FBRT-FORTE.png" alt="Runtime Environment connection between 4DIAC and FBDK"/>
+
+<h1>Where to go from here?</h1>
+
+<p>Now that you have a better understanding of the IEC61499 standard, and know about the tools around 4DIAC, is time to start using it. Take a look at the following page:</p>
+
+<p><a href="../installation/install.html">Install 4DIAC</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+</body>
+</html>

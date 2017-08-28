@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2017 fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Monika Wanger, Jose Cabral 
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Step 6 - Advanced Features</title>
+    <link rel="stylesheet" type="text/css" href="../help.css" />
+  </head>
+  <body>
+
+    <h1 id="topOfPage">Step 6 - Advanced Features</h1>
+    
+    <p>This page is part of a guide that gives a walkthrough over the major 4DIAC features.</p>
+
+    <ol start="0">
+      <li><a href="./overview.html">Overview</a></li>
+      <li><a href="./use4diacLocally.html">Use 4DIAC locally</a></li>
+      <li><a href="./distribute4diac.html">Create a distributed application</a></li>
+      <li><a href="./use4diacRemotely.html">Deploy remotely</a></li>
+      <li><a href="./createOwnTypes.html">Create your own Function Blocks</a></li>
+      <li><a href="./otherUseful.html">Other basic features</a></li>
+      <li>Advanced Features [optional] (YOU ARE HERE!)</li>
+    </ol>
+
+<p>This page shows some advanced features about 4DIAC that are used normally in more complicated applications</p>
+
+<ol>
+  <li><a href="#adaptersUsage">Adapters</a></li>
+  <li>Subapplications (To be implemented in version 1.9)</li>
+</ol>
+
+<h1 id="adaptersUsage">Adapter Usage</h1>
+
+<p><span class="element61499">Adapters</span> group interface elements into reusable interface descriptions. They reduce the number of interface elements (event and data inputs and outputs) and by that the number of connections that have to be created between interacting function blocks. In 4diac <span class="element61499">adapters</span> are listed in the type library and represented by this symbol <img class="inlineImg" src="./img/adapter/adapter.png" alt="adapter" />.</p>
+
+<h2 id="newAdapterType">Create a new Adapter Type</h2>
+<p>These interface descriptions can be added to the interface of any function block type.
+Currently <span class="element61499">adapters</span> can not contain other adapters.
+There are two types of <span class="element61499">adapters</span>, which are mirrored interfaces:</p>
+
+<img class="center" src="./img/adapter/plugAndSocket.png" alt="socket and plug."/>
+
+<ul>
+  <li><span class="element61499">socket</span>: added as <span class="element4diac">input</span> of a function block and represented by this symbol <img class="inlineImg" src="./img/adapter/sockets_16.png" alt="socket of adapter" /> within the function block's interface.</li>
+  <li><span class="element61499">plug</span>: added as <span class="element4diac">output</span> of a function block and represented by this symbol <img class="inlineImg" src="./img/adapter/plugs_16.png" alt="plug of adapter" /> within the function block's interface.</li>
+</ul>
+
+<p>When a new <span class="element61499">adapter</span> is created it is supposed to be a <span class="element4diac">socket</span> the mirrored plug is derived automatically by 4diac and is <span class="specificText">NOT</span> created by the user.
+An adapter(socket) is created by <span class="command4diac">File &rarr; New &rarr; New Type</span> and selecting <span class="menu4diac">Adapter.adp</span> as Type.
+All adapters should start with an <span class="specificText">A</span> (naming convention).</p>
+
+<img class="center" src="./img/adapter/newAdapter.png" alt="socket creation."/>
+
+<h2 id="useAdapterType">Use your new Adapter Type</h2>
+<p>After the creation of your desired adapter type (socket) it can be added to a function block's interface by drag and drop from the Palette, as illustrated in the following figure.</p>
+
+<img class="center" src="./img/adapter/addAdapter.png" alt="add adapter to the interface of a function block."/>
+
+<p>The function blocks used within the following application snippet are part of the TrafficLight example system. Two different adapter types have been used, <span class="element4diac">ATimeOut</span> in <span class="element4diac">PedLightCtl_AT</span> and <span class="element4diac">E_TimeOut</span>) and <span class="element4diac">ATrafficLight</span> in <span class="element4diac">PedLightCtl_AT</span>.</p>
+
+<p>The <span class="element4diac">PedLightCtl_AT</span> is a basic function block. Within basic function blocks adapters are accessed by <span class="specificText">FB_INTERFACE_NAME.ADAPTER_INTERFACE_NAME</span>. The elements of the <span class="element4diac">ATimeOut</span> adapter are therefore accessed by <span class="specificText">timeOut.START</span>, <span class="specificText">timeOut.STOP</span> and <span class="specificText">timeOut.TimeOut</span>.</p>
+
+<p>The <span class="element4diac">E_TimeOut</span> is a composite function block. Within the network of a composite function block any adapter added to its interface is represented by an adapter block which looks like a function block. The interface elements of this adapter block are connected like a function block.</p>
+
+<img class="center" src="./img/adapter/example.png" alt="application with function blocks that contain adapters."/>
+
+<p>Further examples for the usage of adapters can be found within the FestoMPS example system.<p>
+
+<h1>Where to go from here?</h1>
+
+<p>If you want to see some examples, the following link is an index of the available examples in the documentation:</p>
+
+<p><a href="../examples/examplesIndex.html">4DIAC Examples</a></p>
+
+<p>If you have a specific platform that has input and outputs that is supported by FORTE, for example a Raspberry Pi or a PLC, and you want to use them, go to following page:</p>
+
+<p><a href="../parameters/parameters.html">Parameters for different platforms</a></p>
+
+<p>If you want to use a specific communication protocol supported by FORTE, for example MQTT, OPC UA, Modbus and so on, go this page:</p>
+
+<p><a href="../communication/communicationIndex.html">Communication Protocols</a></p>
+
+<p>If you want to go back to see again the basic features again, here's a link</p>
+
+<p><a href="./createOwnTypes.html">Step 5 - Other basic features</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+</body>
+</html>
+
+

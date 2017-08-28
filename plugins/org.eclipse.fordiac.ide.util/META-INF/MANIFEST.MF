@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Export-Package: org.eclipse.fordiac.ide.util,
+ org.eclipse.fordiac.ide.util.comm.channels,
+ org.eclipse.fordiac.ide.util.comm.datatypes,
+ org.eclipse.fordiac.ide.util.comm.exceptions,
+ org.eclipse.fordiac.ide.util.dnd,
+ org.eclipse.fordiac.ide.util.editors,
+ org.eclipse.fordiac.ide.util.imageprovider,
+ org.eclipse.fordiac.ide.util.preferences
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.gef,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.commands,
+ org.eclipse.ui.views.properties.tabbed,
+ org.eclipse.fordiac.ide.ui.controls
+Bundle-Vendor: Eclipse 4diac
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 1.9.0.qualifier
+Bundle-Name: Utils
+Bundle-Activator: org.eclipse.fordiac.ide.util.Activator
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.eclipse.fordiac.ide.util;singleton:=true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
+     - initial API and implementation and/or initial documentation
+-->
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="Palette" nsURI="org.eclipse.fordiac.ide.model.Palette" nsPrefix="Palette">
+  <eClassifiers xsi:type="ecore:EClass" name="Palette">
+    <eOperations name="getTypeEntry" lowerBound="1" eType="#//PaletteEntry">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="PaletteEntry entry = null;&#xA;//TODO reconsider when namespaces are coming how to retrieve the type&#xA;List&lt;PaletteEntry> entries = getTypeEntries(typeName);&#xA;if (!entries.isEmpty()) {&#xA;&#x9;entry = entries.get(0);&#xA;} &#xA;return entry;"/>
+      </eAnnotations>
+      <eParameters name="typeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootGroup" lowerBound="1"
+        eType="#//PaletteGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" eType="#//IProject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="automationSystem" eType="ecore:EClass lib.ecore#//AutomationSystem"
+        eOpposite="lib.ecore#//AutomationSystem/palette"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PaletteGroup">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//PaletteEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subGroups" upperBound="-1"
+        eType="#//PaletteGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FBTypePaletteEntry" eSuperTypes="#//PaletteEntry">
+    <eOperations name="getFBType" lowerBound="1" eType="ecore:EClass lib.ecore#//FBType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof FBType)){&#xA;   return (FBType) type;&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if((null != type) &amp;&amp; (type instanceof FBType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no FBType as type entry for FBTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PaletteEntry" abstract="true">
+    <eOperations name="getGroup" lowerBound="1" eType="#//PaletteGroup">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if(null != eContainer()){&#xA;  return (PaletteGroup)eContainer();&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getProjectRelativeTypePath" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getFile().getProjectRelativePath().toOSString();"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" eType="#//IFile"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastModificationTimestamp"
+        ordered="false" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Long"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass lib.ecore#//LibraryElement"
+        resolveProxies="false" eOpposite="lib.ecore#//LibraryElement/paletteEntry"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeviceTypePaletteEntry" eSuperTypes="#//PaletteEntry">
+    <eOperations name="getDeviceType" lowerBound="1" eType="ecore:EClass lib.ecore#//DeviceType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof DeviceType)){&#xA;   return (DeviceType) type;&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if((null != type) &amp;&amp; (type instanceof DeviceType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no DeviceType as type entry for DeviceTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceTypeEntry" eSuperTypes="#//PaletteEntry">
+    <eOperations name="getResourceType" lowerBound="1" eType="ecore:EClass lib.ecore#//ResourceType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof ResourceType)){&#xA;   return (ResourceType) type;&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if((null != type) &amp;&amp; (type instanceof ResourceType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no ResourceType as type entry for ResourceTypeEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SegmentTypePaletteEntry" eSuperTypes="#//PaletteEntry">
+    <eOperations name="getSegmentType" lowerBound="1" eType="ecore:EClass lib.ecore#//SegmentType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof SegmentType)){&#xA;   return (SegmentType) type;&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if((null != type) &amp;&amp; (type instanceof SegmentType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no SegmentType as type entry for SegmentTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdapterTypePaletteEntry" eSuperTypes="#//PaletteEntry">
+    <eOperations name="getAdapterType" eType="ecore:EClass lib.ecore#//AdapterType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof AdapterType)){&#xA;   return (AdapterType) type;&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if((null != type) &amp;&amp; (type instanceof AdapterType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;% org.eclipse.core.runtime.Status %> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no AdapterType as type entry for AdapterTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SubApplicationTypePaletteEntry" eSuperTypes="#//PaletteEntry">
+    <eOperations name="getSubApplicationType" lowerBound="1" eType="ecore:EClass lib.ecore#//SubAppType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof SubAppType)){&#xA;   return (SubAppType) type;&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if((null != type) &amp;&amp; (type instanceof SubAppType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+  </eClassifiers>
+</ecore:EPackage>

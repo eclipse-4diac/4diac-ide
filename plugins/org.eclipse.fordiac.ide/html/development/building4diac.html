@@ -1,0 +1,180 @@
+<!DOCTYPE html> 
+<!--
+ Copyright (c) 2010 - 2016 TU Wien ACIN, Profactor GmbH, fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Carolyn Oates, Monika Wenger, Gerhard Ebenhofer, Alois Zoitl, 
+   Waldemar Eisenmenger, Gerd Kainz, Jose Cabral
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Building and Running 4DIAC</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+
+<body>
+<h1 id="topOfPage">Building and Running 4DIAC-IDE</h1>
+
+<p>You have 2 options for building and running 4DIAC:</p>
+<ol>
+	<li><a href="#buildFromSource">Building and Running 4DIAC-IDE from Source</a></li>
+	<li><a href="#buildBinary">Building a Binary 4DIAC-IDE Package from Source</a></li>
+</ol>
+
+<h2 id="buildFromSource">Building and Running 4DIAC-IDE from Source</h2>
+
+<p>Run through the following steps to build and execute the 4DIAC-IDE from source:</p>
+<ol>
+	<li>Get the development environment</li>
+	<li>Check out the 4DIAC-IDE repository</li>
+	<li>Import plug-ins into workspace</li>	
+	<li>Get the 4DIAC-LIB</li>
+	<li>Run in development mode</li>
+</ol>
+
+
+<h3 id="devEnvironment">Get the Development Environment</h3>
+
+<p><a href="https://eclipse.org/downloads/eclipse-packages/" target="_blank">Eclipse Neon</a> (or later) use <span class="specificText">Eclipse Modeling Tools</span> edition. 
+In addition to the default Modeling Tool package you will need the following Eclipse Plug-ins. These can be installed via <span class="menu4diac">Help &rarr; Install Modeling Components</span>. 
+
+<ul>
+	<li>Xpand</li>
+	<li>Xtext </li>
+</ul>
+
+<h3 id="checkOutRepos">Check out the 4DIAC-IDE Repository</h3>
+<p>This section shows how to check out (clone) the 4DIAC-IDE repository using TortoiseHG. Details on TortoiseHG can be found <a href="http://tortoisehg.bitbucket.org/" target="_blank">here</a>.</p>
+
+<ul>
+	<li>Create a directory on your filesystem </li>
+	<li>Right mouse click to that directory </li>
+	<li>Select <span class="menu4diac">TortoiseHG/Clone</span>
+		<div><img src="./img/cloneHG.png" alt="Clone 4DIAC with TortoiseHG"/></div>
+	</li>
+	<li>Specify Source Path <span class="address">ssh://[your sf id]@hg.code.sf.net/p/fordiac/fordiac-ide</span> (for anonymous read only access to the repository you can also use the path: <span class="address">http://hg.code.sf.net/p/fordiac/fordiac-ide)</span>
+		<div><img src="./img/selectHGrepository.png" alt="Select desired HG repository"/></div>
+	</li>
+	<li>Press <span class="button4diac">Clone</span> button</li>
+</ul> 
+
+<h3 id="importPlugins">Import Plug-Ins into Workspace</h3>
+<ol>
+	<li><span class="menu4diac">File &rarr; Import &rarr; General &rarr; Existing Projects into Workspace</span></li>
+	<li>Under <span class="menu4diac">Select root directory</span> select the source directory from the file system and mark all projects to be imported.</li>
+	<li>Wait till Eclipse finished building the project (look at the progress bar at the right bottom corner of the Eclipse main window)</li>
+	<li>Check problems view for errors. If you get <span class="specificText">API Baseline</span> not set errors you need to perform the following steps: 
+		<ol>
+			<li>Open the Eclipse preferences: <span class="menu4diac">Window &rarr; Preferences</span></li>
+			<li>Enter API in the top left search field. You should get three research results: 1. <span class="specificText">API Baselines</span>, 2. <span class="specificText">API Errors/Warnings</span>, and 3. <span class="specificText">API Use Scans</span></li>
+			<li>You now have two options: 
+				<ol>
+					<li>Set an API Baseline for your developments:
+						<ul>
+							<li>Select: API Baseline</li>
+							<li>Click Add Baseline ...</li>
+							<li>Enter a name, e.g., MyEclipse</li>
+							<li>For the location select your Eclipse directory</li>
+							<li>Press Finish</li>
+							<li>Select your new baseline in the API Baselines window and press OK</li>
+						</ul>
+					</li>			
+					<li>Set the API Baseline error to ignore: 
+						<ul>
+							<li>Select: API Baseline</li>
+							<li>Set the option Missing API Baseline: which can be found in the bottom of the preferences window from Error to Ignore</li>
+						</ul>
+						<div><img src="./img/APIbaseline.png" alt="API Baseline"/></div>
+					</li>
+				</ol>
+			</li>
+		</ol>
+	</li>
+</ol>
+
+<h3 id="targetPlatform">Set Target Platform</h3>
+<ol>
+	<li>Open the Eclipse preferences within the product plugin:
+	<div><img src="./img/TargetPlatform.png" alt="Eclipse target platform configuration"/></div></li>
+	<li>Wait until the target platform is resolved or press <span class="button4diac">Reload</span> and wait until it is resolved</li>
+	<li>Press <span class="button4diac">Set as Target Platform</span> within the upper right corner and wait until the workspace is builded.</li>
+</ol>
+
+<h3 id="devMode">Run in Development Mode</h3>
+<ol>
+	<li>Open the <span class="folderLocation">4DIAC-IDE.product</span> from the <span class="folderLocation">org.fordiac.ide.product</span> plug-in.
+		<div><img src="./img/productConfigKepler.png" alt="Eclipse product configuration"/></div>
+	</li>
+	<li>In the <span class="menu4diac">Testing</span> Section of the <span class="tab4diac">Overview</span> tab press <span class="button4diac">Synchronize</span></li>
+	<li>To use 4DIAC-IDE directly under this (development) Eclipse you need a type library and templates 
+		<ul>
+			<li>For the type library you need to put the <span class="folderLocation">typelibrary"</span> folder into the directory with your <span class="fileLocation">eclipse.exe</span>. How to get the default <span class="folderLocation">typelibrary</span> is described <a href="#getLib">here</a>.</li>
+			<li>For the templates copy the <span class="folderLocation">templates</span> directory from the 4DIAC download into the directory with your <span class="fileLocation">eclipse.exe</span></li>
+		</ul>
+	</li> 
+	<li>Press <span class="button4diac">Launch an Eclipse Application</span> in the <span class="view4diac">Overview</span></li>
+</ol>
+
+<h3 id="getLib">Get 4DIAC-LIB</h3>
+<p>Currently the 4DIAC-LIB includes:</p>
+<ul>
+	<li>IEC 61499 specific function blocks </li>
+	<li>All IEC 61131-3 functions and function blocks </li>
+	<li>Some <a href="http://www.oscat.de/" target="_blank">OSCAT</a> functions and function blocks </li>
+</ul>
+<p>To use the existing 4DIAC-LIB within the 4DIAC-IDE build from source perform the following step: </p>
+<ul>
+	<li>Use <a href="http://tortoisehg.bitbucket.org/" target="_blank">tortoiseHG</a> to clone the library from: <span class="address">http://hg.code.sf.net/p/fordiac/fordiac-lib</span> into a <span class="folderLocation">typelibrary</span> folder of your Eclipse installation (folder containing <span class="fileLocation">eclipse.exe</span>).</li>
+</ul>
+<p>To use the existing 4DIAC-LIB within the 4DIAC-IDE run through the following steps: </p>
+<ul>
+	<li>Use <a href="http://tortoisehg.bitbucket.org/" target="_blank">tortoiseHG</a> to clone the library from: <span class="address">http://hg.code.sf.net/p/fordiac/fordiac-lib</span></li>
+	<li>Simply copy the contents of the library into your projects or into the <span class="folderLocation">Tool Library</span> directory of your 4DIAC-IDE (folders of the Windows explorer can directly be copied into the <span class="view4diac">Type Navigator</span> View)</li>
+	<li>OR Select all (for existing libraries in the project) and refresh</li>
+</ul>
+
+<h3 id="buildingIDE">Building your own IDE</h3>
+
+<p>A big drawback for running 4DIAC-IDE from source is that you need at least 2 Eclipse instances running. Especially on systems with little memory this can be an issue. If you still want to keep up with the with the developments performed in the Mercurial repository it makes sense to build a binary package. See <a href="#buildBinary">Building a binary 4DIAC-IDE package from source</a> for details on how this can be achieved.</p>
+
+<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+
+<h2 id="buildBinary">Building a Binary 4DIAC-IDE Package from Source</h2>
+
+<p>For building a binary 4DIAC-IDE package from the source code Eclipse provides a product export wizard. The necessary steps are:</p>
+
+<ol>
+	<li>Have the 4DIAC-IDE source code in an Eclipse workspace as described in <a href="#buildFromSource">Building and Running 4DIAC-IDE from Source</a></li>
+	<li>Press <span class="button4diac">Eclipse Product Export Wizard</span> in the <span class="view4diac">Exporting</span> Section of the product-file editor.
+		<div><img src="./img/productExport.png" alt="Product export"/></div>
+	</li> 
+	<li>Specify <span class="menu4diac">Root Directory</span> - e.g. 4DIAC-IDE </li>
+	<li>Specify <span class="menu4diac">Destination</span></li>
+	<li>After pressing <span class="button4diac">Finish</span> your product configuration is exported.</li>
+	<li>In the exported product, you need the <span class="folderLocation">typelibrary</span> of an other 4DIAC-IDE and you have to copy or add the <span class="folderLocation">template</span> directory of an other 4DIAC-IDE otherwise creating new FB types will not provide any template.</li> 
+</ol>
+
+<h1>Where to go from here?</h1>
+
+<p>Go back to Development index:</p>
+
+<p><a href="./developmentIndex.html">Development Index</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+
+</body>
+</html>

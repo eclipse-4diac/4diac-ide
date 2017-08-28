@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Export-Package: org.eclipse.fordiac.ide.export.ui,
+ org.eclipse.fordiac.ide.export.ui.wizard
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.ide,
+ org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.core.resources,
+ org.eclipse.fordiac.ide.export
+Bundle-Vendor: Eclipse 4diac
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 1.9.0.qualifier
+Bundle-Name: Export UI
+Bundle-Activator: org.eclipse.fordiac.ide.export.ui.Activator
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.eclipse.fordiac.ide.export.ui;singleton:=true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

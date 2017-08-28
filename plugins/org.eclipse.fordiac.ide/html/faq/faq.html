@@ -1,0 +1,207 @@
+<!DOCTYPE html> 
+<!--
+ Copyright (c) 2010 - 2017 TU Wien ACIN, fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Carolyn Oates, Monika Wenger, Jose Cabral
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>FAQ</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+
+<body>
+<h1 id="topOfPage">FAQ 4DIAC-IDE</h1>
+	<ol>
+		<li><a href="#4diacfaq1">When I open a certain perspective a view element is missing, how can I get it back?</a></li>
+		<li><a href="#4diacfaq2">Download not possible! Defined profile () for RMT_XXX.xxx not supported</a></li>
+		<li><a href="#4diacfaq3">When I download my application I get an <span class="errorMessage">UNSUPPORTED TYPE</span> error message in the <span class="view4diac">Deployment Console</span></a></li>
+		<li><a href="#4diacfaq4">When I download my application I get a <span class="errorMessage">STATUS ACCESS VIOLATION</span> error messages in the <span class="view4diac">Deployment Console</span></a></li>
+		<li><a href="#4diacfaq5">When I download my application I get an <span class="errorMessage">Create FB Instance failed</span> error</a></li>
+		<li><a href="#4diacfaq6">When I want to download my application I get an <span class="errorMessage">connection refused</span> message</a></li>
+		<li><a href="#4diacfaq7">How do I use ARRAYs?</a></li>
+		<li><a href="#4diacfaq8">What does <span class="command4diac">CLEAN Device</span> do?</a></li>
+		<li><a href="#4diacfaq9">What does <span class="command4diac">KILL Device</span> do?</a></li>
+	</ol>
+
+<h1>FAQ Forte</h1>
+	<ol>
+		<li><a href="#fortefaq1">Windows/Cygwin: The setup script runs to completion but when building the target I get strange compile errors</a></li>
+		<li><a href="#fortefaq2">CMake/Cygwin: Can not find C and C++ compilers</a></li>
+		<li><a href="#fortefaq3">CMake/Cygwin: Can not find RC Compilers</a></li>
+		<li><a href="#fortefaq4">FORTE is C++ why are you than using the C-style include files for the standard c library instead of the C++ style include files?</a></li>
+		<li><a href="#fortefaq5">Within my FORTE console I get <span class="errorMessage">UDP-Socket Send failed: Network is unreachable</span></a></li>
+		<li><a href="#fortefaq6">Within my FORTE console I get <span class="errorMessage">connection closed by peer</span></a></li>
+	</ol>
+
+<h1>4DIAC answers</h1>
+
+	<ol class="listWithH2">
+
+		<li>
+			<h2 id="4diacfaq1">When I open a certain perspective a view element is missing, how can I get it back?</h2>
+			<p>There are two possibilities you can do:</p>
+			<ul>
+				<li>Reset Perspective: When right-clicking on the perspective's name in the perspective switcher you get a context menu with the option reset. By selecting this item the perspective is rest to the initial configuration showing all views again and on their original place.</li>
+				<li>Show View Menu: The menu item <span class="menu4diac">Window &rarr; Show View &rarr; Other</span> brings up an selection dialog that allows you to open any view. By searching through the items you can reopen an accidentally closed view. This option is especially of interest when you have a custom perspective layout you don't like to loose be resting the perspective.</li>
+			</ul>
+			
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li>
+
+		<li>
+			<h2 id="4diacfaq2">Download not possible! Defined profile () for RMT_XXX.xxx not supported</h2>
+			<ul>
+				<li>Go to the System Configuration</li>
+				<li>Select the Device which is named in the error message</li> 
+				<li>Change the properties <span class="menu4diac">Dialog &rarr; Advanced &rarr; Misc &rarr; Profile</span></li>
+				<li>Set Profile to HOLOBLOC</li>
+			</ul>
+			
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li>
+
+		<li>
+			<h2 id="4diacfaq3">When I download my application I get an <span class="errorMessage">UNSUPPORTED TYPE</span> error message in the <span class="view4diac">Deployment Console</span></h2>
+			<p>This message appears for multiple problems:</p>
+			<ul>
+				<li>Make sure that you have the source code (*.cpp, *.h) of all <span class="element4diac">Function Blocks</span> within your <span class="element4diac">Application</span>. Also check if all source files are listed within a <span class="fileLocation">CMakeLists.txt</span> file.</li>
+				<li>Make sure are using your compiled version of forte with the missing Function Block.
+					<ul>
+						<li>In IDE is <span class="menu4diac">Window &rarr; Preference &rarr; 4DIAC &rarr; FORTE Preferences</span> is path to your <span class="fileLocation">forte.exe</span></li>
+						<li>Or start your <span class="fileLocation">forte.exe</span> directly (development tool specific)</li>
+					</ul>	
+				</li>
+			</ul>
+			
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li>
+
+		<li>
+			<h2 id="4diacfaq4">When I download my application I get a <span class="errorMessage">STATUS ACCESS VIOLATION</span> error messages in the <span class="view4diac">Deployment Console</span></h2>
+			<p>Check if you used <span class="element4diac">Composite Function Blocks</span> within your <span class="element4diac">Application</span>. Make sure that you have the source code (*.cpp, *.h) of all <span class="element4diac">Function Blocks</span> within the <span class="element4diac">Composite's Network</span>. Also check if all source files are listed within a <span class="fileLocation">CMakeLists.txt</span> file.</p>
+			
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li>
+
+		<li>	
+			<h2 id="4diacfaq5">When I download my application I get an <span class="errorMessage">Create FB Instance failed</span> error</h2>
+			<p>Make sure that the interface of the function block you want to download is the same than those available on your FORTE executable. In case you download a Composite Function Block, please make sure that its Funnction Block Network matches the Function Block Network within your FORTE executable. When in doubt export your Function Block and compile FORTE before your download again.</p>
+			
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li>
+
+		<li>
+			<h2 id="4diacfaq6">When I want to download my application I get an <span class="errorMessage">connection refused</span> message</h2>
+			<p>Examine the following topics:</p>
+			<ul>
+				<li>Make sure that the port numbers used in the <span class="view4diac">Runtime Launcher</span> of the <span class="view4diac">Deployment</span> view are the same than those used for the <span class="element4diac">MGR_ID</span> of the <span class="element4diac">Devices</span> in the <span class="view4diac">System Configuration</span>.</li>
+				<li>Check if FORTE runs on a different port</li>
+				<li>Check in Task Manager (Windows) if an "old" crashed FORTE blocks the port</li>
+				<li>Check if Monitoring has been started before downloading (FORTE only supports a single connection at the management interface)</li>
+			</ul>
+			
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li>
+
+		
+
+		<li>	
+			<h2 id="4diacfaq7">How do I use ARRAYs?</h2>
+			<p>When you create a new Function Block choose the desired type for your array elements in the <span class="menu4diac">Type</span> drop down of the specific data and set the desired array size <span class="menu4diac">ArraySize</span>. For initializing put the values in curly brackets e.g., <span class="inlineCode">{1,2,3}</span>.</p>
+			
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li>
+
+		<li>
+			<h2 id="4diacfaq8">What does <span class="command4diac">CLEAN Device</span> do?</h2>
+			<span class="command4diac">CLEAN Device</span> deletes all existing <span class="element4diac">Resources</span> and the FBs in the <span class="element4diac">Resources</span>. After <span class="command4diac">CLEAN Device</span>, you can deploy any other FB Network.
+			
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li>
+
+		<li>
+			<h2 id="4diacfaq9">What does <span class="command4diac">KILL Device</span> do?</h2>
+		 	<span class="command4diac">KILL Devices</span> terminates FORTE.
+		 	
+		 	<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li> 
+
+	</ol>
+
+<h1>Forte answers</h1>
+
+	<ol class="listWithH2">
+
+		<li>
+			<h2 id="fortefaq1">Windows/Cygwin: The setup script runs to completion but when building the target I get strange compile errors</h2>
+			<ul>
+				<li>First check for any strange output of the setup script. Maybe your system misses something.</li>
+				<li>Do you have spaces in the directory names where you have put your FORTE? Some Cygwin versions have problems with these.</li>
+			</ul>
+			
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li>
+
+		
+
+		<li>
+			<h2 id="fortefaq2">CMake/Cygwin: Can not find C and C++ compilers</h2>
+		 	CMake Errors: 
+		 	<div class="code">your C compiler: CMAKE_C_COMPILER-NOTFOUND was not found. Please set CMAKE_C_COMPILER to a valid compiler path or name. 
+		 	your CXX compiler: CMAKE_CXX_COMPILER-NOTFOUND was not found. Please set CMAKE_CXX_COMPILER to a valid compiler path or name.</div>
+		 	<p>In this case you need to check the advanced check box and look for <span class="specificText">CMAKE_CXXX_COMPILER</span> and <span class="specificText">CMAKE_C_COMPILER</span> and set the path and executable for your C and C++ compiler. e.g., for Cygwin this could be <span class="fileLocation">c:\cygwin\bin\g++-3.exe</span> for the C++ compiler and <span class="fileLocation">c:\cygwin\bin\gcc-3.exe</span> for the C compiler.
+		 	
+		 	<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li> 
+
+		<li>
+			<h2 id="fortefaq3">CMake/Cygwin: Can not find RC Compilers</h2>
+			CMake Error: 
+			<div class="code">your RC compiler: CMAKE_RC_COMPILER-NOTFOUND was not found. Please set CMAKE_RC_COMPILER to a valid compiler path or name.</div>
+			<p>Again you need to check the advanced chekc box and look for <span class="specificText">CMAKE_RC_COMPILER</span>. For Cygwin or MinGW on Windows it needs a file called windres.exe (e.g., C:\cygwin\bin\windres.exe).
+		
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li> 
+
+		<li>
+			<h2 id="fortefaq4">FORTE is C++ why are you than using the C-style include files for the standard c library instead of the C++ style include files?</h2>
+			<p>The main reason for this is that not all platforms provide the correct C++ include files. Especially with real-time OSs like eCos where you can freely configure the supported features. Using C++ style C include files on these platforms would pull lots of stuff from the compilers in and result in a bigger image or even worse it would not compile. So as of current experience C style include files are more reliable.</p>
+
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li>
+
+		<li>
+			<h2 id="fortefaq5">Within my FORTE console I get <span class="errorMessage">UDP-Socket Send failed: Network is unreachable</span></h2>
+			<p>Consider to explicitly setup multicast IP routing in the kernel with the <span class="inlineCode">route</span> command. This has been an issue on on Raspberry Pi, where executing the following command resolved the problem:</p>
+			<div class="code">route add -net 224.0.0.0 netmask 240.0.0.0 dev eth0</div> 
+			<p>where the IPs are the desired multicast IP.</p>
+
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li>
+
+		<li>
+			<h2 id="fortefaq6">Within my FORTE console I get <span class="errorMessage">connection closed by peer</span></h2>
+			<p>The TCP port is opened by a server in the RMT_RES. 
+			This server handles the communication with the tool for download and monitoring. 
+			The message indicates the end of the download process when 4DIAC-IDE disconnects.</p>
+
+			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+		</li>
+	</ol>
+
+	<p>Or <a href="../startHere/startHere.html">Go to the Start Here Page</a></p>
+
+	<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+
+</body>
+</html>

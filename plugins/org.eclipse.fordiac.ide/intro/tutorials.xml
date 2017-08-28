@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+ Copyright (c) 2014 fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Monika Wenger
+     - initial API and implementation and/or initial documentation
+-->
+<introContent>
+
+	<extensionContent id="page_tutorials" name="Tutorials" path="tutorials/@">
+		<group style-id="content-group" id="orgfordiacide-introLink-group">
+		<link label="X+3 Tutorial" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/tutorials/x3_tutorial.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>This 4DIAC tutorial explains an existing example System which calculates x+3 and displays it by FBRT.</text>
+       	</link>
+		
+		<link label="Flip-Flop Tutorial" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/tutorials/flipFlop_tutorial.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>This 4DIAC tutorial let you create an own System which contains a T-Flip-Flop Application and explains how to yous 4DIAC's Monitoring functionality to observe the results.</text>
+       	</link>
+		</group>
+	</extensionContent>    
+
+	<extensionContent id="page_fbs" name="Tutorials" path="tutorials/@">
+		<group style-id="content-group" id="orgfordiacide-introLink-group">
+		<link label="Developing Function Blocks" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/tutorials/fbs.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>This 4DIAC tutorial explains how to create your own Function Block.</text>
+       	</link>
+	<group style-id="content-group" id="orgfordiacide-introLink-group" expandable="true" expanded="false">	
+		<link label="Flip-Flop as BFB" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/tutorials/flipFlop_asBFB.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>This 4DIAC tutorial explains how to create a Basic Function Block that provides the T-Flip-Flop behavior.</text>
+       	</link>
+		
+		<link label="Flip-Flop as CFB" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/tutorials/flipFlop_asCFB.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>This 4DIAC tutorial explains how to create a Composite Function Block that provides the T-Flip-Flop behavior.</text>
+       	</link>
+		
+		<link label="Flip-Flop as SIFB" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/tutorials/flipFlop_asSIFB.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>This 4DIAC tutorial explains how to create a Service Interface Function Block that provides the T-Flip-Flop behavior.</text>
+       	</link>
+		</group>	</group>
+	</extensionContent> 
+	
+</introContent>

@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Structured Text UI
+Bundle-Vendor: Eclipse 4diac
+Bundle-Version: 1.9.0.qualifier
+Bundle-SymbolicName: org.eclipse.fordiac.ide.model.structuredtext.ui;singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.structuredtext;visibility:=reexport,
+ org.eclipse.fordiac.ide.model.xtext.fbt.ui,
+ org.eclipse.fordiac.ide.fbtypeeditor.ecc,
+ org.eclipse.fordiac.ide.util,
+ org.eclipse.ui,
+ org.eclipse.xtext.ui,
+ org.eclipse.ui.editors,
+ org.eclipse.compare,
+ org.eclipse.xtext.ui.codetemplates.ui,
+ org.antlr.runtime,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtext.ui.shared
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr,
+ org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr.internal,
+ org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr.lexer,
+ org.eclipse.fordiac.ide.model.structuredtext.ui.contentassist,
+ org.eclipse.fordiac.ide.model.structuredtext.ui.quickfix
+Bundle-Activator: org.eclipse.fordiac.ide.model.structuredtext.ui.ExtendedStructuredTextActivator
+Import-Package: org.apache.log4j

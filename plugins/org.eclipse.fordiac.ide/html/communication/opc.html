@@ -1,0 +1,156 @@
+<!DOCTYPE html> 
+<!--
+ Copyright (c) 2014, 2017 AIT, fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Filip Andren, Monika Wenger, Jose Cabral
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>OPC DA</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+
+<body>
+<h1 id="topOfPage">OPC DA</h1>
+<p>This section will show you how to create an OPC DA Client with 4DIAC and how to use it with FORTE. Download the following packages:</p> 
+<ul>
+	<li><a href="http://sourceforge.net/projects/opcclient/" target="_blank">OPC Client library</a> release 0.4</li>
+	<li><a href="http://www.boost.org" target="_blank">Boost Lexical Cast</a></li>
+	<li><a href="http://www.microsoft.com/en-us/download/details.aspx?id=11800" target="_blank">Windows Driver Kit</a></li> 
+</ul>
+
+<h2>Prepare and compile OPC Client Toolkit</h2>
+<ol>
+	<li>Unzip Boost C++ Libraries</li>
+	<li>Visual Studio Express do not include ATL (Active Template Library) which is necessary to compile OPCClientToolKit. This can be aquired by installing windows driver kit.</li>
+	<li>Unzip OPC Client and open the OPCClientToolKit project in Visual Studio.</li>
+	<li>Add ATL header files to the project: Configuration Properties &rarr; VC++ Directories &rarr; Include Directories
+		<div><img src="./img/opc_VSclientProperties.png" alt="VS Properties"/></div>
+		<div><img src="./img/opc_VSinclude.png" alt="VS Include Directories"/></div>
+		</li>
+	<li>Add the path of ATL header files which are in the windows driver kit installation path. (E.g. C:\WinDDK\7600.16385.1\inc\atl71)</li>
+	<li>Edit the function init() in OPCClient.cpp from:
+<div class="code">
+void COPCClient::init()
+{	
+  HRESULT result = CoInitialize(NULL);
+  if (FAILED(result))
+  {
+    throw OPCException("CoInitialize failed");
+  }
+
+  CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL);
+
+  result = CoGetMalloc(MEMCTX_TASK, &amp;iMalloc);
+  if (FAILED(result))
+  {
+    throw OPCException("CoGetMalloc failed");
+  }
+}
+</div>
+
+to: 
+
+<div class="code">
+void COPCClient::init()
+{	
+  CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL);
+
+  HRESULT result = CoGetMalloc(MEMCTX_TASK, &amp;iMalloc);
+  if (FAILED(result))
+  {
+    throw OPCException("CoGetMalloc failed");
+  }
+}
+</div>
+
+	</li>
+
+	<li>Build project</li>
+	<li>Create the following folder structure: 
+		<ul>
+			<li>[opcclientroot]/include - put header files from OPCClientToolKit project here </li>
+			<li>[opcclientroot]/lib - OPCClientToolkit.lib </li>
+		</ul>	
+	</li>
+</ol>
+
+<h2>Compile FORTE with OPC DA Client Support</h2>
+<ol>
+	<li>Create a MS Visual Project of FORTE with CMake as described in <a href="../installation/visualStudio.html" target="_blank">Compiling and Debugging FORTE with MS Visual Studio Express</a> and add the following variables which are required for OPC Client support:
+	<ul>
+		<li>Check FORTE_COM_OPC</li>
+		<li>FORTE_COM_OPC_BOOST_ROOT - choose [boostroot] </li>
+		<li>FORTE_COM_OPC_LIB_ROOT - choose [opcclientroot] </li>
+	</ul>
+	</li>
+	<li>Open FORTE Project with MS Visual Studio. </li>
+	<li>Add ATL headers to the FORTE project.
+		<br>forte Properties &rarr; Configuration Properties &rarr; VC++ Directories &rarr; Include Directories &rarr; add ATL headers path ([windowstoolkitroot]/inc/atl71/)</li>
+	<li>Add ATL libraries to the forte project: 
+		<br>forte Properties &rarr; Configuration Properties &rarr; VC++ Directories &rarr; Library Directories &rarr; add ATL library path ([windowstoolkitroot]/lib/ATL/i386/)</li>
+	<li><a href="../installation/visualStudio.html">compile or debug</a> FORTE</li>
+	<li>When running in debug-mode, it is maybe necessary to exclude some native libraries 
+		<br>Forte Properties/Configuration Properties/Linker/Input/Ignore Specific Default libraries/Edit/LIBCMTD</li>
+</ol>
+
+<h2>Create OPC Client</h2>
+<p>Start the 4DIAC-IDE and create a new <span class="element61499">System</span> with a new <span class="element61499">Application</span> for one <span class="element61499">Device</span>. Add a <span class="specificText">CLIENT_1</span> Function Block to the <span class="element61499">Application</span>, set the following input values, and map it to the hardware.</p>
+
+<ul>
+	<li>QI = 1</li> 
+	<li>ID = opc[localhost:FestoDidactic.EzOPC.2:2000:0.01:VirtualPLC.EB0:VirtualPLC.AB0]</li>
+	<li>SD_1 = BYTE#210</li>
+</ul>
+
+<p>whereas the ID input has the following format:</p>
+
+<div class="code">opc[host:serverName:updateRate:deadBand:fbInputItems:fbOutputItems]</div>
+
+<ul>
+	<li><span class="inlineTitle">host</span>: address to computer with OPC server </li>
+	<li><span class="inlineTitle">serverName</span>: OPC server name, e.g. Matrikon.OPC.Simulation </li>
+	<li><span class="inlineTitle">updateRate</span>: update frequency in milliseconds </li>
+	<li><span class="inlineTitle">deadBand</span>: dead band used for update of value (same unit as value) </li>
+	<li><span class="inlineTitle">fbInputItems/fbOutputItems</span>: items to be added, items should be separated with a comma e.g. </li>
+</ul>
+
+<p>Change to the <span class="view4diac">Deployment perspective</span>, start Forte and download the Application. Switch the System into online mode and start watching the in- and outputs. For further information about <a href="../4diacIDE/use4diacLocally.html#monitoringApplication">Monitoring functionalities</a> follow the link.</p>
+
+<p>After triggering the INIT event, the OPC-client tries to connect with the OPC-server. In this example the OPC-server is "FestoDidactic.EzOPC.2". It is a tool from Festo and can be downloaded <a href="http://www.festo-didactic.com/de-de/service/software/vollversion-demos/ezopc.htm" target="_blank">here</a>.</p>
+
+<img src="./img/opc_fordiacTrigger.png" alt="4DIAC Trigger"/>
+
+<p>When the connection is established, a window of the server pops up.</p>
+
+<img src="./img/opc_festoOPCserver.png" alt="Festo OPC Server"/>
+
+<p>Now trigger the REQ event to send the data from client to server. "BYTE#210" should be send to the server's port "VirtualPLC.EB0". Click to "Virtual Controller" tab to check if the OPC server has received the information.</p>
+
+<img src="./img/opc_festoOPCserverIO.png" alt="Festo OPC Server IO"/>
+
+<h1>Where to go from here?</h1>
+
+<p>Go back to Protocols index:</p>
+
+<p><a href="./communicationIndex.html">Communication Index</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+
+</body>
+</html>

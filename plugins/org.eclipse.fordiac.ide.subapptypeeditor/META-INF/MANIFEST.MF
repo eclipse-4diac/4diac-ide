@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Subapplication Type Editor
+Bundle-SymbolicName: org.eclipse.fordiac.ide.subapptypeeditor;singleton:=true
+Bundle-Version: 1.9.0.qualifier
+Bundle-Activator: org.eclipse.fordiac.ide.subapptypeeditor.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui.views.properties.tabbed,
+ org.eclipse.fordiac.ide.application,
+ org.eclipse.gef,
+ org.eclipse.core.resources,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.fbtypeeditor,
+ org.eclipse.fordiac.ide.gef,
+ org.eclipse.fordiac.ide.fbtypeeditor.network,
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.fordiac.ide.model.commands
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: Eclipse 4diac
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

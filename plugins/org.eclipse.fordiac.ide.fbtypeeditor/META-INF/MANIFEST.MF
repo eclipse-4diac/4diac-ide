@@ -1,0 +1,34 @@
+Manifest-Version: 1.0
+Export-Package: org.eclipse.fordiac.ide.fbtypeeditor,
+ org.eclipse.fordiac.ide.fbtypeeditor.actions,
+ org.eclipse.fordiac.ide.fbtypeeditor.contentprovider,
+ org.eclipse.fordiac.ide.fbtypeeditor.editors,
+ org.eclipse.fordiac.ide.fbtypeeditor.editparts,
+ org.eclipse.fordiac.ide.fbtypeeditor.figures,
+ org.eclipse.fordiac.ide.fbtypeeditor.policies,
+ org.eclipse.fordiac.ide.fbtypeeditor.properties
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui.forms,
+ org.eclipse.fordiac.ide.util,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.typemanagement,
+ org.eclipse.emf.edit,
+ org.eclipse.gef,
+ org.eclipse.emf.edit.ui,
+ org.eclipse.fordiac.ide.model.edit,
+ org.eclipse.ui.ide,
+ org.eclipse.fordiac.ide.gef,
+ org.eclipse.fordiac.ide.application,
+ org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.ui.views.properties.tabbed,
+ org.eclipse.fordiac.ide.model.commands
+Bundle-Vendor: Eclipse 4diac
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 1.9.0.qualifier
+Bundle-Name: Function Block Type Editor
+Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.Activator
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor;singleton:=true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.eclipse.fordiac.ide.deployment.ui.perspectives.DeploymentPerspective"
+            icon="fordiacimage://ICON_DeploymentPerspective"
+            id="org.eclipse.fordiac.ide.deployment.ui.perspectives.DeploymentPerspective"
+            name="Deployment">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.eclipse.fordiac.ide.deployment.ui"
+            name="Deployment">
+      </category>
+      <view
+            category="org.eclipse.fordiac.ide.deployment.ui"
+            class="org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView"
+            icon="fordiacimage://ICON_DownloadSelectionTreeView"
+            id="org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView"
+            name="Deployment Selection">
+      </view>
+      <view
+            category="org.eclipse.fordiac.ide.deployment.ui"
+            class="org.eclipse.fordiac.ide.deployment.ui.views.Output"
+            icon="fordiacimage://ICON_DeploymentConsole"
+            id="org.eclipse.fordiac.ide.deployment.ui.views.Output"
+            name="Deployment Console">
+      </view>
+      <view
+            category="org.eclipse.fordiac.ide.deployment.ui"
+            class="org.eclipse.fordiac.ide.deployment.ui.views.Mode"
+            icon="fordiacimage://ICON_Download"
+            id="org.eclipse.fordiac.ide.deployment.ui.views.Mode"
+            name="Download">
+      </view>
+   </extension>
+<extension
+         point="org.eclipse.ui.exportWizards">
+      <wizard
+            category="org.eclipse.fordiac.ide.export.ui"
+            class="org.eclipse.fordiac.ide.deployment.ui.wizard.CreateBootfilesWizard"
+            id="org.eclipse.fordiac.ide.deployment.ui.wizard.CreateBootfiles"
+            name="Create FORTE boot-files">
+      </wizard>
+   </extension>
+<extension
+      point="org.eclipse.ui.commands">
+   <command
+         categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+         id="org.eclipse.fordiac.ide.deployment.ui.cleanDevice"
+         name="Clean Device">
+   </command>
+   <command
+         categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+         id="org.eclipse.fordiac.ide.deployment.ui.killDevice"
+         name="Kill Device">
+   </command>
+   <command
+         categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+         id="org.eclipse.fordiac.ide.deployment.ui.deleteResource"
+         name="Delete Resource">
+   </command>
+</extension>
+<extension
+      point="org.eclipse.ui.handlers">
+   <handler
+         class="org.eclipse.fordiac.ide.deployment.ui.handlers.CleanDeviceHandler"
+         commandId="org.eclipse.fordiac.ide.deployment.ui.cleanDevice">
+      <activeWhen>
+         <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition" />
+      </activeWhen>
+   </handler>
+   <handler
+         class="org.eclipse.fordiac.ide.deployment.ui.handlers.KillDeviceHandler"
+         commandId="org.eclipse.fordiac.ide.deployment.ui.killDevice">
+      <activeWhen>
+         <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition" />
+      </activeWhen>
+   </handler>
+   <handler
+         class="org.eclipse.fordiac.ide.deployment.ui.handlers.DeleteResourceHandler"
+         commandId="org.eclipse.fordiac.ide.deployment.ui.deleteResource">
+      <activeWhen>
+         <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.ResourceDefinition" />
+      </activeWhen>
+   </handler>
+</extension>
+<extension point="org.eclipse.ui.menus">
+   <menuContribution
+         allPopups="false"
+         locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+      <command
+            commandId="org.eclipse.fordiac.ide.deployment.ui.cleanDevice"
+            icon="fordiacimage://ICON_ClearDevice"
+            label="Delete all Resources"
+            style="push">
+         <visibleWhen
+               checkEnabled="false">
+            <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition" />
+         </visibleWhen>
+      </command>
+   </menuContribution>
+<menuContribution
+      allPopups="false"
+      locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+   <command
+         commandId="org.eclipse.fordiac.ide.deployment.ui.killDevice"
+         icon="fordiacimage://ICON_KillDevice"
+         label="Kill Device"
+         style="push">
+      <visibleWhen
+            checkEnabled="false">
+         <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition" />
+      </visibleWhen>
+   </command>
+</menuContribution>
+<menuContribution
+      allPopups="false"
+      locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+   <command
+         commandId="org.eclipse.fordiac.ide.deployment.ui.deleteResource"
+         icon="fordiacimage://ICON_DeleteResource"
+         label="Delete Resource"
+         style="push">
+      <visibleWhen
+            checkEnabled="false">
+         <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.ResourceDefinition" />
+      </visibleWhen>
+   </command>
+</menuContribution>
+<menuContribution
+      locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+   <command
+         commandId="org.eclipse.ui.file.export"
+         label="Create boot-files">
+      <parameter
+            name="exportWizardId"
+            value="org.eclipse.fordiac.ide.deployment.ui.wizard.CreateBootfiles">
+      </parameter>
+      <visibleWhen
+            checkEnabled="false">
+         <iterate
+               ifEmpty="false"
+               operator="or">
+            <or>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.model.libraryElement.Device">
+               </instanceof>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.model.libraryElement.Resource">
+               </instanceof>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
+               </instanceof>
+            </or>
+         </iterate>
+      </visibleWhen>
+   </command>
+</menuContribution>
+   </extension>
+<extension
+      point="org.eclipse.core.expressions.definitions">
+   <definition
+         id="org.eclipse.fordiac.ide.deployment.ui.ResourceDefinition">
+       <with
+               variable="selection">
+               <iterate>
+                  <or>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.model.libraryElement.Resource">
+                    </instanceof>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart">
+                    </instanceof>
+                  </or>
+               </iterate>
+         </with>  
+   </definition>
+   <definition
+         id="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition">
+       <with
+               variable="selection">
+               <iterate>
+                  <or>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.model.libraryElement.Device">
+                    </instanceof>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart">
+                    </instanceof>
+                  </or>
+               </iterate>
+         </with>  
+   </definition>
+</extension>
+</plugin>

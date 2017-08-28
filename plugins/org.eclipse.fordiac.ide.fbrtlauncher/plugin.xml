@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.fordiac.ide.runtime.RuntimeLauncher">
+      <runtime
+            class="org.eclipse.fordiac.ide.fbrtlauncher.FBRTLauncher">
+      </runtime>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.fbrtlauncher.preferences.FBRTPreferencePage"
+            id="org.eclipse.fordiac.ide.fbrtlauncher.preferences.FBRTPreferencePage"
+            name="FBRT Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.fbrtlauncher.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

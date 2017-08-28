@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2016 fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Monika Wenger, Jose Cabral
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <title>Building FORTE on Raspberry-SPS</title>
+      <link rel="stylesheet" type="text/css" href="../help.css">
+   </head>
+
+   <body>
+      <h1 id="topOfPage">Building FORTE on Raspberry-SPS</h1>
+	  
+      <h2>Introduction</h2>
+      <p>The <a href="http://raspberry-sps.de/" target="_blank">Raspberry-SPS</a> consists of a Raspberry-PI which is a low-cost embedded system with an ARM processor @700Mhz and 512MB RAM and additional modules as digital and analog modules. This tutorial shows how to cross compile FORTE for the Raspberry-SPS.</p>
+	  
+	  <h2 id="preparation">Preparation</h2>
+	  <ol>
+	  	 <li>Download the proper toolchain for your operating system where you plan to build FORTE <a href="https://releases.linaro.org/archive/15.06/components/toolchain/binaries/" target="_blank"> gcc-linaro-arm-linux-gnueabihf</a>. The <span class="specificText">path to your downloaded toolchain has to be short</span> e.g., <span class="inlineCode">C:/toolchain</span> for Windows.</li>
+		  
+		 <li>Start cmake-gui and choose forte source code folder and build binaries, e.g. <span class="folderLocation">forte/bin/raspberrySPS</span> and press the configure button. A new window will be opened. As generator, choose <span class="specificText">Unix Makefiles</span> and check the <span class="specificText">Specify options for cross compiling</span> radio button.
+		 <img src="./img/raspberrySPS_configure.png" alt="configure cross compiling for Raspberry-SPS"/>
+		 </li>
+		 
+		 <li>Configure the cross compiling options as it is illustrated within the following image and press the <span class="button4diac">finish</span> button.
+		 <img src="./img/raspberrySPS_configureToolchain.png" alt="configure toolchain for Raspberry-SPS"/>
+		 </li>
+		 
+		 <li>Choose posix as <span class="specificText">FORTE_ARCHITECHTURE</span> and check <span class="specificText">FORTE_MODULE_Raspberry-SPS</span> as well as other desired modules.</li>
+		 
+		 <li>Press the <span class="button4diac">Configure</span> button until nothing remains red. Afterwards press the <span class="button4diac">Generate</span> button.</li>
+		 
+		 <li>The desired make files have been generated. execute make within a console and find the FORTE executable in <span class="folderLocation">forte/bin/raspberrySPS/src</span>
+		 <div class="code">$ cd forte/bin/raspberrySPS 
+$ make</div>
+		 </li>
+		 
+		 <li>copy the FORTE executable to the Raspberry-SPS and start FORTE with:
+ <div class="code">$ ./forte</div></li>
+	  	</ol>
+	
+<h1 id="whereToGoFromHere">Where to go from here?</h1>
+
+<p>Now that you installed the required tools, it's time to start using them. Take a look at the following page:</p>
+
+<p><a href="../4diacIDE/overview.html">Step by step tutorial</a></p>
+
+<p>If you want to compile FORTE for another platform or want to know more about that, here's a quick link back:</p>
+
+<p><a href="./install.html">Install 4DIAC</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+</body>
+</html>

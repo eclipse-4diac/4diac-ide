@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+  <extension-point id="deviceTypeLoader" name="deviceTypeLoader" schema="schema/deviceTypeLoader.exsd"/>
+  <extension-point id="PaletteEntryCreator" name="PaletteEntryCreator" schema="schema/PaletteEntryCreator.exsd"/>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated fordiac -->
+      <package
+            uri="org.eclipse.fordiac.ide.model.Palette"
+            class="org.eclipse.fordiac.ide.model.Palette.PalettePackage"
+            genModel="model/fordiac.genmodel"/>
+   </extension>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package 
+       uri = "org.eclipse.fordiac.ide.model" 
+       class = "org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage"
+       genModel = "model/fordiac.genmodel" /> 
+  </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated fordiac -->
+      <package
+            uri="org.eclipse.fordiac.ide.model.datatype"
+            class="org.eclipse.fordiac.ide.model.data.DataPackage"
+            genModel="model/fordiac.genmodel"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
+      <PaletteEntryCreator
+            class="org.eclipse.fordiac.ide.model.typelibrary.CreateAdapterTypePaletteEntry">
+      </PaletteEntryCreator>
+   </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
+      <PaletteEntryCreator
+            class="org.eclipse.fordiac.ide.model.typelibrary.CreateDeviceTypePaletteEntry">
+      </PaletteEntryCreator>
+   </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
+      <PaletteEntryCreator
+            class="org.eclipse.fordiac.ide.model.typelibrary.CreateFBTypePaletteEntry">
+      </PaletteEntryCreator>
+   </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
+      <PaletteEntryCreator
+            class="org.eclipse.fordiac.ide.model.typelibrary.CreateResourceTypePaletteEntry">
+      </PaletteEntryCreator>
+   </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
+      <PaletteEntryCreator
+            class="org.eclipse.fordiac.ide.model.typelibrary.CreateSegmentTypePaletteEntry">
+      </PaletteEntryCreator>
+   </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
+      <PaletteEntryCreator
+            class="org.eclipse.fordiac.ide.model.typelibrary.CreateSubapplicationTypePaletteEntry">
+      </PaletteEntryCreator>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated virtualDNS -->
+      <package
+            uri="org.eclipse.fordiac.ide.virtualDNS"
+            class="org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage"
+            genModel="model/virtualDNS.genmodel"/>
+   </extension>
+   
+   <!-- this is needed to load old pre eclipse version projects -->
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated virtualDNS -->
+      <package
+            uri="org.fordiac.ide.virtualDNS"
+            class="org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage"
+            genModel="model/virtualDNS.genmodel"/>
+   </extension>
+
+</plugin>

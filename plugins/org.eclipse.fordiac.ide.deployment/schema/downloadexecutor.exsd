@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+ Copyright (c) 2008 Profactor GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Gerhard Ebenhofer
+     - initial API and implementation and/or initial documentation
+-->
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.fordiac.ide.deployment">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.eclipse.fordiac.ide.deployment" id="org.eclipse.fordiac.ide.deployment.downloadexecutor" name="downloadexecutor"/>
+      </appInfo>
+      <documentation>
+         This extensionpoint is used to implement a &quot;download executor&quot; for a new Profile.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="DeploymentExecutor"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="DeploymentExecutor">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.deployment.IDeploymentExecutor"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         0.1
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         The following is an example of Holobloc Compliance Profile extension definition: 
+&lt;p&gt;
+&lt;pre&gt;
+   &lt;extension
+         point=&quot;org.eclipse.fordiac.ide.deployment.downloadexecutor&quot;&gt;
+      &lt;DeploymentExecutor
+            class=&quot;org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor&quot;&gt;
+      &lt;/DeploymentExecutor&gt;
+   &lt;/extension&gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         Copyright (c) 2007 - 2008 4DIAC-Consortium. 
+http://www.fordiac.org
+
+All rights reserved. This program and the accompanying 
+materials are made available under the terms of the 
+Eclipse Public License v1.0 which accompanies this 
+distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+      </documentation>
+   </annotation>
+
+</schema>

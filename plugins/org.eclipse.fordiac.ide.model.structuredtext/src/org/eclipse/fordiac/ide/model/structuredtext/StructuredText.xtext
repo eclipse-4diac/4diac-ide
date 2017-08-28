@@ -1,0 +1,445 @@
+/*******************************************************************************
+ * Copyright (c) 2015, 2017 fortiss GmbH
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *   Martin Jobst, Alois Zoitl, Monika Wenger 
+ *       - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+grammar org.eclipse.fordiac.ide.model.structuredtext.StructuredText
+	hidden(WS, ML_COMMENT, SL_COMMENT)
+
+generate structuredText "http://www.fordiac.org/ide/model/structuredtext/StructuredText"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+import "org.eclipse.fordiac.ide.model.datatype" as datatype
+import "org.eclipse.fordiac.ide.model.libraryElement" as libraryElement
+
+StructuredTextAlgorithm: {StructuredTextAlgorithm}
+	(
+		'VAR'
+			((localVariables += Var_Decl_Init) ';')*
+		'END_VAR'
+	)?
+	statements=Stmt_List
+;
+
+Var_Decl_Init returns libraryElement::VarDeclaration:
+	{LocalVariable} (constant ?= 'CONSTANT')? name=ID ':'
+	type=[datatype::DataType|Type_Name]
+	(array?='[' arraySize=Array_Size ']')?
+	(':=' initialValue=Constant)?
+;
+
+/************************************************************************
+								statement
+************************************************************************/
+Stmt_List returns StatementList: {StatementList}
+	((statements += Stmt)? ';')*
+;
+
+Stmt returns Statement:
+	Assign_Stmt |
+	Subprog_Ctrl_Stmt |
+	Selection_Stmt |
+	Iteration_Stmt
+;
+
+Assign_Stmt returns AssignmentStatement:
+	variable=Variable ':='
+	expression=Expression
+;
+
+Subprog_Ctrl_Stmt returns Statement:
+	Func_Call |
+	//Invocation |
+	{SuperStatement} 'SUPER' '(' ')' | 
+	{ReturnStatement} 'RETURN' 
+;
+
+Selection_Stmt returns Statement:
+	IF_Stmt | Case_Stmt
+;
+	
+IF_Stmt returns IfStatement:
+	'IF' expression=Expression 'THEN' 
+		statments=Stmt_List 
+		(elseif += ELSIF_Clause)*
+		(else=ELSE_Clause)?
+	'END_IF'
+;
+
+ELSIF_Clause returns ElseIfClause:
+	'ELSIF' expression=Expression 'THEN'
+		statements=Stmt_List
+;
+
+ELSE_Clause returns ElseClause:
+	'ELSE' 
+		statements=Stmt_List
+;
+
+Case_Stmt returns CaseStatement:
+	'CASE' expression=Expression 'OF'
+		(case += Case_Selection)+
+		(else=ELSE_Clause)?
+	'END_CASE'
+;
+
+Case_Selection returns CaseClause:
+	case += Constant (',' case += Constant)* ':' //only allow explicit constants here
+		statements=Stmt_List
+;
+
+Iteration_Stmt returns Statement:
+	For_Stmt |
+	While_Stmt |
+	Repeat_Stmt |
+	{ExitStatement} 'EXIT' |
+	{ContinueStatement} 'CONTINUE'
+;
+
+For_Stmt returns ForStatement:
+	'FOR' variable=Variable_Primary ':=' from=Expression 'TO' to=Expression ('BY' by=Expression)? 'DO'
+		statements=Stmt_List
+	'END_FOR'
+;
+
+While_Stmt returns WhileStatement:
+	'WHILE' expression=Expression 'DO'
+		statements=Stmt_List
+	'END_WHILE'
+;
+
+Repeat_Stmt returns RepeatStatement:
+	'REPEAT'
+		statements=Stmt_List
+	'UNTIL' expression=Expression
+	'END_REPEAT' 
+;
+
+
+/************************************************************************
+								expression
+************************************************************************/
+Expression: Or_Expression;
+
+enum Or_Operator returns BinaryOperator: OR;
+Or_Expression returns Expression:
+	Xor_Expr ({BinaryExpression.left=current} operator=Or_Operator right=Xor_Expr)*
+;
+	
+enum Xor_Operator returns BinaryOperator: XOR;
+Xor_Expr returns Expression:
+	And_Expr ({BinaryExpression.left=current} operator=Xor_Operator right=And_Expr)*
+;
+
+enum And_Operator returns BinaryOperator: AND | AND='&';
+And_Expr returns Expression:
+	Compare_Expr ({BinaryExpression.left=current} operator=And_Operator right=Compare_Expr)*
+;
+
+enum Compare_Operator returns BinaryOperator: EQ='=' | NE='<>';
+Compare_Expr returns Expression:
+	Equ_Expr ({BinaryExpression.left=current} operator=Compare_Operator right=Equ_Expr)*
+;	
+
+enum Equ_Operator returns BinaryOperator: LT='<' | LE='<=' | GT='>' | GE='>=';
+Equ_Expr returns Expression:
+	Add_Expr ({BinaryExpression.left=current} operator=Equ_Operator right=Add_Expr)*
+;
+
+enum Add_Operator returns BinaryOperator: ADD='+' | SUB='-';
+Add_Expr returns Expression:
+	Term ({BinaryExpression.left=current} operator=Add_Operator right=Term)*
+;
+		
+enum Term_Operator returns BinaryOperator: MUL='*' | DIV='/' | MOD;
+Term returns Expression:
+	Power_Expr ({BinaryExpression.left=current} operator=Term_Operator right=Power_Expr)*
+;
+	
+enum Power_Operator returns BinaryOperator: POWER='**';
+Power_Expr returns Expression:
+	Unary_Expr ({BinaryExpression.left=current} operator=Power_Operator right=Unary_Expr)*
+;	
+
+enum Unary_Operator returns UnaryOperator: MINUS='-' | PLUS='+' | NOT;
+Unary_Expr returns Expression:
+	{UnaryExpression} operator=Unary_Operator expression=Primary_Expr | 
+	Primary_Expr |
+	Constant // handle Constant here to avoid ambiguity with '+' and '-' operators
+;
+	
+Primary_Expr returns Expression: 
+	Variable | Func_Call | /*Ref_Value |*/ '(' Expression ')'
+;
+
+Func_Call returns Call:
+	func=(ID|'TIME') // also allow 'TIME' as function name
+	'(' (args += Param_Assign (',' args += Param_Assign)*)? ')'
+;
+
+Param_Assign returns Argument:
+	Param_Assign_In | /*Ref_Assign |*/ Param_Assign_Out
+;
+
+Param_Assign_In returns InArgument:
+	((var=ID ':=')? expr=Expression)
+;
+
+Param_Assign_Out returns OutArgument:
+	not?='NOT'? var=ID '=>' expr=Variable
+;
+
+Variable returns Variable:
+	Variable_Subscript
+;
+
+Variable_Subscript returns Variable:
+	(Variable_Primary | Variable_Adapter) ({ArrayVariable.array=current} '[' index += Expression (',' index += Expression)* ']')?
+;
+
+Variable_Adapter returns Variable:
+	{AdapterVariable} adapter=[libraryElement::AdapterDeclaration|Adapter_Name] '.' var=[libraryElement::VarDeclaration|Variable_Name]
+;
+
+Adapter_Name:
+	ID | 'T' | 'LT' | 'DT'
+;
+
+Variable_Primary returns PrimaryVariable:
+	var=[libraryElement::VarDeclaration|Variable_Name]
+;
+
+Variable_Name:
+	ID | 'T' | 'LT' | 'DT'
+;
+
+/************************************************************************
+								literals
+*************************************************************************/
+Constant:
+	Numeric_Literal | Char_Literal | Time_Literal | Bool_Literal
+;
+
+Numeric_Literal returns NumericLiteral: 
+	Int_Literal | Real_Literal
+;
+
+Int_Literal returns IntLiteral:
+	(type= Int_Type_Name '#')?
+	value = (Signed_Int | BINARY_INT | OCTAL_INT | HEX_INT)
+;
+
+Signed_Int returns ecore::ELong:
+	('+'|'-')? UNSIGNED_INT
+;
+
+Array_Size returns ecore::EInt:
+	UNSIGNED_INT
+;
+
+Real_Literal returns RealLiteral:
+	(type=Real_Type_Name '#')?
+	value=Real_Value
+;
+
+Real_Value returns ecore::EDouble:
+	Signed_Int '.' UNSIGNED_INT ('E' Signed_Int)?
+;
+
+Bool_Literal returns BoolLiteral:
+	(type=Bool_Type_Name '#')?
+	value=Bool_Value
+;
+
+Bool_Value returns ecore::EBoolean:
+	'FALSE' | 'TRUE' // cannot distinguish '0' and '1' from Int_Literal
+;
+
+Char_Literal returns StringLiteral:
+	(type=String_Type_Name (length=UNSIGNED_INT)? '#')?
+	value=(S_BYTE_CHAR_STR | D_BYTE_CHAR_STR)
+;
+
+Time_Literal returns TimeLiteral:
+	Duration | Time_Of_Day | Date | Date_And_Time
+;
+
+Duration returns DurationLiteral:
+	type=Time_Type_Name '#'
+	( '+' | negative?='-' )?
+	value+=Duration_Value ('_' value+=Duration_Value)*
+;
+
+Duration_Value returns DurationValue:
+	value=Fix_Point
+	unit=Duration_Unit
+;
+
+enum Duration_Unit:
+	DAYS='d' | HOURS='h' | MINUTES='m' | SECONDS='s' | MILLIS='ms' | MICROS='us' | NANOS='ns'
+;
+
+Fix_Point: 
+	UNSIGNED_INT ('.' UNSIGNED_INT)?
+;
+
+Time_Of_Day returns DateLiteral: 
+	type=Tod_Type_Name '#'
+	value=Daytime
+;
+	
+Daytime returns ecore::EDate:
+	Day_Hour ':' Day_Minute ':' Day_Second
+;
+
+Day_Hour: UNSIGNED_INT;
+Day_Minute: UNSIGNED_INT;
+Day_Second: Fix_Point;
+
+Date returns DateLiteral:
+	type=Date_Type_Name '#'
+	value=Date_Literal
+;
+
+Date_Literal returns ecore::EDate:
+	Year '-' Month '-' Day
+;
+
+Year: UNSIGNED_INT;
+Month: UNSIGNED_INT;
+Day: UNSIGNED_INT;
+
+Date_And_Time returns DateLiteral: 
+	type=DT_Type_Name '#'
+	value=Date_And_Time_Value
+;
+	
+Date_And_Time_Value returns ecore::EDate:
+	Date_Literal '-' Daytime
+;	
+
+
+/************************************************************************
+								type names
+********************************************************************** */
+Type_Name:
+	ID
+	| 'DINT' | 'INT' | 'SINT' | 'LINT' //Sign_Int_Type_Name
+	| 'UINT' | 'USINT' | 'UDINT' | 'ULINT' //Unsign_Int_Type_Name
+	| 'REAL' | 'LREAL' 
+	| 'STRING' | 'WSTRING' | 'CHAR' | 'WCHAR' 
+	| 'TIME' | 'LTIME' 
+	| 'TIME_OF_DAY' | 'LTIME_OF_DAY' | 'TOD' | 'LTOD' // also allow 'LTIME_OF_DAY'
+	| 'DATE' | 'LDATE' 
+	| 'DATE_AND_TIME' | 'LDATE_AND_TIME' 
+	| 'BOOL' 
+;
+
+
+enum Int_Type_Name returns Type:
+	DINT | INT | SINT | LINT //Sign_Int_Type_Name
+	| UINT | USINT | UDINT | ULINT //Unsign_Int_Type_Name
+;
+	 
+enum Real_Type_Name returns Type:
+	REAL | LREAL
+;
+
+enum String_Type_Name returns Type:
+	STRING | WSTRING | CHAR | WCHAR
+;
+
+enum Time_Type_Name returns Type:
+	TIME | LTIME | T | LT // also allow short type names
+;
+
+enum Tod_Type_Name returns Type:
+	TIME_OF_DAY | LTIME_OF_DAY | TOD | LTOD // also allow 'LTIME_OF_DAY'
+;
+
+enum Date_Type_Name returns Type:
+	DATE | LDATE | D | LD // also allow short type names
+;
+
+enum DT_Type_Name returns Type:
+	DATE_AND_TIME | LDATE_AND_TIME | DT | LDT // also allow 'LDATE_AND_TIME'
+;
+
+enum Bool_Type_Name returns Type:
+	BOOL
+;
+
+enum Any_Bit_Type_Name returns Type:
+	BYTE | WORD | DWORD | LWORD
+;
+
+/* **********************************************************************
+								terminals
+							Attention: Keep order!
+********************************************************************** */
+
+terminal fragment LETTER: 'a'..'z' | 'A'..'Z' | '_';
+terminal fragment DIGIT: '0'..'9';
+terminal fragment BIT: '0'..'1';
+terminal fragment OCTAL_DIGIT: '0'..'7';
+terminal fragment HEX_DIGIT: '0'..'9' | 'a'..'f' | 'A'..'F';
+
+terminal ID:
+	LETTER (LETTER | DIGIT)*
+;
+
+terminal BINARY_INT returns ecore::ELong:
+	'2#'('_'? BIT)+
+;
+
+terminal OCTAL_INT returns ecore::ELong:
+	'8#'('_'? OCTAL_DIGIT)+
+;
+
+terminal HEX_INT returns ecore::ELong:
+	'16#'('_'? HEX_DIGIT)+
+;
+
+terminal UNSIGNED_INT returns ecore::ELong:
+	DIGIT ('_'? DIGIT)*
+;
+
+terminal S_BYTE_CHAR_STR returns ecore::EString:
+	'\'' S_BYTE_CHAR_VALUE* '\''
+;
+
+terminal D_BYTE_CHAR_STR returns ecore::EString:
+	'"' D_BYTE_CHAR_VALUE* '"'
+;
+
+terminal fragment S_BYTE_CHAR_VALUE:
+	COMMON_CHAR_VALUE | '$\'' | '"' | '$' HEX_DIGIT HEX_DIGIT
+;
+
+terminal fragment D_BYTE_CHAR_VALUE:
+	COMMON_CHAR_VALUE | '\'' | '$"' | '$' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+;
+
+terminal fragment COMMON_CHAR_VALUE:
+	(' ' | '!' | '#' | '%' | '&' | '('..'/' | '0'..'9' | ':'..'@' | 'A'..'Z' | '['..'`' | 'a'..'z' | '{'..'~' | '$$' | '$L' | '$N' | '$P' | '$R' | '$T')
+;
+
+terminal ML_COMMENT:
+	('/*' -> '*/') | '(*' -> '*)';
+
+terminal SL_COMMENT: 
+	'//' !('\n'|'\r')* ('\r'? '\n')?;
+
+terminal WS:
+	(' '|'\t'|'\r'|'\n')+;
+
+terminal ANY_OTHER: 
+	.;
+

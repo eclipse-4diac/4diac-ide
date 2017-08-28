@@ -1,0 +1,189 @@
+<!DOCTYPE html> 
+<!--
+ Copyright (c) 2017 fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+    Jose Cabral 
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>IEC 61499 101</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+<body>
+
+<h1 id="topOfPage">IEC 61499 101</h1>
+
+<h2 id="PLC">PLC</h2>
+
+<p>A <a href="https://en.wikipedia.org/wiki/Programmable_logic_controller" target="_blank">PLC</a> is, basically, a small computer used in the industry that has inputs and outputs, used for controlling diferent systems. Normally, inputs are buttons and sensors, and outputs are motors. If you come from an Informatic background, you can see a PLC as a <a href="https://www.raspberrypi.org/" target="_blank">Raspberry Pi</a>, an <a href="https://www.arduino.cc/" target="_blank">Arduino</a>, a <a href="https://beagleboard.org/" target="_blank">Beagle Bone Black</a> or a similar embedded board with inputs and outputs, but, prepared for the industry. The PLC is programmed according to the required application. There are many compannies that produce PLCs, similar to what happens with normal PCs. The difference is that a normal PC is a general purpose computer, meaning that you can use it to do all types of things. But for PLCs, they are efficiently produced for narrowed purposes. Because of that, each PLC producer not only develop the hardware, but also the basic software(firmware) that runs in the PLC. The firmware can be compared to the Operative System (linux, windows, mac OS) in normal computers.</p>
+
+<p>When you program a PLC, you need an IDE (Integrated development environment, a.k.a. a program where you can do everything related to something, in this case to the PLC you are using) from the PLC vendor that runs on your normal computer (windows, linux, mac) and that allows you to code your application and then upload the it to the PLC. At this point is important to note the different terms we are using to refer to similar concepts:</p>
+
+<ul>
+	<li>Application: the software that the user codes and runs on the PLC. When you "program a PLC" you are creating the application</li>
+	<li>IDE: the software provided by the PLC vendor that allows the user to code its application and upload it to the PLC, debug, and other things.</li>
+	<li>Firmware: the basic software the comes already in the PLC. The IDE interacts with it and the user normally can onlu update it and not modify it.</li>
+</ul>
+
+<p>Putting it in simple, to have a PLC controlling something you do the following:</p>
+
+<ol>
+	<li>Get the IDE from the vendor web page and learn how to use it</li>
+	<li>Get to know the capabilities of the PLC and how to access the inputs and outputs from your application</li>
+	<li>Code your application in the IDE</li>
+	<li>Connect you computer to the PLC, normally using an Ethernet cable, and upload your application to the PLC from the IDE (some might have several small tools instead of IDE)</li>
+	<li>Now your application runs in the PLC whenever it turns on</li>
+</ol>
+
+<h3>Programming PLCs</h3>
+
+<p>Even tough for each PLC vendor there's a specific IDE, the programming languages for PLC were standardized in <a href="https://en.wikipedia.org/wiki/IEC_61131" target="_blank">IEC-61131</a> part 3. Five different programming languages are part of the standard:</p>
+
+<ul>
+	<li>Ladder diagram (LD), graphical</li>
+	<li>Function Block diagram (FBD), graphical</li>
+	<li>Structured text (ST), textual</li>
+	<li>Instruction list (IL), textual (deprecated)</li>
+	<li>Sequential function chart (SFC), graphical.</li>
+</ul>
+
+<p>This is very different from "normal" programming, such as C, C++, java, python, and so on. The programming languages given above, specially the graphical ones, are easier to program with due to its abstraction. Of course, this doesn't mean that you cannot program a PLC using the normal programming languages at all, but this feature is not always present.</p>
+
+<p>We'll focus on the Function Block Diagram programming language. The image below shows a small example of how a Function Block (FB) diagram looks like</p>
+
+<img class="center" src="./img/functionBlockExample.png" alt="Example of a Function Block diagram accordding to IEC 61131"/>
+
+<p>In the image we see 3 FBs (on_delay1, AND, alarm), 4 inputs (user_ok, T#5s, packet_arrived, conveyor_full), 2 outputs (red_light, conveyor_motor) and the connections between the FBs. Let's focus on the most right FB. "RS" is the type of it, and "alarm" is the instance name. You can have many instance of the same type. All instance of the same type behave in the same way, but the internal state is different for each instance. For all FBs, the inputs are on the left side and the outputs on the right side. If you have programmed in a normal programming language, you can see a FB as a function you can call, the inputs are the parameters and the outputs is the return value (you can have many outputs). In this case of the RS FB, the output Q becomes true if the input S is true and the input R is false; and Q becomes false when R is true.</p>
+
+<p>Once you "program"/draw this application in the IDE, you compile it and then upload to the PLC. You should see the behavior in the real system. But of course, the physical inputs and outputs of the PLC must be connected to the real sensors and motor in order to have the expected behavior. Each PLC has its own way to represent the physical inputs/outputs when programming.</p>
+
+<p>All right! About PLCs this is all you need to know for now. We'll get closer to 4DIAC in the next section where we see a new standard.</p>
+
+<h2 id="IEC61499">IEC 61499</h2>
+
+<p>The industry is moving from centralized systems towards a more distributed paradigm. This means to transform big systems with a central intelligence controlling all, to a more distributed system, where smaller parts of the system still have intelligence and can communicate between each other smoothly, as if the system behaves like a whole. IEC 61499 defines a domain specific modeling language for developing distributed industrial control solutions. IEC 61499 extends IEC 61131-1 by improving the encapsulation of software components for increased re-usability, providing a vendor independent format, and simplifying support for controller to controller communication. Its distribution functionality and the inherent support for dynamic reconfiguration provide the required infrastructure for Industry 4.0 and industrial IoT applications.</p>
+
+<p>There are two big problems with IEC 61131-1. The first one is when you have feedback in your system. From one Function Block diagram as the one above, but with a feedback, the behavior of the system depends of how the underlying software is implemented. And second, in case of having PLCs from different vendors, the communication between them is not standardized and is normally difficult to achieve.</p>
+
+<p>In other words, IEC 61499 defines a modeling language, similar to the old FBs, oriented to distributed systems. This means that you can model your whole system, even though it's composed by smaller parts, each one of them being a PLC. You use FBs to really encapsulate functionality since no global variables are allowed. You create your application connecting FBs, but the standard also defines how to represent the system from the physical point of view, meaning that you can model the devices and how they are connected. And since your application is not only running in one device, you are able to map different FBs of your application to different devices.</p>
+
+<p>So, without going any further in concepts, let's look some images to understand the capabilities and new features given by IEC 61499</p>
+
+<h2>Main parts of IEC 61499</h2>
+
+<h3>FB Interface</h3>
+
+<p>The image below shows the new look of the FB. It encapsulates the desired functionality. Again, the inputs are on the left and the outputs on the right, but now the interface is divided in events and data. The events are on the top part of the FB, as red, and the data on the lower part as blue. The events trigger the functionalities of the FBs, and the data inputs are the data use by these functionalities. The exact sequence happening in the FB when an event arrives is shown in the next image. 
+
+Events and data connections are not compatible, meaning that you cannot connect them together, in any way. You can fan in (many outputs to the same input) and fan out (same output to many inputs) events connections, and you can fan out data connections. What you cannot do is a fan in of data connections, because the FB won't know which data to get for its input.</p>
+
+<p>The lines and small squares that connect an event with data inputs (both in inputs and outputs) represent the data inputs that are refreshed when an input/output event arrives/leaves. The Event Execution Control (ECC) is the state machine that receives the event input, and according to the actual state, call the encapsulated functionality.</p>
+
+<img class="center" src="./img/functionBlockInterfaces.png" alt="Interfaces of a Function Block" />
+
+<h3 id="FBInternalSequence">FB Internal Sequence</h3>
+
+<p>The following image shows how a FB is triggered to execute its functionality.</p>
+
+<img class="center" src="./img/functionBlockSequence.png" alt="Sequence of how a Function Block is activated" />
+
+
+<ol>
+	<li>An input events arrives to the FB</li>
+	<li>The data inputs related to the incoming event are refreshed</li>
+	<li>The event is passed to the ECC</li>
+	<li>Depending on the type and execution control, the internal functionality is triggered for execution</li>
+	<li>The internal functionality finishes the execution, and provides new output data</li>
+	<li>The output data related to the output event are refreshed</li>
+	<li>Output event is sent</li>
+</ol>
+
+<p>Step 4 to 7 may repeat several times, and an output event is not mandatory to trigger.</p>
+
+<h3>Distributed application</h3>
+
+<p>So, with the FB and its behavior defined, an application in the IEC 61499 standard looks like the image below. You can check that data and events don't connect with each other.</p>
+
+<img class="center" src="img/genericApplication.png" alt="A generic application in IEC61499" />
+
+<p>Now, since the standard is oriented for distributed system, the application doesn't need to be running in only one device. It can be split and deployed in several devices (PLCs). And not only that, but you can have many applications, distributed over many devices. That's why, the System Model view, shown in the image below, helps the user design how the applications are distributed over the many devices its system have. A device can have many resources, that you can think of as threads inside the device. The FB are actually loaded to a resource, not to a device itself.</p>
+
+<img class="center" src="img/deployment.png" alt="Application deployment in several devices" />
+
+<p>You can see that not all FBs of one application go to the same device, and that a device can run many applications or many part of applications. CAUTION: A FB cannot be split to many devices.</p>
+
+<h3>Broken Connections</h3>
+
+<p>Well, it's very nice that you can split the application into many devices, but the data and events need to be sent to the next device in order to maintain the flow of them. Yes! that's why you fix this connections with special FB to publish and subscribe to this information as seen in the image below. Since these new FBs are not part of the application as an overall, you see them only when you go into the resource view.</p>
+
+<img class="center" src="img/distributedDeployment.png" alt="Broken Connection in distributed deployment" />
+
+<p>Finally, you can see now how the image below makes more sense. Of course, it's not all so magic, and you may have many doubts about how the broken connections are actually implemented or how can you access real hardware inputs/outputs in the PLC. We'll see about it later, when we see the different types of FBs.</p>
+
+<img class="center" src="img/iec61499Disitribution.png" alt="Application deployment in real industry">
+
+<h3>Types of Function Blocks</h3>
+
+<p>IEC 61499 defines 3 types of FBs that you can find when developing your application:</p>
+
+<ol>
+	<li>Basic Function Block (BFB):
+
+	<p>In the BFB you can define the state machine of the FB using the Execution Control Chart (ECC), which decides what algorithm to execute. The gray boxes in the right image are the algorithms encapsulated inside the Function Blocks. These algorithm are written by the user, using for example Structure Text (one of the programming language define in IEC 61131). The pink boxes are the output event triggered when the state is accessed. For example, if the FB is in the START state, and an EI1 event arrives, the FB jumps to State1, executes Alg1 and outputs an EO1 event.</p>
+
+	<p>The expression between square brackets are the conditions that should happen together with the event to actually jump to the next state. A 1 means that it will jump directly without the need of an event. It's good to remark here that the event is consumed only once, meaning that in the example explained, if the connection from State1 back to START was again a EI1, it won't enter an infinite loop. It should arrive another EI1 to go back. These kind of loops can occur with the 1 on the connections, since these are not consumed as the events.</p>
+
+	<img class="center" src="img/basicFunctionBlock.png" alt="Basic Function Block">
+
+	</li>
+
+	<li>Composite Function Block(CFB):
+		
+	<p>The CFB is just an internal network of other FBs.</p>
+
+	<img class="center" src="img/compositeFunctionBlock.png" alt="Composite Function Block">
+
+	</li>
+
+	<li>Service Function Block(SFB):
+		
+	<p>The SFB are the FBs needed to access specific parts of the hardware. As seen, the same application is deployed to several devices, but at some point the application needs to access inputs or outputs, and even access the specific hardware to communicate, but these functionalities depend on the hardware. That's where the SFB are needed. They are use basically for everything that you cannot put in a BFB or a CFb because it needs to access the platform. These types of FBs are activated not only from the incoming event but also from the hardware, meaning that a Responder FB can trigger an event every time a packet arrives.</p>
+
+	<img class="center" src="img/serviceFunctionBlock.png" alt="Service Function Block">
+
+	</li>
+
+</ol>
+
+<h3 id="iec61499ComplianceProfiles">Compliance Profiles</h3>
+
+<p>Since the standard is intended to be abstract, many "things" needed for proper execution of a system, like communication and similar, are not in it. But the standard does state how this "things" must be specified, and it's called Compliance Profiles. An example of a Compliance Profile is <a href="http://www.holobloc.com/doc/ita/" target="_blank">Holobloc</a></p>
+
+<p>You can see the Compliance Profile as the way of filling the gaps created because of the abstraction of the standard.</p>
+
+
+
+<h1>Where to go from here?</h1>
+
+<p>Now that you have a better understanding of the IEC61499 standard, it's time to understand what 4DIAC is and tools relate to it. Take a look at the following page:</p>
+
+<p><a href="./4diacFramework.html">Understand the 4DIAC framework</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+</body>
+</html>

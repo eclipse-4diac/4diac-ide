@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Export-Package: org.eclipse.fordiac.ide.application,
+ org.eclipse.fordiac.ide.application.actions,
+ org.eclipse.fordiac.ide.application.commands,
+ org.eclipse.fordiac.ide.application.editors,
+ org.eclipse.fordiac.ide.application.editparts,
+ org.eclipse.fordiac.ide.application.figures,
+ org.eclipse.fordiac.ide.application.handlers,
+ org.eclipse.fordiac.ide.application.policies,
+ org.eclipse.fordiac.ide.application.properties,
+ org.eclipse.fordiac.ide.application.utilities,
+ org.eclipse.fordiac.ide.application.viewer.composite
+Require-Bundle: org.eclipse.emf.ecore.editor,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.util,
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.fordiac.ide.gef,
+ org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.ui.navigator,
+ org.eclipse.core.runtime,
+ org.eclipse.gef,
+ org.eclipse.ui.views.properties.tabbed,
+ org.eclipse.fordiac.ide.typemanagement,
+ org.eclipse.fordiac.ide.model.commands
+Bundle-Vendor: Eclipse 4diac
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 1.9.0.qualifier
+Bundle-Name: Application modeling
+Bundle-Activator: org.eclipse.fordiac.ide.application.ApplicationPlugin
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.eclipse.fordiac.ide.application;singleton:=true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

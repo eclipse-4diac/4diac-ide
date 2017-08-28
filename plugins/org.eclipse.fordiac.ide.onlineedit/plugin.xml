@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            id="org.eclipse.fordiac.ide.onlineedit.onlineCreateConnection"
+            name="Online Create Connection">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            id="org.eclipse.fordiac.ide.onlineedit.onlineCreateFB"
+            name="Online Create FB">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            id="org.eclipse.fordiac.ide.onlineedit.onlineStartFB"
+            name="Online Start FB">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.fordiac.ide.onlineedit.handlers.OnlineCreateConnectionHandler"
+            commandId="org.eclipse.fordiac.ide.onlineedit.onlineCreateConnection">
+         <activeWhen>
+            <with
+                  variable="selection">
+               <iterate
+                     operator="and">
+                  <instanceof
+                        value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart">
+                  </instanceof>
+               </iterate>
+            </with>
+         </activeWhen>
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.onlineedit.handlers.OnlineCreateFBHandler"
+            commandId="org.eclipse.fordiac.ide.onlineedit.onlineCreateFB">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.onlineedit.handlers.OnlineStartFBHandler"
+            commandId="org.eclipse.fordiac.ide.onlineedit.onlineStartFB">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <command
+               commandId="org.eclipse.fordiac.ide.onlineedit.onlineCreateConnection"
+               label="Online Create Connection"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate
+                        operator="and">
+                     <instanceof
+                           value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <command
+               commandId="org.eclipse.fordiac.ide.onlineedit.onlineCreateFB"
+               label="Online Create FB"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference definitionId="org.eclipse.fordiac.ide.onlineedit.FBDefinition" />
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <command
+               commandId="org.eclipse.fordiac.ide.onlineedit.onlineStartFB"
+               label="Online Start FB">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference definitionId="org.eclipse.fordiac.ide.onlineedit.FBDefinition" />
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+<extension
+      point="org.eclipse.core.expressions.definitions">
+   <definition
+         id="org.eclipse.fordiac.ide.onlineedit.FBDefinition">
+       <with
+               variable="selection">
+               <iterate>
+                  <or>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.model.libraryElement.FB">
+                    </instanceof>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.application.editparts.FBEditPart">
+                    </instanceof>
+                  </or>
+               </iterate>
+         </with>  
+   </definition>
+</extension>
+</plugin>

@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.gef,
+ org.eclipse.ui.views.properties.tabbed,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.fbtypeeditor,
+ org.eclipse.fordiac.ide.typemanagement,
+ org.eclipse.fordiac.ide.util,
+ org.eclipse.fordiac.ide.gef,
+ org.eclipse.fordiac.ide.application,
+ org.eclipse.fordiac.ide.model.edit,
+ org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.gef,
+ org.eclipse.fordiac.ide.model.commands
+Bundle-Vendor: Eclipse 4diac
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 1.9.0.qualifier
+Bundle-Name: Composite FB Network
+Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.network.Activator
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.network;singleton:=true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.network,
+ org.eclipse.fordiac.ide.fbtypeeditor.network.editparts,
+ org.eclipse.fordiac.ide.fbtypeeditor.network.viewer

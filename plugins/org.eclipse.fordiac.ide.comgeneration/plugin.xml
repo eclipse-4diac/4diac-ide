@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.fordiac.ide.model.libraryElement.Application"
+            id="org.eclipse.fordiac.ide.comgeneration.plugin.contribution">
+         <menu
+               label="Generate"
+               path="additions"
+               id="org.eclipse.fordiac.ide.comgeneration.plugin.generate">
+            <separator
+                  name="group">
+            </separator>
+         </menu>
+         <action
+               label="Generate communication FBs"
+               class="org.eclipse.fordiac.ide.comgeneration.plugin.popup.actions.GenerateCommAction"
+               menubarPath="org.eclipse.fordiac.ide.comgeneration.plugin.generate/group"
+               enablesFor="1"
+               id="org.eclipse.fordiac.ide.comgeneration.plugin.generateAction">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>

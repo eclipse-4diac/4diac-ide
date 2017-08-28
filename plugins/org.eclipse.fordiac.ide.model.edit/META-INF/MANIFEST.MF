@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Model Edit
+Bundle-SymbolicName: org.eclipse.fordiac.ide.model.edit;singleton:=true
+Bundle-Version: 1.9.0.qualifier
+Bundle-ClassPath: .
+Bundle-Activator: org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin$Implementation
+Bundle-Vendor: Eclipse 4diac
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.eclipse.fordiac.ide.model.Palette.provider,
+ org.eclipse.fordiac.ide.model.data.provider,
+ org.eclipse.fordiac.ide.model.libraryElement.provider
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.fordiac.ide.model;visibility:=reexport,
+ org.eclipse.emf.edit;visibility:=reexport,
+ org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.ecore.edit;visibility:=reexport,
+ org.eclipse.swt,
+ org.eclipse.core.resources,
+ org.eclipse.fordiac.ide.util
+Bundle-ActivationPolicy: lazy

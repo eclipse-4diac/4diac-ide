@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Communication Generation
+Bundle-SymbolicName: org.eclipse.fordiac.ide.comgeneration;singleton:=true
+Bundle-Version: 1.9.0.qualifier
+Bundle-Activator: org.eclipse.fordiac.ide.comgeneration.plugin.Activator
+Bundle-Vendor: Eclipse 4diac
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.edit,
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.fordiac.ide.application,
+ org.eclipse.fordiac.ide.util,
+ org.eclipse.draw2d,
+ org.eclipse.fordiac.ide.gef,
+ org.eclipse.fordiac.ide.model.commands
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy

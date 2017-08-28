@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Subapplication Type Editor"
+            extensions="sub"
+            icon="fordiacimage://ICON_SubApp"
+            contributorClass="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditorContributor"
+            class="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor"
+            id="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor">
+      </editor>
+   </extension>
+<extension
+         point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
+      <editor
+            class="org.eclipse.fordiac.ide.subapptypeeditor.editors.SubAppInterfaceEditor"
+            sortIndex="20"
+            type="subapp">
+      </editor>
+   </extension>
+<extension
+         point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
+      <editor
+            class="org.eclipse.fordiac.ide.subapptypeeditor.editors.SubAppNetworkEditor"
+            sortIndex="30"
+            type="subapp">
+      </editor>
+   </extension>
+</plugin>

@@ -1,0 +1,95 @@
+<!DOCTYPE html> 
+<!--
+ Copyright (c) 2017 fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Jose Cabral 
+     - initial API and implementation and/or initial documentation
+-->
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Step 3 - Deploy remotely</title>
+    <link rel="stylesheet" type="text/css" href="../help.css" />
+  </head>
+  <body>
+
+    <h1 id="topOfPage">Step 3 - Deploy applications remotely</h1>
+    
+    <p>This page is part of a guide that gives a walkthrough over the major 4DIAC features.</p>
+
+    <ol start="0">
+      <li><a href="./overview.html">Overview</a></li>
+      <li><a href="./use4diacLocally.html">Use 4DIAC locally</a></li>
+      <li><a href="./distribute4diac.html">Create a distributed application</a></li>
+      <li>Deploy remotely (YOU ARE HERE!)</li>
+      <li><a href="./createOwnTypes.html">Create your own Function Blocks</a></li>
+      <li><a href="./otherUseful.html">Other basic features</a></li>
+      <li><a href="./advancedFeatures.html">Advanced Features [optional]</a></li>
+    </ol>
+
+    <p>In this step, the Blink application will not run locally, but in another device. This has not too much to show, but it helps understand the workflow when using real PLCs. Since this page is more of an explanation than actually showing, it's up to the reader to actually implement it. The image below shows the architecture of this step.</p>
+
+   <img src="./img/remote4diac.png" alt="architecture for the current step"/>
+
+   <h2 id="stepsToDeployRem">Follow these steps to deploy remotely</h2>
+
+   <ol>
+     <li>Select the PLC hardware or other Hardware that can run FORTE. You can check <a href="../before4DIAC/4diacFramework.html#4diacFramework" target="_blank">here</a> the list of supported platforms. The cheap options are Raspberry Pi, BeagleBoneBlack or other small board that runs linux. Another option would be to use another computer in your network.</li>
+     <li>Start FBRT locally as you did in step 3 when <a href="./distribute4diac.html#deployDevices" target="_blank">deploying devices</a></li>
+     <li>Compile FORTE for your PLC or other Hardware. Check <a href="../installation/install.html#FORTEWindowsUnix">here</a> for more information.</li>
+     <li>Run FORTE on the device. This depends on the device you are using. Normally it has some type of Terminal or FTP that you can access and launch the executable. Attention! You cannot use the "Launch FORTE" similar as you did with FBRT, because this will launch a FORTE on your machine and not in the deveice. There's no way of launching FORTE in the device from 4DIAC.</li>
+     <li>In the System Configuration of the project, change the IP:PORT of the FORTE_PC device to match the one that your device has. You should be able to know the IP of your device. The port is 61499 by default. Remember that you can change this port when launching FORTE.</li>
+     <li>In the Debugging Perspective, select both devices (FBRT_WINDOW and FORTE_PC) just as the step before and click Download.</li>
+     <li>Monitor the FORTE_PC the same way as before, and test the application using the buttons. Remember you cannot monitor FBRT.</li>
+   </ol>
+
+   <h2 id="troubleshooting">Troubleshooting</h2>
+
+   <p>In many cases there are problems even when doing such a simple example. In most cases, it's a network's problem.</p>
+
+   <p>If you get an error when Downloading to the device, it might be that the IP:PORT is wrong, the device is unreachable (in another network behing a firewall maybe?) or FORTE is not running in the device.</p>
+
+   <p>In case you click the Buttons but no reaction in the Blinking part, then there's a communication problem there. Try the following:</p>
+
+   <ul>
+     <li>If you connected your device directly to your computer, add the computer's IP address as default gateway. In some linux versions it shoud be something similar to:
+      <div class="code">$ ip route add default [ip] dev [interface]</div> 
+      <p>where [ip] is the IP address of your computer, and [interface] is the network interface where it's connected (eth0, usb0, etc.)</p>
+      </li>
+      <li>Make sure that the interface is prepared to handle Multicast packets.</li>
+      <li>On Windows machine: run the comand window with admin rights, and type 
+      <div class="code">route PRINT</div>
+      <p>this lists all the routes used by your PC. You should check that the multicast address used by the application appears there and uses your device IP address as gateway. In the case our example it uses the address 239.0.0.1. If it doesn't appear, the address should be added and directed towards the device's IP address. Use the command</p>
+      <div class="code">route ADD 239.0.0.1 MASK 255.255.0.0 [DEVICE_IP] METRIC 255</div>
+      <p>and then it should appear when printing again the routes.</p>
+        </li>
+      <li>Another problem found in Windows is that even tought the device receives the packets and send the answer back, the application is not receiving them. Even tought the packet appears in Wireshark the application does not receive it. A solution is to disable the FIREWALL completely. After that everything should work fine.</li>
+   </ul>
+
+<h1>Where to go from here?</h1>
+
+<p>In the next step you will see how to create your own Function Blocks</p>
+
+<p><a href="./createOwnTypes.html">Step 4 - Create your own Function Blocks</a></p>
+
+<p>If you want to go back to the distributed application running completely locally, here's a link</p>
+
+<p><a href="./distribute4diac.html">Step 2 - Distribute 4DIAC applications</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+</body>
+</html>
+
+

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+ Copyright (c) 2014 - 2016 fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Alois Zoitl, Monika Wenger
+     - initial API and implementation and/or initial documentation
+-->
+<introContent>
+	<extensionContent id="whatsnew-top-left" name="Whats New Current Version" path="whatsnew/@">
+  	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.8">    		
+	       		<group style-id="content-group" id="orgfordiacide-introLink-group" label="4DIAC-IDE">
+	       		 <text> The main changes and improvements in 4DIAC-IDE are:
+	       		 	&lt;UL&gt;
+	       		 		&lt;LI&gt; New more modern icon set
+	       		 		&lt;LI&gt; Added a tree-based FB palette to all FB network editors to avoid dragging from wrong projects 
+	       		 		&lt;LI&gt; Replaced system explorer with a more extensible flexible implementation
+	       		 		&lt;LI&gt; Adapter connections now have an own separate color
+	       		 		&lt;LI&gt; Better routing of network links in the system configuration editor when segments are below of a device.
+	       		 		&lt;LI&gt; Merged ECC, internal variable, and algorithm editor and improved properties for the new ECC editor.
+	       		 		&lt;LI&gt; Better show the transition order in ECCs.
+	       		 		&lt;LI&gt; Improved ST parser for better code completion and syntax highlighting.
+	       		 		&lt;LI&gt; New experimental automatic communication generation plugin.
+	       		 		&lt;LI&gt; Monitoring of adapter interfaces
+	       		 		&lt;LI&gt; Reworked monitoring to be more performant on the tool side.	       		 
+	       			&lt;/UL&gt;
+	       			Furthermore many smaller usability improvements and bug fixes. All in all 75 closed issues!
+	       		 </text>
+	       		 
+				</group>
+	       		<group style-id="content-group" id="orgfordiacide-introLink-group" label="FORTE">
+	       			<text>The main changes and improvements in FORTE are:
+	       		 	&lt;UL&gt;
+	       		 		&lt;LI&gt; Support for new devices: Lego Mindstorms EV3, Raspberry SPS
+	       		 		&lt;LI&gt; Raw communication layer for plain strings
+	       		 		&lt;LI&gt; Simplified the thread abstraction class making it easier to port FORTE to new operating systems.
+	       		 		&lt;LI&gt; Reduced memory requirements of device management by about 2/3rds.
+	       		    &lt;/UL&gt;
+	       		    Furthermore many smaller bug fixes. All in all 15 closed issues!
+	       		    </text>
+	       		</group>
+	       		<group style-id="content-group" id="orgfordiacide-introLink-group" label="4DIAC-LIB">
+	       			<text>The main changes and improvements in 4DIAC-LIB are:
+	       		 		&lt;UL&gt;
+	       		 			&lt;LI&gt; Added device definitions for specific FORTE devices like, BeagleBone Black or RaspberryPI
+	       		 		&lt;/UL&gt;
+	       		 	</text>
+	       		 		
+	       		</group>
+	       		<group style-id="content-group" id="orgfordiacide-introLink-group" label="4DIAC-Systems">
+	       			<text>The main changes and improvements in 4DIAC-Systems are:
+	       		 	&lt;UL&gt;
+	       		 		&lt;LI&gt; Cleaned-up Boiler example
+	       		 		&lt;LI&gt; Updated all examples to use new device definitions.
+	       		    &lt;/UL&gt;</text>
+	       		</group>      		
+       	</group>
+   	</extensionContent>
+   	
+   	<extensionContent id="fordiac-news" style="css/style.css" name="Whats New Extension" path="whatsnew/@">
+        <group style-id="content-group" id="news-web" label="4DIAC News">
+            <contentProvider id="url=http://sourceforge.net/p/fordiac/news/feed.rss##welcome_items=10##no_news_url=https://sourceforge.net/p/fordiac/news/?source=navbar##no_news_text=Welcome to the 4DIAC news page" pluginId="org.eclipse.ui.intro" class="org.eclipse.ui.intro.contentproviders.EclipseRSSViewer">
+            </contentProvider>
+        </group>
+    </extensionContent>
+    
+  	<extensionContent id="fordiac-older-releases" style="css/style.css" name="Prior Versions" path="whatsnew/@">   			 
+		<group style-id="content-group" id="orgfordiacide-introLink-group"
+		           label="Previous Releases">
+            
+            <link label="1.7.3" url="https://sourceforge.net/p/fordiac/news/2015/11/third-maintenance-release-for-4diac-17/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>In the 3rd 1.7 maintenance release 4 issues have been resolved in 4DIAC-IDE and 1 in FORTE.</text>
+       		</link>
+            <link label="1.7.2" url="https://sourceforge.net/p/fordiac/news/2015/08/second-maintenance-release-for-4diac-17//" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>In the 2nd 1.7 maintenance release 7 issues have been resolved in 4DIAC-IDE and 1 in FORTE.</text>
+       		</link>
+		    <link label="1.7.1" url="https://sourceforge.net/p/fordiac/news/2015/05/first-maintenance-release-for-4diac-17/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>In the 1st 1.7 maintenance release 9 issues have been resolved in 4DIAC-IDE and 2 in FORTE.</text>
+       		</link>
+		    <link label="1.7.0" url="https://sourceforge.net/p/fordiac/news/2015/04/4diac-web-page--sf/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>The main contribution of this release is the support for monitoring Composite FB internals, 
+          		       more UI cleanup and usability improvements, new platform Wago PFC 200, new communication Eclipse NeoScada SFP,
+          		       and performance and memory usage improvements in FORTE.</text>
+       		</link>
+            
+            <link label="1.6.2" url="http://sourceforge.net/p/fordiac/news/2014/12/second-maintenance-release-for-4diac-16/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>In the 2nd maintenance release 8 issues have been resolved in 4DIAC-IDE, 1 in FORTE, and 1 in 4DIAC-Systems.</text>
+       		</link>
+		    <link label="1.6.1" url="http://sourceforge.net/p/fordiac/news/2014/11/first-maintenance-release-for-4daic-16/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>In the 1st maintenance release 5 issues have been resolved in 4DIAC-IDE and 1 in 4DIAC-Systems.</text>
+       		</link>
+		    <link label="1.6.0" url="http://sourceforge.net/p/fordiac/news/2014/10/4diac-release-160/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>The main contribution of this release is the improvement of the subaplication support, UI cleanup, new platforms Rspberry PI and BeagleBone Black, new communication MQTT, 
+          		      common I/O function blocks for digital inputs and outputs as well as a new control example.</text>
+       		</link>
+		    <link label="1.5.3" url="http://sourceforge.net/p/fordiac/news/2014/06/thirdsecond-maintenance-release-for-4diac-15--/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>In the 3rd maintenance release 5 issues have been resolved in 4DIAC-IDE and 2 in FORTE and the 4DIAC-Help has been integrated.</text>
+       		</link>
+		    <link label="1.5.2" url="http://sourceforge.net/p/fordiac/news/2014/04/second-maintenance-release-for-4diac-15/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>In the 2nd maintenance release 7 issues have been resolved in 4DIAC-IDE.</text>
+       		</link>
+		    <link label="1.5.1" url="http://sourceforge.net/p/fordiac/news/2014/03/first-maintenance-release-for-4diac-15/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>In the 1st maintenance release 4 issues have been resolved in 4DIAC-IDE and 5 in FORTE.</text>
+       		</link>
+		    <link label="1.5.0" url="http://sourceforge.net/p/fordiac/news/2014/02/4diac-release-150/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>The main contribution of this release is the official support of MacOS as well as Syntax highlighting and code completion the Structured Text algorithm editor</text>
+       		</link>
+       		<!--link label="1.4.2" url="http://sourceforge.net/p/fordiac/news/2013/11/second-maintenance-release-for-4diac-14-/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>In the second maintenance release 6 bugs have been fixed in 4DIAC-IDE and 4 in FORTE.</text>
+       		</link>
+       		<link label="1.4.1" url="http://sourceforge.net/p/fordiac/news/2013/10/first-maintenance-release-for-4daic-14/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>In the second maintenance release 10 bugs have been fixed in 4DIAC-IDE and 2 in FORTE.</text>
+       		</link>
+       		<link label="1.4.0" url="http://sourceforge.net/p/fordiac/news/2013/09/4diac-release-14/" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>The main contribution of this release is the improvement of the overall stability and usability of 4DIAC-IDE and FORTE. All in all this release incorporates the fixes and implementations of more than 84 issues! Additionally we enhanced the support for the generic data types (i.e., ANY_INT, ANY_ELEMENTARY, etc.). The biggest news though is definitely that the 4DIAC framework now support all of the IEC 61131-3 Functions and Function Blocks as IEC 61499 Function Blocks. Of course the IEC 61131-3 Functions are also available for use in Structured Text algorithms!</text>
+       		</link-->
+       	</group>
+  	</extensionContent>
+  	
+</introContent>

@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Structured Text
+Bundle-Vendor: Eclipse 4diac
+Bundle-Version: 1.9.0.qualifier
+Bundle-SymbolicName: org.eclipse.fordiac.ide.model.structuredtext;singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.xtext.fbt,
+ org.eclipse.emf.ecore,
+ org.antlr.runtime,
+ org.eclipse.xtext.util,
+ org.eclipse.emf.common,
+ org.eclipse.xtext,
+ org.eclipse.xtend.lib
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.eclipse.fordiac.ide.model.structuredtext,
+ org.eclipse.fordiac.ide.model.structuredtext.converter,
+ org.eclipse.fordiac.ide.model.structuredtext.parser.antlr,
+ org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.internal,
+ org.eclipse.fordiac.ide.model.structuredtext.resource,
+ org.eclipse.fordiac.ide.model.structuredtext.scoping,
+ org.eclipse.fordiac.ide.model.structuredtext.services,
+ org.eclipse.fordiac.ide.model.structuredtext.structuredText,
+ org.eclipse.fordiac.ide.model.structuredtext.structuredText.impl,
+ org.eclipse.fordiac.ide.model.structuredtext.structuredText.util,
+ org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.lexer
+Import-Package: org.apache.log4j

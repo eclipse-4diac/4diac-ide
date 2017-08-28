@@ -1,0 +1,36 @@
+Manifest-Version: 1.0
+Export-Package: org.eclipse.fordiac.ide.systemmanagement.ui,
+ org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer,
+ org.eclipse.fordiac.ide.systemmanagement.ui.wizard
+Bundle-ActivationPolicy: lazy
+Bundle-Name: System Management UI
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.ui.ide,
+ org.eclipse.core.resources,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.util,
+ org.eclipse.gef,
+ org.eclipse.fordiac.ide.gef,
+ org.eclipse.ui.views.properties.tabbed,
+ org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.ltk.core.refactoring,
+ org.eclipse.fordiac.ide.typemanagement,
+ org.eclipse.fordiac.ide.application,
+ org.eclipse.ui.navigator,
+ org.eclipse.ui.navigator.resources,
+ org.eclipse.emf.edit,
+ org.eclipse.emf.edit.ui,
+ org.eclipse.fordiac.ide.model.edit,
+ org.eclipse.fordiac.ide.resourceediting,
+ org.eclipse.jface,
+ org.eclipse.fordiac.ide.systemconfiguration,
+ org.eclipse.fordiac.ide.model.commands
+Bundle-Vendor: Eclipse 4diac
+Bundle-Version: 1.9.0.qualifier
+Bundle-ManifestVersion: 2
+Bundle-Activator: org.eclipse.fordiac.ide.systemmanagement.ui.Activator
+Bundle-SymbolicName: org.eclipse.fordiac.ide.systemmanagement.ui;singleton:=true

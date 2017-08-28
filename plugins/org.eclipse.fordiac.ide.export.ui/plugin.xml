@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="ExportFilter" name="org.eclipse.fordiac.ide.export.exportFilter" schema="schema/ExportFilter.exsd"/>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <wizard
+            category="org.eclipse.fordiac.ide.export.ui"
+            class="org.eclipse.fordiac.ide.export.ui.wizard.FordiacExportWizard"
+            icon="fordiacimage://ICON_Export"
+            id="org.eclipse.fordiac.ide.export.ui.wizard.FordiacExportWizard"
+            name="4DIAC Type Export">
+      </wizard>
+      <category
+            id="org.eclipse.fordiac.ide.export.ui"
+            name="4diac">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.export.ui.preferences.FORTEExportPreferences"
+            id="org.eclipse.fordiac.ide.export.ui.preferences.FORTEExportPreferences"
+            name="FORTE Export Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.export.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

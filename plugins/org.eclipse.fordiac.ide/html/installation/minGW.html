@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2010 - 2014 TU Wien ACIN, fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Carolyn Oates, Alois Zoitl, Monika Wenger, Jose Cabral
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Setting up MinGW</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+
+<body>
+<h1 id="topOfPage">Setting up MinGW for FORTE Development</h1>
+
+<h2>Install <a href="http://www.mingw.org/" target="_blank">MinGW</a></h2>
+<p>Download installer <a href="https://sourceforge.net/projects/mingw/files/" target="_blank">MinGW Installer</a>. Install using default options and add the following packages:</p>
+<ul>	
+	<li>mingw32-gcc-g++</li>
+	<li>mingw32-cc </li>
+	<li>mingw32-make </li>
+	<li>msys-make (add this if you want to generate Msys Makefile)</li>
+</ul>
+<p>After installing, press <span class="button4diac">Windows Key + Pause</span>. In the System window, click <span class="button4diac">Advanced System Settings &rarr; Advanced (tab) &rarr; Environment Variables</span>. Change PATH variable (click on it), and add the path where your MinGW binaries have been installed in e.g., <span class="folderLocation">C:\MinGW\bin\</span>. Add <span class="folderLocation">C:\MinGW\bin;C:\MinGW\msys\1.0\bin;</span> in the Windows PATH variable. Try to give it in the beginning of the path or most likely after <span class="folderLocation">C:\Program Files\Common Files\Microsoft Shared\Windows Live;</span>.</p> 
+
+<h2>Test MinGW</h2>
+<p>Open command prompt window by pressing <span class="button4diac">Windows</span> button and entering <span class="inlineCode">cmd</span>. Enter <span class="inlineCode">bash</span>, if bash prompt appears, it was successful.</p>
+
+<h2>CMake and Compilation</h2>
+
+<p>In step 2 of <a href="./install.html#generateFilesForCompiling">Generate files for compiling</a>, you have to select <span class="specificText">MSYS Makefiles</span> or <span class="specificText">MinGW Makefiles</span> when working with MinGW. The architecture option should be set to Win32.</p>
+
+<p>To compile forte, you do</p>
+<div class="code">$ cd FORTE_FOLDER_ROOT/bin/[YOUR_SYSTEM]
+$ make</div>
+
+<h1 id="whereToGoFromHere">Where to go from here?</h1>
+
+<p>Now that you installed the required tools, it's time to start using them. Take a look at the following page:</p>
+
+<p><a href="../4diacIDE/overview.html">Step by step tutorial</a></p>
+
+<p>If you want to compile FORTE for another platform or want to know more about that, here's a quick link back:</p>
+
+<p><a href="./install.html">Install 4DIAC</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+</body>
+</html>

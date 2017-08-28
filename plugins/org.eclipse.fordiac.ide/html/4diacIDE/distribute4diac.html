@@ -1,0 +1,134 @@
+<!DOCTYPE html> 
+<!--
+ Copyright (c) 2017 fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+    Jose Cabral 
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Step 2 - Distribute 4DIAC applications</title>
+    <link rel="stylesheet" type="text/css" href="../help.css" />
+  </head>
+  <body>
+
+    <h1 id="topOfPage">Step 2 - Distribute 4DIAC applications</h1>
+
+    <p>This page is part of a guide that gives a walkthrough over the major 4DIAC features.</p>
+
+    <ol start="0">
+      <li><a href="./overview.html">Overview</a></li>
+      <li><a href="./use4diacLocally.html">Use 4DIAC locally</a></li>
+      <li>Create a distributed application (YOU ARE HERE!)</li>
+      <li><a href="./use4diacRemotely.html">Deploy remotely</a></li>
+      <li><a href="./createOwnTypes.html">Create your own Function Blocks</a></li>
+      <li><a href="./otherUseful.html">Other basic features</a></li>
+      <li><a href="./advancedFeatures.html">Advanced Features [optional]</a></li>
+    </ol>
+
+    <p>This guide adds a Start and Stop control to the Blinking application created in <a href="./use4diacLocally.html" target="_blank">Step 1</a>. Normally you would put two buttons that would serve as inputs to the PLC and control the Blink application. In this following example, it will be shown how to detach the buttons from the same Hardware and make them run separately. For now, the example still uses the local computer. But the Blink application will run on a FORTE instance and the input buttons will run on a FBRT instance (if you don't know what it is or you've forgotten, <a href="../before4DIAC/4diacFramework.html" target="_blank">here</a> the quick access). The two different program running on the local machine emulate two PLCs. See the architecture below.</p>
+
+    <img src="./img/distributedArchitecture.png" alt="architecture for the current step"/>
+
+    <h2 id="addAnotherDevice">Add another device to System Configuration</h2>
+
+    <p>First, add a new device to the System Configuration. Go to it, and Drag and Drop a FBRT_WINDOW (1) next to the FORTE_PC, and connect it to the Ethernet sement. It already comes with a resource called PANEL_RESOURCE. The MGR_ID (2) is very important to change, since by default it has the same IP:PORT as the FORTE_PC. Change it to <span class="address">localhost:61505</span>. This means that the FBRT will run locally (localhost) and will listen at the port 61505, a different one from the 61499 from FORTE_PC.</p>
+
+    <img src="./img/distributedSystemConfiguration.png" alt="Distribute System Configuration"/>
+
+    <h2 id="addButtonFBs">Add buttons FBs to the Blink application</h2>
+
+    <p>Back in the Application, because FBRT is written in Java and supports graphical interface and other FBs, there's a folder called <span class="folderLocation">FBRT</span> in the Palette that contains special FBs that only work on it and not in FORTE. In a Subfolder is the <span class="folderLocation">hmi</span> folder and inside of it you can find the IN_EVENT FB.</p>
+
+    <ol>
+      <li>Drag two of them at the left of the blink application. Change the names to START_BUTTON and STOP_BUTTON for better reference.</li>
+      <li>Set the QI of both FBs to 1, and in the LABEL input data, set to the text that you want to see on them. We'll use START and STOP. The 1 in QI means that when an INIT event arrives, the FB will initialize, and if it was zero it would have been de-initialized.</li>
+      <li>Connect the IND event of the START_BUTTON to the START input event of E_CYCLE, and similarly for the STOP_BUTTON and the STOP event. Also, connect the INITO of START_BUTTON to the INIT of STOP_BUTTON. See the image below.</li>
+      <li>Select both FBs, and map them to the resource of the FBRT_WINDOW device that you added before.</li>
+    </ol>
+
+    <img src="./img/distributedApplication.png" alt="Distribute Application"/>
+
+    <p>You can see the stripped line instead of the solid that connect FBs that run in diffent devices. This means that the event doesn't go directly. Since the communication of these events is not implicit, we must complete the application in both devices to handle this broken connections.</p>
+
+
+<h2 id="fixBrokenConnections">Fix broken connections between devices</h2>
+
+<ol>
+  <li>Go to the System Configuration, and double click on the Resource of the FBRT_WINDOW to access the Resource. You see here the two functions block that you added to the application and START FB that comes with the resource.</li>
+  <li>First, connect the COLD and WARM events from the START FB to the INIT event of START_BUTTON. (The order they're initialized is the order they appear in the GUI)</li>
+  <li>Add two PUBLISH_0 FBs from the Palette in the same Resource view. Call them PUBLISH_START and PUBLISH_STOP.</li>
+  <li>Keep the flow of the INIT events by connecting the INITO to the next INIT.</li>
+  <li>Set QI of both PUBLISH to 1.</li>
+  <li>Connect the IND output event of START_BUTTON to the REQ of a PUBLISH_START. Do the same for the other pair of FBs.</li>
+  <li>Set the ID input data of START_BUTTON to 239.0.0.1:61000 and the ID of PUBLISH_STOP to 239.0.0.1:61001.</li>
+</ol>
+
+  <img src="./img/distributedFBRT.png" alt="Distribute FBRT resource"/>
+
+  <p>Here's what the last steps means. Every time you click the button in the FBRT, an IND event is generated. The PUBLISH_X FBs are used to send messages throught the network. Every time a REQ is triggered, a message is sent according to the ID. In the ID you can specify if you want to use a specific network protocol like MQTT, OPC, etc. If you don't specify anything, the default defined in the Compliance Profile is used. The number X in PUBLISH_X is the number of data that you want to send as message, and since we are sending only an event here, and no data we used PUBLISH_0.</p>
+
+  <p>The selected ID specifies an IP:PORT pair. The used <a href="http://www.holobloc.com/doc/ita/s3.htm#3.3" target="_blank">Compliance Profile</a> says that we should use UDP sockets in a certain range. The selected 239.0.0.1 and port 61000/1 have nothing to do with the localhost:61499 or localhost:61505 used for the device. The first are a UDP connections used to send events between devices, and the latter are TCP connections to connect to 4DIAC to upload applications and manage them. Take care of not using the same pair for different UDP sockets.</p>
+
+  <h2>Fix broken connections in the other resource</h2>
+
+<ol>
+  <li>Go to the System Configuration, and double click on the Resource of the FORTE_PC to access the Resource. You see here the blink application as before.</li>
+  <li>First, remove the COLD and WARM events from the START of E_CYCLE, since this will be triggered by the buttons.</li>
+  <li>Add two SUBSCRIBE_0 FBs from the Palette in the same Resource view. Call them SUBSCRIBE_START and SUBSCRIBE_STOP.</li>
+  <li>Connect the WARM and COLD from the START FB to the INIT of SUBSCRIBE_START, and then continue the flow to SUBSCRIBE_STOP.</li>
+  <li>Set QI of both SUBCRIBE to 1.</li>
+  <li>Connect the IND output event of SUBSCRIBE_START to the START of E_CYCLE. Do the same for the other pair of FBs.</li>
+  <li>Set the ID input data of SUBSCRIBE_START to 239.0.0.1:61000 and the ID of SUBSCRIBE_STOP to 239.0.0.1:61001.</li>
+</ol>
+
+  <img src="./img/distributedFORTE.png" alt="Distribute FORTE resource"/>
+
+  <p>This is like the mirror of the step before. Each subscriber listen to a specific UDP IP:PORT. These are the same as used in the GUI. This means that when you press the START button, an event will be sent to a specific IP:PORT using UDP, and since the Blinking device is listening to the same IP:PORT, it will get the event, triggering in the application.</p>
+
+<h2 id="deployDevices">Deploy both devices</h2>
+
+<p>Similar on how it was done to deploy the Blink application is done for two. The only difference is that in this case we launch 1 FORTE instance and 1 FBRT instance in the Deployment Perspective. First set Windows &rarr; Preferences &rarr; 4DIAC &rarr; FBRT Preferences to the fbrt.jar file located under runtime/FBRT in your 4DIAC folder.</p>
+
+<ol>
+  <li>Sele both devices in the Donwload Selection</li>
+  <li>Launch one FORTE instance. The port should be one specified in the System Configuration (has nothing to do with the IP:PORT used with UDP to send events)</li>
+  <li>Launch one FBRT instance. The same care must be taken regarding the port. This will open a GUI frame.</li>
+  <li>Download the application</li>
+  <li>Check that you don't get any error, and you should see the buttons in the GUI.</li>
+
+</ol>
+
+<img src="./img/distributedDownload.png" alt="Distribute FORTE resource"/>
+
+<h2 id="testApplication">Test it! </h2>
+
+<p>Do the debugging similar on how it was done in the <a href="./use4diacLocally.html#monitoringApplication" target="_blank">Blink example</a>. You should see the blinking only after you pressed the start button, and it should stop when pressing the other button. Attention!: You cannot monitor FBRT, only FORTE, because it's a feature only present on it.</p>
+
+<h1>Where to go from here?</h1>
+
+<p>In the next step you will see how FORTE runs in another machine.</p>
+
+<p><a href="./use4diacRemotely.html">Step 3 - Deploy remotely</a></p>
+
+<p>If you want to go back to the original Blinking application without buttons, here's a link</p>
+
+<p><a href="./use4diacLocally.html">Step 1 - Use 4DIAC-IDE locally</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+</body>
+</html>

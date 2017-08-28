@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
+      <editor
+            class="org.eclipse.fordiac.ide.fbtypeeditor.fbtest.FBTestEditor"
+            sortIndex="6514"
+            type="ForAllNonAdapterFBTypes">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.fordiac.ide.fbtypeeditor.fbtest.FBTestEditor"
+            default="false"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.fbtest.editor1"
+            name="FBTest Editor">
+      </editor>
+   </extension>
+
+
+</plugin>

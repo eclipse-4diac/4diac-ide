@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+ Copyright (c) 2014 fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Alois Zoitl, Monika Wenger
+     - initial API and implementation and/or initial documentation
+-->
+<extensions>
+
+  <page id="overview">
+	  <group path="page-content/bottom-left" default="true">
+      </group>
+      <group path="page-content/bottom-right" default="true">
+      </group>
+      <group path="page-content/top-left">
+      	 <extension id="fordiac-overview-left" importance="low"/>
+      </group>
+      <group path="page-content/top-right">
+      	<extension id="fordiac-overview-right" importance="low"/>
+      </group>     
+      <hidden>         
+      	 <extension id="org.eclipse.jdt" importance="low"/>
+         <extension id="org.eclipse.ui.workbench" importance="low"/>
+         <extension id="org.eclipse.pde" importance="low"/>
+      </hidden>
+   </page>
+   
+   <page id="tutorials">
+      <group path="page-content/top-left">
+         <extension id="page_tutorials" importance="low"/>
+      </group>
+	  <group path="page-content/top-right">
+         <extension id="page_fbs" importance="low"/>
+      </group>
+      <hidden>
+      	<extension id="org.eclipse.jdt" importance="low"/>
+        <extension id="org.eclipse.team" importance="low"/>
+        <extension id="org.eclipse.pde" importance="low"/>
+       </hidden>
+   </page>
+   
+   <page id="whatsnew">
+      <group path="page-content/top-right" default="true">
+      	<extension id="fordiac-news" importance="low"/>
+      	<extension id="fordiac-older-releases" importance="low"/>    	
+      </group>
+      <group path="page-content/top-left">
+         <extension id="whatsnew-top-left" importance="low"/>
+      </group>
+      <hidden>         
+      	 <extension id="org.eclipse.jdt" importance="low"/>
+         <extension id="org.eclipse.ui.workbench.news" importance="low"/>
+         <extension id="org.eclipse.ui.workbench.migration" importance="low"/>
+         <extension id="org.eclipse.pde.changes" importance="low"/>
+         <extension id="org.eclipse.ui.workbench" importance="low"/>
+      </hidden>
+   </page>
+   <page id="samples">
+      <group path="page-content/bottom-left" default="true">
+         <extension id="org.eclipse.jdt" importance="low"/>
+         <extension id="org.eclipse.pde.workbench" importance="low"/>
+      </group>
+      <group path="page-content/bottom-right" default="true">
+         <extension id="org.eclipse.pde.swt" importance="low"/>
+      </group>
+   </page>
+ 
+</extensions>

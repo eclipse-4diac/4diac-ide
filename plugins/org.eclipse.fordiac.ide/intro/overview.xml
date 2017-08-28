@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+ Copyright (c) 2014 fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Alois Zoitl, Monika Wenger
+     - initial API and implementation and/or initial documentation
+--><introContent>
+  	<extensionContent id="fordiac-overview-left" name="4DIAC-Framework" path="overview/@">
+       	<group style-id="content-group" id="overview-topleft-group1">
+       		<link label="4DIAC Overview" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/overview/overview.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>Gives a short overview on 4DIAC.</text>
+       	</link>
+		<link label="FAQ 4DIAC-IDE" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/faq/ide.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>Frequently Asked Questions on 4DIAC-IDE.</text>
+       	</link>
+		<link label="FAQ 4DIAC-RTE" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/faq/forte.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>Frequently Asked Questions on 4DIAC-RTE.</text>
+       	</link>
+       	</group>
+  	</extensionContent>
+  	
+  	<extensionContent id="fordiac-overview-right" name="IEC-61499-Elements" path="overview/@">		
+		<group style-id="content-group" id="overview-topright-group1">
+       		<html id="features" src="./features.html" type="inline"/>
+       	</group>
+  	</extensionContent>
+</introContent>

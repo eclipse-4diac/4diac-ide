@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Export-Package: org.eclipse.fordiac.ide.ui.controls
+Require-Bundle: org.eclipse.gef,
+ org.eclipse.core.runtime,
+ org.eclipse.jface,
+ org.eclipse.ui.workbench
+Bundle-Vendor: Eclipse 4diac
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 1.9.0.qualifier
+Bundle-Name: Common UI Controls
+Bundle-Activator: org.eclipse.fordiac.ide.ui.controls.ControlsPlugin
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.eclipse.fordiac.ide.ui.controls;singleton:=true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

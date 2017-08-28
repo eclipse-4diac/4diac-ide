@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.fordiac.ide.deployment.downloadexecutor">
+      <DeploymentExecutor
+            class="org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor">
+      </DeploymentExecutor>
+   </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.deployment.downloadexecutor">
+      <DeploymentExecutor
+            class="org.eclipse.fordiac.ide.deployment.iec61499.FDBK2_DeploymentExecutor">
+      </DeploymentExecutor>
+   </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.deployment.downloadexecutor">
+      <DeploymentExecutor
+            class="org.eclipse.fordiac.ide.deployment.iec61499.DynamicTypeLoad_DeploymentExecutor">
+      </DeploymentExecutor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferences"
+            id="org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferences"
+            name="Deployment Preferences (HOLOBLOC Profile)">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.deployment.iec61499.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.deployment.devicemanagementcommunicationhandler">
+      <DeviceManagementComunicationHandler
+            class="org.eclipse.fordiac.ide.deployment.iec61499.EthernetDeviceManagementCommunicationHandler">
+      </DeviceManagementComunicationHandler>
+   </extension>
+
+</plugin>

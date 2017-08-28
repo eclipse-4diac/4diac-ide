@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2010 - 2017 TU Wien ACIN, fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Carolyn Oates, Alois Zoitl, Monika Wenger, Jose Cabral
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Setting up Cygwin</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+
+<body>
+<h1 id="topOfPage">Setting up Cygwin for FORTE Development</h1>
+<h2>Install Cygwin</h2>
+
+<p>In Windows, Cygwin provides the necessary tools and libraries for building and debugging. Download <a href="http://cygwin.com/" target="_blank">Cygwin</a>, consider that there should not be any blanks in the folder names of the installation. Follow the instructions of the installation wizard and choose at least the following packages:</p>
+<ul>
+	<li>make</li>
+	<li>gcc (binutils)</li>
+	<li>gdb</li>
+</ul>
+<img src="./img/cygwinSetup.png" alt="Setup Cygwin"/>
+
+<h2>Set Environment Variables</h2>
+<p>Press <span class="button4diac">Windows Key + Pause</span>. In the System window, click <span class="button4diac">Advanced System Settings &rarr; Advanced (tab) &rarr; Environment Variables</span>. Select the PATH variable and add the folder where Cywgwin is, e.g. <span class="folderLocation">C:\cygwin\bin</span>.</p>
+
+<img src="./img/environmentVariables.png" alt="Environment variables"/><img src="./img/editEnvironmentVariables.png" alt="Edit environment variables"/>
+
+<h2>Test Cygwin</h2>
+<p>Open command prompt window by pressing <span class="button4diac">Windows</span> button and entering <span class="inlineCode">cmd</span>. Enter <span class="inlineCode">bash</span>. If bash prompt appears, then it was successful. To end Cygwin enter <span class="inlineCode">exit </span>, enter <span class="inlineCode">exit </span> again to end command prompt.</p>
+
+<img src="./img/cygwinTest.png" alt="test Cygwin"/>
+
+<h2>CMake and Compilation</h2>
+
+<p>In step 2 of <a href="./install.html#generateFilesForCompiling">Generate files for compiling</a>, you have to select <span class="specficText">Unix Makefiles</span> when working with Cygwin. The architecture option should be set to Win32.</p>
+
+<p>To compile forte, you do</p>
+<div class="code">$ cd FORTE_FOLDER_ROOT/bin/[YOUR_SYSTEM]
+$ make</div>
+
+<h1 id="whereToGoFromHere">Where to go from here?</h1>
+
+<p>Now that you installed the required tools, it's time to start using them. Take a look at the following page:</p>
+
+<p><a href="../4diacIDE/overview.html">Step by step tutorial</a></p>
+
+<p>If you want to compile FORTE for another platform or want to know more about that, here's a quick link back:</p>
+
+<p><a href="./install.html">Install 4DIAC</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+</body>
+</html>
