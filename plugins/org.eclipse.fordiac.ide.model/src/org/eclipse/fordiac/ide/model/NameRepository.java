@@ -12,6 +12,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,7 +23,6 @@ import java.util.stream.Collectors;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
@@ -40,9 +40,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 
 public class NameRepository {
 
@@ -77,7 +77,7 @@ public class NameRepository {
 	public static void checkNameIdentifier(INamedElement element){
 		element.getAnnotations().clear();
 		if(!IdentifierVerifyer.isValidIdentifier(element.getName())){
-			Annotation ano = element.createAnnotation("Name: " + element.getName() + " is not a valid identifier!");
+			Annotation ano = element.createAnnotation(MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, element.getName()));
 			ano.setServity(2); // 2 means error!
 		}
 	}
@@ -103,13 +103,38 @@ public class NameRepository {
 		return getUniqueName(getRefNames(element), retVal);
 	}
 
+	/** Check if the given nameProposal is a valid name for the given named element.
+	 *
+	 * @param element       the named element for which a new name proposal should be checked
+	 * @param nameProposal  the new name to be checked
+	 * @return  true if the nameProposal is a valid new name for the named element
+	 */
+	public static boolean isValidName(final INamedElement element, final String nameProposal) {
+		Assert.isNotNull(element.eContainer(), "For a correct operation createuniqueName expects that the model element is already added in its containing model!"); //$NON-NLS-1$
+		Abstract4DIACUIPlugin.statusLineErrorMessage(null);
 
+		if(!IdentifierVerifyer.isValidIdentifier(nameProposal)){
+			Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, nameProposal));
+			return false;
+		}
+		if(element instanceof IInterfaceElement && RESERVED_KEYWORDS.contains(nameProposal)) {
+			Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, nameProposal));
+			return false;
+		}
+
+		if(getRefNames(element).contains(nameProposal)) {
+			Abstract4DIACUIPlugin.statusLineErrorMessage((MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal)));
+			return false;
+		}
+
+		return true;
+	}
 
 
 	private static Set<String> getRefNames(INamedElement refElement){
 		EList<?extends INamedElement> elementsList = null;
 
-		//TODO consider moving this instance of cascade into the model
+		//TODO consider moving this instance of cascade into the model utilizing the inheritance hierarchy to our advantage
 		if(refElement instanceof Algorithm) {
 			elementsList = ((BasicFBType)((Algorithm)refElement).eContainer()).getAlgorithm();
 		} else if(refElement instanceof Application) {
@@ -223,23 +248,6 @@ public class NameRepository {
 		return name;
 	}
 
-	public static String getUniqueElementName(INamedElement element, EObject object, String name){
-		if(element instanceof IInterfaceElement){
-			IInterfaceElement ie = (IInterfaceElement)element;
-			if(ie.getFBNetworkElement() instanceof SubApp && null == ie.getFBNetworkElement().getType()){
-				return getUniqueInterfaceElementName(ie, (InterfaceList)ie.eContainer(), name);
-			}
-			return getUniqueInterfaceElementName(ie, (FBType)object, name);
-		}
-		if(element instanceof ECState){
-			return getUniqueECCStateName((ECState)element, (ECC)object, name);
-		}
-		if(element instanceof Algorithm){
-			return getUniqueAlgorithmName((Algorithm)element, (BasicFBType)object, name);
-		}
-		return name;
-	}
-	
 	public static String getUniqueECCStateName(ECState state, ECC ecc, String name) {
 		Set<String> stateNames = getNameList(state, ecc.getECState());
 		return getUniqueName(stateNames, name);

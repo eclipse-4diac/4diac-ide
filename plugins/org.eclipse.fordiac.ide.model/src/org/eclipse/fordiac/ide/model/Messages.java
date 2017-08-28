@@ -180,6 +180,12 @@ public class Messages extends NLS {
 	/** The Import utils_ erro r_ parameter value not set. */
 	public static String ImportUtils_ERROR_ParameterValueNotSet;
 	
+	public static String NameRepository_NameAlreadyExists;
+
+	public static String NameRepository_NameNotAValidIdentifier;
+
+	public static String NameRepository_NameReservedKeyWord;
+
 	public static String TypeLibrary_ImportDataTypeFileDialogTitle;
 	
 	public static String TypeLibrary_LoadReferencedFile_DialogTitle;
