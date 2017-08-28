@@ -159,7 +159,7 @@ class CompositeFBFilter {
   	  «IF null != dne»
   	  {connectionNum = «org.eclipse.fordiac.ide.export.forte_lua.filter.CompositeFBFilter.getConnectionNumber(conList, con)», «dne.luaConnectionString(con.destination, numAdapters, type, "dst")»}
   	  «ELSE»
-  	  {"«con.destination.name»", -1}
+	  {dstID = "«con.destination.name»", dstFBNum = -1}
   	  «ENDIF»
 	  «ENDFOR»
 	}'''
