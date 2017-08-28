@@ -263,7 +263,7 @@ class LuaConstants {
 		  DODataTypeNames = «ifl.outputVars.typeList.luaValueList»,
 		  numAdapters = «ifl.plugs.size + ifl.sockets.size»,
 		  adapterInstanceDefinition = {
-		    «ifl.plugs.map['''{adapterNameID = "«it.name»", adapterTypeNameID = "«it.typeName»", isPlug = true}'''].join(",\n")»
+		    «ifl.plugs.map['''{adapterNameID = "«it.name»", adapterTypeNameID = "«it.typeName»", isPlug = true}'''].join(",\n")»«IF !ifl.sockets.isEmpty && !ifl.plugs.isEmpty»,«ENDIF»
 		    «ifl.sockets.map['''{adapterNameID = "«it.name»", adapterTypeNameID = "«it.typeName»", isPlug = false}'''].join(",\n")»
 		  }
 		}'''
