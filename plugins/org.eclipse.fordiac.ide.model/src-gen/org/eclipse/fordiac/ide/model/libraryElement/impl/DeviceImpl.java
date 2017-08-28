@@ -636,10 +636,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 			return;
 		}
 		String oldName = name;
-		
-		//TODO consider moving this to a rename device command, however then also the device create command needs to be adjusted
-		name = NameRepository.getUniqueDeviceInstanceName(this, newName);			
-
+		name = newName;
 		NameRepository.checkNameIdentifier(this);
 		
 		if (eNotificationRequired()) {

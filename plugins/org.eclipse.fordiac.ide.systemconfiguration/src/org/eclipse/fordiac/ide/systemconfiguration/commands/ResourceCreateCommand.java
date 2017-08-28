@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.systemconfiguration.commands;
 import java.util.Hashtable;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -82,10 +83,8 @@ public class ResourceCreateCommand extends Command {
 			index = device.getResource().size();
 		}
 		device.getResource().add(index, resource);
-		resource.setName(entry.getLabel()); // resource name needs to be added
-											// after it is inserted in the
-											// device so that name checking
-											// works
+		// resource name needs to be added after it is inserted in the device so that name checking works
+		resource.setName(NameRepository.createUniqueName(resource, entry.getLabel()));
 		SystemManager.INSTANCE.notifyListeners();
 	}
 

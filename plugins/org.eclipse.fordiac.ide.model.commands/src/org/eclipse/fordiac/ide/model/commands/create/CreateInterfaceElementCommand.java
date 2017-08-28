@@ -85,7 +85,6 @@ public class CreateInterfaceElementCommand extends Command {
 			}
 		}
 		setInterfaces(interfaceList);
-		interfaceElement.setName(NameRepository.getUniqueInterfaceElementName(interfaceElement, interfaceList,  null == name || name.isEmpty() ? dataType.getName() : name));
 		interfaceElement.setIsInput(isInput);
 		interfaceElement.setType(dataType);
 		interfaceElement.setTypeName(dataType.getName());
@@ -94,6 +93,7 @@ public class CreateInterfaceElementCommand extends Command {
 			cmd = new AdapterCreateCommand(10, 10, (AdapterDeclaration) interfaceElement, (CompositeFBType)interfaceList.eContainer());
 		}
 		redo();
+		interfaceElement.setName(NameRepository.createUniqueName(interfaceElement, null == name || name.isEmpty() ? dataType.getName() : name));
 	}
 	
 	@Override

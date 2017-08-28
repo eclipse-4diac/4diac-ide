@@ -124,8 +124,7 @@ public class CommFBGenerator {
 			//FBView generateFbView = ApplicationUIFBNetworkManager.createFBView(generatedFB, /*destinationDiagram.getNetwork()*/ null);
 			//destinationDiagram.getChildren().add(generateFbView);
 			//generatedFB.setName("GENERATED_" + generatedFBIndex);
-			String name = NameRepository.getUniqueResourceInstanceName(resource, "GENERATED_" + generatedFBIndex);
-			generatedFB.setName(name);
+			generatedFB.setName(NameRepository.createUniqueName(generatedFB, "GENERATED_" + generatedFBIndex)); //$NON-NLS-1$
 			generatedFBIndex++;
 			StringBuilder newFBComment = new StringBuilder();
 			newFBComment.append(GENERATED_ANNOTATION);

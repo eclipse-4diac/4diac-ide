@@ -45,7 +45,7 @@ public class CreateInternalVariableCommand extends Command {
 	 *            the fb type
 	 */
 	public CreateInternalVariableCommand(final BasicFBType fbType) {
-		this.dataType = DataTypeLibrary.getInstance().getType("BOOL");
+		this.dataType = DataTypeLibrary.getInstance().getType("BOOL"); //$NON-NLS-1$
 		this.fbType = fbType;
 	}
 
@@ -59,18 +59,17 @@ public class CreateInternalVariableCommand extends Command {
 	public void execute() {
 		varDecl = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDecl.setType(dataType);
-		String name = NameRepository.getUniqueInterfaceElementName(varDecl, fbType, "INTERNALVAR");
-		varDecl.setName(name);
 		varDecl.setTypeName(dataType.getName());
-		varDecl.setComment("Internal Variable");
+		varDecl.setComment("Internal Variable"); //$NON-NLS-1$
 		varDecl.setArraySize(0);
 		VarInitialization varInitialization = DataFactory.eINSTANCE.createVarInitialization();
-		varInitialization.setInitialValue("");
+		varInitialization.setInitialValue(""); //$NON-NLS-1$
 		varDecl.setVarInitialization(varInitialization);
 		Value value = LibraryElementFactory.eINSTANCE.createValue();
-		value.setValue("");
+		value.setValue(""); //$NON-NLS-1$
 		varDecl.setValue(value);
 		redo();
+		varDecl.setName(NameRepository.createUniqueName(varDecl, "INTERNALVAR")); //$NON-NLS-1$
 	}
 
 	/*

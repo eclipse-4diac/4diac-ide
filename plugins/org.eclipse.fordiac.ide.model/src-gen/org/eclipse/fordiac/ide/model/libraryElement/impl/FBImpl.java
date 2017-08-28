@@ -91,13 +91,6 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 		
 		NameRepository.checkNameIdentifier(this);
 		
-		// unique check needs to be before sending the notification in order
-		// that the annotations are correctly displayed in the graphical editors
-		if (!NameRepository.isFBNetworkUniqueFBInstanceName(this)) {
-			Annotation ano = createAnnotation("FB Name not Unique");
-			ano.setServity(2); // 2 means error!
-		}
-		
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONFIGURABLE_OBJECT__NAME, oldName, name));
 	}

@@ -56,12 +56,11 @@ public class CreateECStateCommand extends Command {
 	public void execute() {
 		ecState.setX(location.x);
 		ecState.setY(location.y);
-		ecState.setName(NameRepository.getUniqueECCStateName(ecState, parent, ecState.getName()));
 		if (parent.getECState().size() == 0) {
 			parent.setStart(ecState);
 		}
 		parent.getECState().add(ecState);
-
+		ecState.setName(NameRepository.createUniqueName(ecState, ecState.getName()));
 	}
 
 	/*

@@ -45,10 +45,10 @@ public class CreateAlgorithmCommand extends Command {
 			oldAlgorithm = action.getAlgorithm();
 		}
 		newAlgorithm = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-		newAlgorithm.setName(NameRepository.getUniqueAlgorithmName(newAlgorithm, fbType, "ALG")); //$NON-NLS-1$
 		newAlgorithm.setComment("new algorithm"); //$NON-NLS-1$
 		newAlgorithm.setText("");  //especially the xtext editor requires at least an empty algorithm text //$NON-NLS-1$
 		redo();
+		newAlgorithm.setName(NameRepository.createUniqueName(newAlgorithm, "ALG")); //$NON-NLS-1$
 	}
 
 	@Override

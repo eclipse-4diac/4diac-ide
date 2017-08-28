@@ -520,7 +520,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		}
 		String oldName = name;
 		
-		name = NameRepository.getUniqueResourceInstanceName(this, newName);
+		name = newName;
 		
 		NameRepository.checkNameIdentifier(this);
 		

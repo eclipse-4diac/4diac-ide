@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -31,10 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -151,7 +147,13 @@ public class NameRepository {
 			elementsList = ((ECC)((ECState)refElement).eContainer()).getECState();
 		} else if(refElement instanceof IInterfaceElement) {
 			EList<INamedElement> elements = new BasicEList<INamedElement>();
-			InterfaceList interfaceList = (InterfaceList)((IInterfaceElement)refElement).eContainer();
+			InterfaceList interfaceList = null;
+			if(((IInterfaceElement)refElement).eContainer() instanceof InterfaceList) {
+				interfaceList = (InterfaceList)((IInterfaceElement)refElement).eContainer();
+			} else {
+				//this is an internal variable
+				interfaceList = ((BasicFBType)((IInterfaceElement)refElement).eContainer()).getInterfaceList();
+			}
 			elements.addAll(interfaceList.getAllInterfaceElements());
 			if(interfaceList.eContainer() instanceof BasicFBType){
 				elements.addAll(((BasicFBType)interfaceList.eContainer()).getInternalVars());
@@ -165,31 +167,9 @@ public class NameRepository {
 	}
 
 
-	/**
-	 * Checks whether the instance name is unique in the fb network it is contained in
-	 * 
-	 * @param fb
-	 * @return
-	 */
-	public static boolean isFBNetworkUniqueFBInstanceName(FB fb) {
-		boolean retVal = true;
-		if (fb != null) {
-			FBNetwork fbn = fb.getFbNetwork();
-			if(null != fbn){
-				for (FBNetworkElement element : fbn.getNetworkElements()) {
-					if((!element.equals(fb)) && (element.getName().equals(fb.getName()))){
-						retVal = false;
-						break;
-					}				
-				}
-			}
-		}
-		return retVal;				
-	}
-	
 	/** Generating a unique name for a name proposal which is definitely not in the list of given existing names
-	 * 
-	 * If the proposed name is already found in the list an '_' and a consecutive number is appended to the proposed name. 
+	 *
+	 * If the proposed name is already found in the list an '_' and a consecutive number is appended to the proposed name.
 	 * The number incremented until a unique name is found.  
 	 * 
 	 * @param existingNameList the list of names already existing in the context 
@@ -206,103 +186,7 @@ public class NameRepository {
 		}
 		return temp;
 	}
-	
-	
 
-	/**
-	 * Returns a unique Instance name for a FB network
-	 * 
-	 * 
-	 * @param fbn  the fbnetwork where the unique names should be searched for.
-	 * @param nameProposal the proposal for the new name
-	 * @return
-	 */
-	public static String getFBNetworkUniqueFBNetworkElementInstanceName(
-			FBNetwork fbn, String nameProposal) {
-		if (fbn != null) {
-			//TODO consider to also add the referenced FB here so that the old name is not considered
-			Set<String> uniqueNames = getNameList(null, fbn.getNetworkElements());
-			return getUniqueName(uniqueNames, nameProposal);
-		}
-		return nameProposal;
-	}
-	
-	public static String getResourceUniqueFBInstanceName(final Resource resourceUT, final String name) {
-		Set<String> resourceNames = getNameList(resourceUT, resourceUT.getFBNetwork().getNetworkElements());
-		return getUniqueName(resourceNames, name);
-	}
-
-	public static String getUniqueResourceInstanceName(final Resource resourceUT, final String name) {
-		if(null != resourceUT.eContainer()){
-			Set<String> resourceNames = getNameList(resourceUT,resourceUT.getDevice().getResource());
-			return getUniqueName(resourceNames, name);
-		}
-		return name;
-	}
-
-	public static String getUniqueDeviceInstanceName(final Device deviceUT, final String name) {
-		if(null != deviceUT.eContainer()){
-			Set<String> deviceNames = getNameList(deviceUT, deviceUT.getAutomationSystem().getSystemConfiguration().getDevices());
-			return getUniqueName(deviceNames, name);
-		}
-		return name;
-	}
-
-	public static String getUniqueECCStateName(ECState state, ECC ecc, String name) {
-		Set<String> stateNames = getNameList(state, ecc.getECState());
-		return getUniqueName(stateNames, name);
-	}
-
-	public static String getUniqueInterfaceElementName(IInterfaceElement iElement, InterfaceList interfaceList, String name) {
-		ArrayList<INamedElement> elements = new ArrayList<INamedElement>();
-		elements.addAll(interfaceList.getAllInterfaceElements());		
-		String retVal = checkReservedKeyWords(name);
-		int i = 1;
-		while (!isUnique(iElement, retVal, elements))  {
-			retVal = name + i;
-			i++;
-		}
-		return retVal;
-	}
-	
-	public static String getUniqueInterfaceElementName(IInterfaceElement iElement, FBType fbType, String name) {
-		ArrayList<INamedElement> elements = new ArrayList<INamedElement>();
-		elements.addAll(fbType.getInterfaceList().getAllInterfaceElements());
-		if(fbType instanceof BasicFBType){
-			elements.addAll(((BasicFBType)fbType).getInternalVars());
-		}
-		String retVal = checkReservedKeyWords(name);
-		int i = 1;
-		while (!isUnique(iElement, retVal, elements))  {
-			retVal = name + i;
-			i++;
-		}
-		return retVal;
-	}
-
-	public static String getUniqueAlgorithmName(Algorithm algorithm, BasicFBType fbType, String name){
-		ArrayList<INamedElement> elements = new ArrayList<INamedElement>();
-		elements.addAll(fbType.getAlgorithm());
-		
-		String retVal = name;
-		int i = 1;
-		while (!isUnique(algorithm, retVal, elements))  {
-			retVal = name + i;
-			i++;
-		}
-		return retVal;
-	}
-
-	private static boolean isUnique(INamedElement iElement, String name, ArrayList<INamedElement> elements) {
-		for (INamedElement element : elements) {
-			 if (!element.equals(iElement) && element.getName()
-					.toUpperCase().equals(name.toUpperCase())) {
-				 return false;
-			 }
-		}
-		return true;
-	}
-	
 	private static String checkReservedKeyWords(String name) {
 		if(RESERVED_KEYWORDS.contains(name.toUpperCase())) {
 			return name + "1"; //$NON-NLS-1$
@@ -315,8 +199,4 @@ public class NameRepository {
 		return name;
 	}
 	
-	private static Set<String> getNameList(INamedElement refElement, EList<?extends INamedElement> elementsList){
-		return elementsList.stream().filter(element -> element != refElement).map(element -> element.getName()).collect(Collectors.toSet());
 	}
-
-}

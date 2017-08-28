@@ -265,9 +265,6 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 		Boolean differentName = true;
 		if (oldName != null) {
 			differentName = !oldName.equals(name);		
-			if((differentName) && eContainer() instanceof ECC) {
-				name = NameRepository.getUniqueECCStateName(this, (ECC) eContainer(), name);
-			}
 		}
 		
 		if(differentName){

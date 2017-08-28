@@ -41,6 +41,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
@@ -436,20 +437,22 @@ public enum SystemManager {
 	/**
 	 * Checks if is valid app name.
 	 * 
-	 * @param text
-	 *            the text
+	 * @param appNameProposal the proposed new name for the application
 	 * @param selectedSystem
 	 *            the selected system
 	 * 
 	 * @return true, if is valid app name
 	 */
-	public static boolean isValidAppName(final String text, final AutomationSystem selectedSystem) {
+	public static boolean isValidAppName(final String appNameProposal, final AutomationSystem selectedSystem) {
+		if(!IdentifierVerifyer.isValidIdentifier(appNameProposal)){
+			return false;
+		}
 		for (Application app : selectedSystem.getApplication()){
-			if (text.equalsIgnoreCase(app.getName())) {
+			if (appNameProposal.equalsIgnoreCase(app.getName())) {
 				return false;
 			}
 		}
-		if (selectedSystem.getName().equals(text)) {
+		if (selectedSystem.getName().equals(appNameProposal)) {
 			return false;
 		}
 		return true;

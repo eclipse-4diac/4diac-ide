@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
@@ -79,7 +80,7 @@ public class DeviceCreateCommand extends Command {
 			parent.getDevices().add(device);
 			// the name needs to be set after the device is added to the network
 			// so that name checking works correctly
-			device.setName(entry.getDeviceType().getName());
+			device.setName(NameRepository.createUniqueName(device, entry.getDeviceType().getName()));
 			createResource();
 			ResourceCreateCommand cmd = null;
 			if (device.getType().getName().contains("FBRT") //$NON-NLS-1$

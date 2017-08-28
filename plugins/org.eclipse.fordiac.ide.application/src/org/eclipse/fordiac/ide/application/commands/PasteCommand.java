@@ -127,8 +127,9 @@ public class PasteCommand extends Command {
 		for (FBNetworkElement element : elementsToCopy) {
 			FBNetworkElement copiedElement = createElementCopyFB(element);	
 			copiedElements.put(element.getName(), copiedElement);
+			destination.getNetworkElements().add(copiedElement);
+			copiedElement.setName(NameRepository.createUniqueName(copiedElement, element.getName()));
 		}
-		destination.getNetworkElements().addAll(copiedElements.values());
 	}
 
 	private FBNetworkElement createElementCopyFB(FBNetworkElement element) {
@@ -141,11 +142,6 @@ public class PasteCommand extends Command {
 				ie.getOutputConnections().clear();
 			}
 		}
-		
-		String name = element.getName();		
-		name = NameRepository.getFBNetworkUniqueFBNetworkElementInstanceName(destination, name);
-		copiedElement.setName(name);
-		
 		Point pastePos = calculatePastePos(element); 
 		copiedElement.setX(pastePos.x);
 		copiedElement.setY(pastePos.y);
