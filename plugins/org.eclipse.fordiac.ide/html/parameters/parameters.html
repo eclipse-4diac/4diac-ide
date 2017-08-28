@@ -114,18 +114,18 @@
 	<ul>
 		<li>At the beginning, right after the first #define add:
 		<div class="code">//----------------------------------------------------------------------------//
-// take precautions if compiled with C++ compiler								//
-#ifdef __cplusplus																//
-extern "C" {																	//
-#endif																			//
+// take precautions if compiled with C++ compiler
+#ifdef __cplusplus
+extern "C" {
+#endif
 //----------------------------------------------------------------------------//</div>
 		</li>
 		<li>And at the end, right before the last #endif, add
 			<div class="code">//----------------------------------------------------------------------------//
-#ifdef __cplusplus																//
-}																				//
-#endif																			//
-// end of C++ compiler wrapper													//
+#ifdef __cplusplus
+}
+#endif
+// end of C++ compiler wrapper
 //----------------------------------------------------------------------------//</div>
 		</li>
 	</ul>

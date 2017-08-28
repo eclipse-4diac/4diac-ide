@@ -54,13 +54,13 @@ $ git clone https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte</div>
 
 <ol>
 
-<li><p>When starting the CMake-GUI you have to select the source directory, which is FORTE_FOLDER_ROOT and also the directory where to build the binaries (e.g. <span class="folderLocation">FORTE_FOLDER_ROOT/bin/posix</span> or <span class="folderLocation">FORTE_FOLDER_ROOT/bin/win32</span>, and so on) which is the output directory (let's call it OUTPUT_FOLDER). In OUTPUT_FOLDER, CMake will put the build project files (e.g., the makefiles) as well as any configuration data which then are compiled creating the executable. Then that you will need to press the <span class="button4diac">Configure</span> button at the low part of CMake. If you asked to create a folder if it doesn't exist, say yes.</p>
+<li><p>When starting the CMake-GUI you have to select the source directory (1), which is FORTE_FOLDER_ROOT and also the directory where to build the binaries (2) (e.g. <span class="folderLocation">FORTE_FOLDER_ROOT/bin/posix</span> or <span class="folderLocation">FORTE_FOLDER_ROOT/bin/win32</span>, and so on) which is the output directory (let's call it OUTPUT_FOLDER). In OUTPUT_FOLDER, CMake will put the build project files (e.g., the makefiles) as well as any configuration data which then are compiled creating the executable. Then you will need to press the <span class="button4diac">Configure</span> button (3) at the low part of CMake. If you asked to create a folder if it doesn't exist, say yes.</p>
 <div><img src="./img/CMakeFirstStep.png" alt="First step in CMake"></div></li>
 
 <li><p>A window will pop up that lets you select the kind of project you like to build. For the correct Project Setting please have a look at the settings for your corresponding platform in the links below, but making it short, in this first configuration you tell CMake if you would like to export the files as a project for Visual Studio, Eclipse or some other type of project, and the compiler you will use to compile the executable. In this step you would select the cross-compiler that you would use if you are compiling for a specific platform different from the one where you are compiling (for example, compiling for a Raspberry Pi or a PLC from a Windows or a Linux computer).</p>
 <div><img src="./img/CMakeSelectCompiler.png" alt="Select compiler in CMake"></div></li>
 
-<li><p>After selecting the type of project and compiler, the CMake main window shows a list of red marked options. The color red doesn't mean that something is wrong, but that these rows were affected by the last configuration, so they need to be checked. These options allow you to configure your FORTE build. The minimal configuration you have to perform is to select the architecture you like to build for using the <span class="specificText">FORTE_ARCHITECTURE</span> option and the modules with the function block libraries you like to enable (a basic configuration uses <span class="specificText">FORTE_MODULE_CONVERT</span>, <span class="specificText">FORTE_MODULE_IEC61131</span> and <span class="specificText">FORTE_MODULE_UTILS</span>). The modules that you enable, represent the group of Function Blocks that the your FORTE executable will contain. You should also keep the option <span class="specificText">FORTE_SUPPORT_MONITORING</span> enabled for Debugging and FB-Testing. Another important option is the <span class="specificText">CMAKE_BUILD_TYPE</span>, which determines if your building a <span class="specificText">Debug</span> or <span class="specificText">Release</span> version. Write the according word to the option to select.</p>
+<li><p>After selecting the type of project and compiler, the CMake main window shows a list of red marked options. The color red doesn't mean that something is wrong, but that these rows were affected by the last configuration, so they need to be checked. These options allow you to configure your FORTE build. The minimal configuration you have to perform is to select the architecture you like to build for using the <span class="specificText">FORTE_ARCHITECTURE</span> option and the modules with the function block libraries you like to enable (a basic configuration uses <span class="specificText">FORTE_MODULE_CONVERT</span>, <span class="specificText">FORTE_MODULE_IEC61131</span> and <span class="specificText">FORTE_MODULE_UTILS</span>). The modules that you enable, represent the group of Function Blocks that the your FORTE executable will contain. You should also keep the option <span class="specificText">FORTE_SUPPORT_MONITORING</span> (which is found when ticking the Advanced box)enabled for Debugging and FB-Testing. Another important option is the <span class="specificText">CMAKE_BUILD_TYPE</span>, which determines if your building a <span class="specificText">Debug</span> or <span class="specificText">Release</span> version. Write the according word to the option to select.</p>
 <div><img src="./img/CMakeBasicConfig.png" alt="Basic Configuration in CMake"></div></li>
 
 <li><p>After you change some options in CMake, you must press again Configure, until no more red rows appear. Then, press the <span class="button4diac">Generate</span> button to create the project files in OUTPUT_FOLDER.</p></li>
@@ -69,18 +69,18 @@ $ git clone https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte</div>
 
 <h3>Compiling</h3>
 
-<p>The last part is compiling the generated project. This depend of the project output you selected in the previous step. Check the links below to see more details of your case.</p>
+<p>The last part is compiling the generated project. This depend of the project output you selected in the previous step. Check the links <a href="#FORTEWindowsUnix">below</a> to see more details of your case.</p>
 
 <p>For the development with FORTE the understanding of the general file structure is helpful. Therefore the essential parts as well as the Makefiles which are important for the configuration and compilation of FORTE are listed in the following:
 <ul>
 	<li><span class="folderLocation">src/modules</span>: this folder contains the source code (cpp, h) of all Function Blocks available for FORTE </li>
-	<li><span class="folderLocation">bin/[YOUR_SYSTEM]/src</span>: contains the FORTE executable after compilation with Makefile <span class="fileLocation">all</span></li>
-	<li><span class="folderLocation">bin/[YOUR_SYSTEM]/src_gen</span>: contains the object files generated during compilation with Makefile <span class="fileLocation">all</span></li>
-	<li><span class="fileLocation">all</span>: this Makefile generates the object files for all FORTE core files and Function Block source code files </li>
-	<li><span class="fileLocation">clean</span>: this makefile removes all generated object files. </li>
+	<li><span class="folderLocation">bin/[YOUR_SYSTEM]/src</span>: contains the FORTE executable after compilation</li>
+	<li><span class="folderLocation">bin/[YOUR_SYSTEM]/src_gen</span>: contains the object files generated during compilation</li>
 </ul>
 
 <h3 id="externalModules">Build external Modules</h3>
+
+<p>Before showing <a href="#FORTEWindowsUnix">how to compile</a>, this part of the documentation shows how to add your own function blocks to FORTE.</p>
 
 <p>When you create and export your own types, you need to add them to FORTE's compilation. In this case, we'll show as an example, how to add three function block called BasicTest, CompositeTest, and ServiceTest. The module's name will be EXAMPLE_TEST. Follow the directions below:</p>
 
@@ -106,13 +106,13 @@ forte_add_sourcefile_hcpp(ServiceTest)</div>
 
 <h2 id="FORTEWindowsUnix">FORTE for Windows and Unix-based systems</h2>
 
-<p>You can use different development Environments, whereas the C++ Compiler you can use to build FORTE not only depends on this environment but also on your operating system. For compiling FORTE under Windows you can use either Visual Studio (Express or full edition) or Eclipse. When using Eclipse for development and debugging under Windows you will need to use a Posix emulation environment like Cygwin or MinGW.</p>
+<p>You can use different development Environments, whereas the C++ Compiler you can use to build FORTE not only depends on this environment but also on your operating system. For compiling FORTE under Windows you can use either Visual Studio (Express or full edition) or Eclipse. When using Eclipse for development and debugging under Windows you will need to use a Posix emulation environment like MinGW or Cygwin.</p>
 			
 		<ul>
 			<li><p>Compilers</p>
 				<ul>
-					<li><a href="cygwin.html">Setting up Cygwin (Windows)</a></li>
 					<li><a href="minGW.html">Setting up MinGW (Windows)</a></li>
+					<li><a href="cygwin.html">Setting up Cygwin (Windows)</a></li>
 					<li>In Unix-like systems (Linux, raspberry pi, etc) you need to install binutils, gcc, gdb, make and cmake. To compile forte, you do
 					<div class="code">$ cd FORTE_FOLDER_ROOT/bin/[YOUR_SYSTEM]
 $ make</div> </li>

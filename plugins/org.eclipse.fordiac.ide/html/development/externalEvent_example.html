@@ -47,7 +47,7 @@
 
 <div class="code">EVENT_SOURCE_FUNCTION_BLOCK_CTOR(FORTE_SIBF_T_FF3){
 	    m_stEventSourceEventEntry.m_poFB = this;
-	    setEventChainExecutor(pa_poSrcRes->getResourceEventExecution());
+	    setEventChainExecutor(pa_poSrcRes-&gt;getResourceEventExecution());
 	    m_bActive = false;
 	    m_stTimeListEntry.m_stTimeOut.m_nLowerValue = 0;
 	    m_stTimeListEntry.m_stTimeOut.m_nUpperValue = 0;
@@ -70,13 +70,13 @@
 	  break;
 	case scm_nEventSTOPID:
 	  if(m_bActive){
-		CTimerHandler::sm_poFORTETimer->unregisterTimedFB(this);
+		CTimerHandler::sm_poFORTETimer-&gt;unregisterTimedFB(this);
 		m_bActive = false;
 	  }
 	  break;
 	case scm_nEventSTARTID:
 	  if(!m_bActive){
-		CTimerHandler::sm_poFORTETimer->registerTimedFB( &m_stTimeListEntry, DT());
+		CTimerHandler::sm_poFORTETimer-&gt;registerTimedFB(&m_stTimeListEntry, DT());
 		m_bActive = true;
 	  }
 	  break;
@@ -89,11 +89,11 @@
 
 <h2>Sending External Events</h2>
 <p>To send External Events your Class must inherit from <span class="specificText">CExternalEventHandler</span>. In the Constructor you must register this class:</p>
-<div class="specificText">m_nExtEvHandID = sm_poDeviceExecution->registerExternalEventHandler(this);</div>
+<div class="specificText">m_nExtEvHandID = sm_poDeviceExecution-&gt;registerExternalEventHandler(this);</div>
 
 <p>Then you can send External Events with:</p>
-<div class="specificText">if(sm_poDeviceExecution->extEvHandlerIsAllowed(m_nExtEvHandID)){
-   sm_poDeviceExecution->startNewEventChain(pointerToTargetFB);
+<div class="specificText">if(sm_poDeviceExecution-&gt;extEvHandlerIsAllowed(m_nExtEvHandID)){
+   sm_poDeviceExecution-&gt;startNewEventChain(pointerToTargetFB);
 }</div>
 
 <h1>Where to go from here?</h1>

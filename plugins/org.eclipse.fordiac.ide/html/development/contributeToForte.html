@@ -86,16 +86,16 @@
 					<li>
 						<p>Download Forte repository</p>
 						
-						<p>In Eclipse, go to File -> Import...-> Git -> Projects from Git. Click Next and then select Clone URI. Next. Paste https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte in the URI field and then Next. Eclipse will connect to the repository and retrieve all the branches of it. Select all and click Next. Select the destination folder of the repository in your local machine and click Next. Wait while the repository is beeing downloaded. Click Next until is finished.</p>
+						<p>In Eclipse, go to File &rarr; Import...&rarr; Git &rarr; Projects from Git. Click Next and then select Clone URI. Next. Paste https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte in the URI field and then Next. Eclipse will connect to the repository and retrieve all the branches of it. Select all and click Next. Select the destination folder of the repository in your local machine and click Next. Wait while the repository is beeing downloaded. Click Next until is finished.</p>
 					</li>
 					<li>
 						<p>Look around and move between branches</p>
 						
 						<p>Now, you have the newest code of Forte. The first thing to do when you download a project, is to look around. Check the folders, read the Documentation and readme files. Try to understand the folders and hierarchies. </p>
 						
-						<p>Right Click on the project, and then Team and you find all the possible commands regarding EGit. Team -> Show in History will show you all the commits in the current branch. Normally, master is the main branch. If Forte has another branch, and you want to work with it, you'll have to create a local branch that serves as reference of the original branch. That is, the Eclipse respository has a master branch (seen as origin/master), and for example a develop branch (seen as origin/develop). But you, locally, have only a master branch (seen as master). This local master is a reference to the origin/master and everything you change on it, will be then pushed to the origin/master. But if you want to work on the origin/develop branch, you'll need to create a local branch that references it. </p>
+						<p>Right Click on the project, and then Team and you find all the possible commands regarding EGit. Team &rarr; Show in History will show you all the commits in the current branch. Normally, master is the main branch. If Forte has another branch, and you want to work with it, you'll have to create a local branch that serves as reference of the original branch. That is, the Eclipse respository has a master branch (seen as origin/master), and for example a develop branch (seen as origin/develop). But you, locally, have only a master branch (seen as master). This local master is a reference to the origin/master and everything you change on it, will be then pushed to the origin/master. But if you want to work on the origin/develop branch, you'll need to create a local branch that references it. </p>
 						
-						<p>Right click on the project -> Team -> Switch To -> Other.... There you see the local and remote branches. Select the remote branch you want to work on, let's say origin/develop, and click Checkout. you'll get a message saying that you can watch the remote branch, or you can create a new branch locally to work on it. Click on Checkout as New Local Branch and then select a name for the local branch. The usual thing is to name the same as the original, so we'll call it develop (wihtout the "origin/" part) and finish. Now you can switch between the branches, and the changes in each one will be reflected in the corresponding origin. </p>
+						<p>Right click on the project &rarr; Team &rarr; Switch To &rarr; Other.... There you see the local and remote branches. Select the remote branch you want to work on, let's say origin/develop, and click Checkout. you'll get a message saying that you can watch the remote branch, or you can create a new branch locally to work on it. Click on Checkout as New Local Branch and then select a name for the local branch. The usual thing is to name the same as the original, so we'll call it develop (wihtout the "origin/" part) and finish. Now you can switch between the branches, and the changes in each one will be reflected in the corresponding origin. </p>
 						
 						<p>The Forte projects follows the workflow shown <a target="_blank" href="http://nvie.com/posts/a-successful-git-branching-model/">here</a>. Basically, the master branch is used to release versions and the develop for new stuff. You should always branch out from develop to work on something new.</p>
 					
@@ -105,7 +105,7 @@
 						
 						<p>Access the <a target="_blank" href="https://git.eclipse.org/r"> Gerrit </a> page in Eclipse to manage everything about Gerrit regarding your account. Click Sign In in the upper right corner and use the same email and password of your Eclipse account created in <a href="#EclipseAccount">step 1.1</a>. Once logged in, click on your name on the upper right corner, and then Settings. There you can change you preferences of messages, follow projects, manage password, among others. When you push something to Gerrit you can do it using ssh or https. SSH requires that you create the public and private keys, which are stored in files that Eclipse use then to connect to Gerrit. To know more about creating the keys and configuring in Eclipse, visit <a target="_blank" href="http://www.vogella.com/tutorials/EclipseGit/article.html#github"> here</a>, and then add the key in the SSH Public Keys setting in Gerrit. In this example we'll show the usage of https. </p>
 						
-						<p>Go to HTTP Password in the Settings page of Gerrit, copy the username that appears and click Generate Password. you'll get a random long password that you'll use every time you want to push something to Gerrit. Go to Eclipse, right-click on the project -> Team -> Show in Repositories View. Then, expand Remotes, and right-click on origin -> Gerrit Configuration.... In this step you can choose ssh, https or other as communication protocol. Choose https and paste your username from Gerrit in the field User. This will change the Push URI. In the Destination branch field, you should set the branch to push to. You can't push to a branch that doesn't exist in the Gerrit repository. Note that the destination branch begins with refs/for/. Click finish and see in the Repositories View that the Origin remote has changed the push URI. This means that when you send something to Forte, it will send to Gerrit, but when you get something from it, you'll get it from the actual repository. </p>
+						<p>Go to HTTP Password in the Settings page of Gerrit, copy the username that appears and click Generate Password. you'll get a random long password that you'll use every time you want to push something to Gerrit. Go to Eclipse, right-click on the project &rarr; Team &rarr; Show in Repositories View. Then, expand Remotes, and right-click on origin &rarr; Gerrit Configuration.... In this step you can choose ssh, https or other as communication protocol. Choose https and paste your username from Gerrit in the field User. This will change the Push URI. In the Destination branch field, you should set the branch to push to. You can't push to a branch that doesn't exist in the Gerrit repository. Note that the destination branch begins with refs/for/. Click finish and see in the Repositories View that the Origin remote has changed the push URI. This means that when you send something to Forte, it will send to Gerrit, but when you get something from it, you'll get it from the actual repository. </p>
 					</li>
 				</ol>
 			</li>
@@ -123,7 +123,7 @@
 						
 						<p>This is when you actually make the changes to the code. Open the files you want to change and simply make them. Try to make less than a 1000 changes for each commit in order to mantain the size of commits small.</p>
 						
-						<p>Open the Git Staging View in Eclipse by going to Window -> Show View -> Other... -> Git -> Git Staging. In the Unstaged Changes you see all the files that were changed. Right-click on them and then Add to index. The selected files will be moved to Staged Changes.</p>
+						<p>Open the Git Staging View in Eclipse by going to Window &rarr; Show View &rarr; Other... &rarr; Git &rarr; Git Staging. In the Unstaged Changes you see all the files that were changed. Right-click on them and then Add to index. The selected files will be moved to Staged Changes.</p>
 					</li>
 					<li>
 						<p id="CommitChanges">Commit the changes</p>
@@ -186,7 +186,7 @@
 					<li>
 						<p>Push the commit</p>
 						
-						<p>In the History View you can see the new commit you have just added. But the commit is locally, and no one else knows about it. It's time to push it to the repository in Eclipse. Right-click on your last commit -> Push commit.... A dialog will open. With the showed configurations, you are trying to push to the develop branch of the Gerrit called refs/heads/develop. But according to the Gerrit documentation you should push to the magic refs/for/[branch] branch. So, in the Dialog, instead of the develop branch as it appear, you should change that to refs/for/develop (not reds/heads/develop). Click next, and you'll be asked to introduce your https Gerrit password generated in <a href="#ConfigureGerrit">step 1.5</a>. The push confirmation says that a new branch is beeing created. Don't worry about that, and click Finish. Put the password again, and the push should succeed. If something fails, the error appears in the log.</p>
+						<p>In the History View you can see the new commit you have just added. But the commit is locally, and no one else knows about it. It's time to push it to the repository in Eclipse. Right-click on your last commit &rarr; Push commit.... A dialog will open. With the showed configurations, you are trying to push to the develop branch of the Gerrit called refs/heads/develop. But according to the Gerrit documentation you should push to the magic refs/for/[branch] branch. So, in the Dialog, instead of the develop branch as it appear, you should change that to refs/for/develop (not reds/heads/develop). Click next, and you'll be asked to introduce your https Gerrit password generated in <a href="#ConfigureGerrit">step 1.5</a>. The push confirmation says that a new branch is beeing created. Don't worry about that, and click Finish. Put the password again, and the push should succeed. If something fails, the error appears in the log.</p>
 					</li>
 				</ol>
 			</li>
@@ -239,7 +239,7 @@
 						johndoe@linuxmint ~/develop/repos/org.eclipse.4diac.forte $ git branch -a<br>
 						* master<br>
 						remotes/origin/1.8.x<br>
-						remotes/origin/HEAD -> origin/master<br>
+						remotes/origin/HEAD &rarr; origin/master<br>
 						remotes/origin/OPC_UA<br>
 						remotes/origin/develop<br>
 						remotes/origin/master<br>
@@ -378,7 +378,7 @@
 						remote:   https://git.eclipse.org/r/74832 [495477] Add conmeleon support to forte<br>
 						remote: <br>
 						To https://jdoexy5@git.eclipse.org/r/4diac/org.eclipse.4diac.forte<br>
-						* [new branch]      HEAD -> refs/for/develop<br>
+						* [new branch] HEAD &rarr; refs/for/develop<br>
 					</code>
 					<p>You have done it, good job! Now it's the reviewers turn and you'll see his or her comments in the Gerrit code review webpage.</p>
 				</li>

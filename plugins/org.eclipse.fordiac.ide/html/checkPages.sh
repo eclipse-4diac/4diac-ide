@@ -15,6 +15,9 @@ CHECK_SYNTAX=false	    #check user defined syntax practices
 CHECK_LAST=false	    #check if lastModified is present
 FIND_RECURSIVELY=false	#check if lastModified is present
 USAGE_REQ=false
+W_ERROR=false
+USER_CHECK_COLOR="1;33" #yellow
+USER_CHECK_TEXT="WARNING"
 
 FOLDERS=""
 FILES=""
@@ -27,9 +30,10 @@ function usage(){
 	echo "   -a       Enable all checks"
 	echo "   -l       Enable check for broken links"
 	echo "   -t       Enable check for HTML 5 syntax"
-	echo "   -s       Enable check for user defined syntax. Currently: <span class="code"> should be inlineCode or use div tag. <i> and <b> are bad practice. <span class=""> is wrong"
+	echo "   -s       Enable check for user defined syntax. This flag is treated as warning unless -w is specified"
 	echo "   -L       Enable check for lastModified tag in the file"
 	echo "   -r       Look in the folders recursively. Default is false"
+	echo "	 -w       Treat warnings as error"
 	echo "    FILES   Files to check"
 	echo "    FOLDERS Folders to check"
 	echo "   -h       Print this help"
@@ -52,7 +56,7 @@ function isXml(){
 }
 
 OPTIND=1 #needed to call the script many times 
-while getopts "altsLrh" opt; do
+while getopts "altsLrhw" opt; do
   case "${opt}" in
     a)
 	  CHECK_LINKS=true
@@ -79,6 +83,9 @@ while getopts "altsLrh" opt; do
       usage
 	  USAGE_REQ=true
       ;;
+	w)
+	  W_ERROR=true
+	  ;;
     \?)
       echo "Invalid option: -$OPTARG"
 	  return 1
@@ -113,6 +120,7 @@ else
 	done
 fi
 
+WARNING_FILES=""
 FAILED_FILES=""
 MAX_LENGTH_FILE=1
 
@@ -141,6 +149,13 @@ if [ "$HTML_FILES" == "" ]; then
     echo "You are checking only XML files but -l option is not enabled."
     return 4
   fi 
+fi
+
+#check if Warnings as error is enabled
+if [ $W_ERROR = true ]
+then
+	USER_CHECK_COLOR="0;31"
+	USER_CHECK_TEXT="FAILED"
 fi
 
 for file in $FILES
@@ -193,14 +208,74 @@ do
 
 	if [ $CHECK_SYNTAX = true ] && [ ${file: -5} == ".html" ]
 	then
-		RESULT=$(cat $file | grep -nE "span class=\"code\"\|<i>\|<b>\|<em>\|<strong>\|\b(\t+)\b\|class=\"\"\|\w  ") #<span class="code"> is obsolete. <i> and <b> are bad practice. class="" is wrong. And double white space
+		RESULT=$(cat $file | grep -nE -e "\S"$'\t' -e "[^\-]\->|span class=\"code\"|<i>|<b>|<em>|<strong>|class=\"\"|\S  ") #<span class="code"> is obsolete. <i> and <b> are bad practice. class="" is wrong. And double white space
 		if [ "$RESULT" != "" ]
 		then
+			if [ $W_ERROR = true ]
+			then
 			OK=false
-			printf "\033[0;31m-----------\033[0m\n"
-			printf "Checked \033[0;31m%-${MAX_LENGTH_FILE}s FAILED!\033[0m\n" $file
-			echo "WARNING AT SYNTAX (Use span instead of i, b, em and strong tags. Check double empty space, tabs instead of space and empty classes): $RESULT"
-			printf "\033[0;31m-----------\033[0m\n"
+			else
+				WARNING_FILES="$WARNING_FILES $file"
+				echo "$WARNING_FILES"
+			fi
+
+			printf "\033[0""$USER_CHECK_COLOR""m-----------\033[0m\n"
+			printf "Checked \033[""$USER_CHECK_COLOR""m%-${MAX_LENGTH_FILE}s $USER_CHECK_TEXT!\033[0m\n" $file
+
+			RES=$(echo "$RESULT" | grep -E "\S"$'\t')
+			if [ "$RES" != "" ]
+			then
+				printf "WARNING AT SYNTAX: Tabs are only allowed at the beginning of the line:\n%s\n" "$RES"
+			fi
+
+			RES=$(echo "$RESULT" | grep -E "[^\-]\->")
+			if [ "$RES" != "" ]
+			then
+				printf "WARNING AT SYNTAX: Don't use arrows like ->, only for comments:\n%s\n" "$RES"
+			fi
+
+			RES=$(echo "$RESULT" | grep -E "span class=\"code\"")
+			if [ "$RES" != "" ]
+			then
+				printf "WARNING AT SYNTAX: Don't use a span with class code. Use inlineCode class or use a div with class code:\n%s\n" "$RES"
+			fi
+
+			RES=$(echo "$RESULT" | grep -E "<i>")
+			if [ "$RES" != "" ]
+			then
+				printf "WARNING AT SYNTAX: Don't use the tag <i>. Put a span aroung it, and use one class that is styled in the css:\n%s\n" "$RES"
+			fi
+
+			RES=$(echo "$RESULT" | grep -E "<b>")
+			if [ "$RES" != "" ]
+			then
+				printf "WARNING AT SYNTAX: Don't use the tag <b>. Put a span aroung it, and use one class that is styled in the css:\n%s\n" "$RES"
+			fi
+
+			RES=$(echo "$RESULT" | grep -E "<em>")
+			if [ "$RES" != "" ]
+			then
+				printf "WARNING AT SYNTAX: Don't use the tag <em>. Put a span aroung it, and use one class that is styled in the css:\n%s\n" "$RES"
+			fi
+
+			RES=$(echo "$RESULT" | grep -E "<strong>")
+			if [ "$RES" != "" ]
+			then
+				printf "WARNING AT SYNTAX: Don't use the tag <strong>. Put a span aroung it, and use one class that is styled in the css:\n%s\n" "$RES"
+			fi
+
+			RES=$(echo "$RESULT" | grep -E "class=\"\"")
+			if [ "$RES" != "" ]
+			then
+				printf "WARNING AT SYNTAX: The class name is empty.:\n%s\n" "$RES"
+			fi
+
+			RES=$(echo "$RESULT" | grep -E "\S  ")
+			if [ "$RES" != "" ]
+			then
+				printf "WARNING AT SYNTAX: Multiple blank space:\n%s\n" "$RES"
+			fi
+			printf "\n\033[""$USER_CHECK_COLOR""m-----------\033[0m\n"
 		fi
 	fi
 	
@@ -225,12 +300,17 @@ do
 	fi
 done 
 
+if  [ "" != "$WARNING_FILES" ]
+then
+	printf "\n\033[""$USER_CHECK_COLOR""mWARNING. Check files: $WARNING_FILES.\033[0m\n"
+fi
+
 if [ "$FAILED_FILES"  == "" ]
 then
 	printf "\n\033[0;32mTest SUCCESS. All files are correct.\033[0m\n"
 	return 0
 else
-	printf "\n\033[0;31mTest FAILED. Check files $FAILED_FILES.\033[0m\n"
+	printf "\n\033[0;31mTest FAILED. Check files: $FAILED_FILES.\033[0m\n"
 	return 5
 fi
 

@@ -33,13 +33,17 @@
 <p>After installing, press <span class="button4diac">Windows Key + Pause</span>. In the System window, click <span class="button4diac">Advanced System Settings &rarr; Advanced (tab) &rarr; Environment Variables</span>. Change PATH variable (click on it), and add the path where your MinGW binaries have been installed in e.g., <span class="folderLocation">C:\MinGW\bin\</span>. Add <span class="folderLocation">C:\MinGW\bin;C:\MinGW\msys\1.0\bin;</span> in the Windows PATH variable. Try to give it in the beginning of the path or most likely after <span class="folderLocation">C:\Program Files\Common Files\Microsoft Shared\Windows Live;</span>.</p> 
 
 <h2>Test MinGW</h2>
-<p>Open command prompt window by pressing <span class="button4diac">Windows</span> button and entering <span class="inlineCode">cmd</span>. Enter <span class="inlineCode">bash</span>, if bash prompt appears, it was successful.</p>
+<p>Open command prompt window by pressing <span class="button4diac">Windows</span> button and entering <span class="inlineCode">cmd</span>. Enter <span class="inlineCode">g++ --version</span>, and if you can see some information about the version of the compiler, it was susscesfull. If you get an error like "Command g++ not found", then you must have done something wrong.</p>
+
+<h2>Change name of the make executable</h2>
+
+<p>In your installation folder, inside the <span class="folderLocation">bin</span> directory, you should find a file called <span class="fileLocation">mingw32-make.exe</span>. Copy this file in the same directory and change it to <span class="fileLocation">make.exe</span>. This is because this file is the one you will use to compile FORTE, and "make" is the command used throughout the documentation for it.</p>
 
 <h2>CMake and Compilation</h2>
 
-<p>In step 2 of <a href="./install.html#generateFilesForCompiling">Generate files for compiling</a>, you have to select <span class="specificText">MSYS Makefiles</span> or <span class="specificText">MinGW Makefiles</span> when working with MinGW. The architecture option should be set to Win32.</p>
+<p>In step 2 of <a href="./install.html#generateFilesForCompiling">Generate files for compiling</a>, you have to select <span class="specificText">Unix Makefiles</span>, <span class="specificText">MSYS Makefiles</span> or <span class="specificText">MinGW Makefiles</span> when working with MinGW. The architecture option should be set to Win32.</p>
 
-<p>To compile forte, you do</p>
+<p>After generating in CMake, to compile forte, you do</p>
 <div class="code">$ cd FORTE_FOLDER_ROOT/bin/[YOUR_SYSTEM]
 $ make</div>
 
