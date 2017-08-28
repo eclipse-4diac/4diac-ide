@@ -77,7 +77,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = null;
+	protected static final String COMMENT_EDEFAULT = "\"\"";
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.

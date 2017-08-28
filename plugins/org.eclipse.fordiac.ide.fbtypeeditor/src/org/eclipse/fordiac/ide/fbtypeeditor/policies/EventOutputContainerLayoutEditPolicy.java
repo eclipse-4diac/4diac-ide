@@ -46,7 +46,7 @@ public class EventOutputContainerLayoutEditPolicy extends AbstractInterfaceConta
 
 			@Override
 			protected Command getIECreateCommand(DataType refElement, int ref) {
-				return new CreateInterfaceElementCommand(refElement, "", "", getFBType().getInterfaceList(), false, ref); //$NON-NLS-1$ //$NON-NLS-2$
+				return new CreateInterfaceElementCommand(refElement, getFBType().getInterfaceList(), false, ref);
 			}	
 		};
 	}
@@ -84,7 +84,7 @@ public class EventOutputContainerLayoutEditPolicy extends AbstractInterfaceConta
 			index = type.getInterfaceList().getEventOutputs().indexOf(ref.getModel());
 		}
 		if (childClass instanceof EventType && type != null) {
-			CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand((DataType) childClass, "", "", type.getInterfaceList(), false, index); //$NON-NLS-1$ //$NON-NLS-2$
+			CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand((DataType) childClass, type.getInterfaceList(), false, index);
 			return cmd;
 		}
 		return null;

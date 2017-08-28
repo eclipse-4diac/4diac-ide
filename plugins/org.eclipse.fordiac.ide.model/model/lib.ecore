@@ -1008,7 +1008,8 @@
       eSuperTypes="#//I4DIACElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
         defaultValueLiteral="&quot;&quot;"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
+        defaultValueLiteral="&quot;&quot;"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ResourceTypeFB" eSuperTypes="#//FB">
     <eOperations name="isResourceTypeFB" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">

@@ -30,17 +30,13 @@ public class CreateInterfaceElementCommand extends Command {
 	private IInterfaceElement interfaceElement;
 	private EList<? extends IInterfaceElement> interfaces;
 	private int index;
-	private String name;
-	private String comment;
 	private InterfaceList interfaceList;
 	private AdapterCreateCommand cmd;
 
-	public CreateInterfaceElementCommand(DataType dataType, String name, String comment, InterfaceList interfaceList, boolean isInput, int index){
+	public CreateInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput, int index){
 		this.isInput = isInput;
 		this.dataType = dataType;
 		this.index = index;
-		this.name = name;
-		this.comment = comment;
 		this.interfaceList = interfaceList;
 	}
 		
@@ -88,12 +84,11 @@ public class CreateInterfaceElementCommand extends Command {
 		interfaceElement.setIsInput(isInput);
 		interfaceElement.setType(dataType);
 		interfaceElement.setTypeName(dataType.getName());
-		interfaceElement.setComment(comment);
 		if(dataType instanceof AdapterType && interfaceList.eContainer() instanceof CompositeFBType){
 			cmd = new AdapterCreateCommand(10, 10, (AdapterDeclaration) interfaceElement, (CompositeFBType)interfaceList.eContainer());
 		}
 		redo();
-		interfaceElement.setName(NameRepository.createUniqueName(interfaceElement, null == name || name.isEmpty() ? dataType.getName() : name));
+		interfaceElement.setName(NameRepository.createUniqueName(interfaceElement, dataType.getName()));
 	}
 	
 	@Override

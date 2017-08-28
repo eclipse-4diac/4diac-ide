@@ -83,7 +83,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = null;
+	protected static final String COMMENT_EDEFAULT = "\"\"";
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.

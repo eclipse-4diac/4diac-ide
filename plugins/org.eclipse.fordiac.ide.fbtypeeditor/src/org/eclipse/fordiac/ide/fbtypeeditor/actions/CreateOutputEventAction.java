@@ -37,7 +37,7 @@ public class CreateOutputEventAction extends WorkbenchPartAction {
 
 	@Override
 	public void run() {
-		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), "", "", fbType.getInterfaceList(), false, -1); //$NON-NLS-1$ //$NON-NLS-2$
+		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), fbType.getInterfaceList(), false, -1);
 		execute(cmd);
 	}
 

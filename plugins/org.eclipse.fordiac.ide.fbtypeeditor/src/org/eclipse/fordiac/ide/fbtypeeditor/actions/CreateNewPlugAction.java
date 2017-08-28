@@ -31,7 +31,7 @@ public class CreateNewPlugAction extends CreateFromNewAdapterAction {
 	}
 
 	protected Command getCreationCommand(AdapterTypePaletteEntry adpEntry) {
-		return new CreateInterfaceElementCommand(adpEntry.getAdapterType(), "", "", getFbType().getInterfaceList(), false, -1); //$NON-NLS-1$ //$NON-NLS-2$
+		return new CreateInterfaceElementCommand(adpEntry.getAdapterType(), getFbType().getInterfaceList(), false, -1);
 	}
 
 }

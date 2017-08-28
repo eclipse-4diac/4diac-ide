@@ -38,7 +38,7 @@ public class ChangeAlgorithmTypeCommand extends Command {
 		
 	@Override
 	public boolean canExecute() {
-		if(algorithmType.equalsIgnoreCase("ST")){ 
+		if(algorithmType.equalsIgnoreCase("ST")){  //$NON-NLS-1$
 			if(oldAlgorithm instanceof STAlgorithm) {
 				return false;
 			} else if (!(oldAlgorithm instanceof TextAlgorithm || oldAlgorithm instanceof OtherAlgorithm)){
@@ -57,7 +57,7 @@ public class ChangeAlgorithmTypeCommand extends Command {
 		// FIXME this only works if there are no more other algorithms
 		// supported!!!
 		
-		if (algorithmType.equalsIgnoreCase("ST")) {
+		if (algorithmType.equalsIgnoreCase("ST")) { //$NON-NLS-1$
 			newAlgorithm = createSTAlgorithm();
 		}else{
 			newAlgorithm = createOtherAlgorithm();
@@ -81,7 +81,7 @@ public class ChangeAlgorithmTypeCommand extends Command {
 		algorithm.setText(((TextAlgorithm) oldAlgorithm).getText());
 		algorithm.setName(oldAlgorithm.getName());
 		algorithm.setComment(oldAlgorithm.getComment());
-		algorithm.setLanguage("AnyText");
+		algorithm.setLanguage("AnyText"); //$NON-NLS-1$
 		return algorithm;
 	}
 	

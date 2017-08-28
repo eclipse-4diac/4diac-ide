@@ -158,7 +158,7 @@ public class CreateConnectionSection extends AbstractSection {
 		return getFBName((INamedElement) element) + "." + ((INamedElement) element).getName(); //$NON-NLS-1$
 	}
 	
-	private String getFBName(INamedElement element){
+	private static String getFBName(INamedElement element){
 		return ((FBNetworkElement)element.eContainer().eContainer()).getName();
 	}
 	

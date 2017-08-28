@@ -38,7 +38,7 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceSection {
 	@Override
 	protected CreateInterfaceElementCommand newCommand(boolean isInput) {
 		AdapterType type = (AdapterType) getType().getFbNetwork().getApplication().getAutomationSystem().getPalette().getTypeEntry(fillTypeCombo()[0]).getType();
-		return new CreateInterfaceElementCommand(type, "", "", getType().getInterface(), isInput, -1);
+		return new CreateInterfaceElementCommand(type, getType().getInterface(), isInput, -1);
 	}
 
 	@Override

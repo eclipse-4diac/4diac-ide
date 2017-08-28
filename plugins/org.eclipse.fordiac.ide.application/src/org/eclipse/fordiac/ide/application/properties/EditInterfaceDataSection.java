@@ -30,11 +30,7 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceSection {
 
 	@Override
 	protected CreateInterfaceElementCommand newCommand(boolean isInput) {
-		return new CreateInterfaceElementCommand(
-				DataTypeLibrary.getInstance().getType(fillTypeCombo()[2]), 
-				"", 
-				"", 
-				getType().getInterface(), isInput, -1);
+		return new CreateInterfaceElementCommand(DataTypeLibrary.getInstance().getType(fillTypeCombo()[2]), getType().getInterface(), isInput, -1);
 	}
 
 	@Override

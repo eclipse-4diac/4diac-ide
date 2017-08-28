@@ -39,7 +39,7 @@ public class CreatePlugAction extends WorkbenchPartAction {
 
 	@Override
 	public void run() {
-		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(entry.getAdapterType(), "", "", fbType.getInterfaceList(), false, -1); //$NON-NLS-1$ //$NON-NLS-2$
+		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(entry.getAdapterType(), fbType.getInterfaceList(), false, -1);
 		execute(cmd);
 	}
 

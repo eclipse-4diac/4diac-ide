@@ -48,7 +48,7 @@ public class SocketContainerLayoutEditPolicy extends AbstractInterfaceContainerL
 
 			@Override
 			protected Command getIECreateCommand(DataType type, int ref) {
-				return new CreateInterfaceElementCommand(type, "", "", getFBType().getInterfaceList(), true, ref); //$NON-NLS-1$ //$NON-NLS-2$
+				return new CreateInterfaceElementCommand(type, getFBType().getInterfaceList(), true, ref);
 			}		
 		};
 	}
@@ -88,7 +88,7 @@ public class SocketContainerLayoutEditPolicy extends AbstractInterfaceContainerL
 			if (ref != null) {
 				index = type.getInterfaceList().getSockets().indexOf(ref.getModel());
 			}
-			CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand((DataType) childClass, "", "", type.getInterfaceList(), true, index); //$NON-NLS-1$ //$NON-NLS-2$
+			CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand((DataType) childClass, type.getInterfaceList(), true, index);
 			return cmd;
 		}
 		return null;
