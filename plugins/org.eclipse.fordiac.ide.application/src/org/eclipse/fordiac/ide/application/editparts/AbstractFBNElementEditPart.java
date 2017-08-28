@@ -27,6 +27,8 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
+import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -41,7 +43,9 @@ import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -188,6 +192,18 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 		// Highlight In and Outconnections of the selected fb, allow alignment of FBs
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FBNElementSelectionPolicy());
+
+		//FBNetwork elements need a special rename command therefore we remove the standard edit policy and add a adjusted one
+		removeEditPolicy(EditPolicy.DIRECT_EDIT_ROLE);
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy() {
+			 protected Command getDirectEditCommand(DirectEditRequest request) {
+			        if (getHost() instanceof AbstractFBNElementEditPart) {
+			            return new ChangeFBNetworkElementName(((AbstractFBNElementEditPart) getHost()).getModel(),
+						(String) request.getCellEditor().getValue());
+			        }
+			        return null;
+			    }
+		});
 	}
 
 

@@ -43,7 +43,7 @@ import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 public class NameRepository {
 
 
-	public static final Set<String> RESERVED_KEYWORDS =
+	private static final Set<String> RESERVED_KEYWORDS =
 			Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(new String[] {
 					"VAR", "END_VAR", "CONSTANT", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					"SUPER", "RETURN", //$NON-NLS-1$ //$NON-NLS-2$
