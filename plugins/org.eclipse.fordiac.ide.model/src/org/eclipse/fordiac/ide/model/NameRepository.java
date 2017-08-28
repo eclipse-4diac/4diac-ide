@@ -17,12 +17,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
@@ -35,7 +39,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 
 public class NameRepository {
@@ -76,6 +82,63 @@ public class NameRepository {
 		}
 	}
 	
+	/** Check and if necessary adapt the given name proposal so that it is a valid name for the given INamedElement
+	 *
+	 * This method expects that the element is already correctly inserted in the model and that its eContainer returns the correct container.
+	 * The nameProposal needs to be a valid identifier
+	 *
+	 * @param element      the element for which the name should be created
+	 * @param nameProposal a proposal for a name of the element
+	 * @return  a valid unique element name
+	 */
+	public static String createUniqueName(final INamedElement element, final String nameProposal) {
+		Assert.isTrue(IdentifierVerifyer.isValidIdentifier(nameProposal), "The given name proposal is not a valid identifier!");  //$NON-NLS-1$
+		Assert.isNotNull(element.eContainer(), "For a correct operation createuniqueName expects that the model element is already added in its containing model!"); //$NON-NLS-1$
+
+		String retVal = nameProposal;
+		if(element instanceof IInterfaceElement) {
+			//for interface elements we need to check if it not a reserved keyword
+			retVal = checkReservedKeyWords(nameProposal);
+		}
+		return getUniqueName(getRefNames(element), retVal);
+	}
+
+
+
+
+	private static Set<String> getRefNames(INamedElement refElement){
+		EList<?extends INamedElement> elementsList = null;
+
+		//TODO consider moving this instance of cascade into the model
+		if(refElement instanceof Algorithm) {
+			elementsList = ((BasicFBType)((Algorithm)refElement).eContainer()).getAlgorithm();
+		} else if(refElement instanceof Application) {
+			elementsList = ((Application)refElement).getAutomationSystem().getApplication();
+		} else if(refElement instanceof Device) {
+			elementsList = ((Device)refElement).getSystemConfiguration().getDevices();
+		} else if(refElement instanceof FBNetworkElement) {
+			elementsList = ((FBNetworkElement)refElement).getFbNetwork().getNetworkElements();
+		} else if(refElement instanceof Resource) {
+			elementsList = ((Resource)refElement).getDevice().getResource();
+		} else if(refElement instanceof Segment) {
+			elementsList = ((SystemConfiguration)((Segment)refElement).eContainer()).getSegments();
+		} else if(refElement instanceof ECState) {
+			elementsList = ((ECC)((ECState)refElement).eContainer()).getECState();
+		} else if(refElement instanceof IInterfaceElement) {
+			EList<INamedElement> elements = new BasicEList<INamedElement>();
+			InterfaceList interfaceList = (InterfaceList)((IInterfaceElement)refElement).eContainer();
+			elements.addAll(interfaceList.getAllInterfaceElements());
+			if(interfaceList.eContainer() instanceof BasicFBType){
+				elements.addAll(((BasicFBType)interfaceList.eContainer()).getInternalVars());
+			}
+			elementsList = elements;
+		} else {
+			throw new IllegalArgumentException("Refenrence list for given class not available: " + refElement.getClass().toString()); //$NON-NLS-1$
+		}
+
+		return elementsList.stream().filter(element -> element != refElement).map(element -> element.getName()).collect(Collectors.toSet());
+	}
+
 
 	/**
 	 * Checks whether the instance name is unique in the fb network it is contained in
@@ -108,7 +171,7 @@ public class NameRepository {
 	 * @param nameProposal a proposal for a name as starting point
 	 * @return a unique name
 	 */
-	static private String getUniqueName(HashSet<String> existingNameList, String nameProposal){
+	static private String getUniqueName(Set<String> existingNameList, String nameProposal){
 		String temp = nameProposal;
 		
 		int i = 1;
@@ -133,20 +196,20 @@ public class NameRepository {
 			FBNetwork fbn, String nameProposal) {
 		if (fbn != null) {
 			//TODO consider to also add the referenced FB here so that the old name is not considered
-			HashSet<String> uniqueNames = getNameList(null, fbn.getNetworkElements()); 
+			Set<String> uniqueNames = getNameList(null, fbn.getNetworkElements());
 			return getUniqueName(uniqueNames, nameProposal);
 		}
 		return nameProposal;
 	}
 	
 	public static String getResourceUniqueFBInstanceName(final Resource resourceUT, final String name) {
-		HashSet<String> resourceNames = getNameList(resourceUT, resourceUT.getFBNetwork().getNetworkElements());
+		Set<String> resourceNames = getNameList(resourceUT, resourceUT.getFBNetwork().getNetworkElements());
 		return getUniqueName(resourceNames, name);
 	}
 
 	public static String getUniqueResourceInstanceName(final Resource resourceUT, final String name) {
 		if(null != resourceUT.eContainer()){
-			HashSet<String> resourceNames = getNameList(resourceUT,resourceUT.getDevice().getResource());
+			Set<String> resourceNames = getNameList(resourceUT,resourceUT.getDevice().getResource());
 			return getUniqueName(resourceNames, name);
 		}
 		return name;
@@ -154,7 +217,7 @@ public class NameRepository {
 
 	public static String getUniqueDeviceInstanceName(final Device deviceUT, final String name) {
 		if(null != deviceUT.eContainer()){
-			HashSet<String> deviceNames = getNameList(deviceUT, deviceUT.getAutomationSystem().getSystemConfiguration().getDevices());
+			Set<String> deviceNames = getNameList(deviceUT, deviceUT.getAutomationSystem().getSystemConfiguration().getDevices());
 			return getUniqueName(deviceNames, name);
 		}
 		return name;
@@ -178,7 +241,7 @@ public class NameRepository {
 	}
 	
 	public static String getUniqueECCStateName(ECState state, ECC ecc, String name) {
-		HashSet<String> stateNames = getNameList(state, ecc.getECState());
+		Set<String> stateNames = getNameList(state, ecc.getECState());
 		return getUniqueName(stateNames, name);
 	}
 
@@ -244,14 +307,8 @@ public class NameRepository {
 		return name;
 	}
 	
-	private static HashSet<String> getNameList(INamedElement refElement, EList<?extends INamedElement> elementsList){
-		HashSet<String> nameList = new HashSet<>();		
-		for (INamedElement element : elementsList) {
-			if(!element.equals(refElement)){
-				nameList.add(element.getName());
-			}
-		}		
-		return nameList;
+	private static Set<String> getNameList(INamedElement refElement, EList<?extends INamedElement> elementsList){
+		return elementsList.stream().filter(element -> element != refElement).map(element -> element.getName()).collect(Collectors.toSet());
 	}
 
 }

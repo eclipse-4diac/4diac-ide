@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
@@ -56,11 +57,11 @@ public class SegmentCreateCommand extends Command {
 		segment.setColor(ColorHelper.createRandomColor());
 		segment.setPaletteEntry(type);
 		segment.getVarDeclarations().addAll(EcoreUtil.copyAll(type.getSegmentType().getVarDeclaration()));
-		segment.setName(type.getSegmentType().getName());
 		segment.setX(bounds.x);
 		segment.setY(bounds.y);
 		segment.setWidth((-1 != bounds.width) ? bounds.width : 300);	
 		redo();
+		segment.setName(NameRepository.createUniqueName(segment, type.getSegmentType().getName()));
 	}
 
 	@Override
