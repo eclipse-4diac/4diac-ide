@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
@@ -79,7 +80,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		EVENT, DATA, ADAPTER
 	}
 	
-	protected abstract CreateInterfaceElementCommand newCommand(boolean isInput);
+	protected abstract CreateSubAppInterfaceElementCommand newCommand(boolean isInput);
 	protected abstract String[] fillTypeCombo();
 	
 	@Override

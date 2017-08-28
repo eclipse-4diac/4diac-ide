@@ -12,11 +12,11 @@ package org.eclipse.fordiac.ide.application.properties;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
-import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.swt.widgets.Composite;
@@ -36,9 +36,9 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceSection {
 	}
 
 	@Override
-	protected CreateInterfaceElementCommand newCommand(boolean isInput) {
+	protected CreateSubAppInterfaceElementCommand newCommand(boolean isInput) {
 		AdapterType type = (AdapterType) getType().getFbNetwork().getApplication().getAutomationSystem().getPalette().getTypeEntry(fillTypeCombo()[0]).getType();
-		return new CreateInterfaceElementCommand(type, getType().getInterface(), isInput, -1);
+		return new CreateSubAppInterfaceElementCommand(type, getType().getInterface(), isInput, -1);
 	}
 
 	@Override

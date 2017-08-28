@@ -25,12 +25,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.gef.commands.Command;
 
 public class CreateInterfaceElementCommand extends Command {
-	private boolean isInput;
-	private DataType dataType;
-	private IInterfaceElement interfaceElement;
-	private EList<? extends IInterfaceElement> interfaces;
-	private int index;
-	private InterfaceList interfaceList;
+	protected boolean isInput;
+	protected DataType dataType;
+	protected IInterfaceElement interfaceElement;
+
+	protected EList<? extends IInterfaceElement> interfaces;
+	protected int index;
+	protected InterfaceList interfaceList;
 	private AdapterCreateCommand cmd;
 
 	public CreateInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput, int index){
@@ -40,6 +41,10 @@ public class CreateInterfaceElementCommand extends Command {
 		this.interfaceList = interfaceList;
 	}
 		
+	public IInterfaceElement getInterfaceElement() {
+		return interfaceElement;
+	}
+
 	@Override
 	public boolean canExecute() {
 		return null != dataType && (null != interfaceList);
