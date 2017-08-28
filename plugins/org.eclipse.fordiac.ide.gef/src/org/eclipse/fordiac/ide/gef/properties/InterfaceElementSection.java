@@ -136,7 +136,7 @@ public class InterfaceElementSection extends AbstractSection {
 			}			
 		}else {
 			if(getType() instanceof AdapterDeclaration) {
-				if(null != getType()) {
+				if(null != getType() && null != getType().getFBNetworkElement().getFbNetwork().getApplication()) {
 					for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette())){
 						typeCombo.add(adaptertype.getAdapterType().getName());
 					}
@@ -149,11 +149,13 @@ public class InterfaceElementSection extends AbstractSection {
 				}
 			}
 		}
+		if(typeCombo.getItems().length > 0){
 		int i = typeCombo.getItems().length - 1;
 	    while (!text.equals(typeCombo.getItems()[i]) && i > 0){
 	        	--i;
 	        } 
 		typeCombo.select(i);					
+	}
 	}
 
 	private static ArrayList<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette){
