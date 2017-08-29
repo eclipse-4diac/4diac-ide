@@ -180,6 +180,7 @@
     <topic href="html/communication/simulation.html" label="Communicating with Simulation Tools">
        <topic label="Matlab" href="html/communication/simulation.html#matlab" />
     </topic>
+	<topic href="html/communication/ros.html" label="ROS"/>
   </topic>  
 		
 	<topic href="html/faq/faq.html" label="Frequently Asked Questions"> 
