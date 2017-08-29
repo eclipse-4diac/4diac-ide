@@ -138,7 +138,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new ChangeInterfaceOrderCommand(getType().getInterface(), (IInterfaceElement) selection, true, true));
+					executeCommand(new ChangeInterfaceOrderCommand((IInterfaceElement) selection, true, true));
 					inputsViewer.refresh();
 				}
 			}
@@ -149,7 +149,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new ChangeInterfaceOrderCommand(getType().getInterface(), (IInterfaceElement) selection, true, false));
+					executeCommand(new ChangeInterfaceOrderCommand((IInterfaceElement) selection, true, false));
 					inputsViewer.refresh();
 				}
 			}
@@ -208,7 +208,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new ChangeInterfaceOrderCommand(getType().getInterface(), (IInterfaceElement) selection, false, true));
+					executeCommand(new ChangeInterfaceOrderCommand((IInterfaceElement) selection, false, true));
 					outputsViewer.refresh();
 				}
 			}
@@ -219,7 +219,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new ChangeInterfaceOrderCommand(getType().getInterface(), (IInterfaceElement) selection, false, false));
+					executeCommand(new ChangeInterfaceOrderCommand((IInterfaceElement) selection, false, false));
 					outputsViewer.refresh();
 				}
 			}

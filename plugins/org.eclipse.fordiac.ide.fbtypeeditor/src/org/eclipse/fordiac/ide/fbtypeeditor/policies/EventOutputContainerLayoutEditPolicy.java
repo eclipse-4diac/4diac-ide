@@ -67,7 +67,7 @@ public class EventOutputContainerLayoutEditPolicy extends AbstractInterfaceConta
 				} else {
 					newIndex = getHost().getChildren().indexOf(after);
 				}
-				return new ChangeInterfaceOrderCommand(getFBType().getInterfaceList(), (IInterfaceElement) childEP.getModel(), 
+				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(), 
 						((IInterfaceElement)childEP.getModel()).isIsInput(), newIndex);
 			}
 		}

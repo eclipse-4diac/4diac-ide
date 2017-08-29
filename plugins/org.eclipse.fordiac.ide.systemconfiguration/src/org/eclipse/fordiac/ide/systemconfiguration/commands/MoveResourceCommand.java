@@ -21,9 +21,9 @@ import org.eclipse.gef.commands.Command;
  */
 public class MoveResourceCommand extends Command {
 	
-	private Resource child;
+	private final Resource child;
 
-	private Device device;
+	private final Device device;
 	
 	private final int oldIndex;
 
@@ -37,12 +37,12 @@ public class MoveResourceCommand extends Command {
 	 * @param oldIndex the old index
 	 * @param newIndex the new index
 	 */
-	public MoveResourceCommand(final Resource child, final int oldIndex, final int newIndex) {
+	public MoveResourceCommand(final Resource child, final int newIndex) {
 		super();
 		this.child = child;
 		this.device = child.getDevice();
-		this.oldIndex = oldIndex;
 		this.newIndex = newIndex;
+		oldIndex = device.getResource().indexOf(child);
 	}
 
 	/*

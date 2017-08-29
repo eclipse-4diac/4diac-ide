@@ -71,7 +71,7 @@ public class VariableOutputContainerLayoutEditPolicy extends AbstractInterfaceCo
 				} else {
 					newIndex = getHost().getChildren().indexOf(after);
 				}
-				return new ChangeInterfaceOrderCommand(getFBType().getInterfaceList(), (IInterfaceElement) childEP.getModel(), ((IInterfaceElement)childEP.getModel()).isIsInput(), newIndex);
+				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(), ((IInterfaceElement)childEP.getModel()).isIsInput(), newIndex);
 			}
 
 		}
