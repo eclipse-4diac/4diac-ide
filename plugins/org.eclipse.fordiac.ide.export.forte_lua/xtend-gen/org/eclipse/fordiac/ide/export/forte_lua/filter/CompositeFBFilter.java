@@ -12,8 +12,6 @@
  */
 package org.eclipse.fordiac.ide.export.forte_lua.filter;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.emf.common.util.EList;
@@ -148,8 +146,11 @@ public class CompositeFBFilter {
   public static CharSequence luaParameters(final FBNetwork fbn) {
     CharSequence _xblockexpression = null;
     {
-      ArrayList<ArrayList<?>> parameters = CompositeFBFilter.getParameters(fbn);
-      int numAdapters = IterableExtensions.size(Iterables.<AdapterFB>filter(fbn.getNetworkElements(), AdapterFB.class));
+      final Function1<FBNetworkElement, Boolean> _function = (FBNetworkElement e) -> {
+        return Boolean.valueOf((!(e instanceof AdapterFB)));
+      };
+      Iterable<FBNetworkElement> fbs = IterableExtensions.<FBNetworkElement>filter(fbn.getNetworkElements(), _function);
+      ArrayList<ArrayList<?>> parameters = CompositeFBFilter.getParameters(IterableExtensions.<FBNetworkElement>toList(fbs));
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("parameters = {");
       _builder.newLine();
@@ -164,8 +165,7 @@ public class CompositeFBFilter {
           _builder.append("  ");
           _builder.append("{fbNum = ");
           Object _get = p.get(0);
-          int _minus = ((((Integer) _get)).intValue() - numAdapters);
-          _builder.append(_minus, "  ");
+          _builder.append(((Integer) _get), "  ");
           _builder.append(", diNameID = \"");
           Object _get_1 = p.get(1);
           _builder.append(_get_1, "  ");
@@ -186,9 +186,6 @@ public class CompositeFBFilter {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("eventConnections = {");
     _builder.newLine();
-    _builder.append("  ");
-    int numAdapters = IterableExtensions.size(Iterables.<AdapterFB>filter(type.getFBNetwork().getNetworkElements(), AdapterFB.class));
-    _builder.newLineIfNotEmpty();
     _builder.append("  ");
     EList<EventConnection> allCons = type.getFBNetwork().getEventConnections();
     _builder.newLineIfNotEmpty();
@@ -213,22 +210,21 @@ public class CompositeFBFilter {
         FBNetworkElement dne = con.getDestination().getFBNetworkElement();
         _builder.newLineIfNotEmpty();
         {
-          if (((!Objects.equal(null, dne)) && (!Objects.equal(null, sne)))) {
+          if (((null != dne) && (null != sne))) {
             _builder.append("  ");
             _builder.append("{");
-            String _luaConnectionString = CompositeFBFilter.luaConnectionString(sne, con.getSource(), numAdapters, type, "src");
+            String _luaConnectionString = CompositeFBFilter.luaConnectionString(sne, con.getSource(), type, "src");
             _builder.append(_luaConnectionString, "  ");
             _builder.append(", ");
-            String _luaConnectionString_1 = CompositeFBFilter.luaConnectionString(dne, con.getDestination(), numAdapters, type, "dst");
+            String _luaConnectionString_1 = CompositeFBFilter.luaConnectionString(dne, con.getDestination(), type, "dst");
             _builder.append(_luaConnectionString_1, "  ");
             _builder.append("}");
             _builder.newLineIfNotEmpty();
           } else {
-            boolean _equals = Objects.equal(null, dne);
-            if (_equals) {
+            if ((null == dne)) {
               _builder.append("  ");
               _builder.append("{");
-              String _luaConnectionString_2 = CompositeFBFilter.luaConnectionString(sne, con.getSource(), numAdapters, type, "src");
+              String _luaConnectionString_2 = CompositeFBFilter.luaConnectionString(sne, con.getSource(), type, "src");
               _builder.append(_luaConnectionString_2, "  ");
               _builder.append(", dstID = \"");
               String _name = con.getDestination().getName();
@@ -236,14 +232,13 @@ public class CompositeFBFilter {
               _builder.append("\", dstFBNum = -1}");
               _builder.newLineIfNotEmpty();
             } else {
-              boolean _equals_1 = Objects.equal(null, sne);
-              if (_equals_1) {
+              if ((null == sne)) {
                 _builder.append("  ");
                 _builder.append("{srcID = \"");
                 String _name_1 = con.getSource().getName();
                 _builder.append(_name_1, "  ");
                 _builder.append("\", srcFBNum = -1, ");
-                String _luaConnectionString_3 = CompositeFBFilter.luaConnectionString(dne, con.getDestination(), numAdapters, type, "dst");
+                String _luaConnectionString_3 = CompositeFBFilter.luaConnectionString(dne, con.getDestination(), type, "dst");
                 _builder.append(_luaConnectionString_3, "  ");
                 _builder.append("}");
                 _builder.newLineIfNotEmpty();
@@ -267,7 +262,7 @@ public class CompositeFBFilter {
     return _builder;
   }
   
-  public static String luaConnectionString(final FBNetworkElement e, final IInterfaceElement ev, final int numAdapters, final CompositeFBType type, final String stringID) {
+  public static String luaConnectionString(final FBNetworkElement e, final IInterfaceElement ev, final CompositeFBType type, final String stringID) {
     final Function1<AdapterDeclaration, AdapterFB> _function = (AdapterDeclaration it) -> {
       return it.getAdapterFB();
     };
@@ -314,9 +309,11 @@ public class CompositeFBFilter {
       _builder_2.append("\", ");
       _builder_2.append(stringID);
       _builder_2.append("FBNum = ");
-      int _indexOf_1 = type.getFBNetwork().getNetworkElements().indexOf(e);
-      int _minus = (_indexOf_1 - numAdapters);
-      _builder_2.append(_minus);
+      final Function1<FBNetworkElement, Boolean> _function_2 = (FBNetworkElement f) -> {
+        return Boolean.valueOf((!(f instanceof AdapterFB)));
+      };
+      int _indexOf_1 = IterableExtensions.<FBNetworkElement>toList(IterableExtensions.<FBNetworkElement>filter(type.getFBNetwork().getNetworkElements(), _function_2)).indexOf(e);
+      _builder_2.append(_indexOf_1);
       return _builder_2.toString();
     }
   }
@@ -325,9 +322,6 @@ public class CompositeFBFilter {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("fannedOutEventConnections = {");
     _builder.newLine();
-    _builder.append("  ");
-    int numAdapters = IterableExtensions.size(Iterables.<AdapterFB>filter(type.getFBNetwork().getNetworkElements(), AdapterFB.class));
-    _builder.newLineIfNotEmpty();
     _builder.append("  ");
     EList<EventConnection> allCons = type.getFBNetwork().getEventConnections();
     _builder.newLineIfNotEmpty();
@@ -349,19 +343,20 @@ public class CompositeFBFilter {
         if (!_hasElements) {
           _hasElements = true;
         } else {
-          _builder.appendImmediate(",", "");
+          _builder.appendImmediate(",", "  ");
         }
+        _builder.append("  \t  ");
         FBNetworkElement dne = con.getDestination().getFBNetworkElement();
         _builder.newLineIfNotEmpty();
         {
-          boolean _notEquals = (!Objects.equal(null, dne));
-          if (_notEquals) {
+          if ((null != dne)) {
+            _builder.append("  ");
             _builder.append("{connectionNum = ");
             int _connectionNumber = CompositeFBFilter.getConnectionNumber(conList, con);
-            _builder.append(_connectionNumber);
+            _builder.append(_connectionNumber, "  ");
             _builder.append(", ");
-            String _luaConnectionString = CompositeFBFilter.luaConnectionString(dne, con.getDestination(), numAdapters, type, "dst");
-            _builder.append(_luaConnectionString);
+            String _luaConnectionString = CompositeFBFilter.luaConnectionString(dne, con.getDestination(), type, "dst");
+            _builder.append(_luaConnectionString, "  ");
             _builder.append("}");
             _builder.newLineIfNotEmpty();
           } else {
@@ -388,9 +383,6 @@ public class CompositeFBFilter {
     _builder.append("dataConnections = {");
     _builder.newLine();
     _builder.append("  ");
-    int numAdapters = IterableExtensions.size(Iterables.<AdapterFB>filter(type.getFBNetwork().getNetworkElements(), AdapterFB.class));
-    _builder.newLineIfNotEmpty();
-    _builder.append("  ");
     EList<DataConnection> allCons = type.getFBNetwork().getDataConnections();
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
@@ -414,22 +406,21 @@ public class CompositeFBFilter {
         FBNetworkElement dne = con.getDestination().getFBNetworkElement();
         _builder.newLineIfNotEmpty();
         {
-          if (((!Objects.equal(null, dne)) && (!Objects.equal(null, sne)))) {
+          if (((null != dne) && (null != sne))) {
             _builder.append("  ");
             _builder.append("{");
-            String _luaConnectionString = CompositeFBFilter.luaConnectionString(sne, con.getSource(), numAdapters, type, "src");
+            String _luaConnectionString = CompositeFBFilter.luaConnectionString(sne, con.getSource(), type, "src");
             _builder.append(_luaConnectionString, "  ");
             _builder.append(", ");
-            String _luaConnectionString_1 = CompositeFBFilter.luaConnectionString(dne, con.getDestination(), numAdapters, type, "dst");
+            String _luaConnectionString_1 = CompositeFBFilter.luaConnectionString(dne, con.getDestination(), type, "dst");
             _builder.append(_luaConnectionString_1, "  ");
             _builder.append("}");
             _builder.newLineIfNotEmpty();
           } else {
-            boolean _equals = Objects.equal(null, dne);
-            if (_equals) {
+            if ((null == dne)) {
               _builder.append("  ");
               _builder.append("{");
-              String _luaConnectionString_2 = CompositeFBFilter.luaConnectionString(sne, con.getSource(), numAdapters, type, "src");
+              String _luaConnectionString_2 = CompositeFBFilter.luaConnectionString(sne, con.getSource(), type, "src");
               _builder.append(_luaConnectionString_2, "  ");
               _builder.append(", dstID = \"");
               String _name = con.getDestination().getName();
@@ -437,14 +428,13 @@ public class CompositeFBFilter {
               _builder.append("\", dstFBNum = -1}");
               _builder.newLineIfNotEmpty();
             } else {
-              boolean _equals_1 = Objects.equal(null, sne);
-              if (_equals_1) {
+              if ((null == sne)) {
                 _builder.append("  ");
                 _builder.append("{srcID = \"");
                 String _name_1 = con.getSource().getName();
                 _builder.append(_name_1, "  ");
                 _builder.append("\", srcFBNum = -1, ");
-                String _luaConnectionString_3 = CompositeFBFilter.luaConnectionString(dne, con.getDestination(), numAdapters, type, "dst");
+                String _luaConnectionString_3 = CompositeFBFilter.luaConnectionString(dne, con.getDestination(), type, "dst");
                 _builder.append(_luaConnectionString_3, "  ");
                 _builder.append("}");
                 _builder.newLineIfNotEmpty();
@@ -476,9 +466,6 @@ public class CompositeFBFilter {
     _builder.append("fannedOutDataConnections = {");
     _builder.newLine();
     _builder.append("  ");
-    int numAdapters = IterableExtensions.size(Iterables.<AdapterFB>filter(type.getFBNetwork().getNetworkElements(), AdapterFB.class));
-    _builder.newLineIfNotEmpty();
-    _builder.append("  ");
     EList<DataConnection> allCons = type.getFBNetwork().getDataConnections();
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
@@ -499,25 +486,27 @@ public class CompositeFBFilter {
         if (!_hasElements) {
           _hasElements = true;
         } else {
-          _builder.appendImmediate(",", "");
+          _builder.appendImmediate(",", "  ");
         }
+        _builder.append("  \t  ");
         FBNetworkElement dne = con.getDestination().getFBNetworkElement();
         _builder.newLineIfNotEmpty();
         {
-          boolean _notEquals = (!Objects.equal(null, dne));
-          if (_notEquals) {
+          if ((null != dne)) {
+            _builder.append("  ");
             _builder.append("{connectionNum = ");
             int _connectionNumber = CompositeFBFilter.getConnectionNumber(conList, con);
-            _builder.append(_connectionNumber);
+            _builder.append(_connectionNumber, "  ");
             _builder.append(", ");
-            String _luaConnectionString = CompositeFBFilter.luaConnectionString(dne, con.getDestination(), numAdapters, type, "dst");
-            _builder.append(_luaConnectionString);
+            String _luaConnectionString = CompositeFBFilter.luaConnectionString(dne, con.getDestination(), type, "dst");
+            _builder.append(_luaConnectionString, "  ");
             _builder.append("}");
             _builder.newLineIfNotEmpty();
           } else {
+            _builder.append("  ");
             _builder.append("{dstID = \"");
             String _name = con.getDestination().getName();
-            _builder.append(_name);
+            _builder.append(_name, "  ");
             _builder.append("\", dstFBNum = -1}");
             _builder.newLineIfNotEmpty();
           }
@@ -578,18 +567,20 @@ public class CompositeFBFilter {
   }
   
   private static int getNumParameter(final FBNetwork fbn) {
-    return CompositeFBFilter.getParameters(fbn).size();
+    final Function1<FBNetworkElement, Boolean> _function = (FBNetworkElement e) -> {
+      return Boolean.valueOf((!(e instanceof AdapterFB)));
+    };
+    return CompositeFBFilter.getParameters(IterableExtensions.<FBNetworkElement>toList(IterableExtensions.<FBNetworkElement>filter(fbn.getNetworkElements(), _function))).size();
   }
   
-  private static ArrayList<ArrayList<?>> getParameters(final FBNetwork fbn) {
+  private static ArrayList<ArrayList<?>> getParameters(final List<FBNetworkElement> fbs) {
     ArrayList<ArrayList<?>> parameters = new ArrayList<ArrayList<?>>();
-    EList<FBNetworkElement> _networkElements = fbn.getNetworkElements();
-    for (final FBNetworkElement ne : _networkElements) {
+    for (final FBNetworkElement ne : fbs) {
       EList<VarDeclaration> _inputVars = ne.getInterface().getInputVars();
       for (final VarDeclaration iv : _inputVars) {
-        if ((((!Objects.equal(null, iv.getValue())) && (!Objects.equal(null, iv.getValue().getValue()))) && (!iv.getValue().getValue().isEmpty()))) {
+        if ((((null != iv.getValue()) && (null != iv.getValue().getValue())) && (!iv.getValue().getValue().isEmpty()))) {
           ArrayList<Object> list = new ArrayList<Object>();
-          list.add(Integer.valueOf(fbn.getNetworkElements().indexOf(ne)));
+          list.add(Integer.valueOf(fbs.indexOf(ne)));
           list.add(iv.getName());
           list.add(iv.getValue().getValue());
           parameters.add(list);

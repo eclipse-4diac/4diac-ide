@@ -62,37 +62,36 @@ class CompositeFBFilter {
 	}'''
 
 	def static luaParameters(FBNetwork fbn){
-	var parameters = fbn.getParameters
-	var numAdapters = fbn.networkElements.filter(AdapterFB).size
+	var fbs = fbn.networkElements.filter(e| !(e instanceof AdapterFB))
+	var parameters = fbs.toList.getParameters
 	'''
 	parameters = {
 	  «FOR p : parameters SEPARATOR ','» 
-	  {fbNum = «p.get(0) as Integer - numAdapters», diNameID = "«p.get(1)»", paramValue = "«p.get(2)»"}
+	  {fbNum = «p.get(0) as Integer», diNameID = "«p.get(1)»", paramValue = "«p.get(2)»"}
 	  «ENDFOR»
 	}'''
 	} 
 
 	def static luaEventConnections(CompositeFBType type) '''
 	eventConnections = {
-	  «var numAdapters = type.FBNetwork.networkElements.filter(AdapterFB).size»
 	  «var allCons = type.FBNetwork.eventConnections»
 	  «var connections = allCons.filter(e| e.source.outputConnections.size == 1 || (e.source.outputConnections.size > 1 && e.source.outputConnections.get(0).equals(e)))»
 	  «FOR con : connections SEPARATOR ','»  	
 	  «var sne = con.source.FBNetworkElement»
 	  «var dne = con.destination.FBNetworkElement»
-	  «IF null != dne && null != sne»
-	  {«sne.luaConnectionString(con.source, numAdapters, type, "src")», «dne.luaConnectionString(con.destination, numAdapters, type, "dst")»}
-	  «ELSEIF null == dne»
-	  {«sne.luaConnectionString(con.source, numAdapters, type, "src")», dstID = "«con.destination.name»", dstFBNum = -1}
-	  «ELSEIF null == sne»
-	  {srcID = "«con.source.name»", srcFBNum = -1, «dne.luaConnectionString(con.destination, numAdapters, type, "dst")»}
+	  «IF null !== dne && null !== sne»
+	  {«sne.luaConnectionString(con.source, type, "src")», «dne.luaConnectionString(con.destination, type, "dst")»}
+	  «ELSEIF null === dne»
+	  {«sne.luaConnectionString(con.source, type, "src")», dstID = "«con.destination.name»", dstFBNum = -1}
+	  «ELSEIF null === sne»
+	  {srcID = "«con.source.name»", srcFBNum = -1, «dne.luaConnectionString(con.destination, type, "dst")»}
 	  «ELSE»
 	  {srcID = "«con.source.name»", srcFBNum = -1, dstID = "«con.destination.name»", dstFBNum = -1}
 	  «ENDIF»
 	  «ENDFOR»
 	}'''
 	
-	def static String luaConnectionString(FBNetworkElement e, IInterfaceElement ev, int numAdapters, CompositeFBType type, String stringID){
+	def static String luaConnectionString(FBNetworkElement e, IInterfaceElement ev, CompositeFBType type, String stringID){
 		var plugs = type.interfaceList.plugs.map[it.adapterFB].toList
 		var sockets = type.interfaceList.sockets.map[it.adapterFB].toList
 		if (e instanceof AdapterFB){
@@ -102,21 +101,20 @@ class CompositeFBFilter {
 				return '''«stringID»ID = "«ev.name»", «stringID»FBNum = «ADAPTER_MARKER.bitwiseOr(plugs.size + sockets.indexOf(e))»'''
 			}
 		}else{
-			return '''«stringID»ID = "«ev.name»", «stringID»FBNum = «type.FBNetwork.networkElements.indexOf(e) - numAdapters»'''
+			return '''«stringID»ID = "«ev.name»", «stringID»FBNum = «type.FBNetwork.networkElements.filter(f| !(f instanceof AdapterFB)).toList.indexOf(e)»'''
 		}
 	}
 	
 	
 	def static luaFannedOutEventConnections(CompositeFBType type) '''
 	fannedOutEventConnections = {
-	  «var numAdapters = type.FBNetwork.networkElements.filter(AdapterFB).size»
 	  «var allCons = type.FBNetwork.eventConnections»
 	  «var conList = allCons.filter(e| e.source.outputConnections.size == 1 || (e.source.outputConnections.size > 1 && e.source.outputConnections.get(0).equals(e))).toList»
 	  «var connections = allCons.filter(e| e.source.outputConnections.size > 1 && !e.source.outputConnections.get(0).equals(e))»
 	  «FOR con : connections SEPARATOR ','»
   	  «var dne = con.destination.FBNetworkElement»
-  	  «IF null != dne»
-  	  {connectionNum = «org.eclipse.fordiac.ide.export.forte_lua.filter.CompositeFBFilter.getConnectionNumber(conList, con)», «dne.luaConnectionString(con.destination, numAdapters, type, "dst")»}
+	  «IF null !== dne»
+	  {connectionNum = «org.eclipse.fordiac.ide.export.forte_lua.filter.CompositeFBFilter.getConnectionNumber(conList, con)», «dne.luaConnectionString(con.destination, type, "dst")»}
   	  «ELSE»
   	  {dstID = "«con.destination.name»", -1}
   	  «ENDIF»
@@ -130,18 +128,17 @@ class CompositeFBFilter {
 	
 	def static luaDataConnections(CompositeFBType type) '''
 	dataConnections = {
-	  «var numAdapters = type.FBNetwork.networkElements.filter(AdapterFB).size»
 	  «var allCons = type.FBNetwork.dataConnections»
 	  «var connections = allCons.filter(e| e.source.outputConnections.size == 1 || (e.source.outputConnections.size > 1 && e.source.outputConnections.get(0).equals(e)))»
 	  «FOR con : connections SEPARATOR ','»  	
 	  «var sne = con.source.FBNetworkElement»
 	  «var dne = con.destination.FBNetworkElement»
-	  «IF null != dne && null != sne»
-	  {«sne.luaConnectionString(con.source, numAdapters, type, "src")», «dne.luaConnectionString(con.destination, numAdapters, type, "dst")»}
-	  «ELSEIF null == dne»
-	  {«sne.luaConnectionString(con.source, numAdapters, type, "src")», dstID = "«con.destination.name»", dstFBNum = -1}
-	  «ELSEIF null == sne»
-	  {srcID = "«con.source.name»", srcFBNum = -1, «dne.luaConnectionString(con.destination, numAdapters, type, "dst")»}
+	  «IF null !== dne && null !== sne»
+	  {«sne.luaConnectionString(con.source, type, "src")», «dne.luaConnectionString(con.destination, type, "dst")»}
+	  «ELSEIF null === dne»
+	  {«sne.luaConnectionString(con.source, type, "src")», dstID = "«con.destination.name»", dstFBNum = -1}
+	  «ELSEIF null === sne»
+	  {srcID = "«con.source.name»", srcFBNum = -1, «dne.luaConnectionString(con.destination, type, "dst")»}
 	  «ELSE»
 	  {srcID = "«con.source.name»", srcFBNum = -1, dstID = "«dne.name».«con.destination.name»", dstFBNum = -1}
 	  «ENDIF»
@@ -150,14 +147,13 @@ class CompositeFBFilter {
 	
 	def static luaFannedOutDataConnections(CompositeFBType type) '''
 	fannedOutDataConnections = {
-	  «var numAdapters = type.FBNetwork.networkElements.filter(AdapterFB).size»
 	  «var allCons = type.FBNetwork.dataConnections»
 	  «var conList = allCons.filter(e| e.source.outputConnections.size == 1 || (e.source.outputConnections.size > 1 && e.source.outputConnections.get(0).equals(e))).toList»
 	  «var connections = allCons.filter(e| e.source.outputConnections.size > 1 && !e.source.outputConnections.get(0).equals(e))»
 	  «FOR con : connections SEPARATOR ','»
   	  «var dne = con.destination.FBNetworkElement»
-  	  «IF null != dne»
-  	  {connectionNum = «org.eclipse.fordiac.ide.export.forte_lua.filter.CompositeFBFilter.getConnectionNumber(conList, con)», «dne.luaConnectionString(con.destination, numAdapters, type, "dst")»}
+	  «IF null !== dne»
+	  {connectionNum = «org.eclipse.fordiac.ide.export.forte_lua.filter.CompositeFBFilter.getConnectionNumber(conList, con)», «dne.luaConnectionString(con.destination, type, "dst")»}
   	  «ELSE»
 	  {dstID = "«con.destination.name»", dstFBNum = -1}
   	  «ENDIF»
@@ -174,16 +170,16 @@ class CompositeFBFilter {
 	'''
 	
 	def static private int getNumParameter(FBNetwork fbn){
-		return fbn.getParameters.size
+		return fbn.networkElements.filter(e| !(e instanceof AdapterFB)).toList.getParameters.size
 	}
 	
-	def static private ArrayList<ArrayList<?>> getParameters(FBNetwork fbn){
+	def static private ArrayList<ArrayList<?>> getParameters(List<FBNetworkElement> fbs){
 		var parameters = new ArrayList<ArrayList<?>>
-		for(ne : fbn.networkElements){
+		for(ne : fbs){
 			for(iv : ne.interface.inputVars){
-				if(null != iv.value && null != iv.value.value && !iv.value.value.empty){
+				if(null !== iv.value && null !== iv.value.value && !iv.value.value.empty){
 					var list = new ArrayList<Object>
-					list.add(fbn.networkElements.indexOf(ne))
+					list.add(fbs.indexOf(ne))
 					list.add(iv.name)
 					list.add(iv.value.value)
 					parameters.add(list)

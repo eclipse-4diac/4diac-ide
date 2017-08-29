@@ -35,9 +35,8 @@ public class AdapterFilter {
   
   public CharSequence lua(final AdapterType type) {
     StringConcatenation _builder = new StringConcatenation();
-    InterfaceList _interfaceList = type.getInterfaceList();
-    CharSequence _luaEventDataInterfaceSpec = AdapterFilter.luaEventDataInterfaceSpec(_interfaceList);
-    _builder.append(_luaEventDataInterfaceSpec, "");
+    CharSequence _luaEventDataInterfaceSpec = AdapterFilter.luaEventDataInterfaceSpec(type.getInterfaceList());
+    _builder.append(_luaEventDataInterfaceSpec);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
     _builder.append("return {interfaceSpec = interfaceSpec}");
@@ -52,36 +51,29 @@ public class AdapterFilter {
       final ArrayList<Integer> inputWithIndexes = new ArrayList<Integer>();
       EList<Event> _eventInputs = ifl.getEventInputs();
       for (final Event e : _eventInputs) {
-        EList<VarDeclaration> _inputVars = ifl.getInputVars();
-        int _eventWith = LuaConstants.getEventWith(e, inputWith, _inputVars);
-        inputWithIndexes.add(Integer.valueOf(_eventWith));
+        inputWithIndexes.add(Integer.valueOf(LuaConstants.getEventWith(e, inputWith, ifl.getInputVars())));
       }
       final ArrayList<Integer> outputWith = new ArrayList<Integer>();
       final ArrayList<Integer> outputWithIndexes = new ArrayList<Integer>();
       EList<Event> _eventOutputs = ifl.getEventOutputs();
       for (final Event e_1 : _eventOutputs) {
-        EList<VarDeclaration> _outputVars = ifl.getOutputVars();
-        int _eventWith_1 = LuaConstants.getEventWith(e_1, outputWith, _outputVars);
-        outputWithIndexes.add(Integer.valueOf(_eventWith_1));
+        outputWithIndexes.add(Integer.valueOf(LuaConstants.getEventWith(e_1, outputWith, ifl.getOutputVars())));
       }
       StringConcatenation _builder = new StringConcatenation();
       _builder.append("local interfaceSpec = {");
       _builder.newLine();
       _builder.append("  ");
       _builder.append("numEIs = ");
-      EList<Event> _eventInputs_1 = ifl.getEventInputs();
-      int _size = _eventInputs_1.size();
+      int _size = ifl.getEventInputs().size();
       _builder.append(_size, "  ");
       _builder.append(",");
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("EINames = ");
-      EList<Event> _eventInputs_2 = ifl.getEventInputs();
       final Function1<Event, String> _function = (Event it) -> {
         return it.getName();
       };
-      List<String> _map = ListExtensions.<Event, String>map(_eventInputs_2, _function);
-      CharSequence _luaStringList = LuaUtils.luaStringList(_map);
+      CharSequence _luaStringList = LuaUtils.luaStringList(ListExtensions.<Event, String>map(ifl.getEventInputs(), _function));
       _builder.append(_luaStringList, "  ");
       _builder.append(",");
       _builder.newLineIfNotEmpty();
@@ -99,19 +91,16 @@ public class AdapterFilter {
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("numEOs = ");
-      EList<Event> _eventOutputs_1 = ifl.getEventOutputs();
-      int _size_1 = _eventOutputs_1.size();
+      int _size_1 = ifl.getEventOutputs().size();
       _builder.append(_size_1, "  ");
       _builder.append(",");
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("EONames = ");
-      EList<Event> _eventOutputs_2 = ifl.getEventOutputs();
       final Function1<Event, String> _function_1 = (Event it) -> {
         return it.getName();
       };
-      List<String> _map_1 = ListExtensions.<Event, String>map(_eventOutputs_2, _function_1);
-      CharSequence _luaStringList_1 = LuaUtils.luaStringList(_map_1);
+      CharSequence _luaStringList_1 = LuaUtils.luaStringList(ListExtensions.<Event, String>map(ifl.getEventOutputs(), _function_1));
       _builder.append(_luaStringList_1, "  ");
       _builder.append(",");
       _builder.newLineIfNotEmpty();
@@ -129,53 +118,43 @@ public class AdapterFilter {
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("numDIs = ");
-      EList<VarDeclaration> _inputVars_1 = ifl.getInputVars();
-      int _size_2 = _inputVars_1.size();
+      int _size_2 = ifl.getInputVars().size();
       _builder.append(_size_2, "  ");
       _builder.append(",");
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("DINames = ");
-      EList<VarDeclaration> _inputVars_2 = ifl.getInputVars();
       final Function1<VarDeclaration, String> _function_2 = (VarDeclaration it) -> {
         return it.getName();
       };
-      List<String> _map_2 = ListExtensions.<VarDeclaration, String>map(_inputVars_2, _function_2);
-      CharSequence _luaStringList_2 = LuaUtils.luaStringList(_map_2);
+      CharSequence _luaStringList_2 = LuaUtils.luaStringList(ListExtensions.<VarDeclaration, String>map(ifl.getInputVars(), _function_2));
       _builder.append(_luaStringList_2, "  ");
       _builder.append(",");
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("DIDataTypeNames = ");
-      EList<VarDeclaration> _inputVars_3 = ifl.getInputVars();
-      ArrayList<Object> _typeList = LuaConstants.getTypeList(_inputVars_3);
-      CharSequence _luaValueList = LuaUtils.luaValueList(_typeList);
+      CharSequence _luaValueList = LuaUtils.luaValueList(LuaConstants.getTypeList(ifl.getInputVars()));
       _builder.append(_luaValueList, "  ");
       _builder.append(",");
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("numDOs = ");
-      EList<VarDeclaration> _outputVars_1 = ifl.getOutputVars();
-      int _size_3 = _outputVars_1.size();
+      int _size_3 = ifl.getOutputVars().size();
       _builder.append(_size_3, "  ");
       _builder.append(",");
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("DONames = ");
-      EList<VarDeclaration> _outputVars_2 = ifl.getOutputVars();
       final Function1<VarDeclaration, String> _function_3 = (VarDeclaration it) -> {
         return it.getName();
       };
-      List<String> _map_3 = ListExtensions.<VarDeclaration, String>map(_outputVars_2, _function_3);
-      CharSequence _luaStringList_3 = LuaUtils.luaStringList(_map_3);
+      CharSequence _luaStringList_3 = LuaUtils.luaStringList(ListExtensions.<VarDeclaration, String>map(ifl.getOutputVars(), _function_3));
       _builder.append(_luaStringList_3, "  ");
       _builder.append(",");
       _builder.newLineIfNotEmpty();
       _builder.append("  ");
       _builder.append("DODataTypeNames = ");
-      EList<VarDeclaration> _outputVars_3 = ifl.getOutputVars();
-      ArrayList<Object> _typeList_1 = LuaConstants.getTypeList(_outputVars_3);
-      CharSequence _luaValueList_1 = LuaUtils.luaValueList(_typeList_1);
+      CharSequence _luaValueList_1 = LuaUtils.luaValueList(LuaConstants.getTypeList(ifl.getOutputVars()));
       _builder.append(_luaValueList_1, "  ");
       _builder.newLineIfNotEmpty();
       _builder.append("}");

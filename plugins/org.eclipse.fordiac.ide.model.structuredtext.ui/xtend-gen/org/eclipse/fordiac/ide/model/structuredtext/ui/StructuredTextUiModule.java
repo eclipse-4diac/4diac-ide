@@ -5,7 +5,6 @@ package org.eclipse.fordiac.ide.model.structuredtext.ui;
 
 import com.google.inject.Binder;
 import com.google.inject.Provider;
-import com.google.inject.binder.AnnotatedBindingBuilder;
 import org.eclipse.fordiac.ide.model.structuredtext.converter.StructuredTextValueConverterService;
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource;
 import org.eclipse.fordiac.ide.model.structuredtext.ui.AbstractStructuredTextUiModule;
@@ -37,8 +36,7 @@ public class StructuredTextUiModule extends AbstractStructuredTextUiModule {
   }
   
   public void configureIResourceDescriptions(final Binder binder) {
-    AnnotatedBindingBuilder<IResourceDescriptions> _bind = binder.<IResourceDescriptions>bind(IResourceDescriptions.class);
-    _bind.to(ResourceSetBasedResourceDescriptions.class);
+    binder.<IResourceDescriptions>bind(IResourceDescriptions.class).to(ResourceSetBasedResourceDescriptions.class);
   }
   
   @Override

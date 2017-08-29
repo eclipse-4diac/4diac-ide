@@ -21,8 +21,7 @@ import org.eclipse.xtext.xbase.lib.StringExtensions;
 public class Bool_ValueValueConverter extends AbstractNullSafeConverter<Boolean> {
   @Override
   protected String internalToString(final Boolean value) {
-    String _string = value.toString();
-    return _string.toUpperCase();
+    return value.toString().toUpperCase();
   }
   
   @Override

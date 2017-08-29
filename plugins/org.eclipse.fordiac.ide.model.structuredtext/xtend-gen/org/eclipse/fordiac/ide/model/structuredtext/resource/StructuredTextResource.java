@@ -14,13 +14,11 @@ package org.eclipse.fordiac.ide.model.structuredtext.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.util.Map;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.ParserRule;
 import org.eclipse.xtext.linking.lazy.LazyLinkingResource;
 import org.eclipse.xtext.parser.IParseResult;
-import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.resource.XtextResource;
 
 @SuppressWarnings("all")
@@ -40,18 +38,11 @@ public class StructuredTextResource extends LazyLinkingResource {
     ParserRule rule = _xifexpression;
     IParseResult result = null;
     if ((rule != null)) {
-      IParser _parser = this.getParser();
-      Reader _createReader = this.createReader(inputStream);
-      IParseResult _parse = _parser.parse(rule, _createReader);
-      result = _parse;
+      result = this.getParser().parse(rule, this.createReader(inputStream));
     } else {
-      IParser _parser_1 = this.getParser();
-      Reader _createReader_1 = this.createReader(inputStream);
-      IParseResult _parse_1 = _parser_1.parse(_createReader_1);
-      result = _parse_1;
+      result = this.getParser().parse(this.createReader(inputStream));
     }
-    IParseResult _parseResult = this.getParseResult();
-    this.updateInternalState(_parseResult, result);
+    this.updateInternalState(this.getParseResult(), result);
     if (((options != null) && Boolean.TRUE.equals(options.get(XtextResource.OPTION_RESOLVE_ALL)))) {
       EcoreUtil.resolveAll(this);
     }

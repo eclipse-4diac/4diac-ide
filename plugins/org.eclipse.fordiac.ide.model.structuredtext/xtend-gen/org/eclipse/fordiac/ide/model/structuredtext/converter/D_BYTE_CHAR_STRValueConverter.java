@@ -37,8 +37,7 @@ public class D_BYTE_CHAR_STRValueConverter extends StringValueConverter {
         }
         char _xtrycatchfinallyexpression = (char) 0;
         try {
-          String _valueOf = String.valueOf(cbuf);
-          int _parseUnsignedInt = Integer.parseUnsignedInt(_valueOf, 16);
+          int _parseUnsignedInt = Integer.parseUnsignedInt(String.valueOf(cbuf), 16);
           _xtrycatchfinallyexpression = ((char) _parseUnsignedInt);
         } catch (final Throwable _t) {
           if (_t instanceof NumberFormatException) {

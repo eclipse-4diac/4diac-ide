@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetupGenerated;
 @SuppressWarnings("all")
 public class FBTypeStandaloneSetup extends FBTypeStandaloneSetupGenerated {
   public static void doSetup() {
-    FBTypeStandaloneSetup _fBTypeStandaloneSetup = new FBTypeStandaloneSetup();
-    _fBTypeStandaloneSetup.createInjectorAndDoEMFRegistration();
+    new FBTypeStandaloneSetup().createInjectorAndDoEMFRegistration();
   }
 }

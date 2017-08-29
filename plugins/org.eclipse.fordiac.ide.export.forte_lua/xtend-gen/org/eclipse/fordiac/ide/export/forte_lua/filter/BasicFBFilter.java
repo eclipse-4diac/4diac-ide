@@ -30,7 +30,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.xtend.lib.annotations.AccessorType;
@@ -51,31 +50,27 @@ public class BasicFBFilter {
   public CharSequence lua(final BasicFBType type) {
     StringConcatenation _builder = new StringConcatenation();
     CharSequence _luaConstants = LuaConstants.luaConstants(type);
-    _builder.append(_luaConstants, "");
+    _builder.append(_luaConstants);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
     CharSequence _luaAlgorithms = this.luaAlgorithms(type);
-    _builder.append(_luaAlgorithms, "");
+    _builder.append(_luaAlgorithms);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
-    ECC _eCC = type.getECC();
-    CharSequence _luaStates = this.luaStates(_eCC);
-    _builder.append(_luaStates, "");
+    CharSequence _luaStates = this.luaStates(type.getECC());
+    _builder.append(_luaStates);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
-    ECC _eCC_1 = type.getECC();
-    Iterable<VarDeclaration> _variables = this.getVariables(type);
-    CharSequence _luaECC = this.luaECC(_eCC_1, _variables);
-    _builder.append(_luaECC, "");
+    CharSequence _luaECC = this.luaECC(type.getECC(), this.getVariables(type));
+    _builder.append(_luaECC);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
-    InterfaceList _interfaceList = type.getInterfaceList();
-    CharSequence _luaInterfaceSpec = LuaConstants.luaInterfaceSpec(_interfaceList);
-    _builder.append(_luaInterfaceSpec, "");
+    CharSequence _luaInterfaceSpec = LuaConstants.luaInterfaceSpec(type.getInterfaceList());
+    _builder.append(_luaInterfaceSpec);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
     CharSequence _luaInternalVarsInformation = LuaConstants.luaInternalVarsInformation(type);
-    _builder.append(_luaInternalVarsInformation, "");
+    _builder.append(_luaInternalVarsInformation);
     _builder.newLineIfNotEmpty();
     _builder.newLine();
     _builder.append("return {ECC = executeEvent, interfaceSpec = interfaceSpec, internalVarsInformation = internalVarsInformation}");
@@ -118,10 +113,8 @@ public class BasicFBFilter {
   }
   
   private Iterable<VarDeclaration> getVariables(final BasicFBType type) {
-    InterfaceList _interfaceList = type.getInterfaceList();
-    EList<VarDeclaration> _inputVars = _interfaceList.getInputVars();
-    InterfaceList _interfaceList_1 = type.getInterfaceList();
-    EList<VarDeclaration> _outputVars = _interfaceList_1.getOutputVars();
+    EList<VarDeclaration> _inputVars = type.getInterfaceList().getInputVars();
+    EList<VarDeclaration> _outputVars = type.getInterfaceList().getOutputVars();
     Iterable<VarDeclaration> _plus = Iterables.<VarDeclaration>concat(_inputVars, _outputVars);
     EList<VarDeclaration> _internalVars = type.getInternalVars();
     return Iterables.<VarDeclaration>concat(_plus, _internalVars);
@@ -135,15 +128,15 @@ public class BasicFBFilter {
       for(final ECState state : _eCState) {
         if (!_hasElements) {
           _hasElements = true;
-          _builder.append("if ", "");
+          _builder.append("if ");
         } else {
           _builder.appendImmediate("\nelseif ", "");
         }
         CharSequence _luaStateName = LuaConstants.luaStateName(state);
-        _builder.append(_luaStateName, "");
+        _builder.append(_luaStateName);
         _builder.append(" == ");
         CharSequence _luaStateVariable = LuaConstants.luaStateVariable();
-        _builder.append(_luaStateVariable, "");
+        _builder.append(_luaStateVariable);
         _builder.append(" then");
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
@@ -151,7 +144,7 @@ public class BasicFBFilter {
         _builder.append(_luaTransition, "  ");
       }
       if (_hasElements) {
-        _builder.append("\nelse return false\nend", "");
+        _builder.append("\nelse return false\nend");
       }
     }
     return _builder;
@@ -165,20 +158,19 @@ public class BasicFBFilter {
       for(final ECTransition tran : _outTransitions) {
         if (!_hasElements) {
           _hasElements = true;
-          _builder.append("if ", "");
+          _builder.append("if ");
         } else {
           _builder.appendImmediate("\nelseif ", "");
         }
         CharSequence _luaTransitionCondition = this.luaTransitionCondition(tran);
-        _builder.append(_luaTransitionCondition, "");
+        _builder.append(_luaTransitionCondition);
         _builder.append(" then return enter");
-        ECState _destination = tran.getDestination();
-        CharSequence _luaStateName = LuaConstants.luaStateName(_destination);
-        _builder.append(_luaStateName, "");
+        CharSequence _luaStateName = LuaConstants.luaStateName(tran.getDestination());
+        _builder.append(_luaStateName);
         _builder.append("(fb)");
       }
       if (_hasElements) {
-        _builder.append("\nelse return false\nend", "");
+        _builder.append("\nelse return false\nend");
       }
     }
     return _builder;
@@ -190,9 +182,8 @@ public class BasicFBFilter {
       Event _conditionEvent = tran.getConditionEvent();
       boolean _notEquals = (!Objects.equal(_conditionEvent, null));
       if (_notEquals) {
-        Event _conditionEvent_1 = tran.getConditionEvent();
-        CharSequence _luaInputEventName = LuaConstants.luaInputEventName(_conditionEvent_1);
-        _builder.append(_luaInputEventName, "");
+        CharSequence _luaInputEventName = LuaConstants.luaInputEventName(tran.getConditionEvent());
+        _builder.append(_luaInputEventName);
         _builder.append(" == id");
       } else {
         _builder.append("true");
@@ -200,12 +191,11 @@ public class BasicFBFilter {
     }
     _builder.append(" and ");
     {
-      String _conditionExpression = tran.getConditionExpression();
-      boolean _isNullOrEmpty = StringExtensions.isNullOrEmpty(_conditionExpression);
+      boolean _isNullOrEmpty = StringExtensions.isNullOrEmpty(tran.getConditionExpression());
       boolean _not = (!_isNullOrEmpty);
       if (_not) {
         CharSequence _luaTransitionConditionExpression = this.luaTransitionConditionExpression(tran);
-        _builder.append(_luaTransitionConditionExpression, "");
+        _builder.append(_luaTransitionConditionExpression);
       } else {
         _builder.append("true");
       }
@@ -218,8 +208,7 @@ public class BasicFBFilter {
     {
       EObject _rootContainer = EcoreUtil.getRootContainer(tran);
       final BasicFBType type = ((BasicFBType) _rootContainer);
-      String _conditionExpression = tran.getConditionExpression();
-      _xblockexpression = this.stAlgorithmFilter.lua(type, _conditionExpression);
+      _xblockexpression = this.stAlgorithmFilter.lua(type, tran.getConditionExpression());
     }
     return _xblockexpression;
   }
@@ -230,7 +219,7 @@ public class BasicFBFilter {
       EList<ECState> _eCState = ecc.getECState();
       for(final ECState state : _eCState) {
         CharSequence _luaState = this.luaState(state);
-        _builder.append(_luaState, "");
+        _builder.append(_luaState);
         _builder.newLineIfNotEmpty();
         _builder.newLine();
       }
@@ -242,7 +231,7 @@ public class BasicFBFilter {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("local function enter");
     CharSequence _luaStateName = LuaConstants.luaStateName(state);
-    _builder.append(_luaStateName, "");
+    _builder.append(_luaStateName);
     _builder.append("(fb)");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
@@ -260,8 +249,7 @@ public class BasicFBFilter {
           Algorithm _algorithm = action.getAlgorithm();
           boolean _notEquals = (!Objects.equal(null, _algorithm));
           if (_notEquals) {
-            Algorithm _algorithm_1 = action.getAlgorithm();
-            CharSequence _luaAlgorithmName = LuaConstants.luaAlgorithmName(_algorithm_1);
+            CharSequence _luaAlgorithmName = LuaConstants.luaAlgorithmName(action.getAlgorithm());
             _builder.append(_luaAlgorithmName, "  ");
             _builder.append("(fb)");
           }
@@ -305,7 +293,7 @@ public class BasicFBFilter {
       EList<Algorithm> _algorithm = type.getAlgorithm();
       for(final Algorithm alg : _algorithm) {
         String _luaAlgorithm = this.luaAlgorithm(alg);
-        _builder.append(_luaAlgorithm, "");
+        _builder.append(_luaAlgorithm);
         _builder.newLineIfNotEmpty();
         _builder.newLine();
       }
@@ -323,7 +311,7 @@ public class BasicFBFilter {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("local function ");
     CharSequence _luaAlgorithmName = LuaConstants.luaAlgorithmName(alg);
-    _builder.append(_luaAlgorithmName, "");
+    _builder.append(_luaAlgorithmName);
     _builder.append("(fb)");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
@@ -333,20 +321,17 @@ public class BasicFBFilter {
     _builder.append("end");
     _builder.newLine();
     final String result = _builder.toString();
-    List<String> _errors = this.stAlgorithmFilter.getErrors();
     final Function1<String, String> _function = (String it) -> {
       StringConcatenation _builder_1 = new StringConcatenation();
       _builder_1.append("Error in algorithm ");
       String _name = alg.getName();
-      _builder_1.append(_name, "");
+      _builder_1.append(_name);
       _builder_1.append(": ");
-      _builder_1.append(it, "");
+      _builder_1.append(it);
       return _builder_1.toString();
     };
-    List<String> _map = ListExtensions.<String, String>map(_errors, _function);
-    this.errors.addAll(_map);
-    List<String> _errors_1 = this.stAlgorithmFilter.getErrors();
-    _errors_1.clear();
+    this.errors.addAll(ListExtensions.<String, String>map(this.stAlgorithmFilter.getErrors(), _function));
+    this.stAlgorithmFilter.getErrors().clear();
     return result;
   }
   

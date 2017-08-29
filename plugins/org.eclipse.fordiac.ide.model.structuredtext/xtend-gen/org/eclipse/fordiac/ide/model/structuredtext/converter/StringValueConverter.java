@@ -30,8 +30,7 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
       {
         final StringReader reader = new StringReader(value);
         final StringBuffer result = new StringBuffer();
-        char _quote = this.getQuote();
-        result.append(_quote);
+        result.append(this.getQuote());
         for (int i = new Function0<Integer>() {
           public Integer apply() {
             try {
@@ -72,50 +71,43 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
             }
           }
           if (!_matched) {
-            IntegerRange _upTo = this.operator_upTo("(", "/");
-            boolean _contains = _upTo.contains(c);
+            boolean _contains = this.operator_upTo("(", "/").contains(c);
             if (_contains) {
               _matched=true;
             }
           }
           if (!_matched) {
-            IntegerRange _upTo_1 = this.operator_upTo("0", "9");
-            boolean _contains_1 = _upTo_1.contains(c);
+            boolean _contains_1 = this.operator_upTo("0", "9").contains(c);
             if (_contains_1) {
               _matched=true;
             }
           }
           if (!_matched) {
-            IntegerRange _upTo_2 = this.operator_upTo(":", "@");
-            boolean _contains_2 = _upTo_2.contains(c);
+            boolean _contains_2 = this.operator_upTo(":", "@").contains(c);
             if (_contains_2) {
               _matched=true;
             }
           }
           if (!_matched) {
-            IntegerRange _upTo_3 = this.operator_upTo("A", "Z");
-            boolean _contains_3 = _upTo_3.contains(c);
+            boolean _contains_3 = this.operator_upTo("A", "Z").contains(c);
             if (_contains_3) {
               _matched=true;
             }
           }
           if (!_matched) {
-            IntegerRange _upTo_4 = this.operator_upTo("[", "`");
-            boolean _contains_4 = _upTo_4.contains(c);
+            boolean _contains_4 = this.operator_upTo("[", "`").contains(c);
             if (_contains_4) {
               _matched=true;
             }
           }
           if (!_matched) {
-            IntegerRange _upTo_5 = this.operator_upTo("a", "z");
-            boolean _contains_5 = _upTo_5.contains(c);
+            boolean _contains_5 = this.operator_upTo("a", "z").contains(c);
             if (_contains_5) {
               _matched=true;
             }
           }
           if (!_matched) {
-            IntegerRange _upTo_6 = this.operator_upTo("{", "~");
-            boolean _contains_6 = _upTo_6.contains(c);
+            boolean _contains_6 = this.operator_upTo("{", "~").contains(c);
             if (_contains_6) {
               _matched=true;
             }
@@ -135,8 +127,8 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
               }
             }
             if (_matched) {
-              char _quote_1 = this.getQuote();
-              boolean _equals = (c == _quote_1);
+              char _quote = this.getQuote();
+              boolean _equals = (c == _quote);
               if (_equals) {
                 result.append("$");
               }
@@ -179,12 +171,10 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
             }
           }
           if (!_matched) {
-            CharSequence _hexLiteral = this.toHexLiteral(((char) c));
-            result.append(_hexLiteral);
+            result.append(this.toHexLiteral(((char) c)));
           }
         }
-        char _quote_1 = this.getQuote();
-        result.append(_quote_1);
+        result.append(this.getQuote());
         _xblockexpression = result.toString();
       }
       return _xblockexpression;
@@ -250,50 +240,43 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
             }
           }
           if (!_matched) {
-            IntegerRange _upTo = this.operator_upTo("(", "/");
-            boolean _contains = _upTo.contains(c);
+            boolean _contains = this.operator_upTo("(", "/").contains(c);
             if (_contains) {
               _matched=true;
             }
           }
           if (!_matched) {
-            IntegerRange _upTo_1 = this.operator_upTo("0", "9");
-            boolean _contains_1 = _upTo_1.contains(c);
+            boolean _contains_1 = this.operator_upTo("0", "9").contains(c);
             if (_contains_1) {
               _matched=true;
             }
           }
           if (!_matched) {
-            IntegerRange _upTo_2 = this.operator_upTo(":", "@");
-            boolean _contains_2 = _upTo_2.contains(c);
+            boolean _contains_2 = this.operator_upTo(":", "@").contains(c);
             if (_contains_2) {
               _matched=true;
             }
           }
           if (!_matched) {
-            IntegerRange _upTo_3 = this.operator_upTo("A", "Z");
-            boolean _contains_3 = _upTo_3.contains(c);
+            boolean _contains_3 = this.operator_upTo("A", "Z").contains(c);
             if (_contains_3) {
               _matched=true;
             }
           }
           if (!_matched) {
-            IntegerRange _upTo_4 = this.operator_upTo("[", "`");
-            boolean _contains_4 = _upTo_4.contains(c);
+            boolean _contains_4 = this.operator_upTo("[", "`").contains(c);
             if (_contains_4) {
               _matched=true;
             }
           }
           if (!_matched) {
-            IntegerRange _upTo_5 = this.operator_upTo("a", "z");
-            boolean _contains_5 = _upTo_5.contains(c);
+            boolean _contains_5 = this.operator_upTo("a", "z").contains(c);
             if (_contains_5) {
               _matched=true;
             }
           }
           if (!_matched) {
-            IntegerRange _upTo_6 = this.operator_upTo("{", "~");
-            boolean _contains_6 = _upTo_6.contains(c);
+            boolean _contains_6 = this.operator_upTo("{", "~").contains(c);
             if (_contains_6) {
               _matched=true;
             }
@@ -332,8 +315,7 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
               _matched=true;
               Object _xblockexpression_2 = null;
               {
-                int _read = reader.read();
-                i = _read;
+                i = reader.read();
                 if ((i == (-1))) {
                   throw new ValueConverterException("Couldn\'t convert value due to invalid escape sequence", null, null);
                 }

@@ -5,7 +5,6 @@ package org.eclipse.fordiac.ide.model.xtext.fbt.ide;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Module;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeRuntimeModule;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup;
 import org.eclipse.fordiac.ide.model.xtext.fbt.ide.FBTypeIdeModule;
@@ -20,7 +19,6 @@ public class FBTypeIdeSetup extends FBTypeStandaloneSetup {
   public Injector createInjector() {
     FBTypeRuntimeModule _fBTypeRuntimeModule = new FBTypeRuntimeModule();
     FBTypeIdeModule _fBTypeIdeModule = new FBTypeIdeModule();
-    Module _mixin = Modules2.mixin(_fBTypeRuntimeModule, _fBTypeIdeModule);
-    return Guice.createInjector(_mixin);
+    return Guice.createInjector(Modules2.mixin(_fBTypeRuntimeModule, _fBTypeIdeModule));
   }
 }
