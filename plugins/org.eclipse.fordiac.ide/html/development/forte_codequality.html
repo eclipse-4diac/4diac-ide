@@ -41,7 +41,7 @@
 		<p>for building FORTE. The nice thing about scan-build is that it creates nice html files with explanations about the found problems.</p>
 			 
 	</li>
-</ul>		  
+</ul>
 
 <h2>Dynamic Analysis</h2>
 <p>Dynamic analysis tools help to find issues during the runtime. Typical issues are memory issues like memory leaks, out of bound access, stack over/underflows, or the use after memory is freed.</p>
@@ -51,11 +51,11 @@
 	</li>
 	<li><span class="inlineTitle">Sanitizers</span>: Sanitizers are means for runtime checking that the complier adds to your application. They can be activated with compiler switches and have the great advantage that they are currently much faster than Valgrind. However they are only available for Clang and gcc. For the latter only partially. Currently we have worked with the following sanitizers
 	
-	<ul>	
+	<ul>
 		<li>Address: Checks for memory and heap issues. Can be activated by adding 
 			<div class="code">-fsanitize=address</div>
 			to the CMake option CMAKE_CXX_FLAGS.
-		</li>   
+		</li>
 		<li>Undefined Behavior: Checks for undefined behavior in your code (e.g, overflows, div by zero). Can be activated by adding 
 			<div class="code">-fsanitize=undefined</div>
 			to the CMake option CMAKE_CXX_FLAGS. 
@@ -69,7 +69,7 @@
 <p>We applied the unit test framework provided by the Boost-library called Boost Test. You can find the current set of available unit test in the directory test. New unit tests are always more then welcome.</p> 
 	
 <h2>Function Block Tests</h2>
-<p>Based on Boost Test we developed a helper class which allows you to write unit test for Function Blocks in C++. For examples how to use it have a look on the test cases in the test/stdfblib directory.</p>  
+<p>Based on Boost Test we developed a helper class which allows you to write unit test for Function Blocks in C++. For examples how to use it have a look on the test cases in the test/stdfblib directory.</p>
 		
 <h1>Where to go from here?</h1>
 

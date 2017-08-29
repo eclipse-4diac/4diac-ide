@@ -41,7 +41,7 @@
 	<li>Edit the function init() in OPCClient.cpp from:
 <div class="code">
 void COPCClient::init()
-{	
+{
   HRESULT result = CoInitialize(NULL);
   if (FAILED(result))
   {
@@ -62,7 +62,7 @@ to:
 
 <div class="code">
 void COPCClient::init()
-{	
+{
   CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL);
 
   HRESULT result = CoGetMalloc(MEMCTX_TASK, &amp;iMalloc);
@@ -80,7 +80,7 @@ void COPCClient::init()
 		<ul>
 			<li>[opcclientroot]/include - put header files from OPCClientToolKit project here </li>
 			<li>[opcclientroot]/lib - OPCClientToolkit.lib </li>
-		</ul>	
+		</ul>
 	</li>
 </ol>
 

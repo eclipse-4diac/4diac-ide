@@ -30,26 +30,26 @@
 				<li><a href="http://www.wago.com/public-download/WAGO-PFC-BSP-2014.10.3.zip" target="_blank">WAGO-PFC-BSP-2014.10.3 </a> Board Support Package (BSP) for configuring and building customized applications on Wago PFCs. 
 				<li>Dependencies for Wago BSP
 				<ul>
-					<li><a href="http://debian.pengutronix.de/debian" target="_blank">OSELAS cross tool chain 2012.12.1</a> for Crotex A8 boards</li>				
+					<li><a href="http://debian.pengutronix.de/debian" target="_blank">OSELAS cross tool chain 2012.12.1</a> for Crotex A8 boards</li>
 					<li><a href="http://www.ptxdist.org/software/ptxdist/download/" target="_blank">PTXDist-2013.03.0</a> a GPL licensed build system for building target embedded Linux kernel and root system from sources.
 			    </ul>
 			<li><a href="http://www.eclipse.org/4diac/en_dow.php" target="_blank"> Latest version of FORTE source</a> which contains the <span class="specicificText">processInterface</span> for Wago at <span class="folderLocation">forte/src/modules/wagokbus</span>. The <span class="specicificText">processInterface</span> facilitates using Wago analog and digital IO's with generic IX,QX and IW,QW blocks from 4diac IDE. </li>
 			</ul>
 			</li>
 		
-	  </ul>		
-	  <p><span class="attention"><span class="inlineTitle">ATTENTION</span>: This tutorial is based on WAGO-PFC-BSP-2014.10.3. The procedure given here is also applicable for the latest board support packages from Wago.The toolchain and the PTXDist version may also change based on the BSP version.</span></p>	   
+	  </ul>
+	  <p><span class="attention"><span class="inlineTitle">ATTENTION</span>: This tutorial is based on WAGO-PFC-BSP-2014.10.3. The procedure given here is also applicable for the latest board support packages from Wago.The toolchain and the PTXDist version may also change based on the BSP version.</span></p>
 	  <h2>Wago BSP Installation on Ubuntu Host</h2>
 	  <p>DO NOT install the packages within the root folder! The installation may take more than an hour, therefore be patient till the whole process completes.</p>
 	  <ol>
 		<li>Create a folder e.g. <span class="folderLocation">~/Wago</span></li>
-		<li>Unzip the board support Package for WAGO PFC downloaded before into the <span class="folderLocation">~/Wago</span> folder. Follow the installation process as found in HOWTo_Install_WAGO_PFC_BSP-version till the step <span class="specicificText">Compile all packages of PFC200 Firmware</span>. </li>	
+		<li>Unzip the board support Package for WAGO PFC downloaded before into the <span class="folderLocation">~/Wago</span> folder. Follow the installation process as found in HOWTo_Install_WAGO_PFC_BSP-version till the step <span class="specicificText">Compile all packages of PFC200 Firmware</span>. </li>
 	  </ol>
 	
 	<h2>Building FORTE</h2>
 	<p>FORTE is normally deployed in cross platforms using CMake. Here for the wago device all the build process is controlled by the <span class="specicificText">ptxdist</span>. For FORTE build's process it is important to know about a few directories in the wago development environment. All the ptxdist packages are managed by so called rule files. The rule files are located in <span class="folderLocation">wago/ptxproj-2.2.20/rules</span> directory. When you create a new package, rule files <span class="fileLocation">packagename.make</span> and <span class="fileLocation">packagename.in</span> are created in the rules directory. There are two kinds of source directories, <span class="folderLocation">wago/src</span> for system level packages and <span class="folderLocation">wago/local_src</span> for new custom packages. The build directory for the target system (wago) is located in a directory called <span class="folderLocation">platformwago-wago-pfc200/build-target</span>.</p>
 	<ol>
-		<li>Create forte_wago project in PTXDist: From <span class="folderLocation">FORTE/buildsupport/wago_pfc200/</span>, copy the rule files <span class="fileLocation">forte_wago.in</span> and <span class="fileLocation">forte_wago.make</span> to <span class="folderLocation">wago/ptxproj-2.2.20/rules</span> (creates a new package). Within the copied rule file <span class="fileLocation">.../ptxproj-2.2.20/forte_wago.make</span> edit the line <span class="specicificText">FORTE_WAGO_URL: file:///&lt;path to FORTE main directory&gt;</span> to the absolute path of your FORTE main directory. To (de)activate specific modules (library parts) of FORTE edit <span class="fileLocation">.../ptxproj-2.2.20/wago.make</span> line <span class="specicificText">FORTE_WAGO_CONF_OPT	:= ...</span></li>
+		<li>Create forte_wago project in PTXDist: From <span class="folderLocation">FORTE/buildsupport/wago_pfc200/</span>, copy the rule files <span class="fileLocation">forte_wago.in</span> and <span class="fileLocation">forte_wago.make</span> to <span class="folderLocation">wago/ptxproj-2.2.20/rules</span> (creates a new package). Within the copied rule file <span class="fileLocation">.../ptxproj-2.2.20/forte_wago.make</span> edit the line <span class="specicificText">FORTE_WAGO_URL: file:///&lt;path to FORTE main directory&gt;</span> to the absolute path of your FORTE main directory. To (de)activate specific modules (library parts) of FORTE edit <span class="fileLocation">.../ptxproj-2.2.20/wago.make</span> line <span class="specicificText">FORTE_WAGO_CONF_OPT := ...</span></li>
 		
 		<li>Save the package to PTXDist: To follow the standard build process of PTXDist the package has to be save to the PTXDist build environment. Select the <span class="specicificText">forte_wago</span> with space key (This will be displayed as <span class="specicificText">[*]</span>) and press exit to go out. It will ask you whether to save the package, then press <span class="button4diac">Yes</span>.
 
@@ -96,7 +96,7 @@
 	  
 	 <p>Set <span class="menu4diac">Build</span> within the <span class="tab4diac">Behvior</span> tab to <span class="specicificText">targetinstall forte_wago</span> and <span class="specicificText">Clean</span> to <span class="specicificText">clean forte_wago</span>.</p> 
 	  
-	  <img src="img/wago_eclipse_ptxdist2.png" alt="add include folders to Eclipse"/>	
+	  <img src="img/wago_eclipse_ptxdist2.png" alt="add include folders to Eclipse"/>
 	  
 	 <p>Add the required include directories within the <span class="menu4diac">C/C++ General / Paths and Symbols</span> category. The required include directories are:</p> 
 	  
@@ -105,7 +105,7 @@
 .../ptxproj-2.2.20/platform-wago-pfc200/sysroot-target/usr/include
 	  
 .../OSELAS.Toolchain-2012.12.1/arm-cortexa8-linux-gnueabihf/
-gcc-4.7.3-glibc-2.16.0-binutils-2.22-kernel-3.6-sanitized/include	  
+gcc-4.7.3-glibc-2.16.0-binutils-2.22-kernel-3.6-sanitized/include
 
 .../OSELAS.Toolchain-2012.12.1/arm-cortexa8-linux-gnueabihf/
 gcc-4.7.3-glibc-2.16.0-binutils-2.22-kernel-3.6-sanitized/
@@ -127,7 +127,7 @@ lib/gcc/arm-cortexa8-linux-gnueabihf/4.7.3/include</div>
 	  
 	  <p>Copy the FORTE executable to <span class="folderLocation">/usr/bin</span> on the Wago PFC. The executable can be copied to the Wago PFC by pasting it into the <span class="folderLocation">/usr/bin</span> folder in the <span class="view4diac">Remote System Details</span> view. Stop the running CoDeSys instance (<span class="specicificText">kill plclinux_rt</span>) if you want to use digital inputs/outputs of the Wago PFC and start FORTE with:</p>
 	  
-	  <div class="code">&gt; cd /usr/bin	  
+	  <div class="code">&gt; cd /usr/bin
 &gt; ./forte</div>
 	  
 	  <h3>Debug FORTE with Eclipse</h3>
@@ -135,7 +135,7 @@ lib/gcc/arm-cortexa8-linux-gnueabihf/4.7.3/include</div>
 
 	   <img src="img/wago_debug_eclipse1.png" alt="FORTE debug for Wago in Eclipse"/>
 	   
-	  <p>Within the <span class="tab4diac">Debugger</span> tab set the <span class="specicificText">GDB debugger</span> to <span class="specicificText">/.../OSELAS.Toolchain-2012.12.1/arm-cortexa8-linux-gnueabihf/gcc-4.7.3-glibc-2.16.0-binutils-2.22-kernel-3.6-sanitized/bin/arm-cortexa8-linux-gnueabihf-gdb</span>.</p>  
+	  <p>Within the <span class="tab4diac">Debugger</span> tab set the <span class="specicificText">GDB debugger</span> to <span class="specicificText">/.../OSELAS.Toolchain-2012.12.1/arm-cortexa8-linux-gnueabihf/gcc-4.7.3-glibc-2.16.0-binutils-2.22-kernel-3.6-sanitized/bin/arm-cortexa8-linux-gnueabihf-gdb</span>.</p>
 	   
 	  <img src="img/wago_debug_eclipse2.png" alt="FORTE debug for Wago in Eclipse"/>
 	  

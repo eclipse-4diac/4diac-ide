@@ -53,13 +53,9 @@
 
 			<h2>Running FORTE in the BBB</h2>
 			
-			<p>In order to run FORTE on the BBB, you can either use a cross-compiler in your machine and then transfer the forte executable to the BBB, or you can transfer all the source files to the BBB and compile directly in it.	This tutorial focuses on compiling directly in the BBB.</p>
+			<p>In order to run FORTE on the BBB, you can either use a cross-compiler in your machine and then transfer the forte executable to the BBB, or you can transfer all the source files to the BBB and compile directly in it. This tutorial focuses on compiling directly in the BBB.</p>
 			
 			<p>In either way, one more step that must be done is to tell the CMake that you want to include the IO in FORTE. To do that, find first the <span class="fieLocation">setup_posix.sh</span> file on the root folder of FORTE, and find the command <span class="specificText">cmake</span> almost at the bottom, and add the text <span class="specificText">-DFORTE_MODULE_SysFs=ON</span> (without quotes) just before <span class="specificText">-DFORTE_ARCHITECTURE=Posix</span> (leaving the blank spaces between them). </p>
-			
-			
-			<!-- The second step is to navigate to the folder <span class="folderLocation">src/stdflib/</span>, and there you will find the <span class="fileLocation">CMakeLists.txt</span>, and you should add at the bottom in a new line: 
-			<span class="specificText">add_subdirectory(io)</span>.	Now you are ready to transfer all to your BBB.</p> -->
 			
 			<h3>Transfering the source code to the BBB</h3>
 			
@@ -68,7 +64,7 @@
 			<p>If you can't or don't want to use WinSCP, you can do it via the terminal. In order to do that you will need <a target="_blank" href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PSCP</a>, which does not have a Graphic Interface but it runs from the Command Windows (Terminal). Once you download it, you can append the folder name where the pscp.exe file is, in the PATH variable. If not, you can navigate in the terminal to the folder where the pscp.exe file is and execute there the following command:
 			<span class="inlineCode">pscp -r "[local FORTE path]" [BBB username]@[ip]:[remote FORTE folder]</span> where <span class="folderLocation">[local FORTE path]</span> is the folder on the windows machine where the source code of FORTE is, <span class="specificText">[BBB username]</span> 
 			is the login user for the BBB, <span class="address">[ip]</span> is the IP address of the BBB, and <span class="fileLocation">[remote FORTE folder]</span> is the folder where to copy the files in the BBB. 
-			The -r option indicates to copy recursively all the folders. An example of the command could be	<span class="inlineCode">pscp.exe -r "c:\Users\JohnDoe\Documents\forte_repository" root@192.168.7.2:/root/bbb_forte_repository</span></p>
+			The -r option indicates to copy recursively all the folders. An example of the command could be <span class="inlineCode">pscp.exe -r "c:\Users\JohnDoe\Documents\forte_repository" root@192.168.7.2:/root/bbb_forte_repository</span></p>
 		
 			<h3>Building FORTE in the BBB</h3>
 		
