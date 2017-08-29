@@ -145,7 +145,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof DeviceInterfaceEditPart) {
 			getFigure().getDataInputs().remove(child);
-		} else if (childEditPart instanceof ResourceEditPart) {
+		} else if (childEditPart instanceof ResourceContainerEditPart) {
 			getFigure().getContentPane().remove(child);
 		} else {
 			super.removeChildVisual(childEditPart);
