@@ -29,11 +29,12 @@ public class DeleteFBNetworkElementCommand extends Command {
 	private IEditorPart editor;
 	private FBNetwork fbParent;
 	private FBNetworkElement element;
-	private CompoundCommand cmds;
+	private CompoundCommand cmds = new CompoundCommand();
 	
 	public DeleteFBNetworkElementCommand(final FBNetworkElement element) {
 		super("Delete FB or Subapplication");
 		this.element = element;
+		fbParent = element.getFbNetwork();
 	}
 
 	@Override
@@ -53,9 +54,15 @@ public class DeleteFBNetworkElementCommand extends Command {
 	@Override
 	public void execute() {
 		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
-		fbParent = element.getFbNetwork();
-		cmds = new CompoundCommand();
-		redo();
+		if(element.isMapped()){
+			cmds.add(new UnmapCommand(element));
+		}
+		getDeleteConnections(element);
+		//Before removing the fbnetwork element the connections and mapping should be removed
+		if(cmds.canExecute()){
+			cmds.execute();
+		}
+		fbParent.getNetworkElements().remove(element);
 	}
 	
 	@Override
@@ -68,13 +75,8 @@ public class DeleteFBNetworkElementCommand extends Command {
 
 	@Override
 	public void redo() {
-		if(element.isMapped()){
-			cmds.add(new UnmapCommand(element));
-		}
-		getDeleteConnections(element);
-		//Before removing the fbnetwork element the connections and mapping should be removed
-		if(cmds.canExecute()){
-			cmds.execute();
+		if(cmds.canRedo()){
+			cmds.redo();
 		}
 		fbParent.getNetworkElements().remove(element);
 	}
