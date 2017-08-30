@@ -1,14 +1,14 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html> 
 
-<html>
+<html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>ROS with IEC 61499 Tutorial</title>
 	<link rel="stylesheet" type="text/css" href="../help.css">
 </head>
 
 <body>
-<h1>How to use 4DIAC's ROS Communication Interface</h1>
+<h1 id="topOfPage">How to use 4DIAC's ROS Communication Interface</h1>
 <p>
 
 4DIAC supports ROS communication for ROS topics, services and actions. ROS
@@ -24,16 +24,14 @@ datatypes.
 
 </p>
 
-<p>
-Prerequisites:
+<p>Prerequisites:</p>
 <ol>
 	<li>ROS indigo installed on Ubuntu 14.04.</li>
 	<li>4DIAC-IDE installed</li>
 </ol>
-</p>
 
-<a name="build"/></a>
-<h2>How to Build FORTE with ROS Functionalities</h2>
+
+<h2 id="build">How to Build FORTE with ROS Functionalities</h2>
 <!--TODO remove setup_posix script and show all cmake variables that have to be set
 Perform the following steps to build forte with ROS communication support:-->
 <ol>
@@ -44,7 +42,7 @@ $ git checkout ros</div></li>
 <div class="code">$ cd org.eclipse.4diac.forte
 $ chmod +x setup_posix.sh
 $ ./setup_posix.sh
-$ cmake-gui   // or via command line</div>
+$ cmake-gui // or via command line</div>
 The variables you need to change are:
 <div class="code">CMAKE_BUILD_TYPE=Debug
 FORTE_MODULE_ROS=On
@@ -59,8 +57,7 @@ $ make</div>
 
 </ol>
 
-<a name="topics"/></a>
-<h2>ROS Topics</h2>
+<h2 id="topics">ROS Topics</h2>
 
 <p>
 4DIAC implements a Communication Layer for standard ROS topics. Use the
@@ -79,7 +76,6 @@ following datatypes:
     <td>std_msgs/Empty</td>
     <td> - (empty)</td>
   </tr>
-  <tr>
   <tr>
     <td>std_msgs/Float64</td>
     <td>LREAL</td>
@@ -101,23 +97,21 @@ following datatypes:
 
 <p>
 The ID data input for a communication layer contains the protocol and a string of vendor
-specific parameters and looks like this:
+specific parameters and looks like this:</p>
 
 <pre>protocol[parameter]</pre>
 
-In our case the protocol string is ros. the parameters in square brackets are a ROS-topic
+<p>In our case the protocol string is ros. the parameters in square brackets are a ROS-topic
 namespace and/or name and its corresponding ROS message type, separated by a colon. In
-general the ID for a ROS publish or subscribe function block looks like this:
+general the ID for a ROS publish or subscribe function block looks like this:</p>
 
 <pre>ros[topic_name:message_name]</pre>
 
-An example of a ROS publish and subscribe connection within FORTE is shown next.
-<br/>
-<img src="./img/topics_example.png" alt="Example Application using publish and subscribe to send and receive ROS topics"/>
-</p>
+<p>An example of a ROS publish and subscribe connection within FORTE is shown next.</p>
 
-<a name="services"/></a>
-<h2>ROS Services</h2>
+<img src="./img/topics_example.png" alt="Example Application using publish and subscribe to send and receive ROS topics"/>
+
+<h2 id="services">ROS Services</h2>
 
 The current implementation of ROS Services is limited to a single service type which is
 <a href="http://docs.ros.org/kinetic/api/std_srvs/html/srv/Trigger.html">std_srvs/Trigger</a>.
@@ -223,10 +217,8 @@ ROS function blocks.
 	<td>Value related to response.message in std_srvs/Trigger.srv</td>
   </tr>
 </table>
-</br>
 
-<a name="actions"/></a>
-<h2>ROS Actions</h2>
+<h2 id="actions">ROS Actions</h2>
 <p>
 The ROS action type which is currently supported by 4DIAC is reapp_msgs/Execute.action. Its definition
 is shown next.
@@ -290,7 +282,6 @@ The interface of the client and server FBs is shown in the following figure and 
     <td>Client FB received a result from the server</td>
   </tr>
   <tr>
-  <tr>
     <td>CNF-</td>
     <td>Client FB received feedback from the server</td>
   </tr>
@@ -316,7 +307,7 @@ The interface of the client and server FBs is shown in the following figure and 
   </tr>
   <tr>
     <td>RSP-</td>
-    <td>Send feedback to the client (e.g. intermediate results during processing)</th>
+    <td>Send feedback to the client (e.g. intermediate results during processing)</td>
   </tr>
 </table>
 <br/>
@@ -410,6 +401,20 @@ ACTIONMSGNAME=localisation</pre>
 can be started like this:
 
 <pre>rosrun actionlib axserver.py test_execute/localisation reapp_msgs/ExecuteAction</pre>
+
+<h1>Where to go from here?</h1>
+
+<p>Go back to Protocols index:</p>
+
+<p><a href="./communicationIndex.html">Communication Index</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
 
 </body>
 </html>

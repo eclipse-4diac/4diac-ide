@@ -40,7 +40,7 @@
 <h2 id="elements">4DIAC Elements</h2>
 <p>Since 4DIAC is compliant to the IEC 61499 standard, 4DIAC-IDE provides the standard's elements for work (you can check <a href="../before4DIAC/iec61499.html#IEC61499" target="_blank">here</a> to rememeber the elements):</p>
 <ul>
-	<li><img src="./img/system.png" alt="System" class="inlineImg" /> <span class="inlineTitle">System</span>: contains the <span class="view4diac">System Configuration</span>  and its corresponding <span class="element61499">Applications</span></li>
+	<li><img src="./img/system.png" alt="System" class="inlineImg" /> <span class="inlineTitle">System</span>: contains the <span class="view4diac">System Configuration</span> and its corresponding <span class="element61499">Applications</span></li>
 	<li><img src="./img/app16.png" alt="Application" class="inlineImg"/> <span class="inlineTitle">Application</span>: contains the desired application in terms of a FB network</li>
 	<li><img src="./img/device16.png" alt="Device" class="inlineImg"/> <span class="inlineTitle">Device</span>: It represents a hardware device like a programmable logic controller (PLC) or micro controller.</li>
 	<li><img src="./img/resource16.png" alt="Resource" class="inlineImg"/> <span class="inlineTitle">Resource</span>: It is responsible for the execution of the control logic within its own execution context.</li>
@@ -48,14 +48,14 @@
 	<ul>
 		<li><img src="./img/basicfb_16.png" alt="BFB" class="inlineImg"/> <span class="inlineTitle">Basic FB (BFB)</span>: It uses an execution control chart (ECC) to control event execution. Algorithms are associated with the different states inside an ECC.</li>
 		<li><img src="./img/compositefb_16.png" alt="CFB" class="inlineImg"/> <span class="inlineTitle">Composite FB (CFB)</span>: It contains a FB network of existing FBs. Its FB interface passes events and data on to the contained FBs that make up the CFB, which in turn pass events and data among themselves and out to the CFB's normal output interface.</li>
-		<li><img src="./img/sifb_16.png" alt="SIFB" class="inlineImg"/> <span class="inlineTitle">Service interface FB (SIFB)</span>: It is usually used for something that cannot be done through the IEC 61499 standard like communication with devices or networks segments. It helps to first understand basic and composite FBs. SIFBs are then used to realize only what cannot be done with a BFB/CFB.</li>	</ul>
+		<li><img src="./img/sifb_16.png" alt="SIFB" class="inlineImg"/> <span class="inlineTitle">Service interface FB (SIFB)</span>: It is usually used for something that cannot be done through the IEC 61499 standard like communication with devices or networks segments. It helps to first understand basic and composite FBs. SIFBs are then used to realize only what cannot be done with a BFB/CFB.</li></ul>
 	</li>
-	<li><img src="./img/adapter.png" alt="Adapter" class="inlineImg"/> <span class="element61499">Adapter</span>: combines a set of input/output events and data to one connection, at the one hand it simplifies the IEC 61499 <span class="element61499">Application</span> and on the other hand it better decouples <span class="element61499">Application</span> parts providing an interface concept allowing to adopt the polymorphic concept of object oriented programming</li>	
+	<li><img src="./img/adapter.png" alt="Adapter" class="inlineImg"/> <span class="element61499">Adapter</span>: combines a set of input/output events and data to one connection, at the one hand it simplifies the IEC 61499 <span class="element61499">Application</span> and on the other hand it better decouples <span class="element61499">Application</span> parts providing an interface concept allowing to adopt the polymorphic concept of object oriented programming</li>
 </ul>
 
 <h2 id="perspectives">4DIAC Perspectives</h2>
 
-<p>The 4DIAC-IDE provides four perspectives, which can be added by the <img src="./img/perspective/new_persp.gif" alt="add perspective"  class="inlineImg"/> button in the upper right corner:</p>
+<p>The 4DIAC-IDE provides four perspectives, which can be added by the <img src="./img/perspective/new_persp.gif" alt="add perspective" class="inlineImg"/> button in the upper right corner:</p>
 <ol>
 	<li><span class="inlineTitle">System </span>perspective is used to configure everything regarding your system. It includes:
 		<ul>
@@ -70,10 +70,10 @@
 </ol>
 
 <h3 id="systemPerspective">System Perspective</h3>
-<p>In the right upper corner the perspective can be changed. The System perspective is reached by the <img src="./img/system.png" alt="System Perspective Button"  class="inlineImg"/> button. The System perspective is divided into the following five areas.</p>
+<p>In the right upper corner the perspective can be changed. The System perspective is reached by the <img src="./img/system.png" alt="System Perspective Button" class="inlineImg"/> button. The System perspective is divided into the following five areas.</p>
 <ol>
 	<li><span class="inlineTitle">System Management area</span>, which is used for the management of IEC 61499 compliant applications and to configure <span class="element61499">Devices</span> and <span class="element61499">Resources</span>. In a tab next to it, there's the <span class="IDEelement">Type Navigator</span>, which lists the available function block library for every <span class="element61499">System</span> as well as the default library.</li> 
-	<li><span class="inlineTitle">Editor area</span>, which contains the <span class="IDEelement">Application editor</span>  for modeling of control applications, the <span class="IDEelement">System editor</span>  for modeling the <span class="element61499">System</span> configuration, and the <span class="IDEelement">Device</span> and <span class="IDEelement">Resource editor</span>  for modeling the <span class="element61499">Resource</span> configuration</li>
+	<li><span class="inlineTitle">Editor area</span>, which contains the <span class="IDEelement">Application editor</span> for modeling of control applications, the <span class="IDEelement">System editor</span> for modeling the <span class="element61499">System</span> configuration, and the <span class="IDEelement">Device</span> and <span class="IDEelement">Resource editor</span> for modeling the <span class="element61499">Resource</span> configuration</li>
 	<li><span class="inlineTitle">Palette</span>: shows the elements that you can add to the editor.</li>
 	<li><span class="inlineTitle">Outline</span> of <span class="element61499">Applications</span>, <span class="element61499">System</span> configurations, <span class="element61499">Devices</span>, and <span class="element61499">Resources</span></li>
 	<li><span class="inlineTitle">Property view</span>, which allows the parameterization of function block instances, <span class="element61499">Devices</span>, and <span class="element61499">Resources</span></li>
