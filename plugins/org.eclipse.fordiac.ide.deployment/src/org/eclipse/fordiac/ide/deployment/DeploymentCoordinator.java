@@ -57,21 +57,12 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-/**
- * The Class DeploymentCoordinator.
- */
 public class DeploymentCoordinator {
-
+	private static DeploymentCoordinator instance;
+	private ArrayList<IDeploymentExecutor> deploymentExecutors = null;
+	private ArrayList<AbstractDeviceManagementCommunicationHandler> deviceMangementCommunicationHandlers = null;
 	private final Hashtable<Device, ArrayList<VarDeclaration>> deployedDeviceProperties = new Hashtable<Device, ArrayList<VarDeclaration>>();
 
-	/**
-	 * Adds the device property.
-	 * 
-	 * @param dev
-	 *            the dev
-	 * @param property
-	 *            the property
-	 */
 	public void addDeviceProperty(Device dev, VarDeclaration property) {
 		if (deployedDeviceProperties.containsKey(dev)) {
 			ArrayList<VarDeclaration> temp = deployedDeviceProperties.get(dev);
@@ -85,27 +76,11 @@ public class DeploymentCoordinator {
 		}
 	}
 
-	/**
-	 * Sets the device properties.
-	 * 
-	 * @param dev
-	 *            the dev
-	 * @param properties
-	 *            the properties
-	 */
 	public void setDeviceProperties(Device dev,
 			ArrayList<VarDeclaration> properties) {
 		deployedDeviceProperties.put(dev, properties);
 	}
 
-	/**
-	 * Removes the device property.
-	 * 
-	 * @param dev
-	 *            the dev
-	 * @param property
-	 *            the property
-	 */
 	public void removeDeviceProperty(Device dev, VarDeclaration property) {
 		if (deployedDeviceProperties.containsKey(dev)) {
 			ArrayList<VarDeclaration> temp = deployedDeviceProperties.get(dev);
@@ -115,33 +90,14 @@ public class DeploymentCoordinator {
 		}
 	}
 
-	/**
-	 * Gets the selected device properties.
-	 * 
-	 * @param dev
-	 *            the dev
-	 * 
-	 * @return the selected device properties
-	 */
 	public ArrayList<VarDeclaration> getSelectedDeviceProperties(Device dev) {
 		return deployedDeviceProperties.get(dev);
 	}
 
-	/** The instance. */
-	private static DeploymentCoordinator instance;
-
-	/**
-	 * Instantiates a new deployment coordinator.
-	 */
 	private DeploymentCoordinator() {
 		// empty private constructor
 	}
 
-	/**
-	 * Gets the single instance of DeploymentCoordinator.
-	 * 
-	 * @return single instance of DeploymentCoordinator
-	 */
 	public static DeploymentCoordinator getInstance() {
 		if (instance == null) {
 			instance = new DeploymentCoordinator();
@@ -149,13 +105,6 @@ public class DeploymentCoordinator {
 		return instance;
 	}
 
-	/** The deployment executors. */
-	private ArrayList<IDeploymentExecutor> deploymentExecutors = null;
-
-	/** The device management communication handlers. */
-	private ArrayList<AbstractDeviceManagementCommunicationHandler> deviceMangementCommunicationHandlers = null;
-
-	/** The listener. */
 	private final IDeploymentListener listener = new IDeploymentListener() {
 
 		@Override
@@ -186,26 +135,10 @@ public class DeploymentCoordinator {
 
 	};
 
-	/**
-	 * Gets the mG r_ id.
-	 * 
-	 * @param resource
-	 *            the resource
-	 * 
-	 * @return the mG r_ id
-	 */
 	private String getMGR_ID(final Resource resource) {
 		return getMGR_ID(resource.getDevice());
 	}
 
-	/**
-	 * Gets the mG r_ id.
-	 * 
-	 * @param dev
-	 *            the dev
-	 * 
-	 * @return the mG r_ id
-	 */
 	public static String getMGR_ID(final Device dev) {
 		for(VarDeclaration varDecl : dev.getVarDeclarations()) {
 			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) {
@@ -218,16 +151,10 @@ public class DeploymentCoordinator {
 		return "";
 	}
 
-	/**
-	 * The Class DownloadRunnable.
-	 */
 	class DownloadRunnable implements IRunnableWithProgress {
-
 		private final List<Device> devices;
 		private final List<ResourceDeploymentData> resources;
-
-		/** the Communication handler */
-		AbstractDeviceManagementCommunicationHandler overrideDevMgmCommHandler;
+		private AbstractDeviceManagementCommunicationHandler overrideDevMgmCommHandler;
 
 		/**
 		 * DownloadRunnable constructor.
@@ -542,7 +469,7 @@ public class DeploymentCoordinator {
 		DownloadRunnable download = new DownloadRunnable(devices, resDepData, overrideDevMgmCommHandler);
 		Shell shell = Display.getDefault().getActiveShell();
 		try {
-			new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(true, true, download);
+			new ProgressMonitorDialog(shell).run(true, true, download);
 		} catch (InvocationTargetException ex) {
 			MessageDialog.openError(shell, "Error", ex.getMessage());
 		} catch (InterruptedException ex) {

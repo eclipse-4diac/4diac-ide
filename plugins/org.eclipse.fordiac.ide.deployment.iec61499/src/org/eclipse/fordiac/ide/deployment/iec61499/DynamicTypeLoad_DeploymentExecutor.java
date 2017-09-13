@@ -61,7 +61,8 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 	}
 	
 	public void createFBType(final FBType fbType, final Resource res) throws CreateFBTypeException {
-		if ((fbType instanceof BasicFBType || fbType instanceof CompositeFBType) && !devMgmCommHandler.getTypes().contains(fbType.getName())) {
+		if ((fbType instanceof BasicFBType || fbType instanceof CompositeFBType) 
+				&& (null == devMgmCommHandler.getTypes() || !devMgmCommHandler.getTypes().contains(fbType.getName()))) {
 			ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 			String luaSkript = luaFilter.createLUA(fbType);
 			String request = MessageFormat.format(Messages.DTL_CreateFBType,
