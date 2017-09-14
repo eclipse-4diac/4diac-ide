@@ -59,13 +59,13 @@
 
 	<properties>
 		<tycho.version>0.26.0</tycho.version>
-		<neon-repo.url>http://download.eclipse.org/releases/neon</neon-repo.url>
+		<oxygen-repo.url>http://download.eclipse.org/releases/oxygen</oxygen-repo.url>
 	</properties>
 
  <repositories>
   <repository>
-   <id>neon</id>
-   <url>${neon-repo.url}</url>
+   <id>oxygen</id>
+   <url>${oxygen-repo.url}</url>
    <layout>p2</layout>
   </repository>
 

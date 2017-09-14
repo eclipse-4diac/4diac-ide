@@ -73,6 +73,10 @@ Content may contain encryption software. The country in which you are currently 
 Java and all Java-based trademarks are trademarks of Oracle Corporation in the United States, other countries, or both.
    </license>
 
+   <includes
+         id="org.eclipse.equinox.p2.extras.feature"
+         version="0.0.0"/>
+
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.emf.ecore.xmi"/>
@@ -187,12 +191,13 @@ Java and all Java-based trademarks are trademarks of Oracle Corporation in the U
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-        <plugin
+
+   <plugin
          id="org.eclipse.fordiac.ide.typemanagement"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         unpack="false"/> 
+         unpack="false"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.model.edit"
