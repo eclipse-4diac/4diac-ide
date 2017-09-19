@@ -366,9 +366,14 @@
                   checkEnabled="false">
                <with
                variable="activeEditorId">
+               	<or>
 		            <equals
 		                  value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
 		            </equals>
+		            <equals
+		                  value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor">
+		            </equals>
+		            </or>
 		         </with>
             </visibleWhen>
          </command>
