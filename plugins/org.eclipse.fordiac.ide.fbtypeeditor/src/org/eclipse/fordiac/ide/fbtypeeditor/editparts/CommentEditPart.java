@@ -88,4 +88,9 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart implements
 	public INamedElement getINamedElement() {
 		return getCastedModel();
 	}
+	
+	@Override
+	public void refreshName() {
+		getNameLabel().setText(getCastedModel().getComment());
+	}
 }

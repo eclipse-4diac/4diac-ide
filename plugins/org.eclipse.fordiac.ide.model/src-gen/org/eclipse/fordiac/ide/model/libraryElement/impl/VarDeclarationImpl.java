@@ -65,7 +65,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = "\"\"";
+	protected static final String NAME_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -85,7 +85,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = "\"\"";
+	protected static final String COMMENT_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.

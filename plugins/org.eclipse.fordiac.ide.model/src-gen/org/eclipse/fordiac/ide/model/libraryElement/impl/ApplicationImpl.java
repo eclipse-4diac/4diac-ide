@@ -46,7 +46,7 @@ public class ApplicationImpl extends I4DIACElementImpl implements Application {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = "\"\"";
+	protected static final String NAME_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -66,7 +66,7 @@ public class ApplicationImpl extends I4DIACElementImpl implements Application {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = "\"\"";
+	protected static final String COMMENT_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
