@@ -50,7 +50,7 @@ public abstract class AbstractDirectEditableEditPart extends
 
 	};
 
-	protected void refreshName() {
+	public void refreshName() {
 		getNameLabel().setText(getINamedElement().getName());
 	}
 

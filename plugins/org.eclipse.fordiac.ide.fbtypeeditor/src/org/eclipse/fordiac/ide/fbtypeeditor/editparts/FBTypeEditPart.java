@@ -103,7 +103,8 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart{
 		super.createEditPolicies();
 	}
 	
-	protected void refreshName() {
+	@Override
+	public void refreshName() {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {

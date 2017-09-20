@@ -111,6 +111,9 @@ public class LabelDirectEditManager extends DirectEditManager {
 		if (getEditPart() instanceof AbstractViewEditPart) {
 			((AbstractViewEditPart) getEditPart()).refreshName();
 		}
+		if(getEditPart() instanceof AbstractDirectEditableEditPart) {
+			((AbstractDirectEditableEditPart)getEditPart()).refreshName();
+		}
 		Font disposeFont = scaledFont;
 		scaledFont = null;
 		initialString = null;

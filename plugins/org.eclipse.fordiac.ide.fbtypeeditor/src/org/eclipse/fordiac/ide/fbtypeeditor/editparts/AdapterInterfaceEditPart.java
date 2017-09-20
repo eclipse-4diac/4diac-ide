@@ -169,7 +169,8 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 		return super.getDragTracker(request);
 	}
 
-	protected void refreshName() {
+	@Override
+	public void refreshName() {
 		((AdapterInterfaceFigure) getFigure()).setText(getINamedElement().getName());
 		super.refreshName();
 	}
