@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
+import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -70,6 +71,15 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 
 		setControl(composite);
 		Dialog.applyDialogFont(composite);
+	}
+	
+	@Override
+	protected boolean validatePage() {
+		if (!IdentifierVerifyer.isValidIdentifier(getProjectName())) {
+			setErrorMessage(Messages.SystemNameNotValid);
+			return false;
+		}		
+		return super.validatePage();
 	}
 
 	private void createAdvancedControls(Composite parent) {

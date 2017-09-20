@@ -64,6 +64,8 @@ public class Messages extends NLS {
 	/** The Palette management page_ labe l_ default palette. */
 	public static String PaletteManagementPage_LABEL_DefaultTypeLibrary;
 	
+	public static String SystemNameNotValid;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
