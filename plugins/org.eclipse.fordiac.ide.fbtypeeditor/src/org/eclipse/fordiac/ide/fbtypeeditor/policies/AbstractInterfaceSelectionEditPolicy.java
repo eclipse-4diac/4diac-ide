@@ -12,10 +12,13 @@ package org.eclipse.fordiac.ide.fbtypeeditor.policies;
 
 import java.util.List;
 
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.handles.PlusHandle;
@@ -98,7 +101,43 @@ public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonRe
 	}
 	
 	private PlusHandle createHandle(InterfaceEditPart part, int direction){
-		return new PlusHandle(part, new RelativeHandleLocator(part.getFigure(), direction));
+		return new PlusHandle(part, new RelativeHandleLocator(part.getFigure(), direction) {
+			@Override
+			public void relocate(IFigure target) {
+				super.relocate(target);
+				//assure that handle is not in the middle of the border but outside of it
+				//TODO if this code has proven to work move it to 4diac specific locater in GEF plugin
+				Rectangle targetBounds = target.getBounds();
+				Dimension targetSize = target.getPreferredSize();
+
+				targetBounds.x += ((targetSize.width + 1) / 4) * getXModifcation();
+				
+				targetBounds.y += ((targetSize.height + 1) / 4) * getYModifcation();
+				target.setBounds(targetBounds);
+			}
+			
+			private int getYModifcation() {
+				switch (direction & PositionConstants.NORTH_SOUTH) {
+				case PositionConstants.NORTH:
+					return -1;
+				case PositionConstants.SOUTH:
+					return  1;
+				default:
+					return 0;
+				}
+			}
+
+			private int getXModifcation() {
+				switch (direction & PositionConstants.EAST_WEST) {
+				case PositionConstants.WEST:
+					return -1;
+				case PositionConstants.EAST:
+					return 1;
+				default:
+					return 0;
+				}
+			}
+		});
 	}
 	
 	private void createInterfaceElement(boolean after) {
