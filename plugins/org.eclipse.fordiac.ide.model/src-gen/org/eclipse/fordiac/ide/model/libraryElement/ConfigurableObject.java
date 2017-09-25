@@ -42,7 +42,7 @@ public interface ConfigurableObject extends INamedElement {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parameter</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConfigurableObject_Parameter()
-	 * @model containment="true" resolveProxies="true" keys="name"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Parameter> getParameter();

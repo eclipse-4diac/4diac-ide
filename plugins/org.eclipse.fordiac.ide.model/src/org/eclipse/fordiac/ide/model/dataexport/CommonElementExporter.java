@@ -117,7 +117,7 @@ public abstract class CommonElementExporter {
 	}
 
 	public static Element createAttributeElement(final Document dom, String name, String value){
-		Element attributeElement = dom.createElement(LibraryElementTags.ATTRIBUTE);
+		Element attributeElement = dom.createElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
 		attributeElement.setAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
 		attributeElement.setAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
 		return attributeElement;

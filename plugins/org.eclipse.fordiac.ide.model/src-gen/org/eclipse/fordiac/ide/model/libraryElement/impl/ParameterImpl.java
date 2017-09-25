@@ -27,34 +27,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.Parameter;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ParameterImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ParameterImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ParameterImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ParameterImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ParameterImpl extends EObjectImpl implements Parameter {
-	/**
-	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String COMMENT_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected String comment = COMMENT_EDEFAULT;
-
+public class ParameterImpl extends I4DIACElementImpl implements Parameter {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -63,7 +43,7 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = null;
+	protected static final String NAME_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -74,6 +54,26 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String COMMENT_EDEFAULT = "";
+
+	/**
+	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected String comment = COMMENT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
@@ -185,10 +185,10 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.PARAMETER__COMMENT:
-				return getComment();
 			case LibraryElementPackage.PARAMETER__NAME:
 				return getName();
+			case LibraryElementPackage.PARAMETER__COMMENT:
+				return getComment();
 			case LibraryElementPackage.PARAMETER__VALUE:
 				return getValue();
 		}
@@ -203,11 +203,11 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.PARAMETER__COMMENT:
-				setComment((String)newValue);
-				return;
 			case LibraryElementPackage.PARAMETER__NAME:
 				setName((String)newValue);
+				return;
+			case LibraryElementPackage.PARAMETER__COMMENT:
+				setComment((String)newValue);
 				return;
 			case LibraryElementPackage.PARAMETER__VALUE:
 				setValue((String)newValue);
@@ -224,11 +224,11 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.PARAMETER__COMMENT:
-				setComment(COMMENT_EDEFAULT);
-				return;
 			case LibraryElementPackage.PARAMETER__NAME:
 				setName(NAME_EDEFAULT);
+				return;
+			case LibraryElementPackage.PARAMETER__COMMENT:
+				setComment(COMMENT_EDEFAULT);
 				return;
 			case LibraryElementPackage.PARAMETER__VALUE:
 				setValue(VALUE_EDEFAULT);
@@ -245,10 +245,10 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.PARAMETER__COMMENT:
-				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 			case LibraryElementPackage.PARAMETER__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case LibraryElementPackage.PARAMETER__COMMENT:
+				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 			case LibraryElementPackage.PARAMETER__VALUE:
 				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 		}
@@ -265,10 +265,10 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (comment: ");
-		result.append(comment);
-		result.append(", name: ");
+		result.append(" (name: ");
 		result.append(name);
+		result.append(", comment: ");
+		result.append(comment);
 		result.append(", value: ");
 		result.append(value);
 		result.append(')');

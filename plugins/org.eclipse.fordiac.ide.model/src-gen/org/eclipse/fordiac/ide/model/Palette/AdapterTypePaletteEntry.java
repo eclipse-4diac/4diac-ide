@@ -31,7 +31,7 @@ public interface AdapterTypePaletteEntry extends PaletteEntry {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='LibraryElement type = getType();\nif((null !=type) && (type instanceof AdapterType)){\n   return (AdapterType) type;\n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='LibraryElement type = getType();\nif((null !=type) &amp;&amp; (type instanceof AdapterType)){\n   return (AdapterType) type;\n}\nreturn null;'"
 	 * @generated
 	 */
 	AdapterType getAdapterType();
@@ -39,7 +39,7 @@ public interface AdapterTypePaletteEntry extends PaletteEntry {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if((null != type) && (type instanceof AdapterType)){\r\n\tsuper.setType(type);\r\n}else{\r\n\tsuper.setType(null);\r\n\tif(null != type){\r\n\t\t<% org.eclipse.core.runtime.Status %> exception = new Status(<%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, \"tried to set no AdapterType as type entry for AdapterTypePaletteEntry\");\r\n\t\tActivator.getDefault().getLog().log(exception);\r\n\t}\r\n}'"
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if((null != type) &amp;&amp; (type instanceof AdapterType)){\r\n\tsuper.setType(type);\r\n}else{\r\n\tsuper.setType(null);\r\n\tif(null != type){\r\n\t\t&lt;% org.eclipse.core.runtime.Status %&gt; exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%&gt;.ERROR, Activator.PLUGIN_ID, \"tried to set no AdapterType as type entry for AdapterTypePaletteEntry\");\r\n\t\tActivator.getDefault().getLog().log(exception);\r\n\t}\r\n}'"
 	 * @generated
 	 */
 	void setType(LibraryElement type);

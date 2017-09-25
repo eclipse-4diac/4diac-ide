@@ -42,7 +42,7 @@ public interface INamedElement extends I4DIACElement {
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getINamedElement_Name()
-	 * @model default="" dataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @model default="" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
 	 * @generated
 	 */
 	String getName();

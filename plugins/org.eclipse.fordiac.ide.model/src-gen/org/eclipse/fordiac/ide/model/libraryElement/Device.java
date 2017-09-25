@@ -25,6 +25,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Device#getResource <em>Resource</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Device#getProfile <em>Profile</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Device#getInConnections <em>In Connections</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Device#getAttributes <em>Attributes</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDevice()
@@ -94,6 +95,22 @@ public interface Device extends TypedConfigureableObject, PositionableElement, C
 	 * @generated
 	 */
 	EList<Link> getInConnections();
+
+	/**
+	 * Returns the value of the '<em><b>Attributes</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.Attribute}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Attributes</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Attributes</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDevice_Attributes()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<Attribute> getAttributes();
 
 	/**
 	 * <!-- begin-user-doc -->

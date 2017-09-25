@@ -164,6 +164,7 @@ public class DeviceItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(LibraryElementPackage.Literals.DEVICE__RESOURCE);
+			childrenFeatures.add(LibraryElementPackage.Literals.DEVICE__ATTRIBUTES);
 		}
 		return childrenFeatures;
 	}
@@ -226,6 +227,7 @@ public class DeviceItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case LibraryElementPackage.DEVICE__RESOURCE:
+			case LibraryElementPackage.DEVICE__ATTRIBUTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -262,6 +264,11 @@ public class DeviceItemProvider
 			(createChildParameter
 				(LibraryElementPackage.Literals.DEVICE__RESOURCE,
 				 LibraryElementFactory.eINSTANCE.createResource()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.DEVICE__ATTRIBUTES,
+				 LibraryElementFactory.eINSTANCE.createAttribute()));
 	}
 
 }

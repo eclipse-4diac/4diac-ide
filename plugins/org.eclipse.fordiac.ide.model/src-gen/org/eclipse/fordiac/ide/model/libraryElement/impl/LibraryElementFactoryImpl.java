@@ -27,6 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
@@ -150,7 +152,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements
 			case LibraryElementPackage.MAPPING: return createMapping();
 			case LibraryElementPackage.OTHER_ALGORITHM: return createOtherAlgorithm();
 			case LibraryElementPackage.OUTPUT_PRIMITIVE: return createOutputPrimitive();
-			case LibraryElementPackage.PARAMETER: return createParameter();
+			case LibraryElementPackage.ATTRIBUTE: return createAttribute();
 			case LibraryElementPackage.RESOURCE: return createResource();
 			case LibraryElementPackage.RESOURCE_TYPE_NAME: return createResourceTypeName();
 			case LibraryElementPackage.RESOURCE_TYPE: return createResourceType();
@@ -187,6 +189,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements
 			case LibraryElementPackage.POSITIONABLE_ELEMENT: return createPositionableElement();
 			case LibraryElementPackage.COLOR: return createColor();
 			case LibraryElementPackage.COLORIZABLE_ELEMENT: return createColorizableElement();
+			case LibraryElementPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
+			case LibraryElementPackage.PARAMETER: return createParameter();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -439,15 +443,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements
 	public OutputPrimitive createOutputPrimitive() {
 		OutputPrimitiveImpl outputPrimitive = new OutputPrimitiveImpl();
 		return outputPrimitive;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Parameter createParameter() {
-		ParameterImpl parameter = new ParameterImpl();
-		return parameter;
 	}
 
 	/**
@@ -783,6 +778,36 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements
 	public ColorizableElement createColorizableElement() {
 		ColorizableElementImpl colorizableElement = new ColorizableElementImpl();
 		return colorizableElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AttributeDeclaration createAttributeDeclaration() {
+		AttributeDeclarationImpl attributeDeclaration = new AttributeDeclarationImpl();
+		return attributeDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Parameter createParameter() {
+		ParameterImpl parameter = new ParameterImpl();
+		return parameter;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Attribute createAttribute() {
+		AttributeImpl attribute = new AttributeImpl();
+		return attribute;
 	}
 
 	/**
