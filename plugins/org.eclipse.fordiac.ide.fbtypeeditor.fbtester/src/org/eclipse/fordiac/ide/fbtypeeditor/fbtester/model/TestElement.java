@@ -239,8 +239,6 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	 *          the value
 	 */
 	public void updateValue(final String value, int cycle) {
-		System.out.println("currentPos: " + currentInt % nrOfHistory);
-		System.out.println("currentValue: " + value);
 		historyValues.add(currentInt % nrOfHistory, value);
 		historyCycles.add(currentInt % nrOfHistory, cycle);
 //		historySec.add(currentInt % nrOfHistory, getSec());

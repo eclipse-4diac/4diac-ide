@@ -294,11 +294,10 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				outputStream.flush();
 				if (type.equals(SendType.REQ)) {
 					String response = parseResponse(inputStream);
-					if (!response.equals("")) {
+					if (!response.equals("")) { //$NON-NLS-1$
 							XMLResource resource = new XMLResourceImpl();
 							InputSource source = new InputSource(new StringReader(response));
 							resource.load(source, data.getLoadOptions());
-							System.out.println("Resource" + resource.getContents());
 							for (EObject object : resource.getContents()) {
 								if (object instanceof Response) {
 									Response resp = (Response) object;
