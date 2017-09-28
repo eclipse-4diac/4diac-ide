@@ -276,6 +276,7 @@ public class DEVImporter {
 		AttributeDeclaration attributeDeclaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
 		attributeDeclaration.setName(attributeMap.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE).getNodeValue());
 		attributeDeclaration.setComment(attributeMap.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE).getNodeValue());	
+		attributeDeclaration.setInitialValue(attributeMap.getNamedItem(LibraryElementTags.INITIALVALUE_ATTRIBUTE).getNodeValue());
 		attributeDeclaration.setType(BaseType1.getByName(attributeMap.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE).getNodeValue()));
 		device.getAttributeDeclarations().add(attributeDeclaration);
 	}
