@@ -26,8 +26,10 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.ReferencedTypeNotFoundException;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -145,6 +147,9 @@ public class DEVImporter {
 						break;
 					case LibraryElementTags.ATTRIBUTE_ELEMENT:
 						parseDeviceTypeAttribute(type, n);
+						break;
+					case LibraryElementTags.ATTRIBUTE_DECLARATION_ELEMENT:
+						parseDeviceTypeAttributeDeclaration(type, n);
 						break;
 					default:
 						break;
@@ -264,6 +269,15 @@ public class DEVImporter {
 
 		return references;
 
+	}
+	
+	private static void parseDeviceTypeAttributeDeclaration(DeviceType device, Node node) {
+		NamedNodeMap attributeMap = node.getAttributes();
+		AttributeDeclaration attributeDeclaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
+		attributeDeclaration.setName(attributeMap.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE).getNodeValue());
+		attributeDeclaration.setComment(attributeMap.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE).getNodeValue());	
+		attributeDeclaration.setType(BaseType1.getByName(attributeMap.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE).getNodeValue()));
+		device.getAttributeDeclarations().add(attributeDeclaration);
 	}
 	
 	private static void parseDeviceTypeAttribute(DeviceType device, Node node) {
