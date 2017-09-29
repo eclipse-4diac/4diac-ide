@@ -20,6 +20,8 @@ import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -81,18 +83,20 @@ public class DeviceCreateCommand extends Command {
 			// the name needs to be set after the device is added to the network
 			// so that name checking works correctly
 			device.setName(NameRepository.createUniqueName(device, entry.getDeviceType().getName()));
-			createResource();
-			ResourceCreateCommand cmd = null;
-			if (device.getType().getName().contains("FBRT") //$NON-NLS-1$
-					|| device.getType().getName().contains("FRAME")) { //$NON-NLS-1$
-				cmd = new ResourceCreateCommand((ResourceTypeEntry) device.getPaletteEntry().getGroup().getParentGroup()
-						.getGroup("Resources").getEntry("PANEL_RESOURCE"), device, false); //$NON-NLS-1$ //$NON-NLS-2$
-			} else {
-				cmd = new ResourceCreateCommand((ResourceTypeEntry) device.getPaletteEntry().getGroup().getParentGroup()
-						.getGroup("Resources").getEntry("EMB_RES"), device, false); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			cmd.execute();
+			setDeviceAttributes();
+			createResource();		
 			SystemManager.INSTANCE.notifyListeners();
+		}
+	}
+	
+	private void setDeviceAttributes() {
+		for(AttributeDeclaration attributeDeclaration : entry.getDeviceType().getAttributeDeclarations()) {
+			Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
+			attribute.setName(attributeDeclaration.getName());
+			attribute.setComment(attributeDeclaration.getComment());
+			attribute.setValue(attributeDeclaration.getInitialValue());
+			attribute.setAttributeDeclaration(attributeDeclaration);
+			device.getAttributes().add(attribute);
 		}
 	}
 
@@ -126,6 +130,16 @@ public class DeviceCreateCommand extends Command {
 						+ " not found. Please check whether your palette contains that type and add it manually to your device!");
 			}
 		}
+		ResourceCreateCommand cmd = null;
+		if (device.getType().getName().contains("FBRT") //$NON-NLS-1$
+				|| device.getType().getName().contains("FRAME")) { //$NON-NLS-1$
+			cmd = new ResourceCreateCommand((ResourceTypeEntry) device.getPaletteEntry().getGroup().getParentGroup()
+					.getGroup("Resources").getEntry("PANEL_RESOURCE"), device, false); //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			cmd = new ResourceCreateCommand((ResourceTypeEntry) device.getPaletteEntry().getGroup().getParentGroup()
+					.getGroup("Resources").getEntry("EMB_RES"), device, false); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		cmd.execute();
 	}
 
 	private Color createRandomDeviceColor() {
