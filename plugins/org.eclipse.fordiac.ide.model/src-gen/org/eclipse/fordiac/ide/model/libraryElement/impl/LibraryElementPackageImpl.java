@@ -591,20 +591,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass parameterEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass iAttributeEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass attributeEClass = null;
 
 	/**
@@ -989,15 +975,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 */
 	public EReference getDevice_InConnections() {
 		return (EReference)deviceEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getDevice_Attributes() {
-		return (EReference)deviceEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -2049,7 +2026,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getConfigurableObject_Parameter() {
+	public EReference getConfigurableObject_Attributes() {
 		return (EReference)configurableObjectEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -2598,33 +2575,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getParameter() {
-		return parameterEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getIAttribute() {
-		return iAttributeEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getIAttribute_Value() {
-		return (EAttribute)iAttributeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getAttribute() {
 		return attributeEClass;
 	}
@@ -2636,6 +2586,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 */
 	public EReference getAttribute_AttributeDeclaration() {
 		return (EReference)attributeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAttribute_Value() {
+		return (EAttribute)attributeEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -2743,7 +2702,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(deviceEClass, DEVICE__RESOURCE);
 		createEAttribute(deviceEClass, DEVICE__PROFILE);
 		createEReference(deviceEClass, DEVICE__IN_CONNECTIONS);
-		createEReference(deviceEClass, DEVICE__ATTRIBUTES);
 
 		deviceTypeEClass = createEClass(DEVICE_TYPE);
 		createEReference(deviceTypeEClass, DEVICE_TYPE__VAR_DECLARATION);
@@ -2824,6 +2782,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		attributeEClass = createEClass(ATTRIBUTE);
 		createEReference(attributeEClass, ATTRIBUTE__ATTRIBUTE_DECLARATION);
+		createEAttribute(attributeEClass, ATTRIBUTE__VALUE);
 
 		resourceEClass = createEClass(RESOURCE);
 		createEReference(resourceEClass, RESOURCE__FB_NETWORK);
@@ -2897,7 +2856,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(compilableTypeEClass, COMPILABLE_TYPE__COMPILER_INFO);
 
 		configurableObjectEClass = createEClass(CONFIGURABLE_OBJECT);
-		createEReference(configurableObjectEClass, CONFIGURABLE_OBJECT__PARAMETER);
+		createEReference(configurableObjectEClass, CONFIGURABLE_OBJECT__ATTRIBUTES);
 
 		compositeFBTypeEClass = createEClass(COMPOSITE_FB_TYPE);
 		createEReference(compositeFBTypeEClass, COMPOSITE_FB_TYPE__FB_NETWORK);
@@ -2986,11 +2945,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEAttribute(attributeDeclarationEClass, ATTRIBUTE_DECLARATION__TYPE);
 		createEAttribute(attributeDeclarationEClass, ATTRIBUTE_DECLARATION__INITIAL_VALUE);
 
-		parameterEClass = createEClass(PARAMETER);
-
-		iAttributeEClass = createEClass(IATTRIBUTE);
-		createEAttribute(iAttributeEClass, IATTRIBUTE__VALUE);
-
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
 
@@ -3055,7 +3009,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		linkEClass.getESuperTypes().add(this.getConfigurableObject());
 		otherAlgorithmEClass.getESuperTypes().add(this.getTextAlgorithm());
 		outputPrimitiveEClass.getESuperTypes().add(this.getPrimitive());
-		attributeEClass.getESuperTypes().add(this.getIAttribute());
+		attributeEClass.getESuperTypes().add(this.getINamedElement());
 		resourceEClass.getESuperTypes().add(this.getTypedConfigureableObject());
 		resourceEClass.getESuperTypes().add(this.getIVarElement());
 		resourceTypeEClass.getESuperTypes().add(this.getCompilableType());
@@ -3088,8 +3042,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		typedConfigureableObjectEClass.getESuperTypes().add(this.getConfigurableObject());
 		adapterFBEClass.getESuperTypes().add(this.getFB());
 		attributeDeclarationEClass.getESuperTypes().add(this.getINamedElement());
-		parameterEClass.getESuperTypes().add(this.getIAttribute());
-		iAttributeEClass.getESuperTypes().add(this.getINamedElement());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterDeclarationEClass, AdapterDeclaration.class, "AdapterDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3151,7 +3103,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getDevice_Resource(), this.getResource(), this.getResource_Device(), "resource", null, 0, -1, Device.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDevice_Profile(), ecorePackage.getEString(), "profile", null, 0, 1, Device.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDevice_InConnections(), this.getLink(), this.getLink_Device(), "inConnections", null, 0, -1, Device.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDevice_Attributes(), this.getAttribute(), null, "attributes", null, 0, -1, Device.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(deviceEClass, this.getAutomationSystem(), "getAutomationSystem", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -3285,6 +3236,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(attributeEClass, Attribute.class, "Attribute", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAttribute_AttributeDeclaration(), this.getAttributeDeclaration(), null, "attributeDeclaration", null, 0, 1, Attribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAttribute_Value(), theXMLTypePackage.getString(), "value", null, 1, 1, Attribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getResource_FBNetwork(), this.getFBNetwork(), null, "fBNetwork", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3395,14 +3347,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getCompilableType_CompilerInfo(), this.getCompilerInfo(), null, "compilerInfo", null, 0, 1, CompilableType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(configurableObjectEClass, ConfigurableObject.class, "ConfigurableObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getConfigurableObject_Parameter(), this.getParameter(), null, "parameter", null, 0, -1, ConfigurableObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getConfigurableObject_Attributes(), this.getAttribute(), null, "attributes", null, 0, -1, ConfigurableObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		op = addEOperation(configurableObjectEClass, null, "setParameter", 0, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theXMLTypePackage.getString(), "parameterName", 0, 1, IS_UNIQUE, IS_ORDERED);
+		op = addEOperation(configurableObjectEClass, null, "setAttribute", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theXMLTypePackage.getString(), "attributeName", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, theXMLTypePackage.getString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theXMLTypePackage.getString(), "comment", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		op = addEOperation(configurableObjectEClass, theXMLTypePackage.getString(), "getParameter", 0, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theXMLTypePackage.getString(), "parameterName", 0, 1, IS_UNIQUE, IS_ORDERED);
+		op = addEOperation(configurableObjectEClass, theXMLTypePackage.getString(), "getAttribute", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theXMLTypePackage.getString(), "attributeName", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(compositeFBTypeEClass, CompositeFBType.class, "CompositeFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCompositeFBType_FBNetwork(), this.getFBNetwork(), null, "fBNetwork", null, 0, 1, CompositeFBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3532,11 +3485,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(attributeDeclarationEClass, AttributeDeclaration.class, "AttributeDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAttributeDeclaration_Type(), theDataPackage.getBaseType1(), "type", "STRING", 0, 1, AttributeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAttributeDeclaration_InitialValue(), theXMLTypePackage.getString(), "initialValue", null, 0, 1, AttributeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(parameterEClass, Parameter.class, "Parameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(iAttributeEClass, IAttribute.class, "IAttribute", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getIAttribute_Value(), theXMLTypePackage.getString(), "value", null, 1, 1, IAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language");
@@ -3875,6 +3823,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 			 "name", "Language"
 		   });	
 		addAnnotation
+		  (getAttribute_Value(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "Value"
+		   });	
+		addAnnotation
 		  (getResource_FBNetwork(), 
 		   source, 
 		   new String[] {
@@ -4069,13 +4024,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   new String[] {
 			 "kind", "attribute",
 			 "name", "Parameters"
-		   });	
-		addAnnotation
-		  (getIAttribute_Value(), 
-		   source, 
-		   new String[] {
-			 "kind", "attribute",
-			 "name", "Value"
 		   });
 	}
 

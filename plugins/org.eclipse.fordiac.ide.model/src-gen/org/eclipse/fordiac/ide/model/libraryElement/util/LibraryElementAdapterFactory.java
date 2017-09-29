@@ -422,14 +422,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createAttributeDeclarationAdapter();
 			}
 			@Override
-			public Adapter caseParameter(Parameter object) {
-				return createParameterAdapter();
-			}
-			@Override
-			public Adapter caseIAttribute(IAttribute object) {
-				return createIAttributeAdapter();
-			}
-			@Override
 			public Adapter caseDataType(DataType object) {
 				return createDataTypeAdapter();
 			}
@@ -1402,34 +1394,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAttributeDeclarationAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Parameter <em>Parameter</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.Parameter
-	 * @generated
-	 */
-	public Adapter createParameterAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.IAttribute <em>IAttribute</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.IAttribute
-	 * @generated
-	 */
-	public Adapter createIAttributeAdapter() {
 		return null;
 	}
 

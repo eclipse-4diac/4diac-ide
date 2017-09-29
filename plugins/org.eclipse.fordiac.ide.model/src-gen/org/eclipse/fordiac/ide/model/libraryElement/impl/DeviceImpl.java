@@ -53,7 +53,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getResource <em>Resource</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getProfile <em>Profile</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getInConnections <em>In Connections</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceImpl#getAttributes <em>Attributes</em>}</li>
  * </ul>
  *
  * @generated
@@ -155,16 +154,6 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @ordered
 	 */
 	protected EList<Link> inConnections;
-
-	/**
-	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAttributes()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Attribute> attributes;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -346,18 +335,6 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Attribute> getAttributes() {
-		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.DEVICE__ATTRIBUTES);
-		}
-		return attributes;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public AutomationSystem getAutomationSystem() {
 		return getSystemConfiguration().getAutomationSystem();
 	}
@@ -454,8 +431,6 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 				return ((InternalEList<?>)getResource()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
 				return ((InternalEList<?>)getInConnections()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.DEVICE__ATTRIBUTES:
-				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -482,8 +457,6 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 				return getProfile();
 			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
 				return getInConnections();
-			case LibraryElementPackage.DEVICE__ATTRIBUTES:
-				return getAttributes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -520,10 +493,6 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 				getInConnections().clear();
 				getInConnections().addAll((Collection<? extends Link>)newValue);
 				return;
-			case LibraryElementPackage.DEVICE__ATTRIBUTES:
-				getAttributes().clear();
-				getAttributes().addAll((Collection<? extends Attribute>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -556,9 +525,6 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
 				getInConnections().clear();
 				return;
-			case LibraryElementPackage.DEVICE__ATTRIBUTES:
-				getAttributes().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -584,8 +550,6 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 				return PROFILE_EDEFAULT == null ? profile != null : !PROFILE_EDEFAULT.equals(profile);
 			case LibraryElementPackage.DEVICE__IN_CONNECTIONS:
 				return inConnections != null && !inConnections.isEmpty();
-			case LibraryElementPackage.DEVICE__ATTRIBUTES:
-				return attributes != null && !attributes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

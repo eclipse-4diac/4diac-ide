@@ -70,8 +70,8 @@ public class AttributeItemProvider
 
 			addNamePropertyDescriptor(object);
 			addCommentPropertyDescriptor(object);
-			addValuePropertyDescriptor(object);
 			addAttributeDeclarationPropertyDescriptor(object);
+			addValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -131,9 +131,9 @@ public class AttributeItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_IAttribute_value_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_IAttribute_value_feature", "_UI_IAttribute_type"),
-				 LibraryElementPackage.Literals.IATTRIBUTE__VALUE,
+				 getString("_UI_Attribute_value_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Attribute_value_feature", "_UI_Attribute_type"),
+				 LibraryElementPackage.Literals.ATTRIBUTE__VALUE,
 				 true,
 				 false,
 				 false,

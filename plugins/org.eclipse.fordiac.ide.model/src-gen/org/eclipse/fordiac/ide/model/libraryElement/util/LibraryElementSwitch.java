@@ -372,7 +372,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.ATTRIBUTE: {
 				Attribute attribute = (Attribute)theEObject;
 				T result = caseAttribute(attribute);
-				if (result == null) result = caseIAttribute(attribute);
 				if (result == null) result = caseINamedElement(attribute);
 				if (result == null) result = caseI4DIACElement(attribute);
 				if (result == null) result = defaultCase(theEObject);
@@ -731,23 +730,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseAttributeDeclaration(attributeDeclaration);
 				if (result == null) result = caseINamedElement(attributeDeclaration);
 				if (result == null) result = caseI4DIACElement(attributeDeclaration);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.PARAMETER: {
-				Parameter parameter = (Parameter)theEObject;
-				T result = caseParameter(parameter);
-				if (result == null) result = caseIAttribute(parameter);
-				if (result == null) result = caseINamedElement(parameter);
-				if (result == null) result = caseI4DIACElement(parameter);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.IATTRIBUTE: {
-				IAttribute iAttribute = (IAttribute)theEObject;
-				T result = caseIAttribute(iAttribute);
-				if (result == null) result = caseINamedElement(iAttribute);
-				if (result == null) result = caseI4DIACElement(iAttribute);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1772,36 +1754,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAttributeDeclaration(AttributeDeclaration object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Parameter</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Parameter</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseParameter(Parameter object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>IAttribute</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>IAttribute</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseIAttribute(IAttribute object) {
 		return null;
 	}
 

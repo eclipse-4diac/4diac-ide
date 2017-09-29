@@ -36,8 +36,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl#getComment <em>Comment</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl#getAttributeDeclaration <em>Attribute Declaration</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -84,6 +84,16 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 	protected String comment = COMMENT_EDEFAULT;
 
 	/**
+	 * The cached value of the '{@link #getAttributeDeclaration() <em>Attribute Declaration</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAttributeDeclaration()
+	 * @generated
+	 * @ordered
+	 */
+	protected AttributeDeclaration attributeDeclaration;
+
+	/**
 	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -102,16 +112,6 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 	 * @ordered
 	 */
 	protected String value = VALUE_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getAttributeDeclaration() <em>Attribute Declaration</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAttributeDeclaration()
-	 * @generated
-	 * @ordered
-	 */
-	protected AttributeDeclaration attributeDeclaration;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -245,11 +245,11 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 				return getName();
 			case LibraryElementPackage.ATTRIBUTE__COMMENT:
 				return getComment();
-			case LibraryElementPackage.ATTRIBUTE__VALUE:
-				return getValue();
 			case LibraryElementPackage.ATTRIBUTE__ATTRIBUTE_DECLARATION:
 				if (resolve) return getAttributeDeclaration();
 				return basicGetAttributeDeclaration();
+			case LibraryElementPackage.ATTRIBUTE__VALUE:
+				return getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -268,11 +268,11 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 			case LibraryElementPackage.ATTRIBUTE__COMMENT:
 				setComment((String)newValue);
 				return;
-			case LibraryElementPackage.ATTRIBUTE__VALUE:
-				setValue((String)newValue);
-				return;
 			case LibraryElementPackage.ATTRIBUTE__ATTRIBUTE_DECLARATION:
 				setAttributeDeclaration((AttributeDeclaration)newValue);
+				return;
+			case LibraryElementPackage.ATTRIBUTE__VALUE:
+				setValue((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -292,11 +292,11 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 			case LibraryElementPackage.ATTRIBUTE__COMMENT:
 				setComment(COMMENT_EDEFAULT);
 				return;
-			case LibraryElementPackage.ATTRIBUTE__VALUE:
-				setValue(VALUE_EDEFAULT);
-				return;
 			case LibraryElementPackage.ATTRIBUTE__ATTRIBUTE_DECLARATION:
 				setAttributeDeclaration((AttributeDeclaration)null);
+				return;
+			case LibraryElementPackage.ATTRIBUTE__VALUE:
+				setValue(VALUE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -314,10 +314,10 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case LibraryElementPackage.ATTRIBUTE__COMMENT:
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
-			case LibraryElementPackage.ATTRIBUTE__VALUE:
-				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 			case LibraryElementPackage.ATTRIBUTE__ATTRIBUTE_DECLARATION:
 				return attributeDeclaration != null;
+			case LibraryElementPackage.ATTRIBUTE__VALUE:
+				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 		}
 		return super.eIsSet(featureID);
 	}

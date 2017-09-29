@@ -1478,29 +1478,6 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.Parameter} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ParameterItemProvider parameterItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.Parameter}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createParameterAdapter() {
-		if (parameterItemProvider == null) {
-			parameterItemProvider = new ParameterItemProvider(this);
-		}
-
-		return parameterItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.Attribute} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

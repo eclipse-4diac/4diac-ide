@@ -190,7 +190,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements
 			case LibraryElementPackage.COLOR: return createColor();
 			case LibraryElementPackage.COLORIZABLE_ELEMENT: return createColorizableElement();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
-			case LibraryElementPackage.PARAMETER: return createParameter();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -788,16 +787,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements
 	public AttributeDeclaration createAttributeDeclaration() {
 		AttributeDeclarationImpl attributeDeclaration = new AttributeDeclarationImpl();
 		return attributeDeclaration;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Parameter createParameter() {
-		ParameterImpl parameter = new ParameterImpl();
-		return parameter;
 	}
 
 	/**

@@ -26,13 +26,14 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getAttributeDeclaration <em>Attribute Declaration</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAttribute()
  * @model
  * @generated
  */
-public interface Attribute extends IAttribute {
+public interface Attribute extends INamedElement {
 	/**
 	 * Returns the value of the '<em><b>Attribute Declaration</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -58,5 +59,32 @@ public interface Attribute extends IAttribute {
 	 * @generated
 	 */
 	void setAttributeDeclaration(AttributeDeclaration value);
+
+	/**
+	 * Returns the value of the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Value</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Value</em>' attribute.
+	 * @see #setValue(String)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAttribute_Value()
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+	 *        extendedMetaData="kind='attribute' name='Value'"
+	 * @generated
+	 */
+	String getValue();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getValue <em>Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Value</em>' attribute.
+	 * @see #getValue()
+	 * @generated
+	 */
+	void setValue(String value);
 
 } // Attribute
