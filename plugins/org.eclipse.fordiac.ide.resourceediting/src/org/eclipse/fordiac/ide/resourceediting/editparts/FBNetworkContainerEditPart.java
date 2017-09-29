@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.text.View;
-
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -26,7 +24,6 @@ import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -111,80 +108,45 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 		Resource res = (Resource)getModel().eContainer();
 
 		for (Object object : children) {
-			if(object instanceof View){
-				View view = (View)object;
-				// TODOD model refactoring - implement when new mapping and subapp model is done					
-//				if (view instanceof MappedSubAppView) {
-//					MappedSubAppView subAppView = (MappedSubAppView) view;
-//					for (Iterator iterator2 = subAppView.getInterfaceElements().iterator(); iterator2
-//							.hasNext();) {
-//						MappedSubAppInterfaceElementView interfaceElementview = (MappedSubAppInterfaceElementView) iterator2
-//								.next();
-//						for (Iterator iterator3 = interfaceElementview.getIInterfaceElement().getInputConnections()
-//								.iterator(); iterator3.hasNext();) {
-//							Connection conn = (Connection) iterator3.next();
-//							if (conn instanceof EventConnection) {
-//								EventConnection eventCon = (EventConnection) conn;
-//								if (eventCon.getSource() != null) {
-//									Event source = eventCon.getSource();
-//									InterfaceList parentList = (InterfaceList) source.eContainer();
-//									if (parentList != null) {
-//										FB sourceFB = (FB) parentList.eContainer();
-//	
-//										if (!(sourceFB instanceof ResourceTypeFB || sourceFB.isResourceFB())
-//												&& !isMappedToEqualResource(uiResEditor, sourceFB)) {
-//											// createVirtualIO
-//											createVirtualIO(interfaceElements, (MappedSubAppView) view,
-//													eventCon.getDestination(), source);
-//										}
-//									}
-//								}
-//	
-//							}
-//						}
-//					}
-//				}
-//			} else 
-				//TODO model refactoring - use the connections of the mapped fbs
-			    if (object instanceof FB) {
-					FB fb = (FB)object;
-					for (Event event : fb.getInterface().getEventInputs()) {
-						for (Connection connection : event.getInputConnections()) {
-							if (connection.getSource() != null) {
-								if (!isMappedToEqualResource(res, connection.getSourceElement())) {
-									createVirtualIO(interfaceElements, fb, event, connection.getSource());
-								}
+		    if (object instanceof FBNetworkElement) {
+		    	FBNetworkElement fbNetworkelement = (FBNetworkElement)object;
+				for (Event event : fbNetworkelement.getInterface().getEventInputs()) {
+					for (Connection connection : event.getInputConnections()) {
+						if (connection.getSource() != null) {
+							if (!isMappedToEqualResource(res, connection.getSourceElement())) {
+								createVirtualIO(interfaceElements, fbNetworkelement, event, connection.getSource());
 							}
 						}
-					}
-					for (Event event : fb.getInterface().getEventOutputs()) {
-						for (Connection connection : event.getOutputConnections()) {
-							if (connection.getSource() != null) {
-								if (!isMappedToEqualResource(res, connection.getDestinationElement())) {
-									createVirtualIO(interfaceElements, fb, event, connection.getDestination());
-								}
-							}
-						}
-					}
-					for (VarDeclaration var : fb.getInterface().getInputVars()) {
-						for (Connection connection : var.getInputConnections()) {
-							if (connection.getSource() != null) {
-								if (!isMappedToEqualResource(res, connection.getSourceElement())) {
-									createVirtualIO(interfaceElements, fb, var, connection.getSource());
-								}
-							}
-						}						
-					}
-					for (VarDeclaration var : fb.getInterface().getOutputVars()) {
-						for (Connection connection : var.getOutputConnections()) {
-							if (connection.getSource() != null) {
-								if (!isMappedToEqualResource(res, connection.getDestinationElement())) {
-									createVirtualIO(interfaceElements, fb, var, connection.getDestination());
-								}
-							}
-						}						
 					}
 				}
+				for (Event event : fbNetworkelement.getInterface().getEventOutputs()) {
+					for (Connection connection : event.getOutputConnections()) {
+						if (connection.getSource() != null) {
+							if (!isMappedToEqualResource(res, connection.getDestinationElement())) {
+								createVirtualIO(interfaceElements, fbNetworkelement, event, connection.getDestination());
+							}
+						}
+					}
+				}
+				for (VarDeclaration var : fbNetworkelement.getInterface().getInputVars()) {
+					for (Connection connection : var.getInputConnections()) {
+						if (connection.getSource() != null) {
+							if (!isMappedToEqualResource(res, connection.getSourceElement())) {
+								createVirtualIO(interfaceElements, fbNetworkelement, var, connection.getSource());
+							}
+						}
+					}						
+				}
+				for (VarDeclaration var : fbNetworkelement.getInterface().getOutputVars()) {
+					for (Connection connection : var.getOutputConnections()) {
+						if (connection.getSource() != null) {
+							if (!isMappedToEqualResource(res, connection.getDestinationElement())) {
+								createVirtualIO(interfaceElements, fbNetworkelement, var, connection.getDestination());
+							}
+						}
+					}						
+				}
+				//TODO add plugs and sockets
 			}
 		}
 		
@@ -193,7 +155,7 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 	}
 
 	private void createVirtualIO(List<Object> interfaceElements,
-			FB fb, IInterfaceElement element, IInterfaceElement source) {
+			FBNetworkElement fbnetworkElement, IInterfaceElement element, IInterfaceElement source) {
 //TODO model refactoring - reimplment when implmenting new virtual IO Bugzilla #490955
 //		InterfaceElementView iev = UiFactory.eINSTANCE.createInterfaceElementView();
 //		iev.setIInterfaceElement(source);
@@ -242,13 +204,14 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 //			}
 //			return false;
 //		}
-		if (fbNetElement.getResource() == null) {
-			return false;
-		}
-		if (res == null) {
-			return false;
-		}
-		return res.equals(fbNetElement.getResource());
+//		if (fbNetElement.getResource() == null) {
+//			return false;
+//		}
+//		if (res == null) {
+//			return false;
+//		}
+//		return res.equals(fbNetElement.getResource());
+		return true;
 	}
 
 	@Override

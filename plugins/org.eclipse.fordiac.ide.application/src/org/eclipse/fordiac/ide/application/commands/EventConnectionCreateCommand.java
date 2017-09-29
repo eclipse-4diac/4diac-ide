@@ -58,13 +58,13 @@ public class EventConnectionCreateCommand extends AbstractConnectionCreateComman
 	private boolean duplicateConnection() {
 		for (Connection con : source.getInputConnections()) {
 			//as we are maybe creating a reverse connection we need to check both 
-			if(con.getSource().equals(destination) || con.getDestination().equals(destination)){
+			if((con.getSource() == destination) || (con.getDestination() == destination)){
 				return true;
 			}
 		}
 		for (Connection con : source.getOutputConnections()) {
 			//as we are maybe creating a reverse connection we need to check both
-			if(con.getSource().equals(destination) || con.getDestination().equals(destination)){
+			if((con.getSource() == destination) || (con.getDestination() == destination)){
 				return true;
 			}
 		}

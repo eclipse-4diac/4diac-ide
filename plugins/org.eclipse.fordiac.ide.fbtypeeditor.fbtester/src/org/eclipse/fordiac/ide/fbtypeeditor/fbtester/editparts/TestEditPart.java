@@ -55,7 +55,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void activate() {
-		//super.activate();
+		super.activate();
 		Set set = getViewer().getEditPartRegistry().keySet();
 		for (Object object : set) {
 			if (object instanceof IInterfaceElement) {
@@ -93,11 +93,6 @@ public class TestEditPart extends AbstractViewEditPart implements
 		registerElement();
 	}
 	
-	@Override
-	public void deactivate() {
-		
-	}
-
 	/**
 	 * Set the background color of this editparts figure
 	 * @param color
@@ -231,12 +226,16 @@ public class TestEditPart extends AbstractViewEditPart implements
 	protected EContentAdapter getContentAdapter() {
 		if (adapter == null) {
 			adapter = new EContentAdapter() {
-
+				boolean blockAdapter;
+				
 				@Override
 				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-
-					refreshVisuals();
+					if(!blockAdapter) {
+						blockAdapter = true;
+						super.notifyChanged(notification);
+						refreshVisuals();
+						blockAdapter = false;
+					}
 				}
 
 			};
