@@ -50,6 +50,11 @@
                label="Interface">
          </propertyTab>
          <propertyTab
+               category="Resource"
+               id="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab"
+               label="Interface">
+         </propertyTab>
+         <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
                category="FB"
                id="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
@@ -71,16 +76,6 @@
                label="Edit Adapters">
          </propertyTab>
          <propertyTab
-               category="Device"
-               id="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab"
-               label="Interface">
-         </propertyTab>
-         <propertyTab
-               category="Resource"
-               id="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab"
-               label="Interface">
-         </propertyTab>
-         <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
                category="FB"
                id="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
@@ -91,12 +86,6 @@
                afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
                category="FB"
                id="org.eclipse.fordiac.ide.application.propertyAppearanceTab"
-               label="Appearance">
-         </propertyTab>
-         <propertyTab
-               afterTab="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab"
-               category="Device"
-               id="org.eclipse.fordiac.ide.device.propertyAppearanceTab"
                label="Appearance">
          </propertyTab>
          <propertyTab
@@ -117,11 +106,6 @@
          <propertyTab
                category="Interface"
                id="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
-               label="Interface Element">
-         </propertyTab>
-         <propertyTab
-               category="Device"
-               id="org.eclipse.fordiac.ide.device.propertyInterfaceElementTab"
                label="Interface Element">
          </propertyTab>
       </propertyTabs>

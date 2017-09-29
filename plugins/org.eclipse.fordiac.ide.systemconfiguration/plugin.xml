@@ -12,6 +12,35 @@
       </editor>
    </extension>
    <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs
+            contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
+         <propertyTab
+               category="Device"
+               id="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab"
+               label="Interface">
+         </propertyTab>
+         <propertyTab
+               afterTab="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab"
+               category="Device"
+               id="org.eclipse.fordiac.ide.device.propertyAttributeTab"
+               indented="true"
+               label="Attributes">
+         </propertyTab>
+         <propertyTab
+               afterTab="org.eclipse.fordiac.ide.device.propertyAttributeTab"
+               category="Device"
+               id="org.eclipse.fordiac.ide.device.propertyAppearanceTab"
+               label="Appearance">
+         </propertyTab>
+         <propertyTab
+               category="Device"
+               id="org.eclipse.fordiac.ide.device.propertyInterfaceElementTab"
+               label="Interface Element">
+         </propertyTab>
+      </propertyTabs>
+   </extension>
+   <extension
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections
             contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
@@ -19,6 +48,14 @@
                class="org.eclipse.fordiac.ide.systemconfiguration.properties.DeviceInterfaceSection"
                id="org.eclipse.fordiac.ide.systemconfiguration.properties.InterfaceSection"
                tab="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab">
+            <input
+                  type="org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.systemconfiguration.properties.AttributeSection"
+               id="org.eclipse.fordiac.ide.systemconfiguration.properties.AttributeSection"
+               tab="org.eclipse.fordiac.ide.device.propertyAttributeTab">
             <input
                   type="org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart">
             </input>
