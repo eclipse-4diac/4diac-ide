@@ -13,6 +13,10 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.commands.Command;
 
@@ -20,7 +24,9 @@ public class ChangeNameCommand extends Command {
 	protected INamedElement element;
 	protected String name;
 	private String oldName;
-
+	private FBNetworkElement fbNetworkElement;
+	private AdapterDeclaration adapterDeclaration;
+	
 	public ChangeNameCommand(final INamedElement element, final String name) {
 		super();
 		this.element = element;
@@ -35,17 +41,35 @@ public class ChangeNameCommand extends Command {
 	@Override
 	public void execute() {
 		oldName = element.getName();
-			redo();
+		if(element instanceof AdapterDeclaration && element.eContainer().eContainer() instanceof CompositeFBType){
+			fbNetworkElement = ((AdapterDeclaration)element).getAdapterFB();
 		}
+		if(element instanceof AdapterFB) {
+			adapterDeclaration = ((AdapterFB)element).getAdapterDecl();
+		}
+		redo();
+	}
 
 	@Override
 	public void undo() {
 		element.setName(oldName);
+		if(null != fbNetworkElement) {
+			fbNetworkElement.setName(oldName);
+		}
+		if(null != adapterDeclaration) {
+			adapterDeclaration.setName(oldName);
+		}
 	}
 
 	@Override
 	public void redo() {
 		element.setName(name);
+		if(null != fbNetworkElement) {
+			fbNetworkElement.setName(name);
+		}
+		if(null != adapterDeclaration) {
+			adapterDeclaration.setName(name);
+		}
 	}
 
 }
