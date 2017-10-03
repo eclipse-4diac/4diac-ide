@@ -320,9 +320,20 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 	
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(getSystem().getProject(), getEditDomain());
+		return new FBTypePaletteViewerProvider(getSystem().getProject(), getEditDomain(), getPalletNavigatorID());
 	}
 	
+	/** Method for providing the id to be used for generating the CNF for showing the pallette.
+	 * 
+	 * This method is to be subclassed by fbnetwork editors which would like to show different types in there 
+	 * pallete (e.g., Composite type editor). 
+	 * 
+	 * @return the navigator id
+	 */
+	protected String getPalletNavigatorID() {
+		return "org.eclipse.fordiac.ide.fbpaletteviewer"; //$NON-NLS-1$;
+	}
+
 	@Override
 	protected FlyoutPreferences getPalettePreferences(){
 		return FBNetworkFlyoutPreferences.INSTANCE;

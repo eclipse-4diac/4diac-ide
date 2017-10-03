@@ -40,11 +40,15 @@ import org.eclipse.ui.navigator.INavigatorFilterService;
 import org.eclipse.ui.navigator.NavigatorContentServiceFactory;
 
 public class FBPaletteViewer extends PaletteViewer {
-	final static String FBPaletteNavigatorId = "org.eclipse.fordiac.ide.fbpaletteviewer"; //$NON-NLS-1$
-
 	private CommonViewer commonViewer;
 	private PatternFilter patternFilter = null;
+	private final String navigatorId;
 	
+	public FBPaletteViewer(String navigatorId) {
+		super();
+		this.navigatorId = navigatorId;
+	}
+
 	public void createTypeLibTreeControl(Composite parent,
 			IProject project) {
 
@@ -84,11 +88,11 @@ public class FBPaletteViewer extends PaletteViewer {
 	}
 
 	private void createCommonViewer(Composite container, IProject project) {
-		commonViewer = new CommonViewer(FBPaletteNavigatorId,
+		commonViewer = new CommonViewer(navigatorId,
 				container, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
 
 		INavigatorContentService contentService = NavigatorContentServiceFactory.INSTANCE
-				.createContentService(FBPaletteNavigatorId, commonViewer);
+				.createContentService(navigatorId, commonViewer);
 
 		contentService.createCommonContentProvider();
 		contentService.createCommonLabelProvider();

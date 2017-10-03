@@ -426,7 +426,7 @@
                   isRoot="true"
                   pattern="org.eclipse.fordiac.ide.fbPaletteContent"/>
             <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
-            <contentExtension pattern="org.eclipse.fordiac.ide.fbpaletteviewer.filters.showonlyFBTypes"/>
+            <contentExtension pattern="org.eclipse.fordiac.ide.fbpaletteviewer.filters.showonlyFBTypesAndSubAppTypes"/>
             <contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper" />
          </includes>
       </viewerContentBinding>
@@ -439,8 +439,8 @@
          point="org.eclipse.ui.navigator.navigatorContent">
       <commonFilter
             activeByDefault="true"
-            id="org.eclipse.fordiac.ide.fbpaletteviewer.filters.showonlyFBTypes"
-            name="Show only IEC 61499 FB Types"
+            id="org.eclipse.fordiac.ide.fbpaletteviewer.filters.showonlyFBTypesAndSubAppTypes"
+            name="Show only IEC 61499 FB Types and Subapp Types"
             visibleInUI="true">
          <filterExpression>
                   <or>
@@ -455,10 +455,16 @@
                               <instanceof
                                     value="org.eclipse.core.resources.IFile">
                               </instanceof>
-                              <test
-                                    property="org.eclipse.core.resources.extension"
-                                    value="fbt">
-                              </test>
+                              <or>
+	                              <test
+	                                    property="org.eclipse.core.resources.extension"
+	                                    value="fbt">
+	                              </test>
+	                              <test
+	                                    property="org.eclipse.core.resources.extension"
+	                                    value="sub">
+	                              </test>
+								</or>		                              
                            </and>                           
                         </or>
                      </not>
