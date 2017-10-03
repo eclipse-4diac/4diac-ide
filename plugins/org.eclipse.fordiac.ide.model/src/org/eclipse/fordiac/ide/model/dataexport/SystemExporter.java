@@ -29,10 +29,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -222,17 +224,25 @@ public class SystemExporter {
 		Element deviceElement = dom.createElement(LibraryElementTags.DEVICE_ELEMENT);
 		CommonElementExporter.setNameTypeCommentAttribute(deviceElement, device, device.getType());
 		CommonElementExporter.exportXandY(device, deviceElement);
-		CommonElementExporter.addColorAttributeElement(dom, deviceElement, device);
-		addDeviceProfile(deviceElement, device);
 		CommonElementExporter.addParamsConfig(dom, deviceElement, device.getVarDeclarations());
+		addAttributes(deviceElement, device.getAttributes(), device);
 		addResources(deviceElement, device.getResource());
 		systemRootElement.appendChild(deviceElement);
+	}
+
+	private void addAttributes(Element deviceElement, EList<Attribute> attributes, Device device) {
+		addDeviceProfile(deviceElement, device);
+		CommonElementExporter.addColorAttributeElement(dom, deviceElement, device);
+		for(Attribute attribute : attributes) {
+			Element domAttribute = CommonElementExporter.createAttributeElement(dom, attribute.getName(), attribute.getValue(), attribute.getComment());
+			deviceElement.appendChild(domAttribute);
+		}
 	}
 
 	private void addDeviceProfile(Element deviceElement, Device device) {
 		String profileName = device.getProfile();
 		if(null != profileName && !"".equals(profileName)){   //$NON-NLS-1$
-			Element profileAttribute = CommonElementExporter.createAttributeElement(dom, LibraryElementTags.DEVICE_PROFILE, profileName);		
+			Element profileAttribute = CommonElementExporter.createAttributeElement(dom, LibraryElementTags.DEVICE_PROFILE, profileName, "device profile");		
 			deviceElement.appendChild(profileAttribute);
 		}
 		

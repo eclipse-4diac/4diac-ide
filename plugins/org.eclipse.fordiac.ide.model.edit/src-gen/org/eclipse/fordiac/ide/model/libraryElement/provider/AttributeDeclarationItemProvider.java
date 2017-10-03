@@ -1,11 +1,15 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2007 - 2011 4DIAC - consortium.
+ *  * Copyright (c) 2008 - 2017 4DIAC - consortium.
+ *  *
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
  *  * http://www.eclipse.org/legal/epl-v10.html
  *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *  *     - initial API and implementation and/or initial documentation
  *  *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
@@ -16,30 +20,29 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject} object.
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ConfigurableObjectItemProvider
-	extends I4DIACElementItemProvider {
+public class AttributeDeclarationItemProvider extends I4DIACElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ConfigurableObjectItemProvider(AdapterFactory adapterFactory) {
+	public AttributeDeclarationItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -56,6 +59,8 @@ public class ConfigurableObjectItemProvider
 
 			addNamePropertyDescriptor(object);
 			addCommentPropertyDescriptor(object);
+			addTypePropertyDescriptor(object);
+			addInitialValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -105,44 +110,58 @@ public class ConfigurableObjectItemProvider
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * This adds a property descriptor for the Type feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.CONFIGURABLE_OBJECT__ATTRIBUTES);
-		}
-		return childrenFeatures;
+	protected void addTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AttributeDeclaration_type_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AttributeDeclaration_type_feature", "_UI_AttributeDeclaration_type"),
+				 LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION__TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
+	 * This adds a property descriptor for the Initial Value feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
+	protected void addInitialValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AttributeDeclaration_initialValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AttributeDeclaration_initialValue_feature", "_UI_AttributeDeclaration_type"),
+				 LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION__INITIAL_VALUE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This returns ConfigurableObject.gif.
+	 * This returns AttributeDeclaration.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ConfigurableObject"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/AttributeDeclaration"));
 	}
 
 	/**
@@ -153,11 +172,12 @@ public class ConfigurableObjectItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ConfigurableObject)object).getName();
+		String label = ((AttributeDeclaration)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_ConfigurableObject_type") :
-			getString("_UI_ConfigurableObject_type") + " " + label;
+			getString("_UI_AttributeDeclaration_type") :
+			getString("_UI_AttributeDeclaration_type") + " " + label;
 	}
+	
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -170,13 +190,12 @@ public class ConfigurableObjectItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ConfigurableObject.class)) {
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__NAME:
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
+		switch (notification.getFeatureID(AttributeDeclaration.class)) {
+			case LibraryElementPackage.ATTRIBUTE_DECLARATION__NAME:
+			case LibraryElementPackage.ATTRIBUTE_DECLARATION__COMMENT:
+			case LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE:
+			case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -192,11 +211,6 @@ public class ConfigurableObjectItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.CONFIGURABLE_OBJECT__ATTRIBUTES,
-				 LibraryElementFactory.eINSTANCE.createAttribute()));
 	}
 
 }

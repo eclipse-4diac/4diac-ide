@@ -96,6 +96,7 @@ public class DeviceTypeItemProvider
 			childrenFeatures.add(LibraryElementPackage.Literals.DEVICE_TYPE__RESOURCE_TYPE_NAME);
 			childrenFeatures.add(LibraryElementPackage.Literals.DEVICE_TYPE__RESOURCE);
 			childrenFeatures.add(LibraryElementPackage.Literals.DEVICE_TYPE__FB_NETWORK);
+			childrenFeatures.add(LibraryElementPackage.Literals.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS);
 		}
 		return childrenFeatures;
 	}
@@ -157,6 +158,7 @@ public class DeviceTypeItemProvider
 			case LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME:
 			case LibraryElementPackage.DEVICE_TYPE__RESOURCE:
 			case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
+			case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -198,6 +200,11 @@ public class DeviceTypeItemProvider
 			(createChildParameter
 				(LibraryElementPackage.Literals.DEVICE_TYPE__FB_NETWORK,
 				 LibraryElementFactory.eINSTANCE.createFBNetwork()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS,
+				 LibraryElementFactory.eINSTANCE.createAttributeDeclaration()));
 	}
 
 }

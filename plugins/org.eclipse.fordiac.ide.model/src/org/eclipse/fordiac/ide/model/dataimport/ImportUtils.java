@@ -31,10 +31,10 @@ import org.eclipse.fordiac.ide.model.data.VarInitialization;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Parameter;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -60,19 +60,16 @@ public class ImportUtils {
 	 * @throws TypeImportException
 	 *             the FBT import exception
 	 */
-	public static VarDeclaration parseParameter(final Node node)
-			throws TypeImportException {
-		Parameter p = LibraryElementFactory.eINSTANCE.createParameter();
-		VarDeclaration var = LibraryElementFactory.eINSTANCE
-				.createVarDeclaration();
+	public static VarDeclaration parseParameter(final Node node) throws TypeImportException {
+		Attribute p = LibraryElementFactory.eINSTANCE.createAttribute();
+		VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		NamedNodeMap map = node.getAttributes();
 		Node name = map.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE);
 		if (name != null) {
 			p.setName(name.getNodeValue());
 			var.setName(name.getNodeValue());
 		} else {
-			throw new TypeImportException(
-					Messages.ImportUtils_ERROR_ParameterNotSet);
+			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterNotSet);
 		}
 		Node value = map.getNamedItem(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (value != null) {
@@ -81,8 +78,7 @@ public class ImportUtils {
 			val.setValue(value.getNodeValue());
 			var.setValue(val);
 		} else {
-			throw new TypeImportException(
-					Messages.ImportUtils_ERROR_ParameterValueNotSet);
+			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterValueNotSet);
 		}
 		Node comment = map.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (comment != null) {
@@ -103,14 +99,12 @@ public class ImportUtils {
 	 * @throws TypeImportException
 	 *             the FBT import exception
 	 */
-	public static List<VarDeclaration> parseInputVariables(final Node node)
-			throws TypeImportException {
+	public static List<VarDeclaration> parseInputVariables(final Node node) throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
 		ArrayList<VarDeclaration> varDecl = new ArrayList<VarDeclaration>();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(
-					LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
+			if (n.getNodeName().equals(LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
 				VarDeclaration var = parseVarDeclaration(n);
 				((IInterfaceElement) var).setIsInput(true);
 				varDecl.add(var);
@@ -130,14 +124,12 @@ public class ImportUtils {
 	 * @throws TypeImportException
 	 *             the FBT import exception
 	 */
-	public static List<VarDeclaration> parseOutputVariables(final Node node)
-			throws TypeImportException {
+	public static List<VarDeclaration> parseOutputVariables(final Node node) throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
 		ArrayList<VarDeclaration> varDecl = new ArrayList<VarDeclaration>();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(
-					LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
+			if (n.getNodeName().equals(LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
 				VarDeclaration var = parseVarDeclaration(n);
 				((IInterfaceElement) var).setIsInput(false);
 				varDecl.add(var);
@@ -157,48 +149,39 @@ public class ImportUtils {
 	 * @throws TypeImportException
 	 *             the FBT import exception
 	 */
-	public static VarDeclaration parseVarDeclaration(final Node n)
-			throws TypeImportException {
+	public static VarDeclaration parseVarDeclaration(final Node n) throws TypeImportException {
 		NamedNodeMap map = n.getAttributes();
-		VarDeclaration v = LibraryElementFactory.eINSTANCE
-				.createVarDeclaration();
+		VarDeclaration v = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		Node name = map.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE);
 		if (name != null) {
 			v.setName(name.getNodeValue());
 		} else {
-			throw new TypeImportException(
-					Messages.ImportUtils_ERROR_InputVariableNameNotDefined);
+			throw new TypeImportException(Messages.ImportUtils_ERROR_InputVariableNameNotDefined);
 		}
 		Node type = map.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (type != null) {
-			DataType dataType = DataTypeLibrary.getInstance().getType(
-					type.getNodeValue());
+			DataType dataType = DataTypeLibrary.getInstance().getType(type.getNodeValue());
 			v.setTypeName(type.getNodeValue());
 			if (dataType != null) {
 				v.setType(dataType);
 			}
 		} else {
-			throw new TypeImportException(
-					Messages.ImportUtils_ERROR_InputVariableTypeNotDefined);
+			throw new TypeImportException(Messages.ImportUtils_ERROR_InputVariableTypeNotDefined);
 		}
-		Node arraySize = map
-				.getNamedItem(LibraryElementTags.ARRAYSIZE_ATTRIBUTE);
+		Node arraySize = map.getNamedItem(LibraryElementTags.ARRAYSIZE_ATTRIBUTE);
 		if (arraySize != null) {
 			try {
 				v.setArraySize(Integer.parseInt(arraySize.getNodeValue()));
 			} catch (NumberFormatException nfe) {
-				throw new TypeImportException(
-						Messages.ImportUtils_ERROR_Arraysize_NumberFormat);
+				throw new TypeImportException(Messages.ImportUtils_ERROR_Arraysize_NumberFormat);
 			}
 		} else {
 			v.setArraySize(-1);
 		}
 
-		Node initialValue = map
-				.getNamedItem(LibraryElementTags.INITIALVALUE_ATTRIBUTE);
+		Node initialValue = map.getNamedItem(LibraryElementTags.INITIALVALUE_ATTRIBUTE);
 		if (initialValue != null) {
-			VarInitialization varInitialization = DataFactory.eINSTANCE
-					.createVarInitialization();
+			VarInitialization varInitialization = DataFactory.eINSTANCE.createVarInitialization();
 			varInitialization.setInitialValue(initialValue.getNodeValue());
 			v.setVarInitialization(varInitialization);
 		}
@@ -227,8 +210,7 @@ public class ImportUtils {
 		if (name != null) {
 			e.setName(name.getNodeValue());
 		} else {
-			throw new TypeImportException(
-					Messages.ImportUtils_ERROR_InputEventNameNotDefined);
+			throw new TypeImportException(Messages.ImportUtils_ERROR_InputEventNameNotDefined);
 		}
 		// Node type = map.getNamedItem("Type");
 		// if (type != null)
@@ -261,24 +243,22 @@ public class ImportUtils {
 	 */
 	public static int parseConnectionValue(String value) {
 		try {
-			double temp = ImportUtils.convertCoordinate(Double
-					.parseDouble(value));
+			double temp = ImportUtils.convertCoordinate(Double.parseDouble(value));
 			return (int) temp;
 		} catch (Exception ex) {
 			return 0;
 		}
 	}
 
-	public static AdapterEvent createAdapterEvent(Event event,
-			AdapterDeclaration a) {
+	public static AdapterEvent createAdapterEvent(Event event, AdapterDeclaration a) {
 		AdapterEvent ae = LibraryElementFactory.eINSTANCE.createAdapterEvent();
 		ae.setName(event.getName());
 		ae.setComment(event.getComment());
 		ae.setAdapterDeclaration(a);
-		
+
 		return ae;
 	}
-	
+
 	/**
 	 * A helper method to get a platform independent regex for the split method.
 	 * 
@@ -291,15 +271,19 @@ public class ImportUtils {
 		}
 		return regex;
 	}
-	
+
 	/**
 	 * copies a file from in to out.
 	 * 
-	 * @param in source File
-	 * @param out destination File
+	 * @param in
+	 *            source File
+	 * @param out
+	 *            destination File
 	 * 
-	 * @throws Exception *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws Exception
+	 * *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static void copyFile(final File in, final File out) throws IOException {
 		FileInputStream fis = new FileInputStream(in);
@@ -312,14 +296,15 @@ public class ImportUtils {
 		fis.close();
 		fos.close();
 	}
-	
-	public static void copyFile(final File in, final org.eclipse.core.resources.IFile out) throws IOException, CoreException {
-		if(!out.getParent().exists()){
-			//create folder if does not exist
+
+	public static void copyFile(final File in, final org.eclipse.core.resources.IFile out)
+			throws IOException, CoreException {
+		if (!out.getParent().exists()) {
+			// create folder if does not exist
 			((IFolder) out.getParent()).create(true, true, null);
 			out.getParent().refreshLocal(IFolder.DEPTH_ZERO, null);
 		}
-		
+
 		copyFile(in, out.getLocation().toFile());
 		try {
 			out.getParent().refreshLocal(IResource.DEPTH_ONE, null);

@@ -123,7 +123,7 @@ public interface Palette extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" typeNameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='PaletteEntry entry = null;\n//TODO reconsider when namespaces are coming how to retrieve the type\nList<PaletteEntry> entries = getTypeEntries(typeName);\nif (!entries.isEmpty()) {\n\tentry = entries.get(0);\n} \nreturn entry;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='PaletteEntry entry = null;\n//TODO reconsider when namespaces are coming how to retrieve the type\nList&lt;PaletteEntry&gt; entries = getTypeEntries(typeName);\nif (!entries.isEmpty()) {\n\tentry = entries.get(0);\n} \nreturn entry;'"
 	 * @generated
 	 */
 	PaletteEntry getTypeEntry(String typeName);
