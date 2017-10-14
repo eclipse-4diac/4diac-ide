@@ -222,7 +222,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * @generated
 	 */
 	public FBNetworkElement getFBNetworkElement() {
-		return (eContainer() instanceof InterfaceList) ? ((InterfaceList)eContainer()).getFBNetworkElement() : null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);
 	}
 
 	/**

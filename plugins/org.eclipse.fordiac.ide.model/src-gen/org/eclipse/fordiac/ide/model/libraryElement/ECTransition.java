@@ -145,7 +145,7 @@ public interface ECTransition extends PositionableElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='String retVal = new String();\n\nEvent event = getConditionEvent();\nString expression = getConditionExpression();\n\nif(event != null){\n\tretVal = event.getName();\n}\nif(expression !=  null){\n\tif(expression.equals(\"1\")){\n\t\tretVal = expression;\n\t}else if (!expression.equals(\"\")){\n\t\tretVal += \"[\" + expression + \"]\";\n\t}\n}\t\t\nreturn retVal;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getConditionText(this);'"
 	 * @generated
 	 */
 	String getConditionText();

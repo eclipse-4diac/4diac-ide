@@ -137,12 +137,8 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SubAppType getType() {
-		LibraryElement type = super.getType();
-		if(null != type){
-			return (SubAppType) type; 
-		}
-		return null;
+	public SubAppType getSubAppType() {
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSubAppType(this);
 	}
 
 	/**

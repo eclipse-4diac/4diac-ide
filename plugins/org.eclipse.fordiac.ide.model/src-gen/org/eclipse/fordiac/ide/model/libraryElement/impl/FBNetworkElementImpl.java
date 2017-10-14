@@ -284,13 +284,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	public Resource getResource() {
-		if(null != getFbNetwork() && getFbNetwork().eContainer() instanceof Resource){
-			return (Resource)getFbNetwork().eContainer();
-		} else if(isMapped()){
-			//get the Resource of the mapped FB
-			return getMapping().getTo().getResource();
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getResource(this);
 	}
 
 	/**
@@ -299,10 +293,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	public IInterfaceElement getInterfaceElement(final String name) {
-		if (getInterface() != null) {
-			return getInterface().getInterfaceElement(name);
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceElement(this, name);
 	}
 
 	/**
@@ -311,13 +302,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	public FBNetworkElement getOpposite() {
-		//try to find the other coresponding mapped entity if this FBNetworkElement is mapped
-		if(isMapped()){
-			return (this == getMapping().getFrom()) ? getMapping().getTo() : getMapping().getFrom();  
-		}else{
-			//TODO model refactoring - if element part of subapp that is mapped recursivly find the according mapped entity 
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getOpposite(this);
 	}
 
 	/**
@@ -326,9 +311,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	public FBNetwork getFbNetwork() {
-		//an FB should always be put in an fbNetwork this is at the same time also a null check
-		return (eContainer() instanceof FBNetwork) ? (FBNetwork)eContainer() : null;
-		
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFbNetwork(this);
 	}
 
 	/**
@@ -337,15 +320,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	public void checkConnections() {
-		for (IInterfaceElement element : getInterface().getAllInterfaceElements()) {
-			//todo when lambdas are better allowed in EMF replace with .forEach(conn -> conn.checkIfConnectionBroken());
-			for (org.eclipse.fordiac.ide.model.libraryElement.Connection conn : element.getInputConnections()) {
-				conn.checkIfConnectionBroken();
-			}
-			for (org.eclipse.fordiac.ide.model.libraryElement.Connection conn : element.getOutputConnections()) {
-				conn.checkIfConnectionBroken();
-			}
-		}
+		org.eclipse.fordiac.ide.model.Annotations.GEN.checkConnections(this);
 	}
 
 	/**
@@ -354,7 +329,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	public boolean isMapped() {
-		return null != getMapping();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isMapped(this);
 	}
 
 	/**

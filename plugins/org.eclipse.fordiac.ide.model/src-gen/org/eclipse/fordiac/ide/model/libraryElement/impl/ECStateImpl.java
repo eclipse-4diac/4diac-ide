@@ -305,10 +305,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * @generated
 	 */
 	public boolean isStartState() {
-		if(null != eContainer()){
-			return this.equals(((ECC)eContainer()).getStart());
-		}
-		return false;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isStartState(this);
 	}
 
 	/**

@@ -273,8 +273,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	public boolean isResourceConnection() {
-		//if source element is null it is a connection from a CFB interface element
-		return (null != getSourceElement() && null != getSourceElement().getFbNetwork()) ? (getSourceElement().getFbNetwork().eContainer() instanceof Resource) : false;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceConnection(this);
 	}
 
 	/**
@@ -283,7 +282,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	public FBNetwork getFBNetwork() {
-		return (FBNetwork)eContainer();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetwork(this);
 	}
 
 	/**
@@ -292,12 +291,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	public void checkIfConnectionBroken() {
-		if(!isResourceConnection()){
-			Resource sourceRes = (null != getSourceElement()) ? getSourceElement().getResource() : null;
-			Resource destinationRes = (null != getDestinationElement()) ? getDestinationElement().getResource() : null;
-			setBrokenConnection(((null != sourceRes) && (!sourceRes.equals(destinationRes))) ||
-			   ((null != destinationRes) && (!destinationRes.equals(sourceRes))));
-		}
+		org.eclipse.fordiac.ide.model.Annotations.GEN.checkifConnectionBroken(this);
 	}
 
 	/**
@@ -467,7 +461,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	public FBNetworkElement getSourceElement() {
-		return (null != getSource()) ? getSource().getFBNetworkElement() : null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSourceElement(this);
 	}
 
 	/**
@@ -476,7 +470,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	public FBNetworkElement getDestinationElement() {
-		return (null != getDestination()) ? getDestination().getFBNetworkElement() : null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDestinationElement(this);
 	}
 
 	/**

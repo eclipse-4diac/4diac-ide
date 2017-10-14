@@ -158,7 +158,7 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 	 * @generated
 	 */
 	public AutomationSystem getAutomationSystem() {
-		return (null != eContainer()) ? (AutomationSystem)eContainer() : null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
 	}
 
 	/**

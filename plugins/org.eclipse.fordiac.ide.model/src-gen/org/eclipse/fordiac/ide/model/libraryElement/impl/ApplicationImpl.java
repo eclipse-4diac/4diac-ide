@@ -221,7 +221,7 @@ public class ApplicationImpl extends I4DIACElementImpl implements Application {
 	 * @generated
 	 */
 	public AutomationSystem getAutomationSystem() {
-		return (AutomationSystem)eContainer();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
 	}
 
 	/**

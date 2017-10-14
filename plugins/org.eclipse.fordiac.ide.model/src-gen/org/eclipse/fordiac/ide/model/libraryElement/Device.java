@@ -99,7 +99,7 @@ public interface Device extends TypedConfigureableObject, PositionableElement, C
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getSystemConfiguration().getAutomationSystem();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);'"
 	 * @generated
 	 */
 	AutomationSystem getAutomationSystem();
@@ -108,7 +108,7 @@ public interface Device extends TypedConfigureableObject, PositionableElement, C
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return (org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration)eContainer();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getSystemConfiguration(this);'"
 	 * @generated
 	 */
 	SystemConfiguration getSystemConfiguration();
@@ -117,16 +117,16 @@ public interface Device extends TypedConfigureableObject, PositionableElement, C
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();\r\nif(null != type){\r\n\treturn (DeviceType) type; \r\n}\r\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getDeviceType(this);'"
 	 * @generated
 	 */
-	DeviceType getType();
+	DeviceType getDeviceType();
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (Resource res : getResource()) {\t\t\t\n\tif (res.getName().equals(name)) {\n\t\treturn res;\n\t}\n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getResourceNamed(this, name);'"
 	 * @generated
 	 */
 	Resource getResourceNamed(String name);

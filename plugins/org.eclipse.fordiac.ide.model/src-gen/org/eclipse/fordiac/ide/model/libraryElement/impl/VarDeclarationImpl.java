@@ -464,7 +464,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @generated
 	 */
 	public boolean isArray() {
-		return arraySize > 0;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isArray(this);
 	}
 
 	/**
@@ -473,7 +473,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @generated
 	 */
 	public FBNetworkElement getFBNetworkElement() {
-		return (eContainer() instanceof InterfaceList) ? ((InterfaceList)eContainer()).getFBNetworkElement() : null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);
 	}
 
 	/**

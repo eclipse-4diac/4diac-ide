@@ -59,9 +59,9 @@ public interface SubApp extends FBNetworkElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='LibraryElement type = super.getType();\nif(null != type){\n\treturn (SubAppType) type; \n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getSubAppType(this);'"
 	 * @generated
 	 */
-	SubAppType getType();
+	SubAppType getSubAppType();
 
 } // SubApp

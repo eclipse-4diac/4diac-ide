@@ -105,7 +105,7 @@ public class ToolTipFigure extends Figure {
 	private VarDeclaration getTypevariable(VarDeclaration var) {
 		if(var.eContainer() instanceof Device){
 			Device dev = (Device)var.eContainer();
-			for(VarDeclaration typeVar : dev.getType().getVarDeclaration()){
+			for(VarDeclaration typeVar : dev.getDeviceType().getVarDeclaration()){
 				if(typeVar.getName().equals(var.getName())){
 					return typeVar;
 				}

@@ -131,7 +131,7 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 	 * @generated
 	 */
 	public AutomationSystem getAutomationSystem() {
-		return (AutomationSystem)eContainer();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
 	}
 
 	/**
@@ -140,11 +140,7 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 	 * @generated
 	 */
 	public Segment getSegmentNamed(final String name) {
-		for (Segment segment : getSegments()) {
-			if (segment.getName().equals(name))
-				return segment;
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSegmentNamed(this, name);
 	}
 
 	/**
@@ -153,11 +149,7 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 	 * @generated
 	 */
 	public Device getDeviceNamed(final String name) {
-		for (Device device : getDevices()) {
-			if (device.getName().equals(name))
-				return device;
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDeviceNamed(this, name);
 	}
 
 	/**

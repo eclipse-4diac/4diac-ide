@@ -48,24 +48,20 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isResourceTypeFB() {
-		return false;
-	}
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FBType getType() {
-		LibraryElement type = super.getType();
-		if(null != type){
-			return (FBType) type; 
-		}
-		return null;
+	public FBType getFBType() {
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBType(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isResourceTypeFB() {
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceTypeFB(this);
 	}
 
 	/**
@@ -73,13 +69,7 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	 * @generated
 	 */
 	public boolean isResourceFB() {
-		//A fB is a resource FB if the FB is in the fbnetwork of a resource and
-		// the mapping is null or as preperation when we allow to map resource FBs 
-		//to applications when the mapping from is equal to the fb 
-		if(getFbNetwork().eContainer() instanceof Resource){
-			return (null == getMapping()) || (equals(getMapping().getFrom()));
-		}		
-		return false;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceFB(this);
 	}
 
 	@Override

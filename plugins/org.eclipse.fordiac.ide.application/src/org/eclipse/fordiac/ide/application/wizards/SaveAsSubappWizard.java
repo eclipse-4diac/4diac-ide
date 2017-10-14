@@ -273,8 +273,8 @@ public class SaveAsSubappWizard extends Wizard {
 	private void copyEventConnections(SubAppType type) {
 		FBNetwork srcNetwork = subApp.getSubAppNetwork();
 		for (EventConnection eCon : srcNetwork.getEventConnections()) {
-			Event src = getEventConTarget(eCon.getSource(), type);
-			Event dst = getEventConTarget(eCon.getDestination(), type);			
+			Event src = getEventConTarget(eCon.getEventSource(), type);
+			Event dst = getEventConTarget(eCon.getEventDestination(), type);			
 			createEventConnection(type.getFBNetwork(), src, dst, eCon);
 		}		
 	}
@@ -282,8 +282,8 @@ public class SaveAsSubappWizard extends Wizard {
 	private void copyDataConnections(SubAppType type) {
 		FBNetwork srcNetwork = subApp.getSubAppNetwork();
 		for (DataConnection dCon : srcNetwork.getDataConnections()) {
-			VarDeclaration src = getDataConTarget(dCon.getSource(), type);
-			VarDeclaration dst = getDataConTarget(dCon.getDestination(), type);			
+			VarDeclaration src = getDataConTarget(dCon.getDataSource(), type);
+			VarDeclaration dst = getDataConTarget(dCon.getDataDestination(), type);			
 			createDataConnection(type.getFBNetwork(), src, dst, dCon);
 		}
 	}	

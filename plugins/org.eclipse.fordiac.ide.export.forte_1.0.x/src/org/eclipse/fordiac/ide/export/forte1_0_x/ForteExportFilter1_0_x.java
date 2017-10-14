@@ -1759,8 +1759,8 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 					conSet.add(eConn);
 
-					Event src = eConn.getSource();
-					Event dst = eConn.getDestination();
+					Event src = eConn.getEventSource();
+					Event dst = eConn.getEventDestination();
 
 					INamedElement srcFB = (INamedElement) src.eContainer()
 							.eContainer();
@@ -1780,8 +1780,8 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 							eConn = (EventConnection)itRunner.next();
 							conSet.add(eConn);
 
-							src = eConn.getSource();
-							dst = eConn.getDestination();
+							src = eConn.getEventSource();
+							dst = eConn.getEventDestination();
 
 							srcFB = src.getFBNetworkElement();
 							dstFB = dst.getFBNetworkElement();
@@ -1869,8 +1869,8 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 					}
 					conSet.add(primConn);
 
-					VarDeclaration src = primConn.getSource();
-					VarDeclaration dst = primConn.getDestination();
+					VarDeclaration src = primConn.getDataSource();
+					VarDeclaration dst = primConn.getDataDestination();
 
 					if((null != src) && (null != dst)){
 						INamedElement srcFB = (INamedElement) src.eContainer()
@@ -1890,8 +1890,8 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 								if (!conSet.contains(itRunner)) {
 									conSet.add(dataConn);
 	
-									src = dataConn.getSource();
-									dst = dataConn.getDestination();
+									src = dataConn.getDataSource();
+									dst = dataConn.getDataDestination();
 	
 									srcFB = (INamedElement) src.eContainer()
 											.eContainer();

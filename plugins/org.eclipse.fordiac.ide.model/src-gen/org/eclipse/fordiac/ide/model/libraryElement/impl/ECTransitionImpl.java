@@ -275,22 +275,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * @generated
 	 */
 	public String getConditionText() {
-		String retVal = new String();
-		
-		Event event = getConditionEvent();
-		String expression = getConditionExpression();
-		
-		if(event != null){
-			retVal = event.getName();
-		}
-		if(expression !=  null){
-			if(expression.equals("1")){
-				retVal = expression;
-			}else if (!expression.equals("")){
-				retVal += "[" + expression + "]";
-			}
-		}		
-		return retVal;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getConditionText(this);
 	}
 
 	/**

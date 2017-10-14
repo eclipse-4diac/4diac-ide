@@ -143,7 +143,7 @@ public interface InterfaceList extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true" many="false"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='EList&lt;IInterfaceElement&gt; retVal = new BasicEList&lt;IInterfaceElement&gt;();\t\t\nretVal.addAll(getEventInputs());\nretVal.addAll(getEventOutputs());\nretVal.addAll(getInputVars());\nretVal.addAll(getOutputVars());\nretVal.addAll(getPlugs());\nretVal.addAll(getSockets());\nreturn retVal;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getAllInterfaceElements(this);'"
 	 * @generated
 	 */
 	EList<IInterfaceElement> getAllInterfaceElements();
@@ -152,7 +152,7 @@ public interface InterfaceList extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (Event event : getEventInputs()) {\n\tif (event.getName().equals(name))\r\n\treturn event;\r\n}\r\nfor (Event event : getEventOutputs()) {\r\n\tif (event.getName().equals(name))\r\n\t\treturn event;\r\n}\r\n\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getEvent(this, name);'"
 	 * @generated
 	 */
 	Event getEvent(String name);
@@ -161,7 +161,7 @@ public interface InterfaceList extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (VarDeclaration var : getInputVars()) {\r\n\tif (var.getName().equals(name))\r\n\t\treturn var;\r\n}\r\nfor (VarDeclaration var : getOutputVars()) {\r\n\tif (var.getName().equals(name))\r\n\t\treturn var;\r\n}\r\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getVariable(this, name);'"
 	 * @generated
 	 */
 	VarDeclaration getVariable(String name);
@@ -170,7 +170,7 @@ public interface InterfaceList extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='IInterfaceElement element = getEvent(name);\nif (element == null) {\n\telement = getVariable(name);\n}\nif (element == null) {\n\telement = getAdapter(name);\n}\nreturn element;\n'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceElement(this, name);'"
 	 * @generated
 	 */
 	IInterfaceElement getInterfaceElement(String name);
@@ -179,9 +179,17 @@ public interface InterfaceList extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//an FB should mostly in an FBNetworkElement otherwise it is in CFB interface this is at the same time also a null check\nreturn (eContainer() instanceof FBNetworkElement) ? (FBNetworkElement)eContainer() : null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);'"
 	 * @generated
 	 */
 	FBNetworkElement getFBNetworkElement();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getAdapter(this, name);'"
+	 * @generated
+	 */
+	AdapterDeclaration getAdapter(String name);
 
 } // InterfaceList

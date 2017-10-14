@@ -306,7 +306,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * @generated
 	 */
 	public AutomationSystem getAutomationSystem() {
-		AutomationSystem system = null; if(null != getDevice()){ system = getDevice().getAutomationSystem(); } return system;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
 	}
 
 	/**

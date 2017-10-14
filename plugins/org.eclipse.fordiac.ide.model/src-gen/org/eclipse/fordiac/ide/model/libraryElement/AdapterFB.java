@@ -66,7 +66,7 @@ public interface AdapterFB extends FB {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return !getAdapterDecl().isIsInput();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isPlug(this);'"
 	 * @generated
 	 */
 	boolean isPlug();
@@ -75,7 +75,7 @@ public interface AdapterFB extends FB {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return !isPlug();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isSocket(this);'"
 	 * @generated
 	 */
 	boolean isSocket();
@@ -84,7 +84,7 @@ public interface AdapterFB extends FB {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='FBType retVal = null;\n\nif (null != getPaletteEntry()) {\n\tif (getPaletteEntry() instanceof AdapterTypePaletteEntry) {\n\t\tif (isPlug()) {\n\t\t\tretVal = ((AdapterTypePaletteEntry) getPaletteEntry())\n\t\t\t\t\t.getAdapterType().getPlugType();\n\t\t} else {\n\t\t\tretVal = ((AdapterTypePaletteEntry) getPaletteEntry())\n\t\t\t\t\t.getAdapterType().getSocketType();\n\t\t}\n\t}\n}\nreturn retVal;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getType(this);'"
 	 * @generated
 	 */
 	FBType getType();

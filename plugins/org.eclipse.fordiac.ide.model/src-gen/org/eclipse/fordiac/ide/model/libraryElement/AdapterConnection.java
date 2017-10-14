@@ -26,28 +26,20 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 public interface AdapterConnection extends Connection {
 	/**
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Source</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return (AdapterDeclaration)super.getSource();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getAdapterSource(this);'"
 	 * @generated
 	 */
-	AdapterDeclaration getSource();
+	AdapterDeclaration getAdapterSource();
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Destination</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return (AdapterDeclaration)super.getDestination();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getAdapterDestination(this);'"
 	 * @generated
 	 */
-	AdapterDeclaration getDestination();
+	AdapterDeclaration getAdapterDestination();
 
 } // AdapterConnection

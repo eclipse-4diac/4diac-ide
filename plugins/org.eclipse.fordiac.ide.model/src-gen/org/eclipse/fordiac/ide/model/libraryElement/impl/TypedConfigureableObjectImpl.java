@@ -108,7 +108,7 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	 * @generated
 	 */
 	public String getTypeName() {
-		return getPaletteEntry().getLabel();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getTypeName(this);
 	}
 
 	/**
@@ -117,10 +117,7 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	 * @generated
 	 */
 	public LibraryElement getType() {
-		if(null != getPaletteEntry()){
-			return getPaletteEntry().getType();
-		}		
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getType(this);
 	}
 
 	/**

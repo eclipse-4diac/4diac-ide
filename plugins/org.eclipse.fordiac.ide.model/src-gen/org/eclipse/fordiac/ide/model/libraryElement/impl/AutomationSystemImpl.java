@@ -302,10 +302,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	 * @generated
 	 */
 	public Device getDeviceNamed(final String name) {
-		if (getSystemConfiguration() != null) {
-			return getSystemConfiguration().getDeviceNamed(name);
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDeviceNamed(this, name);
 	}
 
 	/**
@@ -314,12 +311,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	 * @generated
 	 */
 	public Application getApplicationNamed(final String name) {
-		for(Application app : getApplication()){
-			if (app.getName().equals(name)) {
-				return app;
-			}
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getApplicationNamed(this, name);
 	}
 
 	/**

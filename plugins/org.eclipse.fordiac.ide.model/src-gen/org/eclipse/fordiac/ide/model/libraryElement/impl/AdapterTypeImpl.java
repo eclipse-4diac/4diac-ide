@@ -75,7 +75,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	public InterfaceList getInterfaceList() {
-		return getAdapterFBType().getInterfaceList();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceList(this);
 	}
 
 	/**
@@ -105,36 +105,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	public AdapterFBType getPlugType() {
-				AdapterFBType temp = (AdapterFBType)EcoreUtil.copy(getAdapterFBType());
-				// fetch the interface to invert it; 
-				ArrayList<Event> inputEvents =  new ArrayList<Event>(temp.getInterfaceList().getEventOutputs());
-				for (Event event : inputEvents) {
-					event.setIsInput(true);
-				}
-				ArrayList<Event> outputEvents =  new ArrayList<Event>(temp.getInterfaceList().getEventInputs());
-				for (Event event : outputEvents) {
-					event.setIsInput(false);
-				}
-				ArrayList<VarDeclaration> inputVars =  new ArrayList<VarDeclaration>(temp.getInterfaceList().getOutputVars());
-				for (VarDeclaration varDecl : inputVars) {
-					varDecl.setIsInput(true);
-				}
-				ArrayList<VarDeclaration> outputVars =  new ArrayList<VarDeclaration>(temp.getInterfaceList().getInputVars());
-				for (VarDeclaration varDecl : outputVars) {
-					varDecl.setIsInput(false);
-				}
-				
-				temp.getInterfaceList().getEventInputs().clear();
-				temp.getInterfaceList().getEventOutputs().clear();
-				temp.getInterfaceList().getInputVars().clear();
-				temp.getInterfaceList().getOutputVars().clear();
-				
-				temp.getInterfaceList().getEventInputs().addAll(inputEvents);
-				temp.getInterfaceList().getEventOutputs().addAll(outputEvents);
-				temp.getInterfaceList().getInputVars().addAll(inputVars);
-				temp.getInterfaceList().getOutputVars().addAll(outputVars);
-				
-				return temp;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getPlugType(this);
 	}
 
 	/**
@@ -143,7 +114,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	public AdapterFBType getSocketType() {
-		return (AdapterFBType)EcoreUtil.copy(getAdapterFBType());
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSocketType(this);
 	}
 
 	/**

@@ -128,7 +128,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * @generated
 	 */
 	public boolean isPlug() {
-		return !getAdapterDecl().isIsInput();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isPlug(this);
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * @generated
 	 */
 	public boolean isSocket() {
-		return !isPlug();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isSocket(this);
 	}
 
 	/**
@@ -175,20 +175,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * @generated
 	 */
 	public FBType getType() {
-		FBType retVal = null;
-		
-		if (null != getPaletteEntry()) {
-			if (getPaletteEntry() instanceof AdapterTypePaletteEntry) {
-				if (isPlug()) {
-					retVal = ((AdapterTypePaletteEntry) getPaletteEntry())
-							.getAdapterType().getPlugType();
-				} else {
-					retVal = ((AdapterTypePaletteEntry) getPaletteEntry())
-							.getAdapterType().getSocketType();
-				}
-			}
-		}
-		return retVal;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getType(this);
 	}
 
 	/**

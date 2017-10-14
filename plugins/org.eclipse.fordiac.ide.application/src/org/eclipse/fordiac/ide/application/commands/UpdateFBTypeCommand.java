@@ -232,7 +232,7 @@ public class UpdateFBTypeCommand extends Command {
 
 	private FB copyFB(FB srcFB) {
 		FB copiedFB = createCopiedFBEntry(srcFB);
-		copiedFB.setInterface(EcoreUtil.copy(copiedFB.getType().getInterfaceList()));
+		copiedFB.setInterface(EcoreUtil.copy(copiedFB.getFBType().getInterfaceList()));
 		copiedFB.setName(srcFB.getName());
 
 		// Fix for similar issue as reported in [issue#933] CompositeEditor - setting constant values not possible

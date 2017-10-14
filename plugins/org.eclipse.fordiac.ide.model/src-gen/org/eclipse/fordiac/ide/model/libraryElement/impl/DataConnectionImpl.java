@@ -49,8 +49,8 @@ public class DataConnectionImpl extends ConnectionImpl implements DataConnection
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VarDeclaration getSource() {
-		return (VarDeclaration)super.getSource();
+	public VarDeclaration getDataSource() {
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDataSource(this);
 	}
 
 	/**
@@ -58,8 +58,8 @@ public class DataConnectionImpl extends ConnectionImpl implements DataConnection
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VarDeclaration getDestination() {
-		return (VarDeclaration)super.getDestination();
+	public VarDeclaration getDataDestination() {
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDataDestination(this);
 	}
 
 } //DataConnectionImpl

@@ -336,7 +336,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @generated
 	 */
 	public AutomationSystem getAutomationSystem() {
-		return getSystemConfiguration().getAutomationSystem();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
 	}
 
 	/**
@@ -345,7 +345,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @generated
 	 */
 	public SystemConfiguration getSystemConfiguration() {
-		return (org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration)eContainer();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSystemConfiguration(this);
 	}
 
 	/**
@@ -353,12 +353,8 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DeviceType getType() {
-		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
-		if(null != type){
-			return (DeviceType) type; 
-		}
-		return null;
+	public DeviceType getDeviceType() {
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDeviceType(this);
 	}
 
 	/**
@@ -367,12 +363,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @generated
 	 */
 	public Resource getResourceNamed(final String name) {
-		for (Resource res : getResource()) {			
-			if (res.getName().equals(name)) {
-				return res;
-			}
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getResourceNamed(this, name);
 	}
 
 	/**
