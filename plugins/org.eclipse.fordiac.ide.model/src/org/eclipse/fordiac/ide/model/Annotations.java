@@ -450,14 +450,7 @@ public enum Annotations {
 	
 	//*** ConfigurabeleObject ***//
 	public void setAttribute(ConfigurableObject object, final String attributeName, final String value, final String comment) {
-		Attribute attribute = null;
-		// find already existing parameter with parameterName
-		for (Attribute attr : object.getAttributes()) {
-			if (attr.getName().equalsIgnoreCase(attributeName)) {
-				attribute = attr;
-				break;
-			}
-		}
+		Attribute attribute = getAttribute(object, attributeName);
 		if (attribute == null) {
 			attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 			attribute.setName(attributeName);
@@ -469,18 +462,26 @@ public enum Annotations {
 		}
 	}
 	
-	public String getAttribute(ConfigurableObject object, final String attributeName) {
+	public String getAttributeValue(ConfigurableObject object, final String attributeName) {
+		Attribute a = getAttribute(object, attributeName);
+		if(null != a){
+			return a.getValue();
+		}
+		return null;
+	}
+
+	public Attribute getAttribute(ConfigurableObject object, final String attributeName) {
 		if (attributeName == null) {
 			return null;
 		}
 		for (Attribute attribute : object.getAttributes()) {
 			if (attribute.getName().equalsIgnoreCase(attributeName)) {
-				return attribute.getValue();
+				return attribute;
 			}
 		}
 		return null;
 	}
-
+	
 	//*** DataConnection ***//
 	public VarDeclaration getDataSource(DataConnection dc) {
 		return (VarDeclaration)dc.getSource();

@@ -59,10 +59,19 @@ public interface ConfigurableObject extends INamedElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getAttribute(this, attributeName);'"
 	 * @generated
 	 */
-	String getAttribute(String attributeName);
+	Attribute getAttribute(String attributeName);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getAttributeValue(this, attributeName);'"
+	 * @generated
+	 */
+	String getAttributeValue(String attributeName);
 
 } // ConfigurableObject
