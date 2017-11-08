@@ -37,12 +37,12 @@
           </topic>
           <topic href="html/installation/cygwin.html" label="Windows - Cygwin compiler">
           </topic>
-          <topic href="html/installation/minGW.html" label="Windows - MinGW compiler">
+          <topic href="html/installation/minGW.html" label="Windows - MinGW-w64 compiler">
           </topic>
         </topic>
         <topic label="FORTE for RaspberryPi" href="html/installation/raspi.html">
         </topic>
-        <topic href="html/installation/raspberrySPS.html" label="FORTE for RaspberryPi">
+        <topic href="html/installation/raspberrySPS.html" label="FORTE for RaspberryPi-SPS">
         </topic>
         <topic label="FORTE for lego Mindstorms EV3" href="html/installation/legoMindstormEv3.html"/>
         <topic label="FORTE for lego Mindstorms" href="html/installation/mindstorms.html"/>
