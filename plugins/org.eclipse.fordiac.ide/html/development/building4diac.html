@@ -52,19 +52,12 @@ In addition to the default Modeling Tool package you will need the following Ecl
 </ul>
 
 <h3 id="checkOutRepos">Check out the 4DIAC-IDE Repository</h3>
-<p>This section shows how to check out (clone) the 4DIAC-IDE repository using TortoiseHG. Details on TortoiseHG can be found <a href="http://tortoisehg.bitbucket.org/" target="_blank">here</a>.</p>
+<p>This section shows how to check out (clone) the 4DIAC-IDE repository. You will need <a href="https://git-scm.com/downloads" target="_blank">Git</a> to download it by using the <span class="inlineCode">clone</span> command from Git to the repository <span class="address"> https://git.eclipse.org/r/4diac/org.eclipse.4diac.ide</span>. If you're using the terminal, do:</p>
 
-<ul>
-	<li>Create a directory on your filesystem </li>
-	<li>Right mouse click to that directory </li>
-	<li>Select <span class="menu4diac">TortoiseHG/Clone</span>
-		<div><img src="./img/cloneHG.png" alt="Clone 4DIAC with TortoiseHG"/></div>
-	</li>
-	<li>Specify Source Path <span class="address">ssh://[your sf id]@hg.code.sf.net/p/fordiac/fordiac-ide</span> (for anonymous read only access to the repository you can also use the path: <span class="address">http://hg.code.sf.net/p/fordiac/fordiac-ide)</span>
-		<div><img src="./img/selectHGrepository.png" alt="Select desired HG repository"/></div>
-	</li>
-	<li>Press <span class="button4diac">Clone</span> button</li>
-</ul> 
+<div class="code">$ cd ~ 
+$ git clone https://git.eclipse.org/r/4diac/org.eclipse.4diac.ide</div>
+
+<p>The code will be copied to the new created folder ~/org.eclipse.4diac.ide.</p>
 
 <h3 id="importPlugins">Import Plug-Ins into Workspace</h3>
 <ol>
@@ -143,7 +136,7 @@ In addition to the default Modeling Tool package you will need the following Ecl
 
 <h3 id="buildingIDE">Building your own IDE</h3>
 
-<p>A big drawback for running 4DIAC-IDE from source is that you need at least 2 Eclipse instances running. Especially on systems with little memory this can be an issue. If you still want to keep up with the with the developments performed in the Mercurial repository it makes sense to build a binary package. See <a href="#buildBinary">Building a binary 4DIAC-IDE package from source</a> for details on how this can be achieved.</p>
+<p>A big drawback for running 4DIAC-IDE from source is that you need at least 2 Eclipse instances running. Especially on systems with little memory this can be an issue. If you still want to keep up with the developments performed in the Git repository it makes sense to build a binary package. See <a href="#buildBinary">Building a binary 4DIAC-IDE package from source</a> for details on how this can be achieved.</p>
 
 <p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 
