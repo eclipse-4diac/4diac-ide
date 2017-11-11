@@ -26,9 +26,9 @@
    <topic label="Installation" href="html/installation/install.html"> 
         <topic href="html/installation/install.html#4DIAC-IDE" label="Installing 4DIAC">
         </topic>
-        <topic href="html/installation/install.html#precompiledFORTE" label="Precompiled FORTE">
+        <topic href="html/installation/install.html#precompiledFORTE" label="Pre-compiled FORTE">
         </topic>
-        <topic href="html/installation/install.html#ownFORTE" label="Biuld your FB in FORTE">
+        <topic href="html/installation/install.html#ownFORTE" label="Build your FB in FORTE">
         </topic>
         <topic href="html/installation/install.html#FORTEWindowsUnix" label="FORTE for Windows and Unix based systems">
           <topic href="html/installation/visualStudio.html" label="Use Visual Studio">
@@ -44,8 +44,8 @@
         </topic>
         <topic href="html/installation/raspberrySPS.html" label="FORTE for RaspberryPi-SPS">
         </topic>
-        <topic label="FORTE for lego Mindstorms EV3" href="html/installation/legoMindstormEv3.html"/>
-        <topic label="FORTE for lego Mindstorms" href="html/installation/mindstorms.html"/>
+        <topic label="FORTE for Lego Mindstorms EV3" href="html/installation/legoMindstormEv3.html"/>
+        <topic label="FORTE for Lego Mindstorms" href="html/installation/mindstorms.html"/>
         <topic label="FORTE for WagoPFCs" href="html/installation/wago.html"/>
     </topic>
 	
@@ -114,7 +114,7 @@
          <topic href="html/4diacIDE/createOwnTypes.html#testFunctionBlock" label="Test a Function Block">
          </topic>
       </topic>
-      <topic label="Step 5 - Lear more" href="html/4diacIDE/otherUseful.html">
+      <topic label="Step 5 - Learn more" href="html/4diacIDE/otherUseful.html">
       <topic label="Import an existing System" href="html/4diacIDE/otherUseful.html#ImportSystem"/>
       <topic label="Import an existing Type" href="html/4diacIDE/otherUseful.html#ImportType"/>
       <topic label="Virtual DNS Functionality" href="html/4diacIDE/otherUseful.html#VirtualDNS"/>
@@ -152,7 +152,7 @@
       </topic>
       <topic href="html/parameters/parameters.html#umic" label="uMIC">
       </topic>
-      <topic href="html/parameters/parameters.html#mlpi" label="MLPI (Boschrexroth PLC)">
+      <topic href="html/parameters/parameters.html#mlpi" label="MLPI (Bosch Rexroth PLC)">
       </topic>
       <topic href="html/parameters/parameters.html#ev3" label="Lego Mindstorm EV3">
       </topic>

@@ -64,7 +64,9 @@
    	
    	<extensionContent id="fordiac-news" style="css/style.css" name="Whats New Extension" path="whatsnew/@">
         <group style-id="content-group" id="news-web" label="4DIAC News">
-            <contentProvider id="url=http://sourceforge.net/p/fordiac/news/feed.rss##welcome_items=10##no_news_url=https://sourceforge.net/p/fordiac/news/?source=navbar##no_news_text=Welcome to the 4DIAC news page" pluginId="org.eclipse.ui.intro" class="org.eclipse.ui.intro.contentproviders.EclipseRSSViewer">
+            <contentProvider id="url=https://www.eclipse.org/4diac/feed/##welcome_items=10##no_news_url=https://www.eclipse.org/4diac/en_news.php##no_news_text=Welcome to the 4DIAC news page" 
+            pluginId="org.eclipse.ui.intro" 
+            class="org.eclipse.ui.intro.contentproviders.EclipseRSSViewer">
             </contentProvider>
         </group>
     </extensionContent>
