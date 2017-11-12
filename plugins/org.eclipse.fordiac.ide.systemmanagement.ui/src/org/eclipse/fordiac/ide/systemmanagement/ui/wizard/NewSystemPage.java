@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
 import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -78,7 +79,11 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 		if (!IdentifierVerifyer.isValidIdentifier(getProjectName())) {
 			setErrorMessage(Messages.SystemNameNotValid);
 			return false;
-		}		
+		}	
+		if(SystemManager.isUniqueSystemName(getProjectName())) {
+			setErrorMessage(Messages.SystemNameAlreadyUsed);
+			return false;
+		}
 		return super.validatePage();
 	}
 

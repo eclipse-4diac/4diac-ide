@@ -41,7 +41,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
@@ -435,34 +434,9 @@ public enum SystemManager {
 	}
 
 	/**
-	 * Checks if is valid app name.
-	 * 
-	 * @param appNameProposal the proposed new name for the application
-	 * @param selectedSystem
-	 *            the selected system
-	 * 
-	 * @return true, if is valid app name
-	 */
-	public static boolean isValidAppName(final String appNameProposal, final AutomationSystem selectedSystem) {
-		if(!IdentifierVerifyer.isValidIdentifier(appNameProposal)){
-			return false;
-		}
-		for (Application app : selectedSystem.getApplication()){
-			if (appNameProposal.equalsIgnoreCase(app.getName())) {
-				return false;
-			}
-		}
-		if (selectedSystem.getName().equals(appNameProposal)) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
 	 * Gets the project handle.
 	 * 
-	 * @param name
-	 *            the name
+	 * @param name the name
 	 * 
 	 * @return the project handle
 	 */
@@ -473,14 +447,13 @@ public enum SystemManager {
 	/**
 	 * returns a unique/valid name for a system.
 	 * 
-	 * @param name
-	 *            the name
+	 * @param name the name
 	 * 
 	 * @return a unique/valid system name
 	 */
-	public static String getValidSystemName(final String name) {
+	private static String getValidSystemName(final String name) {
 
-		if (INSTANCE.getSystemForName(name) == null && !getProjectHandle(name).exists()) {
+		if (isUniqueSystemName(name)) {
 			return name;
 		} else {
 			int i = 1;
@@ -491,6 +464,10 @@ public enum SystemManager {
 			}
 			return temp;
 		}
+	}
+	
+	public static boolean isUniqueSystemName(final String name) {
+		return (INSTANCE.getSystemForName(name) == null && !getProjectHandle(name).exists());
 	}
 
 	public ITagProvider getTagProvider(Class<?> class1, AutomationSystem system) {

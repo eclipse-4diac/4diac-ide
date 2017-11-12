@@ -43,28 +43,11 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 	/** The page. */
 	NewSystemPage page;
 
-	private String projectName;
-
-	private boolean defaultPalette = true;
-
-	private boolean useWizard = true;
-
 	/**
 	 * Instantiates a new new system wizard.
 	 */
 	public NewSystemWizard() {
 		setWindowTitle(Messages.NewSystemWizard_WizardName);
-	}
-
-	/**
-	 * Instantiates a new new system wizard.
-	 */
-	public NewSystemWizard(String projectName, boolean defaultPalette,
-			boolean open) {
-		setWindowTitle(Messages.NewSystemWizard_WizardName);
-		this.projectName = projectName;
-		this.defaultPalette = defaultPalette;
-		this.useWizard = false;
 	}
 
 	/*
@@ -121,20 +104,9 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 		try {
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
-			String projectName = ""; //$NON-NLS-1$
-			boolean defaultPalette = true;
-			IPath location = null;
-
-			if (useWizard) {
-				projectName = page.getProjectName();
-				defaultPalette = page.importDefaultPalette();
-				location = page.getLocationPath();
-			} else {
-				projectName = this.projectName;
-				defaultPalette = this.defaultPalette;
-				location = Platform.getLocation();
-				projectName = SystemManager.getValidSystemName(projectName);
-			}
+			String projectName = page.getProjectName(); 
+			boolean defaultPalette = page.importDefaultPalette();
+			IPath location = page.getLocationPath();
 
 			IProject project = root.getProject(projectName);
 			IProjectDescription description = ResourcesPlugin.getWorkspace()
