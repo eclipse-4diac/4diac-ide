@@ -115,7 +115,7 @@
       </viewerContentBinding>
       <dragAssistant
             class="org.eclipse.fordiac.ide.typemanagement.FBTypeDragAssistant"
-            viewerId="org.eclipse.fordiac.ide.fbpaletteviewer">
+            viewerId="org.eclipse.fordiac.ide.compositefbpaletteviewer">
       </dragAssistant>
    </extension>
    <extension
