@@ -80,7 +80,7 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 			setErrorMessage(Messages.SystemNameNotValid);
 			return false;
 		}	
-		if(SystemManager.isUniqueSystemName(getProjectName())) {
+		if(!SystemManager.isUniqueSystemName(getProjectName())) {
 			setErrorMessage(Messages.SystemNameAlreadyUsed);
 			return false;
 		}
