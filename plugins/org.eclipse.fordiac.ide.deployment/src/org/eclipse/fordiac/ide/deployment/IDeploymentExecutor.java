@@ -19,10 +19,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteDeviceParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -112,7 +109,7 @@ public interface IDeploymentExecutor {
 	 * @throws CreateFBInstanceException
 	 *           the create fb instance exception
 	 */
-	public void createFBInstance(FB fb, Resource res)
+	public void createFBInstance(FBDeploymentData fb, Resource res)
 			throws CreateFBInstanceException;
 
 	/**
@@ -130,7 +127,7 @@ public interface IDeploymentExecutor {
 	 * @throws WriteFBParameterException
 	 *           the write fb parameter exception
 	 */
-	public void writeFBParameter(Resource resource, String value, FB fb,
+	public void writeFBParameter(Resource resource, String value, FBDeploymentData fb,
 			VarDeclaration varDecl) throws WriteFBParameterException;
 
 	/**
@@ -138,13 +135,12 @@ public interface IDeploymentExecutor {
 	 * 
 	 * @param res
 	 *          the res
-	 * @param con
-	 *          the connnection to be deployed
+	 * @param connectionData information on the connection to create
 	 * 
 	 * @throws CreateConnectionException
 	 *           the create connection exception
 	 */
-	public void createConnection(Resource res, IInterfaceElement source,  IInterfaceElement destination) throws CreateConnectionException;
+	public void createConnection(Resource res, ConnectionDeploymentData connectionData) throws CreateConnectionException;
 
 	/**
 	 * Start FB Instance.
@@ -154,7 +150,7 @@ public interface IDeploymentExecutor {
 	 * 
 	 * @throws StartException the start exception
 	 */
-	public void startFB(Resource res, FB fb) throws StartException;
+	public void startFB(Resource res, FBDeploymentData fb) throws StartException;
 
 	/**
 	 * Start resource.
@@ -199,7 +195,7 @@ public interface IDeploymentExecutor {
 	 * 
 	 * @throws Exception the exception
 	 */
-	public void deleteFB(Resource res, FB fb) throws Exception;
+	public void deleteFB(Resource res, FBDeploymentData fb) throws Exception;
 
 	/**
 	 * Delete connection.
@@ -209,7 +205,7 @@ public interface IDeploymentExecutor {
 	 * 
 	 * @throws Exception the exception
 	 */
-	public void deleteConnection(Resource res, Connection con) throws Exception;
+	public void deleteConnection(Resource res, ConnectionDeploymentData con) throws Exception;
 
 	/**
 	 * Clear device.

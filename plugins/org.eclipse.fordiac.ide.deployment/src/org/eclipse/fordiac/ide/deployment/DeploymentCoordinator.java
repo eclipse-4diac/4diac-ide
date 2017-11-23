@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterExcep
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -238,7 +237,7 @@ public class DeploymentCoordinator {
 			int retVal = devices.size() + resources.size();
 			for (ResourceDeploymentData resDepData : resources) {
 				retVal += countResourceParams(resDepData.res);
-				retVal += resDepData.fbs.size() + resDepData.connections.size() + resDepData.subAppInterfaceCrossingConns.size();
+				retVal += resDepData.fbs.size() + resDepData.connections.size();
 				//TODO count variables of Fbs
 			}
 			return retVal;
@@ -275,7 +274,6 @@ public class DeploymentCoordinator {
 
 				createFBInstance(resDepData, executor, monitor);				
 				deployConnections(resDepData, executor, monitor);
-				deploySubAppIfCrossingConnections(resDepData, executor, monitor);
 
 				if (!devices.contains(res.getDevice())) {
 					executor.startResource(res);
@@ -315,40 +313,28 @@ public class DeploymentCoordinator {
 		}
 
 		private void deployConnections(final ResourceDeploymentData resDepData, final IDeploymentExecutor executor,  IProgressMonitor monitor) throws CreateConnectionException {
-			for (Connection con : resDepData.connections) {
+			for (ConnectionDeploymentData con : resDepData.connections) {
 				//TODO model refactoring - if one connection endpoint is part of resource find inner endpoint  
-				if (!con.isResTypeConnection()) {
-					executor.createConnection(resDepData.res, con.getSource(), con.getDestination());
-					monitor.worked(1);
-				}
-				if(monitor.isCanceled()){
-					break;
-				}
-			}
-		}
-		
-		private void deploySubAppIfCrossingConnections(final ResourceDeploymentData resDepData, final IDeploymentExecutor executor,  IProgressMonitor monitor) throws CreateConnectionException {
-			for (ResourceDeploymentData.SubAppInterfaceCrossingConnection subAppIfCrossignConn : resDepData.subAppInterfaceCrossingConns) {
-				executor.createConnection(resDepData.res, subAppIfCrossignConn.source, subAppIfCrossignConn.destination);
+				executor.createConnection(resDepData.res, con);
 				monitor.worked(1);
 				if(monitor.isCanceled()){
 					break;
 				}
 			}
 		}
-
+		
 		private void createFBInstance(final ResourceDeploymentData resDepData, final IDeploymentExecutor executor,
 				final IProgressMonitor monitor)
 				throws CreateFBInstanceException, WriteFBParameterException {
 			Resource res = resDepData.res;
-			for (FB fb : resDepData.fbs) {
-				if(!fb.isResourceTypeFB()){
+			for (FBDeploymentData fb : resDepData.fbs) {
+				if(!fb.fb.isResourceTypeFB()){
 					executor.createFBInstance(fb, res);
 					monitor.worked(1);
-					InterfaceList interfaceList = fb.getInterface();
+					InterfaceList interfaceList = fb.fb.getInterface();
 					if (interfaceList != null) {
 						for (VarDeclaration varDecl : interfaceList.getInputVars()) {
-							String val = getVariableValue(varDecl, res.getAutomationSystem(), fb);
+							String val = getVariableValue(varDecl, res.getAutomationSystem(), fb.fb);
 							if(null != val){
 								executor.writeFBParameter(res, val, fb, varDecl);
 								monitor.worked(1);

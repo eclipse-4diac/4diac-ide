@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.onlineedit.handlers;
 
+import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.IDeploymentExecutor;
 
 public class OnlineStartFBHandler extends AbstractOnlineFBHandler {
@@ -19,7 +20,7 @@ public class OnlineStartFBHandler extends AbstractOnlineFBHandler {
 	@Override
 	protected void executeCommand(IDeploymentExecutor executor) throws Exception {
 		try {
-			executor.startFB(resource, resFB);
+			executor.startFB(resource, new FBDeploymentData("", resFB)); //$NON-NLS-1$  //TODO correctly determine prefix
 		} catch (Exception e) {
 			throw e;
 		}

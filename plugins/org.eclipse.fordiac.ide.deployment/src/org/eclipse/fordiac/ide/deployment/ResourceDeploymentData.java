@@ -17,7 +17,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
@@ -28,60 +27,50 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
  */
 class ResourceDeploymentData {
 	
-	class SubAppInterfaceCrossingConnection{
-		public IInterfaceElement source;
-		public IInterfaceElement destination;
-	}
-	
 	public final Resource res;
 
-	public List<FB> fbs = new ArrayList<>();
+	public List<FBDeploymentData> fbs = new ArrayList<>();
 	
-	public List<Connection> connections = new ArrayList<>();
-	
-	public List<SubAppInterfaceCrossingConnection> subAppInterfaceCrossingConns = new ArrayList<>();
-	
+	public List<ConnectionDeploymentData> connections = new ArrayList<>();
+		
 	public ResourceDeploymentData(final Resource res){
 		this.res = res;
-		addFBNetworkElements(res.getFBNetwork());
+		addFBNetworkElements(res.getFBNetwork(), ""); //$NON-NLS-1$
 	}
 	
-	private void addFBNetworkElements(FBNetwork fbNetwork) {
+	private void addFBNetworkElements(FBNetwork fbNetwork, String prefix) {
 		for (FBNetworkElement fbnElement : fbNetwork.getNetworkElements()) {
 			if(fbnElement instanceof FB){
-				fbs.add((FB)fbnElement);
+				fbs.add(new FBDeploymentData(prefix, (FB)fbnElement));
 			}else if(fbnElement instanceof SubApp){
 				//TODO get inner subapp element and recursivly go through the elemetns in it
 			}
 		}
 		for (Connection con : fbNetwork.getEventConnections()) {
-			addConnection(con);
+			addConnection(con, prefix);
 		}
 		for (Connection con : fbNetwork.getDataConnections()) {
-			addConnection(con);
+			addConnection(con, prefix);
 		}
 		for (Connection con : fbNetwork.getAdapterConnections()) {
-			addConnection(con);
+			addConnection(con, prefix);
 		}
 		
 	}
 	
-	private void addConnection(Connection con){
+	private void addConnection(Connection con, String prefix){
 		//TODO for typed subapps we may have to check also for null
 		if(con.getSourceElement() instanceof SubApp){
 			//we don't need to do anything here as we area always creating subapp interface crossing connections from source to dest
 		} else if(con.getSourceElement() instanceof SubApp){
 			//TODO model refactoring find the non sub app endpoint for this connection
 		} else{
-			connections.add(con);
+			if (!con.isResTypeConnection()) {
+				connections.add(new ConnectionDeploymentData(prefix, con.getSource(), prefix, con.getDestination()));
+			}
 		}
 	}
 
-	private void addSubAppInterfaceCrossingConnection(IInterfaceElement source, IInterfaceElement destination){
-		SubAppInterfaceCrossingConnection con = new SubAppInterfaceCrossingConnection();
-		con.source = source;
-		con.destination = destination;
-		subAppInterfaceCrossingConns.add(con);
-	}
+
 	
 }

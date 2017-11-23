@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBInstanceException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBTypeException;
 import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
@@ -45,14 +46,14 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 	}
 
 	@Override
-	public void createFBInstance(final FB fb, final Resource res) throws CreateFBInstanceException {
+	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws CreateFBInstanceException {
 		// check first if FBType exists
-		HashMap<String, AdapterType> adapters = getAdapterTypes(fb.getFBType().getInterfaceList());
+		HashMap<String, AdapterType> adapters = getAdapterTypes(fbData.fb.getFBType().getInterfaceList());
 		if (!adapters.isEmpty()) {
 			queryAdapterTypes(adapters, res);
 		}
-		queryFBTypes(fb, res);
-		super.createFBInstance(fb, res);
+		queryFBTypes(fbData.fb, res);
+		super.createFBInstance(fbData, res);
 	}
 
 	private HashMap<String, AdapterType> getAdapterTypes(InterfaceList interfaceList) {
