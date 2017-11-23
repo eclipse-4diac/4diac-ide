@@ -379,13 +379,13 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" eType="#//Mapping"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SubApp" eSuperTypes="#//FBNetworkElement">
-    <eOperations name="getSubAppType" lowerBound="1" eType="#//SubAppType">
+    <eOperations name="getType" lowerBound="1" eType="#//SubAppType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getSubAppType(this);"/>
+        <details key="body" value="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;LibraryElement type = super.getType();&#xD;&#xA;if(null != type){&#xD;&#xA;   return (SubAppType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="subAppNetwork" lowerBound="1"
-        eType="#//FBNetwork" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subAppNetwork" eType="#//FBNetwork"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FBType" eSuperTypes="#//CompilableType">
     <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceList" lowerBound="1"

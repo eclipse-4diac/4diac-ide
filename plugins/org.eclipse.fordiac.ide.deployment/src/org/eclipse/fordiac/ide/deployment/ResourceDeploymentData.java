@@ -10,7 +10,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -35,15 +37,23 @@ class ResourceDeploymentData {
 		
 	public ResourceDeploymentData(final Resource res){
 		this.res = res;
-		addFBNetworkElements(res.getFBNetwork(), ""); //$NON-NLS-1$
+		Deque<FBNetwork> fbNetworkhierachy = new ArrayDeque<>();
+		fbNetworkhierachy.add(res.getFBNetwork());
+		addFBNetworkElements(fbNetworkhierachy, ""); //$NON-NLS-1$
 	}
 	
-	private void addFBNetworkElements(FBNetwork fbNetwork, String prefix) {
+	private void addFBNetworkElements(Deque<FBNetwork> fbNetworkHierarchy, String prefix) {
+		FBNetwork fbNetwork = fbNetworkHierarchy.peekLast();
 		for (FBNetworkElement fbnElement : fbNetwork.getNetworkElements()) {
 			if(fbnElement instanceof FB){
 				fbs.add(new FBDeploymentData(prefix, (FB)fbnElement));
 			}else if(fbnElement instanceof SubApp){
-				//TODO get inner subapp element and recursivly go through the elemetns in it
+				FBNetwork subAppInternalNetwork = getFBNetworkForSubApp((SubApp)fbnElement);
+				if(null != subAppInternalNetwork) {    //TODO somehow inform the user that we could not get the internals of the subapp and therefore are not deploying its internals
+					fbNetworkHierarchy.addLast(subAppInternalNetwork);
+					addFBNetworkElements(fbNetworkHierarchy, prefix + fbnElement.getName() + "."); //$NON-NLS-1$
+					fbNetworkHierarchy.removeLast();
+				}
 			}
 		}
 		for (Connection con : fbNetwork.getEventConnections()) {
@@ -58,11 +68,24 @@ class ResourceDeploymentData {
 		
 	}
 	
+	private FBNetwork getFBNetworkForSubApp(SubApp subApp) {
+		FBNetwork retVal = subApp.getSubAppNetwork();
+		if(null == retVal) {
+			if(null != subApp.getType()) {
+				//we have a typed subapp
+				retVal = subApp.getType().getFBNetwork();
+			} else if(null != subApp.getOpposite()) {
+				retVal = ((SubApp)subApp.getOpposite()).getSubAppNetwork();
+			}
+		}		
+		return retVal;
+	}
+
 	private void addConnection(Connection con, String prefix){
 		//TODO for typed subapps we may have to check also for null
 		if(con.getSourceElement() instanceof SubApp){
 			//we don't need to do anything here as we area always creating subapp interface crossing connections from source to dest
-		} else if(con.getSourceElement() instanceof SubApp){
+		} else if(con.getDestinationElement() instanceof SubApp){
 			//TODO model refactoring find the non sub app endpoint for this connection
 		} else{
 			if (!con.isResTypeConnection()) {

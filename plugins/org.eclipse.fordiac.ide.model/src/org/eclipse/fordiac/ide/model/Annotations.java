@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -244,13 +243,6 @@ public enum Annotations {
 	}
 	
 	//*** SubApp ***//
-	public SubAppType getSubAppType(SubApp sa) {
-		LibraryElement type = sa.getType();
-		if(null != type){
-			return (SubAppType) type; 
-		}
-		return null;
-	}
 	
 	//*** InterfaceList ***
 	public  EList<IInterfaceElement> getAllInterfaceElements(InterfaceList il) {
