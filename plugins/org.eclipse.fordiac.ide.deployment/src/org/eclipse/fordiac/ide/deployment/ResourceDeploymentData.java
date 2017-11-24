@@ -39,33 +39,30 @@ class ResourceDeploymentData {
 		
 	public ResourceDeploymentData(final Resource res){
 		this.res = res;
-		Deque<FBNetwork> fbNetworkhierachy = new ArrayDeque<>();
-		fbNetworkhierachy.add(res.getFBNetwork());
-		addFBNetworkElements(fbNetworkhierachy, ""); //$NON-NLS-1$
+		addFBNetworkElements(new ArrayDeque<SubApp>(), res.getFBNetwork(), ""); //$NON-NLS-1$
 	}
 	
-	private void addFBNetworkElements(Deque<FBNetwork> fbNetworkHierarchy, String prefix) {
-		FBNetwork fbNetwork = fbNetworkHierarchy.peekLast();
+	private void addFBNetworkElements(Deque<SubApp> subAppHierarchy, FBNetwork fbNetwork, String prefix) {
 		for (FBNetworkElement fbnElement : fbNetwork.getNetworkElements()) {
 			if(fbnElement instanceof FB){
 				fbs.add(new FBDeploymentData(prefix, (FB)fbnElement));
 			}else if(fbnElement instanceof SubApp){
 				FBNetwork subAppInternalNetwork = getFBNetworkForSubApp((SubApp)fbnElement);
 				if(null != subAppInternalNetwork) {    //TODO somehow inform the user that we could not get the internals of the subapp and therefore are not deploying its internals
-					fbNetworkHierarchy.addLast(subAppInternalNetwork);
-					addFBNetworkElements(fbNetworkHierarchy, prefix + fbnElement.getName() + "."); //$NON-NLS-1$
-					fbNetworkHierarchy.removeLast();
+					subAppHierarchy.addLast((SubApp)fbnElement);
+					addFBNetworkElements(subAppHierarchy, subAppInternalNetwork, prefix + fbnElement.getName() + "."); //$NON-NLS-1$
+					subAppHierarchy.removeLast();
 				}
 			}
 		}
 		for (Connection con : fbNetwork.getEventConnections()) {
-			addConnection(con, prefix);
+			addConnection(subAppHierarchy, con, prefix);
 		}
 		for (Connection con : fbNetwork.getDataConnections()) {
-			addConnection(con, prefix);
+			addConnection(subAppHierarchy, con, prefix);
 		}
 		for (Connection con : fbNetwork.getAdapterConnections()) {
-			addConnection(con, prefix);
+			addConnection(subAppHierarchy, con, prefix);
 		}
 		
 	}
@@ -95,37 +92,47 @@ class ResourceDeploymentData {
 		
 	}
 
-	private void addConnection(Connection con, String prefix){
+	private void addConnection(Deque<SubApp> subAppHierarchy, Connection con, String prefix){
 		//Only handle the conneciton if it is no subapp, typed subapp originated or resourcetype connection
 		if(null != con.getSourceElement() && !(con.getSourceElement() instanceof SubApp) && !con.isResTypeConnection()) {
-			for (ConDeploymentDest destData : getConnectionEndPoint(prefix, con.getDestination())) {
+			for (ConDeploymentDest destData : getConnectionEndPoint(subAppHierarchy, prefix, con.getDestination())) {
 				connections.add(new ConnectionDeploymentData(prefix, con.getSource(), destData.prefix, destData.destination));				
 			}			
 		}
 	}
 	
-	private List<ConDeploymentDest> getConnectionEndPoint(String prefix, IInterfaceElement destination) {
+	private List<ConDeploymentDest> getConnectionEndPoint(Deque<SubApp> subAppHierarchy, String prefix, IInterfaceElement destination) {
 		ArrayList<ConDeploymentDest> retVal = new ArrayList<>();
 		if(null != destination.getFBNetworkElement() && !(destination.getFBNetworkElement() instanceof SubApp)) {
 			//we reached an FB endpoint return it
 			retVal.add(new ConDeploymentDest(prefix, destination));
 		} else {
-			retVal.addAll(getSubappInterfaceconnections(prefix, destination));
+			retVal.addAll(getSubappInterfaceconnections(subAppHierarchy, prefix, destination));
 		}
 		return retVal;
 	}
 
-	private List<ConDeploymentDest> getSubappInterfaceconnections(String prefix, IInterfaceElement destination) {
+	private List<ConDeploymentDest> getSubappInterfaceconnections(Deque<SubApp> subAppHierarchy, String prefix, IInterfaceElement destination) {
 		ArrayList<ConDeploymentDest> retVal = new ArrayList<>();
 		if(destination.isIsInput()) {	
 			//we are entering a subapplication
 			String newPrefix = prefix + destination.getFBNetworkElement().getName() + "."; //$NON-NLS-1$
+			subAppHierarchy.addLast((SubApp)destination.getFBNetworkElement());
 			IInterfaceElement internalElement = getSubAppInteralElement(destination);
 			for(Connection con : internalElement.getOutputConnections()) {
-				retVal.addAll(getConnectionEndPoint(newPrefix, con.getDestination()));
+				retVal.addAll(getConnectionEndPoint(subAppHierarchy, newPrefix, con.getDestination()));
 			}
+			subAppHierarchy.removeLast();
+		} else {
+			//we are leaving a subapp
+			String newPrefix = removeLastEntry(prefix);
+			SubApp currentSubApp = subAppHierarchy.removeLast();
+			IInterfaceElement internalElement = currentSubApp.getInterfaceElement(destination.getName());
+			for(Connection con : internalElement.getOutputConnections()) {
+				retVal.addAll(getConnectionEndPoint(subAppHierarchy, newPrefix, con.getDestination()));
+			}			
+			subAppHierarchy.addLast(currentSubApp);
 		}
-		
 		return retVal;
 	}
 
@@ -147,6 +154,13 @@ class ResourceDeploymentData {
 		}
 		return null;
 	}
-
+	
+	private String removeLastEntry(String prefix) {
+		int index = prefix.lastIndexOf('.', prefix.length() - 2);
+		if(-1 != index) {
+			return prefix.substring(0, index);
+		}
+		return ""; //$NON-NLS-1$
+	}
 	
 }
