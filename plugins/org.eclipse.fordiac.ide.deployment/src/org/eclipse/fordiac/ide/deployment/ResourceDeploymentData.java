@@ -19,6 +19,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
@@ -80,20 +82,71 @@ class ResourceDeploymentData {
 		}		
 		return retVal;
 	}
-
-	private void addConnection(Connection con, String prefix){
-		//TODO for typed subapps we may have to check also for null
-		if(con.getSourceElement() instanceof SubApp){
-			//we don't need to do anything here as we area always creating subapp interface crossing connections from source to dest
-		} else if(con.getDestinationElement() instanceof SubApp){
-			//TODO model refactoring find the non sub app endpoint for this connection
-		} else{
-			if (!con.isResTypeConnection()) {
-				connections.add(new ConnectionDeploymentData(prefix, con.getSource(), prefix, con.getDestination()));
-			}
+	
+	private class ConDeploymentDest{
+		final String prefix;
+		final IInterfaceElement destination;
+		
+		public ConDeploymentDest(String prefix, IInterfaceElement destination) {
+			super();
+			this.prefix = prefix;
+			this.destination = destination;
 		}
+		
 	}
 
+	private void addConnection(Connection con, String prefix){
+		//Only handle the conneciton if it is no subapp, typed subapp originated or resourcetype connection
+		if(null != con.getSourceElement() && !(con.getSourceElement() instanceof SubApp) && !con.isResTypeConnection()) {
+			for (ConDeploymentDest destData : getConnectionEndPoint(prefix, con.getDestination())) {
+				connections.add(new ConnectionDeploymentData(prefix, con.getSource(), destData.prefix, destData.destination));				
+			}			
+		}
+	}
+	
+	private List<ConDeploymentDest> getConnectionEndPoint(String prefix, IInterfaceElement destination) {
+		ArrayList<ConDeploymentDest> retVal = new ArrayList<>();
+		if(null != destination.getFBNetworkElement() && !(destination.getFBNetworkElement() instanceof SubApp)) {
+			//we reached an FB endpoint return it
+			retVal.add(new ConDeploymentDest(prefix, destination));
+		} else {
+			retVal.addAll(getSubappInterfaceconnections(prefix, destination));
+		}
+		return retVal;
+	}
+
+	private List<ConDeploymentDest> getSubappInterfaceconnections(String prefix, IInterfaceElement destination) {
+		ArrayList<ConDeploymentDest> retVal = new ArrayList<>();
+		if(destination.isIsInput()) {	
+			//we are entering a subapplication
+			String newPrefix = prefix + destination.getFBNetworkElement().getName() + "."; //$NON-NLS-1$
+			IInterfaceElement internalElement = getSubAppInteralElement(destination);
+			for(Connection con : internalElement.getOutputConnections()) {
+				retVal.addAll(getConnectionEndPoint(newPrefix, con.getDestination()));
+			}
+		}
+		
+		return retVal;
+	}
+
+	private IInterfaceElement getSubAppInteralElement(IInterfaceElement destination) {
+		SubApp subApp = (SubApp)destination.getFBNetworkElement();
+		if(null != subApp.getSubAppNetwork()) {
+			return destination;
+		}else {
+			InterfaceList interfaceList = null;
+			if(null != subApp.getType()) {
+				//we have a typed subapp
+				interfaceList = subApp.getType().getInterfaceList();
+			} else if(null != subApp.getOpposite()) {
+				interfaceList = ((SubApp)subApp.getOpposite()).getInterface();
+			}
+			if(null != interfaceList) {
+				return interfaceList.getInterfaceElement(destination.getName());
+			}
+		}
+		return null;
+	}
 
 	
 }
