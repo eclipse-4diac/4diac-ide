@@ -42,13 +42,10 @@ public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 			return new ResFBEditPart(zoomManager);
 		}
 		if (modelElement instanceof IInterfaceElement) {
-			EditPart parent = context.getParent();
-			if (parent instanceof FBNetworkContainerEditPart) {
-				return new InterfaceEditPartForResourceFBs();
-			}
-			if (context instanceof FBNetworkContainerEditPart) {
-				return new VirtualInOutputEditPart();
-			}
+			return new InterfaceEditPartForResourceFBs();
+		}
+		if (modelElement instanceof VirtualIO) {	
+			return new VirtualInOutputEditPart();
 		}
 		return super.getPartForElement(context, modelElement);
 	}
