@@ -1788,7 +1788,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 							fannedOutConns += genFannedOutConnString(
 									eConnNumber, getCompFBIndex(fbs, srcFB),
-									dst.getName(), dstFB.getName(),
+									dst.getName(), (null != dstFB) ? dstFB.getName() : "",  ////$NON-NLS-1$
 									getCompFBIndex(fbs, dstFB));
 							fannedOutEventConns++;
 						}
