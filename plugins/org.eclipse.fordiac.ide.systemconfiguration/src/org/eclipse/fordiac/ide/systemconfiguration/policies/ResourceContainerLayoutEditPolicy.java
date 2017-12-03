@@ -17,8 +17,10 @@ import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.systemconfiguration.commands.MoveResourceCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
+import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceMoveCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceContainerEditPart;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart;
 import org.eclipse.gef.EditPart;
@@ -44,17 +46,7 @@ public class ResourceContainerLayoutEditPolicy extends FlowLayoutEditPolicy {
 
 	@Override
 	protected Command createMoveChildCommand(EditPart child, EditPart after) {
-		if (child instanceof ResourceEditPart) {
-			ResourceEditPart childEP = (ResourceEditPart) child;
-			int newIndex = -1;
-			if (after == null) {
-				newIndex = childEP.getModel().getDevice().getResource().size();
-			} else {
-				newIndex = childEP.getModel().getDevice().getResource().indexOf(((ResourceEditPart)after).getModel());
-			}
-			return new MoveResourceCommand(childEP.getModel(), newIndex);
-		}
-		return null;
+		return getMoveCommand(child, after);
 	}
 
 	@Override
@@ -81,8 +73,21 @@ public class ResourceContainerLayoutEditPolicy extends FlowLayoutEditPolicy {
 
 	@Override
 	protected Command createAddCommand(EditPart child, EditPart after) {
-		
-		return null;
+		return getMoveCommand(child, after);
 	}
 
+	private ResourceMoveCommand getMoveCommand(EditPart child, EditPart after) {
+		ResourceMoveCommand cmd = null;
+		if (child instanceof ResourceEditPart && getHost() instanceof ResourceContainerEditPart) {
+			int index = -1; 
+			Device targetDevice = ((ResourceContainerEditPart)getHost()).getModel().getDevice();
+			if (after == null) {
+				index = targetDevice.getResource().size();
+			} else {
+				index = targetDevice.getResource().indexOf((Resource) after.getModel()); 
+			}
+			cmd = new ResourceMoveCommand((Resource) child.getModel(), targetDevice, index);
+		}
+		return cmd;
+	}
 }
