@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
-import org.eclipse.fordiac.ide.util.IOpenListener;
 import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
@@ -80,14 +79,9 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 				obj = ((Device)obj).getSystemConfiguration();				
 			}
 
-			IOpenListener openListener = OpenListenerManager.getInstance()
-					.getDefaultOpenListener(((I4DIACElement) obj).getClass(), obj);
-			if (openListener != null) {
-				openListener.run(null);
-				IEditorPart editor = openListener.getOpenedEditor();
-				if((null != editor) && (null != refObject)){
-					//TODO select object
-				}
+			IEditorPart editor = OpenListenerManager.openEditor((I4DIACElement) obj);
+			if((null != editor) && (null != refObject)){
+				//TODO select object
 			}
 		}
 	}

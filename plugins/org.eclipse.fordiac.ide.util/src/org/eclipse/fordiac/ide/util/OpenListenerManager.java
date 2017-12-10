@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2014 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2008, 2009, 2011, 2014, 2017 Profactor GbmH, fortiss GmbH
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.util;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -28,26 +27,19 @@ import org.eclipse.ui.IEditorPart;
 /**
  * The Class OpenListenerManager.
  */
-public class OpenListenerManager {
-
-	private static OpenListenerManager instance;
-
-	/**
-	 * Gets the single instance of OpenListenerManager.
-	 * 
-	 * @return single instance of OpenListenerManager
-	 */
-	public static OpenListenerManager getInstance() {
-		if (instance == null) {
-			instance = new OpenListenerManager();
+public enum OpenListenerManager {
+	INSTANCE;
+	
+	private List<IOpenListener> openListeners = null;
+	
+	List<IOpenListener> getOpenListeners(){
+		if(null == openListeners) {
+			loadOpenListeners();
 		}
-		return instance;
+		return openListeners;
 	}
 
-	private OpenListenerManager() {
-
-	}
-
+	
 	/**
 	 * Gets the open listener.
 	 * 
@@ -56,62 +48,17 @@ public class OpenListenerManager {
 	 * 
 	 * @return the open listener
 	 */
-	public List<IOpenListener> getOpenListener(
-			final Class<? extends I4DIACElement> libElement,
-			final Object elementToOpen) {
-		ArrayList<IOpenListener> listener = new ArrayList<IOpenListener>();
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				org.eclipse.fordiac.ide.util.Activator.PLUGIN_ID, "openListener"); //$NON-NLS-1$
-		for (int i = 0; i < elems.length; i++) {
-			IConfigurationElement element = elems[i];
-			try {
-				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IOpenListener) {
-					IOpenListener openListener = (IOpenListener) object;
-					if (openListener.supportsObject(libElement)) {
-						openListener.selectionChanged(null, new StructuredSelection(
-								elementToOpen));
-
-						listener.add(openListener);
-					}
-				}
-			} catch (CoreException corex) {
-				Activator.getDefault().logError(corex.getMessage(), corex);
+	public List<IOpenListener> getOpenListener(I4DIACElement elementToOpen) {
+		ArrayList<IOpenListener> listeners = new ArrayList<IOpenListener>();
+		for (IOpenListener openListener : getOpenListeners()) {
+			if (listenerSupportsElement(openListener, elementToOpen)) {
+				openListener.selectionChanged(null, new StructuredSelection(elementToOpen));
+				listeners.add(openListener);
 			}
 		}
-		return listener;
+		return listeners;
 	}
 
-	/**
-	 * Gets the open listener.
-	 * 
-	 * @param libElement the lib element
-	 * 
-	 * @return the open listener
-	 */
-	public List<String> getOpenListenerID(
-			final Class<? extends I4DIACElement> libElement) {
-		ArrayList<String> listener = new ArrayList<String>();
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				org.eclipse.fordiac.ide.util.Activator.PLUGIN_ID, "openListener"); //$NON-NLS-1$
-		for (int i = 0; i < elems.length; i++) {
-			IConfigurationElement element = elems[i];
-			try {
-				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IOpenListener) {
-					IOpenListener openListener = (IOpenListener) object;
-					if (openListener.supportsObject(libElement)) {
-						listener.add(element.getAttribute("id"));
-					}
-				}
-			} catch (CoreException corex) {
-				Activator.getDefault().logError(corex.getMessage(), corex);
-			}
-		}
-		return listener;
-	}
 
 	/**
 	 * Sets the default open listener.
@@ -122,9 +69,7 @@ public class OpenListenerManager {
 	public void setDefaultOpenListener(
 			final Class<? extends I4DIACElement> libElement, final String id) {
 		IPreferenceStore ps = Activator.getDefault().getPreferenceStore();
-
 		ps.setValue(libElement.getName(), id);
-
 	}
 
 	/**
@@ -135,40 +80,19 @@ public class OpenListenerManager {
 	 * 
 	 * @return the default open listener
 	 */
-	public IOpenListener getDefaultOpenListener(
-			final Class<? extends I4DIACElement> libElement,
-			final Object elementToOpen) {
-
+	public IOpenListener getDefaultOpenListener(final I4DIACElement elementToOpen) {
 		IPreferenceStore ps = Activator.getDefault().getPreferenceStore();
-
-		String value = ps.getString(libElement.getName());
-
-		Hashtable<IOpenListener, String> listener = new Hashtable<IOpenListener, String>();
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				org.eclipse.fordiac.ide.util.Activator.PLUGIN_ID, "openListener"); //$NON-NLS-1$
-		for (int i = 0; i < elems.length; i++) {
-			IConfigurationElement element = elems[i];
-			try {
-				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IOpenListener) {
-					IOpenListener openListener = (IOpenListener) object;
-					if (openListener.supportsObject(libElement)) {
-						openListener.selectionChanged(null, new StructuredSelection(
-								elementToOpen));
-						if ("".equals(value)) {
-							return openListener;
-						} else if (value.equals(element.getAttribute("id"))) {
-							return openListener;
-						}
-						listener.put(openListener, element.getAttribute("id"));
-					}
+		for(IOpenListener openListener : getOpenListeners()) {
+			if (listenerSupportsElement(openListener, elementToOpen)) {
+				String value = ps.getString(openListener.getHandledClass().getName());				
+				openListener.selectionChanged(null, new StructuredSelection(elementToOpen));
+				if ("".equals(value)) { //$NON-NLS-1$
+					return openListener;
+				} else if (value.equals(openListener.getOpenListenerID())) {
+					return openListener;
 				}
-			} catch (CoreException corex) {
-				Activator.getDefault().logError(corex.getMessage(), corex);
 			}
 		}
-
 		return null;
 	}
 	
@@ -180,12 +104,34 @@ public class OpenListenerManager {
 	 * @return the Editor if opening worked otherwise null
 	 */
 	public static IEditorPart openEditor(I4DIACElement element) {
-		IOpenListener openListener = OpenListenerManager.getInstance()
-				.getDefaultOpenListener(element.getClass(), element);
+		IOpenListener openListener = OpenListenerManager.INSTANCE.getDefaultOpenListener(element);
 		if (openListener != null) {
 			openListener.run(null);
 			return openListener.getOpenedEditor();
 		}
 		return null;
 	}
+	
+	private void loadOpenListeners() {
+		openListeners = new ArrayList<IOpenListener>();
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
+				org.eclipse.fordiac.ide.util.Activator.PLUGIN_ID, "openListener"); //$NON-NLS-1$
+		for (IConfigurationElement element : elems) {
+			try {
+				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
+				if (object instanceof IOpenListener) {
+					openListeners.add((IOpenListener)object);					
+				}
+			} catch (CoreException corex) {
+				Activator.getDefault().logError(corex.getMessage(), corex);
+			}
+		}
+		
+	}
+	
+	private boolean listenerSupportsElement(IOpenListener listener, I4DIACElement elementtoOpen) {
+		return (null != listener.getHandledClass()) && listener.getHandledClass().isInstance(elementtoOpen);
+	}
+
 }

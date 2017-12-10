@@ -76,9 +76,18 @@ public class Messages extends NLS {
 	
 	/** The Open application editor action_ erro r_ open application editor. */
 	public static String OpenApplicationEditorAction_ERROR_OpenApplicationEditor;
+
+
+	public static String OpenApplicationEditorAction_Name;
+
+
+	public static String OpenCompositeInstanceViewerAction_Name;
 	
 	/** The Open sub application editor action_ erro r_ open subapplication editor. */
 	public static String OpenSubApplicationEditorAction_ERROR_OpenSubapplicationEditor;
+
+
+	public static String OpenSubApplicationEditorAction_Name;
 			
 	public static String ReconnectDataConnectionCommand_LABEL;
 	public static String ReconnectEventConnectionCommand_LABEL;

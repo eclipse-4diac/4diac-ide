@@ -172,7 +172,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	/**
 	 * The Class VirtualInputOutputFigure.
 	 */
-	public class VirtualInputOutputFigure extends Label {
+	private class VirtualInputOutputFigure extends Label {
 
 		/**
 		 * Instantiates a new virtual input output figure.

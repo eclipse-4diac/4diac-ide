@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
-import org.eclipse.fordiac.ide.util.IOpenListener;
 import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -79,21 +78,13 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 			operationHistory.execute(cmd, null, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
 			Application app = cmd.getApplication();
 			if(page.getOpenApplication() && (null != app)){
-				openApplicationEditor(app);
+				OpenListenerManager.openEditor(app);
 			}
 			
 		} catch (ExecutionException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 		return true;
-	}
-
-	private static void openApplicationEditor(Application app) {
-		IOpenListener openListener = OpenListenerManager.getInstance()
-				.getDefaultOpenListener(app.getClass(), app);
-		if (openListener != null) {
-			openListener.run(null);
-		}
 	}
 
 	/*

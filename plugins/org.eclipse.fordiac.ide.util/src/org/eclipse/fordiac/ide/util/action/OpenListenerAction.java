@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009, 2011 Profactor GmbH
+ * Copyright (c) 2008, 2011, 2017 Profactor GmbH, fortiss GmbH
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,39 +7,29 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *   Gerhard Ebenhofer
+ *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.actions;
+package org.eclipse.fordiac.ide.util.action;
 
-import org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl;
 import org.eclipse.fordiac.ide.util.IOpenListener;
 import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.jface.action.Action;
 
-/**
- * The Class SubAppOpenListenerAction.
+/** A default implementation handling open action for IOpenListener implementers
  */
-public class SubAppOpenListenerAction extends Action {
+public class OpenListenerAction extends Action {
 	private final IOpenListener openListener;
 
-	/**
-	 * Instantiates a new sub app open listener action.
-	 * 
-	 * @param openListener the open listener
-	 */
-	public SubAppOpenListenerAction(final IOpenListener openListener) {
+	public OpenListenerAction(final IOpenListener openListener) {
 		this.openListener = openListener;
-		setText("Subapp Network");
+		setText(openListener.getActionText());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.action.Action#run()
-	 */
 	@Override
 	public void run() {
-		OpenListenerManager.getInstance().setDefaultOpenListener(SubAppImpl.class,
-				"org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"); //$NON-NLS-1$
+		OpenListenerManager.INSTANCE.setDefaultOpenListener(openListener.getHandledClass(),
+				openListener.getOpenListenerID());
 		openListener.run(null);
 	}
 

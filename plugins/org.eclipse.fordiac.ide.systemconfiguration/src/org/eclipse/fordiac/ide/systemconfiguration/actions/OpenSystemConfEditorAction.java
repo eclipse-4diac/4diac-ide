@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2013 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2008, 2009, 2011, 2013, 2017 Profactor GbmH, fortiss GmbH
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,19 +14,13 @@ package org.eclipse.fordiac.ide.systemconfiguration.actions;
 
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.SystemConfigurationImpl;
-import org.eclipse.fordiac.ide.systemconfiguration.Activator;
+import org.eclipse.fordiac.ide.systemconfiguration.Messages;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
 import org.eclipse.fordiac.ide.util.OpenListener;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * The Class OpenSystemConfEditorAction.
@@ -34,50 +28,17 @@ import org.eclipse.ui.PlatformUI;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class OpenSystemConfEditorAction extends OpenListener {
+	private final static String OPEN_SYSTEM_LISTENER_ID = "org.eclipse.fordiac.ide.systemconfiguration.actions.OpenSystemConfEditorAction"; //$NON-NLS-1$
 
 	/** The sys conf. */
 	private SystemConfiguration sysConf;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action
-	 * .IAction, org.eclipse.ui.IWorkbenchPart)
-	 */
 	@Override
-	public void setActivePart(final IAction action,
-			final IWorkbenchPart targetPart) {
+	public void run(final IAction action) {		
+		SystemConfigurationEditorInput input = new SystemConfigurationEditorInput(sysConf);
+		openEditor(input, SystemConfigurationEditor.class.getName());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
-	 */
-	@Override
-	public void run(final IAction action) {
-		
-		SystemConfigurationEditorInput input = new SystemConfigurationEditorInput(sysConf); 
-
-		IWorkbenchPage activePage = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage();
-		try {
-			editor = activePage.openEditor(input, SystemConfigurationEditor.class.getName());
-		} catch (PartInitException e) {
-			editor = null;
-			Activator.getDefault().logError(e.getMessage(), e);
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action
-	 * .IAction, org.eclipse.jface.viewers.ISelection)
-	 */
 	@Override
 	public void selectionChanged(final IAction action, final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
@@ -89,13 +50,18 @@ public class OpenSystemConfEditorAction extends OpenListener {
 	}
 
 	@Override
-	public boolean supportsObject(final Class<? extends I4DIACElement> clazz) {
-		return clazz != null && clazz.equals(SystemConfigurationImpl.class);
+	public String getActionText() {
+		return Messages.OpenSystemConfEditorAction_Name;
 	}
 
 	@Override
-	public Action getOpenListenerAction() {
-		return new OpenListenerAction(this);
+	public Class<? extends I4DIACElement> getHandledClass() {
+		return SystemConfiguration.class;
+	}
+
+	@Override
+	public String getOpenListenerID() {
+		return OPEN_SYSTEM_LISTENER_ID;
 	}
 
 }

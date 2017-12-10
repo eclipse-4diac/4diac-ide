@@ -18,14 +18,11 @@ import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl;
 import org.eclipse.fordiac.ide.util.OpenListener;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
@@ -33,6 +30,8 @@ import org.eclipse.ui.PlatformUI;
  * The Class OpenSubApplicationEditorAction.
  */
 public class OpenSubApplicationEditorAction extends OpenListener {
+	
+	private final static String OPEN_SUBAPP_LISTENER_ID = "org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"; //$NON-NLS-1$
 
 	/** The uiSubAppNetwork. */
 	private SubApp subApp;
@@ -77,35 +76,10 @@ public class OpenSubApplicationEditorAction extends OpenListener {
 	}
 
 	@Override
-	public Action getOpenListenerAction() {
-		return new SubAppOpenListenerAction(this);
-	}
-
-	@Override
-	public boolean supportsObject(Class<? extends I4DIACElement> clazz) {
-		return clazz != null && clazz.equals(SubAppImpl.class);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.IAction, org.eclipse.ui.IWorkbenchPart)
-	 */
-	@Override
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		// nothing to do
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
-	 */
-	@Override
 	public void run(IAction action) {
 		run();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
-	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
@@ -114,6 +88,20 @@ public class OpenSubApplicationEditorAction extends OpenListener {
 				subApp = (SubApp) structuredSel.getFirstElement();
 			}
 		}
+	}
 
+	@Override
+	public String getActionText() {
+		return Messages.OpenSubApplicationEditorAction_Name;
+	}
+
+	@Override
+	public Class<? extends I4DIACElement> getHandledClass() {
+		return SubApp.class;
+	}
+
+	@Override
+	public String getOpenListenerID() {
+		return OPEN_SUBAPP_LISTENER_ID;
 	}
 }

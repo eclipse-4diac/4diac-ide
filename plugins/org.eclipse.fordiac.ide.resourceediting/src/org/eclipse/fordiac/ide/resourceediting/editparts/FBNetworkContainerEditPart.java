@@ -43,7 +43,7 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 
 
 	/** The content adapter. */
-	EContentAdapter contentAdapter;
+	private EContentAdapter contentAdapter;
 	
 	private final Map<IInterfaceElement, VirtualIO> virutalIOMapping = new HashMap<>();
 	
