@@ -53,7 +53,7 @@ public enum Annotations {
 	}
 	
 	public AdapterFBType getPlugType(AdapterType adapterType) {
-		AdapterFBType temp = (AdapterFBType)EcoreUtil.copy(adapterType.getAdapterFBType());
+		AdapterFBType temp = EcoreUtil.copy(adapterType.getAdapterFBType());
 		// fetch the interface to invert it; 
 		ArrayList<Event> inputEvents =  new ArrayList<Event>(temp.getInterfaceList().getEventOutputs());
 		for (Event event : inputEvents) {
@@ -83,7 +83,7 @@ public enum Annotations {
 	}
 	
 	public AdapterFBType getSocketType(AdapterType at) {
-		return (AdapterFBType)EcoreUtil.copy(at.getAdapterFBType());
+		return EcoreUtil.copy(at.getAdapterFBType());
 	}
 
 	//*** Application ***//
@@ -337,13 +337,13 @@ public enum Annotations {
 	
 	public void removeConnection(FBNetwork fbn, Connection connection) {
 		if (connection instanceof EventConnection) {
-			fbn.getEventConnections().remove((EventConnection)connection);
+			fbn.getEventConnections().remove(connection);
 		}
 		if (connection instanceof DataConnection) {
-			fbn.getDataConnections().remove((DataConnection)connection);
+			fbn.getDataConnections().remove(connection);
 		}
 		if (connection instanceof AdapterConnection) {
-			fbn.getAdapterConnections().remove((AdapterConnection)connection);
+			fbn.getAdapterConnections().remove(connection);
 		}
 	}
 	

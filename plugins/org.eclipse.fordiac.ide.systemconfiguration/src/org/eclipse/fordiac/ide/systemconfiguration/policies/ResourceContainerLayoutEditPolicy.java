@@ -84,7 +84,7 @@ public class ResourceContainerLayoutEditPolicy extends FlowLayoutEditPolicy {
 			if (after == null) {
 				index = targetDevice.getResource().size();
 			} else {
-				index = targetDevice.getResource().indexOf((Resource) after.getModel()); 
+				index = targetDevice.getResource().indexOf(after.getModel()); 
 			}
 			cmd = new ResourceMoveCommand((Resource) child.getModel(), targetDevice, index);
 		}
