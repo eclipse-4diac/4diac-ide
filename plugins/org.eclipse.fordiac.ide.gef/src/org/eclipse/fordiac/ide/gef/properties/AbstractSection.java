@@ -74,8 +74,14 @@ abstract public class AbstractSection extends AbstractPropertySection {
 	private final EContentAdapter contentAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(Notification notification) {
-			if(null != getType() && getType().eAdapters().contains(contentAdapter) && !blockRefresh){				
-				refresh();
+			if(null != getType() && getType().eAdapters().contains(contentAdapter) && !blockRefresh){	
+				leftComposite.getDisplay().asyncExec(new Runnable() {					
+					@Override
+					public void run() {
+						if(!leftComposite.isDisposed())
+						refresh();
+					}
+				});
 			}
 		}
 	};
@@ -110,6 +116,7 @@ abstract public class AbstractSection extends AbstractPropertySection {
 			rightComposite.setLayout(new GridLayout());	
 			rightComposite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		}else{
+			leftComposite = parent;  //store the parent to be used in the content adapter
 			parent.setLayout(new GridLayout(1, true));
 			parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		}

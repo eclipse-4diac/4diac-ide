@@ -20,7 +20,6 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LayoutManager;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -52,8 +51,8 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			((Notifier) getModel()).eAdapters().add(getContentAdapter());
-			((Notifier) getModel().eContainer()).eAdapters().add(getContentAdapter());
+			getModel().eAdapters().add(getContentAdapter());
+			getModel().eContainer().eAdapters().add(getContentAdapter());
 		}
 	}
 
@@ -66,8 +65,8 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
-			((Notifier) getModel().eContainer()).eAdapters().remove(getContentAdapter());
+			getModel().eAdapters().remove(getContentAdapter());
+			getModel().eContainer().eAdapters().remove(getContentAdapter());
 		}
 	}
 
@@ -97,7 +96,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 						refreshChildren();
 						break;
 					case Notification.SET:
-						refreshVisuals();
+						//refreshVisuals();
 						break;
 					}
 				}
