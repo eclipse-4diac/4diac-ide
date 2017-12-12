@@ -28,10 +28,10 @@
       location="org.eclipse.fordiac.ide"
       startupProgressRect="248,306,239,4" />
    <launcher name="4DIAC-IDE">
-      <linux icon="/org.eclipse.fordiac.ide.product/icons/fordiac.xpm"/>
-      <solaris/>
+      <linux icon="/icons/fordiac.xpm"/>
+      <macosx icon="/icons/fordiac.icns"/>
       <win useIco="true">
-         <ico path="/org.eclipse.fordiac.ide.product/icons/fordiac.ico"/>
+         <ico path="/icons/fordiac.ico"/>
          <bmp/>
       </win>
    </launcher>
@@ -44,7 +44,6 @@
       <solaris include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</solaris>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
    </vm>
-
 
    <plugins>
       <plugin id="com.google.guava"/>

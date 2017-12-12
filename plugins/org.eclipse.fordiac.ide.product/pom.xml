@@ -69,31 +69,10 @@
           <products>
             <product>
               <id>org.eclipse.fordiac.ide.product</id>
-              <rootFolder>4DIAC-IDE</rootFolder>
+              <rootFolder>4diac-ide</rootFolder>
             </product>
           </products>
         </configuration>
-      </plugin>
-        <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.5</version>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/products/${product-id}\icons</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>icons</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
