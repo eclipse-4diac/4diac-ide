@@ -296,6 +296,11 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getConditionText(this);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getECC" lowerBound="1" eType="#//ECC">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getECC(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>

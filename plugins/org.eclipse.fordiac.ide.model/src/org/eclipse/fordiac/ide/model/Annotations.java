@@ -161,14 +161,19 @@ public enum Annotations {
 			retVal = event.getName();
 		}
 		if(expression !=  null){
-			if(expression.equals("1")){
+			if(expression.equals("1")){ //$NON-NLS-1$
 				retVal = expression;
-			}else if (!expression.equals("")){
-				retVal += "[" + expression + "]";
+			}else if (!expression.equals("")){ //$NON-NLS-1$
+				retVal += "[" + expression + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}		
 		return retVal;
 	}
+	
+	public ECC getECC(ECTransition ecTransition) {
+		return (ECC)ecTransition.eContainer();
+	}
+
 	
 	//*** FB ***//
 	public FBType getFBType(FB fb) {
