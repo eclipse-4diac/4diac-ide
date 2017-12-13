@@ -35,7 +35,9 @@
 </ul>
 
 <h2 id="build">Build FORTE with open62541</h2>
-<p>OPC UA is not enabled by default in FORTE. To enable it, you need to build FORTE with the open62541 source code yourself. </p>
+<p>OPC UA is not enabled by default in FORTE. To enable it, you need to build FORTE with the open62541 source code yourself.</p>
+
+<p class="attention"><span class="inlineTitle">Attention</span>: You need <a href="https://www.python.org/" target="_blank">python</a> installed on your computer in order to compile the OPCUA library.</p>
 
 <h3>Linux</h3>
 <ol>
@@ -68,7 +70,7 @@ $ make -j</div>
 
 <h3>Windows with Visual Studio</h3>
 <ol>
-	<li>Use a Git tool under Windows and download the FORTE source from <a href="http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git" target="_blank">http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git</a>. The following steps show the commands for <a href="https://git-for-windows.github.io/" target="_blank">Git Bash</a>:
+	<li>Use a Git tool under Windows and download the FORTE source from <a href="http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git" target="_blank">http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git</a> and use the develop branch. The following steps show the commands for <a href="https://git-for-windows.github.io/" target="_blank">Git Bash</a>:
 		<div class="code">$ mkdir "$HOME/4diac" &amp;&amp; cd "$HOME/4diac"
 $ git clone -b develop https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte forte
 $ mkdir build &amp;&amp; cd "build"</div>
@@ -91,20 +93,20 @@ $ cd open62541 &amp;&amp; mkdir build</div>
 	<li>Press <span class="button4diac">Configure</span> and select your Visual Studio Version. (Make sure you select your installed VS version. Otherwise CMake does not find the C/C++ compiler. Activate <span class="specificText">Use default native compilers</span></li>
 	<li>Activate <span class="specificText">BUILD_SHARED_LIBS</span> and <span class="specificText">UA_ENABLE_AMALGAMATION</span></li>
 	<li>Press <span class="button4diac">Configure</span>, then <span class="button4diac">Generate</span> and then <span class="button4diac">Open Project</span></li>
-	<li>Go to <span class="menu4diac">Build &rarr; Build Solution</span>. You may need to execute the command multiple times until all projects are build successfully. This will create the open62541 library under <span class="folderLocation">$HOME/4diac/open62541/build/Release</span> and the amalgamated header file <span class="fileLocation">open62541.h</span>in <span class="folderLocation">$HOME/4diac/open62541/build/Release</span>
+	<li>Go to <span class="menu4diac">Build &rarr; Build Solution</span>. You may need to execute the command multiple times until all projects are build successfully. This will create the open62541 library under <span class="folderLocation">$HOME/4diac/open62541/build/bin/Release</span> and the amalgamated header file <span class="fileLocation">open62541.h</span> in <span class="folderLocation">$HOME/4diac/open62541/build/</span>
 	</li>
 	<li>Switch to the FORTE CMake window to include open62541.
 		<ul>
 			<li>FORTE_COM_OPC_UA=ON</li>
 			<li>FORTE_COM_OPC_UA_INCLUDE_DIR=C:\Users\USER\4diac\open62541\build</li>
-			<li>FORTE_COM_OPC_UA_LIB_DIR=C:\Users\USER\4diac\open62541\build</li>
+			<li>FORTE_COM_OPC_UA_LIB_DIR=C:\Users\USER\4diac\open62541\build\bin\Release</li>
 			<li>FORTE_COM_OPC_UA_VERSION=master</li>
 		</ul>
 	</li>
 	<li>Press <span class="button4diac">Configure</span> and make sure that <span class="specificText">FORTE_COM_OPC_UA_LIB</span> is set to <span class="fileLocation">open62541.dll</span></li>
 	<li>Press <span class="button4diac">Configure</span>, then <span class="button4diac">Generate</span> and then <span class="button4diac">Open Project</span></li>
 	<li>Go to <span class="menu4diac">Build &rarr; Build Solution</span>. You may need to execute the command multiple times until all projects are built successfully. This will create <span class="folderLocation">$HOME/4diac/forte/build/Debug/forte.exe</span></li>
-	<li>In the forte VS Project, Set the PATH variable to include the path to the open62541.dll. Go to properties of <span class="specificText">forte</span>, <span class="specificText">Configuration Properties | Debugging | Environment</span> and add <span class="specificText">PATH=C:\Users\USER\4diac\open62541\build\Debug;%PATH%</span> (Set the correct user path!)
+	<li>In the forte VS Project, Set the PATH variable to include the path to the open62541.dll. Go to properties of <span class="specificText">forte</span>, <span class="specificText">Configuration Properties | Debugging | Environment</span> and add <span class="specificText">PATH=C:\Users\USER\4diac\open62541\build\bin\Release;%PATH%</span> (Set the correct user path!)
 	</li>
 </ol>
 
