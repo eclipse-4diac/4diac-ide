@@ -28,18 +28,16 @@ public class SubAppForFbNetworkFigure extends AbstractFBNetworkElementFigure {
 
 	@Override
 	protected boolean isResoruceTypeFBNElement() {
-		//TODO model refactoring - think if subapps can be of resource type subapps ever
+		// Nothing todo here
 		return false;
 	}
 	
 	@Override
 	protected void setupTypeNameAndVersion(FBNetworkElement model, Figure container) {
-		// TODO Auto-generated method stub
 		super.setupTypeNameAndVersion(model, container);
 		if(null == model.getType()) {
 			//we have an untyped sub app don't show any text in the label
 			typeLabel.setText("");  //$NON-NLS-1$
-		}
-		
+		}		
 	}
 }

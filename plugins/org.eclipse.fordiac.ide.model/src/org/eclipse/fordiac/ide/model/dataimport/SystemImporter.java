@@ -22,6 +22,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -295,8 +296,7 @@ public class SystemImporter {
 							}
 						}
 					} catch (TypeImportException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						Activator.getDefault().logError(e.getMessage(), e);
 					}
 					break;
 				case LibraryElementTags.RESOURCE_ELEMENT:

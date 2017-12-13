@@ -74,8 +74,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 
 		@Override
 		public void finished() {
-			// TODO Auto-generated method stub
-			
+			// nothing to do here			
 		}
 
 		@Override

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.gef.tools.DirectEditManager;
@@ -203,7 +204,7 @@ public class ComboDirectEditManager extends DirectEditManager {
 			// Text text = (Text) getCellEditor().getControl();
 			// text.removeVerifyListener(verifyListener);
 		} catch (Exception e) {
-			// TODO check why this method sometimes crash on exit
+			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}
 	

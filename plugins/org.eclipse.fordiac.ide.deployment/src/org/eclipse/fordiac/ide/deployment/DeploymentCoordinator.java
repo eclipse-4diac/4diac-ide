@@ -248,7 +248,7 @@ public class DeploymentCoordinator {
 			for (VarDeclaration varDecl : res.getVarDeclarations()) {
 				if (varDecl.getValue() != null
 						&& varDecl.getValue().getValue() != null
-						&& varDecl.getValue().getValue().equals("")) {
+						&& varDecl.getValue().getValue().equals("")) { //$NON-NLS-1$
 					work++;
 				}
 			}
@@ -406,14 +406,14 @@ public class DeploymentCoordinator {
 			@Override
 			public void run() {				
 				MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.ICON_ERROR | SWT.OK);
-				String resName = "";
+				String resName = ""; //$NON-NLS-1$
 				if (null != res) {
 					resName = res.getName();
 				}
 
-				if(null != device.getProfile() && !device.getProfile().equals("")){
+				if(null != device.getProfile() && !device.getProfile().equals("")){ //$NON-NLS-1$
 					messageBox.setMessage(MessageFormat.format(Messages.DeploymentCoordinator_MESSAGE_DefinedProfileNotSupported,
-								new Object[] { (null != device.getProfile()) ? device.getProfile() : "",
+								new Object[] { (null != device.getProfile()) ? device.getProfile() : "", //$NON-NLS-1$
 										device.getName(), resName }));
 				}else{
 					messageBox.setMessage(MessageFormat.format(Messages.DeploymentCoordinator_MESSAGE_ProfileNotSet,
