@@ -48,7 +48,7 @@ public class ChangeConditionEventCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return conditionEvent.equals("") || (eventList != null && ! eventList.isEmpty());
+		return conditionEvent.equals("") || (eventList != null && ! eventList.isEmpty()); //$NON-NLS-1$
 	}
 	
 	public ArrayList<Event> getEvents(){
@@ -72,13 +72,13 @@ public class ChangeConditionEventCommand extends Command {
 	
 	@Override
 	public void execute() {
-		oldConditionEvent = transition.getConditionEvent() != null ? transition.getConditionEvent().getName() : "";
-		if(conditionEvent.equals("1")){
+		oldConditionEvent = transition.getConditionEvent() != null ? transition.getConditionEvent().getName() : ""; //$NON-NLS-1$
+		if(conditionEvent.equals("1")){ //$NON-NLS-1$
 			oldConditionExpression = transition.getConditionExpression();
 		}
-		if("1".equals(transition.getConditionExpression())){
+		if("1".equals(transition.getConditionExpression())){ //$NON-NLS-1$
 			oldConditionExpression = transition.getConditionExpression();
-			transition.setConditionExpression("");
+			transition.setConditionExpression(""); //$NON-NLS-1$
 		}
 		redo();
 	}
@@ -93,9 +93,9 @@ public class ChangeConditionEventCommand extends Command {
 
 	@Override
 	public void redo() {
-		if(conditionEvent.equals("1")){
+		if(conditionEvent.equals("1")){ //$NON-NLS-1$
 			// one has been selected
-			transition.setConditionExpression("1");
+			transition.setConditionExpression("1"); //$NON-NLS-1$
 			transition.setConditionEvent(null);
 		}else {
 			transition.setConditionEvent(getEvent(conditionEvent));

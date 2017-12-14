@@ -17,7 +17,7 @@ import java.util.StringTokenizer;
 public class STStringTokenHandling {
 
 	public final static String stTokenDelimiters = new String(
-			" &():.=[]+-*/><;\n\r\t\"\'!,");
+			" &():.=[]+-*/><;\n\r\t\"\'!,"); //$NON-NLS-1$
 	
 	public static String replaceSTToken(String stString, final String oldToken, final String newToken){
 		String retVal = new String();
