@@ -133,14 +133,15 @@
 						<phase>package</phase>
 						<id>sign</id>
 						<goals>
-							<goal>sign</goal>
-						</goals>
+			              <goal>package-dmg</goal>
+			            </goals>
+			            <phase>pre-integration-test</phase>
 						<configuration>
 							<volumeName>4diac-ide</volumeName>
 							<volumeIcon>${project.build.directory}../icon/fordiac.icns</volumeIcon>
-							<icon>Eclipse 100 125</icon>
 							<source>${project.build.directory}/products/org.eclipse.fordiac.ide.product-macosx.cocoa.x86_64.zip</source>
 							<dmgFilename>4diac-ide.dmg</dmgFilename>
+							<sign>true</sign>
 						</configuration>
 					</execution>
 				</executions>
