@@ -135,8 +135,7 @@
 						<goals>
 			              <goal>package-dmg</goal>
 			            </goals>
-			            <phase>pre-integration-test</phase>
-						<configuration>
+			            <configuration>
 							<volumeName>4diac-ide</volumeName>
 							<volumeIcon>${project.build.directory}../icon/fordiac.icns</volumeIcon>
 							<source>${project.build.directory}/products/org.eclipse.fordiac.ide.product-macosx.cocoa.x86_64.zip</source>
