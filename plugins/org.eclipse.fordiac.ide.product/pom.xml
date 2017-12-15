@@ -133,7 +133,7 @@
 						<phase>package</phase>
 						<id>sign</id>
 						<goals>
-							<goal>createDMG</goal>
+							<goal>sign</goal>
 						</goals>
 						<configuration>
 							<volumeName>4diac-ide</volumeName>
