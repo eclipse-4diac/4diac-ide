@@ -27,7 +27,7 @@
    <splash
       location="org.eclipse.fordiac.ide"
       startupProgressRect="248,306,239,4" />
-   <launcher name="4DIAC-IDE">
+   <launcher name="4diac-ide">
       <linux icon="/icons/fordiac.xpm"/>
       <macosx icon="/icons/fordiac.icns"/>
       <win useIco="true">
