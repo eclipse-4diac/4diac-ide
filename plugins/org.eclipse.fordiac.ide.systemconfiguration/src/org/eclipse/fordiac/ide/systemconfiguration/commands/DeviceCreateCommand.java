@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -133,13 +134,19 @@ public class DeviceCreateCommand extends Command {
 		ResourceCreateCommand cmd = null;
 		if (device.getType().getName().contains("FBRT") //$NON-NLS-1$
 				|| device.getType().getName().contains("FRAME")) { //$NON-NLS-1$
-			cmd = new ResourceCreateCommand((ResourceTypeEntry) device.getPaletteEntry().getGroup().getParentGroup()
-					.getGroup("Resources").getEntry("PANEL_RESOURCE"), device, false); //$NON-NLS-1$ //$NON-NLS-2$
+			cmd = new ResourceCreateCommand(getResourceType("PANEL_RESOURCE"), device, false); //$NON-NLS-1$ 
 		} else {
-			cmd = new ResourceCreateCommand((ResourceTypeEntry) device.getPaletteEntry().getGroup().getParentGroup()
-					.getGroup("Resources").getEntry("EMB_RES"), device, false); //$NON-NLS-1$ //$NON-NLS-2$
+			cmd = new ResourceCreateCommand(getResourceType("EMB_RES"), device, false); //$NON-NLS-1$ 
 		}
 		cmd.execute();
+	}
+
+	private ResourceTypeEntry getResourceType(String resTypeName) {
+		List<PaletteEntry> typeEntries = device.getPaletteEntry().getGroup().getPallete().getTypeEntries(resTypeName);
+		if(!typeEntries.isEmpty() && typeEntries.get(0) instanceof ResourceTypeEntry) {
+			return (ResourceTypeEntry)typeEntries.get(0);
+		}
+		return null;
 	}
 
 	private Color createRandomDeviceColor() {
