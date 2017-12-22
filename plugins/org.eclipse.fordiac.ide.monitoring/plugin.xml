@@ -242,12 +242,6 @@
                tooltip="%contributions.menus.debug.watchToolTip">
          </command>
          <command
-               commandId="org.eclipse.fordiac.ide.monitoring.commands.removeWatch"
-               icon="fordiacimage://ICON_RemoveWatch"
-               label="%contributions.menus.debug.removeWatch"
-               tooltip="%contributions.menus.debug.removeWatchToolTip">
-         </command>         
-         <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.addWatchAll"
                icon="fordiacimage://ICON_WatchInterfaceElements"
                label="%contributions.menus.debug.watchAll"
@@ -319,19 +313,6 @@
             </visibleWhen>
          </command>
          <command
-               commandId="org.eclipse.fordiac.ide.monitoring.commands.removeWatch"
-               icon="fordiacimage://ICON_RemoveWatch"
-               label="%contributions.menus.debug.removeWatch"
-               tooltip="%contributions.menus.debug.removeWatchToolTip">
-            <visibleWhen checkEnabled="false">
-               <iterate>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>         
-         <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.addWatchAll"
                icon="fordiacimage://ICON_WatchInterfaceElements"
                label="%contributions.menus.debug.watchAll"
@@ -350,11 +331,23 @@
                label="%contributions.menus.debug.removeAllWatches"
                tooltip="%contributions.menus.debug.removeAllWatchesToolTip">
             <visibleWhen checkEnabled="false">
-               <iterate>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.application.editparts.FBEditPart">
-                  </instanceof>
-               </iterate>
+               <with
+               variable="activeEditorId">
+               	<or>
+		            <equals
+		                  value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
+		            </equals>
+		            <equals
+		                  value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor">
+		            </equals>
+		            <equals
+		                  value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
+		            </equals>
+		            <equals
+		                  value="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer">
+		            </equals>
+		            </or>
+		         </with>
             </visibleWhen></command>
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.force"
