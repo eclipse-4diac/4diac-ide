@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -124,6 +125,7 @@ public class SystemExporter {
 		for (Application app : system.getApplication()) {
 			Element appElement = dom.createElement(LibraryElementTags.APPLICATION_ELEMENT);
 			CommonElementExporter.setNameAndCommentAttribute(appElement, app);
+			addAttributes(appElement, app.getAttributes(), app);
 			appElement.appendChild(new FBNetworkExporter(dom).createFBNetworkElement(app.getFBNetwork()));
 			systemRootElement.appendChild(appElement);
 		}
@@ -213,32 +215,29 @@ public class SystemExporter {
 		}
 	}
 
-	
-	/**
-	 * Adds the device.
-	 * 
-	 * @param device
-	 *            the device
-	 */
 	private void addDevice(Device device) {
 		Element deviceElement = dom.createElement(LibraryElementTags.DEVICE_ELEMENT);
 		CommonElementExporter.setNameTypeCommentAttribute(deviceElement, device, device.getType());
 		CommonElementExporter.exportXandY(device, deviceElement);
 		CommonElementExporter.addParamsConfig(dom, deviceElement, device.getVarDeclarations());
-		addAttributes(deviceElement, device.getAttributes(), device);
+		addDeviceAttributes(deviceElement, device.getAttributes(), device);
 		addResources(deviceElement, device.getResource());
 		systemRootElement.appendChild(deviceElement);
 	}
 
-	private void addAttributes(Element deviceElement, EList<Attribute> attributes, Device device) {
+	private void addDeviceAttributes(Element deviceElement, EList<Attribute> attributes, Device device) {
 		addDeviceProfile(deviceElement, device);
 		CommonElementExporter.addColorAttributeElement(dom, deviceElement, device);
-		for(Attribute attribute : attributes) {
-			Element domAttribute = CommonElementExporter.createAttributeElement(dom, attribute.getName(), attribute.getValue(), attribute.getComment());
-			deviceElement.appendChild(domAttribute);
-		}
+		addAttributes(deviceElement, attributes, device);
 	}
 
+	private void addAttributes(Element element, EList<Attribute> attributes, ConfigurableObject configurableObject) {
+		for(Attribute attribute : attributes) {
+			Element domAttribute = CommonElementExporter.createAttributeElement(dom, attribute.getName(), attribute.getValue(), attribute.getComment());
+			element.appendChild(domAttribute);
+		}
+	}
+	
 	private void addDeviceProfile(Element deviceElement, Device device) {
 		String profileName = device.getProfile();
 		if(null != profileName && !"".equals(profileName)){   //$NON-NLS-1$
