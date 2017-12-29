@@ -389,10 +389,12 @@ public class SystemImporter {
 		Application application = LibraryElementFactory.eINSTANCE.createApplication();
 		NamedNodeMap mapApplicationElement = node.getAttributes();
 		CommonElementImporter.readNameCommentAttributes(application, mapApplicationElement);
-		
+		Node attributeElements = CommonElementImporter.findChildNodeNamed(node, LibraryElementTags.ATTRIBUTE_ELEMENT);
+		if(null != attributeElements) {
+			CommonElementImporter.parseGenericAttributeNode(application, attributeElements.getAttributes());
+		}
 		application.setFBNetwork(new SubAppNetworkImporter(palette).parseFBNetwork(
 				CommonElementImporter.findChildNodeNamed(node, LibraryElementTags.SUBAPPNETWORK_ELEMENT)));
-
 		return application;
 	}
 
