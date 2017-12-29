@@ -16,42 +16,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.commands.Command;
 
-/**
- * The Class DeleteECActionCommand.
- */
 public class DeleteECActionCommand extends Command {
-
-	/** The ec action. */
 	private final ECAction ecAction;
-
-	/** The parent. */
 	private ECState parent;
 
-	/**
-	 * Instantiates a new delete ec action command.
-	 * 
-	 * @param ecAction the ec action
-	 */
 	public DeleteECActionCommand(final ECAction ecAction) {
 		this.ecAction = ecAction;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
 	@Override
 	public void execute() {
 		parent = (ECState) ecAction.eContainer();
 		redo();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
 	@Override
 	public void undo() {
 		if(null != parent){
@@ -59,11 +37,6 @@ public class DeleteECActionCommand extends Command {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
 	@Override
 	public void redo() {
 		if(null != parent){

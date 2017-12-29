@@ -16,58 +16,28 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.commands.Command;
 
-/**
- * The Class CreateECActionCommand.
- */
 public class CreateECActionCommand extends Command {
-
-	/** The action. */
 	private final ECAction action;
-
-	/** The parent. */
 	private final ECState parent;
 
-	/**
-	 * Instantiates a new creates the ec action command.
-	 * 
-	 * @param action the action
-	 * @param parent the parent
-	 */
 	public CreateECActionCommand(final ECAction action, final ECState parent) {
 		super();
 		this.action = action;
 		this.parent = parent;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
 	@Override
 	public void execute() {
-		parent.getECAction().add(action);
-
+		redo();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
 	@Override
 	public void undo() {
 		parent.getECAction().remove(action);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
 	@Override
 	public void redo() {
 		parent.getECAction().add(action);
 	}
-
 }
