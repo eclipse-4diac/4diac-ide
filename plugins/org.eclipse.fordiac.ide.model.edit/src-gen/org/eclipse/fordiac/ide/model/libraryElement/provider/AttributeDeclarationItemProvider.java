@@ -118,9 +118,9 @@ public class AttributeDeclarationItemProvider extends I4DIACElementItemProvider 
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_AttributeDeclaration_type_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AttributeDeclaration_type_feature", "_UI_AttributeDeclaration_type"),
-				 LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION__TYPE,
+				 getString("_UI_TypedElement_type_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TypedElement_type_feature", "_UI_TypedElement_type"),
+				 LibraryElementPackage.Literals.TYPED_ELEMENT__TYPE,
 				 true,
 				 false,
 				 false,

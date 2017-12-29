@@ -31,7 +31,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface Attribute extends INamedElement {
+public interface Attribute extends INamedElement, TypedElement {
 	/**
 	 * Returns the value of the '<em><b>Attribute Declaration</b></em>' reference.
 	 * <!-- begin-user-doc -->

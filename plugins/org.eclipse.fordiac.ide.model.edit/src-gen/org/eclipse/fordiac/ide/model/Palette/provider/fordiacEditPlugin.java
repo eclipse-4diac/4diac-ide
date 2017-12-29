@@ -46,7 +46,6 @@ public final class fordiacEditPlugin extends EMFPlugin {
 	public fordiacEditPlugin() {
 		super
 		  (new ResourceLocator [] {
-		     EcoreEditPlugin.INSTANCE,
 		   });
 	}
 

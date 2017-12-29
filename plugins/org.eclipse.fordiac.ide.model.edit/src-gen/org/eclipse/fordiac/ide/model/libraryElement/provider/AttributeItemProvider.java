@@ -58,6 +58,7 @@ public class AttributeItemProvider
 
 			addNamePropertyDescriptor(object);
 			addCommentPropertyDescriptor(object);
+			addTypePropertyDescriptor(object);
 			addAttributeDeclarationPropertyDescriptor(object);
 			addValuePropertyDescriptor(object);
 		}
@@ -100,6 +101,28 @@ public class AttributeItemProvider
 				 getString("_UI_INamedElement_comment_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", "_UI_INamedElement_type"),
 				 LibraryElementPackage.Literals.INAMED_ELEMENT__COMMENT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TypedElement_type_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TypedElement_type_feature", "_UI_TypedElement_type"),
+				 LibraryElementPackage.Literals.TYPED_ELEMENT__TYPE,
 				 true,
 				 false,
 				 false,
@@ -192,6 +215,7 @@ public class AttributeItemProvider
 		switch (notification.getFeatureID(Attribute.class)) {
 			case LibraryElementPackage.ATTRIBUTE__NAME:
 			case LibraryElementPackage.ATTRIBUTE__COMMENT:
+			case LibraryElementPackage.ATTRIBUTE__TYPE:
 			case LibraryElementPackage.ATTRIBUTE__VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

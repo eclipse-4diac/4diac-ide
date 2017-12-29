@@ -81,6 +81,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -174,6 +175,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.APPLICATION: {
 				Application application = (Application)theEObject;
 				T result = caseApplication(application);
+				if (result == null) result = caseConfigurableObject(application);
 				if (result == null) result = caseINamedElement(application);
 				if (result == null) result = caseI4DIACElement(application);
 				if (result == null) result = defaultCase(theEObject);
@@ -371,6 +373,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				Attribute attribute = (Attribute)theEObject;
 				T result = caseAttribute(attribute);
 				if (result == null) result = caseINamedElement(attribute);
+				if (result == null) result = caseTypedElement(attribute);
 				if (result == null) result = caseI4DIACElement(attribute);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -727,7 +730,14 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				AttributeDeclaration attributeDeclaration = (AttributeDeclaration)theEObject;
 				T result = caseAttributeDeclaration(attributeDeclaration);
 				if (result == null) result = caseINamedElement(attributeDeclaration);
+				if (result == null) result = caseTypedElement(attributeDeclaration);
 				if (result == null) result = caseI4DIACElement(attributeDeclaration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.TYPED_ELEMENT: {
+				TypedElement typedElement = (TypedElement)theEObject;
+				T result = caseTypedElement(typedElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1752,6 +1762,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAttributeDeclaration(AttributeDeclaration object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Typed Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Typed Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTypedElement(TypedElement object) {
 		return null;
 	}
 
