@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -389,15 +390,20 @@ public class SystemImporter {
 		Application application = LibraryElementFactory.eINSTANCE.createApplication();
 		NamedNodeMap mapApplicationElement = node.getAttributes();
 		CommonElementImporter.readNameCommentAttributes(application, mapApplicationElement);
-		Node attributeElements = CommonElementImporter.findChildNodeNamed(node, LibraryElementTags.ATTRIBUTE_ELEMENT);
-		if(null != attributeElements) {
-			CommonElementImporter.parseGenericAttributeNode(application, attributeElements.getAttributes());
-		}
+		parseAttributes(application, node.getChildNodes());
 		application.setFBNetwork(new SubAppNetworkImporter(palette).parseFBNetwork(
 				CommonElementImporter.findChildNodeNamed(node, LibraryElementTags.SUBAPPNETWORK_ELEMENT)));
 		return application;
 	}
 
+	public void parseAttributes(ConfigurableObject configurableObject, NodeList node) {
+		for (int i = 0; i < node.getLength(); i++) {
+			Node n = node.item(i);
+			if(n.getNodeName() == LibraryElementTags.ATTRIBUTE_ELEMENT){
+				CommonElementImporter.parseGenericAttributeNode(configurableObject, n.getAttributes());
+			}
+		}
+	}
 
 	public static void createResourceTypeNetwork(final ResourceType type,
 			final FBNetwork resourceFBNetwork) {
