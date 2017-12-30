@@ -9,11 +9,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.model.commands.change.AttributeChangeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AttributeCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.AttributeDeleteCommand;
+import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -21,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -49,6 +55,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	private TableViewer attributeViewer;
 	private final String NAME = "name"; //$NON-NLS-1$
 	private final String VALUE = "value"; //$NON-NLS-1$
+	private final String TYPE = "type"; //$NON-NLS-1$
 	private final String COMMENT = "comment"; //$NON-NLS-1$
 	private Button attributeNew;
 	private Button attributeDelete;
@@ -95,6 +102,17 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		});
 	}
 
+	private String[] getDataTypes() {
+		List<BaseType1> list = Arrays.asList(BaseType1.values()); 
+		Collections.sort(list);
+		String types[] = new String[list.size()];
+		int i = 0; 
+		for(BaseType1 type : list) {
+			types[i++] = type.getName();
+		}	
+		return types;
+	}
+	
 	private void createInputInfoGroup(Composite parent) {		
 		attributeViewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL | SWT.FILL);
 		GridData gridDataVersionViewer = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -107,20 +125,31 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		TableColumn column1 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
 		column1.setText(NAME);
 		TableColumn column2 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
-		column2.setText(VALUE); 
+		column2.setText(TYPE); 
 		TableColumn column3 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
-		column3.setText(COMMENT);
+		column3.setText(VALUE); 
+		TableColumn column4 = new TableColumn(attributeViewer.getTable(), SWT.LEFT);
+		column4.setText(COMMENT);
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 70));
+		layout.addColumnData(new ColumnWeightData(30, 70));
 		layout.addColumnData(new ColumnWeightData(30, 70));
 		layout.addColumnData(new ColumnWeightData(50, 90));
 		table.setLayout(layout);		
 		attributeViewer.setContentProvider(new InputContentProvider());
 		attributeViewer.setLabelProvider(new InputLabelProvider());		
-		attributeViewer.setCellEditors(new CellEditor[] {new TextCellEditor(table), new TextCellEditor(table, SWT.MULTI | SWT.V_SCROLL), new TextCellEditor(table)});
-		attributeViewer.setColumnProperties(new String[] {NAME, VALUE, COMMENT});
+		attributeViewer.setCellEditors(new CellEditor[] {
+				new TextCellEditor(table), 
+				new ComboBoxCellEditor(table, getDataTypes(), SWT.READ_ONLY),
+				new TextCellEditor(table, SWT.MULTI | SWT.V_SCROLL), 
+				new TextCellEditor(table)
+		});
+		attributeViewer.setColumnProperties(new String[] {NAME, TYPE, VALUE, COMMENT});
 		attributeViewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(final Object element, final String property) {
+				if(element instanceof Attribute && property == TYPE && null != ((Attribute)element).getAttributeDeclaration()) {
+					return false;
+				}
 				return true;
 			}
 			public Object getValue(final Object element, final String property) {
@@ -128,7 +157,9 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 				case NAME:
 					return ((Attribute) element).getName();
 				case VALUE:
-					return ((Attribute) element).getValue();	
+					return ((Attribute) element).getValue();
+				case TYPE:
+					return ((Attribute) element).getType().getValue();
 				case COMMENT:
 					return ((Attribute) element).getComment();
 				default:
@@ -140,13 +171,16 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 				AttributeChangeCommand cmd = null;
 				switch (property) {
 				case NAME:
-					cmd = new AttributeChangeCommand(data, value.toString(), null, null);
+					cmd = new AttributeChangeCommand(data, value.toString(), null, null, null);
 					break;
 				case VALUE:
-					cmd = new AttributeChangeCommand(data, null, value.toString(), null);
+					cmd = new AttributeChangeCommand(data, null, value.toString(), null, null);
+					break;
+				case TYPE:
+					cmd = new AttributeChangeCommand(data, null, null, BaseType1.get((Integer)value), null);
 					break;
 				case COMMENT:
-					cmd = new AttributeChangeCommand(data, null, null, value.toString());
+					cmd = new AttributeChangeCommand(data, null, null, null, value.toString());
 					break;
 				}
 				executeCommand(cmd);
@@ -209,8 +243,10 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 				case 0:
 					return ((Attribute) element).getName();
 				case 1:
-					return ((Attribute) element).getValue();
+					return ((Attribute) element).getType().getName();
 				case 2:
+					return ((Attribute) element).getValue();
+				case 3:
 					return ((Attribute) element).getComment() != null ? ((Attribute) element).getComment() : ""; //$NON-NLS-1$
 				default:
 					break;

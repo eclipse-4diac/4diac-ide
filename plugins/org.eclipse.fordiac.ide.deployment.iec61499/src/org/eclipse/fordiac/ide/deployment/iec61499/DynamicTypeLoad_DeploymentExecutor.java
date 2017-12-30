@@ -106,7 +106,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 	private void setAttribute(Device device, String string, HashSet<String> hashSet) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				device.setAttribute(string, String.join(", ", hashSet), "created during deployment");
+				device.setAttribute(string, "STRING", String.join(", ", hashSet), "created during deployment");
 			}
 		});
 	}

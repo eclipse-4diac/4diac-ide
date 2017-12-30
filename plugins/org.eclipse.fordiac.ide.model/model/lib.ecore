@@ -870,12 +870,13 @@
   <eClassifiers xsi:type="ecore:EClass" name="ConfigurableObject" eSuperTypes="#//INamedElement">
     <eOperations name="setAttribute">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.GEN.setAttribute(this, attributeName, value, comment);"/>
+        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.GEN.setAttribute(this, attributeName, type, value, comment);"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value=" searches for an existing Parameter with the specified parameterName. it is&#xD;&#xA; NOT case sensitive! If there is no Parameter available a new one will be created. "/>
       </eAnnotations>
       <eParameters name="attributeName" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+      <eParameters name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
       <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
       <eParameters name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eOperations>

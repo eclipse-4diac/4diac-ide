@@ -6,6 +6,7 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -446,12 +447,13 @@ public enum Annotations {
 	}
 	
 	//*** ConfigurabeleObject ***//
-	public void setAttribute(ConfigurableObject object, final String attributeName, final String value, final String comment) {
+	public void setAttribute(ConfigurableObject object, final String attributeName, final String type, final String value, final String comment) {
 		Attribute attribute = getAttribute(object, attributeName);
 		if (attribute == null) {
 			attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 			attribute.setName(attributeName);
 			attribute.setValue(value);
+			attribute.setType(BaseType1.getByName(type));
 			attribute.setComment(comment);
 			object.getAttributes().add(attribute);
 		} else {

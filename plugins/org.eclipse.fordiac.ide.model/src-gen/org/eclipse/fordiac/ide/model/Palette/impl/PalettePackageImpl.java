@@ -170,7 +170,6 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		isInited = true;
 
 		// Initialize simple dependencies
-		EcorePackage.eINSTANCE.eClass();
 		XMLTypePackage.eINSTANCE.eClass();
 
 		// Obtain or create and register interdependencies

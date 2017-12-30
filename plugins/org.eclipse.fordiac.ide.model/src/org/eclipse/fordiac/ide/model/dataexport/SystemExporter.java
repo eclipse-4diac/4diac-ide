@@ -233,7 +233,7 @@ public class SystemExporter {
 
 	private void addAttributes(Element element, EList<Attribute> attributes, ConfigurableObject configurableObject) {
 		for(Attribute attribute : attributes) {
-			Element domAttribute = CommonElementExporter.createAttributeElement(dom, attribute.getName(), attribute.getValue(), attribute.getComment());
+			Element domAttribute = CommonElementExporter.createAttributeElement(dom, attribute.getName(), attribute.getType().getName(), attribute.getValue(), attribute.getComment());
 			element.appendChild(domAttribute);
 		}
 	}
@@ -241,7 +241,7 @@ public class SystemExporter {
 	private void addDeviceProfile(Element deviceElement, Device device) {
 		String profileName = device.getProfile();
 		if(null != profileName && !"".equals(profileName)){   //$NON-NLS-1$
-			Element profileAttribute = CommonElementExporter.createAttributeElement(dom, LibraryElementTags.DEVICE_PROFILE, profileName, "device profile");		
+			Element profileAttribute = CommonElementExporter.createAttributeElement(dom, LibraryElementTags.DEVICE_PROFILE, "STRING", profileName, "device profile");		
 			deviceElement.appendChild(profileAttribute);
 		}
 		
