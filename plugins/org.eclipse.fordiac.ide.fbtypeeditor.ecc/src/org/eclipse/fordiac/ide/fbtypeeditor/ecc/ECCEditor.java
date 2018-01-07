@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.AddECCActionAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.DeleteECCAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.ECCSelectAllAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.NewStateAction;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.SetInitialStateAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithm;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
@@ -192,11 +191,7 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 				
 				action = registry.getAction(AddECCActionAction.ADD_ECC_ACTION);
-				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-				
-				action = registry.getAction(SetInitialStateAction.SET_INITIAL_STATE_ACTION);
-				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-				
+				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);				
 			}
 		};
 		viewer.setContextMenu(cmProvider);
@@ -336,10 +331,6 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 		registry.registerAction(action);
 	
 		action = new AddECCActionAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
-		
-		action = new SetInitialStateAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 		
