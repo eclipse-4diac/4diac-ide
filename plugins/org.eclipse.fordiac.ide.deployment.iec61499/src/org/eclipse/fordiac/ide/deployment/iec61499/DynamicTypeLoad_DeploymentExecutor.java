@@ -74,6 +74,10 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 			if(fbType instanceof CompositeFBType) {
 				for(FBNetworkElement netelem : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
 					if(!devMgmCommHandler.getTypes().contains(netelem.getTypeName())) {
+						HashMap<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());						
+						if(!adapters.isEmpty()) {
+							loopAdapterTypes(adapters, res);
+						}
 						createFBType((FBType) netelem.getType(), res);
 					}
 				}
@@ -174,6 +178,10 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "Adapter Types" }));
 			}
 		}
+		loopAdapterTypes(adapters, res);
+	}
+
+	private void loopAdapterTypes(HashMap<String, AdapterType> adapters, Resource res) {
 		adapters.keySet().forEach((e) -> {
 			try {
 				createAdapterType(e, adapters, res);
