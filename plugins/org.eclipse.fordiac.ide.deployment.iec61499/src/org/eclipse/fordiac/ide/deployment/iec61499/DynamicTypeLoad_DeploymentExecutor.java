@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -70,6 +71,13 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 		if ((fbType instanceof BasicFBType || fbType instanceof CompositeFBType)
 				&& ( (null != devMgmCommHandler.getTypes() && !devMgmCommHandler.getTypes().contains(fbType.getName())) 
 						|| (null == devMgmCommHandler.getTypes() && !isAttribute(res.getDevice(), fbType.getName(), "FBType")))) {
+			if(fbType instanceof CompositeFBType) {
+				for(FBNetworkElement netelem : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
+					if(!devMgmCommHandler.getTypes().contains(netelem.getTypeName())) {
+						createFBType((FBType) netelem.getType(), res);
+					}
+				}
+			}
 			ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 			String luaSkript = luaFilter.createLUA(fbType);
 			String request = MessageFormat.format(Messages.DTL_CreateFBType,
