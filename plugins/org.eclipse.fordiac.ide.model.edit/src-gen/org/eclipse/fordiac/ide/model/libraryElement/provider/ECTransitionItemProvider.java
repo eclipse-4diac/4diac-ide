@@ -204,12 +204,14 @@ public class ECTransitionItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		ECTransition ecTransition = (ECTransition)object;
-		return getString("_UI_ECTransition_type") + " " + ecTransition.getX();
+		return ((null != ecTransition.getSource()) ? ecTransition.getSource().getName() : "null") + " TO " +  //$NON-NLS-1$ //$NON-NLS-2$
+				((null != ecTransition.getDestination()) ? ecTransition.getDestination().getName() : "null") + //$NON-NLS-1$
+						" := " + ecTransition.getConditionText();  //$NON-NLS-1$
 	}
 
 	/**
