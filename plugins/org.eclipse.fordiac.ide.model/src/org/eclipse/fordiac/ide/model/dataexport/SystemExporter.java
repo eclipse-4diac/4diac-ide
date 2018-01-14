@@ -150,7 +150,8 @@ public class SystemExporter {
 			segmentElement.setAttribute(LibraryElementTags.X_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(segment.getX()).toString());
 			segmentElement.setAttribute(LibraryElementTags.Y_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(segment.getY()).toString());
 			segmentElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(segment.getWidth()).toString());
-			CommonElementExporter.addColorAttributeElement(dom, segmentElement, segment);			
+			CommonElementExporter.addColorAttributeElement(dom, segmentElement, segment);
+			addAttributes(segmentElement, segment.getAttributes(), segment);
 			systemRootElement.appendChild(segmentElement);
 		}
 

@@ -9,23 +9,31 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.properties;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.properties.AbstractAttributeSection;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
+import org.eclipse.fordiac.ide.systemconfiguration.editparts.SegmentEditPart;
 
 public class AttributeSection extends AbstractAttributeSection {
-	protected Device getInputType(Object input) {
+	protected ConfigurableObject getInputType(Object input) {
 		if(input instanceof DeviceEditPart){
 			return ((DeviceEditPart) input).getModel();
+		}
+		if(input instanceof SegmentEditPart) {
+			return ((SegmentEditPart) input).getModel();
 		}
 		return null;
 	}
 
 	@Override
-	protected EObject getType() {
+	protected ConfigurableObject getType() {
 		if(type instanceof Device){
 			return (Device) type;
+		}
+		if(type instanceof Segment){
+			return (Segment) type;
 		}
 		return null;
 	}
