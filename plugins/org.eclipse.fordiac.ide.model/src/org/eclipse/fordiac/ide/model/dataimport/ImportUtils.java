@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -206,6 +207,7 @@ public class ImportUtils {
 	public static Event parseEvent(final Node n) throws TypeImportException {
 		NamedNodeMap map = n.getAttributes();
 		Event e = LibraryElementFactory.eINSTANCE.createEvent();
+		e.setType(EventTypeLibrary.getInstance().getType(null));
 		Node name = map.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE);
 		if (name != null) {
 			e.setName(name.getNodeValue());
