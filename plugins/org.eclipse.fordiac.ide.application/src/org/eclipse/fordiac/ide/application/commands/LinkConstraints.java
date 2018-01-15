@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.util.Utils;
 
@@ -346,10 +347,15 @@ public class LinkConstraints {
 				EObject sourceCont = source.eContainer().eContainer();
 				EObject destCont = target.eContainer().eContainer();
 				//the connectin can exist in this case if it is of an interface element of the container (e.g., SubApp, CFB) and an internal FB
-				canExist = sourceCont != destCont;						
+				canExist = sourceCont != destCont && ((isTypeContainer(sourceCont) && !isTypeContainer(destCont))  
+						|| (!isTypeContainer(sourceCont) && isTypeContainer(destCont)));						
 			}
 		}
 		return canExist;
+	}
+
+	private static boolean isTypeContainer(EObject cont) {
+		return (cont instanceof SubApp) || (cont instanceof SubAppType) || (cont instanceof CompositeFBType);
 	}
 
 	/**
