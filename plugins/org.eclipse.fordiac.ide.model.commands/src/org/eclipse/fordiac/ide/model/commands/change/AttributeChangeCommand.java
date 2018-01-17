@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.gef.commands.Command;
 
@@ -23,17 +24,20 @@ public class AttributeChangeCommand extends Command {
 	private String valueOld;
 	private String comment;
 	private String commentOld;
+	private BaseType1 type;
+	private BaseType1 typeOld;
 	
-	public AttributeChangeCommand(Attribute attribute, String name, String value, String comment) {
+	public AttributeChangeCommand(Attribute attribute, String name, String value, BaseType1 type, String comment) {
 		this.attribute = attribute;
 		this.comment = comment;
 		this.value = value;
 		this.name = name;
+		this.type = type;
 	}
 	
 	@Override
 	public boolean canExecute() {
-		return null != attribute && (null != name || null != value || null != comment);
+		return null != attribute && (null != name || null != value || null != comment || (null == attribute.getAttributeDeclaration() && null != type));
 	}
 
 	@Override
@@ -41,6 +45,7 @@ public class AttributeChangeCommand extends Command {
 		nameOld = attribute.getName();
 		valueOld = attribute.getValue();
 		commentOld = attribute.getComment();
+		typeOld = attribute.getType();
 		redo();
 	}
 
@@ -55,6 +60,9 @@ public class AttributeChangeCommand extends Command {
 		if(null != value) {			
 			attribute.setValue(valueOld);
 		}
+		if(null != type) {			
+			attribute.setType(typeOld);
+		}
 	}
 
 	@Override
@@ -67,6 +75,9 @@ public class AttributeChangeCommand extends Command {
 		}
 		if(null != value) {			
 			attribute.setValue(value);
+		}
+		if(null != type) {			
+			attribute.setType(type);
 		}
 	}
 

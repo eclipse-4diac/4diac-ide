@@ -28,7 +28,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface Application extends INamedElement {
+public interface Application extends ConfigurableObject {
 	/**
 	 * Returns the value of the '<em><b>FB Network</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

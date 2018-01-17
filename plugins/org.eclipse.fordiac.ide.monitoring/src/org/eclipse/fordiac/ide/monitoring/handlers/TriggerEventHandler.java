@@ -13,7 +13,10 @@ package org.eclipse.fordiac.ide.monitoring.handlers;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
+import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -25,9 +28,9 @@ public class TriggerEventHandler extends AbstractMonitoringHandler {
 		super.execute(event);
 		StructuredSelection selection = (StructuredSelection)HandlerUtil.getCurrentSelection(event);
 		
-		if ((selection).getFirstElement() instanceof InterfaceEditPart) {
-			InterfaceEditPart editPart = (InterfaceEditPart) (selection).getFirstElement();
-			MonitoringManager.getInstance().triggerEvent(editPart.getModel());
+		Event ev = getEvent(selection.getFirstElement());
+		if(null != ev){
+			MonitoringManager.getInstance().triggerEvent(ev);
 		}
 		return null;
 	}
@@ -43,16 +46,26 @@ public class TriggerEventHandler extends AbstractMonitoringHandler {
 			
 			if(1 == sel.size()){
 				//only allow trigger event if only one element is selected
-				if(sel.getFirstElement() instanceof InterfaceEditPart){
-					InterfaceEditPart editPart = (InterfaceEditPart) sel.getFirstElement();
-					if(manager.containsPort(editPart.getModel())
-							&& editPart.isEvent()){
-						needToAdd = true;
-					}
+				Event editPart = getEvent(sel.getFirstElement());
+				if((null != editPart) && manager.containsPort(editPart)) {
+					needToAdd = true;
 				}
 			}
 		}
 		setBaseEnabled(needToAdd);
+	}
+
+	private Event getEvent(Object object) {
+		IInterfaceElement ie = null;
+		if(object instanceof IInterfaceElement) {
+			ie = ((InterfaceEditPart) object).getModel();
+		} else if (object instanceof MonitoringEditPart){
+			ie = ((MonitoringEditPart)object).getModel().getPort().getInterfaceElement();
+		}
+		if(ie instanceof Event) {
+			return (Event)ie;
+		}
+		return null;
 	}
 
 }

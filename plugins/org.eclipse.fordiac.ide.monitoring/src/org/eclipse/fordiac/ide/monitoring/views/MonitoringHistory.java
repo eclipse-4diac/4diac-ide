@@ -62,8 +62,7 @@ public class MonitoringHistory extends ViewPart {
 //
 //			@Override
 //			public void widgetDefaultSelected(SelectionEvent e) {
-//				// TODO Auto-generated method stub
-//
+//				// Nothing to do here
 //			}
 //		});
 //		
@@ -103,14 +102,12 @@ public class MonitoringHistory extends ViewPart {
 //			
 //			@Override
 //			public void notifyTriggerEvent(String port) {
-//				// TODO Auto-generated method stub
-//				
+//				// Nothing to do here 
 //			}
 //			
 //			@Override
 //			public void notifyRemovePort(String port) {
-//				// TODO Auto-generated method stub
-//				
+//				// Nothing to do here
 //			}
 //			
 //			@Override
@@ -150,7 +147,7 @@ public class MonitoringHistory extends ViewPart {
 //			
 //			@Override
 //			public void widgetDefaultSelected(SelectionEvent e) {
-//				// TODO Auto-generated method stub
+//				// Nothing todo here
 //				
 //			}
 //		});

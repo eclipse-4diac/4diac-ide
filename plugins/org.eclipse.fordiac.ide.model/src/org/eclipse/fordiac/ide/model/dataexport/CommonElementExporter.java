@@ -112,13 +112,14 @@ public abstract class CommonElementExporter {
 	
 	public static void addColorAttributeElement(final Document dom, final Element parent, final ColorizableElement colElement){
 		String colorValue = colElement.getColor().getRed() + "," + colElement.getColor().getGreen() + "," + colElement.getColor().getBlue();  //$NON-NLS-1$ //$NON-NLS-2$
-		Element colorAttrubute = createAttributeElement(dom, LibraryElementTags.COLOR, colorValue, "color");		
-		parent.appendChild(colorAttrubute);
+		Element colorAttribute = createAttributeElement(dom, LibraryElementTags.COLOR, "STRING", colorValue, "color");		
+		parent.appendChild(colorAttribute);
 	}
 
-	public static Element createAttributeElement(final Document dom, String name, String value, String comment){
+	public static Element createAttributeElement(final Document dom, String name, String type, String value, String comment){
 		Element attributeElement = dom.createElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
 		attributeElement.setAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
+		attributeElement.setAttribute(LibraryElementTags.TYPE_ATTRIBUTE, type);
 		attributeElement.setAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
 		attributeElement.setAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
 		return attributeElement;

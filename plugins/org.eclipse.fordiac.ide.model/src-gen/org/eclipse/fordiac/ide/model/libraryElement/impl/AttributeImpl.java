@@ -18,9 +18,11 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl#getAttributeDeclaration <em>Attribute Declaration</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl#getValue <em>Value</em>}</li>
  * </ul>
@@ -78,6 +81,26 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 	 * @ordered
 	 */
 	protected String comment = COMMENT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final BaseType1 TYPE_EDEFAULT = BaseType1.STRING;
+
+	/**
+	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected BaseType1 type = TYPE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getAttributeDeclaration() <em>Attribute Declaration</em>}' reference.
@@ -175,6 +198,27 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public BaseType1 getType() {
+		return type;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setType(BaseType1 newType) {
+		BaseType1 oldType = type;
+		type = newType == null ? TYPE_EDEFAULT : newType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ATTRIBUTE__TYPE, oldType, type));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getValue() {
 		return value;
 	}
@@ -241,6 +285,8 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 				return getName();
 			case LibraryElementPackage.ATTRIBUTE__COMMENT:
 				return getComment();
+			case LibraryElementPackage.ATTRIBUTE__TYPE:
+				return getType();
 			case LibraryElementPackage.ATTRIBUTE__ATTRIBUTE_DECLARATION:
 				if (resolve) return getAttributeDeclaration();
 				return basicGetAttributeDeclaration();
@@ -263,6 +309,9 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 				return;
 			case LibraryElementPackage.ATTRIBUTE__COMMENT:
 				setComment((String)newValue);
+				return;
+			case LibraryElementPackage.ATTRIBUTE__TYPE:
+				setType((BaseType1)newValue);
 				return;
 			case LibraryElementPackage.ATTRIBUTE__ATTRIBUTE_DECLARATION:
 				setAttributeDeclaration((AttributeDeclaration)newValue);
@@ -288,6 +337,9 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 			case LibraryElementPackage.ATTRIBUTE__COMMENT:
 				setComment(COMMENT_EDEFAULT);
 				return;
+			case LibraryElementPackage.ATTRIBUTE__TYPE:
+				setType(TYPE_EDEFAULT);
+				return;
 			case LibraryElementPackage.ATTRIBUTE__ATTRIBUTE_DECLARATION:
 				setAttributeDeclaration((AttributeDeclaration)null);
 				return;
@@ -310,12 +362,46 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case LibraryElementPackage.ATTRIBUTE__COMMENT:
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			case LibraryElementPackage.ATTRIBUTE__TYPE:
+				return type != TYPE_EDEFAULT;
 			case LibraryElementPackage.ATTRIBUTE__ATTRIBUTE_DECLARATION:
 				return attributeDeclaration != null;
 			case LibraryElementPackage.ATTRIBUTE__VALUE:
 				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == TypedElement.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.ATTRIBUTE__TYPE: return LibraryElementPackage.TYPED_ELEMENT__TYPE;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == TypedElement.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.TYPED_ELEMENT__TYPE: return LibraryElementPackage.ATTRIBUTE__TYPE;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**
@@ -332,6 +418,8 @@ public class AttributeImpl extends I4DIACElementImpl implements Attribute {
 		result.append(name);
 		result.append(", comment: ");
 		result.append(comment);
+		result.append(", type: ");
+		result.append(type);
 		result.append(", value: ");
 		result.append(value);
 		result.append(')');

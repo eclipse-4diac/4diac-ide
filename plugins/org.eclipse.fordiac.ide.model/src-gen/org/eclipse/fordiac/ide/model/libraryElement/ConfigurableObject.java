@@ -50,11 +50,11 @@ public interface ConfigurableObject extends INamedElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String" valueDataType="org.eclipse.emf.ecore.xml.type.String" commentDataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.fordiac.ide.model.Annotations.GEN.setAttribute(this, attributeName, value, comment);'"
+	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String" typeDataType="org.eclipse.emf.ecore.xml.type.String" valueDataType="org.eclipse.emf.ecore.xml.type.String" commentDataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.fordiac.ide.model.Annotations.GEN.setAttribute(this, attributeName, type, value, comment);'"
 	 * @generated
 	 */
-	void setAttribute(String attributeName, String value, String comment);
+	void setAttribute(String attributeName, String type, String value, String comment);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -35,8 +35,7 @@ public class RenameType extends RenameParticipant {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return Messages.RenameType_Name;
 	}
 
 	@Override
@@ -76,7 +75,7 @@ public class RenameType extends RenameParticipant {
 	}
 
 	protected RefactoringStatus getWrongIdentifierErrorStatus() {
-		return RefactoringStatus.createFatalErrorStatus("Type Name is not a valid Identifier");
+		return RefactoringStatus.createFatalErrorStatus(Messages.RenameType_InvalidIdentifierErrorMessage);
 	}
 
 

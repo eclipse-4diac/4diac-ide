@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.onlineedit;
 import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 import org.osgi.framework.BundleContext;
 
-// TODO: Auto-generated Javadoc
 /**
  * The activator class controls the plug-in life cycle.
  */

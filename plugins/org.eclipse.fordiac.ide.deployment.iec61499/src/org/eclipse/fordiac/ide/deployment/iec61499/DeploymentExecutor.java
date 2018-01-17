@@ -156,7 +156,6 @@ public class DeploymentExecutor implements IDeploymentExecutor {
 				null != source.getFBNetworkElement() && null != destination.getFBNetworkElement()){
 			FBNetworkElement sourceFB = source.getFBNetworkElement();
 			FBNetworkElement destFB = destination.getFBNetworkElement();
-			//TODO model refactoring - for subapps here the full name of the  fbNEtworkelement is needed
 			String request = MessageFormat.format(
 					Messages.DeploymentExecutor_CreateConnection, new Object[] {
 							this.id++, connData.sourcePrefix + sourceFB.getName() + "." + source.getName(),  //$NON-NLS-1$
@@ -282,7 +281,7 @@ public class DeploymentExecutor implements IDeploymentExecutor {
 	public void killDevice(Device dev) throws Exception {
 		String kill = MessageFormat.format(Messages.DeploymentExecutor_KillDevice, new Object[] { id++ });
 		try {
-			sendREQ("", kill);
+			sendREQ("", kill); //$NON-NLS-1$
 		} catch (IOException e) {
 			if (e instanceof EOFException) {
 				// exception can be ignored, as no response is returned by forte

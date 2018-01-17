@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.systemmanagement.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -82,7 +83,6 @@ public class SystemImport extends Wizard implements IImportWizard {
 
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				//TODO: exchange createProject with SystemManager.getInstance().createProject();
 				system = SystemManager.INSTANCE.createLocalProject(page.getProjectName());
 				try {
 					SystemImporter sysImporter = new SystemImporter();
@@ -91,8 +91,7 @@ public class SystemImport extends Wizard implements IImportWizard {
 					SystemManager.INSTANCE.saveSystem(system);
 					stream.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Activator.getDefault().logError(e.getMessage(), e);
 				}
 			}
 		};

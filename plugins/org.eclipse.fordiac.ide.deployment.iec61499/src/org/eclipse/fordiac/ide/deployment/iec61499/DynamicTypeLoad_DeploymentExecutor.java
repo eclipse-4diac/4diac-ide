@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -70,6 +71,17 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 		if ((fbType instanceof BasicFBType || fbType instanceof CompositeFBType)
 				&& ( (null != devMgmCommHandler.getTypes() && !devMgmCommHandler.getTypes().contains(fbType.getName())) 
 						|| (null == devMgmCommHandler.getTypes() && !isAttribute(res.getDevice(), fbType.getName(), "FBType")))) {
+			if(fbType instanceof CompositeFBType) {
+				for(FBNetworkElement netelem : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
+					if(!devMgmCommHandler.getTypes().contains(netelem.getTypeName())) {
+						HashMap<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());						
+						if(!adapters.isEmpty()) {
+							loopAdapterTypes(adapters, res);
+						}
+						createFBType((FBType) netelem.getType(), res);
+					}
+				}
+			}
 			ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 			String luaSkript = luaFilter.createLUA(fbType);
 			String request = MessageFormat.format(Messages.DTL_CreateFBType,
@@ -106,7 +118,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 	private void setAttribute(Device device, String string, HashSet<String> hashSet) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				device.setAttribute(string, String.join(", ", hashSet), "created during deployment");
+				device.setAttribute(string, "STRING", String.join(", ", hashSet), "created during deployment");
 			}
 		});
 	}
@@ -166,6 +178,10 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "Adapter Types" }));
 			}
 		}
+		loopAdapterTypes(adapters, res);
+	}
+
+	private void loopAdapterTypes(HashMap<String, AdapterType> adapters, Resource res) {
 		adapters.keySet().forEach((e) -> {
 			try {
 				createAdapterType(e, adapters, res);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 fortiss GmbH
+ * Copyright (c) 2015, 2017 fortiss GmbH
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,70 +10,99 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
+import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+
+/** Removes all selected watches
+ *
+ */
 public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		super.execute(event);
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		
 		if (selection instanceof StructuredSelection) {
-			StructuredSelection sel = (StructuredSelection) selection;
 			MonitoringManager manager = MonitoringManager.getInstance();
-		
-			for (Iterator iter = sel.iterator(); iter.hasNext();) {
-				Object selectedObject = iter.next();
-				if (selectedObject instanceof FBEditPart) {
-					FBEditPart editPart = (FBEditPart) selectedObject;
-					for (IInterfaceElement element : editPart.getModel().getInterface().getAllInterfaceElements()) {
-						if(manager.containsPort(element)) {
-							RemoveWatchHandler.removeMonitoringElement(manager, element);
-						}
-					}
-				}
+			Set<IInterfaceElement> foundElements = getSelectedWatchedelements(manager, (StructuredSelection) selection);
+			for (IInterfaceElement ifElement : foundElements) {
+				removeMonitoringElement(manager, ifElement);
 			}
 			refreshEditor();
 		}		
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void setEnabled(Object evaluationContext){
 		boolean needToAdd = false;
 		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		
 		if (selection instanceof StructuredSelection) {
-			StructuredSelection sel = (StructuredSelection) selection;
-			MonitoringManager manager = MonitoringManager.getInstance();
-
-			for (Iterator iterator = sel.iterator(); iterator.hasNext();) {
-				Object selectedObject = iterator.next();
-
-				if (selectedObject instanceof FBEditPart) {
-					FBEditPart editPart = (FBEditPart) selectedObject;
-					for (IInterfaceElement element : editPart.getModel().getInterface().getAllInterfaceElements()) {
-						if(manager.containsPort(element)) {
-							needToAdd = true;
-							break;
-						}
-					}					
-				}	
-			}
+			needToAdd = !getSelectedWatchedelements(MonitoringManager.getInstance(), (StructuredSelection) selection).isEmpty();
 		}
 		setBaseEnabled(needToAdd);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static Set<IInterfaceElement> getSelectedWatchedelements(MonitoringManager manager, StructuredSelection selection) {
+		Set<IInterfaceElement> foundElements = new HashSet<>();
+		for (Iterator iterator = selection.iterator(); iterator.hasNext();) {
+			Object selectedObject = iterator.next();
+
+			if (selectedObject instanceof FBEditPart) {
+				foundElements.addAll(getWatchedIfElementsForFB(manager, ((FBEditPart)selectedObject).getModel()));
+			} else if (selectedObject instanceof FBNetworkEditPart) {
+				for (FBNetworkElement fbnElement : ((FBNetworkEditPart)selectedObject).getModel().getNetworkElements()) {
+					foundElements.addAll(getWatchedIfElementsForFB(manager, fbnElement));
+				}
+			}else if (selectedObject instanceof InterfaceEditPart) {
+				if(manager.containsPort( ((InterfaceEditPart)selectedObject).getModel())) {
+					foundElements.add(((InterfaceEditPart)selectedObject).getModel());
+				}
+			}
+		}	
+		return foundElements;
+	}
+
+	static private Set<IInterfaceElement> getWatchedIfElementsForFB(MonitoringManager manager,
+			FBNetworkElement model) {
+		Set<IInterfaceElement> foundElements = new HashSet<>();
+		for (IInterfaceElement element : model.getInterface().getAllInterfaceElements()) {
+			if(manager.containsPort(element)) {
+				foundElements.add(element);
+			}
+		}	
+		return foundElements;
+	}
+	
+	static private void removeMonitoringElement(MonitoringManager manager, IInterfaceElement port) {	
+		MonitoringBaseElement element = manager.getMonitoringElement(port);
+
+		if (element instanceof MonitoringAdapterElement) {
+			for (MonitoringElement child : ((MonitoringAdapterElement)element).getElements()) {
+				manager.removeMonitoringElement(child);
+			}
+		}
+		manager.removeMonitoringElement(element);
 	}
 }

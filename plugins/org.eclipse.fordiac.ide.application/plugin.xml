@@ -38,6 +38,9 @@
          <propertyCategory
                category="Resource">
          </propertyCategory>
+         <propertyCategory
+               category="Application">
+         </propertyCategory>
       </propertyContributor>
    </extension>
    <extension
@@ -107,6 +110,12 @@
                category="Interface"
                id="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
                label="Interface Element">
+         </propertyTab>
+         <propertyTab
+               category="Application"
+               id="org.eclipse.fordiac.ide.application.propertyAttributeTab"
+               indented="false"
+               label="Attributes">
          </propertyTab>
       </propertyTabs>
    </extension>
@@ -188,6 +197,14 @@
             </input>
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.application.properties.AttributeSection"
+               id="org.eclipse.fordiac.ide.application.properties.AttributeSection"
+               tab="org.eclipse.fordiac.ide.application.propertyAttributeTab">
+            <input
+                  type="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart">
             </input>
          </propertySection>
       </propertySections>

@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
-  
- All rights reserved. This program and the accompanying materials
- are made available under the terms of the Eclipse Public License v1.0
- which accompanies this distribution, and is available at
- http://www.eclipse.org/legal/epl-v10.html
- 
- Contributors:
-   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Filip Andren, Monika Wenger
-     - initial API and implementation and/or initial documentation
--->
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="*******************************************************************************&#xD;&#xA; * Copyright (c) 2008 - 2017 4DIAC - consortium.&#xA; *&#xD;&#xA; * All rights reserved. This program and the accompanying materials&#xD;&#xA; * are made available under the terms of the Eclipse Public License v1.0&#xD;&#xA; * which accompanies this distribution, and is available at&#xD;&#xA; * http://www.eclipse.org/legal/epl-v10.html&#xD;&#xA; *&#xA; * Contributors:&#xA; *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst&#xA; *     - initial API and implementation and/or initial documentation&#xA; *******************************************************************************"
-    modelDirectory="/org.eclipse.fordiac.ide.model/src-gen" creationSubmenus="true" editDirectory="/org.eclipse.fordiac.ide.model.edit/src-gen"
-    modelPluginID="org.eclipse.fordiac.ide.model" templateDirectory="" modelName="fordiac"
-    importerID="org.eclipse.emf.importer.ecore" containmentProxies="true" complianceLevel="8.0"
-    copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.model.edit" language=""
-    usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore">
+    modelDirectory="/org.eclipse.fordiac.ide.model/src-gen" creationSubmenus="true"
+    editDirectory="/org.eclipse.fordiac.ide.model.edit/src-gen" modelPluginID="org.eclipse.fordiac.ide.model"
+    templateDirectory="" modelName="fordiac" importerID="org.eclipse.emf.importer.ecore"
+    containmentProxies="true" complianceLevel="8.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.model.edit"
+    language="">
   <foreignModel>palette.ecore</foreignModel>
   <genPackages prefix="Palette" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="palette.ecore#/">
@@ -142,7 +130,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Device/inConnections"/>
       <genOperations ecoreOperation="lib.ecore#//Device/getAutomationSystem"/>
       <genOperations ecoreOperation="lib.ecore#//Device/getSystemConfiguration"/>
-      <genOperations ecoreOperation="lib.ecore#//Device/getType"/>
+      <genOperations ecoreOperation="lib.ecore#//Device/getDeviceType"/>
       <genOperations ecoreOperation="lib.ecore#//Device/getResourceNamed">
         <genParameters ecoreParameter="lib.ecore#//Device/getResourceNamed/name"/>
       </genOperations>
@@ -153,6 +141,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//DeviceType/resource"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//DeviceType/fBNetwork"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//DeviceType/profile"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//DeviceType/attributeDeclarations"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ECAction">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECAction/algorithm"/>
@@ -176,12 +165,13 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECTransition/destination"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECTransition/conditionEvent"/>
       <genOperations ecoreOperation="lib.ecore#//ECTransition/getConditionText"/>
+      <genOperations ecoreOperation="lib.ecore#//ECTransition/getECC"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Event">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FB">
-      <genOperations ecoreOperation="lib.ecore#//FB/getType"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/getFBType"/>
       <genOperations ecoreOperation="lib.ecore#//FB/isResourceFB"/>
       <genOperations ecoreOperation="lib.ecore#//FB/isResourceTypeFB"/>
     </genClasses>
@@ -233,6 +223,9 @@
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInterfaceElement/name"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getFBNetworkElement"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAdapter">
+        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getAdapter/name"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Link">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Link/segment"/>
@@ -249,10 +242,9 @@
     <genClasses ecoreClass="lib.ecore#//OutputPrimitive">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//OutputPrimitive/TestResult"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Parameter">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Parameter/comment"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Parameter/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Parameter/value"/>
+    <genClasses ecoreClass="lib.ecore#//Attribute">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Attribute/attributeDeclaration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Attribute/value"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Resource">
       <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Resource/fBNetwork"/>
@@ -353,13 +345,17 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilableType/compilerInfo"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ConfigurableObject">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ConfigurableObject/parameter"/>
-      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/setParameter">
-        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setParameter/parameterName"/>
-        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setParameter/value"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ConfigurableObject/attributes"/>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/setAttribute">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/attributeName"/>
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/value"/>
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/comment"/>
       </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/getParameter">
-        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/getParameter/parameterName"/>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/getAttribute">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/getAttribute/attributeName"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/getAttributeValue">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/getAttributeValue/attributeName"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CompositeFBType">
@@ -369,16 +365,16 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TextAlgorithm/text"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//DataConnection">
-      <genOperations ecoreOperation="lib.ecore#//DataConnection/getSource"/>
-      <genOperations ecoreOperation="lib.ecore#//DataConnection/getDestination"/>
+      <genOperations ecoreOperation="lib.ecore#//DataConnection/getDataSource"/>
+      <genOperations ecoreOperation="lib.ecore#//DataConnection/getDataDestination"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//EventConnection">
-      <genOperations ecoreOperation="lib.ecore#//EventConnection/getSource"/>
-      <genOperations ecoreOperation="lib.ecore#//EventConnection/getDestination"/>
+      <genOperations ecoreOperation="lib.ecore#//EventConnection/getEventSource"/>
+      <genOperations ecoreOperation="lib.ecore#//EventConnection/getEventDestination"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterConnection">
-      <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getSource"/>
-      <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getDestination"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterSource"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterDestination"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceInterface"/>
     <genClasses image="false" ecoreClass="lib.ecore#//IInterfaceElement">
@@ -471,6 +467,12 @@
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//IVarElement">
       <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//IVarElement/varDeclarations"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//AttributeDeclaration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AttributeDeclaration/initialValue"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="lib.ecore#//TypedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TypedElement/type"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"

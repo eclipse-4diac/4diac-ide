@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="4DIAC-IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="1.9.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="4diac-ide" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="1.9.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.eclipse.fordiac.ide.images/images/dialog.png"/>
@@ -27,7 +27,7 @@
    <splash
       location="org.eclipse.fordiac.ide"
       startupProgressRect="248,306,239,4" />
-   <launcher name="4DIAC-IDE">
+   <launcher name="4diac-ide">
       <linux icon="/icons/fordiac.xpm"/>
       <macosx icon="/icons/fordiac.icns"/>
       <win useIco="true">

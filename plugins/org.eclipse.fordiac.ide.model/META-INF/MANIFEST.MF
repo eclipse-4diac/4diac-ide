@@ -27,7 +27,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Bundle-Version: 1.9.0.qualifier
 Bundle-Localization: plugin
-Bundle-Name: Model
+Bundle-Name: Model (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.model.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model;singleton:=true

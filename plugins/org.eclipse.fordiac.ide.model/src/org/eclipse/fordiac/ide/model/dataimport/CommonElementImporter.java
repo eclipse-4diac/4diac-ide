@@ -217,10 +217,11 @@ class CommonElementImporter {
 
 	static void parseGenericAttributeNode(ConfigurableObject confObject, NamedNodeMap attributeMap) {
 		Node name = attributeMap.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE);
+		Node type = attributeMap.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE);
 		Node value = attributeMap.getNamedItem(LibraryElementTags.VALUE_ATTRIBUTE);
 		Node comment = attributeMap.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if(null != name && null != value){
-			confObject.setAttribute(name.getNodeValue(), value.getNodeValue(), comment.getNodeValue());
+			confObject.setAttribute(name.getNodeValue(), null == type ? "STRING" : type.getNodeValue(), value.getNodeValue(), comment.getNodeValue());
 		}		
 	}
 	

@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -38,15 +39,9 @@ public class DeleteInterfaceCommand extends Command {
 		cmds = new CompoundCommand();
 		handleWiths();
 		handleSubAppConnections();
-		if (interfaceElement.isIsInput()) {
-			if (interfaceElement instanceof AdapterDeclaration) {
-				cmds.add(new DeleteFBNetworkElementCommand(((AdapterDeclaration)interfaceElement).getAdapterFB()));
-			}
-		} else {
-			if (interfaceElement instanceof AdapterDeclaration) {
-				cmds.add(new DeleteFBNetworkElementCommand(((AdapterDeclaration)interfaceElement).getAdapterFB()));
-			}
-		}		
+		if ((interfaceElement instanceof AdapterDeclaration) && (parent.eContainer() instanceof CompositeFBType)) {
+			cmds.add(new DeleteFBNetworkElementCommand(((AdapterDeclaration) interfaceElement).getAdapterFB()));
+		}
 		redo();
 	}
 
@@ -80,10 +75,10 @@ public class DeleteInterfaceCommand extends Command {
 			if (interfaceElement instanceof Event) {
 				oldIndex = parent.getEventInputs().indexOf(interfaceElement);
 				parent.getEventInputs().remove(interfaceElement);
-			}else if (interfaceElement instanceof AdapterDeclaration) {
+			} else if (interfaceElement instanceof AdapterDeclaration) {
 				oldIndex = parent.getSockets().indexOf(interfaceElement);
 				parent.getSockets().remove(interfaceElement);
-			}else if (interfaceElement instanceof VarDeclaration) {
+			} else if (interfaceElement instanceof VarDeclaration) {
 				oldIndex = parent.getInputVars().indexOf(interfaceElement);
 				parent.getInputVars().remove(interfaceElement);
 			}
@@ -97,18 +92,18 @@ public class DeleteInterfaceCommand extends Command {
 			} else if (interfaceElement instanceof VarDeclaration) {
 				oldIndex = parent.getOutputVars().indexOf(interfaceElement);
 				parent.getOutputVars().remove(interfaceElement);
-			} 	
-		}		
-		if(cmds.canExecute()){
+			}
+		}
+		if (cmds.canExecute()) {
 			cmds.execute();
 		}
 	}
-		
+
 	private void handleSubAppConnections() {
-		for(Connection con : interfaceElement.getInputConnections()){					
+		for (Connection con : interfaceElement.getInputConnections()) {
 			cmds.add(new DeleteConnectionCommand(con));
 		}
-		for(Connection con : interfaceElement.getOutputConnections()){					
+		for (Connection con : interfaceElement.getOutputConnections()) {
 			cmds.add(new DeleteConnectionCommand(con));
 		}
 	}

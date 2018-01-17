@@ -59,6 +59,9 @@
             <input
                   type="org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.systemconfiguration.editparts.SegmentEditPart">
+            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.gef.properties.AppearancePropertySection"

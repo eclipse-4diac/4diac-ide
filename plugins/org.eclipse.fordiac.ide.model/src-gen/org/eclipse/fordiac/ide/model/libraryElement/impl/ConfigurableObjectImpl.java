@@ -165,8 +165,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setAttribute(final String attributeName, final String value, final String comment) {
-		org.eclipse.fordiac.ide.model.Annotations.GEN.setAttribute(this, attributeName, value, comment);
+	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
+		org.eclipse.fordiac.ide.model.Annotations.GEN.setAttribute(this, attributeName, type, value, comment);
 	}
 
 	/**

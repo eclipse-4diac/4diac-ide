@@ -95,6 +95,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -589,6 +590,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass typedElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass attributeEClass = null;
 
 	/**
@@ -652,7 +660,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		isInited = true;
 
 		// Initialize simple dependencies
-		EcorePackage.eINSTANCE.eClass();
 		XMLTypePackage.eINSTANCE.eClass();
 
 		// Obtain or create and register interdependencies
@@ -2555,7 +2562,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getAttributeDeclaration_Type() {
+	public EAttribute getAttributeDeclaration_InitialValue() {
 		return (EAttribute)attributeDeclarationEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -2564,8 +2571,17 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getAttributeDeclaration_InitialValue() {
-		return (EAttribute)attributeDeclarationEClass.getEStructuralFeatures().get(1);
+	public EClass getTypedElement() {
+		return typedElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getTypedElement_Type() {
+		return (EAttribute)typedElementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -2940,8 +2956,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(iVarElementEClass, IVAR_ELEMENT__VAR_DECLARATIONS);
 
 		attributeDeclarationEClass = createEClass(ATTRIBUTE_DECLARATION);
-		createEAttribute(attributeDeclarationEClass, ATTRIBUTE_DECLARATION__TYPE);
 		createEAttribute(attributeDeclarationEClass, ATTRIBUTE_DECLARATION__INITIAL_VALUE);
+
+		typedElementEClass = createEClass(TYPED_ELEMENT);
+		createEAttribute(typedElementEClass, TYPED_ELEMENT__TYPE);
 
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
@@ -2986,7 +3004,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		adapterDeclarationEClass.getESuperTypes().add(this.getVarDeclaration());
 		adapterTypeEClass.getESuperTypes().add(theDataPackage.getDataType());
 		algorithmEClass.getESuperTypes().add(this.getINamedElement());
-		applicationEClass.getESuperTypes().add(this.getINamedElement());
+		applicationEClass.getESuperTypes().add(this.getConfigurableObject());
 		basicFBTypeEClass.getESuperTypes().add(this.getFBType());
 		connectionEClass.getESuperTypes().add(this.getConfigurableObject());
 		deviceEClass.getESuperTypes().add(this.getTypedConfigureableObject());
@@ -3008,6 +3026,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		otherAlgorithmEClass.getESuperTypes().add(this.getTextAlgorithm());
 		outputPrimitiveEClass.getESuperTypes().add(this.getPrimitive());
 		attributeEClass.getESuperTypes().add(this.getINamedElement());
+		attributeEClass.getESuperTypes().add(this.getTypedElement());
 		resourceEClass.getESuperTypes().add(this.getTypedConfigureableObject());
 		resourceEClass.getESuperTypes().add(this.getIVarElement());
 		resourceTypeEClass.getESuperTypes().add(this.getCompilableType());
@@ -3040,6 +3059,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		typedConfigureableObjectEClass.getESuperTypes().add(this.getConfigurableObject());
 		adapterFBEClass.getESuperTypes().add(this.getFB());
 		attributeDeclarationEClass.getESuperTypes().add(this.getINamedElement());
+		attributeDeclarationEClass.getESuperTypes().add(this.getTypedElement());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterDeclarationEClass, AdapterDeclaration.class, "AdapterDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3143,6 +3163,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getECTransition_ConditionEvent(), this.getEvent(), null, "conditionEvent", null, 0, 1, ECTransition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(ecTransitionEClass, theXMLTypePackage.getString(), "getConditionText", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		addEOperation(ecTransitionEClass, this.getECC(), "getECC", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(eventEClass, Event.class, "Event", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEvent_With(), this.getWith(), null, "with", null, 0, -1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3352,6 +3374,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		op = addEOperation(configurableObjectEClass, null, "setAttribute", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, theXMLTypePackage.getString(), "attributeName", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theXMLTypePackage.getString(), "type", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, theXMLTypePackage.getString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, theXMLTypePackage.getString(), "comment", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -3487,8 +3510,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getIVarElement_VarDeclarations(), this.getVarDeclaration(), null, "varDeclarations", null, 0, -1, IVarElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(attributeDeclarationEClass, AttributeDeclaration.class, "AttributeDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getAttributeDeclaration_Type(), theDataPackage.getBaseType1(), "type", "STRING", 0, 1, AttributeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAttributeDeclaration_InitialValue(), theXMLTypePackage.getString(), "initialValue", null, 0, 1, AttributeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(typedElementEClass, TypedElement.class, "TypedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getTypedElement_Type(), theDataPackage.getBaseType1(), "type", "STRING", 0, 1, TypedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language");

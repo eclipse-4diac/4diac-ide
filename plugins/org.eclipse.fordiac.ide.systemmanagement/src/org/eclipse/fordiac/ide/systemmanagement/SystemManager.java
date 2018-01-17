@@ -278,11 +278,9 @@ public enum SystemManager {
 				sysImporter.importSystem(stream, system);
 				stream.close();
 			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Activator.getDefault().logError(e.getMessage(), e);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Activator.getDefault().logError(e.getMessage(), e);
 			}
 			return system;
 		}

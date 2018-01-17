@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -141,8 +142,8 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 			SystemManager.INSTANCE.saveSystem(system);
 			return system;
 
-		} catch (CoreException x) {
-			// TODO __gebenh log error
+		} catch (CoreException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
 		} finally {
 			monitor.done();
 		}

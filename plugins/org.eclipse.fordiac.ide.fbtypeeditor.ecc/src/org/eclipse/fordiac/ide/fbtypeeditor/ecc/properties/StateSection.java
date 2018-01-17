@@ -16,6 +16,8 @@ import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeActionOrderCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeTransitionPriorityCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECActionCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ActionContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.StateContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
@@ -24,8 +26,10 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -41,6 +45,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class StateSection extends AbstractECSection {
@@ -49,6 +55,8 @@ public class StateSection extends AbstractECSection {
 	private TreeViewer actionViewer;	
 	private Button actionUp;
 	private Button actionDown;
+	private Button actionNew;
+	private Button actionDelete;
 	private TreeViewer transitionsOutViewer;	
 	private Button transitionUp;
 	private Button transitionDown;
@@ -106,77 +114,74 @@ public class StateSection extends AbstractECSection {
 		});
 	}
 	
+	public void createActionCreateButton(Composite actionButtonComp) {
+		actionNew = getWidgetFactory().createButton(actionButtonComp, "", SWT.FLAT); //$NON-NLS-1$
+		actionNew.setToolTipText("Create new action");
+		actionNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
+		actionNew.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				executeCommand(new CreateECActionCommand(LibraryElementFactory.eINSTANCE.createECAction(), getType()));
+				actionViewer.refresh();
+			}
+		});
+	}
+	
+	private void createActionDeleteButton(Composite actionButtonComp) {
+		actionDelete = getWidgetFactory().createButton(actionButtonComp, "", SWT.PUSH); //$NON-NLS-1$
+		actionDelete.setToolTipText("Delete selected action");
+		actionDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));	
+		actionDelete.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				ECAction action = (ECAction)((IStructuredSelection) actionViewer.getSelection()).getFirstElement();
+				executeCommand(new DeleteECActionCommand(action));
+				actionViewer.refresh();
+			}
+		});
+	}
+	
 	public void createActionTransitionControls(final Composite parent){	
 		Group actionGroup = getWidgetFactory().createGroup(parent, "Actions");
 		actionGroup.setLayout(new GridLayout(2, false));
 		actionGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		actionViewer = new TreeViewer(actionGroup, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gridData.heightHint = 150;
 		gridData.widthHint = 80;
+		createActionViewer(actionGroup, gridData);
+		Composite actionButtonComp = new Composite(actionGroup, SWT.NONE);
+		actionButtonComp.setLayout(new FillLayout(SWT.VERTICAL));
+		createActionCreateButton(actionButtonComp);
+		createActionUpButton(actionButtonComp);
+		createActionDownButton(actionButtonComp);
+		createActionDeleteButton(actionButtonComp);	
+		Group transactionGroup = getWidgetFactory().createGroup(parent, "Outgoing Transitions");
+		transactionGroup.setLayout(new GridLayout(2, false));	
+		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		createTransitionViewer(gridData, transactionGroup);
+		Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
+		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
+		createTransitionUpButton(buttonComp);
+		createTransitionDownButton(buttonComp);
+	}
+
+	private void createActionViewer(Group actionGroup, GridData gridData) {
+		actionViewer = new TreeViewer(actionGroup, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		actionViewer.getTree().setLayoutData(gridData);
 		actionViewer.setContentProvider(new ActionContentProvider());
 		actionViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
 		new AdapterFactoryTreeEditor(actionViewer.getTree(), adapterFactory);
-		Composite actionButtonComp = new Composite(actionGroup, SWT.NONE);
-		actionButtonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		actionUp = getWidgetFactory().createButton(actionButtonComp, "", SWT.ARROW |SWT.UP); //$NON-NLS-1$
-		actionUp.setToolTipText("Move action up");	
-		actionUp.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((TreeSelection)actionViewer.getSelection()).getFirstElement();
-				if(selection instanceof ECAction){
-					executeCommand(new ChangeActionOrderCommand(getType(), (ECAction) selection, true));
-					actionViewer.refresh();
-					actionViewer.setSelection(new StructuredSelection(selection));
-				}
-			}
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {}
-		});
-		actionDown = getWidgetFactory().createButton(actionButtonComp, "Down", SWT.ARROW |SWT.DOWN);
-		actionDown.setToolTipText("Move action down");
-		actionDown.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				Object selection = ((TreeSelection)actionViewer.getSelection()).getFirstElement();
-				if(selection instanceof ECAction){
-					executeCommand(new ChangeActionOrderCommand(getType(), (ECAction) selection, false));
-					transitionsOutViewer.refresh();
-					actionViewer.setSelection(new StructuredSelection(selection));
-				}
-			}
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
-		});
-		
-		Group transactionGroup = getWidgetFactory().createGroup(parent, "Outgoing Transitions");
-		transactionGroup.setLayout(new GridLayout(2, false));	
-		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+	}
+
+	private void createTransitionViewer(GridData gridData, Group transactionGroup) {
 		transitionsOutViewer = new TreeViewer(transactionGroup, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		transitionsOutViewer.getTree().setLayoutData(gridData);
 		transitionsOutViewer.setContentProvider(new StateContentProvider());
 		transitionsOutViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
 		new AdapterFactoryTreeEditor(transitionsOutViewer.getTree(), adapterFactory);
-		Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
-		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		transitionUp = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW |SWT.UP); //$NON-NLS-1$
-		transitionUp.setToolTipText("Move transition up");	
-		transitionUp.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((TreeSelection)transitionsOutViewer.getSelection()).getFirstElement();
-				if(selection instanceof ECTransition){
-					executeCommand(new ChangeTransitionPriorityCommand(getType(), (ECTransition) selection, true));
-					transitionsOutViewer.refresh();
-					transitionsOutViewer.setSelection(new StructuredSelection(selection));
-				}
-			}
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {}
-		});
+	}
+
+	private void createTransitionDownButton(Composite buttonComp) {
 		transitionDown = getWidgetFactory().createButton(buttonComp, "SWT.ARROW |SWT.UP", SWT.ARROW |SWT.DOWN);
 		transitionDown.setToolTipText("Move transition down");
 		transitionDown.addSelectionListener(new SelectionAdapter() {
@@ -194,7 +199,62 @@ public class StateSection extends AbstractECSection {
 			}
 		});
 	}
-	
+
+	private void createTransitionUpButton(Composite buttonComp) {
+		transitionUp = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW |SWT.UP); //$NON-NLS-1$
+		transitionUp.setToolTipText("Move transition up");	
+		transitionUp.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				Object selection = ((TreeSelection)transitionsOutViewer.getSelection()).getFirstElement();
+				if(selection instanceof ECTransition){
+					executeCommand(new ChangeTransitionPriorityCommand(getType(), (ECTransition) selection, true));
+					transitionsOutViewer.refresh();
+					transitionsOutViewer.setSelection(new StructuredSelection(selection));
+				}
+			}
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {}
+		});
+	}
+
+	private void createActionDownButton(Composite actionButtonComp) {
+		actionDown = getWidgetFactory().createButton(actionButtonComp, "Down", SWT.ARROW |SWT.DOWN);
+		actionDown.setToolTipText("Move action down");
+		actionDown.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				Object selection = ((TreeSelection)actionViewer.getSelection()).getFirstElement();
+				if(selection instanceof ECAction){
+					executeCommand(new ChangeActionOrderCommand(getType(), (ECAction) selection, false));
+					transitionsOutViewer.refresh();
+					actionViewer.setSelection(new StructuredSelection(selection));
+				}
+			}
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+			}
+		});
+	}
+
+	private void createActionUpButton(Composite actionButtonComp) {
+		actionUp = getWidgetFactory().createButton(actionButtonComp, "", SWT.ARROW |SWT.UP); //$NON-NLS-1$
+		actionUp.setToolTipText("Move action up");	
+		actionUp.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				Object selection = ((TreeSelection)actionViewer.getSelection()).getFirstElement();
+				if(selection instanceof ECAction){
+					executeCommand(new ChangeActionOrderCommand(getType(), (ECAction) selection, true));
+					actionViewer.refresh();
+					actionViewer.setSelection(new StructuredSelection(selection));
+				}
+			}
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {}
+		});
+	}
+
 	protected void setInputCode() {
 		commentText.setEnabled(false);
 		nameText.setEnabled(false);

@@ -151,6 +151,15 @@ public interface ECTransition extends PositionableElement {
 	String getConditionText();
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getECC(this);'"
+	 * @generated
+	 */
+	ECC getECC();
+
+	/**
 	 * Returns the value of the '<em><b>Source</b></em>' reference.
 	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getOutTransitions <em>Out Transitions</em>}'.
 	 * <!-- begin-user-doc -->
