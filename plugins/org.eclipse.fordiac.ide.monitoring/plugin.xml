@@ -287,9 +287,14 @@
                tooltip="%contributions.menus.debug.triggerEventToolTip">
            <visibleWhen checkEnabled="false">
                <iterate>
+               <or>
                   <instanceof
                         value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart">
                   </instanceof>
+                  <instanceof
+                        value="org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart">
+                  </instanceof>
+                  </or>
                </iterate>
             </visibleWhen>
          </command>
