@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
+import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISources;
@@ -78,6 +79,11 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 			}else if (selectedObject instanceof InterfaceEditPart) {
 				if(manager.containsPort( ((InterfaceEditPart)selectedObject).getModel())) {
 					foundElements.add(((InterfaceEditPart)selectedObject).getModel());
+				}
+			}else if (selectedObject instanceof MonitoringEditPart){
+				IInterfaceElement ie = ((MonitoringEditPart)selectedObject).getModel().getPort().getInterfaceElement();
+				if(manager.containsPort(ie)) {
+					foundElements.add(ie);
 				}
 			}
 		}	
