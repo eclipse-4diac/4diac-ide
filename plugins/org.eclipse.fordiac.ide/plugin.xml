@@ -16,10 +16,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.ui.ide.workbench"
-            name="4DIAC-IDE">
+            name="4diac-ide">
          <property
                name="appName"
-               value="4DIAC-IDE">
+               value="4diac-ide">
          </property>
          <property
                name="aboutImage"
