@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
 import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
@@ -310,7 +309,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	}
 
 	public boolean isVariable() {
-		return getModel() instanceof VarDeclarationImpl;
+		return getModel() instanceof VarDeclaration;
 	}
 
 	@Override

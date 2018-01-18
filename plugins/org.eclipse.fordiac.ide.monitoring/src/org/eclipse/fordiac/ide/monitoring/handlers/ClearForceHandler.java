@@ -12,7 +12,7 @@ package org.eclipse.fordiac.ide.monitoring.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
@@ -26,12 +26,11 @@ public class ClearForceHandler extends AbstractMonitoringHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		super.execute(event);
 		StructuredSelection selection = (StructuredSelection)HandlerUtil.getCurrentSelection(event);
-		InterfaceEditPart editPart = (InterfaceEditPart) (selection).getFirstElement();
-		
-		if (!editPart.isEvent()) {		
+		VarDeclaration var = ForceHandler.getVariable(selection);				
+		if(null != var){		
 			MonitoringManager manager = MonitoringManager.getInstance();
-			MonitoringBaseElement element = manager.getMonitoringElement(editPart.getModel());
-			if (element != null && element instanceof MonitoringElement) {
+			MonitoringBaseElement element = manager.getMonitoringElement(var);
+			if (element instanceof MonitoringElement) {
 				manager.forceValue((MonitoringElement)element, ""); //$NON-NLS-1$
 			}
 		}
@@ -50,11 +49,10 @@ public class ClearForceHandler extends AbstractMonitoringHandler {
 			
 			if(1 == sel.size()){
 				//only allow to force a value if only one element is selected
-				if(sel.getFirstElement() instanceof InterfaceEditPart){
-					InterfaceEditPart editPart = (InterfaceEditPart) sel.getFirstElement();
-					MonitoringBaseElement element = manager.getMonitoringElement(editPart.getModel());
-					needToAdd = (editPart.isVariable() && element != null && element instanceof MonitoringElement && 
-							((MonitoringElement)element).isForce());
+				VarDeclaration var = ForceHandler.getVariable(sel.getFirstElement());				
+				if(null != var){
+					MonitoringBaseElement element = manager.getMonitoringElement(var);
+					needToAdd = (element instanceof MonitoringElement &&  ((MonitoringElement)element).isForce());
 				}
 			}
 		}
