@@ -17,7 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -62,9 +64,9 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	public void redo() {
 		super.redo();
 		for(Object ne : selection){
-			if(ne instanceof FBEditPart){
-				getSubApp().getSubAppNetwork().getNetworkElements().add(((FBEditPart)ne).getModel());
-				createConnection(((FBEditPart)ne).getModel(), true);
+			if(ne instanceof FBEditPart || ne instanceof SubAppForFBNetworkEditPart){
+				getSubApp().getSubAppNetwork().getNetworkElements().add(((AbstractFBNElementEditPart) ne).getModel());
+				createConnection(((AbstractFBNElementEditPart) ne).getModel(), true);
 			}
 		}
 		openClosedEditor();
@@ -74,9 +76,9 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	public void undo() {
 		super.undo();
 		for(Object ne : selection){
-			if(ne instanceof FBEditPart){
-				fbNetwork.getNetworkElements().add(((FBEditPart)ne).getModel());
-				createConnection(((FBEditPart)ne).getModel(), false);
+			if(ne instanceof FBEditPart || ne instanceof SubAppForFBNetworkEditPart){
+				fbNetwork.getNetworkElements().add(((AbstractFBNElementEditPart)ne).getModel());
+				createConnection(((AbstractFBNElementEditPart)ne).getModel(), false);
 			}
 		}
 		element.setInterface(getTypeInterfaceList());
@@ -210,7 +212,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	
 	private boolean isContained(FBNetworkElement e) {
 		for(Object ne : selection){
-			if(ne instanceof FBEditPart && ((FBEditPart)ne).getModel().equals(e)){
+			if(ne instanceof SubAppForFBNetworkEditPart && ((SubAppForFBNetworkEditPart)ne).getModel().equals(e)){
 				return true;
 			}
 		}
