@@ -23,6 +23,7 @@
         <With Var="QO"/>
         <With Var="STATUS"/>
         <With Var="RD_1"/>
+        <With Var="RD_2"/>
       </Event>
     </EventOutputs>
     <InputVars>
@@ -34,6 +35,7 @@
       <VarDeclaration Comment="" Name="QO" Type="BOOL"/>
       <VarDeclaration Comment="" Name="STATUS" Type="WSTRING"/>
       <VarDeclaration Comment="" Name="RD_1" Type="ANY"/>
+      <VarDeclaration Comment="" Name="RD_2" Type="ANY"/>
     </OutputVars>
   </InterfaceList>
 </FBType>
