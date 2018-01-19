@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 fortiss GmbH
+ * Copyright (c) 2015, 2016, 2018 fortiss GmbH
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -46,8 +46,8 @@ public class TriggerEventHandler extends AbstractMonitoringHandler {
 			
 			if(1 == sel.size()){
 				//only allow trigger event if only one element is selected
-				Event editPart = getEvent(sel.getFirstElement());
-				if((null != editPart) && manager.containsPort(editPart)) {
+				Event ev = getEvent(sel.getFirstElement());
+				if((null != ev) && manager.containsPort(ev)) {
 					needToAdd = true;
 				}
 			}

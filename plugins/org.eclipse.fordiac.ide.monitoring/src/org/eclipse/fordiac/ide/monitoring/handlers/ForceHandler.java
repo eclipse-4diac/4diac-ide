@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 fortiss GmbH
+ * Copyright (c) 2015, 2016, 2018 fortiss GmbH
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,9 +13,12 @@ package org.eclipse.fordiac.ide.monitoring.handlers;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
+import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Display;
@@ -27,13 +30,13 @@ public class ForceHandler extends AbstractMonitoringHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		super.execute(event);
-		StructuredSelection selection = (StructuredSelection)HandlerUtil.getCurrentSelection(event);
-		InterfaceEditPart editPart = (InterfaceEditPart) (selection).getFirstElement();
-		if (!editPart.isEvent()) {
+		StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
+		VarDeclaration var = getVariable(selection.getFirstElement());
+		if (null != var) {
 			MonitoringManager manager = MonitoringManager.getInstance();
-			MonitoringBaseElement element = manager.getMonitoringElement(editPart.getModel());
+			MonitoringBaseElement element = manager.getMonitoringElement(var);
 			if (element != null && element instanceof MonitoringElement) {
-				MonitoringElement monitoringElement = (MonitoringElement)element;
+				MonitoringElement monitoringElement = (MonitoringElement) element;
 
 				InputDialog input = new InputDialog(Display.getDefault().getActiveShell(), "Force Value", "Value",
 						monitoringElement.isForce() ? monitoringElement.getForceValue() : "", //$NON-NLS-1$
@@ -46,26 +49,38 @@ public class ForceHandler extends AbstractMonitoringHandler {
 		}
 		return null;
 	}
-	
+
 	@Override
-	public void setEnabled(Object evaluationContext){
+	public void setEnabled(Object evaluationContext) {
 		boolean needToAdd = false;
 		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		
+
 		if (selection instanceof StructuredSelection) {
 			StructuredSelection sel = (StructuredSelection) selection;
 			MonitoringManager manager = MonitoringManager.getInstance();
-			
-			if(1 == sel.size()){
-				//only allow to force a value if only one element is selected
-				if(sel.getFirstElement() instanceof InterfaceEditPart){
-					InterfaceEditPart editPart = (InterfaceEditPart) sel.getFirstElement();					
-					MonitoringBaseElement element = manager.getMonitoringElement(editPart.getModel());
-					needToAdd = ((element instanceof MonitoringElement) && editPart.isVariable());
+
+			if (1 == sel.size()) {
+				// only allow to force a value if only one element is selected
+				VarDeclaration var = getVariable(sel.getFirstElement());
+				if ((null != var) && manager.containsPort(var)) {
+					needToAdd = true;
 				}
 			}
 		}
 		setBaseEnabled(needToAdd);
+	}
+
+	static VarDeclaration getVariable(Object object) {
+		IInterfaceElement ie = null;
+		if (object instanceof IInterfaceElement) {
+			ie = ((InterfaceEditPart) object).getModel();
+		} else if (object instanceof MonitoringEditPart) {
+			ie = ((MonitoringEditPart) object).getModel().getPort().getInterfaceElement();
+		}
+		if (ie instanceof VarDeclaration) {
+			return (VarDeclaration) ie;
+		}
+		return null;
 	}
 
 }
