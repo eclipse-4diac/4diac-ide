@@ -72,6 +72,8 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		
 		CommonElementImporter.getXandY(map, subApp);
 		
+		configureParameters(subApp.getInterface(), node.getChildNodes());
+		
 		fbNetwork.getNetworkElements().add(subApp);
 		fbNetworkElementMap.put(subApp.getName(), subApp);
 	}
