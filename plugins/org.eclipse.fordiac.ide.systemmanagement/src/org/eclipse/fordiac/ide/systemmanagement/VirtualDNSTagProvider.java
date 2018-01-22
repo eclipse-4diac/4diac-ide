@@ -24,7 +24,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSFactory;
 import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement;
 import org.eclipse.fordiac.ide.model.virtualDNS.util.VirtualDNSAdapterFactory;
@@ -112,7 +111,7 @@ public class VirtualDNSTagProvider implements ITagProvider {
 
 
 	@Override
-	public String getReplacedString(ConfigurableObject object, String value) {
+	public String getReplacedString(String value) {
 		return virtualDNSManagement.getReplacedString(value);
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.deployment.ResourceDeploymentData.ParameterData;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateConnectionException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBInstanceException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateResourceInstanceException;
@@ -34,9 +35,8 @@ import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
 import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
+import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -46,7 +46,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -141,7 +140,7 @@ public class DeploymentCoordinator {
 	public static String getMGR_ID(final Device dev) {
 		for(VarDeclaration varDecl : dev.getVarDeclarations()) {
 			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) {
-				String val = getVariableValue(varDecl, dev.getAutomationSystem(), dev);
+				String val = DeploymentHelper.getVariableValue(varDecl, dev.getAutomationSystem());
 				if(null != val){				
 					return val;
 				}
@@ -237,7 +236,7 @@ public class DeploymentCoordinator {
 			int retVal = devices.size() + resources.size();
 			for (ResourceDeploymentData resDepData : resources) {
 				retVal += countResourceParams(resDepData.res);
-				retVal += resDepData.fbs.size() + resDepData.connections.size();
+				retVal += resDepData.fbs.size() + resDepData.connections.size() + resDepData.params.size();
 				//TODO count variables of Fbs
 			}
 			return retVal;
@@ -265,14 +264,15 @@ public class DeploymentCoordinator {
 				executor.createResource(res);
 				monitor.worked(1);
 				for (VarDeclaration varDecl : res.getVarDeclarations()) {
-					String val = getVariableValue(varDecl, res.getAutomationSystem(), res);
+					String val = DeploymentHelper.getVariableValue(varDecl, res.getAutomationSystem());
 					if(null != val){
 						executor.writeResourceParameter(res, varDecl.getName(), val);
 						monitor.worked(1);
 					}
 				}
 
-				createFBInstance(resDepData, executor, monitor);				
+				createFBInstance(resDepData, executor, monitor);	
+				deployParamters(resDepData, executor, monitor);   //this needs to be done before the connections are created
 				deployConnections(resDepData, executor, monitor);
 
 				if (!devices.contains(res.getDevice())) {
@@ -295,7 +295,7 @@ public class DeploymentCoordinator {
 					String mgrid = getMGR_ID(device);
 					executor.getDevMgmComHandler().connect(mgrid);
 					for (VarDeclaration varDeclaration : parameters) {
-						String value = getVariableValue(varDeclaration, device.getAutomationSystem(), device);
+						String value = DeploymentHelper.getVariableValue(varDeclaration, device.getAutomationSystem());
 						if (null != value) {
 							executor.writeDeviceParameter(device, varDeclaration.getName(), value);
 						}
@@ -310,6 +310,16 @@ public class DeploymentCoordinator {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}
 			}
+		}
+		
+		private void deployParamters(ResourceDeploymentData resDepData, IDeploymentExecutor executor,
+				IProgressMonitor monitor) throws WriteFBParameterException {
+			for (ParameterData param : resDepData.params) {
+				executor.writeFBParameter(resDepData.res, param.value, new FBDeploymentData(param.prefix, (FB) param.var.getFBNetworkElement()), 
+						param.var);
+				monitor.worked(1);				
+			}
+			
 		}
 
 		private void deployConnections(final ResourceDeploymentData resDepData, final IDeploymentExecutor executor,  IProgressMonitor monitor) throws CreateConnectionException {
@@ -334,7 +344,7 @@ public class DeploymentCoordinator {
 					InterfaceList interfaceList = fb.fb.getInterface();
 					if (interfaceList != null) {
 						for (VarDeclaration varDecl : interfaceList.getInputVars()) {
-							String val = getVariableValue(varDecl, res.getAutomationSystem(), fb.fb);
+							String val = DeploymentHelper.getVariableValue(varDecl, res.getAutomationSystem());
 							if(null != val){
 								executor.writeFBParameter(res, val, fb, varDecl);
 								monitor.worked(1);
@@ -346,22 +356,7 @@ public class DeploymentCoordinator {
 		}
 
 	}
-
-	private static String getVariableValue(VarDeclaration varDecl, AutomationSystem system, ConfigurableObject object) {
-		Value value = varDecl.getValue();
-		if (null != value && null != value.getValue() && !"".equals(value.getValue())){
-			String val = value.getValue();
-			if (val.contains("%")) {
-				String replaced = SystemManager.INSTANCE.getReplacedString(system, object, val);
-				if (replaced != null) {
-					val = replaced;
-				}
-			}
-			return val;
-		}		
-		return null;	
-	}
-
+	
 	/**
 	 * Count work creating f bs.
 	 * 

@@ -47,7 +47,6 @@ import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -333,11 +332,11 @@ public enum SystemManager {
 		tagProvider.saveTagConfiguration(projectPath);
 	}
 
-	public String getReplacedString(AutomationSystem system, ConfigurableObject object, String value) {
+	public String getReplacedString(AutomationSystem system, String value) {
 		ArrayList<ITagProvider> tagProvider = tagProviders.get(system);
 		String result = null;
 		for (ITagProvider iTagProvider : tagProvider) {
-			result = iTagProvider.getReplacedString(object, value);
+			result = iTagProvider.getReplacedString(value);
 			if (result != null) {
 				break;
 			}

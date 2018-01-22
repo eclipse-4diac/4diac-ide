@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
+ * Copyright (c) 2017, 2018 fortiss GmbH
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -23,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /** Class for storing the information for deplyoing a resources
  * 
@@ -31,11 +33,25 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
  */
 class ResourceDeploymentData {
 	
+	public class ParameterData{
+		public String value;
+		public VarDeclaration var;
+		public String prefix;
+		public ParameterData(String value, String prefix, VarDeclaration var) {
+			super();
+			this.value = value;
+			this.var = var;
+			this.prefix = prefix;
+		}			
+	}
+	
 	public final Resource res;
 
 	public List<FBDeploymentData> fbs = new ArrayList<>();
 	
 	public List<ConnectionDeploymentData> connections = new ArrayList<>();
+	
+	public List<ParameterData> params = new ArrayList<>();
 		
 	public ResourceDeploymentData(final Resource res){
 		this.res = res;
@@ -47,6 +63,7 @@ class ResourceDeploymentData {
 			if(fbnElement instanceof FB){
 				fbs.add(new FBDeploymentData(prefix, (FB)fbnElement));
 			}else if(fbnElement instanceof SubApp){
+				addSubAppParams((SubApp)fbnElement, subAppHierarchy, prefix);
 				FBNetwork subAppInternalNetwork = getFBNetworkForSubApp((SubApp)fbnElement);
 				if(null != subAppInternalNetwork) {    //TODO somehow inform the user that we could not get the internals of the subapp and therefore are not deploying its internals
 					subAppHierarchy.addLast((SubApp)fbnElement);
@@ -67,6 +84,19 @@ class ResourceDeploymentData {
 		
 	}
 	
+	private void addSubAppParams(SubApp subApp, Deque<SubApp> subAppHierarchy, String prefix) {
+		for (VarDeclaration dataInput : subApp.getInterface().getInputVars()) {
+			String val = DeploymentHelper.getVariableValue(dataInput, res.getAutomationSystem());
+			if(null != val){
+				for (ConDeploymentDest destData : getSubappInterfaceconnections(subAppHierarchy, prefix, dataInput)) {
+					params.add(new ParameterData(val, destData.prefix, (VarDeclaration)destData.destination));
+				}	
+			}
+		}
+		
+	}
+
+
 	private FBNetwork getFBNetworkForSubApp(SubApp subApp) {
 		FBNetwork retVal = subApp.getSubAppNetwork();
 		if(null == retVal) {
@@ -79,7 +109,7 @@ class ResourceDeploymentData {
 		}		
 		return retVal;
 	}
-	
+		
 	private class ConDeploymentDest{
 		final String prefix;
 		final IInterfaceElement destination;
