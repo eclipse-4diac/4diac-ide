@@ -260,28 +260,33 @@ public class DeploymentCoordinator {
 				CreateConnectionException, StartException, DisconnectException {
 			Resource res = resDepData.res;
 			if (!res.isDeviceTypeResource()) {
-				executor.getDevMgmComHandler().connect(getMGR_ID(res));
-				executor.createResource(res);
-				monitor.worked(1);
-				for (VarDeclaration varDecl : res.getVarDeclarations()) {
-					String val = DeploymentHelper.getVariableValue(varDecl, res.getAutomationSystem());
-					if(null != val){
-						executor.writeResourceParameter(res, varDecl.getName(), val);
-						monitor.worked(1);
+				try {  //this try catch block with rethrowing is needed so that we can have the finally statement for disconnecting
+					executor.getDevMgmComHandler().connect(getMGR_ID(res));
+					executor.createResource(res);
+					monitor.worked(1);
+					for (VarDeclaration varDecl : res.getVarDeclarations()) {
+						String val = DeploymentHelper.getVariableValue(varDecl, res.getAutomationSystem());
+						if(null != val){
+							executor.writeResourceParameter(res, varDecl.getName(), val);
+							monitor.worked(1);
+						}
 					}
+	
+					createFBInstance(resDepData, executor, monitor);	
+					deployParamters(resDepData, executor, monitor);   //this needs to be done before the connections are created
+					deployConnections(resDepData, executor, monitor);
+	
+					if (!devices.contains(res.getDevice())) {
+						executor.startResource(res);
+					} else {
+						// resource is started when device is
+						// started
+					}
+				} catch (Exception e) {
+					throw e;
+				}finally { 
+					executor.getDevMgmComHandler().disconnect();
 				}
-
-				createFBInstance(resDepData, executor, monitor);	
-				deployParamters(resDepData, executor, monitor);   //this needs to be done before the connections are created
-				deployConnections(resDepData, executor, monitor);
-
-				if (!devices.contains(res.getDevice())) {
-					executor.startResource(res);
-				} else {
-					// resource is started when device is
-					// started
-				}
-				executor.getDevMgmComHandler().disconnect();
 			}
 		}
 
@@ -301,13 +306,18 @@ public class DeploymentCoordinator {
 						}
 					}
 					executor.startDevice(device);
-					executor.getDevMgmComHandler().disconnect();
-					executor.getDevMgmComHandler().removeDeploymentListener(
-							listener);
 					monitor.worked(1);
 				} catch  (Exception e) {
 					//TODO model refactoring - show error message to user
 					Activator.getDefault().logError(e.getMessage(), e);
+				}finally {
+					try {
+						executor.getDevMgmComHandler().disconnect();
+					} catch (DisconnectException e) {
+						//TODO model refactoring - show error message to user
+						Activator.getDefault().logError(e.getMessage(), e);
+					}
+					executor.getDevMgmComHandler().removeDeploymentListener(listener);					
 				}
 			}
 		}
