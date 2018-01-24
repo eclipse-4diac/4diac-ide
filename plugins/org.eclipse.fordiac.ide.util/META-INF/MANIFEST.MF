@@ -5,7 +5,6 @@ Export-Package: org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.util.comm.datatypes,
  org.eclipse.fordiac.ide.util.comm.exceptions,
  org.eclipse.fordiac.ide.util.dnd,
- org.eclipse.fordiac.ide.util.editors,
  org.eclipse.fordiac.ide.util.imageprovider,
  org.eclipse.fordiac.ide.util.preferences
 Require-Bundle: org.eclipse.core.runtime,

@@ -20,7 +20,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.controls.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.controls.editors.I4diacModelEditor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IEditorPart;
@@ -63,6 +66,9 @@ public class DeleteFBNetworkElementCommand extends Command {
 			cmds.execute();
 		}
 		fbParent.getNetworkElements().remove(element);
+		if(element instanceof SubApp) {
+			closeSubApplicationEditor((SubApp)element);
+		}
 	}
 	
 	@Override
@@ -95,4 +101,12 @@ public class DeleteFBNetworkElementCommand extends Command {
 			}
 		}
 	}
+	
+	private void closeSubApplicationEditor(SubApp subapp) {
+		EditorUtils.closeEditorsFiltered((IEditorPart editor) -> {
+			return ((editor instanceof I4diacModelEditor) && 
+					(subapp.getSubAppNetwork() == ((I4diacModelEditor)editor).getModel()) );
+		});
+	}
+
 }

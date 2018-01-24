@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
@@ -32,10 +30,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.util.ElementSelector;
-import org.eclipse.fordiac.ide.util.editors.EditorUtils;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.ui.IEditorPart;
 
 public class FlattenSubAppCommand extends Command {
 	final SubApp subapp;
@@ -78,8 +74,6 @@ public class FlattenSubAppCommand extends Command {
 		
 		ElementSelector selector = new ElementSelector();
 		selector.selectViewObjects(elements);
-		
-		closeSubApplicationEditor();
 	}
 
 	@Override
@@ -180,12 +174,5 @@ public class FlattenSubAppCommand extends Command {
 		}
 		
 	}
-	
-	private void closeSubApplicationEditor() {
-		EditorUtils.closeEditorsFiltered((IEditorPart editor) -> {
-			return ((editor instanceof SubAppNetworkEditor) && 
-					(subapp.getSubAppNetwork() == ((FBNetworkEditor)editor).getModel()) );
-		});
-	}
-	
+		
 }

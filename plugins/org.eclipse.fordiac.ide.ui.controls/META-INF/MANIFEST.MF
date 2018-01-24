@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Export-Package: org.eclipse.fordiac.ide.ui.controls
+Export-Package: org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.fordiac.ide.ui.controls.editors
 Require-Bundle: org.eclipse.gef,
  org.eclipse.core.runtime,
  org.eclipse.jface,
