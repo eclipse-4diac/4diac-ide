@@ -57,7 +57,7 @@ public class TriggerEventHandler extends AbstractMonitoringHandler {
 
 	private Event getEvent(Object object) {
 		IInterfaceElement ie = null;
-		if(object instanceof IInterfaceElement) {
+		if(object instanceof InterfaceEditPart) {
 			ie = ((InterfaceEditPart) object).getModel();
 		} else if (object instanceof MonitoringEditPart){
 			ie = ((MonitoringEditPart)object).getModel().getPort().getInterfaceElement();
