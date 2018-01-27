@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -78,6 +79,7 @@ public class ResourceEditPart extends AbstractViewEditPart {
 			}
 			typeInfo = new Label("(" //$NON-NLS-1$
 					+ type + ")"); //$NON-NLS-1$
+			typeInfo.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
 			add(typeInfo);
 			setOpaque(false);
 		}
