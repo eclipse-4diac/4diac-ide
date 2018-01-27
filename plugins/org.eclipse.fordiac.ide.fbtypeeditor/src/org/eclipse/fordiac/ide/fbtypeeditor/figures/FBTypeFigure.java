@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
@@ -169,6 +170,7 @@ public class FBTypeFigure extends Shape {
 		middleLayout.verticalSpacing = 1;
 		middle.add(typeName = new Label(type.getName() != null ? type.getName()
 				: "N/D"));
+		typeName.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
 		typeName.setTextAlignment(PositionConstants.CENTER);
 		middle.setConstraint(typeName, new GridData(GridData.HORIZONTAL_ALIGN_FILL
 				| GridData.GRAB_HORIZONTAL));
