@@ -55,7 +55,7 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command {
 		element.setX(x);
 		element.setY(y);	
 		createValues();
-		redo();
+		fbNetwork.getNetworkElements().add(element);  // as subclasses may not be able to run redo on execute we have to duplicate this here
 		element.setName(NameRepository.createUniqueName(element, getInitalInstanceName()));
 	}
 	

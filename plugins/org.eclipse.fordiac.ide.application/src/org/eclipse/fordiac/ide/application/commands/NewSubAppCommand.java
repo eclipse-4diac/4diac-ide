@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -32,16 +33,22 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IEditorInput;
 
 public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	/** The input for reopening subApp. */
 	private IEditorInput input = null;
 	private List<?> selection; 
-	private HashMap<IInterfaceElement, IInterfaceElement> connectionModifiers;
-	List<List<?>> modifyConnnection;
+	private final HashMap<IInterfaceElement, IInterfaceElement> connectionModifiers  = new HashMap<IInterfaceElement, IInterfaceElement>();
+	private final List<List<?>> modifyConnnection = new ArrayList<List<?>>();
+	private final List<FBNetworkElement> contents = new ArrayList<>();
+	CompoundCommand unmappingCmds = new CompoundCommand();  //stores all needed unmapp commands
+	MapToCommand mappSubappCmd = null;  //can not be in the compound command as it needs to be performed when subapp interface is finished
+	
 	boolean createConnection;
 	
 	public NewSubAppCommand(FBNetwork fbNetwork, List<?> selection, int x, int y) {
@@ -54,39 +61,79 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	@Override
 	public void execute() {
 		getSubApp().setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
-		connectionModifiers = new HashMap<IInterfaceElement, IInterfaceElement>();
-		modifyConnnection = new ArrayList<List<?>>();
 		super.execute();
-		//redo is called by super class
+		//We cann not call redo here as the unmapp and mapp commands would not be handled correctly
+		buildUpElementList();
+		unmappingCmds.execute();
+		addElementsToSubapp();  //needs to be done after the mapping commands
+		if(null != mappSubappCmd) {
+			mappSubappCmd.execute();
+		}
+		openClosedEditor();
 	}
-	
+
 	@Override
 	public void redo() {
 		super.redo();
-		for(Object ne : selection){
-			if(ne instanceof FBEditPart || ne instanceof SubAppForFBNetworkEditPart){
-				getSubApp().getSubAppNetwork().getNetworkElements().add(((AbstractFBNElementEditPart) ne).getModel());
-				createConnection(((AbstractFBNElementEditPart) ne).getModel(), true);
-			}
+		unmappingCmds.redo();
+		addElementsToSubapp();
+		if(null != mappSubappCmd) {
+			mappSubappCmd.redo();
 		}
 		openClosedEditor();
 	}
 
 	@Override
 	public void undo() {
-		super.undo();
-		for(Object ne : selection){
-			if(ne instanceof FBEditPart || ne instanceof SubAppForFBNetworkEditPart){
-				fbNetwork.getNetworkElements().add(((AbstractFBNElementEditPart)ne).getModel());
-				createConnection(((AbstractFBNElementEditPart)ne).getModel(), false);
-			}
+		if(null != mappSubappCmd) {
+			mappSubappCmd.undo();
 		}
+		super.undo();
+		for(FBNetworkElement el : contents){
+			fbNetwork.getNetworkElements().add(el);
+			createConnection(el, false);
+		}
+		unmappingCmds.undo();
 		element.setInterface(getTypeInterfaceList());
 		connectionModifiers.clear();
 		modifyConnnection.clear();
 		closeOpenedSubApp();
 	}
 	
+	private void buildUpElementList() {
+		Resource res = null;
+		int resCount = 0;
+		for(Object ne : selection){
+			if(ne instanceof FBEditPart || ne instanceof SubAppForFBNetworkEditPart){
+				FBNetworkElement element = ((AbstractFBNElementEditPart) ne).getModel();
+				contents.add(element);
+				if(element.isMapped()) {
+					unmappingCmds.add(new UnmapCommand(element));
+					if(resCount == 0) {
+						//this is the first element
+						resCount = 1;
+						res = element.getResource();
+					} else {
+						if(res != element.getResource()) {
+							resCount = -1; //we have elements mapped to different entities
+						}
+					}
+				} else {
+					resCount = -1; //we have at least one unmapped element so we will not mapp the whole subapp
+				}
+			}
+		}
+		if( 1 == resCount && null != res) {
+			mappSubappCmd = new MapToCommand(getSubApp(), res);
+		}
+	}
+	
+	private void addElementsToSubapp() {
+		for(FBNetworkElement el : contents){
+			getSubApp().getSubAppNetwork().getNetworkElements().add(el);
+			createConnection(el, true);
+		}
+	}	
 	
 	private void moveConnection(Connection con, boolean isRedo){
 		if(con instanceof EventConnection){

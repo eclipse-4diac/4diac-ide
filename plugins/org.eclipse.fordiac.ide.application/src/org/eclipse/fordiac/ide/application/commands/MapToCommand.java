@@ -114,9 +114,9 @@ public class MapToCommand extends Command {
 	public void undo() {
 		createdConnections.undo();
 		
+		srcElement.setMapping(null);  //mapping should be removed first so that all notifiers checking for mapped state will not invalily afterwards use the resource
+		targetElement.setMapping(null);
 		getTargetFBNetwork().getNetworkElements().remove(targetElement);
-		
-		srcElement.setMapping(null);
 		getAutomationSystem().getMapping().remove(mapping);
 		
 		if (null != unmappFromExistingTarget) {
@@ -138,6 +138,7 @@ public class MapToCommand extends Command {
 		}		
 		getTargetFBNetwork().getNetworkElements().add(targetElement);		
 		srcElement.setMapping(mapping);
+		targetElement.setMapping(mapping);
 		getAutomationSystem().getMapping().add(mapping);		
 		createdConnections.redo();
 	}
