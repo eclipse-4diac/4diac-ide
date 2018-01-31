@@ -128,7 +128,7 @@ public abstract class CommonElementExporter {
 	private Transformer createXMLTransformer()
 			throws TransformerFactoryConfigurationError, TransformerConfigurationException {
 		TransformerFactory tFactory = TransformerFactory.newInstance();
-		tFactory.setAttribute("indent-number", new Integer(2)); //$NON-NLS-1$
+		tFactory.setAttribute("indent-number", Integer.valueOf(2)); //$NON-NLS-1$
 		Transformer transformer = tFactory.newTransformer();
 
 		transformer.setOutputProperty(
@@ -505,13 +505,11 @@ public abstract class CommonElementExporter {
 		setNameTypeCommentAttribute(variableElement, varDecl, varDecl.getType());
 
 		if (varDecl.isArray()) {
-			variableElement.setAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE,
-					new Integer(varDecl.getArraySize()).toString());
+			variableElement.setAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE, Integer.toString(varDecl.getArraySize()));
 		}
 		if (varDecl.getVarInitialization() != null
 				&& varDecl.getVarInitialization().getInitialValue() != null) {
-			variableElement.setAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl
-					.getVarInitialization().getInitialValue());
+			variableElement.setAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl.getVarInitialization().getInitialValue());
 		}
 
 		parentElement.appendChild(variableElement);

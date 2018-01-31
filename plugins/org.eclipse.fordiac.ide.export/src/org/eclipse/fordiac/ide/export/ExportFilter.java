@@ -718,15 +718,13 @@ public abstract class ExportFilter implements IExportFilter {
 	 * @return the string
 	 */
 	public static String trimSTRING(String value) {
-		Character trimValue1 = new Character('"');
-		Character trimValue2 = new Character('\'');
+		final String trimValue1 = "\"";
+		final String trimValue2 = "'";		
 
-		if (value.startsWith(trimValue1.toString())
-				|| value.startsWith(trimValue2.toString())) {
+		if (value.startsWith(trimValue1) || value.startsWith(trimValue2)) {
 			value = value.substring(1);
 		}
-		if (value.endsWith(trimValue1.toString())
-				|| value.endsWith(trimValue2.toString())) {
+		if (value.endsWith(trimValue1) || value.endsWith(trimValue2)) {
 			value = value.substring(0, value.length() - 1);
 		}
 

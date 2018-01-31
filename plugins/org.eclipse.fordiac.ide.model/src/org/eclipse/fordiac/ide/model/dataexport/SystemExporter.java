@@ -277,7 +277,7 @@ public class SystemExporter {
 			throws TransformerFactoryConfigurationError, TransformerConfigurationException {
 		Transformer transformer;
 		TransformerFactory tFactory = TransformerFactory.newInstance();
-		tFactory.setAttribute("indent-number", new Integer(2)); //$NON-NLS-1$
+		tFactory.setAttribute("indent-number", Integer.valueOf(2)); //$NON-NLS-1$
 		transformer = tFactory.newTransformer();
 		transformer.setOutputProperty(javax.xml.transform.OutputKeys.DOCTYPE_SYSTEM,
 				"http://www.holobloc.com/xml/LibraryElement.dtd"); //$NON-NLS-1$

@@ -84,8 +84,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 			try {
 				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof IExportFilter) {
-					Integer sortIndex = new Integer(
-							element.getAttribute("sortIndex")); //$NON-NLS-1$
+					Integer sortIndex = Integer.valueOf(element.getAttribute("sortIndex")); //$NON-NLS-1$
 					sortedExportFiltersMap.put(sortIndex,
 							(IExportFilter) object);
 				}

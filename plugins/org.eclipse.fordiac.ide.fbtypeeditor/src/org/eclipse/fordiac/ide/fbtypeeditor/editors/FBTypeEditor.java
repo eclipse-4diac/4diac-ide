@@ -277,8 +277,7 @@ public class FBTypeEditor extends FormEditor implements
 					Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (obj instanceof IFBTEditorPart) {
 						String elementType = element.getAttribute("type"); //$NON-NLS-1$
-						Integer sortIndex = new Integer(
-								element.getAttribute("sortIndex")); //$NON-NLS-1$
+						Integer sortIndex = Integer.valueOf(element.getAttribute("sortIndex")); //$NON-NLS-1$
 						
 						if(checkTypeEditorType(fbType, elementType)){
 							sortedEditorsMap.put(sortIndex, (IFBTEditorPart) obj);

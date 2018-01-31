@@ -282,9 +282,9 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 		
 		public TestResultLabelProvider() {
 			AFLP = new AdapterFactoryLabelProvider(getAdapterFactory());
-			decorators.put(new Integer(TestFailed), FordiacImage.ICON_TestFailed.getImageDescriptor());
-			decorators.put(new Integer(TestOK), FordiacImage.ICON_TestOK.getImageDescriptor());
-			decorators.put(new Integer(NoTest), FordiacImage.ICON_NoTest.getImageDescriptor());
+			decorators.put(Integer.valueOf(TestFailed), FordiacImage.ICON_TestFailed.getImageDescriptor());
+			decorators.put(Integer.valueOf(TestOK), FordiacImage.ICON_TestOK.getImageDescriptor());
+			decorators.put(Integer.valueOf(NoTest), FordiacImage.ICON_NoTest.getImageDescriptor());
 		}
 
 		@Override
