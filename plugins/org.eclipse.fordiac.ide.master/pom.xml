@@ -60,6 +60,7 @@
 	<properties>
 		<tycho.version>0.26.0</tycho.version>
 		<oxygen-repo.url>http://download.eclipse.org/releases/oxygen</oxygen-repo.url>
+		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 	</properties>
 
  <repositories>
