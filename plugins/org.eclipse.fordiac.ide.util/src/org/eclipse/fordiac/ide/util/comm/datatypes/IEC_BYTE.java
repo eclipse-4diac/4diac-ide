@@ -99,7 +99,7 @@ public class IEC_BYTE extends IEC_ANY_BIT {
 	
 	@Override
 	public int hashCode() {
-		return (new Integer(value)).hashCode();
+		return Integer.valueOf(value).hashCode();
 	}
 
 	/*

@@ -130,7 +130,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 				for (ECTransition runner : transition.getSource()
 						.getOutTransitions()) {
 					if (runner.equals(transition)) {
-						transitionOrderDecorator.setText((new Integer(i)).toString());
+						transitionOrderDecorator.setText(Integer.toString(i));
 					}
 					i++;
 				}

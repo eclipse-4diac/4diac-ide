@@ -330,9 +330,9 @@ public class SystemImporter {
 		Node value = attributeMap.getNamedItem(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (value != null) {
 			String[] colors = value.getNodeValue().split(","); //$NON-NLS-1$
-			color.setRed(new Integer(colors[0]));
-			color.setGreen(new Integer(colors[1]));
-			color.setBlue(new Integer(colors[2]));
+			color.setRed(Integer.valueOf(colors[0]));
+			color.setGreen(Integer.valueOf(colors[1]));
+			color.setBlue(Integer.valueOf(colors[2]));
 			colElement.setColor(color);
 		}
 	}
