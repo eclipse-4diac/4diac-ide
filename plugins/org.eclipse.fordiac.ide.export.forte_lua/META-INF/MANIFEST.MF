@@ -10,6 +10,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.export,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.structuredtext,
+ org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.ui.workbench,
  org.eclipse.xtext
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

@@ -164,11 +164,6 @@
       </category>
       <command
             categoryId="org.eclipse.fordiac.ide.monitoring"
-            id="org.eclipse.fordiac.ide.monitoring.commands.addWatchAll"
-            name="Watch All">
-      </command>
-      <command
-            categoryId="org.eclipse.fordiac.ide.monitoring"
             id="org.eclipse.fordiac.ide.monitoring.commands.removeAllWatches"
             name="Remove All Watches">
       </command>
@@ -176,11 +171,6 @@
             categoryId="org.eclipse.fordiac.ide.monitoring"
             id="org.eclipse.fordiac.ide.monitoring.commands.addWatch"
             name="Watch">
-      </command>
-      <command
-            categoryId="org.eclipse.fordiac.ide.monitoring"
-            id="org.eclipse.fordiac.ide.monitoring.commands.removeWatch"
-            name="Remove Watch">
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.monitoring"
@@ -416,20 +406,12 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="org.eclipse.fordiac.ide.monitoring.handlers.AddWatchAllHandler"
-            commandId="org.eclipse.fordiac.ide.monitoring.commands.addWatchAll">
-      </handler>
-      <handler
             class="org.eclipse.fordiac.ide.monitoring.handlers.RemoveAllWatchesHandler"
             commandId="org.eclipse.fordiac.ide.monitoring.commands.removeAllWatches">
       </handler>
       <handler
             class="org.eclipse.fordiac.ide.monitoring.handlers.AddWatchHandler"
             commandId="org.eclipse.fordiac.ide.monitoring.commands.addWatch">
-      </handler>
-      <handler
-            class="org.eclipse.fordiac.ide.monitoring.handlers.RemoveWatchHandler"
-            commandId="org.eclipse.fordiac.ide.monitoring.commands.removeWatch">
       </handler>
       <handler
             class="org.eclipse.fordiac.ide.monitoring.handlers.TriggerEventHandler"

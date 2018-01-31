@@ -52,7 +52,7 @@ public class ChangeConditionEventCommand extends Command {
 	}
 	
 	public ArrayList<Event> getEvents(){
-		eventList.removeAll(eventList);
+		eventList.clear();
 		BasicFBType types = (BasicFBType) transition.eContainer().eContainer();
 		this.eventList.addAll(types.getInterfaceList().getEventInputs());
 		for (AdapterDeclaration socket : types.getInterfaceList().getSockets()) {

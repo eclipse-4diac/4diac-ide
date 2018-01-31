@@ -23,10 +23,10 @@ public class ECActionFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if(toTest instanceof ECActionAlgorithmEditPart && ((ECActionAlgorithmEditPart) toTest).getCastedModel() instanceof ECActionAlgorithm){
+		if(toTest instanceof ECActionAlgorithmEditPart){
 			return true;
 		}
-		if(toTest instanceof ECActionOutputEventEditPart && ((ECActionOutputEventEditPart) toTest).getCastedModel() instanceof ECActionOutputEvent){
+		if(toTest instanceof ECActionOutputEventEditPart){
 			return true;
 		}
 		if(toTest instanceof ECActionAlgorithm || toTest instanceof ECActionOutputEvent){

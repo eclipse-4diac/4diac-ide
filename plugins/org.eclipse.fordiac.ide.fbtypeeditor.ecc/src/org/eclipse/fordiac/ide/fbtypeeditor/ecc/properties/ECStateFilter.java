@@ -20,7 +20,7 @@ public class ECStateFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if(toTest instanceof ECStateEditPart && ((ECStateEditPart) toTest).getCastedModel() instanceof ECState){
+		if(toTest instanceof ECStateEditPart){
 			return true;
 		}
 		if(toTest instanceof ECState){
