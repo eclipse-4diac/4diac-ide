@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IEditorInput;
 
@@ -259,7 +260,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	
 	private boolean isContained(FBNetworkElement e) {
 		for(Object ne : selection){
-			if(ne instanceof SubAppForFBNetworkEditPart && ((SubAppForFBNetworkEditPart)ne).getModel().equals(e)){
+			if(ne instanceof AbstractFBNElementEditPart && ((EditPart)ne).getModel().equals(e)){
 				return true;
 			}
 		}
