@@ -134,7 +134,8 @@ public class ActionSection extends AbstractECSection {
 				}else{
 					executeCommand(new ChangeAlgorithmCommand(getType(), null));
 				}
-				refresh();
+				algorithmGroup.setAlgorithm(getAlgorithm());
+				algorithmsViewer.setInput(getType());
 				addContentAdapter();
 			}
 			@Override
@@ -234,11 +235,10 @@ public class ActionSection extends AbstractECSection {
 		commandStack = null;		
 		if(null != type) {
 			setOutputEventDropdown();
-			outputEventCombo.select(getType().getOutput() != null ? 
-					outputEventCombo.indexOf(getType().getOutput().getName()) : outputEventCombo.indexOf(""));		 //$NON-NLS-1$
+			outputEventCombo.select(getType().getOutput() != null ? outputEventCombo.indexOf(getType().getOutput().getName()) : outputEventCombo.indexOf(""));		 //$NON-NLS-1$
 			setAlgorithmDropdown();
-			algorithmsViewer.setInput(getType());			
 			algorithmGroup.setAlgorithm(getAlgorithm());
+			algorithmsViewer.setInput(getType());
 		} 
 		commandStack = commandStackBuffer;
 	}
@@ -264,8 +264,7 @@ public class ActionSection extends AbstractECSection {
 				algorithmCombo.add(alg.getName());
 			}
 		}
-		algorithmCombo.select((null == getAlgorithm()) ? 0 : 
-			algorithmCombo.indexOf(getAlgorithm().getName()));		
+		algorithmCombo.select((null == getAlgorithm()) ? 0 : algorithmCombo.indexOf(getAlgorithm().getName()));		
 		actionComposite.layout();
 	}
 
