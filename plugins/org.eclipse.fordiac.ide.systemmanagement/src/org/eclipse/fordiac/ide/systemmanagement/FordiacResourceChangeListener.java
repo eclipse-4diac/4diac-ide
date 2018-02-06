@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
@@ -347,7 +346,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	 * @param dstPalette
 	 * @param dstRootPaletteGroup
 	 */
-	private void movePaletteGroup(IContainer srcGroupFolder,
+	private static void movePaletteGroup(IContainer srcGroupFolder,
 			IContainer dstGroupFolder, Palette srcPalette,
 			Palette dstPalette) {
 		PaletteGroup dstGroup = TypeLibrary.getPaletteGroup(dstPalette, dstGroupFolder);
@@ -424,7 +423,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		updatePaletteEntry(file, entry);
 	}
 
-	private void updatePaletteEntry(final IFile newFile, final PaletteEntry entry) {
+	private static void updatePaletteEntry(final IFile newFile, final PaletteEntry entry) {
 		if (null != entry) {
 			String newTypeName = TypeLibrary.getTypeNameFromFile(newFile);
 			entry.setLabel(newTypeName);
@@ -477,18 +476,21 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	protected void renameSystem(final AutomationSystem system, final IProject project) {
+		IFile oldSystemFile = project.getFile(system.getName() + SystemManager.SYSTEM_FILE_ENDING);
 		String newProjectName = project.getName();
-		system.setName(newProjectName);
-		
-		IPath path = project.getLocation().append(system.getName() + SystemManager.SYSTEM_FILE_ENDING);
-		URI uri = URI.createFileURI(path.toOSString());
-		system.eResource().setURI(uri);
+		system.setName(newProjectName);		
 		system.setProject(project);     //update to the new project
-		
 		
 		WorkspaceJob job = new WorkspaceJob("Save system configuration: " + newProjectName) {
 			public IStatus runInWorkspace(IProgressMonitor monitor) {
 				// do the actual work in here
+				try {
+					//try to remove the old file
+					oldSystemFile.delete(true, null);
+				} catch (CoreException e) {
+					Activator.getDefault().logError(e.getMessage(), e);
+				}
+				//save the system with the new name and the new system file
 				SystemManager.INSTANCE.saveSystem(system);				
 				return Status.OK_STATUS;
 			}
@@ -507,7 +509,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 	
-	private void closeAllEditors(final AutomationSystem refSystem) {
+	private static void closeAllEditors(final AutomationSystem refSystem) {
 		//display related stuff needs to run in a display thread
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
@@ -519,7 +521,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		});
 		
 	}
-	private void closeAllFBTypeEditor(final PaletteEntry entry) {
+	private static void closeAllFBTypeEditor(final PaletteEntry entry) {
 		//display related stuff needs to run in a display thread
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
