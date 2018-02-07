@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.ui.controls;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -35,14 +36,9 @@ import org.eclipse.swt.widgets.Text;
  */
 public class FileChooserControl extends Composite {
 
-	/** The c label. */
-	private CLabel cLabel = null;
 
 	/** The text. */
 	private Text text = null;
-
-	/** The button. */
-	private Button button = null;
 
 	/** The label text. */
 	private final String labelText;
@@ -63,8 +59,8 @@ public class FileChooserControl extends Composite {
 			final String label, String[] filterNames, String[] filterExtensions) {
 		super(parent, style);
 		this.labelText = label;
-		this.filterNames = filterNames;
-		this.filterExtensions = filterExtensions;
+		this.filterNames = filterNames.clone();
+		this.filterExtensions = filterExtensions.clone();
 		initialize();
 	}
 
@@ -80,11 +76,11 @@ public class FileChooserControl extends Composite {
 		gridLayout.numColumns = 3;
 		gridLayout.marginHeight = 5;
 		gridLayout.marginWidth = 0;
-		cLabel = new CLabel(this, SWT.NONE);
+		CLabel cLabel = new CLabel(this, SWT.NONE);
 		cLabel.setText(labelText);
 		text = new Text(this, SWT.BORDER);
 		text.setLayoutData(gridData);
-		button = new Button(this, SWT.NONE);
+		Button button = new Button(this, SWT.NONE);
 		button.setText("Select");
 		button.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
 			@Override
@@ -102,13 +98,10 @@ public class FileChooserControl extends Composite {
 				}
 
 				String selectedFile = dialog.open();
-
 				if (selectedFile != null) {
 					text.setText(selectedFile);
 					notifyFileListeners();
-					// validateInput();
 				}
-
 			}
 		});
 
@@ -145,11 +138,10 @@ public class FileChooserControl extends Composite {
 		});
 
 		this.setLayout(gridLayout);
-		// setSize(new org.eclipse.swt.graphics.Point(300,27));
 	}
 
 	/** The listeners. */
-	ArrayList<IFileChanged> listeners = new ArrayList<IFileChanged>();
+	private List<IFileChanged> listeners = new ArrayList<>();
 
 	/**
 	 * Adds the directory changed listener.

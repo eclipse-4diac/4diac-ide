@@ -50,7 +50,7 @@ public class ListFBCreateCommand extends FBCreateCommand {
 	public ListFBCreateCommand(final FBTypePaletteEntry[] type,
 			final FBNetwork parent, int x, int y) {
 		super(null, parent, x, y); // values will be set in execute()
-		typeList = type;
+		typeList = type.clone();
 		selectionList = null;
 		system = parent.getAutomationSystem();
 	}
@@ -59,7 +59,7 @@ public class ListFBCreateCommand extends FBCreateCommand {
 			final FBNetwork parent, int x, int y) {
 		super(null, parent, x, y); // values will be set in execute()
 		typeList = null; 
-		selectionList = fbList;
+		selectionList = fbList.clone();
 		this.system = parent.getAutomationSystem();
 	}
 

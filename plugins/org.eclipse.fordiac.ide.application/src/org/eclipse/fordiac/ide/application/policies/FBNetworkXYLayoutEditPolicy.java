@@ -102,4 +102,10 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	protected Command getAddCommand(final Request generic) {
 		return null;
 	}
+	
+	@Override
+	protected Command getCloneCommand(ChangeBoundsRequest request) {
+		// TODO Auto-generated method stub
+		return super.getCloneCommand(request);
+	}
 }

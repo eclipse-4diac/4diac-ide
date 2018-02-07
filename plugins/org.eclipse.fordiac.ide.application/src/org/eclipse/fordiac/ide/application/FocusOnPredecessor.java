@@ -12,9 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
@@ -35,9 +37,11 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class FocusOnPredecessor implements IObjectActionDelegate {
 
+	private static final int HALF_TRANSPERENT = 50;
+	private static final int NON_TRANSPARENT = 255;
 	private FBEditPart selectedFB = null;
 	IWorkbenchPart workbench = null;
-	
+
 	public FocusOnPredecessor() {
 	}
 
@@ -45,48 +49,30 @@ public class FocusOnPredecessor implements IObjectActionDelegate {
 	public void run(IAction action) {
 		if (selectedFB != null) {
 			FB fb = selectedFB.getModel();
-			ArrayList<FB> fbsToHighlight = new ArrayList<>();
-			ArrayList<Connection> connectionsToHighlight = new ArrayList<>();
-			fbsToHighlight.add(fb);
+			Set<Object> elementToHighlight = new HashSet<>();
+			elementToHighlight.add(fb);
 
-			addPredecessorFBs(fb, fbsToHighlight, connectionsToHighlight);
-			
+			addPredecessorFBs(fb, elementToHighlight);
+
 			if (workbench instanceof FBNetworkEditor) {
 				GraphicalViewer viewer = ((FBNetworkEditor) workbench).getViewer();
 				Map<?, ?> map = viewer.getEditPartRegistry();
-				for (Object obj : map.keySet()) {
-					Object editPartAsObject = map.get(obj);
-					if (obj instanceof Connection) {
-						if (connectionsToHighlight.contains(obj)) {
-							if (editPartAsObject instanceof ConnectionEditPart) {
-								// if previously the transparency was set to a value lower than 255
-								((ConnectionEditPart) editPartAsObject).setTransparency(255);
-							}
-						} else {
-							if (editPartAsObject instanceof ConnectionEditPart) {
-								((ConnectionEditPart) editPartAsObject).setTransparency(50);
-							}
-						}
-					}
-					if (obj instanceof FB) {
-						if (editPartAsObject != null && fbsToHighlight.contains(obj)) {
-							if (editPartAsObject instanceof AbstractViewEditPart) {
-								// if previously the transparency was set to a value lower than 255
-								((AbstractViewEditPart) editPartAsObject).setTransparency(255);
-							}
-						} else {
-							if (editPartAsObject instanceof AbstractViewEditPart) {
-								((AbstractViewEditPart) editPartAsObject).setTransparency(50);
-							}
-						}
-					}
+				for (Entry<?, ?> entry : map.entrySet()) {
+					Object obj = entry.getKey();
+					Object editPartAsObject = entry.getValue();
+					int transparency = (elementToHighlight.contains(obj)) ? NON_TRANSPARENT : HALF_TRANSPERENT;					
+					if (editPartAsObject instanceof AbstractViewEditPart) {
+						((AbstractViewEditPart) editPartAsObject).setTransparency(transparency);
+					} else if (editPartAsObject instanceof ConnectionEditPart){
+						((ConnectionEditPart) editPartAsObject).setTransparency(transparency);
+					}					
 				}
 			}
-			
+
 		}
 	}
 
-	private void addPredecessorFBs(FB fb, ArrayList<FB> fbsToHighlight, ArrayList<Connection> connectionsToHighlight) {
+	private void addPredecessorFBs(FB fb, Set<Object> elementToHighlight) {
 		List<VarDeclaration> inputs = fb.getInterface().getInputVars();
 		for (VarDeclaration varDeclaration : inputs) {
 			for (Connection con : varDeclaration.getInputConnections()) {
@@ -96,10 +82,10 @@ public class FocusOnPredecessor implements IObjectActionDelegate {
 					if (sourceContainer instanceof InterfaceList) {
 						EObject sourceFBEObject = sourceContainer.eContainer();
 						if (sourceFBEObject instanceof FB) {
-							connectionsToHighlight.add(con);
-							if (!fbsToHighlight.contains(sourceFBEObject)) {
-								fbsToHighlight.add((FB)sourceFBEObject);
-								addPredecessorFBs((FB)sourceFBEObject, fbsToHighlight, connectionsToHighlight);
+							elementToHighlight.add(con);
+							if (!elementToHighlight.contains(sourceFBEObject)) {
+								elementToHighlight.add(sourceFBEObject);
+								addPredecessorFBs((FB) sourceFBEObject, elementToHighlight);
 							}
 						}
 					}
@@ -110,10 +96,9 @@ public class FocusOnPredecessor implements IObjectActionDelegate {
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			if (((IStructuredSelection) selection).getFirstElement() instanceof FBEditPart) {
-				selectedFB  = (FBEditPart)((IStructuredSelection) selection).getFirstElement();
-			}
+		if ((selection instanceof IStructuredSelection) && 
+				(((IStructuredSelection) selection).getFirstElement() instanceof FBEditPart)) {
+			selectedFB = (FBEditPart) ((IStructuredSelection) selection).getFirstElement();
 		}
 
 	}
