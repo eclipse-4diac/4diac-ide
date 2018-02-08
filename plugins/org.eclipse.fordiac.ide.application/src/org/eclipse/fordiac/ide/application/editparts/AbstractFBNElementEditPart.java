@@ -269,14 +269,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	private Device findDevice() {
 		Resource res = null;
 		if (null != getModel() && getModel().isMapped()) {
-			if(getModel().getFbNetwork().eContainer() instanceof Resource){
-				res = (Resource)getModel().getFbNetwork().eContainer();
-			} else {
-				FBNetworkElement target = getModel().getOpposite();
-				if(null != target.getFbNetwork() && target.getFbNetwork().eContainer() instanceof Resource){
-					res = (Resource)target.getFbNetwork().eContainer();
-				}		
-			}
+			res = getModel().getResource();			
 		}
 		return (null != res) ? res.getDevice() : null;
 	}
