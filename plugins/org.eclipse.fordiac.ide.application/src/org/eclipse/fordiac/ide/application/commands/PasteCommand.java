@@ -39,6 +39,7 @@ import org.eclipse.swt.graphics.Point;
  */
 public class PasteCommand extends Command {
 
+	private static final int DEFAULT_DELTA = 20;
 	@SuppressWarnings("rawtypes")
 	private final List templates;
 	private final FBNetwork destination;
@@ -51,7 +52,9 @@ public class PasteCommand extends Command {
 	
 	private final CompoundCommand connCreateCmds = new CompoundCommand();
 	
-	private Point sourceRefPos;
+	private int xDelta;
+	private int yDelta;
+	private boolean calcualteDelta = false;
 	private Point pasteRefPos;
 	
 
@@ -70,6 +73,15 @@ public class PasteCommand extends Command {
 		this.templates = templates;
 		this.destination = destination;
 		this.pasteRefPos = pasteRefPos;
+		calcualteDelta = true;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public PasteCommand(List templates, FBNetwork destination, int copyDeltaX, int copyDeltaY) {
+		this.templates = templates;
+		this.destination = destination;
+		xDelta = copyDeltaX;
+		yDelta = copyDeltaY;
 	}
 	
 	@Override
@@ -117,9 +129,14 @@ public class PasteCommand extends Command {
 			}
 		}
 		
-		sourceRefPos = new Point(x, y);
-		if(null == pasteRefPos){
-			pasteRefPos = new Point(x + 20, y + 20);
+		if(calcualteDelta) {
+			if(null != pasteRefPos){
+				xDelta = pasteRefPos.x - x;
+				yDelta = pasteRefPos.y - y;
+			}else {
+				xDelta = DEFAULT_DELTA;
+				yDelta = DEFAULT_DELTA;
+			}
 		}
 	}
 		
@@ -194,15 +211,13 @@ public class PasteCommand extends Command {
 		cmd.setArrangementConstraints(conn.getDx1(), conn.getDx2(), conn.getDy());
 	}
 
-	private IInterfaceElement checkForCopiedInterfaceElement(FBNetworkElement targetElement, IInterfaceElement orig) {
+	private static IInterfaceElement checkForCopiedInterfaceElement(FBNetworkElement targetElement, IInterfaceElement orig) {
 		Assert.isNotNull(targetElement);
 	    return targetElement.getInterfaceElement(orig.getName());
 	}
 
 	private Point calculatePastePos(FBNetworkElement element) {
-		int xDelta = element.getX() - sourceRefPos.x;
-		int yDelta = element.getY() - sourceRefPos.y;		
-		return new Point(pasteRefPos.x + xDelta, pasteRefPos.y + yDelta);
+		return new Point(element.getX() + xDelta, element.getY() + yDelta);
 	}
 
 }
