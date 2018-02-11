@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -272,16 +274,12 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 					IStructuredSelection selection = (IStructuredSelection) event.getSelection();
 					if (selection.getFirstElement() instanceof TestData) {
 						TestData data = (TestData) selection.getFirstElement();
-						Hashtable<String, TestElement> testElements = TestingManager.getInstance()
-								.getTestElements(type);
-						Enumeration<String> keys = testElements.keys();
-						while (keys.hasMoreElements()) {
-							String key = keys.nextElement();
-							TestElement element = testElements.get(key);
-							String value;
-							if ((value = data.getValueFor(element.getPortString())) != null) {
+						Map<String, TestElement> testElements = TestingManager.getInstance().getTestElements(type);
+						for(Entry<String, TestElement> entry : testElements.entrySet()) {
+							String value= data.getValueFor(entry.getValue().getPortString());
+							if (value != null) {
 								System.out.println("set value");
-								testElements.get(key).setValue(value);
+								testElements.get(entry.getKey()).setValue(value);
 							}
 						}
 						TestElement eventToTrigger = null;

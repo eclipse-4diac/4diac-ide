@@ -64,9 +64,9 @@ public final class TestingManager {
 		testElements.put(generateElementString(element), element);
 	}
 
-	public Hashtable<String, TestElement> getTestElements(FBType type,
+	public Map<String, TestElement> getTestElements(FBType type,
 			ISetValueListener valueListener, ITriggerEventListener eventListener) {
-		Hashtable<String, TestElement> elements = new Hashtable<String, TestElement>();
+		Map<String, TestElement> elements = new HashMap<>();
 		for (Entry<String, TestElement> entry : testElements.entrySet()) {
 			TestElement element = entry.getValue();
 			if (element.getFb().getType().equals(type)) {
@@ -82,8 +82,8 @@ public final class TestingManager {
 		return elements;
 	}
 
-	public Hashtable<String, TestElement> getTestElements(FBType type) {
-		Hashtable<String, TestElement> elements = new Hashtable<String, TestElement>();
+	public Map<String, TestElement> getTestElements(FBType type) {
+		Map<String, TestElement> elements = new HashMap<String, TestElement>();
 		for (Entry<String, TestElement> entry : testElements.entrySet()) {
 			TestElement element = entry.getValue();
 			if (element.getFb().getType().equals(type)) {

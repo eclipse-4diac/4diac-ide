@@ -13,8 +13,10 @@
 package org.eclipse.fordiac.ide.gef.router;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.ConnectionAnchor;
@@ -36,9 +38,9 @@ public class MoveableRouter extends BendpointConnectionRouter implements
 
 	private static final PrecisionPoint A_POINT = new PrecisionPoint();
 
-	private static final Hashtable<Connection, Integer> deltasX1 = new Hashtable<Connection, Integer>();
-	private static final Hashtable<Connection, Integer> deltasX2 = new Hashtable<Connection, Integer>();
-	private static final Hashtable<Connection, Integer> deltasY = new Hashtable<Connection, Integer>();
+	private static final Map<Connection, Integer> deltasX1 = new HashMap<>();
+	private static final Map<Connection, Integer> deltasX2 = new HashMap<>();
+	private static final Map<Connection, Integer> deltasY = new HashMap<>();
 
 	private final boolean invalidate = true;
 
@@ -197,12 +199,10 @@ public class MoveableRouter extends BendpointConnectionRouter implements
 		conn.setPoints(points);
 	}
 
-	private boolean needsSwap(Connection conn) {
-		if(conn.getSourceAnchor() instanceof FixedAnchor){
-			if(((FixedAnchor)conn.getSourceAnchor()).getEditPart() instanceof InterfaceEditPart){
-				InterfaceEditPart ep = (InterfaceEditPart)((FixedAnchor)conn.getSourceAnchor()).getEditPart();
-				return ep.isInput();
-			}
+	private static boolean needsSwap(Connection conn) {
+		if((conn.getSourceAnchor() instanceof FixedAnchor) && (((FixedAnchor)conn.getSourceAnchor()).getEditPart() instanceof InterfaceEditPart)){
+			InterfaceEditPart ep = (InterfaceEditPart)((FixedAnchor)conn.getSourceAnchor()).getEditPart();
+			return ep.isInput();
 		}
 		return false;
 	}
@@ -217,7 +217,6 @@ public class MoveableRouter extends BendpointConnectionRouter implements
 	public EditPolicy getBendpointPolicy(final Object modelObject) {
 		if (modelObject instanceof org.eclipse.fordiac.ide.model.libraryElement.Connection) {
 			return new BendpointEditPolicy() {
-				//private final List NULL_CONSTRAINT = new ArrayList();
 
 				@Override
 				protected Command getMoveBendpointCommand(final BendpointRequest request) {
@@ -252,9 +251,7 @@ public class MoveableRouter extends BendpointConnectionRouter implements
 				@SuppressWarnings("rawtypes")
 				@Override
 				protected List createSelectionHandles() {
-					List<ConnectionHandle> list = new ArrayList<ConnectionHandle>();
-					list = createHandlesForAutomaticBendpoints();
-					return list;
+					return createHandlesForAutomaticBendpoints();
 				}
 
 				private List<ConnectionHandle> createHandlesForAutomaticBendpoints() {
