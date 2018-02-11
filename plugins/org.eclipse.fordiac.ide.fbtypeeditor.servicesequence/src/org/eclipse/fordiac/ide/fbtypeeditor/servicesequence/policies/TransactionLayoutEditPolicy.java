@@ -78,15 +78,14 @@ public class TransactionLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 		ServiceTransaction target = (ServiceTransaction)getHost().getModel();	
 		if(! (child instanceof InputPrimitiveEditPart)){
 			EditPart after = getInsertionReference(((DropRequest) request).getLocation());
-			if((child instanceof OutputPrimitiveEditPart) && ((after != null) || ((after == null) && (target.getInputPrimitive() == null)))){		
+			if(((child instanceof OutputPrimitiveEditPart) && (after != null)) || 
+					((after == null) && (target.getInputPrimitive() == null))){		
 				OutputPrimitive refElement = null;						
 				if(after != null){
 					if(after instanceof OutputPrimitiveEditPart){
 						refElement = ((OutputPrimitiveEditPart)after).getCastedModel();
-					}else if (after instanceof InputPrimitiveEditPart){
-						if(0 < target.getOutputPrimitive().size()){
-							refElement = target.getOutputPrimitive().get(0);
-						}
+					}else if ((after instanceof InputPrimitiveEditPart) && (0 < target.getOutputPrimitive().size())){
+						refElement = target.getOutputPrimitive().get(0);
 					}				
 				}
 				return new MoveOutputPrimitiveCommand(target, ((OutputPrimitiveEditPart)child).getCastedModel(), refElement);
@@ -100,10 +99,8 @@ public class TransactionLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 		Object type = request.getNewObjectType();
 		ServiceTransaction model = (ServiceTransaction) getHost().getModel();	
 		if (type.equals("LeftInputPrimitive") || type.equals("RightInputPrimitive")){ //$NON-NLS-1$ //$NON-NLS-2$
-			CreateInputPrimitiveCommand cmd = new CreateInputPrimitiveCommand((String) type, model);
-			return cmd;
-		}
-		else if(type.equals("LeftOutputPrimitive") || type.equals("RightOutputPrimitive")) { //$NON-NLS-1$ //$NON-NLS-2$
+			return new CreateInputPrimitiveCommand((String) type, model);
+		}else if(type.equals("LeftOutputPrimitive") || type.equals("RightOutputPrimitive")) { //$NON-NLS-1$ //$NON-NLS-2$
 			PrimitiveEditPart refPrimitiv = (PrimitiveEditPart) getInsertionReference(((DropRequest) request).getLocation());			
 			if(null != refPrimitiv){
 				if(refPrimitiv instanceof InputPrimitiveEditPart){
