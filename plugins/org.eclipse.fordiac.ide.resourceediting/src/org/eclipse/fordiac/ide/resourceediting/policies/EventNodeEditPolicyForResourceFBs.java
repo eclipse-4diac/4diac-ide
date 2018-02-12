@@ -31,11 +31,7 @@ public class EventNodeEditPolicyForResourceFBs extends EventNodeEditPolicy {
 		while (parent != null && !(parent instanceof FBNetworkContainerEditPart)) {
 			parent = parent.getParent();
 		}
-		if (parent instanceof FBNetworkContainerEditPart) { 
-			// also means that parent != null
-			return ((FBNetworkContainerEditPart) parent).getModel();
-		}
-		return null;
+		return (null != parent) ? ((FBNetworkContainerEditPart) parent).getModel() : null;  //if non null parent is FBNetworkContainerEditPart
 	}
 
 }

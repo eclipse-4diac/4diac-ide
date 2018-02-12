@@ -217,12 +217,8 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		boolean visible = true;
-		if (childEditPart instanceof InterfaceEditPart) {
-			if (childEditPart.getModel() instanceof IInterfaceElement) {
-				if (((IInterfaceElement) childEditPart.getModel()) instanceof AdapterDeclaration)
-					visible = false;
-			}
-
+		if (childEditPart.getModel() instanceof AdapterDeclaration) {
+			visible = false;
 		}
 
 		if (childEditPart instanceof InterfaceEditPart){
@@ -264,8 +260,9 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 		IFigure childFigure = ((GraphicalEditPart) editpart).getFigure();
 		LayoutManager layout = getContentPane().getLayoutManager();
 		Object constraint = null;
-		if (layout != null)
-			constraint = layout.getConstraint(childFigure);		
+		if (layout != null) {
+			constraint = layout.getConstraint(childFigure);
+		}
 		
 		removeChildVisual(editpart);
 		//addChildvisual needs to be done before the children list is updated in order to allow add child visual to determine the place to put the part
@@ -281,10 +278,12 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	@Override
 	protected void addChild(EditPart child, int index) {
 		Assert.isNotNull(child);
-		if (index == -1)
+		if (index == -1) {
 			index = getChildren().size();
-		if (children == null)
+		}
+		if (children == null) {
 			children = new ArrayList(2);
+		}
 
 		//addChildvisual needs to be done before the children list is updated in order to allow add child visual to determine the place to put the part
 		addChildVisual(child, index);
@@ -292,8 +291,9 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 		child.setParent(this);
 		child.addNotify();
 
-		if (isActive())
+		if (isActive()) {
 			child.activate();
+		}
 		fireChildAdded(child, index);
 	}
 
