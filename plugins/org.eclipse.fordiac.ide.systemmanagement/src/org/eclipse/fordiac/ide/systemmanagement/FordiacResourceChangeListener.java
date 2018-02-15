@@ -125,36 +125,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 							return false;
 						}
 
-						final String projectName = delta.getResource()
-								.getProject().getName();
-						AutomationSystem system = systemManager
-								.getSystemForName(projectName);
+						final String projectName = delta.getResource().getProject().getName();
+						AutomationSystem system = systemManager.getSystemForName(projectName);
 						if ((null == system)
-								&& (!projectName
-										.equals(TypeLibrary.TOOL_LIBRARY_PROJECT_NAME))) {
-							if (!systemImportWatingList.contains(projectName)) {
-								systemImportWatingList.add(projectName);
-								WorkspaceJob job = new WorkspaceJob(
-										"Load system: "
-												+ delta.getResource()
-														.getProject().getName()
-												+ " after import") {
-									public IStatus runInWorkspace(
-											IProgressMonitor monitor) {
-										// do the actual work in here
-										loadSystem(delta.getResource()
-												.getProject());
-										// loading of the system has finished we
-										// can remove it from the list
-										systemImportWatingList
-												.remove(projectName);
-										return Status.OK_STATUS;
-									}
-								};
-								job.setRule(delta.getResource().getProject());
-								job.schedule();
-							}
-
+								&& (!TypeLibrary.TOOL_LIBRARY_PROJECT_NAME.equals(projectName))) {
+							loadSystem(delta.getResource().getProject());
 						}
 
 						if ((null != system)
@@ -448,15 +423,27 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private void loadSystem(IProject project) {
-		AutomationSystem system = systemManager.loadProject(project);
-		if(null != system){
-			if(!system.getName().equals(project.getName())){
-				//we have been copied set the system name and correctly save it
-				renameSystem(system, project);
-			}
+	private void loadSystem(final IProject project) {		
+		final String projectName = project.getName();
+		if (!systemImportWatingList.contains(projectName)) {
+			systemImportWatingList.add(projectName);
+			WorkspaceJob job = new WorkspaceJob( "Load system: " + projectName) {
+				public IStatus runInWorkspace(IProgressMonitor monitor) {
+					// do the actual work in here
+					AutomationSystem system = systemManager.loadProject(project);
+					if((null != system) && (!system.getName().equals(projectName))){
+						//we have been copied set the system name and correctly save it
+						renameSystem(system, project);
+					}
+					systemManager.notifyListeners();
+					// loading of the system has finished we can remove it from the list
+					systemImportWatingList.remove(projectName);
+					return Status.OK_STATUS;
+				}
+			};
+			job.setRule(project);
+			job.schedule();
 		}
-		systemManager.notifyListeners();
 	}
 	
 	private void handleProjectRename(final IResourceDelta delta) {
