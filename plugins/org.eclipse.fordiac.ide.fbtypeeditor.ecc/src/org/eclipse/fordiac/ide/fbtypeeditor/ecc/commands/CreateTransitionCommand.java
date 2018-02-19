@@ -25,7 +25,7 @@ import org.eclipse.gef.commands.Command;
 /**
  * The Class TransitionCreateCommand.
  */
-public class TransitionCreateCommand extends Command {
+public class CreateTransitionCommand extends Command {
 
 	/** The source. */
 	private ECState source;

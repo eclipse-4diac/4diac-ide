@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ReconnectTransitionCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.TransitionCreateCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
@@ -36,8 +36,8 @@ public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy implements
 	@Override
 	protected Command getConnectionCompleteCommand(
 			final CreateConnectionRequest request) {
-		if (request.getStartCommand() instanceof TransitionCreateCommand) {
-			TransitionCreateCommand command = (TransitionCreateCommand) request
+		if (request.getStartCommand() instanceof CreateTransitionCommand) {
+			CreateTransitionCommand command = (CreateTransitionCommand) request
 					.getStartCommand();
 			if (getHost() instanceof ECStateEditPart) {
 
@@ -63,7 +63,7 @@ public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy implements
 	protected Command getConnectionCreateCommand(
 			final CreateConnectionRequest request) {
 
-		TransitionCreateCommand cmd = new TransitionCreateCommand();
+		CreateTransitionCommand cmd = new CreateTransitionCommand();
 		if (getHost() instanceof ECStateEditPart) {
 				
 
