@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditorCreator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.AlgorithmTextChangedCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTextCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -67,7 +67,7 @@ class AlgorithmGroup {
 		public void documentChanged(final DocumentEvent event) {
 			if ((getAlgorithm() != null) && (null != currentAlgEditor)) {
 				if(currentAlgEditor.isDocumentValid()){
-					executeCommand(new AlgorithmTextChangedCommand((TextAlgorithm)getAlgorithm(), currentAlgEditor.getAlgorithmText()));	
+					executeCommand(new ChangeAlgorithmTextCommand((TextAlgorithm)getAlgorithm(), currentAlgEditor.getAlgorithmText()));	
 				}
 			}
 		}

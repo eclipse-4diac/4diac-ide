@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.gef.commands.Command;
 
-public class AlgorithmTextChangedCommand extends Command {
+public class ChangeAlgorithmTextCommand extends Command {
 
 	private TextAlgorithm algorithm;
 	
@@ -23,7 +23,7 @@ public class AlgorithmTextChangedCommand extends Command {
 	
 	private String oldAlgorithmText;
 	
-	public AlgorithmTextChangedCommand(TextAlgorithm algorithm, String algorithmText) {
+	public ChangeAlgorithmTextCommand(TextAlgorithm algorithm, String algorithmText) {
 		this.algorithm = algorithm;
 		this.newAlgorithmText = algorithmText;
 	}
