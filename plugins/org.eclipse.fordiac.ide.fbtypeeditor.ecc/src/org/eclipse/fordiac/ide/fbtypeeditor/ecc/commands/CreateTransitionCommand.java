@@ -50,9 +50,32 @@ public class CreateTransitionCommand extends Command {
 
 	/** Transition condition event */
 	private Event conditionEvent;
-	
+
 	/** the viewer which executed this command */
 	EditPartViewer viewer;
+
+	public CreateTransitionCommand() {
+		super();
+	}
+
+	/**
+	 * Convenience constructor preloading the command with the required parameters
+	 * 
+	 * The rationale for this convenience constructor is, that in programmatic code
+	 * generation, all these parameters are known when the command is generated.
+	 * With this constructor the needed code for code generation can be reduced
+	 * 
+	 * @param source The starting state of the transition
+	 * @param destination The end state of the transition
+	 * @param conditionEvent The event triggering the transition
+	 */
+	public CreateTransitionCommand(ECState source, ECState destination, Event conditionEvent) {
+		this.source = source;
+		this.sourceLocation = new Point(this.source.getX(), this.source.getY());
+		this.destination = destination;
+		this.destLocation = new Point(this.destination.getX(), this.destination.getY());
+		this.conditionEvent = conditionEvent;
+	}
 
 	public String getConditionExpression() {
 		return conditionExpression;
@@ -168,10 +191,10 @@ public class CreateTransitionCommand extends Command {
 					transition.setConditionExpression("1"); //$NON-NLS-1$
 				}
 			}
-			if(null != viewer){
+			if (null != viewer) {
 				Object obj = viewer.getEditPartRegistry().get(transition);
-				if(null != obj){
-					viewer.select((EditPart)obj);
+				if (null != obj) {
+					viewer.select((EditPart) obj);
 				}
 			}
 		}

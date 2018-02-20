@@ -10,6 +10,8 @@
  *  Gerhard Ebenhofer, Martijn Rooker, Alois Zoitl, Monika Wenger, Jens Reimann,
  *  Waldemar Eisenmenger, Gerd Kainz
  *    - initial API and implementation and/or initial documentation
+ *  Martin Melik-Merkumians
+ *    - adds convenience methods
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -417,13 +419,20 @@ public class TypeLibrary implements TypeLibraryTags{
 		}
 		return libPath;
 	}
+	
+	/**
+	 * Returns the tool library project.
+	 * @return the tool library project of the 4diac-ide instance
+	 */
+	public IProject getToolLibProject() {
+		IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		
+		return myWorkspaceRoot.getProject(TOOL_LIBRARY_PROJECT_NAME);
+	}
 
 	public IFolder getToolLibFolder() {
 
-		IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace()
-				.getRoot();
-
-		IProject toolLibProject = myWorkspaceRoot.getProject(TOOL_LIBRARY_PROJECT_NAME);
+		IProject toolLibProject = getToolLibProject();
 
 		if (!toolLibProject.exists()) {
 			createToolLibProject(toolLibProject);
