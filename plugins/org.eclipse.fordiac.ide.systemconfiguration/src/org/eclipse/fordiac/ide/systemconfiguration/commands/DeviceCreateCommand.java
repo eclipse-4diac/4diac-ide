@@ -41,10 +41,10 @@ import org.eclipse.ui.IEditorPart;
 
 public class DeviceCreateCommand extends Command {
 	private static final String CREATE_DEVICE_LABEL = Messages.DeviceCreateCommand_LABEL_CreateDevice;
-	protected final DeviceTypePaletteEntry entry;
-	protected final SystemConfiguration parent;
+	private final DeviceTypePaletteEntry entry;
+	private final SystemConfiguration parent;
 	private final Rectangle bounds;
-	protected Device device;
+	private Device device;
 	private IEditorPart editor;
 
 	public Device getDevice() {
@@ -130,15 +130,22 @@ public class DeviceCreateCommand extends Command {
 						+ (res.getPaletteEntry() != null ? " (" + res.getTypeName() + ") " : "(N/A)")
 						+ " not found. Please check whether your palette contains that type and add it manually to your device!");
 			}
-		}
-		ResourceCreateCommand cmd = null;
+		}		
+		createDefaultResource();
+	}
+
+	private void createDefaultResource() {
+		ResourceTypeEntry type = null;
 		if (device.getType().getName().contains("FBRT") //$NON-NLS-1$
 				|| device.getType().getName().contains("FRAME")) { //$NON-NLS-1$
-			cmd = new ResourceCreateCommand(getResourceType("PANEL_RESOURCE"), device, false); //$NON-NLS-1$ 
+			type = getResourceType("PANEL_RESOURCE"); //$NON-NLS-1$
 		} else {
-			cmd = new ResourceCreateCommand(getResourceType("EMB_RES"), device, false); //$NON-NLS-1$ 
+			type = getResourceType("EMB_RES"); //$NON-NLS-1$ 
 		}
-		cmd.execute();
+		if(null != type) {
+			ResourceCreateCommand cmd = new ResourceCreateCommand(type, device, false);	
+			cmd.execute();
+		}
 	}
 
 	private ResourceTypeEntry getResourceType(String resTypeName) {
