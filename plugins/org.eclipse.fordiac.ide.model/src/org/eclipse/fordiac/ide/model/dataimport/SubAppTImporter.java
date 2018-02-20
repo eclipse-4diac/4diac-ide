@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.text.ParseException;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -130,9 +130,9 @@ public class SubAppTImporter extends FBTImporter{
 
 	@Override
 	public void parseWithConstructs(NodeList childNodes,
-			HashMap<String, Event> eventInputs,
-			HashMap<String, Event> eventOutputs,
-			HashMap<String, VarDeclaration> variables) {
+			Map<String, Event> eventInputs,
+			Map<String, Event> eventOutputs,
+			Map<String, VarDeclaration> variables) {
 		//supapps may not have a with construct. Therefore we are doing nothing here
 	}
 			

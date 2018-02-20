@@ -16,23 +16,25 @@ import java.util.StringTokenizer;
 
 public class STStringTokenHandling {
 
-	public final static String stTokenDelimiters = new String(
-			" &():.=[]+-*/><;\n\r\t\"\'!,"); //$NON-NLS-1$
+	public static final String stTokenDelimiters = " &():.=[]+-*/><;\n\r\t\"\'!,"; //$NON-NLS-1$
+	
+	private STStringTokenHandling() {
+		//we dont want this class to be instantiable
+	}
 	
 	public static String replaceSTToken(String stString, final String oldToken, final String newToken){
-		String retVal = new String();
-		
-		StringTokenizer t = new StringTokenizer(stString, STStringTokenHandling.stTokenDelimiters,
-				true);
+		StringBuilder retVal = new StringBuilder();
+		 
+		StringTokenizer t = new StringTokenizer(stString, STStringTokenHandling.stTokenDelimiters, true);
 		while (t.hasMoreElements()) {
 			String s = t.nextToken();
 			if(s.equals(oldToken)){
-				retVal += newToken;
+				retVal.append(newToken);
 			}else{
-				retVal += s;
+				retVal.append(s);
 			}
 		}
-		return retVal;
+		return retVal.toString();
 	}
 
 }

@@ -83,7 +83,7 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 			Object selectedObject = iterator.next();
 
 			if (selectedObject instanceof FBEditPart) {
-				if (selectedObject instanceof FBEditPart && MonitoringManagerUtils.canBeMonitored((FBEditPart)selectedObject)) {
+				if (MonitoringManagerUtils.canBeMonitored((FBEditPart)selectedObject)) {
 					foundElements.addAll((Collection<? extends InterfaceEditPart>) ((FBEditPart)selectedObject).getChildren().stream().filter(element -> element instanceof InterfaceEditPart).
 							collect(Collectors.toSet()));
 				}

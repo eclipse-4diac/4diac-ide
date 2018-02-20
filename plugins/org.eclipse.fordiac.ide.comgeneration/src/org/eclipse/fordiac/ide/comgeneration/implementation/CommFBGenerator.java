@@ -41,7 +41,7 @@ public class CommFBGenerator {
 	private static final String GENERATED_SOURCE_FB_ANNOTATION = "generatedSrcFB";
 	private static final String GENERATED_DESTINATION_FB_ANNOTATION = "generatedDestFB";
 	private static final String GENERATED_FOR_CONNECTION_ANNOTATION = "generatedForConnection";
-	private HashSet<GeneratedFBInfo> generatedFBs;
+	private Set<GeneratedFBInfo> generatedFBs;
 	private TransferedData transferedData;
 	private MediaSpecificGeneratorFactory specificGeneratorFactory;
 	private int generatedFBIndex;
@@ -102,10 +102,11 @@ public class CommFBGenerator {
 		MediaSpecificGenerator specificGenerator = specificGeneratorFactory.getForProtocolId(destination.getSelectedProtocolId());
 		if (specificGenerator == null) {
 			System.err.println("No generator for protocol " + destination.getSelectedProtocolId() + "!");
+		} else { 
+			GeneratedFBInfo sourceGeneratedFBInfo = generateFB(ChannelEnd.SOURCE, numberDataPorts, withPorts, destination, specificGenerator);
+			GeneratedFBInfo destinationGeneratedFBInfo = generateFB(ChannelEnd.DESTINATION, numberDataPorts, withPorts, destination, specificGenerator);
+			specificGenerator.configureFBs(sourceGeneratedFBInfo.getFb(), destinationGeneratedFBInfo.getFb(), destination.getSelectedMedia());
 		}
-		GeneratedFBInfo sourceGeneratedFBInfo = generateFB(ChannelEnd.SOURCE, numberDataPorts, withPorts, destination, specificGenerator);
-		GeneratedFBInfo destinationGeneratedFBInfo = generateFB(ChannelEnd.DESTINATION, numberDataPorts, withPorts, destination, specificGenerator);
-		specificGenerator.configureFBs(sourceGeneratedFBInfo.getFb(), destinationGeneratedFBInfo.getFb(), destination.getSelectedMedia());		
 	}
 	
 	private GeneratedFBInfo generateFB(ChannelEnd end, int numberOfDataPorts, Set<Integer> withPorts, CommunicationChannelDestination destination, MediaSpecificGenerator specificGenerator) {
@@ -121,9 +122,6 @@ public class CommFBGenerator {
 			FBCreateCommand command = new FBCreateCommand(paletteEntry, resource.getFBNetwork() , 10, 10);
 			command.execute();
 			FB generatedFB = command.getFB();
-			//FBView generateFbView = ApplicationUIFBNetworkManager.createFBView(generatedFB, /*destinationDiagram.getNetwork()*/ null);
-			//destinationDiagram.getChildren().add(generateFbView);
-			//generatedFB.setName("GENERATED_" + generatedFBIndex);
 			generatedFB.setName(NameRepository.createUniqueName(generatedFB, "GENERATED_" + generatedFBIndex)); //$NON-NLS-1$
 			generatedFBIndex++;
 			StringBuilder newFBComment = new StringBuilder();
@@ -159,7 +157,7 @@ public class CommFBGenerator {
 		return generatedFBInfo;
 	}
 	
-	private void generateSourceConnections(GeneratedFBInfo generatedFBInfo, MediaSpecificGenerator specificGenerator) {
+	private static void generateSourceConnections(GeneratedFBInfo generatedFBInfo, MediaSpecificGenerator specificGenerator) {
 		// get channel for any destination, they must all be same...
 		CommunicationChannel channel = generatedFBInfo.getDestinations().iterator().next().getCommunicationChannel();		
 		EventConnectionCreateCommand eventCreateCommand = new EventConnectionCreateCommand(generatedFBInfo.getResource().getFBNetwork());
@@ -170,12 +168,11 @@ public class CommFBGenerator {
 		// TODO annotation
 		int targetDataIndex = 0;
 		for (int i = 0; i < channel.getSourceEvent().getWith().size(); i++) {
-			if (generatedFBInfo.getWithPorts() != null && !generatedFBInfo.getWithPorts().contains(i)) {
+			if (generatedFBInfo.getWithPorts() != null && generatedFBInfo.getWithPorts().contains(i)) {
 				continue;
 			}
 			With with = channel.getSourceEvent().getWith().get(i);
 			DataConnectionCreateCommand dataCreateCommand = new DataConnectionCreateCommand(generatedFBInfo.getResource().getFBNetwork());
-//			VarDeclaration targetData = generatedFBInfo.getFb().getInterface().getInputVars().get(targetDataIndex);
 			VarDeclaration targetData = specificGenerator.getTargetInputData(targetDataIndex, generatedFBInfo.getFb());
 			dataCreateCommand.setSource(with.getVariables());
 			dataCreateCommand.setDestination(targetData);
@@ -185,7 +182,7 @@ public class CommFBGenerator {
 		}
 	}
 	
-	private void generateDestinationConnections(GeneratedFBInfo generatedFBInfo, MediaSpecificGenerator specificGenerator) {	
+	private static void generateDestinationConnections(GeneratedFBInfo generatedFBInfo, MediaSpecificGenerator specificGenerator) {	
 		// destinations must have only one fb generated for them...
 		CommunicationChannelDestination destination = generatedFBInfo.getDestinations().iterator().next();
 		for (Integer withIndex : destination.getDestinationPorts().keySet()) {
@@ -209,7 +206,6 @@ public class CommFBGenerator {
 				for (IInterfaceElement interfaceElement : destination.getDestinationPorts().get(withIndex)) {
 					DataConnectionCreateCommand dataCreateCommand = new DataConnectionCreateCommand(generatedFBInfo.getResource().getFBNetwork());
 					dataCreateCommand.setDestination(interfaceElement);
-					//VarDeclaration sourcePort = generatedFBInfo.getFb().getInterface().getOutputVars().get(generatedPortIndex);
 					VarDeclaration targetData = specificGenerator.getTargetOutputData(generatedPortIndex, generatedFBInfo.getFb());
 					dataCreateCommand.setSource(targetData);
 					dataCreateCommand.execute();
@@ -249,14 +245,10 @@ public class CommFBGenerator {
 		
 	private GeneratedFBInfo findExistingGeneratedFBInfo(ChannelEnd end, CommunicationChannel channel, Set<Integer> withPorts, Segment segment) {
 		for (GeneratedFBInfo generatedFBInfo : generatedFBs) {
-			if (generatedFBInfo.getEnd() == end) {
-				if (generatedFBInfo.getChannel().equals(channel))
-				if ((generatedFBInfo.getWithPorts() == null && withPorts == null)
-						|| generatedFBInfo.getWithPorts().equals(withPorts)) {
-					if (generatedFBInfo.getSegment().equals(segment)) {
-						return generatedFBInfo;
-					}
-				}
+			if ((generatedFBInfo.getEnd() == end) && (generatedFBInfo.getChannel().equals(channel)) && 
+					((generatedFBInfo.getWithPorts() == null && withPorts == null) || generatedFBInfo.getWithPorts().equals(withPorts)) &&
+					(generatedFBInfo.getSegment().equals(segment))) {
+				return generatedFBInfo;					
 			}
 		}
 		return null;
@@ -267,9 +259,9 @@ public class CommFBGenerator {
 		EXACT
 	}
 	
-	private class GeneratedFBInfo {
+	private static class GeneratedFBInfo {
 		private FB fb;
-		private HashSet<CommunicationChannelDestination> destinations;
+		private Set<CommunicationChannelDestination> destinations;
 		private Set<Integer> withPorts;
 		private Segment segment;
 		private ChannelEnd end;
@@ -292,7 +284,7 @@ public class CommFBGenerator {
 		public void setWithPorts(Set<Integer> withPorts) {
 			this.withPorts = withPorts;
 		}
-		public HashSet<CommunicationChannelDestination> getDestinations() {
+		public Set<CommunicationChannelDestination> getDestinations() {
 			return destinations;
 		}
 		public ChannelEnd getEnd() {

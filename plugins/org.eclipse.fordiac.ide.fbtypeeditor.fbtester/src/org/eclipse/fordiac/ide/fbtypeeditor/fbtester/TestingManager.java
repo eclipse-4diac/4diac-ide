@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester;
 
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.ISetValueListener;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.ITriggerEventListener;
@@ -21,7 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 
-public class TestingManager {
+public final class TestingManager {
 
 	private static TestingManager instance;
 
@@ -35,45 +38,43 @@ public class TestingManager {
 	private TestingManager() {
 	}
 
-	private final Hashtable<String, TestElement> testElements = new Hashtable<String, TestElement>();
-	private final Hashtable<String, TestElement> triggerElements = new Hashtable<String, TestElement>();
+	private final Map<String, TestElement> testElements = new HashMap<>();
+	private final Map<String, TestElement> triggerElements = new HashMap<>();
 
 	public void addTriggerElement(TestElement element) {
-		triggerElements.put(element.getFBString() + "_RES." + element.getFBString()
-				+ "." + element.getInterfaceElement().getName(), element);
+		triggerElements.put(generateElementString(element), element);
+	}
+	
+	private static String generateElementString(TestElement element) {
+		return element.getFBString() + "_RES." + element.getFBString() + "." + element.getInterfaceElement().getName(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public Hashtable<String, TestElement> getTriggerElements(FBType type) {
 		Hashtable<String, TestElement> elements = new Hashtable<String, TestElement>();
-		for (String key : triggerElements.keySet()) {
-			TestElement element = triggerElements.get(key);
-			if (element.getFb().getType().equals(type)) {
-				if (element.getInterfaceElement() instanceof Event) {
-					elements.put(key, element);
-				}
+		for (Entry<String, TestElement> entry: triggerElements.entrySet()) {
+			TestElement element = entry.getValue();
+			if ((element.getFb().getType().equals(type)) && (element.getInterfaceElement() instanceof Event)) {
+				elements.put(entry.getKey(), element);
 			}
 		}
 		return elements;
 	}
 
 	public void addTestElement(TestElement element) {
-		testElements.put(element.getFBString() + "_RES." + element.getFBString()
-				+ "." + element.getInterfaceElement().getName(), element);
+		testElements.put(generateElementString(element), element);
 	}
 
-	public Hashtable<String, TestElement> getTestElements(FBType type,
+	public Map<String, TestElement> getTestElements(FBType type,
 			ISetValueListener valueListener, ITriggerEventListener eventListener) {
-		Hashtable<String, TestElement> elements = new Hashtable<String, TestElement>();
-		for (String key : testElements.keySet()) {
-			TestElement element = testElements.get(key);
+		Map<String, TestElement> elements = new HashMap<>();
+		for (Entry<String, TestElement> entry : testElements.entrySet()) {
+			TestElement element = entry.getValue();
 			if (element.getFb().getType().equals(type)) {
 				element.addSetValueListener(valueListener);
 				element.addTriggerEventListener(eventListener);
-				if (element.getInterfaceElement() instanceof VarDeclaration) {
-					elements.put(key, element);
-				} else if (element.getInterfaceElement() instanceof Event
-						&& !element.getInterfaceElement().isIsInput()) {
-					elements.put(key, element);
+				if ( (element.getInterfaceElement() instanceof VarDeclaration) || 
+					((element.getInterfaceElement() instanceof Event && !element.getInterfaceElement().isIsInput()))) {
+					elements.put(entry.getKey(), element);
 				}
 
 			}
@@ -81,18 +82,15 @@ public class TestingManager {
 		return elements;
 	}
 
-	public Hashtable<String, TestElement> getTestElements(FBType type) {
-		Hashtable<String, TestElement> elements = new Hashtable<String, TestElement>();
-		for (String key : testElements.keySet()) {
-			TestElement element = testElements.get(key);
+	public Map<String, TestElement> getTestElements(FBType type) {
+		Map<String, TestElement> elements = new HashMap<String, TestElement>();
+		for (Entry<String, TestElement> entry : testElements.entrySet()) {
+			TestElement element = entry.getValue();
 			if (element.getFb().getType().equals(type)) {
-				if (element.getInterfaceElement() instanceof VarDeclaration) {
-					elements.put(key, element);
-				} else if (element.getInterfaceElement() instanceof Event
-						&& !element.getInterfaceElement().isIsInput()) {
-					elements.put(key, element);
+				if ((element.getInterfaceElement() instanceof VarDeclaration) ||  
+						((element.getInterfaceElement() instanceof Event && !element.getInterfaceElement().isIsInput()))) {
+					elements.put(entry.getKey(), element);
 				}
-
 			}
 		}
 		return elements;

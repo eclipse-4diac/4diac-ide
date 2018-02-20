@@ -43,17 +43,17 @@ public class IEC_STRING extends IEC_WSTRING {
 
 	@Override
 	public void decodeValueFrom(DataInputStream in) {
-		String result = ""; //$NON-NLS-1$
+		StringBuilder result =new StringBuilder();
 		int size;
 		try {
 			size = in.readShort();
 			for (int i = 0; i < size; i++) {
-				result += (char) in.readUnsignedByte();
+				result.append((char) in.readUnsignedByte());
 			}
 		} catch (IOException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
-		value = result;
+		value = result.toString();
 	}
 
 	@Override
@@ -65,12 +65,12 @@ public class IEC_STRING extends IEC_WSTRING {
 
 	@Override
 	public byte[] encodeValue() {
-		ByteArrayOutputStream myOut=new ByteArrayOutputStream();
-		DataOutputStream DOS=new DataOutputStream(myOut);
+		ByteArrayOutputStream myOut = new ByteArrayOutputStream();
+		DataOutputStream outputString = new DataOutputStream(myOut);
 		
 		try {
-			DOS.writeShort(value.length());
-			DOS.write(value.getBytes());
+			outputString.writeShort(value.length());
+			outputString.write(value.getBytes());
 		} catch (IOException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}

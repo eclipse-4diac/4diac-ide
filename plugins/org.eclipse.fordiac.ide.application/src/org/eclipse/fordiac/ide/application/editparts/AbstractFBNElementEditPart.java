@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -92,9 +91,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 					refreshToolTip();
 					backgroundColorChanged(getFigure());
 					if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
-						if (notification.getNewValue() instanceof FB) {
-							updateDeviceListener();
-						}
+						updateDeviceListener();
 					}
 				}
 
@@ -119,16 +116,14 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	protected void updateDeviceListener() {
 		Device device = findDevice();
-		if (device != null) {
-			if (device.equals(referencedDevice)) {
-				// nothing to do
-			} else {
-				if (referencedDevice != null) {
-					referencedDevice.eAdapters().remove(colorChangeListener);
-				}
-				referencedDevice = device;
-				referencedDevice.eAdapters().add(colorChangeListener);
+		if (device != referencedDevice) {
+			if (referencedDevice != null) {
+				referencedDevice.eAdapters().remove(colorChangeListener);
 			}
+			referencedDevice = device;
+			if (referencedDevice != null) {
+				referencedDevice.eAdapters().add(colorChangeListener);
+			}			
 		}
 	}
 
@@ -227,7 +222,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	/** The listener. */
-	IPropertyChangeListener listener;
+	private IPropertyChangeListener listener;
 
 	/**
 	 * Returns an <code>IPropertyChangeListener</code> with implemented
@@ -274,14 +269,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	private Device findDevice() {
 		Resource res = null;
 		if (null != getModel() && getModel().isMapped()) {
-			if(getModel().getFbNetwork().eContainer() instanceof Resource){
-				res = (Resource)getModel().getFbNetwork().eContainer();
-			} else {
-				FBNetworkElement target = getModel().getOpposite();
-				if(null != target.getFbNetwork() && target.getFbNetwork().eContainer() instanceof Resource){
-					res = (Resource)target.getFbNetwork().eContainer();
-				}		
-			}
+			res = getModel().getResource();			
 		}
 		return (null != res) ? res.getDevice() : null;
 	}

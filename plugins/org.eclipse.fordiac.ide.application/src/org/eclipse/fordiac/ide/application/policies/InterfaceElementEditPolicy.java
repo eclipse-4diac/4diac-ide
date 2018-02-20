@@ -60,7 +60,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		while (parent != null && !(parent instanceof AbstractFBNetworkEditPart)) {
 			parent = parent.getParent();
 		}
-		if (parent instanceof AbstractFBNetworkEditPart) { // also means that parent != null
+		if (null != parent) { // if none null it is an AbstractFBNetworkEditPart
 			return ((AbstractFBNetworkEditPart) parent).getModel();
 		}
 		return null;

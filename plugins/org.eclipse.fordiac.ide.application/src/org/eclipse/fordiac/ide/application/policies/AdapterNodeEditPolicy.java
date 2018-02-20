@@ -50,11 +50,11 @@ public class AdapterNodeEditPolicy extends InterfaceElementEditPolicy {
 
 	}
 
-	private void openAdapterType(InterfaceEditPart host) {
+	private static void openAdapterType(InterfaceEditPart host) {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		
-		PaletteEntry entry = ((AdapterDeclaration)host.getModel()).getPaletteEntry();
-		if((null != entry) && (entry instanceof AdapterTypePaletteEntry))	{			
+		AdapterTypePaletteEntry entry = ((AdapterDeclaration)host.getModel()).getPaletteEntry();
+		if(null != entry){			
 			IEditorDescriptor desc = PlatformUI.getWorkbench().
 			        getEditorRegistry().getDefaultEditor(entry.getFile().getName());
 			try {

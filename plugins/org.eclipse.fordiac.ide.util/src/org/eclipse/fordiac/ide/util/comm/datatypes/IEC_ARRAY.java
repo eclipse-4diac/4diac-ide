@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.util.Activator;
 
 public class IEC_ARRAY extends IEC_ANY {
 
-	protected IEC_ANY[] value;
+	private IEC_ANY[] value;
 
 	/**
 	 * 
@@ -33,7 +33,7 @@ public class IEC_ARRAY extends IEC_ANY {
 	}
 
 	public IEC_ARRAY(IEC_ANY[] initial) {
-		value = initial;
+		value = initial.clone();
 	}
 
 	/**
@@ -70,14 +70,15 @@ public class IEC_ARRAY extends IEC_ANY {
 	@Override
 	public byte[] encodeValue() {
 		ByteArrayOutputStream myOut = new ByteArrayOutputStream();
-		DataOutputStream DOS = new DataOutputStream(myOut);
+		DataOutputStream dos = new DataOutputStream(myOut);
 		try {
 
-			DOS.writeShort(value.length);
-			DOS.write(value[0].encodeTag());
+			dos.writeShort(value.length);
+			dos.write(value[0].encodeTag());
 
-			for (int i = 0; i < value.length; i++)
-				DOS.write(value[i].encodeValue());
+			for (int i = 0; i < value.length; i++) {
+				dos.write(value[i].encodeValue());
+			}
 			
 		} catch (IOException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
@@ -99,12 +100,13 @@ public class IEC_ARRAY extends IEC_ANY {
 				if (that.value.length == 0) {
 					return true;
 				} 
-				if (!that.value[0].getClass().equals(
-						this.value[0].getClass()))
+				if (!that.value[0].getClass().equals(this.value[0].getClass())) {
 					return false;
+				}
 				for (int i = 0; i < this.value.length; i++) {
-					if (!this.value[i].equals(that.value[i]))
+					if (!this.value[i].equals(that.value[i])) {
 						equal = false;
+					}
 				}
 			} else {
 				return false;
@@ -123,7 +125,7 @@ public class IEC_ARRAY extends IEC_ANY {
 	 * @return the value
 	 */
 	public IEC_ANY[] getValue() {
-		return value;
+		return value.clone();
 	}
 
 	/**
@@ -131,19 +133,19 @@ public class IEC_ARRAY extends IEC_ANY {
 	 *            the value to set
 	 */
 	public void setValue(IEC_ANY[] value) {
-		this.value = value;
+		this.value = value.clone();
 	}
 
 	public String toString() {
-		String tempString = "["; //$NON-NLS-1$
+		StringBuilder tempString = new StringBuilder("["); //$NON-NLS-1$
 		for (int i = 0; i < value.length; i++) {
-			if (i != 0)
-				tempString += ", "; //$NON-NLS-1$
-			tempString += value[i].toString();
-
+			if (i != 0) {
+				tempString.append(", "); //$NON-NLS-1$
+			}
+			tempString.append(value[i].toString());
 		}
-		tempString += "]"; //$NON-NLS-1$
-		return tempString;
+		tempString.append("]"); //$NON-NLS-1$
+		return tempString.toString();
 	}
 
 	@Override

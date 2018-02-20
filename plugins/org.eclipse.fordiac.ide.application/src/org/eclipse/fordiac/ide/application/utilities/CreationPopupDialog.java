@@ -27,8 +27,8 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class CreationPopupDialog extends PopupDialog {
 
-	Object[] elements;
-	LabelProvider labelProvider;
+	private Object[] elements;
+	private LabelProvider labelProvider;
 
 	private ICreationExecutor executor;
 
@@ -41,7 +41,7 @@ public class CreationPopupDialog extends PopupDialog {
 		super(parent, shellStyle, takeFocusOnOpen, persistSize,
 				persistLocation, showDialogMenu, showPersistActions, titleText,
 				infoText);
-		this.elements = elements;
+		this.elements = elements.clone();
 		this.labelProvider = labelProvider;
 		this.executor = executor;
 	}
@@ -49,8 +49,7 @@ public class CreationPopupDialog extends PopupDialog {
 	@Override
 	protected Point getInitialLocation(Point initialSize) {
 		Display display = getShell().getDisplay();
-		Point location = display.getCursorLocation();
-		return location;
+		return display.getCursorLocation();
 	}
 
 	@Override
