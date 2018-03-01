@@ -18,7 +18,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
@@ -76,9 +76,9 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 				for (FBNetworkElement fbnElement : ((FBNetworkEditPart)selectedObject).getModel().getNetworkElements()) {
 					foundElements.addAll(getWatchedIfElementsForFB(manager, fbnElement));
 				}
-			}else if (selectedObject instanceof InterfaceEditPart) {
-				if(manager.containsPort( ((InterfaceEditPart)selectedObject).getModel())) {
-					foundElements.add(((InterfaceEditPart)selectedObject).getModel());
+			}else if (selectedObject instanceof InterfaceEditPartForFBNetwork) {
+				if(manager.containsPort( ((InterfaceEditPartForFBNetwork)selectedObject).getModel())) {
+					foundElements.add(((InterfaceEditPartForFBNetwork)selectedObject).getModel());
 				}
 			}else if (selectedObject instanceof MonitoringEditPart){
 				IInterfaceElement ie = ((MonitoringEditPart)selectedObject).getModel().getPort().getInterfaceElement();

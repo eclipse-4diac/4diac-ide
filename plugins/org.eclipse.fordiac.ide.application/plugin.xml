@@ -154,7 +154,7 @@
                id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
             <input
-                  type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPart">
+                  type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
             </input>
          </propertySection>
          <propertySection
@@ -163,7 +163,7 @@
                id="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
                tab="org.eclipse.fordiac.ide.application.CreateConnection">
             <input
-                  type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPart">
+                  type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
             </input>
          </propertySection>
          <propertySection

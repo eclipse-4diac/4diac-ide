@@ -68,7 +68,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			if(element.getFBNetworkElement() instanceof SubApp && null == element.getFBNetworkElement().getType()){
 				part = new UntypedSubAppInterfaceElementEditPart();
 			}else{
-				part = new InterfaceEditPart();
+				part = new InterfaceEditPartForFBNetwork();
 			}
 		} else if (modelElement instanceof Value){
 			part = new ValueEditPart();

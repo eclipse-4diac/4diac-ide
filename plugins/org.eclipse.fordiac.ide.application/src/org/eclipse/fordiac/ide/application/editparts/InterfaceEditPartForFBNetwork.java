@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2016 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,9 +15,12 @@ package org.eclipse.fordiac.ide.application.editparts;
 import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
+import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 
-public class InterfaceEditPart extends org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart {
+/** The edit part for interface elements of FBs and Subapps shown in FBNetwork editors
+ */
+public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
 		if (isEvent()) {
