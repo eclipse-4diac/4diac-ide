@@ -148,7 +148,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		attributeViewer.setColumnProperties(new String[] {NAME, TYPE, VALUE, COMMENT});
 		attributeViewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(final Object element, final String property) {
-				if(element instanceof Attribute && property == TYPE && null != ((Attribute)element).getAttributeDeclaration()) {
+				if(element instanceof Attribute && TYPE.equals(property) && null != ((Attribute)element).getAttributeDeclaration()) {
 					return false;
 				}
 				return true;
