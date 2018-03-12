@@ -319,6 +319,20 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public SegmentType getType() {
+		//this cannot be moved to the annotation class because there we don't have the super access!!!
+		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
+		if(type instanceof SegmentType){
+			return (SegmentType) type; 
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public Color getColorGen() {
 		if (color != null && color.eIsProxy()) {
 			InternalEObject oldColor = (InternalEObject)color;
@@ -548,14 +562,4 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		return result.toString();
 	}
 	
-	public SegmentType getSegmentType(){
-		SegmentType retVal = null;
-		if(null != getPaletteEntry()){
-			if(getPaletteEntry() instanceof SegmentTypePaletteEntry){
-			   retVal = ((SegmentTypePaletteEntry)getPaletteEntry()).getSegmentType();	
-			}				
-		}
-		return retVal;
-	}
-
 } //SegmentImpl

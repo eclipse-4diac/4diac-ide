@@ -65,7 +65,7 @@ public class FBItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		FBType type = ((FB)object).getFBType();
+		FBType type = ((FB)object).getType();
 		if(type instanceof BasicFBType){
 			return overlayImage(object, FordiacImage.ICON_BasicFB.getImage());
 		}

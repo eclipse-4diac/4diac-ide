@@ -36,6 +36,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteSegmentEditPolicy;
@@ -272,7 +273,9 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			rect.setLayoutManager(rectLayout);
 			rect.setConstraint(instanceNameLabel, instanceNameLayout);
 			rect.add(new Label(":"));  //$NON-NLS-1$
-			Label typeLabel =  new Label(getModel().getSegmentType().getName());
+			LibraryElement type = getModel().getType();
+			String typeName = (null != type) ? type.getName() : "Type not set!";
+			Label typeLabel =  new Label(typeName);
 			rect.add(typeLabel);
 			typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
 			rect.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL));

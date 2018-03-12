@@ -90,9 +90,9 @@ public class ProtocolSelector {
 	}
 	
 	private static String getProtocolIdForMetiaType(Segment segment) {
-		if (segment.getSegmentType().getName().equalsIgnoreCase("Ethernet")) {
+		if (segment.getType().getName().equalsIgnoreCase("Ethernet")) {
 			return EthernetPubSubGenerator.PROTOCOL_ID;
-		} else if (segment.getSegmentType().getName().equalsIgnoreCase("Can")) {
+		} else if (segment.getType().getName().equalsIgnoreCase("Can")) {
 			return CanPubSubGenerator.PROTOCOL_ID;
 		}
 		return null;
@@ -104,8 +104,8 @@ public class ProtocolSelector {
 
 			@Override
 			public int compare(Segment o1, Segment o2) {
-				String name1 = o1.getSegmentType().getName();
-				String name2 = o2.getSegmentType().getName();
+				String name1 = o1.getType().getName();
+				String name2 = o2.getType().getName();
 				
 				if (name1.equalsIgnoreCase("Can")) {
 					if (name2.equalsIgnoreCase("Can")) {

@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteDeviceEditPolicy;
@@ -289,7 +290,9 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 				
 				Figure deviceInfo = new Figure();
 				deviceInfo.setLayoutManager(deviceInfoLayout);
-				Label l = new Label(getModel().getType().getName());
+				LibraryElement type = getModel().getType();
+				String typeName = (null != type) ? type.getName() : "Type not set!";
+				Label l = new Label(typeName);
 				deviceInfo.add(l);
 				l.setTextAlignment(PositionConstants.CENTER);
 				l.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));

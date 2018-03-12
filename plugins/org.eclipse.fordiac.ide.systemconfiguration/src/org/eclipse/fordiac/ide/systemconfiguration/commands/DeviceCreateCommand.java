@@ -103,8 +103,8 @@ public class DeviceCreateCommand extends Command {
 
 	private void setDeviceProfile() {
 		String profile;
-		if(null != device.getDeviceType().getProfile() && !"".equals(device.getDeviceType().getProfile())){
-			profile = device.getDeviceType().getProfile();
+		if(null != device.getType().getProfile() && !"".equals(device.getType().getProfile())){
+			profile = device.getType().getProfile();
 		}else{ 
 			profile = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE);
 		}

@@ -49,7 +49,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 	@Override
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws CreateFBInstanceException {
 		// check first if FBType exists
-		HashMap<String, AdapterType> adapters = getAdapterTypes(fbData.fb.getFBType().getInterfaceList());
+		HashMap<String, AdapterType> adapters = getAdapterTypes(fbData.fb.getType().getInterfaceList());
 		if (!adapters.isEmpty()) {
 			queryAdapterTypes(adapters, res);
 		}
@@ -161,7 +161,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "FB Types" }));
 			}
 		}
-		FBType fbType = fb.getFBType();
+		FBType fbType = fb.getType();
 		try {
 			createFBType(fbType, res);
 		} catch (CreateFBTypeException ce) {

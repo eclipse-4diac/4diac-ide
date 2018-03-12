@@ -352,8 +352,13 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DeviceType getDeviceType() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDeviceType(this);
+	public DeviceType getType() {
+		//this cannot be moved to the annotation class because there we don't have the super access!!!
+		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
+		if(type instanceof DeviceType){
+			return (DeviceType) type; 
+		}
+		return null;
 	}
 
 	/**
