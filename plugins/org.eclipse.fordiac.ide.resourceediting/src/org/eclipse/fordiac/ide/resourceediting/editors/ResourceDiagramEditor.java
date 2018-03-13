@@ -89,7 +89,7 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 			org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput untypedInput = (org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput) input;
 			Object content = untypedInput.getContent();
 			if (content instanceof Resource) {
-				model = ((Resource) content).getFBNetwork();				
+				setModel(((Resource) content).getFBNetwork());				
 				getResource().eAdapters().add(resourceAdapter);
 				getResource().getDevice().eAdapters().add(colorChangeListener);
 				if (input.getName() != null) {

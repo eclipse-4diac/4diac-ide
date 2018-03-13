@@ -76,7 +76,7 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 	protected void setModel(final IEditorInput input) {
 		if (input instanceof SubApplicationEditorInput) {
 			SubApplicationEditorInput subAppInput = (SubApplicationEditorInput) input;
-			model = subAppInput.getSubApp().getSubAppNetwork(); 
+			setModel(subAppInput.getSubApp().getSubAppNetwork()); 
 			// register EContentAdapter to be informed on changes of the subapplication name
 			getSubApp().eAdapters().add(adapter);
 			if (input.getName() != null) {
