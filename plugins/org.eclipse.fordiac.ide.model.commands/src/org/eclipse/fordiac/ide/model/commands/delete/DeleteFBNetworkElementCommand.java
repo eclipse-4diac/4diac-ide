@@ -31,13 +31,12 @@ import org.eclipse.ui.IEditorPart;
 public class DeleteFBNetworkElementCommand extends Command {
 	private IEditorPart editor;
 	private FBNetwork fbParent;
-	private FBNetworkElement element;
+	private final FBNetworkElement element;
 	private CompoundCommand cmds = new CompoundCommand();
 	
 	public DeleteFBNetworkElementCommand(final FBNetworkElement element) {
 		super("Delete FB or Subapplication");
 		this.element = element;
-		fbParent = element.getFbNetwork();
 	}
 
 	@Override
@@ -51,12 +50,13 @@ public class DeleteFBNetworkElementCommand extends Command {
 			Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.DeleteFBNetworkElement);
 			return false;
 		}
-		return true;
+		return null != element && null != element.getFbNetwork();
 	}
 
 	@Override
 	public void execute() {
 		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
+		fbParent = element.getFbNetwork();
 		if(element.isMapped()){
 			cmds.add(new UnmapCommand(element));
 		}
