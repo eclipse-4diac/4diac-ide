@@ -318,22 +318,33 @@
                label="%contributions.menus.debug.removeAllWatches"
                tooltip="%contributions.menus.debug.removeAllWatchesToolTip">
             <visibleWhen checkEnabled="false">
-               <with variable="activeEditorId">
-               	<or>
-		            <equals
-		                  value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
-		            </equals>
-		            <equals
-		                  value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor">
-		            </equals>
-		            <equals
-		                  value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
-		            </equals>
-		            <equals
-		                  value="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer">
-		            </equals>
-		            </or>
-		         </with>
+               <or>
+	               <with variable="activeEditorId">
+	               	<or>
+			            <equals
+			                  value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
+			            </equals>
+			            <equals
+			                  value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor">
+			            </equals>
+			            <equals
+			                  value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
+			            </equals>
+			            <equals
+			                  value="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer">
+			            </equals>
+			            </or>
+			         </with>
+				   <iterate>
+	                  <or>
+		                  <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Application">
+		                  </instanceof>
+		                  <instanceof
+		                        value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
+		                  </instanceof>
+	                  </or>
+	               </iterate>
+			   </or>
             </visibleWhen></command>
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.force"
