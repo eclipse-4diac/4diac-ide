@@ -23,7 +23,9 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 /**
@@ -33,7 +35,7 @@ public class PasteEditPartsAction extends SelectionAction {
 
 	private static final String PASTE_TEXT = "Paste";
 	
-	Point pasteRefPosition;
+	private Point pasteRefPosition;
 
 	/**
 	 * Instantiates a new paste edit parts action.
@@ -72,6 +74,9 @@ public class PasteEditPartsAction extends SelectionAction {
 	protected void init() {
 		setId(ActionFactory.PASTE.getId());
 		setText(PASTE_TEXT);
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages(); 
+		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
+        setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE_DISABLED));
 	}
 
 	/* (non-Javadoc)
