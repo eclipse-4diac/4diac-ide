@@ -74,13 +74,13 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 			Object selectedObject = iterator.next();
 			
 			if(selectedObject instanceof EditPart) { 
-				if (((EditPart)selectedObject).getModel() instanceof EObject) {
-					foundElements.addAll(getWatchedelementsForLibrayElement(manager, (EObject)((EditPart)selectedObject).getModel()));
-				}else if (selectedObject instanceof MonitoringEditPart){
+				if (selectedObject instanceof MonitoringEditPart){
 					IInterfaceElement ie = ((MonitoringEditPart)selectedObject).getModel().getPort().getInterfaceElement();
 					if(manager.containsPort(ie)) {
 						foundElements.add(ie);
 					}
+				}else if (((EditPart)selectedObject).getModel() instanceof EObject) {
+						foundElements.addAll(getWatchedelementsForLibrayElement(manager, (EObject)((EditPart)selectedObject).getModel()));
 				}
 			} else if (selectedObject instanceof EObject) {
 				foundElements.addAll(getWatchedelementsForLibrayElement(manager, (EObject)selectedObject));
