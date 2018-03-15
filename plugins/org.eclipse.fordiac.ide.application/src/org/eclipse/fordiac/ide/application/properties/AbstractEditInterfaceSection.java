@@ -433,8 +433,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 					}
 				}
 			}
-			if((null != cmd) && (null != commandStack)){
-				commandStack.execute(cmd);
+			if(null != cmd){
+				executeCommand(cmd);
 				viewer.refresh(data);
 			}
 			

@@ -150,7 +150,7 @@ public class InternalVarsSection extends ECCSection {
 					cmd = new ChangeInitialValueCommand(data, value.toString());
 				}
 				if(null != cmd){
-					commandStack.execute(cmd);
+					executeCommand(cmd);
 					internalVarsViewer.refresh(data);
 				}			
 			}

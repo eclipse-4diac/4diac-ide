@@ -212,7 +212,7 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 					cmd = new ChangeCompilerVersionCommand(data, value.toString());
 				}
 				if(null != cmd){
-					commandStack.execute(cmd);
+					executeCommand(cmd);
 					compilerViewer.refresh(data);
 				}
 			}
