@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
@@ -100,8 +101,9 @@ public class InterfaceContextMenuProvider extends
 			}
 			submenu.add(action);
 		} 
-		
-		buildAdapterMenuEntries(menu, registry, part, fbType);
+		if(!(fbType instanceof AdapterFBType)) {
+			buildAdapterMenuEntries(menu, registry, part, fbType);
+		}
 	}
 
 	private static void buildAdapterMenuEntries(IMenuManager menu,
@@ -184,11 +186,13 @@ public class InterfaceContextMenuProvider extends
 		action = new CreateOutputEventAction(workBenchPart, fbType);
 		registry.registerAction(action);
 		
-		action = new CreateNewPlugAction(workBenchPart, fbType);
-		registry.registerAction(action);
-		
-		action = new CreateNewSocketAction(workBenchPart, fbType);
-		registry.registerAction(action);
+		if(!(fbType instanceof AdapterFBType)) {
+			action = new CreateNewPlugAction(workBenchPart, fbType);
+			registry.registerAction(action);
+			
+			action = new CreateNewSocketAction(workBenchPart, fbType);
+			registry.registerAction(action);
+		}
 	}
 
 }
