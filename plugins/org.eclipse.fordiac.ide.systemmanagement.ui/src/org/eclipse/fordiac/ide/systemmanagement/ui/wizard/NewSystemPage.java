@@ -25,15 +25,21 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
 public class NewSystemPage extends WizardNewProjectCreationPage {
 
-	private Button importDefaultPaletteSB;
-	
+	private static final String APPLICATION_NAME_PREFIX = "App"; //$NON-NLS-1$
+
 	private Boolean importDefaultPalette = true;
+	private Boolean openApplication = true;
 
 	private Button advancedButton;
+	
+	private Text applicationName;
 
 	/**
 	 * Height of the "advanced" linked resource group. Set when the advanced
@@ -44,9 +50,22 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 	/** Container for the advanced section in the creation wizard
 	 * 
 	 */
-	Composite advancedGroupContainer;
+	private Composite advancedGroupContainer;
 	
-	Composite advancedGroupParent;
+	private Composite advancedGroupParent;
+	
+	// flag indicating if the user changed the initial application name if yes do not update the name any more
+	private boolean appNameManuallyChanged = false;
+	
+	private boolean blockListeners = false;
+	
+	private Listener applicationNameModifyListener = e -> {
+		if(!blockListeners) {
+			appNameManuallyChanged = true;
+			boolean valid = validatePage();
+			setPageComplete(valid);
+		}
+	};
 
 	/**
 	 * Creates a new project creation wizard page.
@@ -64,6 +83,8 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		
+		createApplicationNameGroup((Composite) getControl());
+		
 		createAdvancedControls( (Composite) getControl());
 		
 		Composite composite = (Composite) getControl();
@@ -74,6 +95,26 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 		Dialog.applyDialogFont(composite);
 	}
 	
+	private void createApplicationNameGroup(Composite parent) {
+		Composite applicationNameGroup = new Composite(parent, SWT.NONE);
+        GridLayout layout = new GridLayout();
+        layout.numColumns = 2;
+        applicationNameGroup.setLayout(layout);
+        applicationNameGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+        Label applicationLabel = new Label(applicationNameGroup, SWT.NONE);
+        applicationLabel.setText(Messages.NewSystemWizard_InitialApplicationName);
+        applicationLabel.setFont(parent.getFont());
+
+        // new project name entry field
+        applicationName = new Text(applicationNameGroup, SWT.BORDER);
+        GridData data = new GridData(GridData.FILL_HORIZONTAL);
+        applicationName.setLayoutData(data);
+        applicationName.setFont(parent.getFont());
+        applicationName.addListener(SWT.Modify, applicationNameModifyListener);
+	}
+
+
 	@Override
 	protected boolean validatePage() {
 		if (!IdentifierVerifyer.isValidIdentifier(getProjectName())) {
@@ -84,8 +125,25 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 			setErrorMessage(Messages.SystemNameAlreadyUsed);
 			return false;
 		}
+		if(!appNameManuallyChanged) {
+			blockListeners = true;
+			applicationName.setText(getProjectName() + APPLICATION_NAME_PREFIX );
+			blockListeners = false;
+		} 
+		if(!IdentifierVerifyer.isValidIdentifier(getInitialApplicationName())){
+			return false;
+		}
 		return super.validatePage();
 	}
+
+	public String getInitialApplicationName() {
+		return applicationName.getText();
+	}
+	
+	public boolean getOpenApplication() {
+		return openApplication;
+	}
+
 
 	private void createAdvancedControls(Composite parent) {
 		advancedGroupParent = new Composite(parent, SWT.NONE);
@@ -137,7 +195,7 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 		advancedGroupContainer.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
 				| GridData.HORIZONTAL_ALIGN_FILL));		
 
-		importDefaultPaletteSB = new Button(advancedGroupContainer, SWT.CHECK);
+		Button importDefaultPaletteSB = new Button(advancedGroupContainer, SWT.CHECK);
 		importDefaultPaletteSB.setSelection(importDefaultPalette);
 		importDefaultPaletteSB.setText(Messages.PaletteManagementPage_LABEL_DefaultTypeLibrary);
 		importDefaultPaletteSB.addSelectionListener(new SelectionListener() {
@@ -151,7 +209,21 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 				importDefaultPalette = false;
 			}
 		});
-		
+
+		Button openApplicationCheckbox = new Button(advancedGroupContainer, SWT.CHECK);
+		openApplicationCheckbox.setText(Messages.NewApplicationPage_OpenApplicationForEditing);
+		openApplicationCheckbox.setSelection(openApplication);
+		openApplicationCheckbox.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				openApplication = true;
+			}
+
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+				openApplication = false;
+			}
+		});
 	}
 
 
