@@ -14,9 +14,9 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import java.util.Iterator;
 
-import org.eclipse.fordiac.ide.application.commands.MapToCommand;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.gef.EditPart;

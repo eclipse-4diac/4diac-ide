@@ -10,15 +10,19 @@
  *   Filip Andren, Alois Zoitl, Gerhard Ebenhofer, Monika Wenger 
  *   - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.commands;
+package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -46,8 +50,8 @@ public class UpdateFBTypeCommand extends Command {
 	/** The copied FB view */
 	private FB copiedFB;
 		
-	/** The FB type if not null this entry should be used */
-	private FBTypePaletteEntry entry;
+	/** The if not null this entry should be used for the type of the updated FB*/
+	private PaletteEntry entry;
 	
 	private final FBNetwork network;
 	
@@ -67,8 +71,8 @@ public class UpdateFBTypeCommand extends Command {
 	public UpdateFBTypeCommand(FB fb, PaletteEntry entry) {
 		this.fb = fb;
 		network = (FBNetwork) fb.eContainer();
-		if(entry instanceof FBTypePaletteEntry){
-			this.entry = (FBTypePaletteEntry)entry;
+		if(entry instanceof FBTypePaletteEntry || entry instanceof AdapterTypePaletteEntry){
+			this.entry = entry;
 		}
 	}
 
@@ -93,7 +97,7 @@ public class UpdateFBTypeCommand extends Command {
 		}
 		
 		// Create new FB		
-		copiedFB = copyFB(fb);
+		copyFB(fb);
 		
 		// Find connections which should be reconnected
 		List<Connection> reConnections = new ArrayList<>();
@@ -134,7 +138,7 @@ public class UpdateFBTypeCommand extends Command {
 			cmd.redo();
 		}
 
-		replaceFBViews(fb, copiedFB);
+		replaceFBs(fb, copiedFB);
 		
 		for (AbstractConnectionCreateCommand cmd : connCreateCmds) {
 			cmd.redo();
@@ -158,7 +162,7 @@ public class UpdateFBTypeCommand extends Command {
 			cmd.undo();
 		}
 		
-		replaceFBViews(copiedFB, fb);
+		replaceFBs(copiedFB, fb);
 
 		for (DeleteConnectionCommand cmd : deleteConnCmds) {
 			cmd.undo();
@@ -225,13 +229,13 @@ public class UpdateFBTypeCommand extends Command {
 		return false;
 	}
 
-	private void replaceFBViews(FB oldFB, FB newFB) {
+	private void replaceFBs(FB oldFB, FB newFB) {
 		network.getNetworkElements().remove(oldFB);
 		network.getNetworkElements().add(newFB);
 	}
 
-	private FB copyFB(FB srcFB) {
-		FB copiedFB = createCopiedFBEntry(srcFB);
+	private void copyFB(FB srcFB) {
+		copiedFB = createCopiedFBEntry(srcFB);
 		copiedFB.setInterface(EcoreUtil.copy(copiedFB.getType().getInterfaceList()));
 		copiedFB.setName(srcFB.getName());
 
@@ -248,44 +252,41 @@ public class UpdateFBTypeCommand extends Command {
 		createValues(copiedFB);
 		
 		pasteParams(srcFB, copiedFB);
-		replaceFBViews(srcFB, copiedFB);
-		return copiedFB;
+		replaceFBs(srcFB, copiedFB);
 	}
 
 	protected FB createCopiedFBEntry(FB srcFB) {
-		FB fb = null;
+		FB copy = null;
 		
 		if(srcFB instanceof AdapterFB){
 			AdapterFB aFB = LibraryElementFactory.eINSTANCE.createAdapterFB();
 			aFB.setAdapterDecl(((AdapterFB)srcFB).getAdapterDecl());
-			fb = aFB;				
+			copy = aFB;				
 		}
 		else{
-			fb = LibraryElementFactory.eINSTANCE.createFB();
+			copy = LibraryElementFactory.eINSTANCE.createFB();
 		}
 		
 		//Entry handling is here to allow the reuse of this class also for adapter updates
 		if(null == entry){
-			fb.setPaletteEntry(srcFB.getPaletteEntry());
+			copy.setPaletteEntry(srcFB.getPaletteEntry());
 		}else{
-			fb.setPaletteEntry(entry);
+			copy.setPaletteEntry(entry);
 		}		
-		return fb; 
+		return copy; 
 	}
 	
-	private void pasteParams(FB src, FB dst) {
+	private static void pasteParams(FB src, FB dst) {
 		InterfaceList interfaceList = src.getInterface();
 		if (interfaceList != null) {
 			for (VarDeclaration varDecl : interfaceList .getInputVars()) {
 				if (dst.getInterfaceElement(varDecl.getName()) != null) {
 					// interface exist on new type
-					if (varDecl.getInputConnections().size() == 0) {
-						Value value = varDecl.getValue();
-						if (value != null && value.getValue() != null) {
-							Value newValue = LibraryElementFactory.eINSTANCE.createValue();
-							newValue.setValue(value.getValue());
-							dst.getInterfaceElement(varDecl.getName()).setValue(newValue);
-						}
+					Value value = varDecl.getValue();
+					if (value != null && value.getValue() != null) {
+						Value newValue = LibraryElementFactory.eINSTANCE.createValue();
+						newValue.setValue(value.getValue());
+						dst.getInterfaceElement(varDecl.getName()).setValue(newValue);
 					}
 				}
 			}

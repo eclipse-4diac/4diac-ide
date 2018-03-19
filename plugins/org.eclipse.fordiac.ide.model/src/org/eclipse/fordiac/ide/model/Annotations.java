@@ -559,13 +559,12 @@ public enum Annotations {
 	
 	public FBType getType(AdapterFB afb) {
 		FBType retVal = null;
-		if (null != afb.getPaletteEntry()) {
-			if (afb.getPaletteEntry() instanceof AdapterTypePaletteEntry) {
-				if (afb.isPlug()) {
-					retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getAdapterType().getPlugType();
-				} else {
-					retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getAdapterType().getSocketType();
-				}
+		if ((null != afb.getPaletteEntry()) && (afb.getPaletteEntry() instanceof AdapterTypePaletteEntry)  &&
+				(null != afb.getAdapterDecl())){
+			if (afb.isPlug()) {
+				retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getAdapterType().getPlugType();
+			} else {
+				retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getAdapterType().getSocketType();
 			}
 		}
 		return retVal;

@@ -2,13 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Commands (Incubation)
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.commands
+Bundle-Activator: org.eclipse.fordiac.ide.model.commands.ModelCommandsPlugin
 Bundle-Version: 1.9.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.gef,
  org.eclipse.ui.workbench,
- org.eclipse.osgi,
- org.eclipse.fordiac.ide.ui.controls
+ org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.core.runtime,
+ org.eclipse.jface,
+ org.eclipse.osgi
 Export-Package: org.eclipse.fordiac.ide.model.commands.change,
  org.eclipse.fordiac.ide.model.commands.create,
  org.eclipse.fordiac.ide.model.commands.delete

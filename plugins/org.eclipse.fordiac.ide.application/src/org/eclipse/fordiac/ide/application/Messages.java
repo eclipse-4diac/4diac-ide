@@ -21,9 +21,6 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.application.messages"; //$NON-NLS-1$
 
 
-	public static String MapToCommand_STATUSMessage_AlreadyMapped;
-
-	public static String MapToCommand_STATUSMessage_TypeNotSupported;
 
 	public static String FBFigure_TYPE_NOT_SET;
 	
@@ -56,17 +53,6 @@ public class Messages extends NLS {
 	/** The Flatten sub app command_ labe l_ flatten sub app command. */
 	public static String FlattenSubAppCommand_LABEL_FlattenSubAppCommand;
 			
-	/** The Link constraints_ status message_has already input connection. */
-	public static String LinkConstraints_STATUSMessage_hasAlreadyInputConnection;
-
-	/** The Link constraint outputconnections to check that adapters has only one outputconn */
-	public static String LinkConstraints_STATUSMessage_hasAlreadyOutputConnection;
-	
-	/** The Link constraints_ status message_ i n_ i n_ ou t_ ou t_not allowed. */
-	public static String LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed;
-	
-	/** The Link constraints_ status message_ not compatible. */
-	public static String LinkConstraints_STATUSMessage_NotCompatible;
 	
 	/** The Map sub app to command_ staus message_ already mapped. */
 	public static String MapSubAppToCommand_STAUSMessage_AlreadyMapped;

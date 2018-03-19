@@ -14,9 +14,9 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import java.util.Iterator;
 
-import org.eclipse.fordiac.ide.application.commands.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;

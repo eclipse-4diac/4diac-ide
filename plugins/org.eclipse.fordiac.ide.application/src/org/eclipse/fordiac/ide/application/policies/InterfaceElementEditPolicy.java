@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.application.commands.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -38,7 +38,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 			final CreateConnectionRequest request) {
 		if (request.getStartCommand().getClass().equals(cmdRef)) {
 			AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
-			command.setDestination((InterfaceEditPart) getHost());
+			command.setDestination(((InterfaceEditPart) getHost()).getModel());
 			return command;
 		}
 		return null;

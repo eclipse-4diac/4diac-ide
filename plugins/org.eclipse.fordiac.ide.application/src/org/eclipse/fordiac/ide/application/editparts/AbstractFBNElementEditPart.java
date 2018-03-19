@@ -88,8 +88,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				@Override
 				public void notifyChanged(final Notification notification) {
 					super.notifyChanged(notification);
-					refreshToolTip();
-					backgroundColorChanged(getFigure());
+					refreshToolTip(); //TODO add here checks that better define when the tooltip should be refreshed
 					if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
 						updateDeviceListener();
 					}
@@ -123,6 +122,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			referencedDevice = device;
 			if (referencedDevice != null) {
 				referencedDevice.eAdapters().add(colorChangeListener);
+				backgroundColorChanged(getFigure());
 			}			
 		}
 	}

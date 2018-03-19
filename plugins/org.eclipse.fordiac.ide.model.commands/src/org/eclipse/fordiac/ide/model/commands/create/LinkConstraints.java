@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT fortiss GmbH
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT fortiss GmbH
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,16 +7,16 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Filip Andren
+ *   Gerhard Ebenhofer, Alois Zoitl, Filip Andren, Monika Wenger, Matthias Plasch
  *   - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.commands;
+package org.eclipse.fordiac.ide.model.commands.create;
 
 import java.text.MessageFormat;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.ApplicationPlugin;
-import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.model.commands.ModelCommandsPlugin;
+import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -27,13 +27,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.Utils;
 
 /**
  * The Class LinkConstraints.
  */
 public class LinkConstraints {
 
+	/**Property ID for the enable CASTS preferences 
+	 * 
+	 * This constant is duplicated from the application plugin to avoid dependency cycles.
+	 */
+	public static final String PREFERENCE_ENABLE_CASTS = "enableCastPreference"; //$NON-NLS-1$
 
 	
 	/**
@@ -74,7 +78,7 @@ public class LinkConstraints {
 			if (!isWithConstraintOK(source)) {
 				return false;
 			}
-			ApplicationPlugin.statusLineErrorMessage(null);
+			ModelCommandsPlugin.statusLineErrorMessage(null);
 
 			return true;
 		}
@@ -88,26 +92,26 @@ public class LinkConstraints {
 			}
 			
 			if (!sourceAndDestCheck(source, target)) {
-				ApplicationPlugin.statusLineErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
+				ModelCommandsPlugin.statusLineErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
 				return false;
 			}
 			
 			if (!hasAlreadyInputConnectionsCheck(target, source, con)) {
-				ApplicationPlugin.statusLineErrorMessage(MessageFormat
+				ModelCommandsPlugin.statusLineErrorMessage(MessageFormat
 										.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection,
 												new Object[] { target.getName() }));
 				return false;
 			}
 
 			if (!typeCheck(source, target)) {
-				ApplicationPlugin.statusLineErrorMessage(MessageFormat.format(
+				ModelCommandsPlugin.statusLineErrorMessage(MessageFormat.format(
 						Messages.LinkConstraints_STATUSMessage_NotCompatible,
 						new Object[] { (null != source.getType()) ? source.getType().getName() : "N/A",
 								(null != target.getType()) ? target.getType().getName() : "N/A" }));
 				return false;
 			}
 
-			ApplicationPlugin.statusLineErrorMessage(null);
+			ModelCommandsPlugin.statusLineErrorMessage(null);
 			
 			// FIX Input event can be connected to its own output event - ID: 3029433
 //			if (source.isIsInput() && target.isIsInput() && source.eContainer().equals(target.eContainer())) // connection from input to output within one fb 
@@ -131,16 +135,16 @@ public class LinkConstraints {
 				obj = obj.eContainer();
 				if((obj instanceof CompositeFBType) || (obj instanceof SubApp)){
 					//data connections from and to interface data ports from composits should also be allowed from unwithed composite inputs (e.g., parameters for the FB)
-					ApplicationPlugin.statusLineErrorMessage(null);
+					ModelCommandsPlugin.statusLineErrorMessage(null);
 					return true;
 				}
 			}
 			
-			ApplicationPlugin.statusLineErrorMessage(MessageFormat.format(
+			ModelCommandsPlugin.statusLineErrorMessage(MessageFormat.format(
 					"{0} is not connected to an Event by a With-Construct" ,  new Object[] { varDecl.getName()}));
 			return false;
 		}
-		ApplicationPlugin.statusLineErrorMessage(null);
+		ModelCommandsPlugin.statusLineErrorMessage(null);
 		return true;
 	}
 
@@ -243,11 +247,10 @@ public class LinkConstraints {
 	private static boolean typeCheck(final VarDeclaration source,
 			final VarDeclaration target) {
 
-		boolean automaticCasts = ApplicationPlugin
+		boolean automaticCasts = ModelCommandsPlugin
 				.getDefault()
 				.getPreferenceStore()
-				.getBoolean(
-						org.eclipse.fordiac.ide.application.preferences.PreferenceConstants.P_BOOLEAN);
+				.getBoolean(PREFERENCE_ENABLE_CASTS);
 
 		if (automaticCasts) {
 			BaseType1 sourceType = BaseType1.getByName(source.getTypeName()
@@ -261,7 +264,7 @@ public class LinkConstraints {
 				return false;
 			}
 		} else {
-			return Utils.defaultTypeCompatibilityCheck(source, target);
+			return defaultTypeCompatibilityCheck(source, target);
 		}
 
 	}
@@ -389,33 +392,33 @@ public class LinkConstraints {
 	public static boolean canExistAdapterConnection(AdapterDeclaration source, AdapterDeclaration target, Connection con) {
 		if (source != null && target != null && source != target) {
 			if(!sourceAndDestCheck(source, target)){
-				ApplicationPlugin.statusLineErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
+				ModelCommandsPlugin.statusLineErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
 				return false;
 			}
 
 			if(!hasAlreadyInputConnectionsCheck(target, source, con)) {
-				ApplicationPlugin.statusLineErrorMessage(MessageFormat
+				ModelCommandsPlugin.statusLineErrorMessage(MessageFormat
 										.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection,
 												new Object[] { target.getName() }));
 				return false;
 			}
 			
 			if(hasAlreadyOutputConnectionsCheck(source, con)){
-				ApplicationPlugin.statusLineErrorMessage(MessageFormat.format(
+				ModelCommandsPlugin.statusLineErrorMessage(MessageFormat.format(
 						Messages.LinkConstraints_STATUSMessage_hasAlreadyOutputConnection,
 						new Object[] { source.getName() }));
 				return false;
 			}
 
-			if(!Utils.adapaterTypeCompatibilityCheck(source, target)) {
-				ApplicationPlugin.statusLineErrorMessage(MessageFormat.format(
+			if(!adapaterTypeCompatibilityCheck(source, target)) {
+				ModelCommandsPlugin.statusLineErrorMessage(MessageFormat.format(
 						Messages.LinkConstraints_STATUSMessage_NotCompatible,
 						new Object[] { (null != source.getType()) ? source.getType().getName() : "N/D",
 								(null != target.getType()) ? target.getType().getName() : "N/D" }));
 				return false;
 			}
 
-			ApplicationPlugin.statusLineErrorMessage(null);
+			ModelCommandsPlugin.statusLineErrorMessage(null);
 			return true;
 		}
 		return false;
@@ -425,5 +428,184 @@ public class LinkConstraints {
 	public static boolean canCreateAdapterConnection(AdapterDeclaration source, AdapterDeclaration target) {
 		return canExistAdapterConnection(source, target, null);
 	}
+	
+	/**
+	 * Default type compatibility check.
+	 * 
+	 * @param source
+	 *            the source
+	 * @param target
+	 *            the target
+	 * 
+	 * @return true, if default type compatibility check
+	 */
+	private static boolean defaultTypeCompatibilityCheck(
+			final VarDeclaration source, final VarDeclaration target) {
+		try {
+			if (source.getType().getName().toUpperCase().startsWith("ANY")//$NON-NLS-1$
+					&& target.getType().getName().toUpperCase()
+							.startsWith("ANY")) {//$NON-NLS-1$
+				return checkAnyAnyCompatibility();
+			}
+
+			if (source.getType().getName().equalsIgnoreCase("ANY") //$NON-NLS-1$
+					&& !target.getType().getName().equalsIgnoreCase("ANY")) { //$NON-NLS-1$
+				return true;
+			}
+			if (!source.getType().getName().equalsIgnoreCase("ANY") //$NON-NLS-1$
+					&& target.getType().getName().equalsIgnoreCase("ANY")) { //$NON-NLS-1$
+				return true;
+			}
+
+			if (source.getType().getName().equalsIgnoreCase("ANY") //$NON-NLS-1$
+					&& target.getType().getName().equalsIgnoreCase("ANY")) { //$NON-NLS-1$
+				return checkAnyAnyCompatibility();
+			}
+
+			if (source.getType().getName().equalsIgnoreCase("ANY_ELEMENTARY") //$NON-NLS-1$
+					&& !target.getType().getName()
+							.equalsIgnoreCase("ANY_ELEMENTARY")) { //$NON-NLS-1$
+				return true;
+			}
+			if (!source.getType().getName().equalsIgnoreCase("ANY_ELEMENTARY") //$NON-NLS-1$
+					&& target.getType().getName()
+							.equalsIgnoreCase("ANY_ELEMENTARY")) { //$NON-NLS-1$
+				return true;
+			}
+
+			if (source.getType().getName().equalsIgnoreCase("ANY_ELEMENTARY") //$NON-NLS-1$
+					&& target.getType().getName()
+							.equalsIgnoreCase("ANY_ELEMENTARY")) { //$NON-NLS-1$
+				return checkAnyAnyCompatibility();
+			}
+
+			if (source.getType().getName().equalsIgnoreCase("ANY_MAGNITUDE")) { //$NON-NLS-1$
+				return anyMagnitudeCompatibility(target.getType().getName());
+			}
+
+			if (target.getType().getName().equalsIgnoreCase("ANY_MAGNITUDE")) { //$NON-NLS-1$
+				return anyMagnitudeCompatibility(source.getType().getName());
+			}
+
+			if (source.getType().getName().equalsIgnoreCase("ANY_NUM")) { //$NON-NLS-1$
+				return anyNumCompatibility(target.getType().getName());
+			}
+
+			if (target.getType().getName().equalsIgnoreCase("ANY_NUM")) { //$NON-NLS-1$
+				return anyNumCompatibility(source.getType().getName());
+			}
+
+			if (source.getType().getName().equalsIgnoreCase("ANY_INT")) { //$NON-NLS-1$
+				return anyIntCompatiblity(target.getType().getName());
+			}
+
+			if (target.getType().getName().equalsIgnoreCase("ANY_INT")) { //$NON-NLS-1$
+				return anyIntCompatiblity(source.getType().getName());
+			}
+
+			if (source.getType().getName().equalsIgnoreCase("ANY_REAL")) { //$NON-NLS-1$
+				return anyRealCompatibility(target.getType().getName());
+			}
+
+			if (target.getType().getName().equalsIgnoreCase("ANY_REAL")) { //$NON-NLS-1$
+				return anyRealCompatibility(source.getType().getName());
+			}
+
+			if (source.getType().getName().equalsIgnoreCase("ANY_BIT")) { //$NON-NLS-1$
+				return anyBitCompatibility(target.getType().getName());
+			}
+
+			if (target.getType().getName().equalsIgnoreCase("ANY_BIT")) { //$NON-NLS-1$
+				return anyBitCompatibility(source.getType().getName());
+			}
+
+			if ((source.getType().getName().equalsIgnoreCase("ANY_STRING"))//$NON-NLS-1$
+					&& (target.getType().getName().equalsIgnoreCase("STRING") || target.getType().getName().equalsIgnoreCase("WSTRING"))) { //$NON-NLS-1$ //$NON-NLS-2$
+				return true;
+			}
+			if ((target.getType().getName().equalsIgnoreCase("ANY_STRING"))//$NON-NLS-1$
+					&& (source.getType().getName().equalsIgnoreCase("STRING") || source.getType().getName().equalsIgnoreCase("WSTRING"))) { //$NON-NLS-1$ //$NON-NLS-2$
+				return true;
+			}
+			if (source.getType().getName().equalsIgnoreCase("ANY_STRING") //$NON-NLS-1$
+					&& target.getType().getName()
+							.equalsIgnoreCase("ANY_STRING")) { //$NON-NLS-1$
+				return checkAnyAnyCompatibility();
+			}
+
+			if ((source.getType().getName().equalsIgnoreCase("ANY_DATE"))//$NON-NLS-1$
+					&& (target.getType().getName().equalsIgnoreCase("DATE") //$NON-NLS-1$
+							|| target.getType().getName()
+									.equalsIgnoreCase("DATE_AND_TIME") || target //$NON-NLS-1$
+							.getType().getName()
+							.equalsIgnoreCase("TIME_OF_DAY"))) { //$NON-NLS-1$
+				return true;
+			}
+			if ((target.getType().getName().equalsIgnoreCase("ANY_DATE"))//$NON-NLS-1$
+					&& (source.getType().getName().equalsIgnoreCase("DATE") //$NON-NLS-1$
+							|| source.getType().getName()
+									.equalsIgnoreCase("DATE_AND_TIME") || source //$NON-NLS-1$
+							.getType().getName()
+							.equalsIgnoreCase("TIME_OF_DAY"))) { //$NON-NLS-1$
+				return true;
+			}
+			if (source.getType().getName().equalsIgnoreCase("ANY_DATE") //$NON-NLS-1$
+					&& target.getType().getName().equalsIgnoreCase("ANY_DATE")) { //$NON-NLS-1$
+				return checkAnyAnyCompatibility();
+			}
+			
+			return source.getType().getName()
+					.equalsIgnoreCase(target.getType().getName());
+		} catch (NullPointerException e) {
+			System.out.println(e);
+		}
+
+		return false;
+	}
+	
+	private static boolean checkAnyAnyCompatibility() {
+		return false;
+	}
+
+	private static boolean anyBitCompatibility(String name) {
+		return (name.equalsIgnoreCase("WORD") || name.equalsIgnoreCase("LWORD")  //$NON-NLS-1$//$NON-NLS-2$
+				|| name.equalsIgnoreCase("DWORD") //$NON-NLS-1$
+				|| name.equalsIgnoreCase("BYTE") || name //$NON-NLS-1$
+					.equalsIgnoreCase("BOOL")); //$NON-NLS-1$
+	}
+
+	private static boolean anyMagnitudeCompatibility(String name) {
+		return (anyNumCompatibility(name) || name.equalsIgnoreCase("TIME")); //$NON-NLS-1$;
+	}
+
+	private static boolean anyNumCompatibility(String name) {
+		return (anyIntCompatiblity(name) || anyRealCompatibility(name));
+	}
+
+	private static boolean anyRealCompatibility(String name) {
+		return (name.equalsIgnoreCase("REAL") || name.equalsIgnoreCase("LREAL")); //$NON-NLS-1$ //$NON-NLS-2$;
+	}
+
+	private static boolean anyIntCompatiblity(String name) {
+		return (name.equalsIgnoreCase("INT") || name.equalsIgnoreCase("UINT") //$NON-NLS-1$ //$NON-NLS-2$;
+				|| name.equalsIgnoreCase("SINT") || name.equalsIgnoreCase("LINT") //$NON-NLS-1$ //$NON-NLS-2$;
+				|| name.equalsIgnoreCase("DINT") || name.equalsIgnoreCase("USINT")//$NON-NLS-1$ //$NON-NLS-2$;
+				|| name.equalsIgnoreCase("UDINT") || name.equalsIgnoreCase("ULINT"));//$NON-NLS-1$ //$NON-NLS-2$;
+	}
+	
+	public static boolean adapaterTypeCompatibilityCheck(final AdapterDeclaration source, final AdapterDeclaration target){
+		try {
+			if (((source.getType().getName().equals("ANY_ADAPTER")) && (!target.getType().getName().equals("ANY_ADAPTER"))) || //$NON-NLS-1$ //$NON-NLS-2$
+					((!source.getType().getName().equals("ANY_ADAPTER")) && (target.getType().getName().equals("ANY_ADAPTER")))) { //$NON-NLS-1$ //$NON-NLS-2$
+				return true;
+			}
+			return source.getType().getName().equalsIgnoreCase(target.getType().getName());
+		} catch (NullPointerException e) {
+			System.out.println(e);
+		}
+
+		return false;
+	}
+
 }
 
