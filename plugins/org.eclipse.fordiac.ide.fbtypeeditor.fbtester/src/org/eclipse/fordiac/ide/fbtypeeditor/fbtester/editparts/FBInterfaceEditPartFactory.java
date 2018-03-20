@@ -38,7 +38,7 @@ public class FBInterfaceEditPartFactory extends org.eclipse.fordiac.ide.fbtypeed
 			return new FBTypeRootEditPart();
 		}
 		if (modelElement instanceof FB) {
-			return new org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.FBEditPart(zoomManager);
+			return new org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.TesterFBEditPart(zoomManager);
 		}
 		if (modelElement instanceof IInterfaceElement) {
 			return new org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart();

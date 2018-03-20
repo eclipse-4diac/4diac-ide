@@ -19,13 +19,12 @@ import org.eclipse.gef.GraphicalEditPart;
 
 public abstract class AbstractPositionableElementEditPart extends AbstractViewEditPart {
 	
-	private EContentAdapter contentAdapter=new EContentAdapter(){
+	private EContentAdapter contentAdapter = new EContentAdapter(){
 		@Override 
 		public void notifyChanged(Notification notification) { 
 			Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature) ||
 					LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature)) {
-				//TODO - check if this should be moved to positinableeditpart edit part for all moveable view edit parts
 				refreshPosition();
 			}
 		}
@@ -45,7 +44,7 @@ public abstract class AbstractPositionableElementEditPart extends AbstractViewEd
 		}	
 	}
 
-	abstract protected PositionableElement getPositionableElement();
+	protected abstract PositionableElement getPositionableElement();
 	
 	@Override
 	public void activate() {

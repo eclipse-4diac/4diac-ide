@@ -33,7 +33,6 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.draw2d.FordiacFigureUtilities;
@@ -75,43 +74,25 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
-	public void activate() {
-		if (!isActive()) {
-			super.activate();
-			((Notifier) getModel()).eAdapters().add(getContentAdapter());
-		}
-	}
-
-	@Override
-	public void deactivate() {
-		if (isActive()) {
-			super.deactivate();
-			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
-		}
-	}
-	
-	private EContentAdapter contentAdapter=new EContentAdapter(){
-		@Override 
-		public void notifyChanged(Notification notification) { 
-			Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)){
-				backgroundColorChanged(getFigure());
-			} else {			
-				super.notifyChanged(notification);
-				refreshChildren();
-				refreshTargetConnections();
-			} 
-		}
-	};
-
-	@Override
 	public Device getModel() {
 		return (Device) super.getModel();
 	}
 	
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		return contentAdapter;
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter(){
+			@Override 
+			public void notifyChanged(Notification notification) { 
+				Object feature = notification.getFeature();
+				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)){
+					backgroundColorChanged(getFigure());
+				} else {			
+					super.notifyChanged(notification);
+					refreshChildren();
+					refreshTargetConnections();
+				} 
+			}
+		};
 	}
 
 	@Override
@@ -224,7 +205,6 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 
 	private class DeviceFigure extends Shape implements InteractionStyleFigure {
 		private final Label instanceNameLabel = new Label();
-		//private Figure main = new Figure();
 		private Figure dataInputs = new Figure();
 		private Figure contentPane;
 
@@ -246,7 +226,9 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 					Pattern pattern = new Pattern(display,topLeft.x,topLeft.y,bottomRight.x,bottomRight.y,first,getBackgroundColor());
 					graphics.setBackgroundPattern(pattern);
 					graphics.fillRoundRectangle(getBounds(),getCornerDimensions().width,getCornerDimensions().height);
-					graphics.setBackgroundPattern(null);pattern.dispose();first.dispose();
+					graphics.setBackgroundPattern(null);
+					pattern.dispose();
+					first.dispose();
 				}
 			};
 
@@ -346,10 +328,12 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	
 			@Override
 			protected void fillShape(final Graphics graphics) {
+				//Nothing to do here right now
 			}
 	
 			@Override
 			protected void outlineShape(final Graphics graphics) {
+				//Nothing to do here right now
 			}
 
 			public Figure getDataInputs() {

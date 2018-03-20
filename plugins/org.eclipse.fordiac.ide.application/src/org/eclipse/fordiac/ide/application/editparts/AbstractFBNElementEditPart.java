@@ -55,12 +55,11 @@ import org.eclipse.jface.viewers.TextCellEditor;
  */
 public abstract class AbstractFBNElementEditPart extends AbstractPositionableElementEditPart {
 
-	private EContentAdapter adapter;
-
 	private Device referencedDevice;
 
 	/** necessary that the gradient pattern can be scaled accordingly */
 	private final ZoomManager zoomManager;
+	
 
 	public ZoomManager getZoomManager() {
 		return zoomManager;
@@ -81,22 +80,18 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	};
 
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		if (adapter == null) {
-			adapter = new EContentAdapter() {
-
-				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-					refreshToolTip(); //TODO add here checks that better define when the tooltip should be refreshed
-					if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
-						updateDeviceListener();
-					}
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				refreshToolTip(); //TODO add here checks that better define when the tooltip should be refreshed
+				if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
+					updateDeviceListener();
 				}
+			}
 
-			};
-		}
-		return adapter;
+		};
 	}
 
 	/** The i named element content adapter. */

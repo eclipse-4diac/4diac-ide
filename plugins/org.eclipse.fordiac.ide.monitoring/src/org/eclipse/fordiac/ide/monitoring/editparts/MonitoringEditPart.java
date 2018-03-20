@@ -112,30 +112,24 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 		return l;
 	}
 
-	private EContentAdapter adapter;
-
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		if (adapter == null) {
-			adapter = new EContentAdapter() {
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				Display.getDefault().asyncExec(new Runnable() {
 
-				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-					Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						setValue(getModel().getCurrentValue());
+						refreshVisuals();
 
-						@Override
-						public void run() {
-							setValue(getModel().getCurrentValue());
-							refreshVisuals();
+					}
+				});
+			}
 
-						}
-					});
-				}
-
-			};
-		}
-		return adapter;
+		};
 	}
 	
 	@Override
@@ -162,15 +156,13 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 	}	
 
 	public void setValue(String string) {
-		if (isActive()) {
-			if (getFigure() != null) {
-				if (getModel().isForce() && getModel().getForceValue() != null) {
-					((Label) getFigure()).setText(getModel().getForceValue() + " (" + string + ")");  //$NON-NLS-1$//$NON-NLS-2$
-				} else {
-					((Label) getFigure()).setText(string);
-				}
-				refreshVisuals();
+		if (isActive() && getFigure() != null) {
+			if (getModel().isForce() && getModel().getForceValue() != null) {
+				((Label) getFigure()).setText(getModel().getForceValue() + " (" + string + ")");  //$NON-NLS-1$//$NON-NLS-2$
+			} else {
+				((Label) getFigure()).setText(string);
 			}
+			refreshVisuals();
 		}
 	}
 
@@ -190,7 +182,6 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 		}
 
 		if (getModel().isBreakpointActive()) {
-			//getFigure().setForegroundColor(org.eclipse.draw2d.ColorConstants.red);
 			getFigure().setBackgroundColor(org.eclipse.draw2d.ColorConstants.red);
 		} else {
 			setBackgroundColor(getFigure());

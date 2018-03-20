@@ -73,27 +73,25 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		return new SegmentFigure();
 	}
 
-	private final EContentAdapter adapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(Notification notification) {
-			Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)){
-				backgroundColorChanged(getFigure());
-			} 
-			if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature) ||
-					LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature) ||
-					LibraryElementPackage.eINSTANCE.getSegment_Width().equals(feature)) {
-				refreshVisuals();
-			}
-			super.notifyChanged(notification);
-			refreshSourceConnections();
-		}
-
-	};
-
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		return adapter;
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(Notification notification) {
+				Object feature = notification.getFeature();
+				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)){
+					backgroundColorChanged(getFigure());
+				} 
+				if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature) ||
+						LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature) ||
+						LibraryElementPackage.eINSTANCE.getSegment_Width().equals(feature)) {
+					refreshVisuals();
+				}
+				super.notifyChanged(notification);
+				refreshSourceConnections();
+			}
+
+		};
 	}
 
 	@Override
@@ -156,9 +154,6 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		});
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new SegmentNodeEditPolicy());
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteSegmentEditPolicy());
-		// installEditPolicy(EditPolicyRoles.CONNECTION_HANDLES_ROLE,
-		// new TopBottomConnectionHandleEditPolicy());
-
 	}
 	
 	@Override
@@ -179,7 +174,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		private final RoundedRectangle rect = new RoundedRectangle() {
 			@Override
 			protected void outlineShape(Graphics graphics) {
-
+				//nothing to do here right now
 			}
 
 			@Override
@@ -283,7 +278,6 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			typeLabel.setLabelAlignment(PositionConstants.LEFT);
 			typeLabel.setBackgroundColor(ColorConstants.blue);
 			typeLabel.setOpaque(false);
-
 		}
 
 		public Label getName() {
@@ -292,10 +286,12 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 
 		@Override
 		protected void fillShape(final Graphics graphics) {
+			//nothing to do here right now			
 		}
 
 		@Override
 		protected void outlineShape(final Graphics graphics) {
+			//nothing to do here right now			
 		}
 
 		@Override

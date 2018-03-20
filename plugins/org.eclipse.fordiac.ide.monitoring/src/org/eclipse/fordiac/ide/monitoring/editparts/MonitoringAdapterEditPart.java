@@ -32,9 +32,6 @@ import org.eclipse.swt.widgets.Display;
 
 public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 	
-	private EContentAdapter adapter;
-	
-
 	@Override
 	protected IFigure createFigureForModel() {
 		return new FBFigure(getFB(), null);
@@ -44,26 +41,22 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 		return getModel().getMonitoredAdapterFB();
 	}
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		if (adapter == null) {
-			adapter = new EContentAdapter() {
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				Display.getDefault().asyncExec(new Runnable() {
 
-				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-					Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						refreshVisuals();
 
-						@Override
-						public void run() {
-							refreshVisuals();
+					}
+				});
+			}
 
-						}
-					});
-				}
-
-			};
-		}
-		return adapter;
+		};
 	}
 
 	private FBFigure getCastedFigure() {

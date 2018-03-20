@@ -38,13 +38,6 @@ import org.eclipse.ui.PlatformUI;
 
 public class ResourceEditPart extends AbstractViewEditPart {
 	private ResourceFigure figure;
-	private final EContentAdapter contentAdapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(Notification notification) {
-			refresh();
-			super.notifyChanged(notification);
-		}
-	};
 
 	@Override
 	protected void refreshVisuals() {
@@ -118,8 +111,14 @@ public class ResourceEditPart extends AbstractViewEditPart {
 	}
 
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		return contentAdapter;
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(Notification notification) {
+				refresh();
+				super.notifyChanged(notification);
+			}
+		};
 	}
 
 	@Override

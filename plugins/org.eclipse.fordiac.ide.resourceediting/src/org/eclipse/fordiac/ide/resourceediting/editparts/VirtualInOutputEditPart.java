@@ -55,36 +55,24 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 		updatePos();
 	}
 
-	private EContentAdapter adapter;
-
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		if (adapter == null) {
-			adapter = new EContentAdapter() {
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				refreshSourceConnections();
+				refreshTargetConnections();
+				refreshVisuals();
+				refreshTooltip();
+			}
 
-				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-					refreshSourceConnections();
-					refreshTargetConnections();
-					refreshVisuals();
-					refreshTooltip();
-				}
-
-			};
-		}
-		return adapter;
+		};
 	}
 
 	private void refreshTooltip() {
 		getFigure().setToolTip(new VirtualIOTooltipFigure());
 
-	}
-
-	@Override
-	protected void refreshVisuals() {
-
-		super.refreshVisuals();
 	}
 	
 	private void updatePos() {
@@ -179,11 +167,6 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 		 */
 		public VirtualInputOutputFigure() {
 			super();
-			// FB fb = (FB) getCastedModel().getIInterfaceElement().eContainer()
-			// .eContainer();
-			// setText(fb.getName() + "." + getCastedModel().getLabel());
-			// setBorder(new MarginBorder(0, 5, 0, 5));
-			// setBorder(new ConnectorBorder());
 			setOpaque(false);
 			if (!isInput()) {
 				setIcon(FordiacImage.ICON_LinkOutput.getImage());
@@ -237,8 +220,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 
 	@Override
 	protected IFigure createFigureForModel() {
-		IFigure f = new VirtualInputOutputFigure();
-		return f; // new VirtualInputOutputFigure();
+		return new VirtualInputOutputFigure();
 	}
 
 	@Override
@@ -267,16 +249,6 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
 		return new FixedAnchor(getFigure(), isInput());
 	}
-
-//	@Override
-//	protected List<?> getModelSourceConnections() {
-//		return getIInterfaceElement().getOutputConnections();
-//	}
-//
-//	@Override
-//	protected List<?> getModelTargetConnections() {
-//		return getIInterfaceElement().getInputConnections();
-//	}
 
 	@Override
 	public Label getNameLabel() {
