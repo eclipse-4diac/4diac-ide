@@ -126,8 +126,15 @@ public enum FordiacImage {
 	ICON_WatchesView,
 	ICON_WatchInterfaceElements,
 
+	// Cursors
+	CURSOR_PLUG,	
+	CURSOR_PLUG_MASK,
+	CURSOR_PLUG_NOT,	
+	CURSOR_PLUG_NOT_MASK,
+
 	// Overlay Images
 	OVERLAY_DistributedNature;
+	
 	
 	// @formatter:on
 

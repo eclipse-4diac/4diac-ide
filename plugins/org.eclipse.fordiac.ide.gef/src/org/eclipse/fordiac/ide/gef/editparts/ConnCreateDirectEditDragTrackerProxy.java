@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 fortiss GmbH
+ * Copyright (c) 2016, 2018 fortiss GmbH
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,6 +12,7 @@ package org.eclipse.fordiac.ide.gef.editparts;
 
 import java.util.Map;
 
+import org.eclipse.fordiac.ide.gef.utilities.FordiacCursors;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
@@ -27,21 +28,20 @@ import org.eclipse.swt.widgets.Event;
 
 public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
 	
+	private static final class FordiacConnectionDragCreatinTool extends ConnectionDragCreationTool {
+		
+		public FordiacConnectionDragCreatinTool() {
+			super();
+			setDefaultCursor(FordiacCursors.CURSOR_PLUG);
+			setDisabledCursor(FordiacCursors.CURSOR_PLUG_NOT);
+		}
+	}
+
 	private ConnectionDragCreationTool connectionTool;
 	private SelectEditPartTracker editPartTracker;
 	
 	public ConnCreateDirectEditDragTrackerProxy(EditPart editPart) {
-	    this.connectionTool = new ConnectionDragCreationTool(){
-	    	@Override
-			protected boolean handleButtonDown(int button){
-				super.handleButtonDown(button);
-//				if (button == 1 && getCurrentViewer() != null
-//						&& getTargetEditPart() != null) {
-//					getCurrentViewer().select(getTargetEditPart());
-//				}
-				return true;
-			}	    	
-	    };
+	    this.connectionTool = new FordiacConnectionDragCreatinTool();
 	    this.editPartTracker = new SelectEditPartTracker(editPart);
 	}
 
