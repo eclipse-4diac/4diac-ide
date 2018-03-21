@@ -45,7 +45,7 @@ import org.eclipse.gef.commands.Command;
 public class UpdateFBTypeCommand extends Command {
 	
 	/** The FB view */
-	private final FB fb;
+	private FB fb;
 	
 	/** The copied FB view */
 	private FB copiedFB;
@@ -53,7 +53,7 @@ public class UpdateFBTypeCommand extends Command {
 	/** The if not null this entry should be used for the type of the updated FB*/
 	private PaletteEntry entry;
 	
-	private final FBNetwork network;
+	private FBNetwork network;
 	
 		
 	private List<DeleteConnectionCommand> deleteConnCmds = new ArrayList<>();
@@ -91,6 +91,11 @@ public class UpdateFBTypeCommand extends Command {
 	public void execute() {
 		Resource resource = null;
 		if (fb.isMapped()) {
+			if(network.equals(fb.getResource().getFBNetwork())) {
+				//this is the resource fb we need to use the oposite for a correct update
+				fb = (FB)fb.getOpposite();
+				network = fb.getFbNetwork();
+			}
 			resource = fb.getResource();
 			unmapCmd = new UnmapCommand(fb);
 			unmapCmd.execute();
