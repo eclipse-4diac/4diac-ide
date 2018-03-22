@@ -21,7 +21,7 @@ import org.osgi.framework.BundleContext;
  * 
  */
 public class ModelCommandsPlugin extends Abstract4DIACUIPlugin {
-	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.application"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.model.commands"; //$NON-NLS-1$
 	// The shared instance.
 	private static Abstract4DIACUIPlugin plugin;
 		
