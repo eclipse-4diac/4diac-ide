@@ -117,8 +117,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			referencedDevice = device;
 			if (referencedDevice != null) {
 				referencedDevice.eAdapters().add(colorChangeListener);
-				backgroundColorChanged(getFigure());
 			}			
+			backgroundColorChanged(getFigure());
 		}
 	}
 
