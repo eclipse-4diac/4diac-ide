@@ -83,54 +83,57 @@ Java and all Java-based trademarks are trademarks of Oracle Corporation in the U
 
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.emf.ecore.xmi"/>
-      <import plugin="org.eclipse.ui.views"/>
-      <import plugin="org.eclipse.jface"/>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.gef"/>
-      <import plugin="org.eclipse.emf.common"/>
       <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.ui.intro"/>
-      <import plugin="org.eclipse.ui.intro.universal"/>
-      <import plugin="org.eclipse.ui.forms"/>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.help"/>
-      <import plugin="org.eclipse.epp.logging.aeri.core"/>
-      <import plugin="org.eclipse.epp.logging.aeri.ide"/>
       <import plugin="org.eclipse.emf.ecore.editor"/>
       <import plugin="org.eclipse.ui.navigator"/>
       <import plugin="org.eclipse.ui.views.properties.tabbed"/>
-      <import plugin="org.eclipse.core.expressions"/>
       <import plugin="org.eclipse.fordiac.ide.deployment"/>
       <import plugin="org.eclipse.emf.edit"/>
       <import plugin="org.eclipse.emf.ecore.edit"/>
-      <import plugin="org.eclipse.ui.navigator.resources"/>
+      <import plugin="org.eclipse.jface"/>
       <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.emf.ecore.xmi"/>
       <import plugin="org.eclipse.ltk.core.refactoring"/>
+      <import plugin="org.eclipse.ui.navigator.resources"/>
       <import plugin="org.eclipse.emf.edit.ui"/>
+      <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.swt"/>
-      <import plugin="org.eclipse.emf.mwe2.runtime" version="2.9.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.mwe2.runtime" version="2.9.1" match="greaterOrEqual"/>
+      <import plugin="org.antlr.runtime" version="3.2.0" match="perfect"/>
+      <import plugin="org.eclipse.emf.common"/>
       <import plugin="org.apache.commons.lang" version="2.0.0" match="compatible"/>
       <import plugin="org.apache.commons.logging" version="1.0.0" match="compatible"/>
-      <import plugin="com.google.inject" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.expressions"/>
       <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.ui.forms"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="org.eclipse.mylyn.commons.core" version="3.8.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.mylyn.commons.ui" version="3.8.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.net"/>
       <import plugin="org.eclipse.mylyn.commons.screenshots" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.lang" version="2.6.0" match="compatible"/>
-      <import plugin="org.eclipse.jface" version="3.3.0" match="greaterOrEqual"/>
+      <import plugin="com.google.guava" version="21.0.0" match="compatible"/>
       <import plugin="org.eclipse.mylyn.commons.workbench" version="3.8.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.xtext"/>
-      <import plugin="org.eclipse.xtext.builder.standalone" version="2.10.0" match="compatible"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.eclipse.core.runtime" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.core.resources" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.emf.ecore" version="2.13.0" match="compatible"/>
+      <import plugin="org.eclipse.emf.codegen" version="2.12.0" match="compatible"/>
+      <import plugin="org.eclipse.emf.ecore.xmi" version="2.13.0" match="compatible"/>
+      <import plugin="org.eclipse.text" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.emf.common" version="2.13.0" match="compatible"/>
+      <import plugin="org.eclipse.debug.core" version="3.5.0" match="compatible"/>
       <import feature="org.eclipse.xtext.xbase.lib" version="2.10.0.v201605250459"/>
       <import feature="org.eclipse.xtext.xbase" version="2.10.0.v201605250459"/>
       <import feature="org.eclipse.xtext.redist" version="2.11.0.v20170201-0242"/>
       <import feature="org.eclipse.xtend.sdk" version="2.11.0.v20170201-0242"/>
-      <import plugin="org.eclipse.xtend.core"/>
-      <import plugin="org.eclipse.xtend.lib"/>
+      <import plugin="org.eclipse.jface" version="3.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.core" match="compatible"/>
+      <import plugin="org.eclipse.jdt.launching"/>
    </requires>
 
    <plugin
@@ -274,13 +277,6 @@ Java and all Java-based trademarks are trademarks of Oracle Corporation in the U
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.emf.mwe2.runtime"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.apache.commons.io"
          download-size="0"
          install-size="0"
@@ -387,6 +383,20 @@ Java and all Java-based trademarks are trademarks of Oracle Corporation in the U
 
    <plugin
          id="org.eclipse.emf.common.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.codegen.ecore"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.codegen"
          download-size="0"
          install-size="0"
          version="0.0.0"
