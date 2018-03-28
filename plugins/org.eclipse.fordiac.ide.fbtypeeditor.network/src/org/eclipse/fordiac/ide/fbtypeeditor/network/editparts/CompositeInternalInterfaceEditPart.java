@@ -33,6 +33,11 @@ import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.viewers.TextCellEditor;
 
 public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfaceEditPartRO {
+	
+	public CompositeInternalInterfaceEditPart() {
+		super();
+		setConnectable(true);
+	}
 
 	protected DirectEditManager manager;
 

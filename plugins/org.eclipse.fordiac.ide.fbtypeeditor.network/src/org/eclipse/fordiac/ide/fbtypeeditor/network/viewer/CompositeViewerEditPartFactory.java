@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -66,7 +65,9 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 		if (modelElement instanceof IInterfaceElement) {
 			IInterfaceElement iElement = (IInterfaceElement)modelElement;
 			if(iElement.eContainer().eContainer() instanceof CompositeFBType){
-				return new CompositeInternalInterfaceEditPart();
+				return new CompositeInternalInterfaceEditPartRO();
+			}else {
+				return new InterfaceEditPartForFBNetworkRO();
 			}
 		}
 		

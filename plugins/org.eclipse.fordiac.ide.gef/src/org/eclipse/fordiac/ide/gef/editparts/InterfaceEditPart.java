@@ -223,8 +223,10 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 
 	@Override
 	protected void createEditPolicies() {
-
-		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, getNodeEditPolicy());
+		GraphicalNodeEditPolicy nodeEditPolicy = getNodeEditPolicy();
+		if(null != nodeEditPolicy) {
+			installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, nodeEditPolicy);
+		}
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
 				new SelectionEditPolicy() {
 

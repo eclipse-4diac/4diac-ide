@@ -57,6 +57,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 public class InterfaceEditPart extends AbstractInterfaceElementEditPart implements NodeEditPart {
 
 	public InterfaceEditPart() {
+		super();
 		setConnectable(true);
 	}
 
