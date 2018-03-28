@@ -103,7 +103,7 @@ Java and all Java-based trademarks are trademarks of Oracle Corporation in the U
       <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.swt"/>
       <import plugin="org.eclipse.emf.mwe2.runtime" version="2.9.1" match="greaterOrEqual"/>
-      <import plugin="org.antlr.runtime" version="3.2.0" match="perfect"/>
+      <import plugin="org.antlr.runtime"/>
       <import plugin="org.eclipse.emf.common"/>
       <import plugin="org.apache.commons.lang" version="2.0.0" match="compatible"/>
       <import plugin="org.apache.commons.logging" version="1.0.0" match="compatible"/>
