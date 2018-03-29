@@ -292,6 +292,10 @@
       <property name="4diac.versionId" value="1.9.0" />
    </configurations>
 
+   <repositories>
+      <repository location="http://download.eclipse.org/4diac/nightly/update" enabled="true" />
+   </repositories>
+
    <preferencesInfo>
       <targetfile overwrite="false"/>
    </preferencesInfo>

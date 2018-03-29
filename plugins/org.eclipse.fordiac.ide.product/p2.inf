@@ -1,0 +1,2 @@
+instructions.configure=\
+  addRepository(type:0,location:http${#58}//download.eclipse.org/4diac/nightly/update,name:Eclipse 4diac Nightly Builds Update Site);
