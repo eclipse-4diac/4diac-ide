@@ -22,7 +22,7 @@
       </vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.eclipse.fordiac.ide.images/images/fordiac16.png" i32="/org.eclipse.fordiac.ide.images/images/fordiac32.png" i48="/org.eclipse.fordiac.ide.images/images/fordiac48.png" i256="/org.eclipse.fordiac.ide.images/images/fordiac256.png"/>
+   <windowImages i16="/org.eclipse.fordiac.ide/icons/fordiac16.png" i32="/org.eclipse.fordiac.ide/icons/fordiac32.png" i48="/org.eclipse.fordiac.ide/icons/fordiac48.png" i256="/org.eclipse.fordiac.ide/icons/fordiac256.png"/>
 
    <splash
       location="org.eclipse.fordiac.ide"
