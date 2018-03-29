@@ -123,7 +123,7 @@ abstract public class AbstractSection extends AbstractPropertySection {
 	}
 	
 	protected void executeCommand(Command cmd){
-		if (type != null && commandStack != null) {
+		if (type != null && commandStack != null && cmd.canExecute()) {
 			blockRefresh = true;
 			commandStack.execute(cmd);
 			blockRefresh = false;
