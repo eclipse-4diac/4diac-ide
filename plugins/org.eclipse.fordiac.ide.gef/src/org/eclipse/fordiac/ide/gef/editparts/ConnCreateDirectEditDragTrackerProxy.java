@@ -12,18 +12,19 @@ package org.eclipse.fordiac.ide.gef.editparts;
 
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.gef.utilities.FordiacCursors;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.gef.tools.SelectEditPartTracker;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
 public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
@@ -32,8 +33,8 @@ public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
 		
 		public FordiacConnectionDragCreatinTool() {
 			super();
-			setDefaultCursor(FordiacCursors.CURSOR_PLUG);
-			setDisabledCursor(FordiacCursors.CURSOR_PLUG_NOT);
+			setDefaultCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
+			setDisabledCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_NO));
 		}
 	}
 

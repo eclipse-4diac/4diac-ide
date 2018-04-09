@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.gef.policies;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
-import org.eclipse.fordiac.ide.gef.utilities.FordiacCursors;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -71,7 +70,7 @@ public class ConnectionMovementHighlightEditPolicy extends
 			if (getHostFigure() instanceof InteractionStyleFigure) {
 				style = ((InteractionStyleFigure)getHostFigure()).getIntersectionStyle(pos);
 				if (style == InteractionStyleFigure.REGION_CONNECTION) {
-					getHostFigure().setCursor(FordiacCursors.CURSOR_PLUG);
+					getHostFigure().setCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
 				} else if (style == InteractionStyleFigure.REGION_DRAG) {
 					getHostFigure().setCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_SIZEALL));
 				} else {
