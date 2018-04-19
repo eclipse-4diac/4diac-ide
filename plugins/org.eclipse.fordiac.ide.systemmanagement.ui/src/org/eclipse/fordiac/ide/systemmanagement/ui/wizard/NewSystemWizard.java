@@ -152,7 +152,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 		VersionInfo verInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();			
 		//TODO retrieve this information from some generic location, maybe wizard
 		verInfo.setAuthor("Author");
-		verInfo.setOrganization("4DIAC-Consortium");
+		verInfo.setOrganization("Eclipse 4diac");
 		verInfo.setVersion("1.0");
 		system.getVersionInfo().add(verInfo);
 	}

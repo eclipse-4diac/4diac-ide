@@ -288,12 +288,12 @@
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="3" />
-      <property name="4diac.buildId" value="2017-03-09" />
+      <property name="4diac.buildId" value="2018-03-19" />
       <property name="4diac.versionId" value="1.9.0" />
    </configurations>
 
    <repositories>
-      <repository location="http://download.eclipse.org/4diac/nightly/update" enabled="true" />
+      <repository location="http://download.eclipse.org/4diac/updates/1.9" enabled="true" />
    </repositories>
 
    <preferencesInfo>
