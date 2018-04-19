@@ -17,9 +17,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -55,15 +55,15 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-public class DeploymentCoordinator {
+public class DeploymentCoordinator implements IDeploymentListener {
 	private static DeploymentCoordinator instance;
-	private ArrayList<IDeploymentExecutor> deploymentExecutors = null;
-	private ArrayList<AbstractDeviceManagementCommunicationHandler> deviceMangementCommunicationHandlers = null;
-	private final Hashtable<Device, ArrayList<VarDeclaration>> deployedDeviceProperties = new Hashtable<Device, ArrayList<VarDeclaration>>();
+	private List<IDeploymentExecutor> deploymentExecutors = null;
+	private List<AbstractDeviceManagementCommunicationHandler> deviceMangementCommunicationHandlers = null;
+	private final Map<Device, List<VarDeclaration>> deployedDeviceProperties = new HashMap<>();
 
 	public void addDeviceProperty(Device dev, VarDeclaration property) {
 		if (deployedDeviceProperties.containsKey(dev)) {
-			ArrayList<VarDeclaration> temp = deployedDeviceProperties.get(dev);
+			List<VarDeclaration> temp = deployedDeviceProperties.get(dev);
 			if (!temp.contains(property)) {
 				temp.add(property);
 			}
@@ -75,20 +75,20 @@ public class DeploymentCoordinator {
 	}
 
 	public void setDeviceProperties(Device dev,
-			ArrayList<VarDeclaration> properties) {
+			List<VarDeclaration> properties) {
 		deployedDeviceProperties.put(dev, properties);
 	}
 
 	public void removeDeviceProperty(Device dev, VarDeclaration property) {
 		if (deployedDeviceProperties.containsKey(dev)) {
-			ArrayList<VarDeclaration> temp = deployedDeviceProperties.get(dev);
+			List<VarDeclaration> temp = deployedDeviceProperties.get(dev);
 			if (temp.contains(property)) {
 				temp.remove(property);
 			}
 		}
 	}
 
-	public ArrayList<VarDeclaration> getSelectedDeviceProperties(Device dev) {
+	public List<VarDeclaration> getSelectedDeviceProperties(Device dev) {
 		return deployedDeviceProperties.get(dev);
 	}
 
@@ -103,50 +103,20 @@ public class DeploymentCoordinator {
 		return instance;
 	}
 
-	private final IDeploymentListener listener = new IDeploymentListener() {
-
-		@Override
-		public void responseReceived(String response, String source) {
-			responseReceivedX(response, source);
-		}
-
-		@Override
-		public void postCommandSent(String command, String destination) {
-			postCommandSentX(command, destination);
-		}
-
-		@Override
-		public void postCommandSent(String message) {
-			postCommandSentX(message);
-		}
-
-		@Override
-		public void finished() {
-			finishedX();
-		}
-
-		@Override
-		public void postCommandSent(String info, String destination,
-				String command) {
-			postCommandSentX(info, destination, command);
-		}
-
-	};
-
 	private String getMGR_ID(final Resource resource) {
 		return getMGR_ID(resource.getDevice());
 	}
 
 	public static String getMGR_ID(final Device dev) {
 		for(VarDeclaration varDecl : dev.getVarDeclarations()) {
-			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) {
+			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) { //$NON-NLS-1$
 				String val = DeploymentHelper.getVariableValue(varDecl, dev.getAutomationSystem());
 				if(null != val){				
 					return val;
 				}
 			}
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	class DownloadRunnable implements IRunnableWithProgress {
@@ -198,7 +168,7 @@ public class DeploymentCoordinator {
 				IDeploymentExecutor executor = getDeploymentExecutor(resDepData.res.getDevice(), overrideDevMgmCommHandler);
 
 				if (executor != null) {
-					executor.getDevMgmComHandler().addDeploymentListener(listener);
+					executor.getDevMgmComHandler().addDeploymentListener(getInstance());
 					executor.getDevMgmComHandler().resetTypes();
 					try {
 						deployResource(monitor, resDepData, executor);
@@ -215,7 +185,7 @@ public class DeploymentCoordinator {
 							}
 						});
 					}
-					executor.getDevMgmComHandler().removeDeploymentListener(listener);
+					executor.getDevMgmComHandler().removeDeploymentListener(getInstance());
 
 				} else {
 					printUnsupportedDeviceProfileMessageBox(resDepData.res.getDevice(), resDepData.res);
@@ -227,8 +197,7 @@ public class DeploymentCoordinator {
 					throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 				}
 			}
-			// Thread.sleep(500);
-			finishedX();
+			finished();
 			monitor.done();
 		}
 
@@ -292,11 +261,11 @@ public class DeploymentCoordinator {
 
 		private void configureDevice(final IProgressMonitor monitor, Device device) {
 			IDeploymentExecutor executor = getDeploymentExecutor(device, overrideDevMgmCommHandler);
-			ArrayList<VarDeclaration> parameters = getSelectedDeviceProperties(device);
+			List<VarDeclaration> parameters = getSelectedDeviceProperties(device);
 
 			if (executor != null && parameters != null && parameters.size() > 0) {
 				try {
-					executor.getDevMgmComHandler().addDeploymentListener(listener);
+					executor.getDevMgmComHandler().addDeploymentListener(getInstance());
 					String mgrid = getMGR_ID(device);
 					executor.getDevMgmComHandler().connect(mgrid);
 					for (VarDeclaration varDeclaration : parameters) {
@@ -317,7 +286,7 @@ public class DeploymentCoordinator {
 						//TODO model refactoring - show error message to user
 						Activator.getDefault().logError(e.getMessage(), e);
 					}
-					executor.getDevMgmComHandler().removeDeploymentListener(listener);					
+					executor.getDevMgmComHandler().removeDeploymentListener(getInstance());					
 				}
 			}
 		}
@@ -451,7 +420,7 @@ public class DeploymentCoordinator {
 			if (object instanceof Resource) {
 				resDepData.add(new ResourceDeploymentData((Resource) object));				
 			} else if(object instanceof Device){
-				ArrayList<VarDeclaration> parameters = getSelectedDeviceProperties((Device)object);
+				List<VarDeclaration> parameters = getSelectedDeviceProperties((Device)object);
 				if (parameters != null && parameters.size() > 0) {
 					devices.add((Device)object);
 				}
@@ -507,13 +476,12 @@ public class DeploymentCoordinator {
 		return getDeploymentExecutor(device, null);
 	}
 
-	public static ArrayList<IDeploymentExecutor> loadDeploymentExecutors() {
+	public static List<IDeploymentExecutor> loadDeploymentExecutors() {
 		ArrayList<IDeploymentExecutor> deploymentExecutors = new ArrayList<IDeploymentExecutor>();
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
 				Activator.PLUGIN_ID, "downloadexecutor"); //$NON-NLS-1$
-		for (int i = 0; i < elems.length; i++) {
-			IConfigurationElement element = elems[i];
+		for (IConfigurationElement element : elems) {
 			try {
 				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof IDeploymentExecutor) {
@@ -546,8 +514,7 @@ public class DeploymentCoordinator {
 		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
 				Activator.PLUGIN_ID, "devicemanagementcommunicationhandler"); //$NON-NLS-1$
 
-		for (int i = 0; i < elems.length; i++) {
-			IConfigurationElement element = elems[i];
+		for (IConfigurationElement element : elems) {
 			try {
 				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof AbstractDeviceManagementCommunicationHandler) {
@@ -561,7 +528,7 @@ public class DeploymentCoordinator {
 	}
 
 	/** The listeners. */
-	private final ArrayList<IDeploymentListener> listeners = new ArrayList<IDeploymentListener>();
+	private final List<IDeploymentListener> listeners = new ArrayList<>();
 
 	/**
 	 * Response received x.
@@ -571,12 +538,9 @@ public class DeploymentCoordinator {
 	 * @param source
 	 *            the source
 	 */
-	private void responseReceivedX(final String response, final String source) {
-		for (Iterator<IDeploymentListener> iterator = listeners.iterator(); iterator
-				.hasNext();) {
-			IDeploymentListener listener = iterator.next();
-			listener.responseReceived(response, source);
-		}
+	@Override
+	public void responseReceived(final String response, final String source) {
+		listeners.forEach(l -> l.responseReceived(response, source));
 	}
 
 	/**
@@ -587,21 +551,14 @@ public class DeploymentCoordinator {
 	 * @param destination
 	 *            the destination
 	 */
-	private void postCommandSentX(final String command, final String destination) {
-		for (Iterator<IDeploymentListener> iterator = listeners.iterator(); iterator
-				.hasNext();) {
-			IDeploymentListener listener = iterator.next();
-			listener.postCommandSent(command, destination);
-		}
+	@Override
+	public void postCommandSent(final String command, final String destination) {
+		listeners.forEach(l -> l.postCommandSent(command, destination));
 	}
 
-	private void postCommandSentX(final String info, final String destination,
-			final String command) {
-		for (Iterator<IDeploymentListener> iterator = listeners.iterator(); iterator
-				.hasNext();) {
-			IDeploymentListener listener = iterator.next();
-			listener.postCommandSent(info, destination, command);
-		}
+	@Override
+	public void postCommandSent(final String info, final String destination, final String command) {
+		listeners.forEach(l -> l.postCommandSent(info, destination, command));
 	}
 
 	/**
@@ -610,23 +567,17 @@ public class DeploymentCoordinator {
 	 * @param message
 	 *            the message unformatted
 	 */
-	private void postCommandSentX(final String message) {
-		for (Iterator<IDeploymentListener> iterator = listeners.iterator(); iterator
-				.hasNext();) {
-			IDeploymentListener listener = iterator.next();
-			listener.postCommandSent(message);
-		}
+	@Override
+	public void postCommandSent(final String message) {
+		listeners.forEach(l -> l.postCommandSent(message));
 	}
 
 	/**
 	 * Finished x.
 	 */
-	private void finishedX() {
-		for (Iterator<IDeploymentListener> iterator = listeners.iterator(); iterator
-				.hasNext();) {
-			IDeploymentListener listener = iterator.next();
-			listener.finished();
-		}
+	@Override
+	public void finished() {
+		listeners.forEach(l -> l.finished());
 	}
 
 	/**
@@ -661,14 +612,14 @@ public class DeploymentCoordinator {
 	 */
 	public void enableOutput(
 			AbstractDeviceManagementCommunicationHandler handler) {
-		handler.addDeploymentListener(listener);
+		handler.addDeploymentListener(this);
 	}
 
 	/**
 	 * Flush.
 	 */
 	public void flush() {
-		finishedX();
+		finished();
 	}
 
 	/**
@@ -679,7 +630,7 @@ public class DeploymentCoordinator {
 	 */
 	public void disableOutput(
 			AbstractDeviceManagementCommunicationHandler handler) {
-		handler.removeDeploymentListener(listener);
+		handler.removeDeploymentListener(this);
 	}
 
 }

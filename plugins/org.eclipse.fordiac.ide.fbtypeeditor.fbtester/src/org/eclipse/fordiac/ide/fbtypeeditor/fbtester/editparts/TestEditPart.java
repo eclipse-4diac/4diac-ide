@@ -50,7 +50,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 		SpecificLayerEditPart {
 
 	/** The parent part. */
-	org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart parentPart;
+	protected org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart parentPart;
 
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -58,34 +58,30 @@ public class TestEditPart extends AbstractViewEditPart implements
 		super.activate();
 		Set set = getViewer().getEditPartRegistry().keySet();
 		for (Object object : set) {
-			if (object instanceof IInterfaceElement) {
-				if (((IInterfaceElement) object).equals(getModel().getInterfaceElement())) {
+			if ((object instanceof IInterfaceElement)  && 
+					((IInterfaceElement) object).equals(getModel().getInterfaceElement())) {
+				EditPart part = (EditPart) getViewer().getEditPartRegistry().get(object);
+				if (part instanceof org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart) {
+					parentPart = (org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart) part;
+					IFigure f = parentPart.getFigure();
+					f.addAncestorListener(new AncestorListener() {
 
-					EditPart part = (EditPart) getViewer().getEditPartRegistry().get(
-							object);
-					if (part instanceof org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart) {
-						parentPart = (org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart) part;
-						IFigure f = parentPart.getFigure();
-						f.addAncestorListener(new AncestorListener() {
+						@Override
+						public void ancestorRemoved(IFigure ancestor) {
+							// currently nothing to do here
+						}
 
-							@Override
-							public void ancestorRemoved(IFigure ancestor) {
+						@Override
+						public void ancestorMoved(IFigure ancestor) {
+							refreshPosition();
 
-							}
+						}
 
-							@Override
-							public void ancestorMoved(IFigure ancestor) {
-								refreshPosition();
-
-							}
-
-							@Override
-							public void ancestorAdded(IFigure ancestor) {
-
-							}
-						});
-					}
-
+						@Override
+						public void ancestorAdded(IFigure ancestor) {
+							// currently nothing to do here
+						}
+					});
 				}
 			}
 		}
@@ -111,9 +107,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 	 * Register element.
 	 */
 	protected void registerElement() {
-		// if (isVariable()) {
 		TestingManager.getInstance().addTestElement(getModel());
-		// }
 	}
 
 	/**
@@ -144,10 +138,10 @@ public class TestEditPart extends AbstractViewEditPart implements
 	}
 
 	/** The oldx. */
-	int oldx;
+	protected int oldx;
 
 	/** The oldy. */
-	int oldy;
+	protected int oldy;
 
 	/**
 	 * Update pos.
@@ -205,7 +199,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 		l.setBackgroundColor(org.eclipse.draw2d.ColorConstants.yellow);
 		l.setPreferredSize(150, 20);
 		l.setBorder(new MarginBorder(3, 5, 3, 5));
-		// l.setText(getCastedModel().getMonitoringElementAsString());
+		
 		if (isInput()) {
 			LineBorder lb = new LineBorder() {
 				@Override
@@ -219,28 +213,22 @@ public class TestEditPart extends AbstractViewEditPart implements
 		return l;
 	}
 
-	/** The adapter. */
-	private EContentAdapter adapter;
-
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		if (adapter == null) {
-			adapter = new EContentAdapter() {
-				boolean blockAdapter;
-				
-				@Override
-				public void notifyChanged(final Notification notification) {
-					if(!blockAdapter) {
-						blockAdapter = true;
-						super.notifyChanged(notification);
-						refreshVisuals();
-						blockAdapter = false;
-					}
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			private boolean blockAdapter;
+			
+			@Override
+			public void notifyChanged(final Notification notification) {
+				if(!blockAdapter) {
+					blockAdapter = true;
+					super.notifyChanged(notification);
+					refreshVisuals();
+					blockAdapter = false;
 				}
+			}
 
-			};
-		}
-		return adapter;
+		};
 	}
 
 	@Override
@@ -272,11 +260,10 @@ public class TestEditPart extends AbstractViewEditPart implements
 
 	@Override
 	public void performRequest(Request request) {
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN) {
-			if (!isInput()) {
-				return;
-			}
+		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT
+				|| request.getType() == RequestConstants.REQ_OPEN) && 
+				!isInput()) {
+			return;
 		}
 		super.performRequest(request);
 	}
@@ -307,12 +294,9 @@ public class TestEditPart extends AbstractViewEditPart implements
 	 *          the new value
 	 */
 	public void setValue(String string) {
-		if (isActive()) {
-			if (getFigure() != null) {
-				((Label) getFigure()).setText(string);
-			}
+		if (isActive() &&getFigure() != null) {
+			((Label) getFigure()).setText(string);
 		}
-
 	}
 
 }

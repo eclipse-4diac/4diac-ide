@@ -17,10 +17,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeActionOrderCommand extends Command {
-	protected final ECAction action;
-	protected ECState state;
-	protected int index;
-	protected boolean up;
+	private final ECAction action;
+	private ECState state;
+	private int index;
+	private boolean up;
 
 	public ChangeActionOrderCommand(final ECState state, final ECAction action, boolean up) {
 		this.action = action;
@@ -31,7 +31,8 @@ public class ChangeActionOrderCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return state.getECAction().size() > 1 && ( (up && index > 0) || (!up && index < state.getECAction().size()));
+		return state.getECAction().size() > 1 && ( 
+				(up && index > 0) || (!up && index < (state.getECAction().size()-1)));
 	}
 
 	@Override

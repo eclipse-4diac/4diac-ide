@@ -14,10 +14,10 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.application.commands.AbstractConnectionCreateCommand;
-import org.eclipse.fordiac.ide.application.commands.AdapterConnectionCreateCommand;
-import org.eclipse.fordiac.ide.application.commands.DataConnectionCreateCommand;
-import org.eclipse.fordiac.ide.application.commands.EventConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;

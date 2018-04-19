@@ -132,7 +132,7 @@ public class AlgorithmsSection extends ECCSection {
 					cmd = new ChangeCommentCommand(data, value.toString());
 				}
 				if((null != cmd) && (null != commandStack)){
-					commandStack.execute(cmd);
+					executeCommand(cmd);
 					algorithmViewer.refresh(data);
 					if(cmd instanceof ChangeAlgorithmTypeCommand){
 						data = ((ChangeAlgorithmTypeCommand)cmd).getNewAlgorithm();

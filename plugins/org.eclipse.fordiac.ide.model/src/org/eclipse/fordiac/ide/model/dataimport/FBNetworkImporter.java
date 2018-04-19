@@ -112,7 +112,7 @@ class FBNetworkImporter {
 			
 			if (entry instanceof FBTypePaletteEntry) {
 				fb.setPaletteEntry(entry);
-				fb.setInterface(EcoreUtil.copy(fb.getFBType().getInterfaceList()));
+				fb.setInterface(EcoreUtil.copy(fb.getType().getInterfaceList()));
 			} else {
 //TODO model refactoring - think about where and if such markers should be created maybe move to validator
 //				createFBTypeProblemMarker(IMarker.SEVERITY_ERROR, Messages.FBTImporter_REQUIRED_FB_TYPE_EXCEPTION + typeFbElement.getNodeValue() + " not available");

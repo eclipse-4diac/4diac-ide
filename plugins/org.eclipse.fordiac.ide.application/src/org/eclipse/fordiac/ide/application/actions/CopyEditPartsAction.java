@@ -27,6 +27,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 /**
@@ -48,7 +50,10 @@ public class CopyEditPartsAction extends WorkbenchPartAction implements
 	public CopyEditPartsAction(IEditorPart editor) {
 		super(editor);
 		setId(ActionFactory.COPY.getId());
-		setText(COPY);
+		setText(COPY);		
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages(); 
+		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
+	    setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY_DISABLED));
 	}
 
 	/*
@@ -58,7 +63,7 @@ public class CopyEditPartsAction extends WorkbenchPartAction implements
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		return templates != null;
+		return templates != null && !templates.isEmpty();
 	}
 
 	/*

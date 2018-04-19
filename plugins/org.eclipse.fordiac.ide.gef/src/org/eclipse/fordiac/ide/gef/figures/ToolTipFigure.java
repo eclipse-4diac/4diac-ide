@@ -102,9 +102,11 @@ public class ToolTipFigure extends Figure {
 	private static VarDeclaration getTypevariable(VarDeclaration var) {
 		if(var.eContainer() instanceof Device){
 			Device dev = (Device)var.eContainer();
-			for(VarDeclaration typeVar : dev.getDeviceType().getVarDeclaration()){
-				if(typeVar.getName().equals(var.getName())){
-					return typeVar;
+			if(null != dev.getType()) {
+				for(VarDeclaration typeVar : dev.getType().getVarDeclaration()){
+					if(typeVar.getName().equals(var.getName())){
+						return typeVar;
+					}
 				}
 			}
 		} else if(null != var.getFBNetworkElement() && var.getFBNetworkElement().getType() instanceof FBType){

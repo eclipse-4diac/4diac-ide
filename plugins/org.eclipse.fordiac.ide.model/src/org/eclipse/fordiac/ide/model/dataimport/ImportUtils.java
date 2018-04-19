@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2016  Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008 - 2018  Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,15 +7,15 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl
+ *  Martijn Rooker,Gerhard Ebenhofer, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,12 +43,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- * The Class ImportUtils.
- * 
- * @author Martijn Rooker, martijn.rooker@profactor.at
- */
 public class ImportUtils {
+	
+	private ImportUtils() {
+		//empty private constructor so that this utility class can not be insantiated
+	}
 
 	/**
 	 * This method parses Parameters.
@@ -214,9 +213,6 @@ public class ImportUtils {
 		} else {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_InputEventNameNotDefined);
 		}
-		// Node type = map.getNamedItem("Type");
-		// if (type != null)
-		// e.setType(type.getNodeValue());
 		Node comment = map.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (comment != null) {
 			e.setComment(comment.getNodeValue());
@@ -233,8 +229,8 @@ public class ImportUtils {
 	 * @return the int value
 	 */
 	public static int convertCoordinate(final double value) {
-		double lineHeight = 20;
-		return new Double(lineHeight / 100.0 * value).intValue();
+		double lineHeight = 20;  //TODO make this resolution dependant and font size dependant
+		return (int)(lineHeight / 100.0 * value);
 	}
 
 	/**
@@ -245,8 +241,7 @@ public class ImportUtils {
 	 */
 	public static int parseConnectionValue(String value) {
 		try {
-			double temp = ImportUtils.convertCoordinate(Double.parseDouble(value));
-			return (int) temp;
+			return (int) ImportUtils.convertCoordinate(Double.parseDouble(value));
 		} catch (Exception ex) {
 			return 0;
 		}
@@ -288,15 +283,7 @@ public class ImportUtils {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public static void copyFile(final File in, final File out) throws IOException {
-		FileInputStream fis = new FileInputStream(in);
-		FileOutputStream fos = new FileOutputStream(out);
-		byte[] buf = new byte[1024];
-		int i = 0;
-		while ((i = fis.read(buf)) != -1) {
-			fos.write(buf, 0, i);
-		}
-		fis.close();
-		fos.close();
+		Files.copy(in.toPath(), out.toPath(), StandardCopyOption.REPLACE_EXISTING);
 	}
 
 	public static void copyFile(final File in, final org.eclipse.core.resources.IFile out)
@@ -307,7 +294,8 @@ public class ImportUtils {
 			out.getParent().refreshLocal(IFolder.DEPTH_ZERO, null);
 		}
 
-		copyFile(in, out.getLocation().toFile());
+		Files.copy(in.toPath(), out.getLocation().toFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
+		
 		try {
 			out.getParent().refreshLocal(IResource.DEPTH_ONE, null);
 		} catch (CoreException e) {

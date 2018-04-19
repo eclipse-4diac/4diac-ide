@@ -150,6 +150,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 								OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), mgrid, this, true);
 							}							
 						}
+						executor.getDevMgmComHandler().removeDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
 						DeploymentCoordinator.getInstance().flush();
 						DeploymentCoordinator.getInstance().disableOutput(executor.getDevMgmComHandler());
 					}else{

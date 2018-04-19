@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.application.commands.DataConnectionCreateCommand;
-import org.eclipse.fordiac.ide.application.commands.LinkConstraints;
 import org.eclipse.fordiac.ide.application.commands.ReconnectDataConnectionCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateConnectionRequest;
@@ -38,7 +38,7 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 	@Override
 	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {		
 		DataConnectionCreateCommand cmd = new DataConnectionCreateCommand(getParentNetwork());
-		cmd.setSource((InterfaceEditPart) getHost());
+		cmd.setSource(((InterfaceEditPart) getHost()).getModel());
 		if (cmd.getSource() instanceof VarDeclaration) {
 			if (!LinkConstraints.isWithConstraintOK(((VarDeclaration)cmd.getSource()))) {
 				return null; // Elements which are not connected by a with construct are not allowed to be connected

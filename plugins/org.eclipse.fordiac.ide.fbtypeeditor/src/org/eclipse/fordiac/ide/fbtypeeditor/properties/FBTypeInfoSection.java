@@ -39,7 +39,7 @@ public class FBTypeInfoSection extends CompilableTypeInfoSection {
 	@Override
 	protected LibraryElement getInputType(Object input) {
 		if(input instanceof FBTypeEditPart){
-			return ((FBTypeEditPart) input).getCastedModel();	
+			return ((FBTypeEditPart) input).getModel();	
 		}
 		if(input instanceof FBTypeRootEditPart){
 				return ((FBTypeRootEditPart) input).getCastedFBTypeModel();

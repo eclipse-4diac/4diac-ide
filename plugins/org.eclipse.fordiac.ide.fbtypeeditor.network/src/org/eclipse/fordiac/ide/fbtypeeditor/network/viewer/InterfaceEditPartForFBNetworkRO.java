@@ -1,23 +1,29 @@
 /*******************************************************************************
- * Copyright (c) 2015 fortiss GmbH
+ * Copyright (c) 2018 fortiss GmbH
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Alois Zoitl - initial contribution and API
+ * Contributors:
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring.editparts;
+package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
-import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.Request;
+import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 
-public class MonitoringAdapterInterfaceEditPart extends InterfaceEditPartForFBNetwork {
+public class InterfaceEditPartForFBNetworkRO extends InterfaceEditPartForFBNetwork {
+
+	public InterfaceEditPartForFBNetworkRO() {
+		super();
+		setConnectable(false);
+	}
 	
 	@Override
-	public DragTracker getDragTracker(Request request) {
-		return new org.eclipse.gef.tools.DragEditPartsTracker(this);
+	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
+		return null;
 	}
 
 }

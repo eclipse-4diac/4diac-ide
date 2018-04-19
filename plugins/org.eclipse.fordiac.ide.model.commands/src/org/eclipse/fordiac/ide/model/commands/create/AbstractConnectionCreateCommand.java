@@ -10,10 +10,8 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch, Filip Anderen, Monika Wenger
  *   - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.commands;
+package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.application.ApplicationPlugin;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -80,21 +78,12 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 
 	@Override
 	public boolean canUndo() {
-		ApplicationPlugin.getDefault();
 		return getEditor().equals(Abstract4DIACUIPlugin.getCurrentActiveEditor());
 	}
 	
 	@Override
 	public abstract boolean canExecute();
 	
-	/**
-	 * Sets the source.
-	 * 
-	 * @param source the new source
-	 */
-	public void setSource(final InterfaceEditPart source) {
-		setSource(source.getModel());
-	}
 	
 	public void setSource(final IInterfaceElement source) {
 		this.source = source;
@@ -103,15 +92,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	public IInterfaceElement getSource(){
 		return source;
 	}
-	
-	/**
-	 * Sets the target.
-	 * 
-	 * @param target the new target
-	 */
-	public void setDestination(final InterfaceEditPart target) {
-		setDestination(target.getModel());
-	}
+
 	
 	public void setDestination(final IInterfaceElement target) {
 		this.destination = target;

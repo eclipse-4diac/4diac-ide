@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.ui.views;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -53,14 +54,14 @@ public class DeviceParametersDialog extends org.eclipse.jface.dialogs.Dialog {
 		this.device = device;
 	}
 
-	private ArrayList<VarDeclaration> selectedProperties = new ArrayList<VarDeclaration>();
+	private List<VarDeclaration> selectedProperties = new ArrayList<VarDeclaration>();
 
 	/**
 	 * Gets the selected properties.
 	 * 
 	 * @return the selected properties
 	 */
-	public ArrayList<VarDeclaration> getSelectedProperties() {
+	public List<VarDeclaration> getSelectedProperties() {
 		return selectedProperties;
 	}
 
@@ -71,8 +72,7 @@ public class DeviceParametersDialog extends org.eclipse.jface.dialogs.Dialog {
 		main.setLayout(new GridLayout(1, false));
 		main.setLayoutData(new GridData(GridData.FILL_BOTH));
 		if (device != null) {
-			selectedProperties = DeploymentCoordinator.getInstance()
-					.getSelectedDeviceProperties(device);
+			selectedProperties = DeploymentCoordinator.getInstance().getSelectedDeviceProperties(device);
 
 			for (VarDeclaration varDecl : device.getVarDeclarations()) {
 				Button bt = new Button(main, SWT.CHECK);

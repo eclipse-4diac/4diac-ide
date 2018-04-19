@@ -17,13 +17,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeTransitionPriorityCommand extends Command {
-	protected final ECTransition transition;
-	protected final ECState state;
-	protected final boolean up;
-	protected final int oldStateIndex;
-	protected final int newStateIndex;
-	protected final int oldECCTransitionIndex;
-	protected int newECCTransitionIndex;
+	private final ECTransition transition;
+	private final ECState state;
+	private final boolean up;
+	private final int oldStateIndex;
+	private final int newStateIndex;
+	private final int oldECCTransitionIndex;
+	private int newECCTransitionIndex;
 
 	public ChangeTransitionPriorityCommand(final ECState state, final ECTransition transition, boolean up) {
 		this.transition = transition;
@@ -36,7 +36,8 @@ public class ChangeTransitionPriorityCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return state.getOutTransitions().size() > 1 && ( (up && oldStateIndex > 0) || (!up && oldStateIndex < state.getOutTransitions().size()));
+		return state.getOutTransitions().size() > 1 && ((up && oldStateIndex > 0) || 
+				(!up && oldStateIndex < (state.getOutTransitions().size() - 1)));
 	}
 
 	@Override

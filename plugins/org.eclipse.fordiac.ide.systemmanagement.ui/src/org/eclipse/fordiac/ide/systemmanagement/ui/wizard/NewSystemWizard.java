@@ -42,7 +42,7 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 public class NewSystemWizard extends Wizard implements INewWizard {
 
 	/** The page. */
-	NewSystemPage page;
+	private NewSystemPage page;
 
 	/**
 	 * Instantiates a new new system wizard.
@@ -131,15 +131,13 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 			// otherwise the palette is not correctly initialzed
 			AutomationSystem system = SystemManager.INSTANCE.createAutomationSystem(project);
 
-			VersionInfo verInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();			
-			//TODO retrieve this information from some generic location, maybe wizard
-			verInfo.setAuthor("Author");
-			verInfo.setOrganization("4DIAC-Consortium");
-			verInfo.setVersion("1.0");
-			system.getVersionInfo().add(verInfo);
-
+			setupVersionInfo(system);
 			SystemManager.INSTANCE.addSystem(system);
+			
+			NewApplicationWizard.performApplicationCreation(system, page.getInitialApplicationName(), page.getOpenApplication(), getShell());
+			
 			SystemManager.INSTANCE.saveSystem(system);
+			
 			return system;
 
 		} catch (CoreException e) {
@@ -148,6 +146,15 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 			monitor.done();
 		}
 		return null;
+	}
+
+	private static void setupVersionInfo(AutomationSystem system) {
+		VersionInfo verInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();			
+		//TODO retrieve this information from some generic location, maybe wizard
+		verInfo.setAuthor("Author");
+		verInfo.setOrganization("Eclipse 4diac");
+		verInfo.setVersion("1.0");
+		system.getVersionInfo().add(verInfo);
 	}
 
 	/*
@@ -159,6 +166,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 	@Override
 	public void init(final IWorkbench workbench,
 			final IStructuredSelection selection) {
+		//currently nothing to do here
 	}
 
 }

@@ -25,7 +25,7 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.viewers.TextCellEditor;
 
-public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPart {
+public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
 	protected DirectEditManager manager;
 	
 	@Override

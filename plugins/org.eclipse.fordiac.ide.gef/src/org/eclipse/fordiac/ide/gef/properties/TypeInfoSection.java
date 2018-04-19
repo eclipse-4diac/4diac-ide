@@ -260,7 +260,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 					cmd = new ChangeRemarksCommand(data, value.toString());
 				}
 				if(null != cmd){
-					commandStack.execute(cmd);
+					executeCommand(cmd);
 					versionViewer.refresh(data);
 				}
 				

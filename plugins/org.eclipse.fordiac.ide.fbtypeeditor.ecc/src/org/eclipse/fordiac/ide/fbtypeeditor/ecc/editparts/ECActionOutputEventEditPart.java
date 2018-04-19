@@ -152,7 +152,6 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart{
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			// getCastedModel().getPosition().eAdapters().remove(adapter);
 			getAction().eAdapters().remove(adapter);
 
 			FBType fbType = ECActionHelpers.getFBType(getAction());
@@ -181,27 +180,24 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart{
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
 				new INamedElementRenameEditPolicy() {
 					@Override
-					protected Command getDirectEditCommand(
-							final DirectEditRequest request) {
+					protected Command getDirectEditCommand(final DirectEditRequest request) {
 						if (getHost() instanceof AbstractDirectEditableEditPart) {
-							List<Event> events = ECActionHelpers
-									.getOutputEvents(ECActionHelpers
-											.getFBType(getAction()));
-
-							int selected = ((Integer) request.getCellEditor()
-									.getValue()).intValue();
-							Event ev = null;
-							if (selected < events.size()) {
-								ev = events.get(selected);
+							Integer value = (Integer)request.getCellEditor().getValue();
+							if(null != value) {
+								int selected = value.intValue(); 
+								List<Event> events = ECActionHelpers.getOutputEvents(ECActionHelpers.getFBType(getAction()));							
+								Event ev = null;
+								if (0 <= selected && selected < events.size()) {
+									ev = events.get(selected);
+								}
+								return new ChangeOutputCommand(getAction(), ev);
 							}
-							return new ChangeOutputCommand(getAction(), ev);
 						}
 						return null;
 					}
 
 					@Override
-					protected void showCurrentEditValue(
-							final DirectEditRequest request) {
+					protected void showCurrentEditValue( final DirectEditRequest request) {
 						// handled by the direct edit manager
 					}
 				});
@@ -288,13 +284,10 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart{
 		protected void paintFigure(Graphics graphics) {	
 				Display display = Display.getCurrent();	
 				Rectangle boundingRect = getBounds();
-
 				Point topLeft = boundingRect.getTopLeft();	
-				Point bottomRight = boundingRect.getBottomRight();
-				
+				Point bottomRight = boundingRect.getBottomRight();				
 				Color first = FigureUtilities.lighter(getBackgroundColor());
-				Pattern pattern = new Pattern(display, topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, 
-						first, getBackgroundColor());	
+				Pattern pattern = new Pattern(display, topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, first, getBackgroundColor());	
 				graphics.setBackgroundPattern(pattern);	
 				graphics.fillRectangle(boundingRect);	
 				graphics.setBackgroundPattern(null);	

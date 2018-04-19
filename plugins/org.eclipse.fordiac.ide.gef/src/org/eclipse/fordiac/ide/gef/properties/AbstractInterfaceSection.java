@@ -56,9 +56,9 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 	protected Text nameText;
 	protected Text commentText;
 	private TableViewer inputViewer;
-	private final String NAME_PROPERTY = "name"; //$NON-NLS-1$
-	private final String VALUE_PROPERTY = "value"; //$NON-NLS-1$
-	private final String COMMENT_PROPERTY = "comment"; //$NON-NLS-1$
+	private static final String NAME_PROPERTY = "name"; //$NON-NLS-1$
+	private static final String VALUE_PROPERTY = "value"; //$NON-NLS-1$
+	private static final String COMMENT_PROPERTY = "comment"; //$NON-NLS-1$
 	
 	public AbstractInterfaceSection() {}
 	
@@ -166,7 +166,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 					}
 				}
 				if((null != cmd) && (null != commandStack)){
-					commandStack.execute(cmd);
+					executeCommand(cmd);
 					inputViewer.refresh(data);
 				}
 				

@@ -16,6 +16,10 @@ import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.resource.impl.ResourceSetBasedResourceDescriptions;
 import org.eclipse.xtext.resource.impl.SimpleResourceDescriptionsBasedContainerManager;
+import org.eclipse.xtext.ui.editor.model.IResourceForEditorInputFactory;
+import org.eclipse.xtext.ui.editor.model.ResourceForIEditorInputFactory;
+import org.eclipse.xtext.ui.resource.IResourceSetProvider;
+import org.eclipse.xtext.ui.resource.SimpleResourceSetProvider;
 import org.eclipse.xtext.ui.shared.Access;
 
 /**
@@ -46,5 +50,15 @@ public class StructuredTextUiModule extends AbstractStructuredTextUiModule {
   
   public Class<? extends IValueConverterService> bindIValueConverterService() {
     return StructuredTextValueConverterService.class;
+  }
+  
+  @Override
+  public Class<? extends IResourceForEditorInputFactory> bindIResourceForEditorInputFactory() {
+    return ResourceForIEditorInputFactory.class;
+  }
+  
+  @Override
+  public Class<? extends IResourceSetProvider> bindIResourceSetProvider() {
+    return SimpleResourceSetProvider.class;
   }
 }

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.properties;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.IDeploymentExecutor;
@@ -107,7 +107,7 @@ public class DeviceInterfaceSection extends AbstractDevResInterfaceSection {
 	
 	private static String[] getAvailableProfileNames() {
 		if (null == profileNames) {
-			ArrayList<IDeploymentExecutor> deploymentExecutors = DeploymentCoordinator.loadDeploymentExecutors();
+			List<IDeploymentExecutor> deploymentExecutors = DeploymentCoordinator.loadDeploymentExecutors();
 			String newProfileNames[] = new String[deploymentExecutors.size()];
 			int i = 0;		
 			for (IDeploymentExecutor idepExec : deploymentExecutors) {

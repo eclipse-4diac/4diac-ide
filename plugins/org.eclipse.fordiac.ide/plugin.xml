@@ -31,7 +31,7 @@
          </property>
          <property
                name="windowImages"
-               value="platform:/plugin/org.eclipse.fordiac.ide.images/images/fordiac16.png,platform:/plugin/org.eclipse.fordiac.ide.images/images/fordiac32.png,platform:/plugin/org.eclipse.fordiac.ide.images/images/fordiac48.png,platform:/plugin/org.eclipse.fordiac.ide.images/images/fordiac256.png">
+               value="icons/fordiac16.png,icons/fordiac32.png,icons/fordiac48.png,icons/fordiac256.png">
          </property>
          <property
                name="startupProgressRect"
@@ -147,6 +147,10 @@
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.jdt.*" /> 
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.pde.*" />
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.externaltools.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.emf.mwe2.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ant.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.emf.*"/> 
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtext.ui.shared.*"/>
    </extension>
 
 </plugin>

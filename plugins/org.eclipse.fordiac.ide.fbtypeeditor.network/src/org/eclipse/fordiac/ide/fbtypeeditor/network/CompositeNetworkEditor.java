@@ -180,7 +180,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			if (untypedInput.getContent() instanceof CompositeFBType) {
 				fbType = (CompositeFBType) untypedInput.getContent();
-				model = fbType.getFBNetwork();
+				setModel(fbType.getFBNetwork());
 				getModel().eAdapters().add(adapter);
 				configurePalette(untypedInput);
 			}

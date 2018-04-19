@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2014 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2012, 2014, 2018 Profactor GmbH, fortiss GmbH
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,6 +13,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -23,16 +24,23 @@ import org.eclipse.swt.graphics.Point;
 /**
  * The Class FBEditPart.
  */
-public class FBEditPart extends
+public class TesterFBEditPart extends
 		org.eclipse.fordiac.ide.application.editparts.FBEditPart {
 
 	/** The control listener. */
 	private ControlListener controlListener;
 
 	
-	public FBEditPart(ZoomManager zoomManager) {
+	public TesterFBEditPart(ZoomManager zoomManager) {
 		super(zoomManager);
 	}
+	
+	@Override
+	protected EContentAdapter createContentAdapter() {
+		//Provide an empty content adpater as we don't want to react in the tester to the classical FBN editing changes
+		return new EContentAdapter();
+	}
+
 	
 	@Override
 	protected void refreshName() {

@@ -44,23 +44,23 @@ public class LinkConnectionRouter extends AbstractRouter {
 		connection.translateToRelative(startPoint);
 		connection.translateToRelative(endPoint);
 		
-		
-		Rectangle segmentBounds = ((SegmentEditPart)linkEditPart.getSource()).getFigure().getBounds();
-		
-		if(startPoint.x < segmentBounds.x) { 
-			//the devices connection point lays left of the segment's x range we need to insert a bend point
-			startPoint.x = segmentBounds.x;
-			startPoint.y = segmentBounds.getCenter().y;
+		if(null != linkEditPart.getSource()) {
+			Rectangle segmentBounds = ((SegmentEditPart)linkEditPart.getSource()).getFigure().getBounds();
 			
-			bendPoint = new Point(endPoint.x, startPoint.y);
-			
-		}else if (segmentBounds.right() < startPoint.x){
-			//the devices connection point lays right of the segment's x range we need to insert a bend point
-			
-			startPoint.x = segmentBounds.right();
-			startPoint.y = segmentBounds.getCenter().y;
-			
-			bendPoint = new Point(endPoint.x, startPoint.y);
+			if(startPoint.x < segmentBounds.x) { 
+				//the devices connection point lays left of the segment's x range we need to insert a bend point
+				startPoint.x = segmentBounds.x;
+				startPoint.y = segmentBounds.getCenter().y;
+				
+				bendPoint = new Point(endPoint.x, startPoint.y);
+				
+			}else if (segmentBounds.right() < startPoint.x){
+				//the devices connection point lays right of the segment's x range we need to insert a bend point				
+				startPoint.x = segmentBounds.right();
+				startPoint.y = segmentBounds.getCenter().y;
+				
+				bendPoint = new Point(endPoint.x, startPoint.y);
+			}
 		}
 		
 		points.addPoint(startPoint);

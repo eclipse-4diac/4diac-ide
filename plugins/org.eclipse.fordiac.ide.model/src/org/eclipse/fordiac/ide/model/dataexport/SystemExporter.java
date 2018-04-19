@@ -146,7 +146,7 @@ public class SystemExporter {
 	private void addSegment(List<Segment> segmentsList) {
 		for (Segment segment : segmentsList) {
 			Element segmentElement = dom.createElement(LibraryElementTags.SEGMENT_ELEMENT);
-			CommonElementExporter.setNameTypeCommentAttribute(segmentElement, segment, segment.getSegmentType());
+			CommonElementExporter.setNameTypeCommentAttribute(segmentElement, segment, segment.getType());
 			segmentElement.setAttribute(LibraryElementTags.X_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(segment.getX()).toString());
 			segmentElement.setAttribute(LibraryElementTags.Y_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(segment.getY()).toString());
 			segmentElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(segment.getWidth()).toString());

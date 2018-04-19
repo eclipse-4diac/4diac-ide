@@ -13,6 +13,7 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -82,8 +83,8 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	protected void doReconnectSource() {
 		deleteConnectionCmd = new DeleteConnectionCommand((Connection) request.getConnectionEditPart().getModel());
 		connectionCreateCmd = createConnectionCreateCommand();
-		connectionCreateCmd.setSource((InterfaceEditPart) request.getTarget());
-		connectionCreateCmd.setDestination((InterfaceEditPart) request.getConnectionEditPart().getTarget());
+		connectionCreateCmd.setSource(((InterfaceEditPart) request.getTarget()).getModel());
+		connectionCreateCmd.setDestination(((InterfaceEditPart) request.getConnectionEditPart().getTarget()).getModel());
 		deleteConnectionCmd.execute();
 		connectionCreateCmd.execute();
 	}
@@ -91,8 +92,8 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	protected void doReconnectTarget() {
 		deleteConnectionCmd = new DeleteConnectionCommand((Connection)request.getConnectionEditPart().getModel());
 		connectionCreateCmd = createConnectionCreateCommand();
-		connectionCreateCmd.setSource((InterfaceEditPart) request.getConnectionEditPart().getSource());
-		connectionCreateCmd.setDestination((InterfaceEditPart) request.getTarget());
+		connectionCreateCmd.setSource(((InterfaceEditPart) request.getConnectionEditPart().getSource()).getModel());
+		connectionCreateCmd.setDestination(((InterfaceEditPart) request.getTarget()).getModel());
 		deleteConnectionCmd.execute();
 		connectionCreateCmd.execute();
 	}

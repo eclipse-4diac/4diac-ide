@@ -33,7 +33,7 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor,
 		ISaveablesSource {
 
 	/** The content. */
-	File fContent;
+	private File fContent;
 
 	/**
 	 * Instantiates a new input.
@@ -98,10 +98,8 @@ class Input implements IEditableContent, ITypedElement, IStreamContentAccessor,
 	 */
 	@Override
 	public void setContent(byte[] newContent) {
-		try {
-			FileOutputStream fo = new FileOutputStream(fContent);
+		try (FileOutputStream fo = new FileOutputStream(fContent);){			
 			fo.write(newContent);
-			fo.close();
 		} catch (Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}

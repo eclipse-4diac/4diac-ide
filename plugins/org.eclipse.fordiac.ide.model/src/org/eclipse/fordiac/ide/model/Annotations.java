@@ -127,15 +127,7 @@ public enum Annotations {
 	public SystemConfiguration getSystemConfiguration(Device d) {
 		return (SystemConfiguration)d.eContainer();
 	}
-	
-	public DeviceType getDeviceType(Device d) {
-		LibraryElement type = d.getType();
-		if(null != type){
-			return (DeviceType) type; 
-		}
-		return null;
-	}
-	
+		
 	public Resource getResourceNamed(Device d, String name) {
 		for (Resource res : d.getResource()) {			
 			if (res.getName().equals(name)) {
@@ -177,14 +169,6 @@ public enum Annotations {
 
 	
 	//*** FB ***//
-	public FBType getFBType(FB fb) {
-		LibraryElement type = fb.getType();
-		if(null != type){
-			return (FBType) type; 
-		}
-		return null;
-	}
-	
 	public boolean isResourceFB(FB fb) {
 		//A fB is a resource FB if the FB is in the fbnetwork of a resource and
 		// the mapping is null or as preperation when we allow to map resource FBs 
@@ -575,13 +559,12 @@ public enum Annotations {
 	
 	public FBType getType(AdapterFB afb) {
 		FBType retVal = null;
-		if (null != afb.getPaletteEntry()) {
-			if (afb.getPaletteEntry() instanceof AdapterTypePaletteEntry) {
-				if (afb.isPlug()) {
-					retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getAdapterType().getPlugType();
-				} else {
-					retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getAdapterType().getSocketType();
-				}
+		if ((null != afb.getPaletteEntry()) && (afb.getPaletteEntry() instanceof AdapterTypePaletteEntry)  &&
+				(null != afb.getAdapterDecl())){
+			if (afb.isPlug()) {
+				retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getAdapterType().getPlugType();
+			} else {
+				retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getAdapterType().getSocketType();
 			}
 		}
 		return retVal;

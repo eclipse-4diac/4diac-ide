@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Notification;
@@ -37,6 +38,17 @@ import org.eclipse.swt.graphics.RGB;
 public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
 	private static final String ERROR_IN_CREATE_FIGURE = Messages.AbstractViewEditPart_ERROR_createFigure;
 	protected DirectEditManager manager;
+	
+	private EContentAdapter adapter;
+
+	private EContentAdapter getContentAdapter() {
+		if(null == adapter) {
+			adapter = createContentAdapter();
+			Assert.isNotNull(adapter);
+		}
+		return adapter;
+	}
+	
 	private final EContentAdapter iNamedElementContentAdapter = new EContentAdapter() {
 
 		@Override
@@ -91,13 +103,13 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
 	}
 
 	/**
-	 * Needs to return an EContentAdapter which is registered on the model
+	 * Needs to return an EContentAdapter which will be registered on the model
 	 * objects and gets informed if something change.
 	 * 
 	 * @return EContentAdapter the EContentAdapter of the derived class (must
 	 *         not be null).
 	 */
-	protected abstract EContentAdapter getContentAdapter();
+	protected abstract EContentAdapter createContentAdapter();
 
 	/**
 	 * If an View needs to be informed for changes in the PreferencePage (e.g.

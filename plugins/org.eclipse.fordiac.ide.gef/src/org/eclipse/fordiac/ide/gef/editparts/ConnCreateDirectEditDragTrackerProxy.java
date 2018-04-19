@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 fortiss GmbH
+ * Copyright (c) 2016, 2018 fortiss GmbH
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,30 +18,31 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.gef.tools.SelectEditPartTracker;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
 public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
 	
+	private static final class FordiacConnectionDragCreatinTool extends ConnectionDragCreationTool {
+		
+		public FordiacConnectionDragCreatinTool() {
+			super();
+			setDefaultCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
+			setDisabledCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_NO));
+		}
+	}
+
 	private ConnectionDragCreationTool connectionTool;
 	private SelectEditPartTracker editPartTracker;
 	
 	public ConnCreateDirectEditDragTrackerProxy(EditPart editPart) {
-	    this.connectionTool = new ConnectionDragCreationTool(){
-	    	@Override
-			protected boolean handleButtonDown(int button){
-				super.handleButtonDown(button);
-//				if (button == 1 && getCurrentViewer() != null
-//						&& getTargetEditPart() != null) {
-//					getCurrentViewer().select(getTargetEditPart());
-//				}
-				return true;
-			}	    	
-	    };
+	    this.connectionTool = new FordiacConnectionDragCreatinTool();
 	    this.editPartTracker = new SelectEditPartTracker(editPart);
 	}
 

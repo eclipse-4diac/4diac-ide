@@ -13,9 +13,9 @@
 package org.eclipse.fordiac.ide.subapptypeeditor.policies;
 
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.commands.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeFBNetworkLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateRequest;

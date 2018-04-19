@@ -15,13 +15,13 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.commands.AbstractConnectionCreateCommand;
-import org.eclipse.fordiac.ide.application.commands.AdapterConnectionCreateCommand;
-import org.eclipse.fordiac.ide.application.commands.DataConnectionCreateCommand;
-import org.eclipse.fordiac.ide.application.commands.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -115,8 +115,8 @@ public class CreateConnectionSection extends AbstractSection {
 					cmd = new DataConnectionCreateCommand(nw);
 				}
 				if(null != cmd){
-					cmd.setSource(editParts.get(0));
-					cmd.setDestination(editParts.get(1));
+					cmd.setSource(editParts.get(0).getModel());
+					cmd.setDestination(editParts.get(1).getModel());
 					executeCommand(cmd);
 				}
 			}

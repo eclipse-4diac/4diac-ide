@@ -57,7 +57,7 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected List createSelectionHandles() {
-		List list = new ArrayList();
+		List list = new ArrayList(1);
 		list.add(new ModifiedMoveHandle((GraphicalEditPart) getHost(), insets, arc));
 		return list;
 	}

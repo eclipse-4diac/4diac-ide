@@ -93,24 +93,21 @@ public class StateSection extends AbstractECSection {
 		getWidgetFactory().createCLabel(nameComposite, "Name:"); 
 		nameText = createGroupText(nameComposite, true);
 		nameText.addVerifyListener(new IdentifierVerifyListener());
-		nameText.addModifyListener(new ModifyListener() {
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
-				addContentAdapter();
-			}
+		nameText.addListener(SWT.Modify, e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
+			addContentAdapter();
 		});
+		
 		Composite commentComposite = getWidgetFactory().createComposite(parent);
 		commentComposite.setLayout(new GridLayout(2, false));
 		commentComposite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(commentComposite, "Comment:"); 
 		commentText = createGroupText(commentComposite, true);	
-		commentText.addModifyListener(new ModifyListener() {
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
-				addContentAdapter();
-			}
+		commentText.addListener(SWT.Modify, e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+			addContentAdapter();
 		});
 	}
 	
@@ -118,12 +115,9 @@ public class StateSection extends AbstractECSection {
 		actionNew = getWidgetFactory().createButton(actionButtonComp, "", SWT.FLAT); //$NON-NLS-1$
 		actionNew.setToolTipText("Create new action");
 		actionNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
-		actionNew.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				executeCommand(new CreateECActionCommand(LibraryElementFactory.eINSTANCE.createECAction(), getType()));
-				actionViewer.refresh();
-			}
+		actionNew.addListener(SWT.Selection, e -> {
+			executeCommand(new CreateECActionCommand(LibraryElementFactory.eINSTANCE.createECAction(), getType()));
+			actionViewer.refresh();
 		});
 	}
 	
@@ -131,13 +125,10 @@ public class StateSection extends AbstractECSection {
 		actionDelete = getWidgetFactory().createButton(actionButtonComp, "", SWT.PUSH); //$NON-NLS-1$
 		actionDelete.setToolTipText("Delete selected action");
 		actionDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));	
-		actionDelete.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				ECAction action = (ECAction)((IStructuredSelection) actionViewer.getSelection()).getFirstElement();
-				executeCommand(new DeleteECActionCommand(action));
-				actionViewer.refresh();
-			}
+		actionDelete.addListener(SWT.Selection, e -> {
+			ECAction action = (ECAction)((IStructuredSelection) actionViewer.getSelection()).getFirstElement();
+			executeCommand(new DeleteECActionCommand(action));
+			actionViewer.refresh();
 		});
 	}
 	
@@ -184,18 +175,12 @@ public class StateSection extends AbstractECSection {
 	private void createTransitionDownButton(Composite buttonComp) {
 		transitionDown = getWidgetFactory().createButton(buttonComp, "SWT.ARROW |SWT.UP", SWT.ARROW |SWT.DOWN);
 		transitionDown.setToolTipText("Move transition down");
-		transitionDown.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				Object selection = ((TreeSelection)transitionsOutViewer.getSelection()).getFirstElement();
-				if(selection instanceof ECTransition){
-					executeCommand(new ChangeTransitionPriorityCommand(getType(), (ECTransition) selection, false));
-					transitionsOutViewer.refresh();
-					transitionsOutViewer.setSelection(new StructuredSelection(selection));
-				}
-			}
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
+		transitionDown.addListener(SWT.Selection, e -> {
+			Object selection = ((TreeSelection)transitionsOutViewer.getSelection()).getFirstElement();
+			if(selection instanceof ECTransition){
+				executeCommand(new ChangeTransitionPriorityCommand(getType(), (ECTransition) selection, false));
+				transitionsOutViewer.refresh();
+				transitionsOutViewer.setSelection(new StructuredSelection(selection));
 			}
 		});
 	}
@@ -203,36 +188,25 @@ public class StateSection extends AbstractECSection {
 	private void createTransitionUpButton(Composite buttonComp) {
 		transitionUp = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW |SWT.UP); //$NON-NLS-1$
 		transitionUp.setToolTipText("Move transition up");	
-		transitionUp.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((TreeSelection)transitionsOutViewer.getSelection()).getFirstElement();
-				if(selection instanceof ECTransition){
-					executeCommand(new ChangeTransitionPriorityCommand(getType(), (ECTransition) selection, true));
-					transitionsOutViewer.refresh();
-					transitionsOutViewer.setSelection(new StructuredSelection(selection));
-				}
+		transitionUp.addListener(SWT.Selection, e -> {
+			Object selection = ((TreeSelection)transitionsOutViewer.getSelection()).getFirstElement();
+			if(selection instanceof ECTransition){
+				executeCommand(new ChangeTransitionPriorityCommand(getType(), (ECTransition) selection, true));
+				transitionsOutViewer.refresh();
+				transitionsOutViewer.setSelection(new StructuredSelection(selection));
 			}
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {}
 		});
 	}
 
 	private void createActionDownButton(Composite actionButtonComp) {
 		actionDown = getWidgetFactory().createButton(actionButtonComp, "Down", SWT.ARROW |SWT.DOWN);
 		actionDown.setToolTipText("Move action down");
-		actionDown.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				Object selection = ((TreeSelection)actionViewer.getSelection()).getFirstElement();
-				if(selection instanceof ECAction){
-					executeCommand(new ChangeActionOrderCommand(getType(), (ECAction) selection, false));
-					transitionsOutViewer.refresh();
-					actionViewer.setSelection(new StructuredSelection(selection));
-				}
-			}
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
+		actionDown.addListener(SWT.Selection, e -> {
+			Object selection = ((TreeSelection)actionViewer.getSelection()).getFirstElement();
+			if(selection instanceof ECAction){
+				executeCommand(new ChangeActionOrderCommand(getType(), (ECAction) selection, false));
+				actionViewer.refresh();
+				actionViewer.setSelection(new StructuredSelection(selection));
 			}
 		});
 	}
@@ -240,18 +214,13 @@ public class StateSection extends AbstractECSection {
 	private void createActionUpButton(Composite actionButtonComp) {
 		actionUp = getWidgetFactory().createButton(actionButtonComp, "", SWT.ARROW |SWT.UP); //$NON-NLS-1$
 		actionUp.setToolTipText("Move action up");	
-		actionUp.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((TreeSelection)actionViewer.getSelection()).getFirstElement();
-				if(selection instanceof ECAction){
-					executeCommand(new ChangeActionOrderCommand(getType(), (ECAction) selection, true));
-					actionViewer.refresh();
-					actionViewer.setSelection(new StructuredSelection(selection));
-				}
+		actionUp.addListener(SWT.Selection, e -> {
+			Object selection = ((TreeSelection)actionViewer.getSelection()).getFirstElement();
+			if(selection instanceof ECAction){
+				executeCommand(new ChangeActionOrderCommand(getType(), (ECAction) selection, true));
+				actionViewer.refresh();
+				actionViewer.setSelection(new StructuredSelection(selection));
 			}
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {}
 		});
 	}
 
@@ -277,5 +246,6 @@ public class StateSection extends AbstractECSection {
 
 	@Override
 	protected void setInputInit() {
+		//currently not needed
 	}
 }

@@ -76,6 +76,9 @@ public class ChangeInterfaceOrderCommand extends Command {
 	
 	@Override
 	public void execute() {
+		if(newIndex > interfaces.indexOf(selection)) {
+			newIndex--;
+		}
 		redo();
 	}
 	
@@ -83,7 +86,7 @@ public class ChangeInterfaceOrderCommand extends Command {
 	public void redo() {
 		 @SuppressWarnings("unchecked")
 		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
-		temp.move(newIndex, selection);					
+		temp.move(newIndex, selection);
 	}
 	
 	@Override

@@ -23,6 +23,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.figures.FBTypeFigure;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -53,16 +54,13 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart{
 				Object feature = notification.getFeature();
 				if((LibraryElementPackage.eINSTANCE.getVersionInfo().equals(feature)) || 
 						(LibraryElementPackage.eINSTANCE.getVersionInfo_Version().equals(feature))){
-					getCastedFigure().updateVersionInfoLabel();
+					getFigure().updateVersionInfoLabel();
 				}
 
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
+				Display.getDefault().asyncExec( () -> {
 						if((null != getFigure()) && (getFigure().isShowing())){
 							refresh();
 						}
-					}
 				});
 			}
 		}
@@ -71,17 +69,18 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart{
 	@Override
 	public void activate() {
 		super.activate();
-		getCastedModel().eAdapters().add(adapter);
+		getModel().eAdapters().add(adapter);
 	}
 
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		getCastedModel().eAdapters().remove(adapter);
+		getModel().eAdapters().remove(adapter);
 	}
 
-	public FBType getCastedModel() {
-		return (FBType) getModel();
+	@Override
+	public FBType getModel() {
+		return (FBType) super.getModel();
 	}
 
 	FBTypeEditPart(ZoomManager zoomManager) {
@@ -91,7 +90,7 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart{
 	
 	@Override
 	protected IFigure createFigure() {
-		return new FBTypeFigure((FBType) getModel(), zoomManager);
+		return new FBTypeFigure(getModel(), zoomManager);
 	}
 
 	@Override
@@ -99,54 +98,50 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart{
 	}
 
 	@Override
-	protected void createEditPolicies() {
-		super.createEditPolicies();
-	}
-	
-	@Override
 	public void refreshName() {
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				getNameLabel().setText(getINamedElement().getName());
-			}
-		});
+		Display.getDefault().asyncExec(() -> getNameLabel().setText(getINamedElement().getName()) );
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected List getModelChildren() {
 		if (eic == null) {
-			eic = new EventInputContainer(getCastedModel());
+			eic = new EventInputContainer(getModel());
 		}
 		if (eoc == null) {
-			eoc = new EventOutputContainer(getCastedModel());
+			eoc = new EventOutputContainer(getModel());
 		}
 		if (vic == null) {
-			vic = new VariableInputContainer(getCastedModel());
+			vic = new VariableInputContainer(getModel());
 		}	
 		if (socketcont == null) {
-			socketcont = new SocketContainer(getCastedModel());
+			socketcont = new SocketContainer(getModel());
 		}		
 		if (voc == null) {
-			voc = new VariableOutputContainer(getCastedModel());
+			voc = new VariableOutputContainer(getModel());
 		}
 		if (plugcont == null) {
-			plugcont = new PlugContainer(getCastedModel());
+			plugcont = new PlugContainer(getModel());
 		}
-		ArrayList<Object> temp = new ArrayList<Object>();
+		ArrayList<Object> temp = new ArrayList<>(6);
 		temp.add(eic);
 		temp.add(eoc);
 		temp.add(vic);
-		temp.add(socketcont);
+		if(!(getModel() instanceof AdapterFBType)) {
+			//adaptertypes cannot have sockets
+			temp.add(socketcont);
+		}
 		temp.add(voc);
-		temp.add(plugcont);
+		if(!(getModel() instanceof AdapterFBType)) {
+			//adaptertypes cannot have plugs
+			temp.add(plugcont);
+		}
 		return temp;
-		// return super.getModelChildren();
 	}
 
-	private FBTypeFigure getCastedFigure() {
-		return (FBTypeFigure) getFigure();
+	@Override
+	public FBTypeFigure getFigure() {
+		return (FBTypeFigure) super.getFigure();
 	}
 
 	@Override
@@ -154,22 +149,22 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart{
 		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceContainerEditPart) {
 			if (childEditPart.getModel() instanceof EventInputContainer) {
-				getCastedFigure().getInputEvents().add(child);
+				getFigure().getInputEvents().add(child);
 			}
 			if (childEditPart.getModel() instanceof EventOutputContainer) {
-				getCastedFigure().getOutputEvents().add(child);
+				getFigure().getOutputEvents().add(child);
 			}
 			if (childEditPart.getModel() instanceof VariableInputContainer) {
-				getCastedFigure().getInputVariables().add(child);
+				getFigure().getInputVariables().add(child);
 			}
 			if (childEditPart.getModel() instanceof VariableOutputContainer) {
-				getCastedFigure().getOutputVariables().add(child);
+				getFigure().getOutputVariables().add(child);
 			}
 			if (childEditPart.getModel() instanceof SocketContainer) {
-				getCastedFigure().getSockets().add(child);
+				getFigure().getSockets().add(child);
 			}
 			if (childEditPart.getModel() instanceof PlugContainer) {
-				getCastedFigure().getPlugs().add(child);
+				getFigure().getPlugs().add(child);
 			}
 		} else {
 			super.addChildVisual(childEditPart, index);
@@ -181,22 +176,22 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart{
 		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceContainerEditPart) {
 			if (childEditPart.getModel() instanceof EventInputContainer) {
-				getCastedFigure().getInputEvents().remove(child);
+				getFigure().getInputEvents().remove(child);
 			}
 			if (childEditPart.getModel() instanceof EventOutputContainer) {
-				getCastedFigure().getOutputEvents().remove(child);
+				getFigure().getOutputEvents().remove(child);
 			}
 			if (childEditPart.getModel() instanceof VariableInputContainer) {
-				getCastedFigure().getInputVariables().remove(child);
+				getFigure().getInputVariables().remove(child);
 			}
 			if (childEditPart.getModel() instanceof VariableOutputContainer) {
-				getCastedFigure().getOutputVariables().remove(child);
+				getFigure().getOutputVariables().remove(child);
 			}
 			if (childEditPart.getModel() instanceof SocketContainer) {
-				getCastedFigure().getSockets().remove(child);
+				getFigure().getSockets().remove(child);
 			}
 			if (childEditPart.getModel() instanceof PlugContainer) {
-				getCastedFigure().getPlugs().remove(child);
+				getFigure().getPlugs().remove(child);
 			}
 		} else {
 			super.removeChildVisual(childEditPart);
@@ -241,11 +236,11 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart{
 
 	@Override
 	public INamedElement getINamedElement() {
-		return getCastedModel();
+		return getModel();
 	}
 
 	@Override
 	public Label getNameLabel() {
-		return getCastedFigure().getTypeNameLabel();
+		return getFigure().getTypeNameLabel();
 	}
 }
