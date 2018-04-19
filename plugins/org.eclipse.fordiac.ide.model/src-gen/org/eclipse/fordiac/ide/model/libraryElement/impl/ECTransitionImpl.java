@@ -17,6 +17,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -275,22 +276,16 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * @generated
 	 */
 	public String getConditionText() {
-		String retVal = new String();
-		
-		Event event = getConditionEvent();
-		String expression = getConditionExpression();
-		
-		if(event != null){
-			retVal = event.getName();
-		}
-		if(expression !=  null){
-			if(expression.equals("1")){
-				retVal = expression;
-			}else if (!expression.equals("")){
-				retVal += "[" + expression + "]";
-			}
-		}		
-		return retVal;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getConditionText(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ECC getECC() {
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getECC(this);
 	}
 
 	/**

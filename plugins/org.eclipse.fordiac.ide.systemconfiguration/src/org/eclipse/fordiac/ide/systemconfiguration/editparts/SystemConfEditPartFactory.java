@@ -56,10 +56,13 @@ public class SystemConfEditPartFactory  extends Abstract4diacEditPartFactory {
 		}
 		if (modelElement instanceof Resource) {
 			return new ResourceEditPart();
-		}	
-		else if (modelElement instanceof Value){
+		}
+		if (modelElement instanceof Value){
 			return new ValueEditPart();
  		}
+		if (modelElement instanceof ResourceContainer) {
+			return new ResourceContainerEditPart();
+		}
 		throw createEditpartCreationException(modelElement);
 
 	}

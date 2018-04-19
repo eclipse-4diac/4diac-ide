@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.ui.controls.editors.I4diacModelEditor;
 import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -71,7 +72,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWithFlyoutPalette
-		implements ITabbedPropertySheetPageContributor {
+		implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
@@ -88,13 +89,6 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	public DiagramEditorWithFlyoutPalette() {
 		// setEditDomain(new DefaultEditDomain(this));
 	}
-
-	/**
-	 * Gets the diagram model.
-	 * 
-	 * @return the model to be shown in the editor
-	 */
-	public abstract Object getModel();
 
 	//needed for tabbed property sheets
 	@Override public CommandStack getCommandStack() {

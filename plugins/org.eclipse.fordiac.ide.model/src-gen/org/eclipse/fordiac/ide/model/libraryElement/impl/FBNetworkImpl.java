@@ -24,7 +24,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
@@ -32,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 /**
@@ -162,15 +160,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * @generated
 	 */
 	public void addConnection(final Connection connection) {
-		if (connection instanceof EventConnection) {
-			getEventConnections().add((EventConnection)connection);
-		}
-		if (connection instanceof DataConnection) {
-			getDataConnections().add((DataConnection)connection);
-		}
-		if (connection instanceof AdapterConnection) {
-			getAdapterConnections().add((AdapterConnection)connection);
-		}
+		org.eclipse.fordiac.ide.model.Annotations.GEN.addConnection(this, connection);
 	}
 
 	/**
@@ -179,15 +169,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * @generated
 	 */
 	public void removeConnection(final Connection connection) {
-		if (connection instanceof EventConnection) {
-			getEventConnections().remove(connection);
-		}
-		if (connection instanceof DataConnection) {
-			getDataConnections().remove(connection);
-		}
-		if (connection instanceof AdapterConnection) {
-			getAdapterConnections().remove(connection);
-		}
+		org.eclipse.fordiac.ide.model.Annotations.GEN.removeConnection(this, connection);
 	}
 
 	/**
@@ -196,7 +178,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * @generated
 	 */
 	public boolean isApplicationNetwork() {
-		return eContainer() instanceof Application;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isApplicationNetwork(this);
 	}
 
 	/**
@@ -205,7 +187,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * @generated
 	 */
 	public boolean isSubApplicationNetwork() {
-		return eContainer() instanceof SubApp;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isSubApplicationNetwork(this);
 	}
 
 	/**
@@ -214,7 +196,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * @generated
 	 */
 	public boolean isResourceNetwork() {
-		return eContainer() instanceof Resource;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceNetwork(this);
 	}
 
 	/**
@@ -223,7 +205,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * @generated
 	 */
 	public boolean isCFBTypeNetwork() {
-		return eContainer() instanceof CompositeFBType;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isCFBTypeNetwork(this);
 	}
 
 	/**
@@ -232,15 +214,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * @generated
 	 */
 	public AutomationSystem getAutomationSystem() {
-		if(isApplicationNetwork() || isSubApplicationNetwork()){
-			return getApplication().getAutomationSystem();
-		}
-		if(isResourceNetwork()){
-			return ((Resource)eContainer()).getAutomationSystem();
-		}else if(isCFBTypeNetwork()){
-			return ((CompositeFBType)eContainer()).getPaletteEntry().getGroup().getPallete().getAutomationSystem();
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
 	}
 
 	/**
@@ -249,14 +223,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * @generated
 	 */
 	public Application getApplication() {
-		if(isApplicationNetwork()){
-			// no null check is need as this is already done in isApplicationNetwork
-			return (Application)eContainer();
-		}else if(isSubApplicationNetwork()){
-			return ((SubApp) eContainer()).getFbNetwork().getApplication();
-		}
-		return null;		
-		
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getApplication(this);
 	}
 
 	/**
@@ -265,12 +232,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * @generated
 	 */
 	public FB getFBNamed(final String name) {
-		for (FBNetworkElement element : getNetworkElements()) {
-			if((element instanceof FB) && (element.getName().equals(name))){
-				return (FB)element;
-			}
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNamed(this, name);
 	}
 
 	/**
@@ -279,20 +241,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * @generated
 	 */
 	public SubApp getSubAppNamed(final String name) {
-		for (FBNetworkElement element : getNetworkElements()) {
-			if(element instanceof SubApp){ 
-				if(element.getName().equals(name)){
-					return (SubApp)element; 
-				}
-				
-				SubApp retVal = ((SubApp)element).getSubAppNetwork().getSubAppNamed(name);
-				if(retVal != null){
-					return retVal;
-				}
-			}
-		}	
-		
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSubAppNamed(this, name);
 	}
 
 	/**
@@ -301,12 +250,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * @generated
 	 */
 	public FBNetworkElement getElementNamed(final String name) {
-		for (FBNetworkElement element : getNetworkElements()) {
-			if(element.getName().equals(name)){
-				return element;
-			}
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getElementNamed(this, name);
 	}
 
 	/**

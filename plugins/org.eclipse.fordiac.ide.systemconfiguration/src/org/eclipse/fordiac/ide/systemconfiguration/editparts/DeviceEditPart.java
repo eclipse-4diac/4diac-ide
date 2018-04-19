@@ -20,8 +20,6 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.GridData;
-import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
@@ -35,7 +33,6 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.draw2d.FordiacFigureUtilities;
@@ -44,6 +41,7 @@ import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteDeviceEditPolicy;
@@ -60,7 +58,6 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Pattern;
 import org.eclipse.swt.widgets.Display;
@@ -68,6 +65,7 @@ import org.eclipse.swt.widgets.Display;
 public class DeviceEditPart extends AbstractPositionableElementEditPart implements NodeEditPart {
 	/** necessary that the gradient pattern can be scaled accordingly */
 	private ZoomManager zoomManager;
+	private ResourceContainer resContainer;
 	
 	DeviceEditPart(ZoomManager zoomManager) {
 		super();
@@ -76,43 +74,25 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
-	public void activate() {
-		if (!isActive()) {
-			super.activate();
-			((Notifier) getModel()).eAdapters().add(getContentAdapter());
-		}
-	}
-
-	@Override
-	public void deactivate() {
-		if (isActive()) {
-			super.deactivate();
-			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
-		}
-	}
-	
-	private EContentAdapter contentAdapter=new EContentAdapter(){
-		@Override 
-		public void notifyChanged(Notification notification) { 
-			Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)){
-				backgroundColorChanged(getFigure());
-			} else {			
-				super.notifyChanged(notification);
-				refreshChildren();
-				refreshTargetConnections();
-			} 
-		}
-	};
-
-	@Override
 	public Device getModel() {
 		return (Device) super.getModel();
 	}
 	
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		return contentAdapter;
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter(){
+			@Override 
+			public void notifyChanged(Notification notification) { 
+				Object feature = notification.getFeature();
+				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)){
+					backgroundColorChanged(getFigure());
+				} else {			
+					super.notifyChanged(notification);
+					refreshChildren();
+					refreshTargetConnections();
+				} 
+			}
+		};
 	}
 
 	@Override
@@ -135,7 +115,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof DeviceInterfaceEditPart) {
 			getFigure().getDataInputs().add(child);
-		} else if (childEditPart instanceof ResourceEditPart) {
+		} else if (childEditPart instanceof ResourceContainerEditPart) {
 			getFigure().getContentPane().add(child);
 		} else {
 			super.addChildVisual(childEditPart, index);
@@ -147,11 +127,17 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof DeviceInterfaceEditPart) {
 			getFigure().getDataInputs().remove(child);
-		} else if (childEditPart instanceof ResourceEditPart) {
+		} else if (childEditPart instanceof ResourceContainerEditPart) {
 			getFigure().getContentPane().remove(child);
 		} else {
 			super.removeChildVisual(childEditPart);
 		}
+	}
+	
+	@Override
+	public void setModel(Object model) {
+		super.setModel(model);
+		resContainer = new ResourceContainer((Device)model);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -159,7 +145,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	protected List getModelChildren() {
 		ArrayList elements = new ArrayList();
 		elements.addAll(getModel().getVarDeclarations());
-		elements.addAll(getModel().getResource());
+		elements.add(resContainer);
 		return elements;
 	}
 
@@ -219,7 +205,6 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 
 	private class DeviceFigure extends Shape implements InteractionStyleFigure {
 		private final Label instanceNameLabel = new Label();
-		private Figure main = new Figure();
 		private Figure dataInputs = new Figure();
 		private Figure contentPane;
 
@@ -241,7 +226,9 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 					Pattern pattern = new Pattern(display,topLeft.x,topLeft.y,bottomRight.x,bottomRight.y,first,getBackgroundColor());
 					graphics.setBackgroundPattern(pattern);
 					graphics.fillRoundRectangle(getBounds(),getCornerDimensions().width,getCornerDimensions().height);
-					graphics.setBackgroundPattern(null);pattern.dispose();first.dispose();
+					graphics.setBackgroundPattern(null);
+					pattern.dispose();
+					first.dispose();
 				}
 			};
 
@@ -249,88 +236,51 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 				setBackgroundColor(ColorConstants.white);
 				this.setFillXOR(true);
 				
-				GridLayout gridLayout = new GridLayout(1, true);
-				gridLayout.verticalSpacing = 2;
-				gridLayout.marginHeight = 0;
-				gridLayout.marginWidth = 0;
-				setLayoutManager(gridLayout);
-				GridLayout mainLayout = new GridLayout(1, false);
-				mainLayout.marginHeight = 0;
-				mainLayout.marginWidth = 0;
-				mainLayout.horizontalSpacing = 0;
-				mainLayout.verticalSpacing = -1;
-				GridData mainLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
-					| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-				main.setLayoutManager(mainLayout);
-				add(main);
-				setConstraint(main, mainLayoutData);
-				createInstanceNameLabel(main);
+				setLayoutManager(new ToolbarLayout());
 				
+				createInstanceNameLabel(this);				
 
 				IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
 				int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
 				bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
-				GridLayout bottomLayout = new GridLayout(1, false);
-				bottomLayout.marginHeight = 4;
-				bottomLayout.marginWidth = 1;
-				bottomLayout.horizontalSpacing = 2;
+				ToolbarLayout bottomLayout = new ToolbarLayout();
+				bottomLayout.setStretchMinorAxis(true);
 				bottom.setLayoutManager(bottomLayout);
-				GridData bottomLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
-						| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);	
 				bottom.setOutline(false);
-				
-				ToolbarLayout bottomInputValuesFigureLayout = new ToolbarLayout(false);
-				bottomInputValuesFigureLayout.setStretchMinorAxis(true);
-				GridData bottomInputsFigureLayoutData = new GridData(
-						GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
-				bottomInputsFigureLayoutData.verticalAlignment = SWT.TOP;
-				main.add(bottom);
-				main.setConstraint(bottom, bottomLayoutData);
+				add(bottom);
 				
 				createDeviceInfoSection(bottom);
 				
 				ToolbarLayout bottomInputsLayout = new ToolbarLayout(false);
 				bottomInputsLayout.setStretchMinorAxis(true);
 				dataInputs.setLayoutManager(bottomInputsLayout);
-				GridData bottomInputsLayoutData = new GridData(
-						GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
 				dataInputs.setOpaque(false);
 				bottom.add(dataInputs);
-				bottom.setConstraint(dataInputs, bottomInputsLayoutData);
 				createContentPane(bottom);
 			}
 
 			private void createInstanceNameLabel(Figure parent) {
-				GridData instanceNameLayout = new GridData();
-				instanceNameLayout.grabExcessHorizontalSpace = true;
-				instanceNameLayout.horizontalAlignment = SWT.CENTER;
 				instanceNameLabel.setText(getINamedElement().getName());
 				instanceNameLabel.setTextAlignment(PositionConstants.CENTER);
 				instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DEFAULT_FONT));
 				parent.add(instanceNameLabel);
-				parent.setConstraint(instanceNameLabel, instanceNameLayout);
 			}
 
 			private void createDeviceInfoSection(Figure parent) {
-				GridLayout deviceInfoLayout = new GridLayout();
-				deviceInfoLayout.marginHeight = 0;
-				deviceInfoLayout.horizontalSpacing = 2;
-				deviceInfoLayout.verticalSpacing = 2;
+				ToolbarLayout deviceInfoLayout = new ToolbarLayout();
+				deviceInfoLayout.setStretchMinorAxis(true);
 				
 				Figure deviceInfo = new Figure();
 				deviceInfo.setLayoutManager(deviceInfoLayout);
-				Label l = new Label(getModel().getType().getName());
+				LibraryElement type = getModel().getType();
+				String typeName = (null != type) ? type.getName() : "Type not set!";
+				Label l = new Label(typeName);
 				deviceInfo.add(l);
 				l.setTextAlignment(PositionConstants.CENTER);
 				l.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
-				deviceInfo.setConstraint(l, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 				l.setBorder(new MarginBorder(0, 0, 10, 0));
 				
 				parent.add(deviceInfo);
-				GridData deviceInfoLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
-				deviceInfoLayoutData.verticalAlignment = SWT.TOP;
-				deviceInfoLayoutData.horizontalSpan = 2;
-				parent.setConstraint(deviceInfo, deviceInfoLayoutData);
 				
 				deviceInfo.setBorder(new LineBorder() {	
 					@Override
@@ -349,15 +299,23 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			}
 	
 			private void createContentPane(RoundedRectangle container) {
-				GridData contentPaneLyoutData = new GridData(
-						GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
-				contentPaneLyoutData.verticalAlignment = SWT.TOP;
-				contentPaneLyoutData.horizontalSpan = 2;
-				contentPaneLyoutData.grabExcessHorizontalSpace = true;
 				contentPane = new Figure();
 				contentPane.setLayoutManager(new ToolbarLayout());
 				container.add(contentPane);
-				container.setConstraint(contentPane, contentPaneLyoutData);
+				contentPane.setBorder(new LineBorder() {	
+					@Override
+					public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
+						tempRect.setBounds(getPaintRectangle(figure, insets));
+						if (1 == (getWidth() & 1)) {
+							tempRect.height--;
+						}
+						tempRect.shrink(getWidth() / 2, getWidth() / 2);
+						graphics.setLineWidth(getWidth());
+						graphics.setBackgroundColor(bottom.getBackgroundColor());
+						FordiacFigureUtilities.paintEtchedBorder(graphics,
+								new Rectangle(tempRect.x - 3, tempRect.y, tempRect.width + 5, 3));
+					}
+				});
 			}
 
 			public Label getName() {
@@ -370,10 +328,12 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	
 			@Override
 			protected void fillShape(final Graphics graphics) {
+				//Nothing to do here right now
 			}
 	
 			@Override
 			protected void outlineShape(final Graphics graphics) {
+				//Nothing to do here right now
 			}
 
 			public Figure getDataInputs() {

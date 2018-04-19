@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceCommentCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceNameCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateTransactionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteInputPrimitiveCommand;
@@ -22,6 +21,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteOutpu
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteTransactionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.contentprovider.ServiceSequenceContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
@@ -95,7 +95,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		commentText.addModifyListener(new ModifyListener() {
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
-				executeCommand(new ChangeSequenceCommentCommand(commentText.getText(), getType()));
+				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 				addContentAdapter();
 			}
 		});

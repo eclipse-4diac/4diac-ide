@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.draw2d.ChopboxAnchor;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
@@ -35,6 +36,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteSegmentEditPolicy;
@@ -50,6 +52,7 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Pattern;
@@ -70,27 +73,25 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		return new SegmentFigure();
 	}
 
-	private final EContentAdapter adapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(Notification notification) {
-			Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)){
-				backgroundColorChanged(getFigure());
-			} 
-			if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature) ||
-					LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature) ||
-					LibraryElementPackage.eINSTANCE.getSegment_Width().equals(feature)) {
-				refreshVisuals();
-			}
-			super.notifyChanged(notification);
-			refreshSourceConnections();
-		}
-
-	};
-
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		return adapter;
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(Notification notification) {
+				Object feature = notification.getFeature();
+				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)){
+					backgroundColorChanged(getFigure());
+				} 
+				if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature) ||
+						LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature) ||
+						LibraryElementPackage.eINSTANCE.getSegment_Width().equals(feature)) {
+					refreshVisuals();
+				}
+				super.notifyChanged(notification);
+				refreshSourceConnections();
+			}
+
+		};
 	}
 
 	@Override
@@ -153,9 +154,6 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		});
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new SegmentNodeEditPolicy());
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteSegmentEditPolicy());
-		// installEditPolicy(EditPolicyRoles.CONNECTION_HANDLES_ROLE,
-		// new TopBottomConnectionHandleEditPolicy());
-
 	}
 	
 	@Override
@@ -176,7 +174,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		private final RoundedRectangle rect = new RoundedRectangle() {
 			@Override
 			protected void outlineShape(Graphics graphics) {
-
+				//nothing to do here right now
 			}
 
 			@Override
@@ -240,6 +238,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			instanceNameLabel.setText(getINamedElement().getName());
 			instanceNameLabel.setTextAlignment(PositionConstants.RIGHT);
 			instanceNameLabel.setLabelAlignment(PositionConstants.RIGHT);
+			instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DEFAULT_FONT));
 			GridLayout gridLayout = new GridLayout(1, true);
 			gridLayout.verticalSpacing = 2;
 			gridLayout.marginHeight = 0;
@@ -263,13 +262,22 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			rect.add(instanceNameLabel);
 			instanceNameLabel.setBorder(new MarginBorder(4, 0, 4, 0));
 
-			GridLayout rectLayout = new GridLayout(2, true);
+			GridLayout rectLayout = new GridLayout(3, false);
 			rectLayout.marginHeight = 2;
 			rectLayout.marginWidth = 0;
 			rect.setLayoutManager(rectLayout);
 			rect.setConstraint(instanceNameLabel, instanceNameLayout);
-			rect.add(new Label(": " + getModel().getSegmentType().getName()));
-
+			rect.add(new Label(":"));  //$NON-NLS-1$
+			LibraryElement type = getModel().getType();
+			String typeName = (null != type) ? type.getName() : "Type not set!";
+			Label typeLabel =  new Label(typeName);
+			rect.add(typeLabel);
+			typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
+			rect.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL));
+			typeLabel.setTextAlignment(PositionConstants.LEFT);
+			typeLabel.setLabelAlignment(PositionConstants.LEFT);
+			typeLabel.setBackgroundColor(ColorConstants.blue);
+			typeLabel.setOpaque(false);
 		}
 
 		public Label getName() {
@@ -278,10 +286,12 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 
 		@Override
 		protected void fillShape(final Graphics graphics) {
+			//nothing to do here right now			
 		}
 
 		@Override
 		protected void outlineShape(final Graphics graphics) {
+			//nothing to do here right now			
 		}
 
 		@Override

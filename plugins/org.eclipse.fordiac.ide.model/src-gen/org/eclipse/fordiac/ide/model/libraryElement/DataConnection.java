@@ -26,28 +26,20 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 public interface DataConnection extends Connection {
 	/**
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Source</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return (VarDeclaration)super.getSource();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getDataSource(this);'"
 	 * @generated
 	 */
-	VarDeclaration getSource();
+	VarDeclaration getDataSource();
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Destination</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return (VarDeclaration)super.getDestination();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getDataDestination(this);'"
 	 * @generated
 	 */
-	VarDeclaration getDestination();
+	VarDeclaration getDataDestination();
 
 } // DataConnection

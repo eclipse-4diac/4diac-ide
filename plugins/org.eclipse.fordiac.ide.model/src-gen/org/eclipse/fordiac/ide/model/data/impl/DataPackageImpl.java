@@ -193,7 +193,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		isInited = true;
 
 		// Initialize simple dependencies
-		EcorePackage.eINSTANCE.eClass();
 		XMLTypePackage.eINSTANCE.eClass();
 
 		// Obtain or create and register interdependencies

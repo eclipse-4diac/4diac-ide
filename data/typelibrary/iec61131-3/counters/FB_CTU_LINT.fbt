@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="counters (up-counter)" Name="FB_CTU_LINT">
+  <Identification Description="Copyright (c) 2011 TU Wien ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61131-3" Classification="standard counters"/>
+  <VersionInfo Author="Monika Wenger" Date="2011-06-21" Organization="TU Wien ACIN" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Service Request" Name="REQ" Type="Event">
+        <With Var="CU"/>
+        <With Var="PV"/>
+        <With Var="R"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Confirmation of Requested Service" Name="CNF" Type="Event">
+        <With Var="Q"/>
+        <With Var="CV"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Count up (Rising Edge Detection)" InitialValue="" Name="CU" Type="BOOL"/>
+      <VarDeclaration Comment="Reset" InitialValue="" Name="R" Type="BOOL"/>
+      <VarDeclaration Comment="Preset value" InitialValue="" Name="PV" Type="LINT"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Output" InitialValue="" Name="Q" Type="BOOL"/>
+      <VarDeclaration Comment="Count value" InitialValue="" Name="CV" Type="LINT"/>
+    </OutputVars>
+  </InterfaceList>
+  <Service Comment="counters (up-counter)" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+</FBType>

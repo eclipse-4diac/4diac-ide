@@ -50,13 +50,11 @@ public class CreateServiceSequenceCommand extends Command {
 		if (fbType.getService().getLeftInterface() == null) {
 			leftInterface = LibraryElementFactory.eINSTANCE.createServiceInterface();
 			leftInterface.setName(leftInterfaceName);
-			leftInterface.setComment("");
 			fbType.getService().setLeftInterface(leftInterface);
 		}
 		if (fbType.getService().getRightInterface() == null) {
 			rightInterface = LibraryElementFactory.eINSTANCE.createServiceInterface();
 			rightInterface.setName(rightInterfaceName);
-			rightInterface.setComment("");
 			fbType.getService().setRightInterface(rightInterface);
 		}
 		fbType.getService().getServiceSequence().add(sq);

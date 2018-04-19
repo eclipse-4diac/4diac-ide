@@ -53,21 +53,12 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	public FordiacExportWizard() {
 		IDialogSettings settings = Activator.getDefault().getDialogSettings();
 
-		IDialogSettings dialogSettings = settings.getSection(FORDIAC_EXPORT_SECTION);
-		if (dialogSettings == null) {
-			dialogSettings = settings.addNewSection(FORDIAC_EXPORT_SECTION);
+		if (null == settings.getSection(FORDIAC_EXPORT_SECTION)) {
+			//section does not exist create a section
+			 settings.addNewSection(FORDIAC_EXPORT_SECTION);
 		}
 		setDialogSettings(settings);
 		setWindowTitle(Messages.FordiacExportWizard_LABEL_Window_Title);
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.wizard.Wizard#canFinish()
-	 */
-	@Override
-	public boolean canFinish() {
-		return super.canFinish();
 	}
 
 	private SelectFBTypesWizardPage page;
@@ -97,8 +88,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		
 	   final IExportFilter filter = page.getSelectedExportFilter();
 		
-       IRunnableWithProgress op = new IRunnableWithProgress() {
-			
+       IRunnableWithProgress op = new IRunnableWithProgress() {			
     	   
 			@SuppressWarnings("rawtypes")
 			@Override

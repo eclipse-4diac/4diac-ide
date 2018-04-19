@@ -29,7 +29,7 @@ import org.eclipse.gef.requests.BendpointRequest;
 
 public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 
-	ECTransition transition;
+	private ECTransition transition;
 
 	public TransitionBendPointEditPolicy(ECTransition transition) {
 		super();
@@ -62,10 +62,7 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 	 */
 	@SuppressWarnings("rawtypes")
 	protected List createSelectionHandles() {
-		List list = new ArrayList();
-		list = createHandlesForUserBendpoints();
-		return list;
-
+		return createHandlesForUserBendpoints();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -77,29 +74,23 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 		int bendPointIndex = 0;
 		Point currBendPoint = null;
 
-		if (bendPoints == null)
+		if (bendPoints == null) {
 			bendPoints = new ArrayList();
-		else if (!bendPoints.isEmpty())
+		}else if (!bendPoints.isEmpty()) {
 			currBendPoint = ((Bendpoint) bendPoints.get(0)).getLocation();
+		}
 
 		for (int i = 0; i < points.size() - 1; i++) {
-			// Put a create handle on the middle of every
-			// segment
-			// list.add(new BendpointCreationHandle(connEP,
-			// bendPointIndex, i));
-
-			// If the current user bendpoint matches a bend
-			// location, show a
-			// move handle
+			// If the current user bendpoint matches a bend location, show a move handle
 			if (i < points.size() - 1 && bendPointIndex < bendPoints.size()
 					&& currBendPoint.equals(points.getPoint(i + 1))) {
 				list.add(new BendpointMoveHandle(connEP, bendPointIndex, i + 1));
 
 				// Go to the next user bendpoint
 				bendPointIndex++;
-				if (bendPointIndex < bendPoints.size())
-					currBendPoint = ((Bendpoint) bendPoints.get(bendPointIndex))
-							.getLocation();
+				if (bendPointIndex < bendPoints.size()) {
+					currBendPoint = ((Bendpoint) bendPoints.get(bendPointIndex)).getLocation();
+				}
 			}
 		}
 

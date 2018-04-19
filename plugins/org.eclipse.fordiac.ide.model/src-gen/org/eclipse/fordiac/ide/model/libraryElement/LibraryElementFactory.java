@@ -248,15 +248,6 @@ public interface LibraryElementFactory extends EFactory {
 	OutputPrimitive createOutputPrimitive();
 
 	/**
-	 * Returns a new object of class '<em>Parameter</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Parameter</em>'.
-	 * @generated
-	 */
-	Parameter createParameter();
-
-	/**
 	 * Returns a new object of class '<em>Resource</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -579,6 +570,24 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	ColorizableElement createColorizableElement();
+
+	/**
+	 * Returns a new object of class '<em>Attribute Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Attribute Declaration</em>'.
+	 * @generated
+	 */
+	AttributeDeclaration createAttributeDeclaration();
+
+	/**
+	 * Returns a new object of class '<em>Attribute</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Attribute</em>'.
+	 * @generated
+	 */
+	Attribute createAttribute();
 
 	/**
 	 * Returns the package supported by this factory.

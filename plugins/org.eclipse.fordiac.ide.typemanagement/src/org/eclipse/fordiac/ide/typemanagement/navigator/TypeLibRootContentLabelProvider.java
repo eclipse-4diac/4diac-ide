@@ -21,26 +21,23 @@ public class TypeLibRootContentLabelProvider implements ILabelProvider {
 
 	@Override
 	public void addListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
-
+		// Nothing todo here
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		// Nothing todo here
 	}
 
 	@Override
 	public boolean isLabelProperty(Object element, String property) {
-		// TODO Auto-generated method stub
+		// Nothing todo here
 		return false;
 	}
 
 	@Override
 	public void removeListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
-
+		// Nothing todo here
 	}
 
 	@Override

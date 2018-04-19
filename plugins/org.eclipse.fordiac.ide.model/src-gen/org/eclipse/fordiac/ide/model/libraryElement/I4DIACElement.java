@@ -53,7 +53,7 @@ public interface I4DIACElement extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='\t\tAnnotation annotation = LibraryElementFactory.eINSTANCE\r\n\t\t\t\t.createAnnotation();\r\n\t\tannotation.setName(name);\r\n\t\tgetAnnotations().add(annotation);\r\n\t\treturn annotation;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.createAnnotation(this, name);'"
 	 * @generated
 	 */
 	Annotation createAnnotation(String name);
@@ -61,7 +61,7 @@ public interface I4DIACElement extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='\t\tgetAnnotations().remove(annotation);\r\n'"
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.fordiac.ide.model.Annotations.GEN.removeAnnotation(this, annotation);'"
 	 * @generated
 	 */
 	void removeAnnotation(Annotation annotation);

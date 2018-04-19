@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.resourceediting.editparts;
 
-import java.util.List;
-
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.Figure;
@@ -28,15 +26,14 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -58,75 +55,48 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 		updatePos();
 	}
 
-	private EContentAdapter adapter;
-
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		if (adapter == null) {
-			adapter = new EContentAdapter() {
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				refreshSourceConnections();
+				refreshTargetConnections();
+				refreshVisuals();
+				refreshTooltip();
+			}
 
-				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-					refreshSourceConnections();
-					refreshTargetConnections();
-					refreshVisuals();
-					refreshTooltip();
-				}
-
-			};
-		}
-		return adapter;
+		};
 	}
 
 	private void refreshTooltip() {
 		getFigure().setToolTip(new VirtualIOTooltipFigure());
 
 	}
-
-	@Override
-	protected void refreshVisuals() {
-
-		super.refreshVisuals();
-	}
-
-	/** The oldx. */
-	int oldx = 0;
-
-	/** The oldy. */
-	int oldy = 0;
-
+	
 	private void updatePos() {
 		if (getParent() instanceof FBNetworkContainerEditPart) {
-			FBNetworkContainerEditPart fbnce = (FBNetworkContainerEditPart) getParent();
-			IInterfaceElement element = fbnce.getMainInterfaceElementView(getModel());
+			IInterfaceElement element = getIInterfaceElement();
 			Object o = getViewer().getEditPartRegistry().get(element);
 			if (o instanceof InterfaceEditPartForResourceFBs) {
-				InterfaceEditPartForResourceFBs iep = (InterfaceEditPartForResourceFBs) o;
-
-				String label = ((Label) getFigure()).getText();
-
-				Rectangle bounds = iep.getFigure().getBounds();
-				int x = 0;
-				if (!isInput()) {
-					x = bounds.x - 20 - FigureUtilities.getTextWidth(label, getFigure().getFont());
-				} else {
-					x = bounds.x + bounds.width + 1;
-				}
-				int y = bounds.y;
-				if (x != oldx && y != oldy) {
-					//TODO model refactoring - implement when all views are deleted
-//					if (getCastedModel().getPosition() != null) {
-//						pos = getCastedModel().getPosition();
-//					}
-//					pos.setX(x);
-//					pos.setY(bounds.y);
-//					getCastedModel().setPosition(pos);
-					oldx = x;
-					oldy = y;
-				}
+				updatePos((InterfaceEditPartForResourceFBs) o);
 			}
 		}
+	}
+
+	void updatePos(InterfaceEditPartForResourceFBs referencedEditPart) {
+		String label = ((Label) getFigure()).getText();
+
+		Rectangle bounds = referencedEditPart.getFigure().getBounds();
+		int x;
+		if (isInput()) {
+			x = bounds.x - 20 - FigureUtilities.getTextWidth(label, getFigure().getFont());
+		} else {
+			x = bounds.x + bounds.width + 1;
+		}				
+		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), 
+				new Rectangle(x, bounds.y, -1, -1));
 	}
 
 	/**
@@ -135,40 +105,17 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	 * @return the casted model
 	 */
 	@Override
-	public IInterfaceElement getModel() {
-		return (IInterfaceElement) super.getModel();
+	public VirtualIO getModel() {
+		return (VirtualIO) super.getModel();
 	}
 
-	/**
-	 * Checks if is input.
-	 * 
-	 * @return true, if is input
-	 */
 	public boolean isInput() {
-		return getModel().isIsInput();
+		return getIInterfaceElement().isIsInput();
 	}
 
-	/**
-	 * Checks if is event.
-	 * 
-	 * @return true, if is event
-	 */
-	public boolean isEvent() {
-		return getModel() instanceof Event;
+	private IInterfaceElement getIInterfaceElement() {
+		return getModel().getReferencedInterfaceElement();
 	}
-
-	/**
-	 * Checks if is variable.
-	 * 
-	 * @return true, if is variable
-	 */
-	public boolean isVariable() {
-		return getModel() instanceof VarDeclaration;
-	}
-
-//	private IInterfaceElement getIInterfaceElement() {
-//		return getCastedModel().getIInterfaceElement();
-//	}
 
 	/*
 	 * (non-Javadoc)
@@ -213,20 +160,15 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	/**
 	 * The Class VirtualInputOutputFigure.
 	 */
-	public class VirtualInputOutputFigure extends Label {
+	private class VirtualInputOutputFigure extends Label {
 
 		/**
 		 * Instantiates a new virtual input output figure.
 		 */
 		public VirtualInputOutputFigure() {
 			super();
-			// FB fb = (FB) getCastedModel().getIInterfaceElement().eContainer()
-			// .eContainer();
-			// setText(fb.getName() + "." + getCastedModel().getLabel());
-			// setBorder(new MarginBorder(0, 5, 0, 5));
-			// setBorder(new ConnectorBorder());
 			setOpaque(false);
-			if (isInput()) {
+			if (!isInput()) {
 				setIcon(FordiacImage.ICON_LinkOutput.getImage());
 				setLabelAlignment(PositionConstants.LEFT);
 				setTextAlignment(PositionConstants.LEFT);
@@ -251,9 +193,9 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 			rightCol.setLayoutManager(new ToolbarLayout());
 			add(leftCol, BorderLayout.LEFT);
 			add(rightCol, BorderLayout.CENTER);
-			add(new Label(getModel().getName()), BorderLayout.TOP);
+			add(new Label(getIInterfaceElement().getName()), BorderLayout.TOP);
 
-			FBNetworkElement fbNetElement = getModel().getFBNetworkElement();
+			FBNetworkElement fbNetElement = getIInterfaceElement().getFBNetworkElement();
 			if (fbNetElement == null) {
 				return;
 			}
@@ -271,20 +213,19 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 			}
 
 			add(new Label(dev.getName() + "." + res.getName() + "."
-					+ fbNetElement.getName() + "." + getModel().getName()),BorderLayout.TOP);
+					+ fbNetElement.getName() + "." + getIInterfaceElement().getName()),BorderLayout.TOP);
 
 		}
 	}
 
 	@Override
 	protected IFigure createFigureForModel() {
-		IFigure f = new VirtualInputOutputFigure();
-		return f; // new VirtualInputOutputFigure();
+		return new VirtualInputOutputFigure();
 	}
 
 	@Override
 	public INamedElement getINamedElement() {
-		return getModel();
+		return getModel().getReferencedInterfaceElement();
 	}
 
 	@Override
@@ -307,16 +248,6 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
 		return new FixedAnchor(getFigure(), isInput());
-	}
-
-	@Override
-	protected List<?> getModelSourceConnections() {
-		return getModel().getOutputConnections();
-	}
-
-	@Override
-	protected List<?> getModelTargetConnections() {
-		return getModel().getInputConnections();
 	}
 
 	@Override

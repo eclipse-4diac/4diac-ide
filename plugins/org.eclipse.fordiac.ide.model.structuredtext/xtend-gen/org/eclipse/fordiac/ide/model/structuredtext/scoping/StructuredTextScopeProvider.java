@@ -12,16 +12,13 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext.scoping;
 
-import com.google.common.base.Function;
 import java.util.ArrayList;
 import java.util.Collection;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -44,10 +41,8 @@ public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvide
   public SimpleScope scope_VarDeclaration_type(final VarDeclaration context, final EReference ref) {
     SimpleScope _xblockexpression = null;
     {
-      DataTypeLibrary _instance = DataTypeLibrary.getInstance();
-      final Collection<DataType> candidates = _instance.getDataTypes();
-      Function<EObject, QualifiedName> _wrapper = QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER);
-      Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, _wrapper);
+      final Collection<DataType> candidates = DataTypeLibrary.getInstance().getDataTypes();
+      Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
       _xblockexpression = new SimpleScope(_scopedElementsFor, true);
     }
     return _xblockexpression;
@@ -66,14 +61,9 @@ public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvide
         return IScope.NULLSCOPE;
       }
       final ArrayList<VarDeclaration> candidates = new ArrayList<VarDeclaration>();
-      InterfaceList _interfaceList = type.getInterfaceList();
-      EList<VarDeclaration> _inputVars = _interfaceList.getInputVars();
-      candidates.addAll(_inputVars);
-      InterfaceList _interfaceList_1 = type.getInterfaceList();
-      EList<VarDeclaration> _outputVars = _interfaceList_1.getOutputVars();
-      candidates.addAll(_outputVars);
-      Function<EObject, QualifiedName> _wrapper = QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER);
-      Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, _wrapper);
+      candidates.addAll(type.getInterfaceList().getInputVars());
+      candidates.addAll(type.getInterfaceList().getOutputVars());
+      Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
       _xblockexpression = new SimpleScope(_scopedElementsFor, true);
     }
     return _xblockexpression;

@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.application.handlers;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -30,6 +31,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
  * Our sample handler extends AbstractHandler, an IHandler base class.
  */
 public class ClearFocusOn extends AbstractHandler {
+	private static final int NOT_TRANSPARENT = 255;
+
 	/**
 	 * The constructor.
 	 */
@@ -46,16 +49,17 @@ public class ClearFocusOn extends AbstractHandler {
 		if (part instanceof FBNetworkEditor) {
 			GraphicalViewer viewer = ((FBNetworkEditor) part).getViewer();
 			Map<?,?> map = viewer.getEditPartRegistry();
-			for (Object obj : map.keySet()) {
+			for (Entry<?, ?> entry  : map.entrySet()) {
+				Object obj = entry.getKey();
 				if (obj instanceof FB) {
-					Object editPartAsObject = map.get(obj);
+					Object editPartAsObject = entry.getValue();
 					if (editPartAsObject instanceof AbstractViewEditPart) {
-						((AbstractViewEditPart) editPartAsObject).setTransparency(255);
+						((AbstractViewEditPart) editPartAsObject).setTransparency(NOT_TRANSPARENT);
 					}
 				} else if (obj instanceof Connection) {
-					Object editPartAsObject = map.get(obj);
+					Object editPartAsObject = entry.getValue();
 					if (editPartAsObject instanceof ConnectionEditPart) {
-						((ConnectionEditPart) editPartAsObject).setTransparency(255);
+						((ConnectionEditPart) editPartAsObject).setTransparency(NOT_TRANSPARENT);
 					}
 				}
 			}

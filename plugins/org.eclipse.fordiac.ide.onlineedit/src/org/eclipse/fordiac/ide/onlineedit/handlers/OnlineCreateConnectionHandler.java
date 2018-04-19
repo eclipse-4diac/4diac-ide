@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.onlineedit.handlers;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.IDeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.ui.handlers.AbstractDeploymentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -45,7 +46,7 @@ public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand{
 	@Override
 	protected void executeCommand(IDeploymentExecutor executor) throws Exception {
 		try {
-			executor.createConnection(res, conn.getSource(), conn.getDestination());
+			executor.createConnection(res, new ConnectionDeploymentData("", conn.getSource(), "", conn.getDestination())); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (Exception e) {
 			throw e;
 		}

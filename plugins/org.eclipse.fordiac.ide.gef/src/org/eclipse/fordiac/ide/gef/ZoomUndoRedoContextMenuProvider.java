@@ -68,9 +68,6 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
 		action = registry.getAction(ActionFactory.REDO.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
-
-		menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
-		// addRetargetAction(action);
 		
 		// Alignment Actions
 		MenuManager submenu = new MenuManager("&Align");

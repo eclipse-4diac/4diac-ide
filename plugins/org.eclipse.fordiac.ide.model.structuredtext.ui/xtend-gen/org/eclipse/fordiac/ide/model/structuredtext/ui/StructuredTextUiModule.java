@@ -5,7 +5,6 @@ package org.eclipse.fordiac.ide.model.structuredtext.ui;
 
 import com.google.inject.Binder;
 import com.google.inject.Provider;
-import com.google.inject.binder.AnnotatedBindingBuilder;
 import org.eclipse.fordiac.ide.model.structuredtext.converter.StructuredTextValueConverterService;
 import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResource;
 import org.eclipse.fordiac.ide.model.structuredtext.ui.AbstractStructuredTextUiModule;
@@ -17,6 +16,10 @@ import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.resource.impl.ResourceSetBasedResourceDescriptions;
 import org.eclipse.xtext.resource.impl.SimpleResourceDescriptionsBasedContainerManager;
+import org.eclipse.xtext.ui.editor.model.IResourceForEditorInputFactory;
+import org.eclipse.xtext.ui.editor.model.ResourceForIEditorInputFactory;
+import org.eclipse.xtext.ui.resource.IResourceSetProvider;
+import org.eclipse.xtext.ui.resource.SimpleResourceSetProvider;
 import org.eclipse.xtext.ui.shared.Access;
 
 /**
@@ -37,8 +40,7 @@ public class StructuredTextUiModule extends AbstractStructuredTextUiModule {
   }
   
   public void configureIResourceDescriptions(final Binder binder) {
-    AnnotatedBindingBuilder<IResourceDescriptions> _bind = binder.<IResourceDescriptions>bind(IResourceDescriptions.class);
-    _bind.to(ResourceSetBasedResourceDescriptions.class);
+    binder.<IResourceDescriptions>bind(IResourceDescriptions.class).to(ResourceSetBasedResourceDescriptions.class);
   }
   
   @Override
@@ -48,5 +50,15 @@ public class StructuredTextUiModule extends AbstractStructuredTextUiModule {
   
   public Class<? extends IValueConverterService> bindIValueConverterService() {
     return StructuredTextValueConverterService.class;
+  }
+  
+  @Override
+  public Class<? extends IResourceForEditorInputFactory> bindIResourceForEditorInputFactory() {
+    return ResourceForIEditorInputFactory.class;
+  }
+  
+  @Override
+  public Class<? extends IResourceSetProvider> bindIResourceSetProvider() {
+    return SimpleResourceSetProvider.class;
   }
 }

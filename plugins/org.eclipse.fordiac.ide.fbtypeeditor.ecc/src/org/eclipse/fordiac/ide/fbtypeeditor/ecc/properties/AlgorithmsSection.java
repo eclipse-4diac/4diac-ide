@@ -132,7 +132,7 @@ public class AlgorithmsSection extends ECCSection {
 					cmd = new ChangeCommentCommand(data, value.toString());
 				}
 				if((null != cmd) && (null != commandStack)){
-					commandStack.execute(cmd);
+					executeCommand(cmd);
 					algorithmViewer.refresh(data);
 					if(cmd instanceof ChangeAlgorithmTypeCommand){
 						data = ((ChangeAlgorithmTypeCommand)cmd).getNewAlgorithm();
@@ -155,7 +155,7 @@ public class AlgorithmsSection extends ECCSection {
 		});
 	}
 
-	private CellEditor[] createAlgorithmCellEditors(final Table table) {
+	private static CellEditor[] createAlgorithmCellEditors(final Table table) {
 		TextCellEditor algorithmNameEditor = new TextCellEditor(table); 
 		((Text)algorithmNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
 		return new CellEditor[] { algorithmNameEditor, 

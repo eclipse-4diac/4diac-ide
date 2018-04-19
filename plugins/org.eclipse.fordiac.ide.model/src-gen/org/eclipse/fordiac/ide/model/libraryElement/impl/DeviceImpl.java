@@ -335,7 +335,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @generated
 	 */
 	public AutomationSystem getAutomationSystem() {
-		return getSystemConfiguration().getAutomationSystem();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
 	}
 
 	/**
@@ -344,7 +344,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @generated
 	 */
 	public SystemConfiguration getSystemConfiguration() {
-		return (org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration)eContainer();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSystemConfiguration(this);
 	}
 
 	/**
@@ -353,8 +353,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @generated
 	 */
 	public DeviceType getType() {
+		//this cannot be moved to the annotation class because there we don't have the super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
-		if(null != type){
+		if(type instanceof DeviceType){
 			return (DeviceType) type; 
 		}
 		return null;
@@ -366,12 +367,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @generated
 	 */
 	public Resource getResourceNamed(final String name) {
-		for (Resource res : getResource()) {			
-			if (res.getName().equals(name)) {
-				return res;
-			}
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getResourceNamed(this, name);
 	}
 
 	/**
@@ -636,10 +632,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 			return;
 		}
 		String oldName = name;
-		
-		//TODO consider moving this to a rename device command, however then also the device create command needs to be adjusted
-		name = NameRepository.getUniqueDeviceInstanceName(this, newName);			
-
+		name = newName;
 		NameRepository.checkNameIdentifier(this);
 		
 		if (eNotificationRequired()) {

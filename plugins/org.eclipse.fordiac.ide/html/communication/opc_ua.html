@@ -35,7 +35,9 @@
 </ul>
 
 <h2 id="build">Build FORTE with open62541</h2>
-<p>OPC UA is not enabled by default in FORTE. To enable it, you need to build FORTE with the open62541 source code yourself. </p>
+<p>OPC UA is not enabled by default in FORTE. To enable it, you need to build FORTE with the open62541 source code yourself.</p>
+
+<p class="attention"><span class="inlineTitle">Attention</span>: You need <a href="https://www.python.org/" target="_blank">python</a> installed on your computer in order to compile the OPCUA library.</p>
 
 <h3>Linux</h3>
 <ol>
@@ -68,7 +70,7 @@ $ make -j</div>
 
 <h3>Windows with Visual Studio</h3>
 <ol>
-	<li>Use a Git tool under Windows and download the FORTE source from <a href="http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git" target="_blank">http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git</a>. The following steps show the commands for <a href="https://git-for-windows.github.io/" target="_blank">Git Bash</a>:
+	<li>Use a Git tool under Windows and download the FORTE source from <a href="http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git" target="_blank">http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git</a> and use the develop branch. The following steps show the commands for <a href="https://git-for-windows.github.io/" target="_blank">Git Bash</a>:
 		<div class="code">$ mkdir "$HOME/4diac" &amp;&amp; cd "$HOME/4diac"
 $ git clone -b develop https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte forte
 $ mkdir build &amp;&amp; cd "build"</div>
@@ -91,20 +93,20 @@ $ cd open62541 &amp;&amp; mkdir build</div>
 	<li>Press <span class="button4diac">Configure</span> and select your Visual Studio Version. (Make sure you select your installed VS version. Otherwise CMake does not find the C/C++ compiler. Activate <span class="specificText">Use default native compilers</span></li>
 	<li>Activate <span class="specificText">BUILD_SHARED_LIBS</span> and <span class="specificText">UA_ENABLE_AMALGAMATION</span></li>
 	<li>Press <span class="button4diac">Configure</span>, then <span class="button4diac">Generate</span> and then <span class="button4diac">Open Project</span></li>
-	<li>Go to <span class="menu4diac">Build &rarr; Build Solution</span>. You may need to execute the command multiple times until all projects are build successfully. This will create the open62541 library under <span class="folderLocation">$HOME/4diac/open62541/build/Release</span> and the amalgamated header file <span class="fileLocation">open62541.h</span>in <span class="folderLocation">$HOME/4diac/open62541/build/Release</span>
+	<li>Go to <span class="menu4diac">Build &rarr; Build Solution</span>. You may need to execute the command multiple times until all projects are build successfully. This will create the open62541 library under <span class="folderLocation">$HOME/4diac/open62541/build/bin/Release</span> and the amalgamated header file <span class="fileLocation">open62541.h</span> in <span class="folderLocation">$HOME/4diac/open62541/build/</span>
 	</li>
 	<li>Switch to the FORTE CMake window to include open62541.
 		<ul>
 			<li>FORTE_COM_OPC_UA=ON</li>
 			<li>FORTE_COM_OPC_UA_INCLUDE_DIR=C:\Users\USER\4diac\open62541\build</li>
-			<li>FORTE_COM_OPC_UA_LIB_DIR=C:\Users\USER\4diac\open62541\build</li>
+			<li>FORTE_COM_OPC_UA_LIB_DIR=C:\Users\USER\4diac\open62541\build\bin\Release</li>
 			<li>FORTE_COM_OPC_UA_VERSION=master</li>
 		</ul>
 	</li>
 	<li>Press <span class="button4diac">Configure</span> and make sure that <span class="specificText">FORTE_COM_OPC_UA_LIB</span> is set to <span class="fileLocation">open62541.dll</span></li>
 	<li>Press <span class="button4diac">Configure</span>, then <span class="button4diac">Generate</span> and then <span class="button4diac">Open Project</span></li>
 	<li>Go to <span class="menu4diac">Build &rarr; Build Solution</span>. You may need to execute the command multiple times until all projects are built successfully. This will create <span class="folderLocation">$HOME/4diac/forte/build/Debug/forte.exe</span></li>
-	<li>In the forte VS Project, Set the PATH variable to include the path to the open62541.dll. Go to properties of <span class="specificText">forte</span>, <span class="specificText">Configuration Properties | Debugging | Environment</span> and add <span class="specificText">PATH=C:\Users\USER\4diac\open62541\build\Debug;%PATH%</span> (Set the correct user path!)
+	<li>In the forte VS Project, Set the PATH variable to include the path to the open62541.dll. Go to properties of <span class="specificText">forte</span>, <span class="specificText">Configuration Properties | Debugging | Environment</span> and add <span class="specificText">PATH=C:\Users\USER\4diac\open62541\build\bin\Release;%PATH%</span> (Set the correct user path!)
 	</li>
 </ol>
 
@@ -144,7 +146,7 @@ $ cd open62541 &amp;&amp; mkdir build</div>
 	<li>Open UaExpert (you can get it from <a href="https://www.unified-automation.com/de/downloads/opc-ua-clients.html" target="_blank">here</a>) and connect to the OPC UA server running on FORTE: <span class="address">opc.tcp://localhost:4840</span></li>
 	<li>You should see the two variables which have been created by the SUBSCRIBE and PUBLISH function blocks:
 		<div><img src="./img/opc_ua_flipFlop_uaExpert.png" alt="OPC UA Flip-Flop in UaExpert"/></div>
-		As you can see, below <span class="specificText">Objects</span> there's a <span class="specificText">FolderObjectNode</span> with the name <span class="specificText">FlipFlop</span>. This name comes from the ID configuration of the function block.	The two <span class="specificText">ObjectNode</span>s <span class="specificText">Flipper</span> and <span class="specificText">Flopper</span> are created out of the connection of the function blocks: The SUBSCRIBE FB is connected through RD_1 with the G port of the Flipper FB. Therefore there's a <span class="specificText">VariableNode</span> called <span class="specificText">G</span> in <span class="specificText">Flipper</span> ObjectNode. The same was created for the PUBLISH FB. The data type of the variables is derived from the FB's port datatype.<br/>
+		As you can see, below <span class="specificText">Objects</span> there's a <span class="specificText">FolderObjectNode</span> with the name <span class="specificText">FlipFlop</span>. This name comes from the ID configuration of the function block. The two <span class="specificText">ObjectNode</span>s <span class="specificText">Flipper</span> and <span class="specificText">Flopper</span> are created out of the connection of the function blocks: The SUBSCRIBE FB is connected through RD_1 with the G port of the Flipper FB. Therefore there's a <span class="specificText">VariableNode</span> called <span class="specificText">G</span> in <span class="specificText">Flipper</span> ObjectNode. The same was created for the PUBLISH FB. The data type of the variables is derived from the FB's port datatype.<br/>
 		<span class="inlineTitle">Note:</span> You can change the name of the <span class="specificText">ObjectNode</span> (i.e., Flipper, Flopper) by renaming the function blocks. Currently it is not possible to change the names of the <span class="specificText">VariableNode</span>s. They will always have the name of the port.
 	</li>
 	<li>Optionally you can now monitor the Application in FORTE, e.g., watch the values of SUBSCRIBE and PUBLISH FB. See <a href="../4diacIDE/use4diacLocally.html#monitoringApplication" target="_blank">Use 4DIAC locally Tutorial - Monitor</a> on how to do that.
@@ -167,8 +169,25 @@ $ cd open62541 &amp;&amp; mkdir build</div>
 	
 	<p>Try to understand from where the names for <span class="specificText">Num1</span>, <span class="specificText">Num2</span>, and <span class="specificText">Result</span> come from.</p>
  
-	<p>You can then drag the variables into UaExpert's Data Access View and change the value of <span class="specificText">Num1/IN</span> and <span class="specificText">Num2/IN</span>. The value of <span class="specificText">Result/OUT</span>	should then be the sum of those two values.</p>
+	<p>You can then drag the variables into UaExpert's Data Access View and change the value of <span class="specificText">Num1/IN</span> and <span class="specificText">Num2/IN</span>. The value of <span class="specificText">Result/OUT</span> should then be the sum of those two values.</p>
 
+<h3 id="variables_remote">Read and Write OPC UA variables on a remote server</h3>
+
+<p>This example shows you how you can use a <span class="element4diac">PUBLISH</span> function block to write to an OPC UA variable on a remote server, and how to use a <span class="element4diac">CLIENT</span> function block to read a variable value from a remote server.</p>
+	<p>Create a new System which includes two System Configurations: One for the remote server, and one for the local variable read/write. By running two FORTE instances on you local PC, it is possible to simulate the use-case where the server and client are in separate FORTE instances. The server could for example run on a device offering the variables, the client is then another device which requests information of the previous one.<br />To start two FORTE instances on the same PC, you can pass the port on the command line, e.g., <span class="specificText">./forte -c localhost:61500</span></p>
+	<p>The system configuration should then look like this:</p>
+
+	<img src="./img/opc_ua_variable_read_write_system.png" alt="OPC UA Variable Read/Write System"/>
+
+<p>Then we create the follwing application. On the server side we create an OPC UA variable <span class="specificText">/Objects/1:Incrementer/Increment/IN</span> (<span class="element4diac">SUBSCRIBE_1</span>). When a client writes to this variable, it will be incremented (F_ADD) and then written to another OPC UA variable at <span class="specificText">/Objects/1:Incrementer/Incremented/OUT</span> (<span class="element4diac">PUBLISH_1</span>).</p>
+<p>On the client side we create a <span class="element4diac">PUBLISH</span> FB (<span class="element4diac">WRITE_INCREMENT</span>) which should write a number to the variable on the remote server. To read the incremented value from the server, we use a <span class="element4diac">CLIENT</span> FB (<span class="element4diac">READ_INCREMENTED</span>), which reads the variable's value as soon as the REQ event is triggered.</p>
+<p>Do not forget to connect the <span class="element4diac">COLD/WARM</span> events in the ressource view to the <span class="element4diac">INIT</span> event ports of the corresponding function blocks.</p>
+
+	<img src="./img/opc_ua_variable_read_write_app.png" alt="OPC UA Variable Read/Write Application"/>
+
+<p>You can see that there are two <span class="element4diac">PUBLISH</span> function blocks in this APP: <span class="element4diac">PUBLISH_1</span> and <span class="element4diac">WRITE_INCREMENT</span>. Depending on the ID parameter, they differ in their functionality. For <span class="element4diac">PUBLISH_1</span> the ID does not include the OPC UA encpoint <span class="specificText">opc.tcp://localhost:4840</span> therefore the result will be an OPC UA server which offers a variable. <span class="element4diac">WRITE_INCREMENT</span> includes the encpoint in its ID field, therefore this FB will write the value from <span class="element4diac">SD_1</span> to the variable indicated by the ID on the remote server.</p>
+	<p>The client FB supports calling methods (see following section) and reading variable values. Depending on the OPC UA node given by the ID parameter it will be automatically determined if the remote node is a Variable where the client should read from, or if it is a method which should be called.</p>
+<p><span class="inlineTitle">NOTE:</span> Currently open62541 does not support data change events, therefore you need to use polling to see if a variable has changed on the remote server. When data change events are supported, we will add support for that on <span class="element4diac">SUBSCRIBE</span> FBs.</p>
 
 <h2 id="methods">OPC UA Methods</h2>
 
@@ -197,14 +216,14 @@ $ cd open62541 &amp;&amp; mkdir build</div>
 	<li>In UaExpert Right-Click on the Method Node <span class="specificText">AddValues</span> and select Call... You will be presented with the following window:
 		<div><img src="./img/opc_ua_method_call.png" alt="OPC UA Method Call"/></div>
 	</li>
-	<li>You can see that the name of the input and output arguments are the names of the connected function blocks. Enter values for <span class="specificText">Num1</span> and	<span class="specificText">Num2</span> and press Call. FORTE will trigger the IND event of the SERVER FB, which causes the F_ADD FB to calculate the sum of the two numbers. When the sum is ready, the RSP event on SERVER is triggered and the result is returned to the calling OPC UA Client, which is in this case UaExpert.<br/>
+	<li>You can see that the name of the input and output arguments are the names of the connected function blocks. Enter values for <span class="specificText">Num1</span> and <span class="specificText">Num2</span> and press Call. FORTE will trigger the IND event of the SERVER FB, which causes the F_ADD FB to calculate the sum of the two numbers. When the sum is ready, the RSP event on SERVER is triggered and the result is returned to the calling OPC UA Client, which is in this case UaExpert.<br/>
 	<span class="inlineTitle">Note:</span> After the IND event is triggered, the result has to be ready (i.e., the RSP event has to be triggered) within 4 seconds. This is the default timeout for a method call. Otherwise the call will fail with a timeout error code.</li>
 </ol>
 
 
 <h2 id="client">OPC UA Client</h2>
 
-<p>In this step you will see how you can create an OPC UA client in an IEC 61499 application. A client is used to call methods on a OPC UA server. It uses the <span class="element4diac">CLIENT</span> function block which is able to call methods asynchronously.</p>
+<p>In this step you will see how you can create an OPC UA client in an IEC 61499 application. A client is used to call methods on an OPC UA server and to write new values to variables. It uses the <span class="element4diac">CLIENT</span> function block which is able to call methods asynchronously.</p>
 <p>We will create a client which calls the <span class="element4diac">AddValues</span> method from the previous example. Therefore we extend the OPC UA methods example by adding additional function blocks.</p>
 
 <ol>

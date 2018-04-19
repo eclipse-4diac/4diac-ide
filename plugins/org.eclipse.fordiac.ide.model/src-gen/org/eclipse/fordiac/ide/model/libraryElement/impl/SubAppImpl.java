@@ -138,9 +138,10 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	 * @generated
 	 */
 	public SubAppType getType() {
-		LibraryElement type = super.getType();
-		if(null != type){
-			return (SubAppType) type; 
+		//this cannot be moved to the annotation class because there we don't have the super access!!!
+		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
+		if(type instanceof SubAppType){
+		   return (SubAppType) type; 
 		}
 		return null;
 	}

@@ -30,7 +30,9 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -72,6 +74,8 @@ public class InternalVarsSection extends ECCSection {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));	
+
+		createAddDelteButtons(composite);
 
 		internalVarsViewer = new TableViewer(composite, SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL);
 		GridData gridDataVersionViewer = new GridData(GridData.FILL, GridData.FILL, true, true);
@@ -146,14 +150,27 @@ public class InternalVarsSection extends ECCSection {
 					cmd = new ChangeInitialValueCommand(data, value.toString());
 				}
 				if(null != cmd){
-					commandStack.execute(cmd);
+					executeCommand(cmd);
 					internalVarsViewer.refresh(data);
 				}			
 			}
 		});		
+
+		internalVarsViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				setInternalVarsDeleteState(null != event.getStructuredSelection().getFirstElement());
+			}
+		});
+
+	}
+
+	private void createAddDelteButtons(Composite composite) {
 		Composite buttonComp = new Composite(composite, SWT.NONE);
+		GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
+		buttonComp.setLayoutData(buttonCompLayoutData);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		internalVarsNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
+		internalVarsNew = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH); //$NON-NLS-1$
 		internalVarsNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
 		internalVarsNew.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -162,8 +179,8 @@ public class InternalVarsSection extends ECCSection {
 				internalVarsViewer.refresh();
 			}
 		});
-		internalVarsDelete = getWidgetFactory().createButton(buttonComp, "Delete", SWT.PUSH);
-		internalVarsDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
+		internalVarsDelete = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH); //$NON-NLS-1$
+		setInternalVarsDeleteState(false);
 		internalVarsDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {				
@@ -171,6 +188,13 @@ public class InternalVarsSection extends ECCSection {
 				internalVarsViewer.refresh();
 			}
 		});
+	}
+
+	private void setInternalVarsDeleteState(boolean enabled) {
+		internalVarsDelete.setEnabled(enabled);
+		internalVarsDelete.setImage((enabled) ?
+				PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE) :
+				PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
 
 	private CellEditor[] createCellEditors(final Table table) {

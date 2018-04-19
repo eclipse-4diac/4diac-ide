@@ -17,7 +17,6 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -128,7 +127,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * @generated
 	 */
 	public boolean isPlug() {
-		return !getAdapterDecl().isIsInput();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isPlug(this);
 	}
 
 	/**
@@ -166,7 +165,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * @generated
 	 */
 	public boolean isSocket() {
-		return !isPlug();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isSocket(this);
 	}
 
 	/**
@@ -175,20 +174,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * @generated
 	 */
 	public FBType getType() {
-		FBType retVal = null;
-		
-		if (null != getPaletteEntry()) {
-			if (getPaletteEntry() instanceof AdapterTypePaletteEntry) {
-				if (isPlug()) {
-					retVal = ((AdapterTypePaletteEntry) getPaletteEntry())
-							.getAdapterType().getPlugType();
-				} else {
-					retVal = ((AdapterTypePaletteEntry) getPaletteEntry())
-							.getAdapterType().getSocketType();
-				}
-			}
-		}
-		return retVal;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getType(this);
 	}
 
 	/**

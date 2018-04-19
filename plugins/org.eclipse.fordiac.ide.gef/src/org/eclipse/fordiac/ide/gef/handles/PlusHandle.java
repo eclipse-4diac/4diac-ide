@@ -15,10 +15,12 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Locator;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.SquareHandle;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 
 
 /** A selection handle that can be utilized to draw a square with a plus on the 
@@ -27,9 +29,9 @@ import org.eclipse.swt.graphics.Color;
  */
 public class PlusHandle extends SquareHandle {
 	
-	private static final int DEFAULT_PLUS_HANDLE_SIZE = 9;
+	private static final int DEFAULT_PLUS_HANDLE_SIZE = 8;
 	
-	Color handleColor = ColorConstants.gray;
+	static Color handleColor = ColorManager.getColor(new RGB(114, 175, 73));   //use green as handle color to give more contrast to diagrams 
 	
 	public PlusHandle(GraphicalEditPart owner, Locator loc) {
 		super(owner, loc);
@@ -53,7 +55,7 @@ public class PlusHandle extends SquareHandle {
 	
 	@Override
 	protected Color getBorderColor() {
-		return handleColor;
+		return getFillColor();
 	}
 
 	@Override
@@ -69,13 +71,12 @@ public class PlusHandle extends SquareHandle {
 		g.setBackgroundColor(getFillColor());
 		g.fillRectangle(r.x, r.y, r.width, r.height);
 		
-		g.setForegroundColor(ColorConstants.white);
-		
+			
 		int yMiddle = r.y + r.height/2;
 		int xMiddle = r.x + r.width/2;
 		
-		g.drawLine(r.x , yMiddle, r.x + r.width , yMiddle);
-		g.drawLine(xMiddle, r.y, xMiddle, r.y + r.height);
+		g.setBackgroundColor(ColorConstants.white);
+		g.fillRectangle(r.x + 1, yMiddle - 1, 6, 2);
+		g.fillRectangle(xMiddle - 1, r.y + 1, 2, 6);
 	}
-
 }

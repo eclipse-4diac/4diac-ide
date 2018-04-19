@@ -3,6 +3,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.application,
+ org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.gef,
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.ui.controls,
@@ -10,7 +11,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.9.0.qualifier
-Bundle-Name: Online Edit
+Bundle-Name: Online Edit (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.onlineedit.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.onlineedit;singleton:=true

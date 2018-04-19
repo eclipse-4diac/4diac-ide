@@ -23,15 +23,17 @@ public class FBTypePaletteViewerProvider extends PaletteViewerProvider {
 	 * 
 	 */
 	private final IProject project;
+	private final String navigatorId;
 
-	public FBTypePaletteViewerProvider(IProject project, EditDomain graphicalViewerDomain) {
+	public FBTypePaletteViewerProvider(IProject project, EditDomain graphicalViewerDomain, String navigatorId) {
 		super(graphicalViewerDomain);
 		this.project = project;
+		this.navigatorId = navigatorId;
 	}
 
 	@Override
 	public PaletteViewer createPaletteViewer(Composite parent) {
-		FBPaletteViewer pViewer = new FBPaletteViewer();
+		FBPaletteViewer pViewer = new FBPaletteViewer(navigatorId);
 		pViewer.createTypeLibTreeControl(parent, project);
 		configurePaletteViewer(pViewer);
 		hookPaletteViewer(pViewer);

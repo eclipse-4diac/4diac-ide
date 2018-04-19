@@ -95,18 +95,24 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 			outputStream.writeBytes(request);
 			outputStream.flush();
 			postCommandSent(getInfo(destination), destination, request);
-			String response = ""; //$NON-NLS-1$
-			@SuppressWarnings("unused")
-			byte b = inputStream.readByte();
-			short size = inputStream.readShort();
-			for (int i = 0; i < size; i++) {
-				response += (char) inputStream.readByte();
-			}
-			if (!response.equals("")) { //$NON-NLS-1$
-				responseReceived(response, getInfo(destination));
-			}
+			handleResponse(destination);
 			// TODO error handling
 		}
+	}
+
+	private String handleResponse(String destination) throws IOException {
+		@SuppressWarnings("unused")
+		byte b = inputStream.readByte();
+		short size = inputStream.readShort();
+		StringBuilder response = new StringBuilder(size); 
+		for (int i = 0; i < size; i++) {
+			response.append((char) inputStream.readByte());
+		}
+		String retVal = response.toString();
+		if (0 != response.length()) { 
+			responseReceived(retVal, getInfo(destination));
+		}
+		return retVal;
 	}
 	
 	private String getInfo(String destination){
@@ -128,15 +134,7 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 			outputStream.writeBytes(request);
 			outputStream.flush();
 			postCommandSent(getInfo(destination), destination, request);
-			@SuppressWarnings("unused")
-			byte b = inputStream.readByte();
-			short size = inputStream.readShort();
-			for (int i = 0; i < size; i++) {
-				response += (char) inputStream.readByte();
-			}
-			if (!response.isEmpty()) {
-				responseReceived(response, getInfo(destination));
-			}
+			response = handleResponse(destination);
 		}
 		return response;
 	}

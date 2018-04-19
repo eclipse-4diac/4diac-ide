@@ -20,7 +20,7 @@ public class InputPrimitiveFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if(toTest instanceof InputPrimitiveEditPart && ((InputPrimitiveEditPart) toTest).getCastedModel() instanceof InputPrimitive){
+		if(toTest instanceof InputPrimitiveEditPart){
 			return true;
 		}
 		if(toTest instanceof InputPrimitive){

@@ -23,13 +23,13 @@
 
 <h2 id="topOfPage">Implement a PID controller for the position of a motor of the EV3</h2>
 
-	<p>In this tutorial, an implementation of a PID controller for a motor of the EV3 is presented. The position of the motor will be controlled using PWM. The implementation shows all the steps from	creating a PID Functional Block in 4DIAC, up to tuning the PID controller and printing the values in a graph.</p>
+	<p>In this tutorial, an implementation of a PID controller for a motor of the EV3 is presented. The position of the motor will be controlled using PWM. The implementation shows all the steps from creating a PID Functional Block in 4DIAC, up to tuning the PID controller and printing the values in a graph.</p>
 
 	<p>A basic usage knowledge of 4DIAC is necessary to follow through the steps.</p>
 
 	<h3>Creating the PID FB</h3>
 
-	<p>The first thing to do is to create the PID functional block. Go to File->New->New type. In the pop-up menu, choose the parent folder to store the new FB, choose PID as the Type name, and select Basic.fbt as Type. Click Finish, and the view to edit the new FB will open. First, the interface must be configured. Use the image below to complete it</p>
+	<p>The first thing to do is to create the PID functional block. Go to File &rarr; New &rarr; New type. In the pop-up menu, choose the parent folder to store the new FB, choose PID as the Type name, and select Basic.fbt as Type. Click Finish, and the view to edit the new FB will open. First, the interface must be configured. Use the image below to complete it</p>
 
 	<img src="./img/pidMotor/PIDInterface.png" alt="Interface of the PID FB" />
 
@@ -167,7 +167,7 @@ END_IF; </code></div>
 
 	<h3>Exporting and compiling with FORTE for the Ev3</h3>
 
-	<p>Once the FB is ready, go to File->Export... and select 4DIAC->4DIAC Type Export. Then explore the folder tree on the left and select the PID FB created on the right. Choose where to export and then click Finish.</p>
+	<p>Once the FB is ready, go to File &rarr; Export... and select 4DIAC &rarr; 4DIAC Type Export. Then explore the folder tree on the left and select the PID FB created on the right. Choose where to export and then click Finish.</p>
 
 	<p>To get the source code ready to compile FORTE with the created FB, the generated .cpp and .h files have to be added to the CMAKE configuration. The easiest way to do it is to put both files in the folder src/modules/lms_ev3 and add to the CMakeLists.txt file in that folder, the following line at the end.</p>
 
@@ -209,7 +209,9 @@ END_IF; </code></div>
 
 	<h4>Configuring the system</h4>
 
-	<p>Now that the application is done, some other configurations are needed in the system. The first thing is to create both devices and connect them using the Ethernet segment. In the EV3 resource, the first thing to do is to connect the COLD START to the initialization of the StartButton as said before.</p>	<p>The other configuration in the EV3 resource is the publishing of the conversions of the position and output of the PID. Using a PUBLISH_2_0 with both input and the multicast UDP ID (in this case, 239.192.0.2:65000), and the REQ triggerred by the E_REND FB from the application. With this, the EV3 will send the position and output of the PID to the ID address everytime both conversion are done.</p>
+	<p>Now that the application is done, some other configurations are needed in the system. The first thing is to create both devices and connect them using the Ethernet segment. In the EV3 resource, the first thing to do is to connect the COLD START to the initialization of the StartButton as said before.</p>
+
+  <p>The other configuration in the EV3 resource is the publishing of the conversions of the position and output of the PID. Using a PUBLISH_2_0 with both input and the multicast UDP ID (in this case, 239.192.0.2:65000), and the REQ triggerred by the E_REND FB from the application. With this, the EV3 will send the position and output of the PID to the ID address everytime both conversion are done.</p>
 
 	<img src="./img/pidMotor/PIDPublish.png" alt="Publishing the data to the PC" />
 
@@ -217,11 +219,11 @@ END_IF; </code></div>
 
 	<img src="./img/pidMotor/PIDSubscribe.png" alt="Subscribe to data from EV3" />
 
-	<p> NOTE: In windows machines, the used multicast address is not always detected and the packets from the EV3 don't arrive to the FORTE application in the PC. This happens often if the PC is connected to the EV3 through an ad-hoc connection. To overcome this, try adding the address route with gateway to your own machine in the as presented in the Troubleshooting part at the bottom of the <a target="_blank"	href="./bbbTraficControl.html#troubleshooting">Traffic Control with BBB	example</a>	</p>
+	<p> NOTE: In windows machines, the used multicast address is not always detected and the packets from the EV3 don't arrive to the FORTE application in the PC. This happens often if the PC is connected to the EV3 through an ad-hoc connection. To overcome this, try adding the address route with gateway to your own machine in the as presented in the Troubleshooting part at the bottom of the <a target="_blank" href="./bbbTraficControl.html#troubleshooting">Traffic Control with BBB example</a></p>
 
 	<h3>Tuning the PID</h3>
 
-	<p> With the application ready and working, it is presented now the <a 	target="_blank" 	href="https://en.wikipedia.org/wiki/Ziegler%E2%80%93Nichols_method">Ziegler-Nichols 	method</a> to tune the PID. The basic idea is to turn off the integral and derivative parts, and increase Kp until the output has stable and constant oscillations. The value of Kp that produces this output is called Ku and the oscillation's period at this Ku is called Tu. With these two values, the values of the Kp, Ki, and Kd are chosen according to the table of the link before. Remember that Kd = Kp/Ti and Ki = Kp*Td.	</p>
+	<p> With the application ready and working, it is presented now the <a target="_blank" href="https://en.wikipedia.org/wiki/Ziegler%E2%80%93Nichols_method">Ziegler-Nichols method</a> to tune the PID. The basic idea is to turn off the integral and derivative parts, and increase Kp until the output has stable and constant oscillations. The value of Kp that produces this output is called Ku and the oscillation's period at this Ku is called Tu. With these two values, the values of the Kp, Ki, and Kd are chosen according to the table of the link before. Remember that Kd = Kp/Ti and Ki = Kp*Td.</p>
 
 	<p>The set point is the position 1000. The first value of Kp is 1 and produces a non oscillating result. With Kp = 2, it takes longer, but still without stable oscillations. With Kp = 3, the results show a stable oscillation. So, the critical Ku value must be between 2 and 3. After a binary search between 2 and 3, it is found that Ku = 2.18 and its graph is shown also below. From the data, it can be seen that the oscillations have a period of 600ms (0.6s).</p>
 

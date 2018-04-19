@@ -51,10 +51,6 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 	private void parseSubApp(Node node) throws TypeImportException {
 		SubApp subApp = LibraryElementFactory.eINSTANCE.createSubApp();
 		
-		FBNetwork subAppNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
-		subApp.setSubAppNetwork(subAppNetwork);
-
-		
 		NamedNodeMap map = node.getAttributes();
 		Node name = map.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE);
 		if (name != null) {
@@ -75,6 +71,8 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		}
 		
 		CommonElementImporter.getXandY(map, subApp);
+		
+		configureParameters(subApp.getInterface(), node.getChildNodes());
 		
 		fbNetwork.getNetworkElements().add(subApp);
 		fbNetworkElementMap.put(subApp.getName(), subApp);

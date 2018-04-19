@@ -80,7 +80,7 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractDevice
 		int res = SWT.YES;
 		if (bootFile.exists()) {
 			MessageBox msgBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.ICON_QUESTION);
-			String msg = MessageFormat.format("File Exists, overwrite (" + fileName + ")?",
+			String msg = MessageFormat.format("File Exists, overwrite {0}?",
 					new Object[] { bootFile.getAbsolutePath() });
 			msgBox.setMessage(msg);
 			res = msgBox.open();
@@ -109,7 +109,6 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractDevice
 
 	@Override
 	public void sendQUERY(String destination, String request) throws IOException {
-		// TODO Auto-generated method stub
-		
+		// nothing to do here for now		
 	}
 }

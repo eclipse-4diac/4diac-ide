@@ -28,7 +28,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface Application extends INamedElement {
+public interface Application extends ConfigurableObject {
 	/**
 	 * Returns the value of the '<em><b>FB Network</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
@@ -60,7 +60,7 @@ public interface Application extends INamedElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return (AutomationSystem)eContainer();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);'"
 	 * @generated
 	 */
 	AutomationSystem getAutomationSystem();

@@ -13,23 +13,11 @@
 package org.eclipse.fordiac.ide.resourceediting.editparts;
 
 import org.eclipse.draw2d.AncestorListener;
-import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.resourceediting.policies.EventNodeEditPolicyForResourceFBs;
-import org.eclipse.fordiac.ide.resourceediting.policies.VariableNodeEditPolicyForResourceFBs;
+import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 
-public class InterfaceEditPartForResourceFBs extends InterfaceEditPart {
-
-	@Override
-	public void setSelected(int value) {
-		super.setSelected(value);
-	}
+public class InterfaceEditPartForResourceFBs extends InterfaceEditPartForFBNetwork {
 	
 	@Override
 	protected IFigure createFigure() {
@@ -54,17 +42,6 @@ public class InterfaceEditPartForResourceFBs extends InterfaceEditPart {
 		return fig;
 	}
 
-	@Override
-	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
-		if (isEvent()) {
-			return new EventNodeEditPolicyForResourceFBs();
-		}
-		if (isVariable()) {
-			return new VariableNodeEditPolicyForResourceFBs();
-		}
-		return null;
-	}
-
 	private void updateReferenced() {
 		EditPart parent = getParent();
 		while (parent != null && !(parent instanceof FBNetworkContainerEditPart)) {
@@ -72,29 +49,12 @@ public class InterfaceEditPartForResourceFBs extends InterfaceEditPart {
 		}
 		if (parent != null) {
 			FBNetworkContainerEditPart fbcep = (FBNetworkContainerEditPart) parent;
-			IInterfaceElement referencedElement = fbcep.getAssignedInterfaceElementView(getModel());
-
+			VirtualIO referencedElement = fbcep.getVirtualIOElement(getModel());
 			if (referencedElement != null) {
 				Object o = getViewer().getEditPartRegistry().get(referencedElement);
-				String label = referencedElement.getName();
-
-				int x = 0;
-				Rectangle bounds = getFigure().getBounds();
 				if (o instanceof VirtualInOutputEditPart) {
-					label = ((Label) ((VirtualInOutputEditPart) o).getFigure()).getText();
-					if (!((VirtualInOutputEditPart) o).isInput()) {
-						x = bounds.x - 20
-								- FigureUtilities.getTextWidth(label, getFigure().getFont());
-					} else {
-						x = bounds.x + bounds.width + 1;
-
-					}
+					((VirtualInOutputEditPart) o).updatePos(this);
 				}
-				//TODO model refactoring - implement when all views are deleted
-//				Position pos = UiFactory.eINSTANCE.createPosition();
-//				pos.setX(x);
-//				pos.setY(bounds.y);
-//				referencedView.setPosition(pos);
 			}
 		}
 	}

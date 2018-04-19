@@ -93,7 +93,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 	 * @generated
 	 */
 	public VarDeclaration getVarDeclaration() {
-		return (VarDeclaration)eContainer();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getVarDeclaration(this);
 	}
 
 	/**

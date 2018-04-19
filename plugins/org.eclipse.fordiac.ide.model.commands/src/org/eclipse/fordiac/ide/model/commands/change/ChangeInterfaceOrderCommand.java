@@ -20,32 +20,28 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeInterfaceOrderCommand extends Command {
-	private boolean moveUp;
 	private boolean isInput;
 	private IInterfaceElement selection;
 	private EList<? extends IInterfaceElement> interfaces;
 	private int oldIndex;
 	private int newIndex;
 	
-	private ChangeInterfaceOrderCommand(InterfaceList interfaceList, IInterfaceElement selection, boolean isInput){
+	private ChangeInterfaceOrderCommand(IInterfaceElement selection, boolean isInput){
 		this.isInput = isInput;
 		this.selection = selection;
-		if(!"".equals(interfaceList)){ //$NON-NLS-1$
-			setInterfaces(interfaceList);		
-			if(null != selection && !"".equals(interfaces)){ 
-				oldIndex = this.interfaces.indexOf(selection);
-			}
+		if(null != selection && selection.eContainer() instanceof InterfaceList){
+			setInterfaces((InterfaceList)selection.eContainer());		
+			oldIndex = this.interfaces.indexOf(selection);
 		}
 	}
 	
-	public ChangeInterfaceOrderCommand(InterfaceList interfaceList, IInterfaceElement selection, boolean isInput, boolean moveUp){
-		this(interfaceList, selection, isInput);
-		this.moveUp = moveUp;
-		this.newIndex = -1;
+	public ChangeInterfaceOrderCommand(IInterfaceElement selection, boolean isInput, boolean moveUp){
+		this(selection, isInput);
+		this.newIndex = oldIndex > 0 && moveUp ? oldIndex - 1 : oldIndex + 1;
 	}
 	
-	public ChangeInterfaceOrderCommand(InterfaceList interfaceList, IInterfaceElement selection, boolean isInput, int newIndex){
-		this(interfaceList, selection, isInput);
+	public ChangeInterfaceOrderCommand(IInterfaceElement selection, boolean isInput, int newIndex){
+		this(selection, isInput);
 		this.newIndex = newIndex;
 	}
 	
@@ -75,12 +71,14 @@ public class ChangeInterfaceOrderCommand extends Command {
 	
 	@Override
 	public boolean canExecute() {
-		return null != selection && !"".equals(interfaces) && interfaces.size() > 1 
-				&& ((newIndex == -1 && ((moveUp && oldIndex > 0) || !moveUp && oldIndex < interfaces.size()) || (newIndex != -1 && interfaces.size() >= newIndex)));
+		return null != selection && interfaces.size() > 1 && interfaces.size() >= newIndex;
 	}
 	
 	@Override
 	public void execute() {
+		if(newIndex > interfaces.indexOf(selection)) {
+			newIndex--;
+		}
 		redo();
 	}
 	
@@ -88,7 +86,7 @@ public class ChangeInterfaceOrderCommand extends Command {
 	public void redo() {
 		 @SuppressWarnings("unchecked")
 		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
-		temp.move(oldIndex > 0 && moveUp ? oldIndex - 1 : oldIndex + 1, selection);					
+		temp.move(newIndex, selection);
 	}
 	
 	@Override

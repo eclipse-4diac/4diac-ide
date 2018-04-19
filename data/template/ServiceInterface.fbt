@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+/*******************************************************************************
+ * Copyright (c) 2010 Profactor GmbH
+ * 
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without 
+ * modification, are permitted provided that the following conditions are met:
+ *   - Redistributions of source code must retain the above copyright notice, 
+ *     this list of conditions and the following disclaimer.
+ *   - Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.  
+ *   - Neither the name of the Eclipse Foundation, Inc. nor the names of its 
+ *     contributors may be used to endorse or promote products derived from this
+ *     software without specific prior written permission.
+ *     
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Contributors:
+ *   Gerhard Ebenhofer
+ *     - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+ -->
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="ServiceInterface" Comment="Service Interface Function Block Type" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="4DIAC-Consortium" Version="0.0" Author="4DIAC-IDE" Date="2008-07-10" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Service Initialization" >
+        <With Var="QI" />
+        <With Var="PARAMS" />
+      </Event>
+      <Event Name="REQ" Comment="Service Request" >
+        <With Var="QI" />
+        <With Var="SD" />
+      </Event>
+      <Event Name="RSP" Comment="Application Response to IND" >
+        <With Var="QI" />
+        <With Var="SD" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+      <Event Name="CNF" Comment="Confirmation of Requested Service" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+        <With Var="RD" />
+      </Event>
+      <Event Name="IND" Comment="Indication from Resource" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+        <With Var="RD" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier" />
+      <VarDeclaration Name="PARAMS" Type="WSTRING" Comment="Service Parameters" />
+      <VarDeclaration Name="SD" Type="ANY" Comment="Output data to resource" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />
+      <VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status" />
+      <VarDeclaration Name="RD" Type="ANY" Comment="Input data from resource" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="RESOURCE" LeftInterface="APPLICATION" >
+    <ServiceSequence Name="normal_establishment" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="PARAMS" />
+        <OutputPrimitive Interface="RESOURCE" Event="initialize" Parameters="PARAMS" />
+        <OutputPrimitive Interface="APPLICATION" Event="INITO+" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="unsuccessful_establishment" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="PARAMS" />
+        <OutputPrimitive Interface="RESOURCE" Event="initialize" Parameters="PARAMS" />
+        <OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_confirm" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="APPLICATION" Event="REQ+" Parameters="SD" />
+        <OutputPrimitive Interface="RESOURCE" Event="request" Parameters="SD" />
+        <OutputPrimitive Interface="APPLICATION" Event="CNF+" Parameters="RD" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="APPLICATION" Event="REQ-" Parameters="SD" />
+        <OutputPrimitive Interface="APPLICATION" Event="CNF-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_error" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="APPLICATION" Event="REQ+" Parameters="SD" />
+        <OutputPrimitive Interface="RESOURCE" Event="request" Parameters="SD" />
+        <OutputPrimitive Interface="APPLICATION" Event="CNF-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="indication_response" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="RESOURCE" Event="indicate" Parameters="RD" />
+        <OutputPrimitive Interface="APPLICATION" Event="IND+" Parameters="RD" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <InputPrimitive Interface="APPLICATION" Event="RSP" Parameters="QI,SD" />
+        <OutputPrimitive Interface="RESOURCE" Event="response" Parameters="QI,SD" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="indication_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="RESOURCE" Event="indicate" Parameters="RD,QI=FALSE" />
+        <OutputPrimitive Interface="RESOURCE" Event="inhibited" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="error_indication" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="RESOURCE" Event="error" Parameters="STATUS" />
+        <OutputPrimitive Interface="APPLICATION" Event="IND-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="application_initiated_termination" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="APPLICATION" Event="INIT-" />
+        <OutputPrimitive Interface="RESOURCE" Event="terminate" />
+        <OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="resource_initiated_termination" >
+      <ServiceTransaction >
+        <OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

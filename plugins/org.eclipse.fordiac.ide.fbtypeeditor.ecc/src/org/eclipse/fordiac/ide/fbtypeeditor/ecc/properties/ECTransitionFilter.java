@@ -20,7 +20,7 @@ public class ECTransitionFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if(toTest instanceof ECTransitionEditPart && ((ECTransitionEditPart) toTest).getCastedModel() instanceof ECTransition){
+		if(toTest instanceof ECTransitionEditPart){
 			return true;
 		}
 		if(toTest instanceof ECTransition){

@@ -61,8 +61,19 @@ public class Messages extends NLS {
 	/** The New system wizard_ wizard name. */
 	public static String NewSystemWizard_WizardName;
 	
+	public static String NewSystemWizard_InitialApplicationName;
+
 	/** The Palette management page_ labe l_ default palette. */
 	public static String PaletteManagementPage_LABEL_DefaultTypeLibrary;
+	
+	public static String SystemNameNotValid;
+	
+	public static String SystemNameAlreadyUsed;
+
+
+
+
+
 	
 	static {
 		// initialize resource bundle

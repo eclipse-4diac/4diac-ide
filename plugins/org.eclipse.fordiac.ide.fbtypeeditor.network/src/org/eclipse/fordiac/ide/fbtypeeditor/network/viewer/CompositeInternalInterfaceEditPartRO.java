@@ -22,6 +22,11 @@ import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
  */
 public class CompositeInternalInterfaceEditPartRO extends InterfaceEditPart {
 
+	public CompositeInternalInterfaceEditPartRO() {
+		super();
+		setConnectable(false);
+	}
+	
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
 		return null;

@@ -25,25 +25,25 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 public interface FB extends FBNetworkElement {
 	/**
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//this cannot be moved to the annotation class because there we don\'t have the super access!!!\r\norg.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();\r\nif(type instanceof FBType){\r\n\treturn (FBType) type; \r\n}\r\nreturn null;'"
+	 * @generated
+	 */
+	FBType getType();
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Resource Type FB</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return false;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceTypeFB(this);'"
 	 * @generated
 	 */
 	boolean isResourceTypeFB();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='LibraryElement type = super.getType();\nif(null != type){\n\treturn (FBType) type; \n}\nreturn null;'"
-	 * @generated
-	 */
-	FBType getType();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -53,7 +53,7 @@ public interface FB extends FBNetworkElement {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//A fB is a resource FB if the FB is in the fbnetwork of a resource and\n// the mapping is null or as preperation when we allow to map resource FBs \n//to applications when the mapping from is equal to the fb \nif(getFbNetwork().eContainer() instanceof Resource){\n\treturn (null == getMapping()) || (equals(getMapping().getFrom()));\n}\t\t\nreturn false;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceFB(this);'"
 	 * @generated
 	 */
 	boolean isResourceFB();

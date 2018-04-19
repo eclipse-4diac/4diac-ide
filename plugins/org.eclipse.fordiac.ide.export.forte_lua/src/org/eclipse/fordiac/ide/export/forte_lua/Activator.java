@@ -12,31 +12,31 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_lua;
 
-import org.osgi.framework.BundleActivator;
+import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 import org.osgi.framework.BundleContext;
 
-public class Activator implements BundleActivator {
+public class Activator extends Abstract4DIACUIPlugin {
 
-	private static BundleContext context;
-
-	static BundleContext getContext() {
-		return context;
+	private static Abstract4DIACUIPlugin plugin;
+	
+	public static Abstract4DIACUIPlugin getDefault() {
+		return plugin;
+	}
+	
+	public Activator() {
+		//empty constructur 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext bundleContext) throws Exception {
-		Activator.context = bundleContext;
+	@Override
+	public void start(final BundleContext context) throws Exception {
+		super.start(context);
+		plugin = this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext bundleContext) throws Exception {
-		Activator.context = null;
+	@Override
+	public void stop(final BundleContext context) throws Exception {
+		super.stop(context);
+		plugin = null;
 	}
 
 }

@@ -25,7 +25,6 @@ import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
-import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -58,7 +57,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = null;
+	protected static final String NAME_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
@@ -77,7 +76,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = null;
+	protected static final String COMMENT_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -265,9 +264,6 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 		Boolean differentName = true;
 		if (oldName != null) {
 			differentName = !oldName.equals(name);		
-			if((differentName) && eContainer() instanceof ECC) {
-				name = NameRepository.getUniqueECCStateName(this, (ECC) eContainer(), name);
-			}
 		}
 		
 		if(differentName){
@@ -308,10 +304,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * @generated
 	 */
 	public boolean isStartState() {
-		if(null != eContainer()){
-			return this.equals(((ECC)eContainer()).getStart());
-		}
-		return false;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isStartState(this);
 	}
 
 	/**

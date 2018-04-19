@@ -18,6 +18,8 @@ import java.text.MessageFormat;
 import java.util.HashSet;
 
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
+import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.IDeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateConnectionException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBInstanceException;
@@ -26,7 +28,6 @@ import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteDeviceParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -135,10 +136,10 @@ public class DeploymentExecutor implements IDeploymentExecutor {
 	}
 
 	@Override
-	public void writeFBParameter(final Resource resource, final String value, final FB fb, final VarDeclaration varDecl)
+	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fbData, final VarDeclaration varDecl)
 			throws WriteFBParameterException {
 		String encodedValue = encodeXMLChars(value);
-		String request = generateWriteParmaRequest(fb.getName(), varDecl.getName(), encodedValue);
+		String request = generateWriteParmaRequest(fbData.prefix + fbData.fb.getName(), varDecl.getName(), encodedValue);
 		try {
 			sendREQ(resource.getName(), request);
 		} catch (IOException e) {
@@ -148,17 +149,18 @@ public class DeploymentExecutor implements IDeploymentExecutor {
 
 	}
 
-	public void createConnection(final Resource resource, final IInterfaceElement source, final IInterfaceElement destination) throws CreateConnectionException {
+	public void createConnection(final Resource resource, final ConnectionDeploymentData connData) throws CreateConnectionException {
+		IInterfaceElement source = connData.source;
+		IInterfaceElement destination = connData.destination;
 		if(null != source && null != destination && 
 				null != source.getFBNetworkElement() && null != destination.getFBNetworkElement()){
 			FBNetworkElement sourceFB = source.getFBNetworkElement();
 			FBNetworkElement destFB = destination.getFBNetworkElement();
-			//TODO model refactoring - for subapps here the full name of the  fbNEtworkelement is needed
 			String request = MessageFormat.format(
 					Messages.DeploymentExecutor_CreateConnection, new Object[] {
-							this.id++, sourceFB.getName() + "." //$NON-NLS-1$
-									+ source.getName(), destFB.getName() + "." //$NON-NLS-1$
-									+ destination.getName() });
+							this.id++, connData.sourcePrefix + sourceFB.getName() + "." + source.getName(),  //$NON-NLS-1$
+							connData.destinationPrefix + destFB.getName() + "." + destination.getName() });  //$NON-NLS-1$
+									
 			try {
 				sendREQ(resource.getName(), request);
 			} catch (IOException e) {
@@ -235,41 +237,43 @@ public class DeploymentExecutor implements IDeploymentExecutor {
 	}
 
 	@Override
-	public void deleteConnection(Resource res, Connection con) throws Exception {
+	public void deleteConnection(Resource res, ConnectionDeploymentData conData) throws Exception {
 
 	}
 
 	@Override
-	public void deleteFB(Resource res, FB fb) throws Exception {
+	public void deleteFB(Resource res, FBDeploymentData fbData) throws Exception {
 
 	}
 
 	@Override
-	public void startFB(Resource res, FB fb) throws StartException {
+	public void startFB(Resource res, FBDeploymentData fbData) throws StartException {
+		String fullFbInstanceName = fbData.prefix + fbData.fb.getName();
 		String request = MessageFormat.format(Messages.DeploymentExecutor_StartFB,
-				new Object[] { id++, fb.getName(), fb.getTypeName() });
+				new Object[] { id++, fullFbInstanceName, fbData.fb.getTypeName() });
 		try {
 			sendREQ(res.getName(), request);
 		} catch (IOException e) {
 			throw new StartException(
-					MessageFormat.format(Messages.DeploymentExecutor_StartingFBFailed, new Object[] { fb.getName() }));
+					MessageFormat.format(Messages.DeploymentExecutor_StartingFBFailed, new Object[] { fullFbInstanceName }));
 		}
 	}
 	
 	@Override
-	public void createFBInstance(final FB fb, final Resource res) throws CreateFBInstanceException {
-		String fbType = getValidType(fb);
+	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws CreateFBInstanceException {
+		String fbType = getValidType(fbData.fb);
+		String fullFbInstanceName = fbData.prefix + fbData.fb.getName();
 		if ("".equals(fbType)) { //$NON-NLS-1$
 			throw new CreateFBInstanceException((MessageFormat.format(
-					Messages.DeploymentExecutor_CreateFBInstanceFailedNoTypeFound, new Object[] { fb.getName() })));
+					Messages.DeploymentExecutor_CreateFBInstanceFailedNoTypeFound, new Object[] { fullFbInstanceName })));
 		}
 		String request = MessageFormat.format(Messages.DeploymentExecutor_CreateFBInstance,
-				new Object[] {id++, fb.getName(), fbType });
+				new Object[] {id++, fullFbInstanceName, fbType });
 		try {
 			sendREQ(res.getName(), request);
 		} catch (IOException e) {
 			throw new CreateFBInstanceException(MessageFormat.format(Messages.DeploymentExecutor_CreateFBInstanceFailed,
-					new Object[] { fb.getName() }));
+					new Object[] { fullFbInstanceName }));
 		}
 	}
 
@@ -277,7 +281,7 @@ public class DeploymentExecutor implements IDeploymentExecutor {
 	public void killDevice(Device dev) throws Exception {
 		String kill = MessageFormat.format(Messages.DeploymentExecutor_KillDevice, new Object[] { id++ });
 		try {
-			sendREQ("", kill);
+			sendREQ("", kill); //$NON-NLS-1$
 		} catch (IOException e) {
 			if (e instanceof EOFException) {
 				// exception can be ignored, as no response is returned by forte

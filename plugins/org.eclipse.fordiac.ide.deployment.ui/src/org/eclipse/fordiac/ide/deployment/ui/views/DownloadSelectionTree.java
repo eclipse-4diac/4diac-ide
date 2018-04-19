@@ -54,9 +54,9 @@ import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 
 public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 	
-	private static String DOWNLOAD_DEV_SELECTION = "DOWNLOAD_DEV_SELECTION"; //$NON-NLS-1$
-	private static String DOWNLOAD_DEV_MGRID = "DOWNLOAD_DEV_MGRID"; //$NON-NLS-1$
-	private static String DOWNLOAD_DEV_PROPERTIES = "DOWNLOAD_DEV_PROPERTIES"; //$NON-NLS-1$
+	private static final String DOWNLOAD_DEV_SELECTION = "DOWNLOAD_DEV_SELECTION"; //$NON-NLS-1$
+	private static final String DOWNLOAD_DEV_MGRID = "DOWNLOAD_DEV_MGRID"; //$NON-NLS-1$
+	private static final String DOWNLOAD_DEV_PROPERTIES = "DOWNLOAD_DEV_PROPERTIES"; //$NON-NLS-1$
 
 	
 	static void initSelectedProperties(Device device) {
@@ -194,15 +194,6 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 				}
 				return resource.toArray();
 			}
-			if (parent instanceof Resource) {
-				ArrayList<INamedElement> elements = new ArrayList<>();
-				Resource res = (Resource) parent;
-				if (res.getFBNetwork() != null) {
-					elements.addAll(res.getFBNetwork().getNetworkElements());
-				}
-				return elements.toArray();
-
-			}
 			return new Object[0];
 		}
 
@@ -221,14 +212,6 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 				return ((Device) parent).getResource().size() > 0;
 			}
 			if (parent instanceof Resource) {
-				Resource res = (Resource) parent;
-				if (res.getFBNetwork() == null) {
-					return false;
-				}
-				// return ((Resource)
-				// parent).getFBNetwork().getMappedFBs().size() > 0
-				// || ((Resource) parent).getFBNetwork().getMappedFBs().size() >
-				// 0;
 				return false;
 			}
 			return false;
@@ -239,7 +222,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 	/**
 	 * The Class ViewLabelProvider.
 	 */
-	class ViewLabelProvider extends LabelProvider{
+	static class ViewLabelProvider extends LabelProvider{
 
 		/*
 		 * (non-Javadoc)
@@ -283,7 +266,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 	}
 	
-	class DownloadDecoratingLabelProvider extends DecoratingLabelProvider implements ITableLabelProvider {
+	static class DownloadDecoratingLabelProvider extends DecoratingLabelProvider implements ITableLabelProvider {
 
 		public DownloadDecoratingLabelProvider(ILabelProvider provider,
 				ILabelDecorator decorator) {
@@ -335,16 +318,14 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 		propertiesColumn.setWidth(200);
 		
 		setContentProvider(new ViewContentProvider());
-		//setLabelProvider(new ViewLabelProvider());
 		ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();  		
 		LabelProvider lp = new ViewLabelProvider();		
-		setLabelProvider(new DownloadDecoratingLabelProvider(lp,decorator));
+		setLabelProvider(new DownloadDecoratingLabelProvider(lp ,decorator));
 		
 		setCellModifier(new ICellModifier() {
 
 			public boolean canModify(final Object element, final String property) {
-				if (property.equals(DOWNLOAD_DEV_PROPERTIES)
-						&& element instanceof Device) {
+				if (property.equals(DOWNLOAD_DEV_PROPERTIES) && element instanceof Device) {
 					return true;
 				}
 				return false;
@@ -354,38 +335,26 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 				if (DOWNLOAD_DEV_PROPERTIES.equals(property)) {
 					return getSelectedString(element);
 				}
-				if (DOWNLOAD_DEV_SELECTION.equals(property)) {
-					// nothing to do
-				}
 				return null;
 			}
 
-			public void modify(final Object element, final String property,
-					final Object value) {
+			public void modify(final Object element, final String property, final Object value) {
 				// nothing to do
 			}
 		});
 		
-		setCellEditors(new CellEditor[] { new TextCellEditor(), new TextCellEditor(),
-				new DialogCellEditor(getTree()) {
-
+		setCellEditors(new CellEditor[] { new TextCellEditor(), new TextCellEditor(), new DialogCellEditor(getTree()) {
 					@Override
 					protected Object openDialogBox(Control cellEditorWindow) {
-						DeviceParametersDialog dialog = new DeviceParametersDialog(
-								cellEditorWindow.getShell());
-
+						DeviceParametersDialog dialog = new DeviceParametersDialog(cellEditorWindow.getShell());
 						if (((TreeSelection) getSelection()).getFirstElement() instanceof Device) {
-							dialog.setDevice((Device) ((TreeSelection) getSelection())
-									.getFirstElement());
-
+							dialog.setDevice((Device) ((TreeSelection) getSelection()).getFirstElement());
 							int ret = dialog.open();
 							if (ret == Window.OK) {
 								DeploymentCoordinator.getInstance().setDeviceProperties(
 										dialog.getDevice(), dialog.getSelectedProperties());
 								refresh(dialog.getDevice(), true);
-							} else {
-
-							}
+							} 
 						}
 						return null;
 					}
@@ -396,8 +365,8 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 				DOWNLOAD_DEV_PROPERTIES });
 	}
 	
-	private String getSelectedString(Object element) {
-		ArrayList<VarDeclaration> temp = DeploymentCoordinator.getInstance()
+	private static String getSelectedString(Object element) {
+		List<VarDeclaration> temp = DeploymentCoordinator.getInstance()
 				.getSelectedDeviceProperties((Device) element);
 		if (temp != null) {
 			StringBuffer buffer = new StringBuffer();

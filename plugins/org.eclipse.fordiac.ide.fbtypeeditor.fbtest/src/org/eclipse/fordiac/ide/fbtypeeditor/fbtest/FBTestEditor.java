@@ -13,11 +13,10 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtest;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
@@ -55,14 +54,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
@@ -72,19 +69,10 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 	private FBType type;
 	private Composite resultContainer;
 	private Document document;
-	boolean blockListeners = false;
 	private TextViewer resultViewer;
-	protected ComposedAdapterFactory adapterFactory;
-	private TreeViewer serviceSequencesViewer;
+	private ComposedAdapterFactory adapterFactory;
 	private CommandStack commandStack;
 	
-	private final EContentAdapter adapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(Notification notification) {
-			super.notifyChanged(notification);
-		}
-	};
-
 	public FBTestEditor() {
 		document = new Document();
 	}
@@ -104,7 +92,6 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 		if (input instanceof FBTypeEditorInput) {
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			type = untypedInput.getContent();
-			type.eAdapters().add(adapter);
 		}
 		setSite(site);
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
@@ -156,7 +143,6 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 			public void widgetSelected(final SelectionEvent e) {
 				StartAutomaticRemoteTest cmd = new StartAutomaticRemoteTest(type, document);
 				getCommandStack().execute(cmd);
-				//setDirty();
 			}
 
 			@Override
@@ -169,7 +155,8 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 	private final IDocumentListener listener = new IDocumentListener() {
 		@Override
 		public void documentChanged(final DocumentEvent event) {
-		resultViewer.setDocument(document = new Document(event.getDocument().get()));
+			document = new Document(event.getDocument().get());
+			resultViewer.setDocument(document);
 			resultViewer.refresh();
 		}
 
@@ -183,22 +170,12 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart part,
-			final ISelection selection) {
-	}
-
-	@Override
-	public void dispose() {
-		if (type != null && type.eAdapters().contains(adapter)) {
-			type.eAdapters().remove(adapter);
-		}
-		super.dispose();
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 	}
 
 	@Override
 	public boolean outlineSelectionChanged(Object selectedElement) {
-		boolean bRetVal = false;
-		return bRetVal;
+		return false;
 	}
 
 	@Override
@@ -207,57 +184,18 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 	}
 	
 	private void createSequenceTreeViewer(Composite composite) {
-		serviceSequencesViewer = new TreeViewer(composite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		TreeViewer serviceSequencesViewer = new TreeViewer(composite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		GridData serviceSequenceData = new GridData();
 		serviceSequenceData.horizontalAlignment = GridData.FILL;
 		serviceSequenceData.verticalAlignment = GridData.FILL;
 		serviceSequenceData.grabExcessHorizontalSpace = true;
 		serviceSequenceData.grabExcessVerticalSpace = true;
 		serviceSequencesViewer.getTree().setLayoutData(serviceSequenceData);
-		serviceSequencesViewer.setContentProvider(new AdapterFactoryContentProvider(
-				getAdapterFactory()));
-//		AdapterFactoryLabelProvider myLP=new AdapterFactoryLabelProvider.ColorProvider(
-//				getAdapterFactory(), Display.getCurrent().getSystemColor(SWT.COLOR_RED), Display.getCurrent().getSystemColor(SWT.COLOR_GREEN));	
+		serviceSequencesViewer.setContentProvider(new AdapterFactoryContentProvider(getAdapterFactory()));
 		ColumnLabelProvider myLP=new TestResultLabelProvider();
-//				getAdapterFactory());		
-//		myLP.addListener(new ILabelProviderListener() {
-//			
-//			@Override
-//			public void labelProviderChanged(LabelProviderChangedEvent event) {
-//			}
-//		});
 		serviceSequencesViewer.setLabelProvider(myLP);
 		new AdapterFactoryTreeEditor(serviceSequencesViewer.getTree(), adapterFactory);
-		//createContextMenuFor(serviceSequencesViewer);		
 		serviceSequencesViewer.setInput(type.getService());		
-//		serviceSequencesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-//			public void selectionChanged(
-//					final SelectionChangedEvent event) {
-//				if (event.getSelection() instanceof StructuredSelection) {
-//					StructuredSelection selection = (StructuredSelection) event
-//							.getSelection();										
-//					if(!blockGraphicalViewerUpdate){
-//						ServiceSequence selectedSequence = null;
-//						if(selection.getFirstElement() instanceof ServiceSequence){
-//							selectedSequence = (ServiceSequence) selection.getFirstElement();
-//						}
-//						else if(selection.getFirstElement() instanceof ServiceTransaction){
-//							selectedSequence = (ServiceSequence)((ServiceTransaction) selection.getFirstElement()).eContainer();
-//						}
-//						else if(selection.getFirstElement() instanceof InputPrimitive){
-//							selectedSequence = (ServiceSequence)((InputPrimitive) selection.getFirstElement()).eContainer().eContainer();
-//						}
-//						else if(selection.getFirstElement() instanceof OutputPrimitive){
-//							selectedSequence = (ServiceSequence)((OutputPrimitive) selection.getFirstElement()).eContainer().eContainer();
-//						}
-//						
-//						if(null != selectedSequence){
-//							((SequenceRootEditPart)getGraphicalViewer().getRootEditPart().getContents()).setSelectedSequence(selectedSequence);							
-//						}
-//					}
-//				}
-//			}
-//		});
 	}
 
 	private ComposedAdapterFactory getAdapterFactory() {		
@@ -274,27 +212,27 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 	}
 
 	public class TestResultLabelProvider extends ColumnLabelProvider implements ILabelDecorator{
-		private static final int TestOK = 1;
-		private static final int TestFailed = -1;
-		private static final int NoTest = 0;	
-		private AdapterFactoryLabelProvider AFLP;	
-		HashMap<Integer,ImageDescriptor> decorators=new HashMap<Integer,ImageDescriptor>();
+		private static final int testOK = 1;
+		private static final int testFailed = -1;
+		private static final int noTest = 0;	
+		private AdapterFactoryLabelProvider adpFactLabelProvider;	
+		private Map<Integer,ImageDescriptor> decorators = new HashMap<>();
 		
 		public TestResultLabelProvider() {
-			AFLP = new AdapterFactoryLabelProvider(getAdapterFactory());
-			decorators.put(new Integer(TestFailed), FordiacImage.ICON_TestFailed.getImageDescriptor());
-			decorators.put(new Integer(TestOK), FordiacImage.ICON_TestOK.getImageDescriptor());
-			decorators.put(new Integer(NoTest), FordiacImage.ICON_NoTest.getImageDescriptor());
+			adpFactLabelProvider = new AdapterFactoryLabelProvider(getAdapterFactory());
+			decorators.put(Integer.valueOf(testFailed), FordiacImage.ICON_TestFailed.getImageDescriptor());
+			decorators.put(Integer.valueOf(testOK), FordiacImage.ICON_TestOK.getImageDescriptor());
+			decorators.put(Integer.valueOf(noTest), FordiacImage.ICON_NoTest.getImageDescriptor());
 		}
 
 		@Override
 		public Image getImage(Object element) {
-			return AFLP.getImage(element);
+			return adpFactLabelProvider.getImage(element);
 		}
 
 		@Override
 		public String getText(Object element) {
-			return AFLP.getText(element);
+			return adpFactLabelProvider.getText(element);
 		}
 
 		private int getStatus(Object object) {
@@ -305,7 +243,6 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 				retval = (((ServiceSequence) object).getTestResult());
 			} else {
 				if (object instanceof InputPrimitive) {
-//					retval = getStatus(((InputPrimitive)object).eContainer());
 					retval=-17;
 				}
 				if (object instanceof OutputPrimitive) {
@@ -315,26 +252,6 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 				return retval;
 		}
 		
-		@Override
-		public Color getBackground(Object object) {
-			Color retval = null;
-			int status = getStatus(object);	
-			switch (status) {
-				case -1:
-					retval = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-					break;
-				case 1:
-					retval = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
-					break;
-				default:
-					break;
-				}
-			if (null != retval) {
-//				return retval;
-			}
-			return super.getBackground(object);
-		}
-
 		public void update(ViewerCell cell) {
 			Object element = cell.getElement();
 			cell.setText(getText(element));
@@ -348,11 +265,11 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 
 		@Override
 		public Image decorateImage(Image image, Object element) {
-			ImageDescriptor IDesc = decorators.get(getStatus(element));
+			ImageDescriptor imgDesc = decorators.get(getStatus(element));
 			Image retval;
-			if (null != IDesc) {			
-				DecorationOverlayIcon DOC = new DecorationOverlayIcon(image, IDesc, org.eclipse.jface.viewers.IDecoration.BOTTOM_RIGHT);
-				retval = DOC.createImage();
+			if (null != imgDesc) {			
+				DecorationOverlayIcon decOverlay = new DecorationOverlayIcon(image, imgDesc, org.eclipse.jface.viewers.IDecoration.BOTTOM_RIGHT);
+				retval = decOverlay.createImage();
 			} else {
 				retval = image;
 			}

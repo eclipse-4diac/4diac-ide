@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.9.0.qualifier
-Bundle-Name: FB Type Management
+Bundle-Name: FB Type Management (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.typemanagement.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.typemanagement;singleton:=true

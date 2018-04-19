@@ -33,10 +33,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
  * @author kerbled
  * 
  */
-public class Utils {
+public final class Utils {
 
 	/** The Constant ASN1_TAG_IECSTRING. */
 	private static final int ASN1_TAG_IECSTRING = 80;
+	
+	private Utils() {
+		//private constructor to make class non instantiable
+	}
 
 	/**
 	 * Deploy the network required for testing a function block.
@@ -69,19 +73,19 @@ public class Utils {
 			// create test resource
 			String request = MessageFormat.format(
 					Messages.FBTester_CreateResourceInstance, new Object[] {
-							id++, "_" + type.getName() + "_RES", "EMB_RES" });
-			sendREQ("", request, outputStream, inputStream);
+							id++, "_" + type.getName() + "_RES", "EMB_RES" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			sendREQ("", request, outputStream, inputStream); //$NON-NLS-1$
 
 			request = MessageFormat
 					.format(Messages.FBTester_CreateFBInstance, new Object[] {
-							id++, "_" + type.getName(), type.getName() });
-			sendREQ("_" + type.getName() + "_RES", request, outputStream,
+							id++, "_" + type.getName(), type.getName() }); //$NON-NLS-1$
+			sendREQ("_" + type.getName() + "_RES", request, outputStream, //$NON-NLS-1$ //$NON-NLS-2$
 					inputStream);
 
 			// start test resource
 			request = MessageFormat.format(Messages.FBTester_Start,
 					new Object[] { id++ });
-			sendREQ("_" + type.getName() + "_RES", request, outputStream,
+			sendREQ("_" + type.getName() + "_RES", request, outputStream, //$NON-NLS-1$ //$NON-NLS-2$
 					inputStream);
 
 			socket.close();
@@ -126,13 +130,13 @@ public class Utils {
 			socket.setSoTimeout(10000);
 
 			String kill = MessageFormat.format(Messages.FBTester_KillFB,
-					new Object[] { id++, "_" + type.getName() + "_RES" });
+					new Object[] { id++, "_" + type.getName() + "_RES" }); //$NON-NLS-1$ //$NON-NLS-2$
 			String delete = MessageFormat.format(Messages.FBTester_DeleteFB,
-					new Object[] { id++, "_" + type.getName() + "_RES" });
+					new Object[] { id++, "_" + type.getName() + "_RES" }); //$NON-NLS-1$ //$NON-NLS-2$
 
-			sendREQ("", kill, outputStream, inputStream);
+			sendREQ("", kill, outputStream, inputStream); //$NON-NLS-1$
 
-			sendREQ("", delete, outputStream, inputStream);
+			sendREQ("", delete, outputStream, inputStream); //$NON-NLS-1$
 			
 			
 			socket.close();
@@ -170,9 +174,7 @@ public class Utils {
 			outputStream.writeShort(destination.length());
 			outputStream.writeBytes(destination);
 
-			// out.flush();
-			// Do NOT flush here, all data should be sent within 1 ethernet
-			// frame
+			// Do NOT flush here, all data should be sent within 1 ethernet frame
 			// in case packet fragmentation is not properly handled by server
 
 			outputStream.writeByte(ASN1_TAG_IECSTRING);
@@ -181,21 +183,21 @@ public class Utils {
 			outputStream.flush();
 
 			System.out.println(request);
-			String response = ""; //$NON-NLS-1$
+			StringBuilder response = new StringBuilder();
 			@SuppressWarnings("unused")
 			byte b = inputStream.readByte();
 			
 			short size = inputStream.readShort();
 
 			for (int i = 0; i < size; i++) {
-				response += (char) inputStream.readByte();
+				response.append((char) inputStream.readByte());
 			}
 			System.out.println(response);
 
-			if (response.contains("Reason")) {
-				throw new Exception(response);
+			if (response.toString().contains("Reason")) { //$NON-NLS-1$
+				throw new Exception(response.toString());
 			}
-			output = response;
+			output = response.toString();
 		}
 		return output;
 	}

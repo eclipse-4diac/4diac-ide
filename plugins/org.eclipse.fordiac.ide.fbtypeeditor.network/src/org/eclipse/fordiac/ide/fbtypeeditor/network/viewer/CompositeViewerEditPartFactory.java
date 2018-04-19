@@ -13,13 +13,18 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart;
+import org.eclipse.fordiac.ide.application.policies.FBNElementSelectionPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.AdapterFBEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
+import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
@@ -66,10 +71,32 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 		if (modelElement instanceof IInterfaceElement) {
 			IInterfaceElement iElement = (IInterfaceElement)modelElement;
 			if(iElement.eContainer().eContainer() instanceof CompositeFBType){
-				return new CompositeInternalInterfaceEditPart();
+				return new CompositeInternalInterfaceEditPartRO();
+			}else {
+				return new InterfaceEditPartForFBNetworkRO();
 			}
 		}
-		
+		if (modelElement instanceof FB) {
+			return new FBEditPartRO(zoomManager);
+		}
+		if (modelElement instanceof AdapterFB) {
+			return new AdapterFBEditPart(zoomManager) {
+				@Override
+				protected void createEditPolicies() {
+					// Highlight In and Outconnections of the selected fb, allow alignment of FBs
+					installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FBNElementSelectionPolicy());
+					installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());					
+				}
+				
+				@Override
+				public void performDirectEdit() {
+					//don't do anything here to avoid direct edit
+				}
+			};
+		}
+		if (modelElement instanceof Connection) {
+			return new ConnectionEditPartRO();
+		}
 		return super.getPartForElement(context, modelElement);
 	}
 

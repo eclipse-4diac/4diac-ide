@@ -9,16 +9,25 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -26,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
@@ -79,7 +89,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		EVENT, DATA, ADAPTER
 	}
 	
-	protected abstract CreateInterfaceElementCommand newCommand(boolean isInput);
+	protected abstract CreateSubAppInterfaceElementCommand newCommand(boolean isInput);
 	protected abstract String[] fillTypeCombo();
 	
 	@Override
@@ -137,7 +147,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new ChangeInterfaceOrderCommand(getType().getInterface(), (IInterfaceElement) selection, true, true));
+					executeCommand(new ChangeInterfaceOrderCommand((IInterfaceElement) selection, true, true));
 					inputsViewer.refresh();
 				}
 			}
@@ -148,7 +158,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new ChangeInterfaceOrderCommand(getType().getInterface(), (IInterfaceElement) selection, true, false));
+					executeCommand(new ChangeInterfaceOrderCommand((IInterfaceElement) selection, true, false));
 					inputsViewer.refresh();
 				}
 			}
@@ -207,7 +217,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new ChangeInterfaceOrderCommand(getType().getInterface(), (IInterfaceElement) selection, false, true));
+					executeCommand(new ChangeInterfaceOrderCommand((IInterfaceElement) selection, false, true));
 					outputsViewer.refresh();
 				}
 			}
@@ -218,7 +228,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new ChangeInterfaceOrderCommand(getType().getInterface(), (IInterfaceElement) selection, false, false));
+					executeCommand(new ChangeInterfaceOrderCommand((IInterfaceElement) selection, false, false));
 					outputsViewer.refresh();
 				}
 			}
@@ -390,6 +400,15 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			return null;
 		}
 		
+		private DataType getTypeForSelection(String text) {
+			for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFbNetwork().getApplication().getAutomationSystem().getPalette())){
+				if(adaptertype.getAdapterType().getName().equals(text)) {
+					return adaptertype.getAdapterType();
+				}
+			}
+			return null;
+		}
+		
 		public void modify(final Object element, final String property, final Object value) {
 			TableItem tableItem = (TableItem) element;
 			Object data =  tableItem.getData();
@@ -401,23 +420,54 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 					cmd = new ChangeCommentCommand((INamedElement) data, value.toString());
 				}else {
 					if(TYPE.equals(property)) {
+						String dataTypeName = ((ComboBoxCellEditor)viewer.getCellEditors()[1]).getItems()[(int) value];
 						if(data instanceof AdapterDeclaration) {
-							
+							DataType newType = getTypeForSelection(dataTypeName);			
+							cmd = new ChangeTypeCommand((VarDeclaration) data, newType);
 						}else {
 							if(data instanceof VarDeclaration) {
 								cmd = new ChangeTypeCommand((VarDeclaration) data, 
-										DataTypeLibrary.getInstance().getType(
-												((ComboBoxCellEditor)viewer.getCellEditors()[1]).getItems()[(int) value]));
+										DataTypeLibrary.getInstance().getType(dataTypeName));
 							}							
 						}
 					}
 				}
 			}
-			if((null != cmd) && (null != commandStack)){
-				commandStack.execute(cmd);
+			if(null != cmd){
+				executeCommand(cmd);
 				viewer.refresh(data);
 			}
 			
 		}
+	}
+
+	protected static ArrayList<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette){
+		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();		
+		Palette pal = systemPalette;
+		if(null == pal){
+			pal = TypeLibrary.getInstance().getPalette();
+		}			
+		retVal.addAll(getAdapterGroup(pal.getRootGroup()));		
+		return retVal;
+	}
+	
+	protected static ArrayList<AdapterTypePaletteEntry> getAdapterGroup(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
+		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();	
+		for (Iterator<PaletteGroup> iterator = group.getSubGroups().iterator(); iterator.hasNext();) {
+			PaletteGroup paletteGroup = iterator.next();
+			retVal.addAll(getAdapterGroup(paletteGroup));		
+		}		
+		retVal.addAll(getAdapterGroupEntries(group));		
+		return retVal;
+	}
+	
+	protected static ArrayList<AdapterTypePaletteEntry> getAdapterGroupEntries(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
+		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();	
+		for (PaletteEntry entry : group.getEntries()) {
+			if(entry instanceof AdapterTypePaletteEntry){
+				retVal.add((AdapterTypePaletteEntry) entry);				
+			}
+		}
+		return retVal;
 	}
 }

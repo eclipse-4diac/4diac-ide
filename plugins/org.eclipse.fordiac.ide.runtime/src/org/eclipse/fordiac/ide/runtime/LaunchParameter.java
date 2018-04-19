@@ -30,11 +30,11 @@ public class LaunchParameter {
 	}
 
 	public String[] getValues() {
-		return values;
+		return values.clone();
 	}
 
 	public void setValues(String[] values) {
-		this.values = values;
+		this.values = values.clone();
 	}
 
 	/**

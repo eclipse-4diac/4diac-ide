@@ -162,7 +162,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if(null != type) {
-			arraySizeText.setText(0 >= getType().getArraySize() ? "" : (new Integer((getType()).getArraySize())).toString()); //$NON-NLS-1$
+			arraySizeText.setText(0 >= getType().getArraySize() ? "" : (Integer.toString((getType()).getArraySize()))); //$NON-NLS-1$
 			initValueText.setText(null == getType().getVarInitialization() ? "" : getType().getVarInitialization().getInitialValue()); //$NON-NLS-1$
 			if(getType().eContainer().eContainer() instanceof FBType){
 				eventComposite.setVisible(true);

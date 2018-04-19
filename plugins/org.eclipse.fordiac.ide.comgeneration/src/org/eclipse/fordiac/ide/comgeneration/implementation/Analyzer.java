@@ -57,7 +57,7 @@ public class Analyzer {
 			sourceEvents.add((Event) mappedElement.getInterfaceElement(eventConnection.getSource().getName()));
 		} else if (connection instanceof DataConnection) {
 			DataConnection dataConnection = (DataConnection) connection;
-			for (With with : dataConnection.getSource().getWiths()) {
+			for (With with : dataConnection.getDataSource().getWiths()) {
 				if (with.eContainer() instanceof Event) {
 					sourceEvents.add((Event) mappedElement.getInterfaceElement(((Event)with.eContainer()).getName()));
 				}

@@ -64,8 +64,7 @@ import org.eclipse.ui.actions.ActionFactory;
 /**
  * This class builds the context menu for the FBNetwork Editor.
  */
-public class UIFBNetworkContextMenuProvider extends
-ZoomUndoRedoContextMenuProvider {
+public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvider {
 
 	Palette palette;
 	DiagramEditorWithFlyoutPalette editor;
@@ -157,18 +156,7 @@ ZoomUndoRedoContextMenuProvider {
 		}
 
 		
-		menu.appendToGroup(GEFActionConstants.GROUP_REST, new Separator());
-		menu.appendToGroup(GEFActionConstants.GROUP_REST, addHWMappingMenu());
-		
-		action = registry.getAction(UnmapAction.ID);
-		if (action != null) {
-			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
-		}
-		
-		action = registry.getAction(UnmapAllAction.ID);
-		if (action != null) {
-			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
-		}
+		createMappingMenuEntries(menu);
 
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, new Separator()); 
 				
@@ -182,6 +170,7 @@ ZoomUndoRedoContextMenuProvider {
 		createFBMenus(menu);		
 
 	}
+
 
 
 	@SuppressWarnings("rawtypes")
@@ -269,13 +258,28 @@ ZoomUndoRedoContextMenuProvider {
 		return action;
 	}
 
-	/**
-	 * Adds the hw mapping menu.
-	 * 
-	 * @return the IMenuManager
-	 */
+	protected void createMappingMenuEntries(final IMenuManager menu) {
+		IAction action;
+		menu.appendToGroup(GEFActionConstants.GROUP_REST, new Separator());
+		
+		IMenuManager mappingMenuEntry = createHWMappingMenu();
+		if(null != mappingMenuEntry) {
+			menu.appendToGroup(GEFActionConstants.GROUP_REST, mappingMenuEntry);
+		}
+		
+		action = registry.getAction(UnmapAction.ID);
+		if (action != null) {
+			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
+		}
+		
+		action = registry.getAction(UnmapAllAction.ID);
+		if (action != null) {
+			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
+		}
+	}
+
 	@SuppressWarnings("unchecked")
-	private IMenuManager addHWMappingMenu() {
+	protected IMenuManager createHWMappingMenu() {
 		MenuManager submenu = new MenuManager(Messages.UIFBNetworkContextMenuProvider_LABEL_HardwareMapping);
 		GEFActionConstants.addStandardActionGroups(submenu);
 

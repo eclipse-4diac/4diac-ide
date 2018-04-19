@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
@@ -43,7 +42,7 @@ import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.util.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.controls.editors.EditorUtils;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -126,36 +125,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 							return false;
 						}
 
-						final String projectName = delta.getResource()
-								.getProject().getName();
-						AutomationSystem system = systemManager
-								.getSystemForName(projectName);
+						final String projectName = delta.getResource().getProject().getName();
+						AutomationSystem system = systemManager.getSystemForName(projectName);
 						if ((null == system)
-								&& (!projectName
-										.equals(TypeLibrary.TOOL_LIBRARY_PROJECT_NAME))) {
-							if (!systemImportWatingList.contains(projectName)) {
-								systemImportWatingList.add(projectName);
-								WorkspaceJob job = new WorkspaceJob(
-										"Load system: "
-												+ delta.getResource()
-														.getProject().getName()
-												+ " after import") {
-									public IStatus runInWorkspace(
-											IProgressMonitor monitor) {
-										// do the actual work in here
-										loadSystem(delta.getResource()
-												.getProject());
-										// loading of the system has finished we
-										// can remove it from the list
-										systemImportWatingList
-												.remove(projectName);
-										return Status.OK_STATUS;
-									}
-								};
-								job.setRule(delta.getResource().getProject());
-								job.schedule();
-							}
-
+								&& (!TypeLibrary.TOOL_LIBRARY_PROJECT_NAME.equals(projectName))) {
+							loadSystem(delta.getResource().getProject());
 						}
 
 						if ((null != system)
@@ -347,7 +321,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	 * @param dstPalette
 	 * @param dstRootPaletteGroup
 	 */
-	private void movePaletteGroup(IContainer srcGroupFolder,
+	private static void movePaletteGroup(IContainer srcGroupFolder,
 			IContainer dstGroupFolder, Palette srcPalette,
 			Palette dstPalette) {
 		PaletteGroup dstGroup = TypeLibrary.getPaletteGroup(dstPalette, dstGroupFolder);
@@ -424,7 +398,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		updatePaletteEntry(file, entry);
 	}
 
-	private void updatePaletteEntry(final IFile newFile, final PaletteEntry entry) {
+	private static void updatePaletteEntry(final IFile newFile, final PaletteEntry entry) {
 		if (null != entry) {
 			String newTypeName = TypeLibrary.getTypeNameFromFile(newFile);
 			entry.setLabel(newTypeName);
@@ -449,15 +423,27 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private void loadSystem(IProject project) {
-		AutomationSystem system = systemManager.loadProject(project);
-		if(null != system){
-			if(!system.getName().equals(project.getName())){
-				//we have been copied set the system name and correctly save it
-				renameSystem(system, project);
-			}
+	private void loadSystem(final IProject project) {		
+		final String projectName = project.getName();
+		if (!systemImportWatingList.contains(projectName)) {
+			systemImportWatingList.add(projectName);
+			WorkspaceJob job = new WorkspaceJob( "Load system: " + projectName) {
+				public IStatus runInWorkspace(IProgressMonitor monitor) {
+					// do the actual work in here
+					AutomationSystem system = systemManager.loadProject(project);
+					if((null != system) && (!system.getName().equals(projectName))){
+						//we have been copied set the system name and correctly save it
+						renameSystem(system, project);
+					}
+					systemManager.notifyListeners();
+					// loading of the system has finished we can remove it from the list
+					systemImportWatingList.remove(projectName);
+					return Status.OK_STATUS;
+				}
+			};
+			job.setRule(project);
+			job.schedule();
 		}
-		systemManager.notifyListeners();
 	}
 	
 	private void handleProjectRename(final IResourceDelta delta) {
@@ -477,18 +463,21 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	protected void renameSystem(final AutomationSystem system, final IProject project) {
+		IFile oldSystemFile = project.getFile(system.getName() + SystemManager.SYSTEM_FILE_ENDING);
 		String newProjectName = project.getName();
-		system.setName(newProjectName);
-		
-		IPath path = project.getLocation().append(system.getName() + SystemManager.SYSTEM_FILE_ENDING);
-		URI uri = URI.createFileURI(path.toOSString());
-		system.eResource().setURI(uri);
+		system.setName(newProjectName);		
 		system.setProject(project);     //update to the new project
-		
 		
 		WorkspaceJob job = new WorkspaceJob("Save system configuration: " + newProjectName) {
 			public IStatus runInWorkspace(IProgressMonitor monitor) {
 				// do the actual work in here
+				try {
+					//try to remove the old file
+					oldSystemFile.delete(true, null);
+				} catch (CoreException e) {
+					Activator.getDefault().logError(e.getMessage(), e);
+				}
+				//save the system with the new name and the new system file
 				SystemManager.INSTANCE.saveSystem(system);				
 				return Status.OK_STATUS;
 			}
@@ -507,7 +496,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 	
-	private void closeAllEditors(final AutomationSystem refSystem) {
+	private static void closeAllEditors(final AutomationSystem refSystem) {
 		//display related stuff needs to run in a display thread
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
@@ -519,7 +508,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		});
 		
 	}
-	private void closeAllFBTypeEditor(final PaletteEntry entry) {
+	private static void closeAllFBTypeEditor(final PaletteEntry entry) {
 		//display related stuff needs to run in a display thread
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override

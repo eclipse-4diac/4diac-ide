@@ -10,9 +10,6 @@
 package org.eclipse.fordiac.ide.model.structuredtext;
 
 import com.google.inject.Binder;
-import com.google.inject.binder.AnnotatedBindingBuilder;
-import com.google.inject.binder.LinkedBindingBuilder;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextRuntimeModule;
 import org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.ExpressionParser;
@@ -24,10 +21,7 @@ public class ExpressionRuntimeModule extends StructuredTextRuntimeModule {
   @Override
   public void configureFileExtensions(final Binder binder) {
     if (((this.properties == null) || (this.properties.getProperty(Constants.FILE_EXTENSIONS) == null))) {
-      AnnotatedBindingBuilder<String> _bind = binder.<String>bind(String.class);
-      Named _named = Names.named(Constants.FILE_EXTENSIONS);
-      LinkedBindingBuilder<String> _annotatedWith = _bind.annotatedWith(_named);
-      _annotatedWith.toInstance("expr");
+      binder.<String>bind(String.class).annotatedWith(Names.named(Constants.FILE_EXTENSIONS)).toInstance("expr");
     }
   }
   

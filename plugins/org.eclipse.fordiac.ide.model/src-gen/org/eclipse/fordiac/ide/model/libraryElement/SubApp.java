@@ -40,7 +40,7 @@ public interface SubApp extends FBNetworkElement {
 	 * @return the value of the '<em>Sub App Network</em>' containment reference.
 	 * @see #setSubAppNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp_SubAppNetwork()
-	 * @model containment="true" resolveProxies="true" required="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	FBNetwork getSubAppNetwork();
@@ -59,7 +59,7 @@ public interface SubApp extends FBNetworkElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='LibraryElement type = super.getType();\nif(null != type){\n\treturn (SubAppType) type; \n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//this cannot be moved to the annotation class because there we don\'t have the super access!!!\r\norg.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();\r\nif(type instanceof SubAppType){\r\n   return (SubAppType) type; \r\n}\r\nreturn null;'"
 	 * @generated
 	 */
 	SubAppType getType();

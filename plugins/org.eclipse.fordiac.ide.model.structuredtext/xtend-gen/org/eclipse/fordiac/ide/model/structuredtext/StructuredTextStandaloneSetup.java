@@ -12,7 +12,6 @@ import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetu
 @SuppressWarnings("all")
 public class StructuredTextStandaloneSetup extends StructuredTextStandaloneSetupGenerated {
   public static void doSetup() {
-    StructuredTextStandaloneSetup _structuredTextStandaloneSetup = new StructuredTextStandaloneSetup();
-    _structuredTextStandaloneSetup.createInjectorAndDoEMFRegistration();
+    new StructuredTextStandaloneSetup().createInjectorAndDoEMFRegistration();
   }
 }

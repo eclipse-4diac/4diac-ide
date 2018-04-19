@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,15 +17,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.deployment.ResourceDeploymentData.ParameterData;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateConnectionException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBInstanceException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateResourceInstanceException;
@@ -34,10 +35,8 @@ import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
 import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
+import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -47,7 +46,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -57,24 +55,15 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-/**
- * The Class DeploymentCoordinator.
- */
-public class DeploymentCoordinator {
+public class DeploymentCoordinator implements IDeploymentListener {
+	private static DeploymentCoordinator instance;
+	private List<IDeploymentExecutor> deploymentExecutors = null;
+	private List<AbstractDeviceManagementCommunicationHandler> deviceMangementCommunicationHandlers = null;
+	private final Map<Device, List<VarDeclaration>> deployedDeviceProperties = new HashMap<>();
 
-	private final Hashtable<Device, ArrayList<VarDeclaration>> deployedDeviceProperties = new Hashtable<Device, ArrayList<VarDeclaration>>();
-
-	/**
-	 * Adds the device property.
-	 * 
-	 * @param dev
-	 *            the dev
-	 * @param property
-	 *            the property
-	 */
 	public void addDeviceProperty(Device dev, VarDeclaration property) {
 		if (deployedDeviceProperties.containsKey(dev)) {
-			ArrayList<VarDeclaration> temp = deployedDeviceProperties.get(dev);
+			List<VarDeclaration> temp = deployedDeviceProperties.get(dev);
 			if (!temp.contains(property)) {
 				temp.add(property);
 			}
@@ -85,63 +74,28 @@ public class DeploymentCoordinator {
 		}
 	}
 
-	/**
-	 * Sets the device properties.
-	 * 
-	 * @param dev
-	 *            the dev
-	 * @param properties
-	 *            the properties
-	 */
 	public void setDeviceProperties(Device dev,
-			ArrayList<VarDeclaration> properties) {
+			List<VarDeclaration> properties) {
 		deployedDeviceProperties.put(dev, properties);
 	}
 
-	/**
-	 * Removes the device property.
-	 * 
-	 * @param dev
-	 *            the dev
-	 * @param property
-	 *            the property
-	 */
 	public void removeDeviceProperty(Device dev, VarDeclaration property) {
 		if (deployedDeviceProperties.containsKey(dev)) {
-			ArrayList<VarDeclaration> temp = deployedDeviceProperties.get(dev);
+			List<VarDeclaration> temp = deployedDeviceProperties.get(dev);
 			if (temp.contains(property)) {
 				temp.remove(property);
 			}
 		}
 	}
 
-	/**
-	 * Gets the selected device properties.
-	 * 
-	 * @param dev
-	 *            the dev
-	 * 
-	 * @return the selected device properties
-	 */
-	public ArrayList<VarDeclaration> getSelectedDeviceProperties(Device dev) {
+	public List<VarDeclaration> getSelectedDeviceProperties(Device dev) {
 		return deployedDeviceProperties.get(dev);
 	}
 
-	/** The instance. */
-	private static DeploymentCoordinator instance;
-
-	/**
-	 * Instantiates a new deployment coordinator.
-	 */
 	private DeploymentCoordinator() {
 		// empty private constructor
 	}
 
-	/**
-	 * Gets the single instance of DeploymentCoordinator.
-	 * 
-	 * @return single instance of DeploymentCoordinator
-	 */
 	public static DeploymentCoordinator getInstance() {
 		if (instance == null) {
 			instance = new DeploymentCoordinator();
@@ -149,85 +103,26 @@ public class DeploymentCoordinator {
 		return instance;
 	}
 
-	/** The deployment executors. */
-	private ArrayList<IDeploymentExecutor> deploymentExecutors = null;
-
-	/** The device management communication handlers. */
-	private ArrayList<AbstractDeviceManagementCommunicationHandler> deviceMangementCommunicationHandlers = null;
-
-	/** The listener. */
-	private final IDeploymentListener listener = new IDeploymentListener() {
-
-		@Override
-		public void responseReceived(String response, String source) {
-			responseReceivedX(response, source);
-		}
-
-		@Override
-		public void postCommandSent(String command, String destination) {
-			postCommandSentX(command, destination);
-		}
-
-		@Override
-		public void postCommandSent(String message) {
-			postCommandSentX(message);
-		}
-
-		@Override
-		public void finished() {
-			finishedX();
-		}
-
-		@Override
-		public void postCommandSent(String info, String destination,
-				String command) {
-			postCommandSentX(info, destination, command);
-		}
-
-	};
-
-	/**
-	 * Gets the mG r_ id.
-	 * 
-	 * @param resource
-	 *            the resource
-	 * 
-	 * @return the mG r_ id
-	 */
 	private String getMGR_ID(final Resource resource) {
 		return getMGR_ID(resource.getDevice());
 	}
 
-	/**
-	 * Gets the mG r_ id.
-	 * 
-	 * @param dev
-	 *            the dev
-	 * 
-	 * @return the mG r_ id
-	 */
 	public static String getMGR_ID(final Device dev) {
 		for(VarDeclaration varDecl : dev.getVarDeclarations()) {
-			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) {
-				String val = getVariableValue(varDecl, dev.getAutomationSystem(), dev);
+			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) { //$NON-NLS-1$
+				String val = DeploymentHelper.getVariableValue(varDecl, dev.getAutomationSystem());
 				if(null != val){				
 					return val;
 				}
 			}
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
-	/**
-	 * The Class DownloadRunnable.
-	 */
 	class DownloadRunnable implements IRunnableWithProgress {
-
 		private final List<Device> devices;
 		private final List<ResourceDeploymentData> resources;
-
-		/** the Communication handler */
-		AbstractDeviceManagementCommunicationHandler overrideDevMgmCommHandler;
+		private AbstractDeviceManagementCommunicationHandler overrideDevMgmCommHandler;
 
 		/**
 		 * DownloadRunnable constructor.
@@ -273,7 +168,7 @@ public class DeploymentCoordinator {
 				IDeploymentExecutor executor = getDeploymentExecutor(resDepData.res.getDevice(), overrideDevMgmCommHandler);
 
 				if (executor != null) {
-					executor.getDevMgmComHandler().addDeploymentListener(listener);
+					executor.getDevMgmComHandler().addDeploymentListener(getInstance());
 					executor.getDevMgmComHandler().resetTypes();
 					try {
 						deployResource(monitor, resDepData, executor);
@@ -290,7 +185,7 @@ public class DeploymentCoordinator {
 							}
 						});
 					}
-					executor.getDevMgmComHandler().removeDeploymentListener(listener);
+					executor.getDevMgmComHandler().removeDeploymentListener(getInstance());
 
 				} else {
 					printUnsupportedDeviceProfileMessageBox(resDepData.res.getDevice(), resDepData.res);
@@ -302,8 +197,7 @@ public class DeploymentCoordinator {
 					throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 				}
 			}
-			// Thread.sleep(500);
-			finishedX();
+			finished();
 			monitor.done();
 		}
 
@@ -311,7 +205,7 @@ public class DeploymentCoordinator {
 			int retVal = devices.size() + resources.size();
 			for (ResourceDeploymentData resDepData : resources) {
 				retVal += countResourceParams(resDepData.res);
-				retVal += resDepData.fbs.size() + resDepData.connections.size() + resDepData.subAppInterfaceCrossingConns.size();
+				retVal += resDepData.fbs.size() + resDepData.connections.size() + resDepData.params.size();
 				//TODO count variables of Fbs
 			}
 			return retVal;
@@ -322,7 +216,7 @@ public class DeploymentCoordinator {
 			for (VarDeclaration varDecl : res.getVarDeclarations()) {
 				if (varDecl.getValue() != null
 						&& varDecl.getValue().getValue() != null
-						&& varDecl.getValue().getValue().equals("")) {
+						&& varDecl.getValue().getValue().equals("")) { //$NON-NLS-1$
 					work++;
 				}
 			}
@@ -335,93 +229,101 @@ public class DeploymentCoordinator {
 				CreateConnectionException, StartException, DisconnectException {
 			Resource res = resDepData.res;
 			if (!res.isDeviceTypeResource()) {
-				executor.getDevMgmComHandler().connect(getMGR_ID(res));
-				executor.createResource(res);
-				monitor.worked(1);
-				for (VarDeclaration varDecl : res.getVarDeclarations()) {
-					String val = getVariableValue(varDecl, res.getAutomationSystem(), res);
-					if(null != val){
-						executor.writeResourceParameter(res, varDecl.getName(), val);
-						monitor.worked(1);
+				try {  //this try catch block with rethrowing is needed so that we can have the finally statement for disconnecting
+					executor.getDevMgmComHandler().connect(getMGR_ID(res));
+					executor.createResource(res);
+					monitor.worked(1);
+					for (VarDeclaration varDecl : res.getVarDeclarations()) {
+						String val = DeploymentHelper.getVariableValue(varDecl, res.getAutomationSystem());
+						if(null != val){
+							executor.writeResourceParameter(res, varDecl.getName(), val);
+							monitor.worked(1);
+						}
 					}
+	
+					createFBInstance(resDepData, executor, monitor);	
+					deployParamters(resDepData, executor, monitor);   //this needs to be done before the connections are created
+					deployConnections(resDepData, executor, monitor);
+	
+					if (!devices.contains(res.getDevice())) {
+						executor.startResource(res);
+					} else {
+						// resource is started when device is
+						// started
+					}
+				} catch (Exception e) {
+					throw e;
+				}finally { 
+					executor.getDevMgmComHandler().disconnect();
 				}
-
-				createFBInstance(resDepData, executor, monitor);				
-				deployConnections(resDepData, executor, monitor);
-				deploySubAppIfCrossingConnections(resDepData, executor, monitor);
-
-				if (!devices.contains(res.getDevice())) {
-					executor.startResource(res);
-				} else {
-					// resource is started when device is
-					// started
-				}
-				executor.getDevMgmComHandler().disconnect();
 			}
 		}
 
 		private void configureDevice(final IProgressMonitor monitor, Device device) {
 			IDeploymentExecutor executor = getDeploymentExecutor(device, overrideDevMgmCommHandler);
-			ArrayList<VarDeclaration> parameters = getSelectedDeviceProperties(device);
+			List<VarDeclaration> parameters = getSelectedDeviceProperties(device);
 
 			if (executor != null && parameters != null && parameters.size() > 0) {
 				try {
-					executor.getDevMgmComHandler().addDeploymentListener(listener);
+					executor.getDevMgmComHandler().addDeploymentListener(getInstance());
 					String mgrid = getMGR_ID(device);
 					executor.getDevMgmComHandler().connect(mgrid);
 					for (VarDeclaration varDeclaration : parameters) {
-						String value = getVariableValue(varDeclaration, device.getAutomationSystem(), device);
+						String value = DeploymentHelper.getVariableValue(varDeclaration, device.getAutomationSystem());
 						if (null != value) {
 							executor.writeDeviceParameter(device, varDeclaration.getName(), value);
 						}
 					}
 					executor.startDevice(device);
-					executor.getDevMgmComHandler().disconnect();
-					executor.getDevMgmComHandler().removeDeploymentListener(
-							listener);
 					monitor.worked(1);
 				} catch  (Exception e) {
 					//TODO model refactoring - show error message to user
 					Activator.getDefault().logError(e.getMessage(), e);
+				}finally {
+					try {
+						executor.getDevMgmComHandler().disconnect();
+					} catch (DisconnectException e) {
+						//TODO model refactoring - show error message to user
+						Activator.getDefault().logError(e.getMessage(), e);
+					}
+					executor.getDevMgmComHandler().removeDeploymentListener(getInstance());					
 				}
 			}
 		}
+		
+		private void deployParamters(ResourceDeploymentData resDepData, IDeploymentExecutor executor,
+				IProgressMonitor monitor) throws WriteFBParameterException {
+			for (ParameterData param : resDepData.params) {
+				executor.writeFBParameter(resDepData.res, param.value, new FBDeploymentData(param.prefix, (FB) param.var.getFBNetworkElement()), 
+						param.var);
+				monitor.worked(1);				
+			}
+			
+		}
 
 		private void deployConnections(final ResourceDeploymentData resDepData, final IDeploymentExecutor executor,  IProgressMonitor monitor) throws CreateConnectionException {
-			for (Connection con : resDepData.connections) {
+			for (ConnectionDeploymentData con : resDepData.connections) {
 				//TODO model refactoring - if one connection endpoint is part of resource find inner endpoint  
-				if (!con.isResTypeConnection()) {
-					executor.createConnection(resDepData.res, con.getSource(), con.getDestination());
-					monitor.worked(1);
-				}
+				executor.createConnection(resDepData.res, con);
+				monitor.worked(1);
 				if(monitor.isCanceled()){
 					break;
 				}
 			}
 		}
 		
-		private void deploySubAppIfCrossingConnections(final ResourceDeploymentData resDepData, final IDeploymentExecutor executor,  IProgressMonitor monitor) throws CreateConnectionException {
-			for (ResourceDeploymentData.SubAppInterfaceCrossingConnection subAppIfCrossignConn : resDepData.subAppInterfaceCrossingConns) {
-				executor.createConnection(resDepData.res, subAppIfCrossignConn.source, subAppIfCrossignConn.destination);
-				monitor.worked(1);
-				if(monitor.isCanceled()){
-					break;
-				}
-			}
-		}
-
 		private void createFBInstance(final ResourceDeploymentData resDepData, final IDeploymentExecutor executor,
 				final IProgressMonitor monitor)
 				throws CreateFBInstanceException, WriteFBParameterException {
 			Resource res = resDepData.res;
-			for (FB fb : resDepData.fbs) {
-				if(!fb.isResourceTypeFB()){
+			for (FBDeploymentData fb : resDepData.fbs) {
+				if(!fb.fb.isResourceTypeFB()){
 					executor.createFBInstance(fb, res);
 					monitor.worked(1);
-					InterfaceList interfaceList = fb.getInterface();
+					InterfaceList interfaceList = fb.fb.getInterface();
 					if (interfaceList != null) {
 						for (VarDeclaration varDecl : interfaceList.getInputVars()) {
-							String val = getVariableValue(varDecl, res.getAutomationSystem(), fb);
+							String val = DeploymentHelper.getVariableValue(varDecl, res.getAutomationSystem());
 							if(null != val){
 								executor.writeFBParameter(res, val, fb, varDecl);
 								monitor.worked(1);
@@ -433,22 +335,7 @@ public class DeploymentCoordinator {
 		}
 
 	}
-
-	private static String getVariableValue(VarDeclaration varDecl, AutomationSystem system, ConfigurableObject object) {
-		Value value = varDecl.getValue();
-		if (null != value && null != value.getValue() && !"".equals(value.getValue())){
-			String val = value.getValue();
-			if (val.contains("%")) {
-				String replaced = SystemManager.INSTANCE.getReplacedString(system, object, val);
-				if (replaced != null) {
-					val = replaced;
-				}
-			}
-			return val;
-		}		
-		return null;	
-	}
-
+	
 	/**
 	 * Count work creating f bs.
 	 * 
@@ -493,14 +380,14 @@ public class DeploymentCoordinator {
 			@Override
 			public void run() {				
 				MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.ICON_ERROR | SWT.OK);
-				String resName = "";
+				String resName = ""; //$NON-NLS-1$
 				if (null != res) {
 					resName = res.getName();
 				}
 
-				if(null != device.getProfile() && !device.getProfile().equals("")){
+				if(null != device.getProfile() && !device.getProfile().equals("")){ //$NON-NLS-1$
 					messageBox.setMessage(MessageFormat.format(Messages.DeploymentCoordinator_MESSAGE_DefinedProfileNotSupported,
-								new Object[] { (null != device.getProfile()) ? device.getProfile() : "",
+								new Object[] { (null != device.getProfile()) ? device.getProfile() : "", //$NON-NLS-1$
 										device.getName(), resName }));
 				}else{
 					messageBox.setMessage(MessageFormat.format(Messages.DeploymentCoordinator_MESSAGE_ProfileNotSet,
@@ -533,7 +420,7 @@ public class DeploymentCoordinator {
 			if (object instanceof Resource) {
 				resDepData.add(new ResourceDeploymentData((Resource) object));				
 			} else if(object instanceof Device){
-				ArrayList<VarDeclaration> parameters = getSelectedDeviceProperties((Device)object);
+				List<VarDeclaration> parameters = getSelectedDeviceProperties((Device)object);
 				if (parameters != null && parameters.size() > 0) {
 					devices.add((Device)object);
 				}
@@ -542,7 +429,7 @@ public class DeploymentCoordinator {
 		DownloadRunnable download = new DownloadRunnable(devices, resDepData, overrideDevMgmCommHandler);
 		Shell shell = Display.getDefault().getActiveShell();
 		try {
-			new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(true, true, download);
+			new ProgressMonitorDialog(shell).run(true, true, download);
 		} catch (InvocationTargetException ex) {
 			MessageDialog.openError(shell, "Error", ex.getMessage());
 		} catch (InterruptedException ex) {
@@ -589,13 +476,12 @@ public class DeploymentCoordinator {
 		return getDeploymentExecutor(device, null);
 	}
 
-	public static ArrayList<IDeploymentExecutor> loadDeploymentExecutors() {
+	public static List<IDeploymentExecutor> loadDeploymentExecutors() {
 		ArrayList<IDeploymentExecutor> deploymentExecutors = new ArrayList<IDeploymentExecutor>();
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
 				Activator.PLUGIN_ID, "downloadexecutor"); //$NON-NLS-1$
-		for (int i = 0; i < elems.length; i++) {
-			IConfigurationElement element = elems[i];
+		for (IConfigurationElement element : elems) {
 			try {
 				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof IDeploymentExecutor) {
@@ -628,8 +514,7 @@ public class DeploymentCoordinator {
 		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
 				Activator.PLUGIN_ID, "devicemanagementcommunicationhandler"); //$NON-NLS-1$
 
-		for (int i = 0; i < elems.length; i++) {
-			IConfigurationElement element = elems[i];
+		for (IConfigurationElement element : elems) {
 			try {
 				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof AbstractDeviceManagementCommunicationHandler) {
@@ -643,7 +528,7 @@ public class DeploymentCoordinator {
 	}
 
 	/** The listeners. */
-	private final ArrayList<IDeploymentListener> listeners = new ArrayList<IDeploymentListener>();
+	private final List<IDeploymentListener> listeners = new ArrayList<>();
 
 	/**
 	 * Response received x.
@@ -653,12 +538,9 @@ public class DeploymentCoordinator {
 	 * @param source
 	 *            the source
 	 */
-	private void responseReceivedX(final String response, final String source) {
-		for (Iterator<IDeploymentListener> iterator = listeners.iterator(); iterator
-				.hasNext();) {
-			IDeploymentListener listener = iterator.next();
-			listener.responseReceived(response, source);
-		}
+	@Override
+	public void responseReceived(final String response, final String source) {
+		listeners.forEach(l -> l.responseReceived(response, source));
 	}
 
 	/**
@@ -669,21 +551,14 @@ public class DeploymentCoordinator {
 	 * @param destination
 	 *            the destination
 	 */
-	private void postCommandSentX(final String command, final String destination) {
-		for (Iterator<IDeploymentListener> iterator = listeners.iterator(); iterator
-				.hasNext();) {
-			IDeploymentListener listener = iterator.next();
-			listener.postCommandSent(command, destination);
-		}
+	@Override
+	public void postCommandSent(final String command, final String destination) {
+		listeners.forEach(l -> l.postCommandSent(command, destination));
 	}
 
-	private void postCommandSentX(final String info, final String destination,
-			final String command) {
-		for (Iterator<IDeploymentListener> iterator = listeners.iterator(); iterator
-				.hasNext();) {
-			IDeploymentListener listener = iterator.next();
-			listener.postCommandSent(info, destination, command);
-		}
+	@Override
+	public void postCommandSent(final String info, final String destination, final String command) {
+		listeners.forEach(l -> l.postCommandSent(info, destination, command));
 	}
 
 	/**
@@ -692,23 +567,17 @@ public class DeploymentCoordinator {
 	 * @param message
 	 *            the message unformatted
 	 */
-	private void postCommandSentX(final String message) {
-		for (Iterator<IDeploymentListener> iterator = listeners.iterator(); iterator
-				.hasNext();) {
-			IDeploymentListener listener = iterator.next();
-			listener.postCommandSent(message);
-		}
+	@Override
+	public void postCommandSent(final String message) {
+		listeners.forEach(l -> l.postCommandSent(message));
 	}
 
 	/**
 	 * Finished x.
 	 */
-	private void finishedX() {
-		for (Iterator<IDeploymentListener> iterator = listeners.iterator(); iterator
-				.hasNext();) {
-			IDeploymentListener listener = iterator.next();
-			listener.finished();
-		}
+	@Override
+	public void finished() {
+		listeners.forEach(l -> l.finished());
 	}
 
 	/**
@@ -743,14 +612,14 @@ public class DeploymentCoordinator {
 	 */
 	public void enableOutput(
 			AbstractDeviceManagementCommunicationHandler handler) {
-		handler.addDeploymentListener(listener);
+		handler.addDeploymentListener(this);
 	}
 
 	/**
 	 * Flush.
 	 */
 	public void flush() {
-		finishedX();
+		finished();
 	}
 
 	/**
@@ -761,7 +630,7 @@ public class DeploymentCoordinator {
 	 */
 	public void disableOutput(
 			AbstractDeviceManagementCommunicationHandler handler) {
-		handler.removeDeploymentListener(listener);
+		handler.removeDeploymentListener(this);
 	}
 
 }

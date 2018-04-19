@@ -12,12 +12,17 @@
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
@@ -44,51 +49,54 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class AddWatchHandler extends AbstractMonitoringHandler {
 	
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		super.execute(event);
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		MonitoringManager manager = MonitoringManager.getInstance();
 		if (selection instanceof StructuredSelection) {
-			StructuredSelection sel = (StructuredSelection) selection;
-			for (Iterator iterator = sel.iterator(); iterator.hasNext();) {
-				Object obj = iterator.next();
-				if (obj instanceof InterfaceEditPart) {
-					InterfaceEditPart editPart = (InterfaceEditPart) obj;				
-					if (!manager.containsPort(editPart.getModel())) {
-						PortElement port = MonitoringManagerUtils.createPortElement(editPart);
-						createMonitoringElement(manager, port);
-					}
-				}
-			}			
+			MonitoringManager manager = MonitoringManager.getInstance();
+			Set<InterfaceEditPart> foundElements = getSelectedWatchedelements(manager, (StructuredSelection) selection);
+			for (InterfaceEditPart editPart : foundElements) {
+				PortElement port = MonitoringManagerUtils.createPortElement(editPart);
+				createMonitoringElement(manager, port);
+			}		
 			refreshEditor();
 		}		
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void setEnabled(Object evaluationContext){
 		boolean needToAdd = false;
 		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);		
 		if (selection instanceof StructuredSelection) {
-			StructuredSelection sel = (StructuredSelection) selection;
-			MonitoringManager manager = MonitoringManager.getInstance();
-			for (Iterator iterator = sel.iterator(); iterator.hasNext();) {
-				Object obj = iterator.next();
-				if ((obj instanceof InterfaceEditPart) && 
-						!(obj instanceof MonitoringAdapterInterfaceEditPart)){
-					InterfaceEditPart editPart = (InterfaceEditPart) obj;
-					if(MonitoringManagerUtils.canBeMonitored(editPart)
-								&& !manager.containsPort(editPart.getModel())) {
-						needToAdd = true;
-						break; // can return from loop because one is enough to enable the action
-					}
-				}
-			}
+			needToAdd = !getSelectedWatchedelements(MonitoringManager.getInstance(), (StructuredSelection) selection).isEmpty();
 		}
 		setBaseEnabled(needToAdd);
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static Set<InterfaceEditPart> getSelectedWatchedelements(MonitoringManager manager, StructuredSelection selection) {
+		Set<InterfaceEditPart> foundElements = new HashSet<>();
+		for (Iterator iterator = selection.iterator(); iterator.hasNext();) {
+			Object selectedObject = iterator.next();
+
+			if (selectedObject instanceof FBEditPart) {
+				if (MonitoringManagerUtils.canBeMonitored((FBEditPart)selectedObject)) {
+					foundElements.addAll((Collection<? extends InterfaceEditPart>) ((FBEditPart)selectedObject).getChildren().stream().filter(element -> element instanceof InterfaceEditPart).
+							collect(Collectors.toSet()));
+				}
+			}  else if ((selectedObject instanceof InterfaceEditPart) &&
+					!(selectedObject instanceof MonitoringAdapterInterfaceEditPart)) {
+				InterfaceEditPart iEditPart = (InterfaceEditPart)selectedObject;
+				if(MonitoringManagerUtils.canBeMonitored(iEditPart)
+						&& !manager.containsPort(iEditPart.getModel())) {
+					foundElements.add(iEditPart);
+				}
+			}
+		}	
+		return foundElements;
 	}
 	
 	protected MonitoringBaseElement createMonitoringElement(MonitoringManager manager, PortElement port) {

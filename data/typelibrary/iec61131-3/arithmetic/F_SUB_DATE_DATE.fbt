@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Subtracts two time data types" Name="F_SUB_DATE_DATE">
+  <Identification Description="Copyright (c) 2013 TU Wien ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61131-3" Classification="standard arithmetic function"/>
+  <VersionInfo Author="Monika Wenger" Date="2013-09-13" Organization="TU Wien ACIN" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="IN1"/>
+        <With Var="IN2"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="First funtion input" Name="IN1" Type="DATE"/>
+      <VarDeclaration Comment="Second function input" Name="IN2" Type="DATE"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="IN2 substracted from IN1" Name="OUT" Type="TIME"/>
+    </OutputVars>
+  </InterfaceList>
+</FBType>

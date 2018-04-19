@@ -47,7 +47,6 @@ import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -278,11 +277,9 @@ public enum SystemManager {
 				sysImporter.importSystem(stream, system);
 				stream.close();
 			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Activator.getDefault().logError(e.getMessage(), e);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Activator.getDefault().logError(e.getMessage(), e);
 			}
 			return system;
 		}
@@ -335,11 +332,11 @@ public enum SystemManager {
 		tagProvider.saveTagConfiguration(projectPath);
 	}
 
-	public String getReplacedString(AutomationSystem system, ConfigurableObject object, String value) {
+	public String getReplacedString(AutomationSystem system, String value) {
 		ArrayList<ITagProvider> tagProvider = tagProviders.get(system);
 		String result = null;
 		for (ITagProvider iTagProvider : tagProvider) {
-			result = iTagProvider.getReplacedString(object, value);
+			result = iTagProvider.getReplacedString(value);
 			if (result != null) {
 				break;
 			}
@@ -434,32 +431,9 @@ public enum SystemManager {
 	}
 
 	/**
-	 * Checks if is valid app name.
-	 * 
-	 * @param text
-	 *            the text
-	 * @param selectedSystem
-	 *            the selected system
-	 * 
-	 * @return true, if is valid app name
-	 */
-	public static boolean isValidAppName(final String text, final AutomationSystem selectedSystem) {
-		for (Application app : selectedSystem.getApplication()){
-			if (text.equalsIgnoreCase(app.getName())) {
-				return false;
-			}
-		}
-		if (selectedSystem.getName().equals(text)) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
 	 * Gets the project handle.
 	 * 
-	 * @param name
-	 *            the name
+	 * @param name the name
 	 * 
 	 * @return the project handle
 	 */
@@ -470,14 +444,13 @@ public enum SystemManager {
 	/**
 	 * returns a unique/valid name for a system.
 	 * 
-	 * @param name
-	 *            the name
+	 * @param name the name
 	 * 
 	 * @return a unique/valid system name
 	 */
-	public static String getValidSystemName(final String name) {
+	private static String getValidSystemName(final String name) {
 
-		if (INSTANCE.getSystemForName(name) == null && !getProjectHandle(name).exists()) {
+		if (isUniqueSystemName(name)) {
 			return name;
 		} else {
 			int i = 1;
@@ -488,6 +461,10 @@ public enum SystemManager {
 			}
 			return temp;
 		}
+	}
+	
+	public static boolean isUniqueSystemName(final String name) {
+		return (INSTANCE.getSystemForName(name) == null && !getProjectHandle(name).exists());
 	}
 
 	public ITagProvider getTagProvider(Class<?> class1, AutomationSystem system) {

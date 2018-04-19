@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Creates a FB instance from a certain FB type" Name="ST_CREATE_FB">
+  <Identification Classification="Reconfiguration" Function="Creates FB or Resource instance" Standard="61499-1" Type="Structural Service" 
+    Description="Copyright (c) 2012 Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
+  <VersionInfo Author="Gerhard Ebenhofer" Date="2012-05-31" Organization="Profactor GmbH" Version="1.0"/>
+  <CompilerInfo>
+    <Compiler Language="Cpp" Product="GCC" Vendor="GNU" Version="&gt;3.0"/>
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Event to require creation of a FB or Resource instance" Name="REQ" Type="Event">
+        <With Var="FB_NAME"/>
+        <With Var="FB_TYPE"/>
+        <With Var="DST"/>
+        <With Var="QI"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Event to confirm that the FB or Resource instance has been created" Name="CNF" Type="Event">
+        <With Var="STATUS"/>
+        <With Var="QO"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Event Input Qualifier" Name="QI" Type="BOOL"/>
+      <VarDeclaration Comment="Name of the FB instance" Name="FB_NAME" Type="WSTRING"/>
+      <VarDeclaration Comment="FB type name" Name="FB_TYPE" Type="WSTRING"/>
+      <VarDeclaration Comment="Destination where the FB or Resource instance has to be created (Syntax: ResourceName)" Name="DST" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Event Output Qualifier" Name="QO" Type="BOOL"/>
+      <VarDeclaration Comment="Service Status: RDY, UNSUPPORTED_TYPE, INVALID_OPERATION, INVALID_STATE" Name="STATUS" Type="WSTRING"/>
+    </OutputVars>
+  </InterfaceList>
+  <Service Comment="Creates a FB instance from a certain FB type" LeftInterface="APPLICATION" RightInterface="RESOURCE">
+    <ServiceSequence Name="normal_establishment">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT+" Interface="APPLICATION"/>
+        <OutputPrimitive Event="INITO+" Interface="APPLICATION"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="unsuccessful_establishment">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT+" Interface="APPLICATION"/>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_confirm">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ+" Interface="APPLICATION"/>
+        <OutputPrimitive Event="CNF+" Interface="APPLICATION"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_inhibited">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ-" Interface="APPLICATION"/>
+        <OutputPrimitive Event="CNF-" Interface="APPLICATION"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_error">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ+" Interface="APPLICATION"/>
+        <OutputPrimitive Event="CNF-" Interface="APPLICATION"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="application_initiated_termination">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT-" Interface="APPLICATION"/>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="resource_initiated_termination">
+      <ServiceTransaction>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

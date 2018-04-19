@@ -7,7 +7,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.9.0.qualifier
-Bundle-Name: Compare exported FBs
+Bundle-Name: Compare exported FBs (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.export.compare.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export.compare;singleton:=true

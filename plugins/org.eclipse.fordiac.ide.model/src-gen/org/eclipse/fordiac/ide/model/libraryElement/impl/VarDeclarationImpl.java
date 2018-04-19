@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.VarInitialization;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -65,7 +64,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = null;
+	protected static final String NAME_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -85,7 +84,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = null;
+	protected static final String COMMENT_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -464,7 +463,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @generated
 	 */
 	public boolean isArray() {
-		return arraySize > 0;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isArray(this);
 	}
 
 	/**
@@ -473,7 +472,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @generated
 	 */
 	public FBNetworkElement getFBNetworkElement() {
-		return (eContainer() instanceof InterfaceList) ? ((InterfaceList)eContainer()).getFBNetworkElement() : null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);
 	}
 
 	/**

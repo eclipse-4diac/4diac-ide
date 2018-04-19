@@ -25,25 +25,26 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.gef.commands.Command;
 
 public class CreateInterfaceElementCommand extends Command {
-	private boolean isInput;
-	private DataType dataType;
-	private IInterfaceElement interfaceElement;
-	private EList<? extends IInterfaceElement> interfaces;
-	private int index;
-	private String name;
-	private String comment;
-	private InterfaceList interfaceList;
+	protected boolean isInput;
+	protected DataType dataType;
+	protected IInterfaceElement interfaceElement;
+
+	protected EList<? extends IInterfaceElement> interfaces;
+	protected int index;
+	protected InterfaceList interfaceList;
 	private AdapterCreateCommand cmd;
 
-	public CreateInterfaceElementCommand(DataType dataType, String name, String comment, InterfaceList interfaceList, boolean isInput, int index){
+	public CreateInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput, int index){
 		this.isInput = isInput;
 		this.dataType = dataType;
 		this.index = index;
-		this.name = name;
-		this.comment = comment;
 		this.interfaceList = interfaceList;
 	}
 		
+	public IInterfaceElement getInterfaceElement() {
+		return interfaceElement;
+	}
+
 	@Override
 	public boolean canExecute() {
 		return null != dataType && (null != interfaceList);
@@ -85,15 +86,14 @@ public class CreateInterfaceElementCommand extends Command {
 			}
 		}
 		setInterfaces(interfaceList);
-		interfaceElement.setName(NameRepository.getUniqueInterfaceElementName(interfaceElement, interfaceList,  null == name || name.isEmpty() ? dataType.getName() : name));
 		interfaceElement.setIsInput(isInput);
 		interfaceElement.setType(dataType);
 		interfaceElement.setTypeName(dataType.getName());
-		interfaceElement.setComment(comment);
 		if(dataType instanceof AdapterType && interfaceList.eContainer() instanceof CompositeFBType){
 			cmd = new AdapterCreateCommand(10, 10, (AdapterDeclaration) interfaceElement, (CompositeFBType)interfaceList.eContainer());
 		}
 		redo();
+		interfaceElement.setName(NameRepository.createUniqueName(interfaceElement, dataType.getName()));
 	}
 	
 	@Override

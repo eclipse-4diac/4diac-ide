@@ -22,6 +22,10 @@ import java.util.Set;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -39,9 +43,10 @@ import org.eclipse.swt.graphics.Point;
  */
 public class PasteCommand extends Command {
 
+	private static final int DEFAULT_DELTA = 20;
 	@SuppressWarnings("rawtypes")
 	private final List templates;
-	private final FBNetwork destination;
+	private final FBNetwork dstFBNetwork;
 	
 	private final Map<String, FBNetworkElement> copiedElements = new HashMap<>();
 	
@@ -51,7 +56,9 @@ public class PasteCommand extends Command {
 	
 	private final CompoundCommand connCreateCmds = new CompoundCommand();
 	
-	private Point sourceRefPos;
+	private int xDelta;
+	private int yDelta;
+	private boolean calcualteDelta = false;
 	private Point pasteRefPos;
 	
 
@@ -68,18 +75,27 @@ public class PasteCommand extends Command {
 	@SuppressWarnings("rawtypes")
 	public PasteCommand(List templates, FBNetwork destination, Point pasteRefPos) {
 		this.templates = templates;
-		this.destination = destination;
+		this.dstFBNetwork = destination;
 		this.pasteRefPos = pasteRefPos;
+		calcualteDelta = true;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public PasteCommand(List templates, FBNetwork destination, int copyDeltaX, int copyDeltaY) {
+		this.templates = templates;
+		this.dstFBNetwork = destination;
+		xDelta = copyDeltaX;
+		yDelta = copyDeltaY;
 	}
 	
 	@Override
 	public boolean canExecute() {
-		return null != templates && null != destination;
+		return null != templates && null != dstFBNetwork;
 	}
 
 	@Override
 	public void execute() {
-		if (destination != null) {			
+		if (dstFBNetwork != null) {			
 			gatherCopyData();			
 			copyFBs();
 			copyConnections();
@@ -90,13 +106,13 @@ public class PasteCommand extends Command {
 	@Override
 	public void undo() {
 		connCreateCmds.undo();
-		destination.getNetworkElements().removeAll(copiedElements.values());		
+		dstFBNetwork.getNetworkElements().removeAll(copiedElements.values());		
 		(new ElementSelector()).selectViewObjects(templates);
 	}
 	
 	@Override
 	public void redo() {
-		destination.getNetworkElements().addAll(copiedElements.values());
+		dstFBNetwork.getNetworkElements().addAll(copiedElements.values());
 		connCreateCmds.redo();
 		(new ElementSelector()).selectViewObjects(copiedElements.values());		
 	}
@@ -117,9 +133,14 @@ public class PasteCommand extends Command {
 			}
 		}
 		
-		sourceRefPos = new Point(x, y);
-		if(null == pasteRefPos){
-			pasteRefPos = new Point(x + 20, y + 20);
+		if(calcualteDelta) {
+			if(null != pasteRefPos){
+				xDelta = pasteRefPos.x - x;
+				yDelta = pasteRefPos.y - y;
+			}else {
+				xDelta = DEFAULT_DELTA;
+				yDelta = DEFAULT_DELTA;
+			}
 		}
 	}
 		
@@ -127,8 +148,9 @@ public class PasteCommand extends Command {
 		for (FBNetworkElement element : elementsToCopy) {
 			FBNetworkElement copiedElement = createElementCopyFB(element);	
 			copiedElements.put(element.getName(), copiedElement);
+			dstFBNetwork.getNetworkElements().add(copiedElement);
+			copiedElement.setName(NameRepository.createUniqueName(copiedElement, element.getName()));
 		}
-		destination.getNetworkElements().addAll(copiedElements.values());
 	}
 
 	private FBNetworkElement createElementCopyFB(FBNetworkElement element) {
@@ -141,11 +163,6 @@ public class PasteCommand extends Command {
 				ie.getOutputConnections().clear();
 			}
 		}
-		
-		String name = element.getName();		
-		name = NameRepository.getFBNetworkUniqueFBNetworkElementInstanceName(destination, name);
-		copiedElement.setName(name);
-		
 		Point pastePos = calculatePastePos(element); 
 		copiedElement.setX(pastePos.x);
 		copiedElement.setY(pastePos.y);
@@ -157,22 +174,23 @@ public class PasteCommand extends Command {
 
 	private void copyConnections() {
 		for (Connection conn : connectionsToCopy) {
-			FBNetworkElement  dst = conn.getDestinationElement(); 
-			FBNetworkElement  src = conn.getSourceElement();
+			FBNetworkElement copiedSrc = copiedElements.get(conn.getSourceElement().getName());
+			FBNetworkElement copiedDest = copiedElements.get(conn.getDestinationElement().getName());
 			
-			if (null != copiedElements.get(src.getName()) || (null != copiedElements.get(dst.getName()))){
+			if (null != copiedSrc || null != copiedDest){
+				//Only copy if one end of the connection is copied as well otherwise we will get a duplicate connection
 				AbstractConnectionCreateCommand cmd = null;
 				if(conn instanceof EventConnection){
-					cmd = new EventConnectionCreateCommand(destination);
+					cmd = new EventConnectionCreateCommand(dstFBNetwork);
 				}else if(conn instanceof DataConnection){
-					if(null != copiedElements.get(dst.getName())){
+					if(null != copiedDest){
 						//in order to avoid data fan-in data connections are only copied if also destination is part of the copy
-						cmd = new DataConnectionCreateCommand(destination);
+						cmd = new DataConnectionCreateCommand(dstFBNetwork);
 					}
 				}else if(conn instanceof AdapterConnection){
-					if((null != copiedElements.get(dst.getName())) && (null != copiedElements.get(src.getName()))){
-						//in order to avoid data fan-in / fan-out adapter connections are only copied if also destination is part of the copy
-						cmd = new AdapterConnectionCreateCommand(destination);
+					if(null != copiedSrc && null != copiedDest){
+						//in order to avoid fan-in / fan-out adapter connections are only copied if also destination is part of the copy
+						cmd = new AdapterConnectionCreateCommand(dstFBNetwork);
 					}
 				}
 				if(null != cmd){
@@ -188,9 +206,12 @@ public class PasteCommand extends Command {
 	
 
 	private void copyConnection(Connection conn, AbstractConnectionCreateCommand cmd) {
-		IInterfaceElement source = checkForCopiedInterfaceElement(copiedElements.get(conn.getSourceElement().getName()), 
+		FBNetworkElement copiedSrc = copiedElements.get(conn.getSourceElement().getName());
+		FBNetworkElement copiedDest = copiedElements.get(conn.getDestinationElement().getName());
+		//if the copied src or copied destination are null use the original 
+		IInterfaceElement source = checkForCopiedInterfaceElement((null != copiedSrc) ? copiedSrc : conn.getSourceElement(),
 				conn.getSource());
-		IInterfaceElement destination = checkForCopiedInterfaceElement(copiedElements.get(conn.getDestinationElement().getName()), 
+		IInterfaceElement destination = checkForCopiedInterfaceElement((null != copiedDest) ? copiedDest : conn.getDestinationElement(), 
 				conn.getDestination());
 		
 		cmd.setSource(source);
@@ -198,15 +219,13 @@ public class PasteCommand extends Command {
 		cmd.setArrangementConstraints(conn.getDx1(), conn.getDx2(), conn.getDy());
 	}
 
-	private IInterfaceElement checkForCopiedInterfaceElement(FBNetworkElement targetElement, IInterfaceElement orig) {
+	private static IInterfaceElement checkForCopiedInterfaceElement(FBNetworkElement targetElement, IInterfaceElement orig) {
 		Assert.isNotNull(targetElement);
 	    return targetElement.getInterfaceElement(orig.getName());
 	}
 
 	private Point calculatePastePos(FBNetworkElement element) {
-		int xDelta = element.getX() - sourceRefPos.x;
-		int yDelta = element.getY() - sourceRefPos.y;		
-		return new Point(pasteRefPos.x + xDelta, pasteRefPos.y + yDelta);
+		return new Point(element.getX() + xDelta, element.getY() + yDelta);
 	}
 
 }

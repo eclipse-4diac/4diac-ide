@@ -14,6 +14,8 @@ import org.eclipse.fordiac.ide.model.structuredtext.resource.StructuredTextResou
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.resource.IContainer
 import org.eclipse.xtext.conversion.IValueConverterService
+import org.eclipse.xtext.ui.editor.model.ResourceForIEditorInputFactory
+import org.eclipse.xtext.ui.resource.SimpleResourceSetProvider
 
 /** 
  * Use this class to register components to be used within the IDE.
@@ -35,11 +37,17 @@ class StructuredTextUiModule extends AbstractStructuredTextUiModule {
 		binder.bind(IResourceDescriptions).to(ResourceSetBasedResourceDescriptions)
 	}
 
-	override provideIAllContainersState() {
+	override provideIAllContainersState() { 
 		return Access::getWorkspaceProjectsState()
 	}
 
 	def Class<? extends IValueConverterService> bindIValueConverterService() {
 		return StructuredTextValueConverterService
+	}
+	
+	override bindIResourceForEditorInputFactory() { return ResourceForIEditorInputFactory; }
+	
+	override bindIResourceSetProvider() {
+    	return SimpleResourceSetProvider;
 	}
 }

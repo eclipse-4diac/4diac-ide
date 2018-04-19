@@ -42,6 +42,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -59,7 +60,6 @@ public class ActionSection extends AbstractECSection {
 	private Combo algorithmCombo;
 	private Combo outputEventCombo;
 	private AlgorithmGroup algorithmGroup;
-	
 	private Hashtable<String, Event> events = new Hashtable<String, Event>();
 	private TreeViewer algorithmsViewer;	
 	private Button algorithmNew;
@@ -102,16 +102,12 @@ public class ActionSection extends AbstractECSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
-		super.createControls(parent, tabbedPropertySheetPage);	
-		
+		super.createControls(parent, tabbedPropertySheetPage);		
 		parent.setLayout(new GridLayout(3, true));		
 		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-		
 		createActionCombos(parent);		
-		
 		algorithmGroup = new AlgorithmGroup(parent, getWidgetFactory());
-		
-		createAllAlgorithmViewer(parent);
+		createAlgorithmView(parent);
 	}
 	
 	private void createActionCombos(Composite parent) {
@@ -138,7 +134,8 @@ public class ActionSection extends AbstractECSection {
 				}else{
 					executeCommand(new ChangeAlgorithmCommand(getType(), null));
 				}
-				refresh();
+				algorithmGroup.setAlgorithm(getAlgorithm());
+				algorithmsViewer.setInput(getType());
 				addContentAdapter();
 			}
 			@Override
@@ -162,19 +159,21 @@ public class ActionSection extends AbstractECSection {
 		
 	}
 
-	private void createAllAlgorithmViewer(Composite parent){
+	private void createAlgorithmView(Composite parent) {
 		Group algorithmComposite = getWidgetFactory().createGroup(parent, "All Algorithms");
 		algorithmComposite.setLayout(new GridLayout(2, false));
 		algorithmComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		algorithmsViewer = new TreeViewer(algorithmComposite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridData.horizontalSpan = 2;
-		algorithmsViewer.getTree().setLayoutData(gridData);
-		algorithmsViewer.setContentProvider(new ActionContentProvider());
-		algorithmsViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
-		new AdapterFactoryTreeEditor(algorithmsViewer.getTree(), adapterFactory);
-		algorithmNew = getWidgetFactory().createButton(algorithmComposite, "New", SWT.PUSH);
-		algorithmNew.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true, false));
+		createAllAlgorithmViewer(algorithmComposite);
+		createAddDeleteButtons(algorithmComposite);
+	}
+	
+	private void createAddDeleteButtons(Composite parent) {
+		Composite buttonComp = new Composite(parent, SWT.NONE);
+		GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
+		buttonComp.setLayoutData(buttonCompLayoutData);
+		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
+		algorithmNew = getWidgetFactory().createButton(buttonComp, "", SWT.FLAT);
+		algorithmNew.setToolTipText("Create new algorithm");
 		algorithmNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
 		algorithmNew.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -187,8 +186,8 @@ public class ActionSection extends AbstractECSection {
 				}
 			}
 		});
-		algorithmDelete = getWidgetFactory().createButton(algorithmComposite, "Delete", SWT.PUSH);
-		algorithmDelete.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true, false));
+		algorithmDelete = getWidgetFactory().createButton(buttonComp, "", SWT.FLAT);
+		algorithmDelete.setToolTipText("Delete algorithm");
 		algorithmDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		algorithmDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -206,7 +205,14 @@ public class ActionSection extends AbstractECSection {
 		});
 	}
 	
-	
+	private void createAllAlgorithmViewer(Composite parent){
+		algorithmsViewer = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		algorithmsViewer.getTree().setLayoutData(gridData);
+		algorithmsViewer.setContentProvider(new ActionContentProvider());
+		algorithmsViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
+		new AdapterFactoryTreeEditor(algorithmsViewer.getTree(), adapterFactory);
+	}
 	
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
@@ -229,11 +235,10 @@ public class ActionSection extends AbstractECSection {
 		commandStack = null;		
 		if(null != type) {
 			setOutputEventDropdown();
-			outputEventCombo.select(getType().getOutput() != null ? 
-					outputEventCombo.indexOf(getType().getOutput().getName()) : outputEventCombo.indexOf(""));		 //$NON-NLS-1$
+			outputEventCombo.select(getType().getOutput() != null ? outputEventCombo.indexOf(getType().getOutput().getName()) : outputEventCombo.indexOf(""));		 //$NON-NLS-1$
 			setAlgorithmDropdown();
-			algorithmsViewer.setInput(getType());			
 			algorithmGroup.setAlgorithm(getAlgorithm());
+			algorithmsViewer.setInput(getType());
 		} 
 		commandStack = commandStackBuffer;
 	}
@@ -259,8 +264,7 @@ public class ActionSection extends AbstractECSection {
 				algorithmCombo.add(alg.getName());
 			}
 		}
-		algorithmCombo.select((null == getAlgorithm()) ? 0 : 
-			algorithmCombo.indexOf(getAlgorithm().getName()));		
+		algorithmCombo.select((null == getAlgorithm()) ? 0 : algorithmCombo.indexOf(getAlgorithm().getName()));		
 		actionComposite.layout();
 	}
 

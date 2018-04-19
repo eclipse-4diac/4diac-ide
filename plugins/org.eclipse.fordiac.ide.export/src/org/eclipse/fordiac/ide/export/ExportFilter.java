@@ -597,7 +597,6 @@ public abstract class ExportFilter implements IExportFilter {
 		exportFBVar();
 		exportFBNetworkConnections();
 		exportCompFBExecuteEventMethod();
-		// exportFBManagedObjectMethods();
 	}
 
 	protected void exportVarInputs(final Element varInputs) {
@@ -706,9 +705,6 @@ public abstract class ExportFilter implements IExportFilter {
 
 	protected abstract void handleNotPresentEOTag();
 
-	// protected abstract void exportAlgFBD(String name, NodeList FBDNodes); //
-	// currently not supported
-
 	/**
 	 * Trim string.
 	 * 
@@ -718,19 +714,17 @@ public abstract class ExportFilter implements IExportFilter {
 	 * @return the string
 	 */
 	public static String trimSTRING(String value) {
-		Character trimValue1 = new Character('"');
-		Character trimValue2 = new Character('\'');
+		final String trimValue1 = "\""; //$NON-NLS-1$
+		final String trimValue2 = "'";		 //$NON-NLS-1$
 
-		if (value.startsWith(trimValue1.toString())
-				|| value.startsWith(trimValue2.toString())) {
+		if (value.startsWith(trimValue1) || value.startsWith(trimValue2)) {
 			value = value.substring(1);
 		}
-		if (value.endsWith(trimValue1.toString())
-				|| value.endsWith(trimValue2.toString())) {
+		if (value.endsWith(trimValue1) || value.endsWith(trimValue2)) {
 			value = value.substring(0, value.length() - 1);
 		}
 
-		return value != null ? value : "";
+		return value;
 	}
 
 	@Override

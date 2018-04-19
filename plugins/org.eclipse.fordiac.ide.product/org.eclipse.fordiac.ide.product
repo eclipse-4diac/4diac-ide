@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="4DIAC-IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="1.9.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="4diac-ide" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="1.9.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.eclipse.fordiac.ide.images/images/dialog.png"/>
@@ -16,22 +16,22 @@
    <launcherArgs>
       <programArgs>-nl en
       </programArgs>
-      <vmArgs>-Declipse.buildId=1.9pre
+      <vmArgs>-Declipse.buildId=1.9.0
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.eclipse.fordiac.ide.images/images/fordiac16.png" i32="/org.eclipse.fordiac.ide.images/images/fordiac32.png" i48="/org.eclipse.fordiac.ide.images/images/fordiac48.png" i256="/org.eclipse.fordiac.ide.images/images/fordiac256.png"/>
+   <windowImages i16="/org.eclipse.fordiac.ide/icons/fordiac16.png" i32="/org.eclipse.fordiac.ide/icons/fordiac32.png" i48="/org.eclipse.fordiac.ide/icons/fordiac48.png" i256="/org.eclipse.fordiac.ide/icons/fordiac256.png"/>
 
    <splash
       location="org.eclipse.fordiac.ide"
       startupProgressRect="248,306,239,4" />
-   <launcher name="4DIAC-IDE">
-      <linux icon="/org.eclipse.fordiac.ide.product/icons/fordiac.xpm"/>
-      <solaris/>
+   <launcher name="4diac-ide">
+      <linux icon="/icons/fordiac.xpm"/>
+      <macosx icon="/icons/fordiac.icns"/>
       <win useIco="true">
-         <ico path="/org.eclipse.fordiac.ide.product/icons/fordiac.ico"/>
+         <ico path="/icons/fordiac.ico"/>
          <bmp/>
       </win>
    </launcher>
@@ -44,7 +44,6 @@
       <solaris include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</solaris>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
    </vm>
-
 
    <plugins>
       <plugin id="com.google.guava"/>
@@ -137,11 +136,6 @@
       <plugin id="org.eclipse.emf.mapping.ecore2xml"/>
       <plugin id="org.eclipse.emf.mapping.ecore2xml.ui"/>
       <plugin id="org.eclipse.emf.mapping.ui"/>
-      <plugin id="org.eclipse.emf.mwe.core"/>
-      <plugin id="org.eclipse.emf.mwe.utils"/>
-      <plugin id="org.eclipse.emf.mwe2.language"/>
-      <plugin id="org.eclipse.emf.mwe2.lib"/>
-      <plugin id="org.eclipse.emf.mwe2.runtime"/>
       <plugin id="org.eclipse.emf.transaction"/>
       <plugin id="org.eclipse.emf.validation"/>
       <plugin id="org.eclipse.emf.workspace"/>
@@ -233,26 +227,6 @@
       <plugin id="org.eclipse.ui.win32" fragment="true"/>
       <plugin id="org.eclipse.ui.workbench"/>
       <plugin id="org.eclipse.ui.workbench.texteditor"/>
-      <plugin id="org.eclipse.xpand"/>
-      <plugin id="org.eclipse.xtend"/>
-      <plugin id="org.eclipse.xtend.lib"/>
-      <plugin id="org.eclipse.xtend.lib.macro"/>
-      <plugin id="org.eclipse.xtend.typesystem.emf"/>
-      <plugin id="org.eclipse.xtext"/>
-      <plugin id="org.eclipse.xtext.builder"/>
-      <plugin id="org.eclipse.xtext.common.types"/>
-      <plugin id="org.eclipse.xtext.common.types.edit"/>
-      <plugin id="org.eclipse.xtext.common.types.ui"/>
-      <plugin id="org.eclipse.xtext.ecore"/>
-      <plugin id="org.eclipse.xtext.generator"/>
-      <plugin id="org.eclipse.xtext.ide"/>
-      <plugin id="org.eclipse.xtext.logging" fragment="true"/>
-      <plugin id="org.eclipse.xtext.smap"/>
-      <plugin id="org.eclipse.xtext.ui"/>
-      <plugin id="org.eclipse.xtext.ui.codetemplates"/>
-      <plugin id="org.eclipse.xtext.ui.codetemplates.ui"/>
-      <plugin id="org.eclipse.xtext.ui.shared"/>
-      <plugin id="org.eclipse.xtext.util"/>
       <plugin id="org.hamcrest.core"/>
       <plugin id="org.objectweb.asm"/>
       <plugin id="org.sat4j.core"/>
@@ -292,18 +266,10 @@
       <feature id="org.eclipse.ecf.filetransfer.httpclient4.feature"/>
       <feature id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature"/>
       <feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
-      <feature id="org.eclipse.xtext.runtime"/>
       <feature id="org.eclipse.xtext.ui"/>
-      <feature id="org.eclipse.xtend.sdk"/>
       <feature id="org.eclipse.epp.logging.aeri.feature"/>
       <feature id="org.eclipse.emf.databinding"/>
-      <feature id="org.eclipse.xtext.xbase.lib"/>
-      <feature id="org.eclipse.xtext.xbase"/>
       <feature id="org.eclipse.xtext.redist"/>
-      <feature id="org.eclipse.xtext.sdk"/>
-      <feature id="org.eclipse.jdt"/>
-      <feature id="org.eclipse.emf.codegen.ecore"/>
-      <feature id="org.eclipse.emf.codegen"/>
       <feature id="org.eclipse.fordiac.ide.deployment.feature"/>
       <feature id="org.eclipse.fordiac.ide.export.feature"/>
       <feature id="org.eclipse.fordiac.ide.runtime.feature"/>
@@ -311,15 +277,24 @@
       <feature id="org.eclipse.fordiac.ide.typeeditor.feature"/>
       <feature id="org.eclipse.fordiac.ide.workbench.feature"/>
       <feature id="org.eclipse.fordiac.ide.monitoring.feature"/>
+      <feature id="org.eclipse.xtext.xbase.lib"/>
+      <feature id="org.eclipse.emf.mwe2.runtime.sdk"/>
+      <feature id="org.eclipse.xtext.runtime"/>
+      <feature id="org.eclipse.xtext.xbase"/>
+      <feature id="org.eclipse.jdt" version="3.13.2.v20171130-0906"/>
    </features>
 
    <configurations>
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="3" />
-      <property name="4diac.buildId" value="2017-03-09" />
+      <property name="4diac.buildId" value="2018-03-19" />
       <property name="4diac.versionId" value="1.9.0" />
    </configurations>
+
+   <repositories>
+      <repository location="http://download.eclipse.org/4diac/updates/1.9" enabled="true" />
+   </repositories>
 
    <preferencesInfo>
       <targetfile overwrite="false"/>

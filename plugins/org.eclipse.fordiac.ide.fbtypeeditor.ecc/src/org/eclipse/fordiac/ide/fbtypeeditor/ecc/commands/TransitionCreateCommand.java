@@ -52,7 +52,7 @@ public class TransitionCreateCommand extends Command {
 	private Event conditionEvent;
 	
 	/** the viewer which executed this command */
-	EditPartViewer viewer;
+	private EditPartViewer viewer;
 
 	public String getConditionExpression() {
 		return conditionExpression;
@@ -107,6 +107,11 @@ public class TransitionCreateCommand extends Command {
 	public void setDestination(final ECState destination) {
 		this.destination = destination;
 	}
+	
+	@Override
+	public boolean canExecute() {
+		return (null != source && null != destination && null != source.eContainer());
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -143,36 +148,34 @@ public class TransitionCreateCommand extends Command {
 			y = y1;
 		}
 
-		if (parent != null) {
-			parent.getECTransition().add(transition);
+		parent.getECTransition().add(transition);
 
-			// it is necessayz to invode the following code after adding the
-			// transition to the parent, otherwise ECTransitionEditPart will
-			// throw an nullpointer in the activate method!
+		// it is necessary to invode the following code after adding the
+		// transition to the parent, otherwise ECTransitionEditPart will
+		// throw an nullpointer in the activate method!
 
-			if (source != null && source.equals(destination)) { // self transition
-				transition.setX(x + 10);
-				transition.setY(y + 50);
-			} else {
-				transition.setX(x);
-				transition.setY(y);
+		if (source.equals(destination)) { // self transition
+			transition.setX(x + 10);
+			transition.setY(y + 50);
+		} else {
+			transition.setX(x);
+			transition.setY(y);
+		}
+		transition.setSource(source);
+		transition.setDestination(destination);
+		transition.setConditionEvent(conditionEvent);
+
+		if (conditionExpression != null) {
+			transition.setConditionExpression(conditionExpression);
+		} else {
+			if (conditionEvent == null) {
+				transition.setConditionExpression("1"); //$NON-NLS-1$
 			}
-			transition.setSource(source);
-			transition.setDestination(destination);
-			transition.setConditionEvent(conditionEvent);
-
-			if (conditionExpression != null) {
-				transition.setConditionExpression(conditionExpression);
-			} else {
-				if (conditionEvent == null) {
-					transition.setConditionExpression("1"); //$NON-NLS-1$
-				}
-			}
-			if(null != viewer){
-				Object obj = viewer.getEditPartRegistry().get(transition);
-				if(null != obj){
-					viewer.select((EditPart)obj);
-				}
+		}
+		if(null != viewer){
+			Object obj = viewer.getEditPartRegistry().get(transition);
+			if(null != obj){
+				viewer.select((EditPart)obj);
 			}
 		}
 	}

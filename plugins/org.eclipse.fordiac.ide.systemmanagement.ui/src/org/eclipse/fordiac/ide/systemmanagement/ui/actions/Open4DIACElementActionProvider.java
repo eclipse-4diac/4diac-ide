@@ -84,18 +84,15 @@ public class Open4DIACElementActionProvider extends
 			return;
 		}
 
-		Object obj = ss.getFirstElement();
+		Object obj = ss.getFirstElement();		
+		List<IOpenListener> listeners = OpenListenerManager.INSTANCE.getOpenListener((I4DIACElement)obj);
 		
-		List<IOpenListener> listener = OpenListenerManager
-				.getInstance()
-				.getOpenListener( ((I4DIACElement)obj).getClass(), obj);
-		
-		if(!listener.isEmpty()){
+		if(!listeners.isEmpty()){
 			// Create a menu flyout.
 			IMenuManager submenu = new MenuManager(Messages.OpenEditorProvider_OpenWithMenu_label, ICommonMenuConstants.GROUP_OPEN_WITH);
 			submenu.add(new GroupMarker(ICommonMenuConstants.GROUP_TOP));
 			
-			for (IOpenListener openListener : listener) {
+			for (IOpenListener openListener : listeners) {
 				submenu.add(openListener.getOpenListenerAction());
 			}
 			submenu.add(new GroupMarker(ICommonMenuConstants.GROUP_ADDITIONS));

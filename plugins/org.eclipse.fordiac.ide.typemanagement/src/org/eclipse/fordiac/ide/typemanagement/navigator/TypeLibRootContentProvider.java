@@ -16,27 +16,37 @@ import java.util.HashMap;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 
-public class TypeLibRootContentProvider implements ITreeContentProvider {
+public class TypeLibRootContentProvider implements ITreeContentProvider, IResourceChangeListener {
 
 	BaseWorkbenchContentProvider workbenchContentProvider = new BaseWorkbenchContentProvider(); 
 	
 	HashMap<AutomationSystem, TypeLibRootElement> typeLibElementStore = new HashMap< >();
 	
+	Viewer viewer;
+	
+	public TypeLibRootContentProvider() {
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
+	}
+
 	@Override
 	public void dispose() {
 		workbenchContentProvider.dispose();
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 	}
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// TODO Auto-generated method stub
-
+		this.viewer = viewer;
 	}
 
 	@Override
@@ -89,6 +99,22 @@ public class TypeLibRootContentProvider implements ITreeContentProvider {
 	
 	private Object getTypeLibRootElement(IProject parent) {
 		return getTypeLibRootElement(SystemManager.INSTANCE.getSystemForName(parent.getName()));
+	}
+
+	@Override
+	public void resourceChanged(IResourceChangeEvent event) {
+		if(null != viewer) {
+			//TODO: for performance reason and to avoid to main change listeners going active it may be interesting to check here if the change is a 
+			//      change in the rout folder of a project. 			
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					if(!viewer.getControl().isDisposed()){
+						viewer.refresh();
+					}						
+				}
+			});
+		}
 	}
 	
 }

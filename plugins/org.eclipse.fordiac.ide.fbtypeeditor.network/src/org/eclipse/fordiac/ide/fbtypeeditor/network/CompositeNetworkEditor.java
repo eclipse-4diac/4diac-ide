@@ -180,7 +180,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			if (untypedInput.getContent() instanceof CompositeFBType) {
 				fbType = (CompositeFBType) untypedInput.getContent();
-				model = fbType.getFBNetwork();
+				setModel(fbType.getFBNetwork());
 				getModel().eAdapters().add(adapter);
 				configurePalette(untypedInput);
 			}
@@ -207,7 +207,12 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(fbType.getPaletteEntry().getFile().getProject(), getEditDomain());
+		return new FBTypePaletteViewerProvider(fbType.getPaletteEntry().getFile().getProject(), getEditDomain(), getPalletNavigatorID());
+	}
+	
+	@Override
+	protected String getPalletNavigatorID() {
+		return "org.eclipse.fordiac.ide.compositefbpaletteviewer"; //$NON-NLS-1$;
 	}
 	
 	@Override

@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -55,9 +56,9 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 	protected Text nameText;
 	protected Text commentText;
 	private TableViewer inputViewer;
-	private final String NAME_PROPERTY = "name"; //$NON-NLS-1$
-	private final String VALUE_PROPERTY = "value"; //$NON-NLS-1$
-	private final String COMMENT_PROPERTY = "comment"; //$NON-NLS-1$
+	private static final String NAME_PROPERTY = "name"; //$NON-NLS-1$
+	private static final String VALUE_PROPERTY = "value"; //$NON-NLS-1$
+	private static final String COMMENT_PROPERTY = "comment"; //$NON-NLS-1$
 	
 	public AbstractInterfaceSection() {}
 	
@@ -93,7 +94,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 		nameText.addModifyListener(new ModifyListener() {
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
-				executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
+				executeCommand(getRenameCommand(nameText.getText()));
 				addContentAdapter();
 			}
 		});
@@ -165,7 +166,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 					}
 				}
 				if((null != cmd) && (null != commandStack)){
-					commandStack.execute(cmd);
+					executeCommand(cmd);
 					inputViewer.refresh(data);
 				}
 				
@@ -173,7 +174,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 		});
 	}
 
-	private String getVarDeclarationValue(VarDeclaration v){
+	private static String getVarDeclarationValue(VarDeclaration v){
 		return v.getValue() != null && v.getValue().getValue() != null ? v.getValue().getValue() : ""; //$NON-NLS-1$
 	}
 	
@@ -212,6 +213,14 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 		} 	
 	}
 	
+	private ChangeNameCommand getRenameCommand(String newValue) {
+		INamedElement element = getType();
+		if(element instanceof FBNetworkElement) {
+			return new ChangeFBNetworkElementName((FBNetworkElement) element, newValue);
+		}
+		return new ChangeNameCommand(getType(), nameText.getText());
+	}
+
 	public class InputContentProvider implements IStructuredContentProvider {
 		@Override
 		public Object[] getElements(final Object inputElement) {

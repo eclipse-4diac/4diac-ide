@@ -1,0 +1,5 @@
+**/bin
+/.metadata/
+**/target/**
+**/*.xtendbin
+**/*java._trace

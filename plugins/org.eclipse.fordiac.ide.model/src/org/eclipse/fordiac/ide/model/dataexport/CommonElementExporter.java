@@ -112,21 +112,23 @@ public abstract class CommonElementExporter {
 	
 	public static void addColorAttributeElement(final Document dom, final Element parent, final ColorizableElement colElement){
 		String colorValue = colElement.getColor().getRed() + "," + colElement.getColor().getGreen() + "," + colElement.getColor().getBlue();  //$NON-NLS-1$ //$NON-NLS-2$
-		Element colorAttrubute = createAttributeElement(dom, LibraryElementTags.COLOR, colorValue);		
-		parent.appendChild(colorAttrubute);
+		Element colorAttribute = createAttributeElement(dom, LibraryElementTags.COLOR, "STRING", colorValue, "color");		
+		parent.appendChild(colorAttribute);
 	}
 
-	public static Element createAttributeElement(final Document dom, String name, String value){
-		Element attributeElement = dom.createElement(LibraryElementTags.ATTRIBUTE);
+	public static Element createAttributeElement(final Document dom, String name, String type, String value, String comment){
+		Element attributeElement = dom.createElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
 		attributeElement.setAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
+		attributeElement.setAttribute(LibraryElementTags.TYPE_ATTRIBUTE, type);
 		attributeElement.setAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
+		attributeElement.setAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
 		return attributeElement;
 	}
 
 	private Transformer createXMLTransformer()
 			throws TransformerFactoryConfigurationError, TransformerConfigurationException {
 		TransformerFactory tFactory = TransformerFactory.newInstance();
-		tFactory.setAttribute("indent-number", new Integer(2)); //$NON-NLS-1$
+		tFactory.setAttribute("indent-number", Integer.valueOf(2)); //$NON-NLS-1$
 		Transformer transformer = tFactory.newTransformer();
 
 		transformer.setOutputProperty(
@@ -503,13 +505,11 @@ public abstract class CommonElementExporter {
 		setNameTypeCommentAttribute(variableElement, varDecl, varDecl.getType());
 
 		if (varDecl.isArray()) {
-			variableElement.setAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE,
-					new Integer(varDecl.getArraySize()).toString());
+			variableElement.setAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE, Integer.toString(varDecl.getArraySize()));
 		}
 		if (varDecl.getVarInitialization() != null
 				&& varDecl.getVarInitialization().getInitialValue() != null) {
-			variableElement.setAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl
-					.getVarInitialization().getInitialValue());
+			variableElement.setAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl.getVarInitialization().getInitialValue());
 		}
 
 		parentElement.appendChild(variableElement);

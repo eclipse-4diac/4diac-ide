@@ -11,7 +11,6 @@ package org.eclipse.fordiac.ide.model.structuredtext.ui;
 
 import com.google.inject.Injector;
 import org.eclipse.fordiac.ide.model.structuredtext.ui.ExtendedStructuredTextActivator;
-import org.eclipse.fordiac.ide.model.structuredtext.ui.internal.StructuredtextActivator;
 import org.eclipse.xtext.ui.guice.AbstractGuiceAwareExecutableExtensionFactory;
 import org.osgi.framework.Bundle;
 
@@ -22,14 +21,12 @@ import org.osgi.framework.Bundle;
 public class ExpressionFactory extends AbstractGuiceAwareExecutableExtensionFactory {
   @Override
   protected Bundle getBundle() {
-    StructuredtextActivator _instance = ExtendedStructuredTextActivator.getInstance();
-    return _instance.getBundle();
+    return ExtendedStructuredTextActivator.getInstance().getBundle();
   }
   
   @Override
   protected Injector getInjector() {
-    StructuredtextActivator _instance = ExtendedStructuredTextActivator.getInstance();
-    return _instance.getInjector(
+    return ExtendedStructuredTextActivator.getInstance().getInjector(
       ExtendedStructuredTextActivator.ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION);
   }
 }

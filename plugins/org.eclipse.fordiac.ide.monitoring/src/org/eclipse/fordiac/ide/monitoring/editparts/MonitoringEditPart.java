@@ -20,8 +20,8 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
@@ -40,11 +40,11 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 
 
 	public boolean isEvent() {
-		return getInterfaceElement() instanceof EventImpl;
+		return getInterfaceElement() instanceof Event;
 	}
 
 	public boolean isVariable() {
-		return getInterfaceElement() instanceof VarDeclarationImpl;
+		return getInterfaceElement() instanceof VarDeclaration;
 	}
 
 	@Override
@@ -54,28 +54,31 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
-				new DirectEditPolicy(){
-
-					@Override
-					protected Command getDirectEditCommand(DirectEditRequest request) {
-						String value = (String) request.getCellEditor().getValue();
-						MonitoringEditPart editPart = (MonitoringEditPart)getHost();
-						MonitoringManager.getInstance().writeValue(editPart.getModel(), value);
-						return null;
-					}
-
-					@Override
-					protected void showCurrentEditValue(DirectEditRequest request) {
-						String value = (String) request.getCellEditor().getValue();
-						MonitoringEditPart editPart = (MonitoringEditPart)getHost();
-						if (null != editPart) {
-							editPart.getNameLabel().setText(value);
+		if(!isEvent()) {
+			//only allow direct edit if it is not an event, see Bug 510735 for details.
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
+					new DirectEditPolicy(){
+	
+						@Override
+						protected Command getDirectEditCommand(DirectEditRequest request) {
+							String value = (String) request.getCellEditor().getValue();
+							MonitoringEditPart editPart = (MonitoringEditPart)getHost();
+							MonitoringManager.getInstance().writeValue(editPart.getModel(), value);
+							return null;
 						}
-						
-					}
-									
-		});
+	
+						@Override
+						protected void showCurrentEditValue(DirectEditRequest request) {
+							String value = (String) request.getCellEditor().getValue();
+							MonitoringEditPart editPart = (MonitoringEditPart)getHost();
+							if (null != editPart) {
+								editPart.getNameLabel().setText(value);
+							}
+							
+						}
+										
+			});
+		}
 	}
 
 	@Override
@@ -109,30 +112,38 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 		return l;
 	}
 
-	private EContentAdapter adapter;
-
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		if (adapter == null) {
-			adapter = new EContentAdapter() {
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				Display.getDefault().asyncExec(new Runnable() {
 
-				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-					Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						setValue(getModel().getCurrentValue());
+						refreshVisuals();
 
-						@Override
-						public void run() {
-							setValue(getModel().getCurrentValue());
-							refreshVisuals();
+					}
+				});
+			}
 
-						}
-					});
-				}
-
-			};
+		};
+	}
+	
+	@Override
+	public void performRequest(final Request request) {
+		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
+		// REQ_OPEN -> doubleclick
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
+				|| request.getType() == RequestConstants.REQ_OPEN) {
+			if(!isEvent()) {
+				performDirectEdit();
+			}
+		} else {
+			super.performRequest(request);
 		}
-		return adapter;
 	}
 
 	@Override
@@ -145,15 +156,13 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 	}	
 
 	public void setValue(String string) {
-		if (isActive()) {
-			if (getFigure() != null) {
-				if (getModel().isForce() && getModel().getForceValue() != null) {
-					((Label) getFigure()).setText(getModel().getForceValue() + " (" + string + ")");  //$NON-NLS-1$//$NON-NLS-2$
-				} else {
-					((Label) getFigure()).setText(string);
-				}
-				refreshVisuals();
+		if (isActive() && getFigure() != null) {
+			if (getModel().isForce() && getModel().getForceValue() != null) {
+				((Label) getFigure()).setText(getModel().getForceValue() + " (" + string + ")");  //$NON-NLS-1$//$NON-NLS-2$
+			} else {
+				((Label) getFigure()).setText(string);
 			}
+			refreshVisuals();
 		}
 	}
 
@@ -173,7 +182,6 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 		}
 
 		if (getModel().isBreakpointActive()) {
-			//getFigure().setForegroundColor(org.eclipse.draw2d.ColorConstants.red);
 			getFigure().setBackgroundColor(org.eclipse.draw2d.ColorConstants.red);
 		} else {
 			setBackgroundColor(getFigure());

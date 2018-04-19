@@ -22,10 +22,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Parameter;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,7 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Parameter;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl#getComment <em>Comment</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl#getParameter <em>Parameter</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableObjectImpl#getAttributes <em>Attributes</em>}</li>
  * </ul>
  *
  * @generated
@@ -51,7 +50,7 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = null;
+	protected static final String NAME_EDEFAULT = "";
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -69,7 +68,7 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = null;
+	protected static final String COMMENT_EDEFAULT = "";
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -80,15 +79,14 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 */
 	protected String comment = COMMENT_EDEFAULT;
 	/**
-	 * The cached value of the '{@link #getParameter() <em>Parameter</em>}' containment reference list.
+	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getParameter()
+	 * @see #getAttributes()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Parameter> parameter;
-
+	protected EList<Attribute> attributes;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -155,11 +153,11 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Parameter> getParameter() {
-		if (parameter == null) {
-			parameter = new EObjectContainmentEList.Resolving<Parameter>(Parameter.class, this, LibraryElementPackage.CONFIGURABLE_OBJECT__PARAMETER);
+	public EList<Attribute> getAttributes() {
+		if (attributes == null) {
+			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES);
 		}
-		return parameter;
+		return attributes;
 	}
 
 	/**
@@ -167,23 +165,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setParameter(final String parameterName, final String value) {
-				Parameter parameter = null;
-				// find already existing parameter with parameterName
-				for (Parameter param : getParameter()) {
-					if (param.getName().equalsIgnoreCase(parameterName)) {
-						parameter = param;
-						break;
-					}
-				}
-				if (parameter == null) {
-					parameter = LibraryElementFactory.eINSTANCE.createParameter();
-					parameter.setName(parameterName);
-					parameter.setValue(value);
-					getParameter().add(parameter);
-				} else {
-					parameter.setValue(value);
-				}
+	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
+		org.eclipse.fordiac.ide.model.Annotations.GEN.setAttribute(this, attributeName, type, value, comment);
 	}
 
 	/**
@@ -191,16 +174,17 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getParameter(final String parameterName) {
-				if (parameterName == null) {
-					return null;
-				}
-				for (Parameter param : getParameter()) {
-					if (param.getName().equalsIgnoreCase(parameterName)) {
-						return param.getValue();
-					}
-				}
-				return null;
+	public Attribute getAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getAttributeValue(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAttributeValue(this, attributeName);
 	}
 
 	/**
@@ -211,8 +195,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__PARAMETER:
-				return ((InternalEList<?>)getParameter()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
+				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -229,8 +213,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 				return getName();
 			case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
 				return getComment();
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__PARAMETER:
-				return getParameter();
+			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
+				return getAttributes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -250,9 +234,9 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 			case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
 				setComment((String)newValue);
 				return;
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__PARAMETER:
-				getParameter().clear();
-				getParameter().addAll((Collection<? extends Parameter>)newValue);
+			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
+				getAttributes().clear();
+				getAttributes().addAll((Collection<? extends Attribute>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -272,8 +256,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 			case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
 				setComment(COMMENT_EDEFAULT);
 				return;
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__PARAMETER:
-				getParameter().clear();
+			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
+				getAttributes().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -291,8 +275,8 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__PARAMETER:
-				return parameter != null && !parameter.isEmpty();
+			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
+				return attributes != null && !attributes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

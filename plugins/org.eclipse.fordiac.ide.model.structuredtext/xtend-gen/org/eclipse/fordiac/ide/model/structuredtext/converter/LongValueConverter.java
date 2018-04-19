@@ -22,8 +22,7 @@ import org.eclipse.xtext.xbase.lib.StringExtensions;
 public abstract class LongValueConverter extends AbstractLexerBasedConverter<Long> {
   @Override
   protected String toEscapedString(final Long value) {
-    int _radix = this.getRadix();
-    return Long.toString((value).longValue(), _radix);
+    return Long.toString((value).longValue(), this.getRadix());
   }
   
   @Override
@@ -55,9 +54,7 @@ public abstract class LongValueConverter extends AbstractLexerBasedConverter<Lon
           (((("Couldn\'t convert input \'" + string) + "\' without radix prefix \'") + prefix) + "\' to a long value."), node, 
           null);
       }
-      int _length = prefix.length();
-      String _substring = string.substring(_length);
-      final String value = _substring.replace("_", "");
+      final String value = string.substring(prefix.length()).replace("_", "");
       boolean _isNullOrEmpty_1 = StringExtensions.isNullOrEmpty(value);
       if (_isNullOrEmpty_1) {
         throw new ValueConverterException((("Couldn\'t convert input \'" + string) + "\' to a long value."), node, null);
@@ -66,8 +63,7 @@ public abstract class LongValueConverter extends AbstractLexerBasedConverter<Lon
       try {
         Long _xblockexpression_1 = null;
         {
-          int _radix = this.getRadix();
-          final long longValue = Long.parseUnsignedLong(value, _radix);
+          final long longValue = Long.parseUnsignedLong(value, this.getRadix());
           _xblockexpression_1 = Long.valueOf(longValue);
         }
         _xtrycatchfinallyexpression = _xblockexpression_1;
@@ -85,8 +81,7 @@ public abstract class LongValueConverter extends AbstractLexerBasedConverter<Lon
   }
   
   protected String getPrefix() {
-    int _radix = this.getRadix();
-    String _string = Integer.toString(_radix);
+    String _string = Integer.toString(this.getRadix());
     return (_string + "#");
   }
   

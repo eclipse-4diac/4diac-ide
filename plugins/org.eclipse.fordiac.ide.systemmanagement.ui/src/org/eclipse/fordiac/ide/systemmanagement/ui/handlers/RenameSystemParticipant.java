@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.handlers;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.typemanagement.RenameType;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
@@ -32,7 +33,7 @@ public class RenameSystemParticipant extends RenameType {
 	
 	@Override
 	protected RefactoringStatus getWrongIdentifierErrorStatus() {
-		return RefactoringStatus.createFatalErrorStatus("System name is not a valid Identifier");
+		return RefactoringStatus.createFatalErrorStatus(Messages.SystemNameNotValid);
 	}
 
 }

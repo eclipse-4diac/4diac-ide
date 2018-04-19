@@ -12,13 +12,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.commands.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.application.commands.ListFBCreateCommand;
+import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
+import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
@@ -71,28 +75,27 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
-		if (request == null) {
-			return null;
-		}
-		Object childClass = request.getNewObjectType();
-		Rectangle constraint = (Rectangle) getConstraintFor(request);
-		if (getHost().getModel() instanceof FBNetwork) {
-			FBNetwork fbNetwork = (FBNetwork)getHost().getModel(); 
-			if (childClass instanceof FBTypePaletteEntry) {
-				FBTypePaletteEntry type = (FBTypePaletteEntry) childClass;
-				return new FBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);	
-			}
-			if (childClass instanceof FBTypePaletteEntry[]) {
-				FBTypePaletteEntry[] type = (FBTypePaletteEntry[]) childClass;
-				return new ListFBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
-			}			
-			if (childClass instanceof SubApplicationTypePaletteEntry) {
-				SubApplicationTypePaletteEntry type = (SubApplicationTypePaletteEntry) request .getNewObjectType();
-				return new CreateSubAppInstanceCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
-			}			
-			if (childClass instanceof TransferDataSelectionOfFb[]) {
-				TransferDataSelectionOfFb[] type = (TransferDataSelectionOfFb[]) childClass;
-				return new ListFBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
+		if (null != request) {
+			Object childClass = request.getNewObjectType();
+			Rectangle constraint = (Rectangle) getConstraintFor(request);
+			if (getHost().getModel() instanceof FBNetwork) {
+				FBNetwork fbNetwork = (FBNetwork)getHost().getModel(); 
+				if (childClass instanceof FBTypePaletteEntry) {
+					FBTypePaletteEntry type = (FBTypePaletteEntry) childClass;
+					return new FBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);	
+				}
+				if (childClass instanceof FBTypePaletteEntry[]) {
+					FBTypePaletteEntry[] type = (FBTypePaletteEntry[]) childClass;
+					return new ListFBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
+				}			
+				if (childClass instanceof SubApplicationTypePaletteEntry) {
+					SubApplicationTypePaletteEntry type = (SubApplicationTypePaletteEntry) request .getNewObjectType();
+					return new CreateSubAppInstanceCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
+				}			
+				if (childClass instanceof TransferDataSelectionOfFb[]) {
+					TransferDataSelectionOfFb[] type = (TransferDataSelectionOfFb[]) childClass;
+					return new ListFBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
+				}
 			}
 		}		
 		return null;
@@ -101,5 +104,11 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command getAddCommand(final Request generic) {
 		return null;
+	}
+	
+	@Override
+	protected Command getCloneCommand(ChangeBoundsRequest request) {
+		List elements = (List)request.getEditParts().stream().map(n-> ((EditPart)n).getModel()).collect(Collectors.toList());
+		return new PasteCommand(elements, (FBNetwork)getHost().getModel(), request.getMoveDelta().x, request.getMoveDelta().y); 
 	}
 }

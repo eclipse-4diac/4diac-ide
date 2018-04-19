@@ -12,7 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
+import org.eclipse.draw2d.Figure;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 /**
@@ -26,7 +28,16 @@ public class SubAppForFbNetworkFigure extends AbstractFBNetworkElementFigure {
 
 	@Override
 	protected boolean isResoruceTypeFBNElement() {
-		//TODO model refactoring - think if subapps can be of resource type subapps ever
+		// Nothing todo here
 		return false;
+	}
+	
+	@Override
+	protected void setupTypeNameAndVersion(FBNetworkElement model, Figure container) {
+		super.setupTypeNameAndVersion(model, container);
+		if(null == model.getType()) {
+			//we have an untyped sub app don't show any text in the label
+			typeLabel.setText("");  //$NON-NLS-1$
+		}		
 	}
 }

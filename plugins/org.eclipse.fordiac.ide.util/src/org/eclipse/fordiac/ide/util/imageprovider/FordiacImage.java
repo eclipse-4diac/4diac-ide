@@ -129,6 +129,7 @@ public enum FordiacImage {
 	// Overlay Images
 	OVERLAY_DistributedNature;
 	
+	
 	// @formatter:on
 
 	private static final String IMAGES_DIRECTORY = "images";

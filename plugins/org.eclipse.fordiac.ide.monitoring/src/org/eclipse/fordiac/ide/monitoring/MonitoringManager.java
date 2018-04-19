@@ -343,11 +343,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	}
 
 	public MonitoringBaseElement getMonitoringElementByPortString(String systemName, String portString) {
-		SystemMonitoringData systemData = getSystemMonitoringData(systemName);
-		if(null != systemData){
-			return systemData.getMonitoringElementByPortString(portString);
-		}
-		return null;
+		return getSystemMonitoringData(systemName).getMonitoringElementByPortString(portString);
 	}
 
 	private SystemMonitoringData getSystemMonitoringData(String systemName) {

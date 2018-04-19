@@ -48,7 +48,7 @@ public class VariableOutputContainerLayoutEditPolicy extends AbstractInterfaceCo
 
 			@Override
 			protected Command getIECreateCommand(DataType refElement, int ref) {
-				return new CreateInterfaceElementCommand(refElement, "", "", getFBType().getInterfaceList(), false, ref); //$NON-NLS-1$ //$NON-NLS-2$
+				return new CreateInterfaceElementCommand(refElement, getFBType().getInterfaceList(), false, ref);
 			}
 		};
 	}
@@ -71,7 +71,7 @@ public class VariableOutputContainerLayoutEditPolicy extends AbstractInterfaceCo
 				} else {
 					newIndex = getHost().getChildren().indexOf(after);
 				}
-				return new ChangeInterfaceOrderCommand(getFBType().getInterfaceList(), (IInterfaceElement) childEP.getModel(), ((IInterfaceElement)childEP.getModel()).isIsInput(), newIndex);
+				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(), ((IInterfaceElement)childEP.getModel()).isIsInput(), newIndex);
 			}
 
 		}
@@ -89,7 +89,7 @@ public class VariableOutputContainerLayoutEditPolicy extends AbstractInterfaceCo
 			if (ref != null) {
 				index = type.getInterfaceList().getOutputVars().indexOf(ref.getModel());
 			}
-			CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand((DataType) childClass, "", "", type.getInterfaceList(), false, index); //$NON-NLS-1$ //$NON-NLS-2$
+			CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand((DataType) childClass, type.getInterfaceList(), false, index);
 			return cmd;
 		}
 		return null;

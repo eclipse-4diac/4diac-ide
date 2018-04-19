@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -63,7 +62,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = null;
+	protected static final String NAME_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -83,7 +82,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = null;
+	protected static final String COMMENT_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -222,7 +221,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * @generated
 	 */
 	public FBNetworkElement getFBNetworkElement() {
-		return (eContainer() instanceof InterfaceList) ? ((InterfaceList)eContainer()).getFBNetworkElement() : null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);
 	}
 
 	/**

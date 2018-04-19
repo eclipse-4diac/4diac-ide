@@ -68,7 +68,7 @@ public class OutputPrimitiveSection extends PrimitiveSection {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if(null != type) {
-			testResultText.setText((new Integer(getType().getTestResult())).toString());
+			testResultText.setText(Integer.toString(getType().getTestResult()));
 		}
 		commandStack = commandStackBuffer;
 	}

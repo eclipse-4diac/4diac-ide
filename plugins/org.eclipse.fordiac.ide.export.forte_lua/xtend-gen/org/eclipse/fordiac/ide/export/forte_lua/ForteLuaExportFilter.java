@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.export.forte_lua;
 import java.util.Collections;
 import java.util.List;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.export.forte_lua.filter.AdapterFilter;
 import org.eclipse.fordiac.ide.export.forte_lua.filter.BasicFBFilter;
 import org.eclipse.fordiac.ide.export.forte_lua.filter.CompositeFBFilter;
@@ -48,26 +47,22 @@ public class ForteLuaExportFilter implements IExportFilter {
     boolean _matched = false;
     if (type instanceof BasicFBType) {
       _matched=true;
-      CharSequence _lua = this.basicFBFilter.lua(((BasicFBType)type));
-      System.out.println(_lua);
+      System.out.println(this.basicFBFilter.lua(((BasicFBType)type)));
     }
     if (!_matched) {
       if (type instanceof CompositeFBType) {
         _matched=true;
-        CharSequence _lua = this.compositeFBFilter.lua(((CompositeFBType)type));
-        System.out.println(_lua);
+        System.out.println(this.compositeFBFilter.lua(((CompositeFBType)type)));
       }
     }
     if (!_matched) {
       if (type instanceof AdapterType) {
         _matched=true;
-        CharSequence _lua = this.adapterFilter.lua(((AdapterType)type));
-        System.out.println(_lua);
+        System.out.println(this.adapterFilter.lua(((AdapterType)type)));
       }
     }
     if (!_matched) {
-      EClass _eClass = type.eClass();
-      String _name = _eClass.getName();
+      String _name = type.eClass().getName();
       String _plus = ("Unknown library element type " + _name);
       throw new UnsupportedOperationException(_plus);
     }
@@ -77,25 +72,21 @@ public class ForteLuaExportFilter implements IExportFilter {
     boolean _matched = false;
     if (type instanceof BasicFBType) {
       _matched=true;
-      CharSequence _lua = this.basicFBFilter.lua(((BasicFBType)type));
-      return String.valueOf(_lua);
+      return String.valueOf(this.basicFBFilter.lua(((BasicFBType)type)));
     }
     if (!_matched) {
       if (type instanceof CompositeFBType) {
         _matched=true;
-        CharSequence _lua = this.compositeFBFilter.lua(((CompositeFBType)type));
-        return String.valueOf(_lua);
+        return String.valueOf(this.compositeFBFilter.lua(((CompositeFBType)type)));
       }
     }
     if (!_matched) {
       if (type instanceof AdapterType) {
         _matched=true;
-        CharSequence _lua = this.adapterFilter.lua(((AdapterType)type));
-        return String.valueOf(_lua);
+        return String.valueOf(this.adapterFilter.lua(((AdapterType)type)));
       }
     }
-    EClass _eClass = type.eClass();
-    String _name = _eClass.getName();
+    String _name = type.eClass().getName();
     String _plus = ("Unknown library element type " + _name);
     throw new UnsupportedOperationException(_plus);
   }

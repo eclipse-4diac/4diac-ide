@@ -63,7 +63,6 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionFactory;
@@ -88,23 +87,19 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 				if (featureId == LibraryElementPackage.INAMED_ELEMENT__NAME) {
 					setPartName(getModel().getApplication().getName());
 				}
-			}
-			try {
-				Display.getDefault().syncExec(
-				  new Runnable() {
-				    public void run(){
-				    	firePropertyChange(PROP_DIRTY);
-				    }
-				  });						
-				
-			} catch (Exception e) {
-
+				break;
+			default:
+					break;
 			}
 		}
 
 	};
 
-	protected FBNetwork model;
+	private FBNetwork model;
+	
+	protected void setModel(FBNetwork model) {
+		this.model = model;
+	}
 
 	
 	public CommandStack getFBEditorCommandStack() {
@@ -181,8 +176,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		ElementEditPartFactory factory = new ElementEditPartFactory(this, getZoomManger());
-		return factory;
+		return new ElementEditPartFactory(this, getZoomManger());
 	}
 
 	@Override
@@ -211,12 +205,13 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 			org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput untypedInput = (org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput) input;
 			Object content = untypedInput.getContent();
 			if (content instanceof Application) {
-//TODO model refactoring - consider moving this to the base class				
-				model = ((Application) content).getFBNetwork();
+//TODO model refactoring - consider moving this to the base class
+				Application app = ((Application) content); 
+				model = app.getFBNetwork();
 				
 				// register EContentAdapter to be informed on changes of the
 				// application name
-				getModel().eAdapters().add(adapter);
+				app.eAdapters().add(adapter);
 			}
 			if (input.getName() != null) {
 				setPartName(input.getName());
@@ -303,10 +298,8 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 
 	@Override
 	public void dispose() {
-		if (adapter != null && getModel() != null) {
-			if (getModel().eAdapters().contains(adapter)) {
+		if (adapter != null && getModel() != null && getModel().eAdapters().contains(adapter)) {
 				getModel().eAdapters().remove(adapter);
-			}
 		}
 		super.dispose();
 		getEditDomain().setPaletteViewer(null);
@@ -320,9 +313,20 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 	
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(getSystem().getProject(), getEditDomain());
+		return new FBTypePaletteViewerProvider(getSystem().getProject(), getEditDomain(), getPalletNavigatorID());
 	}
 	
+	/** Method for providing the id to be used for generating the CNF for showing the pallette.
+	 * 
+	 * This method is to be subclassed by fbnetwork editors which would like to show different types in there 
+	 * pallete (e.g., Composite type editor). 
+	 * 
+	 * @return the navigator id
+	 */
+	protected String getPalletNavigatorID() {
+		return "org.eclipse.fordiac.ide.fbpaletteviewer"; //$NON-NLS-1$;
+	}
+
 	@Override
 	protected FlyoutPreferences getPalettePreferences(){
 		return FBNetworkFlyoutPreferences.INSTANCE;

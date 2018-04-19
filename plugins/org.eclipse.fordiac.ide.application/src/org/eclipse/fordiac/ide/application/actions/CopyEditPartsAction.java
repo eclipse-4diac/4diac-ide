@@ -27,6 +27,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 /**
@@ -38,7 +40,7 @@ public class CopyEditPartsAction extends WorkbenchPartAction implements
 	private static final String COPY = "Copy";
 
 	/** The templates. */
-	List<EObject> templates = null;
+	private List<EObject> templates = null;
 
 	/**
 	 * Instantiates a new copy edit parts action.
@@ -48,7 +50,10 @@ public class CopyEditPartsAction extends WorkbenchPartAction implements
 	public CopyEditPartsAction(IEditorPart editor) {
 		super(editor);
 		setId(ActionFactory.COPY.getId());
-		setText(COPY);
+		setText(COPY);		
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages(); 
+		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
+	    setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY_DISABLED));
 	}
 
 	/*
@@ -58,7 +63,7 @@ public class CopyEditPartsAction extends WorkbenchPartAction implements
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		return templates != null;
+		return templates != null && !templates.isEmpty();
 	}
 
 	/*
@@ -78,23 +83,16 @@ public class CopyEditPartsAction extends WorkbenchPartAction implements
 		templates = new ArrayList<EObject>();
 		// only if all selected objects are uifbs copy is possible --> all
 		// selected items are added to the template
-		if (selection != null) {
-			for (Iterator iter = selection.iterator(); iter.hasNext();) {
-				Object obj = iter.next();
-				if (obj instanceof EditPart) {
-					Object model = ((EditPart) obj).getModel();
-					if ((model instanceof FBNetworkElement)|| (model instanceof Connection)){
-						templates.add((EObject) model);
-					} else {
-//						templates = null;
-//						refresh();
-//						return;
-					}
-				}
+		for (Iterator iter = selection.iterator(); iter.hasNext();) {
+			Object obj = iter.next();
+			if (obj instanceof EditPart) {
+				Object model = ((EditPart) obj).getModel();
+				if ((model instanceof FBNetworkElement)|| (model instanceof Connection)){
+					templates.add((EObject) model);
+				} 
 			}
 		}
 		refresh();
-
 	}
 
 	/* (non-Javadoc)

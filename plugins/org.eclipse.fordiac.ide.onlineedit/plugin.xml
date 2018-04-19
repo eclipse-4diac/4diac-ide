@@ -60,9 +60,13 @@
                      variable="selection">
                   <iterate
                         operator="and">
-                     <instanceof
-                           value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart">
-                     </instanceof>
+                     <and>
+	                 	<instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart" />
+	                    <not> 
+	                     	<instanceof value="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.ConnectionEditPartRO" />
+	                    </not>
+	                </and>
+                     
                   </iterate>
                </with>
             </visibleWhen>
@@ -105,9 +109,17 @@
                     <instanceof
                           value="org.eclipse.fordiac.ide.model.libraryElement.FB">
                     </instanceof>
-                    <instanceof
-                          value="org.eclipse.fordiac.ide.application.editparts.FBEditPart">
-                    </instanceof>
+                    <and>
+	                    <instanceof
+	                          value="org.eclipse.fordiac.ide.application.editparts.FBEditPart">
+	                    </instanceof>
+	                    <not>
+	                    	<or>
+	                    		<instanceof value="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.FBEditPartRO"/>
+	                    		<instanceof value="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.AdapterFBEditPart"/>
+	                    	</or>	
+	                    </not>
+	                </and>    
                   </or>
                </iterate>
          </with>  

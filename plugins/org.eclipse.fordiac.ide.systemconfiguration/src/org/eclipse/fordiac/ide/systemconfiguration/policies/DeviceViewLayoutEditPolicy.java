@@ -18,8 +18,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
-import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -78,29 +76,10 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.editpolicies.LayoutEditPolicy#getCreateCommand(org.
-	 * eclipse .gef.requests.CreateRequest)
-	 */
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
-		if (request == null) {
-			return null;
-		}
-		Object childClass = request.getNewObjectType();
-		if (childClass instanceof org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry) {
-			org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry type = (org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry) request
-					.getNewObjectType();
-
-			if (getHost() instanceof DeviceEditPart) {
-				DeviceEditPart devEditPart = (DeviceEditPart) getHost();
-				return new ResourceCreateCommand(type, devEditPart.getModel(), false);
-			}
-		}
+		//we cannot create anything here, resource creation is handled in the resorucontainerlayoutEditPolicy
 		return null;
-
 	}
 
 	/**

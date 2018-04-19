@@ -98,7 +98,6 @@ public class TCPCommunicationObject {
 				}
 			}
 			try {
-
 				outputStream.writeByte(ASN1_TAG_IECSTRING);
 				outputStream.writeShort(destination.length());
 				outputStream.writeBytes(destination);
@@ -107,59 +106,27 @@ public class TCPCommunicationObject {
 				outputStream.writeShort(request.length());
 				outputStream.writeBytes(request);
 				outputStream.flush();
-				if (type.equals(SendType.REQ)) {
-					String response = ""; //$NON-NLS-1$
-					@SuppressWarnings("unused")
-					byte b = inputStream.readByte();
-					short size = inputStream.readShort();
-
-					for (int i = 0; i < size; i++) {
-						response += (char) inputStream.readByte();
-					}
-					if (!response.equals("")) { //$NON-NLS-1$
-						return response;
-					}
-				} else if (type.equals(SendType.addWatch)) {
-					String response = ""; //$NON-NLS-1$
-					@SuppressWarnings("unused")
-					byte b = inputStream.readByte();
-					short size = inputStream.readShort();
-
-					for (int i = 0; i < size; i++) {
-						response += (char) inputStream.readByte();
-					}
-					if (!response.equals("")) { //$NON-NLS-1$
-						return response;
-					}
-				} else if (type.equals(SendType.triggerEvent)) {
+				
+				switch (type) {
+				case REQ:
+					return readResponse();
+				case addWatch:
+					return readResponse();
+				case triggerEvent:
 					// normally nothing to do - as no response expected
-				} else if (type.equals(SendType.removeWatch)) {
-					// normally nothing to do - as no response expected
-					String response = ""; //$NON-NLS-1$
-					@SuppressWarnings("unused")
-					byte b = inputStream.readByte();
-					short size = inputStream.readShort();
-
-					for (int i = 0; i < size; i++) {
-						response += (char) inputStream.readByte();
-					}
-					if (!response.equals("")) { //$NON-NLS-1$
-						return response;
-					}
-
-				} else if (type.equals(SendType.startEventCnt)) {
-					byte[] temp = new byte[1500];
-					inputStream.read(temp);
+					break;
+				case removeWatch:
+					return readResponse();
+				case startEventCnt:
+					readResponse();
 					return null;
-					// TODO evaluate response
-
-				} else if (type.equals(SendType.breakPoint)) {
-					byte[] temp = new byte[1500];
-					inputStream.read(temp);
+				case breakPoint:
+					readResponse();
 					return null;
-				} else if (type.equals(SendType.forceValue)) {
+				case forceValue:
 					// normally nothing to do - as no response expected
-				}
+					break;
+				}			
 			} catch (IOException e) {
 				Activator.getDefault().logError("Communication Problem: " + e.getMessage(), e);
 				try {
@@ -170,6 +137,17 @@ public class TCPCommunicationObject {
 			}
 		}
 		return null;
+	}
+
+	private String readResponse() throws IOException {
+		@SuppressWarnings("unused")
+		byte b = inputStream.readByte();
+		short size = inputStream.readShort();
+		StringBuilder response = new StringBuilder(size);
+		for (int i = 0; i < size; i++) {
+			response.append((char) inputStream.readByte());
+		}		
+		return (0 == response.length()) ? null : response.toString();
 	}
 
 	/**

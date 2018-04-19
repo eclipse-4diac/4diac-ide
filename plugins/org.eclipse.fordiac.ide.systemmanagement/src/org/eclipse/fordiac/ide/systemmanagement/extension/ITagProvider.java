@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.systemmanagement.extension;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 
 public interface ITagProvider {
 	/**
@@ -35,7 +34,7 @@ public interface ITagProvider {
 	 * @param value 
 	 * @return the value of the (if exists) active configuration, otherwise null
 	 */
-	String getReplacedString(ConfigurableObject configuredObject, String value);
+	String getReplacedString(String value);
 	
 	/**
 	 * the main element of the internal datastructure - is created in the initializeNewTagProvider() method

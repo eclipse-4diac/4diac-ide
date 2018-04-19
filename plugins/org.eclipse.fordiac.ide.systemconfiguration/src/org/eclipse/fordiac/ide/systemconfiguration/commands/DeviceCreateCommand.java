@@ -16,9 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -37,10 +41,10 @@ import org.eclipse.ui.IEditorPart;
 
 public class DeviceCreateCommand extends Command {
 	private static final String CREATE_DEVICE_LABEL = Messages.DeviceCreateCommand_LABEL_CreateDevice;
-	protected final DeviceTypePaletteEntry entry;
-	protected final SystemConfiguration parent;
+	private final DeviceTypePaletteEntry entry;
+	private final SystemConfiguration parent;
 	private final Rectangle bounds;
-	protected Device device;
+	private Device device;
 	private IEditorPart editor;
 
 	public Device getDevice() {
@@ -79,19 +83,21 @@ public class DeviceCreateCommand extends Command {
 			parent.getDevices().add(device);
 			// the name needs to be set after the device is added to the network
 			// so that name checking works correctly
-			device.setName(entry.getDeviceType().getName());
-			createResource();
-			ResourceCreateCommand cmd = null;
-			if (device.getType().getName().contains("FBRT") //$NON-NLS-1$
-					|| device.getType().getName().contains("FRAME")) { //$NON-NLS-1$
-				cmd = new ResourceCreateCommand((ResourceTypeEntry) device.getPaletteEntry().getGroup().getParentGroup()
-						.getGroup("Resources").getEntry("PANEL_RESOURCE"), device, false); //$NON-NLS-1$ //$NON-NLS-2$
-			} else {
-				cmd = new ResourceCreateCommand((ResourceTypeEntry) device.getPaletteEntry().getGroup().getParentGroup()
-						.getGroup("Resources").getEntry("EMB_RES"), device, false); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			cmd.execute();
+			device.setName(NameRepository.createUniqueName(device, entry.getDeviceType().getName()));
+			setDeviceAttributes();
+			createResource();		
 			SystemManager.INSTANCE.notifyListeners();
+		}
+	}
+	
+	private void setDeviceAttributes() {
+		for(AttributeDeclaration attributeDeclaration : entry.getDeviceType().getAttributeDeclarations()) {
+			Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
+			attribute.setName(attributeDeclaration.getName());
+			attribute.setComment(attributeDeclaration.getComment());
+			attribute.setValue(attributeDeclaration.getInitialValue());
+			attribute.setAttributeDeclaration(attributeDeclaration);
+			device.getAttributes().add(attribute);
 		}
 	}
 
@@ -124,7 +130,30 @@ public class DeviceCreateCommand extends Command {
 						+ (res.getPaletteEntry() != null ? " (" + res.getTypeName() + ") " : "(N/A)")
 						+ " not found. Please check whether your palette contains that type and add it manually to your device!");
 			}
+		}		
+		createDefaultResource();
+	}
+
+	private void createDefaultResource() {
+		ResourceTypeEntry type = null;
+		if (device.getType().getName().contains("FBRT") //$NON-NLS-1$
+				|| device.getType().getName().contains("FRAME")) { //$NON-NLS-1$
+			type = getResourceType("PANEL_RESOURCE"); //$NON-NLS-1$
+		} else {
+			type = getResourceType("EMB_RES"); //$NON-NLS-1$ 
 		}
+		if(null != type) {
+			ResourceCreateCommand cmd = new ResourceCreateCommand(type, device, false);	
+			cmd.execute();
+		}
+	}
+
+	private ResourceTypeEntry getResourceType(String resTypeName) {
+		List<PaletteEntry> typeEntries = device.getPaletteEntry().getGroup().getPallete().getTypeEntries(resTypeName);
+		if(!typeEntries.isEmpty() && typeEntries.get(0) instanceof ResourceTypeEntry) {
+			return (ResourceTypeEntry)typeEntries.get(0);
+		}
+		return null;
 	}
 
 	private Color createRandomDeviceColor() {

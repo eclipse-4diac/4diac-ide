@@ -52,7 +52,7 @@ public class ResourceTypeFBImpl extends FBImpl implements ResourceTypeFB {
 	 * @generated
 	 */
 	public boolean isResourceTypeFB() {
-		return true;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceTypeFB();
 	}
 
 	@Override

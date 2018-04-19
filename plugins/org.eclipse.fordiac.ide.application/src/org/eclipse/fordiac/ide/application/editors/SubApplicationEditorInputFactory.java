@@ -73,9 +73,11 @@ public class SubApplicationEditorInputFactory extends AbstractUntypedEditorInput
      */
     public static void saveState(IMemento memento, SubApplicationEditorInput input) {
     	Application app = input.getApplication();
-    	saveAutomationSystem(memento, app.getAutomationSystem());
-    	memento.putString(TAG_APPLICATION, app.getName());
-    	memento.putString(TAG_SUB_APPLICATION, input.getName());
+    	if(null != app) {
+	    	saveAutomationSystem(memento, app.getAutomationSystem());
+	    	memento.putString(TAG_APPLICATION, app.getName());
+	    	memento.putString(TAG_SUB_APPLICATION, input.getName());
+    	}
     }
 
 }

@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
 import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
@@ -224,8 +223,10 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 
 	@Override
 	protected void createEditPolicies() {
-
-		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, getNodeEditPolicy());
+		GraphicalNodeEditPolicy nodeEditPolicy = getNodeEditPolicy();
+		if(null != nodeEditPolicy) {
+			installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, nodeEditPolicy);
+		}
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
 				new SelectionEditPolicy() {
 
@@ -252,9 +253,9 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 
 				@Override
 				public Command getCommand(Request request) {
-					if (REQ_CREATE.equals(request.getType()))
+					if (REQ_CREATE.equals(request.getType())) {
 						return getCreateCommand((CreateRequest) request);
-
+					}
 					return null;
 				}
 
@@ -265,7 +266,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 						InterfaceEditPart host = (InterfaceEditPart) getHost();
 						if ((host.getModel() instanceof VarDeclaration) && (!(host.getModel() instanceof AdapterDeclaration))) {
 							VarDeclaration v = (VarDeclaration) host.getModel();
-							return new ChangeValueCommand(v, request != null && request.getNewObject() != null ? request.getNewObject().toString():""); //$NON-NLS-1$
+							return new ChangeValueCommand(v, request.getNewObject() != null ? request.getNewObject().toString():""); //$NON-NLS-1$
 						}
 					}
 					return null;
@@ -310,7 +311,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	}
 
 	public boolean isVariable() {
-		return getModel() instanceof VarDeclarationImpl;
+		return getModel() instanceof VarDeclaration;
 	}
 
 	@Override
@@ -407,8 +408,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 
 	public ValueEditPart getReferencedValueEditPart() {
 		if (referencedPart == null) {
-			Object temp; 
-			if ((temp = getViewer().getEditPartRegistry().get(getModel().getValue())) instanceof ValueEditPart) {
+			Object temp = getViewer().getEditPartRegistry().get(getModel().getValue()); 
+			if (temp instanceof ValueEditPart) {
 				referencedPart = (ValueEditPart)temp;
 			}
 		}

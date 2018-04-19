@@ -30,54 +30,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ApplicationImpl#getFBNetwork <em>FB Network</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ApplicationImpl extends I4DIACElementImpl implements Application {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String COMMENT_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected String comment = COMMENT_EDEFAULT;
-
+public class ApplicationImpl extends ConfigurableObjectImpl implements Application {
 	/**
 	 * The cached value of the '{@link #getFBNetwork() <em>FB Network</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -178,50 +136,8 @@ public class ApplicationImpl extends I4DIACElementImpl implements Application {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getComment() {
-		return comment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setComment(String newComment) {
-		String oldComment = comment;
-		comment = newComment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.APPLICATION__COMMENT, oldComment, comment));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.APPLICATION__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public AutomationSystem getAutomationSystem() {
-		return (AutomationSystem)eContainer();
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
 	}
 
 	/**
@@ -246,10 +162,6 @@ public class ApplicationImpl extends I4DIACElementImpl implements Application {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.APPLICATION__NAME:
-				return getName();
-			case LibraryElementPackage.APPLICATION__COMMENT:
-				return getComment();
 			case LibraryElementPackage.APPLICATION__FB_NETWORK:
 				if (resolve) return getFBNetwork();
 				return basicGetFBNetwork();
@@ -265,12 +177,6 @@ public class ApplicationImpl extends I4DIACElementImpl implements Application {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.APPLICATION__NAME:
-				setName((String)newValue);
-				return;
-			case LibraryElementPackage.APPLICATION__COMMENT:
-				setComment((String)newValue);
-				return;
 			case LibraryElementPackage.APPLICATION__FB_NETWORK:
 				setFBNetwork((FBNetwork)newValue);
 				return;
@@ -286,12 +192,6 @@ public class ApplicationImpl extends I4DIACElementImpl implements Application {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.APPLICATION__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case LibraryElementPackage.APPLICATION__COMMENT:
-				setComment(COMMENT_EDEFAULT);
-				return;
 			case LibraryElementPackage.APPLICATION__FB_NETWORK:
 				setFBNetwork((FBNetwork)null);
 				return;
@@ -307,32 +207,10 @@ public class ApplicationImpl extends I4DIACElementImpl implements Application {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.APPLICATION__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case LibraryElementPackage.APPLICATION__COMMENT:
-				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 			case LibraryElementPackage.APPLICATION__FB_NETWORK:
 				return fBNetwork != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", comment: ");
-		result.append(comment);
-		result.append(')');
-		return result.toString();
 	}
 
 } //ApplicationImpl

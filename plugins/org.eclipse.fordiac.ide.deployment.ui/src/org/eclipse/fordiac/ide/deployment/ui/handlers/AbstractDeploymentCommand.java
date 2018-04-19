@@ -18,6 +18,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.IDeploymentExecutor;
+import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -74,8 +75,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 
 		@Override
 		public void finished() {
-			// TODO Auto-generated method stub
-			
+			// nothing to do here			
 		}
 
 		@Override
@@ -141,10 +141,16 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 						try {
 							executor.getDevMgmComHandler().connect(mgrid);
 							executeCommand(executor);
-							executor.getDevMgmComHandler().disconnect();
 						} catch (Exception e) {
 							OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), mgrid, this, true);
+						}finally {
+							try {
+								executor.getDevMgmComHandler().disconnect();
+							} catch (DisconnectException e) {
+								OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), mgrid, this, true);
+							}							
 						}
+						executor.getDevMgmComHandler().removeDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
 						DeploymentCoordinator.getInstance().flush();
 						DeploymentCoordinator.getInstance().disableOutput(executor.getDevMgmComHandler());
 					}else{

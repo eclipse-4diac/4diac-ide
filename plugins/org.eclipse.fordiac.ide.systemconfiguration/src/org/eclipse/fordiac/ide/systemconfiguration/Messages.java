@@ -25,6 +25,8 @@ public class Messages extends NLS {
 		
 	/** The Device edit part_ labe l_ not defined. */
 	public static String DeviceEditPart_LABEL_NotDefined;
+
+	public static String OpenSystemConfEditorAction_Name;
 	
 	/** The System conf palette factory_ labe l_ tools. */
 	public static String SystemConfPaletteFactory_LABEL_Tools;

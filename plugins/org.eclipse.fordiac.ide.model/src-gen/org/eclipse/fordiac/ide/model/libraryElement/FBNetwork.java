@@ -108,7 +108,7 @@ public interface FBNetwork extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model connectionRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (connection instanceof EventConnection) {\n\tgetEventConnections().add((EventConnection)connection);\n}\nif (connection instanceof DataConnection) {\n\tgetDataConnections().add((DataConnection)connection);\n}\nif (connection instanceof AdapterConnection) {\n\tgetAdapterConnections().add((AdapterConnection)connection);\n}'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.fordiac.ide.model.Annotations.GEN.addConnection(this, connection);'"
 	 * @generated
 	 */
 	void addConnection(Connection connection);
@@ -117,7 +117,7 @@ public interface FBNetwork extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model connectionRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (connection instanceof EventConnection) {\n\tgetEventConnections().remove((EventConnection)connection);\n}\nif (connection instanceof DataConnection) {\n\tgetDataConnections().remove((DataConnection)connection);\n}\nif (connection instanceof AdapterConnection) {\n\tgetAdapterConnections().remove((AdapterConnection)connection);\n}'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.fordiac.ide.model.Annotations.GEN.removeConnection(this, connection);'"
 	 * @generated
 	 */
 	void removeConnection(Connection connection);
@@ -126,7 +126,7 @@ public interface FBNetwork extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return eContainer() instanceof Application;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isApplicationNetwork(this);'"
 	 * @generated
 	 */
 	boolean isApplicationNetwork();
@@ -135,7 +135,7 @@ public interface FBNetwork extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return eContainer() instanceof SubApp;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isSubApplicationNetwork(this);'"
 	 * @generated
 	 */
 	boolean isSubApplicationNetwork();
@@ -144,7 +144,7 @@ public interface FBNetwork extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return eContainer() instanceof Resource;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceNetwork(this);'"
 	 * @generated
 	 */
 	boolean isResourceNetwork();
@@ -153,7 +153,7 @@ public interface FBNetwork extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return eContainer() instanceof CompositeFBType;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isCFBTypeNetwork(this);'"
 	 * @generated
 	 */
 	boolean isCFBTypeNetwork();
@@ -162,7 +162,7 @@ public interface FBNetwork extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if(isApplicationNetwork() || isSubApplicationNetwork()){\n\treturn getApplication().getAutomationSystem();\n}\nif(isResourceNetwork()){\n\treturn ((Resource)eContainer()).getAutomationSystem();\n}else if(isCFBTypeNetwork()){\n\treturn ((CompositeFBType)eContainer()).getPaletteEntry().getGroup().getPallete().getAutomationSystem();\n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);'"
 	 * @generated
 	 */
 	AutomationSystem getAutomationSystem();
@@ -171,7 +171,7 @@ public interface FBNetwork extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if(isApplicationNetwork()){\r\n\t// no null check is need as this is already done in isApplicationNetwork\r\n\treturn (Application)eContainer();\r\n}else if(isSubApplicationNetwork()){\r\n\treturn ((SubApp) eContainer()).getFbNetwork().getApplication();\r\n}\r\nreturn null;\t\t\r\n'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getApplication(this);'"
 	 * @generated
 	 */
 	Application getApplication();
@@ -180,7 +180,7 @@ public interface FBNetwork extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (FBNetworkElement element : getNetworkElements()) {\n\tif((element instanceof FB) && (element.getName().equals(name))){\n\t\treturn (FB)element;\n\t}\n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNamed(this, name);'"
 	 * @generated
 	 */
 	FB getFBNamed(String name);
@@ -189,7 +189,7 @@ public interface FBNetwork extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (FBNetworkElement element : getNetworkElements()) {\n\tif(element instanceof SubApp){ \n\t\tif(element.getName().equals(name)){\n\t\t\treturn (SubApp)element; \n\t\t}\n\t\t\n\t\tSubApp retVal = ((SubApp)element).getSubAppNetwork().getSubAppNamed(name);\n\t\tif(retVal != null){\n\t\t\treturn retVal;\n\t\t}\n\t}\n}\t\n\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getSubAppNamed(this, name);'"
 	 * @generated
 	 */
 	SubApp getSubAppNamed(String name);
@@ -198,7 +198,7 @@ public interface FBNetwork extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (FBNetworkElement element : getNetworkElements()) {\n\tif(element.getName().equals(name)){\n\t\treturn element;\n\t}\n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getElementNamed(this, name);'"
 	 * @generated
 	 */
 	FBNetworkElement getElementNamed(String name);

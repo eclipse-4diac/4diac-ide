@@ -59,17 +59,31 @@
 
 	<properties>
 		<tycho.version>0.26.0</tycho.version>
-		<neon-repo.url>http://download.eclipse.org/releases/neon</neon-repo.url>
+		<oxygen-repo.url>http://download.eclipse.org/releases/oxygen</oxygen-repo.url>
+		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 	</properties>
 
  <repositories>
   <repository>
-   <id>neon</id>
-   <url>${neon-repo.url}</url>
+   <id>oxygen</id>
+   <url>${oxygen-repo.url}</url>
    <layout>p2</layout>
   </repository>
 
  </repositories>
+ 
+ <pluginRepositories>
+    <pluginRepository>
+      <id>cbi</id>
+      <url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 
 	<build>
 		<plugins>
@@ -79,7 +93,6 @@
 				<version>${tycho.version}</version>
 				<extensions>true</extensions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
@@ -140,4 +153,28 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<profiles>
+    <profile>
+      <id>eclipse-sign</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eclipse.cbi.maven.plugins</groupId>
+            <artifactId>eclipse-jarsigner-plugin</artifactId>
+            <version>1.1.4</version>
+            <executions>
+              <execution>
+                <id>sign</id>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <phase>verify</phase>
+              </execution>
+            </executions>
+          </plugin>          
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project> 

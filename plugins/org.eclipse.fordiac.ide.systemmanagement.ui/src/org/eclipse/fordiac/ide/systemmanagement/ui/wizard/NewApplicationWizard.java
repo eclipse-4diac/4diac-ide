@@ -20,10 +20,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
-import org.eclipse.fordiac.ide.util.IOpenListener;
 import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -43,7 +43,7 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 	private static final String NEW_IEC61499_APPLICATION = Messages.NewApplicationWizard_Title;
 
 	/** The page. */
-	protected NewApplicationPage page;
+	private NewApplicationPage page;
 
 	private AutomationSystem system;
 
@@ -61,38 +61,40 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem system = page.getSelectedSystem();
+		performApplicationCreation(page.getSelectedSystem(), page.getFileName(), page.getOpenApplication(), getShell());
+		return true;
+	}
+	
+	
+	/** This method performs the creation process and opens the editor if necessary
+	 * 
+	 * This method has been extracted as static method so that other wizards like the system creation wizard can 
+	 * utilize this code as well.
+	 * 
+	 * @param system the system where the application should be created
+	 * @param appName  the application name for the new application
+	 * @param openApplication boolean flag indicating if the editor for this application should be opened after creation
+	 * @param shell the wizard's shell invoking this method
+	 */
+	public static void performApplicationCreation(AutomationSystem system, String appName, Boolean openApplication, Shell shell) {
+		NewAppCommand cmd = new NewAppCommand(system, appName, Messages.NewApplicationWizard_Comment);
 		
-		NewAppCommand cmd = getApplicationCreateCommand(system);
-				
-		//TODO check how to get the command stack here
-		//getCommandStack().execute(cmd);
+		//TODO check how to get the command stack here getCommandStack().execute(cmd);
 		
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		IOperationHistory operationHistory = workbench.getOperationSupport().getOperationHistory();
 		IUndoContext undoContext = workbench.getOperationSupport().getUndoContext();
 		cmd.addContext(undoContext);
-		
-		//new UndoRedoActionGroup(, undoContext, true);
 
 		try {
-			operationHistory.execute(cmd, null, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
+			operationHistory.execute(cmd, null, WorkspaceUndoUtil.getUIInfoAdapter(shell));
 			Application app = cmd.getApplication();
-			if(page.getOpenApplication() && (null != app)){
-				openApplicationEditor(app);
+			if(openApplication && (null != app)){
+				OpenListenerManager.openEditor(app);
 			}
 			
 		} catch (ExecutionException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
-		}
-		return true;
-	}
-
-	private static void openApplicationEditor(Application app) {
-		IOpenListener openListener = OpenListenerManager.getInstance()
-				.getDefaultOpenListener(app.getClass(), app);
-		if (openListener != null) {
-			openListener.run(null);
 		}
 	}
 
@@ -130,10 +132,6 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 		} else
 			this.system = null;
 
-	}
-	
-	protected NewAppCommand getApplicationCreateCommand(org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem system) {
-		return new NewAppCommand(system, page.getFileName(), Messages.NewApplicationWizard_Comment);
 	}
 
 }

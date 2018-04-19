@@ -36,8 +36,7 @@
 
 <h2 id="publishSubscribe">Publish/Subscribe - UDP/IP</h2>
 
-<p>To communicate using Publish/Subscribe FBs, a UDP/IP connection is utilized, so we have to provide the Publish/Subscribe Function Blocks with a multicast IP address and a port.
-	The Publish FBs will send data over the network in this multicast IP address/port and the Subscribe FBs will listen to the same multicast IP address/port receiving any data sent by the Publish FBs. Multicast IP addresses can be picked from the range 224.0.0.0 - 239.255.255.255, while the port is arbitrary. So an example ID parameter for the Publish/Subscribe FBs would be:</p>
+<p>To communicate using Publish/Subscribe FBs, a UDP/IP connection is utilized, so we have to provide the Publish/Subscribe Function Blocks with a multicast IP address and a port. The Publish FBs will send data over the network in this multicast IP address/port and the Subscribe FBs will listen to the same multicast IP address/port receiving any data sent by the Publish FBs. Multicast IP addresses can be picked from the range 224.0.0.0 - 239.255.255.255, while the port is arbitrary. So an example ID parameter for the Publish/Subscribe FBs would be:</p>
 	
 <div class="code">225.0.0.1:61499</div>
 
@@ -77,7 +76,7 @@
 
 <div class="code">192.168.0.2:61501</div>
 
-<p>However the "localhost" attribute is just for informational reasons and will not be used by FORTE, i.e. the Server's IP address will always be the same as the device's IP address. Only the port attribute is used.	In contrast to Publish/Subscribe FBs, Client/Server FBs work in pairs. Only one Client FB can be connected to a Server FB at a time, while a Client FB can be connected to only one Server FB.</p>
+<p>However the "localhost" attribute is just for informational reasons and will not be used by FORTE, i.e. the Server's IP address will always be the same as the device's IP address. Only the port attribute is used. In contrast to Publish/Subscribe FBs, Client/Server FBs work in pairs. Only one Client FB can be connected to a Server FB at a time, while a Client FB can be connected to only one Server FB.</p>
 
 <p>An example of using a Client/Server pair can be seen in the figure below and can be summarized as follows:</p>
 

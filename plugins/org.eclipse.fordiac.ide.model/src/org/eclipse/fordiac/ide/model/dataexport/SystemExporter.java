@@ -29,11 +29,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -122,6 +125,7 @@ public class SystemExporter {
 		for (Application app : system.getApplication()) {
 			Element appElement = dom.createElement(LibraryElementTags.APPLICATION_ELEMENT);
 			CommonElementExporter.setNameAndCommentAttribute(appElement, app);
+			addAttributes(appElement, app.getAttributes(), app);
 			appElement.appendChild(new FBNetworkExporter(dom).createFBNetworkElement(app.getFBNetwork()));
 			systemRootElement.appendChild(appElement);
 		}
@@ -142,11 +146,12 @@ public class SystemExporter {
 	private void addSegment(List<Segment> segmentsList) {
 		for (Segment segment : segmentsList) {
 			Element segmentElement = dom.createElement(LibraryElementTags.SEGMENT_ELEMENT);
-			CommonElementExporter.setNameTypeCommentAttribute(segmentElement, segment, segment.getSegmentType());
+			CommonElementExporter.setNameTypeCommentAttribute(segmentElement, segment, segment.getType());
 			segmentElement.setAttribute(LibraryElementTags.X_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(segment.getX()).toString());
 			segmentElement.setAttribute(LibraryElementTags.Y_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(segment.getY()).toString());
 			segmentElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(segment.getWidth()).toString());
-			CommonElementExporter.addColorAttributeElement(dom, segmentElement, segment);			
+			CommonElementExporter.addColorAttributeElement(dom, segmentElement, segment);
+			addAttributes(segmentElement, segment.getAttributes(), segment);
 			systemRootElement.appendChild(segmentElement);
 		}
 
@@ -211,28 +216,33 @@ public class SystemExporter {
 		}
 	}
 
-	
-	/**
-	 * Adds the device.
-	 * 
-	 * @param device
-	 *            the device
-	 */
 	private void addDevice(Device device) {
 		Element deviceElement = dom.createElement(LibraryElementTags.DEVICE_ELEMENT);
 		CommonElementExporter.setNameTypeCommentAttribute(deviceElement, device, device.getType());
 		CommonElementExporter.exportXandY(device, deviceElement);
-		CommonElementExporter.addColorAttributeElement(dom, deviceElement, device);
-		addDeviceProfile(deviceElement, device);
 		CommonElementExporter.addParamsConfig(dom, deviceElement, device.getVarDeclarations());
+		addDeviceAttributes(deviceElement, device.getAttributes(), device);
 		addResources(deviceElement, device.getResource());
 		systemRootElement.appendChild(deviceElement);
 	}
 
+	private void addDeviceAttributes(Element deviceElement, EList<Attribute> attributes, Device device) {
+		addDeviceProfile(deviceElement, device);
+		CommonElementExporter.addColorAttributeElement(dom, deviceElement, device);
+		addAttributes(deviceElement, attributes, device);
+	}
+
+	private void addAttributes(Element element, EList<Attribute> attributes, ConfigurableObject configurableObject) {
+		for(Attribute attribute : attributes) {
+			Element domAttribute = CommonElementExporter.createAttributeElement(dom, attribute.getName(), attribute.getType().getName(), attribute.getValue(), attribute.getComment());
+			element.appendChild(domAttribute);
+		}
+	}
+	
 	private void addDeviceProfile(Element deviceElement, Device device) {
 		String profileName = device.getProfile();
 		if(null != profileName && !"".equals(profileName)){   //$NON-NLS-1$
-			Element profileAttribute = CommonElementExporter.createAttributeElement(dom, LibraryElementTags.DEVICE_PROFILE, profileName);		
+			Element profileAttribute = CommonElementExporter.createAttributeElement(dom, LibraryElementTags.DEVICE_PROFILE, "STRING", profileName, "device profile");		
 			deviceElement.appendChild(profileAttribute);
 		}
 		
@@ -267,7 +277,7 @@ public class SystemExporter {
 			throws TransformerFactoryConfigurationError, TransformerConfigurationException {
 		Transformer transformer;
 		TransformerFactory tFactory = TransformerFactory.newInstance();
-		tFactory.setAttribute("indent-number", new Integer(2)); //$NON-NLS-1$
+		tFactory.setAttribute("indent-number", Integer.valueOf(2)); //$NON-NLS-1$
 		transformer = tFactory.newTransformer();
 		transformer.setOutputProperty(javax.xml.transform.OutputKeys.DOCTYPE_SYSTEM,
 				"http://www.holobloc.com/xml/LibraryElement.dtd"); //$NON-NLS-1$

@@ -13,11 +13,6 @@
 package org.eclipse.fordiac.ide.model.structuredtext;
 
 import com.google.inject.Binder;
-import com.google.inject.binder.AnnotatedBindingBuilder;
-import com.google.inject.binder.AnnotatedConstantBindingBuilder;
-import com.google.inject.binder.ConstantBindingBuilder;
-import com.google.inject.binder.LinkedBindingBuilder;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import org.eclipse.fordiac.ide.model.structuredtext.AbstractStructuredTextRuntimeModule;
 import org.eclipse.fordiac.ide.model.structuredtext.converter.StructuredTextValueConverterService;
@@ -73,15 +68,10 @@ public class StructuredTextRuntimeModule extends AbstractStructuredTextRuntimeMo
   }
   
   public void configureIScopeProviderDelegate(final Binder binder) {
-    AnnotatedBindingBuilder<IScopeProvider> _bind = binder.<IScopeProvider>bind(IScopeProvider.class);
-    Named _named = Names.named(AbstractDeclarativeScopeProvider.NAMED_DELEGATE);
-    LinkedBindingBuilder<IScopeProvider> _annotatedWith = _bind.annotatedWith(_named);
-    _annotatedWith.to(SimpleLocalScopeProvider.class);
+    binder.<IScopeProvider>bind(IScopeProvider.class).annotatedWith(Names.named(AbstractDeclarativeScopeProvider.NAMED_DELEGATE)).to(SimpleLocalScopeProvider.class);
   }
   
   public void configureIgnoreCaseLinking(final Binder binder) {
-    AnnotatedConstantBindingBuilder _bindConstant = binder.bindConstant();
-    ConstantBindingBuilder _annotatedWith = _bindConstant.annotatedWith(IgnoreCaseLinking.class);
-    _annotatedWith.to(true);
+    binder.bindConstant().annotatedWith(IgnoreCaseLinking.class).to(true);
   }
 }

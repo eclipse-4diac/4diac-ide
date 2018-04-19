@@ -25,6 +25,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
@@ -60,7 +62,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
-import org.eclipse.fordiac.ide.model.libraryElement.Parameter;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -80,6 +81,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -173,6 +175,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.APPLICATION: {
 				Application application = (Application)theEObject;
 				T result = caseApplication(application);
+				if (result == null) result = caseConfigurableObject(application);
 				if (result == null) result = caseINamedElement(application);
 				if (result == null) result = caseI4DIACElement(application);
 				if (result == null) result = defaultCase(theEObject);
@@ -366,9 +369,12 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.PARAMETER: {
-				Parameter parameter = (Parameter)theEObject;
-				T result = caseParameter(parameter);
+			case LibraryElementPackage.ATTRIBUTE: {
+				Attribute attribute = (Attribute)theEObject;
+				T result = caseAttribute(attribute);
+				if (result == null) result = caseINamedElement(attribute);
+				if (result == null) result = caseTypedElement(attribute);
+				if (result == null) result = caseI4DIACElement(attribute);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -717,6 +723,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.IVAR_ELEMENT: {
 				IVarElement iVarElement = (IVarElement)theEObject;
 				T result = caseIVarElement(iVarElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ATTRIBUTE_DECLARATION: {
+				AttributeDeclaration attributeDeclaration = (AttributeDeclaration)theEObject;
+				T result = caseAttributeDeclaration(attributeDeclaration);
+				if (result == null) result = caseINamedElement(attributeDeclaration);
+				if (result == null) result = caseTypedElement(attributeDeclaration);
+				if (result == null) result = caseI4DIACElement(attributeDeclaration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.TYPED_ELEMENT: {
+				TypedElement typedElement = (TypedElement)theEObject;
+				T result = caseTypedElement(typedElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1111,21 +1132,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseOutputPrimitive(OutputPrimitive object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Parameter</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Parameter</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseParameter(Parameter object) {
 		return null;
 	}
 
@@ -1741,6 +1747,51 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseIVarElement(IVarElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Attribute Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Attribute Declaration</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAttributeDeclaration(AttributeDeclaration object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Typed Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Typed Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTypedElement(TypedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Attribute</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Attribute</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAttribute(Attribute object) {
 		return null;
 	}
 

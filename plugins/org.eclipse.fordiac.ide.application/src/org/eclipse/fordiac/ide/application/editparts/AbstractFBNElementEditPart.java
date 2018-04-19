@@ -27,9 +27,10 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
+import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -41,7 +42,9 @@ import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -52,12 +55,11 @@ import org.eclipse.jface.viewers.TextCellEditor;
  */
 public abstract class AbstractFBNElementEditPart extends AbstractPositionableElementEditPart {
 
-	private EContentAdapter adapter;
-
 	private Device referencedDevice;
 
 	/** necessary that the gradient pattern can be scaled accordingly */
 	private final ZoomManager zoomManager;
+	
 
 	public ZoomManager getZoomManager() {
 		return zoomManager;
@@ -78,25 +80,18 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	};
 
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		if (adapter == null) {
-			adapter = new EContentAdapter() {
-
-				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-					refreshToolTip();
-					backgroundColorChanged(getFigure());
-					if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
-						if (notification.getNewValue() instanceof FB) {
-							updateDeviceListener();
-						}
-					}
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				refreshToolTip(); //TODO add here checks that better define when the tooltip should be refreshed
+				if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
+					updateDeviceListener();
 				}
+			}
 
-			};
-		}
-		return adapter;
+		};
 	}
 
 	/** The i named element content adapter. */
@@ -115,16 +110,15 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	protected void updateDeviceListener() {
 		Device device = findDevice();
-		if (device != null) {
-			if (device.equals(referencedDevice)) {
-				// nothing to do
-			} else {
-				if (referencedDevice != null) {
-					referencedDevice.eAdapters().remove(colorChangeListener);
-				}
-				referencedDevice = device;
-				referencedDevice.eAdapters().add(colorChangeListener);
+		if (device != referencedDevice) {
+			if (referencedDevice != null) {
+				referencedDevice.eAdapters().remove(colorChangeListener);
 			}
+			referencedDevice = device;
+			if (referencedDevice != null) {
+				referencedDevice.eAdapters().add(colorChangeListener);
+			}			
+			backgroundColorChanged(getFigure());
 		}
 	}
 
@@ -188,6 +182,18 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 		// Highlight In and Outconnections of the selected fb, allow alignment of FBs
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FBNElementSelectionPolicy());
+
+		//FBNetwork elements need a special rename command therefore we remove the standard edit policy and add a adjusted one
+		removeEditPolicy(EditPolicy.DIRECT_EDIT_ROLE);
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy() {
+			 protected Command getDirectEditCommand(DirectEditRequest request) {
+			        if (getHost() instanceof AbstractFBNElementEditPart) {
+			            return new ChangeFBNetworkElementName(((AbstractFBNElementEditPart) getHost()).getModel(),
+						(String) request.getCellEditor().getValue());
+			        }
+			        return null;
+			    }
+		});
 	}
 
 
@@ -211,7 +217,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	/** The listener. */
-	IPropertyChangeListener listener;
+	private IPropertyChangeListener listener;
 
 	/**
 	 * Returns an <code>IPropertyChangeListener</code> with implemented
@@ -258,14 +264,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	private Device findDevice() {
 		Resource res = null;
 		if (null != getModel() && getModel().isMapped()) {
-			if(getModel().getFbNetwork().eContainer() instanceof Resource){
-				res = (Resource)getModel().getFbNetwork().eContainer();
-			} else {
-				FBNetworkElement target = getModel().getOpposite();
-				if(null != target.getFbNetwork() && target.getFbNetwork().eContainer() instanceof Resource){
-					res = (Resource)target.getFbNetwork().eContainer();
-				}		
-			}
+			res = getModel().getResource();			
 		}
 		return (null != res) ? res.getDevice() : null;
 	}

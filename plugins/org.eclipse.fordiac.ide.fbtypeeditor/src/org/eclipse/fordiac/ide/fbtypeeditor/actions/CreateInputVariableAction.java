@@ -38,7 +38,7 @@ public class CreateInputVariableAction extends WorkbenchPartAction {
 
 	@Override
 	public void run() {
-		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(dataType, "", "", fbType.getInterfaceList(), true, -1); //$NON-NLS-1$ //$NON-NLS-2$
+		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(dataType, fbType.getInterfaceList(), true, -1);
 		execute(cmd);
 	}
 

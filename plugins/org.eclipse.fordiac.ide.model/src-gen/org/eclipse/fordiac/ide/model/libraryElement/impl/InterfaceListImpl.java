@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -206,14 +205,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	public EList<IInterfaceElement> getAllInterfaceElements() {
-		EList<IInterfaceElement> retVal = new BasicEList<IInterfaceElement>();		
-		retVal.addAll(getEventInputs());
-		retVal.addAll(getEventOutputs());
-		retVal.addAll(getInputVars());
-		retVal.addAll(getOutputVars());
-		retVal.addAll(getPlugs());
-		retVal.addAll(getSockets());
-		return retVal;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAllInterfaceElements(this);
 	}
 
 	/**
@@ -222,16 +214,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	public Event getEvent(final String name) {
-		for (Event event : getEventInputs()) {
-			if (event.getName().equals(name))
-			return event;
-		}
-		for (Event event : getEventOutputs()) {
-			if (event.getName().equals(name))
-				return event;
-		}
-		
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getEvent(this, name);
 	}
 
 	/**
@@ -240,15 +223,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	public VarDeclaration getVariable(final String name) {
-		for (VarDeclaration var : getInputVars()) {
-			if (var.getName().equals(name))
-				return var;
-		}
-		for (VarDeclaration var : getOutputVars()) {
-			if (var.getName().equals(name))
-				return var;
-		}
-		return null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getVariable(this, name);
 	}
 
 	/**
@@ -257,15 +232,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	public IInterfaceElement getInterfaceElement(final String name) {
-		IInterfaceElement element = getEvent(name);
-		if (element == null) {
-			element = getVariable(name);
-		}
-		if (element == null) {
-			element = getAdapter(name);
-		}
-		return element;
-		
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceElement(this, name);
 	}
 
 	/**
@@ -274,8 +241,16 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	public FBNetworkElement getFBNetworkElement() {
-		//an FB should mostly in an FBNetworkElement otherwise it is in CFB interface this is at the same time also a null check
-		return (eContainer() instanceof FBNetworkElement) ? (FBNetworkElement)eContainer() : null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AdapterDeclaration getAdapter(final String name) {
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAdapter(this, name);
 	}
 
 	/**
@@ -415,18 +390,6 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return outputVars != null && !outputVars.isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-
-	private AdapterDeclaration getAdapter(String name) {
-		for (AdapterDeclaration adapt : getPlugs()) {
-			if (adapt.getName().equals(name))
-				return adapt;
-		}
-		for (AdapterDeclaration adapt : getSockets()) {
-			if (adapt.getName().equals(name))
-				return adapt;
-		}
-		return null;
 	}
 
 } //InterfaceListImpl

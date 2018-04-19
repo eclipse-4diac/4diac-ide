@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -58,7 +59,7 @@ public class RenameApplication extends AbstractHandler {
 						if(application.getName().equals(newText)){
 							return new String("Application name not different!");
 						}
-						if (!SystemManager.isValidAppName(newText, application.getAutomationSystem())) {
+						if (!NameRepository.isValidName(application, newText)) {
 							return Messages.NewApplicationPage_ErrorMessageInvalidAppName;
 						}
 						return null;

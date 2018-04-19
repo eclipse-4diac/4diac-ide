@@ -55,15 +55,13 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command {
 		element.setX(x);
 		element.setY(y);	
 		createValues();
-		redo();
+		fbNetwork.getNetworkElements().add(element);  // as subclasses may not be able to run redo on execute we have to duplicate this here
+		element.setName(NameRepository.createUniqueName(element, getInitalInstanceName()));
 	}
 	
 	@Override
 	public void redo() {
-		String name = NameRepository.getFBNetworkUniqueFBNetworkElementInstanceName(fbNetwork, getInitalInstanceName());
-		//this has to be done before the name is set in order to avoid problems in the name setting
 		fbNetwork.getNetworkElements().add(element);
-		element.setName(name);
 	}
 
 	@Override

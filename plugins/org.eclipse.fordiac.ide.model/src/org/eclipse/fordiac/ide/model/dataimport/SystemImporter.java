@@ -22,6 +22,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -33,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -61,14 +63,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- * 
- * @author eisenmenger
- *
- */
-
 public class SystemImporter {
-
 	Palette palette = null;
 	AutomationSystem system;
 
@@ -302,8 +297,7 @@ public class SystemImporter {
 							}
 						}
 					} catch (TypeImportException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						Activator.getDefault().logError(e.getMessage(), e);
 					}
 					break;
 				case LibraryElementTags.RESOURCE_ELEMENT:
@@ -336,9 +330,9 @@ public class SystemImporter {
 		Node value = attributeMap.getNamedItem(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (value != null) {
 			String[] colors = value.getNodeValue().split(","); //$NON-NLS-1$
-			color.setRed(new Integer(colors[0]));
-			color.setGreen(new Integer(colors[1]));
-			color.setBlue(new Integer(colors[2]));
+			color.setRed(Integer.valueOf(colors[0]));
+			color.setGreen(Integer.valueOf(colors[1]));
+			color.setBlue(Integer.valueOf(colors[2]));
 			colElement.setColor(color);
 		}
 	}
@@ -396,13 +390,20 @@ public class SystemImporter {
 		Application application = LibraryElementFactory.eINSTANCE.createApplication();
 		NamedNodeMap mapApplicationElement = node.getAttributes();
 		CommonElementImporter.readNameCommentAttributes(application, mapApplicationElement);
-		
+		parseAttributes(application, node.getChildNodes());
 		application.setFBNetwork(new SubAppNetworkImporter(palette).parseFBNetwork(
 				CommonElementImporter.findChildNodeNamed(node, LibraryElementTags.SUBAPPNETWORK_ELEMENT)));
-
 		return application;
 	}
 
+	public void parseAttributes(ConfigurableObject configurableObject, NodeList node) {
+		for (int i = 0; i < node.getLength(); i++) {
+			Node n = node.item(i);
+			if(n.getNodeName() == LibraryElementTags.ATTRIBUTE_ELEMENT){
+				CommonElementImporter.parseGenericAttributeNode(configurableObject, n.getAttributes());
+			}
+		}
+	}
 
 	public static void createResourceTypeNetwork(final ResourceType type,
 			final FBNetwork resourceFBNetwork) {

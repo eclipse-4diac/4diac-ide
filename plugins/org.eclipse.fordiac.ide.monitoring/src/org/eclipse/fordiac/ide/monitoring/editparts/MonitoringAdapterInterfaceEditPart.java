@@ -9,11 +9,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.editparts;
 
-import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.Request;
 
-public class MonitoringAdapterInterfaceEditPart extends InterfaceEditPart {
+public class MonitoringAdapterInterfaceEditPart extends InterfaceEditPartForFBNetwork {
 	
 	@Override
 	public DragTracker getDragTracker(Request request) {

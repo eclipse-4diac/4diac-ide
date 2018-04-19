@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import java.util.ArrayList;
 
-import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
+import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.swt.widgets.Composite;
@@ -29,12 +29,8 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceSection {
 	}
 
 	@Override
-	protected CreateInterfaceElementCommand newCommand(boolean isInput) {
-		return new CreateInterfaceElementCommand(
-				DataTypeLibrary.getInstance().getType(fillTypeCombo()[2]), 
-				"", 
-				"", 
-				getType().getInterface(), isInput, -1);
+	protected CreateSubAppInterfaceElementCommand newCommand(boolean isInput) {
+		return new CreateSubAppInterfaceElementCommand(DataTypeLibrary.getInstance().getType(fillTypeCombo()[2]), getType().getInterface(), isInput, -1);
 	}
 
 	@Override

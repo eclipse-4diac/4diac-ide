@@ -16,6 +16,8 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -43,13 +45,11 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 
 	public CreateBootfilesWizard() {
 		setWindowTitle(Messages.FordiacCreateBootfilesWizard_LABEL_Window_Title);
-		
 		IDialogSettings settings = Activator.getDefault().getDialogSettings();
 
-		IDialogSettings dialogSettings = settings.getSection(FORDIAC_CREATE_BOOTFILES_SECTION);
-		if (dialogSettings == null) {
-			dialogSettings = settings
-					.addNewSection(FORDIAC_CREATE_BOOTFILES_SECTION);
+		if (null != settings.getSection(FORDIAC_CREATE_BOOTFILES_SECTION)) {
+			//if section does not exist create it
+			settings.addNewSection(FORDIAC_CREATE_BOOTFILES_SECTION);
 		}
 		setDialogSettings(settings);
 	}
@@ -70,29 +70,20 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public boolean performFinish() {
-		
-		
 		IRunnableWithProgress iop = new IRunnableWithProgress(){
 
 			@Override
-			public void run(IProgressMonitor monitor)
-					throws InvocationTargetException, InterruptedException {
-				
+			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {				
 				String outputDirectory = page.getDirectory();
-				HashMap<Device, ArrayList<Object> > workLoad = prepareWorkload(); 
-				
-				monitor.beginTask("Generating boot-files for the selected resources", workLoad.size());
-				
-				for (Entry<Device, ArrayList<Object>> entry : workLoad.entrySet()) {
+				Map<Device, List<Object> > workLoad = prepareWorkload(); 				
+				monitor.beginTask("Generating boot-files for the selected resources", workLoad.size());				
+				for (Entry<Device, List<Object>> entry : workLoad.entrySet()) {
 					String fileName = outputDirectory +  File.separatorChar +  entry.getKey().getAutomationSystem().getName() + "_" + entry.getKey().getName() + ".fboot";				
 					BootFileDeviceManagementCommunicationHandler.createBootFile(entry.getValue(), fileName, getShell());
 					monitor.worked(1);
 				}
-
-				monitor.done();
-				
-			}
-			
+				monitor.done();				
+			}			
 		};
 		
 		try {	    
@@ -107,9 +98,9 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 		return true;
 	}
 
-	private HashMap<Device, ArrayList<Object>> prepareWorkload() {
+	private Map<Device, List<Object>> prepareWorkload() {
 		Object selectedElements[] = page.getSelectedElements();
-		HashMap<Device, ArrayList<Object> > workLoad = new HashMap<Device, ArrayList<Object> >();
+		Map<Device, List<Object> > workLoad = new HashMap<>();
 
 		for (Object object : selectedElements) {
 			if(object instanceof Resource){
@@ -122,14 +113,12 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 		return workLoad;
 	}
 
-	private void insertResource(HashMap<Device, ArrayList<Object>> workLoad,
-			Resource res) {
-		ArrayList<Object> resList = getWorkLoadEntryList(workLoad, res.getDevice());
+	private static void insertResource(Map<Device, List<Object>> workLoad, Resource res) {
+		List<Object> resList = getWorkLoadEntryList(workLoad, res.getDevice());
 		resList.add(res);
 	}
 
-	private ArrayList<Object> getWorkLoadEntryList(
-			HashMap<Device, ArrayList<Object>> workLoad, Device device) {
+	private static List<Object> getWorkLoadEntryList(Map<Device, List<Object>> workLoad, Device device) {
 		if(!workLoad.containsKey(device)){
 			workLoad.put(device, new ArrayList<Object>());
 		}

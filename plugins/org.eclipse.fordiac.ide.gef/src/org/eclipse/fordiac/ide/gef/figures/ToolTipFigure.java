@@ -40,18 +40,14 @@ public class ToolTipFigure extends Figure {
 	 *            the element
 	 */
 	public ToolTipFigure(final INamedElement element) {
-
 		ToolbarLayout mainLayout = new ToolbarLayout(false);
 		setLayoutManager(mainLayout);
 		mainLayout.setStretchMinorAxis(true);
 
-		String nameLine = new String(element.getName());
+		String nameLine = element.getName();
 
-		if (element instanceof VarDeclaration) {
-			if (((VarDeclaration) element).getType() != null) {
-				nameLine += " - "
-						+ ((VarDeclaration) element).getType().getName();
-			}
+		if ((element instanceof VarDeclaration) &&  (((VarDeclaration) element).getType() != null)) {
+				nameLine += " - " + ((VarDeclaration) element).getType().getName();
 		}
 
 		add(new Label(nameLine));
@@ -74,18 +70,19 @@ public class ToolTipFigure extends Figure {
 		List<With> withs = element.getWith();
 		if(!withs.isEmpty()){
 			boolean first = true;
-			String withText = "With: [";
+			StringBuilder withText = new StringBuilder("With: [");
 			for (With with : withs) {
 				if (first) {
 					first = false;
 				} else {
-					withText += ", ";
+					withText.append(", ");
 				}
-				if (with != null && with.getVariables() != null)
-					withText += with.getVariables().getName();
+				if (with != null && with.getVariables() != null) {
+					withText.append(with.getVariables().getName());
+				}
 			}
-			withText += "]";
-			line.add(new Label(withText));			
+			withText.append("]");
+			line.add(new Label(withText.toString()));			
 		}
 		
 	}
@@ -102,12 +99,14 @@ public class ToolTipFigure extends Figure {
 		}
 	}
 
-	private VarDeclaration getTypevariable(VarDeclaration var) {
+	private static VarDeclaration getTypevariable(VarDeclaration var) {
 		if(var.eContainer() instanceof Device){
 			Device dev = (Device)var.eContainer();
-			for(VarDeclaration typeVar : dev.getType().getVarDeclaration()){
-				if(typeVar.getName().equals(var.getName())){
-					return typeVar;
+			if(null != dev.getType()) {
+				for(VarDeclaration typeVar : dev.getType().getVarDeclaration()){
+					if(typeVar.getName().equals(var.getName())){
+						return typeVar;
+					}
 				}
 			}
 		} else if(null != var.getFBNetworkElement() && var.getFBNetworkElement().getType() instanceof FBType){

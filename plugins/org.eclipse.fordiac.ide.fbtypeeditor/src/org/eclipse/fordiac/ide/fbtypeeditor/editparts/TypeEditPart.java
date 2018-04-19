@@ -41,6 +41,7 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
 public class TypeEditPart extends AbstractInterfaceElementEditPart implements EditPart {
@@ -56,6 +57,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements Ed
 	public class TypeFigure extends Label {
 		public TypeFigure() {
 			super();
+			this.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
 		}
 
 		@Override

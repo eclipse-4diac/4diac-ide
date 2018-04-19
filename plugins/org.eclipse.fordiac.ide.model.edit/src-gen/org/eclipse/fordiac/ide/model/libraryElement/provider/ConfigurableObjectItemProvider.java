@@ -116,7 +116,7 @@ public class ConfigurableObjectItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.CONFIGURABLE_OBJECT__PARAMETER);
+			childrenFeatures.add(LibraryElementPackage.Literals.CONFIGURABLE_OBJECT__ATTRIBUTES);
 		}
 		return childrenFeatures;
 	}
@@ -175,7 +175,7 @@ public class ConfigurableObjectItemProvider
 			case LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__PARAMETER:
+			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -195,8 +195,8 @@ public class ConfigurableObjectItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LibraryElementPackage.Literals.CONFIGURABLE_OBJECT__PARAMETER,
-				 LibraryElementFactory.eINSTANCE.createParameter()));
+				(LibraryElementPackage.Literals.CONFIGURABLE_OBJECT__ATTRIBUTES,
+				 LibraryElementFactory.eINSTANCE.createAttribute()));
 	}
 
 }

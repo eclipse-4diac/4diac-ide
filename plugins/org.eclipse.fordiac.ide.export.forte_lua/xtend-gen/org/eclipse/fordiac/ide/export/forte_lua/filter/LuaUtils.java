@@ -21,7 +21,7 @@ public class LuaUtils {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("\"");
     String _convertToJavaString = Strings.convertToJavaString(s);
-    _builder.append(_convertToJavaString, "");
+    _builder.append(_convertToJavaString);
     _builder.append("\"");
     return _builder;
   }
@@ -38,7 +38,7 @@ public class LuaUtils {
           _builder.appendImmediate(", ", "");
         }
         CharSequence _luaString = LuaUtils.luaString(value);
-        _builder.append(_luaString, "");
+        _builder.append(_luaString);
       }
     }
     _builder.append("}");
@@ -57,7 +57,7 @@ public class LuaUtils {
           _builder.appendImmediate(", ", "");
         }
         String _string = value.toString();
-        _builder.append(_string, "");
+        _builder.append(_string);
       }
     }
     _builder.append("}");
@@ -78,10 +78,10 @@ public class LuaUtils {
         {
           if ((value instanceof String)) {
             CharSequence _luaString = LuaUtils.luaString(((String)value));
-            _builder.append(_luaString, "");
+            _builder.append(_luaString);
           } else {
             String _string = value.toString();
-            _builder.append(_string, "");
+            _builder.append(_string);
           }
         }
       }

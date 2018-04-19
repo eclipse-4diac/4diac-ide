@@ -101,10 +101,10 @@
   		<p>Example:<br>
   			dio.3 &rarr; will access Digital I/O 3 at pin 7 of the uMIC200</p>
   		</li>
-  		<li><span class="inlineTitle">relay</span>:  controls the relays. The possible numbers are 1 and 2. The 1 controls the NO relay and 2 the NC. Only QX can be used with <span class="specificText">relay</span>.<br>
+  		<li><span class="inlineTitle">relay</span>: controls the relays. The possible numbers are 1 and 2. The 1 controls the NO relay and 2 the NC. Only QX can be used with <span class="specificText">relay</span>.<br>
   		<p>Example:<br>
   			relay.1 &rarr; will control the NC relay at pins 14- 15
- 		</li>	
+ 		</li>
 	</ol>
  
 	<img src="./img/uMICFBs.png" alt="FBs example for uMIC platform">
@@ -114,18 +114,18 @@
 	<ul>
 		<li>At the beginning, right after the first #define add:
 		<div class="code">//----------------------------------------------------------------------------//
-// take precautions if compiled with C++ compiler								//
-#ifdef __cplusplus																//
-extern "C" {																	//
-#endif																			//
+// take precautions if compiled with C++ compiler
+#ifdef __cplusplus
+extern "C" {
+#endif
 //----------------------------------------------------------------------------//</div>
 		</li>
 		<li>And at the end, right before the last #endif, add
 			<div class="code">//----------------------------------------------------------------------------//
-#ifdef __cplusplus																//
-}																				//
-#endif																			//
-// end of C++ compiler wrapper													//
+#ifdef __cplusplus
+}
+#endif
+// end of C++ compiler wrapper
 //----------------------------------------------------------------------------//</div>
 		</li>
 	</ul>

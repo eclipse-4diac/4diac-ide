@@ -40,7 +40,7 @@ public interface AdapterType extends DataType {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getAdapterFBType().getInterfaceList();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceList(this);'"
 	 * @generated
 	 */
 	InterfaceList getInterfaceList();
@@ -80,7 +80,7 @@ public interface AdapterType extends DataType {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='\t\tAdapterFBType temp = (AdapterFBType)EcoreUtil.copy(getAdapterFBType());\r\n\t\t// fetch the interface to invert it; \r\n\t\tArrayList<Event> inputEvents =  new ArrayList<Event>(temp.getInterfaceList().getEventOutputs());\r\n\t\tfor (Event event : inputEvents) {\r\n\t\t\tevent.setIsInput(true);\r\n\t\t}\r\n\t\tArrayList<Event> outputEvents =  new ArrayList<Event>(temp.getInterfaceList().getEventInputs());\r\n\t\tfor (Event event : outputEvents) {\r\n\t\t\tevent.setIsInput(false);\r\n\t\t}\r\n\t\tArrayList<VarDeclaration> inputVars =  new ArrayList<VarDeclaration>(temp.getInterfaceList().getOutputVars());\r\n\t\tfor (VarDeclaration varDecl : inputVars) {\r\n\t\t\tvarDecl.setIsInput(true);\r\n\t\t}\r\n\t\tArrayList<VarDeclaration> outputVars =  new ArrayList<VarDeclaration>(temp.getInterfaceList().getInputVars());\r\n\t\tfor (VarDeclaration varDecl : outputVars) {\r\n\t\t\tvarDecl.setIsInput(false);\r\n\t\t}\r\n\t\t\r\n\t\ttemp.getInterfaceList().getEventInputs().clear();\r\n\t\ttemp.getInterfaceList().getEventOutputs().clear();\r\n\t\ttemp.getInterfaceList().getInputVars().clear();\r\n\t\ttemp.getInterfaceList().getOutputVars().clear();\r\n\t\t\r\n\t\ttemp.getInterfaceList().getEventInputs().addAll(inputEvents);\r\n\t\ttemp.getInterfaceList().getEventOutputs().addAll(outputEvents);\r\n\t\ttemp.getInterfaceList().getInputVars().addAll(inputVars);\r\n\t\ttemp.getInterfaceList().getOutputVars().addAll(outputVars);\r\n\t\t\r\n\t\treturn temp;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getPlugType(this);'"
 	 * @generated
 	 */
 	AdapterFBType getPlugType();
@@ -93,7 +93,7 @@ public interface AdapterType extends DataType {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return (AdapterFBType)<%org.eclipse.emf.ecore.util.EcoreUtil%>.copy(getAdapterFBType());'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getSocketType(this);'"
 	 * @generated
 	 */
 	AdapterFBType getSocketType();

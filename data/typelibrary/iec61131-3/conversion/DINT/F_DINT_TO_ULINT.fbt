@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="convert DINT to ULINT" Name="F_DINT_TO_ULINT">
+  <Identification Classification="type conversion function" Standard="61131-3"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-12-25" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Service Request" Name="REQ" Type="Event">
+        <With Var="IN"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Confirmation of Requested Service" Name="CNF" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Event Input Qualifier" Name="IN" Type="DINT"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Event Output Qualifier" Name="OUT" Type="ULINT"/>
+    </OutputVars>
+  </InterfaceList>
+</FBType>

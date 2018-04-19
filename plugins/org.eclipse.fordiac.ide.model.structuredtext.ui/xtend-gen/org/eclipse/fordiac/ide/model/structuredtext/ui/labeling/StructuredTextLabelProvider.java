@@ -27,10 +27,10 @@ public class StructuredTextLabelProvider extends DefaultEObjectLabelProvider {
   public CharSequence text(final VarDeclaration decl) {
     StringConcatenation _builder = new StringConcatenation();
     String _name = decl.getName();
-    _builder.append(_name, "");
+    _builder.append(_name);
     _builder.append(" [");
     String _typeName = decl.getTypeName();
-    _builder.append(_typeName, "");
+    _builder.append(_typeName);
     _builder.append("]");
     return _builder;
   }

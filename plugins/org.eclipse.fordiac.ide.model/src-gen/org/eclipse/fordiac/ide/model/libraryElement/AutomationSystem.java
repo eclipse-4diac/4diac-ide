@@ -153,7 +153,7 @@ public interface AutomationSystem extends LibraryElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getSystemConfiguration() != null) {\n\treturn getSystemConfiguration().getDeviceNamed(name);\n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getDeviceNamed(this, name);'"
 	 * @generated
 	 */
 	Device getDeviceNamed(String name);
@@ -162,7 +162,7 @@ public interface AutomationSystem extends LibraryElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for(Application app : getApplication()){\n\tif (app.getName().equals(name)) {\n\t\treturn app;\n\t}\n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getApplicationNamed(this, name);'"
 	 * @generated
 	 */
 	Application getApplicationNamed(String name);

@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
@@ -42,6 +47,7 @@ public class FlattenSubAppCommand extends Command {
 	List<AdapterConnection> transferAdapterConnections = new ArrayList<>();
 	CompoundCommand deleteCommands = new CompoundCommand();
 	CompoundCommand createCommands = new CompoundCommand();
+	CompoundCommand mappCommands = new CompoundCommand();
 
 	public FlattenSubAppCommand(SubApp subapp) {
 		super(Messages.FlattenSubAppCommand_LABEL_FlattenSubAppCommand);
@@ -55,6 +61,8 @@ public class FlattenSubAppCommand extends Command {
 		adjustFBNElementPosition(subapp.getX(), subapp.getY());
 		
 		checkConnections();
+		createMappCommands();
+		
 		deleteCommands.add(new DeleteFBNetworkElementCommand(subapp));
 		deleteCommands.execute();
 		
@@ -68,9 +76,10 @@ public class FlattenSubAppCommand extends Command {
 		parent.getDataConnections().addAll(transferDataConnections);
 		
 		subapp.getSubAppNetwork().getAdapterConnections().removeAll(transferAdapterConnections);
-		parent.getAdapterConnections().addAll(transferAdapterConnections);
+		parent.getAdapterConnections().addAll(transferAdapterConnections);		
 		
 		createCommands.execute();
+		mappCommands.execute();
 		
 		ElementSelector selector = new ElementSelector();
 		selector.selectViewObjects(elements);
@@ -93,10 +102,12 @@ public class FlattenSubAppCommand extends Command {
 		parent.getAdapterConnections().addAll(transferAdapterConnections);
 		
 		createCommands.redo();
+		mappCommands.redo();
 	}
 
 	@Override
 	public void undo() {
+		mappCommands.undo();
 		createCommands.undo();
 		parent.getNetworkElements().removeAll(elements);
 		subapp.getSubAppNetwork().getNetworkElements().addAll(elements);
@@ -119,6 +130,14 @@ public class FlattenSubAppCommand extends Command {
 		checkConnectionList(subapp.getSubAppNetwork().getDataConnections(), transferDataConnections);
 		checkConnectionList(subapp.getSubAppNetwork().getAdapterConnections(), transferAdapterConnections);
 		
+	}
+	
+	private void createMappCommands() {
+		if(subapp.isMapped()) {
+			for (FBNetworkElement fbNetworkElement : elements) {
+				mappCommands.add(new MapToCommand(fbNetworkElement, subapp.getResource()));
+			}
+		}
 	}
 
 	private <T extends Connection> void checkConnectionList(
@@ -174,5 +193,5 @@ public class FlattenSubAppCommand extends Command {
 		}
 		
 	}
-	
+		
 }

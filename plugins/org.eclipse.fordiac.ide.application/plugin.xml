@@ -38,6 +38,9 @@
          <propertyCategory
                category="Resource">
          </propertyCategory>
+         <propertyCategory
+               category="Application">
+         </propertyCategory>
       </propertyContributor>
    </extension>
    <extension
@@ -47,6 +50,11 @@
          <propertyTab
                category="FB"
                id="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
+               label="Interface">
+         </propertyTab>
+         <propertyTab
+               category="Resource"
+               id="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab"
                label="Interface">
          </propertyTab>
          <propertyTab
@@ -71,16 +79,6 @@
                label="Edit Adapters">
          </propertyTab>
          <propertyTab
-               category="Device"
-               id="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab"
-               label="Interface">
-         </propertyTab>
-         <propertyTab
-               category="Resource"
-               id="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab"
-               label="Interface">
-         </propertyTab>
-         <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
                category="FB"
                id="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
@@ -91,12 +89,6 @@
                afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
                category="FB"
                id="org.eclipse.fordiac.ide.application.propertyAppearanceTab"
-               label="Appearance">
-         </propertyTab>
-         <propertyTab
-               afterTab="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab"
-               category="Device"
-               id="org.eclipse.fordiac.ide.device.propertyAppearanceTab"
                label="Appearance">
          </propertyTab>
          <propertyTab
@@ -120,9 +112,10 @@
                label="Interface Element">
          </propertyTab>
          <propertyTab
-               category="Device"
-               id="org.eclipse.fordiac.ide.device.propertyInterfaceElementTab"
-               label="Interface Element">
+               category="Application"
+               id="org.eclipse.fordiac.ide.application.propertyAttributeTab"
+               indented="false"
+               label="Attributes">
          </propertyTab>
       </propertyTabs>
    </extension>
@@ -161,7 +154,7 @@
                id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
             <input
-                  type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPart">
+                  type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
             </input>
          </propertySection>
          <propertySection
@@ -170,7 +163,7 @@
                id="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
                tab="org.eclipse.fordiac.ide.application.CreateConnection">
             <input
-                  type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPart">
+                  type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
             </input>
          </propertySection>
          <propertySection
@@ -204,6 +197,14 @@
             </input>
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.application.properties.AttributeSection"
+               id="org.eclipse.fordiac.ide.application.properties.AttributeSection"
+               tab="org.eclipse.fordiac.ide.application.propertyAttributeTab">
+            <input
+                  type="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart">
             </input>
          </propertySection>
       </propertySections>
@@ -366,9 +367,14 @@
                   checkEnabled="false">
                <with
                variable="activeEditorId">
+               	<or>
 		            <equals
 		                  value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
 		            </equals>
+		            <equals
+		                  value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor">
+		            </equals>
+		            </or>
 		         </with>
             </visibleWhen>
          </command>
@@ -437,7 +443,7 @@
                   isRoot="true"
                   pattern="org.eclipse.fordiac.ide.fbPaletteContent"/>
             <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
-            <contentExtension pattern="org.eclipse.fordiac.ide.fbpaletteviewer.filters.showonlyFBTypes"/>
+            <contentExtension pattern="org.eclipse.fordiac.ide.fbpaletteviewer.filters.showonlyFBTypesAndSubAppTypes"/>
             <contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper" />
          </includes>
       </viewerContentBinding>
@@ -450,8 +456,8 @@
          point="org.eclipse.ui.navigator.navigatorContent">
       <commonFilter
             activeByDefault="true"
-            id="org.eclipse.fordiac.ide.fbpaletteviewer.filters.showonlyFBTypes"
-            name="Show only IEC 61499 FB Types"
+            id="org.eclipse.fordiac.ide.fbpaletteviewer.filters.showonlyFBTypesAndSubAppTypes"
+            name="Show only IEC 61499 FB Types and Subapp Types"
             visibleInUI="true">
          <filterExpression>
                   <or>
@@ -466,10 +472,16 @@
                               <instanceof
                                     value="org.eclipse.core.resources.IFile">
                               </instanceof>
-                              <test
-                                    property="org.eclipse.core.resources.extension"
-                                    value="fbt">
-                              </test>
+                              <or>
+	                              <test
+	                                    property="org.eclipse.core.resources.extension"
+	                                    value="fbt">
+	                              </test>
+	                              <test
+	                                    property="org.eclipse.core.resources.extension"
+	                                    value="sub">
+	                              </test>
+								</or>		                              
                            </and>                           
                         </or>
                      </not>

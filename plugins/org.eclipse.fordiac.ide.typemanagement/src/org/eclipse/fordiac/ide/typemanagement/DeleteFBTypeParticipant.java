@@ -47,8 +47,7 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Delete IEC 61499 Type";
 	}
 
 	@Override

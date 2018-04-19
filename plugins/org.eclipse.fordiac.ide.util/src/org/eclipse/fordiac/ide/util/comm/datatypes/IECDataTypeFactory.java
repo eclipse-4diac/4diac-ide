@@ -24,31 +24,31 @@ public class IECDataTypeFactory {
 	
 	static {
 		ASN1map =  new Hashtable<String, Integer>();
-		ASN1map.put("BOOL", new Integer(ASN1.APPLICATION+ASN1.BOOL)); //$NON-NLS-1$
-		ASN1map.put("SINT", new Integer(ASN1.APPLICATION+ASN1.SINT)); //$NON-NLS-1$
-		ASN1map.put("INT", new Integer(ASN1.APPLICATION+ASN1.INT)); //$NON-NLS-1$
-		ASN1map.put("DINT", new Integer(ASN1.APPLICATION+ASN1.DINT)); //$NON-NLS-1$
-		ASN1map.put("LINT", new Integer(ASN1.APPLICATION+ASN1.LINT)); //$NON-NLS-1$
-		ASN1map.put("USINT", new Integer(ASN1.APPLICATION+ASN1.USINT)); //$NON-NLS-1$
-		ASN1map.put("UINT", new Integer(ASN1.APPLICATION+ASN1.UINT)); //$NON-NLS-1$
-		ASN1map.put("UDINT", new Integer(ASN1.APPLICATION+ASN1.UDINT)); //$NON-NLS-1$
-		ASN1map.put("ULINT", new Integer(ASN1.APPLICATION+ASN1.ULINT)); //$NON-NLS-1$
+		ASN1map.put("BOOL", Integer.valueOf(ASN1.APPLICATION+ASN1.BOOL)); //$NON-NLS-1$
+		ASN1map.put("SINT", Integer.valueOf(ASN1.APPLICATION+ASN1.SINT)); //$NON-NLS-1$
+		ASN1map.put("INT", Integer.valueOf(ASN1.APPLICATION+ASN1.INT)); //$NON-NLS-1$
+		ASN1map.put("DINT", Integer.valueOf(ASN1.APPLICATION+ASN1.DINT)); //$NON-NLS-1$
+		ASN1map.put("LINT", Integer.valueOf(ASN1.APPLICATION+ASN1.LINT)); //$NON-NLS-1$
+		ASN1map.put("USINT", Integer.valueOf(ASN1.APPLICATION+ASN1.USINT)); //$NON-NLS-1$
+		ASN1map.put("UINT", Integer.valueOf(ASN1.APPLICATION+ASN1.UINT)); //$NON-NLS-1$
+		ASN1map.put("UDINT", Integer.valueOf(ASN1.APPLICATION+ASN1.UDINT)); //$NON-NLS-1$
+		ASN1map.put("ULINT", Integer.valueOf(ASN1.APPLICATION+ASN1.ULINT)); //$NON-NLS-1$
 		
-		ASN1map.put("REAL", new Integer(ASN1.APPLICATION+ASN1.REAL)); //$NON-NLS-1$
-		ASN1map.put("LREAL", new Integer(ASN1.APPLICATION+ASN1.LREAL)); //$NON-NLS-1$
+		ASN1map.put("REAL", Integer.valueOf(ASN1.APPLICATION+ASN1.REAL)); //$NON-NLS-1$
+		ASN1map.put("LREAL", Integer.valueOf(ASN1.APPLICATION+ASN1.LREAL)); //$NON-NLS-1$
 		
-		ASN1map.put("DATE", new Integer(ASN1.APPLICATION+ASN1.DATE)); //$NON-NLS-1$
-		ASN1map.put("TIME", new Integer(ASN1.APPLICATION+ASN1.TIME)); //$NON-NLS-1$
-		ASN1map.put("TIME_OF_DAY", new Integer(ASN1.APPLICATION+ASN1.TIME_OF_DAY)); //$NON-NLS-1$
-		ASN1map.put("DATE_AND_TIME", new Integer(ASN1.APPLICATION+ASN1.DATE_AND_TIME)); //$NON-NLS-1$
-		ASN1map.put("STRING", new Integer(ASN1.APPLICATION+ASN1.STRING)); //$NON-NLS-1$
-		ASN1map.put("WSTRING", new Integer(ASN1.APPLICATION+ASN1.WSTRING)); //$NON-NLS-1$
-		ASN1map.put("BYTE", new Integer(ASN1.APPLICATION+ASN1.BYTE)); //$NON-NLS-1$
-		ASN1map.put("WORD", new Integer(ASN1.APPLICATION+ASN1.WORD)); //$NON-NLS-1$
-		ASN1map.put("DWORD", new Integer(ASN1.APPLICATION+ASN1.DWORD)); //$NON-NLS-1$
-		ASN1map.put("LWORD", new Integer(ASN1.APPLICATION+ASN1.LWORD)); //$NON-NLS-1$
+		ASN1map.put("DATE", Integer.valueOf(ASN1.APPLICATION+ASN1.DATE)); //$NON-NLS-1$
+		ASN1map.put("TIME", Integer.valueOf(ASN1.APPLICATION+ASN1.TIME)); //$NON-NLS-1$
+		ASN1map.put("TIME_OF_DAY", Integer.valueOf(ASN1.APPLICATION+ASN1.TIME_OF_DAY)); //$NON-NLS-1$
+		ASN1map.put("DATE_AND_TIME", Integer.valueOf(ASN1.APPLICATION+ASN1.DATE_AND_TIME)); //$NON-NLS-1$
+		ASN1map.put("STRING", Integer.valueOf(ASN1.APPLICATION+ASN1.STRING)); //$NON-NLS-1$
+		ASN1map.put("WSTRING", Integer.valueOf(ASN1.APPLICATION+ASN1.WSTRING)); //$NON-NLS-1$
+		ASN1map.put("BYTE", Integer.valueOf(ASN1.APPLICATION+ASN1.BYTE)); //$NON-NLS-1$
+		ASN1map.put("WORD", Integer.valueOf(ASN1.APPLICATION+ASN1.WORD)); //$NON-NLS-1$
+		ASN1map.put("DWORD", Integer.valueOf(ASN1.APPLICATION+ASN1.DWORD)); //$NON-NLS-1$
+		ASN1map.put("LWORD", Integer.valueOf(ASN1.APPLICATION+ASN1.LWORD)); //$NON-NLS-1$
 		
-		ASN1map.put("ANY", new Integer(ASN1.APPLICATION+ASN1.STRING)); //$NON-NLS-1$
+		ASN1map.put("ANY", Integer.valueOf(ASN1.APPLICATION+ASN1.STRING)); //$NON-NLS-1$
 	}
 	
 	public static IEC_ANY getIECTypeByTypename(String TypeName) {

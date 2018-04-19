@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Service Interface Function Block Type" Name="STEST_END">
+  <Identification Standard="61499-2"/>
+  <Identification Description="Copyright (c) 2015 Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
+  <VersionInfo Author="Michael Hofmann" Date="2015-01-11" Organization="Profactor GmbH" Version="1.0"/>
+  <CompilerInfo/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Service Request" Name="REQ" Type="Event"/>
+    </EventInputs>
+    <EventOutputs/>
+    <InputVars/>
+    <OutputVars/>
+  </InterfaceList>
+  <Service Comment="Service Interface Function Block Type" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+</FBType>

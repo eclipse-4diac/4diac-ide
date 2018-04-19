@@ -30,7 +30,7 @@ public class DeleteECStateCommand extends Command {
 	private final ECState state;
 
 	/** The parent. */
-	private ECC parent;
+	private final ECC parent;
 
 	/** The delete actions. */
 	private CompoundCommand deleteActions;
@@ -49,6 +49,12 @@ public class DeleteECStateCommand extends Command {
 	public DeleteECStateCommand(final ECState state) {
 		super();
 		this.state = state;
+		parent = (ECC) state.eContainer();
+	}
+	
+	@Override
+	public boolean canExecute() {
+		return (null != state) && (null != parent) && (parent.getStart() != state);  //don't allow inital states to be deleted
 	}
 
 	/*
@@ -59,7 +65,7 @@ public class DeleteECStateCommand extends Command {
 	@Override
 	public void execute() {
 
-		parent = (ECC) state.eContainer();
+		
 		deleteActions = new CompoundCommand();
 		for (Iterator<?> iterator = state.getECAction().iterator(); iterator
 				.hasNext();) {

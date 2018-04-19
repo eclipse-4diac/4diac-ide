@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -41,30 +42,13 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 public class NewSystemWizard extends Wizard implements INewWizard {
 
 	/** The page. */
-	NewSystemPage page;
-
-	private String projectName;
-
-	private boolean defaultPalette = true;
-
-	private boolean useWizard = true;
+	private NewSystemPage page;
 
 	/**
 	 * Instantiates a new new system wizard.
 	 */
 	public NewSystemWizard() {
 		setWindowTitle(Messages.NewSystemWizard_WizardName);
-	}
-
-	/**
-	 * Instantiates a new new system wizard.
-	 */
-	public NewSystemWizard(String projectName, boolean defaultPalette,
-			boolean open) {
-		setWindowTitle(Messages.NewSystemWizard_WizardName);
-		this.projectName = projectName;
-		this.defaultPalette = defaultPalette;
-		this.useWizard = false;
 	}
 
 	/*
@@ -121,20 +105,9 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 		try {
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
-			String projectName = ""; //$NON-NLS-1$
-			boolean defaultPalette = true;
-			IPath location = null;
-
-			if (useWizard) {
-				projectName = page.getProjectName();
-				defaultPalette = page.importDefaultPalette();
-				location = page.getLocationPath();
-			} else {
-				projectName = this.projectName;
-				defaultPalette = this.defaultPalette;
-				location = Platform.getLocation();
-				projectName = SystemManager.getValidSystemName(projectName);
-			}
+			String projectName = page.getProjectName(); 
+			boolean defaultPalette = page.importDefaultPalette();
+			IPath location = page.getLocationPath();
 
 			IProject project = root.getProject(projectName);
 			IProjectDescription description = ResourcesPlugin.getWorkspace()
@@ -158,23 +131,30 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 			// otherwise the palette is not correctly initialzed
 			AutomationSystem system = SystemManager.INSTANCE.createAutomationSystem(project);
 
-			VersionInfo verInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();			
-			//TODO retrieve this information from some generic location, maybe wizard
-			verInfo.setAuthor("Author");
-			verInfo.setOrganization("4DIAC-Consortium");
-			verInfo.setVersion("1.0");
-			system.getVersionInfo().add(verInfo);
-
+			setupVersionInfo(system);
 			SystemManager.INSTANCE.addSystem(system);
+			
+			NewApplicationWizard.performApplicationCreation(system, page.getInitialApplicationName(), page.getOpenApplication(), getShell());
+			
 			SystemManager.INSTANCE.saveSystem(system);
+			
 			return system;
 
-		} catch (CoreException x) {
-			// TODO __gebenh log error
+		} catch (CoreException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
 		} finally {
 			monitor.done();
 		}
 		return null;
+	}
+
+	private static void setupVersionInfo(AutomationSystem system) {
+		VersionInfo verInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();			
+		//TODO retrieve this information from some generic location, maybe wizard
+		verInfo.setAuthor("Author");
+		verInfo.setOrganization("Eclipse 4diac");
+		verInfo.setVersion("1.0");
+		system.getVersionInfo().add(verInfo);
 	}
 
 	/*
@@ -186,6 +166,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 	@Override
 	public void init(final IWorkbench workbench,
 			final IStructuredSelection selection) {
+		//currently nothing to do here
 	}
 
 }

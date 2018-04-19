@@ -11,7 +11,7 @@
             name="ResourceEditor">
       </editor>
    </extension>
-   <extension
+  <extension
          point="org.eclipse.fordiac.ide.util.openListener">
       <openListener
             class="org.eclipse.fordiac.ide.resourceediting.actions.OpenResourceEditorAction"
@@ -20,25 +20,17 @@
             label="Resource">
       </openListener>
    </extension>
-   <extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            adaptable="false"
-            id="org.eclipse.fordiac.ide.resourceediting.objectContribution1"
-            objectClass="org.eclipse.fordiac.ide.resourceediting.editparts.VirtualInOutputEditPart">
-         <action
-               class="org.eclipse.fordiac.ide.resourceediting.actions.OpenResourceEditorAction"
-               id="org.eclipse.fordiac.ide.resourceediting.action1"
-               label="Open Resource">
-         </action>
-      </objectContribution>
-   </extension>
-   <extension
+  <extension
          point="org.eclipse.ui.commands">
       <command
             categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
             id="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
             name="Show FB in Application">
+      </command>
+       <command
+            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            id="org.eclipse.fordiac.ide.resourceediting.commands.OpenConnectionOppositeResource"
+            name="Open connection opposite resource">
       </command>
    </extension>
    <extension
@@ -60,6 +52,10 @@
                   </instanceof>
                </iterate>
             </and></activeWhen>
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.resourceediting.handlers.OpenConnectionOppositeResource"
+            commandId="org.eclipse.fordiac.ide.resourceediting.commands.OpenConnectionOppositeResource">
       </handler>
    </extension>
    <extension
@@ -104,6 +100,21 @@
                <iterate>
                   <instanceof
                         value="org.eclipse.fordiac.ide.resourceediting.editparts.ResFBEditPart">
+                  </instanceof>
+               </iterate>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <command
+               commandId="org.eclipse.fordiac.ide.resourceediting.commands.OpenConnectionOppositeResource"
+               tooltip="Open the resouce with the opposite end of the connection">
+            <visibleWhen
+                  checkEnabled="true">
+               <iterate>
+                  <instanceof
+                        value="org.eclipse.fordiac.ide.resourceediting.editparts.VirtualInOutputEditPart">
                   </instanceof>
                </iterate>
             </visibleWhen>

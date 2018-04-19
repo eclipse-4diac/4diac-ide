@@ -130,7 +130,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 		connection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
 
-		String status = getModel().getParameter(HIDEN_CON);
+		String status = getModel().getAttributeValue(HIDEN_CON);
 		if (connection instanceof HideableConnection) {
 			((HideableConnection) connection)
 					.setHidden((status != null && status.equalsIgnoreCase(HIDDEN) ? true : false));

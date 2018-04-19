@@ -87,7 +87,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if(null != getFbNetwork() && getFbNetwork().eContainer() instanceof Resource){\n\treturn (Resource)getFbNetwork().eContainer();\n} else if(isMapped()){\n\t//get the Resource of the mapped FB\n\treturn getMapping().getTo().getResource();\n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getResource(this);'"
 	 * @generated
 	 */
 	Resource getResource();
@@ -96,7 +96,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (getInterface() != null) {\n\treturn getInterface().getInterfaceElement(name);\n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceElement(this, name);'"
 	 * @generated
 	 */
 	IInterfaceElement getInterfaceElement(String name);
@@ -105,7 +105,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//try to find the other coresponding mapped entity if this FBNetworkElement is mapped\nif(isMapped()){\n\treturn (this == getMapping().getFrom()) ? getMapping().getTo() : getMapping().getFrom();  \n}else{\n\t//TODO model refactoring - if element part of subapp that is mapped recursivly find the according mapped entity \n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getOpposite(this);'"
 	 * @generated
 	 */
 	FBNetworkElement getOpposite();
@@ -114,7 +114,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//an FB should always be put in an fbNetwork this is at the same time also a null check\nreturn (eContainer() instanceof FBNetwork) ? (FBNetwork)eContainer() : null;\n'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getFbNetwork(this);'"
 	 * @generated
 	 */
 	FBNetwork getFbNetwork();
@@ -122,7 +122,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='for (IInterfaceElement element : getInterface().getAllInterfaceElements()) {\r\n\t//todo when lambdas are better allowed in EMF replace with .forEach(conn -> conn.checkIfConnectionBroken());\r\n\tfor (org.eclipse.fordiac.ide.model.libraryElement.Connection conn : element.getInputConnections()) {\r\n\t\tconn.checkIfConnectionBroken();\r\n\t}\r\n\tfor (org.eclipse.fordiac.ide.model.libraryElement.Connection conn : element.getOutputConnections()) {\r\n\t\tconn.checkIfConnectionBroken();\r\n\t}\r\n}'"
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.fordiac.ide.model.Annotations.GEN.checkConnections(this);'"
 	 * @generated
 	 */
 	void checkConnections();
@@ -131,7 +131,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return null != getMapping();'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isMapped(this);'"
 	 * @generated
 	 */
 	boolean isMapped();

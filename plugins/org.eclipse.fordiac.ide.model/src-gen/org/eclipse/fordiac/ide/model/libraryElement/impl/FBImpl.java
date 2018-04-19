@@ -16,12 +16,9 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '
@@ -48,21 +45,14 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isResourceTypeFB() {
-		return false;
-	}
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public FBType getType() {
-		LibraryElement type = super.getType();
-		if(null != type){
+		//this cannot be moved to the annotation class because there we don't have the super access!!!
+		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
+		if(type instanceof FBType){
 			return (FBType) type; 
 		}
 		return null;
@@ -72,14 +62,16 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isResourceTypeFB() {
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceTypeFB(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean isResourceFB() {
-		//A fB is a resource FB if the FB is in the fbnetwork of a resource and
-		// the mapping is null or as preperation when we allow to map resource FBs 
-		//to applications when the mapping from is equal to the fb 
-		if(getFbNetwork().eContainer() instanceof Resource){
-			return (null == getMapping()) || (equals(getMapping().getFrom()));
-		}		
-		return false;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceFB(this);
 	}
 
 	@Override
@@ -90,13 +82,6 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 		getAnnotations().clear();
 		
 		NameRepository.checkNameIdentifier(this);
-		
-		// unique check needs to be before sending the notification in order
-		// that the annotations are correctly displayed in the graphical editors
-		if (!NameRepository.isFBNetworkUniqueFBInstanceName(this)) {
-			Annotation ano = createAnnotation("FB Name not Unique");
-			ano.setServity(2); // 2 means error!
-		}
 		
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONFIGURABLE_OBJECT__NAME, oldName, name));

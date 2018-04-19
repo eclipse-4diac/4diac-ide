@@ -5,7 +5,6 @@ package org.eclipse.fordiac.ide.model.structuredtext.ide;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Module;
 import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextRuntimeModule;
 import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetup;
 import org.eclipse.fordiac.ide.model.structuredtext.ide.StructuredTextIdeModule;
@@ -20,7 +19,6 @@ public class StructuredTextIdeSetup extends StructuredTextStandaloneSetup {
   public Injector createInjector() {
     StructuredTextRuntimeModule _structuredTextRuntimeModule = new StructuredTextRuntimeModule();
     StructuredTextIdeModule _structuredTextIdeModule = new StructuredTextIdeModule();
-    Module _mixin = Modules2.mixin(_structuredTextRuntimeModule, _structuredTextIdeModule);
-    return Guice.createInjector(_mixin);
+    return Guice.createInjector(Modules2.mixin(_structuredTextRuntimeModule, _structuredTextIdeModule));
   }
 }

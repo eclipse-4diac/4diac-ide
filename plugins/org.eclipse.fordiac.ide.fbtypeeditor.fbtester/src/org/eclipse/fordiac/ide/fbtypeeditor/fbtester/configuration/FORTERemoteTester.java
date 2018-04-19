@@ -21,8 +21,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -70,7 +70,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 	private IDialogSettings forteRemoteTesterSettings;
 	private Text ipText;
 	private Text runTimePortText;
-	MonitoringCommunicationOptions data = new MonitoringCommunicationOptions();
+	private MonitoringCommunicationOptions data = new MonitoringCommunicationOptions();
 	
 	private enum SendType {
 		REQ, addWatch, removeWatch, triggerEvent, startEventCnt, forceValue
@@ -180,10 +180,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 			}
 
 			@Override
-			public void newTestConf(ArrayList<TestElement> variables,
-					ArrayList<String> values,
-					ArrayList<ValuedVarDecl> resultVars,
-					Hashtable<String, Object> params) {
+			public void newTestConf(List<TestElement> variables, List<String> values, List<ValuedVarDecl> resultVars, Map<String, Object> params) {
 				
 			}
 		};
@@ -218,7 +215,6 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 					}
 					if (element.getInterfaceElement() instanceof Event && !element.getInterfaceElement().isIsInput()) {
 						addWatch(element, outputStream, inputStream);
-						// startEventCnt(element, outputStream, inputStream);
 					}
 
 				} catch (IOException e1) {
@@ -289,16 +285,15 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				outputStream.writeBytes(destination);
 				
 				outputStream.writeByte(80);
-				outputStream.writeShort(request.toString().length());
-				outputStream.writeBytes(request.toString());
+				outputStream.writeShort(request.length());
+				outputStream.writeBytes(request);
 				outputStream.flush();
 				if (type.equals(SendType.REQ)) {
 					String response = parseResponse(inputStream);
-					if (!response.equals("")) {
+					if (!response.equals("")) { //$NON-NLS-1$
 							XMLResource resource = new XMLResourceImpl();
 							InputSource source = new InputSource(new StringReader(response));
 							resource.load(source, data.getLoadOptions());
-							System.out.println("Resource" + resource.getContents());
 							for (EObject object : resource.getContents()) {
 								if (object instanceof Response) {
 									Response resp = (Response) object;
@@ -351,18 +346,18 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 		}
 	}
 
-	private String parseResponse(DataInputStream inputStream) throws IOException {
-		String response = ""; //$NON-NLS-1$
+	private static String parseResponse(DataInputStream inputStream) throws IOException {
+		StringBuilder response = new StringBuilder(); 
 		inputStream.readByte(); // asn.1 tag
 		short size = inputStream.readShort();
 
 		for (int i = 0; i < size; i++) {
-			response += (char) inputStream.readByte();
+			response.append((char) inputStream.readByte());
 		}
-		return response;
+		return response.toString();
 	}
 
-	private Hashtable<String, TestElement> testElements;
+	private Map<String, TestElement> testElements;
 
 	/**
 	 * "Type" : "FB", "Name" : "FB_ADD_INT", "Resource" : "RES1", "Port" :
