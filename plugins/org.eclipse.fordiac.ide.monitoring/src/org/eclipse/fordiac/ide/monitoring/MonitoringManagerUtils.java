@@ -69,13 +69,7 @@ public class MonitoringManagerUtils {
 		if (res == null) {
 			return null;
 		}
-		Device dev = (Device) res.eContainer();
-		if (dev == null) {
-			return null;
-		}
 		
-		AutomationSystem system = dev.getAutomationSystem();
-
 		PortElement p;
 		if (ep.getModel() instanceof AdapterDeclaration){
 			p = MonitoringFactory.eINSTANCE.createAdapterPortElement(); 
@@ -83,8 +77,6 @@ public class MonitoringManagerUtils {
 		else{
 			p = MonitoringFactory.eINSTANCE.createPortElement();
 		}
-		p.setSystem(system);
-		p.setDevice(dev);
 		p.setResource(res);
 		p.setFb(fb);
 		p.setInterfaceElement(ep.getModel());

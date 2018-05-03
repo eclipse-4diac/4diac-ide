@@ -41,8 +41,6 @@ import org.eclipse.fordiac.ide.model.monitoring.PortElement;
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.PortElementImpl#getFb <em>Fb</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.PortElementImpl#getInterfaceElement <em>Interface Element</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.PortElementImpl#getResource <em>Resource</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.PortElementImpl#getDevice <em>Device</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.PortElementImpl#getSystem <em>System</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.PortElementImpl#getHierarchy <em>Hierarchy</em>}</li>
  * </ul>
  *
@@ -78,26 +76,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * @ordered
 	 */
 	protected Resource resource;
-
-	/**
-	 * The cached value of the '{@link #getDevice() <em>Device</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDevice()
-	 * @generated
-	 * @ordered
-	 */
-	protected Device device;
-
-	/**
-	 * The cached value of the '{@link #getSystem() <em>System</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSystem()
-	 * @generated
-	 * @ordered
-	 */
-	protected AutomationSystem system;
 
 	/**
 	 * The cached value of the '{@link #getHierarchy() <em>Hierarchy</em>}' attribute list.
@@ -247,82 +225,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Device getDevice() {
-		if (device != null && device.eIsProxy()) {
-			InternalEObject oldDevice = (InternalEObject)device;
-			device = (Device)eResolveProxy(oldDevice);
-			if (device != oldDevice) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringPackage.PORT_ELEMENT__DEVICE, oldDevice, device));
-			}
-		}
-		return device;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Device basicGetDevice() {
-		return device;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDevice(Device newDevice) {
-		Device oldDevice = device;
-		device = newDevice;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.PORT_ELEMENT__DEVICE, oldDevice, device));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AutomationSystem getSystem() {
-		if (system != null && system.eIsProxy()) {
-			InternalEObject oldSystem = (InternalEObject)system;
-			system = (AutomationSystem)eResolveProxy(oldSystem);
-			if (system != oldSystem) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringPackage.PORT_ELEMENT__SYSTEM, oldSystem, system));
-			}
-		}
-		return system;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AutomationSystem basicGetSystem() {
-		return system;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setSystem(AutomationSystem newSystem) {
-		AutomationSystem oldSystem = system;
-		system = newSystem;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.PORT_ELEMENT__SYSTEM, oldSystem, system));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EList<String> getHierarchy() {
 		if (hierarchy == null) {
 			hierarchy = new EDataTypeUniqueEList<String>(String.class, this, MonitoringPackage.PORT_ELEMENT__HIERARCHY);
@@ -348,9 +250,27 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 					adapter += ".";
 				}
 		
-				return device.getName() + "."
+				return getResource().getDevice().getName() + "."
 						+ resource.getName() + "." + hierarchy +  fb.getName() + "."
 						+ adapter + interfaceElement.getName();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Device getDevice() {
+				return getResource().getDevice();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AutomationSystem getSystem() {
+				return getResource().getAutomationSystem();
 	}
 
 	/**
@@ -370,12 +290,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 			case MonitoringPackage.PORT_ELEMENT__RESOURCE:
 				if (resolve) return getResource();
 				return basicGetResource();
-			case MonitoringPackage.PORT_ELEMENT__DEVICE:
-				if (resolve) return getDevice();
-				return basicGetDevice();
-			case MonitoringPackage.PORT_ELEMENT__SYSTEM:
-				if (resolve) return getSystem();
-				return basicGetSystem();
 			case MonitoringPackage.PORT_ELEMENT__HIERARCHY:
 				return getHierarchy();
 		}
@@ -399,12 +313,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 				return;
 			case MonitoringPackage.PORT_ELEMENT__RESOURCE:
 				setResource((Resource)newValue);
-				return;
-			case MonitoringPackage.PORT_ELEMENT__DEVICE:
-				setDevice((Device)newValue);
-				return;
-			case MonitoringPackage.PORT_ELEMENT__SYSTEM:
-				setSystem((AutomationSystem)newValue);
 				return;
 			case MonitoringPackage.PORT_ELEMENT__HIERARCHY:
 				getHierarchy().clear();
@@ -431,12 +339,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 			case MonitoringPackage.PORT_ELEMENT__RESOURCE:
 				setResource((Resource)null);
 				return;
-			case MonitoringPackage.PORT_ELEMENT__DEVICE:
-				setDevice((Device)null);
-				return;
-			case MonitoringPackage.PORT_ELEMENT__SYSTEM:
-				setSystem((AutomationSystem)null);
-				return;
 			case MonitoringPackage.PORT_ELEMENT__HIERARCHY:
 				getHierarchy().clear();
 				return;
@@ -458,10 +360,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 				return interfaceElement != null;
 			case MonitoringPackage.PORT_ELEMENT__RESOURCE:
 				return resource != null;
-			case MonitoringPackage.PORT_ELEMENT__DEVICE:
-				return device != null;
-			case MonitoringPackage.PORT_ELEMENT__SYSTEM:
-				return system != null;
 			case MonitoringPackage.PORT_ELEMENT__HIERARCHY:
 				return hierarchy != null && !hierarchy.isEmpty();
 		}

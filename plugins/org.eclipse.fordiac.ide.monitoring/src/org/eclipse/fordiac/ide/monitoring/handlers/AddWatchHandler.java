@@ -131,11 +131,9 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		ios.addAll(interfaceList.getOutputVars());
 		for (IInterfaceElement io : ios) {
 			PortElement newPort = monitoringFactory.createPortElement();
-			newPort.setDevice(port.getDevice());
 			newPort.setFb(port.getFb());
 			newPort.setInterfaceElement(io);
 			newPort.setResource(port.getResource());
-			newPort.setSystem(port.getSystem());
 			ports.add(newPort);
 			childElements.add((MonitoringElement)createMonitoringElement(manager, newPort));
 		}

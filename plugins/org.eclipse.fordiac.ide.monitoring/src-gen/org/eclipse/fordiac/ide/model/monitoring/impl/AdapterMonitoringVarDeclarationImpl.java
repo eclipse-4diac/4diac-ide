@@ -86,7 +86,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = null;
+	protected static final String NAME_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -106,7 +106,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = null;
+	protected static final String COMMENT_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -586,7 +586,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 */
 	public boolean isArray() {
-		return arraySize > 0;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.isArray(this);
 	}
 
 	/**
@@ -595,7 +595,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 */
 	public FBNetworkElement getFBNetworkElement() {
-		return (eContainer() instanceof InterfaceList) ? ((InterfaceList)eContainer()).getFBNetworkElement() : null;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);
 	}
 
 	/**
@@ -604,11 +604,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 */
 	public Annotation createAnnotation(final String name) {
-				Annotation annotation = LibraryElementFactory.eINSTANCE
-						.createAnnotation();
-				annotation.setName(name);
-				getAnnotations().add(annotation);
-				return annotation;
+		return org.eclipse.fordiac.ide.model.Annotations.GEN.createAnnotation(this, name);
 	}
 
 	/**
@@ -617,8 +613,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 */
 	public void removeAnnotation(final Annotation annotation) {
-				getAnnotations().remove(annotation);
-		
+		org.eclipse.fordiac.ide.model.Annotations.GEN.removeAnnotation(this, annotation);
 	}
 
 	/**

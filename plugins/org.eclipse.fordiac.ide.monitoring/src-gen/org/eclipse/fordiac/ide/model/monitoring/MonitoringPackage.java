@@ -350,31 +350,13 @@ public interface MonitoringPackage extends EPackage {
 	int PORT_ELEMENT__RESOURCE = 2;
 
 	/**
-	 * The feature id for the '<em><b>Device</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_ELEMENT__DEVICE = 3;
-
-	/**
-	 * The feature id for the '<em><b>System</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_ELEMENT__SYSTEM = 4;
-
-	/**
 	 * The feature id for the '<em><b>Hierarchy</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_ELEMENT__HIERARCHY = 5;
+	int PORT_ELEMENT__HIERARCHY = 3;
 
 	/**
 	 * The number of structural features of the '<em>Port Element</em>' class.
@@ -383,7 +365,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_ELEMENT_FEATURE_COUNT = 6;
+	int PORT_ELEMENT_FEATURE_COUNT = 4;
 
 
 	/**
@@ -422,24 +404,6 @@ public interface MonitoringPackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_PORT_ELEMENT__RESOURCE = PORT_ELEMENT__RESOURCE;
-
-	/**
-	 * The feature id for the '<em><b>Device</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_PORT_ELEMENT__DEVICE = PORT_ELEMENT__DEVICE;
-
-	/**
-	 * The feature id for the '<em><b>System</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_PORT_ELEMENT__SYSTEM = PORT_ELEMENT__SYSTEM;
 
 	/**
 	 * The feature id for the '<em><b>Hierarchy</b></em>' attribute list.
@@ -894,7 +858,7 @@ public interface MonitoringPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>IEdit Part Creator</em>'.
 	 * @see org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator
-	 * @model instanceClass="org.eclipse.fordiac.ide.gef.IEditPartCreator"
+	 * @model instanceClass="org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator"
 	 * @generated
 	 */
 	EClass getIEditPartCreator();
@@ -941,28 +905,6 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPortElement_Resource();
-
-	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.monitoring.PortElement#getDevice <em>Device</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Device</em>'.
-	 * @see org.eclipse.fordiac.ide.model.monitoring.PortElement#getDevice()
-	 * @see #getPortElement()
-	 * @generated
-	 */
-	EReference getPortElement_Device();
-
-	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.monitoring.PortElement#getSystem <em>System</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>System</em>'.
-	 * @see org.eclipse.fordiac.ide.model.monitoring.PortElement#getSystem()
-	 * @see #getPortElement()
-	 * @generated
-	 */
-	EReference getPortElement_System();
 
 	/**
 	 * Returns the meta object for the attribute list '{@link org.eclipse.fordiac.ide.model.monitoring.PortElement#getHierarchy <em>Hierarchy</em>}'.
@@ -1225,22 +1167,6 @@ public interface MonitoringPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PORT_ELEMENT__RESOURCE = eINSTANCE.getPortElement_Resource();
-
-		/**
-		 * The meta object literal for the '<em><b>Device</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORT_ELEMENT__DEVICE = eINSTANCE.getPortElement_Device();
-
-		/**
-		 * The meta object literal for the '<em><b>System</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORT_ELEMENT__SYSTEM = eINSTANCE.getPortElement_System();
 
 		/**
 		 * The meta object literal for the '<em><b>Hierarchy</b></em>' attribute list feature.

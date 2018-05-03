@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
@@ -151,6 +152,7 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		isInited = true;
 
 		// Initialize simple dependencies
+		EcorePackage.eINSTANCE.eClass();
 		PalettePackage.eINSTANCE.eClass();
 		LibraryElementPackage.eINSTANCE.eClass();
 		DataPackage.eINSTANCE.eClass();
@@ -374,26 +376,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPortElement_Device() {
-		return (EReference)portElementEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getPortElement_System() {
-		return (EReference)portElementEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getPortElement_Hierarchy() {
-		return (EAttribute)portElementEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)portElementEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -487,8 +471,6 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		createEReference(portElementEClass, PORT_ELEMENT__FB);
 		createEReference(portElementEClass, PORT_ELEMENT__INTERFACE_ELEMENT);
 		createEReference(portElementEClass, PORT_ELEMENT__RESOURCE);
-		createEReference(portElementEClass, PORT_ELEMENT__DEVICE);
-		createEReference(portElementEClass, PORT_ELEMENT__SYSTEM);
 		createEAttribute(portElementEClass, PORT_ELEMENT__HIERARCHY);
 
 		adapterPortElementEClass = createEClass(ADAPTER_PORT_ELEMENT);
@@ -579,11 +561,13 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		initEReference(getPortElement_Fb(), theLibraryElementPackage.getFB(), null, "fb", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortElement_InterfaceElement(), theLibraryElementPackage.getIInterfaceElement(), null, "interfaceElement", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortElement_Resource(), theLibraryElementPackage.getResource(), null, "resource", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPortElement_Device(), theLibraryElementPackage.getDevice(), null, "device", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPortElement_System(), theLibraryElementPackage.getAutomationSystem(), null, "system", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPortElement_Hierarchy(), theXMLTypePackage.getString(), "hierarchy", null, 0, -1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(portElementEClass, theXMLTypePackage.getString(), "getPortString", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		addEOperation(portElementEClass, theLibraryElementPackage.getDevice(), "getDevice", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		addEOperation(portElementEClass, theLibraryElementPackage.getAutomationSystem(), "getSystem", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(adapterPortElementEClass, AdapterPortElement.class, "AdapterPortElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAdapterPortElement_Ports(), this.getPortElement(), null, "ports", null, 0, -1, AdapterPortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
