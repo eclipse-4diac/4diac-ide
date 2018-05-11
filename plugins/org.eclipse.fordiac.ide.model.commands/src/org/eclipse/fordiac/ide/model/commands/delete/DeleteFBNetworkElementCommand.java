@@ -38,6 +38,10 @@ public class DeleteFBNetworkElementCommand extends Command {
 		super("Delete FB or Subapplication");
 		this.element = element;
 	}
+	
+	public FBNetworkElement getFBNetworkElement() {
+		return element;
+	}
 
 	@Override
 	public boolean canUndo() {
