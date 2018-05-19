@@ -130,9 +130,9 @@ public class DeploymentExecutor implements IDeploymentExecutor {
 		String retVal = value;
 		retVal = retVal.replaceAll("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
 		retVal = retVal.replaceAll("'", "&apos;"); //$NON-NLS-1$ //$NON-NLS-2$
-		retVal = retVal.replaceAll(">", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
+		retVal = retVal.replaceAll("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		retVal = retVal.replaceAll(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
-		return value;
+		return retVal;
 	}
 
 	@Override
