@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 TU Wien ACIN, Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2011 - 2018 TU Wien ACIN, Profactor GmbH, fortiss GmbH, 
+ * 								Johannes Kepler University Linz (JKU) 
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -65,7 +66,6 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart{
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
 			refreshEventLabel();
-
 		}
 	};
 
@@ -74,31 +74,24 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart{
 
 		@Override
 		public void notifyChanged(Notification notification) {
+			super.notifyChanged(notification);
 			if (notification.getEventType() == Notification.REMOVE) {
-				if ((notification.getOldValue() == getAction().getOutput())
-						|| ((getAction().getOutput() instanceof AdapterEvent)
-								&& (notification.getOldValue() instanceof AdapterDeclaration) && (((AdapterEvent) getAction()
-								.getOutput()).getAdapterDeclaration() == notification
-								.getOldValue()))) {
+				if ((notification.getOldValue() == getAction().getOutput()) || 
+						((getAction().getOutput() instanceof AdapterEvent) && 
+								(notification.getOldValue() instanceof AdapterDeclaration) &&
+								(((AdapterEvent) getAction().getOutput()).getAdapterDeclaration() == notification.getOldValue()))) {
 					executeCommand(new ChangeOutputCommand(getAction(), null));
 				}
 			} else if (notification.getEventType() == Notification.SET) {
-				if (null != getAction().getOutput()) {
-					if (notification.getNewValue() instanceof String) {
-						if (getAction().getOutput().getName().equals(notification.getNewValue())) {
-							super.notifyChanged(notification);
-							refreshEventLabel();
-						} else if ((getAction().getOutput() instanceof AdapterEvent)
-								&& (((AdapterEvent) getAction().getOutput())
-										.getAdapterDeclaration().getName()
-										.equals(notification.getNewValue()))) {
-							super.notifyChanged(notification);
-							refreshEventLabel();
-						}
+				if (null != getAction().getOutput() && notification.getNewValue() instanceof String) {
+					if (getAction().getOutput().getName().equals(notification.getNewValue())) {
+						refreshEventLabel();
+					} else if ((getAction().getOutput() instanceof AdapterEvent)
+							&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration().getName().equals(notification.getNewValue()))) {
+						refreshEventLabel();
 					}
 				}
 			}
-
 		}
 	};
 
