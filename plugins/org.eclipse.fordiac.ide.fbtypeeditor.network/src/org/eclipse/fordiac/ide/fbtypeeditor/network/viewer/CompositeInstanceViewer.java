@@ -15,14 +15,17 @@ package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 import java.util.EventObject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.viewer.composite.CompositeInstanceViewerInput;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
 import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -84,6 +87,7 @@ public class CompositeInstanceViewer extends DiagramEditor {
 			if (content instanceof FB) {
 				if (((FB) content).getType() instanceof CompositeFBType) {
 					fb = (FB) content;
+					setPartName(getNameHierarchy());
 					//we need to copy the type so that we have an instance specific network TODO consider using here the type
 					//cfbt = EcoreUtil.copy((CompositeFBType) fb.getFBType()); 
 					cfbt = (CompositeFBType) fb.getType();
@@ -92,6 +96,7 @@ public class CompositeInstanceViewer extends DiagramEditor {
 			}
 		}
 	}
+
 
 	@Override
 	public FBNetwork getModel(){
@@ -120,4 +125,19 @@ public class CompositeInstanceViewer extends DiagramEditor {
 	public void doSaveAs() {
 		super.doSaveAs();
 	}
+	
+	private String getNameHierarchy() {
+		//TODO mabye a nice helper function to be put into the fb model
+		StringBuilder retVal =  new StringBuilder(fb.getName());
+		EObject cont = fb.eContainer().eContainer();
+		while(cont instanceof INamedElement){
+			retVal.insert(0, ((INamedElement)cont).getName() + "."); //$NON-NLS-1$
+			if(cont instanceof Application) {
+				break;
+			}
+			cont = cont.eContainer().eContainer();
+		}		
+		return retVal.toString();
+	}
+
 }

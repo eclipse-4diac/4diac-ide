@@ -68,4 +68,8 @@ public class UnmapCommand extends Command {
 		system.getMapping().remove(mapping);
 		deleteMappedFBCmd.redo();		
 	}
+	
+	public FBNetworkElement getMappedFBNetworkElement() {
+		return deleteMappedFBCmd.getFBNetworkElement();
+	}
 }

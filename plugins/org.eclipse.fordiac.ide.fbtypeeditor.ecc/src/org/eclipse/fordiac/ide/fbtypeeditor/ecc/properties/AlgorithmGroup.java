@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2017 fortiss GmbH.
+ * Copyright (c) 2016 - 2018 fortiss GmbH, Johannes Kepler University Linz (JKU)
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,7 +11,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -36,10 +37,6 @@ import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -57,7 +54,7 @@ class AlgorithmGroup {
 	private Text commentText;
 	private Composite codeEditors;
 	private StackLayout stack;
-	private Hashtable<String, IAlgorithmEditor> editors = new Hashtable<String, IAlgorithmEditor>();
+	private Map<String, IAlgorithmEditor> editors = new HashMap<>();
 	private IAlgorithmEditor currentAlgEditor;
 	
 	private boolean blockUpdates = false;
@@ -73,6 +70,7 @@ class AlgorithmGroup {
 		}
 		@Override
 		public void documentAboutToBeChanged(final DocumentEvent event) {
+			// nothing todo here
 		}
 	};
 	
@@ -102,15 +100,7 @@ class AlgorithmGroup {
 		languageLabel = widgetFactory.createCLabel(langAndComents, "Langugage: ");
 		languageCombo = new Combo(langAndComents, SWT.SINGLE | SWT.READ_ONLY);
 		fillLanguageDropDown();
-		languageCombo.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				executeCommand(new ChangeAlgorithmTypeCommand(getBasicFBType(), getAlgorithm(), languageCombo.getText()));
-			}
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
+		languageCombo.addListener(SWT.Selection, event -> executeCommand(new ChangeAlgorithmTypeCommand(getBasicFBType(), getAlgorithm(), languageCombo.getText())));
 		
 		
 		commentLabel = widgetFactory.createCLabel(langAndComents, "Comment:"); 
@@ -118,13 +108,7 @@ class AlgorithmGroup {
 		commentText.setEditable(true);	
 		commentText.setEnabled(true);
 		commentText.setLayoutData(new GridData(GridData.FILL, 0, true, false));
-		commentText.addModifyListener(new ModifyListener() {
-			public void modifyText(final ModifyEvent e) {
-				//removeContentAdapter();
-				executeCommand(new ChangeCommentCommand(getAlgorithm(), commentText.getText()));
-				//addContentAdapter();
-			}
-		});		
+		commentText.addListener(SWT.Modify, e -> executeCommand(new ChangeCommentCommand(getAlgorithm(), commentText.getText())) );		
 		
 		GridData codeEditorsGridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		codeEditorsGridData.horizontalSpan = 1;
@@ -181,7 +165,7 @@ class AlgorithmGroup {
 				currentAlgorithm = algorithm;
 				if(null != currentAlgorithm){
 					initializeEditor();
-				enableAllFields();
+					enableAllFields();
 					updateAlgFields();
 				} else {
 					algorithmGroup.setText(Messages.ECAlgorithmGroup_Title);
@@ -189,7 +173,7 @@ class AlgorithmGroup {
 					languageCombo.select(0);
 					stack.topControl = null; 
 					codeEditors.layout();
-				disableAllFields();
+					disableAllFields();
 				}
 			} else if(null != currentAlgorithm){
 				//update the content of the algorithm only
@@ -238,7 +222,7 @@ class AlgorithmGroup {
 	}
 
 	
-	private String getAlgorithmTypeString(Algorithm algorithm) {
+	private static String getAlgorithmTypeString(Algorithm algorithm) {
 		if (algorithm instanceof STAlgorithm) {
 			return "ST"; //$NON-NLS-1$
 		} 

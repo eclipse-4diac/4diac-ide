@@ -93,16 +93,18 @@ public class DeleteConnectionCommand extends Command {
 			FBNetworkElement opSource = source.getFBNetworkElement().getOpposite();
 			FBNetworkElement opDestination = destination.getFBNetworkElement().getOpposite();
 			if(null != opSource && null != opDestination && opSource.getFbNetwork() == opDestination.getFbNetwork()){
-				Connection con = findConnection(opSource.getInterfaceElement(source.getName()), opDestination.getInterfaceElement(destination.getName())); 
-				DeleteConnectionCommand cmd = new DeleteConnectionCommand(con);
-				cmd.setPerformMappingCheck(false);  //as this is the command for the mirrored connection we don't want again to check
-				return (cmd.canExecute()) ? cmd : null;
+				Connection con = findConnection(opSource.getInterfaceElement(source.getName()), opDestination.getInterfaceElement(destination.getName()));
+				if(null != con) {
+					DeleteConnectionCommand cmd = new DeleteConnectionCommand(con);
+					cmd.setPerformMappingCheck(false);  //as this is the command for the mirrored connection we don't want again to check
+					return (cmd.canExecute()) ? cmd : null;
+				}
 			}
 		}
 		return null;
 	}
 
-	private Connection findConnection(IInterfaceElement source, IInterfaceElement destination) {
+	private static Connection findConnection(IInterfaceElement source, IInterfaceElement destination) {
 		for (Connection con : source.getOutputConnections()) {
 			if(con.getDestination() == destination){
 				return con;

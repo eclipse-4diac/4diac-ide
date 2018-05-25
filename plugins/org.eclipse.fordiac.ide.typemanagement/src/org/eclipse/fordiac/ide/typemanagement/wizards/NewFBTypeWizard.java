@@ -19,11 +19,14 @@ import java.util.Date;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -43,7 +46,7 @@ import org.eclipse.ui.part.FileEditorInput;
 public class NewFBTypeWizard extends Wizard implements INewWizard {
 	private IStructuredSelection selection;
 	private NewFBTypeWizardPage page1;
-	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); //$NON-NLS-1$
 	private PaletteEntry entry;
 
 	public NewFBTypeWizard() {
@@ -84,7 +87,7 @@ public class NewFBTypeWizard extends Wizard implements INewWizard {
 		return false;
 	}
 
-	private boolean checkTemplateAvailable(String templatePath) {
+	private static boolean checkTemplateAvailable(String templatePath) {
 		if (!new File(templatePath).exists()) {
 			templateNotAvailable(templatePath);
 			return false;
@@ -92,7 +95,7 @@ public class NewFBTypeWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	private void templateNotAvailable(String templatePath) {
+	private static void templateNotAvailable(String templatePath) {
 		MessageBox mbx = new MessageBox(Display.getDefault().getActiveShell());
 		mbx.setMessage("Template not available! (" + templatePath + ")");
 		mbx.open();
@@ -108,10 +111,7 @@ public class NewFBTypeWizard extends Wizard implements INewWizard {
 		}
 		LibraryElement type = entry.getType();
 		type.setName(TypeLibrary.getTypeNameFromFile(targetTypeFile));
-		if (0 != type.getVersionInfo().size()) {
-			VersionInfo versionInfo = type.getVersionInfo().get(0);
-			versionInfo.setDate(format.format(new Date(System.currentTimeMillis())));
-		}
+		setupVersionInfo(type);
 		CommonElementExporter.saveType(entry);
 		entry.setType(type);
 		if (page1.getOpenType()) {
@@ -120,7 +120,19 @@ public class NewFBTypeWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	private void openTypeEditor(PaletteEntry entry) {
+	private void setupVersionInfo(LibraryElement type) {
+		VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
+		versionInfo.setAuthor(System.getProperty("user.name")); //$NON-NLS-1$
+		versionInfo.setDate(format.format(new Date(System.currentTimeMillis())));
+		versionInfo.setVersion("1.0"); //$NON-NLS-1$
+		if(type instanceof AdapterType) {
+			type = ((AdapterType)type).getAdapterFBType();
+		}		
+		type.getVersionInfo().clear();
+		type.getVersionInfo().add(versionInfo);
+	}
+
+	private static void openTypeEditor(PaletteEntry entry) {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 				.getDefaultEditor(entry.getFile().getName());
