@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
+import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPolicy;
@@ -33,10 +34,39 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Display;
 
 
 public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
+	
+	/** The property change listener. */
+	private final IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			if (event.getProperty().equals(PreferenceConstants.P_MONITORING_TRANSPARENCY)) {
+				((SetableAlphaLabel)getFigure()).setAlpha(PreferenceConstants.getMonitoringTransparency());
+			}
+		}
+	};
+	
+	@Override
+	public void activate() {
+		if (!isActive()) {
+			super.activate();
+			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+		}
+	}
+		
+
+	@Override
+	public void deactivate() {
+		if (isActive()) {
+			super.deactivate();
+			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+		}
+	}
 
 
 	public boolean isEvent() {
@@ -56,9 +86,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 	protected void createEditPolicies() {
 		if(!isEvent()) {
 			//only allow direct edit if it is not an event, see Bug 510735 for details.
-			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
-					new DirectEditPolicy(){
-	
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy(){	
 						@Override
 						protected Command getDirectEditCommand(DirectEditRequest request) {
 							String value = (String) request.getCellEditor().getValue();
@@ -73,10 +101,8 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 							MonitoringEditPart editPart = (MonitoringEditPart)getHost();
 							if (null != editPart) {
 								editPart.getNameLabel().setText(value);
-							}
-							
-						}
-										
+							}							
+						}										
 			});
 		}
 	}
@@ -108,7 +134,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 		l.setBorder(new MarginBorder(0, 5, 0, 5));
 		l.setText("N/A");
 		l.setMinimumSize(new Dimension(50, 1));
-		l.setAlpha(190);
+		l.setAlpha(PreferenceConstants.getMonitoringTransparency());
 		return l;
 	}
 

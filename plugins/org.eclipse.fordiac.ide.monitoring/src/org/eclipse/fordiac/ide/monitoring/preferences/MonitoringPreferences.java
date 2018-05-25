@@ -47,27 +47,28 @@ public class MonitoringPreferences extends FieldEditorPreferencePage implements
 
 		IntegerFieldEditor polling = new IntegerFieldEditor(
 				PreferenceConstants.P_POLLING_INTERVAL, "Polling interval in ms",
-				getFieldEditorParent(), 300);
+				getFieldEditorParent(), PreferenceConstants.P_POLLING_INTERVAL_DEVAULT_VALUE);
 		polling.setValidRange(1, 60000);
 
 		addField(polling);
 
 		IntegerFieldEditor connectionTimeout = new IntegerFieldEditor(
 				PreferenceConstants.P_RESPONSE_TIMEOUT, "Response Timout in ms",
-				getFieldEditorParent(), 3000);
+				getFieldEditorParent(), PreferenceConstants.P_RESPONSE_TIMEOUT_DEVAULT_VALUE);
 		connectionTimeout.setValidRange(1, 60000);
-
 		addField(connectionTimeout);
+		
+
+		IntegerFieldEditor monitoringTransparency = new IntegerFieldEditor(
+				PreferenceConstants.P_MONITORING_TRANSPARENCY, "Monitoring indicator transparency level",
+				getFieldEditorParent(), PreferenceConstants.P_MONITORING_TRANSPARENCY_VALUE);
+		monitoringTransparency.setValidRange(100, 255);
+		addField(monitoringTransparency);
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
-	 */
 	public void init(IWorkbench workbench) {
+		//nothing todo here
 	}
 
 }
