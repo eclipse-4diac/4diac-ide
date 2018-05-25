@@ -23,7 +23,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
@@ -31,10 +30,10 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -44,7 +43,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -59,7 +57,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class SaveAsSubappWizard extends Wizard {
 
-	final SubApp subApp;
+	private final SubApp subApp;
 	
 	private SaveAsSubappWizardPage newFilePage;
 	
@@ -93,21 +91,13 @@ public class SaveAsSubappWizard extends Wizard {
 		if(perform){		
 			if(createSubAppTemplateCopy()){  		// copy the subapp template so that we don't need to write code for any basic type information stuff (e.g., version, coments etc.)
 				PaletteEntry entry = getPalletEntry();
-				
-				
 				LibraryElement type = entry.getType();
 				type.setName(TypeLibrary.getTypeNameFromFile(entry.getFile()));
 				
-				if (0 != type.getVersionInfo().size()) {
-					VersionInfo versionInfo = type.getVersionInfo().get(0);
-					versionInfo.setDate(format.format(new Date(System
-							.currentTimeMillis())));
-				}
-				
-				performTypeSetup((SubAppType)type);
-				
-				CommonElementExporter.saveType(entry);
-				
+				setupVersionInfo(type);				
+				performTypeSetup((SubAppType)type);				
+				CommonElementExporter.saveType(entry);	
+				entry.setLastModificationTimestamp(0);  //triggers a reload on the next model access
 				
 				if(newFilePage.getOpenType()){
 					openTypeEditor(entry);
@@ -129,16 +119,18 @@ public class SaveAsSubappWizard extends Wizard {
 	private boolean createSubAppTemplateCopy(){
 		String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
 		File templateFolder = new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
-		
-		for (File file : templateFolder.listFiles()) {
-			String fileName = file.getName().toUpperCase(); 			
-			if(fileName.endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING)){
-				IFile targetTypeFile = getTargetTypeFile();
-				try {
-					ImportUtils.copyFile(file, targetTypeFile);
-					return true;
-				} catch (IOException | CoreException e) {
-					ApplicationPlugin.getDefault().logError(e.getMessage(), e);
+		File [] fileList = templateFolder.listFiles();
+		if(null != fileList) {
+			for (File file : fileList) {
+				String fileName = file.getName().toUpperCase(); 			
+				if(fileName.endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING)){
+					IFile targetTypeFile = getTargetTypeFile();
+					try {
+						ImportUtils.copyFile(file, targetTypeFile);
+						return true;
+					} catch (IOException | CoreException e) {
+						ApplicationPlugin.getDefault().logError(e.getMessage(), e);
+					}
 				}
 			}
 		}
@@ -147,7 +139,7 @@ public class SaveAsSubappWizard extends Wizard {
 
 	private IFile getTargetTypeFile() {
 		return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(newFilePage.getContainerFullPath() + 
-				"/" + newFilePage.getFileName() + TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT));
+				File.separator + newFilePage.getFileName() + TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT));
 	}
 	
 	private PaletteEntry getPalletEntry() {
@@ -164,7 +156,7 @@ public class SaveAsSubappWizard extends Wizard {
 		return entry;
 	}
 	
-	private void openTypeEditor(PaletteEntry entry) {		
+	private static void openTypeEditor(PaletteEntry entry) {		
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			
 		IEditorDescriptor desc = PlatformUI.getWorkbench().
@@ -175,252 +167,68 @@ public class SaveAsSubappWizard extends Wizard {
 			ApplicationPlugin.getDefault().logError(e.getMessage(), e);
 		}				
 	}
-
 	
 	private void performTypeSetup(SubAppType type) {
 		performInterfaceSetup(type);
-		performSubappNetworkSetup(type);
-		
+		performSubappNetworkSetup(type);		
 	}
 
 	private void performInterfaceSetup(SubAppType type) {
 		//replace interface list with newly generated
-	InterfaceList interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
-		type.setInterfaceList(interfaceList);
-		
-		//the internal subapp interface elements are the ones which also have an outgoing connection only put this into the interface of the new subapp type
-//TODO model refactoring - implement when new subappmodel is finished
-//		for (InternalSubAppInterfaceElementView interfaceElement : subAppView.getUiSubAppNetwork().getInterfaceElements()) {
-//			IInterfaceElement element = interfaceElement.getIInterfaceElement();
-//			
-//			IInterfaceElement newInterfaceElement = null;		
-//					
-//			if(element instanceof Event){
-//				newInterfaceElement = createEventElement(type.getInterfaceList(), (Event)element); 
-//									
-//			}else if (element instanceof AdapterDeclaration){
-//				newInterfaceElement = createAdapterElement(type.getInterfaceList(), (AdapterDeclaration)element);					
-//			}else if (element instanceof VarDeclaration){
-//				newInterfaceElement = createVarElement(type.getInterfaceList(), (VarDeclaration)element);				
-//			}
-//			
-//			if(null != newInterfaceElement){
-//				newInterfaceElement.setName(interfaceElement.getLabel().replace('.', '_')); //use the aggregated name for the new interface elements name
-//				newInterfaceElement.setComment(element.getComment());
-//				newInterfaceElement.setIsInput(!element.isIsInput());				
-//			}
-//			
-//		}
-		
-	}
-
-	private IInterfaceElement createEventElement(InterfaceList interfaceList,
-			Event element) {
-		Event e = LibraryElementFactory.eINSTANCE.createEvent();
-		if(element.isIsInput()){   //currently the element used in subapp internal interface views is the interface element of the corresponding internal FB therefore we have to mirror the inputs and outputs here
-			interfaceList.getEventOutputs().add(e);
-		}
-		else{	
-			interfaceList.getEventInputs().add(e);
-		}		
-		return e;
-	}
-
-	private IInterfaceElement createAdapterElement(InterfaceList interfaceList,
-			AdapterDeclaration element) {
-		AdapterDeclaration a = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
-		a.setType(element.getType());
-		a.setTypeName(element.getTypeName());
-		
-		if(element.isIsInput()){   //currently the element used in subapp internal interface views is the interface element of the corresponding internal FB therefore we have to mirror the inputs and outputs here
-			interfaceList.getPlugs().add(a);
-		}
-		else{	
-			interfaceList.getSockets().add(a);
-		}
-		return a;
-	}
-
-	private IInterfaceElement createVarElement(InterfaceList interfaceList,
-			VarDeclaration element) {
-		VarDeclaration v = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		v.setType(element.getType());
-		v.setTypeName(element.getTypeName());
-		v.setArraySize(element.getArraySize());
-		
-		if(element.isIsInput()){   //currently the element used in subapp internal interface views is the interface element of the corresponding internal FB therefore we have to mirror the inputs and outputs here
-			interfaceList.getOutputVars().add(v);
-		}
-		else{	
-			interfaceList.getInputVars().add(v);
-		}	
-		return v;
+		InterfaceList interfaceList = EcoreUtil.copy(subApp.getInterface());
+		type.setInterfaceList(interfaceList);		
 	}
 
 	private void performSubappNetworkSetup(SubAppType type) {
-		FBNetwork srcNetwork = subApp.getSubAppNetwork();
-		FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
-		type.setFBNetwork(dstNetwork);
+		FBNetwork dstNetwork = EcoreUtil.copy(subApp.getSubAppNetwork());
 		
-		dstNetwork.getNetworkElements().addAll(EcoreUtil.copyAll(srcNetwork.getNetworkElements()));				
+		dstNetwork.getEventConnections().clear();
+		for (Connection connection : subApp.getSubAppNetwork().getEventConnections()) {
+			dstNetwork.getEventConnections().add((EventConnection)createConnection(type, dstNetwork, connection));
+		}
 		
-		copyEventConnections(type);
-		copyDataConnections(type);		
-		copyInterfaceConnections(type);
-		//TODO src officially does not have adapter connections 
+		dstNetwork.getDataConnections().clear();
+		for (Connection connection : subApp.getSubAppNetwork().getDataConnections()) {
+			dstNetwork.getDataConnections().add((DataConnection)createConnection(type, dstNetwork, connection));
+		}
+		
+		dstNetwork.getAdapterConnections().clear();
+		for (Connection connection : subApp.getSubAppNetwork().getAdapterConnections()) {
+			dstNetwork.getAdapterConnections().add((AdapterConnection)createConnection(type, dstNetwork, connection));
+		}
+		
+		type.setFBNetwork(dstNetwork);		
 	}
 
-	private void copyEventConnections(SubAppType type) {
-		FBNetwork srcNetwork = subApp.getSubAppNetwork();
-		for (EventConnection eCon : srcNetwork.getEventConnections()) {
-			Event src = getEventConTarget(eCon.getEventSource(), type);
-			Event dst = getEventConTarget(eCon.getEventDestination(), type);			
-			createEventConnection(type.getFBNetwork(), src, dst, eCon);
+	private Connection createConnection(SubAppType type, FBNetwork dstNetwork, Connection connection) {
+		Connection newConn = EcoreUtil.copy(connection);
+		newConn.setSource(getInterfaceElement(connection.getSource(), type.getInterfaceList(), dstNetwork));
+		newConn.setDestination(getInterfaceElement(connection.getDestination(), type.getInterfaceList(), dstNetwork));
+		return newConn;
+	}
+
+	private IInterfaceElement getInterfaceElement(IInterfaceElement ie, InterfaceList typeInterface, FBNetwork dstNetwork) {
+		if(subApp.equals(ie.getFBNetworkElement())) {
+			return typeInterface.getInterfaceElement(ie.getName());
 		}		
-	}
-
-	private void copyDataConnections(SubAppType type) {
-		FBNetwork srcNetwork = subApp.getSubAppNetwork();
-		for (DataConnection dCon : srcNetwork.getDataConnections()) {
-			VarDeclaration src = getDataConTarget(dCon.getDataSource(), type);
-			VarDeclaration dst = getDataConTarget(dCon.getDataDestination(), type);			
-			createDataConnection(type.getFBNetwork(), src, dst, dCon);
+		FBNetworkElement element = dstNetwork.getElementNamed(ie.getFBNetworkElement().getName());	
+		if(null == element) {
+			return null;
 		}
-	}	
-
-	private void copyInterfaceConnections(SubAppType type) {
-		//currently untyped subapps store interface connection information in the ui model only	
-		//TODO with new subapp design this code may not be necessary any more
-		FBNetwork dstNetwork = type.getFBNetwork();
-		
-//		for (ConnectionView iConnectionView : subAppView.getUiSubAppNetwork().getConnections()) {
-//			ConnectionView conView = (ConnectionView)iConnectionView;  //we only have ConnectionViews in our network
-//			if(conView.getSource().getIInterfaceElement() instanceof Event){				
-//				Event src = getEventConTarget(conView.getSource(), type);
-//				Event dst = getEventConTarget(conView.getDestination(), type);				
-//				createEventConnection(dstNetwork, src, dst, null);				
-//			}else{				
-//				VarDeclaration src = getDataConTarget(conView.getSource(), type);;
-//				VarDeclaration dst = getDataConTarget(conView.getDestination(), type);				
-//				createDataConnection(dstNetwork, src, dst, null);
-//			}
-//		}
+		return element.getInterfaceElement(ie.getName());
 	}
 
-	private void createEventConnection(FBNetwork dstNetwork, Event src,
-			Event dst, EventConnection refEventCon) {
-		if((null != src) && (null != dst)){
-			EventConnection eventCon = LibraryElementFactory.eINSTANCE.createEventConnection();
-			eventCon.setResTypeConnection(true);
-			eventCon.setSource(src);
-			eventCon.setDestination(dst);
-			if(null != refEventCon){
-				performGeneralConnectionConfiguration(eventCon, refEventCon);
-			}
-			if(!connectionExists(dstNetwork.getEventConnections(), eventCon)){
-				dstNetwork.getEventConnections().add(eventCon);
-			}
-		}
-	}
-	
-	private void createDataConnection(FBNetwork dstNetwork, VarDeclaration src,
-			VarDeclaration dst, DataConnection refDataCon) {
-		if((null != src) && (null != dst)){
-			DataConnection dataCon = LibraryElementFactory.eINSTANCE.createDataConnection();
-			dataCon.setResTypeConnection(true);
-			dataCon.setSource(src);
-			dataCon.setDestination(dst);
-			if(null != refDataCon){
-				performGeneralConnectionConfiguration(dataCon, refDataCon);
-			}
-			if(!connectionExists(dstNetwork.getDataConnections(), dataCon)){
-				dstNetwork.getDataConnections().add(dataCon);
-			}
-		}
-	}
-
-	//TODO with the new subapp design coming this should also not be necessary anymore
-	private boolean connectionExists(EList<? extends Connection> connectionList,
-			Connection newConnection) {
-		
-		for (Connection connection : connectionList) {
-			if((connection.getSource().equals(newConnection.getSource())) && 
-					(connection.getDestination().equals(newConnection.getDestination()))){
-				return true;
-			}
+	private void setupVersionInfo(LibraryElement type) {
+		//copied from newFBTypeWizard  TODO consider if we can put this into a comon place
+		VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
+		versionInfo.setAuthor(System.getProperty("user.name")); //$NON-NLS-1$
+		versionInfo.setDate(format.format(new Date(System.currentTimeMillis())));
+		versionInfo.setVersion("1.0"); //$NON-NLS-1$
+		if(type instanceof AdapterType) {
+			type = ((AdapterType)type).getAdapterFBType();
 		}		
-		return false;
+		type.getVersionInfo().clear();
+		type.getVersionInfo().add(versionInfo);
 	}
-
-	private void performGeneralConnectionConfiguration(Connection con,
-			Connection refCon) {
-		con.setComment(refCon.getComment());
-		con.setDx1(refCon.getDx1());
-		con.setDx2(refCon.getDx2());
-		con.setDy(refCon.getDy());
-	}
-
-	private Event getEventConTarget(Event element, SubAppType type) {
-		InterfaceList targetElement = getConTargetElement(element, type);
-		if(null != targetElement){
-			return targetElement.getEvent(element.getName());
-		}
-		return null;
-	}
-
-//	private Event getEventConTarget(InterfaceElementView interfaceElementView, SubAppType type) {
-//		SubAppInterfaceList targetElement = getInterfaceConTargetElement(interfaceElementView, type);
-//		String targetPortName = getConTargetPortName(interfaceElementView);
-//		if(null != targetElement){
-//			return targetElement.getEvent(targetPortName);
-//		}
-//		return null;
-//	}
-	
-	private VarDeclaration getDataConTarget(VarDeclaration element,
-			SubAppType type) {
-		InterfaceList targetElement = getConTargetElement(element, type);
-		if(null != targetElement){
-			return targetElement.getVariable(element.getName());
-		}
-		return null;
-	}
-
-//	private VarDeclaration getDataConTarget(InterfaceElementView interfaceElementView, SubAppType type) {
-//		SubAppInterfaceList targetElement = getInterfaceConTargetElement(interfaceElementView, type);
-//		String targetPortName = getConTargetPortName(interfaceElementView);
-//		if(null != targetElement){
-//			return targetElement.getVariable(targetPortName);
-//		}
-//		return null;
-//	}
-//	
-//	private SubAppInterfaceList getInterfaceConTargetElement(
-//			InterfaceElementView interfaceElementView, SubAppType type) {
-//		if(interfaceElementView instanceof InternalSubAppInterfaceElementView){
-//			return type.getInterfaceList();
-//		}else{
-//			return getConTargetElement(interfaceElementView.getIInterfaceElement(), type);
-//		}
-//	}
-
-	private InterfaceList getConTargetElement(
-			IInterfaceElement iInterfaceElement, SubAppType type) {
-		
-		FBNetworkElement target =  iInterfaceElement.getFBNetworkElement();
-		for (FBNetworkElement element : type.getFBNetwork().getNetworkElements()) {
-			if(element.getName().equals(target.getName())){
-				return element.getInterface();
-			}			
-		}
-		return null;
-	}
-
-//	private String getConTargetPortName(InterfaceElementView interfaceElementView) {
-//		if(interfaceElementView instanceof InternalSubAppInterfaceElementView){
-//			return interfaceElementView.getLabel().replace('.', '_');
-//		}
-//		return interfaceElementView.getIInterfaceElement().getName();
-//	}
 
 }
