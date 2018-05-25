@@ -30,6 +30,9 @@ public class DeleteTransitionCommand extends Command {
 
 	/** The source. */
 	private ECState source;
+	
+	private int oldSourcePos;
+	private int oldTransitionPos;
 
 	/** The dest. */
 	private ECState dest;
@@ -52,8 +55,10 @@ public class DeleteTransitionCommand extends Command {
 	@Override
 	public void execute() {
 		parent = (ECC) transition.eContainer();
+		oldTransitionPos = parent.getECTransition().indexOf(transition);
 
 		source = transition.getSource();
+		oldSourcePos = source.getOutTransitions().indexOf(transition);
 		dest = transition.getDestination();
 
 		transition.setSource(null);
@@ -68,8 +73,9 @@ public class DeleteTransitionCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		parent.getECTransition().add(transition);
+		parent.getECTransition().add(oldTransitionPos, transition);
 		transition.setSource(source);
+		source.getOutTransitions().move(oldSourcePos, transition);
 		transition.setDestination(dest);
 	}
 
