@@ -105,13 +105,13 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		Scanner scanner = null;
 		try{
 			scanner =  new Scanner(element.getContents());
-			if(null != scanner.findWithinHorizon("BasicFB", 0)){
+			if(null != scanner.findWithinHorizon("BasicFB", 0)){ //$NON-NLS-1$
 				image = FordiacImage.ICON_BasicFB.getImage();
 				
 			}
 			else{
 				scanner.reset();
-				if(null != scanner.findWithinHorizon("FBNetwork", 0)){
+				if(null != scanner.findWithinHorizon("FBNetwork", 0)){ //$NON-NLS-1$
 					image = FordiacImage.ICON_CompositeFB.getImage();
 					
 				}else{
@@ -186,7 +186,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		}
 		
 		if(null != type){
-			return type.getName() + ": " + ((null == type.getComment()) ? "" : type.getComment());
+			return type.getName() + ": " + ((null == type.getComment()) ? "" : type.getComment()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 		return null;

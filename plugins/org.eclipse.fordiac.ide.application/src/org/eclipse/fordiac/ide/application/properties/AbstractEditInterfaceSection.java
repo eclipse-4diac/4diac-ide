@@ -131,7 +131,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		inputsViewer.setLabelProvider(new InterfaceLabelProvider());
 		Composite composite = new Composite(inputsGroup, SWT.NONE);
 		composite.setLayout(new FillLayout(SWT.VERTICAL));
-		createInput = getWidgetFactory().createButton(composite, "", SWT.PUSH);
+		createInput = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
 		createInput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createInput.setToolTipText("Create interface element");
 		createInput.addSelectionListener(new SelectionAdapter() {
@@ -201,7 +201,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		outputsViewer.setLabelProvider(new InterfaceLabelProvider());
 		Composite composite = new Composite(outputsGroup, SWT.NONE);
 		composite.setLayout(new FillLayout(SWT.VERTICAL));
-		createOutput = getWidgetFactory().createButton(composite, "", SWT.PUSH);
+		createOutput = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
 		createOutput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createOutput.setToolTipText("Create interface element");
 		createOutput.addSelectionListener(new SelectionAdapter() {

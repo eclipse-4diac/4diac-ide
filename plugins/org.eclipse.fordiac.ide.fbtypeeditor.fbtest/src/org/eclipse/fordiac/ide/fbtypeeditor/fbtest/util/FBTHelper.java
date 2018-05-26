@@ -240,12 +240,12 @@ public class FBTHelper {
 				Boolean inputQualifier=false;
 				boolean useInputQualifier=false;
 				/** Evaluate Event-Data */
-				if (event.contains("-")) {
-					event = event.substring(0, event.indexOf("-"));
+				if (event.contains("-")) { //$NON-NLS-1$
+					event = event.substring(0, event.indexOf("-")); //$NON-NLS-1$
 					inputQualifier=false;
 					useInputQualifier=true;
-				} else if(event.contains("+")) {
-					event = event.substring(0, event.indexOf("+"));
+				} else if(event.contains("+")) { //$NON-NLS-1$
+					event = event.substring(0, event.indexOf("+")); //$NON-NLS-1$
 					inputQualifier=true;
 					useInputQualifier=true;
 				}
@@ -258,11 +258,11 @@ public class FBTHelper {
 
 					if (useInputQualifier) {
 						String qiDT = null;
-						int qiID = FBTHelper.getDIID(fbType, "QI");
+						int qiID = FBTHelper.getDIID(fbType, "QI"); //$NON-NLS-1$
 
 						if (0<=qiID) {
 							qiDT = FBTHelper.getDIDataType(fbType, qiID);
-							DataVariable qi = new DataVariable("QI", qiID, qiDT, true, inputQualifier.toString() );
+							DataVariable qi = new DataVariable("QI", qiID, qiDT, true, inputQualifier.toString() ); //$NON-NLS-1$
 							tp.addData(qi);
 						}
 					}
@@ -272,11 +272,11 @@ public class FBTHelper {
 					//					String params = ;
 					//TODO extract input data
 					if (null != st.getInputPrimitive().getParameters()) {
-						String[] parameters = st.getInputPrimitive().getParameters().split(";");
+						String[] parameters = st.getInputPrimitive().getParameters().split(";"); //$NON-NLS-1$
 						for (String param : parameters) {
-							param = param.replace(" ", "");
-							param = param.replace("\t", "");
-							String[] left= param.split(":=");
+							param = param.replace(" ", ""); //$NON-NLS-1$ //$NON-NLS-2$
+							param = param.replace("\t", ""); //$NON-NLS-1$ //$NON-NLS-2$
+							String[] left= param.split(":="); //$NON-NLS-1$
 							if (left.length==2) {
 								String diDT = null;
 								int diID = FBTHelper.getDIID(fbType, left[0]);
@@ -302,12 +302,12 @@ public class FBTHelper {
 						Boolean outputQualifier=false;
 						boolean useOutputQualifier=false;
 						/** Evaluate Event-Data */
-						if (event.contains("-")) {
-							event = event.substring(0, event.indexOf("-"));
+						if (event.contains("-")) { //$NON-NLS-1$
+							event = event.substring(0, event.indexOf("-")); //$NON-NLS-1$
 							outputQualifier=false;
 							useOutputQualifier=true;
-						} else if(event.contains("+")) {
-							event = event.substring(0, event.indexOf("+"));
+						} else if(event.contains("+")) { //$NON-NLS-1$
+							event = event.substring(0, event.indexOf("+")); //$NON-NLS-1$
 							outputQualifier=true;
 							useOutputQualifier=true;
 						}
@@ -320,11 +320,11 @@ public class FBTHelper {
 
 							if (useOutputQualifier) {
 								String qoDT = null;
-								int qoID = FBTHelper.getDOID(fbType, "QO");
+								int qoID = FBTHelper.getDOID(fbType, "QO"); //$NON-NLS-1$
 
 								if (0<=qoID) {
 									qoDT = FBTHelper.getDODataType(fbType, qoID);
-									DataVariable qo = new DataVariable("QO", qoID, qoDT, false, outputQualifier.toString() );
+									DataVariable qo = new DataVariable("QO", qoID, qoDT, false, outputQualifier.toString() ); //$NON-NLS-1$
 									tp.addData(qo);
 								}
 							}
@@ -334,11 +334,11 @@ public class FBTHelper {
 						//					String params = ;
 						//TODO extract output data
 						if (null != op.getParameters()) {
-							String[] parameters = op.getParameters().split(";");
+							String[] parameters = op.getParameters().split(";"); //$NON-NLS-1$
 							for (String param : parameters) {
-								param = param.replace(" ", "");
-								param = param.replace("\t", "");
-								String[] left= param.split(":=");
+								param = param.replace(" ", ""); //$NON-NLS-1$ //$NON-NLS-2$
+								param = param.replace("\t", ""); //$NON-NLS-1$ //$NON-NLS-2$
+								String[] left= param.split(":="); //$NON-NLS-1$
 								if (left.length==2) {
 									String doDT = null;
 									int doID = FBTHelper.getDOID(fbType, left[0]);

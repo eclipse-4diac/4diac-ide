@@ -242,7 +242,7 @@ public class SystemExporter {
 	private void addDeviceProfile(Element deviceElement, Device device) {
 		String profileName = device.getProfile();
 		if(null != profileName && !"".equals(profileName)){   //$NON-NLS-1$
-			Element profileAttribute = CommonElementExporter.createAttributeElement(dom, LibraryElementTags.DEVICE_PROFILE, "STRING", profileName, "device profile");		
+			Element profileAttribute = CommonElementExporter.createAttributeElement(dom, LibraryElementTags.DEVICE_PROFILE, "STRING", profileName, "device profile");		 //$NON-NLS-1$ //$NON-NLS-2$
 			deviceElement.appendChild(profileAttribute);
 		}
 		

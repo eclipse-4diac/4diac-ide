@@ -199,19 +199,13 @@ public class TransactionSection extends AbstractServiceSection {
 		});
 		rightOutputPrimitivesDelete = getWidgetFactory().createButton(buttonComp, "Delete", SWT.PUSH);
 		rightOutputPrimitivesDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		rightOutputPrimitivesDelete.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
+		rightOutputPrimitivesDelete.addListener( SWT.Selection, event -> {
 				Object selection = ((TreeSelection)rightOutputPrimitivesViewer.getSelection()).getFirstElement();					
 				if(selection instanceof OutputPrimitive){
 					executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive)selection));
 				}
 				rightOutputPrimitivesViewer.refresh();
-			}
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
-		});
+			});
 	}		
 	
 	protected ServiceTransaction getType(){
@@ -234,7 +228,7 @@ public class TransactionSection extends AbstractServiceSection {
 	private void refreshInputPrimitive(){
 		if(null != getType().getInputPrimitive()){
 			inputPrimitive.setText(null == getType().getInputPrimitive().getParameters() || getType().getInputPrimitive().getParameters().equals("")?  //$NON-NLS-1$
-					getType().getInputPrimitive().getEvent() : getType().getInputPrimitive().getEvent() + "(" + getType().getInputPrimitive().getParameters() + ")");
+					getType().getInputPrimitive().getEvent() : getType().getInputPrimitive().getEvent() + "(" + getType().getInputPrimitive().getParameters() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 			label.setImage( isLeftInterface(getType().getInputPrimitive()) ?
 					FordiacImage.ICON_LeftInputPrimitive.getImage() :
 						FordiacImage.ICON_RigthInputPrimitive.getImage());

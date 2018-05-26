@@ -23,8 +23,6 @@ import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -59,18 +57,12 @@ public class DeviceInterfaceSection extends AbstractDevResInterfaceSection {
 		getWidgetFactory().createCLabel(composite, "Profile:"); 
 		profile = new Combo(composite, SWT.SINGLE | SWT.READ_ONLY);
 		profile.setItems(getAvailableProfileNames());
-		profile.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
+		profile.addListener( SWT.Selection, event -> {
 				removeContentAdapter();				
 				executeCommand(new ChangeProfileCommand((Device) getType(), profile.getText()));
 				refresh();
 				addContentAdapter();
-			}
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
+			});
 		
 		getWidgetFactory().createCLabel(composite, "Instance Comment:"); 
 		commentText = createGroupText(composite, true);

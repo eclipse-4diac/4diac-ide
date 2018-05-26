@@ -34,10 +34,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -173,7 +169,7 @@ public class StateSection extends AbstractECSection {
 	}
 
 	private void createTransitionDownButton(Composite buttonComp) {
-		transitionDown = getWidgetFactory().createButton(buttonComp, "SWT.ARROW |SWT.UP", SWT.ARROW |SWT.DOWN);
+		transitionDown = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW |SWT.DOWN); //$NON-NLS-1$
 		transitionDown.setToolTipText("Move transition down");
 		transitionDown.addListener(SWT.Selection, e -> {
 			Object selection = ((TreeSelection)transitionsOutViewer.getSelection()).getFirstElement();

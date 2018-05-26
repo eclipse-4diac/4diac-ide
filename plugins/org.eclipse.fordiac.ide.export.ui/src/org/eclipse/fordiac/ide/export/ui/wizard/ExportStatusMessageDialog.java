@@ -117,7 +117,7 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 			if(null != string){
 				count += string.length();
 				text.append(string);
-				newLine = "\n";
+				newLine = "\n"; //$NON-NLS-1$
 				text.append(newLine);
 				count += newLine.length();
 			}

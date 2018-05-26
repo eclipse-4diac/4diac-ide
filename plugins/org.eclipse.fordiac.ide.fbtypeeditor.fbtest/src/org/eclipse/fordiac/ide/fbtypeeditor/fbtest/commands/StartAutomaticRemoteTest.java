@@ -61,7 +61,7 @@ public class StartAutomaticRemoteTest extends Command {
         boolean isAutomatedTest=true;
 
         List<TestSequence> testSequences = FBTHelper.extractTestSequences(fbType);
-        String CommID="localhost:"+(60000+numART);
+        String CommID="localhost:"+(60000+numART); //$NON-NLS-1$
         
         if (isAutomatedTest) {
 			boolean isOK=true;

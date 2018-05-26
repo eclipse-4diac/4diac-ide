@@ -34,8 +34,6 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -79,6 +77,7 @@ public class TransitionSection extends AbstractECSection {
 
 		@Override
 		public void documentAboutToBeChanged(final DocumentEvent event) {
+			//nothing todo here
 		}
 	};
 	
@@ -140,18 +139,12 @@ public class TransitionSection extends AbstractECSection {
 		conditionEditingContainer.setLayoutData(compositeLayoutData);
 		
 		eventCombo = new Combo(conditionEditingContainer, SWT.SINGLE | SWT.READ_ONLY | SWT.BORDER);
-		eventCombo.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
+		eventCombo.addListener( SWT.Selection, event -> {
 				removeContentAdapter();
 				executeCommand(new ChangeConditionEventCommand(getType(), eventCombo.getText()));
 				checkEnablement();
 				addContentAdapter();
-			}
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
-		});
+			});
 		
 		getWidgetFactory().createCLabel(conditionEditingContainer, "["); //$NON-NLS-1$
 		

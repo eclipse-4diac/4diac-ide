@@ -66,7 +66,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements Ed
 				// if is array append array size
 				VarDeclaration varDec = (VarDeclaration) getCastedModel();
 				if (varDec.isArray()) {
-					s = s + "[" + varDec.getArraySize() + "]";
+					s = s + "[" + varDec.getArraySize() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			super.setText(s);

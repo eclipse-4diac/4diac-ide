@@ -106,10 +106,10 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 	
 	private static MonitorInformation getMonitoringInfo(Device dev) {
 		for (VarDeclaration varDecl : dev.getVarDeclarations()) {
-			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) { //$NON-NLS-N1
+			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) { //$NON-NLS-$1
 				if (varDecl.getValue() != null) {
 					String val = varDecl.getValue().getValue();
-					if (val.startsWith("%")) {					//$NON-NLS-N1
+					if (val.startsWith("%")) {					//$NON-NLS-1$
 						val = SystemManager.INSTANCE.getReplacedString(dev.getAutomationSystem(), val);
 					}
 					return new MonitorInformation(val);

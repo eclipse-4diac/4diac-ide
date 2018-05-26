@@ -138,7 +138,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 					try {
 						socket = new Socket(InetAddress.getByName(ipAddress), runtimePort);
 						socket.setSoTimeout(500);
-						addWatches("_" + type.getName());
+						addWatches("_" + type.getName()); //$NON-NLS-1$
 						setRunning(true);
 						Thread t = new Thread(new TriggerRequestRunnable(socket, thread));
 						t.start();
@@ -231,8 +231,8 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 			String request = MessageFormat.format(
 					Messages.TCPCommunicationObject_Monitoring_ADD_Watch,
 					new Object[] { 0,
-							element.getFBString() + "." + element.getPortString(),
-							"*" });
+							element.getFBString() + "." + element.getPortString(), //$NON-NLS-1$
+							"*" }); //$NON-NLS-1$
 
 			sendRequest(SendType.addWatch, element.getResourceString(), request, outputStream, inputStream);
 		}
@@ -269,7 +269,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 						new Object[] { i });
 
 				if (running) {
-					sendRequest(SendType.REQ,"", request, outputStream, inputStream);
+					sendRequest(SendType.REQ, "", request, outputStream, inputStream); //$NON-NLS-1$
 				}
 			}
 		}
@@ -377,7 +377,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				String request = MessageFormat.format(
 						Messages.TCPCommunicationObject_Monitoring_Force_Value,
 						new Object[] { 0,
-								element.getValue(), element.getFBString() + "." + element.getPortString(), "true"});
+								element.getValue(), element.getFBString() + "." + element.getPortString(), "true"}); //$NON-NLS-1$ //$NON-NLS-2$
 				sendRequest(SendType.forceValue, element.getResourceString(), request, outputStream, inputStream);
 			}  catch (IOException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
@@ -396,7 +396,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 						String request = MessageFormat.format(
 								Messages.TCPCommunicationObject_WriteParameter,
 								new Object[] { 0,
-										"$e", element.getFBString() + "." + element.getPortString()});
+										"$e", element.getFBString() + "." + element.getPortString()}); //$NON-NLS-1$ //$NON-NLS-2$
 						
 						sendRequest(SendType.triggerEvent, element.getResourceString(), request, outputStream, inputStream);
 

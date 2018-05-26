@@ -45,7 +45,7 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 		text.addSelectionListener(new SelectionAdapter() {
 			public void widgetDefaultSelected(SelectionEvent e) {
 				if (e.detail == SWT.CANCEL) {
-					setSearchFilter("");
+					setSearchFilter(""); //$NON-NLS-1$
 				} else {
 					setSearchFilter(text.getText());
 				}
@@ -78,7 +78,7 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 
 	@Override
 	public String getContributorId() {
-		return "property.contributor.fb";
+		return "property.contributor.fb"; //$NON-NLS-1$
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

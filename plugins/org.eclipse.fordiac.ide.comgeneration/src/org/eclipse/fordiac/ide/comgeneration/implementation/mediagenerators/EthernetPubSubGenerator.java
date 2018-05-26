@@ -22,14 +22,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
-	public static String[] paletteEntrySourceLocal = {"net/PUBL_0", "net/PUBL_1", "net/PUBL_2", "net/PUBL_3", "net/PUBL_4"};
-	public static String[] paletteEntryDestinationsLocal = {"net/SUBL_0", "net/SUBL_1", "net/SUBL_2", "net/SUBL_3", "net/SUBL_4"};
-	public static String[] paletteEntrySource = {"net/PUBLISH_0", "net/PUBLISH_1", "net/PUBLISH_2", "net/PUBLISH_3", "net/PUBLISH_4"};
-	public static String[] paletteEntryDestinations = {"net/SUBSCRIBE_0", "net/SUBSCRIBE_1", "net/SUBSCRIBE_2", "net/SUBSCRIBE_3", "net/SUBSCRIBE_4"};
+	public static String[] paletteEntrySourceLocal = {"net/PUBL_0", "net/PUBL_1", "net/PUBL_2", "net/PUBL_3", "net/PUBL_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	public static String[] paletteEntryDestinationsLocal = {"net/SUBL_0", "net/SUBL_1", "net/SUBL_2", "net/SUBL_3", "net/SUBL_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	public static String[] paletteEntrySource = {"net/PUBLISH_0", "net/PUBLISH_1", "net/PUBLISH_2", "net/PUBLISH_3", "net/PUBLISH_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	public static String[] paletteEntryDestinations = {"net/SUBSCRIBE_0", "net/SUBSCRIBE_1", "net/SUBSCRIBE_2", "net/SUBSCRIBE_3", "net/SUBSCRIBE_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
-	public static String PROTOCOL_ID = "EthernetPubSub";
+	public static String PROTOCOL_ID = "EthernetPubSub"; //$NON-NLS-1$
 	
-	public static String DEFAULT_HOST = "225.0.0.1";
+	public static String DEFAULT_HOST = "225.0.0.1"; //$NON-NLS-1$
 	public static int DEFAULT_START_PORT = 61550;
 	
 	
@@ -46,7 +46,7 @@ public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
 
 	@Override
 	public String getMediaType() {
-		return "Ethernet";
+		return "Ethernet"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
 			palletEntries = (end == ChannelEnd.SOURCE) ? paletteEntrySource : paletteEntryDestinations;
 		}
 		
-		String[] paletteEntryPath = palletEntries[numDataPorts].split("/");
+		String[] paletteEntryPath = palletEntries[numDataPorts].split("/"); //$NON-NLS-1$
 		
 		PaletteGroup group = palette.getRootGroup();
 		
@@ -129,19 +129,19 @@ public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
 		if (sourceValue == null) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(host);
-			sb.append(":");
+			sb.append(":"); //$NON-NLS-1$
 			sb.append(currentPort);
 			currentPort++;
 			sourceValue = sb.toString();
 			sourceId.getValue().setValue(sourceValue);
 			if (sourceQI != null) {
-				sourceQI.getValue().setValue("1");
+				sourceQI.getValue().setValue("1"); //$NON-NLS-1$
 			}
 		}
 		
 		destinationId.getValue().setValue(sourceValue);
 		if (destinationQI != null) {
-			destinationQI.getValue().setValue("1");
+			destinationQI.getValue().setValue("1"); //$NON-NLS-1$
 		}
 	}
 	
@@ -150,7 +150,7 @@ public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
 
 	@Override
 	public VarDeclaration getTargetInputData(int index, FB fb) {
-		String dataName = "SD_" + (index + 1);
+		String dataName = "SD_" + (index + 1); //$NON-NLS-1$
 		for (VarDeclaration var : fb.getInterface().getInputVars()) {
 			if (var.getName().equals(dataName)) {
 				return var;
@@ -161,7 +161,7 @@ public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
 
 	@Override
 	public VarDeclaration getTargetOutputData(int index, FB fb) {
-		String dataName = "RD_" + (index + 1);
+		String dataName = "RD_" + (index + 1); //$NON-NLS-1$
 		for (VarDeclaration var : fb.getInterface().getOutputVars()) {
 			if (var.getName().equals(dataName)) {
 				return var;

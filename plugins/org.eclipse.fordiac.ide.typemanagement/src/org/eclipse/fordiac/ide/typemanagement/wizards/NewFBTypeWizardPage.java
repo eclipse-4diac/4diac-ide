@@ -95,9 +95,9 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
     public String getFileName() {
     	String retval = super.getFileName();	
     	if((null != fbTypeCombo) && (null != fbTypeCombo.getText())){
-    		String splited[] = fbTypeCombo.getText().split("\\.");
+    		String splited[] = fbTypeCombo.getText().split("\\."); //$NON-NLS-1$
     		if(splited.length == 2){
-    			retval= retval + "." + splited[1];
+    			retval= retval + "." + splited[1]; //$NON-NLS-1$
     		}
     	}
     	return retval;
@@ -162,8 +162,8 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		return new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
-				return pathname.getName().toUpperCase().endsWith(".FBT")
-						|| pathname.getName().toUpperCase().endsWith(".ADP")
+				return pathname.getName().toUpperCase().endsWith(".FBT") //$NON-NLS-1$
+						|| pathname.getName().toUpperCase().endsWith(".ADP") //$NON-NLS-1$
 						|| pathname.getName().toUpperCase().endsWith(TypeLibrary.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
 			}
 		};

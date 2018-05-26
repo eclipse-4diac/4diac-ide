@@ -105,7 +105,7 @@ public class BreakpointsView extends ViewPart {
 				if (element instanceof MonitoringElement) {
 					return ((MonitoringElement) element).getBreakpointCondition();
 				}
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 
 			@Override

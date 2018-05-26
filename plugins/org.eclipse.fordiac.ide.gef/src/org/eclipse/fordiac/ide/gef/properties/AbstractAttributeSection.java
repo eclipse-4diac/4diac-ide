@@ -79,7 +79,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
-		attributeNew = getWidgetFactory().createButton(composite, "", SWT.PUSH);
+		attributeNew = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
 		attributeNew.setToolTipText("create attribute");
 		attributeNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
 		attributeNew.addSelectionListener(new SelectionAdapter() {
@@ -91,7 +91,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 				}
 			}
 		});
-		attributeDelete = getWidgetFactory().createButton(composite, "", SWT.PUSH);
+		attributeDelete = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
 		attributeDelete.setToolTipText("delete selected attribute");
 		attributeDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		attributeDelete.addSelectionListener(new SelectionAdapter() {

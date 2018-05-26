@@ -32,7 +32,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -81,7 +80,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 	}
 	
 	protected void createQISection(Composite parent) {
-		qiGroup = getWidgetFactory().createGroup(parent, "QI");	
+		qiGroup = getWidgetFactory().createGroup(parent, "QI");	 //$NON-NLS-1$
 		qiGroup.setLayout(new RowLayout(SWT.VERTICAL));
 		qiGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 	    buttonNone = getWidgetFactory().createButton(qiGroup, "none", SWT.RADIO);
@@ -91,17 +90,17 @@ public class PrimitiveSection extends AbstractServiceSection {
 				refresh();
 			}
 		});
-	    buttonTrue = getWidgetFactory().createButton(qiGroup, "true", SWT.RADIO);
+	    buttonTrue = getWidgetFactory().createButton(qiGroup, "true", SWT.RADIO); //$NON-NLS-1$
 	    buttonTrue.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				changeEventText("true");
+				changeEventText("true"); //$NON-NLS-1$
 				refresh();
 			}
 		});
-	    buttonFalse = getWidgetFactory().createButton(qiGroup, "false", SWT.RADIO);
+	    buttonFalse = getWidgetFactory().createButton(qiGroup, "false", SWT.RADIO); //$NON-NLS-1$
 	    buttonFalse.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				changeEventText("false");
+				changeEventText("false"); //$NON-NLS-1$
 				refresh();
 			}
 		});
@@ -110,15 +109,15 @@ public class PrimitiveSection extends AbstractServiceSection {
 	
 	private void changeEventText(String button){
 		if(null != editPart){
-			String event = getType().getEvent().replace("+", "").replace("-", "");
+			String event = getType().getEvent().replace("+", "").replace("-", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		switch(button){
-			case "true": 
-				editPart.getNameLabel().setText(event + "+");
-				executeCommand(new ChangePrimitiveEventCommand(getType(),event + "+"));
+			case "true":  //$NON-NLS-1$
+				editPart.getNameLabel().setText(event + "+"); //$NON-NLS-1$
+				executeCommand(new ChangePrimitiveEventCommand(getType(),event + "+")); //$NON-NLS-1$
 				break;
-			case "false":
-				editPart.getNameLabel().setText(event + "-");
-				executeCommand(new ChangePrimitiveEventCommand(getType(),event + "-"));
+			case "false": //$NON-NLS-1$
+				editPart.getNameLabel().setText(event + "-"); //$NON-NLS-1$
+				executeCommand(new ChangePrimitiveEventCommand(getType(),event + "-")); //$NON-NLS-1$
 				break;
 			default:
 				editPart.getNameLabel().setText(event);
@@ -135,16 +134,10 @@ public class PrimitiveSection extends AbstractServiceSection {
 		getWidgetFactory().createCLabel(composite, "Interface: ");
 		serviceInterfaceCombo = new Combo(composite, SWT.SINGLE | SWT.READ_ONLY | SWT.BORDER);
 		serviceInterfaceCombo.setLayoutData(new GridData(SWT.FILL, 0, true, false));	
-		serviceInterfaceCombo.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
+		serviceInterfaceCombo.addListener( SWT.Selection, event -> {
 				executeCommand(new ChangePrimitiveInterfaceCommand((Service) getType().eContainer().eContainer().eContainer(), getType(), serviceInterfaceCombo.getText()));
 				refresh();
-			}
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
-		});
+			});
 		getWidgetFactory().createCLabel(composite, "Parameters:"); 
 		parametersText = createGroupText(composite, true);	
 		parametersText.addModifyListener(new ModifyListener() {
@@ -181,15 +174,15 @@ public class PrimitiveSection extends AbstractServiceSection {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if(null != type) {
-			parametersText.setText(getType().getParameters() != null ? getType().getParameters() : "");
+			parametersText.setText(getType().getParameters() != null ? getType().getParameters() : ""); //$NON-NLS-1$
 			setServiceInterfaceDropdown();
 			eventText.setText(getType().getEvent());
 			if(containsQI()){
 				setRadioButton();
 				if(type instanceof OutputPrimitive){
-					qiGroup.setText("QO");
+					qiGroup.setText("QO"); //$NON-NLS-1$
 				}else{
-					qiGroup.setText("QI");
+					qiGroup.setText("QI"); //$NON-NLS-1$
 				}
 				qiGroup.setVisible(true);
 			}
@@ -208,13 +201,13 @@ public class PrimitiveSection extends AbstractServiceSection {
 	protected boolean containsQI(){
 		if(type instanceof InputPrimitive){
 			for (VarDeclaration var : getFB().getInterfaceList().getInputVars()) {
-				if(var.getName().equals("QI")){
+				if(var.getName().equals("QI")){ //$NON-NLS-1$
 					return true;
 				}
 			}
 		}else if(type instanceof OutputPrimitive){
 			for (VarDeclaration var : getFB().getInterfaceList().getOutputVars()) {
-				if(var.getName().equals("QO")){
+				if(var.getName().equals("QO")){ //$NON-NLS-1$
 					return true;
 				}
 			}
@@ -223,12 +216,12 @@ public class PrimitiveSection extends AbstractServiceSection {
 	}
 		
 	public void setRadioButton(){
-		if(getType().getEvent().endsWith("+")){
+		if(getType().getEvent().endsWith("+")){ //$NON-NLS-1$
 			buttonTrue.setSelection(true);
 			buttonFalse.setSelection(false);
 			buttonNone.setSelection(false);
 		}else{
-			if(getType().getEvent().endsWith("-")){
+			if(getType().getEvent().endsWith("-")){ //$NON-NLS-1$
 				buttonFalse.setSelection(true);
 				buttonNone.setSelection(false);
 				buttonTrue.setSelection(false);

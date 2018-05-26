@@ -40,7 +40,7 @@ public class ConnectionTooltipFigure extends Figure {
 		
 		if(null != connection){
 			getEndpointLabel(label, connection.getSource());
-			label.append(" -> ");
+			label.append(" -> "); //$NON-NLS-1$
 			getEndpointLabel(label, connection.getDestination());
 		}
 		

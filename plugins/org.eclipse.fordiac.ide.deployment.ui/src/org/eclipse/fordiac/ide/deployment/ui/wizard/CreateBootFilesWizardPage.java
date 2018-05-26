@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class CreateBootFilesWizardPage extends WizardPage {
 
+	private static final String SETTING_CURRENT_DIR = "currentDir"; //$NON-NLS-1$
 	private IStructuredSelection selection;
 	private DirectoryChooserControl dcc;
 	private DownloadSelectionTree systemTree;
@@ -133,7 +134,7 @@ public class CreateBootFilesWizardPage extends WizardPage {
 	 *         if at least one is invalid
 	 */
 	private boolean validatePage() {
-		if (dcc.getDirectory() == null || dcc.getDirectory().equals("")) {
+		if (dcc.getDirectory() == null || dcc.getDirectory().equals("")) { //$NON-NLS-1$
 			setErrorMessage("Destination not selected!");
 			return false;
 		}
@@ -152,7 +153,7 @@ public class CreateBootFilesWizardPage extends WizardPage {
 	 */
 	private void loadDir() {
 		if (getDialogSettings() != null) {
-			String cachedDir = getDialogSettings().get("currentDir");
+			String cachedDir = getDialogSettings().get(SETTING_CURRENT_DIR);
 			if (cachedDir != null) {
 				setDirectory(cachedDir);
 			}
@@ -179,7 +180,7 @@ public class CreateBootFilesWizardPage extends WizardPage {
 	 *          the current dir
 	 */
 	private void saveDir(final String currentDir) {
-		getDialogSettings().put("currentDir", currentDir);
+		getDialogSettings().put(SETTING_CURRENT_DIR, currentDir);
 	}
 
 	

@@ -210,7 +210,7 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements
 	public String getReplacedString(String value) {
 		String replacedValue = new String();
 		
-		int start = value.indexOf("%", 0);
+		int start = value.indexOf("%", 0); //$NON-NLS-1$
 		int end = -1;
 		
 		if(0 != start){
@@ -220,14 +220,14 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements
 		
 		while(-1 != start){
 			start++; //pass by the starting %
-			end = value.indexOf("%", start);
+			end = value.indexOf("%", start); //$NON-NLS-1$
 			if(-1 != end){
 				String name = value.substring(start, end);
 				name = getValueForName(name);
 				if(null != name){
 					replacedValue += name;	
 				}
-				start = value.indexOf("%", end + 1);
+				start = value.indexOf("%", end + 1); //$NON-NLS-1$
 				if((-1 != start) && (start != end + 1)){
 					replacedValue += value.substring(end + 1, start);
 				}

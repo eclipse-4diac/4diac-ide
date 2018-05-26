@@ -34,7 +34,6 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -71,18 +70,10 @@ public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.propert
 		group.setLayout(new GridLayout(2, false));
 		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
-		fbLabel = getWidgetFactory().createCLabel(group, "");
+		fbLabel = getWidgetFactory().createCLabel(group, ""); //$NON-NLS-1$
 		fbCombo = new Combo(group, SWT.SINGLE | SWT.READ_ONLY);
-		fbCombo.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				fillInterfaceCombo(fbCombo.getText());
-			}
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
-		interfaceElementLabel = getWidgetFactory().createCLabel(group, "");
+		fbCombo.addListener( SWT.Selection, event -> fillInterfaceCombo(fbCombo.getText()));
+		interfaceElementLabel = getWidgetFactory().createCLabel(group, ""); //$NON-NLS-1$
 		interfaceCombo = new Combo(group, SWT.SINGLE | SWT.READ_ONLY);
 		interfaceCombo.addSelectionListener(new SelectionListener() {
 			@Override
@@ -94,13 +85,11 @@ public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.propert
 			}
 		});
 		
-		newConnection = getWidgetFactory().createButton(group, "", SWT.PUSH);
+		newConnection = getWidgetFactory().createButton(group, "", SWT.PUSH); //$NON-NLS-1$
 		newConnection.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		delConnection.setLayoutData(new  GridData(SWT.LEFT, SWT.BOTTOM, false, true));
 		newConnection.setToolTipText("new Connection");	
-		newConnection.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
+		newConnection.addListener( SWT.Selection, event -> {
 				AbstractConnectionCreateCommand cmd = null;
 				if(getType() instanceof Event){
 					cmd = new EventConnectionCreateCommand(getFBNetwork());
@@ -115,10 +104,7 @@ public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.propert
 					executeCommand(cmd);
 					connectionsTree.refresh();
 				}
-			}
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {}
-		});
+			});
 	}
 
 	private FBNetwork getFBNetwork() {
@@ -194,23 +180,17 @@ public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.propert
 		connectionsTree.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 		new AdapterFactoryTreeEditor(connectionsTree.getTree(), adapterFactory);
 				
-		delConnection = getWidgetFactory().createButton(group, "", SWT.PUSH);
+		delConnection = getWidgetFactory().createButton(group, "", SWT.PUSH); //$NON-NLS-1$
 		delConnection.setLayoutData(new  GridData(SWT.RIGHT, SWT.BOTTOM, false, true));
 		delConnection.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		delConnection.setToolTipText("delete Connection");
-		delConnection.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
+		delConnection.addListener( SWT.Selection, event -> {
 				Object selection = ((TreeSelection)connectionsTree.getSelection()).getFirstElement();
 				if(selection instanceof Connection){
 					executeCommand(new DeleteConnectionCommand((Connection)selection));
 					connectionsTree.refresh();
 				}
-			}
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
-		});	
+			});	
 	}
 
 	@Override

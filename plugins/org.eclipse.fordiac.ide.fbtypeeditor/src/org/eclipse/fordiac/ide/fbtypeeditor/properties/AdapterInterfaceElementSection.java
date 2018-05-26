@@ -37,8 +37,6 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -113,20 +111,13 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		typeCombo = new Combo(parent, SWT.SINGLE | SWT.READ_ONLY | SWT.BORDER);
 		GridData languageComboGridData = new GridData(SWT.FILL, 0, true, false);
 		typeCombo.setLayoutData(languageComboGridData);	
-		typeCombo.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
+		typeCombo.addListener( SWT.Selection, event ->  {
 				DataType newType = getTypeForSelection(typeCombo.getText());
 				if(null != newType){
 					executeCommand(new ChangeTypeCommand((VarDeclaration)type, newType));
 					//refresh();
 				}
-			}
-			
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
-		});
+			});
 	}
 
 	protected void setInputCode() {

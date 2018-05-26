@@ -90,9 +90,9 @@ public class ProtocolSelector {
 	}
 	
 	private static String getProtocolIdForMetiaType(Segment segment) {
-		if (segment.getType().getName().equalsIgnoreCase("Ethernet")) {
+		if (segment.getType().getName().equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
 			return EthernetPubSubGenerator.PROTOCOL_ID;
-		} else if (segment.getType().getName().equalsIgnoreCase("Can")) {
+		} else if (segment.getType().getName().equalsIgnoreCase("Can")) { //$NON-NLS-1$
 			return CanPubSubGenerator.PROTOCOL_ID;
 		}
 		return null;
@@ -107,16 +107,16 @@ public class ProtocolSelector {
 				String name1 = o1.getType().getName();
 				String name2 = o2.getType().getName();
 				
-				if (name1.equalsIgnoreCase("Can")) {
-					if (name2.equalsIgnoreCase("Can")) {
+				if (name1.equalsIgnoreCase("Can")) { //$NON-NLS-1$
+					if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$
 						return 0;
 					} else {
 						return -1;
 					}
-				} else if (name1.equalsIgnoreCase("Ethernet")) {
-					if (name2.equalsIgnoreCase("Can")) {
+				} else if (name1.equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
+					if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$
 						return 1;
-					} else if (name2.equalsIgnoreCase("Ethernet")) {
+					} else if (name2.equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
 						return 0;
 					} else {
 						return -1;

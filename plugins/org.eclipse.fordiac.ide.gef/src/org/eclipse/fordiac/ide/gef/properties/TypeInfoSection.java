@@ -80,17 +80,18 @@ public abstract class TypeInfoSection extends AbstractSection {
 	private Group versionInfoGroup;
 	private Button versionInfoNew;
 	private Button versionInfoDelete;
-	private static final String VERSION_PROPERTY = "version";
-	private static final String ORGANIZATION_PROPERTY = "organization";
-	private static final String AUTHOR_PROPERTY = "author";
-	private static final String DATE_PROPERTY = "date";
-	private static final String REMARKS_PROPERTY = "remarks";	
+	private static final String VERSION_PROPERTY = "version"; //$NON-NLS-1$
+	private static final String ORGANIZATION_PROPERTY = "organization"; //$NON-NLS-1$
+	private static final String AUTHOR_PROPERTY = "author"; //$NON-NLS-1$
+	private static final String DATE_PROPERTY = "date"; //$NON-NLS-1$
+	private static final String REMARKS_PROPERTY = "remarks";	 //$NON-NLS-1$
 	
 	protected LibraryElement getType(){
 		return (LibraryElement)type;
 	}
 	
 	protected void setInputInit(){
+		//nothing todo here
 	}
 	
 	@Override
@@ -163,7 +164,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 		});
 		CLabel label = getWidgetFactory().createCLabel(identificationGroup, "Description: ");
 		label.setLayoutData(new GridData(SWT.NONE, SWT.TOP, false, false));
-		descriptionText = getWidgetFactory().createText(identificationGroup, "", SWT.WRAP | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);	
+		descriptionText = getWidgetFactory().createText(identificationGroup, "", SWT.WRAP | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);	 //$NON-NLS-1$
 		GridData descriptionTextData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		descriptionText.setLayoutData(descriptionTextData);
 		descriptionText.addModifyListener(new ModifyListener() {
@@ -287,15 +288,15 @@ public abstract class TypeInfoSection extends AbstractSection {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;		
 		if(null != type) {
-			fbTypeNameText.setText(getType().getName() != null ? getType().getName() : "");
-			commentText.setText(getType().getComment() != null ? getType().getComment() : "");
+			fbTypeNameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
+			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			if(getType().getIdentification() != null){
-				standardText.setText(getType().getIdentification().getStandard() != null ? getType().getIdentification().getStandard() : "");
-				classificationText.setText(getType().getIdentification().getClassification() != null ? getType().getIdentification().getClassification() : "");
-				domainText.setText(getType().getIdentification().getApplicationDomain() != null ? getType().getIdentification().getApplicationDomain() : "");
-				functionText.setText(getType().getIdentification().getFunction() != null ? getType().getIdentification().getFunction() : "");
-				typeText.setText(getType().getIdentification().getType() != null ? getType().getIdentification().getType() : "");
-				descriptionText.setText(getType().getIdentification().getDescription() != null ? getType().getIdentification().getDescription() : "");		
+				standardText.setText(getType().getIdentification().getStandard() != null ? getType().getIdentification().getStandard() : ""); //$NON-NLS-1$
+				classificationText.setText(getType().getIdentification().getClassification() != null ? getType().getIdentification().getClassification() : ""); //$NON-NLS-1$
+				domainText.setText(getType().getIdentification().getApplicationDomain() != null ? getType().getIdentification().getApplicationDomain() : ""); //$NON-NLS-1$
+				functionText.setText(getType().getIdentification().getFunction() != null ? getType().getIdentification().getFunction() : ""); //$NON-NLS-1$
+				typeText.setText(getType().getIdentification().getType() != null ? getType().getIdentification().getType() : ""); //$NON-NLS-1$
+				descriptionText.setText(getType().getIdentification().getDescription() != null ? getType().getIdentification().getDescription() : "");		 //$NON-NLS-1$
 				versionViewer.setInput(getType());
 			}else{
 				getType().setIdentification(LibraryElementFactory.eINSTANCE.createIdentification());

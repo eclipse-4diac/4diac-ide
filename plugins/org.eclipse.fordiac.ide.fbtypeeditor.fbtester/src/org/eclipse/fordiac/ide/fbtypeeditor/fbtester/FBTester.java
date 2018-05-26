@@ -366,7 +366,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 
 	private void saveTestData() {
 		if (path != null) {
-			File testDataFile = new File(path + File.separatorChar + type.getName() + ".forte");
+			File testDataFile = new File(path + File.separatorChar + type.getName() + ".forte"); //$NON-NLS-1$
 			try {
 				FileOutputStream outStream = new FileOutputStream(testDataFile);
 				DataOutputStream dataStream = new DataOutputStream(outStream);
@@ -388,7 +388,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 
 	private void parseTestData() {
 		if (path != null) {
-			File testDataFile = new File(path + File.separatorChar + type.getName() + ".forte");
+			File testDataFile = new File(path + File.separatorChar + type.getName() + ".forte"); //$NON-NLS-1$
 			if (testDataFile.exists()) {
 				FileInputStream fstream;
 				BufferedReader data = null;
@@ -527,9 +527,9 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 			for (int j = 0; j < elements.length; j++) {
 				IConfigurationElement element = elements[j];
 				try {
-					Object obj = element.createExecutableExtension("class");
+					Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (obj instanceof IFBTestConfiguratonCreator) {
-						String label = element.getAttribute("label");
+						String label = element.getAttribute("label"); //$NON-NLS-1$
 						configurations.add(label);
 					}
 				} catch (Exception e) {
@@ -542,7 +542,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 
 	public void createConfigurations(final Composite parent) {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.fbtester.fbTesterConfiguration");
+		IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.fbtester.fbTesterConfiguration"); //$NON-NLS-1$
 		IExtension[] extensions = point.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {
 			IExtension extension = extensions[i];
@@ -550,14 +550,14 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 			for (int j = 0; j < elements.length; j++) {
 				IConfigurationElement element = elements[j];
 				try {
-					Object obj = element.createExecutableExtension("class");
+					Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (obj instanceof IFBTestConfiguratonCreator) {
 						((IFBTestConfiguratonCreator) obj).setType(type);
 						((IFBTestConfiguratonCreator) obj).setGroup(palette.getRootGroup());
 
 						IFBTestConfiguration configuration = ((IFBTestConfiguratonCreator) obj)
 								.createConfigurationPage(parent);
-						String lang = element.getAttribute("label");
+						String lang = element.getAttribute("label"); //$NON-NLS-1$
 						configurations.put(lang, configuration);
 					}
 				} catch (Exception e) {

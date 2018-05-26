@@ -33,9 +33,9 @@ public class AttributeCreateCommand extends Command {
 	@Override
 	public void execute() {
 		attribute = LibraryElementFactory.eINSTANCE.createAttribute();
-		attribute.setName("name");
-		attribute.setComment("comment");
-		attribute.setValue("value");
+		attribute.setName("name"); //$NON-NLS-1$
+		attribute.setComment("comment"); //$NON-NLS-1$
+		attribute.setValue("value"); //$NON-NLS-1$
 		redo();
 	}
 

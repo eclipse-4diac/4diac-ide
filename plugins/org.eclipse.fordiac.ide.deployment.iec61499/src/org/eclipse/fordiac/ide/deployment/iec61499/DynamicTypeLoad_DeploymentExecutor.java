@@ -66,11 +66,11 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 
 	public void createFBType(final FBType fbType, final Resource res) throws CreateFBTypeException {
 		if(null != devMgmCommHandler.getTypes()) {
-			setAttribute(res.getDevice(), "FBType", devMgmCommHandler.getTypes());
+			setAttribute(res.getDevice(), "FBType", devMgmCommHandler.getTypes()); //$NON-NLS-1$
 		}
 		if ((fbType instanceof BasicFBType || fbType instanceof CompositeFBType)
 				&& ( (null != devMgmCommHandler.getTypes() && !devMgmCommHandler.getTypes().contains(fbType.getName())) 
-						|| (null == devMgmCommHandler.getTypes() && !isAttribute(res.getDevice(), fbType.getName(), "FBType")))) {
+						|| (null == devMgmCommHandler.getTypes() && !isAttribute(res.getDevice(), fbType.getName(), "FBType")))) { //$NON-NLS-1$
 			if(fbType instanceof CompositeFBType) {
 				for(FBNetworkElement netelem : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
 					if(!devMgmCommHandler.getTypes().contains(netelem.getTypeName())) {
@@ -89,8 +89,8 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 			try {
 				if (this.devMgmCommHandler instanceof EthernetDeviceManagementCommunicationHandler) {
 					String result = ((EthernetDeviceManagementCommunicationHandler) devMgmCommHandler)
-							.sendREQandRESP("", request);
-					if (result.contains("Reason")) {
+							.sendREQandRESP("", request); //$NON-NLS-1$
+					if (result.contains("Reason")) { //$NON-NLS-1$
 						throw new CreateFBTypeException("LUA skript for " + fbType.getName() + " FBType not executed");
 					} else {
 						devMgmCommHandler.getTypes().add(fbType.getName());
@@ -106,7 +106,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 
 	private boolean isAttribute(Device device, String fbTypeName, String attributeType) {
 		if(null != device.getAttribute(attributeType)) {			
-			for(String s : device.getAttributeValue(attributeType).split(",")) {
+			for(String s : device.getAttributeValue(attributeType).split(",")) { //$NON-NLS-1$
 				if(fbTypeName.equals(s.trim())) {
 					return true;
 				}
@@ -118,7 +118,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 	private void setAttribute(Device device, String string, HashSet<String> hashSet) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				device.setAttribute(string, "STRING", String.join(", ", hashSet), "created during deployment");
+				device.setAttribute(string, "STRING", String.join(", ", hashSet), "created during deployment"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 		});
 	}
@@ -135,9 +135,8 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 					new Object[] { id++, adapterKey, luaSkript });
 			try {
 				if (this.devMgmCommHandler instanceof EthernetDeviceManagementCommunicationHandler) {
-					String result = ((EthernetDeviceManagementCommunicationHandler) devMgmCommHandler).sendREQandRESP("",
-							request);
-					if (result.contains("Reason")) {
+					String result = ((EthernetDeviceManagementCommunicationHandler) devMgmCommHandler).sendREQandRESP("", request); //$NON-NLS-1$
+					if (result.contains("Reason")) { //$NON-NLS-1$
 						throw new CreateFBTypeException(
 								"LUA skript for " + adapterKey + " AdapterType not executed");
 					} else {
@@ -158,7 +157,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 			try {
 				sendQUERY(res.getName(), request);
 			} catch (IOException e) {
-				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "FB Types" }));
+				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "FB Types" })); //$NON-NLS-1$
 			}
 		}
 		FBType fbType = fb.getType();

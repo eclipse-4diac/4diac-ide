@@ -259,7 +259,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		Scanner scanner;
 		try {
 			scanner = new Scanner(file.getContents());
-			if(null != scanner.findWithinHorizon("<libraryElement:AutomationSystem", 0)){
+			if(null != scanner.findWithinHorizon("<libraryElement:AutomationSystem", 0)){ //$NON-NLS-1$
 				//it is an Automation system
 				final IProject project = file.getProject();
 				if(!file.getName().equals(file.getProject().getName() + ".xml")){ //$NON-NLS-1$

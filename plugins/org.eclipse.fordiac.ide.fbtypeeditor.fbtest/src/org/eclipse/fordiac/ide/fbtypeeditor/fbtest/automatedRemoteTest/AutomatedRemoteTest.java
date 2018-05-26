@@ -39,7 +39,7 @@ import org.eclipse.fordiac.ide.util.comm.exceptions.CommException;
 public class AutomatedRemoteTest {
 
 	FBType fbType;
-	String fbInterface="";
+	String fbInterface=""; //$NON-NLS-1$
 	String MgrID;
 	
 	List<IEC_ANY> sendList = new ArrayList<IEC_ANY>();
@@ -58,7 +58,7 @@ public class AutomatedRemoteTest {
 	ART_TCPClient TCPTestInterface;
 	
 	ART_DeploymentMgr DMgr;
-	public String DMgr_response="";
+	public String DMgr_response=""; //$NON-NLS-1$
 	
 	public boolean prepareART (FBType fbType, List<TestSequence> paTestSequences) {
 		this.fbType = fbType;
@@ -86,7 +86,7 @@ public class AutomatedRemoteTest {
 	}
 
 	private boolean prepareInterface () {
-		fbInterface="";
+		fbInterface=""; //$NON-NLS-1$
 		IEC_UINT InputEventID = new IEC_UINT();
 		IEC_UINT OutputEventID = new IEC_UINT();
 		

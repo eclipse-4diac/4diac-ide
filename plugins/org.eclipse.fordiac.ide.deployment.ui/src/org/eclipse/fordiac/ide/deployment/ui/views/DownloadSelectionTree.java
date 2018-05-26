@@ -294,7 +294,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 					return getSelectedString(element);
 				}
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		
 	}

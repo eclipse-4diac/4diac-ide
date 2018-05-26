@@ -37,7 +37,7 @@ public class ResourceMoveCommand extends Command {
 			Abstract4DIACUIPlugin.statusLineErrorMessage("Device needs at least one Resource!");
 			return false;
 		}else {
-			Abstract4DIACUIPlugin.statusLineErrorMessage("");
+			Abstract4DIACUIPlugin.statusLineErrorMessage(""); //$NON-NLS-1$
 			return true;
 		}
 	}

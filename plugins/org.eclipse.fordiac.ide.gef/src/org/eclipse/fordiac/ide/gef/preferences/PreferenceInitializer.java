@@ -35,7 +35,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(DiagramPreferences.SNAP_TO_GRID, true);
 		store.setDefault(DiagramPreferences.SHOW_GRID, true);
 		store.setDefault(DiagramPreferences.GRID_SPACING, 20);
-		store.setDefault(DiagramPreferences.CONNECTION_ROUTER, "Adjustable Router (no Jumplinks)");
+		store.setDefault(DiagramPreferences.CONNECTION_ROUTER, "Adjustable Router (no Jumplinks)"); //$NON-NLS-1$
 		PreferenceConverter.setDefault(store, DiagramPreferences.SELECTION_COLOR, ColorConstants.gray.getRGB());
 		store.setDefault(DiagramPreferences.CORNER_DIM, 14);
 	}

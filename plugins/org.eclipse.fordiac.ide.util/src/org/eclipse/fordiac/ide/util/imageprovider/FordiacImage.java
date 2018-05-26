@@ -132,8 +132,8 @@ public enum FordiacImage {
 	
 	// @formatter:on
 
-	private static final String IMAGES_DIRECTORY = "images";
-	private static final String FORDIAC_IMAGE_PROPERTIES = "fordiacimages";
+	private static final String IMAGES_DIRECTORY = "images"; //$NON-NLS-1$
+	private static final String FORDIAC_IMAGE_PROPERTIES = "fordiacimages"; //$NON-NLS-1$
 	private static ResourceBundle foridacImageProperties = ResourceBundle
 			.getBundle(FORDIAC_IMAGE_PROPERTIES);
 

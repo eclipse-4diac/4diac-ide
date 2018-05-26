@@ -212,8 +212,8 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 				return;
 			}
 
-			add(new Label(dev.getName() + "." + res.getName() + "."
-					+ fbNetElement.getName() + "." + getIInterfaceElement().getName()),BorderLayout.TOP);
+			add(new Label(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
+					+ fbNetElement.getName() + "." + getIInterfaceElement().getName()),BorderLayout.TOP); //$NON-NLS-1$
 
 		}
 	}

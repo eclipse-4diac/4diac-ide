@@ -37,10 +37,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 public class CommFBGenerator {
-	private static final String GENERATED_ANNOTATION = "generatedComm";
-	private static final String GENERATED_SOURCE_FB_ANNOTATION = "generatedSrcFB";
-	private static final String GENERATED_DESTINATION_FB_ANNOTATION = "generatedDestFB";
-	private static final String GENERATED_FOR_CONNECTION_ANNOTATION = "generatedForConnection";
+	private static final String GENERATED_ANNOTATION = "generatedComm"; //$NON-NLS-1$
+	private static final String GENERATED_SOURCE_FB_ANNOTATION = "generatedSrcFB"; //$NON-NLS-1$
+	private static final String GENERATED_DESTINATION_FB_ANNOTATION = "generatedDestFB"; //$NON-NLS-1$
+	private static final String GENERATED_FOR_CONNECTION_ANNOTATION = "generatedForConnection"; //$NON-NLS-1$
 	private Set<GeneratedFBInfo> generatedFBs;
 	private TransferedData transferedData;
 	private MediaSpecificGeneratorFactory specificGeneratorFactory;

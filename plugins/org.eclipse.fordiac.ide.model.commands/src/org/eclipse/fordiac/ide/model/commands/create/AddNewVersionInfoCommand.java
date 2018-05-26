@@ -26,7 +26,7 @@ import org.eclipse.gef.commands.Command;
 public class AddNewVersionInfoCommand extends Command {
 	
 	/** The format. */
-	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); //$NON-NLS-1$
 
 	/** The type. */
 	private LibraryElement type;
@@ -54,10 +54,10 @@ public class AddNewVersionInfoCommand extends Command {
 	public void execute() {
 		info = LibraryElementFactory.eINSTANCE.createVersionInfo();
 		info.setDate(format.format(new Date(System.currentTimeMillis())));
-		info.setAuthor("Unknown");
+		info.setAuthor("Unknown"); 
 		info.setOrganization("Unknown");
-		info.setVersion("1.0");	
-		info.setRemarks("");
+		info.setVersion("1.0");	 //$NON-NLS-1$
+		info.setRemarks(""); //$NON-NLS-1$
 		redo();
 	}
 

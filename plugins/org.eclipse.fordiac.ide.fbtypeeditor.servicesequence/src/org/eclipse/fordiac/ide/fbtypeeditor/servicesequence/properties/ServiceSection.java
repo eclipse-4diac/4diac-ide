@@ -209,10 +209,10 @@ public class ServiceSection extends AbstractServiceSection {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;		
 		if(null != type) {
-			leftNameText.setText(null != getType().getService().getLeftInterface() ? getType().getService().getLeftInterface().getName() : "");
-			leftCommentText.setText(null != getType().getService().getLeftInterface() && null != getType().getService().getLeftInterface().getComment() ? getType().getService().getLeftInterface().getComment() : "");
-			rightNameText.setText(null != getType().getService().getRightInterface() ? getType().getService().getRightInterface().getName() : "");
-			rightCommentText.setText(null != getType().getService().getRightInterface() && null != getType().getService().getRightInterface().getComment() ? getType().getService().getRightInterface().getComment() : "");		
+			leftNameText.setText(null != getType().getService().getLeftInterface() ? getType().getService().getLeftInterface().getName() : ""); //$NON-NLS-1$
+			leftCommentText.setText(null != getType().getService().getLeftInterface() && null != getType().getService().getLeftInterface().getComment() ? getType().getService().getLeftInterface().getComment() : ""); //$NON-NLS-1$
+			rightNameText.setText(null != getType().getService().getRightInterface() ? getType().getService().getRightInterface().getName() : ""); //$NON-NLS-1$
+			rightCommentText.setText(null != getType().getService().getRightInterface() && null != getType().getService().getRightInterface().getComment() ? getType().getService().getRightInterface().getComment() : "");		 //$NON-NLS-1$
 			sequencesViewer.setInput(getType().getService());
 		} 
 		commandStack = commandStackBuffer;

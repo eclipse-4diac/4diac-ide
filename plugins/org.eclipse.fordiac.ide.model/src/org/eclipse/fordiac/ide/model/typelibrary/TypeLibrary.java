@@ -465,7 +465,7 @@ public class TypeLibrary implements TypeLibraryTags{
 
 		IFolder link = toolLibProject.getFolder(TOOL_LIBRARY_PROJECT_NAME);
 
-		final String typeLibPath = System.getProperty("4diac.typelib.path");
+		final String typeLibPath = System.getProperty("4diac.typelib.path"); //$NON-NLS-1$
 
 		final IPath location;
 

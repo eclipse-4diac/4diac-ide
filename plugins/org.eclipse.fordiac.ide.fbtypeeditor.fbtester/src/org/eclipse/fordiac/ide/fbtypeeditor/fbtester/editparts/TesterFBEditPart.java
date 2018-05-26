@@ -45,7 +45,7 @@ public class TesterFBEditPart extends
 	@Override
 	protected void refreshName() {
 		// always display empty name in fb tester
-		getNameLabel().setText("");
+		getNameLabel().setText(""); //$NON-NLS-1$
 	}
 
 	@Override

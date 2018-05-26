@@ -178,7 +178,7 @@ public class TCPCommunicationObject {
 				Messages.TCPCommunicationObject_Monitoring_ADD_Watch,
 				new Object[] { this.id++,
 						element.getQualifiedString(),
-						"*" });
+						"*" }); //$NON-NLS-1$
 		String response = sendRequest(SendType.addWatch, null, request,
 				element.getResourceString());
 		//TODO show somehow the feeback if the response contained a reason that it didn't work
@@ -190,7 +190,7 @@ public class TCPCommunicationObject {
 				Messages.TCPCommunicationObject_Monitoring_Delete_Watch,
 				new Object[] { this.id++,
 						element.getQualifiedString(),
-						"*" });
+						"*" }); //$NON-NLS-1$
 		String response = sendRequest(SendType.removeWatch, null, request,
 				element.getResourceString());
 		element.setOffline(response == null);
@@ -210,7 +210,7 @@ public class TCPCommunicationObject {
 				Messages.TCPCommunicationObject_Monitoring_Read_Watches,
 				new Object[] { this.id++ });
 
-		String response = sendRequest(SendType.REQ, device, request, "");
+		String response = sendRequest(SendType.REQ, device, request, ""); //$NON-NLS-1$
 		if (response != null) {
 			evaluateResponse(system, device, response);
 		}
@@ -332,7 +332,7 @@ public class TCPCommunicationObject {
 							for (FB fb : res.getFbs()) {
 								for (Port p : fb.getPorts()) {
 									final MonitoringBaseElement element = MonitoringManager.getInstance()
-											.getMonitoringElementByPortString(system.getName(), device.getName() + "." + res.getName()
+											.getMonitoringElementByPortString(system.getName(), device.getName() + "." + res.getName() //$NON-NLS-1$
 													+ "." + fb.getName() //$NON-NLS-1$
 													+ "." + p.getName()); //$NON-NLS-1$
 									if (element != null && element instanceof MonitoringElement) {
@@ -350,7 +350,7 @@ public class TCPCommunicationObject {
 											monitoringElement.setUsec(timeAsLong % 1000);
 											monitoringElement.setCurrentValue(d.getValue());
 											if (d.getForced() != null) {
-												monitoringElement.setForce(d.getForced().equals("true"));
+												monitoringElement.setForce(d.getForced().equals("true")); //$NON-NLS-1$
 //												if (element.isForce()) {
 //													element.setForceValue(d.getValue());
 //												}
@@ -365,9 +365,9 @@ public class TCPCommunicationObject {
 			}
 
 		} catch (WrappedException ex) {
-			Activator.getDefault().logError("",ex);
+			Activator.getDefault().logError("",ex); //$NON-NLS-1$
 		} catch (IOException ex) {
-			Activator.getDefault().logError("",ex);
+			Activator.getDefault().logError("",ex); //$NON-NLS-1$
 		}
 
 	}
@@ -405,7 +405,7 @@ public class TCPCommunicationObject {
 		String request = MessageFormat.format(
 				Messages.TCPCommunicationObject_WriteParameter,
 				new Object[] { this.id++,
-						"$e", element.getQualifiedString()});
+						"$e", element.getQualifiedString()}); //$NON-NLS-1$
 		 sendRequest(SendType.triggerEvent, null, request, element.getResourceString());
 	}
 	
@@ -420,7 +420,7 @@ public class TCPCommunicationObject {
 		String request = MessageFormat.format(
 				Messages.TCPCommunicationObject_Monitoring_Force_Value,
 				new Object[] { this.id++,
-						value, element.getQualifiedString(), "true"});
+						value, element.getQualifiedString(), "true"}); //$NON-NLS-1$
 
 		sendRequest(SendType.forceValue, null, request, element.getResourceString());
 	}
@@ -429,7 +429,7 @@ public class TCPCommunicationObject {
 		String request = MessageFormat.format(
 				Messages.TCPCommunicationObject_Monitoring_Force_Value,
 				new Object[] { this.id++,
-						"*", element.getQualifiedString(), "false"});
+						"*", element.getQualifiedString(), "false"});  //$NON-NLS-1$//$NON-NLS-2$
 
 		sendRequest(SendType.forceValue, null, request, element.getResourceString());
 		// sendRequest(SendType.forceValue, null, null, forceValue);
