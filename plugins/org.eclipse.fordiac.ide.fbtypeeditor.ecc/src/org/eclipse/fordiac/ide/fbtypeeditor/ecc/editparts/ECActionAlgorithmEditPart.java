@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2016 TU Wien ACIN, Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2011 - 2018 TU Wien ACIN, Profactor GmbH, fortiss GmbH, 
+ * 								Johannes Kepler University Linz (JKU) 
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -81,16 +82,13 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 
 		@Override
 		public void notifyChanged(Notification notification) {
+			super.notifyChanged(notification);
 			if (notification.getEventType() == Notification.SET) {
-				if (null != getAction().getAlgorithm()) {
-					if (getAction().getAlgorithm().getName().equals(notification.getNewValue())) {
-						super.notifyChanged(notification);
+				if (null != getAction().getAlgorithm() && getAction().getAlgorithm().getName().equals(notification.getNewValue())) {
 						refreshAlgLabel();
-					}
 				}
 			}
 		}
-
 	};
 
 	/** The property change listener. */
@@ -116,10 +114,8 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			// getCastedModel().getPosition().eAdapters().add(adapter);
-			// addapt to the fbtype so that we get informed on interface changes
-
 			getAction().eAdapters().add(adapter);
+			// addapt to the fbtype so that we get informed on alg name changes
 			ECActionHelpers.getFBType(getAction()).eAdapters().add(fbAdapter);
 			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		}
@@ -134,7 +130,6 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			// getCastedModel().getPosition().eAdapters().remove(adapter);
 			getAction().eAdapters().remove(adapter);
 			FBType fbtype = ECActionHelpers.getFBType(getAction());
 			if (fbtype != null) {

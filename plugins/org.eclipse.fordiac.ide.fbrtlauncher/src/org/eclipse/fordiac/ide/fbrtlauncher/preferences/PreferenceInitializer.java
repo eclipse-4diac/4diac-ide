@@ -32,25 +32,18 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		boolean isWin32 = Platform.getOS().equalsIgnoreCase(Platform.OS_WIN32);
 		boolean isLinux = Platform.getOS().equalsIgnoreCase(Platform.OS_LINUX);
+		boolean isMacOS = Platform.getOS().equalsIgnoreCase(Platform.OS_MACOSX);
 		if (isWin32) {
-			store.setDefault(PreferenceConstants.P_PATH,
-					"C:\\Training\\FBRT\\fbrt.jar"); //$NON-NLS-1$
-			store
-					.setDefault(
-							PreferenceConstants.P_LIB,
-							"convert;crypt;events;hmi;ita;mach;math;mva;net;plc;process;student;template;test;"); //$NON-NLS-1$
-		} else if (isLinux) {
-			store.setDefault(PreferenceConstants.P_PATH,
-					"/Training/FBRT/fbrt.jar"); //$NON-NLS-1$
-			store
-					.setDefault(
-							PreferenceConstants.P_LIB,
-							"convert;crypt;events;hmi;ita;mach;math;mva;net;plc;process;student;template;test;"); //$NON-NLS-1$
-		} else {
-			store.setDefault(PreferenceConstants.P_PATH,
-					"Set path to the FBRT ...");
+			store.setDefault(PreferenceConstants.P_PATH, "C:\\Training\\FBRT\\fbrt.jar"); //$NON-NLS-1$
 			store.setDefault(PreferenceConstants.P_LIB,
-					"Set the used FBRT Libraries ...");
+					"convert;crypt;events;hmi;ita;mach;math;mva;net;plc;process;student;template;test;"); //$NON-NLS-1$
+		} else if (isLinux || isMacOS) {
+			store.setDefault(PreferenceConstants.P_PATH, "/Training/FBRT/fbrt.jar"); //$NON-NLS-1$
+			store.setDefault(PreferenceConstants.P_LIB,
+					"convert;crypt;events;hmi;ita;mach;math;mva;net;plc;process;student;template;test;"); //$NON-NLS-1$
+		} else {
+			store.setDefault(PreferenceConstants.P_PATH, "Set path to the FBRT ...");
+			store.setDefault(PreferenceConstants.P_LIB, "Set the used FBRT Libraries ...");
 		}
 	}
 

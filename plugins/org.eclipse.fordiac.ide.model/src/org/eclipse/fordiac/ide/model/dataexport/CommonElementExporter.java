@@ -125,7 +125,7 @@ public abstract class CommonElementExporter {
 		return attributeElement;
 	}
 
-	private Transformer createXMLTransformer()
+	private static Transformer createXMLTransformer()
 			throws TransformerFactoryConfigurationError, TransformerConfigurationException {
 		TransformerFactory tFactory = TransformerFactory.newInstance();
 		tFactory.setAttribute("indent-number", Integer.valueOf(2)); //$NON-NLS-1$
@@ -380,7 +380,7 @@ public abstract class CommonElementExporter {
 		return LibraryElementTags.INTERFACE_LIST_ELEMENT;
 	}
 
-	private void createAdapterList(final Document dom,
+	private static void createAdapterList(final Document dom,
 			final Element parentElement, final List<AdapterDeclaration> adapterList, final String elementName) {
 		if (adapterList.size() > 0) {
 			Element adpaterListElement = dom.createElement(elementName);
@@ -391,7 +391,7 @@ public abstract class CommonElementExporter {
 		}
 	}
 
-	private void addAdapterDeclaration(final Document dom,
+	private static void addAdapterDeclaration(final Document dom,
 			final Element parentElement, final AdapterDeclaration adapterDecl) {
 		Element adatperElement = dom.createElement(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
 
@@ -719,7 +719,7 @@ public abstract class CommonElementExporter {
 	 * @param sequences
 	 *            the sequences
 	 */
-	private void addServiceSequences(final Document dom,
+	private static void addServiceSequences(final Document dom,
 			final Element serviceElement, final List<ServiceSequence> sequences) {
 		for (Iterator<ServiceSequence> iter = sequences.iterator(); iter
 				.hasNext();) {

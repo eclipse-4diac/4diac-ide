@@ -34,7 +34,7 @@
  *******************************************************************************/
  -->
 <!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
-<FBType Comment="Tamplate for a simple Basic Function Block Type" Name="Basic">
+<FBType Comment="Template for a simple Basic Function Block Type" Name="Basic">
   <Identification Standard="61499-2"/>
   <VersionInfo Author="4DIAC-IDE" Date="2016-05-26" Organization="4DIAC-Consortium" Version="0.0"/>
   <VersionInfo Author="AZ" Date="2016-05-26" Organization="fortiss GmbH" Version="1.0"/>

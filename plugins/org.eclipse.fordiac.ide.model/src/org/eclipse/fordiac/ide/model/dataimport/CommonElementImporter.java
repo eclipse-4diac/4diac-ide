@@ -97,10 +97,8 @@ class CommonElementImporter {
 				.getNamedItem(LibraryElementTags.ORGANIZATION_ATTRIBUTE);
 		if (organization != null) {
 			versionInfo.setOrganization(organization.getNodeValue());
-		} else {
-			throw new TypeImportException(
-					Messages.CommonElementImporter_ERROR_Missing_Organization);
-		}
+		} 
+		
 		Node version = map.getNamedItem(LibraryElementTags.VERSION_ATTRIBUTE);
 		if (version != null) {
 			versionInfo.setVersion(version.getNodeValue());
@@ -221,7 +219,7 @@ class CommonElementImporter {
 		Node value = attributeMap.getNamedItem(LibraryElementTags.VALUE_ATTRIBUTE);
 		Node comment = attributeMap.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if(null != name && null != value){
-			confObject.setAttribute(name.getNodeValue(), null == type ? "STRING" : type.getNodeValue(), value.getNodeValue(), comment.getNodeValue());
+			confObject.setAttribute(name.getNodeValue(), null == type ? "STRING" : type.getNodeValue(), value.getNodeValue(), comment.getNodeValue()); //$NON-NLS-1$
 		}		
 	}
 	

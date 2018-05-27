@@ -99,7 +99,21 @@
             name="Templates">
             <keywordReference id="org.eclipse.fordiac.ide.model.structuredtext.ui.keyword_StructuredText"/>
         </page>
+        <page
+            category="org.eclipse.fordiac.ide.model.structuredtext.StructuredText"
+            class="org.eclipse.fordiac.ide.model.structuredtext.ui.preferences.StructuredTextAutoInsertPreferences"
+            id="org.eclipse.fordiac.ide.model.structuredtext.StructuredText.AutoInsert"
+            name="Auto Insert">
+            <keywordReference id="org.eclipse.fordiac.ide.model.structuredtext.ui.keyword_StructuredText"/>
+        </page>
     </extension>
+    <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.model.structuredtext.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+    
     <extension
             point="org.eclipse.ui.propertyPages">
         <page

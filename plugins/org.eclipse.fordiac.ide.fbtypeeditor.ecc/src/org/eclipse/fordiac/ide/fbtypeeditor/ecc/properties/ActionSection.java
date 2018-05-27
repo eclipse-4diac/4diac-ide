@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
+ * Copyright (c) 2015 - 2018 fortiss GmbH, Johannes Kepler University Linz (JKU)
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,18 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeOutputCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateAlgorithmCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteAlgorithmCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ActionContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithm;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionHelpers;
@@ -35,24 +31,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class ActionSection extends AbstractECSection {
@@ -60,10 +49,9 @@ public class ActionSection extends AbstractECSection {
 	private Combo algorithmCombo;
 	private Combo outputEventCombo;
 	private AlgorithmGroup algorithmGroup;
-	private Hashtable<String, Event> events = new Hashtable<String, Event>();
-	private TreeViewer algorithmsViewer;	
-	private Button algorithmNew;
-	private Button algorithmDelete;
+	private AlgorithmList algorithmList;
+	
+	private Map<String, Event> events = new HashMap<>();
 	
 	@Override
 	protected ECAction getType() {
@@ -121,9 +109,7 @@ public class ActionSection extends AbstractECSection {
 		
 		getWidgetFactory().createCLabel(actionComposite, "Algorithm: ");
 		algorithmCombo = new Combo(actionComposite, SWT.SINGLE | SWT.READ_ONLY);
-		algorithmCombo.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
+		algorithmCombo.addListener(SWT.Selection, event -> {
 				removeContentAdapter();
 				if(algorithmCombo.indexOf(algorithmCombo.getText()) > 0){
 					BasicFBType fb = ECActionHelpers.getFBType(getType());
@@ -135,84 +121,33 @@ public class ActionSection extends AbstractECSection {
 					executeCommand(new ChangeAlgorithmCommand(getType(), null));
 				}
 				algorithmGroup.setAlgorithm(getAlgorithm());
-				algorithmsViewer.setInput(getType());
+				algorithmList.refresh();
 				addContentAdapter();
-			}
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
+			});
 		
 		getWidgetFactory().createCLabel(actionComposite, "Output Event: ");
 		outputEventCombo = new Combo(actionComposite, SWT.SINGLE | SWT.READ_ONLY);
-		outputEventCombo.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
+		outputEventCombo.addListener(SWT.Selection, event -> {
 				removeContentAdapter();
 				executeCommand(new ChangeOutputCommand(getType(), events.get(outputEventCombo.getText())));
 				addContentAdapter();
-			}
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
+			});
 		
 	}
 
 	private void createAlgorithmView(Composite parent) {
 		Group algorithmComposite = getWidgetFactory().createGroup(parent, "All Algorithms");
-		algorithmComposite.setLayout(new GridLayout(2, false));
+		algorithmComposite.setLayout(new GridLayout(1, false));
 		algorithmComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		createAllAlgorithmViewer(algorithmComposite);
-		createAddDeleteButtons(algorithmComposite);
-	}
-	
-	private void createAddDeleteButtons(Composite parent) {
-		Composite buttonComp = new Composite(parent, SWT.NONE);
-		GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
-		buttonComp.setLayoutData(buttonCompLayoutData);
-		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		algorithmNew = getWidgetFactory().createButton(buttonComp, "", SWT.FLAT);
-		algorithmNew.setToolTipText("Create new algorithm");
-		algorithmNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
-		algorithmNew.addSelectionListener(new SelectionAdapter() {
+		algorithmList = new AlgorithmList(algorithmComposite, getWidgetFactory());
+		algorithmList.getAlgorithmViewer().addSelectionChangedListener(new ISelectionChangedListener() {			
 			@Override
-			public void widgetSelected(SelectionEvent event) {	
-				BasicFBType fb = ECActionHelpers.getFBType(getType());
-				if(null != fb){
-					executeCommand(new CreateAlgorithmCommand(fb));
-					algorithmsViewer.refresh();
-					setAlgorithmDropdown();				
-				}
-			}
-		});
-		algorithmDelete = getWidgetFactory().createButton(buttonComp, "", SWT.FLAT);
-		algorithmDelete.setToolTipText("Delete algorithm");
-		algorithmDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		algorithmDelete.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				Object selection = ((TreeSelection)algorithmsViewer.getSelection()).getFirstElement();
-				if(selection instanceof Algorithm){
-					BasicFBType fb = ECActionHelpers.getFBType(getType());
-					if(null != fb){
-						executeCommand(new DeleteAlgorithmCommand(fb, (Algorithm)((IStructuredSelection) algorithmsViewer.getSelection()).getFirstElement()));
-						algorithmsViewer.refresh();
-						setAlgorithmDropdown();
-					}
-				}
+			public void selectionChanged(SelectionChangedEvent event) {
+				refresh();
 			}
 		});
 	}
 	
-	private void createAllAlgorithmViewer(Composite parent){
-		algorithmsViewer = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		algorithmsViewer.getTree().setLayoutData(gridData);
-		algorithmsViewer.setContentProvider(new ActionContentProvider());
-		algorithmsViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
-		new AdapterFactoryTreeEditor(algorithmsViewer.getTree(), adapterFactory);
-	}
 	
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
@@ -226,7 +161,9 @@ public class ActionSection extends AbstractECSection {
 			algorithmCombo.setEnabled(false);
 		}
 		setType(input);
-		algorithmGroup.initialize(ECActionHelpers.getFBType(getType()), commandStack);
+		BasicFBType type = ECActionHelpers.getFBType(getType());
+		algorithmGroup.initialize(type, commandStack);
+		algorithmList.initialize(type, commandStack);
 	}	
 
 	@Override
@@ -238,7 +175,7 @@ public class ActionSection extends AbstractECSection {
 			outputEventCombo.select(getType().getOutput() != null ? outputEventCombo.indexOf(getType().getOutput().getName()) : outputEventCombo.indexOf(""));		 //$NON-NLS-1$
 			setAlgorithmDropdown();
 			algorithmGroup.setAlgorithm(getAlgorithm());
-			algorithmsViewer.setInput(getType());
+			algorithmList.refresh();
 		} 
 		commandStack = commandStackBuffer;
 	}
@@ -270,9 +207,11 @@ public class ActionSection extends AbstractECSection {
 
 	@Override
 	protected void setInputCode() {
+		//nothing to be done here
 	}
 
 	@Override
 	protected void setInputInit() {
+		//nothing to be done here
 	}
 }
