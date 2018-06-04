@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Monitoring (Incubation)
 Bundle-SymbolicName: org.eclipse.fordiac.ide.monitoring;singleton:=true
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.9.1.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.monitoring.Activator
 Bundle-Vendor: Eclipse 4diac
 Bundle-Localization: plugin

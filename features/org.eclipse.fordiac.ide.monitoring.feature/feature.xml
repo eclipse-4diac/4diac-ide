@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.monitoring.feature"
       label="Monitoring and Debugging"
-      version="1.9.0.qualifier"
+      version="1.9.1.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
