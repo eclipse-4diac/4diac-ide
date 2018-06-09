@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +23,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
+import org.eclipse.fordiac.ide.application.policies.ConnectionGraphicalNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DisableConnectionHandleRoleEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FeedbackConnectionEndpointEditPolicy;
@@ -56,51 +58,26 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		return (Connection) super.getModel();
 	}
 
-	@Override
-	public void setSelected(int value) {
-		super.setSelected(value);
-	}
-
 	private final IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
-			if (event.getProperty().equals(
-				PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
-				&& getModel() instanceof EventConnection) {
-				getFigure()
-								.setForegroundColor(
-										PreferenceGetter
-												.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
-					}
-					if (event.getProperty().equals(
-							PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)
-							&& getModel() instanceof AdapterConnection) {
-						getFigure()
-								.setForegroundColor(
-										PreferenceGetter
-												.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
-					}
-					if (event.getProperty().equals(
-							PreferenceConstants.P_DATA_CONNECTOR_COLOR)
-							&& getModel() instanceof DataConnection) {
-						getFigure()
-								.setForegroundColor(
-										PreferenceGetter
-												.getColor(PreferenceConstants.P_DATA_CONNECTOR_COLOR));
-					}
-					if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON)) {
-						if (getModel() instanceof DataConnection) {
-							getFigure().setVisible(!((Boolean) event.getNewValue()));
-						}
-					}
-					if (event.getProperty()
-							.equals(PreferenceConstants.P_HIDE_EVENT_CON)) {
-						if (getModel() instanceof EventConnection) {
-							getFigure().setVisible(!((Boolean) event.getNewValue()));
-						}
-					}
-				}
-			};
+			if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR) &&  getModel() instanceof EventConnection) {
+				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
+			}
+			if (event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR) && getModel() instanceof AdapterConnection) {
+				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
+			}
+			if (event.getProperty().equals(PreferenceConstants.P_DATA_CONNECTOR_COLOR) && getModel() instanceof DataConnection) {
+				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_DATA_CONNECTOR_COLOR));
+			}
+			if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON) && getModel() instanceof DataConnection) {
+				getFigure().setVisible(!((Boolean) event.getNewValue()));
+			}
+			if (event.getProperty().equals(PreferenceConstants.P_HIDE_EVENT_CON) && getModel() instanceof EventConnection) {
+				getFigure().setVisible(!((Boolean) event.getNewValue()));
+			}
+		}
+	};
 
 	@Override
 	protected void createEditPolicies() {
@@ -121,7 +98,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 							.getConnectionRouter())
 							.getBendpointPolicy(getModel()));
 		}
-
+		
+		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new ConnectionGraphicalNodeEditPolicy());
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2017 fortiss GmbH
+ * Copyright (c) 2016 - 2018 fortiss GmbH, Johannes Kepler University
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -27,10 +28,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class AdapterNodeEditPolicy extends InterfaceElementEditPolicy {
-
-	public AdapterNodeEditPolicy() {
-		super(AdapterConnectionCreateCommand.class);
-	}
 
 	@Override
 	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {

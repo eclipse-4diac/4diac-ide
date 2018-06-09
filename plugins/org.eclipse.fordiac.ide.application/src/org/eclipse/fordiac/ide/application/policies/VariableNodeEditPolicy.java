@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012, 2014, 2016 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008, 2012, 2014, 2016, 2018 Profactor GmbH, fortiss GmbH,
+ * 											  Johannes Kepler University	
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,10 +27,6 @@ import org.eclipse.gef.requests.ReconnectRequest;
  */
 public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 
-	public VariableNodeEditPolicy() {
-		super(DataConnectionCreateCommand.class);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -39,12 +36,10 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {		
 		DataConnectionCreateCommand cmd = new DataConnectionCreateCommand(getParentNetwork());
 		cmd.setSource(((InterfaceEditPart) getHost()).getModel());
-		if (cmd.getSource() instanceof VarDeclaration) {
-			if (!LinkConstraints.isWithConstraintOK(((VarDeclaration)cmd.getSource()))) {
-				return null; // Elements which are not connected by a with construct are not allowed to be connected
-			}
-		}
-		
+		if ((cmd.getSource() instanceof VarDeclaration) &&
+				(!LinkConstraints.isWithConstraintOK(((VarDeclaration)cmd.getSource())))) {
+			return null; // Elements which are not connected by a with construct are not allowed to be connected
+		}		
 		request.setStartCommand(cmd);
 		return new DataConnectionCreateCommand(getParentNetwork());
 
