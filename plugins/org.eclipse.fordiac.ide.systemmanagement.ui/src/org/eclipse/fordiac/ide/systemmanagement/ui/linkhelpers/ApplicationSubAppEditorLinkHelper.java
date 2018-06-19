@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 fortiss GmbH
+ * Copyright (c) 2015, 2016, 2018 fortiss GmbH, Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -71,9 +70,7 @@ public class ApplicationSubAppEditorLinkHelper extends AbstractEditorLinkHelper 
 
 	private void performEditorSelect(IWorkbenchPage aPage, IEditorInput editorInput, FB refFB) {
 		IEditorPart editor = activateEditor(aPage, editorInput);
-		if ((null != editor) && (editor instanceof FBNetworkEditor) && (null != refFB)){
-			((FBNetworkEditor)editor).selectFB(refFB);
-		}
+		selectObject(editor, refFB);
 	}
 	
 	private static SubApplicationEditorInput generateSubAppEditorInput(SubApp subApp){

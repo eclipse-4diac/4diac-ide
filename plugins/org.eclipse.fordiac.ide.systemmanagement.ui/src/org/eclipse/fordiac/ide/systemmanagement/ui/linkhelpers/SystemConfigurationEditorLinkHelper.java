@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 fortiss GmbH
+ * Copyright (c) 2015, 2016, 2018 fortiss GmbH, Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -51,9 +50,7 @@ public class SystemConfigurationEditorLinkHelper extends AbstractEditorLinkHelpe
 		if (null != sysConf) {
 			IEditorInput sysConfInput = new SystemConfigurationEditorInput(sysConf);
 			IEditorPart editor = activateEditor(aPage, sysConfInput);
-			if ((null != editor) && (editor instanceof SystemConfigurationEditor) && (null != refDev)){
-				((SystemConfigurationEditor)editor).selectDevice(refDev);
-			}
+			selectObject(editor, refDev);
 		}
 		
 	}

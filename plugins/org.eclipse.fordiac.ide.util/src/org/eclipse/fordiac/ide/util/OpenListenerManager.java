@@ -66,7 +66,7 @@ public enum OpenListenerManager {
 	 * @param libElement the lib element
 	 * @param id the id
 	 */
-	public void setDefaultOpenListener(
+	public static void setDefaultOpenListener(
 			final Class<? extends I4DIACElement> libElement, final String id) {
 		IPreferenceStore ps = Activator.getDefault().getPreferenceStore();
 		ps.setValue(libElement.getName(), id);
@@ -130,7 +130,7 @@ public enum OpenListenerManager {
 		
 	}
 	
-	private boolean listenerSupportsElement(IOpenListener listener, I4DIACElement elementtoOpen) {
+	private static boolean listenerSupportsElement(IOpenListener listener, I4DIACElement elementtoOpen) {
 		return (null != listener.getHandledClass()) && listener.getHandledClass().isInstance(elementtoOpen);
 	}
 
