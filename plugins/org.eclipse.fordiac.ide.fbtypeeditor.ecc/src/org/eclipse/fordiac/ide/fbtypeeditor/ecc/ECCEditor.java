@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -223,7 +224,7 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 
 			@Override
 			public DragTracker getDragTracker(Request req) {
-				MarqueeDragTracker dragTracker = new MarqueeDragTracker();
+				MarqueeDragTracker dragTracker = new AdvancedMarqueeDragTracker();
 				dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 				return dragTracker;
 			}
@@ -239,7 +240,6 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 	 */
 	@Override
 	protected void initializeGraphicalViewer() {
-		// super.initializeGraphicalViewer();
 		GraphicalViewer viewer = getGraphicalViewer();
 		// enable drag from palette
 		viewer.addDropTargetListener(new TemplateTransferDropTargetListener(viewer));
@@ -287,7 +287,7 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 	}
 
 	/** The palette root. */
-	PaletteRoot paletteRoot;
+	private PaletteRoot paletteRoot;
 
 	/*
 	 * (non-Javadoc)
@@ -298,7 +298,8 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 	 */
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-		return paletteRoot = ECCPaletteFactory.createPalette();
+		paletteRoot = ECCPaletteFactory.createPalette();
+		return paletteRoot;
 	}
 
 	/*
@@ -396,11 +397,9 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 	@Override
 	public boolean outlineSelectionChanged(Object selectedElement) {
 		Object obj = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
-		if(null != obj){
-			if(obj instanceof EditPart){
-				getGraphicalViewer().select((EditPart)obj);
-				return true;
-			}
+		if(obj instanceof EditPart){
+			getGraphicalViewer().select((EditPart)obj);
+			return true;
 		}
 		if(selectedElement instanceof ECCItemProvider){
 			return true;

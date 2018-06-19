@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -74,13 +75,11 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 
 	/** The adapter. */
 	EContentAdapter adapter = new EContentAdapter() {
-
 		@Override
 		public void notifyChanged(
 				final Notification notification) {
 			int type = notification.getEventType();
-			int featureId = notification
-					.getFeatureID(Application.class);
+			int featureId = notification.getFeatureID(Application.class);
 
 			switch (type) {
 			case Notification.SET:
@@ -89,10 +88,9 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 				}
 				break;
 			default:
-					break;
+				break;
 			}
 		}
-
 	};
 
 	private FBNetwork model;
@@ -111,7 +109,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()){
 			@Override	
 			public DragTracker getDragTracker(Request req) {
-				MarqueeDragTracker dragTracker = new MarqueeDragTracker(){
+				MarqueeDragTracker dragTracker = new AdvancedMarqueeDragTracker(){
 					//redefined from MarqueeSelectionTool
 					static final int DEFAULT_MODE = 0;
 					static final int TOGGLE_MODE = 1;
