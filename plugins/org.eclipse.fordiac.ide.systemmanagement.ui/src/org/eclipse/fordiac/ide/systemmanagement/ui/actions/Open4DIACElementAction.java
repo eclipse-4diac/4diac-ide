@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
@@ -78,6 +79,9 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 			}else if (obj instanceof Device){
 				refObject = obj;
 				obj = ((Device)obj).getSystemConfiguration();				
+			}else if (obj instanceof Segment){
+				refObject = obj;
+				obj = (SystemConfiguration)((Segment)refObject).eContainer();
 			}
 
 			IEditorPart editor = OpenListenerManager.openEditor((I4DIACElement) obj);

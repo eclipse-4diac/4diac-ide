@@ -544,6 +544,7 @@
              <or>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration"/>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Device"/>
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Segment"/>
              </or>
           </selectionEnablement>
           <editorInputEnablement>

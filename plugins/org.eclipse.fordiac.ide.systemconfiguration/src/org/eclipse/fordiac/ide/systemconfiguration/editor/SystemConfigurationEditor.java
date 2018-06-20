@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2012 - 2018 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * 								Johannes Kepler University	
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,8 +16,8 @@ package org.eclipse.fordiac.ide.systemconfiguration.editor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.SystemConfEditPartFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -101,10 +102,12 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 		return new PaletteRoot();
 	}
 
-	public void selectDevice(Device refDev) {
-			EditPart editPart = (EditPart) getViewer().getEditPartRegistry().get(refDev);
-			getViewer().select(editPart);
-			getViewer().reveal(editPart);
+	public void selectElement(TypedConfigureableObject refElement) {
+		Object obj = getViewer().getEditPartRegistry().get(refElement);
+		if(obj instanceof EditPart) {
+			getViewer().select((EditPart)obj);
+			getViewer().reveal((EditPart)obj);
+		}
 	}
 
 

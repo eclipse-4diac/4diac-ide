@@ -395,7 +395,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//SystemConfiguration">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SystemConfiguration/devices"/>
-      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SystemConfiguration/segments"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SystemConfiguration/segments"/>
       <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SystemConfiguration/links"/>
       <genOperations ecoreOperation="lib.ecore#//SystemConfiguration/getAutomationSystem"/>
       <genOperations ecoreOperation="lib.ecore#//SystemConfiguration/getSegmentNamed">

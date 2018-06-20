@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -45,8 +47,9 @@ public abstract class AbstractEditorLinkHelper implements ILinkHelper {
 			((FBNetworkEditor)editor).selectFB((FB)selObject);
 			return;
 		}
-		if((editor instanceof SystemConfigurationEditor) && (selObject instanceof Device)){
-			((SystemConfigurationEditor)editor).selectDevice((Device)selObject);
+		if((editor instanceof SystemConfigurationEditor) && 
+				((selObject instanceof Device) || selObject instanceof Segment)){
+			((SystemConfigurationEditor)editor).selectElement((TypedConfigureableObject)selObject);
 			return;
 		}
 	}
