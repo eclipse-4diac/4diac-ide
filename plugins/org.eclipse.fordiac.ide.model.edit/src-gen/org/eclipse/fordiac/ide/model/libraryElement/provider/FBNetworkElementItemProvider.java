@@ -127,36 +127,6 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.FB_NETWORK_ELEMENT__INTERFACE);
-		}
-		return childrenFeatures;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
 	 * This returns FBNetworkElement.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -196,10 +166,8 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 		switch (notification.getFeatureID(FBNetworkElement.class)) {
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__X:
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__Y:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -215,11 +183,6 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.FB_NETWORK_ELEMENT__INTERFACE,
-				 LibraryElementFactory.eINSTANCE.createInterfaceList()));
 	}
 
 }
