@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
+ * Copyright (c) 2015 - 2018 fortiss GmbH, Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,10 +21,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
+import org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.AbstractEditorLinkHelper;
 import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
@@ -45,7 +47,7 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 	protected boolean updateSelection(IStructuredSelection selection) {
 		boolean retval = true;
 		Iterator element = getStructuredSelection().iterator();
-		while(element.hasNext() && (true == retval)) {
+		while(element.hasNext() && (retval)) {
 			Object obj = element.next();
 			if((obj instanceof Device) || (obj instanceof SystemConfiguration) || (obj instanceof Application) ||
 					(obj instanceof SubApp) || obj instanceof Resource){
@@ -77,12 +79,13 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 			}else if (obj instanceof Device){
 				refObject = obj;
 				obj = ((Device)obj).getSystemConfiguration();				
+			}else if (obj instanceof Segment){
+				refObject = obj;
+				obj = (SystemConfiguration)((Segment)refObject).eContainer();
 			}
 
 			IEditorPart editor = OpenListenerManager.openEditor((I4DIACElement) obj);
-			if((null != editor) && (null != refObject)){
-				//TODO select object
-			}
+			AbstractEditorLinkHelper.selectObject(editor,refObject);
 		}
 	}
 

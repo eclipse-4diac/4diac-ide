@@ -23,13 +23,17 @@ public class PreferenceConstants {
 
 	public static final String P_FORCE_COLOR = "forceColor"; //$NON-NLS-1$
 
-	static final String P_POLLING_INTERVAL = "pollingInterval"; //$NON-NLS-1$
+	public static final String P_POLLING_INTERVAL = "pollingInterval"; //$NON-NLS-1$
 	
-	static final int P_POLLING_INTERVAL_DEVAULT_VALUE = 300;
+	public static final int P_POLLING_INTERVAL_DEVAULT_VALUE = 300;
 
-	static final String P_RESPONSE_TIMEOUT = "responseTimeout"; //$NON-NLS-1$
+	public static final String P_RESPONSE_TIMEOUT = "responseTimeout"; //$NON-NLS-1$
 	
-	static final int P_RESPONSE_TIMEOUT_DEVAULT_VALUE = 3000;
+	public static final int P_RESPONSE_TIMEOUT_DEVAULT_VALUE = 3000;
+	
+	public static final String P_MONITORING_TRANSPARENCY = "monitoringTransparency"; //$NON-NLS-1$
+	
+	public static final int P_MONITORING_TRANSPARENCY_VALUE = 190;
 	
 	public static int getTimeOutValue(){
 		int timeout = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.P_RESPONSE_TIMEOUT);
@@ -45,6 +49,14 @@ public class PreferenceConstants {
 			timeout = P_POLLING_INTERVAL_DEVAULT_VALUE;
 		}		
 		return timeout;
+	}
+	
+	public static int getMonitoringTransparency(){
+		int transparency = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.P_MONITORING_TRANSPARENCY);
+		if(0 == transparency){
+			transparency = P_MONITORING_TRANSPARENCY_VALUE;
+		}		
+		return transparency;
 	}
 
 }

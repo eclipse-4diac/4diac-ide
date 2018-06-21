@@ -40,6 +40,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		store.setDefault(PreferenceConstants.P_RESPONSE_TIMEOUT, PreferenceConstants.P_RESPONSE_TIMEOUT_DEVAULT_VALUE);
 		store.setDefault(PreferenceConstants.P_POLLING_INTERVAL, PreferenceConstants.P_POLLING_INTERVAL_DEVAULT_VALUE);
+		store.setDefault(PreferenceConstants.P_MONITORING_TRANSPARENCY, PreferenceConstants.P_MONITORING_TRANSPARENCY_VALUE);
 	}
 
 }
