@@ -2,6 +2,4 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="devicemanagementinteractor" name="devicemanagementinteractor" schema="schema/devicemanagementinteractor.exsd"/>
-   <extension-point id="devicemanagementcommunicationhandler" name="devicemanagementcommunicationhandler" schema="schema/devicemanagementcommunicationhandler.exsd"/>
-
 </plugin>

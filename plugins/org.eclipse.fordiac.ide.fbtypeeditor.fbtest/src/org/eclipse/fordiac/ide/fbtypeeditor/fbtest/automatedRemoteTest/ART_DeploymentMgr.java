@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 TU Wien ACIN, Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2011 - 2018 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +21,6 @@ import java.util.List;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateResourceInstanceException;
 import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
 import org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor;
-import org.eclipse.fordiac.ide.deployment.iec61499.EthernetDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtest.Activator;
@@ -89,7 +89,7 @@ public class ART_DeploymentMgr {
 				
 		res.setName("__"+fbType.getName()+"Test"+UID);  //$NON-NLS-1$//$NON-NLS-2$
 
-		executor = new DeploymentExecutor();
+		executor = new DeploymentExecutor(dev);
 		
 		listener = new IDeploymentListener() {
 			
@@ -122,17 +122,17 @@ public class ART_DeploymentMgr {
 			}
 		};
 		
-		executor.getDevMgmComHandler().addDeploymentListener(listener);
+		executor.addDeploymentListener(listener);
 	}
 
 	
 	public boolean cleanRes() {
 		try {
-			executor.getDevMgmComHandler().connect(address);
+			executor.connect();
 			deploymentResponseCounter++; //Kill Res
 			deploymentResponseCounter++; //Delete Res
 			executor.deleteResource(res);
-			executor.getDevMgmComHandler().disconnect();
+			executor.disconnect();
 			
 		} catch (Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
@@ -154,7 +154,7 @@ public class ART_DeploymentMgr {
 		int numDO=FBTHelper.getDOSize(fbType);
 
 		try {
-			executor.getDevMgmComHandler().connect(address);
+			executor.connect();
 		} catch (Exception e1) {
 			MgmtCommands="Error during connection to device: "+address+"\n"; //$NON-NLS-2$
 			Error = true;
@@ -251,7 +251,7 @@ public class ART_DeploymentMgr {
 
 		
 		try {
-			executor.getDevMgmComHandler().disconnect();
+			executor.disconnect();
 		} catch (DisconnectException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
@@ -290,7 +290,7 @@ public class ART_DeploymentMgr {
 
 	private void sendREQ(final String destination, final String request) throws IOException {
 		deploymentResponseCounter++;
-		executor.getDevMgmComHandler().sendREQ(destination, request);
+		executor.sendREQ(destination, request);
 	}
 
 }

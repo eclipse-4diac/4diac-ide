@@ -12,25 +12,40 @@
 package org.eclipse.fordiac.ide.deployment.interactors;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
+import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
 public abstract class AbstractDeviceManagementInteractor implements IDeviceManagementInteractor {
 	
-	protected final AbstractDeviceManagementCommunicationHandler commHandler;
+	private final AbstractDeviceManagementCommunicationHandler commHandler;
+	private final Device device;
 	protected Set<String> fbTypes = null;
 	protected Set<String> adapterTypes = null;
 	
-	protected AbstractDeviceManagementInteractor(AbstractDeviceManagementCommunicationHandler commHandler){
-		this.commHandler = commHandler;
+	protected AbstractDeviceManagementInteractor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler){
+		this.device = dev;
+		this.commHandler = (null != overrideHandler) ? overrideHandler : createCommunicationHandler(dev) ;
+	}
+	
+	protected AbstractDeviceManagementCommunicationHandler getDevMgmComHandler() {
+		return commHandler; 
 	}
 	
 	@Override
-	public AbstractDeviceManagementCommunicationHandler getDevMgmComHandler() {
-		return commHandler; 
+	public void connect() throws InvalidMgmtID, UnknownHostException, IOException {
+		getDevMgmComHandler().connect(getDeviceAddress(device));
+	}
+
+	@Override
+	public void disconnect() throws DisconnectException {
+		getDevMgmComHandler().disconnect();
 	}
 	
 	@Override
@@ -72,5 +87,17 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 		// TODO maybe an error message would be good
 	}
 
+	/** create a device managment communication handler suitable for the given device
+	 * 
+	 * @param dev the device to be checked
+	 * @return the created handler
+	 */
+	protected abstract AbstractDeviceManagementCommunicationHandler createCommunicationHandler(Device dev);
 
+	/**Provide for the given device the address needed for the commhandler to connect to it
+	 * 
+	 * @param device the dvice to connect to
+	 * @return  the device's address
+	 */
+	protected abstract String getDeviceAddress(Device device);
 }

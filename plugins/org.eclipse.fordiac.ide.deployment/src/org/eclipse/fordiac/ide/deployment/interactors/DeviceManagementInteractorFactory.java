@@ -33,8 +33,6 @@ public enum DeviceManagementInteractorFactory {
 	INSTANCE;
 	
 	private List<IDeviceManagementInteractorProvider> deviceManagementInteractors = null;
-	private List<AbstractDeviceManagementCommunicationHandler> deviceMangementCommunicationHandlers = null;
-	
 	
 	/**
 	 * Gets the device managment interactor.
@@ -50,8 +48,7 @@ public enum DeviceManagementInteractorFactory {
 			final AbstractDeviceManagementCommunicationHandler overrideComHandler) {
 		for (IDeviceManagementInteractorProvider idepExec : getDeviceManagementInteractorList()) {
 			if (idepExec.supports(device.getProfile())) {
-				return idepExec.createInteractor((null != overrideComHandler) ? overrideComHandler
-						: getDevMgmCommunicationHandler(device));
+				return idepExec.createInteractor(device, overrideComHandler);
 			}
 		}
 		return null;
@@ -81,51 +78,17 @@ public enum DeviceManagementInteractorFactory {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
 				Activator.PLUGIN_ID, "devicemanagementinteractor"); //$NON-NLS-1$
-		ArrayList<IDeviceManagementInteractorProvider> deploymentExecutors = new ArrayList<>(elems.length);
+		ArrayList<IDeviceManagementInteractorProvider> interactors = new ArrayList<>(elems.length);
 		for (IConfigurationElement element : elems) {
 			try {
 				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (object instanceof IDeviceManagementInteractorProvider) {
-					deploymentExecutors.add((IDeviceManagementInteractorProvider) object);
+					interactors.add((IDeviceManagementInteractorProvider) object);
 				}
 			} catch (CoreException corex) {
 				Activator.getDefault().logError(Messages.DeploymentCoordinator_ERROR_Message, corex);
 			}
 		}
-		return deploymentExecutors;
-	}
-	
-	private AbstractDeviceManagementCommunicationHandler getDevMgmCommunicationHandler(
-			Device device) {
-		if (null == deviceMangementCommunicationHandlers) {
-			loadDeviceManagementCommunicationHandlers();
-		}
-
-		// TODO currently we only have one communication handler. Extend this
-		// here
-		if (deviceMangementCommunicationHandlers.size() > 0) {
-			return deviceMangementCommunicationHandlers.get(0);
-		}
-		return null;
-	}
-
-	private void loadDeviceManagementCommunicationHandlers() {
-		deviceMangementCommunicationHandlers = new ArrayList<AbstractDeviceManagementCommunicationHandler>();
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				Activator.PLUGIN_ID, "devicemanagementcommunicationhandler"); //$NON-NLS-1$
-
-		for (IConfigurationElement element : elems) {
-			try {
-				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof AbstractDeviceManagementCommunicationHandler) {
-					deviceMangementCommunicationHandlers
-							.add((AbstractDeviceManagementCommunicationHandler) object);
-				}
-			} catch (CoreException corex) {
-				Activator.getDefault().logError(Messages.DeploymentCoordinator_ERROR_Message, corex);
-			}
-		}
-	}
-
+		return interactors;
+	}	
 }

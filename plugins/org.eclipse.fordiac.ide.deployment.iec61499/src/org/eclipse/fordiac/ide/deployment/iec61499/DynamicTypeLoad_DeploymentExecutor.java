@@ -39,8 +39,8 @@ import org.eclipse.swt.widgets.Display;
 
 public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 
-	public DynamicTypeLoad_DeploymentExecutor(AbstractDeviceManagementCommunicationHandler commHandler) {
-		super(commHandler);
+	public DynamicTypeLoad_DeploymentExecutor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler) {
+		super(dev, overrideHandler);
 		// nothing todo here
 	}
 

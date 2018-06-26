@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
+import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -287,7 +288,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 				return getText(element);
 			} else if (columnIndex == 1) {
 				if (element instanceof Device) {
-					return DeploymentCoordinator.getMGR_ID((Device)element);
+					return DeploymentHelper.getMGR_ID((Device)element);
 				}
 			} else if (columnIndex == 2) {
 				if (element instanceof Device) {

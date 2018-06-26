@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -131,29 +132,28 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 		if (null != list) {
 			for (Object currentElement : list) {
 				if (prepareParametersToExecute(currentElement)) {
-					IDeviceManagementInteractor executor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device);
-					if (null != executor) {
-						String mgrid = DeploymentCoordinator.getMGR_ID(device);
-						DeploymentCoordinator.getInstance().enableOutput(executor.getDevMgmComHandler());
+					IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device);
+					if (null != interactor) {
+						DeploymentCoordinator.getInstance().enableOutput(interactor);
 						OnlineDeploymentErrorCheckListener.getInstance().setCurrentObject(this);
 						OnlineDeploymentErrorCheckListener.getInstance().setLastMessage(""); //$NON-NLS-1$
 						OnlineDeploymentErrorCheckListener.getInstance().setLastCommand(""); //$NON-NLS-1$
-						executor.getDevMgmComHandler().addDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
+						interactor.addDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
 						try {
-							executor.getDevMgmComHandler().connect(mgrid);
-							executeCommand(executor);
+							interactor.connect();
+							executeCommand(interactor);
 						} catch (Exception e) {
-							OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), mgrid, this, true);
+							OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMGR_ID(device), this, true);
 						}finally {
 							try {
-								executor.getDevMgmComHandler().disconnect();
+								interactor.disconnect();
 							} catch (DisconnectException e) {
-								OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), mgrid, this, true);
+								OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMGR_ID(device), this, true);
 							}							
 						}
-						executor.getDevMgmComHandler().removeDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
+						interactor.removeDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
 						DeploymentCoordinator.getInstance().flush();
-						DeploymentCoordinator.getInstance().disableOutput(executor.getDevMgmComHandler());
+						DeploymentCoordinator.getInstance().disableOutput(interactor);
 					}else{
 						manageExecutorError();
 					}

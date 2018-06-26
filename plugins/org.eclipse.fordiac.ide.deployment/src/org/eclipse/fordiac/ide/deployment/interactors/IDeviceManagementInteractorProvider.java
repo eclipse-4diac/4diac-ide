@@ -12,6 +12,7 @@
 package org.eclipse.fordiac.ide.deployment.interactors;
 
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
 /** Interface for classes that provide device mangement interactors 
  * 
@@ -30,7 +31,12 @@ public interface IDeviceManagementInteractorProvider {
 	
 	public String getProfileName();
 	
-
-    IDeviceManagementInteractor createInteractor(AbstractDeviceManagementCommunicationHandler commHandler);
+	/** Create an instance of the device managment interactor this provider is providing
+	 * 
+	 * @param dev				the device for which this interactor should be created
+	 * @param overrideHandler   if not null a device comm handler for overriding the default. This is mainly used for bootfile generation.
+	 * @return
+	 */
+    IDeviceManagementInteractor createInteractor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler);
 	
 }

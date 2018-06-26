@@ -15,6 +15,7 @@ import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationH
 import org.eclipse.fordiac.ide.deployment.iec61499.DynamicTypeLoad_DeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractorProvider;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
 public class DynamicTypeLoadDevMgmInteractorProvider implements IDeviceManagementInteractorProvider {
 	private static final String PROFILE_NAME = "DynamicTypeLoad"; //$NON-NLS-1$
@@ -30,8 +31,8 @@ public class DynamicTypeLoadDevMgmInteractorProvider implements IDeviceManagemen
 	}
 
 	@Override
-	public IDeviceManagementInteractor createInteractor(AbstractDeviceManagementCommunicationHandler commHandler) {
-		return new DynamicTypeLoad_DeploymentExecutor(commHandler);
+	public IDeviceManagementInteractor createInteractor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler) {
+		return new DynamicTypeLoad_DeploymentExecutor(dev, overrideHandler);
 	}
 
 }

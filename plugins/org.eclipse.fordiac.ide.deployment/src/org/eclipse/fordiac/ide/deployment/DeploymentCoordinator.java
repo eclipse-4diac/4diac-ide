@@ -101,22 +101,6 @@ public class DeploymentCoordinator implements IDeploymentListener {
 		return instance;
 	}
 
-	private String getMGR_ID(final Resource resource) {
-		return getMGR_ID(resource.getDevice());
-	}
-
-	public static String getMGR_ID(final Device dev) {
-		for(VarDeclaration varDecl : dev.getVarDeclarations()) {
-			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) { //$NON-NLS-1$
-				String val = DeploymentHelper.getVariableValue(varDecl, dev.getAutomationSystem());
-				if(null != val){				
-					return val;
-				}
-			}
-		}
-		return ""; //$NON-NLS-1$
-	}
-
 	class DownloadRunnable implements IRunnableWithProgress {
 		private final List<Device> devices;
 		private final List<ResourceDeploymentData> resources;
@@ -178,7 +162,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 								
 								MessageDialog.openError(shell, "Major Download Error", 
 										"Resource: " + resDepData.res.getDevice().getName() + "." + resDepData.res.getName() + "\n" +
-										"MGR_ID: " + getMGR_ID(resDepData.res) + "\n" +		
+										"MGR_ID: " + DeploymentHelper.getMGR_ID(resDepData.res.getDevice()) + "\n" +		
 										"Problem: "+ e.getMessage());
 							}
 						});
@@ -228,7 +212,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 			Resource res = resDepData.res;
 			if (!res.isDeviceTypeResource()) {
 				try {  //this try catch block with rethrowing is needed so that we can have the finally statement for disconnecting
-					executor.getDevMgmComHandler().connect(getMGR_ID(res));
+					executor.connect();
 					executor.createResource(res);
 					monitor.worked(1);
 					for (VarDeclaration varDecl : res.getVarDeclarations()) {
@@ -252,7 +236,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 				} catch (Exception e) {
 					throw e;
 				}finally { 
-					executor.getDevMgmComHandler().disconnect();
+					executor.disconnect();
 				}
 			}
 		}
@@ -264,8 +248,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 			if (executor != null && parameters != null && parameters.size() > 0) {
 				try {
 					executor.addDeploymentListener(getInstance());
-					String mgrid = getMGR_ID(device);
-					executor.getDevMgmComHandler().connect(mgrid);
+					executor.connect();
 					for (VarDeclaration varDeclaration : parameters) {
 						String value = DeploymentHelper.getVariableValue(varDeclaration, device.getAutomationSystem());
 						if (null != value) {
@@ -279,7 +262,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}finally {
 					try {
-						executor.getDevMgmComHandler().disconnect();
+						executor.disconnect();
 					} catch (DisconnectException e) {
 						//TODO model refactoring - show error message to user
 						Activator.getDefault().logError(e.getMessage(), e);
@@ -526,9 +509,8 @@ public class DeploymentCoordinator implements IDeploymentListener {
 	 * @param executor
 	 *            the executor
 	 */
-	public void enableOutput(
-			AbstractDeviceManagementCommunicationHandler handler) {
-		handler.addDeploymentListener(this);
+	public void enableOutput(IDeviceManagementInteractor interactor) {
+		interactor.addDeploymentListener(this);
 	}
 
 	/**
@@ -544,9 +526,8 @@ public class DeploymentCoordinator implements IDeploymentListener {
 	 * @param executor
 	 *            the executor
 	 */
-	public void disableOutput(
-			AbstractDeviceManagementCommunicationHandler handler) {
-		handler.removeDeploymentListener(this);
+	public void disableOutput(IDeviceManagementInteractor interactor) {
+		interactor.removeDeploymentListener(this);
 	}
 
 }

@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.WriteDeviceParameterExcepti
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -40,13 +41,12 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	private final HashSet<String> genFBs = new HashSet<String>();
 	protected int id = 0;
 
-	public DeploymentExecutor() {
-		//TODO replace with null
-		this(new EthernetDeviceManagementCommunicationHandler());
+	public DeploymentExecutor(Device dev) {
+		this(dev, null);
 	}
 	
-	public DeploymentExecutor(AbstractDeviceManagementCommunicationHandler commHandler) {
-		super(commHandler);
+	public DeploymentExecutor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler) {
+		super(dev, overrideHandler);
 		genFBs.add("PUBLISH"); //$NON-NLS-1$
 		genFBs.add("SUBSCRIBE"); //$NON-NLS-1$
 		genFBs.add("PUBL"); //$NON-NLS-1$
@@ -56,10 +56,22 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	}
 	
 	@Override
-	public EthernetDeviceManagementCommunicationHandler getDevMgmComHandler() {
+	protected EthernetDeviceManagementCommunicationHandler getDevMgmComHandler() {
 		return (EthernetDeviceManagementCommunicationHandler)super.getDevMgmComHandler();
 	}
 
+	@Override
+	protected AbstractDeviceManagementCommunicationHandler createCommunicationHandler(Device dev) {
+		//currently we only have the ability to connect via ethernet to our devices, if this changes add here according factories
+		return new EthernetDeviceManagementCommunicationHandler();
+	}
+	
+	@Override
+	protected String getDeviceAddress(Device device) {
+		return DeploymentHelper.getMGR_ID(device);
+	}
+	
+	
 	private static String getValidType(final FB fb) {
 		if (fb != null && fb.getPaletteEntry() != null) {
 			return fb.getTypeName();

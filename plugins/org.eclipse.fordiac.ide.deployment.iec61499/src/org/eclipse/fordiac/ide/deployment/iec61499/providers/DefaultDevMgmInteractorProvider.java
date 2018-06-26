@@ -15,6 +15,7 @@ import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationH
 import org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractorProvider;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
 public class DefaultDevMgmInteractorProvider implements IDeviceManagementInteractorProvider {
 	private static final String PROFILE_NAME = "HOLOBLOC"; //$NON-NLS-1$
@@ -30,8 +31,8 @@ public class DefaultDevMgmInteractorProvider implements IDeviceManagementInterac
 	}
 
 	@Override
-	public IDeviceManagementInteractor createInteractor(AbstractDeviceManagementCommunicationHandler commHandler) {
-		return new DeploymentExecutor(commHandler);
+	public IDeviceManagementInteractor createInteractor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler) {
+		return new DeploymentExecutor(dev, overrideHandler);
 	}
 
 }

@@ -34,11 +34,4 @@
             class="org.eclipse.fordiac.ide.deployment.iec61499.preferences.PreferenceInitializer">
       </initializer>
    </extension>
-   <extension
-         point="org.eclipse.fordiac.ide.deployment.devicemanagementcommunicationhandler">
-      <DeviceManagementComunicationHandler
-            class="org.eclipse.fordiac.ide.deployment.iec61499.EthernetDeviceManagementCommunicationHandler">
-      </DeviceManagementComunicationHandler>
-   </extension>
-
 </plugin>

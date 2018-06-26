@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 fortiss GmbH
+ * Copyright (c) 2018 fortiss GmbH, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
 package org.eclipse.fordiac.ide.deployment.util;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -30,6 +31,18 @@ public abstract class DeploymentHelper {
 			return val;
 		}		
 		return null;	
+	}
+	
+	public static String getMGR_ID(final Device dev) {
+		for(VarDeclaration varDecl : dev.getVarDeclarations()) {
+			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) { //$NON-NLS-1$
+				String val = DeploymentHelper.getVariableValue(varDecl, dev.getAutomationSystem());
+				if(null != val){				
+					return val;
+				}
+			}
+		}
+		return ""; //$NON-NLS-1$
 	}
 	
 }

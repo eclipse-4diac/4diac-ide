@@ -13,14 +13,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Set;
 
-import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateConnectionException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBInstanceException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateResourceInstanceException;
+import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
+import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
 import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteDeviceParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
@@ -36,6 +39,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  */
 public interface IDeviceManagementInteractor {
 	
+	public void connect() throws InvalidMgmtID, UnknownHostException, IOException;
+
+	public void disconnect() throws DisconnectException;
+	
 	public Set<String> getTypes();
 
 	public Set<String> getAdapterTypes();
@@ -45,10 +52,6 @@ public interface IDeviceManagementInteractor {
 	public void addDeploymentListener(final IDeploymentListener listener);
 
 	public void removeDeploymentListener(final IDeploymentListener listener);
-	
-	//FIXME remove this function
-	public AbstractDeviceManagementCommunicationHandler getDevMgmComHandler();
-	
 	
 	/**
 	 * Creates the resource.
