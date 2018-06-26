@@ -18,6 +18,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
+import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -130,7 +131,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 		if (null != list) {
 			for (Object currentElement : list) {
 				if (prepareParametersToExecute(currentElement)) {
-					IDeviceManagementInteractor executor = DeploymentCoordinator.getInstance().getDeploymentExecutor(device);
+					IDeviceManagementInteractor executor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device);
 					if (null != executor) {
 						String mgrid = DeploymentCoordinator.getMGR_ID(device);
 						DeploymentCoordinator.getInstance().enableOutput(executor.getDevMgmComHandler());

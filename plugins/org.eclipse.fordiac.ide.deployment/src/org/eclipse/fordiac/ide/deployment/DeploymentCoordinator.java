@@ -21,11 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.deployment.ResourceDeploymentData.ParameterData;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateConnectionException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBInstanceException;
@@ -35,6 +31,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
 import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
+import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
@@ -58,8 +55,7 @@ import org.eclipse.ui.PlatformUI;
 
 public class DeploymentCoordinator implements IDeploymentListener {
 	private static DeploymentCoordinator instance;
-	private List<IDeviceManagementInteractor> deploymentExecutors = null;
-	private List<AbstractDeviceManagementCommunicationHandler> deviceMangementCommunicationHandlers = null;
+	
 	private final Map<Device, List<VarDeclaration>> deployedDeviceProperties = new HashMap<>();
 
 	public void addDeviceProperty(Device dev, VarDeclaration property) {
@@ -166,7 +162,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 					throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 				}
 
-				IDeviceManagementInteractor executor = getDeploymentExecutor(resDepData.res.getDevice(), overrideDevMgmCommHandler);
+				IDeviceManagementInteractor executor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(resDepData.res.getDevice(), overrideDevMgmCommHandler);
 
 				if (executor != null) {
 					executor.getDevMgmComHandler().addDeploymentListener(getInstance());
@@ -261,7 +257,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 		}
 
 		private void configureDevice(final IProgressMonitor monitor, Device device) {
-			IDeviceManagementInteractor executor = getDeploymentExecutor(device, overrideDevMgmCommHandler);
+			IDeviceManagementInteractor executor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device, overrideDevMgmCommHandler);
 			List<VarDeclaration> parameters = getSelectedDeviceProperties(device);
 
 			if (executor != null && parameters != null && parameters.size() > 0) {
@@ -444,89 +440,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 		performDeployment(selection, null);
 	}
 
-	/**
-	 * Gets the deployment executor.
-	 * 
-	 * @param device
-	 *            the device for which a deployment executor should be get
-	 * @param overrideComHandler
-	 *            if not null this com handler will be given to the executor
-	 * 
-	 * @return the deployment executor
-	 */
-	public IDeviceManagementInteractor getDeploymentExecutor(
-			final Device device,
-			final AbstractDeviceManagementCommunicationHandler overrideComHandler) {
-		if (null == deploymentExecutors) {
-			deploymentExecutors = loadDeploymentExecutors();
-		}
-
-		for (IDeviceManagementInteractor idepExec : deploymentExecutors) {
-			if (idepExec.supports(device.getProfile())) {
-				idepExec.setDeviceManagementCommunicationHandler((null != overrideComHandler) ? overrideComHandler
-						: getDevMgmCommunicationHandler(device));
-				return (null != idepExec.getDevMgmComHandler()) ? idepExec
-						: null;
-			}
-		}
-
-		return null;
-	}
-
-	public IDeviceManagementInteractor getDeploymentExecutor(final Device device) {
-		return getDeploymentExecutor(device, null);
-	}
-
-	public static List<IDeviceManagementInteractor> loadDeploymentExecutors() {
-		ArrayList<IDeviceManagementInteractor> deploymentExecutors = new ArrayList<IDeviceManagementInteractor>();
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				Activator.PLUGIN_ID, "devicemanagementinteractor"); //$NON-NLS-1$
-		for (IConfigurationElement element : elems) {
-			try {
-				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IDeviceManagementInteractor) {
-					deploymentExecutors.add((IDeviceManagementInteractor) object);
-				}
-			} catch (CoreException corex) {
-				Activator.getDefault().logError(Messages.DeploymentCoordinator_ERROR_Message, corex);
-			}
-		}
-		return deploymentExecutors;
-	}
-
-	private AbstractDeviceManagementCommunicationHandler getDevMgmCommunicationHandler(
-			Device device) {
-		if (null == deviceMangementCommunicationHandlers) {
-			loadDeviceManagementCommunicationHandlers();
-		}
-
-		// TODO currently we only have one communication handler. Extend this
-		// here
-		if (deviceMangementCommunicationHandlers.size() > 0) {
-			return deviceMangementCommunicationHandlers.get(0);
-		}
-		return null;
-	}
-
-	private void loadDeviceManagementCommunicationHandlers() {
-		deviceMangementCommunicationHandlers = new ArrayList<AbstractDeviceManagementCommunicationHandler>();
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				Activator.PLUGIN_ID, "devicemanagementcommunicationhandler"); //$NON-NLS-1$
-
-		for (IConfigurationElement element : elems) {
-			try {
-				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof AbstractDeviceManagementCommunicationHandler) {
-					deviceMangementCommunicationHandlers
-							.add((AbstractDeviceManagementCommunicationHandler) object);
-				}
-			} catch (CoreException corex) {
-				Activator.getDefault().logError(Messages.DeploymentCoordinator_ERROR_Message, corex);
-			}
-		}
-	}
+	
 
 	/** The listeners. */
 	private final List<IDeploymentListener> listeners = new ArrayList<>();

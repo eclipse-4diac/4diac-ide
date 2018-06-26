@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
+ * Copyright (c) 2017 -2018 fortiss GmbH, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,8 +13,7 @@ package org.eclipse.fordiac.ide.systemconfiguration.properties;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
-import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -99,14 +98,8 @@ public class DeviceInterfaceSection extends AbstractDevResInterfaceSection {
 	
 	private static String[] getAvailableProfileNames() {
 		if (null == profileNames) {
-			List<IDeviceManagementInteractor> deploymentExecutors = DeploymentCoordinator.loadDeploymentExecutors();
-			String newProfileNames[] = new String[deploymentExecutors.size()];
-			int i = 0;		
-			for (IDeviceManagementInteractor idepExec : deploymentExecutors) {
-				newProfileNames[i] = idepExec.getProfileName();
-				i++;
-			}
-			profileNames = newProfileNames;
+			List<String> newProfileNames = DeviceManagementInteractorFactory.INSTANCE.getAvailableProfileNames();
+			profileNames = newProfileNames.toArray(new String[newProfileNames.size()]);
 		}
 		return profileNames;
 	}
