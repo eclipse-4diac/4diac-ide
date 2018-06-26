@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2007 - 2017 TU Wien ACIN, Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2007 - 2018 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +28,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteDeviceParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
-import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -35,13 +36,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class DeploymentExecutor implements IDeviceManagementInteractor {
-	private static final String PROFILE_NAME = "HOLOBLOC"; //$NON-NLS-1$
+public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	private final HashSet<String> genFBs = new HashSet<String>();
 	protected int id = 0;
-	AbstractDeviceManagementCommunicationHandler devMgmCommHandler = null;
 
 	public DeploymentExecutor() {
+		//TODO replace with null
+		this(new EthernetDeviceManagementCommunicationHandler());
+	}
+	
+	public DeploymentExecutor(AbstractDeviceManagementCommunicationHandler commHandler) {
+		super(commHandler);
 		genFBs.add("PUBLISH"); //$NON-NLS-1$
 		genFBs.add("SUBSCRIBE"); //$NON-NLS-1$
 		genFBs.add("PUBL"); //$NON-NLS-1$
@@ -49,41 +54,17 @@ public class DeploymentExecutor implements IDeviceManagementInteractor {
 		genFBs.add("SERVER"); //$NON-NLS-1$
 		genFBs.add("CLIENT"); //$NON-NLS-1$
 	}
-
+	
 	@Override
-	public void setDeviceManagementCommunicationHandler(AbstractDeviceManagementCommunicationHandler handler) {
-		devMgmCommHandler = handler;
+	public EthernetDeviceManagementCommunicationHandler getDevMgmComHandler() {
+		return (EthernetDeviceManagementCommunicationHandler)super.getDevMgmComHandler();
 	}
 
-	@Override
-	public AbstractDeviceManagementCommunicationHandler getDevMgmComHandler() {
-		return devMgmCommHandler;
-	}
-
-	private String getValidType(final FB fb) {
+	private static String getValidType(final FB fb) {
 		if (fb != null && fb.getPaletteEntry() != null) {
 			return fb.getTypeName();
 		}
 		return null;
-	}
-
-	public void sendREQ(final String destination, final String request) throws IOException {
-		devMgmCommHandler.sendREQ(destination, request);
-		// TODO maybe an error message would be good
-	}
-
-	public void sendQUERY(final String destination, final String request) throws IOException {
-		devMgmCommHandler.sendQUERY(destination, request);
-		// TODO maybe an error message would be good
-	}
-	
-	@Override
-	public boolean supports(final String profile) {
-		return getProfileName().equals(profile);
-	}
-
-	public String getProfileName() {
-		return PROFILE_NAME;
 	}
 
 	@Override
@@ -126,7 +107,7 @@ public class DeploymentExecutor implements IDeviceManagementInteractor {
 		return Messages.DeploymentExecutor_WriteParameter;
 	}
 
-	private String encodeXMLChars(final String value) {
+	private static String encodeXMLChars(final String value) {
 		String retVal = value;
 		retVal = retVal.replaceAll("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
 		retVal = retVal.replaceAll("'", "&apos;"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -290,7 +271,7 @@ public class DeploymentExecutor implements IDeviceManagementInteractor {
 						new Object[] { dev.getName() }));
 			}
 		} finally {
-			devMgmCommHandler.resetTypes();
+			resetTypes();
 		}
 	}
 }

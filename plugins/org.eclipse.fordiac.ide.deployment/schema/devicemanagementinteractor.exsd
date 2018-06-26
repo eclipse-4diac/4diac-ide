@@ -30,7 +30,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="DeviceManagementInteractor"/>
+            <element ref="DeviceManagementInteractorProvider"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -56,7 +56,7 @@
       </complexType>
    </element>
 
-   <element name="DeviceManagementInteractor">
+   <element name="DeviceManagementInteractorProvider">
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
@@ -64,7 +64,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagmentInteractor"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagmentInteractorProvider"/>
                </appInfo>
             </annotation>
          </attribute>

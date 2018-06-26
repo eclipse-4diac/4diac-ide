@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH, 
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -165,8 +166,8 @@ public class DeploymentCoordinator implements IDeploymentListener {
 				IDeviceManagementInteractor executor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(resDepData.res.getDevice(), overrideDevMgmCommHandler);
 
 				if (executor != null) {
-					executor.getDevMgmComHandler().addDeploymentListener(getInstance());
-					executor.getDevMgmComHandler().resetTypes();
+					executor.addDeploymentListener(getInstance());
+					executor.resetTypes();
 					try {
 						deployResource(monitor, resDepData, executor);
 					} catch (final Exception e) {
@@ -182,7 +183,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 							}
 						});
 					}
-					executor.getDevMgmComHandler().removeDeploymentListener(getInstance());
+					executor.removeDeploymentListener(getInstance());
 
 				} else {
 					printUnsupportedDeviceProfileMessageBox(resDepData.res.getDevice(), resDepData.res);
@@ -262,7 +263,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 
 			if (executor != null && parameters != null && parameters.size() > 0) {
 				try {
-					executor.getDevMgmComHandler().addDeploymentListener(getInstance());
+					executor.addDeploymentListener(getInstance());
 					String mgrid = getMGR_ID(device);
 					executor.getDevMgmComHandler().connect(mgrid);
 					for (VarDeclaration varDeclaration : parameters) {
@@ -283,7 +284,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 						//TODO model refactoring - show error message to user
 						Activator.getDefault().logError(e.getMessage(), e);
 					}
-					executor.getDevMgmComHandler().removeDeploymentListener(getInstance());					
+					executor.removeDeploymentListener(getInstance());					
 				}
 			}
 		}

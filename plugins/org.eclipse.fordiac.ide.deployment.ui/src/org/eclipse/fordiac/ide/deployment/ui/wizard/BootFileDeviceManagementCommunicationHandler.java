@@ -107,8 +107,4 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractDevice
 		stringBuffer = new StringBuffer();
 	}
 
-	@Override
-	public void sendQUERY(String destination, String request) throws IOException {
-		// nothing to do here for now		
-	}
 }

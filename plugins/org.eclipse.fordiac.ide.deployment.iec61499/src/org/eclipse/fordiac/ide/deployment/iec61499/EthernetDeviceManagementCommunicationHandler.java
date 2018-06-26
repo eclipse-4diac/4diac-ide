@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 - 2017 fortiss GmbH
+ * Copyright (c) 2013 - 2018 fortiss GmbH, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,7 +22,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
-import java.util.HashSet;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -180,39 +179,19 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 		throw new InvalidMgmtID(mgrID);
 	}
 
-	public void sendQUERY(final String destination, final String request) throws IOException {
+	public QueryResponseHandler sendQUERY(final String destination, final String request) throws IOException {
 		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 		try {
 			SAXParser saxParser = saxParserFactory.newSAXParser();
 			QueryResponseHandler handler = new QueryResponseHandler();
 			String response = sendREQandRESP(destination, request);
 			saxParser.parse(new InputSource(new StringReader(response)), handler);
-//			postCommandSent(info, destination, request);
-			if(request.contains("FBType")){ //$NON-NLS-1$
-				getFBTypes(getInfo(destination), handler);
-			}else if(request.contains("AdapterType")){ //$NON-NLS-1$
-				getAdapterTypes(getInfo(destination), handler);
-			}
+			return handler;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		// TODO maybe an error message would be good
+		return null;
 	}
 
-	private void getFBTypes(String info, QueryResponseHandler handler) {
-		if(null == fbTypes){
-			fbTypes = new HashSet<String>();
-		}
-		fbTypes = handler.getQueryResult();
-//		responseReceived("<Response FBTypes=\"" + fbTypes.toString() + "\"/>", info);
-	}
-	
-	
-	private void getAdapterTypes(String info, QueryResponseHandler handler) {
-		if(null == adapterTypes){
-			adapterTypes = new HashSet<String>();
-		}
-		adapterTypes = handler.getQueryResult();
-//		responseReceived("<Response AdapterTypes=\"" + adapterTypes.toString() + "\"/>", info);
-	}
 }

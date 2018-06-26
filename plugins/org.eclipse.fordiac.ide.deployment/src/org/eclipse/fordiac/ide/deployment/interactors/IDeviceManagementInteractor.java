@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
+import java.util.Set;
+
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
@@ -23,6 +25,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteDeviceParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
+import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -33,30 +36,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  */
 public interface IDeviceManagementInteractor {
 	
-	/** Allows to set the communication handler to be used for the deployment process
-	 * 
-	 * @param handler the communication handler to be used for the deployment
-	 */
-	public void setDeviceManagementCommunicationHandler(AbstractDeviceManagementCommunicationHandler handler);
+	public Set<String> getTypes();
+
+	public Set<String> getAdapterTypes();
 	
-	/** get the current device management communication handler
-	 */
+	public void resetTypes();
+	
+	public void addDeploymentListener(final IDeploymentListener listener);
+
+	public void removeDeploymentListener(final IDeploymentListener listener);
+	
+	//FIXME remove this function
 	public AbstractDeviceManagementCommunicationHandler getDevMgmComHandler();
-
-	/**
-	 * Supports.
-	 * 
-	 * @param profile
-	 *          the profile
-	 * 
-	 * @return true, if successful
-	 */
-	public boolean supports(String profile);
 	
 	
-	public String getProfileName();
-	
-
 	/**
 	 * Creates the resource.
 	 * 

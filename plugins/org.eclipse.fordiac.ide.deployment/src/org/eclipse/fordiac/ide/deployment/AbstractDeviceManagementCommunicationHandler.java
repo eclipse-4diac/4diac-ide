@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 - 2017 fortiss GmbH
+ * Copyright (c) 2013 - 2018 fortiss GmbH, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,7 +13,6 @@ package org.eclipse.fordiac.ide.deployment;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
@@ -24,29 +23,12 @@ import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
  * Base class for coordinating the management communication to a device
  */
 public abstract class AbstractDeviceManagementCommunicationHandler {
-	protected HashSet<String> fbTypes = null;
-	protected HashSet<String> adapterTypes = null;
-
-	public HashSet<String> getTypes() {
-		return fbTypes;
-	}
-
-	public HashSet<String> getAdapterTypes() {
-		return adapterTypes;
-	}
-	
-	public void resetTypes() {
-		fbTypes = null;
-		adapterTypes = null;
-	}
 
 	abstract public void connect(String address) throws InvalidMgmtID, UnknownHostException, IOException;
 
 	abstract public void disconnect() throws DisconnectException;
 
 	abstract public void sendREQ(final String destination, final String request) throws IOException;
-
-	abstract public void sendQUERY(final String destination, final String request) throws IOException;
 
 	private final ArrayList<IDeploymentListener> listeners = new ArrayList<IDeploymentListener>();
 

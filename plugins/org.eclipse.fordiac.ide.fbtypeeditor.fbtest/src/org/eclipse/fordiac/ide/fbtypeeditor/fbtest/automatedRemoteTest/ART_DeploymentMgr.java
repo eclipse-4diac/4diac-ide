@@ -86,13 +86,10 @@ public class ART_DeploymentMgr {
 			PaletteEntry entry = entries.get(0);
 			res.setPaletteEntry(entry);
 		} 
-		
 				
 		res.setName("__"+fbType.getName()+"Test"+UID);  //$NON-NLS-1$//$NON-NLS-2$
 
-
 		executor = new DeploymentExecutor();
-		executor.setDeviceManagementCommunicationHandler(new EthernetDeviceManagementCommunicationHandler());
 		
 		listener = new IDeploymentListener() {
 			

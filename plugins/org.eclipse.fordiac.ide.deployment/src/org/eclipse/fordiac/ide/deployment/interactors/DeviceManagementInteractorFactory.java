@@ -32,7 +32,7 @@ public enum DeviceManagementInteractorFactory {
 	
 	INSTANCE;
 	
-	private List<IDeviceManagementInteractor> deviceManagementInteractors = null;
+	private List<IDeviceManagementInteractorProvider> deviceManagementInteractors = null;
 	private List<AbstractDeviceManagementCommunicationHandler> deviceMangementCommunicationHandlers = null;
 	
 	
@@ -48,11 +48,10 @@ public enum DeviceManagementInteractorFactory {
 	 */
 	public IDeviceManagementInteractor getDeviceManagementInteractor(final Device device,
 			final AbstractDeviceManagementCommunicationHandler overrideComHandler) {
-		for (IDeviceManagementInteractor idepExec : getDeviceManagementInteractorList()) {
+		for (IDeviceManagementInteractorProvider idepExec : getDeviceManagementInteractorList()) {
 			if (idepExec.supports(device.getProfile())) {
-				idepExec.setDeviceManagementCommunicationHandler((null != overrideComHandler) ? overrideComHandler
+				return idepExec.createInteractor((null != overrideComHandler) ? overrideComHandler
 						: getDevMgmCommunicationHandler(device));
-				return (null != idepExec.getDevMgmComHandler()) ? idepExec : null;
 			}
 		}
 		return null;
@@ -71,23 +70,23 @@ public enum DeviceManagementInteractorFactory {
 				.collect(Collectors.toList());
 	}
 	
-	private List<IDeviceManagementInteractor> getDeviceManagementInteractorList(){
+	private List<IDeviceManagementInteractorProvider> getDeviceManagementInteractorList(){
 		if (null == deviceManagementInteractors) {
 			deviceManagementInteractors = loadDeviceManagmentInteractors();
 		}
 		return deviceManagementInteractors;
 	}
 
-	private static List<IDeviceManagementInteractor> loadDeviceManagmentInteractors() {
-		ArrayList<IDeviceManagementInteractor> deploymentExecutors = new ArrayList<IDeviceManagementInteractor>();
+	private static List<IDeviceManagementInteractorProvider> loadDeviceManagmentInteractors() {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
 				Activator.PLUGIN_ID, "devicemanagementinteractor"); //$NON-NLS-1$
+		ArrayList<IDeviceManagementInteractorProvider> deploymentExecutors = new ArrayList<>(elems.length);
 		for (IConfigurationElement element : elems) {
 			try {
 				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IDeviceManagementInteractor) {
-					deploymentExecutors.add((IDeviceManagementInteractor) object);
+				if (object instanceof IDeviceManagementInteractorProvider) {
+					deploymentExecutors.add((IDeviceManagementInteractorProvider) object);
 				}
 			} catch (CoreException corex) {
 				Activator.getDefault().logError(Messages.DeploymentCoordinator_ERROR_Message, corex);

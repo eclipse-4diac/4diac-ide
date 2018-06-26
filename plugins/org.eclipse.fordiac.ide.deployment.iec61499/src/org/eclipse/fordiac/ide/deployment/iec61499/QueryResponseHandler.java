@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.iec61499;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,7 +62,7 @@ public class QueryResponseHandler extends DefaultHandler {
 		}
 	}
 
-	public HashSet<String> getQueryResult() {
+	public Set<String> getQueryResult() {
 		return this.queryResult;
 	}
 }

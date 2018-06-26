@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
+ * Copyright (c) 2017 - 2018 fortiss GmbH, Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,15 +9,19 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - reworked this class for the new device managment interaction 
+ *                 interface  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBInstanceException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBTypeException;
@@ -35,16 +39,11 @@ import org.eclipse.swt.widgets.Display;
 
 public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 
-	private static final String PROFILE_NAME = "DynamicTypeLoad"; //$NON-NLS-1$
-
-	public DynamicTypeLoad_DeploymentExecutor() {
-		super();
+	public DynamicTypeLoad_DeploymentExecutor(AbstractDeviceManagementCommunicationHandler commHandler) {
+		super(commHandler);
+		// nothing todo here
 	}
 
-	@Override
-	public String getProfileName() {
-		return PROFILE_NAME;
-	}
 
 	@Override
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws CreateFBInstanceException {
@@ -57,7 +56,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 		super.createFBInstance(fbData, res);
 	}
 
-	private HashMap<String, AdapterType> getAdapterTypes(InterfaceList interfaceList) {
+	private static HashMap<String, AdapterType> getAdapterTypes(InterfaceList interfaceList) {
 		HashMap<String, AdapterType> list = new HashMap<String, AdapterType>();
 		interfaceList.getPlugs().forEach((e) -> list.put(e.getTypeName(), (AdapterType) EcoreUtil.copy(e.getType())));
 		interfaceList.getSockets().forEach((e) -> list.put(e.getTypeName(), (AdapterType) EcoreUtil.copy(e.getType())));
@@ -65,15 +64,15 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 	}
 
 	public void createFBType(final FBType fbType, final Resource res) throws CreateFBTypeException {
-		if(null != devMgmCommHandler.getTypes()) {
-			setAttribute(res.getDevice(), "FBType", devMgmCommHandler.getTypes()); //$NON-NLS-1$
+		if(null != getTypes()) {
+			setAttribute(res.getDevice(), "FBType", getTypes()); //$NON-NLS-1$
 		}
 		if ((fbType instanceof BasicFBType || fbType instanceof CompositeFBType)
-				&& ( (null != devMgmCommHandler.getTypes() && !devMgmCommHandler.getTypes().contains(fbType.getName())) 
-						|| (null == devMgmCommHandler.getTypes() && !isAttribute(res.getDevice(), fbType.getName(), "FBType")))) { //$NON-NLS-1$
+				&& ( (null != getTypes() && !getTypes().contains(fbType.getName())) 
+						|| (null == getTypes() && !isAttribute(res.getDevice(), fbType.getName(), "FBType")))) { //$NON-NLS-1$
 			if(fbType instanceof CompositeFBType) {
 				for(FBNetworkElement netelem : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
-					if(!devMgmCommHandler.getTypes().contains(netelem.getTypeName())) {
+					if(!getTypes().contains(netelem.getTypeName())) {
 						HashMap<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());						
 						if(!adapters.isEmpty()) {
 							loopAdapterTypes(adapters, res);
@@ -86,17 +85,12 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 			String luaSkript = luaFilter.createLUA(fbType);
 			String request = MessageFormat.format(Messages.DTL_CreateFBType,
 					new Object[] { id++, fbType.getName(), luaSkript });
-			try {
-				if (this.devMgmCommHandler instanceof EthernetDeviceManagementCommunicationHandler) {
-					String result = ((EthernetDeviceManagementCommunicationHandler) devMgmCommHandler)
-							.sendREQandRESP("", request); //$NON-NLS-1$
-					if (result.contains("Reason")) { //$NON-NLS-1$
-						throw new CreateFBTypeException("LUA skript for " + fbType.getName() + " FBType not executed");
-					} else {
-						devMgmCommHandler.getTypes().add(fbType.getName());
-					}
+			try {				
+				String result = getDevMgmComHandler().sendREQandRESP("", request); //$NON-NLS-1$
+				if (result.contains("Reason")) { //$NON-NLS-1$
+					throw new CreateFBTypeException("LUA skript for " + fbType.getName() + " FBType not executed");
 				} else {
-					sendREQ(res.getName(), request);
+					getTypes().add(fbType.getName());
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -104,7 +98,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private boolean isAttribute(Device device, String fbTypeName, String attributeType) {
+	private static boolean isAttribute(Device device, String fbTypeName, String attributeType) {
 		if(null != device.getAttribute(attributeType)) {			
 			for(String s : device.getAttributeValue(attributeType).split(",")) { //$NON-NLS-1$
 				if(fbTypeName.equals(s.trim())) {
@@ -115,7 +109,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 		return false;
 	}
 	
-	private void setAttribute(Device device, String string, HashSet<String> hashSet) {
+	private static void setAttribute(Device device, String string, Set<String> hashSet) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				device.setAttribute(string, "STRING", String.join(", ", hashSet), "created during deployment"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -124,26 +118,21 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 	}
 	
 	public void createAdapterType(final String adapterKey, HashMap<String, AdapterType> adapters, final Resource res) throws CreateFBTypeException {
-		if(null != devMgmCommHandler.getAdapterTypes()) {
-			setAttribute(res.getDevice(), "AdapterType", devMgmCommHandler.getAdapterTypes());
+		if(null != getAdapterTypes()) {
+			setAttribute(res.getDevice(), "AdapterType", getAdapterTypes());
 		}
-		if ( (null != devMgmCommHandler.getAdapterTypes() && !devMgmCommHandler.getAdapterTypes().contains(adapterKey)) 
-				|| (null == devMgmCommHandler.getAdapterTypes() && !isAttribute(res.getDevice(), adapterKey, "AdapterType")) ) {			
+		if ( (null != getAdapterTypes()) && (!getAdapterTypes().contains(adapterKey) || 
+				!isAttribute(res.getDevice(), adapterKey, "AdapterType")) ) {			
 			ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 			String luaSkript = luaFilter.createLUA(adapters.get(adapterKey));
 			String request = MessageFormat.format(Messages.DTL_CreateAdapterType,
 					new Object[] { id++, adapterKey, luaSkript });
 			try {
-				if (this.devMgmCommHandler instanceof EthernetDeviceManagementCommunicationHandler) {
-					String result = ((EthernetDeviceManagementCommunicationHandler) devMgmCommHandler).sendREQandRESP("", request); //$NON-NLS-1$
-					if (result.contains("Reason")) { //$NON-NLS-1$
-						throw new CreateFBTypeException(
-								"LUA skript for " + adapterKey + " AdapterType not executed");
-					} else {
-						devMgmCommHandler.getAdapterTypes().add(adapterKey);
-					}
+				String result = getDevMgmComHandler().sendREQandRESP("", request); //$NON-NLS-1$
+				if (result.contains("Reason")) { //$NON-NLS-1$
+					throw new CreateFBTypeException("LUA skript for " + adapterKey + " AdapterType not executed");
 				} else {
-					sendREQ(res.getName(), request);
+					getAdapterTypes().add(adapterKey);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -152,10 +141,11 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private void queryFBTypes(FB fb, Resource res) {
-		if (null != devMgmCommHandler && null == devMgmCommHandler.getTypes()) {
+		if (null == getTypes()) {
 			String request = MessageFormat.format(Messages.DTL_QueryFBTypes, new Object[] { id++ });
 			try {
-				sendQUERY(res.getName(), request);
+				QueryResponseHandler queryResp = getDevMgmComHandler().sendQUERY(res.getName(), request);
+				setTypes(null != queryResp ? queryResp.getQueryResult() : Collections.emptySet());
 			} catch (IOException e) {
 				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "FB Types" })); //$NON-NLS-1$
 			}
@@ -169,10 +159,11 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private void queryAdapterTypes(HashMap<String, AdapterType> adapters, Resource res) {
-		if (null != devMgmCommHandler && null == devMgmCommHandler.getAdapterTypes()) {
+		if (null == getAdapterTypes()) {
 			String request = MessageFormat.format(Messages.DTL_QueryAdapterTypes, new Object[] { id++ });
 			try {
-				sendQUERY(res.getName(), request);
+				QueryResponseHandler queryResp = getDevMgmComHandler().sendQUERY(res.getName(), request);
+				setAdapterTypes(null != queryResp ? queryResp.getQueryResult() : Collections.emptySet());
 			} catch (IOException e1) {
 				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "Adapter Types" }));
 			}
