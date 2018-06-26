@@ -53,7 +53,6 @@
 		<module>../../features/org.eclipse.fordiac.ide.systemimport.feature</module>
 		<module>../../features/org.eclipse.fordiac.ide.typeeditor.feature</module>
 		<module>../../features/org.eclipse.fordiac.ide.workbench.feature</module>
-		<module>../../features/org.eclipse.fordiac.ide.monitoring.feature</module>
 		<module>../../features/org.eclipse.fordiac.ide.comgeneration.feature</module>
 	</modules>
 

@@ -276,7 +276,6 @@
       <feature id="org.eclipse.fordiac.ide.systemimport.feature"/>
       <feature id="org.eclipse.fordiac.ide.typeeditor.feature"/>
       <feature id="org.eclipse.fordiac.ide.workbench.feature"/>
-      <feature id="org.eclipse.fordiac.ide.monitoring.feature"/>
       <feature id="org.eclipse.xtext.xbase.lib"/>
       <feature id="org.eclipse.emf.mwe2.runtime.sdk"/>
       <feature id="org.eclipse.xtext.runtime"/>
