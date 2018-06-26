@@ -20,7 +20,6 @@ import java.util.HashSet;
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
-import org.eclipse.fordiac.ide.deployment.IDeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateConnectionException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBInstanceException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateResourceInstanceException;
@@ -28,6 +27,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteDeviceParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class DeploymentExecutor implements IDeploymentExecutor {
+public class DeploymentExecutor implements IDeviceManagementInteractor {
 	private static final String PROFILE_NAME = "HOLOBLOC"; //$NON-NLS-1$
 	private final HashSet<String> genFBs = new HashSet<String>();
 	protected int id = 0;

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2011, 2013, 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008 - 2011, 2013, 2017, 2018 Profactor GmbH, fortiss GmbH,
+ * 						Johanns Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,8 +11,11 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment;
+package org.eclipse.fordiac.ide.deployment.interactors;
 
+import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
+import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateConnectionException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBInstanceException;
 import org.eclipse.fordiac.ide.deployment.exceptions.CreateResourceInstanceException;
@@ -23,12 +27,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/**
- * The Interface IDeploymentExecutor.
+/** Interface for classes that allow deployment and monitoring to interact with
+ * a device's device management functionality.
  * 
- * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
  */
-public interface IDeploymentExecutor {
+public interface IDeviceManagementInteractor {
 	
 	/** Allows to set the communication handler to be used for the deployment process
 	 * 

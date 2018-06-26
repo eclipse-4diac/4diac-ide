@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
 import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
 import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -57,7 +58,7 @@ import org.eclipse.ui.PlatformUI;
 
 public class DeploymentCoordinator implements IDeploymentListener {
 	private static DeploymentCoordinator instance;
-	private List<IDeploymentExecutor> deploymentExecutors = null;
+	private List<IDeviceManagementInteractor> deploymentExecutors = null;
 	private List<AbstractDeviceManagementCommunicationHandler> deviceMangementCommunicationHandlers = null;
 	private final Map<Device, List<VarDeclaration>> deployedDeviceProperties = new HashMap<>();
 
@@ -165,7 +166,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 					throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 				}
 
-				IDeploymentExecutor executor = getDeploymentExecutor(resDepData.res.getDevice(), overrideDevMgmCommHandler);
+				IDeviceManagementInteractor executor = getDeploymentExecutor(resDepData.res.getDevice(), overrideDevMgmCommHandler);
 
 				if (executor != null) {
 					executor.getDevMgmComHandler().addDeploymentListener(getInstance());
@@ -223,7 +224,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 			return work;
 		}
 
-		protected void deployResource(final IProgressMonitor monitor, final ResourceDeploymentData resDepData, IDeploymentExecutor executor)
+		protected void deployResource(final IProgressMonitor monitor, final ResourceDeploymentData resDepData, IDeviceManagementInteractor executor)
 				throws InvalidMgmtID, UnknownHostException, IOException, CreateResourceInstanceException,
 				WriteResourceParameterException, CreateFBInstanceException, WriteFBParameterException,
 				CreateConnectionException, StartException, DisconnectException {
@@ -260,7 +261,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 		}
 
 		private void configureDevice(final IProgressMonitor monitor, Device device) {
-			IDeploymentExecutor executor = getDeploymentExecutor(device, overrideDevMgmCommHandler);
+			IDeviceManagementInteractor executor = getDeploymentExecutor(device, overrideDevMgmCommHandler);
 			List<VarDeclaration> parameters = getSelectedDeviceProperties(device);
 
 			if (executor != null && parameters != null && parameters.size() > 0) {
@@ -291,7 +292,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 			}
 		}
 		
-		private void deployParamters(ResourceDeploymentData resDepData, IDeploymentExecutor executor,
+		private void deployParamters(ResourceDeploymentData resDepData, IDeviceManagementInteractor executor,
 				IProgressMonitor monitor) throws WriteFBParameterException {
 			for (ParameterData param : resDepData.params) {
 				executor.writeFBParameter(resDepData.res, param.value, new FBDeploymentData(param.prefix, (FB) param.var.getFBNetworkElement()), 
@@ -301,7 +302,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 			
 		}
 
-		private void deployConnections(final ResourceDeploymentData resDepData, final IDeploymentExecutor executor,  IProgressMonitor monitor) throws CreateConnectionException {
+		private void deployConnections(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor,  IProgressMonitor monitor) throws CreateConnectionException {
 			for (ConnectionDeploymentData con : resDepData.connections) {
 				//TODO model refactoring - if one connection endpoint is part of resource find inner endpoint  
 				executor.createConnection(resDepData.res, con);
@@ -312,7 +313,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 			}
 		}
 		
-		private void createFBInstance(final ResourceDeploymentData resDepData, final IDeploymentExecutor executor,
+		private void createFBInstance(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor,
 				final IProgressMonitor monitor)
 				throws CreateFBInstanceException, WriteFBParameterException {
 			Resource res = resDepData.res;
@@ -453,14 +454,14 @@ public class DeploymentCoordinator implements IDeploymentListener {
 	 * 
 	 * @return the deployment executor
 	 */
-	public IDeploymentExecutor getDeploymentExecutor(
+	public IDeviceManagementInteractor getDeploymentExecutor(
 			final Device device,
 			final AbstractDeviceManagementCommunicationHandler overrideComHandler) {
 		if (null == deploymentExecutors) {
 			deploymentExecutors = loadDeploymentExecutors();
 		}
 
-		for (IDeploymentExecutor idepExec : deploymentExecutors) {
+		for (IDeviceManagementInteractor idepExec : deploymentExecutors) {
 			if (idepExec.supports(device.getProfile())) {
 				idepExec.setDeviceManagementCommunicationHandler((null != overrideComHandler) ? overrideComHandler
 						: getDevMgmCommunicationHandler(device));
@@ -472,20 +473,20 @@ public class DeploymentCoordinator implements IDeploymentListener {
 		return null;
 	}
 
-	public IDeploymentExecutor getDeploymentExecutor(final Device device) {
+	public IDeviceManagementInteractor getDeploymentExecutor(final Device device) {
 		return getDeploymentExecutor(device, null);
 	}
 
-	public static List<IDeploymentExecutor> loadDeploymentExecutors() {
-		ArrayList<IDeploymentExecutor> deploymentExecutors = new ArrayList<IDeploymentExecutor>();
+	public static List<IDeviceManagementInteractor> loadDeploymentExecutors() {
+		ArrayList<IDeviceManagementInteractor> deploymentExecutors = new ArrayList<IDeviceManagementInteractor>();
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				Activator.PLUGIN_ID, "downloadexecutor"); //$NON-NLS-1$
+				Activator.PLUGIN_ID, "devicemanagementinteractor"); //$NON-NLS-1$
 		for (IConfigurationElement element : elems) {
 			try {
 				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IDeploymentExecutor) {
-					deploymentExecutors.add((IDeploymentExecutor) object);
+				if (object instanceof IDeviceManagementInteractor) {
+					deploymentExecutors.add((IDeviceManagementInteractor) object);
 				}
 			} catch (CoreException corex) {
 				Activator.getDefault().logError(Messages.DeploymentCoordinator_ERROR_Message, corex);

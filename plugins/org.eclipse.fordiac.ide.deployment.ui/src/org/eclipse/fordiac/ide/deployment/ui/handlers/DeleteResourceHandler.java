@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
-import org.eclipse.fordiac.ide.deployment.IDeploymentExecutor;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart;
 
@@ -45,7 +45,7 @@ public class DeleteResourceHandler extends AbstractDeploymentCommand {
 	}
 
 	@Override
-	protected void executeCommand(IDeploymentExecutor executor) throws Exception {
+	protected void executeCommand(IDeviceManagementInteractor executor) throws Exception {
 		try {
 			executor.deleteResource(resource);
 		} catch (Exception e) {

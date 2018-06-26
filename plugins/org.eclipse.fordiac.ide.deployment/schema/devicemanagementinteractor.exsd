@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!--
- Copyright (c) 2008 Profactor GmbH
+ Copyright (c) 2008, 2018 Profactor GmbH, Johannes Kepler University
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -8,24 +8,29 @@
  http://www.eclipse.org/legal/epl-v10.html
  
  Contributors:
-   Gerhard Ebenhofer
+   Gerhard Ebenhofer, Alois Zoitl
      - initial API and implementation and/or initial documentation
 -->
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.fordiac.ide.deployment">
+<schema targetNamespace="org.eclipse.fordiac.ide.deployment" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.eclipse.fordiac.ide.deployment" id="org.eclipse.fordiac.ide.deployment.downloadexecutor" name="downloadexecutor"/>
+         <meta.schema plugin="org.eclipse.fordiac.ide.deployment" id="org.eclipse.fordiac.ide.deployment.devicemanagementinteractor" name="devicemanagementinteractor"/>
       </appInfo>
       <documentation>
-         This extensionpoint is used to implement a &quot;download executor&quot; for a new Profile.
+         This extensionpoint is used to implement a &quot;device management interactor&quot; for a new Profile.
       </documentation>
    </annotation>
 
    <element name="extension">
+      <annotation>
+         <appInfo>
+            <meta.element />
+         </appInfo>
+      </annotation>
       <complexType>
          <sequence>
-            <element ref="DeploymentExecutor"/>
+            <element ref="DeviceManagementInteractor"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -51,7 +56,7 @@
       </complexType>
    </element>
 
-   <element name="DeploymentExecutor">
+   <element name="DeviceManagementInteractor">
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
@@ -59,7 +64,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.deployment.IDeploymentExecutor"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagmentInteractor"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -84,7 +89,7 @@
 &lt;p&gt;
 &lt;pre&gt;
    &lt;extension
-         point=&quot;org.eclipse.fordiac.ide.deployment.downloadexecutor&quot;&gt;
+         point=&quot;org.eclipse.fordiac.ide.deployment.devicemanagementinteractor&quot;&gt;
       &lt;DeploymentExecutor
             class=&quot;org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor&quot;&gt;
       &lt;/DeploymentExecutor&gt;
@@ -111,5 +116,6 @@
          [Enter information about supplied implementation of this extension point.]
       </documentation>
    </annotation>
+
 
 </schema>

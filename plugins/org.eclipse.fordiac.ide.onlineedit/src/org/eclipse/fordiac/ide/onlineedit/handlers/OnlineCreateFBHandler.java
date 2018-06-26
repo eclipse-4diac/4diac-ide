@@ -13,12 +13,12 @@
 package org.eclipse.fordiac.ide.onlineedit.handlers;
 
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
-import org.eclipse.fordiac.ide.deployment.IDeploymentExecutor;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 
 public class OnlineCreateFBHandler extends AbstractOnlineFBHandler {
 
 	@Override
-	protected void executeCommand(IDeploymentExecutor executor) throws Exception {
+	protected void executeCommand(IDeviceManagementInteractor executor) throws Exception {
 		try {
 			executor.createFBInstance(new FBDeploymentData("", resFB), resource); //$NON-NLS-1$  //TODO correctly determine prefix
 		} catch (Exception e) {

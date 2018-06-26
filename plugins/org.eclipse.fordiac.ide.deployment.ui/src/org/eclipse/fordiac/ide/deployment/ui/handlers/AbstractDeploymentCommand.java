@@ -17,8 +17,8 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
-import org.eclipse.fordiac.ide.deployment.IDeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -130,7 +130,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 		if (null != list) {
 			for (Object currentElement : list) {
 				if (prepareParametersToExecute(currentElement)) {
-					IDeploymentExecutor executor = DeploymentCoordinator.getInstance().getDeploymentExecutor(device);
+					IDeviceManagementInteractor executor = DeploymentCoordinator.getInstance().getDeploymentExecutor(device);
 					if (null != executor) {
 						String mgrid = DeploymentCoordinator.getMGR_ID(device);
 						DeploymentCoordinator.getInstance().enableOutput(executor.getDevMgmComHandler());
@@ -172,7 +172,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 	
 	protected abstract boolean prepareParametersToExecute(Object element);
 	
-	protected abstract void executeCommand(IDeploymentExecutor executor) throws Exception;
+	protected abstract void executeCommand(IDeviceManagementInteractor executor) throws Exception;
 	
 	protected void manageExecutorError(){
 		DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(device, null);
