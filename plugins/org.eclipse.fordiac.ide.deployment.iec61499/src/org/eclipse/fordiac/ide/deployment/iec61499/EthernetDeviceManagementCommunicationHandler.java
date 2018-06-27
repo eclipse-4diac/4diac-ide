@@ -23,6 +23,7 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
 import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
 import org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferences;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class EthernetDeviceManagementCommunicationHandler extends AbstractDeviceManagementCommunicationHandler {
 	private static final int ASN1_TAG_IECSTRING = 80;
@@ -40,7 +42,7 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 	private DataOutputStream outputStream;
 	private DataInputStream inputStream;
 
-	private class MgrInformation {
+	private static class MgrInformation {
 		public String iP;
 		public Integer port;
 
@@ -150,7 +152,7 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 	 * @throws InvalidMgmtID
 	 *             when the given ide is no valid ip address port compbination
 	 */
-	private MgrInformation getValidMgrInformation(final String mgrID) throws InvalidMgmtID {
+	private static MgrInformation getValidMgrInformation(final String mgrID) throws InvalidMgmtID {
 		if (null != mgrID) {
 			String id = mgrID;
 			if (id.startsWith("\"")) { //$NON-NLS-1$
@@ -179,19 +181,13 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 		throw new InvalidMgmtID(mgrID);
 	}
 
-	public QueryResponseHandler sendQUERY(final String destination, final String request) throws IOException {
+	public QueryResponseHandler sendQUERY(final String destination, final String request) throws IOException, ParserConfigurationException, SAXException {
 		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-		try {
-			SAXParser saxParser = saxParserFactory.newSAXParser();
-			QueryResponseHandler handler = new QueryResponseHandler();
-			String response = sendREQandRESP(destination, request);
-			saxParser.parse(new InputSource(new StringReader(response)), handler);
-			return handler;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		// TODO maybe an error message would be good
-		return null;
+		SAXParser saxParser = saxParserFactory.newSAXParser();
+		QueryResponseHandler handler = new QueryResponseHandler();
+		String response = sendREQandRESP(destination, request);
+		saxParser.parse(new InputSource(new StringReader(response)), handler);
+		return handler;
 	}
 
 }

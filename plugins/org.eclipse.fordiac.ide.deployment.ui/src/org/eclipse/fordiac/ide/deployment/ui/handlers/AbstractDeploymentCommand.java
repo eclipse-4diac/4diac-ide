@@ -143,12 +143,12 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 							interactor.connect();
 							executeCommand(interactor);
 						} catch (Exception e) {
-							OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMGR_ID(device), this, true);
+							OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID(device), this, true);
 						}finally {
 							try {
 								interactor.disconnect();
 							} catch (DisconnectException e) {
-								OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMGR_ID(device), this, true);
+								OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID(device), this, true);
 							}							
 						}
 						interactor.removeDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());

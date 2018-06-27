@@ -288,7 +288,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 				return getText(element);
 			} else if (columnIndex == 1) {
 				if (element instanceof Device) {
-					return DeploymentHelper.getMGR_ID((Device)element);
+					return DeploymentHelper.getMgrID((Device)element);
 				}
 			} else if (columnIndex == 2) {
 				if (element instanceof Device) {

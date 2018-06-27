@@ -17,6 +17,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
@@ -38,8 +39,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
-	private final HashSet<String> genFBs = new HashSet<String>();
-	protected int id = 0;
+	private final Set<String> genFBs = new HashSet<>();
+	int id = 0;
 
 	public DeploymentExecutor(Device dev) {
 		this(dev, null);
@@ -68,7 +69,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	
 	@Override
 	protected String getDeviceAddress(Device device) {
-		return DeploymentHelper.getMGR_ID(device);
+		return DeploymentHelper.getMgrID(device);
 	}
 	
 	

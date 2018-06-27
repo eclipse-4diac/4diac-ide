@@ -23,10 +23,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class QueryResponseHandler extends DefaultHandler {
 
-	private HashSet<String> queryResult = null;
+	private Set<String> queryResult = null;
 	private boolean response = false;
 	private boolean nameList = false;
-	private final String PATTERN = "([A-Za-z_]\\w+)(\\1,\\s*[A-Za-z_]\\w+)*"; //$NON-NLS-1$
+	private final static String PATTERN = "([A-Za-z_]\\w+)(\\1,\\s*[A-Za-z_]\\w+)*"; //$NON-NLS-1$
 
 	public QueryResponseHandler() {
 		queryResult = new HashSet<String>();

@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -37,9 +38,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.swt.widgets.Display;
 
-public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
+public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
-	public DynamicTypeLoad_DeploymentExecutor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler) {
+	public DynamicTypeLoadDeploymentExecutor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler) {
 		super(dev, overrideHandler);
 		// nothing todo here
 	}
@@ -48,7 +49,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 	@Override
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws CreateFBInstanceException {
 		// check first if FBType exists
-		HashMap<String, AdapterType> adapters = getAdapterTypes(fbData.fb.getType().getInterfaceList());
+		Map<String, AdapterType> adapters = getAdapterTypes(fbData.fb.getType().getInterfaceList());
 		if (!adapters.isEmpty()) {
 			queryAdapterTypes(adapters, res);
 		}
@@ -56,8 +57,8 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 		super.createFBInstance(fbData, res);
 	}
 
-	private static HashMap<String, AdapterType> getAdapterTypes(InterfaceList interfaceList) {
-		HashMap<String, AdapterType> list = new HashMap<String, AdapterType>();
+	private static Map<String, AdapterType> getAdapterTypes(InterfaceList interfaceList) {
+		Map<String, AdapterType> list = new HashMap<>();
 		interfaceList.getPlugs().forEach((e) -> list.put(e.getTypeName(), (AdapterType) EcoreUtil.copy(e.getType())));
 		interfaceList.getSockets().forEach((e) -> list.put(e.getTypeName(), (AdapterType) EcoreUtil.copy(e.getType())));
 		return list;
@@ -73,7 +74,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 			if(fbType instanceof CompositeFBType) {
 				for(FBNetworkElement netelem : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
 					if(!getTypes().contains(netelem.getTypeName())) {
-						HashMap<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());						
+						Map<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());						
 						if(!adapters.isEmpty()) {
 							loopAdapterTypes(adapters, res);
 						}
@@ -117,7 +118,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 		});
 	}
 	
-	public void createAdapterType(final String adapterKey, HashMap<String, AdapterType> adapters, final Resource res) throws CreateFBTypeException {
+	public void createAdapterType(final String adapterKey, Map<String, AdapterType> adapters, final Resource res) throws CreateFBTypeException {
 		if(null != getAdapterTypes()) {
 			setAttribute(res.getDevice(), "AdapterType", getAdapterTypes());
 		}
@@ -146,7 +147,7 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 			try {
 				QueryResponseHandler queryResp = getDevMgmComHandler().sendQUERY(res.getName(), request);
 				setTypes(null != queryResp ? queryResp.getQueryResult() : Collections.emptySet());
-			} catch (IOException e) {
+			} catch (Exception e) {
 				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "FB Types" })); //$NON-NLS-1$
 			}
 		}
@@ -158,20 +159,20 @@ public class DynamicTypeLoad_DeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private void queryAdapterTypes(HashMap<String, AdapterType> adapters, Resource res) {
+	private void queryAdapterTypes(Map<String, AdapterType> adapters, Resource res) {
 		if (null == getAdapterTypes()) {
 			String request = MessageFormat.format(Messages.DTL_QueryAdapterTypes, new Object[] { id++ });
 			try {
 				QueryResponseHandler queryResp = getDevMgmComHandler().sendQUERY(res.getName(), request);
 				setAdapterTypes(null != queryResp ? queryResp.getQueryResult() : Collections.emptySet());
-			} catch (IOException e1) {
+			} catch (Exception e1) {
 				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "Adapter Types" }));
 			}
 		}
 		loopAdapterTypes(adapters, res);
 	}
 
-	private void loopAdapterTypes(HashMap<String, AdapterType> adapters, Resource res) {
+	private void loopAdapterTypes(Map<String, AdapterType> adapters, Resource res) {
 		adapters.keySet().forEach((e) -> {
 			try {
 				createAdapterType(e, adapters, res);

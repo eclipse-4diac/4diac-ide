@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
-public class FDBK2_DevMgmIneractorProvider extends DefaultDevMgmInteractorProvider {
+public class FDBK2DevMgmInteractorProvider extends DefaultDevMgmInteractorProvider {
 	private static final String PROFILE_NAME = "FBDK2"; //$NON-NLS-1$	
 	
 	@Override

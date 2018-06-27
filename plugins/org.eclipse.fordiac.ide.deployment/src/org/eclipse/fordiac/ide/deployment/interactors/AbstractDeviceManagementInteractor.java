@@ -26,8 +26,8 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 	
 	private final AbstractDeviceManagementCommunicationHandler commHandler;
 	private final Device device;
-	protected Set<String> fbTypes = null;
-	protected Set<String> adapterTypes = null;
+	private Set<String> fbTypes = null;
+	private Set<String> adapterTypes = null;
 	
 	protected AbstractDeviceManagementInteractor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler){
 		this.device = dev;

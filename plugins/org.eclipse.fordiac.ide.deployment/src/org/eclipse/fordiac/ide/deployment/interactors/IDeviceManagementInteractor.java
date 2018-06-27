@@ -3,7 +3,7 @@
  * 						Johanns Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * are made available under the terms of the Eclipse  License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
@@ -39,19 +39,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  */
 public interface IDeviceManagementInteractor {
 	
-	public void connect() throws InvalidMgmtID, UnknownHostException, IOException;
+	 void connect() throws InvalidMgmtID, UnknownHostException, IOException;
 
-	public void disconnect() throws DisconnectException;
+	 void disconnect() throws DisconnectException;
 	
-	public Set<String> getTypes();
+	 Set<String> getTypes();
 
-	public Set<String> getAdapterTypes();
+	 Set<String> getAdapterTypes();
 	
-	public void resetTypes();
+	 void resetTypes();
 	
-	public void addDeploymentListener(final IDeploymentListener listener);
+	 void addDeploymentListener(final IDeploymentListener listener);
 
-	public void removeDeploymentListener(final IDeploymentListener listener);
+	 void removeDeploymentListener(final IDeploymentListener listener);
 	
 	/**
 	 * Creates the resource.
@@ -62,7 +62,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws CreateResourceInstanceException
 	 *           the create resource instance exception
 	 */
-	public void createResource(Resource resource)
+	 void createResource(Resource resource)
 			throws CreateResourceInstanceException;
 
 	/**
@@ -78,7 +78,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws WriteResourceParameterException
 	 *           the write resource parameter exception
 	 */
-	public void writeResourceParameter(Resource resource, String parameter,
+	 void writeResourceParameter(Resource resource, String parameter,
 			String value) throws WriteResourceParameterException;
 
 	/**
@@ -94,7 +94,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws WriteDeviceParameterException
 	 *           the write device parameter exception
 	 */
-	public void writeDeviceParameter(Device device, String parameter, String value)
+	 void writeDeviceParameter(Device device, String parameter, String value)
 			throws WriteDeviceParameterException;
 
 	/**
@@ -108,7 +108,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws CreateFBInstanceException
 	 *           the create fb instance exception
 	 */
-	public void createFBInstance(FBDeploymentData fb, Resource res)
+	 void createFBInstance(FBDeploymentData fb, Resource res)
 			throws CreateFBInstanceException;
 
 	/**
@@ -126,7 +126,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws WriteFBParameterException
 	 *           the write fb parameter exception
 	 */
-	public void writeFBParameter(Resource resource, String value, FBDeploymentData fb,
+	 void writeFBParameter(Resource resource, String value, FBDeploymentData fb,
 			VarDeclaration varDecl) throws WriteFBParameterException;
 
 	/**
@@ -139,7 +139,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws CreateConnectionException
 	 *           the create connection exception
 	 */
-	public void createConnection(Resource res, ConnectionDeploymentData connectionData) throws CreateConnectionException;
+	 void createConnection(Resource res, ConnectionDeploymentData connectionData) throws CreateConnectionException;
 
 	/**
 	 * Start FB Instance.
@@ -149,7 +149,7 @@ public interface IDeviceManagementInteractor {
 	 * 
 	 * @throws StartException the start exception
 	 */
-	public void startFB(Resource res, FBDeploymentData fb) throws StartException;
+	 void startFB(Resource res, FBDeploymentData fb) throws StartException;
 
 	/**
 	 * Start resource.
@@ -160,7 +160,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws StartException
 	 *           the start exception
 	 */
-	public void startResource(Resource res) throws StartException;
+	 void startResource(Resource res) throws StartException;
 
 
 	/**
@@ -172,7 +172,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws StartException
 	 *           the start exception
 	 */
-	public void startDevice(Device dev) throws StartException;
+	 void startDevice(Device dev) throws StartException;
 
 	
 	/**
@@ -184,7 +184,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws Exception
 	 *           the exception
 	 */
-	public void deleteResource(Resource res) throws Exception;
+	 void deleteResource(Resource res) throws Exception;
 
 	/**
 	 * Delete fb instance.
@@ -194,7 +194,7 @@ public interface IDeviceManagementInteractor {
 	 * 
 	 * @throws Exception the exception
 	 */
-	public void deleteFB(Resource res, FBDeploymentData fb) throws Exception;
+	 void deleteFB(Resource res, FBDeploymentData fb) throws Exception;
 
 	/**
 	 * Delete connection.
@@ -204,7 +204,7 @@ public interface IDeviceManagementInteractor {
 	 * 
 	 * @throws Exception the exception
 	 */
-	public void deleteConnection(Resource res, ConnectionDeploymentData con) throws Exception;
+	 void deleteConnection(Resource res, ConnectionDeploymentData con) throws Exception;
 
 	/**
 	 * Clear device.
@@ -215,7 +215,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws Exception
 	 *           the exception
 	 */
-	public void clearDevice(Device dev) throws Exception;
+	 void clearDevice(Device dev) throws Exception;
 
 	/**
 	 * Kill device.
@@ -226,5 +226,5 @@ public interface IDeviceManagementInteractor {
 	 * @throws Exception
 	 *           the exception
 	 */
-	public void killDevice(Device dev) throws Exception;
+	 void killDevice(Device dev) throws Exception;
 }

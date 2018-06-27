@@ -13,7 +13,7 @@ package org.eclipse.fordiac.ide.deployment;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
 import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
@@ -24,24 +24,22 @@ import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
  */
 public abstract class AbstractDeviceManagementCommunicationHandler {
 
-	abstract public void connect(String address) throws InvalidMgmtID, UnknownHostException, IOException;
+	public abstract void connect(String address) throws InvalidMgmtID, UnknownHostException, IOException;
 
-	abstract public void disconnect() throws DisconnectException;
+	public abstract void disconnect() throws DisconnectException;
 
-	abstract public void sendREQ(final String destination, final String request) throws IOException;
+	public abstract void sendREQ(final String destination, final String request) throws IOException;
 
-	private final ArrayList<IDeploymentListener> listeners = new ArrayList<IDeploymentListener>();
+	private final List<IDeploymentListener> listeners = new ArrayList<>();
 
 	protected void responseReceived(final String response, final String source) {
-		for (Iterator<IDeploymentListener> iterator = listeners.iterator(); iterator.hasNext();) {
-			IDeploymentListener listener = iterator.next();
+		for (IDeploymentListener listener : listeners) {
 			listener.responseReceived(response, source);
 		}
 	}
 
 	protected void postCommandSent(String info, String destination, String command) {
-		for (Iterator<IDeploymentListener> iterator = listeners.iterator(); iterator.hasNext();) {
-			IDeploymentListener listener = iterator.next();
+		for (IDeploymentListener listener : listeners) {
 			listener.postCommandSent(command, info);
 			listener.postCommandSent(info, destination, command);
 		}

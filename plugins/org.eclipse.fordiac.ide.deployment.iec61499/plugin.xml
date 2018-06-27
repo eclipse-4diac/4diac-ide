@@ -10,7 +10,7 @@
    <extension
          point="org.eclipse.fordiac.ide.deployment.devicemanagementinteractor">
       <DeviceManagementInteractorProvider
-            class="org.eclipse.fordiac.ide.deployment.iec61499.providers.FDBK2_DevMgmIneractorProvider">
+            class="org.eclipse.fordiac.ide.deployment.iec61499.providers.FDBK2DevMgmInteractorProvider">
       </DeviceManagementInteractorProvider>
    </extension>
    <extension

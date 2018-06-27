@@ -33,7 +33,7 @@ public abstract class DeploymentHelper {
 		return null;	
 	}
 	
-	public static String getMGR_ID(final Device dev) {
+	public static String getMgrID(final Device dev) {
 		for(VarDeclaration varDecl : dev.getVarDeclarations()) {
 			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) { //$NON-NLS-1$
 				String val = DeploymentHelper.getVariableValue(varDecl, dev.getAutomationSystem());

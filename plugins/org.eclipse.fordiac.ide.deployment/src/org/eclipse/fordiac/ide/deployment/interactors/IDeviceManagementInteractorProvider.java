@@ -26,10 +26,10 @@ public interface IDeviceManagementInteractorProvider {
 	 * 
 	 * @return true, if successful
 	 */
-	public boolean supports(String profile);
+	boolean supports(String profile);
 	
 	
-	public String getProfileName();
+	String getProfileName();
 	
 	/** Create an instance of the device managment interactor this provider is providing
 	 * 

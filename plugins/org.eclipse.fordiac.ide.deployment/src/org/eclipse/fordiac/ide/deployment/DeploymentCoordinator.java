@@ -162,7 +162,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 								
 								MessageDialog.openError(shell, "Major Download Error", 
 										"Resource: " + resDepData.res.getDevice().getName() + "." + resDepData.res.getName() + "\n" +
-										"MGR_ID: " + DeploymentHelper.getMGR_ID(resDepData.res.getDevice()) + "\n" +		
+										"MGR_ID: " + DeploymentHelper.getMgrID(resDepData.res.getDevice()) + "\n" +		
 										"Problem: "+ e.getMessage());
 							}
 						});
@@ -356,29 +356,19 @@ public class DeploymentCoordinator implements IDeploymentListener {
 
 	public static void printUnsupportedDeviceProfileMessageBox(
 			final Device device, final Resource res) {
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().syncExec(() -> {				
+			MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.ICON_ERROR | SWT.OK);
+			String resName = (null != res) ?  res.getName() : ""; //$NON-NLS-1$
 
-			@Override
-			public void run() {				
-				MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.ICON_ERROR | SWT.OK);
-				String resName = ""; //$NON-NLS-1$
-				if (null != res) {
-					resName = res.getName();
-				}
-
-				if(null != device.getProfile() && !device.getProfile().equals("")){ //$NON-NLS-1$
-					messageBox.setMessage(MessageFormat.format(Messages.DeploymentCoordinator_MESSAGE_DefinedProfileNotSupported,
-								new Object[] { (null != device.getProfile()) ? device.getProfile() : "", //$NON-NLS-1$
-										device.getName(), resName }));
-				}else{
-					messageBox.setMessage(MessageFormat.format(Messages.DeploymentCoordinator_MESSAGE_ProfileNotSet,
-							new Object[] {device.getName(), resName }));
-				}
-				
-				messageBox.open();
-			}
-		});
-			
+			if(null != device.getProfile() && !device.getProfile().equals("")){ //$NON-NLS-1$
+				messageBox.setMessage(MessageFormat.format(Messages.DeploymentCoordinator_MESSAGE_DefinedProfileNotSupported,
+							new Object[] { device.getProfile(), device.getName(), resName }));
+			}else{
+				messageBox.setMessage(MessageFormat.format(Messages.DeploymentCoordinator_MESSAGE_ProfileNotSet,
+						new Object[] {device.getName(), resName }));
+			}				
+			messageBox.open();
+		});			
 	}
 
 	/**
