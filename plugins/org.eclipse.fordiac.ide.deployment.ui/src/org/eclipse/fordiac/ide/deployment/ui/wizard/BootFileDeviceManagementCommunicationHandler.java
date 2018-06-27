@@ -17,14 +17,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
-import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
-import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.ui.Activator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -52,12 +50,12 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractDevice
 	}
 
 	@Override
-	public void connect(String address) throws InvalidMgmtID, UnknownHostException, IOException {
+	public void connect(String address) throws DeploymentException {
 		origMgrID = address;
 	}
 
 	@Override
-	public void disconnect() throws DisconnectException {
+	public void disconnect() throws DeploymentException {
 		// For bootfile writing we need nothing to do here
 	}
 

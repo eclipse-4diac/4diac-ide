@@ -18,8 +18,7 @@ import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.deployment.exceptions.CreateResourceInstanceException;
-import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
@@ -168,7 +167,7 @@ public class ART_DeploymentMgr {
 		try {
 			deploymentResponseCounter++;
 			executor.createResource(res);
-		} catch (CreateResourceInstanceException e) {
+		} catch (DeploymentException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 			Error = true;
 		} 
@@ -252,7 +251,7 @@ public class ART_DeploymentMgr {
 		
 		try {
 			executor.disconnect();
-		} catch (DisconnectException e) {
+		} catch (DeploymentException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 

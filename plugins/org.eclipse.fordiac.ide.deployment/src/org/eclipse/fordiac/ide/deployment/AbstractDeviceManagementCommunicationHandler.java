@@ -11,12 +11,10 @@
 package org.eclipse.fordiac.ide.deployment;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
-import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 
 /**
@@ -24,9 +22,9 @@ import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
  */
 public abstract class AbstractDeviceManagementCommunicationHandler {
 
-	public abstract void connect(String address) throws InvalidMgmtID, UnknownHostException, IOException;
+	public abstract void connect(String address) throws DeploymentException;
 
-	public abstract void disconnect() throws DisconnectException;
+	public abstract void disconnect() throws DeploymentException;
 
 	public abstract void sendREQ(final String destination, final String request) throws IOException;
 

@@ -12,13 +12,11 @@
 package org.eclipse.fordiac.ide.deployment.interactors;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
-import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
-import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
@@ -39,12 +37,12 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 	}
 	
 	@Override
-	public void connect() throws InvalidMgmtID, UnknownHostException, IOException {
+	public void connect() throws DeploymentException {
 		getDevMgmComHandler().connect(getDeviceAddress(device));
 	}
 
 	@Override
-	public void disconnect() throws DisconnectException {
+	public void disconnect() throws DeploymentException {
 		getDevMgmComHandler().disconnect();
 	}
 	

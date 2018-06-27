@@ -50,6 +50,8 @@ public class Messages extends NLS {
 	public static String DTL_CreateTypeFailed;
 	public static String FBDK2_WriteParameter;
 	
+	public static String EthernetComHandler_InvalidMgmtID;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

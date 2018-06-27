@@ -13,9 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,14 +22,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.deployment.ResourceDeploymentData.ParameterData;
-import org.eclipse.fordiac.ide.deployment.exceptions.CreateConnectionException;
-import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBInstanceException;
-import org.eclipse.fordiac.ide.deployment.exceptions.CreateResourceInstanceException;
-import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
-import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
-import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
-import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
-import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
@@ -206,9 +197,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 		}
 
 		protected void deployResource(final IProgressMonitor monitor, final ResourceDeploymentData resDepData, IDeviceManagementInteractor executor)
-				throws InvalidMgmtID, UnknownHostException, IOException, CreateResourceInstanceException,
-				WriteResourceParameterException, CreateFBInstanceException, WriteFBParameterException,
-				CreateConnectionException, StartException, DisconnectException {
+				throws DeploymentException {
 			Resource res = resDepData.res;
 			if (!res.isDeviceTypeResource()) {
 				try {  //this try catch block with rethrowing is needed so that we can have the finally statement for disconnecting
@@ -263,7 +252,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 				}finally {
 					try {
 						executor.disconnect();
-					} catch (DisconnectException e) {
+					} catch (DeploymentException e) {
 						//TODO model refactoring - show error message to user
 						Activator.getDefault().logError(e.getMessage(), e);
 					}
@@ -273,7 +262,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 		}
 		
 		private void deployParamters(ResourceDeploymentData resDepData, IDeviceManagementInteractor executor,
-				IProgressMonitor monitor) throws WriteFBParameterException {
+				IProgressMonitor monitor) throws DeploymentException {
 			for (ParameterData param : resDepData.params) {
 				executor.writeFBParameter(resDepData.res, param.value, new FBDeploymentData(param.prefix, (FB) param.var.getFBNetworkElement()), 
 						param.var);
@@ -282,7 +271,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 			
 		}
 
-		private void deployConnections(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor,  IProgressMonitor monitor) throws CreateConnectionException {
+		private void deployConnections(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor,  IProgressMonitor monitor) throws DeploymentException {
 			for (ConnectionDeploymentData con : resDepData.connections) {
 				//TODO model refactoring - if one connection endpoint is part of resource find inner endpoint  
 				executor.createConnection(resDepData.res, con);
@@ -295,7 +284,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 		
 		private void createFBInstance(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor,
 				final IProgressMonitor monitor)
-				throws CreateFBInstanceException, WriteFBParameterException {
+				throws DeploymentException {
 			Resource res = resDepData.res;
 			for (FBDeploymentData fb : resDepData.fbs) {
 				if(!fb.fb.isResourceTypeFB()){

@@ -13,21 +13,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
-import org.eclipse.fordiac.ide.deployment.exceptions.CreateConnectionException;
-import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBInstanceException;
-import org.eclipse.fordiac.ide.deployment.exceptions.CreateResourceInstanceException;
-import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
-import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
-import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
-import org.eclipse.fordiac.ide.deployment.exceptions.WriteDeviceParameterException;
-import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
-import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -39,9 +29,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  */
 public interface IDeviceManagementInteractor {
 	
-	 void connect() throws InvalidMgmtID, UnknownHostException, IOException;
+	 void connect() throws DeploymentException;
 
-	 void disconnect() throws DisconnectException;
+	 void disconnect() throws DeploymentException;
 	
 	 Set<String> getTypes();
 
@@ -62,8 +52,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws CreateResourceInstanceException
 	 *           the create resource instance exception
 	 */
-	 void createResource(Resource resource)
-			throws CreateResourceInstanceException;
+	 void createResource(Resource resource) throws DeploymentException;
 
 	/**
 	 * Write resource parameter.
@@ -78,8 +67,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws WriteResourceParameterException
 	 *           the write resource parameter exception
 	 */
-	 void writeResourceParameter(Resource resource, String parameter,
-			String value) throws WriteResourceParameterException;
+	 void writeResourceParameter(Resource resource, String parameter, String value) throws DeploymentException;
 
 	/**
 	 * Write device parameter.
@@ -94,8 +82,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws WriteDeviceParameterException
 	 *           the write device parameter exception
 	 */
-	 void writeDeviceParameter(Device device, String parameter, String value)
-			throws WriteDeviceParameterException;
+	 void writeDeviceParameter(Device device, String parameter, String value) throws DeploymentException;
 
 	/**
 	 * Creates the fb instance.
@@ -108,8 +95,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws CreateFBInstanceException
 	 *           the create fb instance exception
 	 */
-	 void createFBInstance(FBDeploymentData fb, Resource res)
-			throws CreateFBInstanceException;
+	 void createFBInstance(FBDeploymentData fb, Resource res) throws DeploymentException;
 
 	/**
 	 * Write fb parameter.
@@ -126,8 +112,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws WriteFBParameterException
 	 *           the write fb parameter exception
 	 */
-	 void writeFBParameter(Resource resource, String value, FBDeploymentData fb,
-			VarDeclaration varDecl) throws WriteFBParameterException;
+	 void writeFBParameter(Resource resource, String value, FBDeploymentData fb, VarDeclaration varDecl) throws DeploymentException;
 
 	/**
 	 * Creates the  connection.
@@ -139,7 +124,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws CreateConnectionException
 	 *           the create connection exception
 	 */
-	 void createConnection(Resource res, ConnectionDeploymentData connectionData) throws CreateConnectionException;
+	 void createConnection(Resource res, ConnectionDeploymentData connectionData) throws DeploymentException;
 
 	/**
 	 * Start FB Instance.
@@ -149,7 +134,7 @@ public interface IDeviceManagementInteractor {
 	 * 
 	 * @throws StartException the start exception
 	 */
-	 void startFB(Resource res, FBDeploymentData fb) throws StartException;
+	 void startFB(Resource res, FBDeploymentData fb) throws DeploymentException;
 
 	/**
 	 * Start resource.
@@ -160,7 +145,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws StartException
 	 *           the start exception
 	 */
-	 void startResource(Resource res) throws StartException;
+	 void startResource(Resource res) throws DeploymentException;
 
 
 	/**
@@ -172,7 +157,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws StartException
 	 *           the start exception
 	 */
-	 void startDevice(Device dev) throws StartException;
+	 void startDevice(Device dev) throws DeploymentException;
 
 	
 	/**
@@ -184,7 +169,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws Exception
 	 *           the exception
 	 */
-	 void deleteResource(Resource res) throws Exception;
+	 void deleteResource(Resource res) throws DeploymentException;
 
 	/**
 	 * Delete fb instance.
@@ -194,7 +179,7 @@ public interface IDeviceManagementInteractor {
 	 * 
 	 * @throws Exception the exception
 	 */
-	 void deleteFB(Resource res, FBDeploymentData fb) throws Exception;
+	 void deleteFB(Resource res, FBDeploymentData fb) throws DeploymentException;
 
 	/**
 	 * Delete connection.
@@ -204,7 +189,7 @@ public interface IDeviceManagementInteractor {
 	 * 
 	 * @throws Exception the exception
 	 */
-	 void deleteConnection(Resource res, ConnectionDeploymentData con) throws Exception;
+	 void deleteConnection(Resource res, ConnectionDeploymentData con) throws DeploymentException;
 
 	/**
 	 * Clear device.
@@ -215,7 +200,7 @@ public interface IDeviceManagementInteractor {
 	 * @throws Exception
 	 *           the exception
 	 */
-	 void clearDevice(Device dev) throws Exception;
+	 void clearDevice(Device dev) throws DeploymentException;
 
 	/**
 	 * Kill device.
@@ -226,5 +211,5 @@ public interface IDeviceManagementInteractor {
 	 * @throws Exception
 	 *           the exception
 	 */
-	 void killDevice(Device dev) throws Exception;
+	 void killDevice(Device dev) throws DeploymentException;
 }

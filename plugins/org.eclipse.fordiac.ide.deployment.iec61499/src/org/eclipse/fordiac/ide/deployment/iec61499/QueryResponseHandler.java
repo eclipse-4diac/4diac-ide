@@ -26,7 +26,7 @@ public class QueryResponseHandler extends DefaultHandler {
 	private Set<String> queryResult = null;
 	private boolean response = false;
 	private boolean nameList = false;
-	private final static String PATTERN = "([A-Za-z_]\\w+)(\\1,\\s*[A-Za-z_]\\w+)*"; //$NON-NLS-1$
+	private static final String PATTERN = "([A-Za-z_]\\w+)(\\1,\\s*[A-Za-z_]\\w+)*"; //$NON-NLS-1$
 
 	public QueryResponseHandler() {
 		queryResult = new HashSet<String>();

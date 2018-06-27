@@ -29,8 +29,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.Activator;
-import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
-import org.eclipse.fordiac.ide.deployment.exceptions.InvalidMgmtID;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferences;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -53,20 +52,23 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 	}
 
 	@Override
-	public void connect(String address) throws InvalidMgmtID, UnknownHostException, IOException {
+	public void connect(String address) throws DeploymentException {
 		mgrInfo = getValidMgrInformation(address);
 		socket = new Socket();
 		int timeout = HoloblocDeploymentPreferences.getConnectionTimeout();
 		SocketAddress sockaddr = new InetSocketAddress(mgrInfo.iP, mgrInfo.port);		
-		socket.connect(sockaddr, timeout);
-		socket.setSoTimeout(timeout);
-											// 3s as timeout
-		outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-		inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+		try {
+			socket.connect(sockaddr, timeout); // 3s as timeout
+			socket.setSoTimeout(timeout);
+			outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+			inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+		} catch (IOException e) {
+			throw new DeploymentException("Could not connect to device1", e);
+		}
 	}
 
 	@Override
-	public void disconnect() throws DisconnectException {
+	public void disconnect() throws DeploymentException {
 		try {
 			outputStream.close();
 			inputStream.close();
@@ -74,8 +76,8 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 			// TODO check this sleep!
 			Thread.sleep(50);
 		} catch (IOException e) {
-			throw new DisconnectException(
-					MessageFormat.format(Messages.DeploymentExecutor_DisconnectFailed, new Object[] {}));
+			throw new DeploymentException(
+					MessageFormat.format(Messages.DeploymentExecutor_DisconnectFailed, new Object[] {}), e);
 		} catch (InterruptedException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
@@ -152,7 +154,7 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 	 * @throws InvalidMgmtID
 	 *             when the given ide is no valid ip address port compbination
 	 */
-	private static MgrInformation getValidMgrInformation(final String mgrID) throws InvalidMgmtID {
+	private static MgrInformation getValidMgrInformation(final String mgrID) throws DeploymentException {
 		if (null != mgrID) {
 			String id = mgrID;
 			if (id.startsWith("\"")) { //$NON-NLS-1$
@@ -170,7 +172,8 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 					mgrInfo.iP = adress.getHostAddress();
 					port = Integer.parseInt(splitID[1]);
 				} catch (NumberFormatException | UnknownHostException e) {
-					throw new InvalidMgmtID(mgrID);
+					throw new DeploymentException(MessageFormat.format(Messages.EthernetComHandler_InvalidMgmtID,
+							new Object[] {mgrID}), e);
 				}
 				if (1023 < port && port < 65536) {
 					mgrInfo.port = port;
@@ -178,7 +181,8 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 				}
 			}
 		}
-		throw new InvalidMgmtID(mgrID);
+		throw new DeploymentException(MessageFormat.format(Messages.EthernetComHandler_InvalidMgmtID,
+				new Object[] {mgrID}));
 	}
 
 	public QueryResponseHandler sendQUERY(final String destination, final String request) throws IOException, ParserConfigurationException, SAXException {

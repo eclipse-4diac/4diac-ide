@@ -22,13 +22,7 @@ import java.util.Set;
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
-import org.eclipse.fordiac.ide.deployment.exceptions.CreateConnectionException;
-import org.eclipse.fordiac.ide.deployment.exceptions.CreateFBInstanceException;
-import org.eclipse.fordiac.ide.deployment.exceptions.CreateResourceInstanceException;
-import org.eclipse.fordiac.ide.deployment.exceptions.StartException;
-import org.eclipse.fordiac.ide.deployment.exceptions.WriteDeviceParameterException;
-import org.eclipse.fordiac.ide.deployment.exceptions.WriteFBParameterException;
-import org.eclipse.fordiac.ide.deployment.exceptions.WriteResourceParameterException;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -81,32 +75,32 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	}
 
 	@Override
-	public void createResource(final Resource resource) throws CreateResourceInstanceException {
+	public void createResource(final Resource resource) throws DeploymentException {
 		String request = MessageFormat.format(Messages.DeploymentExecutor_CreateResourceInstance,
 				new Object[] { id++, resource.getName(), resource.getTypeName() });
 		try {
 			sendREQ("", request);  //$NON-NLS-1$
 		} catch (EOFException e) {
-			throw new CreateResourceInstanceException(MessageFormat
-					.format(Messages.DeploymentExecutor_DeviceConnectionClosed, new Object[] { resource.getName() }));
+			throw new DeploymentException(MessageFormat
+					.format(Messages.DeploymentExecutor_DeviceConnectionClosed, new Object[] { resource.getName() }), e);
 		} catch (IOException e) {
-			throw new CreateResourceInstanceException(MessageFormat
-					.format(Messages.DeploymentExecutor_CreateResourceFailed, new Object[] { resource.getName() }));
+			throw new DeploymentException(MessageFormat
+					.format(Messages.DeploymentExecutor_CreateResourceFailed, new Object[] { resource.getName() }), e);
 		}
 	}
 
 	@Override
 	public void writeResourceParameter(final Resource resource, final String parameter, final String value)
-			throws WriteResourceParameterException {
+			throws DeploymentException {
 
 		String encodedValue = encodeXMLChars(value);
 		String request = generateWriteParmaRequest(resource.getName(), parameter, encodedValue);
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (IOException e) {
-			throw new WriteResourceParameterException(
+			throw new DeploymentException(
 					MessageFormat.format(Messages.DeploymentExecutor_WriteResourceParameterFailed,
-							new Object[] { resource.getName(), parameter }));
+							new Object[] { resource.getName(), parameter }), e);
 		}
 	}
 
@@ -131,19 +125,19 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 
 	@Override
 	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fbData, final VarDeclaration varDecl)
-			throws WriteFBParameterException {
+			throws DeploymentException {
 		String encodedValue = encodeXMLChars(value);
 		String request = generateWriteParmaRequest(fbData.prefix + fbData.fb.getName(), varDecl.getName(), encodedValue);
 		try {
 			sendREQ(resource.getName(), request);
 		} catch (IOException e) {
-			throw new WriteFBParameterException(MessageFormat.format(Messages.DeploymentExecutor_WriteFBParameterFailed,
-					new Object[] { resource.getName(), varDecl.getName() }));
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_WriteFBParameterFailed,
+					new Object[] { resource.getName(), varDecl.getName() }), e);
 		}
 
 	}
 
-	public void createConnection(final Resource resource, final ConnectionDeploymentData connData) throws CreateConnectionException {
+	public void createConnection(final Resource resource, final ConnectionDeploymentData connData) throws DeploymentException {
 		IInterfaceElement source = connData.source;
 		IInterfaceElement destination = connData.destination;
 		if(null != source && null != destination && 
@@ -159,49 +153,47 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 				sendREQ(resource.getName(), request);
 			} catch (IOException e) {
 				//TODO model refactoring - add here more information on what connection had the issue
-				throw new CreateConnectionException(Messages.DeploymentExecutor_CreateConnectionFailed);
+				throw new DeploymentException(Messages.DeploymentExecutor_CreateConnectionFailed, e);
 			}
 		} else {
-			throw new CreateConnectionException(Messages.DeploymentExecutor_CreateConnectionFailed);
+			throw new DeploymentException(Messages.DeploymentExecutor_CreateConnectionFailed);
 		}
 	}
 
 	@Override
-	public void startResource(final Resource res) throws StartException {
+	public void startResource(final Resource res) throws DeploymentException {
 		String request = MessageFormat.format(Messages.DeploymentExecutor_Start, new Object[] {id++ });
 		try {
 			sendREQ(res.getName(), request);
 		} catch (IOException e) {
-			throw new StartException(MessageFormat.format(Messages.DeploymentExecutor_StartingResourceFailed,
-					new Object[] { res.getName() }));
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_StartingResourceFailed,
+					new Object[] { res.getName() }), e);
 		}
 	}
 
 	@Override
-	public void startDevice(Device dev) throws StartException {
+	public void startDevice(Device dev) throws DeploymentException {
 		String request = MessageFormat.format(Messages.DeploymentExecutor_Start, new Object[] {id++ });
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (IOException e) {
-			throw new StartException(MessageFormat.format(Messages.DeploymentExecutor_StartingDeviceFailed,
-					new Object[] { dev.getName() }));
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_StartingDeviceFailed,
+					new Object[] { dev.getName() }), e);
 		}
 	}
 
 	@Override
-	public void writeDeviceParameter(Device device, String parameter, String value)
-			throws WriteDeviceParameterException {
+	public void writeDeviceParameter(Device device, String parameter, String value) throws DeploymentException {
 		String request = MessageFormat.format(getWriteParameterMessage(), new Object[] {id++, value, parameter });
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (IOException e) {
-			throw new WriteDeviceParameterException(
-					MessageFormat.format(Messages.DeploymentExecutor_WriteDeviceParameterFailed,
-							new Object[] { device.getName(), parameter }));
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_WriteDeviceParameterFailed,
+							new Object[] { device.getName(), parameter }), e);
 		}
 	}
 
-	public void deleteResource(Resource res) throws Exception {
+	public void deleteResource(Resource res) throws DeploymentException {
 		String kill = MessageFormat.format(Messages.DeploymentExecutor_KillFB,
 				new Object[] {id++, res.getName() });
 		String delete = MessageFormat.format(Messages.DeploymentExecutor_DeleteFB,
@@ -209,19 +201,19 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		try {
 			sendREQ("", kill); //$NON-NLS-1$
 		} catch (IOException e) {
-			throw new WriteDeviceParameterException(
-					MessageFormat.format(Messages.DeploymentExecutor_KillFBFailed, new Object[] { res.getName(), }));
+			throw new DeploymentException(
+					MessageFormat.format(Messages.DeploymentExecutor_KillFBFailed, new Object[] { res.getName(), }), e);
 		}
 		try {
 			sendREQ("", delete); //$NON-NLS-1$
 		} catch (IOException e) {
-			throw new WriteDeviceParameterException(
-					MessageFormat.format(Messages.DeploymentExecutor_DeleteFBFailed, new Object[] { res.getName(), }));
+			throw new DeploymentException(
+					MessageFormat.format(Messages.DeploymentExecutor_DeleteFBFailed, new Object[] { res.getName(), }), e);
 		}
 	}
 
 	@Override
-	public void clearDevice(Device dev) throws Exception {
+	public void clearDevice(Device dev) throws DeploymentException {
 		for (Resource res : dev.getResource()) {
 			if (!res.isDeviceTypeResource()) {
 				deleteResource(res);
@@ -231,34 +223,34 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	}
 
 	@Override
-	public void deleteConnection(Resource res, ConnectionDeploymentData conData) throws Exception {
+	public void deleteConnection(Resource res, ConnectionDeploymentData conData) throws DeploymentException {
 
 	}
 
 	@Override
-	public void deleteFB(Resource res, FBDeploymentData fbData) throws Exception {
+	public void deleteFB(Resource res, FBDeploymentData fbData) throws DeploymentException {
 
 	}
 
 	@Override
-	public void startFB(Resource res, FBDeploymentData fbData) throws StartException {
+	public void startFB(Resource res, FBDeploymentData fbData) throws DeploymentException {
 		String fullFbInstanceName = fbData.prefix + fbData.fb.getName();
 		String request = MessageFormat.format(Messages.DeploymentExecutor_StartFB,
 				new Object[] { id++, fullFbInstanceName, fbData.fb.getTypeName() });
 		try {
 			sendREQ(res.getName(), request);
 		} catch (IOException e) {
-			throw new StartException(
-					MessageFormat.format(Messages.DeploymentExecutor_StartingFBFailed, new Object[] { fullFbInstanceName }));
+			throw new DeploymentException(
+					MessageFormat.format(Messages.DeploymentExecutor_StartingFBFailed, new Object[] { fullFbInstanceName }), e);
 		}
 	}
 	
 	@Override
-	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws CreateFBInstanceException {
+	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws DeploymentException {
 		String fbType = getValidType(fbData.fb);
 		String fullFbInstanceName = fbData.prefix + fbData.fb.getName();
 		if ("".equals(fbType)) { //$NON-NLS-1$
-			throw new CreateFBInstanceException((MessageFormat.format(
+			throw new DeploymentException((MessageFormat.format(
 					Messages.DeploymentExecutor_CreateFBInstanceFailedNoTypeFound, new Object[] { fullFbInstanceName })));
 		}
 		String request = MessageFormat.format(Messages.DeploymentExecutor_CreateFBInstance,
@@ -266,13 +258,13 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		try {
 			sendREQ(res.getName(), request);
 		} catch (IOException e) {
-			throw new CreateFBInstanceException(MessageFormat.format(Messages.DeploymentExecutor_CreateFBInstanceFailed,
-					new Object[] { fullFbInstanceName }));
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_CreateFBInstanceFailed,
+					new Object[] { fullFbInstanceName }), e);
 		}
 	}
 
 	@Override
-	public void killDevice(Device dev) throws Exception {
+	public void killDevice(Device dev) throws DeploymentException {
 		String kill = MessageFormat.format(Messages.DeploymentExecutor_KillDevice, new Object[] { id++ });
 		try {
 			sendREQ("", kill); //$NON-NLS-1$
@@ -280,8 +272,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 			if (e instanceof EOFException) {
 				// exception can be ignored, as no response is returned by forte
 			} else {
-				throw new Exception(MessageFormat.format(Messages.DeploymentExecutor_KillDeviceFailed,
-						new Object[] { dev.getName() }));
+				throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_KillDeviceFailed,
+						new Object[] { dev.getName() }), e);
 			}
 		} finally {
 			resetTypes();

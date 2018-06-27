@@ -17,7 +17,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
-import org.eclipse.fordiac.ide.deployment.exceptions.DisconnectException;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
@@ -147,7 +147,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 						}finally {
 							try {
 								interactor.disconnect();
-							} catch (DisconnectException e) {
+							} catch (DeploymentException e) {
 								OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID(device), this, true);
 							}							
 						}
