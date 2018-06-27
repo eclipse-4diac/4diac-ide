@@ -146,7 +146,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			String request = MessageFormat.format(Messages.DTL_QueryFBTypes, new Object[] { id++ });
 			try {
 				QueryResponseHandler queryResp = getDevMgmComHandler().sendQUERY(res.getName(), request);
-				setTypes(null != queryResp ? queryResp.getQueryResult() : Collections.emptySet());
+				setTypes(queryResp.getQueryResult());
 			} catch (Exception e) {
 				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "FB Types" })); //$NON-NLS-1$
 			}
@@ -164,7 +164,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			String request = MessageFormat.format(Messages.DTL_QueryAdapterTypes, new Object[] { id++ });
 			try {
 				QueryResponseHandler queryResp = getDevMgmComHandler().sendQUERY(res.getName(), request);
-				setAdapterTypes(null != queryResp ? queryResp.getQueryResult() : Collections.emptySet());
+				setAdapterTypes(queryResp.getQueryResult());
 			} catch (Exception e1) {
 				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "Adapter Types" }));
 			}
