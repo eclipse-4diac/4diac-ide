@@ -41,7 +41,6 @@ public class D_BYTE_CHAR_STRValueConverter extends StringValueConverter {
           _xtrycatchfinallyexpression = ((char) _parseUnsignedInt);
         } catch (final Throwable _t) {
           if (_t instanceof NumberFormatException) {
-            final NumberFormatException e = (NumberFormatException)_t;
             throw new ValueConverterException("Couldn\'t convert value due to invalid escape sequence", null, null);
           } else {
             throw Exceptions.sneakyThrow(_t);

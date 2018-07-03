@@ -9,7 +9,6 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext.ui;
 
-import com.google.inject.Module;
 import org.eclipse.fordiac.ide.model.structuredtext.ExpressionRuntimeModule;
 import org.eclipse.fordiac.ide.model.structuredtext.ui.ExpressionUiModule;
 import org.eclipse.fordiac.ide.model.structuredtext.ui.internal.StructuredtextActivator;
@@ -42,7 +41,7 @@ public class ExtendedStructuredTextActivator extends StructuredtextActivator {
   }
   
   @Override
-  public Module getRuntimeModule(final String grammar) {
+  public com.google.inject.Module getRuntimeModule(final String grammar) {
     boolean _equals = ExtendedStructuredTextActivator.ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION.equals(grammar);
     if (_equals) {
       return new ExpressionRuntimeModule();
@@ -51,7 +50,7 @@ public class ExtendedStructuredTextActivator extends StructuredtextActivator {
   }
   
   @Override
-  public Module getUiModule(final String grammar) {
+  public com.google.inject.Module getUiModule(final String grammar) {
     boolean _equals = ExtendedStructuredTextActivator.ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION.equals(grammar);
     if (_equals) {
       return new ExpressionUiModule(this);

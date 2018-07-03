@@ -42,12 +42,13 @@ public class FBTypeContentOutline extends ContentOutlinePage {
 
 		@Override
 		public void notifyChanged(Notification notification) {
-			Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					getTreeViewer().expandAll();
-				}
-			});
+			if(!getTreeViewer().getControl().isDisposed()) {
+				Display.getDefault().asyncExec(() -> {
+					if(!getTreeViewer().getControl().isDisposed()) {
+						getTreeViewer().expandAll();
+					}
+				});
+			}
 		}
 	};
 	

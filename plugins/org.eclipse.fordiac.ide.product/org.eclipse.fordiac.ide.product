@@ -280,7 +280,7 @@
       <feature id="org.eclipse.emf.mwe2.runtime.sdk"/>
       <feature id="org.eclipse.xtext.runtime"/>
       <feature id="org.eclipse.xtext.xbase"/>
-      <feature id="org.eclipse.jdt" version="3.13.2.v20171130-0906"/>
+      <feature id="org.eclipse.jdt"/>
    </features>
 
    <configurations>
