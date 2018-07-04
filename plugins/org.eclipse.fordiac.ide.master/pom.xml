@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.fordiac</groupId>
 	<artifactId>parent</artifactId>
-	<version>1.9.2-SNAPSHOT</version>
+	<version>1.10.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>../org.eclipse.fordiac.ide</module>
@@ -57,15 +57,15 @@
 	</modules>
 
 	<properties>
-		<tycho.version>0.26.0</tycho.version>
-		<oxygen-repo.url>http://download.eclipse.org/releases/oxygen</oxygen-repo.url>
+		<tycho.version>1.2.0</tycho.version>
+		<photon-repo.url>http://download.eclipse.org/releases/photon</photon-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 	</properties>
 
  <repositories>
   <repository>
-   <id>oxygen</id>
-   <url>${oxygen-repo.url}</url>
+   <id>photon</id>
+   <url>${photon-repo.url}</url>
    <layout>p2</layout>
   </repository>
 
@@ -101,7 +101,7 @@
 						<artifact>
 							<groupId>org.eclipse.fordiac</groupId>
 							<artifactId>org.eclipse.fordiac.ide.product</artifactId>
-							<version>1.9.2-SNAPSHOT</version>
+							<version>1.10.0-SNAPSHOT</version>
 						</artifact>
 					</target>
 					
