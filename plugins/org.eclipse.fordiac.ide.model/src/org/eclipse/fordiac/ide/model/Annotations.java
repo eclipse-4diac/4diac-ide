@@ -561,9 +561,9 @@ public enum Annotations {
 		if ((null != afb.getPaletteEntry()) && (afb.getPaletteEntry() instanceof AdapterTypePaletteEntry)  &&
 				(null != afb.getAdapterDecl())){
 			if (afb.isPlug()) {
-				retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getAdapterType().getPlugType();
+				retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getType().getPlugType();
 			} else {
-				retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getAdapterType().getSocketType();
+				retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getType().getSocketType();
 			}
 		}
 		return retVal;

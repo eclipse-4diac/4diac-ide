@@ -179,7 +179,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 				if(palette != null){
 					PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, fbtFile);
 					if(null != entry){
-						type = ((AdapterTypePaletteEntry)entry).getAdapterType().getAdapterFBType();
+						type = ((AdapterTypePaletteEntry)entry).getType().getAdapterFBType();
 					}
 				}
 			}

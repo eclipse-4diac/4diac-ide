@@ -113,7 +113,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements Ed
 							// TODO change to own command in order to update cfb
 							// internals
 							cmd = new ChangeTypeCommand((VarDeclaration) getCastedModel(),
-									getAdapterTypeEntry(systemPalette, typeName).getAdapterType());
+									getAdapterTypeEntry(systemPalette, typeName).getType());
 						} else {
 							cmd = new ChangeTypeCommand((VarDeclaration) getCastedModel(),
 									DataTypeLibrary.getInstance().getType(typeName));

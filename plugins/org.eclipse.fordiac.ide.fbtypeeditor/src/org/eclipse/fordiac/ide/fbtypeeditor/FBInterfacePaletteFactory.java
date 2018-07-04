@@ -168,7 +168,7 @@ public final class FBInterfacePaletteFactory {
 				ImageDescriptor desc = FordiacImage.ICON_DataType.getImageDescriptor();
 				CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(
 						entry.getLabel(), entry.getType().getComment(), 
-						new DataTypeCreationFactory(entry.getAdapterType()), desc, desc);
+						new DataTypeCreationFactory(entry.getType()), desc, desc);
 				if (combined != null) {
 					entries.add(combined);
 				}

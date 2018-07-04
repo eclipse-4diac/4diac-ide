@@ -107,8 +107,8 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 			private DataType getTypeForSelection(String text) {
 				for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette())){
-					if(adaptertype.getAdapterType().getName().equals(text)) {
-						return adaptertype.getAdapterType();
+					if(adaptertype.getType().getName().equals(text)) {
+						return adaptertype.getType();
 					}
 				}
 				return null;
@@ -138,7 +138,7 @@ public class InterfaceElementSection extends AbstractSection {
 			if(getType() instanceof AdapterDeclaration) {
 				if(null != getType() && null != getType().getFBNetworkElement().getFbNetwork().getApplication()) {
 					for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette())){
-						typeCombo.add(adaptertype.getAdapterType().getName());
+						typeCombo.add(adaptertype.getType().getName());
 					}
 				}
 			}else {

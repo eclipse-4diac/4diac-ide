@@ -151,7 +151,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link PalettePackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -165,7 +165,8 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		if (isInited) return (PalettePackage)EPackage.Registry.INSTANCE.getEPackage(PalettePackage.eNS_URI);
 
 		// Obtain or create and register package
-		PalettePackageImpl thePalettePackage = (PalettePackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof PalettePackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new PalettePackageImpl());
+		Object registeredPalettePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		PalettePackageImpl thePalettePackage = registeredPalettePackage instanceof PalettePackageImpl ? (PalettePackageImpl)registeredPalettePackage : new PalettePackageImpl();
 
 		isInited = true;
 
@@ -173,8 +174,10 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		XMLTypePackage.eINSTANCE.eClass();
 
 		// Obtain or create and register interdependencies
-		LibraryElementPackageImpl theLibraryElementPackage = (LibraryElementPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI) instanceof LibraryElementPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI) : LibraryElementPackage.eINSTANCE);
-		DataPackageImpl theDataPackage = (DataPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI) instanceof DataPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI) : DataPackage.eINSTANCE);
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
+		LibraryElementPackageImpl theLibraryElementPackage = (LibraryElementPackageImpl)(registeredPackage instanceof LibraryElementPackageImpl ? registeredPackage : LibraryElementPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
+		DataPackageImpl theDataPackage = (DataPackageImpl)(registeredPackage instanceof DataPackageImpl ? registeredPackage : DataPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		thePalettePackage.createPackageContents();
@@ -189,7 +192,6 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		// Mark meta-data to indicate it can't be changed
 		thePalettePackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(PalettePackage.eNS_URI, thePalettePackage);
 		return thePalettePackage;
@@ -538,7 +540,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		initEClass(adapterTypePaletteEntryEClass, AdapterTypePaletteEntry.class, "AdapterTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		addEOperation(adapterTypePaletteEntryEClass, theLibraryElementPackage.getAdapterType(), "getAdapterType", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(adapterTypePaletteEntryEClass, theLibraryElementPackage.getAdapterType(), "getType", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		op = addEOperation(adapterTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED);

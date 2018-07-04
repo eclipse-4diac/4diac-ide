@@ -55,14 +55,14 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AdapterType getAdapterType() {
-		LibraryElement type = getType();
+	public AdapterType getType() {
+		LibraryElement type = super.getType();
 		if((null !=type) && (type instanceof AdapterType)){
 		   return (AdapterType) type;
 		}
 		return null;
 	}
-	
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

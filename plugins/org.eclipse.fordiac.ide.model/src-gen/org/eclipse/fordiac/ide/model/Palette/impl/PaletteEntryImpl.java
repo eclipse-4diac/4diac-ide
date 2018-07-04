@@ -398,7 +398,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (label: ");
 		result.append(label);
 		result.append(", file: ");

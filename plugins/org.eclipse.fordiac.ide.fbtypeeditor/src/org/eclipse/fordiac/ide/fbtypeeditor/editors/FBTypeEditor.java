@@ -189,7 +189,7 @@ public class FBTypeEditor extends FormEditor implements
 		if(paletteEntry instanceof FBTypePaletteEntry){
 			return ((FBTypePaletteEntry)paletteEntry).getFBType();
 		} else if(paletteEntry instanceof AdapterTypePaletteEntry){
-			return ((AdapterTypePaletteEntry)paletteEntry).getAdapterType().getAdapterFBType();
+			return ((AdapterTypePaletteEntry)paletteEntry).getType().getAdapterFBType();
 		}
 		return null;
 	}

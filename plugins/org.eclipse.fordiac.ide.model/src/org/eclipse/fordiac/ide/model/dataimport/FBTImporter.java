@@ -1115,7 +1115,7 @@ public class FBTImporter implements LibraryElementTags {
 			a.setPaletteEntry(entry);
 			AdapterType dataType = null;
 			if (entry != null) {
-				dataType = entry.getAdapterType();
+				dataType = entry.getType();
 			}
 			a.setTypeName(typeName.getNodeValue());
 			if (dataType != null) {

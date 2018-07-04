@@ -30,6 +30,6 @@ class AdapterExporter extends CommonElementExporter {
 	}
 	
 	protected FBType getType(PaletteEntry entry){
-		return ((AdapterTypePaletteEntry)entry).getAdapterType().getAdapterFBType();
+		return ((AdapterTypePaletteEntry)entry).getType().getAdapterFBType();
 	}
 }

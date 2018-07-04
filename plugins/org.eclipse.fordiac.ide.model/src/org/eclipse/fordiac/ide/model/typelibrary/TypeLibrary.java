@@ -494,7 +494,7 @@ public class TypeLibrary implements TypeLibraryTags{
 	 */
 	public static void loadAdapterType(final PaletteEntry entry,
 			final Palette palette) {
-		if (((AdapterTypePaletteEntry) entry).getAdapterType() == null) {
+		if (((AdapterTypePaletteEntry) entry).getType() == null) {
 			AdapterType type = null;
 
 			if (ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(entry.getFile().getFileExtension())) {

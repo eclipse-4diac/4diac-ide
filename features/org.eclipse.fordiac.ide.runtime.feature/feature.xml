@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.runtime.feature"
       label="Runtime"
-      version="1.9.0.qualifier"
+      version="1.10.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>

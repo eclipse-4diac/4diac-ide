@@ -31,10 +31,10 @@ public interface AdapterTypePaletteEntry extends PaletteEntry {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='LibraryElement type = getType();\nif((null !=type) &amp;&amp; (type instanceof AdapterType)){\n   return (AdapterType) type;\n}\nreturn null;'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='LibraryElement type = super.getType();\nif((null !=type) &amp;&amp; (type instanceof AdapterType)){\n   return (AdapterType) type;\n}\nreturn null;'"
 	 * @generated
 	 */
-	AdapterType getAdapterType();
+	AdapterType getType();
 
 	/**
 	 * <!-- begin-user-doc -->

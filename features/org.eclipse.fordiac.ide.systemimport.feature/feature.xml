@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.systemimport.feature"
       label="System Import"
-      version="1.9.0.qualifier"
+      version="1.10.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>

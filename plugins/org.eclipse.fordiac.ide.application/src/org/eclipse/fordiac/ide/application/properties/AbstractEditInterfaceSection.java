@@ -402,8 +402,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		
 		private DataType getTypeForSelection(String text) {
 			for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFbNetwork().getApplication().getAutomationSystem().getPalette())){
-				if(adaptertype.getAdapterType().getName().equals(text)) {
-					return adaptertype.getAdapterType();
+				if(adaptertype.getType().getName().equals(text)) {
+					return adaptertype.getType();
 				}
 			}
 			return null;

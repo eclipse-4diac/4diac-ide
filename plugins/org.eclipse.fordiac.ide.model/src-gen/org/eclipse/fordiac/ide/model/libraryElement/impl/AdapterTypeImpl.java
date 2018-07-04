@@ -169,20 +169,22 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 		}
 		return super.eIsSet(featureID);
 	}
-
+	
+	//TODO move to model and annotations
+	@Override
 	public void setName(String value) {
 		super.setName(value);
-		getAdapterFBType().setName(value);
+		if(null != getAdapterFBType()) { 
+			getAdapterFBType().setName(value);
+		}
 	}
-	
+	//TODO move to model and annotations
 	@Override
-	public String getName() {
-		return getAdapterFBType().getName();
-	}
-	
-	@Override
-	public String getComment() {
-		return getAdapterFBType().getComment();
+	public void setComment(String value) {
+		super.setComment(value);
+		if(null != getAdapterFBType()) { 
+			getAdapterFBType().setComment(value);
+		}
 	}
 	
 } //AdapterTypeImpl

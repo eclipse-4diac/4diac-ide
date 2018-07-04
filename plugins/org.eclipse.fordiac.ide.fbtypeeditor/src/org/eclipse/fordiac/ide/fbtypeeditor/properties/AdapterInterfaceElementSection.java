@@ -164,7 +164,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		FBType fbType = (FBType)getType().eContainer().eContainer();
 		PaletteEntry entry = fbType.getPaletteEntry();
 		for (AdapterTypePaletteEntry adaptertype : TypeEditPart.getAdapterTypes(entry.getGroup().getPallete())) {
-			types.add(adaptertype.getAdapterType());
+			types.add(adaptertype.getType());
 		}
 		return types;
 	}

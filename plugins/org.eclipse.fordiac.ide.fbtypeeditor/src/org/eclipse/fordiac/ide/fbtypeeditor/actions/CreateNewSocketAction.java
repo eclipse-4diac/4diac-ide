@@ -31,6 +31,6 @@ public class CreateNewSocketAction extends CreateFromNewAdapterAction {
 	}
 
 	protected Command getCreationCommand(AdapterTypePaletteEntry adpEntry) {
-		return new CreateInterfaceElementCommand(adpEntry.getAdapterType(), getFbType().getInterfaceList(), true, -1);
+		return new CreateInterfaceElementCommand(adpEntry.getType(), getFbType().getInterfaceList(), true, -1);
 	}
 }

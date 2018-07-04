@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -32,7 +33,7 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceSection {
 
 	@Override
 	protected CreateSubAppInterfaceElementCommand newCommand(boolean isInput) {
-		AdapterType type = (AdapterType) getType().getFbNetwork().getApplication().getAutomationSystem().getPalette().getTypeEntry(fillTypeCombo()[0]).getType();
+		AdapterType type = getAdapterTypes(getPalette()).get(0).getType();
 		return new CreateSubAppInterfaceElementCommand(type, getType().getInterface(), isInput, -1);
 	}
 
@@ -40,10 +41,14 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceSection {
 	protected String[] fillTypeCombo() {
 		ArrayList<String> list = new ArrayList<String>();
 		if(null != getType()) {
-			for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFbNetwork().getApplication().getAutomationSystem().getPalette())){
-				list.add(adaptertype.getAdapterType().getName());
+			for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getPalette())){
+				list.add(adaptertype.getLabel());
 			}
 		}
-		return list.toArray(new String[0]);		
+		return list.toArray(new String[list.size()]);		
+	}
+
+	private Palette getPalette() {
+		return getType().getFbNetwork().getApplication().getAutomationSystem().getPalette();
 	}
 }
