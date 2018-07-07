@@ -15,7 +15,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -37,12 +37,10 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 				protected Command getDirectEditCommand(
 						final DirectEditRequest request) {
 					if (getHost() instanceof UntypedSubAppInterfaceElementEditPart) {
-						ChangeNameCommand cmd = new ChangeNameCommand(getModel(), (String)request.getCellEditor().getValue());
-						return cmd;
+						return new ChangeSubAppIENameCommand(getModel(), (String)request.getCellEditor().getValue());
 					}
 					return null;
 				}
-
 			});
 	}
 	

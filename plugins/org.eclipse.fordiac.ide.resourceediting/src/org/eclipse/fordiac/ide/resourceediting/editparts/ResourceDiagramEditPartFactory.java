@@ -16,6 +16,7 @@ import org.eclipse.fordiac.ide.application.editparts.ElementEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -42,7 +43,12 @@ public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 			return new ResFBEditPart(zoomManager);
 		}
 		if (modelElement instanceof IInterfaceElement) {
-			return new InterfaceEditPartForResourceFBs();
+			IInterfaceElement element = (IInterfaceElement)modelElement;
+			if(element.getFBNetworkElement() instanceof SubApp && null == element.getFBNetworkElement().getType()){
+				return  new UntypedSubAppInterfaceElementEditPartForResource();
+			}else{
+				return new InterfaceEditPartForResourceFBs();
+			}
 		}
 		if (modelElement instanceof VirtualIO) {	
 			return new VirtualInOutputEditPart();

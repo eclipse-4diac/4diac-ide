@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
@@ -414,7 +414,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			Object data =  tableItem.getData();
 			Command cmd = null;
 			if(NAME.equals(property)){				
-				cmd = new ChangeNameCommand((IInterfaceElement) data, value.toString());
+				cmd = new ChangeSubAppIENameCommand((IInterfaceElement) data, value.toString());
 			}else{
 				if(COMMENT.equals(property)){
 					cmd = new ChangeCommentCommand((INamedElement) data, value.toString());
