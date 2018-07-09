@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
+ * Copyright (c) 2017 - 2018 fortiss GmbH, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,7 +11,9 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
+import org.eclipse.gef.EditPolicy;
 
 public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceElementEditPart {
 	
@@ -32,5 +34,11 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 		return !super.isInput();
 	}
 	
+	@Override
+	protected void createEditPolicies() {
+		super.createEditPolicies();
+		// allow delete of a subapp's interface element
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteSubAppInterfaceElementPolicy());
+	}
 	
 }

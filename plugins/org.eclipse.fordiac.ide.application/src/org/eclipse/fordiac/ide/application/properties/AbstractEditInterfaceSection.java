@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
+ * Copyright (c) 2017, 2018 fortiss GmbH, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Monika Wenger - initial implementation
+ * Monika Wenger, Alois Zoitl - initial implementation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
+import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
@@ -26,7 +27,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -170,7 +170,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new DeleteInterfaceCommand((IInterfaceElement) selection));
+					executeCommand(new DeleteSubAppInterfaceElementCommand((IInterfaceElement) selection));
 					inputsViewer.refresh();
 				}
 			}
@@ -240,7 +240,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new DeleteInterfaceCommand((IInterfaceElement) selection));
+					executeCommand(new DeleteSubAppInterfaceElementCommand((IInterfaceElement) selection));
 					outputsViewer.refresh();
 				}
 			}

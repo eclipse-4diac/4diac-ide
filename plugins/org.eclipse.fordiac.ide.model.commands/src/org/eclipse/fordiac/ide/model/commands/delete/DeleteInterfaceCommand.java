@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 -2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008 -2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,7 +43,7 @@ public class DeleteInterfaceCommand extends Command {
 		if ((interfaceElement instanceof AdapterDeclaration) && (parent.eContainer() instanceof CompositeFBType)) {
 			cmds.add(new DeleteFBNetworkElementCommand(((AdapterDeclaration) interfaceElement).getAdapterFB()));
 		}
-		redo();
+		performDeletion();
 	}
 
 	@Override
@@ -71,6 +72,10 @@ public class DeleteInterfaceCommand extends Command {
 
 	@Override
 	public void redo() {
+		performDeletion();
+	}
+
+	private void performDeletion() {
 		if (interfaceElement.isIsInput()) {
 			if (interfaceElement instanceof Event) {
 				oldIndex = parent.getEventInputs().indexOf(interfaceElement);
