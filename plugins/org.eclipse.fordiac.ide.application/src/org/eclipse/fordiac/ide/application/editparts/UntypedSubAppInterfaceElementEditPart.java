@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
+ * Copyright (c) 2017, 2018 fortiss GmbH, Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,10 +12,11 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.Label;
+import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -37,13 +38,13 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 				protected Command getDirectEditCommand(
 						final DirectEditRequest request) {
 					if (getHost() instanceof UntypedSubAppInterfaceElementEditPart) {
-						ChangeNameCommand cmd = new ChangeNameCommand(getModel(), (String)request.getCellEditor().getValue());
-						return cmd;
+						return new ChangeSubAppIENameCommand(getModel(), (String)request.getCellEditor().getValue());
 					}
 					return null;
 				}
-
 			});
+		// allow delete of a subapp's interface element
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteSubAppInterfaceElementPolicy());
 	}
 	
 	@Override

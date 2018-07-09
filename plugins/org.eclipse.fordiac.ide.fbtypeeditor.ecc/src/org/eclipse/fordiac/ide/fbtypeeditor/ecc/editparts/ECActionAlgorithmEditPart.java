@@ -115,6 +115,10 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		if (!isActive()) {
 			super.activate();
 			getAction().eAdapters().add(adapter);
+			if (getINamedElement() != null) {
+				//We don't want that the the base class registers to the algorithm as it is hard to track if algorithm changes
+				getINamedElement().eAdapters().remove(getNameAdapter());
+			}
 			// addapt to the fbtype so that we get informed on alg name changes
 			ECActionHelpers.getFBType(getAction()).eAdapters().add(fbAdapter);
 			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);

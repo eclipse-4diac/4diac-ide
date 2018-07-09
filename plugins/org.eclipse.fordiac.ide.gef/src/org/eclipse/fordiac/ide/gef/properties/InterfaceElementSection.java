@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -76,7 +76,7 @@ public class InterfaceElementSection extends AbstractSection {
 		nameText.addModifyListener(new ModifyListener() {
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
-				executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
+				executeCommand(new ChangeSubAppIENameCommand(getType(), nameText.getText()));
 				addContentAdapter();
 			}
 		});

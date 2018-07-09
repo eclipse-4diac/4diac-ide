@@ -23,6 +23,7 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -85,7 +86,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 		}
 	}
 
-	void updatePos(InterfaceEditPartForResourceFBs referencedEditPart) {
+	void updatePos(InterfaceEditPartForFBNetwork referencedEditPart) {
 		String label = ((Label) getFigure()).getText();
 
 		Rectangle bounds = referencedEditPart.getFigure().getBounds();
@@ -258,5 +259,10 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	@Override
 	public IPropertyChangeListener getPreferenceChangeListener() {
 		return null;
+	}
+	
+	@Override
+	protected void refreshName() {
+		//we don't have a name to refresh and therfore nothing todo here
 	}
 }
