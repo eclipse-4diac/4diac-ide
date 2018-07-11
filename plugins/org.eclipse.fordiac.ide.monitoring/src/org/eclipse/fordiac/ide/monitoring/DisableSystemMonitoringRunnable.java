@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 - 2017 fortiss GmbH
+ * Copyright (c) 2016 - 2018 fortiss GmbH, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -62,6 +62,8 @@ class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
 			if (element instanceof MonitoringElement) {
 				monitor.subTask("Remove watch for: " + element.getPortString());
 				systemMonitoringData.sendRemoveWatch(element);
+				//clear the value to show that there is currently no value
+				((MonitoringElement)element).setCurrentValue("");  //$NON-NLS-1$
 				monitor.worked(1);
 			}
 		}		
