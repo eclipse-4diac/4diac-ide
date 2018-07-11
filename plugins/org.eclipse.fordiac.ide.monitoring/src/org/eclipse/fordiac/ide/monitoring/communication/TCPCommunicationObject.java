@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2012 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                           Johanes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.communication;
 
@@ -34,6 +36,7 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager.BreakPoint;
+import org.eclipse.fordiac.ide.monitoring.SystemMonitoringData;
 import org.eclipse.fordiac.ide.monitoring.monCom.Data;
 import org.eclipse.fordiac.ide.monitoring.monCom.FB;
 import org.eclipse.fordiac.ide.monitoring.monCom.Port;
@@ -318,6 +321,7 @@ public class TCPCommunicationObject {
 	 */
 	private void evaluateResponse(AutomationSystem system, Device device,
 			String response) {
+		SystemMonitoringData systemMonData = MonitoringManager.getInstance().getSystemMonitoringData(system);
 		try {
 			XMLResource resource = new XMLResourceImpl();
 			InputSource source = new InputSource(new StringReader(response));
@@ -331,8 +335,8 @@ public class TCPCommunicationObject {
 
 							for (FB fb : res.getFbs()) {
 								for (Port p : fb.getPorts()) {
-									final MonitoringBaseElement element = MonitoringManager.getInstance()
-											.getMonitoringElementByPortString(system.getName(), device.getName() + "." + res.getName() //$NON-NLS-1$
+									final MonitoringBaseElement element = systemMonData.getMonitoringElementByPortString(
+											device.getName() + "." + res.getName() //$NON-NLS-1$
 													+ "." + fb.getName() //$NON-NLS-1$
 													+ "." + p.getName()); //$NON-NLS-1$
 									if (element != null && element instanceof MonitoringElement) {

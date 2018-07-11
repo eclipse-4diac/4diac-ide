@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2016 Profactor GmbH, AIT, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2012 - 2018 Profactor GmbH, AIT, TU Wien ACIN, fortiss GmbH,
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Matthias Plasch, Filip Andren, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
@@ -26,7 +28,6 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.PortElement;
 import org.eclipse.fordiac.ide.monitoring.communication.TCPCommunicationObject;
 import org.eclipse.fordiac.ide.systemmanagement.Activator;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -42,7 +43,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	/** The instance. */
 	private static MonitoringManager instance;
 	
-	private final Map<String, SystemMonitoringData> systemMonitoringData = new Hashtable<>();
+	private final Map<AutomationSystem, SystemMonitoringData> systemMonitoringData = new Hashtable<>();
 
 	/**
 	 * Gets the single instance of MonitoringManager.
@@ -188,16 +189,8 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 *            the system
 	 */
 	@Override
-	public void enableSystem(String system) {
-		// get system from the SystemManager
-		AutomationSystem automationSystem = SystemManager.INSTANCE.getSystemForName(system);
-		if (automationSystem == null) {
-			Activator.getDefault().logError(system + " could not be found.");
-			return;
-		} 
-		
-		SystemMonitoringData systemData = getSystemMonitoringData(system);
-		systemData.enableSystem();
+	public void enableSystem(AutomationSystem system) {
+		getSystemMonitoringData(system).enableSystem();
 	}
 
 
@@ -208,15 +201,8 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 *            the system
 	 */
 	@Override
-	public void disableSystem(String system) {
-		AutomationSystem automationSystem = SystemManager.INSTANCE.getSystemForName(system);
-		if (automationSystem == null) {
-			Activator.getDefault().logError(system + " could not be found for deactivating monitoring.");
-			return;
-		} 
-		
-		SystemMonitoringData systemData = getSystemMonitoringData(system);
-		systemData.disableSystem();
+	public void disableSystem(AutomationSystem system) {
+		getSystemMonitoringData(system).disableSystem();
 	}
 
 	/**
@@ -342,21 +328,9 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		}
 	}
 
-	public MonitoringBaseElement getMonitoringElementByPortString(String systemName, String portString) {
-		return getSystemMonitoringData(systemName).getMonitoringElementByPortString(portString);
-	}
-
-	private SystemMonitoringData getSystemMonitoringData(String systemName) {
-		SystemMonitoringData retVal = systemMonitoringData.get(systemName);
-		if(null == retVal){
-			retVal = createSystemMonitoringData(
-						SystemManager.INSTANCE.getSystemForName(systemName));
-		}
-		return retVal;
-	}
 	
-	private SystemMonitoringData getSystemMonitoringData(AutomationSystem system) {
-		SystemMonitoringData retVal = systemMonitoringData.get(system.getName());
+	public SystemMonitoringData getSystemMonitoringData(AutomationSystem system) {
+		SystemMonitoringData retVal = systemMonitoringData.get(system);
 		if(null == retVal){
 			retVal = createSystemMonitoringData(system);
 		}
@@ -365,7 +339,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 	private SystemMonitoringData createSystemMonitoringData(AutomationSystem system) {
 		SystemMonitoringData newData = new SystemMonitoringData(system);
-		systemMonitoringData.put(system.getName(), newData);
+		systemMonitoringData.put(system, newData); 
 		return newData;
 	}
 }

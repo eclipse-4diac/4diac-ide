@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 fortiss GmbH
+ * Copyright (c) 2016- 2018 fortiss GmbH, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
@@ -45,7 +46,7 @@ public class MonitoredSystems extends CompoundContributionItem {
 			MonitoringManager manager = MonitoringManager.getInstance();
 
 			if (menuItem.getSelection()) {
-				manager.enableSystem(system.getName());
+				manager.enableSystem(system);
 
 				IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 				try {
@@ -54,7 +55,7 @@ public class MonitoredSystems extends CompoundContributionItem {
 					Activator.getDefault().logError(e1.getMessage(), e1);
 				}
 			} else {
-				manager.disableSystem(system.getName());
+				manager.disableSystem(system);
 			}
 			refreshSystemTree();
 		}

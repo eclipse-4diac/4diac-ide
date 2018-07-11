@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2015, 2016 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2012, 2015, 2016, 2018 Profactor GmbH, fortiss GmbH, Johannes
+ *                                      Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,12 +10,14 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
 import java.util.ArrayList;
 
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.monitoring.Breakpoints;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
 import org.eclipse.fordiac.ide.model.monitoring.PortElement;
@@ -73,7 +76,7 @@ public abstract class AbstractMonitoringManager {
 		}
 	}
 	
-	public abstract void disableSystem(String system);
+	public abstract void disableSystem(AutomationSystem system);
 	
-	public abstract void enableSystem(String system);
+	public abstract void enableSystem(AutomationSystem system);
 }

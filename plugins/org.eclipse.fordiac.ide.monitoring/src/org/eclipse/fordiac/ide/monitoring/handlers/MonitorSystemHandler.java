@@ -43,9 +43,9 @@ public class MonitorSystemHandler extends AbstractHandler {
 
 				if (oldValue) {
 					// we are monitoring disable it now
-					MonitoringManager.getInstance().disableSystem(system.getName());					
+					MonitoringManager.getInstance().disableSystem(system);					
 				} else {
-					MonitoringManager.getInstance().enableSystem(system.getName());
+					MonitoringManager.getInstance().enableSystem(system);
 					
 					//TODO think if this should be asked for to the user. Similar to switching to the debug perspective in java development.
 					IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
