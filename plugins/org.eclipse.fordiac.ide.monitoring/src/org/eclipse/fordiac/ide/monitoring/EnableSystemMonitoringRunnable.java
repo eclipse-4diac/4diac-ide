@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 - 2017 fortiss GmbH
+ * Copyright (c) 2016 - 2018 fortiss GmbH, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,11 +7,13 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -58,11 +60,7 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 			if(monitor.isCanceled()) break;
 			MonitorInformation monitorInfo = getMonitoringInfo(dev);
 			if (monitorInfo != null) {
-				TCPCommunicationObject commObject = systemMonitoringData.getCommObject(dev);
-				if(null == commObject){
-					commObject = new TCPCommunicationObject(monitorInfo);
-					systemMonitoringData.addCommObject(dev, commObject);
-				}
+				TCPCommunicationObject commObject = getCommObject(dev, monitorInfo); 
 				commObject.enable();
 			} else {
 				Activator.getDefault().logInfo(dev.getName() + " has no monitoring resource.");
@@ -84,21 +82,12 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 	}
 
 	private void startPollingThreads(IProgressMonitor monitor) {
-		monitor.subTask("Enabling the polling threads");
-		for (Device dev : systemMonitoringData.getSystem().getSystemConfiguration().getDevices()) {
-			if(monitor.isCanceled()) break;
-			
-			TCPCommunicationObject commObject = systemMonitoringData.getCommObject(dev);
-			if(null != commObject){
-				//only install a polling thread if we have a connectionto the device
-				DevicePolling t = systemMonitoringData.getPollingThread(dev);
-				if(null == t){
-					t = new DevicePolling(systemMonitoringData.getSystem(), dev, commObject);
-					systemMonitoringData.addPollingThread(dev, t);
-				}
-				t.setRunning(true);
-				t.getThread().start();
+		monitor.subTask("Enabling the polling threads");		
+		for (Entry<Device, DeviceMonitoringHandler> runner: systemMonitoringData.getDevMonitoringHandlers().entrySet()){
+			if(monitor.isCanceled()) {
+				break;
 			}
+			runner.getValue().enable();
 			monitor.worked(1);
 		}		
 	}
@@ -119,5 +108,20 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 
 		return null;
 	}
+	
+	private TCPCommunicationObject getCommObject(Device dev, MonitorInformation monitorInfo) {
+		return getOrCreateDevMonitoringHandler(dev, monitorInfo).getCommObject();
+	}
+
+	private DeviceMonitoringHandler getOrCreateDevMonitoringHandler(Device dev, MonitorInformation monitorInfo) {
+		DeviceMonitoringHandler retVal = systemMonitoringData.getDevMonitoringHandler(dev);
+		if(null == retVal) {
+			retVal = new DeviceMonitoringHandler(dev, monitorInfo);
+			systemMonitoringData.addDevMonitoringHandler(dev, retVal);
+		}
+		return retVal;		
+	}
+
+
 
 }

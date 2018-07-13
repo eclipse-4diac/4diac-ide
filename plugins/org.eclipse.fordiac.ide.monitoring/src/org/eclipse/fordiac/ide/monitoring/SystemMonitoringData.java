@@ -13,7 +13,9 @@ package org.eclipse.fordiac.ide.monitoring;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -35,9 +37,7 @@ public class SystemMonitoringData {
 	private final Map<IInterfaceElement, MonitoringBaseElement> monitoredElements = new Hashtable<>();
 	private final Map<String, MonitoringBaseElement> monitoredElementsPerPortStrings = new Hashtable<>();
 
-	//TODO of java has a something like a c++ std::tuple it would be good to use here
-	private final Hashtable<Device, TCPCommunicationObject> openCommunication = new Hashtable<>();
-	private final Hashtable<Device, DevicePolling> pollingThreads = new Hashtable<>();
+	private final Map<Device, DeviceMonitoringHandler> deviceHandlers = new Hashtable<>();
 	
 	private boolean monitoringEnabled = false;
 	
@@ -53,25 +53,21 @@ public class SystemMonitoringData {
 	Collection<MonitoringBaseElement> getMonitoredElements(){ 
 		return monitoredElements.values();
 	}
-
-	TCPCommunicationObject getCommObject(Device dev){
-		return openCommunication.get(dev);
+	
+	DeviceMonitoringHandler getDevMonitoringHandler(Device dev){
+		return deviceHandlers.get(dev);
 	}
 	
-	void addCommObject(Device dev, TCPCommunicationObject comObj){
-		openCommunication.put(dev, comObj);
+	void addDevMonitoringHandler(Device dev, DeviceMonitoringHandler handler){
+		deviceHandlers.put(dev, handler);
 	}
 	
-	DevicePolling getPollingThread(Device dev){
-		return pollingThreads.get(dev);
-	}
-	
-	void addPollingThread(Device dev, DevicePolling thread){
-		pollingThreads.put(dev, thread);
+	Map<Device, DeviceMonitoringHandler>getDevMonitoringHandlers(){
+		return deviceHandlers;
 	}
 	
 	void removePollingThread(Device dev){
-		pollingThreads.remove(dev);
+		deviceHandlers.remove(dev);
 	}
 	
 	public void enableSystem() {
@@ -124,6 +120,12 @@ public class SystemMonitoringData {
 		if(null != commObject){
 			commObject.addWatch(element);
 		}
+	}
+
+
+	public TCPCommunicationObject getCommObject(Device device) {
+		DeviceMonitoringHandler handler = getDevMonitoringHandler(device);
+		return (null != handler) ? handler.getCommObject() : null;
 	}
 
 

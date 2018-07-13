@@ -7,17 +7,18 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.monitoring.communication.TCPCommunicationObject;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
@@ -45,14 +46,14 @@ class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
 
 	private void disconnectFromDevices(List<Device> devices, IProgressMonitor monitor) {
 		monitor.subTask("Disconnecting the devices");
-		for (Device dev : devices) {
-			if(monitor.isCanceled()) break;
-			TCPCommunicationObject commObject = systemMonitoringData.getCommObject(dev);
-			if(null != commObject){
-				commObject.disable();				
+		for (Entry<Device, DeviceMonitoringHandler> runner: systemMonitoringData.getDevMonitoringHandlers().entrySet()){
+			if(monitor.isCanceled()) {
+				break;
 			}
+			runner.getValue().getCommObject().disable();
 			monitor.worked(1);
-		}
+		}	
+		systemMonitoringData.getDevMonitoringHandlers().clear();
 	}
 
 	private void removeWatches(IProgressMonitor monitor) {
@@ -71,16 +72,13 @@ class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
 
 	private void stopPollingThreads(IProgressMonitor monitor) {
 		monitor.subTask("Enabling the polling threads");
-		for (Device dev : systemMonitoringData.getSystem().getSystemConfiguration().getDevices()) {
-			if(monitor.isCanceled()) break;
-			DevicePolling t = systemMonitoringData.getPollingThread(dev);
-
-			if(null != t){
-				t.setRunning(false);
-				systemMonitoringData.removePollingThread(dev);
+		for (Entry<Device, DeviceMonitoringHandler> runner: systemMonitoringData.getDevMonitoringHandlers().entrySet()){
+			if(monitor.isCanceled()) {
+				break;
 			}
+			runner.getValue().disable();
 			monitor.worked(1);
-		}		
+		}	
 	}
 
 }
