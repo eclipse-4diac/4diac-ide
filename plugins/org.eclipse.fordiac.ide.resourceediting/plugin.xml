@@ -128,28 +128,4 @@
             id="org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInputFactory">
       </factory>
    </extension>
-<extension
-      point="org.eclipse.ui.views.properties.tabbed.propertySections">
-   <propertySections
-         contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
-      <propertySection
-            class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-            enablesFor="1"
-            id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-            tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
-         <input
-               type="org.eclipse.fordiac.ide.resourceediting.editparts.InterfaceEditPartForResourceFBs">
-         </input>
-      </propertySection>
-      <propertySection
-            class="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
-            enablesFor="2"
-            id="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
-            tab="org.eclipse.fordiac.ide.application.CreateConnection">
-         <input
-               type="org.eclipse.fordiac.ide.resourceediting.editparts.InterfaceEditPartForResourceFBs">
-         </input>
-      </propertySection>
-   </propertySections>
-</extension>
 </plugin>
