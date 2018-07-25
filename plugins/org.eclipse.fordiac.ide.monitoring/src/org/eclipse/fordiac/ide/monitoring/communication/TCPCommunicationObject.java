@@ -37,10 +37,10 @@ import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager.BreakPoint;
 import org.eclipse.fordiac.ide.monitoring.SystemMonitoringData;
-import org.eclipse.fordiac.ide.monitoring.monCom.Data;
-import org.eclipse.fordiac.ide.monitoring.monCom.FB;
-import org.eclipse.fordiac.ide.monitoring.monCom.Port;
-import org.eclipse.fordiac.ide.monitoring.monCom.Response;
+import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.deployment.devResponse.FB;
+import org.eclipse.fordiac.ide.deployment.devResponse.Port;
+import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
 import org.xml.sax.InputSource;
 
@@ -330,7 +330,7 @@ public class TCPCommunicationObject {
 				if (object instanceof Response) {
 					Response resp = (Response) object;
 					if (resp.getWatches() != null) {
-						for (org.eclipse.fordiac.ide.monitoring.monCom.Resource res : resp
+						for (org.eclipse.fordiac.ide.deployment.devResponse.Resource res : resp
 								.getWatches().getResources()) {
 
 							for (FB fb : res.getFbs()) {

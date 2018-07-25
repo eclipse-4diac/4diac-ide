@@ -1,16 +1,20 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
+ * * 
+ * * All rights reserved. This program and the accompanying materials
+ * * are made available under the terms of the Eclipse Public License v1.0
+ * * which accompanies this distribution, and is available at
+ * * http://www.eclipse.org/legal/epl-v10.html
+ * *
+ * * Contributors:
+ * *   Gerhard Ebenhofer, Alois Zoitl
+ * *     - initial API and implementation and/or initial documentation
+ * *   Alois Zoitl - moved to deployment and reworked it to a device response model
+ * ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring.monCom;
+ */
+package org.eclipse.fordiac.ide.deployment.devResponse;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -28,18 +32,18 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * @see org.eclipse.fordiac.ide.monitoring.monCom.MonComFactory
+ * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory
  * @model kind="package"
  * @generated
  */
-public interface MonComPackage extends EPackage {
+public interface DevResponsePackage extends EPackage {
 	/**
 	 * The package name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNAME = "monCom";
+	String eNAME = "devResponse";
 
 	/**
 	 * The package namespace URI.
@@ -47,7 +51,7 @@ public interface MonComPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "org.eclipse.fordiac.ide.monitoring";
+	String eNS_URI = "org.eclipse.fordiac.ide.deployment";
 
 	/**
 	 * The package namespace name.
@@ -55,7 +59,7 @@ public interface MonComPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_PREFIX = "monCom";
+	String eNS_PREFIX = "devResponse";
 
 	/**
 	 * The singleton instance of the package.
@@ -63,14 +67,14 @@ public interface MonComPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	MonComPackage eINSTANCE = org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl.init();
+	DevResponsePackage eINSTANCE = org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.ResourceImpl <em>Resource</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl <em>Resource</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.ResourceImpl
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl#getResource()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getResource()
 	 * @generated
 	 */
 	int RESOURCE = 0;
@@ -103,11 +107,11 @@ public interface MonComPackage extends EPackage {
 	int RESOURCE_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.FBImpl <em>FB</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl <em>FB</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.FBImpl
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl#getFB()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getFB()
 	 * @generated
 	 */
 	int FB = 1;
@@ -140,11 +144,11 @@ public interface MonComPackage extends EPackage {
 	int FB_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.PortImpl <em>Port</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl <em>Port</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.PortImpl
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl#getPort()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getPort()
 	 * @generated
 	 */
 	int PORT = 2;
@@ -177,11 +181,11 @@ public interface MonComPackage extends EPackage {
 	int PORT_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.DataImpl <em>Data</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl <em>Data</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.DataImpl
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl#getData()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getData()
 	 * @generated
 	 */
 	int DATA = 3;
@@ -222,13 +226,12 @@ public interface MonComPackage extends EPackage {
 	 */
 	int DATA_FEATURE_COUNT = 3;
 
-
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.ResponseImpl <em>Response</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl <em>Response</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.ResponseImpl
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl#getResponse()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getResponse()
 	 * @generated
 	 */
 	int RESPONSE = 4;
@@ -270,11 +273,11 @@ public interface MonComPackage extends EPackage {
 	int RESPONSE_FEATURE_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.WatchesImpl <em>Watches</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl <em>Watches</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.WatchesImpl
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl#getWatches()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getWatches()
 	 * @generated
 	 */
 	int WATCHES = 5;
@@ -299,203 +302,203 @@ public interface MonComPackage extends EPackage {
 
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.monitoring.monCom.Resource <em>Resource</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource <em>Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Resource</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Resource
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Resource
 	 * @generated
 	 */
 	EClass getResource();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.monitoring.monCom.Resource#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Resource#getName()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Resource#getName()
 	 * @see #getResource()
 	 * @generated
 	 */
 	EAttribute getResource_Name();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.monitoring.monCom.Resource#getFbs <em>Fbs</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource#getFbs <em>Fbs</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Fbs</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Resource#getFbs()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Resource#getFbs()
 	 * @see #getResource()
 	 * @generated
 	 */
 	EReference getResource_Fbs();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.monitoring.monCom.FB <em>FB</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.FB <em>FB</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>FB</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.FB
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FB
 	 * @generated
 	 */
 	EClass getFB();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.monitoring.monCom.FB#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.FB#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.FB#getName()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FB#getName()
 	 * @see #getFB()
 	 * @generated
 	 */
 	EAttribute getFB_Name();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.monitoring.monCom.FB#getPorts <em>Ports</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.deployment.devResponse.FB#getPorts <em>Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Ports</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.FB#getPorts()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FB#getPorts()
 	 * @see #getFB()
 	 * @generated
 	 */
 	EReference getFB_Ports();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.monitoring.monCom.Port <em>Port</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Port <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Port</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Port
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Port
 	 * @generated
 	 */
 	EClass getPort();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.monitoring.monCom.Port#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Port#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Port#getName()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Port#getName()
 	 * @see #getPort()
 	 * @generated
 	 */
 	EAttribute getPort_Name();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.monitoring.monCom.Port#getDataValues <em>Data Values</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.deployment.devResponse.Port#getDataValues <em>Data Values</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Data Values</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Port#getDataValues()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Port#getDataValues()
 	 * @see #getPort()
 	 * @generated
 	 */
 	EReference getPort_DataValues();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.monitoring.monCom.Data <em>Data</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data <em>Data</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Data</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Data
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Data
 	 * @generated
 	 */
 	EClass getData();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.monitoring.monCom.Data#getValue <em>Value</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Data#getValue()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Data#getValue()
 	 * @see #getData()
 	 * @generated
 	 */
 	EAttribute getData_Value();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.monitoring.monCom.Data#getTime <em>Time</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getTime <em>Time</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Time</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Data#getTime()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Data#getTime()
 	 * @see #getData()
 	 * @generated
 	 */
 	EAttribute getData_Time();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.monitoring.monCom.Data#getForced <em>Forced</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getForced <em>Forced</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Forced</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Data#getForced()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Data#getForced()
 	 * @see #getData()
 	 * @generated
 	 */
 	EAttribute getData_Forced();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.monitoring.monCom.Response <em>Response</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response <em>Response</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Response</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Response
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response
 	 * @generated
 	 */
 	EClass getResponse();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.monitoring.monCom.Response#getID <em>ID</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getID <em>ID</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>ID</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Response#getID()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getID()
 	 * @see #getResponse()
 	 * @generated
 	 */
 	EAttribute getResponse_ID();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.monitoring.monCom.Response#getWatches <em>Watches</em>}'.
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches <em>Watches</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Watches</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Response#getWatches()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches()
 	 * @see #getResponse()
 	 * @generated
 	 */
 	EReference getResponse_Watches();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.monitoring.monCom.Response#getReason <em>Reason</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason <em>Reason</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Reason</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Response#getReason()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason()
 	 * @see #getResponse()
 	 * @generated
 	 */
 	EAttribute getResponse_Reason();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.monitoring.monCom.Watches <em>Watches</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Watches <em>Watches</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Watches</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Watches
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Watches
 	 * @generated
 	 */
 	EClass getWatches();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.monitoring.monCom.Watches#getResources <em>Resources</em>}'.
+	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.deployment.devResponse.Watches#getResources <em>Resources</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Resources</em>'.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Watches#getResources()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Watches#getResources()
 	 * @see #getWatches()
 	 * @generated
 	 */
@@ -508,7 +511,7 @@ public interface MonComPackage extends EPackage {
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
-	MonComFactory getMonComFactory();
+	DevResponseFactory getDevResponseFactory();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -524,11 +527,11 @@ public interface MonComPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.ResourceImpl <em>Resource</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl <em>Resource</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.ResourceImpl
-		 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl#getResource()
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getResource()
 		 * @generated
 		 */
 		EClass RESOURCE = eINSTANCE.getResource();
@@ -550,11 +553,11 @@ public interface MonComPackage extends EPackage {
 		EReference RESOURCE__FBS = eINSTANCE.getResource_Fbs();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.FBImpl <em>FB</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl <em>FB</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.FBImpl
-		 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl#getFB()
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getFB()
 		 * @generated
 		 */
 		EClass FB = eINSTANCE.getFB();
@@ -576,11 +579,11 @@ public interface MonComPackage extends EPackage {
 		EReference FB__PORTS = eINSTANCE.getFB_Ports();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.PortImpl <em>Port</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl <em>Port</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.PortImpl
-		 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl#getPort()
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getPort()
 		 * @generated
 		 */
 		EClass PORT = eINSTANCE.getPort();
@@ -602,11 +605,11 @@ public interface MonComPackage extends EPackage {
 		EReference PORT__DATA_VALUES = eINSTANCE.getPort_DataValues();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.DataImpl <em>Data</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl <em>Data</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.DataImpl
-		 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl#getData()
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getData()
 		 * @generated
 		 */
 		EClass DATA = eINSTANCE.getData();
@@ -636,11 +639,11 @@ public interface MonComPackage extends EPackage {
 		EAttribute DATA__FORCED = eINSTANCE.getData_Forced();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.ResponseImpl <em>Response</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl <em>Response</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.ResponseImpl
-		 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl#getResponse()
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getResponse()
 		 * @generated
 		 */
 		EClass RESPONSE = eINSTANCE.getResponse();
@@ -670,11 +673,11 @@ public interface MonComPackage extends EPackage {
 		EAttribute RESPONSE__REASON = eINSTANCE.getResponse_Reason();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.WatchesImpl <em>Watches</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl <em>Watches</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.WatchesImpl
-		 * @see org.eclipse.fordiac.ide.monitoring.monCom.impl.MonComPackageImpl#getWatches()
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getWatches()
 		 * @generated
 		 */
 		EClass WATCHES = eINSTANCE.getWatches();
@@ -689,4 +692,4 @@ public interface MonComPackage extends EPackage {
 
 	}
 
-} //MonComPackage
+} //DevResponsePackage

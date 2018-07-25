@@ -1,45 +1,46 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
+ * * 
+ * * All rights reserved. This program and the accompanying materials
+ * * are made available under the terms of the Eclipse Public License v1.0
+ * * which accompanies this distribution, and is available at
+ * * http://www.eclipse.org/legal/epl-v10.html
+ * *
+ * * Contributors:
+ * *   Gerhard Ebenhofer, Alois Zoitl
+ * *     - initial API and implementation and/or initial documentation
+ * *   Alois Zoitl - moved to deployment and reworked it to a device response model
+ * ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring.monCom.util;
+ */
+package org.eclipse.fordiac.ide.deployment.devResponse.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
+
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.monitoring.monCom.Data;
-import org.eclipse.fordiac.ide.monitoring.monCom.FB;
-import org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage;
-import org.eclipse.fordiac.ide.monitoring.monCom.Port;
-import org.eclipse.fordiac.ide.monitoring.monCom.Resource;
-import org.eclipse.fordiac.ide.monitoring.monCom.Response;
-import org.eclipse.fordiac.ide.monitoring.monCom.Watches;
+
+import org.eclipse.fordiac.ide.deployment.devResponse.*;
 
 /**
  * <!-- begin-user-doc -->
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage
+ * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage
  * @generated
  */
-public class MonComAdapterFactory extends AdapterFactoryImpl {
+public class DevResponseAdapterFactory extends AdapterFactoryImpl {
 	/**
 	 * The cached model package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static MonComPackage modelPackage;
+	protected static DevResponsePackage modelPackage;
 
 	/**
 	 * Creates an instance of the adapter factory.
@@ -47,9 +48,9 @@ public class MonComAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MonComAdapterFactory() {
+	public DevResponseAdapterFactory() {
 		if (modelPackage == null) {
-			modelPackage = MonComPackage.eINSTANCE;
+			modelPackage = DevResponsePackage.eINSTANCE;
 		}
 	}
 
@@ -78,8 +79,8 @@ public class MonComAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MonComSwitch<Adapter> modelSwitch =
-		new MonComSwitch<Adapter>() {
+	protected DevResponseSwitch<Adapter> modelSwitch =
+		new DevResponseSwitch<Adapter>() {
 			@Override
 			public Adapter caseResource(Resource object) {
 				return createResourceAdapter();
@@ -125,13 +126,13 @@ public class MonComAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.monitoring.monCom.Resource <em>Resource</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource <em>Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Resource
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Resource
 	 * @generated
 	 */
 	public Adapter createResourceAdapter() {
@@ -139,13 +140,13 @@ public class MonComAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.monitoring.monCom.FB <em>FB</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.devResponse.FB <em>FB</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.FB
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FB
 	 * @generated
 	 */
 	public Adapter createFBAdapter() {
@@ -153,13 +154,13 @@ public class MonComAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.monitoring.monCom.Port <em>Port</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Port <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Port
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Port
 	 * @generated
 	 */
 	public Adapter createPortAdapter() {
@@ -167,13 +168,13 @@ public class MonComAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.monitoring.monCom.Data <em>Data</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data <em>Data</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Data
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Data
 	 * @generated
 	 */
 	public Adapter createDataAdapter() {
@@ -181,13 +182,13 @@ public class MonComAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.monitoring.monCom.Response <em>Response</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response <em>Response</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Response
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response
 	 * @generated
 	 */
 	public Adapter createResponseAdapter() {
@@ -195,13 +196,13 @@ public class MonComAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.monitoring.monCom.Watches <em>Watches</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Watches <em>Watches</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.Watches
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Watches
 	 * @generated
 	 */
 	public Adapter createWatchesAdapter() {
@@ -220,4 +221,4 @@ public class MonComAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} //MonComAdapterFactory
+} //DevResponseAdapterFactory

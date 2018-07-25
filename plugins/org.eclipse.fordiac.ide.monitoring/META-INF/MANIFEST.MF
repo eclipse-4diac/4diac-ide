@@ -19,14 +19,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui.controls,
  org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.fordiac.ide.deployment.ui,
- org.eclipse.ui.navigator
+ org.eclipse.ui.navigator,
+ org.eclipse.fordiac.ide.deployment
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.fordiac.ide.model.monitoring,
- org.eclipse.fordiac.ide.model.monitoring.impl,
- org.eclipse.fordiac.ide.model.monitoring.util,
- org.eclipse.fordiac.ide.monitoring.monCom,
- org.eclipse.fordiac.ide.monitoring.monCom.impl,
- org.eclipse.fordiac.ide.monitoring.monCom.util,
- org.eclipse.fordiac.ide.monitoring.communication
 Bundle-ClassPath: .
+Export-Package: org.eclipse.fordiac.ide.monitoring.communication

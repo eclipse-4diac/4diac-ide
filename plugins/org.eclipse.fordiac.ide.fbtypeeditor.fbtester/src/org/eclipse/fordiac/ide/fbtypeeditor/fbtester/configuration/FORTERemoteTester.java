@@ -40,10 +40,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.monitoring.communication.Messages;
 import org.eclipse.fordiac.ide.monitoring.communication.MonitoringCommunicationOptions;
-import org.eclipse.fordiac.ide.monitoring.monCom.Data;
-import org.eclipse.fordiac.ide.monitoring.monCom.FB;
-import org.eclipse.fordiac.ide.monitoring.monCom.Port;
-import org.eclipse.fordiac.ide.monitoring.monCom.Response;
+import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.deployment.devResponse.FB;
+import org.eclipse.fordiac.ide.deployment.devResponse.Port;
+import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
@@ -298,7 +298,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 								if (object instanceof Response) {
 									Response resp = (Response) object;
 									if (resp.getWatches() != null) {
-										for (org.eclipse.fordiac.ide.monitoring.monCom.Resource res : resp
+										for (org.eclipse.fordiac.ide.deployment.devResponse.Resource res : resp
 												.getWatches().getResources()) {
 
 											for (FB fb : res.getFbs()) {

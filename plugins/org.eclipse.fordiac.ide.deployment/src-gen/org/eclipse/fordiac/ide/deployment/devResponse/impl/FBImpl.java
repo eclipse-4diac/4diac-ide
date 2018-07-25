@@ -1,31 +1,40 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
+ * * 
+ * * All rights reserved. This program and the accompanying materials
+ * * are made available under the terms of the Eclipse Public License v1.0
+ * * which accompanies this distribution, and is available at
+ * * http://www.eclipse.org/legal/epl-v10.html
+ * *
+ * * Contributors:
+ * *   Gerhard Ebenhofer, Alois Zoitl
+ * *     - initial API and implementation and/or initial documentation
+ * *   Alois Zoitl - moved to deployment and reworked it to a device response model
+ * ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring.monCom.impl;
+ */
+package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.monitoring.monCom.FB;
-import org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage;
-import org.eclipse.fordiac.ide.monitoring.monCom.Port;
+
+import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
+import org.eclipse.fordiac.ide.deployment.devResponse.FB;
+import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,8 +44,8 @@ import org.eclipse.fordiac.ide.monitoring.monCom.Port;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.FBImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.FBImpl#getPorts <em>Ports</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getPorts <em>Ports</em>}</li>
  * </ul>
  *
  * @generated
@@ -88,7 +97,7 @@ public class FBImpl extends EObjectImpl implements FB {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return MonComPackage.Literals.FB;
+		return DevResponsePackage.Literals.FB;
 	}
 
 	/**
@@ -109,7 +118,7 @@ public class FBImpl extends EObjectImpl implements FB {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonComPackage.FB__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.FB__NAME, oldName, name));
 	}
 
 	/**
@@ -119,7 +128,7 @@ public class FBImpl extends EObjectImpl implements FB {
 	 */
 	public EList<Port> getPorts() {
 		if (ports == null) {
-			ports = new EObjectContainmentEList<Port>(Port.class, this, MonComPackage.FB__PORTS);
+			ports = new EObjectContainmentEList<Port>(Port.class, this, DevResponsePackage.FB__PORTS);
 		}
 		return ports;
 	}
@@ -132,7 +141,7 @@ public class FBImpl extends EObjectImpl implements FB {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case MonComPackage.FB__PORTS:
+			case DevResponsePackage.FB__PORTS:
 				return ((InternalEList<?>)getPorts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -146,9 +155,9 @@ public class FBImpl extends EObjectImpl implements FB {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MonComPackage.FB__NAME:
+			case DevResponsePackage.FB__NAME:
 				return getName();
-			case MonComPackage.FB__PORTS:
+			case DevResponsePackage.FB__PORTS:
 				return getPorts();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -163,10 +172,10 @@ public class FBImpl extends EObjectImpl implements FB {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MonComPackage.FB__NAME:
+			case DevResponsePackage.FB__NAME:
 				setName((String)newValue);
 				return;
-			case MonComPackage.FB__PORTS:
+			case DevResponsePackage.FB__PORTS:
 				getPorts().clear();
 				getPorts().addAll((Collection<? extends Port>)newValue);
 				return;
@@ -182,10 +191,10 @@ public class FBImpl extends EObjectImpl implements FB {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MonComPackage.FB__NAME:
+			case DevResponsePackage.FB__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case MonComPackage.FB__PORTS:
+			case DevResponsePackage.FB__PORTS:
 				getPorts().clear();
 				return;
 		}
@@ -200,9 +209,9 @@ public class FBImpl extends EObjectImpl implements FB {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MonComPackage.FB__NAME:
+			case DevResponsePackage.FB__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case MonComPackage.FB__PORTS:
+			case DevResponsePackage.FB__PORTS:
 				return ports != null && !ports.isEmpty();
 		}
 		return super.eIsSet(featureID);
@@ -217,7 +226,7 @@ public class FBImpl extends EObjectImpl implements FB {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(')');

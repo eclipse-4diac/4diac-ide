@@ -1,31 +1,40 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
+ * * 
+ * * All rights reserved. This program and the accompanying materials
+ * * are made available under the terms of the Eclipse Public License v1.0
+ * * which accompanies this distribution, and is available at
+ * * http://www.eclipse.org/legal/epl-v10.html
+ * *
+ * * Contributors:
+ * *   Gerhard Ebenhofer, Alois Zoitl
+ * *     - initial API and implementation and/or initial documentation
+ * *   Alois Zoitl - moved to deployment and reworked it to a device response model
+ * ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring.monCom.impl;
+ */
+package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.monitoring.monCom.Data;
-import org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage;
-import org.eclipse.fordiac.ide.monitoring.monCom.Port;
+
+import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
+import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,8 +44,8 @@ import org.eclipse.fordiac.ide.monitoring.monCom.Port;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.PortImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.PortImpl#getDataValues <em>Data Values</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl#getDataValues <em>Data Values</em>}</li>
  * </ul>
  *
  * @generated
@@ -88,7 +97,7 @@ public class PortImpl extends EObjectImpl implements Port {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return MonComPackage.Literals.PORT;
+		return DevResponsePackage.Literals.PORT;
 	}
 
 	/**
@@ -109,7 +118,7 @@ public class PortImpl extends EObjectImpl implements Port {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonComPackage.PORT__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.PORT__NAME, oldName, name));
 	}
 
 	/**
@@ -119,7 +128,7 @@ public class PortImpl extends EObjectImpl implements Port {
 	 */
 	public EList<Data> getDataValues() {
 		if (dataValues == null) {
-			dataValues = new EObjectContainmentEList<Data>(Data.class, this, MonComPackage.PORT__DATA_VALUES);
+			dataValues = new EObjectContainmentEList<Data>(Data.class, this, DevResponsePackage.PORT__DATA_VALUES);
 		}
 		return dataValues;
 	}
@@ -132,7 +141,7 @@ public class PortImpl extends EObjectImpl implements Port {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case MonComPackage.PORT__DATA_VALUES:
+			case DevResponsePackage.PORT__DATA_VALUES:
 				return ((InternalEList<?>)getDataValues()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -146,9 +155,9 @@ public class PortImpl extends EObjectImpl implements Port {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MonComPackage.PORT__NAME:
+			case DevResponsePackage.PORT__NAME:
 				return getName();
-			case MonComPackage.PORT__DATA_VALUES:
+			case DevResponsePackage.PORT__DATA_VALUES:
 				return getDataValues();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -163,10 +172,10 @@ public class PortImpl extends EObjectImpl implements Port {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MonComPackage.PORT__NAME:
+			case DevResponsePackage.PORT__NAME:
 				setName((String)newValue);
 				return;
-			case MonComPackage.PORT__DATA_VALUES:
+			case DevResponsePackage.PORT__DATA_VALUES:
 				getDataValues().clear();
 				getDataValues().addAll((Collection<? extends Data>)newValue);
 				return;
@@ -182,10 +191,10 @@ public class PortImpl extends EObjectImpl implements Port {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MonComPackage.PORT__NAME:
+			case DevResponsePackage.PORT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case MonComPackage.PORT__DATA_VALUES:
+			case DevResponsePackage.PORT__DATA_VALUES:
 				getDataValues().clear();
 				return;
 		}
@@ -200,9 +209,9 @@ public class PortImpl extends EObjectImpl implements Port {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MonComPackage.PORT__NAME:
+			case DevResponsePackage.PORT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case MonComPackage.PORT__DATA_VALUES:
+			case DevResponsePackage.PORT__DATA_VALUES:
 				return dataValues != null && !dataValues.isEmpty();
 		}
 		return super.eIsSet(featureID);
@@ -217,7 +226,7 @@ public class PortImpl extends EObjectImpl implements Port {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(')');

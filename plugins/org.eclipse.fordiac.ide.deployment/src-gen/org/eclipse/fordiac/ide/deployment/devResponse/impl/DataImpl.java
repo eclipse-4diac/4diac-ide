@@ -1,23 +1,30 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
+ * * 
+ * * All rights reserved. This program and the accompanying materials
+ * * are made available under the terms of the Eclipse Public License v1.0
+ * * which accompanies this distribution, and is available at
+ * * http://www.eclipse.org/legal/epl-v10.html
+ * *
+ * * Contributors:
+ * *   Gerhard Ebenhofer, Alois Zoitl
+ * *     - initial API and implementation and/or initial documentation
+ * *   Alois Zoitl - moved to deployment and reworked it to a device response model
+ * ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring.monCom.impl;
+ */
+package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.fordiac.ide.monitoring.monCom.Data;
-import org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage;
+
+import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,9 +34,9 @@ import org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.DataImpl#getValue <em>Value</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.DataImpl#getTime <em>Time</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.DataImpl#getForced <em>Forced</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl#getTime <em>Time</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl#getForced <em>Forced</em>}</li>
  * </ul>
  *
  * @generated
@@ -111,7 +118,7 @@ public class DataImpl extends EObjectImpl implements Data {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return MonComPackage.Literals.DATA;
+		return DevResponsePackage.Literals.DATA;
 	}
 
 	/**
@@ -132,7 +139,7 @@ public class DataImpl extends EObjectImpl implements Data {
 		String oldValue = value;
 		value = newValue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonComPackage.DATA__VALUE, oldValue, value));
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.DATA__VALUE, oldValue, value));
 	}
 
 	/**
@@ -153,7 +160,7 @@ public class DataImpl extends EObjectImpl implements Data {
 		String oldTime = time;
 		time = newTime;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonComPackage.DATA__TIME, oldTime, time));
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.DATA__TIME, oldTime, time));
 	}
 
 	/**
@@ -174,7 +181,7 @@ public class DataImpl extends EObjectImpl implements Data {
 		String oldForced = forced;
 		forced = newForced;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonComPackage.DATA__FORCED, oldForced, forced));
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.DATA__FORCED, oldForced, forced));
 	}
 
 	/**
@@ -185,11 +192,11 @@ public class DataImpl extends EObjectImpl implements Data {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MonComPackage.DATA__VALUE:
+			case DevResponsePackage.DATA__VALUE:
 				return getValue();
-			case MonComPackage.DATA__TIME:
+			case DevResponsePackage.DATA__TIME:
 				return getTime();
-			case MonComPackage.DATA__FORCED:
+			case DevResponsePackage.DATA__FORCED:
 				return getForced();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -203,13 +210,13 @@ public class DataImpl extends EObjectImpl implements Data {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MonComPackage.DATA__VALUE:
+			case DevResponsePackage.DATA__VALUE:
 				setValue((String)newValue);
 				return;
-			case MonComPackage.DATA__TIME:
+			case DevResponsePackage.DATA__TIME:
 				setTime((String)newValue);
 				return;
-			case MonComPackage.DATA__FORCED:
+			case DevResponsePackage.DATA__FORCED:
 				setForced((String)newValue);
 				return;
 		}
@@ -224,13 +231,13 @@ public class DataImpl extends EObjectImpl implements Data {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MonComPackage.DATA__VALUE:
+			case DevResponsePackage.DATA__VALUE:
 				setValue(VALUE_EDEFAULT);
 				return;
-			case MonComPackage.DATA__TIME:
+			case DevResponsePackage.DATA__TIME:
 				setTime(TIME_EDEFAULT);
 				return;
-			case MonComPackage.DATA__FORCED:
+			case DevResponsePackage.DATA__FORCED:
 				setForced(FORCED_EDEFAULT);
 				return;
 		}
@@ -245,11 +252,11 @@ public class DataImpl extends EObjectImpl implements Data {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MonComPackage.DATA__VALUE:
+			case DevResponsePackage.DATA__VALUE:
 				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
-			case MonComPackage.DATA__TIME:
+			case DevResponsePackage.DATA__TIME:
 				return TIME_EDEFAULT == null ? time != null : !TIME_EDEFAULT.equals(time);
-			case MonComPackage.DATA__FORCED:
+			case DevResponsePackage.DATA__FORCED:
 				return FORCED_EDEFAULT == null ? forced != null : !FORCED_EDEFAULT.equals(forced);
 		}
 		return super.eIsSet(featureID);
@@ -264,7 +271,7 @@ public class DataImpl extends EObjectImpl implements Data {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (value: ");
 		result.append(value);
 		result.append(", time: ");

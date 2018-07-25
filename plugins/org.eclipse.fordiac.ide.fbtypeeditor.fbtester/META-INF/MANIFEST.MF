@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.ui.controls,
  org.eclipse.ui.externaltools,
  org.eclipse.fordiac.ide.monitoring,
- org.eclipse.fordiac.ide.typemanagement
+ org.eclipse.fordiac.ide.typemanagement,
+ org.eclipse.fordiac.ide.deployment
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Eclipse 4diac

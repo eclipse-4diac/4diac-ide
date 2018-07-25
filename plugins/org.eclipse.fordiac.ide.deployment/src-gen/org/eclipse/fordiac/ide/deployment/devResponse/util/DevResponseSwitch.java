@@ -1,27 +1,27 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
+ * * 
+ * * All rights reserved. This program and the accompanying materials
+ * * are made available under the terms of the Eclipse Public License v1.0
+ * * which accompanies this distribution, and is available at
+ * * http://www.eclipse.org/legal/epl-v10.html
+ * *
+ * * Contributors:
+ * *   Gerhard Ebenhofer, Alois Zoitl
+ * *     - initial API and implementation and/or initial documentation
+ * *   Alois Zoitl - moved to deployment and reworked it to a device response model
+ * ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring.monCom.util;
+ */
+package org.eclipse.fordiac.ide.deployment.devResponse.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.util.Switch;
-import org.eclipse.fordiac.ide.monitoring.monCom.Data;
-import org.eclipse.fordiac.ide.monitoring.monCom.FB;
-import org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage;
-import org.eclipse.fordiac.ide.monitoring.monCom.Port;
-import org.eclipse.fordiac.ide.monitoring.monCom.Resource;
-import org.eclipse.fordiac.ide.monitoring.monCom.Response;
-import org.eclipse.fordiac.ide.monitoring.monCom.Watches;
+
+import org.eclipse.fordiac.ide.deployment.devResponse.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,17 +33,17 @@ import org.eclipse.fordiac.ide.monitoring.monCom.Watches;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage
+ * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage
  * @generated
  */
-public class MonComSwitch<T> extends Switch<T> {
+public class DevResponseSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static MonComPackage modelPackage;
+	protected static DevResponsePackage modelPackage;
 
 	/**
 	 * Creates an instance of the switch.
@@ -51,9 +51,9 @@ public class MonComSwitch<T> extends Switch<T> {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MonComSwitch() {
+	public DevResponseSwitch() {
 		if (modelPackage == null) {
-			modelPackage = MonComPackage.eINSTANCE;
+			modelPackage = DevResponsePackage.eINSTANCE;
 		}
 	}
 
@@ -80,37 +80,37 @@ public class MonComSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case MonComPackage.RESOURCE: {
+			case DevResponsePackage.RESOURCE: {
 				Resource resource = (Resource)theEObject;
 				T result = caseResource(resource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MonComPackage.FB: {
+			case DevResponsePackage.FB: {
 				FB fb = (FB)theEObject;
 				T result = caseFB(fb);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MonComPackage.PORT: {
+			case DevResponsePackage.PORT: {
 				Port port = (Port)theEObject;
 				T result = casePort(port);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MonComPackage.DATA: {
+			case DevResponsePackage.DATA: {
 				Data data = (Data)theEObject;
 				T result = caseData(data);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MonComPackage.RESPONSE: {
+			case DevResponsePackage.RESPONSE: {
 				Response response = (Response)theEObject;
 				T result = caseResponse(response);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MonComPackage.WATCHES: {
+			case DevResponsePackage.WATCHES: {
 				Watches watches = (Watches)theEObject;
 				T result = caseWatches(watches);
 				if (result == null) result = defaultCase(theEObject);
@@ -226,4 +226,4 @@ public class MonComSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-} //MonComSwitch
+} //DevResponseSwitch

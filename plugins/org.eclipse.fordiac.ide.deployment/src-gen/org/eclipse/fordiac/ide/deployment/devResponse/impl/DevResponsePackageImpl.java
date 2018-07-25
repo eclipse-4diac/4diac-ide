@@ -1,31 +1,35 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
+ * * 
+ * * All rights reserved. This program and the accompanying materials
+ * * are made available under the terms of the Eclipse Public License v1.0
+ * * which accompanies this distribution, and is available at
+ * * http://www.eclipse.org/legal/epl-v10.html
+ * *
+ * * Contributors:
+ * *   Gerhard Ebenhofer, Alois Zoitl
+ * *     - initial API and implementation and/or initial documentation
+ * *   Alois Zoitl - moved to deployment and reworked it to a device response model
+ * ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring.monCom.impl;
-
-import static org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage.RESOURCE;
+ */
+package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-import org.eclipse.fordiac.ide.monitoring.monCom.Data;
-import org.eclipse.fordiac.ide.monitoring.monCom.MonComFactory;
-import org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage;
-import org.eclipse.fordiac.ide.monitoring.monCom.Port;
-import org.eclipse.fordiac.ide.monitoring.monCom.Resource;
-import org.eclipse.fordiac.ide.monitoring.monCom.Response;
-import org.eclipse.fordiac.ide.monitoring.monCom.Watches;
+
+import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
+import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
+import org.eclipse.fordiac.ide.deployment.devResponse.Port;
+import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
+import org.eclipse.fordiac.ide.deployment.devResponse.Response;
+import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,7 +37,7 @@ import org.eclipse.fordiac.ide.monitoring.monCom.Watches;
  * <!-- end-user-doc -->
  * @generated
  */
-public class MonComPackageImpl extends EPackageImpl implements MonComPackage {
+public class DevResponsePackageImpl extends EPackageImpl implements DevResponsePackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -87,12 +91,12 @@ public class MonComPackageImpl extends EPackageImpl implements MonComPackage {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage#eNS_URI
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#eNS_URI
 	 * @see #init()
 	 * @generated
 	 */
-	private MonComPackageImpl() {
-		super(eNS_URI, MonComFactory.eINSTANCE);
+	private DevResponsePackageImpl() {
+		super(eNS_URI, DevResponseFactory.eINSTANCE);
 	}
 
 	/**
@@ -104,8 +108,8 @@ public class MonComPackageImpl extends EPackageImpl implements MonComPackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
-	 * <p>This method is used to initialize {@link MonComPackage#eINSTANCE} when that field is accessed.
+	 *
+	 * <p>This method is used to initialize {@link DevResponsePackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -114,27 +118,27 @@ public class MonComPackageImpl extends EPackageImpl implements MonComPackage {
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
-	public static MonComPackage init() {
-		if (isInited) return (MonComPackage)EPackage.Registry.INSTANCE.getEPackage(MonComPackage.eNS_URI);
+	public static DevResponsePackage init() {
+		if (isInited) return (DevResponsePackage)EPackage.Registry.INSTANCE.getEPackage(DevResponsePackage.eNS_URI);
 
 		// Obtain or create and register package
-		MonComPackageImpl theMonComPackage = (MonComPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof MonComPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new MonComPackageImpl());
+		Object registeredDevResponsePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		DevResponsePackageImpl theDevResponsePackage = registeredDevResponsePackage instanceof DevResponsePackageImpl ? (DevResponsePackageImpl)registeredDevResponsePackage : new DevResponsePackageImpl();
 
 		isInited = true;
 
 		// Create package meta-data objects
-		theMonComPackage.createPackageContents();
+		theDevResponsePackage.createPackageContents();
 
 		// Initialize created meta-data
-		theMonComPackage.initializePackageContents();
+		theDevResponsePackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
-		theMonComPackage.freeze();
+		theDevResponsePackage.freeze();
 
-  
 		// Update the registry and return the package
-		EPackage.Registry.INSTANCE.put(MonComPackage.eNS_URI, theMonComPackage);
-		return theMonComPackage;
+		EPackage.Registry.INSTANCE.put(DevResponsePackage.eNS_URI, theDevResponsePackage);
+		return theDevResponsePackage;
 	}
 
 	/**
@@ -313,8 +317,8 @@ public class MonComPackageImpl extends EPackageImpl implements MonComPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MonComFactory getMonComFactory() {
-		return (MonComFactory)getEFactoryInstance();
+	public DevResponseFactory getDevResponseFactory() {
+		return (DevResponseFactory)getEFactoryInstance();
 	}
 
 	/**
@@ -396,9 +400,9 @@ public class MonComPackageImpl extends EPackageImpl implements MonComPackage {
 		initEAttribute(getResource_Name(), ecorePackage.getEString(), "name", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getResource_Fbs(), this.getFB(), null, "fbs", null, 0, -1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(fbEClass, org.eclipse.fordiac.ide.monitoring.monCom.FB.class, "FB", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getFB_Name(), ecorePackage.getEString(), "name", null, 0, 1, org.eclipse.fordiac.ide.monitoring.monCom.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getFB_Ports(), this.getPort(), null, "ports", null, 0, -1, org.eclipse.fordiac.ide.monitoring.monCom.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(fbEClass, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, "FB", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getFB_Name(), ecorePackage.getEString(), "name", null, 0, 1, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFB_Ports(), this.getPort(), null, "ports", null, 0, -1, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPort_Name(), ecorePackage.getEString(), "name", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -421,4 +425,4 @@ public class MonComPackageImpl extends EPackageImpl implements MonComPackage {
 		createResource(eNS_URI);
 	}
 
-} //MonComPackageImpl
+} //DevResponsePackageImpl

@@ -1,30 +1,30 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
+ * * 
+ * * All rights reserved. This program and the accompanying materials
+ * * are made available under the terms of the Eclipse Public License v1.0
+ * * which accompanies this distribution, and is available at
+ * * http://www.eclipse.org/legal/epl-v10.html
+ * *
+ * * Contributors:
+ * *   Gerhard Ebenhofer, Alois Zoitl
+ * *     - initial API and implementation and/or initial documentation
+ * *   Alois Zoitl - moved to deployment and reworked it to a device response model
+ * ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring.monCom.impl;
+ */
+package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.fordiac.ide.monitoring.monCom.Data;
-import org.eclipse.fordiac.ide.monitoring.monCom.FB;
-import org.eclipse.fordiac.ide.monitoring.monCom.MonComFactory;
-import org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage;
-import org.eclipse.fordiac.ide.monitoring.monCom.Port;
-import org.eclipse.fordiac.ide.monitoring.monCom.Resource;
-import org.eclipse.fordiac.ide.monitoring.monCom.Response;
-import org.eclipse.fordiac.ide.monitoring.monCom.Watches;
+
+import org.eclipse.fordiac.ide.deployment.devResponse.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,24 +32,24 @@ import org.eclipse.fordiac.ide.monitoring.monCom.Watches;
  * <!-- end-user-doc -->
  * @generated
  */
-public class MonComFactoryImpl extends EFactoryImpl implements MonComFactory {
+public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseFactory {
 	/**
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static MonComFactory init() {
+	public static DevResponseFactory init() {
 		try {
-			MonComFactory theMonComFactory = (MonComFactory)EPackage.Registry.INSTANCE.getEFactory(MonComPackage.eNS_URI);
-			if (theMonComFactory != null) {
-				return theMonComFactory;
+			DevResponseFactory theDevResponseFactory = (DevResponseFactory)EPackage.Registry.INSTANCE.getEFactory(DevResponsePackage.eNS_URI);
+			if (theDevResponseFactory != null) {
+				return theDevResponseFactory;
 			}
 		}
 		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
-		return new MonComFactoryImpl();
+		return new DevResponseFactoryImpl();
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class MonComFactoryImpl extends EFactoryImpl implements MonComFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MonComFactoryImpl() {
+	public DevResponseFactoryImpl() {
 		super();
 	}
 
@@ -70,12 +70,12 @@ public class MonComFactoryImpl extends EFactoryImpl implements MonComFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case MonComPackage.RESOURCE: return createResource();
-			case MonComPackage.FB: return createFB();
-			case MonComPackage.PORT: return createPort();
-			case MonComPackage.DATA: return createData();
-			case MonComPackage.RESPONSE: return createResponse();
-			case MonComPackage.WATCHES: return createWatches();
+			case DevResponsePackage.RESOURCE: return createResource();
+			case DevResponsePackage.FB: return createFB();
+			case DevResponsePackage.PORT: return createPort();
+			case DevResponsePackage.DATA: return createData();
+			case DevResponsePackage.RESPONSE: return createResponse();
+			case DevResponsePackage.WATCHES: return createWatches();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -146,8 +146,8 @@ public class MonComFactoryImpl extends EFactoryImpl implements MonComFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MonComPackage getMonComPackage() {
-		return (MonComPackage)getEPackage();
+	public DevResponsePackage getDevResponsePackage() {
+		return (DevResponsePackage)getEPackage();
 	}
 
 	/**
@@ -157,8 +157,8 @@ public class MonComFactoryImpl extends EFactoryImpl implements MonComFactory {
 	 * @generated
 	 */
 	@Deprecated
-	public static MonComPackage getPackage() {
-		return MonComPackage.eINSTANCE;
+	public static DevResponsePackage getPackage() {
+		return DevResponsePackage.eINSTANCE;
 	}
 
-} //MonComFactoryImpl
+} //DevResponseFactoryImpl

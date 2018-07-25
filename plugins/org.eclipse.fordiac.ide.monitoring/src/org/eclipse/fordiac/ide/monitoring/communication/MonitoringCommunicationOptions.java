@@ -19,7 +19,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLInfoImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
-import org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage;
+import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 
 public class MonitoringCommunicationOptions {
 	public Map<String, Object> loadOptions;
@@ -29,34 +29,34 @@ public class MonitoringCommunicationOptions {
 		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
 
 		XMLMapImpl map = new XMLMapImpl();
-		map.setNoNamespacePackage(MonComPackage.eINSTANCE);
+		map.setNoNamespacePackage(DevResponsePackage.eINSTANCE);
 
 		XMLInfoImpl fbInfo = new XMLInfoImpl();
 		fbInfo.setXMLRepresentation(XMLInfoImpl.ELEMENT);
-		EClass fbClass = MonComPackage.eINSTANCE.getFB();
+		EClass fbClass = DevResponsePackage.eINSTANCE.getFB();
 		map.add(fbClass, fbInfo);
 
 		XMLInfoImpl portInfo = new XMLInfoImpl();
 		portInfo.setXMLRepresentation(XMLInfoImpl.ELEMENT);
-		EClass portClass = MonComPackage.eINSTANCE.getPort();
+		EClass portClass = DevResponsePackage.eINSTANCE.getPort();
 		map.add(portClass, portInfo);
 
 		XMLInfoImpl dataInfo = new XMLInfoImpl();
 		dataInfo.setXMLRepresentation(XMLInfoImpl.ELEMENT);
-		EClass dataClass = MonComPackage.eINSTANCE.getData();
+		EClass dataClass = DevResponsePackage.eINSTANCE.getData();
 		map.add(dataClass, dataInfo);
 
 		XMLInfoImpl responseInfo = new XMLInfoImpl();
 		responseInfo.setXMLRepresentation(XMLInfoImpl.ELEMENT);
-		EClass responseClass = MonComPackage.eINSTANCE.getResponse();
+		EClass responseClass = DevResponsePackage.eINSTANCE.getResponse();
 		map.add(responseClass, responseInfo);
 
 		XMLInfoImpl watchesInfo = new XMLInfoImpl();
 		watchesInfo.setXMLRepresentation(XMLInfoImpl.ELEMENT);
-		EClass watchesClass = MonComPackage.eINSTANCE.getWatches();
+		EClass watchesClass = DevResponsePackage.eINSTANCE.getWatches();
 		map.add(watchesClass, watchesInfo);
 
-		EClass resourceClass = MonComPackage.eINSTANCE.getResource();
+		EClass resourceClass = DevResponsePackage.eINSTANCE.getResource();
 		XMLInfoImpl resourceInfo = new XMLInfoImpl();
 		resourceInfo.setXMLRepresentation(XMLInfoImpl.ELEMENT);
 		resourceInfo.setName("Resource"); //$NON-NLS-1$

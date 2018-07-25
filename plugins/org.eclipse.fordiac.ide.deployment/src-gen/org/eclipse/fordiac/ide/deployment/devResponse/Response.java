@@ -1,16 +1,20 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
+ * * 
+ * * All rights reserved. This program and the accompanying materials
+ * * are made available under the terms of the Eclipse Public License v1.0
+ * * which accompanies this distribution, and is available at
+ * * http://www.eclipse.org/legal/epl-v10.html
+ * *
+ * * Contributors:
+ * *   Gerhard Ebenhofer, Alois Zoitl
+ * *     - initial API and implementation and/or initial documentation
+ * *   Alois Zoitl - moved to deployment and reworked it to a device response model
+ * ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring.monCom;
+ */
+package org.eclipse.fordiac.ide.deployment.devResponse;
 
 import org.eclipse.emf.ecore.EObject;
 
@@ -23,12 +27,12 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.Response#getID <em>ID</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.Response#getWatches <em>Watches</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.Response#getReason <em>Reason</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getID <em>ID</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches <em>Watches</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason <em>Reason</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage#getResponse()
+ * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getResponse()
  * @model
  * @generated
  */
@@ -43,14 +47,14 @@ public interface Response extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>ID</em>' attribute.
 	 * @see #setID(String)
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage#getResponse_ID()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getResponse_ID()
 	 * @model
 	 * @generated
 	 */
 	String getID();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.monitoring.monCom.Response#getID <em>ID</em>}' attribute.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getID <em>ID</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>ID</em>' attribute.
@@ -69,14 +73,14 @@ public interface Response extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Watches</em>' reference.
 	 * @see #setWatches(Watches)
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage#getResponse_Watches()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getResponse_Watches()
 	 * @model
 	 * @generated
 	 */
 	Watches getWatches();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.monitoring.monCom.Response#getWatches <em>Watches</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches <em>Watches</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Watches</em>' reference.
@@ -95,14 +99,14 @@ public interface Response extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Reason</em>' attribute.
 	 * @see #setReason(String)
-	 * @see org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage#getResponse_Reason()
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getResponse_Reason()
 	 * @model
 	 * @generated
 	 */
 	String getReason();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.monitoring.monCom.Response#getReason <em>Reason</em>}' attribute.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason <em>Reason</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Reason</em>' attribute.

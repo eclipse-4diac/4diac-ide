@@ -1,25 +1,32 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
+ * * 
+ * * All rights reserved. This program and the accompanying materials
+ * * are made available under the terms of the Eclipse Public License v1.0
+ * * which accompanies this distribution, and is available at
+ * * http://www.eclipse.org/legal/epl-v10.html
+ * *
+ * * Contributors:
+ * *   Gerhard Ebenhofer, Alois Zoitl
+ * *     - initial API and implementation and/or initial documentation
+ * *   Alois Zoitl - moved to deployment and reworked it to a device response model
+ * ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring.monCom.impl;
+ */
+package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage;
-import org.eclipse.fordiac.ide.monitoring.monCom.Response;
-import org.eclipse.fordiac.ide.monitoring.monCom.Watches;
+
+import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
+import org.eclipse.fordiac.ide.deployment.devResponse.Response;
+import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,9 +36,9 @@ import org.eclipse.fordiac.ide.monitoring.monCom.Watches;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.ResponseImpl#getID <em>ID</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.ResponseImpl#getWatches <em>Watches</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.monitoring.monCom.impl.ResponseImpl#getReason <em>Reason</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getID <em>ID</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getWatches <em>Watches</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getReason <em>Reason</em>}</li>
  * </ul>
  *
  * @generated
@@ -103,7 +110,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return MonComPackage.Literals.RESPONSE;
+		return DevResponsePackage.Literals.RESPONSE;
 	}
 
 	/**
@@ -124,7 +131,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 		String oldID = id;
 		id = newID;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonComPackage.RESPONSE__ID, oldID, id));
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__ID, oldID, id));
 	}
 
 	/**
@@ -138,7 +145,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			watches = (Watches)eResolveProxy(oldWatches);
 			if (watches != oldWatches) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonComPackage.RESPONSE__WATCHES, oldWatches, watches));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DevResponsePackage.RESPONSE__WATCHES, oldWatches, watches));
 			}
 		}
 		return watches;
@@ -162,7 +169,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 		Watches oldWatches = watches;
 		watches = newWatches;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonComPackage.RESPONSE__WATCHES, oldWatches, watches));
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__WATCHES, oldWatches, watches));
 	}
 
 	/**
@@ -183,7 +190,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 		String oldReason = reason;
 		reason = newReason;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonComPackage.RESPONSE__REASON, oldReason, reason));
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__REASON, oldReason, reason));
 	}
 
 	/**
@@ -194,12 +201,12 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MonComPackage.RESPONSE__ID:
+			case DevResponsePackage.RESPONSE__ID:
 				return getID();
-			case MonComPackage.RESPONSE__WATCHES:
+			case DevResponsePackage.RESPONSE__WATCHES:
 				if (resolve) return getWatches();
 				return basicGetWatches();
-			case MonComPackage.RESPONSE__REASON:
+			case DevResponsePackage.RESPONSE__REASON:
 				return getReason();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -213,13 +220,13 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MonComPackage.RESPONSE__ID:
+			case DevResponsePackage.RESPONSE__ID:
 				setID((String)newValue);
 				return;
-			case MonComPackage.RESPONSE__WATCHES:
+			case DevResponsePackage.RESPONSE__WATCHES:
 				setWatches((Watches)newValue);
 				return;
-			case MonComPackage.RESPONSE__REASON:
+			case DevResponsePackage.RESPONSE__REASON:
 				setReason((String)newValue);
 				return;
 		}
@@ -234,13 +241,13 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MonComPackage.RESPONSE__ID:
+			case DevResponsePackage.RESPONSE__ID:
 				setID(ID_EDEFAULT);
 				return;
-			case MonComPackage.RESPONSE__WATCHES:
+			case DevResponsePackage.RESPONSE__WATCHES:
 				setWatches((Watches)null);
 				return;
-			case MonComPackage.RESPONSE__REASON:
+			case DevResponsePackage.RESPONSE__REASON:
 				setReason(REASON_EDEFAULT);
 				return;
 		}
@@ -255,11 +262,11 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MonComPackage.RESPONSE__ID:
+			case DevResponsePackage.RESPONSE__ID:
 				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
-			case MonComPackage.RESPONSE__WATCHES:
+			case DevResponsePackage.RESPONSE__WATCHES:
 				return watches != null;
-			case MonComPackage.RESPONSE__REASON:
+			case DevResponsePackage.RESPONSE__REASON:
 				return REASON_EDEFAULT == null ? reason != null : !REASON_EDEFAULT.equals(reason);
 		}
 		return super.eIsSet(featureID);
@@ -274,7 +281,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (ID: ");
 		result.append(id);
 		result.append(", Reason: ");

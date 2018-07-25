@@ -2,17 +2,22 @@ Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.deployment.exceptions,
  org.eclipse.fordiac.ide.deployment.interactors,
- org.eclipse.fordiac.ide.deployment.util
+ org.eclipse.fordiac.ide.deployment.util,
+ org.eclipse.fordiac.ide.deployment.devResponse
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.ui.controls
-Bundle-Vendor: Eclipse 4diac
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.10.0.qualifier
-Bundle-Name: Deployment (Incubation)
+Bundle-ClassPath: .
+Bundle-Name: %pluginName
 Bundle-Activator: org.eclipse.fordiac.ide.deployment.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment;singleton:=true
+Automatic-Module-Name: org.eclipse.fordiac.ide.deployment
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
