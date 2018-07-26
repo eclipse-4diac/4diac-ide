@@ -18,7 +18,21 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.fordiac.ide.model.data.*;
+import org.eclipse.fordiac.ide.model.data.ArrayType;
+import org.eclipse.fordiac.ide.model.data.BaseType1;
+import org.eclipse.fordiac.ide.model.data.DataFactory;
+import org.eclipse.fordiac.ide.model.data.DataPackage;
+import org.eclipse.fordiac.ide.model.data.DerivedType;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.data.ElementaryType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
+import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.data.Subrange;
+import org.eclipse.fordiac.ide.model.data.SubrangeType;
+import org.eclipse.fordiac.ide.model.data.ValueType;
+import org.eclipse.fordiac.ide.model.data.VarInitialization;
 
 /**
  * <!-- begin-user-doc -->

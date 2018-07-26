@@ -17,3 +17,4 @@ Export-Package: org.eclipse.fordiac.ide.model.commands.change,
  org.eclipse.fordiac.ide.model.commands.create,
  org.eclipse.fordiac.ide.model.commands.delete
 Bundle-Vendor: Eclipse 4diac
+Automatic-Module-Name: org.eclipse.fordiac.ide.model.commands

@@ -26,3 +26,4 @@ Export-Package: org.eclipse.fordiac.ide.model.structuredtext,
  org.eclipse.fordiac.ide.model.structuredtext.structuredText.util,
  org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.lexer
 Import-Package: org.apache.log4j
+Automatic-Module-Name: org.eclipse.fordiac.ide.model.structuredtext

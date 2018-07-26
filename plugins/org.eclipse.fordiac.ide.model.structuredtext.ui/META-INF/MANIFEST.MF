@@ -26,3 +26,4 @@ Export-Package: org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.a
  org.eclipse.fordiac.ide.model.structuredtext.ui.quickfix
 Bundle-Activator: org.eclipse.fordiac.ide.model.structuredtext.ui.ExtendedStructuredTextActivator
 Import-Package: org.apache.log4j
+Automatic-Module-Name: org.eclipse.fordiac.ide.model.structuredtext.ui

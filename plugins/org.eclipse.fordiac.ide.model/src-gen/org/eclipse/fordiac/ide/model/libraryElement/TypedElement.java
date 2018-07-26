@@ -15,7 +15,6 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 
 /**

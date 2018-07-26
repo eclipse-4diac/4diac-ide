@@ -14,8 +14,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-import org.eclipse.fordiac.ide.model.data.BaseType1;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Attribute Declaration</b></em>'.
