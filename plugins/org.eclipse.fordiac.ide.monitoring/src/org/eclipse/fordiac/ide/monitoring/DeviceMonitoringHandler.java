@@ -11,23 +11,40 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
+import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.deployment.devResponse.FB;
+import org.eclipse.fordiac.ide.deployment.devResponse.Port;
+import org.eclipse.fordiac.ide.deployment.devResponse.Response;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.monitoring.communication.MonitorInformation;
-import org.eclipse.fordiac.ide.monitoring.communication.TCPCommunicationObject;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.systemmanagement.Activator;
 
 class DeviceMonitoringHandler implements Runnable {
 
 	private final Device device;
-	private final TCPCommunicationObject commObj;
+	private final IDeviceManagementInteractor devInteractor;
+	private final SystemMonitoringData systemMonData;
 	private final Thread thread;
 	
 	private boolean running = true;
+	
+	private synchronized void setRunning(boolean val) {
+		running = val;
+	}
+	
+	private synchronized boolean isRunning() {
+		return running;
+	}
 
-	public DeviceMonitoringHandler(Device device, MonitorInformation monitorInfo) {
+	public DeviceMonitoringHandler(Device device, SystemMonitoringData systemMonData) {
 		this.device = device;
-		this.commObj = new TCPCommunicationObject(monitorInfo);
+		devInteractor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device);
+		this.systemMonData = systemMonData;
 		this.thread = new Thread(this);
 	}
 	
@@ -35,37 +52,81 @@ class DeviceMonitoringHandler implements Runnable {
 		return thread;
 	}
 	
-	public TCPCommunicationObject getCommObject() {
-		return commObj;
+	public IDeviceManagementInteractor getDevMgmInteractor() {
+		return devInteractor;
 	}
 	
 	public synchronized void enable() {
-		running = true;
+		setRunning(true);
 		thread.start();
 	}
 	
 	public synchronized void disable() {
-		running = false;
+		setRunning(running);
 	}
 	
 	@Override
 	public void run() {
-		if (commObj != null) {
+		if (devInteractor != null) {
 			int pollingIntervall = PreferenceConstants.getPollingInterval();
-			while (running) {
+			while (isRunning()) {
 				try {
 					Thread.sleep(pollingIntervall);
 				} catch (InterruptedException e) {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}
-				if(commObj.isConnected()){
-					//TODO maybe a counter if something is todo would be nice
-					commObj.sendReq(device.getAutomationSystem(), device);
-					commObj.queryBreakpoints(device.getAutomationSystem(), device);
+				if(devInteractor.isConnected()){
+					try {
+						Response resp = devInteractor.readWatches();
+						if(null != resp) {
+							updateWatches(resp);
+						}
+						//TODO implement when finally providing breakpoint support: commObj.queryBreakpoints(device.getAutomationSystem(), device);
+					} catch (DeploymentException e) {
+						// TODO think about where to show this error and what todo about it.
+						e.printStackTrace();
+					}
 				} else {
-					running = false;
+					setRunning(false);
 				}
 				
+			}
+		}
+	}
+
+	private void updateWatches(Response resp) {
+		if (resp.getWatches() != null) {
+			for (org.eclipse.fordiac.ide.deployment.devResponse.Resource res : resp.getWatches().getResources()) {
+				String resName = device.getName() + "." + res.getName() + "."; //$NON-NLS-1$ //$NON-NLS-2$
+
+				for (FB fb : res.getFbs()) {
+					String fbName = resName + fb.getName() + "."; //$NON-NLS-1$
+					 
+					for (Port p : fb.getPorts()) {
+						final MonitoringBaseElement element = systemMonData.getMonitoringElementByPortString(fbName + p.getName());
+						if (element instanceof MonitoringElement) {
+							MonitoringElement monitoringElement = (MonitoringElement)element;
+
+							for (Data d : p.getDataValues()) {
+								long timeAsLong = 0;
+								try {
+									timeAsLong = Long.parseLong(d.getTime());
+								} catch (NumberFormatException nfe) {
+									timeAsLong = 0;
+								}
+								monitoringElement.setSec(timeAsLong / 1000);
+								monitoringElement.setUsec(timeAsLong % 1000);
+								monitoringElement.setCurrentValue(d.getValue());
+								if (d.getForced() != null) {
+									monitoringElement.setForce(d.getForced().equals("true")); //$NON-NLS-1$
+//									if (element.isForce()) {
+//										element.setForceValue(d.getValue());
+//									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}

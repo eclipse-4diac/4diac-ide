@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 
@@ -34,6 +33,15 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 	
 	protected AbstractDeviceManagementCommunicationHandler getDevMgmComHandler() {
 		return commHandler; 
+	}
+	
+	protected Device getDevice() {
+		return device;
+	}
+	
+	@Override
+	public boolean isConnected() {
+		return getDevMgmComHandler().isConnected();
 	}
 	
 	@Override
@@ -78,11 +86,6 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 	@Override
 	public void removeDeploymentListener(final IDeploymentListener listener) {
 		commHandler.removeDeploymentListener(listener);
-	}
-	
-	public void sendREQ(final String destination, final String request) throws IOException {
-		commHandler.sendREQ(destination, request);
-		// TODO maybe an error message would be good
 	}
 
 	/** create a device managment communication handler suitable for the given device

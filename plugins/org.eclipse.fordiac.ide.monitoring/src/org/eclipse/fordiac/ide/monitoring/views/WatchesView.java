@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.views;
 
+import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
 import org.eclipse.fordiac.ide.monitoring.IMonitoringListener;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesContentProvider;

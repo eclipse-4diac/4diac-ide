@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 fortiss GmbH
+ * Copyright (c) 2015, 2016, 2018 fortiss GmbH, Johanes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,13 +7,14 @@
  *
  * Contributors:
  *   Gerd Kainz, Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring   
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager.BreakPoint;
@@ -50,7 +51,7 @@ public class ContinueHandler extends AbstractMonitoringHandler {
 					InterfaceEditPart editPart = (InterfaceEditPart) sel.getFirstElement();			
 					if(editPart.isEvent()){
 						MonitoringBaseElement element = MonitoringManager.getInstance().getMonitoringElement(editPart.getModel());
-						if(element != null && element instanceof MonitoringElement){
+						if(element instanceof MonitoringElement){
 							needToAdd = ((MonitoringElement)element).isBreakpointActive();
 						}
 					}

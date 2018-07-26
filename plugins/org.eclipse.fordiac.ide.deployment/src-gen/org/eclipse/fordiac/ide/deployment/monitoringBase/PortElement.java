@@ -1,19 +1,24 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ *  * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
+ *  * 
+ *  * All rights reserved. This program and the accompanying materials
+ *  * are made available under the terms of the Eclipse Public License v1.0
+ *  * which accompanies this distribution, and is available at
+ *  * http://www.eclipse.org/legal/epl-v10.html
+ *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
+ *  *     - initial API and implementation and/or initial documentation
+ *  ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.model.monitoring;
+ */
+package org.eclipse.fordiac.ide.deployment.monitoringBase;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EObject;
+
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -29,13 +34,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.PortElement#getFb <em>Fb</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.PortElement#getInterfaceElement <em>Interface Element</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.PortElement#getResource <em>Resource</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.PortElement#getHierarchy <em>Hierarchy</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getFb <em>Fb</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getInterfaceElement <em>Interface Element</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getResource <em>Resource</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getHierarchy <em>Hierarchy</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getPortElement()
+ * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getPortElement()
  * @model
  * @generated
  */
@@ -50,14 +55,14 @@ public interface PortElement extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fb</em>' reference.
 	 * @see #setFb(FB)
-	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getPortElement_Fb()
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getPortElement_Fb()
 	 * @model
 	 * @generated
 	 */
 	FB getFb();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.monitoring.PortElement#getFb <em>Fb</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getFb <em>Fb</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Fb</em>' reference.
@@ -76,14 +81,14 @@ public interface PortElement extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Interface Element</em>' reference.
 	 * @see #setInterfaceElement(IInterfaceElement)
-	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getPortElement_InterfaceElement()
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getPortElement_InterfaceElement()
 	 * @model
 	 * @generated
 	 */
 	IInterfaceElement getInterfaceElement();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.monitoring.PortElement#getInterfaceElement <em>Interface Element</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getInterfaceElement <em>Interface Element</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Interface Element</em>' reference.
@@ -102,14 +107,14 @@ public interface PortElement extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Resource</em>' reference.
 	 * @see #setResource(Resource)
-	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getPortElement_Resource()
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getPortElement_Resource()
 	 * @model
 	 * @generated
 	 */
 	Resource getResource();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.monitoring.PortElement#getResource <em>Resource</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getResource <em>Resource</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Resource</em>' reference.
@@ -128,7 +133,7 @@ public interface PortElement extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Hierarchy</em>' attribute list.
-	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getPortElement_Hierarchy()
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getPortElement_Hierarchy()
 	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */

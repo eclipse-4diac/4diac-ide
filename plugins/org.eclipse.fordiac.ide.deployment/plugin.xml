@@ -10,4 +10,12 @@
             genModel="model/devResponse.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated monitoringBase -->
+      <package
+            uri="org.eclipse.fordiac.depolyment.monitoringBase"
+            class="org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage"
+            genModel="model/monitoringBase.genmodel"/>
+   </extension>
+
 </plugin>

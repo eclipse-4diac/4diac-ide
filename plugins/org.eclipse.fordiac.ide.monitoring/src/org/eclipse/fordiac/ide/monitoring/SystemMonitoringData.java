@@ -13,18 +13,17 @@ package org.eclipse.fordiac.ide.monitoring;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
-import org.eclipse.fordiac.ide.monitoring.communication.TCPCommunicationObject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
@@ -66,7 +65,7 @@ public class SystemMonitoringData {
 		return deviceHandlers;
 	}
 	
-	void removePollingThread(Device dev){
+	void removeDeviceMonitoringHandler(Device dev){
 		deviceHandlers.remove(dev);
 	}
 	
@@ -109,23 +108,33 @@ public class SystemMonitoringData {
 
 
 	public void sendRemoveWatch(MonitoringBaseElement element) {
-		TCPCommunicationObject commObject = getCommObject(element.getPort().getDevice());
-		if(null != commObject){
-			commObject.removeWatch(element);
+		IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(element.getPort().getDevice());
+		if(null != devMgmInteractor){
+			try {
+				devMgmInteractor.removeWatch(element);
+			} catch (DeploymentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}		
 	}
 
 	public void sendAddWatch(MonitoringBaseElement element) {
-		TCPCommunicationObject commObject = getCommObject(element.getPort().getDevice());
-		if(null != commObject){
-			commObject.addWatch(element);
+		IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(element.getPort().getDevice());
+		if(null != devMgmInteractor){
+			try {
+				devMgmInteractor.addWatch(element);
+			} catch (DeploymentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
 
-	public TCPCommunicationObject getCommObject(Device device) {
+	public IDeviceManagementInteractor getDevMgmInteractor(Device device) {
 		DeviceMonitoringHandler handler = getDevMonitoringHandler(device);
-		return (null != handler) ? handler.getCommObject() : null;
+		return (null != handler) ? handler.getDevMgmInteractor() : null;
 	}
 
 

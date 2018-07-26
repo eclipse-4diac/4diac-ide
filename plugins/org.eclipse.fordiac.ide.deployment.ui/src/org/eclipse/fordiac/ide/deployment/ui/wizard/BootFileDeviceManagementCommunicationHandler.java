@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2015, 2017 fortiss GmbH
+ * Copyright (c) 2014 - 2018 fortiss GmbH, Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  *   Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.wizard;
 
@@ -50,6 +51,11 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractDevice
 	}
 
 	@Override
+	public boolean isConnected() {
+		return true;
+	}
+	
+	@Override
 	public void connect(String address) throws DeploymentException {
 		origMgrID = address;
 	}
@@ -60,7 +66,7 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractDevice
 	}
 
 	@Override
-	public void sendREQ(String destination, String request) throws IOException {
+	public void sendREQ(String destination, String request) throws IOException { 
 		stringBuffer.append(destination + ";" + request + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		String info = origMgrID;
 		if (!destination.equals("")) { //$NON-NLS-1$

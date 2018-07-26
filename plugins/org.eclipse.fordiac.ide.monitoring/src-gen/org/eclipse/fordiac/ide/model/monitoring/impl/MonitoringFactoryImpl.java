@@ -19,6 +19,14 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.fordiac.ide.model.monitoring.*;
+import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
+import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
+import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
+import org.eclipse.fordiac.ide.model.monitoring.Breakpoints;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -67,7 +75,6 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 			case MonitoringPackage.MONITORING_ELEMENT: return createMonitoringElement();
 			case MonitoringPackage.MONITORING_ADAPTER_ELEMENT: return createMonitoringAdapterElement();
 			case MonitoringPackage.BREAKPOINTS: return createBreakpoints();
-			case MonitoringPackage.PORT_ELEMENT: return createPortElement();
 			case MonitoringPackage.ADAPTER_PORT_ELEMENT: return createAdapterPortElement();
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT: return createAdapterMonitoringEvent();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION: return createAdapterMonitoringVarDeclaration();
@@ -104,16 +111,6 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	public Breakpoints createBreakpoints() {
 		BreakpointsImpl breakpoints = new BreakpointsImpl();
 		return breakpoints;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PortElement createPortElement() {
-		PortElementImpl portElement = new PortElementImpl();
-		return portElement;
 	}
 
 	/**

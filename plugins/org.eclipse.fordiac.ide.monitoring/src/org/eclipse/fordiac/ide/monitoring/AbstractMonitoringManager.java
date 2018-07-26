@@ -15,12 +15,13 @@
 package org.eclipse.fordiac.ide.monitoring;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.monitoring.Breakpoints;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
 
 public abstract class AbstractMonitoringManager {
 
@@ -28,7 +29,7 @@ public abstract class AbstractMonitoringManager {
 			.createBreakpoints();
 
 	/** The monitoring listeners. */
-	protected final ArrayList<IMonitoringListener> monitoringListeners = new ArrayList<IMonitoringListener>();
+	protected final List<IMonitoringListener> monitoringListeners = new ArrayList<>();
 
 	/**
 	 * Register IMonitoringListener.
@@ -53,7 +54,7 @@ public abstract class AbstractMonitoringManager {
 		breakpoints.eAdapters().remove(adapter);
 	}
 
-	ArrayList<IMonitoringListener> watchesAdapter = new ArrayList<IMonitoringListener>();
+	List<IMonitoringListener> watchesAdapter = new ArrayList<>();
 	
 	public void addWatchesAdapter(IMonitoringListener adapter) {
 		if (!watchesAdapter.contains(adapter)) {

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.impl.MonitoringBaseElementImpl;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart;
@@ -539,7 +540,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (force: ");
 		result.append(force);
 		result.append(", forceValue: ");
@@ -559,46 +560,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 		result.append(')');
 		return result.toString();
 	}
-	
-	@Override
-	public int getCurrentPos() {
-		return currentInt;
-	}
 
-	@Override
-	public long getHistorySec(int pos) {
-		if (pos >= historySec.size()) {
-			return 0;
-		}
-		return historySec.get(pos);
-
-	}
-
-	@Override
-	public long getHistoryUSec(int pos) {
-		if (pos >= historyUSec.size()) {
-			return 0;
-		}
-		return historyUSec.get(pos);
-
-	}
-
-	@Override
-	public String getHistoryValue(int pos, boolean time) {
-		if (pos >= historyValues.size()) {
-			return "No Data available";
-		}
-		if (time) {
-			return historyValues.get(pos);// + " (sec: " + historySec.get(pos)
-											// +" usec: " + historyUSec.get(pos)
-											// + ")";
-
-		}
-		return historyValues.get(pos); // + " (sec: " + historySec.get(pos)
-										// +" usec: " + historyUSec.get(pos) +
-										// ")";
-
-	}
 
 	@Override
 	public EditPart createEditPart() {

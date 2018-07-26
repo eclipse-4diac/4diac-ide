@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
@@ -32,7 +33,7 @@ public enum DeviceManagementInteractorFactory {
 	
 	INSTANCE;
 	
-	private List<IDeviceManagementInteractorProvider> deviceManagementInteractors = null;
+	private List<IDeviceManagementInteractorProvider> deviceManagementInteractorProviders = null;
 	
 	/**
 	 * Gets the device managment interactor.
@@ -68,10 +69,10 @@ public enum DeviceManagementInteractorFactory {
 	}
 	
 	private List<IDeviceManagementInteractorProvider> getDeviceManagementInteractorList(){
-		if (null == deviceManagementInteractors) {
-			deviceManagementInteractors = loadDeviceManagmentInteractors();
+		if (null == deviceManagementInteractorProviders) {
+			deviceManagementInteractorProviders = loadDeviceManagmentInteractors();
 		}
-		return deviceManagementInteractors;
+		return deviceManagementInteractorProviders;
 	}
 
 	private static List<IDeviceManagementInteractorProvider> loadDeviceManagmentInteractors() {

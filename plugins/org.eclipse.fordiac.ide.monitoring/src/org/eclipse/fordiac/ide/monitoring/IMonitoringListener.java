@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
 
 public interface IMonitoringListener {
 

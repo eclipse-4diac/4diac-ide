@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.monitoring.provider;
 import java.util.ArrayList;
 
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;

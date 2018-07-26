@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 
@@ -30,7 +30,7 @@ public interface IChildrenProvider {
 	 * 
 	 * @return a list of children
 	 */
-	ArrayList<IEditPartCreator> getChildren(FBNetwork diagram);
+	List<IEditPartCreator> getChildren(FBNetwork diagram);
 
 	/**
 	 * Checks if is enabled.

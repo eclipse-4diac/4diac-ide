@@ -20,14 +20,16 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
-import org.eclipse.fordiac.ide.monitoring.communication.TCPCommunicationObject;
-import org.eclipse.fordiac.ide.systemmanagement.Activator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -233,9 +235,10 @@ public class MonitoringManager extends AbstractMonitoringManager {
 			MonitoringElement monitoringElement = (MonitoringElement)element;
 
 			SystemMonitoringData data = getSystemMonitoringData(monitoringElement.getPort().getSystem());
-			TCPCommunicationObject commObject = data.getCommObject(monitoringElement.getPort().getDevice());
-			if(null != commObject){
-				commObject.toggleBreakpoint(monitoringElement, set);
+			IDeviceManagementInteractor devMgmInteractor = data.getDevMgmInteractor(monitoringElement.getPort().getDevice());
+			if(null != devMgmInteractor){
+				//FIXME implement when we finally have breakpoint support
+				//devMgmInteractor.toggleBreakpoint(monitoringElement, set);
 				if (set.equals(BreakPoint.add)) {
 					monitoringElement.setBreakpoint(true);
 					breakpoints.getBreakpoints().add(monitoringElement);
@@ -262,9 +265,14 @@ public class MonitoringManager extends AbstractMonitoringManager {
 			MonitoringElement monitoringElement = (MonitoringElement)element;
 
 			SystemMonitoringData data = getSystemMonitoringData(monitoringElement.getPort().getSystem());
-			TCPCommunicationObject commObject = data.getCommObject(monitoringElement.getPort().getDevice());
-			if(commObject != null){
-				commObject.triggerEvent(monitoringElement);
+			IDeviceManagementInteractor devMgmInteractor = data.getDevMgmInteractor(monitoringElement.getPort().getDevice());
+			if(devMgmInteractor != null){
+				try {
+					devMgmInteractor.triggerEvent(monitoringElement);
+				} catch (DeploymentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				notifyTriggerEvent(monitoringElement.getPort());
 			}
 		} 
@@ -274,60 +282,61 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		AutomationSystem automationSystem = element.getPort().getSystem();
 
 		if (automationSystem == null) {
-			Activator.getDefault().logError("System could not be found to write value (" + element.getPort() + ").");
-			MessageDialog.openError(Display.getDefault().getActiveShell(),
-					"Error", "System could not be found for write value ("
-							+ element.getPort() + ").");
+			showSystemNotFoundErrorMsg(element);
 			return;
 		}
 		Device device = element.getPort().getDevice();
 		if (device == null) {
-			Activator.getDefault().logError("Device could not be found for write value (" + element.getPort() + ").");
-			MessageDialog.openError(Display.getDefault().getActiveShell(),
-					"Error", "Device could not be found for write value ("
-							+ element.getPort() + ").");
+			showDeviceNotFounderroMsg(element);
 			return;
 		}
 		
-		TCPCommunicationObject commObject = getSystemMonitoringData(automationSystem).getCommObject(device);
+		IDeviceManagementInteractor devMgmInteractor = getSystemMonitoringData(automationSystem).getDevMgmInteractor(device);
 
-		if(commObject != null){
-			commObject.writeValue(element, value);
+		if(devMgmInteractor != null){
+			String fullName = element.getQualifiedString();
+			fullName = fullName.substring(0, fullName.lastIndexOf(".")); // strip interface name
+			fullName = fullName.substring(0, fullName.lastIndexOf(".") +1 ); // strip fbName
+			
+			FBDeploymentData data = new FBDeploymentData(fullName, element.getPort().getFb());
+			try {
+				devMgmInteractor.writeFBParameter(element.getPort().getResource(), value, data, (VarDeclaration)element.getPort().getInterfaceElement());
+			} catch (DeploymentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
-	
 
 	public void forceValue(MonitoringElement element, String value) {
 		AutomationSystem automationSystem = element.getPort().getSystem();
 
 		if (automationSystem == null) {
-			Activator.getDefault().logError("System could not be found to force value (" + element.getPort() + ").");
-			MessageDialog.openError(Display.getDefault().getActiveShell(),
-					"Error", "System could not be found for force value ("
-							+ element.getPort() + ").");
+			showSystemNotFoundErrorMsg(element);
 			return;
 		}
 		Device device = element.getPort().getDevice();
 		if (device == null) {
-			Activator.getDefault().logError("Device could not be found for force value (" + element.getPort() + ").");
-			MessageDialog.openError(Display.getDefault().getActiveShell(),
-					"Error", "Device could not be found for force value ("
-							+ element.getPort() + ").");
+			showDeviceNotFounderroMsg(element);
 			return;
 		}
 		
 		element.forceValue(value);
-		TCPCommunicationObject commObject = getSystemMonitoringData(automationSystem).getCommObject(device);
+		IDeviceManagementInteractor devMgmInteractor = getSystemMonitoringData(automationSystem).getDevMgmInteractor(device);
 
-		if(commObject != null){
-			if (element.isForce()) {
-				commObject.forceValue(element, value);
-			} else {
-				commObject.clearForce(element);				
+		if(devMgmInteractor != null){
+			try {
+				if (element.isForce()) {
+						devMgmInteractor.forceValue(element, value);
+				} else {
+					devMgmInteractor.clearForce(element);				
+				}
+			} catch (DeploymentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
-
 	
 	public SystemMonitoringData getSystemMonitoringData(AutomationSystem system) {
 		SystemMonitoringData retVal = systemMonitoringData.get(system);
@@ -342,4 +351,14 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		systemMonitoringData.put(system, newData); 
 		return newData;
 	}
+	
+	private static void showDeviceNotFounderroMsg(MonitoringElement element) {
+		MessageDialog.openError(Display.getDefault().getActiveShell(), "Error", "Device could not be found for FB port: " + element.getPort() + ".");
+	}
+
+	private static void showSystemNotFoundErrorMsg(MonitoringElement element) {
+		MessageDialog.openError(Display.getDefault().getActiveShell(), "Error", "System could not be found for FB port: " + element.getPort() + ".");
+	}
+	
+
 }

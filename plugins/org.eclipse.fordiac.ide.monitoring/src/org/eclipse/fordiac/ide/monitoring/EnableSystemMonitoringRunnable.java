@@ -16,14 +16,12 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.monitoring.communication.MonitorInformation;
-import org.eclipse.fordiac.ide.monitoring.communication.TCPCommunicationObject;
 import org.eclipse.fordiac.ide.systemmanagement.Activator;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
@@ -51,19 +49,16 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 
 	private void connectToDevices(List<Device> devices, IProgressMonitor monitor) {
 		monitor.subTask("Connecting to the devices");
-		// search for devices with monitoring resource and create a
-		// TCPCommunicationObject
-		// TODO make TCPCommunicationObject more general and select the
-		// required communication method from a device property - maybe add
-		// an extension point for this
 		for (Device dev : devices) {
-			if(monitor.isCanceled()) break;
-			MonitorInformation monitorInfo = getMonitoringInfo(dev);
-			if (monitorInfo != null) {
-				TCPCommunicationObject commObject = getCommObject(dev, monitorInfo); 
-				commObject.enable();
-			} else {
-				Activator.getDefault().logInfo(dev.getName() + " has no monitoring resource.");
+			if(monitor.isCanceled()) { 
+				break;
+			}
+			IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(dev); 
+			try {
+				devMgmInteractor.connect();
+			} catch (DeploymentException e) {
+				systemMonitoringData.removeDeviceMonitoringHandler(dev);
+				Activator.getDefault().logError("Monitoring: Cann  not connect to device " + dev.getName(), e);
 			}
 			monitor.worked(1);
 		}
@@ -72,7 +67,9 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 	private void addWatches(IProgressMonitor monitor) {
 		monitor.subTask("Adding the watches");
 		for (MonitoringBaseElement element : systemMonitoringData.getMonitoredElements()){			
-			if(monitor.isCanceled()) break;
+			if(monitor.isCanceled()) {
+				break;
+			}
 			if (element instanceof MonitoringElement) {
 				monitor.subTask("Add watch for: " + element.getPortString());
 				systemMonitoringData.sendAddWatch(element);
@@ -91,37 +88,18 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 			monitor.worked(1);
 		}		
 	}
-
 	
-	private static MonitorInformation getMonitoringInfo(Device dev) {
-		for (VarDeclaration varDecl : dev.getVarDeclarations()) {
-			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) { //$NON-NLS-$1
-				if (varDecl.getValue() != null) {
-					String val = varDecl.getValue().getValue();
-					if (val.startsWith("%")) {					//$NON-NLS-1$
-						val = SystemManager.INSTANCE.getReplacedString(dev.getAutomationSystem(), val);
-					}
-					return new MonitorInformation(val);
-				}
-			}
-		}
-
-		return null;
-	}
-	
-	private TCPCommunicationObject getCommObject(Device dev, MonitorInformation monitorInfo) {
-		return getOrCreateDevMonitoringHandler(dev, monitorInfo).getCommObject();
+	private IDeviceManagementInteractor getDevMgmInteractor(Device dev) {
+		return getOrCreateDevMonitoringHandler(dev).getDevMgmInteractor();
 	}
 
-	private DeviceMonitoringHandler getOrCreateDevMonitoringHandler(Device dev, MonitorInformation monitorInfo) {
+	private DeviceMonitoringHandler getOrCreateDevMonitoringHandler(Device dev) {
 		DeviceMonitoringHandler retVal = systemMonitoringData.getDevMonitoringHandler(dev);
 		if(null == retVal) {
-			retVal = new DeviceMonitoringHandler(dev, monitorInfo);
+			retVal = new DeviceMonitoringHandler(dev, systemMonitoringData);
 			systemMonitoringData.addDevMonitoringHandler(dev, retVal);
 		}
 		return retVal;		
 	}
-
-
 
 }

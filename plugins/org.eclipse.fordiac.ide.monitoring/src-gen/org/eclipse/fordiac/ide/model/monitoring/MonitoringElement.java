@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.monitoring;
 
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
+
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '
@@ -259,11 +261,5 @@ public interface MonitoringElement extends MonitoringBaseElement{
 	 * @generated
 	 */
 	void forceValue(String value);
-
-	int getCurrentPos();
-	
-	String getHistoryValue(int pos, boolean time);
-	public long getHistorySec(int pos) ;
-	public long getHistoryUSec(int pos) ;
 	
 } // MonitoringElement

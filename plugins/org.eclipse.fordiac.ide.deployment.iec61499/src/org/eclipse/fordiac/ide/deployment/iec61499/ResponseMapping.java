@@ -10,7 +10,7 @@
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring.communication;
+package org.eclipse.fordiac.ide.deployment.iec61499;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,10 +21,10 @@ import org.eclipse.emf.ecore.xmi.impl.XMLInfoImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 
-public class MonitoringCommunicationOptions {
+public class ResponseMapping {
 	public Map<String, Object> loadOptions;
 
-	public MonitoringCommunicationOptions() {
+	public ResponseMapping() {
 		loadOptions = new HashMap<String, Object>();
 		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
 

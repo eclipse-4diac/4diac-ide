@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH, 
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,8 +8,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Alois Zoitl, Florian Noack, Gerhard Ebenhofer, 
- *  Monika Wenger - initial API and implementation and/or initial documentation
+ *  Alois Zoitl, Florian Noack, Gerhard Ebenhofer, Monika Wenger 
+ *  		- initial API and implementation and/or initial documentation
+ *  Alois Zoitl - Harmonized deployment and monitoring communication
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499;
 
@@ -36,12 +38,25 @@ public class Messages extends NLS {
 	public static String DeploymentExecutor_StopFB;
 	public static String DeploymentExecutor_DeleteFB;
 	public static String DeploymentExecutor_DeleteConnection;
+	public static String DeploymentExecutor_Read_Watches;
+	public static String DeploymentExecutor_Add_Watch;
+	public static String DeploymentExecutor_Delete_Watch;
+	public static String DeploymentExecutor_Force_Value;
+
 	public static String DeploymentExecutor_WriteResourceParameterFailed;
 	public static String DeploymentExecutor_WriteDeviceParameterFailed;
 	public static String DeploymentExecutor_DisconnectFailed;
 	public static String DeploymentExecutor_KillFBFailed;
 	public static String DeploymentExecutor_KillDeviceFailed;
 	public static String DeploymentExecutor_DeleteFBFailed;
+	public static String DeploymentExecutor_ReadWatchesFailed;
+	public static String DeploymentExecutor_AddWatchesFailed;
+	public static String DeploymentExecutor_DeleteWatchesFailed;
+	public static String DeploymentExecutor_ForceValueFailed;
+	public static String DeploymentExecutor_ClearForceFailed;
+	public static String DeploymentExecutor_TriggerEventFailed;
+
+	
 	public static String DTL_CreateFBType;
 	public static String DTL_CreateAdapterType;
 	public static String DTL_QueryFBTypes;

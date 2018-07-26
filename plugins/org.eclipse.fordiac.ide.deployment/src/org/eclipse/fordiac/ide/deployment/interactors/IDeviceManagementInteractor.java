@@ -10,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
@@ -17,7 +18,9 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
+import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -28,6 +31,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * 
  */
 public interface IDeviceManagementInteractor {
+	
+	/**Check if this interactor is currently connected with its device
+	 * 
+	 * @return true if a connection is open.
+	 */	
+	boolean isConnected();
 	
 	 void connect() throws DeploymentException;
 
@@ -212,4 +221,20 @@ public interface IDeviceManagementInteractor {
 	 *           the exception
 	 */
 	 void killDevice(Device dev) throws DeploymentException;
+	 
+	 
+	 /*********************** monitoring commands ****************************************************/
+	 Response readWatches() throws DeploymentException;
+	 
+	 void addWatch(MonitoringBaseElement element) throws DeploymentException;
+	 
+	 void removeWatch(MonitoringBaseElement element) throws DeploymentException;
+	 
+	 void triggerEvent(MonitoringBaseElement element) throws DeploymentException;
+		
+	 void forceValue(MonitoringBaseElement element, String value) throws DeploymentException;
+	 
+	 void clearForce(MonitoringBaseElement element) throws DeploymentException;
+
+
 }

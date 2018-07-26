@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2016 Profactor GmbH, AIT, fortiss GmbH
+ * Copyright (c) 2012 - 2018 Profactor GmbH, AIT, fortiss GmbH
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,12 +10,15 @@
  * Contributors:
  *   Gerhard Ebenhofer, Filip Andren, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
 import java.util.ArrayList;
 
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseFactory;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeNetworkViewerEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -22,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
 
 public class MonitoringManagerUtils {
 	
@@ -73,7 +76,7 @@ public class MonitoringManagerUtils {
 			p = MonitoringFactory.eINSTANCE.createAdapterPortElement(); 
 		}
 		else{
-			p = MonitoringFactory.eINSTANCE.createPortElement();
+			p = MonitoringBaseFactory.eINSTANCE.createPortElement();
 		}
 		p.setResource(res);
 		p.setFb(fb);

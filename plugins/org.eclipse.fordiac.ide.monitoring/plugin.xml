@@ -151,7 +151,7 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated monitoring -->
       <package
-            uri="org.eclipse.fordiac"
+            uri="org.eclipse.fordiac.monitoring"
             class="org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage"
             genModel="model/monitoring.genmodel"/>
    </extension>

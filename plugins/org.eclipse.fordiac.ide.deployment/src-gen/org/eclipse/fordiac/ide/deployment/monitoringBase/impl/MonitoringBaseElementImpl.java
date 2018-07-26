@@ -1,37 +1,40 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ *  * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
+ *  * 
+ *  * All rights reserved. This program and the accompanying materials
+ *  * are made available under the terms of the Eclipse Public License v1.0
+ *  * which accompanies this distribution, and is available at
+ *  * http://www.eclipse.org/legal/epl-v10.html
+ *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
+ *  *     - initial API and implementation and/or initial documentation
+ *  ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.model.monitoring.impl;
+ */
+package org.eclipse.fordiac.ide.deployment.monitoringBase.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Base Element</b></em>'.
+ * An implementation of the model object '<em><b>Element</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringBaseElementImpl#getPort <em>Port</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringBaseElementImpl#isOffline <em>Offline</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.impl.MonitoringBaseElementImpl#getPort <em>Port</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.impl.MonitoringBaseElementImpl#isOffline <em>Offline</em>}</li>
  * </ul>
  *
  * @generated
@@ -83,7 +86,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return MonitoringPackage.Literals.MONITORING_BASE_ELEMENT;
+		return MonitoringBasePackage.Literals.MONITORING_BASE_ELEMENT;
 	}
 
 	/**
@@ -97,7 +100,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 			port = (PortElement)eResolveProxy(oldPort);
 			if (port != oldPort) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringPackage.MONITORING_BASE_ELEMENT__PORT, oldPort, port));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT, oldPort, port));
 			}
 		}
 		return port;
@@ -121,7 +124,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 		PortElement oldPort = port;
 		port = newPort;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_BASE_ELEMENT__PORT, oldPort, port));
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT, oldPort, port));
 	}
 
 	/**
@@ -142,7 +145,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 		boolean oldOffline = offline;
 		offline = newOffline;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_BASE_ELEMENT__OFFLINE, oldOffline, offline));
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE, oldOffline, offline));
 	}
 
 	/**
@@ -215,10 +218,10 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MonitoringPackage.MONITORING_BASE_ELEMENT__PORT:
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
-			case MonitoringPackage.MONITORING_BASE_ELEMENT__OFFLINE:
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
 				return isOffline();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -232,10 +235,10 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MonitoringPackage.MONITORING_BASE_ELEMENT__PORT:
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
 				setPort((PortElement)newValue);
 				return;
-			case MonitoringPackage.MONITORING_BASE_ELEMENT__OFFLINE:
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
 				setOffline((Boolean)newValue);
 				return;
 		}
@@ -250,10 +253,10 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MonitoringPackage.MONITORING_BASE_ELEMENT__PORT:
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
 				setPort((PortElement)null);
 				return;
-			case MonitoringPackage.MONITORING_BASE_ELEMENT__OFFLINE:
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
 				setOffline(OFFLINE_EDEFAULT);
 				return;
 		}
@@ -268,9 +271,9 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MonitoringPackage.MONITORING_BASE_ELEMENT__PORT:
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
 				return port != null;
-			case MonitoringPackage.MONITORING_BASE_ELEMENT__OFFLINE:
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
 				return offline != OFFLINE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
@@ -285,10 +288,11 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (offline: ");
 		result.append(offline);
 		result.append(')');
 		return result.toString();
 	}
+
 } //MonitoringBaseElementImpl

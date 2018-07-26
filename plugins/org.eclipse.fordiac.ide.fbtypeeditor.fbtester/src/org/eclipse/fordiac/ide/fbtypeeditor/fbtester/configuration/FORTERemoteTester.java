@@ -1,5 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2015, 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2012 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 							 Johannes Kepler University	   	
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,7 +9,8 @@
  *
  * Contributors:
  *   Gerhard Ebenhofer, Ingo Hegny, Alois Zoitl, Monika Wenger
- *    - initial implementation
+ *    			 - initial implementation
+ *   Alois Zoitl - Harmonized deployment and monitoring 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.configuration;
 
@@ -27,6 +30,12 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
+import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.deployment.devResponse.FB;
+import org.eclipse.fordiac.ide.deployment.devResponse.Port;
+import org.eclipse.fordiac.ide.deployment.devResponse.Response;
+import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
+import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.ValuedVarDecl;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.IFBTestConfiguration;
@@ -38,12 +47,6 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.monitoring.communication.Messages;
-import org.eclipse.fordiac.ide.monitoring.communication.MonitoringCommunicationOptions;
-import org.eclipse.fordiac.ide.deployment.devResponse.Data;
-import org.eclipse.fordiac.ide.deployment.devResponse.FB;
-import org.eclipse.fordiac.ide.deployment.devResponse.Port;
-import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
@@ -70,7 +73,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 	private IDialogSettings forteRemoteTesterSettings;
 	private Text ipText;
 	private Text runTimePortText;
-	private MonitoringCommunicationOptions data = new MonitoringCommunicationOptions();
+	private ResponseMapping data = new ResponseMapping();
 	
 	private enum SendType {
 		REQ, addWatch, removeWatch, triggerEvent, startEventCnt, forceValue
@@ -228,12 +231,8 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 
 	private void addWatch(TestElement element, DataOutputStream outputStream, DataInputStream inputStream) {
 		if (outputStream != null && inputStream != null) {
-			String request = MessageFormat.format(
-					Messages.TCPCommunicationObject_Monitoring_ADD_Watch,
-					new Object[] { 0,
-							element.getFBString() + "." + element.getPortString(), //$NON-NLS-1$
-							"*" }); //$NON-NLS-1$
-
+			String request = MessageFormat.format(Messages.DeploymentExecutor_Add_Watch,
+					new Object[] { 0, element.getFBString() + "." + element.getPortString(), "*" }); //$NON-NLS-1$ //$NON-NLS-2$
 			sendRequest(SendType.addWatch, element.getResourceString(), request, outputStream, inputStream);
 		}
 	}
@@ -264,9 +263,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				} catch (InterruptedException e) {
 					setRunning(false);
 				}
-				String request = MessageFormat.format(
-						Messages.TCPCommunicationObject_Monitoring_Read_Watches,
-						new Object[] { i });
+				String request = MessageFormat.format(Messages.DeploymentExecutor_Read_Watches, new Object[] { i });
 
 				if (running) {
 					sendRequest(SendType.REQ, "", request, outputStream, inputStream); //$NON-NLS-1$
@@ -372,12 +369,9 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 			try {
 				outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 				inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-
 				
-				String request = MessageFormat.format(
-						Messages.TCPCommunicationObject_Monitoring_Force_Value,
-						new Object[] { 0,
-								element.getValue(), element.getFBString() + "." + element.getPortString(), "true"}); //$NON-NLS-1$ //$NON-NLS-2$
+				String request = MessageFormat.format(Messages.DeploymentExecutor_Force_Value,
+						new Object[] { 0, element.getValue(), element.getFBString() + "." + element.getPortString(), "true"}); //$NON-NLS-1$ //$NON-NLS-2$
 				sendRequest(SendType.forceValue, element.getResourceString(), request, outputStream, inputStream);
 			}  catch (IOException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
@@ -393,13 +387,9 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 				inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 				if (element != null) {
-						String request = MessageFormat.format(
-								Messages.TCPCommunicationObject_WriteParameter,
-								new Object[] { 0,
-										"$e", element.getFBString() + "." + element.getPortString()}); //$NON-NLS-1$ //$NON-NLS-2$
-						
-						sendRequest(SendType.triggerEvent, element.getResourceString(), request, outputStream, inputStream);
-
+					String request = MessageFormat.format(Messages.DeploymentExecutor_WriteParameter,
+							new Object[] { 0, "$e", element.getFBString() + "." + element.getPortString()}); //$NON-NLS-1$ //$NON-NLS-2$
+					sendRequest(SendType.triggerEvent, element.getResourceString(), request, outputStream, inputStream);
 				}
 			} catch (IOException e) {
 				Activator.getDefault().logError(e.getMessage(), e);

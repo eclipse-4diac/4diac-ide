@@ -6,7 +6,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Alois Zoitl, Florian Noack, Monika Wenger - initial API and implementation and/or initial documentation
+ *   Alois Zoitl, Florian Noack, Monika Wenger - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499;
 
@@ -49,6 +50,11 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 		public String toString() {
 			return iP + ":" + port; //$NON-NLS-1$
 		}
+	}	
+	
+	@Override
+	public boolean isConnected() {
+		return null != socket && socket.isConnected() && !socket.isClosed();
 	}
 
 	@Override
@@ -83,24 +89,8 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 		}
 	}
 
-	@Override
 	public void sendREQ(String destination, String request) throws IOException {
-		if (outputStream != null && inputStream != null) {
-			outputStream.writeByte(ASN1_TAG_IECSTRING);
-			outputStream.writeShort(destination.length());
-			outputStream.writeBytes(destination);
-			// out.flush();
-			// Do NOT flush here, all data should be sent within 1 ethernet
-			// frame
-			// in case packet fragmentation is not properly handled by server
-			outputStream.writeByte(ASN1_TAG_IECSTRING);
-			outputStream.writeShort(request.length());
-			outputStream.writeBytes(request);
-			outputStream.flush();
-			postCommandSent(getInfo(destination), destination, request);
-			handleResponse(destination);
-			// TODO error handling
-		}
+		sendREQandRESP(destination, request);
 	}
 
 	private String handleResponse(String destination) throws IOException {
@@ -141,6 +131,7 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 		}
 		return response;
 	}
+
 
 	/**
 	 * returns a valid MgrInformation if the mgrID contains valid destination

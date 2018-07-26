@@ -16,8 +16,9 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -40,17 +41,22 @@ class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
 		monitor.beginTask("Disable monitoring for system", count);
 		stopPollingThreads(monitor);
 		removeWatches(monitor);
-		disconnectFromDevices(devices, monitor);
+		disconnectFromDevices(monitor);
 		monitor.done();
 	}
 
-	private void disconnectFromDevices(List<Device> devices, IProgressMonitor monitor) {
+	private void disconnectFromDevices(IProgressMonitor monitor) {
 		monitor.subTask("Disconnecting the devices");
 		for (Entry<Device, DeviceMonitoringHandler> runner: systemMonitoringData.getDevMonitoringHandlers().entrySet()){
 			if(monitor.isCanceled()) {
 				break;
 			}
-			runner.getValue().getCommObject().disable();
+			try {
+				runner.getValue().getDevMgmInteractor().disconnect();
+			} catch (DeploymentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			monitor.worked(1);
 		}	
 		systemMonitoringData.getDevMonitoringHandlers().clear();
@@ -59,7 +65,9 @@ class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
 	private void removeWatches(IProgressMonitor monitor) {
 		monitor.subTask("Connecting to the devices");
 		for (MonitoringBaseElement element : systemMonitoringData.getMonitoredElements()){	
-			if(monitor.isCanceled()) break;
+			if(monitor.isCanceled()) { 
+				break;
+			}
 			if (element instanceof MonitoringElement) {
 				monitor.subTask("Remove watch for: " + element.getPortString());
 				systemMonitoringData.sendRemoveWatch(element);

@@ -59,15 +59,6 @@ public interface MonitoringFactory extends EFactory {
 	Breakpoints createBreakpoints();
 
 	/**
-	 * Returns a new object of class '<em>Port Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Port Element</em>'.
-	 * @generated
-	 */
-	PortElement createPortElement();
-
-	/**
 	 * Returns a new object of class '<em>Adapter Port Element</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

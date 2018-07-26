@@ -6,7 +6,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Alois Zoitl, Monika Wenger - initial API and implementation and/or initial documentation
+ *   Alois Zoitl, Monika Wenger - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment;
 
@@ -21,6 +22,12 @@ import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
  * Base class for coordinating the management communication to a device
  */
 public abstract class AbstractDeviceManagementCommunicationHandler {
+	
+	/**Check if this communication handler is currently connected with its device
+	 * 
+	 * @return true if a connection is open.
+	 */	
+	public abstract boolean isConnected();
 
 	public abstract void connect(String address) throws DeploymentException;
 

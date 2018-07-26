@@ -8,22 +8,29 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Alois Zoitl, Florian Noack, Gerhard Ebenhofer, 
- *  Monika Wenger - initial API and implementation and/or initial documentation
+ *  Alois Zoitl, Florian Noack, Gerhard Ebenhofer, Monika Wenger 
+ *  		- initial API and implementation and/or initial documentation
+ *  Alois Zoitl - Harmonized deployment and monitoring communication
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.StringReader;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
+import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -31,10 +38,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.xml.sax.InputSource;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	private final Set<String> genFBs = new HashSet<>();
 	int id = 0;
+	
+	ResponseMapping respMapping = new ResponseMapping();
 
 	public DeploymentExecutor(Device dev) {
 		this(dev, null);
@@ -94,7 +104,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 			throws DeploymentException {
 
 		String encodedValue = encodeXMLChars(value);
-		String request = generateWriteParmaRequest(resource.getName(), parameter, encodedValue);
+		String request = generateWriteParamRequest(resource.getName(), parameter, encodedValue);
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (IOException e) {
@@ -104,12 +114,13 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		}
 	}
 
-	protected String generateWriteParmaRequest(final String targetElementName, final String parameter,
+	protected String generateWriteParamRequest(final String targetElementName, final String parameter,
 			final String value) {
 		return MessageFormat.format(getWriteParameterMessage(),
 				new Object[] { id++, value, targetElementName + "." + parameter }); //$NON-NLS-1$
 	}
 
+	@SuppressWarnings("static-method")  //this method needs to be overwritable by subclasses
 	protected String getWriteParameterMessage() {
 		return Messages.DeploymentExecutor_WriteParameter;
 	}
@@ -127,7 +138,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fbData, final VarDeclaration varDecl)
 			throws DeploymentException {
 		String encodedValue = encodeXMLChars(value);
-		String request = generateWriteParmaRequest(fbData.prefix + fbData.fb.getName(), varDecl.getName(), encodedValue);
+		String request = generateWriteParamRequest(fbData.prefix + fbData.fb.getName(), varDecl.getName(), encodedValue);
 		try {
 			sendREQ(resource.getName(), request);
 		} catch (IOException e) {
@@ -279,4 +290,94 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 			resetTypes();
 		}
 	}
+	
+	public void sendREQ(String destination, String request) throws IOException {
+		getDevMgmComHandler().sendREQandRESP(destination, request);
+	}
+
+	@Override
+	public Response readWatches() throws DeploymentException {
+		String request = MessageFormat.format(Messages.DeploymentExecutor_Read_Watches, new Object[] { id++ });
+
+		try {
+			String response = getDevMgmComHandler().sendREQandRESP("", request);  //$NON-NLS-1$
+			if (response != null) {
+				XMLResource resource = new XMLResourceImpl();
+				InputSource source = new InputSource(new StringReader(response));
+				resource.load(source, respMapping.getLoadOptions());
+				for (EObject object : resource.getContents()) {
+					if (object instanceof Response) {
+						return (Response)object;
+					}
+				}
+			}
+		} catch (IOException e) {
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_ReadWatchesFailed,
+					new Object[] { getDevice().getName() }), e);
+		}  
+		
+		return null;
+	}
+	
+	@Override
+	public void addWatch(MonitoringBaseElement element) throws DeploymentException {
+		String request = MessageFormat.format(Messages.DeploymentExecutor_Add_Watch, new Object[] { this.id++, element.getQualifiedString(), "*" }); //$NON-NLS-1$
+		try {
+			String response = getDevMgmComHandler().sendREQandRESP(element.getResourceString(), request);
+			//TODO show somehow the feedback if the response contained a reason that it didn't work
+			element.setOffline(response == null);
+		} catch (IOException e) {
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_AddWatchesFailed,
+					new Object[] { element.getQualifiedString() }), e);
+		}
+	}
+	 
+	@Override
+	public void removeWatch(MonitoringBaseElement element) throws DeploymentException {
+		String request = MessageFormat.format(Messages.DeploymentExecutor_Delete_Watch, new Object[] { this.id++, element.getQualifiedString(), "*" }); //$NON-NLS-1$
+		try {
+			String response = getDevMgmComHandler().sendREQandRESP(element.getResourceString(), request);
+			//TODO show somehow the feedback if the response contained a reason that it didn't work
+			element.setOffline(response == null);
+		} catch (IOException e) {
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_DeleteWatchesFailed,
+					new Object[] { element.getQualifiedString() }), e);
+		}
+	}
+
+	@Override
+	public void triggerEvent(MonitoringBaseElement element) throws DeploymentException {
+		String request = MessageFormat.format(getWriteParameterMessage(), new Object[] {id++, "$e", element.getQualifiedString()}); //$NON-NLS-1$ 
+		try {
+			sendREQ(element.getResourceString(), request);
+		} catch (IOException e) {
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_TriggerEventFailed,
+							new Object[] { element.getQualifiedString() }), e);
+		}
+	}
+	
+	@Override
+	public void forceValue(MonitoringBaseElement element, String value) throws DeploymentException{
+		String request = MessageFormat.format(Messages.DeploymentExecutor_Force_Value,
+				new Object[] { this.id++, value, element.getQualifiedString(), "true"}); //$NON-NLS-1$
+		try {
+			sendREQ(element.getResourceString(), request);
+		} catch (IOException e) {
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_ForceValueFailed,
+							new Object[] { element.getQualifiedString(), value }), e);
+		}
+	}
+	
+	@Override
+	public void clearForce(MonitoringBaseElement element) throws DeploymentException {
+		String request = MessageFormat.format(Messages.DeploymentExecutor_Force_Value,
+				new Object[] { this.id++, "*", element.getQualifiedString(), "false"}); //$NON-NLS-1$ //$NON-NLS-2$
+		try {
+			sendREQ(element.getResourceString(), request);
+		} catch (IOException e) {
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_ClearForceFailed,
+							new Object[] { element.getQualifiedString() }), e);
+		}
+	}
+
 }

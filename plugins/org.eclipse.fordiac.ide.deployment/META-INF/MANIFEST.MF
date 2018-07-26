@@ -3,13 +3,17 @@ Export-Package: org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.deployment.exceptions,
  org.eclipse.fordiac.ide.deployment.interactors,
  org.eclipse.fordiac.ide.deployment.util,
- org.eclipse.fordiac.ide.deployment.devResponse
+ org.eclipse.fordiac.ide.deployment.devResponse,
+ org.eclipse.fordiac.ide.deployment.monitoringBase,
+ org.eclipse.fordiac.ide.deployment.monitoringBase.impl,
+ org.eclipse.fordiac.ide.deployment.monitoringBase.util
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
- org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model;visibility:=reexport,
  org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.ui.controls
+ org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.fordiac.ide.gef
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
