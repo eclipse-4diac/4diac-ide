@@ -30,18 +30,14 @@ public class BreakpointsViewContinueBreakpoint extends ContinueBreakpoint {
 	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		if (selection instanceof StructuredSelection) {
-			// this.selection = (StructuredSelection) selection;
-			if (((StructuredSelection) selection).getFirstElement() instanceof MonitoringElement) {
-				MonitoringElement element = (MonitoringElement) ((StructuredSelection) selection)
-						.getFirstElement();
-				if (element != null
-						&& element.getPort().getInterfaceElement() instanceof org.eclipse.fordiac.ide.model.libraryElement.Event) {
-					action.setEnabled(element.isBreakpointActive());
-					this.selection = new StructuredSelection(element.getPort().getInterfaceElement());
-				} else {
-					action.setEnabled(false);
-				}
+		if ((selection instanceof StructuredSelection) && (((StructuredSelection) selection).getFirstElement() instanceof MonitoringElement)) {
+			MonitoringElement element = (MonitoringElement) ((StructuredSelection) selection).getFirstElement();
+			if (element != null
+					&& element.getPort().getInterfaceElement() instanceof org.eclipse.fordiac.ide.model.libraryElement.Event) {
+				action.setEnabled(element.isBreakpointActive());
+				this.selection = new StructuredSelection(element.getPort().getInterfaceElement());
+			} else {
+				action.setEnabled(false);
 			}
 		}
 	}

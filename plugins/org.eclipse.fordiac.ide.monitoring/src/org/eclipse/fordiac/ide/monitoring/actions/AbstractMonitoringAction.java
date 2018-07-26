@@ -35,8 +35,7 @@ public abstract class AbstractMonitoringAction implements IObjectActionDelegate 
 			DiagramEditorWithFlyoutPalette editorW = (DiagramEditorWithFlyoutPalette)targetPart;
 			editorWithPalette = editorW;
 		}else if(targetPart instanceof CompositeInstanceViewer) {
-			DiagramEditor editor = (DiagramEditor) targetPart;
-			this.editor = editor;						
+			editor = (DiagramEditor) targetPart;		
 		}
 
 	}

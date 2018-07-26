@@ -30,7 +30,7 @@ import org.eclipse.ui.IWorkbenchWindowPulldownDelegate2;
 public class SwitchMonitoringModeAction implements
 		IWorkbenchWindowPulldownDelegate2 {
 
-	boolean selectAll = true;
+	private boolean selectAll = true;
 
 	@Override
 	public Menu getMenu(Menu parent) {
@@ -46,11 +46,12 @@ public class SwitchMonitoringModeAction implements
 	
 	@Override
 	public void dispose() {
-
+		//currently nothing to do here
 	}
 
 	@Override
 	public void init(IWorkbenchWindow window) {
+		//currently nothing to do here
 	}
 
 	@Override
@@ -75,6 +76,7 @@ public class SwitchMonitoringModeAction implements
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
+		//currently nothing to do here
 	}
 	
 }

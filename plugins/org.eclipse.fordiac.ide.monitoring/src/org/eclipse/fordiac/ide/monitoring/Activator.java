@@ -21,7 +21,7 @@ import org.osgi.framework.BundleContext;
 public class Activator extends Abstract4DIACUIPlugin {
 
 	// The plug-in ID
-	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.monitoring"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.monitoring"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;

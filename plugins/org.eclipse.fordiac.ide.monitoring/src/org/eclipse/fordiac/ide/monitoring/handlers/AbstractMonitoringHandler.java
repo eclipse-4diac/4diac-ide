@@ -27,7 +27,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public abstract class AbstractMonitoringHandler extends AbstractHandler {
 
-	RootEditPart rootEditPart = null;
+	private RootEditPart rootEditPart = null;
 	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {

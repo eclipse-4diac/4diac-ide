@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.monitoring.provider;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
@@ -30,7 +31,7 @@ public class BreakpointsContentProvider implements ITreeContentProvider {
 
 	private Viewer viewer;
 
-	EContentAdapter adapter = new EContentAdapter() {
+	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(
 				final org.eclipse.emf.common.notify.Notification notification) {
@@ -63,7 +64,7 @@ public class BreakpointsContentProvider implements ITreeContentProvider {
 		}
 	};
 
-	private final ArrayList<MonitoringElement> breakpoints = new ArrayList<MonitoringElement>();
+	private final List<MonitoringElement> breakpoints = new ArrayList<MonitoringElement>();
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
@@ -76,7 +77,7 @@ public class BreakpointsContentProvider implements ITreeContentProvider {
 		oldBreakpoints.addAll(breakpoints);
 
 		for (MonitoringBaseElement element : MonitoringManager.getInstance().getElementsToMonitor()) {
-			if (element != null && element instanceof MonitoringElement) {
+			if (element instanceof MonitoringElement) {
 				MonitoringElement monitoringElement = (MonitoringElement)element;
 
 				if (monitoringElement.isBreakpoint() && !breakpoints.contains(monitoringElement)) {
@@ -120,7 +121,11 @@ public class BreakpointsContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
-
+		for (MonitoringElement element : breakpoints) {
+			if (element.eAdapters().contains(adapter)) {
+				element.eAdapters().remove(adapter);
+			}
+		}
 	}
 
 	@Override

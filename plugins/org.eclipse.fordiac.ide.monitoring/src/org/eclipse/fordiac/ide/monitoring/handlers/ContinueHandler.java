@@ -33,7 +33,7 @@ public class ContinueHandler extends AbstractMonitoringHandler {
 			InterfaceEditPart editPart = (InterfaceEditPart) (selection).getFirstElement();
 			MonitoringManager manager = MonitoringManager.getInstance();			
 			MonitoringBaseElement element = manager.getMonitoringElement(editPart.getModel());
-			manager.toggleBreakpoint(element, BreakPoint.clear);
+			manager.toggleBreakpoint(element, BreakPoint.CLEAR);
 		}
 		return null;
 	}
@@ -45,15 +45,13 @@ public class ContinueHandler extends AbstractMonitoringHandler {
 		
 		if (selection instanceof StructuredSelection) {
 			StructuredSelection sel = (StructuredSelection) selection;
-			if(1 == sel.size()){
+			if((1 == sel.size()) && (sel.getFirstElement() instanceof InterfaceEditPart)){
 				//only allow trigger event if only one element is selected
-				if(sel.getFirstElement() instanceof InterfaceEditPart){
-					InterfaceEditPart editPart = (InterfaceEditPart) sel.getFirstElement();			
-					if(editPart.isEvent()){
-						MonitoringBaseElement element = MonitoringManager.getInstance().getMonitoringElement(editPart.getModel());
-						if(element instanceof MonitoringElement){
-							needToAdd = ((MonitoringElement)element).isBreakpointActive();
-						}
+				InterfaceEditPart editPart = (InterfaceEditPart) sel.getFirstElement();			
+				if(editPart.isEvent()){
+					MonitoringBaseElement element = MonitoringManager.getInstance().getMonitoringElement(editPart.getModel());
+					if(element instanceof MonitoringElement){
+						needToAdd = ((MonitoringElement)element).isBreakpointActive();
 					}
 				}
 			}

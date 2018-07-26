@@ -19,7 +19,6 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
@@ -32,7 +31,6 @@ public abstract class ContinueBreakpoint extends AbstractMonitoringAction {
 		// empty constructor
 	}
 
-	protected Shell shell;
 	protected StructuredSelection selection;
 
 	/**
@@ -41,7 +39,6 @@ public abstract class ContinueBreakpoint extends AbstractMonitoringAction {
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		super.setActivePart(action, targetPart);
-		shell = targetPart.getSite().getShell();
 	}
 
 	/**
@@ -49,14 +46,12 @@ public abstract class ContinueBreakpoint extends AbstractMonitoringAction {
 	 */
 	@Override
 	public void run(IAction action) {			
-		if (null != selection) {
-			if (selection.getFirstElement() instanceof InterfaceEditPart) {
-				InterfaceEditPart editPart = (InterfaceEditPart) selection.getFirstElement();
-				
-				PortElement port = MonitoringManagerUtils.createPortElement(editPart);
-				if(null != port){
-					//MonitoringManager.getInstance().toggleBreakpoint(port, BreakPoint.clear);
-				}
+		if ((null != selection) && (selection.getFirstElement() instanceof InterfaceEditPart)) {
+			InterfaceEditPart editPart = (InterfaceEditPart) selection.getFirstElement();
+			
+			PortElement port = MonitoringManagerUtils.createPortElement(editPart);
+			if(null != port){
+				//MonitoringManager.getInstance().toggleBreakpoint(port, BreakPoint.clear);
 			}
 		}
 	}

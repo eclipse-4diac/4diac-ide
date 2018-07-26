@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.monitoring.provider;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
@@ -29,7 +30,7 @@ public class WatchesContentProvider implements ITreeContentProvider {
 
 	private Viewer viewer;
 
-	EContentAdapter adapter = new EContentAdapter() {
+	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(
 				final org.eclipse.emf.common.notify.Notification notification) {
@@ -55,22 +56,16 @@ public class WatchesContentProvider implements ITreeContentProvider {
 			}
 		}
 	};
-	ArrayList<MonitoringBaseElement> watchedElements = new ArrayList<MonitoringBaseElement>();
+	
+	private List<MonitoringBaseElement> watchedElements = new ArrayList<>();
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof MonitoringElement) {
 			return new Object[0];
 		}
-		// ArrayList<MonitoringElement> oldWatchedElements = new
-		// ArrayList<MonitoringElement>();
-		// oldWatchedElements.addAll(watchedElements);
 
-		for (MonitoringBaseElement element : watchedElements) {
-			if (element.eAdapters().contains(adapter)) {
-				element.eAdapters().remove(adapter);
-			}
-		}
+		removeAdapterFromChildrenList();
 
 		watchedElements.clear();
 
@@ -101,7 +96,7 @@ public class WatchesContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
-
+		removeAdapterFromChildrenList();
 	}
 
 	@Override
@@ -109,4 +104,12 @@ public class WatchesContentProvider implements ITreeContentProvider {
 		this.viewer = viewer;
 	}
 
+	private void removeAdapterFromChildrenList() {
+		for (MonitoringBaseElement element : watchedElements) {
+			if (element.eAdapters().contains(adapter)) {
+				element.eAdapters().remove(adapter);
+			}
+		}
+	}
+	
 }

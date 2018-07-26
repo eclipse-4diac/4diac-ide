@@ -55,7 +55,7 @@ public class TriggerEventHandler extends AbstractMonitoringHandler {
 		setBaseEnabled(needToAdd);
 	}
 
-	private Event getEvent(Object object) {
+	private static Event getEvent(Object object) {
 		IInterfaceElement ie = null;
 		if(object instanceof InterfaceEditPart) {
 			ie = ((InterfaceEditPart) object).getModel();

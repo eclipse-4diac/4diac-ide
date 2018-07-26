@@ -62,17 +62,17 @@ public class MonitoringChildren implements IMonitoringListener,
 
 	@Override
 	public void notifyAddPort(PortElement port) {
-		// nothing to do;
+		// nothing to do
 	}
 
 	@Override
 	public void notifyRemovePort(PortElement port) {
-		// nothing to do;
+		// nothing to do
 	}
 
 	@Override
 	public void notifyTriggerEvent(PortElement port) {
-		// nothing to do;
+		// nothing to do
 	}
 
 }

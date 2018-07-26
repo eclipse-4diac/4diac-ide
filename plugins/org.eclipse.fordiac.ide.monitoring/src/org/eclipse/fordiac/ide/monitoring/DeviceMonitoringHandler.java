@@ -83,8 +83,8 @@ class DeviceMonitoringHandler implements Runnable {
 						}
 						//TODO implement when finally providing breakpoint support: commObj.queryBreakpoints(device.getAutomationSystem(), device);
 					} catch (DeploymentException e) {
-						// TODO think about where to show this error and what todo about it.
-						e.printStackTrace();
+						// TODO think if error should be shown to the user
+						Activator.getDefault().logError("Could not update the watches!", e);
 					}
 				} else {
 					setRunning(false);
@@ -119,9 +119,6 @@ class DeviceMonitoringHandler implements Runnable {
 								monitoringElement.setCurrentValue(d.getValue());
 								if (d.getForced() != null) {
 									monitoringElement.setForce(d.getForced().equals("true")); //$NON-NLS-1$
-//									if (element.isForce()) {
-//										element.setForceValue(d.getValue());
-//									}
 								}
 							}
 						}

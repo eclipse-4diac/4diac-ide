@@ -208,7 +208,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	}
 
 	public enum BreakPoint {
-		add, remove, clear
+		ADD, REMOVE, CLEAR
 	}
 
 	/**
@@ -226,13 +226,13 @@ public class MonitoringManager extends AbstractMonitoringManager {
 			if(null != devMgmInteractor){
 				//FIXME implement when we finally have breakpoint support
 				//devMgmInteractor.toggleBreakpoint(monitoringElement, set);
-				if (set.equals(BreakPoint.add)) {
+				if (set.equals(BreakPoint.ADD)) {
 					monitoringElement.setBreakpoint(true);
 					breakpoints.getBreakpoints().add(monitoringElement);
-				} else if (set.equals(BreakPoint.remove)) {
+				} else if (set.equals(BreakPoint.REMOVE)) {
 					monitoringElement.setBreakpoint(false);
 					breakpoints.getBreakpoints().remove(monitoringElement);
-				} else if (set.equals(BreakPoint.clear)) {
+				} else if (set.equals(BreakPoint.CLEAR)) {
 				}
 			}
 		}
@@ -257,8 +257,8 @@ public class MonitoringManager extends AbstractMonitoringManager {
 				try {
 					devMgmInteractor.triggerEvent(monitoringElement);
 				} catch (DeploymentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					// TODO think if error should be shown to the user
+					Activator.getDefault().logError("Could not trigger event for " + element.getQualifiedString(), e);
 				}
 				notifyTriggerEvent(monitoringElement.getPort());
 			}
@@ -282,15 +282,15 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 		if(devMgmInteractor != null){
 			String fullName = element.getQualifiedString();
-			fullName = fullName.substring(0, fullName.lastIndexOf(".")); // strip interface name
-			fullName = fullName.substring(0, fullName.lastIndexOf(".") +1 ); // strip fbName
+			fullName = fullName.substring(0, fullName.lastIndexOf('.')); // strip interface name
+			fullName = fullName.substring(0, fullName.lastIndexOf('.') +1 ); // strip fbName
 			
 			FBDeploymentData data = new FBDeploymentData(fullName, element.getPort().getFb());
 			try {
 				devMgmInteractor.writeFBParameter(element.getPort().getResource(), value, data, (VarDeclaration)element.getPort().getInterfaceElement());
 			} catch (DeploymentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// TODO think if error should be shown to the user
+				Activator.getDefault().logError("Could not write value to " + element.getQualifiedString(), e);
 			}
 		}
 	}
@@ -319,8 +319,8 @@ public class MonitoringManager extends AbstractMonitoringManager {
 					devMgmInteractor.clearForce(element);				
 				}
 			} catch (DeploymentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// TODO think if error should be shown to the user
+				Activator.getDefault().logError("Could not force value of " + element.getQualifiedString() + "to " + value, e);
 			}
 		}
 	}

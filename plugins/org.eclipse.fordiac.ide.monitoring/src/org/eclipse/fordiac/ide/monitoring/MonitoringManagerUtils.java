@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
 
-public class MonitoringManagerUtils {
+public final class MonitoringManagerUtils {
 	
 	private MonitoringManagerUtils() {
 		throw new AssertionError();  //class should not be instantiated

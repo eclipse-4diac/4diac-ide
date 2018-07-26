@@ -66,19 +66,17 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 
 							@Override
 							public void ancestorRemoved(IFigure ancestor) {
-								// nothing to do;
+								// nothing to do
 							}
 
 							@Override
 							public void ancestorMoved(IFigure ancestor) {
-								// calculatePos();
 								refreshVisuals();
-
 							}
 
 							@Override
 							public void ancestorAdded(IFigure ancestor) {
-								// nothing to do;
+								// nothing to do
 							}
 						});
 					}	
@@ -126,19 +124,19 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 		
 									@Override
 									public void ancestorRemoved(IFigure ancestor) {
-										// nothing to do;
+										// nothing to do
 									}
 		
 									@Override
 									public void ancestorMoved(IFigure ancestor) {
-										// calculatePos();
+										// calculatePos()
 										refreshVisuals();
 		
 									}
 		
 									@Override
 									public void ancestorAdded(IFigure ancestor) {
-										// nothing to do;
+										// nothing to do
 									}
 								});
 							}

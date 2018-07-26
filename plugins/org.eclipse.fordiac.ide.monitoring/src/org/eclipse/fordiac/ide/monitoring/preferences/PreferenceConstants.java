@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.monitoring.Activator;
 /**
  * Constant definitions for plug-in preferences
  */
-public class PreferenceConstants {
+public final class PreferenceConstants {
 
 	public static final String P_WATCH_COLOR = "watchColor"; //$NON-NLS-1$
 
@@ -47,6 +47,10 @@ public class PreferenceConstants {
 			transparency = P_MONITORING_TRANSPARENCY_VALUE;
 		}		
 		return transparency;
+	}
+	
+	private PreferenceConstants() {
+		//class should not be instantiable
 	}
 
 }

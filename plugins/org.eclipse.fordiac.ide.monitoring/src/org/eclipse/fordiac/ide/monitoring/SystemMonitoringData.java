@@ -113,8 +113,8 @@ public class SystemMonitoringData {
 			try {
 				devMgmInteractor.removeWatch(element);
 			} catch (DeploymentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// TODO think if error should be shown to the user
+				Activator.getDefault().logError("Could not remove watch for " + element.getQualifiedString(), e);
 			}
 		}		
 	}
@@ -125,8 +125,8 @@ public class SystemMonitoringData {
 			try {
 				devMgmInteractor.addWatch(element);
 			} catch (DeploymentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// TODO think if error should be shown to the user
+				Activator.getDefault().logError("Could not add watch for " + element.getQualifiedString(), e);
 			}
 		}
 	}

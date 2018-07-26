@@ -24,3 +24,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.edit,
  org.eclipse.emf.edit.ui,
  org.eclipse.fordiac.ide.ui.controls
+Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.fbtest

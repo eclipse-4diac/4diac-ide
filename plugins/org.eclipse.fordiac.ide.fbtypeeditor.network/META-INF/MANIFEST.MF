@@ -26,3 +26,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.fordiac.ide.fbtypeeditor.network.editparts,
  org.eclipse.fordiac.ide.fbtypeeditor.network.viewer
+Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.network

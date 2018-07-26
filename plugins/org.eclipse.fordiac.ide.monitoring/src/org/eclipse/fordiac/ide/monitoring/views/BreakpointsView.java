@@ -188,6 +188,7 @@ public class BreakpointsView extends ViewPart {
 
 	@Override
 	public void setFocus() {
+		//Currently nothing to do
 	}
 
 }

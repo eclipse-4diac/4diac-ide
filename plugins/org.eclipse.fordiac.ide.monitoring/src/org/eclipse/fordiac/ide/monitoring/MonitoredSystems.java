@@ -79,7 +79,7 @@ public class MonitoredSystems extends CompoundContributionItem {
 	}
 	
 	private static void createSystemMonitoringMenuEntry(AutomationSystem system, Menu menu, int index){
-		MenuItem item = new MenuItem(menu, SWT.CHECK);
+		MenuItem item = (index == -1 ) ? new MenuItem(menu, SWT.CHECK) : new MenuItem(menu, SWT.CHECK, index);
 		item.setText(system.getName());
 		MonitoringManager manager = MonitoringManager.getInstance();
 		item.setSelection(manager.monitoringForSystemEnabled(system));
@@ -90,7 +90,6 @@ public class MonitoredSystems extends CompoundContributionItem {
 		for (AutomationSystem system : SystemManager.INSTANCE.getSystems()) {	
 			createSystemMonitoringMenuEntry(system, menu, -1);
 		}		
-		
 	}
 
 	public static void refreshSystemTree() {

@@ -37,10 +37,11 @@ public class WatchesView extends ViewPart {
 	private FilteredTree filteredTree;
 
 	
-	IMonitoringListener listener = new IMonitoringListener() {
+	private IMonitoringListener listener = new IMonitoringListener() {
 		
 		@Override
-		public void notifyTriggerEvent(PortElement port) {			
+		public void notifyTriggerEvent(PortElement port) {	
+			//currently nothing to do
 		}
 		
 		@Override
@@ -131,7 +132,7 @@ public class WatchesView extends ViewPart {
 
 	@Override
 	public void setFocus() {
-
+		//currently nothing to do
 	}
 
 }

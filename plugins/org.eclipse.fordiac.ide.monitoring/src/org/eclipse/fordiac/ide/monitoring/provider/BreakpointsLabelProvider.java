@@ -47,10 +47,8 @@ public class BreakpointsLabelProvider extends LabelProvider implements
 	public String getColumnText(Object element, int columnIndex) {
 		if (columnIndex == 0) {
 			return getText(element);
-		} else if (columnIndex == 1) {
-			if (element instanceof MonitoringElement) {
-				return ((MonitoringElement) element).getBreakpointCondition();
-			}
+		} else if ((columnIndex == 1) && (element instanceof MonitoringElement)) {
+			return ((MonitoringElement) element).getBreakpointCondition();
 		}
 		return ""; //$NON-NLS-1$
 	}

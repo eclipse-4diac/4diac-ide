@@ -28,23 +28,17 @@ public class MonitorSystemHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		Command command = event.getCommand();
-		boolean oldValue = HandlerUtil.toggleCommandState(command);
-		// use the old value and perform the operation
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 
-		if (selection instanceof TreeSelection) {
-			if (((TreeSelection) selection).getFirstElement() instanceof AutomationSystem) {
-				AutomationSystem system = (AutomationSystem) ((TreeSelection) selection)
-						.getFirstElement();
-
-				if (oldValue) {
-					// we are monitoring disable it now
-					MonitoringManager.getInstance().disableSystem(system);					
-				} else {
-					MonitoringManager.getInstance().enableSystem(system);
-				}
-				MonitoredSystems.refreshSystemTree();
+		if ((selection instanceof TreeSelection) && (((TreeSelection) selection).getFirstElement() instanceof AutomationSystem)) {
+			AutomationSystem system = (AutomationSystem) ((TreeSelection) selection).getFirstElement();
+			if (HandlerUtil.toggleCommandState(command)) {
+				// we are monitoring disable it now
+				MonitoringManager.getInstance().disableSystem(system);					
+			} else {
+				MonitoringManager.getInstance().enableSystem(system);
 			}
+			MonitoredSystems.refreshSystemTree();
 		}
 		return null;
 	}

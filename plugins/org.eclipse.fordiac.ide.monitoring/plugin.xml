@@ -62,12 +62,6 @@
             name="Watches"
             restorable="true">
       </view>
-      <view
-            class="org.eclipse.fordiac.ide.monitoring.views.MonitoringHistory"
-            id="org.eclipse.fordiac.ide.monitoring.views.MonitoringHistory"
-            name="Monitoring History"
-            restorable="true">
-      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
@@ -444,13 +438,6 @@
             class="org.eclipse.fordiac.ide.monitoring.handlers.ContinueHandler"
             commandId="org.eclipse.fordiac.ide.monitoring.commands.continue">
       </handler>
-   </extension>
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated monCom -->
-      <package
-            uri="org.eclipse.fordiac.ide.monitoring"
-            class="org.eclipse.fordiac.ide.monitoring.monCom.MonComPackage"
-            genModel="model/monCom.genmodel"/>
    </extension>
    <extension
          point="org.eclipse.fordiac.ide.deployment.monitoringmanager">

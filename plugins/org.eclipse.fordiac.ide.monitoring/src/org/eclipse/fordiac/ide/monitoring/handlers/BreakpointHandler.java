@@ -33,7 +33,7 @@ public class BreakpointHandler extends AbstractMonitoringHandler {
 			InterfaceEditPart editPart = (InterfaceEditPart) (selection).getFirstElement();
 			MonitoringManager manager = MonitoringManager.getInstance();			
 			MonitoringBaseElement element = manager.getMonitoringElement(editPart.getModel());
-			manager.toggleBreakpoint(element, ((MonitoringElement)element).isBreakpoint() ? BreakPoint.add : BreakPoint.remove);
+			manager.toggleBreakpoint(element, ((MonitoringElement)element).isBreakpoint() ? BreakPoint.ADD : BreakPoint.REMOVE);
 		}
 		return null;
 	}
@@ -45,12 +45,10 @@ public class BreakpointHandler extends AbstractMonitoringHandler {
 		
 		if (selection instanceof StructuredSelection) {
 			StructuredSelection sel = (StructuredSelection) selection;
-			if(1 == sel.size()){
-				//only allow trigger event if only one element is selected
-				if(sel.getFirstElement() instanceof InterfaceEditPart){
-					InterfaceEditPart editPart = (InterfaceEditPart) sel.getFirstElement();			
-					needToAdd = editPart.isEvent();
-				}
+			if((1 == sel.size()) && (sel.getFirstElement() instanceof InterfaceEditPart)) {
+				//only allow trigger event if only one InterfaceEditPart is selected
+				InterfaceEditPart editPart = (InterfaceEditPart) sel.getFirstElement();			
+				needToAdd = editPart.isEvent();
 			}
 		}
 		//TODO remove next line when breakpoints are finally implemented
