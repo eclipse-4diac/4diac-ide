@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;

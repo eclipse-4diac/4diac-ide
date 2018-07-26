@@ -12,8 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.monitoring;
 
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
-
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '

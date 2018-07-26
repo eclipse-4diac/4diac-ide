@@ -13,7 +13,7 @@ package org.eclipse.fordiac.ide.monitoring.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;

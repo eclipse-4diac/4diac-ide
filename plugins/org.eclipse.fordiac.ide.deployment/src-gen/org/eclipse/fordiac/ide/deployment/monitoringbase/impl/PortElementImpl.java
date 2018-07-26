@@ -13,24 +13,19 @@
  *  ******************************************************************************
  * 
  */
-package org.eclipse.fordiac.ide.deployment.monitoringBase.impl;
+package org.eclipse.fordiac.ide.deployment.monitoringbase.impl;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
-
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -46,10 +41,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.impl.PortElementImpl#getFb <em>Fb</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.impl.PortElementImpl#getInterfaceElement <em>Interface Element</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.impl.PortElementImpl#getResource <em>Resource</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.impl.PortElementImpl#getHierarchy <em>Hierarchy</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl#getFb <em>Fb</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl#getInterfaceElement <em>Interface Element</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl#getResource <em>Resource</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl#getHierarchy <em>Hierarchy</em>}</li>
  * </ul>
  *
  * @generated

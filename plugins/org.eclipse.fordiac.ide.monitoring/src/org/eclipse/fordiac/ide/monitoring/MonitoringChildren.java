@@ -17,8 +17,9 @@ package org.eclipse.fordiac.ide.monitoring;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IChildrenProvider;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;

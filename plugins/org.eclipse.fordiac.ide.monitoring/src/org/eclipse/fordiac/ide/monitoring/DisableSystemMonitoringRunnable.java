@@ -17,7 +17,7 @@ import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.jface.operation.IRunnableWithProgress;

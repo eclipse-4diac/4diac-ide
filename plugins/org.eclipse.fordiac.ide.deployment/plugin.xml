@@ -2,6 +2,7 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="devicemanagementinteractor" name="devicemanagementinteractor" schema="schema/devicemanagementinteractor.exsd"/>
+   <extension-point id="monitoringmanager" name="Monitoring Manager" schema="schema/monitoringmanager.exsd"/>
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated devResponse -->
       <package
@@ -13,8 +14,8 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated monitoringBase -->
       <package
-            uri="org.eclipse.fordiac.depolyment.monitoringBase"
-            class="org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage"
+            uri="org.eclipse.fordiac.depolyment.monitoringbase"
+            class="org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage"
             genModel="model/monitoringBase.genmodel"/>
    </extension>
 

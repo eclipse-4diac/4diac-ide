@@ -20,10 +20,6 @@
         eType="#//MonitoringElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="monitoredAdapterFB" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//AdapterFB"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Breakpoints">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="breakpoints" upperBound="-1"
-        eType="#//MonitoringElement" containment="true"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterPortElement" eSuperTypes="ecore:EClass ../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.ecore#//PortElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
         eType="ecore:EClass ../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.ecore#//PortElement" containment="true"/>

@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;

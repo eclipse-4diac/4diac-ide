@@ -13,7 +13,7 @@
  *  ******************************************************************************
  * 
  */
-package org.eclipse.fordiac.ide.deployment.monitoringBase;
+package org.eclipse.fordiac.ide.deployment.monitoringbase;
 
 import org.eclipse.emf.ecore.EFactory;
 
@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.EFactory;
  * The <b>Factory</b> for the model.
  * It provides a create method for each non-abstract class of the model.
  * <!-- end-user-doc -->
- * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage
+ * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage
  * @generated
  */
 public interface MonitoringBaseFactory extends EFactory {
@@ -32,7 +32,7 @@ public interface MonitoringBaseFactory extends EFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	MonitoringBaseFactory eINSTANCE = org.eclipse.fordiac.ide.deployment.monitoringBase.impl.MonitoringBaseFactoryImpl.init();
+	MonitoringBaseFactory eINSTANCE = org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseFactoryImpl.init();
 
 	/**
 	 * Returns a new object of class '<em>Port Element</em>'.
@@ -42,6 +42,15 @@ public interface MonitoringBaseFactory extends EFactory {
 	 * @generated
 	 */
 	PortElement createPortElement();
+
+	/**
+	 * Returns a new object of class '<em>Breakpoints</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Breakpoints</em>'.
+	 * @generated
+	 */
+	Breakpoints createBreakpoints();
 
 	/**
 	 * Returns the package supported by this factory.

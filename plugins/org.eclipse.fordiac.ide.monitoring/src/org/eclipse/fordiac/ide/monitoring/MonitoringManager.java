@@ -23,8 +23,10 @@ import java.util.Map;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.AbstractMonitoringManager;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -37,13 +39,8 @@ import org.eclipse.swt.widgets.Display;
 /**
  * Singleton instance that Coordinates and manages all the Ports to be
  * monitored.
- * 
- * @author gebenh
  */
 public class MonitoringManager extends AbstractMonitoringManager {
-
-	/** The instance. */
-	private static MonitoringManager instance;
 	
 	private final Map<AutomationSystem, SystemMonitoringData> systemMonitoringData = new Hashtable<>();
 
@@ -53,18 +50,8 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 * @return single instance of MonitoringManager
 	 */
 	public static MonitoringManager getInstance() {
-		if (instance == null) {
-			instance = new MonitoringManager();
-		}
-		return instance;
+		return (MonitoringManager)AbstractMonitoringManager.getMonitoringManager();
 	}
-
-	/**
-	 * Instantiates a new monitoring manager.
-	 */
-	private MonitoringManager() {
-	}
-	
 
 	/**
 	 * Notify add port.

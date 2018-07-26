@@ -17,8 +17,8 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.monitoring.*;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
-import org.eclipse.fordiac.ide.model.monitoring.Breakpoints;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
@@ -97,10 +96,6 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseMonitoringAdapterElement(MonitoringAdapterElement object) {
 				return createMonitoringAdapterElementAdapter();
-			}
-			@Override
-			public Adapter caseBreakpoints(Breakpoints object) {
-				return createBreakpointsAdapter();
 			}
 			@Override
 			public Adapter caseAdapterPortElement(AdapterPortElement object) {
@@ -171,13 +166,13 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement <em>Element</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement <em>Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement
 	 * @generated
 	 */
 	public Adapter createMonitoringBaseElementAdapter() {
@@ -213,20 +208,6 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.monitoring.Breakpoints <em>Breakpoints</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.monitoring.Breakpoints
-	 * @generated
-	 */
-	public Adapter createBreakpointsAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part Creator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -255,13 +236,13 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement <em>Port Element</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement <em>Port Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement
 	 * @generated
 	 */
 	public Adapter createPortElementAdapter() {

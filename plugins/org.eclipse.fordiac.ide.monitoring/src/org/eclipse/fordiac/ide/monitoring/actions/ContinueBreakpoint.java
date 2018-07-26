@@ -14,7 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.actions;
 
-import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
 import org.eclipse.jface.action.IAction;

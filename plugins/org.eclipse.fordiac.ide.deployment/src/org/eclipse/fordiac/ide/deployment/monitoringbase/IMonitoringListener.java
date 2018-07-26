@@ -10,9 +10,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring;
-
-import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
+package org.eclipse.fordiac.ide.deployment.monitoringbase;
 
 public interface IMonitoringListener {
 

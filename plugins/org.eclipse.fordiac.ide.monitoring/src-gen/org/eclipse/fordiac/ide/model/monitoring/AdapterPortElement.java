@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.model.monitoring;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 
 
 /**
@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
 public interface AdapterPortElement extends PortElement {
 	/**
 	 * Returns the value of the '<em><b>Ports</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement}.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Ports</em>' reference list isn't clear,

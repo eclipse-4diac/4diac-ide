@@ -13,14 +13,14 @@
  *  ******************************************************************************
  * 
  */
-package org.eclipse.fordiac.ide.deployment.monitoringBase.util;
+package org.eclipse.fordiac.ide.deployment.monitoringbase.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
-import org.eclipse.fordiac.ide.deployment.monitoringBase.*;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.*;
 
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 
@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage
+ * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage
  * @generated
  */
 public class MonitoringBaseSwitch<T> extends Switch<T> {
@@ -94,6 +94,12 @@ public class MonitoringBaseSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case MonitoringBasePackage.BREAKPOINTS: {
+				Breakpoints breakpoints = (Breakpoints)theEObject;
+				T result = caseBreakpoints(breakpoints);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case MonitoringBasePackage.IEDIT_PART_CREATOR: {
 				IEditPartCreator iEditPartCreator = (IEditPartCreator)theEObject;
 				T result = caseIEditPartCreator(iEditPartCreator);
@@ -131,6 +137,21 @@ public class MonitoringBaseSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePortElement(PortElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Breakpoints</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Breakpoints</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBreakpoints(Breakpoints object) {
 		return null;
 	}
 

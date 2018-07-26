@@ -17,8 +17,8 @@ package org.eclipse.fordiac.ide.monitoring;
 import java.util.ArrayList;
 
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseFactory;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseFactory;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeNetworkViewerEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;

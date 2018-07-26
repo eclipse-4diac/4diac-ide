@@ -21,8 +21,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.impl.MonitoringBasePackageImpl;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
@@ -30,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
-import org.eclipse.fordiac.ide.model.monitoring.Breakpoints;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
@@ -57,12 +55,6 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 */
 	private EClass monitoringAdapterElementEClass = null;
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass breakpointsEClass = null;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -273,24 +265,6 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getBreakpoints() {
-		return breakpointsEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getBreakpoints_Breakpoints() {
-		return (EReference)breakpointsEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getIEditPartCreator() {
 		return iEditPartCreatorEClass;
 	}
@@ -373,9 +347,6 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		createEReference(monitoringAdapterElementEClass, MONITORING_ADAPTER_ELEMENT__ELEMENTS);
 		createEReference(monitoringAdapterElementEClass, MONITORING_ADAPTER_ELEMENT__MONITORED_ADAPTER_FB);
 
-		breakpointsEClass = createEClass(BREAKPOINTS);
-		createEReference(breakpointsEClass, BREAKPOINTS__BREAKPOINTS);
-
 		adapterPortElementEClass = createEClass(ADAPTER_PORT_ELEMENT);
 		createEReference(adapterPortElementEClass, ADAPTER_PORT_ELEMENT__PORTS);
 
@@ -444,9 +415,6 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		initEClass(monitoringAdapterElementEClass, MonitoringAdapterElement.class, "MonitoringAdapterElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMonitoringAdapterElement_Elements(), this.getMonitoringElement(), null, "elements", null, 0, -1, MonitoringAdapterElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMonitoringAdapterElement_MonitoredAdapterFB(), theLibraryElementPackage.getAdapterFB(), null, "monitoredAdapterFB", null, 0, 1, MonitoringAdapterElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(breakpointsEClass, Breakpoints.class, "Breakpoints", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getBreakpoints_Breakpoints(), this.getMonitoringElement(), null, "breakpoints", null, 0, -1, Breakpoints.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(adapterPortElementEClass, AdapterPortElement.class, "AdapterPortElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAdapterPortElement_Ports(), theMonitoringBasePackage.getPortElement(), null, "ports", null, 0, -1, AdapterPortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -13,7 +13,7 @@
  *  ******************************************************************************
  * 
  */
-package org.eclipse.fordiac.ide.deployment.monitoringBase;
+package org.eclipse.fordiac.ide.deployment.monitoringbase;
 
 import org.eclipse.emf.ecore.EObject;
 
@@ -28,12 +28,12 @@ import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement#getPort <em>Port</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement#isOffline <em>Offline</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#getPort <em>Port</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#isOffline <em>Offline</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getMonitoringBaseElement()
- * @model abstract="true" superTypes="org.eclipse.fordiac.ide.deployment.monitoringBase.IEditPartCreator"
+ * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getMonitoringBaseElement()
+ * @model abstract="true" superTypes="org.eclipse.fordiac.ide.deployment.monitoringbase.IEditPartCreator"
  * @generated
  */
 public interface MonitoringBaseElement extends EObject, IEditPartCreator {
@@ -47,14 +47,14 @@ public interface MonitoringBaseElement extends EObject, IEditPartCreator {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Port</em>' reference.
 	 * @see #setPort(PortElement)
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getMonitoringBaseElement_Port()
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getMonitoringBaseElement_Port()
 	 * @model
 	 * @generated
 	 */
 	PortElement getPort();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement#getPort <em>Port</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#getPort <em>Port</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Port</em>' reference.
@@ -74,14 +74,14 @@ public interface MonitoringBaseElement extends EObject, IEditPartCreator {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Offline</em>' attribute.
 	 * @see #setOffline(boolean)
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getMonitoringBaseElement_Offline()
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getMonitoringBaseElement_Offline()
 	 * @model default="true" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated
 	 */
 	boolean isOffline();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement#isOffline <em>Offline</em>}' attribute.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#isOffline <em>Offline</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Offline</em>' attribute.

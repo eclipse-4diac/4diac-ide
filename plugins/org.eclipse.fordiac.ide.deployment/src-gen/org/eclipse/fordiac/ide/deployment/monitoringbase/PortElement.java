@@ -13,7 +13,7 @@
  *  ******************************************************************************
  * 
  */
-package org.eclipse.fordiac.ide.deployment.monitoringBase;
+package org.eclipse.fordiac.ide.deployment.monitoringbase;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -34,13 +34,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getFb <em>Fb</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getInterfaceElement <em>Interface Element</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getResource <em>Resource</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getHierarchy <em>Hierarchy</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getFb <em>Fb</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getInterfaceElement <em>Interface Element</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getResource <em>Resource</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getHierarchy <em>Hierarchy</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getPortElement()
+ * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getPortElement()
  * @model
  * @generated
  */
@@ -55,14 +55,14 @@ public interface PortElement extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fb</em>' reference.
 	 * @see #setFb(FB)
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getPortElement_Fb()
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getPortElement_Fb()
 	 * @model
 	 * @generated
 	 */
 	FB getFb();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getFb <em>Fb</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getFb <em>Fb</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Fb</em>' reference.
@@ -81,14 +81,14 @@ public interface PortElement extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Interface Element</em>' reference.
 	 * @see #setInterfaceElement(IInterfaceElement)
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getPortElement_InterfaceElement()
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getPortElement_InterfaceElement()
 	 * @model
 	 * @generated
 	 */
 	IInterfaceElement getInterfaceElement();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getInterfaceElement <em>Interface Element</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getInterfaceElement <em>Interface Element</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Interface Element</em>' reference.
@@ -107,14 +107,14 @@ public interface PortElement extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Resource</em>' reference.
 	 * @see #setResource(Resource)
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getPortElement_Resource()
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getPortElement_Resource()
 	 * @model
 	 * @generated
 	 */
 	Resource getResource();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement#getResource <em>Resource</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getResource <em>Resource</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Resource</em>' reference.
@@ -133,7 +133,7 @@ public interface PortElement extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Hierarchy</em>' attribute list.
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#getPortElement_Hierarchy()
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getPortElement_Hierarchy()
 	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */

@@ -12,20 +12,63 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
-package org.eclipse.fordiac.ide.monitoring;
+package org.eclipse.fordiac.ide.deployment.monitoringbase;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
+import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.monitoring.Breakpoints;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
 
 public abstract class AbstractMonitoringManager {
+	
+	private static AbstractMonitoringManager monitoringManager = null;
+	
+	private static final AbstractMonitoringManager dummyMonitoringManager = new AbstractMonitoringManager() {
+		
+		@Override
+		public void enableSystem(AutomationSystem system) {
+			//in the dummy manager we don't do anything here
+		}
+		
+		@Override
+		public void disableSystem(AutomationSystem system) {
+			//in the dummy manager we don't do anything here			
+		}
+	};
+	
+	public static AbstractMonitoringManager getMonitoringManager() {
+		if(null == monitoringManager) {
+			monitoringManager = createMonitoringManager();
+		}
+		return monitoringManager;
+	}
+	
+	private static AbstractMonitoringManager createMonitoringManager() {
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
+				Activator.PLUGIN_ID, "monitoringmanager"); //$NON-NLS-1$
+		for (IConfigurationElement element : elems) {
+			try {
+				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
+				if (object instanceof AbstractMonitoringManager) {
+					return (AbstractMonitoringManager)object;
+				}
+			} catch (CoreException corex) {
+				Activator.getDefault().logError("error in creating monitoring manager", corex);
+			}
+		}
+		Activator.getDefault().logError("No monitoring manager provided");
+		return dummyMonitoringManager;
+	}
+	
 
-	protected final Breakpoints breakpoints = MonitoringFactory.eINSTANCE
+	protected final Breakpoints breakpoints = MonitoringBaseFactory.eINSTANCE
 			.createBreakpoints();
 
 	/** The monitoring listeners. */

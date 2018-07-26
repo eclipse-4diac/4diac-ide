@@ -13,29 +13,23 @@
  *  ******************************************************************************
  * 
  */
-package org.eclipse.fordiac.ide.deployment.monitoringBase.impl;
+package org.eclipse.fordiac.ide.deployment.monitoringbase.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
-
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseFactory;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
-
+import org.eclipse.fordiac.ide.deployment.monitoringbase.Breakpoints;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseFactory;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
-
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
-
 import org.eclipse.fordiac.ide.model.data.DataPackage;
-
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
@@ -64,6 +58,13 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass breakpointsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass iEditPartCreatorEClass = null;
 
 	/**
@@ -77,7 +78,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage#eNS_URI
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#eNS_URI
 	 * @see #init()
 	 * @generated
 	 */
@@ -211,6 +212,24 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getBreakpoints() {
+		return breakpointsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBreakpoints_Breakpoints() {
+		return (EReference)breakpointsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getIEditPartCreator() {
 		return iEditPartCreatorEClass;
 	}
@@ -252,6 +271,9 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 		createEReference(portElementEClass, PORT_ELEMENT__INTERFACE_ELEMENT);
 		createEReference(portElementEClass, PORT_ELEMENT__RESOURCE);
 		createEAttribute(portElementEClass, PORT_ELEMENT__HIERARCHY);
+
+		breakpointsEClass = createEClass(BREAKPOINTS);
+		createEReference(breakpointsEClass, BREAKPOINTS__BREAKPOINTS);
 
 		iEditPartCreatorEClass = createEClass(IEDIT_PART_CREATOR);
 	}
@@ -314,6 +336,9 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 		addEOperation(portElementEClass, theLibraryElementPackage.getDevice(), "getDevice", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		addEOperation(portElementEClass, theLibraryElementPackage.getAutomationSystem(), "getSystem", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(breakpointsEClass, Breakpoints.class, "Breakpoints", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBreakpoints_Breakpoints(), this.getMonitoringBaseElement(), null, "breakpoints", null, 0, -1, Breakpoints.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(iEditPartCreatorEClass, IEditPartCreator.class, "IEditPartCreator", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 

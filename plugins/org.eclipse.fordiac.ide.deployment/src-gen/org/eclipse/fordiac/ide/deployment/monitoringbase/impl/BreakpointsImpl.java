@@ -1,17 +1,19 @@
-/*******************************************************************************
- * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
+/**
+ * ******************************************************************************
+ *  * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
+ *  * 
+ *  * All rights reserved. This program and the accompanying materials
+ *  * are made available under the terms of the Eclipse Public License v1.0
+ *  * which accompanies this distribution, and is available at
+ *  * http://www.eclipse.org/legal/epl-v10.html
+ *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
+ *  *     - initial API and implementation and/or initial documentation
+ *  ******************************************************************************
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.model.monitoring.impl;
-
+ */
+package org.eclipse.fordiac.ide.deployment.monitoringbase.impl;
 
 import java.util.Collection;
 
@@ -22,9 +24,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.model.monitoring.Breakpoints;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.Breakpoints;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,7 +36,7 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.BreakpointsImpl#getBreakpoints <em>Breakpoints</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.BreakpointsImpl#getBreakpoints <em>Breakpoints</em>}</li>
  * </ul>
  *
  * @generated
@@ -48,7 +50,7 @@ public class BreakpointsImpl extends EObjectImpl implements Breakpoints {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<MonitoringElement> breakpoints;
+	protected EList<MonitoringBaseElement> breakpoints;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -66,7 +68,7 @@ public class BreakpointsImpl extends EObjectImpl implements Breakpoints {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return MonitoringPackage.Literals.BREAKPOINTS;
+		return MonitoringBasePackage.Literals.BREAKPOINTS;
 	}
 
 	/**
@@ -74,9 +76,9 @@ public class BreakpointsImpl extends EObjectImpl implements Breakpoints {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<MonitoringElement> getBreakpoints() {
+	public EList<MonitoringBaseElement> getBreakpoints() {
 		if (breakpoints == null) {
-			breakpoints = new EObjectContainmentEList<MonitoringElement>(MonitoringElement.class, this, MonitoringPackage.BREAKPOINTS__BREAKPOINTS);
+			breakpoints = new EObjectContainmentEList<MonitoringBaseElement>(MonitoringBaseElement.class, this, MonitoringBasePackage.BREAKPOINTS__BREAKPOINTS);
 		}
 		return breakpoints;
 	}
@@ -89,7 +91,7 @@ public class BreakpointsImpl extends EObjectImpl implements Breakpoints {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case MonitoringPackage.BREAKPOINTS__BREAKPOINTS:
+			case MonitoringBasePackage.BREAKPOINTS__BREAKPOINTS:
 				return ((InternalEList<?>)getBreakpoints()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -103,7 +105,7 @@ public class BreakpointsImpl extends EObjectImpl implements Breakpoints {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MonitoringPackage.BREAKPOINTS__BREAKPOINTS:
+			case MonitoringBasePackage.BREAKPOINTS__BREAKPOINTS:
 				return getBreakpoints();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -118,9 +120,9 @@ public class BreakpointsImpl extends EObjectImpl implements Breakpoints {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MonitoringPackage.BREAKPOINTS__BREAKPOINTS:
+			case MonitoringBasePackage.BREAKPOINTS__BREAKPOINTS:
 				getBreakpoints().clear();
-				getBreakpoints().addAll((Collection<? extends MonitoringElement>)newValue);
+				getBreakpoints().addAll((Collection<? extends MonitoringBaseElement>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -134,7 +136,7 @@ public class BreakpointsImpl extends EObjectImpl implements Breakpoints {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MonitoringPackage.BREAKPOINTS__BREAKPOINTS:
+			case MonitoringBasePackage.BREAKPOINTS__BREAKPOINTS:
 				getBreakpoints().clear();
 				return;
 		}
@@ -149,7 +151,7 @@ public class BreakpointsImpl extends EObjectImpl implements Breakpoints {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MonitoringPackage.BREAKPOINTS__BREAKPOINTS:
+			case MonitoringBasePackage.BREAKPOINTS__BREAKPOINTS:
 				return breakpoints != null && !breakpoints.isEmpty();
 		}
 		return super.eIsSet(featureID);

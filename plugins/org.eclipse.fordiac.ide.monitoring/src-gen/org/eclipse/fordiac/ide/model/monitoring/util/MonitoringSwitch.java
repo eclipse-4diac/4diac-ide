@@ -16,8 +16,8 @@ package org.eclipse.fordiac.ide.model.monitoring.util;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.monitoring.*;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
-import org.eclipse.fordiac.ide.model.monitoring.Breakpoints;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
@@ -106,12 +105,6 @@ public class MonitoringSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MonitoringPackage.BREAKPOINTS: {
-				Breakpoints breakpoints = (Breakpoints)theEObject;
-				T result = caseBreakpoints(breakpoints);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case MonitoringPackage.ADAPTER_PORT_ELEMENT: {
 				AdapterPortElement adapterPortElement = (AdapterPortElement)theEObject;
 				T result = caseAdapterPortElement(adapterPortElement);
@@ -162,21 +155,6 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMonitoringBaseElement(MonitoringBaseElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
 	public T caseMonitoringElement(MonitoringElement object) {
 		return null;
 	}
@@ -193,21 +171,6 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMonitoringAdapterElement(MonitoringAdapterElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Breakpoints</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Breakpoints</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseBreakpoints(Breakpoints object) {
 		return null;
 	}
 
@@ -238,6 +201,21 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMonitoringBase_IEditPartCreator(IEditPartCreator object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMonitoringBaseElement(MonitoringBaseElement object) {
 		return null;
 	}
 

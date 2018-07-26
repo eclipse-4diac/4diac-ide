@@ -13,7 +13,7 @@
  *  ******************************************************************************
  * 
  */
-package org.eclipse.fordiac.ide.deployment.monitoringBase.util;
+package org.eclipse.fordiac.ide.deployment.monitoringbase.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
@@ -22,7 +22,7 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.eclipse.fordiac.ide.deployment.monitoringBase.*;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.*;
 
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 
@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage
+ * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage
  * @generated
  */
 public class MonitoringBaseAdapterFactory extends AdapterFactoryImpl {
@@ -91,6 +91,10 @@ public class MonitoringBaseAdapterFactory extends AdapterFactoryImpl {
 				return createPortElementAdapter();
 			}
 			@Override
+			public Adapter caseBreakpoints(Breakpoints object) {
+				return createBreakpointsAdapter();
+			}
+			@Override
 			public Adapter caseIEditPartCreator(IEditPartCreator object) {
 				return createIEditPartCreatorAdapter();
 			}
@@ -115,13 +119,13 @@ public class MonitoringBaseAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement <em>Element</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement <em>Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement
 	 * @generated
 	 */
 	public Adapter createMonitoringBaseElementAdapter() {
@@ -129,16 +133,30 @@ public class MonitoringBaseAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement <em>Port Element</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement <em>Port Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement
 	 * @generated
 	 */
 	public Adapter createPortElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.Breakpoints <em>Breakpoints</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.Breakpoints
+	 * @generated
+	 */
+	public Adapter createBreakpointsAdapter() {
 		return null;
 	}
 

@@ -13,16 +13,16 @@
  *  ******************************************************************************
  * 
  */
-package org.eclipse.fordiac.ide.deployment.monitoringBase.impl;
+package org.eclipse.fordiac.ide.deployment.monitoringbase.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBaseElement;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.MonitoringBasePackage;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.PortElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 
 /**
@@ -33,8 +33,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.impl.MonitoringBaseElementImpl#getPort <em>Port</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringBase.impl.MonitoringBaseElementImpl#isOffline <em>Offline</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl#getPort <em>Port</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl#isOffline <em>Offline</em>}</li>
  * </ul>
  *
  * @generated

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.fordiac.ide.deployment.monitoringBase.impl.MonitoringBaseElementImpl;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart;
