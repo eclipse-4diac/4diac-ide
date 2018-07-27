@@ -42,9 +42,9 @@ import org.xml.sax.InputSource;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	private final Set<String> genFBs = new HashSet<>();
-	int id = 0;
+	protected int id = 0;
 	
-	ResponseMapping respMapping = new ResponseMapping();
+	private ResponseMapping respMapping = new ResponseMapping();
 
 	public DeploymentExecutor(Device dev) {
 		this(dev, null);
@@ -279,13 +279,11 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		String kill = MessageFormat.format(Messages.DeploymentExecutor_KillDevice, new Object[] { id++ });
 		try {
 			sendREQ("", kill); //$NON-NLS-1$
+		} catch (EOFException e) {
+			// exception can be ignored, as no response is returned by forte			
 		} catch (IOException e) {
-			if (e instanceof EOFException) {
-				// exception can be ignored, as no response is returned by forte
-			} else {
-				throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_KillDeviceFailed,
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_KillDeviceFailed,
 						new Object[] { dev.getName() }), e);
-			}
 		} finally {
 			resetTypes();
 		}
@@ -325,7 +323,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		try {
 			String response = getDevMgmComHandler().sendREQandRESP(element.getResourceString(), request);
 			//TODO show somehow the feedback if the response contained a reason that it didn't work
-			element.setOffline(response == null);
+			element.setOffline("".equals(response)); //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_AddWatchesFailed,
 					new Object[] { element.getQualifiedString() }), e);
@@ -338,7 +336,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		try {
 			String response = getDevMgmComHandler().sendREQandRESP(element.getResourceString(), request);
 			//TODO show somehow the feedback if the response contained a reason that it didn't work
-			element.setOffline(response == null);
+			element.setOffline("".equals(response)); //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_DeleteWatchesFailed,
 					new Object[] { element.getQualifiedString() }), e);

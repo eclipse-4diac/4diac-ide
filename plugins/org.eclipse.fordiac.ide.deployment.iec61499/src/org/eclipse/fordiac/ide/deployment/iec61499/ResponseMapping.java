@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 
 public class ResponseMapping {
-	public Map<String, Object> loadOptions;
+	private Map<String, Object> loadOptions;
 
 	public ResponseMapping() {
 		loadOptions = new HashMap<String, Object>();

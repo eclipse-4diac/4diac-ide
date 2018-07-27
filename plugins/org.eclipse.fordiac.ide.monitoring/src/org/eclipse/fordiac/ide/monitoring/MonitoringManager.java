@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.AbstractMonitoringManager;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -52,42 +51,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	public static MonitoringManager getInstance() {
 		return (MonitoringManager)AbstractMonitoringManager.getMonitoringManager();
 	}
-
-	/**
-	 * Notify add port.
-	 * 
-	 * @param port
-	 *            the port
-	 */
-	private void notifyAddPort(PortElement port) {
-		for (IMonitoringListener monitoringListener : monitoringListeners) {
-			monitoringListener.notifyAddPort(port);
-		}
-	}
-
-	/**
-	 * Notify remove port.
-	 * 
-	 * @param port
-	 *            the port
-	 */
-	private void notifyRemovePort(PortElement port) {
-		for (IMonitoringListener monitoringListener : monitoringListeners) {
-			monitoringListener.notifyRemovePort(port);
-		}
-	}
-
-	/**
-	 * Notify trigger event.
-	 * 
-	 * @param port
-	 *            the port
-	 */
-	private void notifyTriggerEvent(PortElement port) {
-		for (IMonitoringListener monitoringListener : monitoringListeners) {
-			monitoringListener.notifyTriggerEvent(port);
-		}
-	}
+	
 
 	/**
 	 * Gets the monitoring element.

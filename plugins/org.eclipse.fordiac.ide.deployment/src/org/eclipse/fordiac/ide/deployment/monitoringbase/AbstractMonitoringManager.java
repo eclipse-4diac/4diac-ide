@@ -68,11 +68,10 @@ public abstract class AbstractMonitoringManager {
 	}
 	
 
-	protected final Breakpoints breakpoints = MonitoringBaseFactory.eINSTANCE
-			.createBreakpoints();
+	protected final Breakpoints breakpoints = MonitoringBaseFactory.eINSTANCE.createBreakpoints();
 
 	/** The monitoring listeners. */
-	protected final List<IMonitoringListener> monitoringListeners = new ArrayList<>();
+	private final List<IMonitoringListener> monitoringListeners = new ArrayList<>();
 
 	/**
 	 * Register IMonitoringListener.
@@ -92,12 +91,50 @@ public abstract class AbstractMonitoringManager {
 			breakpoints.eAdapters().add(adapter);
 		}
 	}
+	
+	
+	/**
+	 * Notify add port.
+	 * 
+	 * @param port
+	 *            the port
+	 */
+	public void notifyAddPort(PortElement port) {
+		for (IMonitoringListener monitoringListener : monitoringListeners) {
+			monitoringListener.notifyAddPort(port);
+		}
+	}
+
+	/**
+	 * Notify remove port.
+	 * 
+	 * @param port
+	 *            the port
+	 */
+	public void notifyRemovePort(PortElement port) {
+		for (IMonitoringListener monitoringListener : monitoringListeners) {
+			monitoringListener.notifyRemovePort(port);
+		}
+	}
+
+	/**
+	 * Notify trigger event.
+	 * 
+	 * @param port
+	 *            the port
+	 */
+	public void notifyTriggerEvent(PortElement port) {
+		for (IMonitoringListener monitoringListener : monitoringListeners) {
+			monitoringListener.notifyTriggerEvent(port);
+		}
+	}
+	
 
 	public void removeBreakpointsAdapter(EContentAdapter adapter) {
 		breakpoints.eAdapters().remove(adapter);
 	}
 
-	List<IMonitoringListener> watchesAdapter = new ArrayList<>();
+	private List<IMonitoringListener> watchesAdapter = new ArrayList<>();
 	
 	public void addWatchesAdapter(IMonitoringListener adapter) {
 		if (!watchesAdapter.contains(adapter)) {
@@ -114,6 +151,7 @@ public abstract class AbstractMonitoringManager {
 			adapter.notifyAddPort(port);
 		}
 	}
+	
 	public void notifyWatchesAdapterPortRemoved(PortElement port) {
 		for (IMonitoringListener adapter : watchesAdapter) {
 			adapter.notifyRemovePort(port);

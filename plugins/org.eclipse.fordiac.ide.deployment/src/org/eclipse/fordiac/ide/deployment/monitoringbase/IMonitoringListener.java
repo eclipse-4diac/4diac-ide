@@ -14,9 +14,9 @@ package org.eclipse.fordiac.ide.deployment.monitoringbase;
 
 public interface IMonitoringListener {
 
-	public void notifyAddPort(PortElement port);
+	void notifyAddPort(PortElement port);
 
-	public void notifyTriggerEvent(PortElement port);
+	void notifyTriggerEvent(PortElement port);
 
-	public void notifyRemovePort(PortElement port);
+	void notifyRemovePort(PortElement port);
 }
