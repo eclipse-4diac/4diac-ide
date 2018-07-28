@@ -12,13 +12,11 @@ public class SystemExplorer extends CommonNavigator implements ITabbedPropertySh
 		return "org.eclipse.fordiac.ide.application.editors.DiagramEditor";
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Object getAdapter(final Class type) {
-		if (type == IPropertySheetPage.class) {
-			return new TabbedPropertySheetPage(this);
+	public <T> T getAdapter(Class<T> adapter) {
+		if (adapter == IPropertySheetPage.class) {
+			return adapter.cast(new TabbedPropertySheetPage(this));
 		}
-
-		return super.getAdapter(type);
+		return super.getAdapter(adapter);
 	}
 }
