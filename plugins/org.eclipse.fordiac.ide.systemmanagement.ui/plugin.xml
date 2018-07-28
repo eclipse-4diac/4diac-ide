@@ -38,7 +38,7 @@
       </category>
       <view
       		category="org.eclipse.fordiac.ide.systemmanagement"
-            class="org.eclipse.ui.navigator.CommonNavigator"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemExplorer"
             icon="fordiacimage://ICON_SystemExplorer"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"
             name="%SystemExplorer.name">
@@ -256,7 +256,7 @@
       <extension
             point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
          <propertyContributor
-               contributorId="property.contributor.system">
+               contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
             <propertyCategory
                   category="systemInfo">
             </propertyCategory>
@@ -268,7 +268,7 @@
       <extension
             point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
          <propertyTabs
-               contributorId="property.contributor.system">
+               contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
             <propertyTab
                   category="systemInfo"
                   id="property.tab.systeminfo"
@@ -286,7 +286,7 @@
       <extension
             point="org.eclipse.ui.views.properties.tabbed.propertySections">
          <propertySections
-               contributorId="property.contributor.system">
+               contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
             <propertySection
                   class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.TypeInfoSection"
                   id="property.section.system.fBTypeInfo"
