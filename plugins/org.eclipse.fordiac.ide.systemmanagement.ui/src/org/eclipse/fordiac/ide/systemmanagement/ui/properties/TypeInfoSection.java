@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.properties;
 
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IWorkbenchPart;
@@ -26,8 +26,8 @@ public class TypeInfoSection extends org.eclipse.fordiac.ide.gef.properties.Type
 
 	@Override
 	protected LibraryElement getInputType(Object input) {
-		if(input instanceof FB){
-			return ((FB) input).getType();	
+		if(input instanceof FBNetworkElement){
+			return ((FBNetworkElement) input).getType();	
 		}
 		return null;
 	}

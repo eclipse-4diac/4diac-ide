@@ -45,16 +45,12 @@ import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class AppearancePropertySection extends AbstractPropertySection {
-	private AbstractViewEditPart abstractViewEditPart;
 	private ColorizableElement colorizableElement;
 	private final List<ColorizableElement> selectedViews = new ArrayList<>();
 	private Color color;
 	protected Label colorLabel;
 	protected Button chooseColorBtn;
 	protected Group colorsGroup;
-
-	public AppearancePropertySection() {
-	}
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -71,10 +67,12 @@ public class AppearancePropertySection extends AbstractPropertySection {
 		super.setInput(part, selection);
 		Assert.isTrue(selection instanceof IStructuredSelection);
 		Object input = ((IStructuredSelection) selection).getFirstElement();
-		Assert.isTrue(input instanceof AbstractViewEditPart);
-		this.abstractViewEditPart = (AbstractViewEditPart) input;
-		if (abstractViewEditPart.getModel() instanceof ColorizableElement) {
-			colorizableElement = (ColorizableElement) abstractViewEditPart.getModel();
+		if(input instanceof AbstractViewEditPart && ((AbstractViewEditPart)input).getModel() instanceof ColorizableElement) {
+			colorizableElement = (ColorizableElement) ((AbstractViewEditPart)input).getModel();
+		}else {
+			if(input instanceof ColorizableElement) {
+				colorizableElement = (ColorizableElement) input;
+			}
 		}
 		selectedViews.clear();
 		for (Iterator iterator = ((IStructuredSelection) selection).iterator(); iterator.hasNext();) {

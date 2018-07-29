@@ -10,7 +10,7 @@
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemconfiguration.commands;
+package org.eclipse.fordiac.ide.gef.commands;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.gef.commands.Command;

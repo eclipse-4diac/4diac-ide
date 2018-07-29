@@ -210,6 +210,8 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	@Override
 	protected void setInputCode() {	
 		attributeViewer.setCellModifier(null);
+		attributeDelete.setEnabled(false);
+		attributeNew.setEnabled(false);
 	}
 	
 	@Override
