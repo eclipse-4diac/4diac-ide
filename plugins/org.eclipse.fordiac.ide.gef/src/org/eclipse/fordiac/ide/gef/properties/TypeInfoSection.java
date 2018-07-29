@@ -212,7 +212,8 @@ public abstract class TypeInfoSection extends AbstractSection {
 		
 		Composite buttonComp = new Composite(versionInfoGroup, SWT.NONE);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		versionInfoNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
+		versionInfoNew = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH);
+		versionInfoNew.setToolTipText("New info element");
 		versionInfoNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
 		versionInfoNew.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
@@ -220,8 +221,9 @@ public abstract class TypeInfoSection extends AbstractSection {
 				versionViewer.refresh();
 			}
 		});
-		versionInfoDelete = getWidgetFactory().createButton(buttonComp, "Delete", SWT.PUSH);
+		versionInfoDelete = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH);
 		versionInfoDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
+		versionInfoDelete.setToolTipText("Delete selected info element");
 		versionInfoDelete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				executeCommand(new DeleteVersionInfoCommand(getType(), (VersionInfo)((IStructuredSelection) versionViewer.getSelection()).getFirstElement()));
