@@ -21,8 +21,8 @@ import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeBackgroundcolorCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
-import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
@@ -149,13 +149,7 @@ public class AppearancePropertySection extends AbstractPropertySection {
 						cmd = new ChangeBackgroundcolorCommand(colorizableElement, rgb);
 					}
 					if (cmd.canExecute()) {
-						Object viewer = Abstract4DIACUIPlugin.getCurrentActiveEditor()
-								.getAdapter(GraphicalViewer.class);
-						if (viewer instanceof GraphicalViewer) {
-							((GraphicalViewer) viewer).getEditDomain().getCommandStack().execute(cmd);
-						} else {
-							cmd.execute();
-						}
+						SystemManager.INSTANCE.getCommandStack( ((SystemConfiguration) colorizableElement.eContainer()).getAutomationSystem() ).execute(cmd);
 						color.dispose();
 						color = new Color(null, rgb);
 						colorLabel.setBackground(color);
