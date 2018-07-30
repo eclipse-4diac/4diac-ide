@@ -66,13 +66,14 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractDevice
 	}
 
 	@Override
-	public void sendREQ(String destination, String request) throws IOException { 
+	public String sendREQ(String destination, String request) throws IOException { 
 		stringBuffer.append(destination + ";" + request + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		String info = origMgrID;
 		if (!destination.equals("")) { //$NON-NLS-1$
 			info += ": " + destination; //$NON-NLS-1$
 		}
 		postCommandSent(info, destination, request);
+		return ""; //$NON-NLS-1$
 	}
 
 	/*

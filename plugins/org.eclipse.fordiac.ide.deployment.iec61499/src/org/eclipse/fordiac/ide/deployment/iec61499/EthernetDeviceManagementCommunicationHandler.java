@@ -16,7 +16,6 @@ import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -24,16 +23,10 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferences;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 public class EthernetDeviceManagementCommunicationHandler extends AbstractDeviceManagementCommunicationHandler {
 	private static final int ASN1_TAG_IECSTRING = 80;
@@ -69,7 +62,7 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 			outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 		} catch (IOException e) {
-			throw new DeploymentException("Could not connect to device1", e);
+			throw new DeploymentException("Could not connect to device", e);
 		}
 	}
 
@@ -87,10 +80,6 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 		} catch (InterruptedException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
-	}
-
-	public void sendREQ(String destination, String request) throws IOException {
-		sendREQandRESP(destination, request);
 	}
 
 	private String handleResponse(String destination) throws IOException {
@@ -116,7 +105,8 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 		return info;
 	}
 
-	public String sendREQandRESP(String destination, String request) throws IOException {
+	@Override
+	public String sendREQ(String destination, String request) throws IOException {
 		String response = ""; //$NON-NLS-1$
 		if (outputStream != null && inputStream != null) {
 			outputStream.writeByte(ASN1_TAG_IECSTRING);
@@ -174,15 +164,6 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 		}
 		throw new DeploymentException(MessageFormat.format(Messages.EthernetComHandler_InvalidMgmtID,
 				new Object[] {mgrID}));
-	}
-
-	public QueryResponseHandler sendQUERY(final String destination, final String request) throws IOException, ParserConfigurationException, SAXException {
-		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-		SAXParser saxParser = saxParserFactory.newSAXParser();
-		QueryResponseHandler handler = new QueryResponseHandler();
-		String response = sendREQandRESP(destination, request);
-		saxParser.parse(new InputSource(new StringReader(response)), handler);
-		return handler;
 	}
 
 }

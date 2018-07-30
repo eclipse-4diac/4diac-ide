@@ -33,7 +33,16 @@ public abstract class AbstractDeviceManagementCommunicationHandler {
 
 	public abstract void disconnect() throws DeploymentException;
 
-	public abstract void sendREQ(final String destination, final String request) throws IOException;
+	/**  Send a request to the device and return the response
+	 * 
+	 * @param destination the destination with in the device 
+	 * 			- null ... the device 
+	 * 			- not null ... the name of a resource
+	 * @param request the request to send
+	 * @return  the response received from the device
+	 * @throws IOException
+	 */
+	public abstract String sendREQ(final String destination, final String request) throws IOException;
 
 	private final List<IDeploymentListener> listeners = new ArrayList<>();
 

@@ -21,6 +21,10 @@ import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
@@ -39,6 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	private final Set<String> genFBs = new HashSet<>();
@@ -60,11 +65,6 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		genFBs.add("CLIENT"); //$NON-NLS-1$
 	}
 	
-	@Override
-	protected EthernetDeviceManagementCommunicationHandler getDevMgmComHandler() {
-		return (EthernetDeviceManagementCommunicationHandler)super.getDevMgmComHandler();
-	}
-
 	@Override
 	protected AbstractDeviceManagementCommunicationHandler createCommunicationHandler(Device dev) {
 		//currently we only have the ability to connect via ethernet to our devices, if this changes add here according factories
@@ -290,7 +290,16 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	}
 	
 	public void sendREQ(String destination, String request) throws IOException {
-		getDevMgmComHandler().sendREQandRESP(destination, request);
+		getDevMgmComHandler().sendREQ(destination, request);
+	}
+
+	public QueryResponseHandler sendQUERY(final String destination, final String request) throws IOException, ParserConfigurationException, SAXException {
+		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+		SAXParser saxParser = saxParserFactory.newSAXParser();
+		QueryResponseHandler handler = new QueryResponseHandler();
+		String response = getDevMgmComHandler().sendREQ(destination, request);
+		saxParser.parse(new InputSource(new StringReader(response)), handler);
+		return handler;
 	}
 
 	@Override
@@ -298,7 +307,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		String request = MessageFormat.format(Messages.DeploymentExecutor_Read_Watches, new Object[] { id++ });
 
 		try {
-			String response = getDevMgmComHandler().sendREQandRESP("", request);  //$NON-NLS-1$
+			String response = getDevMgmComHandler().sendREQ("", request);  //$NON-NLS-1$
 			if (response != null) {
 				XMLResource resource = new XMLResourceImpl();
 				InputSource source = new InputSource(new StringReader(response));
@@ -321,7 +330,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	public void addWatch(MonitoringBaseElement element) throws DeploymentException {
 		String request = MessageFormat.format(Messages.DeploymentExecutor_Add_Watch, new Object[] { this.id++, element.getQualifiedString(), "*" }); //$NON-NLS-1$
 		try {
-			String response = getDevMgmComHandler().sendREQandRESP(element.getResourceString(), request);
+			String response = getDevMgmComHandler().sendREQ(element.getResourceString(), request);
 			//TODO show somehow the feedback if the response contained a reason that it didn't work
 			element.setOffline("".equals(response)); //$NON-NLS-1$
 		} catch (IOException e) {
@@ -334,7 +343,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	public void removeWatch(MonitoringBaseElement element) throws DeploymentException {
 		String request = MessageFormat.format(Messages.DeploymentExecutor_Delete_Watch, new Object[] { this.id++, element.getQualifiedString(), "*" }); //$NON-NLS-1$
 		try {
-			String response = getDevMgmComHandler().sendREQandRESP(element.getResourceString(), request);
+			String response = getDevMgmComHandler().sendREQ(element.getResourceString(), request);
 			//TODO show somehow the feedback if the response contained a reason that it didn't work
 			element.setOffline("".equals(response)); //$NON-NLS-1$
 		} catch (IOException e) {
@@ -377,5 +386,6 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 							new Object[] { element.getQualifiedString() }), e);
 		}
 	}
+	
 
 }

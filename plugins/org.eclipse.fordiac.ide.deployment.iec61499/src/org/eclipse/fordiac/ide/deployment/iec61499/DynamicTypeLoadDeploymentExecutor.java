@@ -85,7 +85,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			String request = MessageFormat.format(Messages.DTL_CreateFBType,
 					new Object[] { id++, fbType.getName(), luaSkript });
 			try {				
-				String result = getDevMgmComHandler().sendREQandRESP("", request); //$NON-NLS-1$
+				String result = getDevMgmComHandler().sendREQ("", request); //$NON-NLS-1$
 				if (result.contains("Reason")) { //$NON-NLS-1$
 					throw new DeploymentException("LUA skript for " + fbType.getName() + " FBType not executed");
 				} else {
@@ -127,7 +127,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			String request = MessageFormat.format(Messages.DTL_CreateAdapterType,
 					new Object[] { id++, adapterKey, luaSkript });
 			try {
-				String result = getDevMgmComHandler().sendREQandRESP("", request); //$NON-NLS-1$
+				String result = getDevMgmComHandler().sendREQ("", request); //$NON-NLS-1$
 				if (result.contains("Reason")) { //$NON-NLS-1$
 					throw new DeploymentException("LUA skript for " + adapterKey + " AdapterType not executed");
 				} else {
@@ -143,7 +143,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		if (null == getTypes()) {
 			String request = MessageFormat.format(Messages.DTL_QueryFBTypes, new Object[] { id++ });
 			try {
-				QueryResponseHandler queryResp = getDevMgmComHandler().sendQUERY(res.getName(), request);
+				QueryResponseHandler queryResp = sendQUERY(res.getName(), request);
 				setTypes(queryResp.getQueryResult());
 			} catch (Exception e) {
 				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "FB Types" })); //$NON-NLS-1$
@@ -161,7 +161,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		if (null == getAdapterTypes()) {
 			String request = MessageFormat.format(Messages.DTL_QueryAdapterTypes, new Object[] { id++ });
 			try {
-				QueryResponseHandler queryResp = getDevMgmComHandler().sendQUERY(res.getName(), request);
+				QueryResponseHandler queryResp = sendQUERY(res.getName(), request);
 				setAdapterTypes(queryResp.getQueryResult());
 			} catch (Exception e1) {
 				System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "Adapter Types" })); //$NON-NLS-1$
@@ -179,4 +179,6 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			}
 		});
 	}
+	
+
 }
