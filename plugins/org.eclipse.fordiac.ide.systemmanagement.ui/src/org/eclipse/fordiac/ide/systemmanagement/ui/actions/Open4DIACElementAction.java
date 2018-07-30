@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
@@ -72,10 +73,10 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 			Object obj = element.next();
 			Object refObject = null;
 			
-			if(obj instanceof FB){
-				//if an FB is selected we need to open the according root node and use FB for selecting
+			if(obj instanceof FB || (obj instanceof SubApp && null == ((SubApp)obj).getSubAppNetwork())){
+				//if an FB or a typed subapp is selected we need to open the according root node and use FBNetworkElement for selecting
 				refObject = obj;
-				obj = getFBRootNode((FB)obj);
+				obj = getFBRootNode((FBNetworkElement)obj);
 			}else if (obj instanceof Device){
 				refObject = obj;
 				obj = ((Device)obj).getSystemConfiguration();				
@@ -94,7 +95,7 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 		return ((rootNode instanceof Application) || (rootNode instanceof SubApp));
 	}
 
-	private static EObject getFBRootNode(FB fb) {
+	private static EObject getFBRootNode(FBNetworkElement fb) {
 		EObject fbCont = fb.eContainer();
 		EObject rootNode = null;
 		if(fbCont instanceof FBNetwork){
@@ -102,8 +103,4 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 		}
 		return rootNode;
 	}
-
-
-	
-	
 }

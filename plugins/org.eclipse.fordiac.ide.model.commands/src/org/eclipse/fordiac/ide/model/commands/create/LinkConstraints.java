@@ -349,9 +349,9 @@ public class LinkConstraints {
 					(!source.isIsInput() && !target.isIsInput())){
 				EObject sourceCont = source.eContainer().eContainer();
 				EObject destCont = target.eContainer().eContainer();
-				//the connectin can exist in this case if it is of an interface element of the container (e.g., SubApp, CFB) and an internal FB
-				canExist = sourceCont != destCont && ((isTypeContainer(sourceCont) && !isTypeContainer(destCont))  
-						|| (!isTypeContainer(sourceCont) && isTypeContainer(destCont)));						
+				//the connection can exist in this case if it is of an interface element of the container (e.g., SubApp, CFB) and an internal FB
+				canExist = (sourceCont != destCont) && (isTypeContainer(sourceCont) || isTypeContainer(destCont)) &&
+						(sourceCont.eContainer() != destCont.eContainer());  //and they are not on the same level (e.g., two subapps in the same subapplication/application						
 			}
 		}
 		return canExist;
