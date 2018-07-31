@@ -12,9 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -33,9 +30,9 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.deployment.AbstractFileManagementHandler;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
-import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -53,7 +50,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
-public final class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManagementCommunicationHandler {
+public final class FMUDeviceManagementCommunicationHandler extends AbstractFileManagementHandler {
 	
 	public static class FMUInputOutput{
 		
@@ -221,17 +218,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 	
 	private static final int TOTAL_MONITOR = 100;
 	
-	private StringBuilder bootfileResult = new StringBuilder();
-	
-	public StringBuilder getBootfileResult() {
-		return bootfileResult;
-	}
-
 	private List<FMUInputOutput> inputsAndOutputs = new ArrayList<>();
 
-	/** The original MgrID. */
-	private String origMgrID;
-	
 	private Device device;
 	
 	public static void createFMU(Device device, List<Resource> resources, List<String> librariesToAdd, String directory, Shell shell, IProgressMonitor monitor){
@@ -241,7 +229,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 				String outputName = device.getAutomationSystem().getName() + "_" + device.getName();
 				DeploymentCoordinator deployment = DeploymentCoordinator.getInstance();
 				FMUDeviceManagementCommunicationHandler fmuFileHandler = new FMUDeviceManagementCommunicationHandler(device);
-				deployment.performDeployment(resources.toArray(), fmuFileHandler); //will call the callbacks, sendREQ among them
+				deployment.performDeployment(resources.toArray(), fmuFileHandler, null); //will call the callbacks, sendREQ among them
 				monitor.worked(TOTAL_MONITOR / 2);
 				
 				File destZipFile = createZipFile(directory, outputName, shell);
@@ -251,10 +239,10 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 				}
 				
 			}else {
-				showErrorMessage("No selected libraries were found.\n", shell);
+				IDeviceManagementCommunicationHandler.showErrorMessage("No selected libraries were found.\n", shell);
 			}
 		}else {
-			showErrorMessage("The directory is invalid\n", shell);
+			IDeviceManagementCommunicationHandler.showErrorMessage("The directory is invalid\n", shell);
 		}
 	}
 	
@@ -289,7 +277,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 	private static File createZipFile(String directoryPath, String outputName, Shell shell) {
 		File direc = new File(directoryPath);
 		if (!direc.exists() && !direc.mkdir()) {
-			showErrorMessage("Output folder " + directoryPath + " doesn't exist and couldn't be created\n", shell);
+			IDeviceManagementCommunicationHandler.showErrorMessage("Output folder " + directoryPath + " doesn't exist and couldn't be created\n", shell);
 		} else {
 			File destZipFile = new File(directoryPath + File.separatorChar + outputName + ".fmu");
 
@@ -318,14 +306,14 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 						librariesToAdd, shell)) {
 					return tempFolder;
 				}else {
-					showErrorMessage("Couldn't create the components inside the temporary folder " + tempFolder, shell);
+					IDeviceManagementCommunicationHandler.showErrorMessage("Couldn't create the components inside the temporary folder " + tempFolder, shell);
 				}
 			} else {
-				showErrorMessage("Binary directory " + binariesDirectory.toPath()
+				IDeviceManagementCommunicationHandler.showErrorMessage("Binary directory " + binariesDirectory.toPath()
 						+ " does not exist. Check the FMU Page in the preferences", shell);
 			}
 		} catch (IOException e) {
-			showErrorMessage("Couldn't create the temporary folder", shell);
+			IDeviceManagementCommunicationHandler.showErrorMessage("Couldn't create the temporary folder", shell);
 		}
 		return null;
 	}
@@ -333,18 +321,11 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 	private static boolean writeAllFiles(FMUDeviceManagementCommunicationHandler fmuFileHandler, String tempFolder,
 			String outputName, Shell shell) {
 		return (
-				writeToFile(new File(tempFolder + File.separatorChar + RESOURCES_FOLDER_NAME + File.separatorChar + "forte.fboot")
-						.getAbsolutePath(),
-				fmuFileHandler.getBootfileResult().toString(), shell) 
+				fmuFileHandler.writeToBootFile(new File(tempFolder + File.separatorChar + RESOURCES_FOLDER_NAME + File.separatorChar + "forte.fboot")
+						.getAbsolutePath(), true, shell) 
 				&&
-			writeToFile(new File(tempFolder + File.separatorChar + "modelDescription.xml").getAbsolutePath(),
-					fmuFileHandler.createModelDescription(outputName).toString(), shell));
-	}
-	
-	private static void showErrorMessage(String message, Shell shell) {
-		MessageBox msgBox = new MessageBox(shell, SWT.OK | SWT.ICON_ERROR);
-		msgBox.setMessage(message);
-		msgBox.open();
+				writeToAnyFile(new File(tempFolder + File.separatorChar + "modelDescription.xml").getAbsolutePath(),
+					fmuFileHandler.createModelDescription(outputName).toString(), true, shell));
 	}
 	
 	private static boolean deleteFolder(String pathToDelete) {
@@ -413,27 +394,14 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 	private static boolean createNotBinaryFiles(String root, Shell shell) {
 		File[] folders = { new File(root + File.separatorChar + BINARIES_FOLDER_NAME), 
 				new File(root + File.separatorChar + RESOURCES_FOLDER_NAME)};
-		File[] files = {new File(root + File.separatorChar + RESOURCES_FOLDER_NAME + File.separatorChar + "forte.fboot"),
-				new File(root + File.separatorChar + "modelDescription.xml")};
 		
 		for(File folder : folders) {
 			if (!folder.mkdir()) {
-				showErrorMessage("Couldn't create " + folder.getAbsolutePath() + " in the temporary folder", shell);
+				IDeviceManagementCommunicationHandler.showErrorMessage("Couldn't create " + folder.getAbsolutePath() + " in the temporary folder", shell);
 				return false;
 			}
 		}
 		
-		for(File file : files) {
-			try {
-				if (!file.createNewFile()) {
-					showErrorMessage("Couldn't create " + file.getAbsolutePath() + " in the temporary folder", shell);
-					return false;
-				}	
-			}catch (IOException e) {
-				showErrorMessage("Couldn't create the files in the fmu:\n" + e.getMessage(), shell);
-				return false;
-			}
-		}
 		return true;
 		
 	}
@@ -449,42 +417,17 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 					Files.copy(sourceFile.toPath(), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 					return true;
 				} catch (IOException e) {
-					showErrorMessage("Internal error when copying the file" + sourceFile.getAbsolutePath() + " into " + tempFile.getAbsolutePath() + "\n" + e.getMessage(), shell);
+					IDeviceManagementCommunicationHandler.showErrorMessage("Internal error when copying the file" + sourceFile.getAbsolutePath() + " into " + tempFile.getAbsolutePath() + "\n" + e.getMessage(), shell);
 				}
 			} else {
-				showErrorMessage("Library " + sourceFile.getAbsolutePath() + "couldn't be found", shell);
+				IDeviceManagementCommunicationHandler.showErrorMessage("Library " + sourceFile.getAbsolutePath() + "couldn't be found", shell);
 			}
 			
 		}else {
-			showErrorMessage("Unable to create " + outputFolder, shell);
+			IDeviceManagementCommunicationHandler.showErrorMessage("Unable to create " + outputFolder, shell);
 		}
 		
 		return false;
-	}
-	
-	/*take the current state of the string buffer and write it to the given file */
-	private static boolean writeToFile(String fileName, String toWrite, Shell shell) {
-		File outputFile = new File(fileName);
-
-		if (!outputFile.exists()) {
-			try {
-				if(!outputFile.createNewFile()) {
-					return false;
-				}
-			} catch (IOException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-				return false;
-			}
-		}
-		try(Writer boot = 
-				new OutputStreamWriter(new FileOutputStream(outputFile), StandardCharsets.UTF_8)){
-			boot.write(toWrite);
-			boot.flush();
-		} catch (IOException e) {
-			showErrorMessage("Couldn't write file " + fileName + "\nException: \n" + e.getMessage() , shell);
-			return false;
-		}
-		return true;
 	}
 	
 	private static void zipFolder(String root, String directoryPath, ZipOutputStream zos){
@@ -534,8 +477,6 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 	public String sendREQ(String destination, String request) throws IOException {
 
 		if (!request.contains("Action=\"START\"")) { //don't print the start request, since the it should be started from the FMI
-			bootfileResult.append(destination + ";" + request + "\n"); 
-
 			if (request.contains("Action=\"CREATE\"><FB ") && !destination.equals("")) {
 				String type = getSubstringAfterMatch(request, "Type=\"");
 				type = type.substring(0, type.indexOf('"'));
@@ -543,13 +484,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 				fbName = fbName.substring(0, fbName.indexOf('"'));
 				populateInputsAndOutputs(fbName, type, device.getResourceNamed(destination).getFBNetwork(), "");
 			}
-
-			String info = origMgrID;
-			if (!destination.equals("")) { //$NON-NLS-1$
-				info += ": " + destination; //$NON-NLS-1$
-			}
-
-			postCommandSent(info, destination, request);
+			return super.sendREQ(destination, request);
 		}
 		return "";
 	}
@@ -865,20 +800,5 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 	
 	private String getSubstringAfterMatch(String source, String toLook) {
 		return source.substring(source.indexOf(toLook) + toLook.length());
-	}
-
-	@Override
-	public void connect(String address) throws DeploymentException {
-		origMgrID = address;
-	}
-
-	@Override
-	public void disconnect() throws DeploymentException {
-		//nothing to do for a file
-	}
-
-	@Override
-	public boolean isConnected() {
-		return true;
 	}
 }

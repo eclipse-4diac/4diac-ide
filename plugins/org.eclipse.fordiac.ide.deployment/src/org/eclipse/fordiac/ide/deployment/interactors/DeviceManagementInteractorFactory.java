@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -46,9 +46,10 @@ public enum DeviceManagementInteractorFactory {
 	 * @return the deployment executor
 	 */
 	public IDeviceManagementInteractor getDeviceManagementInteractor(final Device device,
-			final AbstractDeviceManagementCommunicationHandler overrideComHandler) {
+			final IDeviceManagementCommunicationHandler overrideComHandler, String profile) {
+		String profileToUse = (null != profile) ? profile : device.getProfile();
 		for (IDeviceManagementInteractorProvider idepExec : getDeviceManagementInteractorList()) {
-			if (idepExec.supports(device.getProfile())) {
+			if (idepExec.supports(profileToUse)) {
 				return idepExec.createInteractor(device, overrideComHandler);
 			}
 		}
@@ -56,7 +57,7 @@ public enum DeviceManagementInteractorFactory {
 	}
 
 	public IDeviceManagementInteractor getDeviceManagementInteractor(final Device device) {
-		return getDeviceManagementInteractor(device, null);
+		return getDeviceManagementInteractor(device, null, null);
 	}
 	
 	/** Get a list of names of the profiles supported by the registered device managment interactors

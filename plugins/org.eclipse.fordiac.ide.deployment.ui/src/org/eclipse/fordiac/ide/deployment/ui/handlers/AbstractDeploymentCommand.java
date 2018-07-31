@@ -56,34 +56,27 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 			this.lastCommand = lastCommand;
 		}
 
+		
 		@Override
-		public void postCommandSent(String command, String destination) {
+		public void connectionOpened() {
+			//nothing to do here
+		}
+		
+		@Override
+		public void postCommandSent(String info, String destination, String command) {
 			lastCommand = command;
-			
 		}
-
+		
 		@Override
-		public void postCommandSent(String message) {
-			lastCommand = message;
-			
-		}
-
-		@Override
-		public void responseReceived(String response, String source) {
+		public void postResponseReceived(String response, String source) {
 			if (response.contains("Reason")){ //$NON-NLS-1$
 				showDeploymentError(response.substring(response.lastIndexOf("Reason") + 8,  response.length() - 4), source, currentObject, false);	 //$NON-NLS-1$
 			}
 		}
 
 		@Override
-		public void finished() {
+		public void connectionClosed() {
 			// nothing to do here			
-		}
-
-		@Override
-		public void postCommandSent(String info, String destination, String command) {
-			lastCommand = command;
-			
 		}
 		
 		private static OnlineDeploymentErrorCheckListener instance = null;
@@ -113,14 +106,11 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 						"Problem: "+ response + "\nSource: " + source; 
 			}
 
-			if (null == view || showWithConsole ){
-				if (!lastMessage.equals(currentMessage)){ //when deleting Resources two messages are sent (KILL and delete Resource) and both failed creating two popups with the same information
-					Shell shell = Display.getDefault().getActiveShell();	
-					MessageDialog.openError(shell, currentElement.getErrorMessageHeader(), 
-							currentMessage);
-					lastMessage = currentMessage;
-				}
- 				
+			if ((null == view || showWithConsole ) && 
+					(!lastMessage.equals(currentMessage))){//when deleting Resources two messages are sent (KILL and delete Resource) and both failed creating two popups with the same information
+				Shell shell = Display.getDefault().getActiveShell();
+				MessageDialog.openError(shell, currentElement.getErrorMessageHeader(), currentMessage);
+				lastMessage = currentMessage;
 			}
 		}
 	}
@@ -152,7 +142,6 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 							}							
 						}
 						interactor.removeDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
-						DeploymentCoordinator.getInstance().flush();
 						DeploymentCoordinator.getInstance().disableOutput(interactor);
 					}else{
 						manageExecutorError();
@@ -173,7 +162,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 	
 	protected abstract boolean prepareParametersToExecute(Object element);
 	
-	protected abstract void executeCommand(IDeviceManagementInteractor executor) throws Exception;
+	protected abstract void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException;
 	
 	protected void manageExecutorError(){
 		DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(device, null);

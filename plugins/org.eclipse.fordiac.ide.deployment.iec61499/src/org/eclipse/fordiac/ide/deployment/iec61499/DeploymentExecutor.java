@@ -28,14 +28,13 @@ import javax.xml.parsers.SAXParserFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
-import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
-import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -55,7 +54,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		this(dev, null);
 	}
 	
-	public DeploymentExecutor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler) {
+	public DeploymentExecutor(Device dev, IDeviceManagementCommunicationHandler overrideHandler) {
 		super(dev, overrideHandler);
 		genFBs.add("PUBLISH"); //$NON-NLS-1$
 		genFBs.add("SUBSCRIBE"); //$NON-NLS-1$
@@ -66,16 +65,10 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	}
 	
 	@Override
-	protected AbstractDeviceManagementCommunicationHandler createCommunicationHandler(Device dev) {
-		//currently we only have the ability to connect via ethernet to our devices, if this changes add here according factories
+	protected IDeviceManagementCommunicationHandler createCommunicationHandler(Device dev) {
+		//currently we only have the ability to connect via Ethernet to our devices, if this changes add here according factories
 		return new EthernetDeviceManagementCommunicationHandler();
 	}
-	
-	@Override
-	protected String getDeviceAddress(Device device) {
-		return DeploymentHelper.getMgrID(device);
-	}
-	
 	
 	private static String getValidType(final FB fb) {
 		if (fb != null && fb.getPaletteEntry() != null) {
@@ -87,15 +80,15 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	@Override
 	public void createResource(final Resource resource) throws DeploymentException {
 		String request = MessageFormat.format(Messages.DeploymentExecutor_CreateResourceInstance,
-				new Object[] { id++, resource.getName(), resource.getTypeName() });
+				id++, resource.getName(), resource.getTypeName());
 		try {
 			sendREQ("", request);  //$NON-NLS-1$
 		} catch (EOFException e) {
 			throw new DeploymentException(MessageFormat
-					.format(Messages.DeploymentExecutor_DeviceConnectionClosed, new Object[] { resource.getName() }), e);
+					.format(Messages.DeploymentExecutor_DeviceConnectionClosed, resource.getName()), e);
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat
-					.format(Messages.DeploymentExecutor_CreateResourceFailed, new Object[] { resource.getName() }), e);
+					.format(Messages.DeploymentExecutor_CreateResourceFailed, resource.getName()), e);
 		}
 	}
 
@@ -110,14 +103,14 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		} catch (IOException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.DeploymentExecutor_WriteResourceParameterFailed,
-							new Object[] { resource.getName(), parameter }), e);
+							resource.getName(), parameter), e);
 		}
 	}
 
 	protected String generateWriteParamRequest(final String targetElementName, final String parameter,
 			final String value) {
 		return MessageFormat.format(getWriteParameterMessage(),
-				new Object[] { id++, value, targetElementName + "." + parameter }); //$NON-NLS-1$
+				id++, value, targetElementName + "." + parameter); //$NON-NLS-1$
 	}
 
 	@SuppressWarnings("static-method")  //this method needs to be overwritable by subclasses
@@ -143,7 +136,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 			sendREQ(resource.getName(), request);
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_WriteFBParameterFailed,
-					new Object[] { resource.getName(), varDecl.getName() }), e);
+					resource.getName(), varDecl.getName()), e);
 		}
 
 	}
@@ -157,9 +150,9 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 			FBNetworkElement sourceFB = source.getFBNetworkElement();
 			FBNetworkElement destFB = destination.getFBNetworkElement();
 			String request = MessageFormat.format(
-					Messages.DeploymentExecutor_CreateConnection, new Object[] {
+					Messages.DeploymentExecutor_CreateConnection, 
 							this.id++, connData.sourcePrefix + sourceFB.getName() + "." + source.getName(),  //$NON-NLS-1$
-							connData.destinationPrefix + destFB.getName() + "." + destination.getName() });  //$NON-NLS-1$
+							connData.destinationPrefix + destFB.getName() + "." + destination.getName());  //$NON-NLS-1$
 									
 			try {
 				sendREQ(resource.getName(), request);
@@ -174,54 +167,54 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 
 	@Override
 	public void startResource(final Resource res) throws DeploymentException {
-		String request = MessageFormat.format(Messages.DeploymentExecutor_Start, new Object[] {id++ });
+		String request = MessageFormat.format(Messages.DeploymentExecutor_Start, id++);
 		try {
 			sendREQ(res.getName(), request);
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_StartingResourceFailed,
-					new Object[] { res.getName() }), e);
+					res.getName()), e);
 		}
 	}
 
 	@Override
 	public void startDevice(Device dev) throws DeploymentException {
-		String request = MessageFormat.format(Messages.DeploymentExecutor_Start, new Object[] {id++ });
+		String request = MessageFormat.format(Messages.DeploymentExecutor_Start, id++);
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_StartingDeviceFailed,
-					new Object[] { dev.getName() }), e);
+					dev.getName()), e);
 		}
 	}
 
 	@Override
 	public void writeDeviceParameter(Device device, String parameter, String value) throws DeploymentException {
-		String request = MessageFormat.format(getWriteParameterMessage(), new Object[] {id++, value, parameter });
+		String request = MessageFormat.format(getWriteParameterMessage(), id++, value, parameter);
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_WriteDeviceParameterFailed,
-							new Object[] { device.getName(), parameter }), e);
+							device.getName(), parameter), e);
 		}
 	}
 
 	@Override
 	public void deleteResource(Resource res) throws DeploymentException {
 		String kill = MessageFormat.format(Messages.DeploymentExecutor_KillFB,
-				new Object[] {id++, res.getName() });
+				id++, res.getName());
 		String delete = MessageFormat.format(Messages.DeploymentExecutor_DeleteFB,
-				new Object[] {id++, res.getName() });
+				id++, res.getName());
 		try {
 			sendREQ("", kill); //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(
-					MessageFormat.format(Messages.DeploymentExecutor_KillFBFailed, new Object[] { res.getName(), }), e);
+					MessageFormat.format(Messages.DeploymentExecutor_KillFBFailed, res.getName()), e);
 		}
 		try {
 			sendREQ("", delete); //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(
-					MessageFormat.format(Messages.DeploymentExecutor_DeleteFBFailed, new Object[] { res.getName(), }), e);
+					MessageFormat.format(Messages.DeploymentExecutor_DeleteFBFailed, res.getName()), e);
 		}
 	}
 
@@ -237,24 +230,24 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 
 	@Override
 	public void deleteConnection(Resource res, ConnectionDeploymentData conData) throws DeploymentException {
-
+		//do nothing
 	}
 
 	@Override
 	public void deleteFB(Resource res, FBDeploymentData fbData) throws DeploymentException {
-
+		//do nothing
 	}
 
 	@Override
 	public void startFB(Resource res, FBDeploymentData fbData) throws DeploymentException {
 		String fullFbInstanceName = fbData.prefix + fbData.fb.getName();
 		String request = MessageFormat.format(Messages.DeploymentExecutor_StartFB,
-				new Object[] { id++, fullFbInstanceName, fbData.fb.getTypeName() });
+				id++, fullFbInstanceName, fbData.fb.getTypeName());
 		try {
 			sendREQ(res.getName(), request);
 		} catch (IOException e) {
 			throw new DeploymentException(
-					MessageFormat.format(Messages.DeploymentExecutor_StartingFBFailed, new Object[] { fullFbInstanceName }), e);
+					MessageFormat.format(Messages.DeploymentExecutor_StartingFBFailed, fullFbInstanceName), e);
 		}
 	}
 	
@@ -264,37 +257,33 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		String fullFbInstanceName = fbData.prefix + fbData.fb.getName();
 		if ("".equals(fbType)) { //$NON-NLS-1$
 			throw new DeploymentException((MessageFormat.format(
-					Messages.DeploymentExecutor_CreateFBInstanceFailedNoTypeFound, new Object[] { fullFbInstanceName })));
+					Messages.DeploymentExecutor_CreateFBInstanceFailedNoTypeFound, fullFbInstanceName)));
 		}
 		String request = MessageFormat.format(Messages.DeploymentExecutor_CreateFBInstance,
-				new Object[] {id++, fullFbInstanceName, fbType });
+				id++, fullFbInstanceName, fbType);
 		try {
 			sendREQ(res.getName(), request);
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_CreateFBInstanceFailed,
-					new Object[] { fullFbInstanceName }), e);
+					fullFbInstanceName), e);
 		}
 	}
 
 	@Override
 	public void killDevice(Device dev) throws DeploymentException {
-		String kill = MessageFormat.format(Messages.DeploymentExecutor_KillDevice, new Object[] { id++ });
+		String kill = MessageFormat.format(Messages.DeploymentExecutor_KillDevice, id++);
 		try {
 			sendREQ("", kill); //$NON-NLS-1$
 		} catch (EOFException e) {
 			// exception can be ignored, as no response is returned by forte			
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_KillDeviceFailed,
-						new Object[] { dev.getName() }), e);
+					dev.getName()), e);
 		} finally {
 			resetTypes();
 		}
 	}
 	
-	public void sendREQ(String destination, String request) throws IOException {
-		getDevMgmComHandler().sendREQ(destination, request);
-	}
-
 	public QueryResponseHandler sendQUERY(final String destination, final String request) throws IOException, ParserConfigurationException, SAXException {
 		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 		SAXParser saxParser = saxParserFactory.newSAXParser();
@@ -306,7 +295,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 
 	@Override
 	public Response readWatches() throws DeploymentException {
-		String request = MessageFormat.format(Messages.DeploymentExecutor_Read_Watches, new Object[] { id++ });
+		String request = MessageFormat.format(Messages.DeploymentExecutor_Read_Watches, id++);
 
 		try {
 			String response = getDevMgmComHandler().sendREQ("", request);  //$NON-NLS-1$
@@ -322,7 +311,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 			}
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_ReadWatchesFailed,
-					new Object[] { getDevice().getName() }), e);
+					getDevice().getName()), e);
 		}  
 		
 		return null;
@@ -330,64 +319,66 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	
 	@Override
 	public void addWatch(MonitoringBaseElement element) throws DeploymentException {
-		String request = MessageFormat.format(Messages.DeploymentExecutor_Add_Watch, new Object[] { this.id++, element.getQualifiedString(), "*" }); //$NON-NLS-1$
+		String request = MessageFormat.format(Messages.DeploymentExecutor_Add_Watch, this.id++, element.getQualifiedString(), "*"); //$NON-NLS-1$
 		try {
 			String response = getDevMgmComHandler().sendREQ(element.getResourceString(), request);
+			
 			//TODO show somehow the feedback if the response contained a reason that it didn't work
 			element.setOffline("".equals(response)); //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_AddWatchesFailed,
-					new Object[] { element.getQualifiedString() }), e);
+					element.getQualifiedString()), e);
 		}
 	}
 	 
 	@Override
 	public void removeWatch(MonitoringBaseElement element) throws DeploymentException {
-		String request = MessageFormat.format(Messages.DeploymentExecutor_Delete_Watch, new Object[] { this.id++, element.getQualifiedString(), "*" }); //$NON-NLS-1$
+		String request = MessageFormat.format(Messages.DeploymentExecutor_Delete_Watch, this.id++, element.getQualifiedString(), "*"); //$NON-NLS-1$
 		try {
 			String response = getDevMgmComHandler().sendREQ(element.getResourceString(), request);
 			//TODO show somehow the feedback if the response contained a reason that it didn't work
 			element.setOffline("".equals(response)); //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_DeleteWatchesFailed,
-					new Object[] { element.getQualifiedString() }), e);
+					element.getQualifiedString()), e);
 		}
 	}
 
 	@Override
 	public void triggerEvent(MonitoringBaseElement element) throws DeploymentException {
-		String request = MessageFormat.format(getWriteParameterMessage(), new Object[] {id++, "$e", element.getQualifiedString()}); //$NON-NLS-1$ 
+		String request = MessageFormat.format(getWriteParameterMessage(), id++, "$e", element.getQualifiedString()); //$NON-NLS-1$ 
 		try {
 			sendREQ(element.getResourceString(), request);
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_TriggerEventFailed,
-							new Object[] { element.getQualifiedString() }), e);
+							element.getQualifiedString()), e);
 		}
 	}
 	
 	@Override
 	public void forceValue(MonitoringBaseElement element, String value) throws DeploymentException{
 		String request = MessageFormat.format(Messages.DeploymentExecutor_Force_Value,
-				new Object[] { this.id++, value, element.getQualifiedString(), "true"}); //$NON-NLS-1$
+				this.id++, value, element.getQualifiedString(), "true"); //$NON-NLS-1$
 		try {
 			sendREQ(element.getResourceString(), request);
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_ForceValueFailed,
-							new Object[] { element.getQualifiedString(), value }), e);
+							element.getQualifiedString(), value), e);
 		}
 	}
 	
 	@Override
 	public void clearForce(MonitoringBaseElement element) throws DeploymentException {
 		String request = MessageFormat.format(Messages.DeploymentExecutor_Force_Value,
-				new Object[] { this.id++, "*", element.getQualifiedString(), "false"}); //$NON-NLS-1$ //$NON-NLS-2$
+				this.id++, "*", element.getQualifiedString(), "false"); //$NON-NLS-1$ //$NON-NLS-2$
 		try {
 			sendREQ(element.getResourceString(), request);
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_ClearForceFailed,
-							new Object[] { element.getQualifiedString() }), e);
+							element.getQualifiedString()), e);
 		}
 	}
-	
+
+
 
 }

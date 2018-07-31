@@ -27,7 +27,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
-import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
@@ -60,10 +60,11 @@ import org.eclipse.swt.widgets.Display;
 import org.xml.sax.InputSource;
 
 public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
+
 	private static final Logger logger = Logger.getLogger(DynamicTypeLoadDeploymentExecutor.class);
 	private ResponseMapping respMapping = new ResponseMapping();
 	
-	public DynamicTypeLoadDeploymentExecutor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler) {
+	public DynamicTypeLoadDeploymentExecutor(Device dev, IDeviceManagementCommunicationHandler overrideHandler) {
 		super(dev, overrideHandler);
 		// nothing to do here
 	}

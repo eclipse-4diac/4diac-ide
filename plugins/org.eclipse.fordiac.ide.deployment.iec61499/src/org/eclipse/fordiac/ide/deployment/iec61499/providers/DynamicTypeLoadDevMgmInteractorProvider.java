@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499.providers;
 
-import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.iec61499.DynamicTypeLoadDeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractorProvider;
@@ -31,7 +31,7 @@ public class DynamicTypeLoadDevMgmInteractorProvider implements IDeviceManagemen
 	}
 
 	@Override
-	public IDeviceManagementInteractor createInteractor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler) {
+	public IDeviceManagementInteractor createInteractor(Device dev, IDeviceManagementCommunicationHandler overrideHandler) {
 		return new DynamicTypeLoadDeploymentExecutor(dev, overrideHandler);
 	}
 

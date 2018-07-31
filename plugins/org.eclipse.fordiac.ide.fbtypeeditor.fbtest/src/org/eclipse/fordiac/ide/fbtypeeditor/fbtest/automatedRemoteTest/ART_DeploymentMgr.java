@@ -38,15 +38,14 @@ public class ART_DeploymentMgr {
 
 	private Resource res;
 	private DeploymentExecutor executor;
-	private IDeploymentListener listener;
 	private Device dev;
 
 	private FBType fbType;
 
-	private int REQID=0;
+	private int reqID = 0;
 	private String address;
 
-	private int UID=-2;
+	private int uID =- 2;
 
 	private boolean deploymentError;
 	private int deploymentResponseCounter=0;
@@ -58,7 +57,7 @@ public class ART_DeploymentMgr {
 		deploymentError=false;
 		MgmtResponse=""; //$NON-NLS-1$
 		MgmtCommands=""; //$NON-NLS-1$
-		UID=paUID;
+		uID=paUID;
 		this.fbType=fbType;
 		if (null!= address) {
 			this.address=address;
@@ -81,19 +80,29 @@ public class ART_DeploymentMgr {
 		res.setDevice(dev);
 		
 		List<PaletteEntry> entries = TypeLibrary.getInstance().getPalette().getTypeEntries("EMB_RES"); //$NON-NLS-1$
-		if (entries.size() > 0) {
+		if (!entries.isEmpty()) {
 			PaletteEntry entry = entries.get(0);
 			res.setPaletteEntry(entry);
 		} 
 				
-		res.setName("__"+fbType.getName()+"Test"+UID);  //$NON-NLS-1$//$NON-NLS-2$
+		res.setName("__"+fbType.getName()+"Test"+uID);  //$NON-NLS-1$//$NON-NLS-2$
 
 		executor = new DeploymentExecutor(dev);
 		
-		listener = new IDeploymentListener() {
+		IDeploymentListener listener = new IDeploymentListener() {
 			
 			@Override
-			public void responseReceived(String response, String source) {
+			public void connectionOpened() {
+				// do nothing
+			}
+			
+			@Override
+			public void postCommandSent(String info, String destination, String command) {
+				MgmtCommands+=(destination+command+"\n"); //$NON-NLS-1$
+			}
+			
+			@Override
+			public void postResponseReceived(String response, String source) {
 				if (response.toLowerCase().indexOf("reason")>-1) { //$NON-NLS-1$
 					deploymentError=true;
 					MgmtCommands+=(response+"\n\n"); //$NON-NLS-1$
@@ -104,20 +113,8 @@ public class ART_DeploymentMgr {
 			}
 			
 			@Override
-			public void postCommandSent(String info, String destination, String command) {
-			}
-			
-			@Override
-			public void postCommandSent(String message) {
-			}
-			
-			@Override
-			public void postCommandSent(String command, String destination) {
-				MgmtCommands+=(destination+command+"\n"); //$NON-NLS-1$
-			}
-			
-			@Override
-			public void finished() {
+			public void connectionClosed() {
+				//do nothing
 			}
 		};
 		
@@ -145,7 +142,7 @@ public class ART_DeploymentMgr {
 	public boolean deploy(String TestChannelID) {
 		MgmtResponse=""; //$NON-NLS-1$
 		MgmtCommands=""; //$NON-NLS-1$
-		boolean Error=false;
+		boolean errorOcurred = false;
 		int numEI=FBTHelper.getEISize(fbType);
 		int numEO=FBTHelper.getEOSize(fbType);
 
@@ -156,10 +153,10 @@ public class ART_DeploymentMgr {
 			executor.connect();
 		} catch (Exception e1) {
 			MgmtCommands="Error during connection to device: "+address+"\n"; //$NON-NLS-2$
-			Error = true;
+			errorOcurred = true;
 		} 
 
-		if (Error)
+		if (errorOcurred)
 		{
 			return false;
 		}
@@ -169,17 +166,17 @@ public class ART_DeploymentMgr {
 			executor.createResource(res);
 		} catch (DeploymentException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
-			Error = true;
+			errorOcurred = true;
 		} 
 
-		while ((!Error)&&(!deploymentError)&& deploymentResponseCounter>0) {
+		while ((!errorOcurred)&&(!deploymentError)&& deploymentResponseCounter>0) {
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
 			}
 		}
 		
-		if (deploymentError || Error) {
+		if (deploymentError || errorOcurred) {
 //no clean-up required; creation of resource failed!
 			
 			return false;
@@ -189,45 +186,45 @@ public class ART_DeploymentMgr {
 		String destination = res.getName();
 		
 		try {
-			sendREQ(res.getName(), createFB_Request("FBuT",fbType.getName())); //$NON-NLS-1$
-			sendREQ(res.getName(), createFB_Request("Server","SERVER_"+(numDO+1)+"_"+(numDI+1)) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			sendREQ(res.getName(), createFB_Request("MuX","E_MUX_"+numEO)); //$NON-NLS-1$ //$NON-NLS-2$
-			sendREQ(res.getName(), createFB_Request("DeMuX","E_DEMUX_"+numEI)); //$NON-NLS-1$ //$NON-NLS-2$
+			sendREQ(res.getName(), createFBRequest("FBuT",fbType.getName())); //$NON-NLS-1$
+			sendREQ(res.getName(), createFBRequest("Server","SERVER_"+(numDO+1)+"_"+(numDI+1)) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			sendREQ(res.getName(), createFBRequest("MuX","E_MUX_"+numEO)); //$NON-NLS-1$ //$NON-NLS-2$
+			sendREQ(res.getName(), createFBRequest("DeMuX","E_DEMUX_"+numEI)); //$NON-NLS-1$ //$NON-NLS-2$
 
 			//EventConns
-			sendREQ(res.getName(), createConnection_Request("Server", "IND", "DeMuX", "EI")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			sendREQ(res.getName(), createConnection_Request("MuX", "EO", "Server", "RSP")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			sendREQ(res.getName(), createConnectionRequest("Server", "IND", "DeMuX", "EI")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			sendREQ(res.getName(), createConnectionRequest("MuX", "EO", "Server", "RSP")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
-			sendREQ(res.getName(), createConnection_Request("START", "COLD", "Server", "INIT")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			sendREQ(res.getName(), createConnectionRequest("START", "COLD", "Server", "INIT")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 			if (null != fbType.getInterfaceList()) {
 				if (null!= fbType.getInterfaceList().getEventInputs()) {
 					for (Iterator<Event> iterator=fbType.getInterfaceList().getEventInputs().iterator(); iterator.hasNext();) {
-						Event EI = iterator.next();
-						sendREQ(res.getName(), createConnection_Request("DeMuX", "EO"+(FBTHelper.getEIID(fbType, EI.getName())+1), "FBuT", EI.getName())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						Event eventInput = iterator.next();
+						sendREQ(res.getName(), createConnectionRequest("DeMuX", "EO"+(FBTHelper.getEIID(fbType, eventInput.getName())+1), "FBuT", eventInput.getName())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					}
 				}
 				if (null!= fbType.getInterfaceList().getEventOutputs()) {
 					for (Iterator<Event> iterator=fbType.getInterfaceList().getEventOutputs().iterator(); iterator.hasNext();) {
-						Event EO = iterator.next();
-						sendREQ(res.getName(), createConnection_Request("FBuT", EO.getName(), "MuX", "EI"+(FBTHelper.getEOID(fbType, EO.getName())+1))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						Event eventOutput = iterator.next();
+						sendREQ(res.getName(), createConnectionRequest("FBuT", eventOutput.getName(), "MuX", "EI"+(FBTHelper.getEOID(fbType, eventOutput.getName())+1))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					}
 				}
 
 			}
 
-			sendREQ(destination, writeFBParameter_Request("Server.ID", TestChannelID)); //$NON-NLS-1$
-			sendREQ(destination, writeFBParameter_Request("Server.QI", "1")); //$NON-NLS-1$ //$NON-NLS-2$
+			sendREQ(destination, writeFBParameterRequest("Server.ID", TestChannelID)); //$NON-NLS-1$
+			sendREQ(destination, writeFBParameterRequest("Server.QI", "1")); //$NON-NLS-1$ //$NON-NLS-2$
 
 			//DataConns
-			sendREQ(res.getName(), createConnection_Request("Server", "RD_1", "DeMuX", "K")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			sendREQ(res.getName(), createConnection_Request("MuX", "K", "Server", "SD_1")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			sendREQ(res.getName(), createConnectionRequest("Server", "RD_1", "DeMuX", "K")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			sendREQ(res.getName(), createConnectionRequest("MuX", "K", "Server", "SD_1")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 			//Server to FBuT
 			if (null!= fbType.getInterfaceList().getInputVars()) {
 				for (Iterator<VarDeclaration> iterator=fbType.getInterfaceList().getInputVars().iterator(); iterator.hasNext();) {
-					VarDeclaration DI = iterator.next();
-					sendREQ(res.getName(), createConnection_Request("Server", "RD_"+(2+FBTHelper.getDIID(fbType, DI.getName())), "FBuT", DI.getName())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					VarDeclaration digitalInput = iterator.next();
+					sendREQ(res.getName(), createConnectionRequest("Server", "RD_"+(2+FBTHelper.getDIID(fbType, digitalInput.getName())), "FBuT", digitalInput.getName())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				}
 			}
 			
@@ -235,8 +232,8 @@ public class ART_DeploymentMgr {
 			//FBuT to Server
 			if (null!= fbType.getInterfaceList().getOutputVars()) {
 				for (Iterator<VarDeclaration> iterator=fbType.getInterfaceList().getOutputVars().iterator(); iterator.hasNext();) {
-					VarDeclaration DO = iterator.next();
-					sendREQ(res.getName(), createConnection_Request( "FBuT", DO.getName(), "Server", "SD_"+(2+FBTHelper.getDOID(fbType, DO.getName())))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					VarDeclaration digitalOutput = iterator.next();
+					sendREQ(res.getName(), createConnectionRequest( "FBuT", digitalOutput.getName(), "Server", "SD_"+(2+FBTHelper.getDOID(fbType, digitalOutput.getName())))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				}
 			}
 			
@@ -245,7 +242,7 @@ public class ART_DeploymentMgr {
 			
 		} catch (Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
-			Error = true;
+			errorOcurred = true;
 		}
 
 		
@@ -260,30 +257,30 @@ public class ART_DeploymentMgr {
 			return false;
 		}
 		
-		return (!Error);
+		return (!errorOcurred);
 	}
 
 
-	private String createFB_Request(String fbName, String fbTypeName) {
+	private String createFBRequest(String fbName, String fbTypeName) {
 		return MessageFormat.format(
-				Messages.DeploymentExecutor_CreateFBInstance, new Object[] { this.REQID++,
-						fbName, fbTypeName });
+				Messages.DeploymentExecutor_CreateFBInstance, this.reqID++,
+						fbName, fbTypeName);
 	}
 
-	private String createConnection_Request(String SrcFBName, String SrcIfElemName, String DstFBName, String DstIfElemName) {
+	private String createConnectionRequest(String srcFBName, String srcIfElemName, String dstFBName, String dstIfElemName) {
 		return MessageFormat.format(
-				Messages.DeploymentExecutor_CreateConnection, new Object[] {
-						this.REQID++, SrcFBName + "." //$NON-NLS-1$
-						+ SrcIfElemName,
-						DstFBName + "." //$NON-NLS-1$
-						+ DstIfElemName });
+				Messages.DeploymentExecutor_CreateConnection, 
+						this.reqID++, srcFBName + "." //$NON-NLS-1$
+						+ srcIfElemName,
+						dstFBName + "." //$NON-NLS-1$
+						+ dstIfElemName );
 	}
 
 	
-	private String writeFBParameter_Request(final String Dst, final String value) {
+	private String writeFBParameterRequest(final String Dst, final String value) {
 		return MessageFormat.format(
-				Messages.DeploymentExecutor_WriteParameter, new Object[] { this.REQID++,
-						value, Dst });
+				Messages.DeploymentExecutor_WriteParameter, this.reqID++,
+						value, Dst );
 
 	}
 

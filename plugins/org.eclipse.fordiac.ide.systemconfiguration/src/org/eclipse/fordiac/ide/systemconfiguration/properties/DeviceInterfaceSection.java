@@ -13,6 +13,7 @@ package org.eclipse.fordiac.ide.systemconfiguration.properties;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.DynamicTypeLoadDeploymentExecutor;
@@ -45,23 +46,18 @@ public class DeviceInterfaceSection extends AbstractDeviceInterfaceSection {
 					IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor((Device)getType());
 					if(interactor instanceof DynamicTypeLoadDeploymentExecutor) {
 						DeploymentCoordinator.getInstance().enableOutput(interactor);
-//						OnlineDeploymentErrorCheckListener.getInstance().setLastMessage(""); //$NON-NLS-1$
-//						OnlineDeploymentErrorCheckListener.getInstance().setLastCommand(""); //$NON-NLS-1$
-//						interactor.addDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
 						try {
 							interactor.connect();
 							((DynamicTypeLoadDeploymentExecutor) interactor).queryResources((Device)getType());
 						} catch (Exception e) {
-//							OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID((Device)getType()), this, true);
+							Activator.getDefault().logError(e.getMessage(), e);
 						}finally {
 							try {
 								interactor.disconnect();
 							} catch (DeploymentException e) {
-//								OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID((Device)getType()), this, true);
+								Activator.getDefault().logError(e.getMessage(), e);
 							}							
 						}
-//						interactor.removeDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
-						DeploymentCoordinator.getInstance().flush();
 						DeploymentCoordinator.getInstance().disableOutput(interactor);
 					}
 				}

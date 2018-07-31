@@ -12,26 +12,28 @@
 package org.eclipse.fordiac.ide.deployment;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * Base class for coordinating the management communication to a device
  */
-public abstract class AbstractDeviceManagementCommunicationHandler {
+public interface IDeviceManagementCommunicationHandler {
+	
+	void connect(String address) throws DeploymentException;
+
+	void disconnect() throws DeploymentException;
 	
 	/**Check if this communication handler is currently connected with its device
 	 * 
 	 * @return true if a connection is open.
 	 */	
-	public abstract boolean isConnected();
-
-	public abstract void connect(String address) throws DeploymentException;
-
-	public abstract void disconnect() throws DeploymentException;
+	boolean isConnected();
+	
+	String getInfo(String destination);
 
 	/**  Send a request to the device and return the response
 	 * 
@@ -42,32 +44,12 @@ public abstract class AbstractDeviceManagementCommunicationHandler {
 	 * @return  the response received from the device
 	 * @throws IOException
 	 */
-	public abstract String sendREQ(final String destination, final String request) throws IOException;
-
-	private final List<IDeploymentListener> listeners = new ArrayList<>();
-
-	protected void responseReceived(final String response, final String source) {
-		for (IDeploymentListener listener : listeners) {
-			listener.responseReceived(response, source);
-		}
+	String sendREQ(final String destination, final String request) throws IOException;
+	
+	public static void showErrorMessage(String message, Shell shell) {
+		MessageBox msgBox = new MessageBox(shell, SWT.OK | SWT.ICON_ERROR);
+		msgBox.setMessage(message);
+		msgBox.open();
 	}
-
-	protected void postCommandSent(String info, String destination, String command) {
-		for (IDeploymentListener listener : listeners) {
-			listener.postCommandSent(command, info);
-			listener.postCommandSent(info, destination, command);
-		}
-	}
-
-	public void addDeploymentListener(final IDeploymentListener listener) {
-		if (!listeners.contains(listener)) {
-			listeners.add(listener);
-		}
-	}
-
-	public void removeDeploymentListener(final IDeploymentListener listener) {
-		if (listeners.contains(listener)) {
-			listeners.remove(listener);
-		}
-	}
+	
 }

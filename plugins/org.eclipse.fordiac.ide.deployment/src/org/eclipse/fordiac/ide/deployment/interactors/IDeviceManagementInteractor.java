@@ -14,8 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
-import java.util.Set;
-
 import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
@@ -26,169 +24,153 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/** Interface for classes that allow deployment and monitoring to interact with
- * a device's device management functionality.
+/**
+ * Interface for classes that allow deployment and monitoring to interact with a
+ * device's device management functionality.
  * 
  */
 public interface IDeviceManagementInteractor {
-	
+
+	/*************** Communication commands **************************/
+
 	/**Check if this interactor is currently connected with its device
 	 * 
 	 * @return true if a connection is open.
-	 */	
-	boolean isConnected();
-	
-	 void connect() throws DeploymentException;
+	 */
+	public abstract boolean isConnected();
 
-	 void disconnect() throws DeploymentException;
-	
-	 Set<String> getTypes();
+	public abstract void connect() throws DeploymentException;
 
-	 Set<String> getAdapterTypes();
-	
-	 void resetTypes();
-	
-	 void addDeploymentListener(final IDeploymentListener listener);
+	public abstract void disconnect() throws DeploymentException;
 
-	 void removeDeploymentListener(final IDeploymentListener listener);
+	/**** Listener commands ***/
+
+	void addDeploymentListener(final IDeploymentListener listener);
+
+	void removeDeploymentListener(final IDeploymentListener listener);
 	
+	/*** Management Commands ***/
+
+	/**
+	 * Provide for the given device the address needed for the commhandler to
+	 * connect to it
+	 * 
+	 * @param device the dvice to connect to
+	 * @return the device's address
+	 */
+
 	/**
 	 * Creates the resource.
 	 * 
-	 * @param resource
-	 *          the resource
+	 * @param resource the resource
 	 * 
-	 * @throws CreateResourceInstanceException
-	 *           the create resource instance exception
+	 * @throws CreateResourceInstanceException the create resource instance
+	 *                                         exception
 	 */
-	 void createResource(Resource resource) throws DeploymentException;
+	void createResource(Resource resource) throws DeploymentException;
 
 	/**
 	 * Write resource parameter.
 	 * 
-	 * @param resource
-	 *          the resource
-	 * @param parameter
-	 *          the parameter
-	 * @param value
-	 *          the value
+	 * @param resource  the resource
+	 * @param parameter the parameter
+	 * @param value     the value
 	 * 
-	 * @throws WriteResourceParameterException
-	 *           the write resource parameter exception
+	 * @throws WriteResourceParameterException the write resource parameter
+	 *                                         exception
 	 */
-	 void writeResourceParameter(Resource resource, String parameter, String value) throws DeploymentException;
+	void writeResourceParameter(Resource resource, String parameter, String value) throws DeploymentException;
 
 	/**
 	 * Write device parameter.
 	 * 
-	 * @param device
-	 *          the device
-	 * @param parameter
-	 *          the parameter
-	 * @param value
-	 *          the value
+	 * @param device    the device
+	 * @param parameter the parameter
+	 * @param value     the value
 	 * 
-	 * @throws WriteDeviceParameterException
-	 *           the write device parameter exception
+	 * @throws WriteDeviceParameterException the write device parameter exception
 	 */
-	 void writeDeviceParameter(Device device, String parameter, String value) throws DeploymentException;
+	void writeDeviceParameter(Device device, String parameter, String value) throws DeploymentException;
 
 	/**
 	 * Creates the fb instance.
 	 * 
-	 * @param fb
-	 *          the fb
-	 * @param res
-	 *          the res
+	 * @param fb  the fb
+	 * @param res the res
 	 * 
-	 * @throws CreateFBInstanceException
-	 *           the create fb instance exception
+	 * @throws CreateFBInstanceException the create fb instance exception
 	 */
-	 void createFBInstance(FBDeploymentData fb, Resource res) throws DeploymentException;
+	void createFBInstance(FBDeploymentData fb, Resource res) throws DeploymentException;
 
 	/**
 	 * Write fb parameter.
 	 * 
-	 * @param resource
-	 *          the resource
-	 * @param value
-	 *          the value
-	 * @param fb
-	 *          the fb
-	 * @param varDecl
-	 *          the var decl
+	 * @param resource the resource
+	 * @param value    the value
+	 * @param fb       the fb
+	 * @param varDecl  the var decl
 	 * 
-	 * @throws WriteFBParameterException
-	 *           the write fb parameter exception
+	 * @throws WriteFBParameterException the write fb parameter exception
 	 */
-	 void writeFBParameter(Resource resource, String value, FBDeploymentData fb, VarDeclaration varDecl) throws DeploymentException;
+	void writeFBParameter(Resource resource, String value, FBDeploymentData fb, VarDeclaration varDecl)
+			throws DeploymentException;
 
 	/**
-	 * Creates the  connection.
+	 * Creates the connection.
 	 * 
-	 * @param res
-	 *          the res
+	 * @param res            the res
 	 * @param connectionData information on the connection to create
 	 * 
-	 * @throws CreateConnectionException
-	 *           the create connection exception
+	 * @throws CreateConnectionException the create connection exception
 	 */
-	 void createConnection(Resource res, ConnectionDeploymentData connectionData) throws DeploymentException;
+	void createConnection(Resource res, ConnectionDeploymentData connectionData) throws DeploymentException;
 
 	/**
 	 * Start FB Instance.
 	 * 
 	 * @param res the res
-	 * @param fb the fb
+	 * @param fb  the fb
 	 * 
 	 * @throws StartException the start exception
 	 */
-	 void startFB(Resource res, FBDeploymentData fb) throws DeploymentException;
+	void startFB(Resource res, FBDeploymentData fb) throws DeploymentException;
 
 	/**
 	 * Start resource.
 	 * 
-	 * @param res
-	 *          the res
+	 * @param res the res
 	 * 
-	 * @throws StartException
-	 *           the start exception
+	 * @throws StartException the start exception
 	 */
-	 void startResource(Resource res) throws DeploymentException;
-
+	void startResource(Resource res) throws DeploymentException;
 
 	/**
 	 * Start device.
 	 * 
-	 * @param dev
-	 *          the dev
+	 * @param dev the dev
 	 * 
-	 * @throws StartException
-	 *           the start exception
+	 * @throws StartException the start exception
 	 */
-	 void startDevice(Device dev) throws DeploymentException;
+	void startDevice(Device dev) throws DeploymentException;
 
-	
 	/**
 	 * Delete resource.
 	 * 
-	 * @param res
-	 *          the res
+	 * @param res the res
 	 * 
-	 * @throws Exception
-	 *           the exception
+	 * @throws Exception the exception
 	 */
-	 void deleteResource(Resource res) throws DeploymentException;
+	void deleteResource(Resource res) throws DeploymentException;
 
 	/**
 	 * Delete fb instance.
 	 * 
 	 * @param res the res
-	 * @param fb the fb instance
+	 * @param fb  the fb instance
 	 * 
 	 * @throws Exception the exception
 	 */
-	 void deleteFB(Resource res, FBDeploymentData fb) throws DeploymentException;
+	void deleteFB(Resource res, FBDeploymentData fb) throws DeploymentException;
 
 	/**
 	 * Delete connection.
@@ -198,43 +180,39 @@ public interface IDeviceManagementInteractor {
 	 * 
 	 * @throws Exception the exception
 	 */
-	 void deleteConnection(Resource res, ConnectionDeploymentData con) throws DeploymentException;
+	void deleteConnection(Resource res, ConnectionDeploymentData con) throws DeploymentException;
 
 	/**
 	 * Clear device.
 	 * 
-	 * @param dev
-	 *          the device
+	 * @param dev the device
 	 * 
-	 * @throws Exception
-	 *           the exception
+	 * @throws Exception the exception
 	 */
-	 void clearDevice(Device dev) throws DeploymentException;
+	void clearDevice(Device dev) throws DeploymentException;
 
 	/**
 	 * Kill device.
 	 * 
-	 * @param dev
-	 *          the device
+	 * @param dev the device
 	 * 
-	 * @throws Exception
-	 *           the exception
+	 * @throws Exception the exception
 	 */
-	 void killDevice(Device dev) throws DeploymentException;
-	 
-	 
-	 /*********************** monitoring commands ****************************************************/
-	 Response readWatches() throws DeploymentException;
-	 
-	 void addWatch(MonitoringBaseElement element) throws DeploymentException;
-	 
-	 void removeWatch(MonitoringBaseElement element) throws DeploymentException;
-	 
-	 void triggerEvent(MonitoringBaseElement element) throws DeploymentException;
-		
-	 void forceValue(MonitoringBaseElement element, String value) throws DeploymentException;
-	 
-	 void clearForce(MonitoringBaseElement element) throws DeploymentException;
+	void killDevice(Device dev) throws DeploymentException;
 
+	/***********************
+	 * monitoring commands
+	 ****************************************************/
+	Response readWatches() throws DeploymentException;
+
+	void addWatch(MonitoringBaseElement element) throws DeploymentException;
+
+	void removeWatch(MonitoringBaseElement element) throws DeploymentException;
+
+	void triggerEvent(MonitoringBaseElement element) throws DeploymentException;
+
+	void forceValue(MonitoringBaseElement element, String value) throws DeploymentException;
+
+	void clearForce(MonitoringBaseElement element) throws DeploymentException;
 
 }

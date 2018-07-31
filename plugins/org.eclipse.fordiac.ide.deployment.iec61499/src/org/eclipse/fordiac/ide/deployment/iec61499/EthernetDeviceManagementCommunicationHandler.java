@@ -23,21 +23,24 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
 
-import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferences;
 
-public class EthernetDeviceManagementCommunicationHandler extends AbstractDeviceManagementCommunicationHandler {
+public class EthernetDeviceManagementCommunicationHandler implements IDeviceManagementCommunicationHandler {
 	private static final int ASN1_TAG_IECSTRING = 80;
 	private MgrInformation mgrInfo;
 	private Socket socket;
 	private DataOutputStream outputStream;
 	private DataInputStream inputStream;
+	private static final int LOWER_INVALID_PORT = 1023;
+	private static final int UPPER_INVALID_PORT = 65536;
+	private static final long MS_SLEEP_IN_DISCONNECT = 50;
 
 	private static class MgrInformation {
-		public String iP;
-		public Integer port;
+		private String iP;
+		private Integer port;
 
 		@Override
 		public String toString() {
@@ -72,8 +75,7 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 			outputStream.close();
 			inputStream.close();
 			socket.close();
-			// TODO check this sleep!
-			Thread.sleep(50);
+			Thread.sleep(MS_SLEEP_IN_DISCONNECT); // TODO check this sleep!
 		} catch (IOException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.DeploymentExecutor_DisconnectFailed, new Object[] {}), e);
@@ -90,14 +92,10 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 		for (int i = 0; i < size; i++) {
 			response.append((char) inputStream.readByte());
 		}
-		String retVal = response.toString();
-		if (0 != response.length()) { 
-			responseReceived(retVal, getInfo(destination));
-		}
-		return retVal;
+		return response.toString();
 	}
 	
-	private String getInfo(String destination){
+	public String getInfo(String destination){
 		String info = mgrInfo.toString();
 		if (!destination.equals("")) { //$NON-NLS-1$
 			info += ": " + destination; //$NON-NLS-1$
@@ -116,7 +114,6 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 			outputStream.writeShort(request.length());
 			outputStream.writeBytes(request);
 			outputStream.flush();
-			postCommandSent(getInfo(destination), destination, request);
 			response = handleResponse(destination);
 		}
 		return response;
@@ -137,13 +134,7 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 	 */
 	private static MgrInformation getValidMgrInformation(final String mgrID) throws DeploymentException {
 		if (null != mgrID) {
-			String id = mgrID;
-			if (id.startsWith("\"")) { //$NON-NLS-1$
-				id = id.substring(1, id.length());
-			}
-			if (id.endsWith("\"")) { //$NON-NLS-1$
-				id = id.substring(0, id.length() - 1);
-			}
+			String id = trimQuoutes(mgrID);
 			String[] splitID = id.split(":"); //$NON-NLS-1$
 			Integer port;
 			MgrInformation mgrInfo = new MgrInformation();
@@ -154,16 +145,26 @@ public class EthernetDeviceManagementCommunicationHandler extends AbstractDevice
 					port = Integer.parseInt(splitID[1]);
 				} catch (NumberFormatException | UnknownHostException e) {
 					throw new DeploymentException(MessageFormat.format(Messages.EthernetComHandler_InvalidMgmtID,
-							new Object[] {mgrID}), e);
+							mgrID), e);
 				}
-				if (1023 < port && port < 65536) {
+				if (LOWER_INVALID_PORT < port && port < UPPER_INVALID_PORT) {
 					mgrInfo.port = port;
 					return mgrInfo;
 				}
 			}
 		}
-		throw new DeploymentException(MessageFormat.format(Messages.EthernetComHandler_InvalidMgmtID,
-				new Object[] {mgrID}));
+		throw new DeploymentException(MessageFormat.format(Messages.EthernetComHandler_InvalidMgmtID, mgrID));
+	}
+	
+	private static String trimQuoutes(final String toTrim) {
+		String id = toTrim;
+		if (id.startsWith("\"")) { //$NON-NLS-1$
+			id = id.substring(1, id.length());
+		}
+		if (id.endsWith("\"")) { //$NON-NLS-1$
+			id = id.substring(0, id.length() - 1);
+		}
+		return id;
 	}
 
 }

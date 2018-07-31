@@ -16,7 +16,6 @@ import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.SharedCursors;
 import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.tools.SelectionTool;
 import org.eclipse.swt.SWT;
@@ -107,23 +106,20 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 */
 	@Override
 	protected boolean handleButtonDown(int which) {
-		if (which == 3 && getCurrentViewer().getControl() instanceof FigureCanvas) {
-			if (stateTransition(STATE_INITIAL, PAN)) {
-				if (stateTransition(PAN, PAN_IN_PROGRESS)) {
-					refreshCursor();
-					viewLocation = ((FigureCanvas) getCurrentViewer().getControl())
-							.getViewport().getViewLocation();
-					updateTargetRequest();
-					((SelectionRequest) getTargetRequest()).setLastButtonPressed(which);
-					updateTargetUnderMouse();
-					EditPart editpart = getTargetEditPart();
-					if (editpart != null) {
-						setDragTracker(editpart.getDragTracker(getTargetRequest()));
-						lockTargetEditPart(editpart);
-					}
-					return true;
-				}
+		if ((which == 3 && getCurrentViewer().getControl() instanceof FigureCanvas) &&
+			 (stateTransition(STATE_INITIAL, PAN)) &&
+				 (stateTransition(PAN, PAN_IN_PROGRESS))) {
+			refreshCursor();
+			viewLocation = ((FigureCanvas) getCurrentViewer().getControl()).getViewport().getViewLocation();
+			updateTargetRequest();
+			((SelectionRequest) getTargetRequest()).setLastButtonPressed(which);
+			updateTargetUnderMouse();
+			EditPart editpart = getTargetEditPart();
+			if (editpart != null) {
+				setDragTracker(editpart.getDragTracker(getTargetRequest()));
+				lockTargetEditPart(editpart);
 			}
+			return true;
 		}
 		if (which == 1 && getCurrentViewer().getControl() instanceof FigureCanvas
 				&& stateTransition(PAN, PAN_IN_PROGRESS)) {

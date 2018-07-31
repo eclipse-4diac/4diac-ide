@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499.providers;
 
-import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
@@ -27,7 +27,7 @@ public class FDBK2DevMgmInteractorProvider extends DefaultDevMgmInteractorProvid
 	}
 	
 	@Override
-	public IDeviceManagementInteractor createInteractor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler) {
+	public IDeviceManagementInteractor createInteractor(Device dev, IDeviceManagementCommunicationHandler overrideHandler) {
 		return new DeploymentExecutor(dev, overrideHandler) {
 			
 			@Override

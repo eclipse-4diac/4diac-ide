@@ -16,8 +16,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
-public abstract class DeploymentHelper {
-
+public interface DeploymentHelper {
+	
 	public static String getVariableValue(VarDeclaration varDecl, AutomationSystem system) {
 		Value value = varDecl.getValue();
 		if (null != value && null != value.getValue() && !"".equals(value.getValue())){ //$NON-NLS-1$
