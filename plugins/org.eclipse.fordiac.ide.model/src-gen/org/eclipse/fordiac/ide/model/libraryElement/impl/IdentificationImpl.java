@@ -420,7 +420,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (applicationDomain: ");
 		result.append(applicationDomain);
 		result.append(", classification: ");

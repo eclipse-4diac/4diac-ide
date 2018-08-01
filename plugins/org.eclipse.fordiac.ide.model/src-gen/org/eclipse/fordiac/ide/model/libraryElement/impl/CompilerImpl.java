@@ -350,7 +350,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (language: ");
 		if (languageESet) result.append(language); else result.append("<unset>");
 		result.append(", product: ");

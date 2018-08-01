@@ -268,7 +268,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (classdef: ");
 		result.append(classdef);
 		result.append(", header: ");

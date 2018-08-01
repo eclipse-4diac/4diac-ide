@@ -50,7 +50,7 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 	 * @generated
 	 */
 	public Event getEventSource() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getEventSource(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getEventSource(this);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 	 * @generated
 	 */
 	public Event getEventDestination() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getEventDestination(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getEventDestination(this);
 	}
 
 } //EventConnectionImpl

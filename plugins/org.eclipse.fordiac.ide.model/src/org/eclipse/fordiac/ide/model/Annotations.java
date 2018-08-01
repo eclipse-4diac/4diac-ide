@@ -44,15 +44,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public enum Annotations {
-	GEN;
+public final class Annotations {
 
 	//*** AdapterType  ***//
-	public InterfaceList getInterfaceList(AdapterType at) {
+	public static InterfaceList getInterfaceList(AdapterType at) {
 		return at.getAdapterFBType().getInterfaceList();
 	}
 	
-	public AdapterFBType getPlugType(AdapterType adapterType) {
+	public static AdapterFBType getPlugType(AdapterType adapterType) {
 		AdapterFBType temp = EcoreUtil.copy(adapterType.getAdapterFBType());
 		// fetch the interface to invert it 
 		ArrayList<Event> inputEvents =  new ArrayList<Event>(temp.getInterfaceList().getEventOutputs());
@@ -82,34 +81,34 @@ public enum Annotations {
 		return temp;
 	}
 	
-	public AdapterFBType getSocketType(AdapterType at) {
+	public static AdapterFBType getSocketType(AdapterType at) {
 		return EcoreUtil.copy(at.getAdapterFBType());
 	}
 
 	//*** Application ***//
-	public AutomationSystem getAutomationSystem(Application a) {
+	public static AutomationSystem getAutomationSystem(Application a) {
 		return (AutomationSystem)a.eContainer();
 	}
 	
 	//*** Connection ***//
-	public FBNetworkElement getSourceElement(Connection c) {
+	public static FBNetworkElement getSourceElement(Connection c) {
 		return (null != c.getSource()) ? c.getSource().getFBNetworkElement() : null;
 	}
 	
-	public FBNetworkElement getDestinationElement(Connection c) {
+	public static FBNetworkElement getDestinationElement(Connection c) {
 		return (null != c.getDestination()) ? c.getDestination().getFBNetworkElement() : null;
 	}
 	
-	public boolean isResourceConnection(Connection c) {
+	public static boolean isResourceConnection(Connection c) {
 		//if source element is null it is a connection from a CFB interface element
 		return (null != c.getSourceElement() && null != c.getSourceElement().getFbNetwork()) ? (c.getSourceElement().getFbNetwork().eContainer() instanceof Resource) : false;
 	}
 	
-	public FBNetwork getFBNetwork(Connection c) {
+	public static FBNetwork getFBNetwork(Connection c) {
 		return (FBNetwork)c.eContainer();
 	}
 
-	public void checkifConnectionBroken(Connection c){
+	public static void checkifConnectionBroken(Connection c){
 		if(!c.isResourceConnection()){
 			Resource sourceRes = (null != c.getSourceElement()) ? c.getSourceElement().getResource() : null;
 			Resource destinationRes = (null != c.getDestinationElement()) ? c.getDestinationElement().getResource() : null;
@@ -119,15 +118,15 @@ public enum Annotations {
 	}
 
 	//*** Device ***//
-	public AutomationSystem getAutomationSystem(Device d) {
+	public static AutomationSystem getAutomationSystem(Device d) {
 		return d.getSystemConfiguration().getAutomationSystem();
 	}
 	
-	public SystemConfiguration getSystemConfiguration(Device d) {
+	public static SystemConfiguration getSystemConfiguration(Device d) {
 		return (SystemConfiguration)d.eContainer();
 	}
 		
-	public Resource getResourceNamed(Device d, String name) {
+	public static Resource getResourceNamed(Device d, String name) {
 		for (Resource res : d.getResource()) {			
 			if (res.getName().equals(name)) {
 				return res;
@@ -137,7 +136,7 @@ public enum Annotations {
 	}
 	
 	//*** ECState ***//
-	public boolean isStartState(ECState ecs) {
+	public static boolean isStartState(ECState ecs) {
 		if(null != ecs.eContainer()){
 			return ecs.equals(((ECC)ecs.eContainer()).getStart());
 		}
@@ -145,7 +144,7 @@ public enum Annotations {
 	}
 	
 	//*** ECTransition ***//
-	public String getConditionText(ECTransition ect) {
+	public static String getConditionText(ECTransition ect) {
 		String retVal = ""; //$NON-NLS-1$
 		Event event = ect.getConditionEvent();
 		String expression = ect.getConditionExpression();
@@ -162,13 +161,13 @@ public enum Annotations {
 		return retVal;
 	}
 	
-	public ECC getECC(ECTransition ecTransition) {
+	public static ECC getECC(ECTransition ecTransition) {
 		return (ECC)ecTransition.eContainer();
 	}
 
 	
 	//*** FB ***//
-	public boolean isResourceFB(FB fb) {
+	public static boolean isResourceFB(FB fb) {
 		//A fB is a resource FB if the FB is in the fbnetwork of a resource and
 		// the mapping is null or as preperation when we allow to map resource FBs 
 		//to applications when the mapping from is equal to the fb 
@@ -178,12 +177,12 @@ public enum Annotations {
 		return false;
 	}
 	
-	public boolean isResourceTypeFB(FB fb) {
+	public static boolean isResourceTypeFB(FB fb) {
 		return false;
 	}
 	
 	//*** FBNetworkElement ***//
-	public Resource getResource(FBNetworkElement fbne){
+	public static Resource getResource(FBNetworkElement fbne){
 		if(null != fbne.getFbNetwork() && fbne.getFbNetwork().eContainer() instanceof Resource){
 			return (Resource)fbne.getFbNetwork().eContainer();
 		} else if(fbne.isMapped()){
@@ -193,14 +192,14 @@ public enum Annotations {
 		return null;
 	}
 	
-	public IInterfaceElement getInterfaceElement(FBNetworkElement fbne, String name) {
+	public static IInterfaceElement getInterfaceElement(FBNetworkElement fbne, String name) {
 		if (fbne.getInterface() != null) {
 			return fbne.getInterface().getInterfaceElement(name);
 		}
 		return null;
 	}
 	
-	public FBNetworkElement getOpposite(FBNetworkElement fbne) {
+	public static FBNetworkElement getOpposite(FBNetworkElement fbne) {
 		//try to find the other coresponding mapped entity if this FBNetworkElement is mapped
 		if(fbne.isMapped()){
 			return (fbne == fbne.getMapping().getFrom()) ? fbne.getMapping().getTo() : fbne.getMapping().getFrom();  
@@ -210,12 +209,12 @@ public enum Annotations {
 		return null;
 	}
 	
-	public FBNetwork getFbNetwork(FBNetworkElement fbne) {
+	public static FBNetwork getFbNetwork(FBNetworkElement fbne) {
 		//an FB should always be put in an fbNetwork this is at the same time also a null check
 		return (fbne.eContainer() instanceof FBNetwork) ? (FBNetwork)fbne.eContainer() : null;
 	}
 	
-	public void checkConnections(FBNetworkElement fbne) {
+	public static void checkConnections(FBNetworkElement fbne) {
 		for (IInterfaceElement element : fbne.getInterface().getAllInterfaceElements()) {
 			//todo when lambdas are better allowed in EMF replace with 
 			element.getInputConnections().forEach(conn -> conn.checkIfConnectionBroken());
@@ -223,14 +222,14 @@ public enum Annotations {
 		}
 	}
 	
-	public boolean isMapped(FBNetworkElement fbne) {
+	public static boolean isMapped(FBNetworkElement fbne) {
 		return null != fbne.getMapping();
 	}
 	
 	//*** SubApp ***//
 	
 	//*** InterfaceList ***
-	public  EList<IInterfaceElement> getAllInterfaceElements(InterfaceList il) {
+	public static EList<IInterfaceElement> getAllInterfaceElements(InterfaceList il) {
 		EList<IInterfaceElement> retVal = new BasicEList<IInterfaceElement>();		
 		retVal.addAll(il.getEventInputs());
 		retVal.addAll(il.getEventOutputs());
@@ -241,7 +240,7 @@ public enum Annotations {
 		return retVal;
 	}
 	
-	public Event getEvent(InterfaceList il, String name){
+	public static Event getEvent(InterfaceList il, String name){
 		for (Event event : il.getEventInputs()) {
 			if (event.getName().equals(name)) {
 				return event;
@@ -255,7 +254,7 @@ public enum Annotations {
 		return null;
 	}
 	
-	public VarDeclaration getVariable(InterfaceList il, String name) {
+	public static VarDeclaration getVariable(InterfaceList il, String name) {
 		for (VarDeclaration var : il.getInputVars()) {
 			if (var.getName().equals(name)) {
 				return var;
@@ -269,7 +268,7 @@ public enum Annotations {
 		return null;
 	}
 	
-	public IInterfaceElement getInterfaceElement(InterfaceList il, String name) {
+	public static IInterfaceElement getInterfaceElement(InterfaceList il, String name) {
 		IInterfaceElement element = il.getEvent(name);
 		if (element == null) {
 			element = il.getVariable(name);
@@ -280,12 +279,12 @@ public enum Annotations {
 		return element;
 	}
 	
-	public FBNetworkElement getFBNetworkElement(InterfaceList il) {
+	public static FBNetworkElement getFBNetworkElement(InterfaceList il) {
 		//an FB should mostly in an FBNetworkElement otherwise it is in CFB interface this is at the same time also a null check
 		return (il.eContainer() instanceof FBNetworkElement) ? (FBNetworkElement)il.eContainer() : null;
 	}
 	
-	public AdapterDeclaration getAdapter(InterfaceList il, String name) {
+	public static AdapterDeclaration getAdapter(InterfaceList il, String name) {
 		for (AdapterDeclaration adapt : il.getPlugs()) {
 			if (adapt.getName().equals(name)) {
 				return adapt;
@@ -300,12 +299,12 @@ public enum Annotations {
 	}
 	
 	//*** Mapping ***//
-	public AutomationSystem getAutomationSystem(Mapping m) {
+	public static AutomationSystem getAutomationSystem(Mapping m) {
 		return (null != m.eContainer()) ? (AutomationSystem)m.eContainer() : null;
 	}
 	
 	//*** Resource ***//
-	public AutomationSystem getAutomationSystem(Resource r) {
+	public static AutomationSystem getAutomationSystem(Resource r) {
 		AutomationSystem system = null; 
 		if(null != r.getDevice()){ 
 			system = r.getDevice().getAutomationSystem(); 
@@ -314,7 +313,7 @@ public enum Annotations {
 	}
 	
 	//*** FBNetwork ***//
-	public void addConnection(FBNetwork fbn, Connection connection) {
+	public static void addConnection(FBNetwork fbn, Connection connection) {
 		if (connection instanceof EventConnection) {
 			fbn.getEventConnections().add((EventConnection)connection);
 		}
@@ -326,7 +325,7 @@ public enum Annotations {
 		}
 	}
 	
-	public void removeConnection(FBNetwork fbn, Connection connection) {
+	public static void removeConnection(FBNetwork fbn, Connection connection) {
 		if (connection instanceof EventConnection) {
 			fbn.getEventConnections().remove(connection);
 		}
@@ -338,23 +337,23 @@ public enum Annotations {
 		}
 	}
 	
-	public boolean isApplicationNetwork(FBNetwork fbn) {
+	public static boolean isApplicationNetwork(FBNetwork fbn) {
 		return fbn.eContainer() instanceof Application;
 	}
 	
-	public boolean isSubApplicationNetwork(FBNetwork fbn) {
+	public static boolean isSubApplicationNetwork(FBNetwork fbn) {
 		return fbn.eContainer() instanceof SubApp;
 	}
 	
-	public boolean isResourceNetwork(FBNetwork fbn) {
+	public static boolean isResourceNetwork(FBNetwork fbn) {
 		return fbn.eContainer() instanceof Resource;
 	}
 	
-	public boolean isCFBTypeNetwork(FBNetwork fbn) {
+	public static boolean isCFBTypeNetwork(FBNetwork fbn) {
 		return fbn.eContainer() instanceof CompositeFBType;
 	}
 	
-	public AutomationSystem getAutomationSystem(FBNetwork fbn) {
+	public static AutomationSystem getAutomationSystem(FBNetwork fbn) {
 		if(fbn.isApplicationNetwork() || fbn.isSubApplicationNetwork()){
 			return fbn.getApplication().getAutomationSystem();
 		}
@@ -366,7 +365,7 @@ public enum Annotations {
 		return null;
 	}
 	
-	public Application getApplication(FBNetwork fbn) {
+	public static Application getApplication(FBNetwork fbn) {
 		if(fbn.isApplicationNetwork()){
 			// no null check is need as this is already done in isApplicationNetwork
 			return (Application)fbn.eContainer();
@@ -376,7 +375,7 @@ public enum Annotations {
 		return null;		
 	}
 
-	public FB getFBNamed(FBNetwork fbn, String name) {
+	public static FB getFBNamed(FBNetwork fbn, String name) {
 		for (FBNetworkElement element : fbn.getNetworkElements()) {
 			if((element instanceof FB) && (element.getName().equals(name))){
 				return (FB)element;
@@ -385,7 +384,7 @@ public enum Annotations {
 		return null;
 	}
 	
-	public SubApp getSubAppNamed(FBNetwork fbn, String name) {
+	public static SubApp getSubAppNamed(FBNetwork fbn, String name) {
 		for (FBNetworkElement element : fbn.getNetworkElements()) {
 			if(element instanceof SubApp){ 
 				if(element.getName().equals(name)){
@@ -403,7 +402,7 @@ public enum Annotations {
 		return null;
 	}
 	
-	public FBNetworkElement getElementNamed(FBNetwork fbn, String name) {
+	public static FBNetworkElement getElementNamed(FBNetwork fbn, String name) {
 		for (FBNetworkElement element : fbn.getNetworkElements()) {
 			if(element.getName().equals(name)){
 				return element;
@@ -413,14 +412,14 @@ public enum Annotations {
 	}
 	
 	//*** AutomationSystem ***//
-	public Device getDeviceNamed(AutomationSystem as, String name) {
+	public static Device getDeviceNamed(AutomationSystem as, String name) {
 		if (as.getSystemConfiguration() != null) {
 			return as.getSystemConfiguration().getDeviceNamed(name);
 		}
 		return null;
 	}
 	
-	public Application getApplicationNamed(AutomationSystem as, String name) {
+	public static Application getApplicationNamed(AutomationSystem as, String name) {
 		for(Application app : as.getApplication()){
 			if (app.getName().equals(name)) {
 				return app;
@@ -430,12 +429,12 @@ public enum Annotations {
 	}
 
 	//*** VarDeclaration ***//
-	public boolean isArray(VarDeclaration vd) {
+	public static boolean isArray(VarDeclaration vd) {
 		return vd.getArraySize() > 0;
 	}
 	
 	//*** ConfigurabeleObject ***//
-	public void setAttribute(ConfigurableObject object, final String attributeName, final String type, final String value, final String comment) {
+	public static void setAttribute(ConfigurableObject object, final String attributeName, final String type, final String value, final String comment) {
 		Attribute attribute = getAttribute(object, attributeName);
 		if (attribute == null) {
 			attribute = LibraryElementFactory.eINSTANCE.createAttribute();
@@ -449,7 +448,7 @@ public enum Annotations {
 		}
 	}
 	
-	public String getAttributeValue(ConfigurableObject object, final String attributeName) {
+	public static String getAttributeValue(ConfigurableObject object, final String attributeName) {
 		Attribute a = getAttribute(object, attributeName);
 		if(null != a){
 			return a.getValue();
@@ -457,7 +456,7 @@ public enum Annotations {
 		return null;
 	}
 
-	public Attribute getAttribute(ConfigurableObject object, final String attributeName) {
+	public static Attribute getAttribute(ConfigurableObject object, final String attributeName) {
 		if (attributeName == null) {
 			return null;
 		}
@@ -470,48 +469,48 @@ public enum Annotations {
 	}
 	
 	//*** DataConnection ***//
-	public VarDeclaration getDataSource(DataConnection dc) {
+	public static VarDeclaration getDataSource(DataConnection dc) {
 		return (VarDeclaration)dc.getSource();
 	}
 	
-	public VarDeclaration getDataDestination(DataConnection dc) {
+	public static VarDeclaration getDataDestination(DataConnection dc) {
 		return (VarDeclaration)dc.getDestination();
 	}
 	
 	//*** EventConnection ***//
-	public Event getEventSource(EventConnection ec) {
+	public static Event getEventSource(EventConnection ec) {
 		return (Event)ec.getSource();
 	}
 	
-	public Event getEventDestination(EventConnection ec) {
+	public static Event getEventDestination(EventConnection ec) {
 		return (Event)ec.getDestination();
 	}
 		
 	//*** AdapterConnection ***//
-	public AdapterDeclaration getAdapterSource(AdapterConnection ac) {
+	public static AdapterDeclaration getAdapterSource(AdapterConnection ac) {
 		return (AdapterDeclaration)ac.getSource();
 	}
 	
-	public AdapterDeclaration getAdapterDestination(AdapterConnection ac) {
+	public static AdapterDeclaration getAdapterDestination(AdapterConnection ac) {
 		return (AdapterDeclaration)ac.getDestination();
 	}
 	
 	//*** IInterfaceElement ***//
-	public FBNetworkElement getFBNetworkElement(IInterfaceElement iie) {
+	public static FBNetworkElement getFBNetworkElement(IInterfaceElement iie) {
 		return (iie.eContainer() instanceof InterfaceList) ? ((InterfaceList)iie.eContainer()).getFBNetworkElement() : null;
 	}
 	
 	//*** Value ***//
-	public VarDeclaration getVarDeclaration(Value v) {
+	public static VarDeclaration getVarDeclaration(Value v) {
 		return (VarDeclaration)v.eContainer();
 	}
 	
 	//*** SystemConfiguration ***//
-	public AutomationSystem getAutomationSystem(SystemConfiguration sc) {
+	public static AutomationSystem getAutomationSystem(SystemConfiguration sc) {
 		return (AutomationSystem)sc.eContainer();
 	}
 	
-	public Segment getSegmentNamed(SystemConfiguration sc, String name) {
+	public static Segment getSegmentNamed(SystemConfiguration sc, String name) {
 		for (Segment segment : sc.getSegments()) {
 			if (segment.getName().equals(name)) {
 				return segment;
@@ -520,7 +519,7 @@ public enum Annotations {
 		return null;
 	}
 	
-	public Device getDeviceNamed(SystemConfiguration sc, String name) {
+	public static Device getDeviceNamed(SystemConfiguration sc, String name) {
 		for (Device device : sc.getDevices()) {
 			if (device.getName().equals(name)) {
 				return device;
@@ -530,28 +529,28 @@ public enum Annotations {
 	}
 	
 	//*** ResourceTypeFB ***//
-	public boolean isResourceTypeFB() {
+	public static boolean isResourceTypeFB() {
 		return true;
 	}
 	
 	//*** I4DIACElement ***//
-	public Annotation createAnnotation(I4DIACElement i4e, String name) {
+	public static Annotation createAnnotation(I4DIACElement i4e, String name) {
 		Annotation annotation = LibraryElementFactory.eINSTANCE.createAnnotation();
 		annotation.setName(name);
 		i4e.getAnnotations().add(annotation);
 		return annotation;
 	}
 	
-	public void removeAnnotation(I4DIACElement i4e, Annotation a) {
+	public static void removeAnnotation(I4DIACElement i4e, Annotation a) {
 		i4e.getAnnotations().remove(a);
 	}
 	
 	//*** TypedConfigureableObject ***//
-	public String getTypeName(TypedConfigureableObject tco) {
+	public static String getTypeName(TypedConfigureableObject tco) {
 		return tco.getPaletteEntry().getLabel();
 	}
 	
-	public LibraryElement getType(TypedConfigureableObject tco) {
+	public static LibraryElement getType(TypedConfigureableObject tco) {
 		if(null != tco.getPaletteEntry()){
 			return tco.getPaletteEntry().getType();
 		}		
@@ -559,11 +558,11 @@ public enum Annotations {
 	}
 	
 	//*** AdapterFB ***//
-	public boolean isSocket(AdapterFB afb) {
+	public static boolean isSocket(AdapterFB afb) {
 		return !afb.isPlug();
 	}
 	
-	public FBType getType(AdapterFB afb) {
+	public static FBType getType(AdapterFB afb) {
 		FBType retVal = null;
 		if ((null != afb.getPaletteEntry()) && (afb.getPaletteEntry() instanceof AdapterTypePaletteEntry)  &&
 				(null != afb.getAdapterDecl())){
@@ -576,8 +575,12 @@ public enum Annotations {
 		return retVal;
 	}
 	
-	public boolean isPlug(AdapterFB afb) {
+	public static boolean isPlug(AdapterFB afb) {
 		return !afb.getAdapterDecl().isIsInput();
+	}
+	
+	private Annotations() {
+		throw new UnsupportedOperationException("The utility class Annotations should not be instatiated");
 	}
 
 }

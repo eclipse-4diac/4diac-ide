@@ -70,7 +70,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	public InterfaceList getInterfaceList() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceList(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getInterfaceList(this);
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	public AdapterFBType getPlugType() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getPlugType(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getPlugType(this);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	public AdapterFBType getSocketType() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSocketType(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getSocketType(this);
 	}
 
 	/**

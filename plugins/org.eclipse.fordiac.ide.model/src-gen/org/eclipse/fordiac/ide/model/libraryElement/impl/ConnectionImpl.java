@@ -272,7 +272,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	public boolean isResourceConnection() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceConnection(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isResourceConnection(this);
 	}
 
 	/**
@@ -281,7 +281,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	public FBNetwork getFBNetwork() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetwork(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getFBNetwork(this);
 	}
 
 	/**
@@ -290,7 +290,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	public void checkIfConnectionBroken() {
-		org.eclipse.fordiac.ide.model.Annotations.GEN.checkifConnectionBroken(this);
+		org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);
 	}
 
 	/**
@@ -460,7 +460,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	public FBNetworkElement getSourceElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSourceElement(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);
 	}
 
 	/**
@@ -469,7 +469,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	public FBNetworkElement getDestinationElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDestinationElement(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getDestinationElement(this);
 	}
 
 	/**
@@ -637,7 +637,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (dx1: ");
 		result.append(dx1);
 		result.append(", dx2: ");

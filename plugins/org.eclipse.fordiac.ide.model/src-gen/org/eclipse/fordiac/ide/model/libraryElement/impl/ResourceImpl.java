@@ -307,7 +307,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * @generated
 	 */
 	public AutomationSystem getAutomationSystem() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
 
 	/**
@@ -517,7 +517,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (x: ");
 		result.append(x);
 		result.append(", y: ");

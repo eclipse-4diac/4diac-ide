@@ -463,7 +463,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @generated
 	 */
 	public boolean isArray() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isArray(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isArray(this);
 	}
 
 	/**
@@ -472,7 +472,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @generated
 	 */
 	public FBNetworkElement getFBNetworkElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
 	}
 
 	/**
@@ -780,7 +780,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(", comment: ");

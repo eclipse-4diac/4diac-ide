@@ -78,7 +78,7 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements
 	 * @generated
 	 */
 	public Annotation createAnnotation(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.createAnnotation(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.createAnnotation(this, name);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements
 	 * @generated
 	 */
 	public void removeAnnotation(final Annotation annotation) {
-		org.eclipse.fordiac.ide.model.Annotations.GEN.removeAnnotation(this, annotation);
+		org.eclipse.fordiac.ide.model.Annotations.removeAnnotation(this, annotation);
 	}
 
 	/**

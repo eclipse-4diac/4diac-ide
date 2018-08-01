@@ -205,7 +205,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	public EList<IInterfaceElement> getAllInterfaceElements() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAllInterfaceElements(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getAllInterfaceElements(this);
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	public Event getEvent(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getEvent(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getEvent(this, name);
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	public VarDeclaration getVariable(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getVariable(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getVariable(this, name);
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	public IInterfaceElement getInterfaceElement(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceElement(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);
 	}
 
 	/**
@@ -241,7 +241,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	public FBNetworkElement getFBNetworkElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
 	}
 
 	/**
@@ -250,7 +250,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	public AdapterDeclaration getAdapter(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAdapter(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getAdapter(this, name);
 	}
 
 	/**

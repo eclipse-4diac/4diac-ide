@@ -584,7 +584,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 */
 	public boolean isArray() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isArray(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isArray(this);
 	}
 
 	/**
@@ -593,7 +593,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 */
 	public FBNetworkElement getFBNetworkElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
 	}
 
 	/**
@@ -602,7 +602,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 */
 	public Annotation createAnnotation(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.createAnnotation(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.createAnnotation(this, name);
 	}
 
 	/**
@@ -611,7 +611,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 */
 	public void removeAnnotation(final Annotation annotation) {
-		org.eclipse.fordiac.ide.model.Annotations.GEN.removeAnnotation(this, annotation);
+		org.eclipse.fordiac.ide.model.Annotations.removeAnnotation(this, annotation);
 	}
 
 	/**

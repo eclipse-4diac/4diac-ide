@@ -127,7 +127,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * @generated
 	 */
 	public boolean isPlug() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isPlug(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isPlug(this);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * @generated
 	 */
 	public boolean isSocket() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isSocket(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isSocket(this);
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * @generated
 	 */
 	public FBType getType() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getType(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getType(this);
 	}
 
 	/**

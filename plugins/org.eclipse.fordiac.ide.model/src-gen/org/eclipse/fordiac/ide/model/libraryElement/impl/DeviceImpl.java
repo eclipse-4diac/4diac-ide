@@ -335,7 +335,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @generated
 	 */
 	public AutomationSystem getAutomationSystem() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
 
 	/**
@@ -344,7 +344,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @generated
 	 */
 	public SystemConfiguration getSystemConfiguration() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSystemConfiguration(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getSystemConfiguration(this);
 	}
 
 	/**
@@ -367,7 +367,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @generated
 	 */
 	public Resource getResourceNamed(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getResourceNamed(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getResourceNamed(this, name);
 	}
 
 	/**
@@ -615,7 +615,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (x: ");
 		result.append(x);
 		result.append(", y: ");

@@ -264,7 +264,7 @@ public class ColorImpl extends EObjectImpl implements Color {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (red: ");
 		result.append(red);
 		result.append(", green: ");

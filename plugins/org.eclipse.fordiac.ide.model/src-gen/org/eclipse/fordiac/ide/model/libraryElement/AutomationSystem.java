@@ -153,7 +153,7 @@ public interface AutomationSystem extends LibraryElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getDeviceNamed(this, name);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);'"
 	 * @generated
 	 */
 	Device getDeviceNamed(String name);
@@ -162,7 +162,7 @@ public interface AutomationSystem extends LibraryElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getApplicationNamed(this, name);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getApplicationNamed(this, name);'"
 	 * @generated
 	 */
 	Application getApplicationNamed(String name);

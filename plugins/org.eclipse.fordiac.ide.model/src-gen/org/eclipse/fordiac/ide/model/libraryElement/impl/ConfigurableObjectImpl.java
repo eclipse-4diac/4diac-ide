@@ -166,7 +166,7 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * @generated
 	 */
 	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
-		org.eclipse.fordiac.ide.model.Annotations.GEN.setAttribute(this, attributeName, type, value, comment);
+		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * @generated
 	 */
 	public Attribute getAttribute(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAttribute(this, attributeName);
+		return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * @generated
 	 */
 	public String getAttributeValue(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAttributeValue(this, attributeName);
+		return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);
 	}
 
 	/**
@@ -290,7 +290,7 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(", comment: ");

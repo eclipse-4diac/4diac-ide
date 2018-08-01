@@ -182,7 +182,7 @@ public interface IInterfaceElement extends INamedElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);'"
 	 * @generated
 	 */
 	FBNetworkElement getFBNetworkElement();

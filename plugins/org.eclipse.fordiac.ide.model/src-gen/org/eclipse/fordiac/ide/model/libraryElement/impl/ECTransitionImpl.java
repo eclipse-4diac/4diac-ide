@@ -276,7 +276,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * @generated
 	 */
 	public String getConditionText() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getConditionText(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getConditionText(this);
 	}
 
 	/**
@@ -285,7 +285,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * @generated
 	 */
 	public ECC getECC() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getECC(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getECC(this);
 	}
 
 	/**
@@ -494,7 +494,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (comment: ");
 		result.append(comment);
 		result.append(", conditionExpression: ");

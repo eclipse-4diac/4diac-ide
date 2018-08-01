@@ -63,7 +63,7 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	 * @generated
 	 */
 	public boolean isResourceTypeFB() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceTypeFB(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB(this);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	 * @generated
 	 */
 	public boolean isResourceFB() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceFB(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isResourceFB(this);
 	}
 
 	@Override

@@ -40,7 +40,7 @@ public interface FB extends FBNetworkElement {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceTypeFB(this);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB(this);'"
 	 * @generated
 	 */
 	boolean isResourceTypeFB();
@@ -53,7 +53,7 @@ public interface FB extends FBNetworkElement {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceFB(this);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.isResourceFB(this);'"
 	 * @generated
 	 */
 	boolean isResourceFB();

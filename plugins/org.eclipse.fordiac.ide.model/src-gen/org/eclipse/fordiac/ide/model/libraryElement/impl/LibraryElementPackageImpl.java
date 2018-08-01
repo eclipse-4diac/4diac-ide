@@ -640,7 +640,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link LibraryElementPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -654,7 +654,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		if (isInited) return (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
 
 		// Obtain or create and register package
-		LibraryElementPackageImpl theLibraryElementPackage = (LibraryElementPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof LibraryElementPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new LibraryElementPackageImpl());
+		Object registeredLibraryElementPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		LibraryElementPackageImpl theLibraryElementPackage = registeredLibraryElementPackage instanceof LibraryElementPackageImpl ? (LibraryElementPackageImpl)registeredLibraryElementPackage : new LibraryElementPackageImpl();
 
 		isInited = true;
 
@@ -662,8 +663,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		XMLTypePackage.eINSTANCE.eClass();
 
 		// Obtain or create and register interdependencies
-		PalettePackageImpl thePalettePackage = (PalettePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(PalettePackage.eNS_URI) instanceof PalettePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(PalettePackage.eNS_URI) : PalettePackage.eINSTANCE);
-		DataPackageImpl theDataPackage = (DataPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI) instanceof DataPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI) : DataPackage.eINSTANCE);
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(PalettePackage.eNS_URI);
+		PalettePackageImpl thePalettePackage = (PalettePackageImpl)(registeredPackage instanceof PalettePackageImpl ? registeredPackage : PalettePackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
+		DataPackageImpl theDataPackage = (DataPackageImpl)(registeredPackage instanceof DataPackageImpl ? registeredPackage : DataPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theLibraryElementPackage.createPackageContents();
@@ -678,7 +681,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		// Mark meta-data to indicate it can't be changed
 		theLibraryElementPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(LibraryElementPackage.eNS_URI, theLibraryElementPackage);
 		return theLibraryElementPackage;
@@ -3543,519 +3545,519 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	protected void createExtendedMetaDataAnnotations() {
-		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";	
+		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
 		addAnnotation
-		  (getAdapterType_AdapterFBType(), 
-		   source, 
+		  (getAdapterType_AdapterFBType(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "Service",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "Service",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getApplication_FBNetwork(), 
-		   source, 
+		  (getApplication_FBNetwork(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "FBNetwork",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "FBNetwork",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getBasicFBType_ECC(), 
-		   source, 
+		  (getBasicFBType_ECC(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "ECC",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "ECC",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getBasicFBType_Algorithm(), 
-		   source, 
+		  (getBasicFBType_Algorithm(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "Algorithm",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "Algorithm",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getBasicFBType_InternalVars(), 
-		   source, 
+		  (getBasicFBType_InternalVars(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "VarDeclaration",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "VarDeclaration",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getCompilerInfo_Compiler(), 
-		   source, 
+		  (getCompilerInfo_Compiler(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "Compiler",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "Compiler",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getCompilerInfo_Classdef(), 
-		   source, 
+		  (getCompilerInfo_Classdef(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "classdef"
-		   });	
+			   "kind", "attribute",
+			   "name", "classdef"
+		   });
 		addAnnotation
-		  (getCompilerInfo_Header(), 
-		   source, 
+		  (getCompilerInfo_Header(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "header"
-		   });	
+			   "kind", "attribute",
+			   "name", "header"
+		   });
 		addAnnotation
-		  (getCompiler_Language(), 
-		   source, 
+		  (getCompiler_Language(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Language"
-		   });	
+			   "kind", "attribute",
+			   "name", "Language"
+		   });
 		addAnnotation
-		  (getCompiler_Product(), 
-		   source, 
+		  (getCompiler_Product(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Product"
-		   });	
+			   "kind", "attribute",
+			   "name", "Product"
+		   });
 		addAnnotation
-		  (getCompiler_Vendor(), 
-		   source, 
+		  (getCompiler_Vendor(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Vendor"
-		   });	
+			   "kind", "attribute",
+			   "name", "Vendor"
+		   });
 		addAnnotation
-		  (getCompiler_Version(), 
-		   source, 
+		  (getCompiler_Version(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Version"
-		   });	
+			   "kind", "attribute",
+			   "name", "Version"
+		   });
 		addAnnotation
-		  (getConnection_Dx1(), 
-		   source, 
+		  (getConnection_Dx1(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "dx1"
-		   });	
+			   "kind", "attribute",
+			   "name", "dx1"
+		   });
 		addAnnotation
-		  (getConnection_Dx2(), 
-		   source, 
+		  (getConnection_Dx2(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "dx2"
-		   });	
+			   "kind", "attribute",
+			   "name", "dx2"
+		   });
 		addAnnotation
-		  (getConnection_Dy(), 
-		   source, 
+		  (getConnection_Dy(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "dy"
-		   });	
+			   "kind", "attribute",
+			   "name", "dy"
+		   });
 		addAnnotation
-		  (getDevice_Resource(), 
-		   source, 
+		  (getDevice_Resource(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "Resource",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "Resource",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getDeviceType_VarDeclaration(), 
-		   source, 
+		  (getDeviceType_VarDeclaration(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "VarDeclaration",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "VarDeclaration",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getDeviceType_ResourceTypeName(), 
-		   source, 
+		  (getDeviceType_ResourceTypeName(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "ResourceTypeName",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "ResourceTypeName",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getDeviceType_Resource(), 
-		   source, 
+		  (getDeviceType_Resource(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "Resource",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "Resource",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getDeviceType_FBNetwork(), 
-		   source, 
+		  (getDeviceType_FBNetwork(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "FBNetwork",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "FBNetwork",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getECC_ECState(), 
-		   source, 
+		  (getECC_ECState(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "ECState",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "ECState",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getECC_ECTransition(), 
-		   source, 
+		  (getECC_ECTransition(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "ECTransition",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "ECTransition",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getECState_ECAction(), 
-		   source, 
+		  (getECState_ECAction(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "ECAction",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "ECAction",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getECTransition_Comment(), 
-		   source, 
+		  (getECTransition_Comment(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Comment"
-		   });	
+			   "kind", "attribute",
+			   "name", "Comment"
+		   });
 		addAnnotation
-		  (getECTransition_ConditionExpression(), 
-		   source, 
+		  (getECTransition_ConditionExpression(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Condition"
-		   });	
+			   "kind", "attribute",
+			   "name", "Condition"
+		   });
 		addAnnotation
-		  (getEvent_With(), 
-		   source, 
+		  (getEvent_With(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "With",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "With",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getFBType_InterfaceList(), 
-		   source, 
+		  (getFBType_InterfaceList(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "InterfaceList",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "InterfaceList",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getFBType_Service(), 
-		   source, 
+		  (getFBType_Service(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "ServiceSequence",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "ServiceSequence",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getIdentification_ApplicationDomain(), 
-		   source, 
+		  (getIdentification_ApplicationDomain(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "ApplicationDomain"
-		   });	
+			   "kind", "attribute",
+			   "name", "ApplicationDomain"
+		   });
 		addAnnotation
-		  (getIdentification_Classification(), 
-		   source, 
+		  (getIdentification_Classification(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Classification"
-		   });	
+			   "kind", "attribute",
+			   "name", "Classification"
+		   });
 		addAnnotation
-		  (getIdentification_Description(), 
-		   source, 
+		  (getIdentification_Description(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Description"
-		   });	
+			   "kind", "attribute",
+			   "name", "Description"
+		   });
 		addAnnotation
-		  (getIdentification_Function(), 
-		   source, 
+		  (getIdentification_Function(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Function"
-		   });	
+			   "kind", "attribute",
+			   "name", "Function"
+		   });
 		addAnnotation
-		  (getIdentification_Standard(), 
-		   source, 
+		  (getIdentification_Standard(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Standard"
-		   });	
+			   "kind", "attribute",
+			   "name", "Standard"
+		   });
 		addAnnotation
-		  (getIdentification_Type(), 
-		   source, 
+		  (getIdentification_Type(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Type"
-		   });	
+			   "kind", "attribute",
+			   "name", "Type"
+		   });
 		addAnnotation
-		  (getInterfaceList_Plugs(), 
-		   source, 
+		  (getInterfaceList_Plugs(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "AdapterDeclaration",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "AdapterDeclaration",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getInterfaceList_Sockets(), 
-		   source, 
+		  (getInterfaceList_Sockets(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "AdapterDeclaration",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "AdapterDeclaration",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getInterfaceList_EventInputs(), 
-		   source, 
+		  (getInterfaceList_EventInputs(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "SubAppEventInputs",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "SubAppEventInputs",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getInterfaceList_EventOutputs(), 
-		   source, 
+		  (getInterfaceList_EventOutputs(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "SubAppEventOutputs",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "SubAppEventOutputs",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getInterfaceList_InputVars(), 
-		   source, 
+		  (getInterfaceList_InputVars(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "InputVars",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "InputVars",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getInterfaceList_OutputVars(), 
-		   source, 
+		  (getInterfaceList_OutputVars(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "OutputVars",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "OutputVars",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getOtherAlgorithm_Language(), 
-		   source, 
+		  (getOtherAlgorithm_Language(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Language"
-		   });	
+			   "kind", "attribute",
+			   "name", "Language"
+		   });
 		addAnnotation
-		  (getAttribute_Value(), 
-		   source, 
+		  (getAttribute_Value(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Value"
-		   });	
+			   "kind", "attribute",
+			   "name", "Value"
+		   });
 		addAnnotation
-		  (getResource_FBNetwork(), 
-		   source, 
+		  (getResource_FBNetwork(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "FBNetwork",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "FBNetwork",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getResource_X(), 
-		   source, 
+		  (getResource_X(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "x"
-		   });	
+			   "kind", "attribute",
+			   "name", "x"
+		   });
 		addAnnotation
-		  (getResource_Y(), 
-		   source, 
+		  (getResource_Y(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "y"
-		   });	
+			   "kind", "attribute",
+			   "name", "y"
+		   });
 		addAnnotation
-		  (getResourceTypeName_Name(), 
-		   source, 
+		  (getResourceTypeName_Name(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Name"
-		   });	
+			   "kind", "attribute",
+			   "name", "Name"
+		   });
 		addAnnotation
-		  (getSegment_Width(), 
-		   source, 
+		  (getSegment_Width(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "dx1"
-		   });	
+			   "kind", "attribute",
+			   "name", "dx1"
+		   });
 		addAnnotation
-		  (getServiceSequence_ServiceTransaction(), 
-		   source, 
+		  (getServiceSequence_ServiceTransaction(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "ServiceTransaction",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "ServiceTransaction",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getServiceTransaction_InputPrimitive(), 
-		   source, 
+		  (getServiceTransaction_InputPrimitive(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "InputPrimitive",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "InputPrimitive",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getServiceTransaction_OutputPrimitive(), 
-		   source, 
+		  (getServiceTransaction_OutputPrimitive(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "OutputPrimitive",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "OutputPrimitive",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getFBNetwork_NetworkElements(), 
-		   source, 
+		  (getFBNetwork_NetworkElements(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "FB",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "FB",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getFBNetwork_DataConnections(), 
-		   source, 
+		  (getFBNetwork_DataConnections(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "DataConnections",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "DataConnections",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getFBNetwork_AdapterConnections(), 
-		   source, 
+		  (getFBNetwork_AdapterConnections(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "AdapterConnections",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "AdapterConnections",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getAutomationSystem_Application(), 
-		   source, 
+		  (getAutomationSystem_Application(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "Application",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "Application",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getAutomationSystem_Mapping(), 
-		   source, 
+		  (getAutomationSystem_Mapping(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "Mapping",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "Mapping",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getVarDeclaration_ArraySize(), 
-		   source, 
+		  (getVarDeclaration_ArraySize(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "ArraySize"
-		   });	
+			   "kind", "attribute",
+			   "name", "ArraySize"
+		   });
 		addAnnotation
-		  (getVersionInfo_Author(), 
-		   source, 
+		  (getVersionInfo_Author(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Author"
-		   });	
+			   "kind", "attribute",
+			   "name", "Author"
+		   });
 		addAnnotation
-		  (getVersionInfo_Date(), 
-		   source, 
+		  (getVersionInfo_Date(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Date"
-		   });	
+			   "kind", "attribute",
+			   "name", "Date"
+		   });
 		addAnnotation
-		  (getVersionInfo_Organization(), 
-		   source, 
+		  (getVersionInfo_Organization(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Organization"
-		   });	
+			   "kind", "attribute",
+			   "name", "Organization"
+		   });
 		addAnnotation
-		  (getVersionInfo_Remarks(), 
-		   source, 
+		  (getVersionInfo_Remarks(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Remarks"
-		   });	
+			   "kind", "attribute",
+			   "name", "Remarks"
+		   });
 		addAnnotation
-		  (getVersionInfo_Version(), 
-		   source, 
+		  (getVersionInfo_Version(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Version"
-		   });	
+			   "kind", "attribute",
+			   "name", "Version"
+		   });
 		addAnnotation
-		  (getCompositeFBType_FBNetwork(), 
-		   source, 
+		  (getCompositeFBType_FBNetwork(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "FBNetwork",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "FBNetwork",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getSystemConfiguration_Devices(), 
-		   source, 
+		  (getSystemConfiguration_Devices(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "Device",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "Device",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getSystemConfiguration_Segments(), 
-		   source, 
+		  (getSystemConfiguration_Segments(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "Segment",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "Segment",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getSystemConfiguration_Links(), 
-		   source, 
+		  (getSystemConfiguration_Links(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "Link",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "Link",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getService_ServiceSequence(), 
-		   source, 
+		  (getService_ServiceSequence(),
+		   source,
 		   new String[] {
-			 "kind", "element",
-			 "name", "OutputPrimitive",
-			 "namespace", "##targetNamespace"
-		   });	
+			   "kind", "element",
+			   "name", "OutputPrimitive",
+			   "namespace", "##targetNamespace"
+		   });
 		addAnnotation
-		  (getPrimitive_Event(), 
-		   source, 
+		  (getPrimitive_Event(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Event"
-		   });	
+			   "kind", "attribute",
+			   "name", "Event"
+		   });
 		addAnnotation
-		  (getPrimitive_Parameters(), 
-		   source, 
+		  (getPrimitive_Parameters(),
+		   source,
 		   new String[] {
-			 "kind", "attribute",
-			 "name", "Parameters"
+			   "kind", "attribute",
+			   "name", "Parameters"
 		   });
 	}
 

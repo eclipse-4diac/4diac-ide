@@ -284,7 +284,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	public Resource getResource() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getResource(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getResource(this);
 	}
 
 	/**
@@ -293,7 +293,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	public IInterfaceElement getInterfaceElement(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceElement(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);
 	}
 
 	/**
@@ -302,7 +302,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	public FBNetworkElement getOpposite() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getOpposite(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getOpposite(this);
 	}
 
 	/**
@@ -311,7 +311,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	public FBNetwork getFbNetwork() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFbNetwork(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getFbNetwork(this);
 	}
 
 	/**
@@ -320,7 +320,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	public void checkConnections() {
-		org.eclipse.fordiac.ide.model.Annotations.GEN.checkConnections(this);
+		org.eclipse.fordiac.ide.model.Annotations.checkConnections(this);
 	}
 
 	/**
@@ -329,7 +329,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	public boolean isMapped() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isMapped(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isMapped(this);
 	}
 
 	/**
@@ -479,7 +479,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (x: ");
 		result.append(x);
 		result.append(", y: ");

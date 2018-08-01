@@ -113,7 +113,7 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isArray(this);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.isArray(this);'"
 	 * @generated
 	 */
 	boolean isArray();

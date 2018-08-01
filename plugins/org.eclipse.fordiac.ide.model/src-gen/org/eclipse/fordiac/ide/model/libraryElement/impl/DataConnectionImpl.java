@@ -50,7 +50,7 @@ public class DataConnectionImpl extends ConnectionImpl implements DataConnection
 	 * @generated
 	 */
 	public VarDeclaration getDataSource() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDataSource(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getDataSource(this);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class DataConnectionImpl extends ConnectionImpl implements DataConnection
 	 * @generated
 	 */
 	public VarDeclaration getDataDestination() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDataDestination(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getDataDestination(this);
 	}
 
 } //DataConnectionImpl

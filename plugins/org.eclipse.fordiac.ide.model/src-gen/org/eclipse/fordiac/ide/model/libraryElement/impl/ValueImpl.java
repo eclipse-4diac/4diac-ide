@@ -93,7 +93,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 	 * @generated
 	 */
 	public VarDeclaration getVarDeclaration() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getVarDeclaration(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getVarDeclaration(this);
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (value: ");
 		result.append(value);
 		result.append(')');

@@ -159,7 +159,7 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (language: ");
 		result.append(language);
 		result.append(')');

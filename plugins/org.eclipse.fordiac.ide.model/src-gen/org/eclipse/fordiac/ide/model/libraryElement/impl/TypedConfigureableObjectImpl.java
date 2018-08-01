@@ -108,7 +108,7 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	 * @generated
 	 */
 	public String getTypeName() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getTypeName(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getTypeName(this);
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	 * @generated
 	 */
 	public LibraryElement getType() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getType(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getType(this);
 	}
 
 	/**

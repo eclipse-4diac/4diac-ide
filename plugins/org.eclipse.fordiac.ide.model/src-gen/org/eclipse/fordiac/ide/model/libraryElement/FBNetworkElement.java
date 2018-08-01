@@ -87,7 +87,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getResource(this);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getResource(this);'"
 	 * @generated
 	 */
 	Resource getResource();
@@ -96,7 +96,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceElement(this, name);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);'"
 	 * @generated
 	 */
 	IInterfaceElement getInterfaceElement(String name);
@@ -105,7 +105,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getOpposite(this);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getOpposite(this);'"
 	 * @generated
 	 */
 	FBNetworkElement getOpposite();
@@ -114,7 +114,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getFbNetwork(this);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getFbNetwork(this);'"
 	 * @generated
 	 */
 	FBNetwork getFbNetwork();
@@ -122,7 +122,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.fordiac.ide.model.Annotations.GEN.checkConnections(this);'"
+	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.fordiac.ide.model.Annotations.checkConnections(this);'"
 	 * @generated
 	 */
 	void checkConnections();
@@ -131,7 +131,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isMapped(this);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.isMapped(this);'"
 	 * @generated
 	 */
 	boolean isMapped();

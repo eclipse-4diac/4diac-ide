@@ -304,7 +304,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * @generated
 	 */
 	public boolean isStartState() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isStartState(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);
 	}
 
 	/**
@@ -502,7 +502,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(", comment: ");

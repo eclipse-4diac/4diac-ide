@@ -50,7 +50,7 @@ public class AdapterConnectionImpl extends ConnectionImpl implements AdapterConn
 	 * @generated
 	 */
 	public AdapterDeclaration getAdapterSource() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAdapterSource(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getAdapterSource(this);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class AdapterConnectionImpl extends ConnectionImpl implements AdapterConn
 	 * @generated
 	 */
 	public AdapterDeclaration getAdapterDestination() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAdapterDestination(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getAdapterDestination(this);
 	}
 	
 } //AdapterConnectionImpl

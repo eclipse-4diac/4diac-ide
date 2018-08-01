@@ -10,17 +10,17 @@
   <eClassifiers xsi:type="ecore:EClass" name="AdapterType" eSuperTypes="data.ecore#//DataType">
     <eOperations name="getInterfaceList" eType="#//InterfaceList">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceList(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getInterfaceList(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getPlugType" eType="#//AdapterFBType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getPlugType(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getPlugType(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getSocketType" eType="#//AdapterFBType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getSocketType(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getSocketType(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterFBType" eType="#//AdapterFBType"
@@ -36,7 +36,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Application" eSuperTypes="#//ConfigurableObject">
     <eOperations name="getAutomationSystem" eType="#//AutomationSystem">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fBNetwork" lowerBound="1"
@@ -129,27 +129,27 @@
   <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//ConfigurableObject">
     <eOperations name="getSourceElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getSourceElement(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getDestinationElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getDestinationElement(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getDestinationElement(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="isResourceConnection" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceConnection(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isResourceConnection(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getFBNetwork" lowerBound="1" eType="#//FBNetwork">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetwork(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getFBNetwork(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="checkIfConnectionBroken" lowerBound="1">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.GEN.checkifConnectionBroken(this);"/>
+        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dx1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
@@ -180,12 +180,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="Device" eSuperTypes="#//TypedConfigureableObject #//PositionableElement #//ColorizableElement #//IVarElement">
     <eOperations name="getAutomationSystem" lowerBound="1" eType="#//AutomationSystem">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getSystemConfiguration" lowerBound="1" eType="#//SystemConfiguration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getSystemConfiguration(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getSystemConfiguration(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getType" lowerBound="1" eType="#//DeviceType">
@@ -195,7 +195,7 @@
     </eOperations>
     <eOperations name="getResourceNamed" eType="#//Resource">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getResourceNamed(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getResourceNamed(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
@@ -274,7 +274,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ECState" eSuperTypes="#//INamedElement #//PositionableElement">
     <eOperations name="isStartState" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isStartState(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCAction" upperBound="-1"
@@ -293,12 +293,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="ECTransition" eSuperTypes="#//PositionableElement">
     <eOperations name="getConditionText" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getConditionText(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getConditionText(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getECC" lowerBound="1" eType="#//ECC">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getECC(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getECC(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
@@ -338,45 +338,45 @@
     </eOperations>
     <eOperations name="isResourceFB" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceFB(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isResourceFB(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="isResourceTypeFB" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceTypeFB(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB(this);"/>
       </eAnnotations>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FBNetworkElement" eSuperTypes="#//TypedConfigureableObject #//PositionableElement">
     <eOperations name="getResource" lowerBound="1" eType="#//Resource">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getResource(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getResource(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getInterfaceElement" lowerBound="1" eType="#//IInterfaceElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceElement(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eOperations name="getOpposite" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getOpposite(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getOpposite(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getFbNetwork" lowerBound="1" eType="#//FBNetwork">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getFbNetwork(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getFbNetwork(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="checkConnections" lowerBound="1">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.GEN.checkConnections(this);"/>
+        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.checkConnections(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="isMapped" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isMapped(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isMapped(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//InterfaceList"
@@ -452,7 +452,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="InterfaceList">
     <eOperations name="getAllInterfaceElements" lowerBound="1">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getAllInterfaceElements(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAllInterfaceElements(this);"/>
       </eAnnotations>
       <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
         <eTypeArguments eClassifier="#//IInterfaceElement"/>
@@ -460,30 +460,30 @@
     </eOperations>
     <eOperations name="getEvent" eType="#//Event">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getEvent(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getEvent(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eOperations name="getVariable" eType="#//VarDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getVariable(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getVariable(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eOperations name="getInterfaceElement" lowerBound="1" eType="#//IInterfaceElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceElement(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eOperations name="getFBNetworkElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getAdapter" eType="#//AdapterDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getAdapter(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAdapter(this, name);"/>
       </eAnnotations>
       <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
@@ -551,7 +551,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Mapping">
     <eOperations name="getAutomationSystem" lowerBound="1" eType="#//AutomationSystem">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//FBNetworkElement"/>
@@ -583,7 +583,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="#//TypedConfigureableObject #//IVarElement">
     <eOperations name="getAutomationSystem" lowerBound="1" eType="#//AutomationSystem">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getType" lowerBound="1" eType="#//ResourceType">
@@ -687,61 +687,61 @@
   <eClassifiers xsi:type="ecore:EClass" name="FBNetwork">
     <eOperations name="addConnection">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.GEN.addConnection(this, connection);"/>
+        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.addConnection(this, connection);"/>
       </eAnnotations>
       <eParameters name="connection" lowerBound="1" eType="#//Connection"/>
     </eOperations>
     <eOperations name="removeConnection">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.GEN.removeConnection(this, connection);"/>
+        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.removeConnection(this, connection);"/>
       </eAnnotations>
       <eParameters name="connection" lowerBound="1" eType="#//Connection"/>
     </eOperations>
     <eOperations name="isApplicationNetwork" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isApplicationNetwork(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isApplicationNetwork(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="isSubApplicationNetwork" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isSubApplicationNetwork(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isSubApplicationNetwork(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="isResourceNetwork" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceNetwork(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isResourceNetwork(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="isCFBTypeNetwork" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isCFBTypeNetwork(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isCFBTypeNetwork(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getAutomationSystem" eType="#//AutomationSystem">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getApplication" eType="#//Application">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getApplication(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getApplication(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getFBNamed" eType="#//FB">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNamed(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getFBNamed(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eOperations>
     <eOperations name="getSubAppNamed" eType="#//SubApp">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getSubAppNamed(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getSubAppNamed(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eOperations>
     <eOperations name="getElementNamed" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getElementNamed(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getElementNamed(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eOperations>
@@ -776,13 +776,13 @@
   <eClassifiers xsi:type="ecore:EClass" name="AutomationSystem" eSuperTypes="#//LibraryElement">
     <eOperations name="getDeviceNamed" lowerBound="1" eType="#//Device">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getDeviceNamed(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eOperations name="getApplicationNamed" lowerBound="1" eType="#//Application">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getApplicationNamed(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getApplicationNamed(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
@@ -812,7 +812,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="VarDeclaration" eSuperTypes="#//IInterfaceElement">
     <eOperations name="isArray" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isArray(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isArray(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="arraySize" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
@@ -880,7 +880,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ConfigurableObject" eSuperTypes="#//INamedElement">
     <eOperations name="setAttribute">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.GEN.setAttribute(this, attributeName, type, value, comment);"/>
+        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value=" searches for an existing Parameter with the specified parameterName. it is&#xD;&#xA; NOT case sensitive! If there is no Parameter available a new one will be created. "/>
@@ -892,13 +892,13 @@
     </eOperations>
     <eOperations name="getAttribute" eType="#//Attribute">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getAttribute(this, attributeName);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);"/>
       </eAnnotations>
       <eParameters name="attributeName" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eOperations>
     <eOperations name="getAttributeValue" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getAttributeValue(this, attributeName);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);"/>
       </eAnnotations>
       <eParameters name="attributeName" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eOperations>
@@ -921,36 +921,36 @@
   <eClassifiers xsi:type="ecore:EClass" name="DataConnection" eSuperTypes="#//Connection">
     <eOperations name="getDataSource" lowerBound="1" eType="#//VarDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getDataSource(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getDataSource(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getDataDestination" lowerBound="1" eType="#//VarDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getDataDestination(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getDataDestination(this);"/>
       </eAnnotations>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventConnection" eSuperTypes="#//Connection">
     <eOperations name="getEventSource" lowerBound="1" eType="#//Event">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getEventSource(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getEventSource(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getEventDestination" lowerBound="1" eType="#//Event">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getEventDestination(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getEventDestination(this);"/>
       </eAnnotations>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterConnection" eSuperTypes="#//Connection">
     <eOperations name="getAdapterSource" lowerBound="1" eType="#//AdapterDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getAdapterSource(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAdapterSource(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getAdapterDestination" lowerBound="1" eType="#//AdapterDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getAdapterDestination(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAdapterDestination(this);"/>
       </eAnnotations>
     </eOperations>
   </eClassifiers>
@@ -959,7 +959,7 @@
       eSuperTypes="#//INamedElement">
     <eOperations name="getFBNetworkElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInput" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
@@ -976,7 +976,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Value">
     <eOperations name="getVarDeclaration" lowerBound="1" eType="#//VarDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getVarDeclaration(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getVarDeclaration(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -984,18 +984,18 @@
   <eClassifiers xsi:type="ecore:EClass" name="SystemConfiguration" eSuperTypes="#//I4DIACElement">
     <eOperations name="getAutomationSystem" lowerBound="1" eType="#//AutomationSystem">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getSegmentNamed" lowerBound="1" eType="#//Segment">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getSegmentNamed(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getSegmentNamed(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eOperations name="getDeviceNamed" lowerBound="1" eType="#//Device">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getDeviceNamed(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
@@ -1034,20 +1034,20 @@
   <eClassifiers xsi:type="ecore:EClass" name="ResourceTypeFB" eSuperTypes="#//FB">
     <eOperations name="isResourceTypeFB" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceTypeFB();"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB();"/>
       </eAnnotations>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="I4DIACElement" abstract="true">
     <eOperations name="createAnnotation" eType="#//Annotation">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.createAnnotation(this, name);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.createAnnotation(this, name);"/>
       </eAnnotations>
       <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eOperations>
     <eOperations name="removeAnnotation">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.GEN.removeAnnotation(this, annotation);"/>
+        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.removeAnnotation(this, annotation);"/>
       </eAnnotations>
       <eParameters name="annotation" eType="#//Annotation"/>
     </eOperations>
@@ -1087,12 +1087,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="TypedConfigureableObject" eSuperTypes="#//ConfigurableObject">
     <eOperations name="getTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getTypeName(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getTypeName(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getType" lowerBound="1" eType="#//LibraryElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getType(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getType(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="paletteEntry" lowerBound="1"
@@ -1101,17 +1101,17 @@
   <eClassifiers xsi:type="ecore:EClass" name="AdapterFB" eSuperTypes="#//FB">
     <eOperations name="isSocket" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isSocket(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isSocket(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getType" lowerBound="1" eType="#//FBType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.getType(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getType(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="isPlug" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.GEN.isPlug(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isPlug(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterDecl" lowerBound="1"
