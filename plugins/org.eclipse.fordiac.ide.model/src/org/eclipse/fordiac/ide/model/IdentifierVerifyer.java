@@ -16,7 +16,11 @@ package org.eclipse.fordiac.ide.model;
  * This class provides static methods to check whether a string is a valid IEC
  * 61499 compliant identifier.
  */
-public class IdentifierVerifyer {
+public final class IdentifierVerifyer {
+	
+	private IdentifierVerifyer() {
+		//we don't want this util class to be instantatable
+	}
 
 	/**
 	 * Checks if is valid identifier.

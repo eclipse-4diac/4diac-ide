@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.model.dataimport.IDeviceTypeImporter;
  * 
  * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
  */
-public class DEVTypeLibrary {
+public final class DEVTypeLibrary {
 	/**
 	 * Instantiates a new dEV type library.
 	 */

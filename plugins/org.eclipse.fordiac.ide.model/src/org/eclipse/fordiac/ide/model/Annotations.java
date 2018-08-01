@@ -54,7 +54,7 @@ public enum Annotations {
 	
 	public AdapterFBType getPlugType(AdapterType adapterType) {
 		AdapterFBType temp = EcoreUtil.copy(adapterType.getAdapterFBType());
-		// fetch the interface to invert it; 
+		// fetch the interface to invert it 
 		ArrayList<Event> inputEvents =  new ArrayList<Event>(temp.getInterfaceList().getEventOutputs());
 		for (Event event : inputEvents) {
 			event.setIsInput(true);
@@ -146,7 +146,7 @@ public enum Annotations {
 	
 	//*** ECTransition ***//
 	public String getConditionText(ECTransition ect) {
-		String retVal = new String();
+		String retVal = ""; //$NON-NLS-1$
 		Event event = ect.getConditionEvent();
 		String expression = ect.getConditionExpression();
 		if(event != null){
@@ -217,13 +217,9 @@ public enum Annotations {
 	
 	public void checkConnections(FBNetworkElement fbne) {
 		for (IInterfaceElement element : fbne.getInterface().getAllInterfaceElements()) {
-			//todo when lambdas are better allowed in EMF replace with .forEach(conn -> conn.checkIfConnectionBroken());
-			for (org.eclipse.fordiac.ide.model.libraryElement.Connection conn : element.getInputConnections()) {
-				conn.checkIfConnectionBroken();
-			}
-			for (org.eclipse.fordiac.ide.model.libraryElement.Connection conn : element.getOutputConnections()) {
-				conn.checkIfConnectionBroken();
-			}
+			//todo when lambdas are better allowed in EMF replace with 
+			element.getInputConnections().forEach(conn -> conn.checkIfConnectionBroken());
+			element.getOutputConnections().forEach(conn -> conn.checkIfConnectionBroken());
 		}
 	}
 	
@@ -247,24 +243,28 @@ public enum Annotations {
 	
 	public Event getEvent(InterfaceList il, String name){
 		for (Event event : il.getEventInputs()) {
-			if (event.getName().equals(name))
-			return event;
+			if (event.getName().equals(name)) {
+				return event;
+			}
 		}
 		for (Event event : il.getEventOutputs()) {
-			if (event.getName().equals(name))
+			if (event.getName().equals(name)) {
 				return event;
+			}
 		}
 		return null;
 	}
 	
 	public VarDeclaration getVariable(InterfaceList il, String name) {
 		for (VarDeclaration var : il.getInputVars()) {
-			if (var.getName().equals(name))
+			if (var.getName().equals(name)) {
 				return var;
+			}
 		}
 		for (VarDeclaration var : il.getOutputVars()) {
-			if (var.getName().equals(name))
+			if (var.getName().equals(name)) {
 				return var;
+			}
 		}
 		return null;
 	}
@@ -287,12 +287,14 @@ public enum Annotations {
 	
 	public AdapterDeclaration getAdapter(InterfaceList il, String name) {
 		for (AdapterDeclaration adapt : il.getPlugs()) {
-			if (adapt.getName().equals(name))
+			if (adapt.getName().equals(name)) {
 				return adapt;
+			}
 		}
 		for (AdapterDeclaration adapt : il.getSockets()) {
-			if (adapt.getName().equals(name))
+			if (adapt.getName().equals(name)) {
 				return adapt;
+			}
 		}
 		return null;
 	}
@@ -511,16 +513,18 @@ public enum Annotations {
 	
 	public Segment getSegmentNamed(SystemConfiguration sc, String name) {
 		for (Segment segment : sc.getSegments()) {
-			if (segment.getName().equals(name))
+			if (segment.getName().equals(name)) {
 				return segment;
+			}
 		}
 		return null;
 	}
 	
 	public Device getDeviceNamed(SystemConfiguration sc, String name) {
 		for (Device device : sc.getDevices()) {
-			if (device.getName().equals(name))
+			if (device.getName().equals(name)) {
 				return device;
+			}
 		}
 		return null;
 	}
@@ -575,6 +579,5 @@ public enum Annotations {
 	public boolean isPlug(AdapterFB afb) {
 		return !afb.getAdapterDecl().isIsInput();
 	}
-	
-	//return org.eclipse.fordiac.ide.model.Annotations.GEN.isPlug(this);
+
 }

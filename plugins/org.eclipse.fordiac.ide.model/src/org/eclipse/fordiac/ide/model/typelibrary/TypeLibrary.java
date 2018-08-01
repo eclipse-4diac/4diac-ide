@@ -67,7 +67,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-public class TypeLibrary implements TypeLibraryTags{
+public final class TypeLibrary implements TypeLibraryTags{
 	
 
 	/** The palette. */
@@ -83,13 +83,11 @@ public class TypeLibrary implements TypeLibraryTags{
 	/** The instance. */
 	private static TypeLibrary instance;
 
-	static public String getTypeNameFromFile(IFile element) {
-		//String name = element.getName().replaceAll(
-		//		"." + element.getFileExtension() + "$", "");
+	public static String getTypeNameFromFile(IFile element) {
 		return getTypeNameFromFileName(element.getName());
 	}
 
-	static public String getTypeNameFromFileName(final String fileName){
+	public static String getTypeNameFromFileName(final String fileName){
 		String name = fileName;
 		int index = fileName.lastIndexOf('.'); 
 		if(-1 != index){
@@ -98,7 +96,7 @@ public class TypeLibrary implements TypeLibraryTags{
 		return name;
 	}
 
-	static public boolean isIEC61499TypeFile(String filename){
+	public static boolean isIEC61499TypeFile(String filename){
 		return ((filename.toUpperCase().endsWith(FB_TYPE_FILE_ENDING_WITH_DOT)) || 
 				(filename.toUpperCase().endsWith(TypeLibrary.ADAPTER_TYPE_FILE_ENDING_WITH_DOT)) ||
 				(filename.toUpperCase().endsWith(TypeLibrary.DEVICE_TYPE_FILE_ENDING_WITH_DOT)) ||
@@ -110,7 +108,7 @@ public class TypeLibrary implements TypeLibraryTags{
 	 *
 	 * If the group is not found it will not be created.
 	 */
-	static public PaletteGroup getPaletteGroup(Palette palette, IContainer groupDst) {		
+	public static PaletteGroup getPaletteGroup(Palette palette, IContainer groupDst) {		
 		String[] groups = groupDst.getProjectRelativePath().toString().split("/"); //$NON-NLS-1$
 		if((0 == groups.length) || ((1 == groups.length) && (0 == groups[0].length()))){
 			return palette.getRootGroup();
@@ -129,7 +127,7 @@ public class TypeLibrary implements TypeLibraryTags{
 	 * @param groupDst
 	 * @return
 	 */
-	static public PaletteGroup getPaletteGroupWithAdd(Palette palette, IContainer groupDst) {		
+	public static PaletteGroup getPaletteGroupWithAdd(Palette palette, IContainer groupDst) {		
 		String[] groups = groupDst.getProjectRelativePath().toString().split("/"); //$NON-NLS-1$
 		if((0 == groups.length) || ((1 == groups.length) && (0 == groups[0].length()))){
 			return palette.getRootGroup();
@@ -148,7 +146,7 @@ public class TypeLibrary implements TypeLibraryTags{
 	 * @param entryTypeFile the IFile representing the type
 	 * @return the palette entry or null
 	 */
-	static public PaletteEntry getPaletteEntry(final Palette palette, final IFile entryTypeFile) {
+	public static PaletteEntry getPaletteEntry(final Palette palette, final IFile entryTypeFile) {
 		PaletteEntry retVal = null;		
 		PaletteGroup group = getPaletteGroup(palette, entryTypeFile.getParent());
 		if(null != group){
@@ -413,7 +411,7 @@ public class TypeLibrary implements TypeLibraryTags{
 		AutomationSystem system = palette.getAutomationSystem();
 
 		if (system == null) {
-			libPath = TypeLibrary.getInstance().getToolLibFolder();
+			libPath = TypeLibrary.getToolLibFolder();
 		}else {
 			libPath = system.getProject();
 		}
@@ -424,13 +422,13 @@ public class TypeLibrary implements TypeLibraryTags{
 	 * Returns the tool library project.
 	 * @return the tool library project of the 4diac-ide instance
 	 */
-	public IProject getToolLibProject() {
+	public static IProject getToolLibProject() {
 		IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		
 		return myWorkspaceRoot.getProject(TOOL_LIBRARY_PROJECT_NAME);
 	}
 
-	public IFolder getToolLibFolder() {
+	public static IFolder getToolLibFolder() {
 
 		IProject toolLibProject = getToolLibProject();
 
@@ -508,7 +506,7 @@ public class TypeLibrary implements TypeLibraryTags{
 		boolean retval = false;
 		if (!srcFile.isDirectory()) {
 			try {
-				PaletteGroup group = performTypeSpecificImportPreparation(srcFile, palette, relativeDestionationPath, overWrite, selectedFiles, shell);
+				PaletteGroup group = performTypeSpecificImportPreparation(srcFile, palette, relativeDestionationPath, selectedFiles, shell);
 
 				IFile dstFile = TypeLibrary.getLibPath(palette).getFile(new Path(relativeDestionationPath));
 
@@ -549,8 +547,7 @@ public class TypeLibrary implements TypeLibraryTags{
 	}
 
 	private static PaletteGroup performTypeSpecificImportPreparation(
-			File srcFile, Palette palette, String relativeDestionationPath, boolean overWrite,
-			Set<String> selectedFiles, Shell shell) throws TypeImportException, CoreException  {
+			File srcFile, Palette palette, String relativeDestionationPath, Set<String> selectedFiles, Shell shell) throws TypeImportException, CoreException  {
 		PaletteGroup group = null;
 
 
@@ -659,7 +656,7 @@ public class TypeLibrary implements TypeLibraryTags{
 		return false;
 	}
 
-	static private boolean checkForReferencedTypeInPalette(
+	private static boolean checkForReferencedTypeInPalette(
 			Palette palette, String typeName, Shell shell) {
 
 		final List<PaletteEntry> fbTypes = palette.getTypeEntries(typeName);
@@ -682,12 +679,12 @@ public class TypeLibrary implements TypeLibraryTags{
 							}
 
 							public void dispose() {
-								// nothing to do;
+								// nothing to do
 							}
 
 							public void inputChanged(Viewer viewer,
 									Object oldInput, Object newInput) {
-								// nothing to do;
+								// nothing to do
 
 							}
 
@@ -705,11 +702,11 @@ public class TypeLibrary implements TypeLibraryTags{
 
 							public void addListener(
 									ILabelProviderListener listener) {
-								// nothing to do;
+								// nothing to do
 							}
 
 							public void dispose() {
-								// nothing to do;
+								// nothing to do
 							}
 
 							public boolean isLabelProperty(Object element,
@@ -719,7 +716,7 @@ public class TypeLibrary implements TypeLibraryTags{
 
 							public void removeListener(
 									ILabelProviderListener listener) {
-								// nothing to do;
+								// nothing to do
 							}
 
 						}, shell);

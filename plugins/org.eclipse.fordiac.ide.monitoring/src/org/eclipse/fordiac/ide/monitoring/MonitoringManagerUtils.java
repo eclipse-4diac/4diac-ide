@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
 
 public final class MonitoringManagerUtils {
@@ -66,11 +67,6 @@ public final class MonitoringManagerUtils {
 
 	private static PortElement createPortElement(FB fb,
 			org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart ep) {
-		Resource res = findResourceForFB(fb);
-		if (res == null) {
-			return null;
-		}
-		
 		PortElement p;
 		if (ep.getModel() instanceof AdapterDeclaration){
 			p = MonitoringFactory.eINSTANCE.createAdapterPortElement(); 
@@ -78,6 +74,12 @@ public final class MonitoringManagerUtils {
 		else{
 			p = MonitoringBaseFactory.eINSTANCE.createPortElement();
 		}
+
+		Resource res = findResourceForFB(fb, p);
+		if (res == null) {
+			return null;
+		}
+		
 		p.setResource(res);
 		p.setFb(fb);
 		p.setInterfaceElement(ep.getModel());
@@ -114,27 +116,19 @@ public final class MonitoringManagerUtils {
 		return null;
 	}
 
-	private static Resource findResourceForFB(FB fb) {
-// TODO  model refacoring - reimplement when subapp mapping model is finished and if needed	
-//		EObject container = fb.eContainer();		
-//		if(container instanceof ResourceFBNetwork){
-//			//we have a resource FB
-//			return (ResourceFBNetwork)container;
-//		}
-//
-//		while (!(container instanceof FBNetwork)) {
-//			if (container instanceof SubAppNetwork) {
-//				ResourceFBNetwork resourceNetwork = ((SubAppNetwork) container)
-//						.getParentSubApp().getResource();
-//				if (resourceNetwork != null) {
-//					return resourceNetwork;
-//				}
-//				container = ((SubAppNetwork) container).getParentSubApp()
-//						.eContainer();
-//			}
-//		}
+	private static Resource findResourceForFB(FBNetworkElement element, PortElement p) {
+		Resource retVal = element.getResource();
 		
-		return fb.getResource();
+		if(null == retVal && element.getFbNetwork().eContainer() instanceof SubApp) {
+			//if we are in a subapp check if we can find it in the hierarchy we are in a resource
+			SubApp subApp = (SubApp)element.getFbNetwork().eContainer();
+			retVal = findResourceForFB(subApp, p);
+			if(null != retVal) {
+				//if we found a resource add the the name recursively to the hierarchy as prefix  
+				p.getHierarchy().add(subApp.getName());
+			}
+		}		
+		return retVal;
 	}
 
 	

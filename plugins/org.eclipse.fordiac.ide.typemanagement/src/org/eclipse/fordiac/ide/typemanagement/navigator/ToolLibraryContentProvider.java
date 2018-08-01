@@ -28,10 +28,12 @@ public class ToolLibraryContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
+		//currently nothing todo here
 	}
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		//currently nothing todo here
 	}
 
 	@Override
@@ -42,7 +44,7 @@ public class ToolLibraryContentProvider implements ITreeContentProvider {
 			IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace()
 					.getRoot();
 	
-			IFolder toolLibFolder = TypeLibrary.getInstance().getToolLibFolder();
+			IFolder toolLibFolder = TypeLibrary.getToolLibFolder();
 			
 			IProject[] projects = myWorkspaceRoot.getProjects();
 	

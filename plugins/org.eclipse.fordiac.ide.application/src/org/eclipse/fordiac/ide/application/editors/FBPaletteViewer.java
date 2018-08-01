@@ -130,7 +130,7 @@ public class FBPaletteViewer extends PaletteViewer {
 
 		
 		if(project.getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)){
-			commonViewer.setInput(TypeLibrary.getInstance().getToolLibFolder());
+			commonViewer.setInput(TypeLibrary.getToolLibFolder());
 		}else{
 			commonViewer.setInput(project);			
 		}

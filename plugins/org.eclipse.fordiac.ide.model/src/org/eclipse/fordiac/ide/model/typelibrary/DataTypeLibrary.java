@@ -34,10 +34,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
-public class DataTypeLibrary {
+public final class DataTypeLibrary {
 
 	/** The type map. */
-	protected Map<String, DataType> typeMap;
+	private Map<String, DataType> typeMap;
 
 	/**
 	 * Instantiates a new data type library.
@@ -127,7 +127,7 @@ public class DataTypeLibrary {
 	}
 
 	
-	public void loadReferencedDataTypes(File srcFile, Shell shell) throws TypeImportException{		
+	public static void loadReferencedDataTypes(File srcFile, Shell shell) throws TypeImportException{		
 		List<String> referencedDataTypes = FBTImporter.getReferencedDataTypes(srcFile);
 		
 		for (Iterator<String> iterator = referencedDataTypes.iterator(); iterator.hasNext();) {
