@@ -48,7 +48,7 @@ public class ART_TCPClient implements IIecReceivable, IIecSender {
 		manager = ChannelManager.getInstance();
 		channelID=paID;
 		
-		if (!this.Initialize(paID)) throw new CommException("Initialisation of CommunicationChannel to Runtime failed");
+		if (!this.initialize(paID)) throw new CommException("Initialisation of CommunicationChannel to Runtime failed");
 		
 		receiveDataList=paReceiveDataListList;
 		ReceiveListSize = paListSize;
@@ -86,7 +86,7 @@ public class ART_TCPClient implements IIecReceivable, IIecSender {
 		return true;
 	}
 
-	synchronized public void ReceiveIECData(List<IEC_ANY> inList) {
+	public synchronized void receiveIECData(List<IEC_ANY> inList) {
 		if (ReceiveListSize>counter) {
 		if (!ReceivedDataTypeMatch(inList, receiveDataList.get(counter)))
 			{
@@ -127,7 +127,7 @@ public class ART_TCPClient implements IIecReceivable, IIecSender {
 	}
 
 	@Override
-	public boolean Initialize(String pa_sID) {
+	public boolean initialize(String pa_sID) {
 		
 		try {
 			manager.register(pa_sID, IChannel.TCP, this);
@@ -139,7 +139,7 @@ public class ART_TCPClient implements IIecReceivable, IIecSender {
 	}
 
 	@Override
-	public boolean DeInitialize(String pa_sID) {
+	public boolean deInitialize(String pa_sID) {
 		try {
 			manager.deregister(pa_sID);
 		} catch (CommException e) {
@@ -150,7 +150,7 @@ public class ART_TCPClient implements IIecReceivable, IIecSender {
 	}
 
 	@Override
-	synchronized public void SendIECData(List<IEC_ANY> sendData) throws CommException {
+	public synchronized void sendIECData(List<IEC_ANY> sendData) throws CommException {
 		ChannelManager.send(channelID, IChannel.TCP, sendData);
 		counter=0;
 	}

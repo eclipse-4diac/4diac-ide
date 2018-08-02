@@ -241,7 +241,7 @@ public class AutomatedRemoteTest {
 							SLcounter++;
 						}
 						
-						TCPTestInterface.SendIECData(sendList);
+						TCPTestInterface.sendIECData(sendList);
 					} catch (CommException e) {
 						Activator.getDefault().logError(e.getMessage(), e);
 					}

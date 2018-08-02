@@ -73,9 +73,9 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	protected TableViewer outputsViewer;
 	protected Table inputsTable;
 	protected Table outputsTable;
-	private final String NAME = "name"; //$NON-NLS-1$
-	private final String TYPE = "type"; //$NON-NLS-1$
-	private final String COMMENT = "comment"; //$NON-NLS-1$
+	private static final String NAME = "name"; //$NON-NLS-1$
+	private static final String TYPE = "type"; //$NON-NLS-1$
+	private static final String COMMENT = "comment"; //$NON-NLS-1$
 	private Button inputUp;
 	private Button inputDown;
 	private Group outputsGroup;
@@ -102,7 +102,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		createOutputEdit(parent);
 	}
 	
-	private void createTableLayout(Table table){
+	private static void createTableLayout(Table table){
 		TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText(NAME);
 		TableColumn column2 = new TableColumn(table, SWT.LEFT);

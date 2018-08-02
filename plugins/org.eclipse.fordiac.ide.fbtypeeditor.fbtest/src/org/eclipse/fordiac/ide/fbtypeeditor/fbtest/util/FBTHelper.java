@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class FBTHelper {
 
-	static public int getEISize(FBType fbType) {
+	public static int getEISize(FBType fbType) {
 		int retval=0;
 		try {
 			retval = fbType.getInterfaceList().getEventInputs().size();
@@ -34,7 +34,7 @@ public class FBTHelper {
 		}
 		return retval;
 	}
-	static public int getEOSize(FBType fbType) {
+	public static int getEOSize(FBType fbType) {
 		int retval=0;
 		try {
 			retval = fbType.getInterfaceList().getEventOutputs().size();
@@ -44,7 +44,7 @@ public class FBTHelper {
 		return retval;
 	}
 
-	static public int getDISize(FBType fbType) {
+	public static int getDISize(FBType fbType) {
 		int retval=0;
 		try {
 			retval = fbType.getInterfaceList().getInputVars().size();
@@ -54,7 +54,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public int getDOSize(FBType fbType) {
+	public static int getDOSize(FBType fbType) {
 		int retval=0;
 		try {
 			retval = fbType.getInterfaceList().getOutputVars().size();
@@ -64,7 +64,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public int getEIID(FBType fbType, String eventName) {
+	public static int getEIID(FBType fbType, String eventName) {
 		int retval = -1;
 
 		try {
@@ -82,7 +82,7 @@ public class FBTHelper {
 		return retval;
 	}
 
-	static public int getEOID(FBType fbType, String eventName) {
+	public static int getEOID(FBType fbType, String eventName) {
 		int retval = -1;
 		
 		try {
@@ -100,7 +100,7 @@ public class FBTHelper {
 		return retval;
 	}
 
-	static public int getDIID(final FBType fbType, final String DIName) {
+	public static int getDIID(final FBType fbType, final String DIName) {
 		int retval = -1;
 		try {
 		for (Iterator<VarDeclaration> iterator = fbType.getInterfaceList().getInputVars().iterator(); iterator
@@ -118,7 +118,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public String getDIDataType(final FBType fbType, final int DIID) {
+	public static String getDIDataType(final FBType fbType, final int DIID) {
 		String retval = null;
 		
 		try {
@@ -131,7 +131,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public int getDOID(final FBType fbType, final String DOName) {
+	public static int getDOID(final FBType fbType, final String DOName) {
 		int retval = -1;
 		try {
 		for (Iterator<VarDeclaration> iterator = fbType.getInterfaceList().getOutputVars().iterator(); iterator
@@ -149,7 +149,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public String getDODataType(final FBType fbType, final int DOID) {
+	public static String getDODataType(final FBType fbType, final int DOID) {
 		String retval = null;
 		
 		try {
@@ -162,7 +162,7 @@ public class FBTHelper {
 		return retval;
 	}
 
-	static public String getDINameByIndex(final FBType fbType, final int index) {
+	public static String getDINameByIndex(final FBType fbType, final int index) {
 		String retval = null;
 		
 		try {
@@ -174,7 +174,7 @@ public class FBTHelper {
 		return retval;
 	}
 
-	static public String getDONameByIndex(final FBType fbType, final int index) {
+	public static String getDONameByIndex(final FBType fbType, final int index) {
 		String retval = null;
 		
 		try {
@@ -186,7 +186,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public String getEINameByIndex(final FBType fbType, final int index) {
+	public static String getEINameByIndex(final FBType fbType, final int index) {
 		String retval = null;
 		
 		try {
@@ -198,7 +198,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public String getEONameByIndex(final FBType fbType, final int index) {
+	public static String getEONameByIndex(final FBType fbType, final int index) {
 		String retval = null;
 		
 		try {
@@ -210,7 +210,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public List<TestSequence> extractTestSequences(FBType fbType) {
+	public static List<TestSequence> extractTestSequences(FBType fbType) {
 		
 		List<TestSequence> testSequences = new ArrayList<TestSequence>();
 		
@@ -225,7 +225,7 @@ public class FBTHelper {
 		return testSequences;
 	}
 	
-	static public TestSequence extractTestSequence(FBType fbType, ServiceSequence sq) {
+	public static TestSequence extractTestSequence(FBType fbType, ServiceSequence sq) {
 		TestSequence ts = new TestSequence();
 		ts.setName(sq.getName());
 		ts.setRelatedModelElement(sq);

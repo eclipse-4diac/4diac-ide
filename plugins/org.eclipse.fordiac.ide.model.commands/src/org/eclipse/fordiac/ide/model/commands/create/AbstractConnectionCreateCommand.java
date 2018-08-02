@@ -39,7 +39,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	}
 
 	/** The parent. */
-	final private FBNetwork parent;
+	private final FBNetwork parent;
 
 	/** The connection view. */
 	private Connection connection;

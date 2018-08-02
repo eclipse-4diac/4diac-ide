@@ -26,11 +26,8 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
  */
 public class CompositeNetworkEditPartFactory extends ElementEditPartFactory {
 
-	protected CompositeFBType compositeType;
-	
-	public CompositeNetworkEditPartFactory(GraphicalEditor editor, CompositeFBType compositeType, ZoomManager zoomManager) {
+	public CompositeNetworkEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {
 		super(editor, zoomManager);
-		this.compositeType = compositeType;
 	}
 
 	@Override

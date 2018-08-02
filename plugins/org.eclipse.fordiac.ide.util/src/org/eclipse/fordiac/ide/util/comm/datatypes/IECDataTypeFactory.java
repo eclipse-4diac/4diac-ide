@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.util.comm.exceptions.DataTypeValueOutOfBoundsExce
 
 public class IECDataTypeFactory {
 
-	private final static Hashtable<String, Integer> ASN1map;
+	private static final Hashtable<String, Integer> ASN1map;
 	
 	static {
 		ASN1map =  new Hashtable<String, Integer>();

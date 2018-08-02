@@ -20,5 +20,5 @@ public interface BendpointPolicyRouter {
 	 * @return a bendpoint editpolicy suitable for the router returned in
 	 *         getConnectionRouter
 	 */
-	public EditPolicy getBendpointPolicy(final Object modelObject);
+	EditPolicy getBendpointPolicy(final Object modelObject);
 }

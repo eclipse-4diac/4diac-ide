@@ -32,6 +32,6 @@ public interface ISetValueListener {
 	 * @param value
 	 *          the value
 	 */
-	public void setValue(TestElement element, String value);
+	void setValue(TestElement element, String value);
 
 }

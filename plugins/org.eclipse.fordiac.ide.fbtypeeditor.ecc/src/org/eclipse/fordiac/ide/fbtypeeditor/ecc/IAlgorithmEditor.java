@@ -25,14 +25,14 @@ public interface IAlgorithmEditor {
 	 * 
 	 * @param listener document listener to be added
 	 */
-	public void addDocumentListener(IDocumentListener listener);
+	void addDocumentListener(IDocumentListener listener);
 
 	
 	/** Remove a document listener for the algorithm editor
 	 * 
 	 * @param listener document listener to be removed
 	 */
-	public void removeDocumentListener(IDocumentListener listener);
+	void removeDocumentListener(IDocumentListener listener);
 	
 	
 	/** Set the text of the algorithm
@@ -41,18 +41,18 @@ public interface IAlgorithmEditor {
 	 * 
 	 * @param text content of the algorithm
 	 */
-	public void setAlgorithmText(String text);
+	void setAlgorithmText(String text);
 	
 	/**get the text of the algorithm from the editor
 	 */
-	public String getAlgorithmText();
+	String getAlgorithmText();
 	
 	/**
 	 * Gets the control.
 	 * 
 	 * @return the control
 	 */
-	public Control getControl();
+	Control getControl();
 	
 	/** Allows document listeners to check if the document is in a valid state before reading it back.
 	 * 
@@ -62,6 +62,6 @@ public interface IAlgorithmEditor {
 	 * 
 	 * @return true if the document is in a valid state to be read back
 	 */
-	public boolean isDocumentValid();
+	boolean isDocumentValid();
 	
 }

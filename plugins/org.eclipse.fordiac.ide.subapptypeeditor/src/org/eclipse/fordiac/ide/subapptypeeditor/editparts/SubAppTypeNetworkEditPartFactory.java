@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.subapptypeeditor.editparts;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.subapptypeeditor.policies.SubAppTypeFBNetworkLayoutEditPolicy;
@@ -28,9 +27,8 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 public class SubAppTypeNetworkEditPartFactory extends
 		CompositeNetworkEditPartFactory {
 
-	public SubAppTypeNetworkEditPartFactory(GraphicalEditor editor, CompositeFBType compositeType,
-			ZoomManager zoomManager) {
-		super(editor, compositeType, zoomManager);
+	public SubAppTypeNetworkEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {
+		super(editor, zoomManager);
 	}
 	
 	@Override

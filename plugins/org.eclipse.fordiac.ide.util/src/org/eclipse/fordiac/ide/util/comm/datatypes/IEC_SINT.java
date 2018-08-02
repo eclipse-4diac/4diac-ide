@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.util.Activator;
 
 public class IEC_SINT extends IEC_INT {
 
-	static final int BOUNDS_MASK = 0x7FFFFF80;
+	private static final int BOUNDS_MASK = 0x7FFFFF80;
 
 	public IEC_SINT() {
 		super();

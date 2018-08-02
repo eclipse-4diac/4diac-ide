@@ -26,7 +26,7 @@ public interface IIecReceivable extends IIecCommObject {
 	 * method is called by {@link CCommThread} for evaluation (and decoding) of received data 
 	 * @param inList
 	 */
-	public abstract void ReceiveIECData(List<IEC_ANY> inList);
+	void receiveIECData(List<IEC_ANY> inList);
 	
-	public abstract void setMyReceiveData(List<IEC_ANY> pa_loReceiveData);
+	void setMyReceiveData(List<IEC_ANY> loReceiveData);
 }

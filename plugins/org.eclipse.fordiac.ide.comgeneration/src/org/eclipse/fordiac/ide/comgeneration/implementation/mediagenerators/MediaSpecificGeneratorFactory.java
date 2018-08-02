@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class MediaSpecificGeneratorFactory {
-	final private Map<String, MediaSpecificGenerator> generators = new HashMap<>();
+	private final Map<String, MediaSpecificGenerator> generators = new HashMap<>();
 
 	public MediaSpecificGeneratorFactory() {
 		super();

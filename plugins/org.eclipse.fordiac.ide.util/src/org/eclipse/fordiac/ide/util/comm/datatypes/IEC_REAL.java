@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.util.Activator;
 
 public class IEC_REAL extends IEC_ANY {
 
-	protected float value;
+	private float value;
 	
 
 	public IEC_REAL() {

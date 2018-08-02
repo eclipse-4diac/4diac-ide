@@ -25,13 +25,13 @@ public abstract class AbstractUntypedEditorInputFactory implements
     private static final String TAG_AUTOMATION_SYSTEM = "SYSTEM"; //$NON-NLS-1$
     
     
-    static protected void saveAutomationSystem(IMemento memento, AutomationSystem system){
+    protected static void saveAutomationSystem(IMemento memento, AutomationSystem system){
     	if(null != system){
     		memento.putString(TAG_AUTOMATION_SYSTEM, system.getName());
     	}
     }
     
-    protected String loadAutomationSystemName(IMemento memento){
+    protected static String loadAutomationSystemName(IMemento memento){
     	return memento.getString(TAG_AUTOMATION_SYSTEM);
     }
 

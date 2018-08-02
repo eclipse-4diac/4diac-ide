@@ -28,7 +28,7 @@ public class TCPClient extends IIecNetCommRcv implements IIecSender,IIecReceivab
 		super();
 	}
 	
-	public boolean Initialize(String pa_sID) {
+	public boolean initialize(String pa_sID) {
 		boolean retval = Initialize(pa_sID, IChannel.TCP);
 		if (retval) {
 			m_bInitialized=true;
@@ -37,7 +37,7 @@ public class TCPClient extends IIecNetCommRcv implements IIecSender,IIecReceivab
 		return retval;
 	}
 	
-	public void SendIECData(List<IEC_ANY> sendData) throws CommException{
+	public void sendIECData(List<IEC_ANY> sendData) throws CommException{
 			ChannelManager.send(m_sID, IChannel.TCP, sendData);
 		
 	}

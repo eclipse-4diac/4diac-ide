@@ -27,7 +27,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
  */
 public class OpenResourceEditorAction extends OpenListener {
 	
-	private final static String OPEN_RES_EDITOR_LISTENER_ID = "org.eclipse.fordiac.ide.resourceediting.actions.OpenResourceEditorAction"; //$NON-NLS-1$
+	private static final String OPEN_RES_EDITOR_LISTENER_ID = "org.eclipse.fordiac.ide.resourceediting.actions.OpenResourceEditorAction"; //$NON-NLS-1$
 
 	/** The res. */
 	private Resource res;

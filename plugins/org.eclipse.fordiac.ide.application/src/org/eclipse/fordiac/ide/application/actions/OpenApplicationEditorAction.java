@@ -28,7 +28,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
  */
 public class OpenApplicationEditorAction extends OpenListener {
 	
-	private final static String OPEN_APP_LISTENER_ID = "org.eclipse.fordiac.ide.application.actions.OpenApplicationEditorAction"; //$NON-NLS-1$
+	private static final String OPEN_APP_LISTENER_ID = "org.eclipse.fordiac.ide.application.actions.OpenApplicationEditorAction"; //$NON-NLS-1$
 
 	/** The app. */
 	private Application app;

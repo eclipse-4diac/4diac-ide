@@ -64,7 +64,6 @@ public class FBInterfaceEditor extends GraphicalEditorWithFlyoutPalette implemen
 	private RulerComposite rulerComp;
 	private CommandStack commandStack;
 	private FBType fbType;
-	protected ZoomManager zoomManager;
 	private KeyHandler sharedKeyHandler;
 	protected PaletteRoot paletteRoot;
 	protected Palette palette;
@@ -136,7 +135,11 @@ public class FBInterfaceEditor extends GraphicalEditorWithFlyoutPalette implemen
 	}
 
 	protected EditPartFactory getEditPartFactory() {
-		return new FBInterfaceEditPartFactory(this, palette, zoomManager);
+		return new FBInterfaceEditPartFactory(this, palette, getZoomManger());
+	}
+	
+	protected ZoomManager getZoomManger(){		
+		return ((ScalableFreeformRootEditPart)(getGraphicalViewer().getRootEditPart())).getZoomManager();
 	}
 
 	@Override

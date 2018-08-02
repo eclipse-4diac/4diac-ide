@@ -44,7 +44,7 @@ public abstract class IIecNetCommRcv implements IIecReceivable {
 		return true;
 	}
 
-	public boolean DeInitialize(String pa_sID) {
+	public boolean deInitialize(String pa_sID) {
 		try {
 			m_oManager.deregister(pa_sID);
 		} catch (CommException e) {
@@ -66,7 +66,7 @@ public abstract class IIecNetCommRcv implements IIecReceivable {
 		return equal;
 	}
 
-	public void ReceiveIECData(List<IEC_ANY> inList) {
+	public void receiveIECData(List<IEC_ANY> inList) {
 			if (!ReceivedDataTypeMatch(inList))
 				{
 				System.out.println("did not receive expected data");

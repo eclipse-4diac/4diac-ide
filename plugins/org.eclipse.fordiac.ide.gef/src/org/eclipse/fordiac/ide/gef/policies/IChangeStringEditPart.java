@@ -27,20 +27,20 @@ public interface IChangeStringEditPart {
 	 * 
 	 * @return the featureid to be changed
 	 */
-	public int getFeatureID();
+	int getFeatureID();
 
 	/**
 	 * Gets the element.
 	 * 
 	 * @return the element that should be changed
 	 */
-	public EObject getElement();
+	EObject getElement();
 
 	/**
 	 * Gets the label.
 	 * 
 	 * @return the label containing the text to be changed
 	 */
-	public Label getLabel();
+	Label getLabel();
 
 }

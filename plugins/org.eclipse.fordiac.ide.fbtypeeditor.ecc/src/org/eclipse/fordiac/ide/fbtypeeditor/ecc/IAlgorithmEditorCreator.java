@@ -28,6 +28,6 @@ public interface IAlgorithmEditorCreator {
 	 * 
 	 * @return the i algorithm editor
 	 */
-	public IAlgorithmEditor createAlgorithmEditor(Composite parent, BasicFBType fbType);
+	IAlgorithmEditor createAlgorithmEditor(Composite parent, BasicFBType fbType);
 
 }

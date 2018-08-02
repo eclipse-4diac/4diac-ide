@@ -35,7 +35,7 @@ public class DeleteSubAppInterfaceElementCommand extends DeleteInterfaceCommand 
 	public void execute() {
 		super.execute();
 		if(null != opposite) {
-			opposite.execute();;
+			opposite.execute();
 		}
 	}
 	
@@ -43,7 +43,7 @@ public class DeleteSubAppInterfaceElementCommand extends DeleteInterfaceCommand 
 	public void undo() {
 		super.undo();
 		if(null != opposite) {
-			opposite.undo();;
+			opposite.undo();
 		}
 	}
 	

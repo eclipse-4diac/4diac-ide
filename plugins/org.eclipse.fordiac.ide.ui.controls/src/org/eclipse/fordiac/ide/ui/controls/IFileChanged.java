@@ -22,6 +22,6 @@ public interface IFileChanged {
 	 * 
 	 * @param newFile the new file - not guaranted that the file exists
 	 */
-	public void fileChanged(String newFile);
+	void fileChanged(String newFile);
 
 }

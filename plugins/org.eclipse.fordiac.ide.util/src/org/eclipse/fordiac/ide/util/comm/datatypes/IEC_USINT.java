@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.util.Activator;
 
 public class IEC_USINT extends IEC_INT {
 	
-	protected static final int BOUNDS_MASK = 0xFF00;
+	private static final int BOUNDS_MASK = 0xFF00;
 	
 	public IEC_USINT(){
 		super();

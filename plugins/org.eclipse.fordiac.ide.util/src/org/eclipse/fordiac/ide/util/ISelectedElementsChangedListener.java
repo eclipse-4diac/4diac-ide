@@ -28,6 +28,6 @@ public interface ISelectedElementsChangedListener {
 	/**
 	 * Selection changed.
 	 */
-	public abstract void selectionChanged();
+	void selectionChanged();
 
 }

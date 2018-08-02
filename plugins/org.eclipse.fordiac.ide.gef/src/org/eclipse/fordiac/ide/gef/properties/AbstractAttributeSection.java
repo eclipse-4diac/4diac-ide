@@ -54,10 +54,10 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractAttributeSection extends AbstractSection {
 	private TableViewer attributeViewer;
-	private final String NAME = "name"; //$NON-NLS-1$
-	private final String VALUE = "value"; //$NON-NLS-1$
-	private final String TYPE = "type"; //$NON-NLS-1$
-	private final String COMMENT = "comment"; //$NON-NLS-1$
+	private static final String NAME = "name"; //$NON-NLS-1$
+	private static final String VALUE = "value"; //$NON-NLS-1$
+	private static final String TYPE = "type"; //$NON-NLS-1$
+	private static final String COMMENT = "comment"; //$NON-NLS-1$
 	private Button attributeNew;
 	private Button attributeDelete;
 	

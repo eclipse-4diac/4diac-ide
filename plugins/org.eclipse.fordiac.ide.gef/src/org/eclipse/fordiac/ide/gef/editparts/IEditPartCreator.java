@@ -17,7 +17,7 @@ import org.eclipse.gef.EditPart;
 
 /**
  * Objects implementing this element can create an EditPart (for graphical
- * Visualisation in GEF editors).
+ * visualisation in GEF editors).
  */
 public interface IEditPartCreator {
 
@@ -26,6 +26,6 @@ public interface IEditPartCreator {
 	 * 
 	 * @return the created EditPart
 	 */
-	public EditPart createEditPart();
+	EditPart createEditPart();
 	
 }

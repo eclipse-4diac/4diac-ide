@@ -33,7 +33,7 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractDevice
 	StringBuffer stringBuffer = new StringBuffer();
 	public String origMgrID;
 
-	static public void createBootFile(List<Object> workList, String fileName, Shell shell) {
+	public static void createBootFile(List<Object> workList, String fileName, Shell shell) {
 		if (null != fileName) {
 			DeploymentCoordinator deployment = DeploymentCoordinator.getInstance();
 			BootFileDeviceManagementCommunicationHandler bootFileHandler = new BootFileDeviceManagementCommunicationHandler();

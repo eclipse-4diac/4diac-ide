@@ -23,14 +23,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
-	private final static String[] PALETTE_ENTRY_SOURCE_LOCAL = {"net/PUBL_0", "net/PUBL_1", "net/PUBL_2", "net/PUBL_3", "net/PUBL_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-	private final static String[] PALETTE_ENTRY_DESTINATION_LOCAL = {"net/SUBL_0", "net/SUBL_1", "net/SUBL_2", "net/SUBL_3", "net/SUBL_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-	private final static String[] PALETTE_ENTRY_SOURCE = {"net/PUBLISH_0", "net/PUBLISH_1", "net/PUBLISH_2", "net/PUBLISH_3", "net/PUBLISH_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-	private final static String[] PALETTE_ENTRY_DESTINATION = {"net/SUBSCRIBE_0", "net/SUBSCRIBE_1", "net/SUBSCRIBE_2", "net/SUBSCRIBE_3", "net/SUBSCRIBE_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	private static final String[] PALETTE_ENTRY_SOURCE_LOCAL = {"net/PUBL_0", "net/PUBL_1", "net/PUBL_2", "net/PUBL_3", "net/PUBL_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	private static final String[] PALETTE_ENTRY_DESTINATION_LOCAL = {"net/SUBL_0", "net/SUBL_1", "net/SUBL_2", "net/SUBL_3", "net/SUBL_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	private static final String[] PALETTE_ENTRY_SOURCE = {"net/PUBLISH_0", "net/PUBLISH_1", "net/PUBLISH_2", "net/PUBLISH_3", "net/PUBLISH_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	private static final String[] PALETTE_ENTRY_DESTINATION = {"net/SUBSCRIBE_0", "net/SUBSCRIBE_1", "net/SUBSCRIBE_2", "net/SUBSCRIBE_3", "net/SUBSCRIBE_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
-	public final static String PROTOCOL_ID = "CanPubSub"; //$NON-NLS-1$
+	public static final String PROTOCOL_ID = "CanPubSub"; //$NON-NLS-1$
 	
-	private final static int DEFAULT_START_MESSAGE_ID = 500;
+	private static final int DEFAULT_START_MESSAGE_ID = 500;
 	
 	
 	private int startMessageId; 

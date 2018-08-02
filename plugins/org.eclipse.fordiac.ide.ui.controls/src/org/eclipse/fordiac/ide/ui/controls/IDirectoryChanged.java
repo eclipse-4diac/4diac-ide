@@ -22,6 +22,6 @@ public interface IDirectoryChanged {
 	 * 
 	 * @param newDirectory the new directory
 	 */
-	public void directoryChanged(String newDirectory);
+	void directoryChanged(String newDirectory);
 
 }

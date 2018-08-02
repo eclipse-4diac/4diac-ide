@@ -126,7 +126,7 @@ public class XMLFormatter {
 		}
 	}
 
-	private static abstract class TagReader {
+	private abstract static class TagReader {
 
 		protected Reader reader;
 
@@ -142,7 +142,7 @@ public class XMLFormatter {
 			return 0;
 		}
 
-		abstract public String getStartOfTag();
+		public abstract String getStartOfTag();
 
 		public String getTagText() {
 			return this.tagText;

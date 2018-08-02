@@ -26,6 +26,6 @@ public interface IConnectionEditPartCreator {
 	 * 
 	 * @return the created EditPart
 	 */
-	public ConnectionEditPart createEditPart();
+	ConnectionEditPart createEditPart();
 	
 }

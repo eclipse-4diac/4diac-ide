@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
 public class FBTypeUtils {
 
-	static public Palette getPalletteForFBTypeFile(IFile element) {
+	public static Palette getPalletteForFBTypeFile(IFile element) {
 		Palette palette = null;
 		if(null != element){
 			if(element.getProject().getName().equals(TypeLibrary.TOOL_LIBRARY_PROJECT_NAME)){ 

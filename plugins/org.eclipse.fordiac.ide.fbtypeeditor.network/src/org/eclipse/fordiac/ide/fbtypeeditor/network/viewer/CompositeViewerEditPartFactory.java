@@ -38,7 +38,7 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 	
 
 	public CompositeViewerEditPartFactory(GraphicalEditor editor, FB fbInstance, FBEditPart fbEditPart, ZoomManager zoomManager) {
-		super(editor, (CompositeFBType)fbInstance.getType(), zoomManager);
+		super(editor, zoomManager);
 		this.fbInstance = fbInstance;
 		this.fbEditPart = fbEditPart;
 	}

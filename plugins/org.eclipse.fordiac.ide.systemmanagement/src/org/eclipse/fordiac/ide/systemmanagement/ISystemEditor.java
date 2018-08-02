@@ -16,5 +16,5 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 
 public interface ISystemEditor {
 
-	public AutomationSystem getSystem();
+	AutomationSystem getSystem();
 }

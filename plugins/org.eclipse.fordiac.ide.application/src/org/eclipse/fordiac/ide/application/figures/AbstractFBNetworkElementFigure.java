@@ -551,6 +551,6 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		getInstanceNameLabel().setIcon(image);
 	}
 	
-	abstract protected boolean isResoruceTypeFBNElement();
+	protected abstract boolean isResoruceTypeFBNElement();
 
 }

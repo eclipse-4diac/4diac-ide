@@ -27,20 +27,20 @@ public interface IOpenListener extends IObjectActionDelegate {
 	 * 
 	 * @return the open listener action
 	 */
-	public Action getOpenListenerAction();
+	Action getOpenListenerAction();
 	
-	public IEditorPart getOpenedEditor();
+	IEditorPart getOpenedEditor();
 
 	/** Get the Text to be printed in the Actions menu
 	 */
-	public String getActionText();
+	String getActionText();
 
 	/** Get the class this open listner handles
 	 */
-	public Class<? extends I4DIACElement> getHandledClass();
+	Class<? extends I4DIACElement> getHandledClass();
 
 	/** Get the id of the open listener as it is registered in the plugin's extension point.
 	 */
-	public String getOpenListenerID();
+	String getOpenListenerID();
 
 }

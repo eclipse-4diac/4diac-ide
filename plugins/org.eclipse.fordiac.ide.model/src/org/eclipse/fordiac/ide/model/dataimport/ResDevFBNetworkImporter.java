@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 class ResDevFBNetworkImporter extends SubAppNetworkImporter {
 	
-	final private EList<VarDeclaration> varInputs;
+	private final EList<VarDeclaration> varInputs;
 	
 	ResDevFBNetworkImporter(Palette palette, EList<VarDeclaration> varInputs){
 		super(palette);

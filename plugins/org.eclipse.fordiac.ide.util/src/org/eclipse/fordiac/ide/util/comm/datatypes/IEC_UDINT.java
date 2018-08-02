@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.util.Activator;
 
 public class IEC_UDINT extends IEC_LINT {
 
-	protected static final long BOUNDS_MASK = 0xFFFFFFFF00000000L;
+	private static final long BOUNDS_MASK = 0xFFFFFFFF00000000L;
 	
 	public IEC_UDINT() {
 		super();

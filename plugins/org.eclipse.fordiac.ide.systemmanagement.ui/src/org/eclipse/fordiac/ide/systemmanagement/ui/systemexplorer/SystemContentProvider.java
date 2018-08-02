@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -30,20 +31,15 @@ import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 
 public class SystemContentProvider extends AdapterFactoryContentProvider implements DistributedSystemListener  {
 
-	static private ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
+	private static ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 	
-	BaseWorkbenchContentProvider workbenchContentProvider = new BaseWorkbenchContentProvider();
+	private BaseWorkbenchContentProvider workbenchContentProvider = new BaseWorkbenchContentProvider();
 	
 	public SystemContentProvider() {
 		super(systemAdapterFactory);
 		SystemManager.INSTANCE.addWorkspaceListener(this);
 	}
 
-
-	@Override
-	public void dispose() {
-		super.dispose();
-	}
 
 	@Override
 	public Object[] getElements(Object inputElement) {
@@ -72,7 +68,7 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	}
 	
 		
-	private final static ArrayList<AdapterFactory> createFactoryList(){
+	private static List<AdapterFactory> createFactoryList(){
 		ArrayList<AdapterFactory> factories = new ArrayList<AdapterFactory>();
 		factories.add(new SystemElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());

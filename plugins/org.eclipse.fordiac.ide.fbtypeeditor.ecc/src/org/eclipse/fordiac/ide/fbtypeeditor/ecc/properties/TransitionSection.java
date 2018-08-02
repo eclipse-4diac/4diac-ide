@@ -55,7 +55,7 @@ import com.google.inject.name.Named;
 @SuppressWarnings("restriction")
 public class TransitionSection extends AbstractECSection {
 	private static final String ONE_CONDITION = "1"; //$NON-NLS-1$
-	private final static String LINKING_FILE_EXTENSION = "xtextfbt";   //$NON-NLS-1$
+	private static final String LINKING_FILE_EXTENSION = "xtextfbt";   //$NON-NLS-1$
 	private Text commentText;
 	private Combo eventCombo;
 	Composite conditionEditingContainer;

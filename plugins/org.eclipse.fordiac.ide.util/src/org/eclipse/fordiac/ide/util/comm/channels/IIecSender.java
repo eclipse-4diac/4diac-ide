@@ -19,5 +19,5 @@ import org.eclipse.fordiac.ide.util.comm.exceptions.CommException;
 
 public interface IIecSender extends IIecCommObject {
 
-	public abstract void SendIECData(List<IEC_ANY> sendData) throws CommException;
+	void sendIECData(List<IEC_ANY> sendData) throws CommException;
 }

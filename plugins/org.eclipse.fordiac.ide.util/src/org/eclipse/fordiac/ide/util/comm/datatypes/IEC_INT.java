@@ -21,8 +21,7 @@ import org.eclipse.fordiac.ide.util.Activator;
 
 public class IEC_INT extends IEC_DINT {
 
-	protected static final int BOUNDS_MASK = 0x7FFF8000;
-//	protected short value;
+	private static final int BOUNDS_MASK = 0x7FFF8000;
 
 	public IEC_INT(int initial) {
 		super(initial);

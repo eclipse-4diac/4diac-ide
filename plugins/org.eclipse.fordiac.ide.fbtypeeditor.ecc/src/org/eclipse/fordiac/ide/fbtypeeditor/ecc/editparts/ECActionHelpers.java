@@ -92,11 +92,12 @@ public class ECActionHelpers {
 		return algorithms;
 	}
 
-	static public BasicFBType getFBType(ECAction action) {
+	public static BasicFBType getFBType(ECAction action) {
 		if (action.eContainer() != null
 				&& action.eContainer().eContainer() != null
-				&& action.eContainer().eContainer().eContainer() != null)
+				&& action.eContainer().eContainer().eContainer() != null) {
 			return (BasicFBType) action.eContainer().eContainer().eContainer();
+		}
 		return null;
 	}
 	

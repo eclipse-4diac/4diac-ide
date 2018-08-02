@@ -32,7 +32,7 @@ public class UDPPublisher implements IIecSender {
 		m_oManager = ChannelManager.getInstance();
 	}
 	
-	public boolean Initialize(String pa_sID) {
+	public boolean initialize(String pa_sID) {
 		m_bInitialized=false;
 		m_sID=""; //$NON-NLS-1$
 		try {
@@ -47,13 +47,13 @@ public class UDPPublisher implements IIecSender {
 		return true;
 	}
 
-	public void SendIECData(List<IEC_ANY> sendData) throws CommException {
+	public void sendIECData(List<IEC_ANY> sendData) throws CommException {
 			ChannelManager.send(m_sID, IChannel.UDP, sendData);
 		
 	}
 
 	@Override
-	public boolean DeInitialize(String pa_sID) {
+	public boolean deInitialize(String pa_sID) {
 		//only abstract methods used;
 		m_bInitialized=false;
 		m_sID=""; //$NON-NLS-1$

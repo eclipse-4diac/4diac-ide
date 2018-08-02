@@ -36,7 +36,7 @@ public class UDPCommThread extends CCommThread {
 	public void run() {
 		while (!isInterrupted() && channel.getSocket() != null) {
 			try {
-				receiver.ReceiveIECData(channel.receiveFrom());
+				receiver.receiveIECData(channel.receiveFrom());
 			} catch (IOException e) {
 
 				return;

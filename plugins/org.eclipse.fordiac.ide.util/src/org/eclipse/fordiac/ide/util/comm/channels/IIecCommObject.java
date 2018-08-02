@@ -14,8 +14,8 @@ package org.eclipse.fordiac.ide.util.comm.channels;
 
 public interface IIecCommObject {
 
-	public abstract boolean Initialize(String pa_sID);
+	boolean initialize(String sID);
 
-	public abstract boolean DeInitialize(String pa_sID);
+	boolean deInitialize(String sID);
 
 }

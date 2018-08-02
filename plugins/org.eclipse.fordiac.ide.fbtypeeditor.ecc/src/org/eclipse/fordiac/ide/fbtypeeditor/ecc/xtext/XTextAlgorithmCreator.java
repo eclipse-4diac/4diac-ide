@@ -36,7 +36,7 @@ import com.google.inject.name.Named;
 @SuppressWarnings("restriction")
 public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 	
-	private final static String LINKING_FILE_EXTENSION = "xtextfbt";   //$NON-NLS-1$
+	private static final String LINKING_FILE_EXTENSION = "xtextfbt";   //$NON-NLS-1$
 	
 	@Inject
 	protected EmbeddedEditorFactory editorFactory;
