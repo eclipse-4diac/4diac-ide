@@ -42,12 +42,12 @@ import org.w3c.dom.NodeList;
 
 class FBNetworkImporter {
 
-	final protected Palette palette;	
-	final protected FBNetwork fbNetwork;
+	protected final Palette palette;	
+	protected final FBNetwork fbNetwork;
 	//this is the interface list needed for checking connection to the containg types interface
-	final private InterfaceList interfaceList; 
+	private final InterfaceList interfaceList; 
 	
-	protected Map<String, FBNetworkElement> fbNetworkElementMap = new HashMap<>();
+	protected final Map<String, FBNetworkElement> fbNetworkElementMap = new HashMap<>();
 	
 	public FBNetworkImporter(Palette palette) {
 		//so we need an empty interface list
@@ -154,7 +154,7 @@ class FBNetworkImporter {
 //	}
 
 
-	protected void configureParameters(InterfaceList interfaceList, NodeList childNodes) throws TypeImportException {
+	protected static void configureParameters(InterfaceList interfaceList, NodeList childNodes) throws TypeImportException {
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
 			if (n.getNodeName().equals(LibraryElementTags.PARAMETER_ELEMENT)) {
@@ -282,7 +282,7 @@ class FBNetworkImporter {
 		return fbNetworkElementMap.get(fbName);
 	}
 	
-	private VarDeclaration getVarNamed(InterfaceList interfaceList, String varName, boolean input) {
+	private static VarDeclaration getVarNamed(InterfaceList interfaceList, String varName, boolean input) {
 		VarDeclaration retVal;
 		boolean hasType = true;
 
@@ -304,7 +304,7 @@ class FBNetworkImporter {
 		return retVal;
 	}
 
-	private VarDeclaration createVarDecl(InterfaceList interfaceList, String varName, boolean input) {
+	private static VarDeclaration createVarDecl(InterfaceList interfaceList, String varName, boolean input) {
 		VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		var.setName(varName);
 		var.setIsInput(input);

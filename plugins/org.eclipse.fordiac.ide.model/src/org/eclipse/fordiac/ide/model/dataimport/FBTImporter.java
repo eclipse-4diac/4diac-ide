@@ -82,32 +82,44 @@ import org.xml.sax.SAXException;
 public class FBTImporter implements LibraryElementTags {
 
 	/** The variables. */
-	public Map<String, VarDeclaration> variables = new HashMap<>();
+	private Map<String, VarDeclaration> variables = new HashMap<>();
 
 	/** The internal variables. */
-	public Map<String, VarDeclaration> internalVariables = new HashMap<>();
+	private Map<String, VarDeclaration> internalVariables = new HashMap<>();
 
 	/** The input events. */
-	public Map<String, Event> inputEvents = new HashMap<>();
+	private Map<String, Event> inputEvents = new HashMap<>();
 	
 	/** The output events. */
-	public Map<String, Event> outputEvents = new HashMap<>();
+	private Map<String, Event> outputEvents = new HashMap<>();
 
 	/** The adapters. */
-	public Map<String, AdapterDeclaration> adapters = new HashMap<>();
-	public Map<String, PositionableElement> adapterPositions = new HashMap<>();
+	private Map<String, AdapterDeclaration> adapters = new HashMap<>();
+	private Map<String, PositionableElement> adapterPositions = new HashMap<>();
 
 	/** The algorithm name ec action mapping. */
-	public Map<String, ArrayList<ECAction>> algorithmNameECActionMapping = new HashMap<>();
+	private Map<String, ArrayList<ECAction>> algorithmNameECActionMapping = new HashMap<>();
 
 	/** The ec states. */
-	public Map<String, ECState> ecStates = new HashMap<>();
+	private Map<String, ECState> ecStates = new HashMap<>();
 	
-	protected FBType type;
+	private FBType type;
 
 	private IFile file;
 	
-	protected Palette palette;
+	private Palette palette;
+	
+	protected FBType getType() {
+		return type;
+	}
+	
+	protected Palette getPalette() {
+		return palette; 
+	}
+	
+	protected void setPalette(Palette palette) {
+		this.palette = palette;
+	}
 
 	/**
 	 * Import fb type.
@@ -582,7 +594,7 @@ public class FBTImporter implements LibraryElementTags {
 				parseECC(type, n);
 			}
 			if (n.getNodeName().equals(ALGORITHM_ELEMENT)) {
-				parseAlgorithm(type, n, palette);
+				parseAlgorithm(type, n);
 			}
 		}
 	}
@@ -602,8 +614,7 @@ public class FBTImporter implements LibraryElementTags {
 	 * @throws ReferencedTypeNotFoundException
 	 *             the referenced type not found exception
 	 */
-	private void parseAlgorithm(final BasicFBType type, final Node n,
-			final Palette palette) throws TypeImportException,
+	private void parseAlgorithm(final BasicFBType type, final Node n) throws TypeImportException,
 			ReferencedTypeNotFoundException {
 		NamedNodeMap map = n.getAttributes();
 		Node nameNode = map.getNamedItem(NAME_ATTRIBUTE);
