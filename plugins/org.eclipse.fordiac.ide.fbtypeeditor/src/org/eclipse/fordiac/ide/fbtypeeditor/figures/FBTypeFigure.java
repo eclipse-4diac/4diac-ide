@@ -58,8 +58,7 @@ public class FBTypeFigure extends Shape {
 	private final Figure sockets = new Figure();
 	private final Figure dataOutputs = new Figure();
 	private final Figure plugs = new Figure();
-	protected TopBorder bottomBorder;
-	protected Label typeName;
+	private Label typeName;
 	private Label versionInfoLabel;
 	private FBType type;
 	private ZoomManager zoomManager; 
@@ -122,9 +121,6 @@ public class FBTypeFigure extends Shape {
 		tpl.marginHeight = 0;
 
 		topInputs.setLayoutManager(tpl);
-		// topInputs.add(new Label("comment ..."));
-		// topInputs.add(new Label("type "));
-		// topInputs.add(new Label(" "));
 
 		//		
 		ToolbarLayout topInputsLayout = new ToolbarLayout(false);
@@ -147,8 +143,8 @@ public class FBTypeFigure extends Shape {
 		top.setConstraint(eventOutputs, BorderLayout.RIGHT);
 
 		Figure middleContainer = new Figure();
-		BorderLayout borderLayout;
-		middleContainer.setLayoutManager(borderLayout = new BorderLayout());
+		BorderLayout borderLayout = new BorderLayout();
+		middleContainer.setLayoutManager(borderLayout);
 		borderLayout.setHorizontalSpacing(10);
 		middleContainer.setBorder(new MarginBorder(0, 7, 0, 7));
 
@@ -168,8 +164,8 @@ public class FBTypeFigure extends Shape {
 		middle.setBorder(new TopBorder(getBackgroundColor(), 0));
 		middleLayout.marginHeight = 0;
 		middleLayout.verticalSpacing = 1;
-		middle.add(typeName = new Label(type.getName() != null ? type.getName()
-				: "N/D"));
+		typeName = new Label(type.getName() != null ? type.getName() : "N/D");
+		middle.add(typeName);
 		typeName.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
 		typeName.setTextAlignment(PositionConstants.CENTER);
 		middle.setConstraint(typeName, new GridData(GridData.HORIZONTAL_ALIGN_FILL
@@ -184,13 +180,8 @@ public class FBTypeFigure extends Shape {
 				| GridData.GRAB_HORIZONTAL));
 
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
-		bottom
-				.setBorder(bottomBorder = new TopBorder(getBackgroundColor(), 14 - 4));
+		bottom.setBorder(new TopBorder(getBackgroundColor(), 14 - 4));
 
-		// GridLayout bottomLayout = new GridLayout(2, false);
-		// bottomLayout.marginHeight = 4;
-		// bottomLayout.marginWidth = 1;
-		// bottomLayout.horizontalSpacing = 0;
 		BorderLayout bottomLayout = new BorderLayout();
 		bottom.setLayoutManager(bottomLayout);
 		GridData bottomLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL
@@ -321,7 +312,7 @@ public class FBTypeFigure extends Shape {
 		return typeName;
 	}
 	
-	public void updateVersionInfoLabel(){
+	public final void updateVersionInfoLabel(){
 		VersionInfo versionInfo = null;
 		if (type.getVersionInfo().size() > 0) {
 			versionInfo = type.getVersionInfo().get(type.getVersionInfo().size() - 1);
@@ -364,9 +355,12 @@ public class FBTypeFigure extends Shape {
 
 	@Override
 	protected void fillShape(final Graphics graphics) {
+		//nothing to do here
 	}
 
 	@Override
 	protected void outlineShape(final Graphics graphics) {
+		//nothing to do here
 	}
+	
 }

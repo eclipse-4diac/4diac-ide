@@ -28,11 +28,11 @@ public class TCPClient extends IIecNetCommRcv implements IIecSender,IIecReceivab
 		super();
 	}
 	
-	public boolean initialize(String pa_sID) {
-		boolean retval = Initialize(pa_sID, IChannel.TCP);
+	@Override
+	public boolean initialize(String sID) {
+		boolean retval = initialize(sID, IChannel.TCP);
 		if (retval) {
-			m_bInitialized=true;
-			m_sID=pa_sID;
+			m_sID=sID;
 		}
 		return retval;
 	}
