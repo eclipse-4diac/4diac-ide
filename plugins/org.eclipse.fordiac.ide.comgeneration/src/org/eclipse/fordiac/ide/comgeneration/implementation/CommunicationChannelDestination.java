@@ -15,6 +15,9 @@ package org.eclipse.fordiac.ide.comgeneration.implementation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -22,21 +25,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 public class CommunicationChannelDestination {
 
-	private final CommunicationChannel CommunicationChannel;
+	private final CommunicationChannel communicationChannel;
 	private Resource destinationResource;
-	private HashSet<Connection> connections;
-	private HashMap<Integer, ArrayList<IInterfaceElement>> destinationPorts;
-	private ArrayList<CommunicationMediaInfo> availableMedia;
+	private final Set<Connection> connections = new HashSet<>();
+	private final Map<Integer, List<IInterfaceElement>> destinationPorts = new HashMap<>();
+	private final List<CommunicationMediaInfo> availableMedia = new ArrayList<>();
 	private boolean separated;
 	private String selectedProtocolId;
 	private CommunicationMediaInfo selectedMedia;
 	
 	public CommunicationChannelDestination(CommunicationChannel communicationChannel) {
 		super();
-		CommunicationChannel = communicationChannel;
-		destinationPorts = new HashMap<Integer, ArrayList<IInterfaceElement>>();
-		connections = new HashSet<Connection>();
-		availableMedia = new ArrayList<CommunicationMediaInfo>();
+		this.communicationChannel = communicationChannel;
 		separated = false;
 		selectedProtocolId = null;
 		selectedMedia = null;
@@ -50,19 +50,19 @@ public class CommunicationChannelDestination {
 		this.destinationResource = destinationResource;
 	}
 
-	public HashMap<Integer, ArrayList<IInterfaceElement>> getDestinationPorts() {
+	public Map<Integer, List<IInterfaceElement>> getDestinationPorts() {
 		return destinationPorts;
 	}
 
 	public CommunicationChannel getCommunicationChannel() {
-		return CommunicationChannel;
+		return communicationChannel;
 	}
 
-	public ArrayList<CommunicationMediaInfo> getAvailableMedia() {
+	public List<CommunicationMediaInfo> getAvailableMedia() {
 		return availableMedia;
 	}
 
-	public HashSet<Connection> getConnection() {
+	public Set<Connection> getConnection() {
 		return connections;
 	}
 

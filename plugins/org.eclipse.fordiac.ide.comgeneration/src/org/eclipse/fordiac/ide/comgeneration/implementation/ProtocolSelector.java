@@ -19,9 +19,11 @@ import java.util.Iterator;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.CanPubSubGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.EthernetPubSubGenerator;
+import org.eclipse.fordiac.ide.comgeneration.plugin.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 
-public class ProtocolSelector {
+public final class ProtocolSelector {
+	
 	public static void doAutomatedProtocolSelection(CommunicationModel model) {
 		for (CommunicationChannel channel : model.getChannels().values()) {
 			ArrayList<Segment> commonSegments = new ArrayList<Segment>();
@@ -74,18 +76,18 @@ public class ProtocolSelector {
 				}
 				
 				if (selectedSegment != null) {
-				for (CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
-					if (mediaInfo.getSegment() == selectedSegment) {
-						destination.setSelectedMedia(mediaInfo);
-						destination.setSelectedProtocolId(getProtocolIdForMetiaType(mediaInfo.getSegment()));
-						break;
+					for (CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
+						if (mediaInfo.getSegment() == selectedSegment) {
+							destination.setSelectedMedia(mediaInfo);
+							destination.setSelectedProtocolId(getProtocolIdForMetiaType(mediaInfo.getSegment()));
+							break;
+						}
 					}
-				}
 				} else {
-					System.err.println("No connection available for ");
+					Activator.getDefault().logError("No connection available for ");
 				}
 				
-							}
+			}
 		}
 	}
 	
@@ -126,5 +128,9 @@ public class ProtocolSelector {
 			}
 			
 		});
+	}
+	
+	private ProtocolSelector() {
+		throw new UnsupportedOperationException("ProtocolSelector utilioty class should not be instantiated!");
 	}
 }

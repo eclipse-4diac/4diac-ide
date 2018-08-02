@@ -20,20 +20,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public interface MediaSpecificGenerator {
 
-	public abstract String getMediaType();
+	String getMediaType();
 
-	public abstract String getProtocolId();
+	String getProtocolId();
 
-	public abstract FBTypePaletteEntry getPaletteType(ChannelEnd end,
-			int numDataPorts, boolean local);
+	FBTypePaletteEntry getPaletteType(ChannelEnd end, int numDataPorts, boolean local);
 	
 	
-	public abstract void configureFBs(FB sourceFB, FB destinationFB, CommunicationMediaInfo mediaInfo);
+	void configureFBs(FB sourceFB, FB destinationFB, CommunicationMediaInfo mediaInfo);
 
-	public abstract void reset();
+	void reset();
 
-	public abstract boolean isSeparatedSource();
+	boolean isSeparatedSource();
 	
-	public VarDeclaration getTargetInputData(int index, FB fb);
-	public VarDeclaration getTargetOutputData(int index, FB fb);
+	VarDeclaration getTargetInputData(int index, FB fb);
+	VarDeclaration getTargetOutputData(int index, FB fb);
 }

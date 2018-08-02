@@ -40,9 +40,7 @@ public class GenerateCommAction implements IObjectActionDelegate {
 	}
 
 	public void run(IAction action) {
-		String message;
 		if (selectedApplication != null) {
-			message = selectedApplication.getName();
 			Palette palette = selectedApplication.getAutomationSystem().getPalette();
 			MediaSpecificGeneratorFactory specificGeneratorFactory = new MediaSpecificGeneratorFactory();
 			EthernetPubSubGenerator ethernetPubSubGenerator = new EthernetPubSubGenerator(palette);
@@ -58,9 +56,7 @@ public class GenerateCommAction implements IObjectActionDelegate {
 			generator.removeGeneratedElements(selectedApplication);
 			generator.setTransferedData(TransferedData.EXACT);
 			generator.generate(model);
-		} else {
-			message = "No application selected.";
-		}
+		} 
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {

@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.comgeneration.plugin;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 import org.osgi.framework.BundleContext;
 
-public class Activator extends AbstractUIPlugin {
+public class Activator extends Abstract4DIACUIPlugin {
 	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.comgeneration"; //$NON-NLS-1$
 	// The shared instance
 	private static Activator plugin;

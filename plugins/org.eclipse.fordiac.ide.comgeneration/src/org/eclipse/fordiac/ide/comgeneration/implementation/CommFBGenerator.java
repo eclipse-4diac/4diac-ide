@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.MediaSpecificGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.MediaSpecificGeneratorFactory;
+import org.eclipse.fordiac.ide.comgeneration.plugin.Activator;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
@@ -76,7 +77,7 @@ public class CommFBGenerator {
 		
 	private void generateFBs(CommunicationChannelDestination destination) {
 		if (destination.getSelectedMedia() == null || destination.getSelectedProtocolId() == null) {
-			System.err.println("No media or protocol selected for " + destination);
+			Activator.getDefault().logError("No media or protocol selected for " + destination);
 			return;
 		}
 		int numberDataPorts = 0;
@@ -101,7 +102,7 @@ public class CommFBGenerator {
 		}
 		MediaSpecificGenerator specificGenerator = specificGeneratorFactory.getForProtocolId(destination.getSelectedProtocolId());
 		if (specificGenerator == null) {
-			System.err.println("No generator for protocol " + destination.getSelectedProtocolId() + "!");
+			Activator.getDefault().logError("No generator for protocol " + destination.getSelectedProtocolId() + "!");
 		} else { 
 			GeneratedFBInfo sourceGeneratedFBInfo = generateFB(ChannelEnd.SOURCE, numberDataPorts, withPorts, destination, specificGenerator);
 			GeneratedFBInfo destinationGeneratedFBInfo = generateFB(ChannelEnd.DESTINATION, numberDataPorts, withPorts, destination, specificGenerator);
@@ -228,7 +229,7 @@ public class CommFBGenerator {
 		if (sourceEvents.size() == 0) {
 			FB startFB = resource.getFBNetwork().getFBNamed("START");
 			if (startFB == null) {
-				System.err.println("No start FB in resource " + resource.getName() + "!");
+				Activator.getDefault().logError("No start FB in resource " + resource.getName() + "!");
 				return;
 			}
 			sourceEvents.add(startFB.getInterface().getEventOutputs().get(0));

@@ -2,7 +2,8 @@ Manifest-Version: 1.0
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.runtime,
- org.eclipse.debug.core
+ org.eclipse.debug.core,
+ org.eclipse.fordiac.ide.ui.controls
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.10.0.qualifier

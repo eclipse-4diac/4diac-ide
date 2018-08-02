@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.comgeneration.implementation;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -100,7 +101,7 @@ public class Analyzer {
 						portIndex++;
 					}
 				}
-				ArrayList<IInterfaceElement> destinationPortList = destination.getDestinationPorts().get(portIndex);
+				List<IInterfaceElement> destinationPortList = destination.getDestinationPorts().get(portIndex);
 				if (destinationPortList == null) {
 					destinationPortList = new ArrayList<IInterfaceElement>();
 					destination.getDestinationPorts().put(portIndex, destinationPortList);
