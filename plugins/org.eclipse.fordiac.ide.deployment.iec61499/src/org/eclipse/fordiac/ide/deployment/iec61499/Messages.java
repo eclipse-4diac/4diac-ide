@@ -63,6 +63,7 @@ public class Messages extends NLS {
 	public static String DTL_QueryAdapterTypes;
 	public static String DTL_QueryFailed;
 	public static String DTL_CreateTypeFailed;
+	public static String DTL_QueryFBInstances;
 	public static String FBDK2_WriteParameter;
 	
 	public static String EthernetComHandler_InvalidMgmtID;

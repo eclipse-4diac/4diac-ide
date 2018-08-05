@@ -138,7 +138,17 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			}
 		}
 	}
-
+	
+	public void queryResources(Device dev) {
+		String request = MessageFormat.format(Messages.DTL_QueryFBInstances, new Object[] { id++ });
+		try {
+			QueryResponseHandler queryResp = sendQUERY("", request);
+			//TODO provide result to create resources
+		} catch (Exception e) {
+			System.out.println(MessageFormat.format(Messages.DTL_QueryFailed, new Object[] { "Resources" })); //$NON-NLS-1$
+		}
+	}
+	
 	private void queryFBTypes(FB fb, Resource res) {
 		if (null == getTypes()) {
 			String request = MessageFormat.format(Messages.DTL_QueryFBTypes, new Object[] { id++ });

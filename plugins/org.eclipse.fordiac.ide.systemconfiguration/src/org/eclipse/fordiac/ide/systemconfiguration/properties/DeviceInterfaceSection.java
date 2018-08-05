@@ -13,10 +13,16 @@ package org.eclipse.fordiac.ide.systemconfiguration.properties;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.iec61499.DynamicTypeLoadDeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDeviceInterfaceSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 
 public class DeviceInterfaceSection extends AbstractDeviceInterfaceSection {
@@ -31,6 +37,35 @@ public class DeviceInterfaceSection extends AbstractDeviceInterfaceSection {
 	protected void createFBInfoGroup(Composite parent) {
 		super.createFBInfoGroup(parent);
 		profile.setItems(getAvailableProfileNames());
+		getResources.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {	
+				if(type instanceof Device){
+					IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor((Device)getType());
+					if(interactor instanceof DynamicTypeLoadDeploymentExecutor) {
+						DeploymentCoordinator.getInstance().enableOutput(interactor);
+//						OnlineDeploymentErrorCheckListener.getInstance().setLastMessage(""); //$NON-NLS-1$
+//						OnlineDeploymentErrorCheckListener.getInstance().setLastCommand(""); //$NON-NLS-1$
+//						interactor.addDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
+						try {
+							interactor.connect();
+							((DynamicTypeLoadDeploymentExecutor) interactor).queryResources((Device)getType());
+						} catch (Exception e) {
+//							OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID((Device)getType()), this, true);
+						}finally {
+							try {
+								interactor.disconnect();
+							} catch (DeploymentException e) {
+//								OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID((Device)getType()), this, true);
+							}							
+						}
+//						interactor.removeDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
+						DeploymentCoordinator.getInstance().flush();
+						DeploymentCoordinator.getInstance().disableOutput(interactor);
+					}
+				}
+			}
+		});
 	}
 	
 	private static String[] getAvailableProfileNames() {
