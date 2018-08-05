@@ -162,6 +162,18 @@ public class Messages extends NLS {
 	/** The FB type library_ erro r_ not supported. */
 	public static String FBTypeLibrary_ERROR_NotSupported;
 	
+	/** Identifier has length zero */
+	public static String IdentifierVerifyer_ERROR_IdentifierLengthZero;
+
+	/** Identifier has invalid starting symbol */
+	public static String IdentifierVerifyer_ERROR_InvalidStartSymbol;
+
+	/** Invalid symbol used in identifier */
+	public static String IdentifierVerifyer_ERROR_InvalidSymbolUsedInIdentifer;
+
+	/** Identifier pattern does not match for unknown reasons */
+	public static String IdentifierVerifyer_ERROR_UnkownExpressionError;
+
 	/** The Import utils_ erro r_ arraysize_ number format. */
 	public static String ImportUtils_ERROR_Arraysize_NumberFormat;
 	
