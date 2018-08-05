@@ -42,17 +42,11 @@ public class IdentifierVerifyListener implements VerifyListener {
 			return;
 		}
 		// Get the character typed
-		char myChar = event.character;
 		String text = ((Text) event.widget).getText();
 		if (event.keyCode == SWT.DEL || event.keyCode == SWT.BS) {
 			return;
 		}
-		if ((myChar == '_' || IdentifierVerifyer.isIdentifierChar(myChar)) && text.length() == 0) {
-			event.doit = true;
-		} else if (myChar == SWT.NULL) {
-			event.doit = true;
-		} else if ((IdentifierVerifyer.isIdentifierChar(myChar) || Character.isDigit(myChar) || myChar == '_')
-				&& text.length() >= 1) {
+		if(IdentifierVerifyer.isValidIdentifier(text)) {
 			event.doit = true;
 		} else {
 			event.doit = false;
