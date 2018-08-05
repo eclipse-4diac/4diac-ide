@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2011, 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2011, 2017 Profactor GmbH, fortiss GmbH, 2018 TU Vienna/ACIN
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,17 +9,28 @@
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
+ *  Martin Melik Merkumains - changes implementation to regex expression
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class provides static methods to check whether a string is a valid IEC
  * 61499 compliant identifier.
  */
 public final class IdentifierVerifyer {
+
+	private static final String IDENTIFIER_HAS_TO_START_WITH_UNDERSCORE_OR_A_CHARACTER = "Identifier has to start with '_' or a character";
+	private final static String IDENTIFIER_LENGTH_LOWER_THAN_ONE = "Length < 1";
+	private final static String IdentifierRegex = "[_A-Za-z][_A-Za-z\\d]*";
+	private final static Pattern IdentifierPattern = Pattern.compile(IdentifierRegex, Pattern.MULTILINE);
+	private final static String InvalidIdentifierRegex = "[^_A-Za-z\\d]";
+	private final static Pattern InvalidIdentifierPattern = Pattern.compile(InvalidIdentifierRegex, Pattern.MULTILINE);
 	
 	private IdentifierVerifyer() {
-		//we don't want this util class to be instantatable
+		//we don't want this util class to be instantiable
 	}
 
 	/**
@@ -30,7 +41,8 @@ public final class IdentifierVerifyer {
 	 * @return true, if is valid identifier
 	 */
 	public static boolean isValidIdentifier(String identifier) {
-		return (null == isValidIdentifierWithErrorMessage(identifier));
+		final Matcher matcher = IdentifierPattern.matcher(identifier);
+		return matcher.matches();
 	}
 	/**
 	 * Checks if is valid identifier.
@@ -40,49 +52,21 @@ public final class IdentifierVerifyer {
 	 * @return null if it is an valid identifier otherwise an Error message
 	 */
 	public static String isValidIdentifierWithErrorMessage(String identifier) {
+		if(isValidIdentifier(identifier)) {
+			return null;
+		}
 		if (identifier.length() < 1) {
-			return "Length < 1";
+			return IDENTIFIER_LENGTH_LOWER_THAN_ONE;
 		}
-		char firstChar = identifier.charAt(0);
-		if (firstChar != '_' && !isIdentifierChar(firstChar)) {
-			return "Identifier has to start with '_' or a character";
+		String firstChar = identifier.substring(0, 1);
+		final Matcher startSymbolMatcher = IdentifierPattern.matcher(firstChar);
+		if (!startSymbolMatcher.matches()) {
+			return IDENTIFIER_HAS_TO_START_WITH_UNDERSCORE_OR_A_CHARACTER;
 		}
-		for (int i = 0; i < identifier.length(); i++) {
-			Character myChar = identifier.charAt(i);
-			if ((!isIdentifierChar(myChar) && !Character.isDigit(myChar) && myChar != '_')) {
-				return "The char: " + myChar + " is not allowed within identifiers";
-			}
+		final Matcher invalidExpressionSymbolsMatcher = InvalidIdentifierPattern.matcher(identifier);
+		if(invalidExpressionSymbolsMatcher.find()) {
+			return "Invalid symbol " + invalidExpressionSymbolsMatcher.group(0).toString() + " used in identifier";
 		}
-		return null;
-	}
-	
-	public static boolean isIdentifierChar(char character){
-		char toLower = Character.toLowerCase(character);
-		return (('a' == toLower) || 
-				('b' == toLower) || 
-				('c' == toLower) || 
-				('d' == toLower) || 
-				('e' == toLower) || 
-				('f' == toLower) || 
-				('g' == toLower) || 
-				('h' == toLower) || 
-				('i' == toLower) || 
-				('j' == toLower) || 
-				('k' == toLower) || 
-				('l' == toLower) || 
-				('m' == toLower) || 
-				('n' == toLower) || 
-				('o' == toLower) || 
-				('p' == toLower) || 
-				('q' == toLower) || 
-				('r' == toLower) || 
-				('s' == toLower) || 
-				('t' == toLower) || 
-				('u' == toLower) || 
-				('v' == toLower) || 
-				('w' == toLower) || 
-				('x' == toLower) || 
-				('y' == toLower) || 
-				('z' == toLower));
+		return "Unkown expression error";
 	}
 }
