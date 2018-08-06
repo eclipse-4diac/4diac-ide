@@ -66,35 +66,45 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		if(null != getTypes()) {
 			setAttribute(res.getDevice(), "FBType", getTypes()); //$NON-NLS-1$
 		}
-		if ((fbType instanceof BasicFBType || fbType instanceof CompositeFBType)
-				&& ( (null != getTypes() && !getTypes().contains(fbType.getName())) 
-						|| (null == getTypes() && !isAttribute(res.getDevice(), fbType.getName(), "FBType")))) { //$NON-NLS-1$
-			if(fbType instanceof CompositeFBType) {
-				for(FBNetworkElement netelem : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
-					if(!getTypes().contains(netelem.getTypeName())) {
-						Map<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());						
-						if(!adapters.isEmpty()) {
-							loopAdapterTypes(adapters, res);
-						}
-						createFBType((FBType) netelem.getType(), res);
+		if (fbType instanceof BasicFBType || fbType instanceof CompositeFBType) {
+			if( (null != getTypes() && !getTypes().contains(fbType.getName())) 
+					|| (null == getTypes() && !isAttribute(res.getDevice(), fbType.getName(), "FBType"))) { //$NON-NLS-1$
+				if(fbType instanceof CompositeFBType) {
+					createFBTypesOfCFB(fbType, res);
+				}
+				String request = createLuaRequestMessage(fbType);
+				try {				
+					String result = getDevMgmComHandler().sendREQ("", request); //$NON-NLS-1$
+					if (result.contains("Reason")) { //$NON-NLS-1$
+						throw new DeploymentException("LUA skript for " + fbType.getName() + " FBType not executed");
+					} else {
+						getTypes().add(fbType.getName());
 					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			}
-			ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
-			String luaSkript = luaFilter.createLUA(fbType);
-			String request = MessageFormat.format(Messages.DTL_CreateFBType,
-					new Object[] { id++, fbType.getName(), luaSkript });
-			try {				
-				String result = getDevMgmComHandler().sendREQ("", request); //$NON-NLS-1$
-				if (result.contains("Reason")) { //$NON-NLS-1$
-					throw new DeploymentException("LUA skript for " + fbType.getName() + " FBType not executed");
-				} else {
-					getTypes().add(fbType.getName());
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
+	}
+
+	private void createFBTypesOfCFB(final FBType fbType, final Resource res) throws DeploymentException {
+		for(FBNetworkElement netelem : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
+			if(!getTypes().contains(netelem.getTypeName())) {
+				Map<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());						
+				if(!adapters.isEmpty()) {
+					loopAdapterTypes(adapters, res);
+				}
+				createFBType((FBType) netelem.getType(), res);
+			}
+		}
+	}
+
+
+	private String createLuaRequestMessage(final FBType fbType) {
+		ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
+		String luaSkript = luaFilter.createLUA(fbType);
+		String request = MessageFormat.format(Messages.DTL_CreateFBType, new Object[] { id++, fbType.getName(), luaSkript });
+		return request;
 	}
 
 	private static boolean isAttribute(Device device, String fbTypeName, String attributeType) {
