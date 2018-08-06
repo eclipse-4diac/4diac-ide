@@ -19,7 +19,11 @@ import java.io.IOException;
  * A class providing necessary constants and methods for <code>ASN.1</code>
  * tag decoding.
  */
-public class ASN1 {
+public final class ASN1 {
+	
+	private ASN1() {
+		/* Utility class - no public constructor desired */ 		
+	}
 	
 	/** ASN.1 tag classes*/
 	/** The ASN.1 NULL element */
@@ -85,15 +89,15 @@ public class ASN1 {
 	/** IEC 61131-3 compact encoding ARRAY */
 	public static final int ARRAY = 22;
 	
-	public static final int DerivedData = 26;
-	public static final int DirectlyDerivedData = 27;
-	public static final int EnumeratedData = 28;
-	public static final int SubrangeData = 29;
+	public static final int DERIVED_DATA = 26;
+	public static final int DIRECTLY_DERIVED_DATA = 27;
+	public static final int ENUMERATED_DATA = 28;
+	public static final int SUBRANGE_DATA = 29;
 	public static final int STRUCTURED = 31;
 	
 	/**
 	 * Retrieves the first identifier octet from a {@link DataInputStream} and
-	 * delegates decoding of the datatype to class {@link IECDataTypeFactory}
+	 * delegates decoding of the data type to class {@link IECDataTypeFactory}
 	 * 
 	 * @param inputStream the {@link DataInputStream} to read from
 	 * @return the decoded IEC data type
@@ -103,11 +107,11 @@ public class ASN1 {
 			throws IOException {
 		
 		// throws IOException, if stream is closed by tcp-stack for example
-		int IdentifierOctet = inputStream.readByte();
-		if (IdentifierOctet == 0) {
+		int identifierOctet = inputStream.readByte();
+		if (identifierOctet == 0) {
 			return null;
 		}
-		return (IECDataTypeFactory.getIECType(IdentifierOctet, inputStream));
+		return (IECDataTypeFactory.getIECType(identifierOctet, inputStream));
 	}
 
 }
