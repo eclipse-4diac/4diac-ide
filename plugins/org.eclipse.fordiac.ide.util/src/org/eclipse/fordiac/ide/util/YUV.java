@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 fortiss GmbH
+ * Copyright (c) 2016 fortiss GmbH, 2018 TU Vienna/ACIN
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,8 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians
+ *     - reduces visibility of fields
  *******************************************************************************/
 package org.eclipse.fordiac.ide.util;
 
@@ -19,9 +21,9 @@ import org.eclipse.swt.graphics.RGB;
  */
 public class YUV {
 	
-	public double y;
-	public double u;
-	public double v;
+	private double y;
+	private double u;
+	private double v;
 	
 	public YUV(RGB rgb){
 		y = 0.299 * rgb.red + 0.587 * rgb.green + 0.114 * rgb.blue;
