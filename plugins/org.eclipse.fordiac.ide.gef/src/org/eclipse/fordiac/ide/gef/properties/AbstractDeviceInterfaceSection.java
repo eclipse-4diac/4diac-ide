@@ -23,14 +23,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 public abstract class AbstractDeviceInterfaceSection extends AbstractDevResInterfaceSection {
 	protected static String[] profileNames = null;
 	protected Combo profile;
 	protected Button getResources;
-
+	
 	@Override
 	protected void createFBInfoGroup(Composite parent) {
 		Composite composite = getWidgetFactory().createComposite(parent);
@@ -68,14 +66,19 @@ public abstract class AbstractDeviceInterfaceSection extends AbstractDevResInter
 			}
 		});
 		getResources = getWidgetFactory().createButton(composite, "fetch resource", SWT.PUSH); //$NON-NLS-1$
-		getResources.setToolTipText("create attribute");
+		getResources.setToolTipText("fetch resources");
 	}
 	
 	@Override
 	public void refresh() {
 		super.refresh();
 		if(null != type) {
-			setProfile();		
+			setProfile();
+			if("DynamicTypeLoad".equals(((Device)getType()).getProfile())) {
+				getResources.setEnabled(true);
+			}else {
+				getResources.setEnabled(false);
+			}
 		}
 	}
 	
