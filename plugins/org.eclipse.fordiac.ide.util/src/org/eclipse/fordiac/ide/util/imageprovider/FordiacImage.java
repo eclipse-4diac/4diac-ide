@@ -76,6 +76,7 @@ public enum FordiacImage {
 	ICON_FBTest,
 	ICON_FBTester,
 	ICON_FirmwareResource,
+	ICON_FMU,
 	ICON_ForceValue,
 	ICON_HideData,
 	ICON_HideEvent,
