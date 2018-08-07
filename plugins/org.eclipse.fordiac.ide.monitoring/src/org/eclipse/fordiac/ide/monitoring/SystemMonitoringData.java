@@ -13,7 +13,7 @@ package org.eclipse.fordiac.ide.monitoring;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
@@ -33,10 +33,10 @@ public class SystemMonitoringData {
 	
 	private final AutomationSystem system;
 	
-	private final Map<IInterfaceElement, MonitoringBaseElement> monitoredElements = new Hashtable<>();
-	private final Map<String, MonitoringBaseElement> monitoredElementsPerPortStrings = new Hashtable<>();
+	private final Map<IInterfaceElement, MonitoringBaseElement> monitoredElements = new HashMap<>();
+	private final Map<String, MonitoringBaseElement> monitoredElementsPerPortStrings = new HashMap<>();
 
-	private final Map<Device, DeviceMonitoringHandler> deviceHandlers = new Hashtable<>();
+	private final Map<Device, DeviceMonitoringHandler> deviceHandlers = new HashMap<>();
 	
 	private boolean monitoringEnabled = false;
 	

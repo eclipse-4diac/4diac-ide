@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +19,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.fordiac.ide.model.monitoring.*;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;

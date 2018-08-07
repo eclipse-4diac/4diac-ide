@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2016 fortiss GmbH. Profactor GmbH
+ * Copyright (c) 2015 - 2016 fortiss GmbH. Profactor GmbH,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +16,8 @@ package org.eclipse.fordiac.ide.util.imageprovider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -137,7 +139,7 @@ public enum FordiacImage {
 	private static ResourceBundle foridacImageProperties = ResourceBundle
 			.getBundle(FORDIAC_IMAGE_PROPERTIES);
 
-	private static Hashtable<Image, Image> errorImages = new Hashtable<Image, Image>();
+	private static Map<Image, Image> errorImages = new HashMap<>();
 	private static int count = 0;
 	
 	//FIXME: find a better way to handle overlay images

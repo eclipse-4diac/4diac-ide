@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2014, 2016 Profactor GmbH, TU Wien ACIN fortiss GmbH
+ * Copyright (c) 2012, 2014, 2016 Profactor GmbH, TU Wien ACIN fortiss GmbH,
+ * 				 2018 Johannes Kepler University		
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,7 +13,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -118,7 +119,7 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 		return getEditorInput().getPaletteEntry();
 	}
 
-	private final Map<IInterfaceElement, CommentTypeField> commentMapping = new Hashtable<>();
+	private final Map<IInterfaceElement, CommentTypeField> commentMapping = new HashMap<>();
 
 	@Override
 	protected List<?> getModelChildren() {

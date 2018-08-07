@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2016, 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2012, 2016, 2017 Profactor GmbH, fortiss GmbH,
+ * 				 2018 Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,7 +13,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -49,8 +49,8 @@ public final class TestingManager {
 		return element.getFBString() + "_RES." + element.getFBString() + "." + element.getInterfaceElement().getName(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public Hashtable<String, TestElement> getTriggerElements(FBType type) {
-		Hashtable<String, TestElement> elements = new Hashtable<String, TestElement>();
+	public Map<String, TestElement> getTriggerElements(FBType type) {
+		Map<String, TestElement> elements = new HashMap<>();
 		for (Entry<String, TestElement> entry: triggerElements.entrySet()) {
 			TestElement element = entry.getValue();
 			if ((element.getFb().getType().equals(type)) && (element.getInterfaceElement() instanceof Event)) {

@@ -1,5 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems
+ * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -552,23 +553,23 @@ public final class TypeLibrary implements TypeLibraryTags{
 
 
 		if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.FB_TYPE_FILE_ENDING)){ 
-			DataTypeLibrary.getInstance().loadReferencedDataTypes(srcFile, shell);				
+			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);				
 			group = getTargetGroup(relativeDestionationPath, palette, FB_TYPE_FILE_ENDING_WITH_DOT);
 			loadReferencedFBTypes(srcFile, palette, group, relativeDestionationPath, selectedFiles, shell);
 
 		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.ADAPTER_TYPE_FILE_ENDING)) {
-			DataTypeLibrary.getInstance().loadReferencedDataTypes(srcFile, shell);				
+			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);				
 
 			group = getTargetGroup(relativeDestionationPath, palette, ADAPTER_TYPE_FILE_ENDING_WITH_DOT);
 
 		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.DEVICE_TYPE_FILE_ENDING)) {
-			DataTypeLibrary.getInstance().loadReferencedDataTypes(srcFile, shell);	
+			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);	
 
 			group = getTargetGroup(relativeDestionationPath, palette, DEVICE_TYPE_FILE_ENDING_WITH_DOT);
 			loadReferencedRESTypes(srcFile, palette, group,  relativeDestionationPath, selectedFiles, shell);
 
 		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.RESOURCE_TYPE_FILE_ENDING)) {
-			DataTypeLibrary.getInstance().loadReferencedDataTypes(srcFile, shell);				
+			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);				
 
 			group = getTargetGroup(relativeDestionationPath, palette, RESOURCE_TYPE_FILE_ENDING_WITH_DOT);
 
@@ -577,7 +578,7 @@ public final class TypeLibrary implements TypeLibraryTags{
 		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.SEGMENT_TYPE_FILE_ENDING)) {
 			group = getTargetGroup(relativeDestionationPath, palette, SEGMENT_TYPE_FILE_ENDING_WITH_DOT);
 		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.SUBAPP_TYPE_FILE_ENDING)) {
-			DataTypeLibrary.getInstance().loadReferencedDataTypes(srcFile, shell);				
+			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);				
 
 			group = getTargetGroup(relativeDestionationPath, palette, SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
 

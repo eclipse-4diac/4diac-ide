@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.NameRepository;
@@ -90,8 +92,8 @@ public class ResourceCreateCommand extends Command {
 
 	//TODO model refactoring - Can this also be used for the resoruce parsing?
 	public void createResourceTypeNetwork(final Resource resource,  final ResourceType type, final FBNetwork resourceFBNetwork) {
-		Hashtable<String, Event> events = new Hashtable<>();
-		Hashtable<String, VarDeclaration> varDecls = new Hashtable<>();
+		Map<String, Event> events = new HashMap<>();
+		Map<String, VarDeclaration> varDecls = new HashMap<>();
 		for (FBNetworkElement element : type.getFBNetwork().getNetworkElements()) {
 			FB copy = LibraryElementFactory.eINSTANCE.createResourceTypeFB();
 			resource.getFBNetwork().getNetworkElements().add(copy);

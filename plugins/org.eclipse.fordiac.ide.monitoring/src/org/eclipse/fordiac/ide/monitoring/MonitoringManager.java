@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.monitoring;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +41,7 @@ import org.eclipse.swt.widgets.Display;
  */
 public class MonitoringManager extends AbstractMonitoringManager {
 	
-	private final Map<AutomationSystem, SystemMonitoringData> systemMonitoringData = new Hashtable<>();
+	private final Map<AutomationSystem, SystemMonitoringData> systemMonitoringData = new HashMap<>();
 
 	/**
 	 * Gets the single instance of MonitoringManager.

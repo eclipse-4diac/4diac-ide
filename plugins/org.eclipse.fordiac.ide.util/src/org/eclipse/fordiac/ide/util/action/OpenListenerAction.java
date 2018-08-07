@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2011, 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008, 2011, 2017 Profactor GmbH, fortiss GmbH,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,8 +29,7 @@ public class OpenListenerAction extends Action {
 
 	@Override
 	public void run() {
-		OpenListenerManager.INSTANCE.setDefaultOpenListener(openListener.getHandledClass(),
-				openListener.getOpenListenerID());
+		OpenListenerManager.setDefaultOpenListener(openListener.getHandledClass(), openListener.getOpenListenerID());
 		openListener.run(null);
 	}
 

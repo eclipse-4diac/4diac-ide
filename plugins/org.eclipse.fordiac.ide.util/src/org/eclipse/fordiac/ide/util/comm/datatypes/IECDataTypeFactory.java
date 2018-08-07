@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 TU Wien ACIN
+ * Copyright (c) 2011 TU Wien ACIN, 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.util.comm.datatypes;
 
 import java.io.DataInputStream;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.fordiac.ide.util.comm.datatypes.derived.DerivedDataTypeFactory;
@@ -28,7 +28,7 @@ public final class IECDataTypeFactory {
 	private static final Map<String, Integer> ASN1map;
 
 	static {
-		ASN1map = new Hashtable<>();
+		ASN1map = new HashMap<>();
 		ASN1map.put("BOOL", Integer.valueOf(ASN1.APPLICATION + ASN1.BOOL)); //$NON-NLS-1$
 		ASN1map.put("SINT", Integer.valueOf(ASN1.APPLICATION + ASN1.SINT)); //$NON-NLS-1$
 		ASN1map.put("INT", Integer.valueOf(ASN1.APPLICATION + ASN1.INT)); //$NON-NLS-1$

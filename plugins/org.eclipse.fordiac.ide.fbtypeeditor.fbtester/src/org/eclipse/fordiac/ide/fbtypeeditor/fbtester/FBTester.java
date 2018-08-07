@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH.
+ * Copyright (c) 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 						2018 Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -23,11 +24,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -120,12 +121,12 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	private KeyHandler sharedKeyHandler;
 	private StackLayout stack;
 	protected Palette palette;
-	private final Hashtable<String, IFBTestConfiguration> configurations = new Hashtable<String, IFBTestConfiguration>();
+	private final Map<String, IFBTestConfiguration> configurations = new HashMap<>();
 	private Composite configurationParent;
 	private TableViewer testDataViewer;
 	private CommandStack commandStack;
-	private final Hashtable<String, TableColumn> dataColumns = new Hashtable<String, TableColumn>();
-	private final ArrayList<TestData> testDataCollection = new ArrayList<TestData>();
+	private final Map<String, TableColumn> dataColumns = new HashMap<>();
+	private final ArrayList<TestData> testDataCollection = new ArrayList<>();
 	private RulerComposite rulerComp;
 	
 	EContentAdapter eContentAdapter = new EContentAdapter() {
@@ -283,11 +284,9 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 							}
 						}
 						TestElement eventToTrigger = null;
-						Hashtable<String, TestElement> triggerElements = TestingManager.getInstance()
-								.getTriggerElements(type);
-						Enumeration<String> triggerkeys = triggerElements.keys();
-						while (triggerkeys.hasMoreElements()) {
-							String key = triggerkeys.nextElement();
+						Map<String, TestElement> triggerElements = TestingManager.getInstance().getTriggerElements(type);
+						Set<String> triggerkeys = triggerElements.keySet();
+						for (String key : triggerkeys) {
 							TestElement element = triggerElements.get(key);
 							if (element.getInterfaceElement().getName().equals(data.getEvent().getName())) {
 								eventToTrigger = element;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 - 2017 fortiss GmbH
+ * Copyright (c) 2016 - 2017 fortiss GmbH, 2018 Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,8 +15,9 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -407,8 +408,8 @@ public class SystemImporter {
 
 	public static void createResourceTypeNetwork(final ResourceType type,
 			final FBNetwork resourceFBNetwork) {
-		Hashtable<String, Event> events = new Hashtable<>();
-		Hashtable<String, VarDeclaration> varDecls = new Hashtable<>();
+		Map<String, Event> events = new HashMap<>();
+		Map<String, VarDeclaration> varDecls = new HashMap<>();
 
 		for (FBNetworkElement element : type.getFBNetwork().getNetworkElements()){
 			FB copy = LibraryElementFactory.eINSTANCE.createResourceTypeFB();

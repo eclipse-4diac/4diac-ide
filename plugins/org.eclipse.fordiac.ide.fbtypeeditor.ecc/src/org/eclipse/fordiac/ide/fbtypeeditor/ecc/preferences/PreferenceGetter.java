@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2011, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.jface.preference.PreferenceConverter;
@@ -29,7 +31,7 @@ import org.eclipse.swt.graphics.RGB;
 public class PreferenceGetter {
 
 	/** The used colors. */
-	private static Hashtable<RGB, Color> usedColors = new Hashtable<RGB, Color>();
+	private static Map<RGB, Color> usedColors = new HashMap<>();
 
 	/**
 	 * Returns the color for the specified preference.

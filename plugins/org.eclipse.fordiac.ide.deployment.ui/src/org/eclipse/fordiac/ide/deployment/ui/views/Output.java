@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2010 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2010 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,11 +17,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.text.MessageFormat;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -146,7 +146,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 	class ColorCache implements ISharedTextColors {
 
 		/** The rgbs. */
-		private final Hashtable<RGB, Color> rgbs = new Hashtable<RGB, Color>();
+		private final Map<RGB, Color> rgbs = new HashMap<>();
 
 		/*
 		 * (non-Javadoc)
@@ -166,11 +166,9 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 * @see org.eclipse.jface.text.source.ISharedTextColors#dispose()
 		 */
 		public void dispose() {
-			Enumeration<Color> colors = rgbs.elements();
-			while (colors.hasMoreElements()) {
-				Color c = colors.nextElement();
-				if (!c.isDisposed()) {
-					c.dispose();
+			for (Entry<RGB, Color> entry : rgbs.entrySet()) {
+				if (!entry.getValue().isDisposed()) {
+					entry.getValue().dispose();
 				}
 			}
 		}

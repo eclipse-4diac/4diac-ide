@@ -1,5 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
+ * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH, 
+ * 				 2018 Johannes Kepler University
+ * 
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,9 +22,9 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
@@ -75,16 +77,16 @@ public enum SystemManager {
 
 	
 	/** The model systems. */
-	List<AutomationSystem> systems = new ArrayList<>();
+	private List<AutomationSystem> systems = new ArrayList<>();
 
-	Hashtable<AutomationSystem, Runnable> runningJobs = new Hashtable<AutomationSystem, Runnable>();
+	private Map<AutomationSystem, Runnable> runningJobs = new HashMap<AutomationSystem, Runnable>();
 
 	private final HashMap<AutomationSystem, ArrayList<ITagProvider>> tagProviders = new HashMap<AutomationSystem, ArrayList<ITagProvider>>();
 
 	/** The listeners. */
 	ArrayList<DistributedSystemListener> listeners = new ArrayList<DistributedSystemListener>();
 	
-	private final Hashtable<AutomationSystem, CommandStack> systemCommandStacks = new Hashtable<AutomationSystem, CommandStack>();
+	private final Map<AutomationSystem, CommandStack> systemCommandStacks = new HashMap<AutomationSystem, CommandStack>();
 
 	/**
 	 * Gets the command stack.
