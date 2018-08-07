@@ -84,8 +84,8 @@ public class PaletteEntryItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PaletteEntry_label_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PaletteEntry_label_feature", "_UI_PaletteEntry_type"),
+				 getString("_UI_PaletteEntry_label_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_PaletteEntry_label_feature", "_UI_PaletteEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 PalettePackage.Literals.PALETTE_ENTRY__LABEL,
 				 true,
 				 false,
@@ -106,8 +106,8 @@ public class PaletteEntryItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PaletteEntry_file_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PaletteEntry_file_feature", "_UI_PaletteEntry_type"),
+				 getString("_UI_PaletteEntry_file_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_PaletteEntry_file_feature", "_UI_PaletteEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 PalettePackage.Literals.PALETTE_ENTRY__FILE,
 				 true,
 				 false,
@@ -128,8 +128,8 @@ public class PaletteEntryItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PaletteEntry_lastModificationTimestamp_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PaletteEntry_lastModificationTimestamp_feature", "_UI_PaletteEntry_type"),
+				 getString("_UI_PaletteEntry_lastModificationTimestamp_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_PaletteEntry_lastModificationTimestamp_feature", "_UI_PaletteEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 PalettePackage.Literals.PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP,
 				 true,
 				 false,
@@ -150,8 +150,8 @@ public class PaletteEntryItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PaletteEntry_type_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PaletteEntry_type_feature", "_UI_PaletteEntry_type"),
+				 getString("_UI_PaletteEntry_type_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_PaletteEntry_type_feature", "_UI_PaletteEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 PalettePackage.Literals.PALETTE_ENTRY__TYPE,
 				 true,
 				 false,
@@ -169,7 +169,7 @@ public class PaletteEntryItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/PaletteEntry"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/PaletteEntry")); //$NON-NLS-1$
 	}
 
 	/**
@@ -182,8 +182,8 @@ public class PaletteEntryItemProvider
 	public String getText(Object object) {
 		String label = ((PaletteEntry)object).getLabel();
 		return label == null || label.length() == 0 ?
-			getString("_UI_PaletteEntry_type") :
-			getString("_UI_PaletteEntry_type") + " " + label;
+			getString("_UI_PaletteEntry_type") : //$NON-NLS-1$
+			getString("_UI_PaletteEntry_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

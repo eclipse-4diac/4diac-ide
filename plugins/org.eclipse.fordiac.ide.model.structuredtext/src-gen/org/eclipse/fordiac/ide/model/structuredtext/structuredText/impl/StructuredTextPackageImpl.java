@@ -437,7 +437,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getStructuredTextAlgorithm()
+  @Override
+public EClass getStructuredTextAlgorithm()
   {
     return structuredTextAlgorithmEClass;
   }
@@ -447,7 +448,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getStructuredTextAlgorithm_LocalVariables()
+  @Override
+public EReference getStructuredTextAlgorithm_LocalVariables()
   {
     return (EReference)structuredTextAlgorithmEClass.getEStructuralFeatures().get(0);
   }
@@ -457,7 +459,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getStructuredTextAlgorithm_Statements()
+  @Override
+public EReference getStructuredTextAlgorithm_Statements()
   {
     return (EReference)structuredTextAlgorithmEClass.getEStructuralFeatures().get(1);
   }
@@ -467,7 +470,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getStatementList()
+  @Override
+public EClass getStatementList()
   {
     return statementListEClass;
   }
@@ -477,7 +481,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getStatementList_Statements()
+  @Override
+public EReference getStatementList_Statements()
   {
     return (EReference)statementListEClass.getEStructuralFeatures().get(0);
   }
@@ -487,7 +492,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getStatement()
+  @Override
+public EClass getStatement()
   {
     return statementEClass;
   }
@@ -497,7 +503,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getAssignmentStatement()
+  @Override
+public EClass getAssignmentStatement()
   {
     return assignmentStatementEClass;
   }
@@ -507,7 +514,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getAssignmentStatement_Variable()
+  @Override
+public EReference getAssignmentStatement_Variable()
   {
     return (EReference)assignmentStatementEClass.getEStructuralFeatures().get(0);
   }
@@ -517,7 +525,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getAssignmentStatement_Expression()
+  @Override
+public EReference getAssignmentStatement_Expression()
   {
     return (EReference)assignmentStatementEClass.getEStructuralFeatures().get(1);
   }
@@ -527,7 +536,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getIfStatement()
+  @Override
+public EClass getIfStatement()
   {
     return ifStatementEClass;
   }
@@ -537,7 +547,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getIfStatement_Expression()
+  @Override
+public EReference getIfStatement_Expression()
   {
     return (EReference)ifStatementEClass.getEStructuralFeatures().get(0);
   }
@@ -547,7 +558,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getIfStatement_Statments()
+  @Override
+public EReference getIfStatement_Statments()
   {
     return (EReference)ifStatementEClass.getEStructuralFeatures().get(1);
   }
@@ -557,7 +569,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getIfStatement_Elseif()
+  @Override
+public EReference getIfStatement_Elseif()
   {
     return (EReference)ifStatementEClass.getEStructuralFeatures().get(2);
   }
@@ -567,7 +580,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getIfStatement_Else()
+  @Override
+public EReference getIfStatement_Else()
   {
     return (EReference)ifStatementEClass.getEStructuralFeatures().get(3);
   }
@@ -577,7 +591,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getElseIfClause()
+  @Override
+public EClass getElseIfClause()
   {
     return elseIfClauseEClass;
   }
@@ -587,7 +602,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getElseIfClause_Expression()
+  @Override
+public EReference getElseIfClause_Expression()
   {
     return (EReference)elseIfClauseEClass.getEStructuralFeatures().get(0);
   }
@@ -597,7 +613,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getElseIfClause_Statements()
+  @Override
+public EReference getElseIfClause_Statements()
   {
     return (EReference)elseIfClauseEClass.getEStructuralFeatures().get(1);
   }
@@ -607,7 +624,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getElseClause()
+  @Override
+public EClass getElseClause()
   {
     return elseClauseEClass;
   }
@@ -617,7 +635,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getElseClause_Statements()
+  @Override
+public EReference getElseClause_Statements()
   {
     return (EReference)elseClauseEClass.getEStructuralFeatures().get(0);
   }
@@ -627,7 +646,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getCaseStatement()
+  @Override
+public EClass getCaseStatement()
   {
     return caseStatementEClass;
   }
@@ -637,7 +657,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getCaseStatement_Expression()
+  @Override
+public EReference getCaseStatement_Expression()
   {
     return (EReference)caseStatementEClass.getEStructuralFeatures().get(0);
   }
@@ -647,7 +668,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getCaseStatement_Case()
+  @Override
+public EReference getCaseStatement_Case()
   {
     return (EReference)caseStatementEClass.getEStructuralFeatures().get(1);
   }
@@ -657,7 +679,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getCaseStatement_Else()
+  @Override
+public EReference getCaseStatement_Else()
   {
     return (EReference)caseStatementEClass.getEStructuralFeatures().get(2);
   }
@@ -667,7 +690,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getCaseClause()
+  @Override
+public EClass getCaseClause()
   {
     return caseClauseEClass;
   }
@@ -677,7 +701,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getCaseClause_Case()
+  @Override
+public EReference getCaseClause_Case()
   {
     return (EReference)caseClauseEClass.getEStructuralFeatures().get(0);
   }
@@ -687,7 +712,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getCaseClause_Statements()
+  @Override
+public EReference getCaseClause_Statements()
   {
     return (EReference)caseClauseEClass.getEStructuralFeatures().get(1);
   }
@@ -697,7 +723,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getForStatement()
+  @Override
+public EClass getForStatement()
   {
     return forStatementEClass;
   }
@@ -707,7 +734,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getForStatement_Variable()
+  @Override
+public EReference getForStatement_Variable()
   {
     return (EReference)forStatementEClass.getEStructuralFeatures().get(0);
   }
@@ -717,7 +745,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getForStatement_From()
+  @Override
+public EReference getForStatement_From()
   {
     return (EReference)forStatementEClass.getEStructuralFeatures().get(1);
   }
@@ -727,7 +756,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getForStatement_To()
+  @Override
+public EReference getForStatement_To()
   {
     return (EReference)forStatementEClass.getEStructuralFeatures().get(2);
   }
@@ -737,7 +767,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getForStatement_By()
+  @Override
+public EReference getForStatement_By()
   {
     return (EReference)forStatementEClass.getEStructuralFeatures().get(3);
   }
@@ -747,7 +778,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getForStatement_Statements()
+  @Override
+public EReference getForStatement_Statements()
   {
     return (EReference)forStatementEClass.getEStructuralFeatures().get(4);
   }
@@ -757,7 +789,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getWhileStatement()
+  @Override
+public EClass getWhileStatement()
   {
     return whileStatementEClass;
   }
@@ -767,7 +800,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getWhileStatement_Expression()
+  @Override
+public EReference getWhileStatement_Expression()
   {
     return (EReference)whileStatementEClass.getEStructuralFeatures().get(0);
   }
@@ -777,7 +811,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getWhileStatement_Statements()
+  @Override
+public EReference getWhileStatement_Statements()
   {
     return (EReference)whileStatementEClass.getEStructuralFeatures().get(1);
   }
@@ -787,7 +822,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getRepeatStatement()
+  @Override
+public EClass getRepeatStatement()
   {
     return repeatStatementEClass;
   }
@@ -797,7 +833,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getRepeatStatement_Statements()
+  @Override
+public EReference getRepeatStatement_Statements()
   {
     return (EReference)repeatStatementEClass.getEStructuralFeatures().get(0);
   }
@@ -807,7 +844,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getRepeatStatement_Expression()
+  @Override
+public EReference getRepeatStatement_Expression()
   {
     return (EReference)repeatStatementEClass.getEStructuralFeatures().get(1);
   }
@@ -817,7 +855,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getExpression()
+  @Override
+public EClass getExpression()
   {
     return expressionEClass;
   }
@@ -827,7 +866,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getCall()
+  @Override
+public EClass getCall()
   {
     return callEClass;
   }
@@ -837,7 +877,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getCall_Func()
+  @Override
+public EAttribute getCall_Func()
   {
     return (EAttribute)callEClass.getEStructuralFeatures().get(0);
   }
@@ -847,7 +888,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getCall_Args()
+  @Override
+public EReference getCall_Args()
   {
     return (EReference)callEClass.getEStructuralFeatures().get(1);
   }
@@ -857,7 +899,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getArgument()
+  @Override
+public EClass getArgument()
   {
     return argumentEClass;
   }
@@ -867,7 +910,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getArgument_Var()
+  @Override
+public EAttribute getArgument_Var()
   {
     return (EAttribute)argumentEClass.getEStructuralFeatures().get(0);
   }
@@ -877,7 +921,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getInArgument()
+  @Override
+public EClass getInArgument()
   {
     return inArgumentEClass;
   }
@@ -887,7 +932,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getInArgument_Expr()
+  @Override
+public EReference getInArgument_Expr()
   {
     return (EReference)inArgumentEClass.getEStructuralFeatures().get(0);
   }
@@ -897,7 +943,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getOutArgument()
+  @Override
+public EClass getOutArgument()
   {
     return outArgumentEClass;
   }
@@ -907,7 +954,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getOutArgument_Not()
+  @Override
+public EAttribute getOutArgument_Not()
   {
     return (EAttribute)outArgumentEClass.getEStructuralFeatures().get(0);
   }
@@ -917,7 +965,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getOutArgument_Expr()
+  @Override
+public EReference getOutArgument_Expr()
   {
     return (EReference)outArgumentEClass.getEStructuralFeatures().get(1);
   }
@@ -927,7 +976,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getVariable()
+  @Override
+public EClass getVariable()
   {
     return variableEClass;
   }
@@ -937,7 +987,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getPrimaryVariable()
+  @Override
+public EClass getPrimaryVariable()
   {
     return primaryVariableEClass;
   }
@@ -947,7 +998,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getPrimaryVariable_Var()
+  @Override
+public EReference getPrimaryVariable_Var()
   {
     return (EReference)primaryVariableEClass.getEStructuralFeatures().get(0);
   }
@@ -957,7 +1009,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getConstant()
+  @Override
+public EClass getConstant()
   {
     return constantEClass;
   }
@@ -967,7 +1020,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getConstant_Type()
+  @Override
+public EAttribute getConstant_Type()
   {
     return (EAttribute)constantEClass.getEStructuralFeatures().get(0);
   }
@@ -977,7 +1031,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getNumericLiteral()
+  @Override
+public EClass getNumericLiteral()
   {
     return numericLiteralEClass;
   }
@@ -987,7 +1042,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getIntLiteral()
+  @Override
+public EClass getIntLiteral()
   {
     return intLiteralEClass;
   }
@@ -997,7 +1053,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getIntLiteral_Value()
+  @Override
+public EAttribute getIntLiteral_Value()
   {
     return (EAttribute)intLiteralEClass.getEStructuralFeatures().get(0);
   }
@@ -1007,7 +1064,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getRealLiteral()
+  @Override
+public EClass getRealLiteral()
   {
     return realLiteralEClass;
   }
@@ -1017,7 +1075,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getRealLiteral_Value()
+  @Override
+public EAttribute getRealLiteral_Value()
   {
     return (EAttribute)realLiteralEClass.getEStructuralFeatures().get(0);
   }
@@ -1027,7 +1086,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getBoolLiteral()
+  @Override
+public EClass getBoolLiteral()
   {
     return boolLiteralEClass;
   }
@@ -1037,7 +1097,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getBoolLiteral_Value()
+  @Override
+public EAttribute getBoolLiteral_Value()
   {
     return (EAttribute)boolLiteralEClass.getEStructuralFeatures().get(0);
   }
@@ -1047,7 +1108,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getStringLiteral()
+  @Override
+public EClass getStringLiteral()
   {
     return stringLiteralEClass;
   }
@@ -1057,7 +1119,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getStringLiteral_Length()
+  @Override
+public EAttribute getStringLiteral_Length()
   {
     return (EAttribute)stringLiteralEClass.getEStructuralFeatures().get(0);
   }
@@ -1067,7 +1130,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getStringLiteral_Value()
+  @Override
+public EAttribute getStringLiteral_Value()
   {
     return (EAttribute)stringLiteralEClass.getEStructuralFeatures().get(1);
   }
@@ -1077,7 +1141,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getTimeLiteral()
+  @Override
+public EClass getTimeLiteral()
   {
     return timeLiteralEClass;
   }
@@ -1087,7 +1152,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getDurationLiteral()
+  @Override
+public EClass getDurationLiteral()
   {
     return durationLiteralEClass;
   }
@@ -1097,7 +1163,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getDurationLiteral_Negative()
+  @Override
+public EAttribute getDurationLiteral_Negative()
   {
     return (EAttribute)durationLiteralEClass.getEStructuralFeatures().get(0);
   }
@@ -1107,7 +1174,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getDurationLiteral_Value()
+  @Override
+public EReference getDurationLiteral_Value()
   {
     return (EReference)durationLiteralEClass.getEStructuralFeatures().get(1);
   }
@@ -1117,7 +1185,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getDurationValue()
+  @Override
+public EClass getDurationValue()
   {
     return durationValueEClass;
   }
@@ -1127,7 +1196,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getDurationValue_Value()
+  @Override
+public EAttribute getDurationValue_Value()
   {
     return (EAttribute)durationValueEClass.getEStructuralFeatures().get(0);
   }
@@ -1137,7 +1207,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getDurationValue_Unit()
+  @Override
+public EAttribute getDurationValue_Unit()
   {
     return (EAttribute)durationValueEClass.getEStructuralFeatures().get(1);
   }
@@ -1147,7 +1218,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getDateLiteral()
+  @Override
+public EClass getDateLiteral()
   {
     return dateLiteralEClass;
   }
@@ -1157,7 +1229,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getDateLiteral_Value()
+  @Override
+public EAttribute getDateLiteral_Value()
   {
     return (EAttribute)dateLiteralEClass.getEStructuralFeatures().get(0);
   }
@@ -1167,7 +1240,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getLocalVariable()
+  @Override
+public EClass getLocalVariable()
   {
     return localVariableEClass;
   }
@@ -1177,7 +1251,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getLocalVariable_Constant()
+  @Override
+public EAttribute getLocalVariable_Constant()
   {
     return (EAttribute)localVariableEClass.getEStructuralFeatures().get(0);
   }
@@ -1187,7 +1262,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getLocalVariable_Array()
+  @Override
+public EAttribute getLocalVariable_Array()
   {
     return (EAttribute)localVariableEClass.getEStructuralFeatures().get(1);
   }
@@ -1197,7 +1273,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getLocalVariable_InitialValue()
+  @Override
+public EReference getLocalVariable_InitialValue()
   {
     return (EReference)localVariableEClass.getEStructuralFeatures().get(2);
   }
@@ -1207,7 +1284,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getSuperStatement()
+  @Override
+public EClass getSuperStatement()
   {
     return superStatementEClass;
   }
@@ -1217,7 +1295,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getReturnStatement()
+  @Override
+public EClass getReturnStatement()
   {
     return returnStatementEClass;
   }
@@ -1227,7 +1306,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getExitStatement()
+  @Override
+public EClass getExitStatement()
   {
     return exitStatementEClass;
   }
@@ -1237,7 +1317,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getContinueStatement()
+  @Override
+public EClass getContinueStatement()
   {
     return continueStatementEClass;
   }
@@ -1247,7 +1328,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getBinaryExpression()
+  @Override
+public EClass getBinaryExpression()
   {
     return binaryExpressionEClass;
   }
@@ -1257,7 +1339,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getBinaryExpression_Left()
+  @Override
+public EReference getBinaryExpression_Left()
   {
     return (EReference)binaryExpressionEClass.getEStructuralFeatures().get(0);
   }
@@ -1267,7 +1350,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getBinaryExpression_Operator()
+  @Override
+public EAttribute getBinaryExpression_Operator()
   {
     return (EAttribute)binaryExpressionEClass.getEStructuralFeatures().get(1);
   }
@@ -1277,7 +1361,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getBinaryExpression_Right()
+  @Override
+public EReference getBinaryExpression_Right()
   {
     return (EReference)binaryExpressionEClass.getEStructuralFeatures().get(2);
   }
@@ -1287,7 +1372,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getUnaryExpression()
+  @Override
+public EClass getUnaryExpression()
   {
     return unaryExpressionEClass;
   }
@@ -1297,7 +1383,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getUnaryExpression_Operator()
+  @Override
+public EAttribute getUnaryExpression_Operator()
   {
     return (EAttribute)unaryExpressionEClass.getEStructuralFeatures().get(0);
   }
@@ -1307,7 +1394,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getUnaryExpression_Expression()
+  @Override
+public EReference getUnaryExpression_Expression()
   {
     return (EReference)unaryExpressionEClass.getEStructuralFeatures().get(1);
   }
@@ -1317,7 +1405,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getArrayVariable()
+  @Override
+public EClass getArrayVariable()
   {
     return arrayVariableEClass;
   }
@@ -1327,7 +1416,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getArrayVariable_Array()
+  @Override
+public EReference getArrayVariable_Array()
   {
     return (EReference)arrayVariableEClass.getEStructuralFeatures().get(0);
   }
@@ -1337,7 +1427,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getArrayVariable_Index()
+  @Override
+public EReference getArrayVariable_Index()
   {
     return (EReference)arrayVariableEClass.getEStructuralFeatures().get(1);
   }
@@ -1347,7 +1438,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getAdapterVariable()
+  @Override
+public EClass getAdapterVariable()
   {
     return adapterVariableEClass;
   }
@@ -1357,7 +1449,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getAdapterVariable_Adapter()
+  @Override
+public EReference getAdapterVariable_Adapter()
   {
     return (EReference)adapterVariableEClass.getEStructuralFeatures().get(0);
   }
@@ -1367,7 +1460,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getAdapterVariable_Var()
+  @Override
+public EReference getAdapterVariable_Var()
   {
     return (EReference)adapterVariableEClass.getEStructuralFeatures().get(1);
   }
@@ -1377,7 +1471,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EEnum getBinaryOperator()
+  @Override
+public EEnum getBinaryOperator()
   {
     return binaryOperatorEEnum;
   }
@@ -1387,7 +1482,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EEnum getUnaryOperator()
+  @Override
+public EEnum getUnaryOperator()
   {
     return unaryOperatorEEnum;
   }
@@ -1397,7 +1493,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EEnum getDuration_Unit()
+  @Override
+public EEnum getDuration_Unit()
   {
     return duration_UnitEEnum;
   }
@@ -1407,7 +1504,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public EEnum getType()
+  @Override
+public EEnum getType()
   {
     return typeEEnum;
   }
@@ -1417,7 +1515,8 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public StructuredTextFactory getStructuredTextFactory()
+  @Override
+public StructuredTextFactory getStructuredTextFactory()
   {
     return (StructuredTextFactory)getEFactoryInstance();
   }

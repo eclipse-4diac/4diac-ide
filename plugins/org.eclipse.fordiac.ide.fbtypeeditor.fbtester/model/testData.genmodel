@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright (c) 2012, 2015 Profactor GmbH, fortiss GmbH
-  
- All rights reserved. This program and the accompanying materials
- are made available under the terms of the Eclipse Public License v1.0
- which accompanies this distribution, and is available at
- http://www.eclipse.org/legal/epl-v10.html
- 
- Contributors:
-   Gerhard Ebenhofer, Alois Zoitl
-     - initial API and implementation and/or initial documentation
--->
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="******************************************************************************&#xD;&#xA; * Copyright (c) 2012 Profactor GmbH&#xD;&#xA; * &#xD;&#xA; * All rights reserved. This program and the accompanying materials&#xD;&#xA; * are made available under the terms of the Eclipse Public License v1.0&#xD;&#xA; * which accompanies this distribution, and is available at&#xD;&#xA; * http://www.eclipse.org/legal/epl-v10.html&#xD;&#xA; *&#xD;&#xA; * Contributors:&#xD;&#xA; *   Gerhard Ebenhofer&#xD;&#xA; *     - initial API and implementation and/or initial documentation&#xD;&#xA; ******************************************************************************"
     modelDirectory="/org.eclipse.fordiac.ide.fbtester/src-gen" editDirectory="/org.eclipse.fordiac.ide.fbtester.edit/src-gen"
     editorDirectory="/org.eclipse.fordiac.ide.fbtester.editor/src-gen" modelPluginID="org.eclipse.fordiac.ide.fbtester"
     modelName="TestData" editPluginClass="org.eclipse.fordiac.ide.fbtester.model.testdata.provider.TestDataEditPlugin"
     editorPluginClass="org.eclipse.fordiac.ide.fbtester.model.testdata.presentation.TestDataEditorPlugin"
-    testsDirectory="/org.eclipse.fordiac.ide.fbtester.tests/src-gen" testSuiteClass="org.eclipse.fordiac.ide.fbtester.model.testdata.tests.TestDataAllTests"
+    nonNLSMarkers="true" testsDirectory="/org.eclipse.fordiac.ide.fbtester.tests/src-gen"
+    testSuiteClass="org.eclipse.fordiac.ide.fbtester.model.testdata.tests.TestDataAllTests"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
     editPluginID="org.eclipse.fordiac.ide.fbtester.edit" editorPluginID="org.eclipse.fordiac.ide.fbtester.editor"
-    usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette ../../org.eclipse.ordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore">
+    usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement"
+    importOrganizing="true" cleanup="true">
   <foreignModel>testData.ecore</foreignModel>
   <genPackages prefix="Testdata" basePackage="org.eclipse.fordiac.ide.fbtester.model"
       resource="XML" disposableProviderFactory="true" ecorePackage="testData.ecore#/">

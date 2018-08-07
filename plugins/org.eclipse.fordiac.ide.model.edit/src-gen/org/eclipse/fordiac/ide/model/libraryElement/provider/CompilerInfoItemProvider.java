@@ -85,8 +85,8 @@ public class CompilerInfoItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CompilerInfo_classdef_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CompilerInfo_classdef_feature", "_UI_CompilerInfo_type"),
+				 getString("_UI_CompilerInfo_classdef_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_CompilerInfo_classdef_feature", "_UI_CompilerInfo_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.COMPILER_INFO__CLASSDEF,
 				 true,
 				 false,
@@ -107,8 +107,8 @@ public class CompilerInfoItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CompilerInfo_header_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CompilerInfo_header_feature", "_UI_CompilerInfo_type"),
+				 getString("_UI_CompilerInfo_header_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_CompilerInfo_header_feature", "_UI_CompilerInfo_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.COMPILER_INFO__HEADER,
 				 true,
 				 false,
@@ -156,7 +156,7 @@ public class CompilerInfoItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CompilerInfo"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CompilerInfo")); //$NON-NLS-1$
 	}
 
 	/**
@@ -169,8 +169,8 @@ public class CompilerInfoItemProvider
 	public String getText(Object object) {
 		String label = ((CompilerInfo)object).getClassdef();
 		return label == null || label.length() == 0 ?
-			getString("_UI_CompilerInfo_type") :
-			getString("_UI_CompilerInfo_type") + " " + label;
+			getString("_UI_CompilerInfo_type") : //$NON-NLS-1$
+			getString("_UI_CompilerInfo_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

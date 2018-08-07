@@ -66,6 +66,7 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Annotation> getAnnotations() {
 		if (annotations == null) {
 			annotations = new EObjectResolvingEList<Annotation>(Annotation.class, this, LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS);
@@ -77,6 +78,7 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Annotation createAnnotation(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.createAnnotation(this, name);
 	}
@@ -85,6 +87,7 @@ public abstract class I4DIACElementImpl extends EObjectImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void removeAnnotation(final Annotation annotation) {
 		org.eclipse.fordiac.ide.model.Annotations.removeAnnotation(this, annotation);
 	}

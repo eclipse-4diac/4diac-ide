@@ -143,6 +143,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VarDeclaration> getVarDeclaration() {
 		if (varDeclaration == null) {
 			varDeclaration = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION);
@@ -155,6 +156,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ResourceTypeName> getResourceTypeName() {
 		if (resourceTypeName == null) {
 			resourceTypeName = new EObjectContainmentEList<ResourceTypeName>(ResourceTypeName.class, this, LibraryElementPackage.DEVICE_TYPE__RESOURCE_TYPE_NAME);
@@ -167,6 +169,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Resource> getResource() {
 		if (resource == null) {
 			resource = new EObjectContainmentEList<Resource>(Resource.class, this, LibraryElementPackage.DEVICE_TYPE__RESOURCE);
@@ -179,6 +182,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetwork getFBNetwork() {
 		return fBNetwork;
 	}
@@ -203,6 +207,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFBNetwork(FBNetwork newFBNetwork) {
 		if (newFBNetwork != fBNetwork) {
 			NotificationChain msgs = null;
@@ -222,6 +227,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getProfile() {
 		return profile;
 	}
@@ -231,6 +237,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProfile(String newProfile) {
 		String oldProfile = profile;
 		profile = newProfile;
@@ -243,6 +250,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<AttributeDeclaration> getAttributeDeclarations() {
 		if (attributeDeclarations == null) {
 			attributeDeclarations = new EObjectContainmentEList.Resolving<AttributeDeclaration>(AttributeDeclaration.class, this, LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS);
@@ -395,7 +403,7 @@ public class DeviceTypeImpl extends CompilableTypeImpl implements DeviceType {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (profile: ");
+		result.append(" (profile: "); //$NON-NLS-1$
 		result.append(profile);
 		result.append(')');
 		return result.toString();

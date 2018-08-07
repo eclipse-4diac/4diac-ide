@@ -118,6 +118,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getID() {
 		return id;
 	}
@@ -127,6 +128,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setID(String newID) {
 		String oldID = id;
 		id = newID;
@@ -139,6 +141,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Watches getWatches() {
 		if (watches != null && watches.eIsProxy()) {
 			InternalEObject oldWatches = (InternalEObject)watches;
@@ -165,6 +168,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWatches(Watches newWatches) {
 		Watches oldWatches = watches;
 		watches = newWatches;
@@ -177,6 +181,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getReason() {
 		return reason;
 	}
@@ -186,6 +191,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReason(String newReason) {
 		String oldReason = reason;
 		reason = newReason;
@@ -282,9 +288,9 @@ public class ResponseImpl extends EObjectImpl implements Response {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (ID: ");
+		result.append(" (ID: "); //$NON-NLS-1$
 		result.append(id);
-		result.append(", Reason: ");
+		result.append(", Reason: "); //$NON-NLS-1$
 		result.append(reason);
 		result.append(')');
 		return result.toString();

@@ -70,6 +70,7 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetwork getSubAppNetwork() {
 		if (subAppNetwork != null && subAppNetwork.eIsProxy()) {
 			InternalEObject oldSubAppNetwork = (InternalEObject)subAppNetwork;
@@ -117,6 +118,7 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSubAppNetwork(FBNetwork newSubAppNetwork) {
 		if (newSubAppNetwork != subAppNetwork) {
 			NotificationChain msgs = null;
@@ -136,6 +138,7 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SubAppType getType() {
 		//this cannot be moved to the annotation class because there we don't have the super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();

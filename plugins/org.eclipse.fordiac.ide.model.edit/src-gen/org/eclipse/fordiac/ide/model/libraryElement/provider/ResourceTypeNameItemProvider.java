@@ -82,8 +82,8 @@ public class ResourceTypeNameItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ResourceTypeName_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ResourceTypeName_name_feature", "_UI_ResourceTypeName_type"),
+				 getString("_UI_ResourceTypeName_name_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ResourceTypeName_name_feature", "_UI_ResourceTypeName_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.RESOURCE_TYPE_NAME__NAME,
 				 true,
 				 false,
@@ -101,7 +101,7 @@ public class ResourceTypeNameItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ResourceTypeName"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ResourceTypeName")); //$NON-NLS-1$
 	}
 
 	/**
@@ -114,8 +114,8 @@ public class ResourceTypeNameItemProvider
 	public String getText(Object object) {
 		String label = ((ResourceTypeName)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_ResourceTypeName_type") :
-			getString("_UI_ResourceTypeName_type") + " " + label;
+			getString("_UI_ResourceTypeName_type") : //$NON-NLS-1$
+			getString("_UI_ResourceTypeName_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

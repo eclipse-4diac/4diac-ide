@@ -68,8 +68,8 @@ public class ApplicationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Application_fBNetwork_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Application_fBNetwork_feature", "_UI_Application_type"),
+				 getString("_UI_Application_fBNetwork_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Application_fBNetwork_feature", "_UI_Application_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.APPLICATION__FB_NETWORK,
 				 true,
 				 false,

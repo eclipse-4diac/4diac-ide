@@ -69,6 +69,7 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetwork getFBNetwork() {
 		return fBNetwork;
 	}
@@ -93,6 +94,7 @@ public class CompositeFBTypeImpl extends FBTypeImpl implements CompositeFBType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFBNetwork(FBNetwork newFBNetwork) {
 		if (newFBNetwork != fBNetwork) {
 			NotificationChain msgs = null;

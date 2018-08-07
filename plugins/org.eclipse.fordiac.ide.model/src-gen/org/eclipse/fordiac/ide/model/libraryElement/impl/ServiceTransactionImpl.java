@@ -102,6 +102,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public InputPrimitive getInputPrimitive() {
 		return inputPrimitive;
 	}
@@ -126,6 +127,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInputPrimitive(InputPrimitive newInputPrimitive) {
 		if (newInputPrimitive != inputPrimitive) {
 			NotificationChain msgs = null;
@@ -145,6 +147,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<OutputPrimitive> getOutputPrimitive() {
 		if (outputPrimitive == null) {
 			outputPrimitive = new EObjectContainmentEList<OutputPrimitive>(OutputPrimitive.class, this, LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE);
@@ -157,6 +160,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public int getTestResult() {
 		return testResult;
 		// TODO: implement this method to return the 'Test Result' attribute
@@ -169,6 +173,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public void setTestResult(int newTestResult) {
 		int oldTestResult = testResult;
 		testResult=newTestResult;
@@ -184,6 +189,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public void unsetTestResult() {
 		testResult = TEST_RESULT_EDEFAULT;
 		// TODO: implement this method to unset the 'Test Result' attribute
@@ -196,6 +202,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public boolean isSetTestResult() {
 		return (testResult != TEST_RESULT_EDEFAULT);
 		// TODO: implement this method to return whether the 'Test Result' attribute is set

@@ -114,6 +114,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FB getFb() {
 		if (fb != null && fb.eIsProxy()) {
 			InternalEObject oldFb = (InternalEObject)fb;
@@ -140,6 +141,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFb(FB newFb) {
 		FB oldFb = fb;
 		fb = newFb;
@@ -152,6 +154,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IInterfaceElement getInterfaceElement() {
 		if (interfaceElement != null && interfaceElement.eIsProxy()) {
 			InternalEObject oldInterfaceElement = (InternalEObject)interfaceElement;
@@ -178,6 +181,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInterfaceElement(IInterfaceElement newInterfaceElement) {
 		IInterfaceElement oldInterfaceElement = interfaceElement;
 		interfaceElement = newInterfaceElement;
@@ -190,6 +194,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Resource getResource() {
 		if (resource != null && resource.eIsProxy()) {
 			InternalEObject oldResource = (InternalEObject)resource;
@@ -216,6 +221,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setResource(Resource newResource) {
 		Resource oldResource = resource;
 		resource = newResource;
@@ -228,6 +234,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<String> getHierarchy() {
 		if (hierarchy == null) {
 			hierarchy = new EDataTypeUniqueEList<String>(String.class, this, MonitoringBasePackage.PORT_ELEMENT__HIERARCHY);
@@ -240,6 +247,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPortString() {
 				String hierarchy = ""; 
 				for (String element : getHierarchy()) {
@@ -263,6 +271,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Device getDevice() {
 				return getResource().getDevice();
 	}
@@ -272,6 +281,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AutomationSystem getSystem() {
 				return getResource().getAutomationSystem();
 	}
@@ -379,7 +389,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (hierarchy: ");
+		result.append(" (hierarchy: "); //$NON-NLS-1$
 		result.append(hierarchy);
 		result.append(')');
 		return result.toString();

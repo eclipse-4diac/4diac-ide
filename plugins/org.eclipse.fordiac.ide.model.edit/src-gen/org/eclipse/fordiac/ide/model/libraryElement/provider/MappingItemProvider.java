@@ -82,8 +82,8 @@ public class MappingItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Mapping_from_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Mapping_from_feature", "_UI_Mapping_type"),
+				 getString("_UI_Mapping_from_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Mapping_from_feature", "_UI_Mapping_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.MAPPING__FROM,
 				 true,
 				 false,
@@ -104,8 +104,8 @@ public class MappingItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Mapping_to_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Mapping_to_feature", "_UI_Mapping_type"),
+				 getString("_UI_Mapping_to_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Mapping_to_feature", "_UI_Mapping_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.MAPPING__TO,
 				 true,
 				 false,
@@ -123,7 +123,7 @@ public class MappingItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Mapping"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Mapping")); //$NON-NLS-1$
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class MappingItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Mapping_type");
+		return getString("_UI_Mapping_type"); //$NON-NLS-1$
 	}
 
 	/**

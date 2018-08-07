@@ -82,8 +82,8 @@ public class VarInitializationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VarInitialization_initialValue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VarInitialization_initialValue_feature", "_UI_VarInitialization_type"),
+				 getString("_UI_VarInitialization_initialValue_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VarInitialization_initialValue_feature", "_UI_VarInitialization_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DataPackage.Literals.VAR_INITIALIZATION__INITIAL_VALUE,
 				 true,
 				 false,
@@ -101,7 +101,7 @@ public class VarInitializationItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/VarInitialization"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VarInitialization")); //$NON-NLS-1$
 	}
 
 	/**

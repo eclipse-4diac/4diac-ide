@@ -60,7 +60,7 @@ public class ElementaryTypeItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ElementaryType"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ElementaryType")); //$NON-NLS-1$
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class ElementaryTypeItemProvider
 	public String getText(Object object) {
 		String label = ((ElementaryType)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_ElementaryType_type") :
-			getString("_UI_ElementaryType_type") + " " + label;
+			getString("_UI_ElementaryType_type") : //$NON-NLS-1$
+			getString("_UI_ElementaryType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

@@ -94,6 +94,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortElement getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -120,6 +121,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPort(PortElement newPort) {
 		PortElement oldPort = port;
 		port = newPort;
@@ -132,6 +134,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isOffline() {
 		return offline;
 	}
@@ -141,6 +144,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOffline(boolean newOffline) {
 		boolean oldOffline = offline;
 		offline = newOffline;
@@ -153,6 +157,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getPortString() {
 		String hierarchy = ""; 
 				for (String element : getPort().getHierarchy()) {
@@ -175,6 +180,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getResourceString() {
 		return getPort().getResource().getName();
 	}
@@ -184,6 +190,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getFBString() {
 		return getPort().getFb().getName();
 	}
@@ -193,6 +200,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getQualifiedString() {
 		String hierarchy = ""; 
 		for (String element : getPort().getHierarchy()) {
@@ -289,7 +297,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (offline: ");
+		result.append(" (offline: "); //$NON-NLS-1$
 		result.append(offline);
 		result.append(')');
 		return result.toString();

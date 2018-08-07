@@ -60,7 +60,7 @@ public class DataConnectionItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/DataConnection"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/DataConnection")); //$NON-NLS-1$
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class DataConnectionItemProvider
 	public String getText(Object object) {
 		String label = ((DataConnection)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_DataConnection_type") :
-			getString("_UI_DataConnection_type") + " " + label;
+			getString("_UI_DataConnection_type") : //$NON-NLS-1$
+			getString("_UI_DataConnection_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

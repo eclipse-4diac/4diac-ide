@@ -71,8 +71,8 @@ public class ServiceItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Service_serviceSequence_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Service_serviceSequence_feature", "_UI_Service_type"),
+				 getString("_UI_Service_serviceSequence_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Service_serviceSequence_feature", "_UI_Service_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.SERVICE__SERVICE_SEQUENCE,
 				 true,
 				 false,
@@ -123,8 +123,8 @@ public class ServiceItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Service_rightInterface_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Service_rightInterface_feature", "_UI_Service_type"),
+				 getString("_UI_Service_rightInterface_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Service_rightInterface_feature", "_UI_Service_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.SERVICE__RIGHT_INTERFACE,
 				 true,
 				 false,
@@ -145,8 +145,8 @@ public class ServiceItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Service_leftInterface_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Service_leftInterface_feature", "_UI_Service_type"),
+				 getString("_UI_Service_leftInterface_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Service_leftInterface_feature", "_UI_Service_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.SERVICE__LEFT_INTERFACE,
 				 true,
 				 false,
@@ -164,7 +164,7 @@ public class ServiceItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Service"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Service")); //$NON-NLS-1$
 	}
 
 	/**

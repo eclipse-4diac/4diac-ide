@@ -72,7 +72,8 @@ public class StatementListImpl extends MinimalEObjectImpl.Container implements S
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<Statement> getStatements()
+  @Override
+public EList<Statement> getStatements()
   {
     if (statements == null)
     {

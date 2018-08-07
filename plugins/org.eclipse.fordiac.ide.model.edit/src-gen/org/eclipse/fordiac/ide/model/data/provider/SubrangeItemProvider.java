@@ -83,8 +83,8 @@ public class SubrangeItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Subrange_lowerLimit_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Subrange_lowerLimit_feature", "_UI_Subrange_type"),
+				 getString("_UI_Subrange_lowerLimit_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Subrange_lowerLimit_feature", "_UI_Subrange_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DataPackage.Literals.SUBRANGE__LOWER_LIMIT,
 				 true,
 				 false,
@@ -105,8 +105,8 @@ public class SubrangeItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Subrange_upperLimit_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Subrange_upperLimit_feature", "_UI_Subrange_type"),
+				 getString("_UI_Subrange_upperLimit_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Subrange_upperLimit_feature", "_UI_Subrange_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DataPackage.Literals.SUBRANGE__UPPER_LIMIT,
 				 true,
 				 false,
@@ -124,7 +124,7 @@ public class SubrangeItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Subrange"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Subrange")); //$NON-NLS-1$
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class SubrangeItemProvider
 	@Override
 	public String getText(Object object) {
 		Subrange subrange = (Subrange)object;
-		return getString("_UI_Subrange_type") + " " + subrange.getLowerLimit();
+		return getString("_UI_Subrange_type") + " " + subrange.getLowerLimit(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

@@ -60,7 +60,7 @@ public class AdapterTypePaletteEntryItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AdapterTypePaletteEntry"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/AdapterTypePaletteEntry")); //$NON-NLS-1$
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class AdapterTypePaletteEntryItemProvider
 	public String getText(Object object) {
 		String label = ((AdapterTypePaletteEntry)object).getLabel();
 		return label == null || label.length() == 0 ?
-			getString("_UI_AdapterTypePaletteEntry_type") :
-			getString("_UI_AdapterTypePaletteEntry_type") + " " + label;
+			getString("_UI_AdapterTypePaletteEntry_type") : //$NON-NLS-1$
+			getString("_UI_AdapterTypePaletteEntry_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

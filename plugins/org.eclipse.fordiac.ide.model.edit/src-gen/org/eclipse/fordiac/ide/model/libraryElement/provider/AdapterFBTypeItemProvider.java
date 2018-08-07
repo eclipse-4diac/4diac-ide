@@ -66,8 +66,8 @@ public class AdapterFBTypeItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_AdapterFBType_adapterType_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AdapterFBType_adapterType_feature", "_UI_AdapterFBType_type"),
+				 getString("_UI_AdapterFBType_adapterType_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_AdapterFBType_adapterType_feature", "_UI_AdapterFBType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.ADAPTER_FB_TYPE__ADAPTER_TYPE,
 				 true,
 				 false,
@@ -85,7 +85,7 @@ public class AdapterFBTypeItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AdapterFBType"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/AdapterFBType")); //$NON-NLS-1$
 	}
 
 	/**
@@ -98,8 +98,8 @@ public class AdapterFBTypeItemProvider
 	public String getText(Object object) {
 		String label = ((AdapterFBType)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_AdapterFBType_type") :
-			getString("_UI_AdapterFBType_type") + " " + label;
+			getString("_UI_AdapterFBType_type") : //$NON-NLS-1$
+			getString("_UI_AdapterFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

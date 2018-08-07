@@ -72,6 +72,7 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<EnumeratedValue> getEnumeratedValue() {
 		if (enumeratedValue == null) {
 			enumeratedValue = new EObjectContainmentEList<EnumeratedValue>(EnumeratedValue.class, this, DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE);

@@ -74,8 +74,8 @@ public class DeviceItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PositionableElement_x_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_x_feature", "_UI_PositionableElement_type"),
+				 getString("_UI_PositionableElement_x_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_x_feature", "_UI_PositionableElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__X,
 				 true,
 				 false,
@@ -96,8 +96,8 @@ public class DeviceItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PositionableElement_y_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_y_feature", "_UI_PositionableElement_type"),
+				 getString("_UI_PositionableElement_y_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_y_feature", "_UI_PositionableElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__Y,
 				 true,
 				 false,
@@ -118,8 +118,8 @@ public class DeviceItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Device_profile_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Device_profile_feature", "_UI_Device_type"),
+				 getString("_UI_Device_profile_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Device_profile_feature", "_UI_Device_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.DEVICE__PROFILE,
 				 true,
 				 false,
@@ -140,8 +140,8 @@ public class DeviceItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Device_inConnections_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Device_inConnections_feature", "_UI_Device_type"),
+				 getString("_UI_Device_inConnections_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Device_inConnections_feature", "_UI_Device_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.DEVICE__IN_CONNECTIONS,
 				 true,
 				 false,

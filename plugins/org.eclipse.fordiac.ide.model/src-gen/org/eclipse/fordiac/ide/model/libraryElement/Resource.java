@@ -183,6 +183,7 @@ public interface Resource extends TypedConfigureableObject, IVarElement {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//this cannot be moved to the annotation class because there we don\'t have the super access!!!\r\norg.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();\r\nif(type instanceof ResourceType){\r\n\treturn (ResourceType) type; \r\n}\r\nreturn null;'"
 	 * @generated
 	 */
+	@Override
 	ResourceType getType();	
 
 } // Resource

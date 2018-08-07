@@ -49,6 +49,7 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Event getEventSource() {
 		return org.eclipse.fordiac.ide.model.Annotations.getEventSource(this);
 	}
@@ -58,6 +59,7 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Event getEventDestination() {
 		return org.eclipse.fordiac.ide.model.Annotations.getEventDestination(this);
 	}

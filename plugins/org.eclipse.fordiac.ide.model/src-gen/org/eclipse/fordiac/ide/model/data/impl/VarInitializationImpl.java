@@ -77,6 +77,7 @@ public class VarInitializationImpl extends EObjectImpl implements VarInitializat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getInitialValue() {
 		return initialValue;
 	}
@@ -86,6 +87,7 @@ public class VarInitializationImpl extends EObjectImpl implements VarInitializat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInitialValue(String newInitialValue) {
 		String oldInitialValue = initialValue;
 		initialValue = newInitialValue;
@@ -160,8 +162,8 @@ public class VarInitializationImpl extends EObjectImpl implements VarInitializat
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (initialValue: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (initialValue: "); //$NON-NLS-1$
 		result.append(initialValue);
 		result.append(')');
 		return result.toString();

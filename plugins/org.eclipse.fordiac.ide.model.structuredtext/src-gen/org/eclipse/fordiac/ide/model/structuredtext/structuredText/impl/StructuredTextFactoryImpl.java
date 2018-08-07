@@ -160,7 +160,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public StructuredTextAlgorithm createStructuredTextAlgorithm()
+  @Override
+public StructuredTextAlgorithm createStructuredTextAlgorithm()
   {
     StructuredTextAlgorithmImpl structuredTextAlgorithm = new StructuredTextAlgorithmImpl();
     return structuredTextAlgorithm;
@@ -171,7 +172,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public StatementList createStatementList()
+  @Override
+public StatementList createStatementList()
   {
     StatementListImpl statementList = new StatementListImpl();
     return statementList;
@@ -182,7 +184,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public Statement createStatement()
+  @Override
+public Statement createStatement()
   {
     StatementImpl statement = new StatementImpl();
     return statement;
@@ -193,7 +196,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public AssignmentStatement createAssignmentStatement()
+  @Override
+public AssignmentStatement createAssignmentStatement()
   {
     AssignmentStatementImpl assignmentStatement = new AssignmentStatementImpl();
     return assignmentStatement;
@@ -204,7 +208,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public IfStatement createIfStatement()
+  @Override
+public IfStatement createIfStatement()
   {
     IfStatementImpl ifStatement = new IfStatementImpl();
     return ifStatement;
@@ -215,7 +220,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public ElseIfClause createElseIfClause()
+  @Override
+public ElseIfClause createElseIfClause()
   {
     ElseIfClauseImpl elseIfClause = new ElseIfClauseImpl();
     return elseIfClause;
@@ -226,7 +232,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public ElseClause createElseClause()
+  @Override
+public ElseClause createElseClause()
   {
     ElseClauseImpl elseClause = new ElseClauseImpl();
     return elseClause;
@@ -237,7 +244,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public CaseStatement createCaseStatement()
+  @Override
+public CaseStatement createCaseStatement()
   {
     CaseStatementImpl caseStatement = new CaseStatementImpl();
     return caseStatement;
@@ -248,7 +256,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public CaseClause createCaseClause()
+  @Override
+public CaseClause createCaseClause()
   {
     CaseClauseImpl caseClause = new CaseClauseImpl();
     return caseClause;
@@ -259,7 +268,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public ForStatement createForStatement()
+  @Override
+public ForStatement createForStatement()
   {
     ForStatementImpl forStatement = new ForStatementImpl();
     return forStatement;
@@ -270,7 +280,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public WhileStatement createWhileStatement()
+  @Override
+public WhileStatement createWhileStatement()
   {
     WhileStatementImpl whileStatement = new WhileStatementImpl();
     return whileStatement;
@@ -281,7 +292,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public RepeatStatement createRepeatStatement()
+  @Override
+public RepeatStatement createRepeatStatement()
   {
     RepeatStatementImpl repeatStatement = new RepeatStatementImpl();
     return repeatStatement;
@@ -292,7 +304,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression createExpression()
+  @Override
+public Expression createExpression()
   {
     ExpressionImpl expression = new ExpressionImpl();
     return expression;
@@ -303,7 +316,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public Call createCall()
+  @Override
+public Call createCall()
   {
     CallImpl call = new CallImpl();
     return call;
@@ -314,7 +328,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public Argument createArgument()
+  @Override
+public Argument createArgument()
   {
     ArgumentImpl argument = new ArgumentImpl();
     return argument;
@@ -325,7 +340,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public InArgument createInArgument()
+  @Override
+public InArgument createInArgument()
   {
     InArgumentImpl inArgument = new InArgumentImpl();
     return inArgument;
@@ -336,7 +352,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public OutArgument createOutArgument()
+  @Override
+public OutArgument createOutArgument()
   {
     OutArgumentImpl outArgument = new OutArgumentImpl();
     return outArgument;
@@ -347,7 +364,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public Variable createVariable()
+  @Override
+public Variable createVariable()
   {
     VariableImpl variable = new VariableImpl();
     return variable;
@@ -358,7 +376,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public PrimaryVariable createPrimaryVariable()
+  @Override
+public PrimaryVariable createPrimaryVariable()
   {
     PrimaryVariableImpl primaryVariable = new PrimaryVariableImpl();
     return primaryVariable;
@@ -369,7 +388,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public Constant createConstant()
+  @Override
+public Constant createConstant()
   {
     ConstantImpl constant = new ConstantImpl();
     return constant;
@@ -380,7 +400,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public NumericLiteral createNumericLiteral()
+  @Override
+public NumericLiteral createNumericLiteral()
   {
     NumericLiteralImpl numericLiteral = new NumericLiteralImpl();
     return numericLiteral;
@@ -391,7 +412,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public IntLiteral createIntLiteral()
+  @Override
+public IntLiteral createIntLiteral()
   {
     IntLiteralImpl intLiteral = new IntLiteralImpl();
     return intLiteral;
@@ -402,7 +424,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public RealLiteral createRealLiteral()
+  @Override
+public RealLiteral createRealLiteral()
   {
     RealLiteralImpl realLiteral = new RealLiteralImpl();
     return realLiteral;
@@ -413,7 +436,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public BoolLiteral createBoolLiteral()
+  @Override
+public BoolLiteral createBoolLiteral()
   {
     BoolLiteralImpl boolLiteral = new BoolLiteralImpl();
     return boolLiteral;
@@ -424,7 +448,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public StringLiteral createStringLiteral()
+  @Override
+public StringLiteral createStringLiteral()
   {
     StringLiteralImpl stringLiteral = new StringLiteralImpl();
     return stringLiteral;
@@ -435,7 +460,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public TimeLiteral createTimeLiteral()
+  @Override
+public TimeLiteral createTimeLiteral()
   {
     TimeLiteralImpl timeLiteral = new TimeLiteralImpl();
     return timeLiteral;
@@ -446,7 +472,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public DurationLiteral createDurationLiteral()
+  @Override
+public DurationLiteral createDurationLiteral()
   {
     DurationLiteralImpl durationLiteral = new DurationLiteralImpl();
     return durationLiteral;
@@ -457,7 +484,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public DurationValue createDurationValue()
+  @Override
+public DurationValue createDurationValue()
   {
     DurationValueImpl durationValue = new DurationValueImpl();
     return durationValue;
@@ -468,7 +496,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public DateLiteral createDateLiteral()
+  @Override
+public DateLiteral createDateLiteral()
   {
     DateLiteralImpl dateLiteral = new DateLiteralImpl();
     return dateLiteral;
@@ -479,7 +508,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public LocalVariable createLocalVariable()
+  @Override
+public LocalVariable createLocalVariable()
   {
     LocalVariableImpl localVariable = new LocalVariableImpl();
     return localVariable;
@@ -490,7 +520,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public SuperStatement createSuperStatement()
+  @Override
+public SuperStatement createSuperStatement()
   {
     SuperStatementImpl superStatement = new SuperStatementImpl();
     return superStatement;
@@ -501,7 +532,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public ReturnStatement createReturnStatement()
+  @Override
+public ReturnStatement createReturnStatement()
   {
     ReturnStatementImpl returnStatement = new ReturnStatementImpl();
     return returnStatement;
@@ -512,7 +544,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public ExitStatement createExitStatement()
+  @Override
+public ExitStatement createExitStatement()
   {
     ExitStatementImpl exitStatement = new ExitStatementImpl();
     return exitStatement;
@@ -523,7 +556,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public ContinueStatement createContinueStatement()
+  @Override
+public ContinueStatement createContinueStatement()
   {
     ContinueStatementImpl continueStatement = new ContinueStatementImpl();
     return continueStatement;
@@ -534,7 +568,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public BinaryExpression createBinaryExpression()
+  @Override
+public BinaryExpression createBinaryExpression()
   {
     BinaryExpressionImpl binaryExpression = new BinaryExpressionImpl();
     return binaryExpression;
@@ -545,7 +580,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public UnaryExpression createUnaryExpression()
+  @Override
+public UnaryExpression createUnaryExpression()
   {
     UnaryExpressionImpl unaryExpression = new UnaryExpressionImpl();
     return unaryExpression;
@@ -556,7 +592,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public ArrayVariable createArrayVariable()
+  @Override
+public ArrayVariable createArrayVariable()
   {
     ArrayVariableImpl arrayVariable = new ArrayVariableImpl();
     return arrayVariable;
@@ -567,7 +604,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public AdapterVariable createAdapterVariable()
+  @Override
+public AdapterVariable createAdapterVariable()
   {
     AdapterVariableImpl adapterVariable = new AdapterVariableImpl();
     return adapterVariable;
@@ -666,7 +704,8 @@ public class StructuredTextFactoryImpl extends EFactoryImpl implements Structure
    * <!-- end-user-doc -->
    * @generated
    */
-  public StructuredTextPackage getStructuredTextPackage()
+  @Override
+public StructuredTextPackage getStructuredTextPackage()
   {
     return (StructuredTextPackage)getEPackage();
   }

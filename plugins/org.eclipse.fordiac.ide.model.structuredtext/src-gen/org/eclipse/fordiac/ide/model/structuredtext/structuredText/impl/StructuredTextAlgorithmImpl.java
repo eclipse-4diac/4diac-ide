@@ -87,7 +87,8 @@ public class StructuredTextAlgorithmImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<VarDeclaration> getLocalVariables()
+  @Override
+public EList<VarDeclaration> getLocalVariables()
   {
     if (localVariables == null)
     {
@@ -101,7 +102,8 @@ public class StructuredTextAlgorithmImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
-  public StatementList getStatements()
+  @Override
+public StatementList getStatements()
   {
     return statements;
   }
@@ -128,7 +130,8 @@ public class StructuredTextAlgorithmImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setStatements(StatementList newStatements)
+  @Override
+public void setStatements(StatementList newStatements)
   {
     if (newStatements != statements)
     {

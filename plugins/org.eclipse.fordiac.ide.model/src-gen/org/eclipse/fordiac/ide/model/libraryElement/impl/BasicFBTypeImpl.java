@@ -98,6 +98,7 @@ public class BasicFBTypeImpl extends FBTypeImpl implements BasicFBType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ECC getECC() {
 		return eCC;
 	}
@@ -122,6 +123,7 @@ public class BasicFBTypeImpl extends FBTypeImpl implements BasicFBType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setECC(ECC newECC) {
 		if (newECC != eCC) {
 			NotificationChain msgs = null;
@@ -141,6 +143,7 @@ public class BasicFBTypeImpl extends FBTypeImpl implements BasicFBType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Algorithm> getAlgorithm() {
 		if (algorithm == null) {
 			algorithm = new EObjectContainmentEList<Algorithm>(Algorithm.class, this, LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM);
@@ -153,6 +156,7 @@ public class BasicFBTypeImpl extends FBTypeImpl implements BasicFBType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VarDeclaration> getInternalVars() {
 		if (internalVars == null) {
 			internalVars = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.BASIC_FB_TYPE__INTERNAL_VARS);

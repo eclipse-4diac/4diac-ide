@@ -81,8 +81,8 @@ public class WithItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_With_variables_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_With_variables_feature", "_UI_With_type"),
+				 getString("_UI_With_variables_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_With_variables_feature", "_UI_With_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.WITH__VARIABLES,
 				 true,
 				 false,
@@ -100,7 +100,7 @@ public class WithItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/With"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/With")); //$NON-NLS-1$
 	}
 
 	/**

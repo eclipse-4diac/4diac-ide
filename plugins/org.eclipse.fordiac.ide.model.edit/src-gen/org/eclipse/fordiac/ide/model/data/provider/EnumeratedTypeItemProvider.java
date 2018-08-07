@@ -94,7 +94,7 @@ public class EnumeratedTypeItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/EnumeratedType"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/EnumeratedType")); //$NON-NLS-1$
 	}
 
 	/**
@@ -107,8 +107,8 @@ public class EnumeratedTypeItemProvider
 	public String getText(Object object) {
 		String label = ((EnumeratedType)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_EnumeratedType_type") :
-			getString("_UI_EnumeratedType_type") + " " + label;
+			getString("_UI_EnumeratedType_type") : //$NON-NLS-1$
+			getString("_UI_EnumeratedType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

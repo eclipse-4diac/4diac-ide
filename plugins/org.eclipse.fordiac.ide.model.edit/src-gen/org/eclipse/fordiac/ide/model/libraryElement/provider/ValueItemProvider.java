@@ -82,8 +82,8 @@ public class ValueItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Value_value_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Value_value_feature", "_UI_Value_type"),
+				 getString("_UI_Value_value_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Value_value_feature", "_UI_Value_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.VALUE__VALUE,
 				 true,
 				 false,
@@ -101,7 +101,7 @@ public class ValueItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Value"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Value")); //$NON-NLS-1$
 	}
 
 	/**
@@ -114,8 +114,8 @@ public class ValueItemProvider
 	public String getText(Object object) {
 		String label = ((Value)object).getValue();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Value_type") :
-			getString("_UI_Value_type") + " " + label;
+			getString("_UI_Value_type") : //$NON-NLS-1$
+			getString("_UI_Value_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

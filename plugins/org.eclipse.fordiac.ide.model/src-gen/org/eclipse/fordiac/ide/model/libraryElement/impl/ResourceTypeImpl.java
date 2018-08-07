@@ -98,6 +98,7 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VarDeclaration> getVarDeclaration() {
 		if (varDeclaration == null) {
 			varDeclaration = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.RESOURCE_TYPE__VAR_DECLARATION);
@@ -110,6 +111,7 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetwork getFBNetwork() {
 		return fBNetwork;
 	}
@@ -134,6 +136,7 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFBNetwork(FBNetwork newFBNetwork) {
 		if (newFBNetwork != fBNetwork) {
 			NotificationChain msgs = null;
@@ -153,6 +156,7 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBType getSupportedFBTypes() {
 		if (supportedFBTypes != null && supportedFBTypes.eIsProxy()) {
 			InternalEObject oldSupportedFBTypes = (InternalEObject)supportedFBTypes;
@@ -179,6 +183,7 @@ public class ResourceTypeImpl extends CompilableTypeImpl implements ResourceType
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSupportedFBTypes(FBType newSupportedFBTypes) {
 		FBType oldSupportedFBTypes = supportedFBTypes;
 		supportedFBTypes = newSupportedFBTypes;

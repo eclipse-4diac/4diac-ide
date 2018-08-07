@@ -81,8 +81,8 @@ public class ECActionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ECAction_algorithm_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ECAction_algorithm_feature", "_UI_ECAction_type"),
+				 getString("_UI_ECAction_algorithm_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECAction_algorithm_feature", "_UI_ECAction_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.EC_ACTION__ALGORITHM,
 				 true,
 				 false,
@@ -103,8 +103,8 @@ public class ECActionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ECAction_output_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ECAction_output_feature", "_UI_ECAction_type"),
+				 getString("_UI_ECAction_output_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECAction_output_feature", "_UI_ECAction_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.EC_ACTION__OUTPUT,
 				 true,
 				 false,
@@ -122,7 +122,7 @@ public class ECActionItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ECAction"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ECAction")); //$NON-NLS-1$
 	}
 
 	/**

@@ -77,6 +77,7 @@ public class ResourceTypeNameImpl extends EObjectImpl implements ResourceTypeNam
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -86,6 +87,7 @@ public class ResourceTypeNameImpl extends EObjectImpl implements ResourceTypeNam
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -161,7 +163,7 @@ public class ResourceTypeNameImpl extends EObjectImpl implements ResourceTypeNam
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (name: ");
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(')');
 		return result.toString();

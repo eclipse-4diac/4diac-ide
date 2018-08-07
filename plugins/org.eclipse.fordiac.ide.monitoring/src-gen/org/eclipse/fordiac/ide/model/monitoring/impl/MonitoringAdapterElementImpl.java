@@ -90,6 +90,7 @@ public class MonitoringAdapterElementImpl extends MonitoringBaseElementImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<MonitoringElement> getElements() {
 		if (elements == null) {
 			elements = new EObjectContainmentEList<MonitoringElement>(MonitoringElement.class, this, MonitoringPackage.MONITORING_ADAPTER_ELEMENT__ELEMENTS);
@@ -102,6 +103,7 @@ public class MonitoringAdapterElementImpl extends MonitoringBaseElementImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterFB getMonitoredAdapterFB() {
 		if (monitoredAdapterFB != null && monitoredAdapterFB.eIsProxy()) {
 			InternalEObject oldMonitoredAdapterFB = (InternalEObject)monitoredAdapterFB;
@@ -128,6 +130,7 @@ public class MonitoringAdapterElementImpl extends MonitoringBaseElementImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMonitoredAdapterFB(AdapterFB newMonitoredAdapterFB) {
 		AdapterFB oldMonitoredAdapterFB = monitoredAdapterFB;
 		monitoredAdapterFB = newMonitoredAdapterFB;

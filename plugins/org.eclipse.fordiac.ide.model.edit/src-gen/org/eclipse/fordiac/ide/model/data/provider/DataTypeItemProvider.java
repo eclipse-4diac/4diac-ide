@@ -65,8 +65,8 @@ public class DataTypeItemProvider
 	public String getText(Object object) {
 		String label = ((DataType)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_DataType_type") :
-			getString("_UI_DataType_type") + " " + label;
+			getString("_UI_DataType_type") : //$NON-NLS-1$
+			getString("_UI_DataType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

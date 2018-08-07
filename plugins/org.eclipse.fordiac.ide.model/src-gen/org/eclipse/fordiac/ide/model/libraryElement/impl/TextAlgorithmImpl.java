@@ -75,6 +75,7 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getText() {
 		return text;
 	}
@@ -84,6 +85,7 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setText(String newText) {
 		String oldText = text;
 		text = newText;
@@ -159,7 +161,7 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (text: ");
+		result.append(" (text: "); //$NON-NLS-1$
 		result.append(text);
 		result.append(')');
 		return result.toString();

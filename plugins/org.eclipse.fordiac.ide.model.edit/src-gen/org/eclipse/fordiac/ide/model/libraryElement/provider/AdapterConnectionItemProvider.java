@@ -60,7 +60,7 @@ public class AdapterConnectionItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AdapterConnection"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/AdapterConnection")); //$NON-NLS-1$
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class AdapterConnectionItemProvider
 	public String getText(Object object) {
 		String label = ((AdapterConnection)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_AdapterConnection_type") :
-			getString("_UI_AdapterConnection_type") + " " + label;
+			getString("_UI_AdapterConnection_type") : //$NON-NLS-1$
+			getString("_UI_AdapterConnection_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

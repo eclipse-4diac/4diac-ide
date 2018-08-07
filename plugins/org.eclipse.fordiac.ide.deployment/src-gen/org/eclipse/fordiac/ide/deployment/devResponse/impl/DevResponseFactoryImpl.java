@@ -77,7 +77,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 			case DevResponsePackage.RESPONSE: return createResponse();
 			case DevResponsePackage.WATCHES: return createWatches();
 			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -86,6 +86,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Resource createResource() {
 		ResourceImpl resource = new ResourceImpl();
 		return resource;
@@ -96,6 +97,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FB createFB() {
 		FBImpl fb = new FBImpl();
 		return fb;
@@ -106,6 +108,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port createPort() {
 		PortImpl port = new PortImpl();
 		return port;
@@ -116,6 +119,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Data createData() {
 		DataImpl data = new DataImpl();
 		return data;
@@ -126,6 +130,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Response createResponse() {
 		ResponseImpl response = new ResponseImpl();
 		return response;
@@ -136,6 +141,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Watches createWatches() {
 		WatchesImpl watches = new WatchesImpl();
 		return watches;
@@ -146,6 +152,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DevResponsePackage getDevResponsePackage() {
 		return (DevResponsePackage)getEPackage();
 	}

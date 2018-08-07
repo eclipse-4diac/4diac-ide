@@ -219,6 +219,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isForce() {
 		return force;
 	}
@@ -227,6 +228,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setForce(boolean newForce) {
 		boolean oldForce = force;
 		force = newForce;
@@ -238,6 +240,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getForceValue() {
 		return forceValue;
 	}
@@ -246,6 +249,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setForceValue(String newForceValue) {
 		String oldForceValue = forceValue;
 		forceValue = newForceValue;
@@ -257,6 +261,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBreakpoint() {
 		return breakpoint;
 	}
@@ -265,6 +270,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBreakpoint(boolean newBreakpoint) {
 		boolean oldBreakpoint = breakpoint;
 		breakpoint = newBreakpoint;
@@ -276,6 +282,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBreakpointActive() {
 		return breakpointActive;
 	}
@@ -285,6 +292,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public void setBreakpointActive(boolean newBreakpointActive) {
 		if (breakpointActive != newBreakpointActive) {
 			boolean oldBreakpointActive = breakpointActive;
@@ -303,6 +311,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getBreakpointCondition() {
 		return breakpointCondition;
 	}
@@ -311,6 +320,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBreakpointCondition(String newBreakpointCondition) {
 		String oldBreakpointCondition = breakpointCondition;
 		breakpointCondition = newBreakpointCondition;
@@ -322,6 +332,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public String getCurrentValue() {
 		return (null == currentValue) ? "N/A" : currentValue;
 	}
@@ -337,6 +348,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public void setCurrentValue(String newCurrentValue) {
 		if (currentValue == null
 				|| ((currentValue != null) && !currentValue
@@ -359,6 +371,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getSec() {
 		return sec;
 	}
@@ -367,6 +380,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSec(long newSec) {
 		long oldSec = sec;
 		sec = newSec;
@@ -378,6 +392,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getUsec() {
 		return usec;
 	}
@@ -386,6 +401,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUsec(long newUsec) {
 		long oldUsec = usec;
 		usec = newUsec;
@@ -398,6 +414,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public void forceValue(String value) {
 		if (value != null && !value.equals("")) {
 			setForce(true);
@@ -541,21 +558,21 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (force: ");
+		result.append(" (force: "); //$NON-NLS-1$
 		result.append(force);
-		result.append(", forceValue: ");
+		result.append(", forceValue: "); //$NON-NLS-1$
 		result.append(forceValue);
-		result.append(", breakpoint: ");
+		result.append(", breakpoint: "); //$NON-NLS-1$
 		result.append(breakpoint);
-		result.append(", breakpointActive: ");
+		result.append(", breakpointActive: "); //$NON-NLS-1$
 		result.append(breakpointActive);
-		result.append(", breakpointCondition: ");
+		result.append(", breakpointCondition: "); //$NON-NLS-1$
 		result.append(breakpointCondition);
-		result.append(", currentValue: ");
+		result.append(", currentValue: "); //$NON-NLS-1$
 		result.append(currentValue);
-		result.append(", sec: ");
+		result.append(", sec: "); //$NON-NLS-1$
 		result.append(sec);
-		result.append(", usec: ");
+		result.append(", usec: "); //$NON-NLS-1$
 		result.append(usec);
 		result.append(')');
 		return result.toString();

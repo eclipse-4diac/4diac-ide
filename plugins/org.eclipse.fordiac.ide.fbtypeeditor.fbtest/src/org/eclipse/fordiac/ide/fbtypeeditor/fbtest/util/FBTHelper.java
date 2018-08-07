@@ -237,7 +237,7 @@ public class FBTHelper {
 			tt.setRelatedModelElement(st);
 			if (null != st.getInputPrimitive()) {
 				String event = st.getInputPrimitive().getEvent();
-				Boolean inputQualifier=false;
+				boolean inputQualifier=false;
 				boolean useInputQualifier=false;
 				/** Evaluate Event-Data */
 				if (event.contains("-")) { //$NON-NLS-1$
@@ -262,7 +262,7 @@ public class FBTHelper {
 
 						if (0<=qiID) {
 							qiDT = FBTHelper.getDIDataType(fbType, qiID);
-							DataVariable qi = new DataVariable("QI", qiID, qiDT, true, inputQualifier.toString() ); //$NON-NLS-1$
+							DataVariable qi = new DataVariable("QI", qiID, qiDT, true, Boolean.toString(inputQualifier)); //$NON-NLS-1$
 							tp.addData(qi);
 						}
 					}

@@ -32,6 +32,7 @@ public interface ResourceTypeFB extends FB {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB();'"
 	 * @generated
 	 */
+	@Override
 	boolean isResourceTypeFB();
 	// emtpy interface
 } // ResourceTypeFB

@@ -67,8 +67,8 @@ public class LinkItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Link_segment_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Link_segment_feature", "_UI_Link_type"),
+				 getString("_UI_Link_segment_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Link_segment_feature", "_UI_Link_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.LINK__SEGMENT,
 				 true,
 				 false,
@@ -89,8 +89,8 @@ public class LinkItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Link_device_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Link_device_feature", "_UI_Link_type"),
+				 getString("_UI_Link_device_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Link_device_feature", "_UI_Link_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.LINK__DEVICE,
 				 true,
 				 false,
@@ -108,7 +108,7 @@ public class LinkItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Link"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Link")); //$NON-NLS-1$
 	}
 
 	/**
@@ -121,8 +121,8 @@ public class LinkItemProvider
 	public String getText(Object object) {
 		String label = ((Link)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Link_type") :
-			getString("_UI_Link_type") + " " + label;
+			getString("_UI_Link_type") : //$NON-NLS-1$
+			getString("_UI_Link_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

@@ -165,6 +165,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getX() {
 		return x;
 	}
@@ -174,6 +175,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setX(int newX) {
 		int oldX = x;
 		x = newX;
@@ -186,6 +188,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getY() {
 		return y;
 	}
@@ -195,6 +198,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setY(int newY) {
 		int oldY = y;
 		y = newY;
@@ -207,6 +211,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Color getColor() {
 		if (color != null && color.eIsProxy()) {
 			InternalEObject oldColor = (InternalEObject)color;
@@ -254,6 +259,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setColor(Color newColor) {
 		if (newColor != color) {
 			NotificationChain msgs = null;
@@ -273,6 +279,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getWidth() {
 		return width;
 	}
@@ -282,6 +289,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWidth(int newWidth) {
 		int oldWidth = width;
 		width = newWidth;
@@ -294,6 +302,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
 			varDeclarations = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.SEGMENT__VAR_DECLARATIONS);
@@ -306,6 +315,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Link> getOutConnections() {
 		if (outConnections == null) {
 			outConnections = new EObjectWithInverseResolvingEList<Link>(Link.class, this, LibraryElementPackage.SEGMENT__OUT_CONNECTIONS, LibraryElementPackage.LINK__SEGMENT);
@@ -318,6 +328,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SegmentType getType() {
 		//this cannot be moved to the annotation class because there we don't have the super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
@@ -332,6 +343,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Color getColorGen() {
 		if (color != null && color.eIsProxy()) {
 			InternalEObject oldColor = (InternalEObject)color;
@@ -551,11 +563,11 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (x: ");
+		result.append(" (x: "); //$NON-NLS-1$
 		result.append(x);
-		result.append(", y: ");
+		result.append(", y: "); //$NON-NLS-1$
 		result.append(y);
-		result.append(", width: ");
+		result.append(", width: "); //$NON-NLS-1$
 		result.append(width);
 		result.append(')');
 		return result.toString();

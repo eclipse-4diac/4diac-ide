@@ -105,6 +105,7 @@ public class FBImpl extends EObjectImpl implements FB {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -114,6 +115,7 @@ public class FBImpl extends EObjectImpl implements FB {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -126,6 +128,7 @@ public class FBImpl extends EObjectImpl implements FB {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Port> getPorts() {
 		if (ports == null) {
 			ports = new EObjectContainmentEList<Port>(Port.class, this, DevResponsePackage.FB__PORTS);
@@ -227,7 +230,7 @@ public class FBImpl extends EObjectImpl implements FB {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (name: ");
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(')');
 		return result.toString();

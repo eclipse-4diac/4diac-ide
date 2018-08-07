@@ -81,6 +81,7 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public InterfaceList getInterfaceList() {
 		return interfaceList;
 	}
@@ -105,6 +106,7 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInterfaceList(InterfaceList newInterfaceList) {
 		if (newInterfaceList != interfaceList) {
 			NotificationChain msgs = null;
@@ -124,6 +126,7 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Service getService() {
 		return service;
 	}
@@ -148,6 +151,7 @@ public class FBTypeImpl extends CompilableTypeImpl implements FBType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setService(Service newService) {
 		if (newService != service) {
 			NotificationChain msgs = null;

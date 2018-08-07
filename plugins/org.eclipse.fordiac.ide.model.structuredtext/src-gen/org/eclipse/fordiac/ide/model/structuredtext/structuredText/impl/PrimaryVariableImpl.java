@@ -66,7 +66,8 @@ public class PrimaryVariableImpl extends VariableImpl implements PrimaryVariable
    * <!-- end-user-doc -->
    * @generated
    */
-  public VarDeclaration getVar()
+  @Override
+public VarDeclaration getVar()
   {
     if (var != null && var.eIsProxy())
     {
@@ -96,7 +97,8 @@ public class PrimaryVariableImpl extends VariableImpl implements PrimaryVariable
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setVar(VarDeclaration newVar)
+  @Override
+public void setVar(VarDeclaration newVar)
   {
     VarDeclaration oldVar = var;
     var = newVar;

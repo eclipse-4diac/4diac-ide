@@ -96,7 +96,8 @@ public class DurationValueImpl extends MinimalEObjectImpl.Container implements D
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getValue()
+  @Override
+public String getValue()
   {
     return value;
   }
@@ -106,7 +107,8 @@ public class DurationValueImpl extends MinimalEObjectImpl.Container implements D
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setValue(String newValue)
+  @Override
+public void setValue(String newValue)
   {
     String oldValue = value;
     value = newValue;
@@ -119,7 +121,8 @@ public class DurationValueImpl extends MinimalEObjectImpl.Container implements D
    * <!-- end-user-doc -->
    * @generated
    */
-  public Duration_Unit getUnit()
+  @Override
+public Duration_Unit getUnit()
   {
     return unit;
   }
@@ -129,7 +132,8 @@ public class DurationValueImpl extends MinimalEObjectImpl.Container implements D
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setUnit(Duration_Unit newUnit)
+  @Override
+public void setUnit(Duration_Unit newUnit)
   {
     Duration_Unit oldUnit = unit;
     unit = newUnit == null ? UNIT_EDEFAULT : newUnit;

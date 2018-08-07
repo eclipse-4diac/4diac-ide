@@ -79,7 +79,7 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link VirtualDNSPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -93,7 +93,8 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 		if (isInited) return (VirtualDNSPackage)EPackage.Registry.INSTANCE.getEPackage(VirtualDNSPackage.eNS_URI);
 
 		// Obtain or create and register package
-		VirtualDNSPackageImpl theVirtualDNSPackage = (VirtualDNSPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof VirtualDNSPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new VirtualDNSPackageImpl());
+		Object registeredVirtualDNSPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		VirtualDNSPackageImpl theVirtualDNSPackage = registeredVirtualDNSPackage instanceof VirtualDNSPackageImpl ? (VirtualDNSPackageImpl)registeredVirtualDNSPackage : new VirtualDNSPackageImpl();
 
 		isInited = true;
 
@@ -106,7 +107,6 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 		// Mark meta-data to indicate it can't be changed
 		theVirtualDNSPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(VirtualDNSPackage.eNS_URI, theVirtualDNSPackage);
 		return theVirtualDNSPackage;
@@ -117,6 +117,7 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getVirtualDNSEntry() {
 		return virtualDNSEntryEClass;
 	}
@@ -126,6 +127,7 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVirtualDNSEntry_Name() {
 		return (EAttribute)virtualDNSEntryEClass.getEStructuralFeatures().get(0);
 	}
@@ -135,6 +137,7 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVirtualDNSEntry_Value() {
 		return (EAttribute)virtualDNSEntryEClass.getEStructuralFeatures().get(1);
 	}
@@ -144,6 +147,7 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getVirtualDNSCollection() {
 		return virtualDNSCollectionEClass;
 	}
@@ -153,6 +157,7 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getVirtualDNSCollection_VirtualDNSEntries() {
 		return (EReference)virtualDNSCollectionEClass.getEStructuralFeatures().get(0);
 	}
@@ -162,6 +167,7 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVirtualDNSCollection_Name() {
 		return (EAttribute)virtualDNSCollectionEClass.getEStructuralFeatures().get(1);
 	}
@@ -171,6 +177,7 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getVirtualDNSManagement() {
 		return virtualDNSManagementEClass;
 	}
@@ -180,6 +187,7 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getVirtualDNSManagement_AvailableDNSCollections() {
 		return (EReference)virtualDNSManagementEClass.getEStructuralFeatures().get(0);
 	}
@@ -189,6 +197,7 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getVirtualDNSManagement_ActiveVirtualDNS() {
 		return (EReference)virtualDNSManagementEClass.getEStructuralFeatures().get(1);
 	}
@@ -198,6 +207,7 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VirtualDNSFactory getVirtualDNSFactory() {
 		return (VirtualDNSFactory)getEFactoryInstance();
 	}
@@ -264,17 +274,17 @@ public class VirtualDNSPackageImpl extends EPackageImpl implements VirtualDNSPac
 		// Add supertypes to classes
 
 		// Initialize classes and features; add operations and parameters
-		initEClass(virtualDNSEntryEClass, VirtualDNSEntry.class, "VirtualDNSEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getVirtualDNSEntry_Name(), ecorePackage.getEString(), "name", null, 0, 1, VirtualDNSEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVirtualDNSEntry_Value(), ecorePackage.getEString(), "value", null, 0, 1, VirtualDNSEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(virtualDNSEntryEClass, VirtualDNSEntry.class, "VirtualDNSEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getVirtualDNSEntry_Name(), ecorePackage.getEString(), "name", null, 0, 1, VirtualDNSEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getVirtualDNSEntry_Value(), ecorePackage.getEString(), "value", null, 0, 1, VirtualDNSEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(virtualDNSCollectionEClass, VirtualDNSCollection.class, "VirtualDNSCollection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getVirtualDNSCollection_VirtualDNSEntries(), this.getVirtualDNSEntry(), null, "virtualDNSEntries", null, 0, -1, VirtualDNSCollection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVirtualDNSCollection_Name(), ecorePackage.getEString(), "name", null, 0, 1, VirtualDNSCollection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(virtualDNSCollectionEClass, VirtualDNSCollection.class, "VirtualDNSCollection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getVirtualDNSCollection_VirtualDNSEntries(), this.getVirtualDNSEntry(), null, "virtualDNSEntries", null, 0, -1, VirtualDNSCollection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getVirtualDNSCollection_Name(), ecorePackage.getEString(), "name", null, 0, 1, VirtualDNSCollection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(virtualDNSManagementEClass, VirtualDNSManagement.class, "VirtualDNSManagement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getVirtualDNSManagement_AvailableDNSCollections(), this.getVirtualDNSCollection(), null, "availableDNSCollections", null, 0, -1, VirtualDNSManagement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVirtualDNSManagement_ActiveVirtualDNS(), this.getVirtualDNSCollection(), null, "activeVirtualDNS", null, 0, 1, VirtualDNSManagement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(virtualDNSManagementEClass, VirtualDNSManagement.class, "VirtualDNSManagement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getVirtualDNSManagement_AvailableDNSCollections(), this.getVirtualDNSCollection(), null, "availableDNSCollections", null, 0, -1, VirtualDNSManagement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getVirtualDNSManagement_ActiveVirtualDNS(), this.getVirtualDNSCollection(), null, "activeVirtualDNS", null, 0, 1, VirtualDNSManagement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

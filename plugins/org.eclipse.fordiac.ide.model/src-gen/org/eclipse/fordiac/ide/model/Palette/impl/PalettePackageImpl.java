@@ -201,6 +201,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPalette() {
 		return paletteEClass;
 	}
@@ -210,6 +211,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPalette_RootGroup() {
 		return (EReference)paletteEClass.getEStructuralFeatures().get(0);
 	}
@@ -219,6 +221,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPalette_Project() {
 		return (EAttribute)paletteEClass.getEStructuralFeatures().get(1);
 	}
@@ -228,6 +231,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPalette_AutomationSystem() {
 		return (EReference)paletteEClass.getEStructuralFeatures().get(2);
 	}
@@ -237,6 +241,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPaletteGroup() {
 		return paletteGroupEClass;
 	}
@@ -246,6 +251,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPaletteGroup_Entries() {
 		return (EReference)paletteGroupEClass.getEStructuralFeatures().get(0);
 	}
@@ -255,6 +261,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPaletteGroup_SubGroups() {
 		return (EReference)paletteGroupEClass.getEStructuralFeatures().get(1);
 	}
@@ -264,6 +271,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPaletteGroup_Label() {
 		return (EAttribute)paletteGroupEClass.getEStructuralFeatures().get(2);
 	}
@@ -273,6 +281,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFBTypePaletteEntry() {
 		return fbTypePaletteEntryEClass;
 	}
@@ -282,6 +291,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPaletteEntry() {
 		return paletteEntryEClass;
 	}
@@ -291,6 +301,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPaletteEntry_Label() {
 		return (EAttribute)paletteEntryEClass.getEStructuralFeatures().get(0);
 	}
@@ -300,6 +311,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPaletteEntry_File() {
 		return (EAttribute)paletteEntryEClass.getEStructuralFeatures().get(1);
 	}
@@ -309,6 +321,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPaletteEntry_LastModificationTimestamp() {
 		return (EAttribute)paletteEntryEClass.getEStructuralFeatures().get(2);
 	}
@@ -318,6 +331,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPaletteEntry_Type() {
 		return (EReference)paletteEntryEClass.getEStructuralFeatures().get(3);
 	}
@@ -327,6 +341,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDeviceTypePaletteEntry() {
 		return deviceTypePaletteEntryEClass;
 	}
@@ -336,6 +351,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getResourceTypeEntry() {
 		return resourceTypeEntryEClass;
 	}
@@ -345,6 +361,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSegmentTypePaletteEntry() {
 		return segmentTypePaletteEntryEClass;
 	}
@@ -354,6 +371,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getAdapterTypePaletteEntry() {
 		return adapterTypePaletteEntryEClass;
 	}
@@ -363,6 +381,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSubApplicationTypePaletteEntry() {
 		return subApplicationTypePaletteEntryEClass;
 	}
@@ -372,6 +391,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getIFile() {
 		return iFileEDataType;
 	}
@@ -381,6 +401,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getIProject() {
 		return iProjectEDataType;
 	}
@@ -390,6 +411,7 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PaletteFactory getPaletteFactory() {
 		return (PaletteFactory)getEFactoryInstance();
 	}
@@ -486,74 +508,74 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		subApplicationTypePaletteEntryEClass.getESuperTypes().add(this.getPaletteEntry());
 
 		// Initialize classes and features; add operations and parameters
-		initEClass(paletteEClass, Palette.class, "Palette", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getPalette_RootGroup(), this.getPaletteGroup(), null, "rootGroup", null, 1, 1, Palette.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPalette_Project(), this.getIProject(), "project", null, 0, 1, Palette.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPalette_AutomationSystem(), theLibraryElementPackage.getAutomationSystem(), theLibraryElementPackage.getAutomationSystem_Palette(), "automationSystem", null, 0, 1, Palette.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(paletteEClass, Palette.class, "Palette", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getPalette_RootGroup(), this.getPaletteGroup(), null, "rootGroup", null, 1, 1, Palette.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getPalette_Project(), this.getIProject(), "project", null, 0, 1, Palette.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPalette_AutomationSystem(), theLibraryElementPackage.getAutomationSystem(), theLibraryElementPackage.getAutomationSystem_Palette(), "automationSystem", null, 0, 1, Palette.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		EOperation op = addEOperation(paletteEClass, this.getPaletteEntry(), "getTypeEntry", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, ecorePackage.getEString(), "typeName", 1, 1, IS_UNIQUE, IS_ORDERED);
+		EOperation op = addEOperation(paletteEClass, this.getPaletteEntry(), "getTypeEntry", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEString(), "typeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(paletteGroupEClass, PaletteGroup.class, "PaletteGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getPaletteGroup_Entries(), this.getPaletteEntry(), null, "entries", null, 0, -1, PaletteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPaletteGroup_SubGroups(), this.getPaletteGroup(), null, "subGroups", null, 0, -1, PaletteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPaletteGroup_Label(), ecorePackage.getEString(), "label", null, 0, 1, PaletteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(paletteGroupEClass, PaletteGroup.class, "PaletteGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getPaletteGroup_Entries(), this.getPaletteEntry(), null, "entries", null, 0, -1, PaletteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPaletteGroup_SubGroups(), this.getPaletteGroup(), null, "subGroups", null, 0, -1, PaletteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getPaletteGroup_Label(), ecorePackage.getEString(), "label", null, 0, 1, PaletteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(fbTypePaletteEntryEClass, FBTypePaletteEntry.class, "FBTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(fbTypePaletteEntryEClass, FBTypePaletteEntry.class, "FBTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		addEOperation(fbTypePaletteEntryEClass, theLibraryElementPackage.getFBType(), "getFBType", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(fbTypePaletteEntryEClass, theLibraryElementPackage.getFBType(), "getFBType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(fbTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED);
+		op = addEOperation(fbTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(paletteEntryEClass, PaletteEntry.class, "PaletteEntry", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getPaletteEntry_Label(), ecorePackage.getEString(), "label", null, 0, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPaletteEntry_File(), this.getIFile(), "file", null, 0, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPaletteEntry_LastModificationTimestamp(), theXMLTypePackage.getLong(), "lastModificationTimestamp", null, 0, 1, PaletteEntry.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
-		initEReference(getPaletteEntry_Type(), theLibraryElementPackage.getLibraryElement(), theLibraryElementPackage.getLibraryElement_PaletteEntry(), "type", null, 1, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(paletteEntryEClass, PaletteEntry.class, "PaletteEntry", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getPaletteEntry_Label(), ecorePackage.getEString(), "label", null, 0, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getPaletteEntry_File(), this.getIFile(), "file", null, 0, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getPaletteEntry_LastModificationTimestamp(), theXMLTypePackage.getLong(), "lastModificationTimestamp", null, 0, 1, PaletteEntry.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, !IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPaletteEntry_Type(), theLibraryElementPackage.getLibraryElement(), theLibraryElementPackage.getLibraryElement_PaletteEntry(), "type", null, 1, 1, PaletteEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(paletteEntryEClass, this.getPaletteGroup(), "getGroup", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(paletteEntryEClass, this.getPaletteGroup(), "getGroup", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(paletteEntryEClass, theXMLTypePackage.getString(), "getProjectRelativeTypePath", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(paletteEntryEClass, theXMLTypePackage.getString(), "getProjectRelativeTypePath", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(deviceTypePaletteEntryEClass, DeviceTypePaletteEntry.class, "DeviceTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(deviceTypePaletteEntryEClass, DeviceTypePaletteEntry.class, "DeviceTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		addEOperation(deviceTypePaletteEntryEClass, theLibraryElementPackage.getDeviceType(), "getDeviceType", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(deviceTypePaletteEntryEClass, theLibraryElementPackage.getDeviceType(), "getDeviceType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(deviceTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED);
+		op = addEOperation(deviceTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(resourceTypeEntryEClass, ResourceTypeEntry.class, "ResourceTypeEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(resourceTypeEntryEClass, ResourceTypeEntry.class, "ResourceTypeEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		addEOperation(resourceTypeEntryEClass, theLibraryElementPackage.getResourceType(), "getResourceType", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(resourceTypeEntryEClass, theLibraryElementPackage.getResourceType(), "getResourceType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(resourceTypeEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED);
+		op = addEOperation(resourceTypeEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(segmentTypePaletteEntryEClass, SegmentTypePaletteEntry.class, "SegmentTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(segmentTypePaletteEntryEClass, SegmentTypePaletteEntry.class, "SegmentTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		addEOperation(segmentTypePaletteEntryEClass, theLibraryElementPackage.getSegmentType(), "getSegmentType", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(segmentTypePaletteEntryEClass, theLibraryElementPackage.getSegmentType(), "getSegmentType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(segmentTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED);
+		op = addEOperation(segmentTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(adapterTypePaletteEntryEClass, AdapterTypePaletteEntry.class, "AdapterTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(adapterTypePaletteEntryEClass, AdapterTypePaletteEntry.class, "AdapterTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		addEOperation(adapterTypePaletteEntryEClass, theLibraryElementPackage.getAdapterType(), "getType", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(adapterTypePaletteEntryEClass, theLibraryElementPackage.getAdapterType(), "getType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(adapterTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED);
+		op = addEOperation(adapterTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(subApplicationTypePaletteEntryEClass, SubApplicationTypePaletteEntry.class, "SubApplicationTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(subApplicationTypePaletteEntryEClass, SubApplicationTypePaletteEntry.class, "SubApplicationTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		addEOperation(subApplicationTypePaletteEntryEClass, theLibraryElementPackage.getSubAppType(), "getSubApplicationType", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(subApplicationTypePaletteEntryEClass, theLibraryElementPackage.getSubAppType(), "getSubApplicationType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(subApplicationTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED);
+		op = addEOperation(subApplicationTypePaletteEntryEClass, null, "setType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theLibraryElementPackage.getLibraryElement(), "type", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize data types
-		initEDataType(iFileEDataType, IFile.class, "IFile", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-		initEDataType(iProjectEDataType, IProject.class, "IProject", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(iFileEDataType, IFile.class, "IFile", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEDataType(iProjectEDataType, IProject.class, "IProject", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

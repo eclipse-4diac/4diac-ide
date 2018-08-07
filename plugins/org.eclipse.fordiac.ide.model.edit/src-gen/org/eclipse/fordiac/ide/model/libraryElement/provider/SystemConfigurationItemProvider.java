@@ -107,7 +107,7 @@ public class SystemConfigurationItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_SystemConfiguration_type");
+		return getString("_UI_SystemConfiguration_type"); //$NON-NLS-1$
 	}
 
 	/**

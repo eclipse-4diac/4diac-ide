@@ -94,8 +94,8 @@ public class LibraryElementItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_INamedElement_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", "_UI_INamedElement_type"),
+				 getString("_UI_INamedElement_name_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", "_UI_INamedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.INAMED_ELEMENT__NAME,
 				 true,
 				 false,
@@ -116,8 +116,8 @@ public class LibraryElementItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_INamedElement_comment_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", "_UI_INamedElement_type"),
+				 getString("_UI_INamedElement_comment_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", "_UI_INamedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.INAMED_ELEMENT__COMMENT,
 				 true,
 				 false,
@@ -138,8 +138,8 @@ public class LibraryElementItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LibraryElement_paletteEntry_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LibraryElement_paletteEntry_feature", "_UI_LibraryElement_type"),
+				 getString("_UI_LibraryElement_paletteEntry_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_LibraryElement_paletteEntry_feature", "_UI_LibraryElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.LIBRARY_ELEMENT__PALETTE_ENTRY,
 				 true,
 				 false,
@@ -188,7 +188,7 @@ public class LibraryElementItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/LibraryElement"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/LibraryElement")); //$NON-NLS-1$
 	}
 
 	/**
@@ -201,8 +201,8 @@ public class LibraryElementItemProvider
 	public String getText(Object object) {
 		String label = ((LibraryElement)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_LibraryElement_type") :
-			getString("_UI_LibraryElement_type") + " " + label;
+			getString("_UI_LibraryElement_type") : //$NON-NLS-1$
+			getString("_UI_LibraryElement_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

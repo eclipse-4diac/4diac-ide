@@ -94,7 +94,8 @@ public class DurationLiteralImpl extends TimeLiteralImpl implements DurationLite
    * <!-- end-user-doc -->
    * @generated
    */
-  public boolean isNegative()
+  @Override
+public boolean isNegative()
   {
     return negative;
   }
@@ -104,7 +105,8 @@ public class DurationLiteralImpl extends TimeLiteralImpl implements DurationLite
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setNegative(boolean newNegative)
+  @Override
+public void setNegative(boolean newNegative)
   {
     boolean oldNegative = negative;
     negative = newNegative;
@@ -117,7 +119,8 @@ public class DurationLiteralImpl extends TimeLiteralImpl implements DurationLite
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<DurationValue> getValue()
+  @Override
+public EList<DurationValue> getValue()
   {
     if (value == null)
     {

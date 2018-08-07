@@ -77,7 +77,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT: return createAdapterMonitoringEvent();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION: return createAdapterMonitoringVarDeclaration();
 			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -86,6 +86,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MonitoringElement createMonitoringElement() {
 		MonitoringElementImpl monitoringElement = new MonitoringElementImpl();
 		return monitoringElement;
@@ -96,6 +97,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MonitoringAdapterElement createMonitoringAdapterElement() {
 		MonitoringAdapterElementImpl monitoringAdapterElement = new MonitoringAdapterElementImpl();
 		return monitoringAdapterElement;
@@ -106,6 +108,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterPortElement createAdapterPortElement() {
 		AdapterPortElementImpl adapterPortElement = new AdapterPortElementImpl();
 		return adapterPortElement;
@@ -116,6 +119,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterMonitoringEvent createAdapterMonitoringEvent() {
 		AdapterMonitoringEventImpl adapterMonitoringEvent = new AdapterMonitoringEventImpl();
 		return adapterMonitoringEvent;
@@ -126,6 +130,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterMonitoringVarDeclaration createAdapterMonitoringVarDeclaration() {
 		AdapterMonitoringVarDeclarationImpl adapterMonitoringVarDeclaration = new AdapterMonitoringVarDeclarationImpl();
 		return adapterMonitoringVarDeclaration;
@@ -136,6 +141,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MonitoringPackage getMonitoringPackage() {
 		return (MonitoringPackage)getEPackage();
 	}

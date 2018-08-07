@@ -68,6 +68,7 @@ public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterType getAdapterType() {
 		if (adapterType != null && adapterType.eIsProxy()) {
 			InternalEObject oldAdapterType = (InternalEObject)adapterType;
@@ -94,6 +95,7 @@ public class AdapterFBTypeImpl extends FBTypeImpl implements AdapterFBType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAdapterType(AdapterType newAdapterType) {
 		AdapterType oldAdapterType = adapterType;
 		adapterType = newAdapterType;

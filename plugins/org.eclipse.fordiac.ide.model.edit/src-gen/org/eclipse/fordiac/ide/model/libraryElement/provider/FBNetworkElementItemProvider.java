@@ -69,8 +69,8 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PositionableElement_x_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_x_feature", "_UI_PositionableElement_type"),
+				 getString("_UI_PositionableElement_x_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_x_feature", "_UI_PositionableElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__X,
 				 true,
 				 false,
@@ -91,8 +91,8 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PositionableElement_y_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_y_feature", "_UI_PositionableElement_type"),
+				 getString("_UI_PositionableElement_y_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_y_feature", "_UI_PositionableElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__Y,
 				 true,
 				 false,
@@ -113,8 +113,8 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_FBNetworkElement_mapping_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_FBNetworkElement_mapping_feature", "_UI_FBNetworkElement_type"),
+				 getString("_UI_FBNetworkElement_mapping_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_FBNetworkElement_mapping_feature", "_UI_FBNetworkElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.FB_NETWORK_ELEMENT__MAPPING,
 				 true,
 				 false,
@@ -132,7 +132,7 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBNetworkElement"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBNetworkElement")); //$NON-NLS-1$
 	}
 
 	/**
@@ -145,8 +145,8 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 	public String getText(Object object) {
 		String label = ((FBNetworkElement)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_FBNetworkElement_type") :
-			getString("_UI_FBNetworkElement_type") + " " + label;
+			getString("_UI_FBNetworkElement_type") : //$NON-NLS-1$
+			getString("_UI_FBNetworkElement_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 

@@ -84,8 +84,8 @@ public class PrimitiveItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Primitive_event_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Primitive_event_feature", "_UI_Primitive_type"),
+				 getString("_UI_Primitive_event_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Primitive_event_feature", "_UI_Primitive_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.PRIMITIVE__EVENT,
 				 true,
 				 false,
@@ -106,8 +106,8 @@ public class PrimitiveItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Primitive_parameters_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Primitive_parameters_feature", "_UI_Primitive_type"),
+				 getString("_UI_Primitive_parameters_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Primitive_parameters_feature", "_UI_Primitive_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.PRIMITIVE__PARAMETERS,
 				 true,
 				 false,
@@ -128,8 +128,8 @@ public class PrimitiveItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Primitive_interface_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Primitive_interface_feature", "_UI_Primitive_type"),
+				 getString("_UI_Primitive_interface_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Primitive_interface_feature", "_UI_Primitive_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.PRIMITIVE__INTERFACE,
 				 true,
 				 false,
@@ -147,7 +147,7 @@ public class PrimitiveItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Primitive"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Primitive")); //$NON-NLS-1$
 	}
 
 	/**
@@ -160,8 +160,8 @@ public class PrimitiveItemProvider
 	public String getText(Object object) {
 		String label = ((Primitive)object).getEvent();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Primitive_type") :
-			getString("_UI_Primitive_type") + " " + label;
+			getString("_UI_Primitive_type") : //$NON-NLS-1$
+			getString("_UI_Primitive_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

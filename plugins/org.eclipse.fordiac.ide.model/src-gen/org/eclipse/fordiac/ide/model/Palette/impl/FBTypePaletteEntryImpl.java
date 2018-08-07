@@ -56,6 +56,7 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBType getFBType() {
 		LibraryElement type = getType();
 		if((null !=type) && (type instanceof FBType)){
@@ -69,6 +70,7 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(final LibraryElement type) {
 		if((null != type) && (type instanceof FBType)){
 			super.setType(type);

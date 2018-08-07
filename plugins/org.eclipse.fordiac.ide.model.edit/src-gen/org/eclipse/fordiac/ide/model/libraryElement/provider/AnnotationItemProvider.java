@@ -83,8 +83,8 @@ public class AnnotationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Annotation_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Annotation_name_feature", "_UI_Annotation_type"),
+				 getString("_UI_Annotation_name_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Annotation_name_feature", "_UI_Annotation_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.ANNOTATION__NAME,
 				 true,
 				 false,
@@ -105,8 +105,8 @@ public class AnnotationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Annotation_servity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Annotation_servity_feature", "_UI_Annotation_type"),
+				 getString("_UI_Annotation_servity_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Annotation_servity_feature", "_UI_Annotation_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.ANNOTATION__SERVITY,
 				 true,
 				 false,
@@ -124,7 +124,7 @@ public class AnnotationItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Annotation"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Annotation")); //$NON-NLS-1$
 	}
 
 	/**
@@ -137,8 +137,8 @@ public class AnnotationItemProvider
 	public String getText(Object object) {
 		String label = ((Annotation)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Annotation_type") :
-			getString("_UI_Annotation_type") + " " + label;
+			getString("_UI_Annotation_type") : //$NON-NLS-1$
+			getString("_UI_Annotation_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

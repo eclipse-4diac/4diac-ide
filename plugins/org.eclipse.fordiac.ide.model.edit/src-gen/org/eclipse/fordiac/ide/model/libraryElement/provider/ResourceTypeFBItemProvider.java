@@ -60,7 +60,7 @@ public class ResourceTypeFBItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ResourceTypeFB"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ResourceTypeFB")); //$NON-NLS-1$
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class ResourceTypeFBItemProvider
 	public String getText(Object object) {
 		String label = ((ResourceTypeFB)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_ResourceTypeFB_type") :
-			getString("_UI_ResourceTypeFB_type") + " " + label;
+			getString("_UI_ResourceTypeFB_type") : //$NON-NLS-1$
+			getString("_UI_ResourceTypeFB_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

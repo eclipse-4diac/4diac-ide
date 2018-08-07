@@ -119,7 +119,7 @@ public class InterfaceListItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_InterfaceList_type");
+		return getString("_UI_InterfaceList_type"); //$NON-NLS-1$
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class InterfaceListItemProvider
 
 		if (qualify) {
 			return getString
-				("_UI_CreateChild_text2",
+				("_UI_CreateChild_text2", //$NON-NLS-1$
 				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
 		}
 		return super.getCreateChildText(owner, feature, child, selection);

@@ -72,6 +72,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getValue() {
 		return value;
 	}
@@ -80,6 +81,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(String newValue) {
 		String oldValue = value;
 		value = newValue;
@@ -92,6 +94,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VarDeclaration getVarDeclaration() {
 		return org.eclipse.fordiac.ide.model.Annotations.getVarDeclaration(this);
 	}
@@ -159,7 +162,7 @@ public class ValueImpl extends EObjectImpl implements Value {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (value: ");
+		result.append(" (value: "); //$NON-NLS-1$
 		result.append(value);
 		result.append(')');
 		return result.toString();

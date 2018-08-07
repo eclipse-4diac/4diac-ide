@@ -80,8 +80,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	private void updateRuler() {
 		getViewer().setProperty(
 				RulerProvider.PROPERTY_RULER_VISIBILITY,
-				Activator.getDefault().getPreferenceStore()
-						.getBoolean(DiagramPreferences.SHOW_RULERS));
+				Boolean.valueOf(Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_RULERS)));
 	}
 
 	/*

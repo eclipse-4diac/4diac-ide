@@ -71,8 +71,8 @@ public class ArrayTypeItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ArrayType_initialValues_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ArrayType_initialValues_feature", "_UI_ArrayType_type"),
+				 getString("_UI_ArrayType_initialValues_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ArrayType_initialValues_feature", "_UI_ArrayType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DataPackage.Literals.ARRAY_TYPE__INITIAL_VALUES,
 				 true,
 				 false,
@@ -93,8 +93,8 @@ public class ArrayTypeItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ArrayType_baseType_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ArrayType_baseType_feature", "_UI_ArrayType_type"),
+				 getString("_UI_ArrayType_baseType_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ArrayType_baseType_feature", "_UI_ArrayType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DataPackage.Literals.ARRAY_TYPE__BASE_TYPE,
 				 true,
 				 false,
@@ -142,7 +142,7 @@ public class ArrayTypeItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ArrayType"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ArrayType")); //$NON-NLS-1$
 	}
 
 	/**
@@ -155,8 +155,8 @@ public class ArrayTypeItemProvider
 	public String getText(Object object) {
 		String label = ((ArrayType)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_ArrayType_type") :
-			getString("_UI_ArrayType_type") + " " + label;
+			getString("_UI_ArrayType_type") : //$NON-NLS-1$
+			getString("_UI_ArrayType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

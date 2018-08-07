@@ -99,7 +99,8 @@ public class BinaryExpressionImpl extends ExpressionImpl implements BinaryExpres
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getLeft()
+  @Override
+public Expression getLeft()
   {
     return left;
   }
@@ -126,7 +127,8 @@ public class BinaryExpressionImpl extends ExpressionImpl implements BinaryExpres
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setLeft(Expression newLeft)
+  @Override
+public void setLeft(Expression newLeft)
   {
     if (newLeft != left)
     {
@@ -147,7 +149,8 @@ public class BinaryExpressionImpl extends ExpressionImpl implements BinaryExpres
    * <!-- end-user-doc -->
    * @generated
    */
-  public BinaryOperator getOperator()
+  @Override
+public BinaryOperator getOperator()
   {
     return operator;
   }
@@ -157,7 +160,8 @@ public class BinaryExpressionImpl extends ExpressionImpl implements BinaryExpres
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setOperator(BinaryOperator newOperator)
+  @Override
+public void setOperator(BinaryOperator newOperator)
   {
     BinaryOperator oldOperator = operator;
     operator = newOperator == null ? OPERATOR_EDEFAULT : newOperator;
@@ -170,7 +174,8 @@ public class BinaryExpressionImpl extends ExpressionImpl implements BinaryExpres
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getRight()
+  @Override
+public Expression getRight()
   {
     return right;
   }
@@ -197,7 +202,8 @@ public class BinaryExpressionImpl extends ExpressionImpl implements BinaryExpres
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setRight(Expression newRight)
+  @Override
+public void setRight(Expression newRight)
   {
     if (newRight != right)
     {

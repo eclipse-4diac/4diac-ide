@@ -55,6 +55,7 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterType getType() {
 		LibraryElement type = super.getType();
 		if((null !=type) && (type instanceof AdapterType)){
@@ -68,6 +69,7 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(final LibraryElement type) {
 		if((null != type) && (type instanceof AdapterType)){
 			super.setType(type);
@@ -80,6 +82,7 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 		}
 	}
 
+	@Override
 	protected LibraryElement loadType() {
 		return ADPImporter.importAdapterType(getFile());
 	}

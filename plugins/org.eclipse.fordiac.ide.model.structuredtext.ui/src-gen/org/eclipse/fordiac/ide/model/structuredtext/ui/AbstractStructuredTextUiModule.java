@@ -125,16 +125,19 @@ public abstract class AbstractStructuredTextUiModule extends DefaultUiModule {
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.labeling.LabelProviderFragment2
+	@Override
 	public Class<? extends ILabelProvider> bindILabelProvider() {
 		return StructuredTextLabelProvider.class;
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.labeling.LabelProviderFragment2
+	@Override
 	public void configureResourceUIServiceLabelProvider(Binder binder) {
 		binder.bind(ILabelProvider.class).annotatedWith(ResourceServiceDescriptionLabelProvider.class).to(StructuredTextDescriptionLabelProvider.class);
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.quickfix.QuickfixProviderFragment2
+	@Override
 	public Class<? extends IssueResolutionProvider> bindIssueResolutionProvider() {
 		return StructuredTextQuickfixProvider.class;
 	}

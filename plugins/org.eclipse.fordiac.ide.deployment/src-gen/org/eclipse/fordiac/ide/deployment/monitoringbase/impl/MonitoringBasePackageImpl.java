@@ -140,6 +140,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMonitoringBaseElement() {
 		return monitoringBaseElementEClass;
 	}
@@ -149,6 +150,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMonitoringBaseElement_Port() {
 		return (EReference)monitoringBaseElementEClass.getEStructuralFeatures().get(0);
 	}
@@ -158,6 +160,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getMonitoringBaseElement_Offline() {
 		return (EAttribute)monitoringBaseElementEClass.getEStructuralFeatures().get(1);
 	}
@@ -167,6 +170,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getPortElement() {
 		return portElementEClass;
 	}
@@ -176,6 +180,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortElement_Fb() {
 		return (EReference)portElementEClass.getEStructuralFeatures().get(0);
 	}
@@ -185,6 +190,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortElement_InterfaceElement() {
 		return (EReference)portElementEClass.getEStructuralFeatures().get(1);
 	}
@@ -194,6 +200,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getPortElement_Resource() {
 		return (EReference)portElementEClass.getEStructuralFeatures().get(2);
 	}
@@ -203,6 +210,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getPortElement_Hierarchy() {
 		return (EAttribute)portElementEClass.getEStructuralFeatures().get(3);
 	}
@@ -212,6 +220,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBreakpoints() {
 		return breakpointsEClass;
 	}
@@ -221,6 +230,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBreakpoints_Breakpoints() {
 		return (EReference)breakpointsEClass.getEStructuralFeatures().get(0);
 	}
@@ -230,6 +240,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getIEditPartCreator() {
 		return iEditPartCreatorEClass;
 	}
@@ -239,6 +250,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MonitoringBaseFactory getMonitoringBaseFactory() {
 		return (MonitoringBaseFactory)getEFactoryInstance();
 	}
@@ -313,34 +325,34 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 		monitoringBaseElementEClass.getESuperTypes().add(this.getIEditPartCreator());
 
 		// Initialize classes and features; add operations and parameters
-		initEClass(monitoringBaseElementEClass, MonitoringBaseElement.class, "MonitoringBaseElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMonitoringBaseElement_Port(), this.getPortElement(), null, "port", null, 0, 1, MonitoringBaseElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMonitoringBaseElement_Offline(), theXMLTypePackage.getBoolean(), "offline", "true", 0, 1, MonitoringBaseElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(monitoringBaseElementEClass, MonitoringBaseElement.class, "MonitoringBaseElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getMonitoringBaseElement_Port(), this.getPortElement(), null, "port", null, 0, 1, MonitoringBaseElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getMonitoringBaseElement_Offline(), theXMLTypePackage.getBoolean(), "offline", "true", 0, 1, MonitoringBaseElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
-		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getPortString", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getPortString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getResourceString", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getResourceString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getFBString", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getFBString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getQualifiedString", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getQualifiedString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(portElementEClass, PortElement.class, "PortElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getPortElement_Fb(), theLibraryElementPackage.getFB(), null, "fb", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPortElement_InterfaceElement(), theLibraryElementPackage.getIInterfaceElement(), null, "interfaceElement", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPortElement_Resource(), theLibraryElementPackage.getResource(), null, "resource", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPortElement_Hierarchy(), theXMLTypePackage.getString(), "hierarchy", null, 0, -1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(portElementEClass, PortElement.class, "PortElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getPortElement_Fb(), theLibraryElementPackage.getFB(), null, "fb", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPortElement_InterfaceElement(), theLibraryElementPackage.getIInterfaceElement(), null, "interfaceElement", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPortElement_Resource(), theLibraryElementPackage.getResource(), null, "resource", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getPortElement_Hierarchy(), theXMLTypePackage.getString(), "hierarchy", null, 0, -1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(portElementEClass, theXMLTypePackage.getString(), "getPortString", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(portElementEClass, theXMLTypePackage.getString(), "getPortString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(portElementEClass, theLibraryElementPackage.getDevice(), "getDevice", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(portElementEClass, theLibraryElementPackage.getDevice(), "getDevice", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(portElementEClass, theLibraryElementPackage.getAutomationSystem(), "getSystem", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(portElementEClass, theLibraryElementPackage.getAutomationSystem(), "getSystem", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(breakpointsEClass, Breakpoints.class, "Breakpoints", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getBreakpoints_Breakpoints(), this.getMonitoringBaseElement(), null, "breakpoints", null, 0, -1, Breakpoints.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(breakpointsEClass, Breakpoints.class, "Breakpoints", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getBreakpoints_Breakpoints(), this.getMonitoringBaseElement(), null, "breakpoints", null, 0, -1, Breakpoints.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(iEditPartCreatorEClass, IEditPartCreator.class, "IEditPartCreator", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEClass(iEditPartCreatorEClass, IEditPartCreator.class, "IEditPartCreator", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

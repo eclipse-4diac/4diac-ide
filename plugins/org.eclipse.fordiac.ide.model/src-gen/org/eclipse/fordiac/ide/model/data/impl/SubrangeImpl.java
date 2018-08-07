@@ -98,6 +98,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getLowerLimit() {
 		return lowerLimit;
 	}
@@ -107,6 +108,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLowerLimit(int newLowerLimit) {
 		int oldLowerLimit = lowerLimit;
 		lowerLimit = newLowerLimit;
@@ -119,6 +121,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getUpperLimit() {
 		return upperLimit;
 	}
@@ -128,6 +131,7 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUpperLimit(int newUpperLimit) {
 		int oldUpperLimit = upperLimit;
 		upperLimit = newUpperLimit;
@@ -212,10 +216,10 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (lowerLimit: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (lowerLimit: "); //$NON-NLS-1$
 		result.append(lowerLimit);
-		result.append(", upperLimit: ");
+		result.append(", upperLimit: "); //$NON-NLS-1$
 		result.append(upperLimit);
 		result.append(')');
 		return result.toString();

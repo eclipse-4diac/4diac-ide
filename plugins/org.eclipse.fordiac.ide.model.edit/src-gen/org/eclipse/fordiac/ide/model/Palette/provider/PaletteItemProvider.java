@@ -85,8 +85,8 @@ public class PaletteItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Palette_project_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Palette_project_feature", "_UI_Palette_type"),
+				 getString("_UI_Palette_project_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Palette_project_feature", "_UI_Palette_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 PalettePackage.Literals.PALETTE__PROJECT,
 				 true,
 				 false,
@@ -107,8 +107,8 @@ public class PaletteItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Palette_automationSystem_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Palette_automationSystem_feature", "_UI_Palette_type"),
+				 getString("_UI_Palette_automationSystem_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Palette_automationSystem_feature", "_UI_Palette_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 PalettePackage.Literals.PALETTE__AUTOMATION_SYSTEM,
 				 true,
 				 false,
@@ -156,7 +156,7 @@ public class PaletteItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Palette"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Palette")); //$NON-NLS-1$
 	}
 
 	/**
@@ -170,8 +170,8 @@ public class PaletteItemProvider
 		IProject labelValue = ((Palette)object).getProject();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Palette_type") :
-			getString("_UI_Palette_type") + " " + label;
+			getString("_UI_Palette_type") : //$NON-NLS-1$
+			getString("_UI_Palette_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

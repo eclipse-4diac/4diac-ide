@@ -94,7 +94,7 @@ public class StructuredTypeItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/StructuredType"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/StructuredType")); //$NON-NLS-1$
 	}
 
 	/**
@@ -107,8 +107,8 @@ public class StructuredTypeItemProvider
 	public String getText(Object object) {
 		String label = ((StructuredType)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_StructuredType_type") :
-			getString("_UI_StructuredType_type") + " " + label;
+			getString("_UI_StructuredType_type") : //$NON-NLS-1$
+			getString("_UI_StructuredType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

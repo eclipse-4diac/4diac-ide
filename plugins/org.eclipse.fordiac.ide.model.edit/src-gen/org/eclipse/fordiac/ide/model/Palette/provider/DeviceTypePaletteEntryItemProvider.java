@@ -60,7 +60,7 @@ public class DeviceTypePaletteEntryItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/DeviceTypePaletteEntry"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/DeviceTypePaletteEntry")); //$NON-NLS-1$
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class DeviceTypePaletteEntryItemProvider
 	public String getText(Object object) {
 		String label = ((DeviceTypePaletteEntry)object).getLabel();
 		return label == null || label.length() == 0 ?
-			getString("_UI_DeviceTypePaletteEntry_type") :
-			getString("_UI_DeviceTypePaletteEntry_type") + " " + label;
+			getString("_UI_DeviceTypePaletteEntry_type") : //$NON-NLS-1$
+			getString("_UI_DeviceTypePaletteEntry_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

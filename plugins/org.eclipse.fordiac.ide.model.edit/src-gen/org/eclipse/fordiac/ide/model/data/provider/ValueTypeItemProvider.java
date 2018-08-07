@@ -60,7 +60,7 @@ public class ValueTypeItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ValueType"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ValueType")); //$NON-NLS-1$
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class ValueTypeItemProvider
 	public String getText(Object object) {
 		String label = ((ValueType)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_ValueType_type") :
-			getString("_UI_ValueType_type") + " " + label;
+			getString("_UI_ValueType_type") : //$NON-NLS-1$
+			getString("_UI_ValueType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

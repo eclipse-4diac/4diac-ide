@@ -132,6 +132,7 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -140,6 +141,7 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated not
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -152,6 +154,7 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getComment() {
 		return comment;
 	}
@@ -160,6 +163,7 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
 		comment = newComment;
@@ -171,6 +175,7 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VersionInfo> getVersionInfo() {
 		if (versionInfo == null) {
 			versionInfo = new EObjectContainmentEList.Resolving<VersionInfo>(VersionInfo.class, this, LibraryElementPackage.LIBRARY_ELEMENT__VERSION_INFO);
@@ -182,6 +187,7 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Identification getIdentification() {
 		if (identification != null && identification.eIsProxy()) {
 			InternalEObject oldIdentification = (InternalEObject)identification;
@@ -227,6 +233,7 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIdentification(Identification newIdentification) {
 		if (newIdentification != identification) {
 			NotificationChain msgs = null;
@@ -246,6 +253,7 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PaletteEntry getPaletteEntry() {
 		return paletteEntry;
 	}
@@ -270,6 +278,7 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPaletteEntry(PaletteEntry newPaletteEntry) {
 		if (newPaletteEntry != paletteEntry) {
 			NotificationChain msgs = null;
@@ -423,9 +432,9 @@ public class LibraryElementImpl extends I4DIACElementImpl implements LibraryElem
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (name: ");
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", comment: ");
+		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
 		result.append(')');
 		return result.toString();

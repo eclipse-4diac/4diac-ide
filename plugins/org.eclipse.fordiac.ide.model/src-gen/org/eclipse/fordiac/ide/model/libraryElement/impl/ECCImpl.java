@@ -98,6 +98,7 @@ public class ECCImpl extends EObjectImpl implements ECC {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ECState> getECState() {
 		if (eCState == null) {
 			eCState = new EObjectContainmentEList<ECState>(ECState.class, this, LibraryElementPackage.ECC__EC_STATE);
@@ -110,6 +111,7 @@ public class ECCImpl extends EObjectImpl implements ECC {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ECTransition> getECTransition() {
 		if (eCTransition == null) {
 			eCTransition = new EObjectContainmentEList<ECTransition>(ECTransition.class, this, LibraryElementPackage.ECC__EC_TRANSITION);
@@ -122,6 +124,7 @@ public class ECCImpl extends EObjectImpl implements ECC {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ECState getStart() {
 		if (start != null && start.eIsProxy()) {
 			InternalEObject oldStart = (InternalEObject)start;
@@ -148,6 +151,7 @@ public class ECCImpl extends EObjectImpl implements ECC {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStart(ECState newStart) {
 		ECState oldStart = start;
 		start = newStart;

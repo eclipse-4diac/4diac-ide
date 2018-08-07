@@ -70,6 +70,7 @@ public class WithImpl extends EObjectImpl implements With {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VarDeclaration getVariables() {
 		if (variables != null && variables.eIsProxy()) {
 			InternalEObject oldVariables = (InternalEObject)variables;
@@ -111,6 +112,7 @@ public class WithImpl extends EObjectImpl implements With {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVariables(VarDeclaration newVariables) {
 		if (newVariables != variables) {
 			NotificationChain msgs = null;

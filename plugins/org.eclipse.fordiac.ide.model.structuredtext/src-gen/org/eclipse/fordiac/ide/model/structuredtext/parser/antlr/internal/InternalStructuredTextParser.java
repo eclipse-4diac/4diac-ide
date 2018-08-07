@@ -1,23 +1,14 @@
 package org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.internal;
 
-import org.eclipse.xtext.*;
-import org.eclipse.xtext.parser.*;
-import org.eclipse.xtext.parser.impl.*;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.xtext.parser.antlr.AbstractInternalAntlrParser;
-import org.eclipse.xtext.parser.antlr.XtextTokenStream;
-import org.eclipse.xtext.parser.antlr.XtextTokenStream.HiddenTokens;
 import org.eclipse.xtext.parser.antlr.AntlrDatatypeRuleToken;
 import org.eclipse.fordiac.ide.model.structuredtext.services.StructuredTextGrammarAccess;
 
 
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 @SuppressWarnings("all")
 public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
@@ -156,8 +147,10 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
         }
         
 
-    public String[] getTokenNames() { return InternalStructuredTextParser.tokenNames; }
-    public String getGrammarFileName() { return "InternalStructuredTextParser.g"; }
+    @Override
+	public String[] getTokenNames() { return InternalStructuredTextParser.tokenNames; }
+    @Override
+	public String getGrammarFileName() { return "InternalStructuredTextParser.g"; }
 
 
 
@@ -13373,7 +13366,8 @@ public class InternalStructuredTextParser extends AbstractInternalAntlrParser {
             this.special = dfa_6;
             this.transition = dfa_7;
         }
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "1915:2: ( ( () ( (lv_operator_1_0= ruleUnary_Operator ) ) ( (lv_expression_2_0= rulePrimary_Expr ) ) ) | this_Primary_Expr_3= rulePrimary_Expr | this_Constant_4= ruleConstant )";
         }
     }

@@ -78,7 +78,8 @@ public class AssignmentStatementImpl extends StatementImpl implements Assignment
    * <!-- end-user-doc -->
    * @generated
    */
-  public Variable getVariable()
+  @Override
+public Variable getVariable()
   {
     return variable;
   }
@@ -105,7 +106,8 @@ public class AssignmentStatementImpl extends StatementImpl implements Assignment
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setVariable(Variable newVariable)
+  @Override
+public void setVariable(Variable newVariable)
   {
     if (newVariable != variable)
     {
@@ -126,7 +128,8 @@ public class AssignmentStatementImpl extends StatementImpl implements Assignment
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getExpression()
+  @Override
+public Expression getExpression()
   {
     return expression;
   }
@@ -153,7 +156,8 @@ public class AssignmentStatementImpl extends StatementImpl implements Assignment
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setExpression(Expression newExpression)
+  @Override
+public void setExpression(Expression newExpression)
   {
     if (newExpression != expression)
     {

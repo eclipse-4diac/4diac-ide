@@ -73,8 +73,8 @@ public class ECTransitionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ECTransition_comment_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_comment_feature", "_UI_ECTransition_type"),
+				 getString("_UI_ECTransition_comment_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_comment_feature", "_UI_ECTransition_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.EC_TRANSITION__COMMENT,
 				 true,
 				 false,
@@ -95,8 +95,8 @@ public class ECTransitionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ECTransition_conditionExpression_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_conditionExpression_feature", "_UI_ECTransition_type"),
+				 getString("_UI_ECTransition_conditionExpression_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_conditionExpression_feature", "_UI_ECTransition_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.EC_TRANSITION__CONDITION_EXPRESSION,
 				 true,
 				 false,
@@ -117,8 +117,8 @@ public class ECTransitionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ECTransition_source_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_source_feature", "_UI_ECTransition_type"),
+				 getString("_UI_ECTransition_source_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_source_feature", "_UI_ECTransition_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.EC_TRANSITION__SOURCE,
 				 true,
 				 false,
@@ -139,8 +139,8 @@ public class ECTransitionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ECTransition_destination_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_destination_feature", "_UI_ECTransition_type"),
+				 getString("_UI_ECTransition_destination_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_destination_feature", "_UI_ECTransition_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.EC_TRANSITION__DESTINATION,
 				 true,
 				 false,
@@ -161,8 +161,8 @@ public class ECTransitionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ECTransition_conditionEvent_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_conditionEvent_feature", "_UI_ECTransition_type"),
+				 getString("_UI_ECTransition_conditionEvent_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECTransition_conditionEvent_feature", "_UI_ECTransition_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.EC_TRANSITION__CONDITION_EVENT,
 				 true,
 				 false,
@@ -197,7 +197,7 @@ public class ECTransitionItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ECTransition"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ECTransition")); //$NON-NLS-1$
 	}
 
 	/**

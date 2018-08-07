@@ -86,8 +86,8 @@ public class VersionInfoItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VersionInfo_author_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VersionInfo_author_feature", "_UI_VersionInfo_type"),
+				 getString("_UI_VersionInfo_author_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VersionInfo_author_feature", "_UI_VersionInfo_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.VERSION_INFO__AUTHOR,
 				 true,
 				 false,
@@ -108,8 +108,8 @@ public class VersionInfoItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VersionInfo_date_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VersionInfo_date_feature", "_UI_VersionInfo_type"),
+				 getString("_UI_VersionInfo_date_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VersionInfo_date_feature", "_UI_VersionInfo_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.VERSION_INFO__DATE,
 				 true,
 				 false,
@@ -130,8 +130,8 @@ public class VersionInfoItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VersionInfo_organization_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VersionInfo_organization_feature", "_UI_VersionInfo_type"),
+				 getString("_UI_VersionInfo_organization_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VersionInfo_organization_feature", "_UI_VersionInfo_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.VERSION_INFO__ORGANIZATION,
 				 true,
 				 false,
@@ -152,8 +152,8 @@ public class VersionInfoItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VersionInfo_remarks_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VersionInfo_remarks_feature", "_UI_VersionInfo_type"),
+				 getString("_UI_VersionInfo_remarks_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VersionInfo_remarks_feature", "_UI_VersionInfo_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.VERSION_INFO__REMARKS,
 				 true,
 				 false,
@@ -174,8 +174,8 @@ public class VersionInfoItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VersionInfo_version_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VersionInfo_version_feature", "_UI_VersionInfo_type"),
+				 getString("_UI_VersionInfo_version_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VersionInfo_version_feature", "_UI_VersionInfo_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.VERSION_INFO__VERSION,
 				 true,
 				 false,
@@ -193,7 +193,7 @@ public class VersionInfoItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/VersionInfo"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VersionInfo")); //$NON-NLS-1$
 	}
 
 	/**
@@ -206,8 +206,8 @@ public class VersionInfoItemProvider
 	public String getText(Object object) {
 		String label = ((VersionInfo)object).getAuthor();
 		return label == null || label.length() == 0 ?
-			getString("_UI_VersionInfo_type") :
-			getString("_UI_VersionInfo_type") + " " + label;
+			getString("_UI_VersionInfo_type") : //$NON-NLS-1$
+			getString("_UI_VersionInfo_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

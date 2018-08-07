@@ -118,6 +118,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getTestData() {
 		return testDataEClass;
 	}
@@ -127,6 +128,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTestData_TestName() {
 		return (EAttribute)testDataEClass.getEStructuralFeatures().get(0);
 	}
@@ -136,6 +138,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getTestData_Event() {
 		return (EReference)testDataEClass.getEStructuralFeatures().get(1);
 	}
@@ -145,6 +148,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTestData_TestIntstance() {
 		return (EAttribute)testDataEClass.getEStructuralFeatures().get(2);
 	}
@@ -154,6 +158,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getTestData_EventOutputs() {
 		return (EReference)testDataEClass.getEStructuralFeatures().get(3);
 	}
@@ -163,6 +168,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getTestData_Values() {
 		return (EReference)testDataEClass.getEStructuralFeatures().get(4);
 	}
@@ -172,6 +178,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getTestData_Results() {
 		return (EReference)testDataEClass.getEStructuralFeatures().get(5);
 	}
@@ -181,6 +188,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTestData_Line() {
 		return (EAttribute)testDataEClass.getEStructuralFeatures().get(6);
 	}
@@ -190,6 +198,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getTestData_Type() {
 		return (EReference)testDataEClass.getEStructuralFeatures().get(7);
 	}
@@ -199,6 +208,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getValuedVarDecl() {
 		return valuedVarDeclEClass;
 	}
@@ -208,6 +218,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getValuedVarDecl_VarDeclaration() {
 		return (EReference)valuedVarDeclEClass.getEStructuralFeatures().get(0);
 	}
@@ -217,6 +228,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getValuedVarDecl_Value() {
 		return (EAttribute)valuedVarDeclEClass.getEStructuralFeatures().get(1);
 	}
@@ -226,6 +238,7 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TestdataFactory getTestdataFactory() {
 		return (TestdataFactory)getEFactoryInstance();
 	}

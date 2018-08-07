@@ -135,6 +135,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getComment() {
 		return comment;
 	}
@@ -144,6 +145,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
 		comment = newComment;
@@ -156,6 +158,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getConditionExpression() {
 		return conditionExpression;
 	}
@@ -165,6 +168,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setConditionExpression(String newConditionExpression) {
 		String oldConditionExpression = conditionExpression;
 		conditionExpression = newConditionExpression;
@@ -177,6 +181,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ECState getDestination() {
 		if (destination != null && destination.eIsProxy()) {
 			InternalEObject oldDestination = (InternalEObject)destination;
@@ -218,6 +223,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDestination(ECState newDestination) {
 		if (newDestination != destination) {
 			NotificationChain msgs = null;
@@ -237,6 +243,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Event getConditionEvent() {
 		if (conditionEvent != null && conditionEvent.eIsProxy()) {
 			InternalEObject oldConditionEvent = (InternalEObject)conditionEvent;
@@ -263,6 +270,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setConditionEvent(Event newConditionEvent) {
 		Event oldConditionEvent = conditionEvent;
 		conditionEvent = newConditionEvent;
@@ -275,6 +283,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getConditionText() {
 		return org.eclipse.fordiac.ide.model.Annotations.getConditionText(this);
 	}
@@ -284,6 +293,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ECC getECC() {
 		return org.eclipse.fordiac.ide.model.Annotations.getECC(this);
 	}
@@ -329,6 +339,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ECState getSource() {
 		if (source != null && source.eIsProxy()) {
 			InternalEObject oldSource = (InternalEObject)source;
@@ -370,6 +381,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSource(ECState newSource) {
 		if (newSource != source) {
 			NotificationChain msgs = null;
@@ -495,9 +507,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (comment: ");
+		result.append(" (comment: "); //$NON-NLS-1$
 		result.append(comment);
-		result.append(", conditionExpression: ");
+		result.append(", conditionExpression: "); //$NON-NLS-1$
 		result.append(conditionExpression);
 		result.append(')');
 		return result.toString();

@@ -61,6 +61,7 @@ public class StructuredTypeImpl extends DataTypeImpl implements StructuredType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VarDeclaration> getVarDeclaration() {
 		// TODO: implement this method to return the 'Var Declaration' containment reference list
 		// Ensure that you remove @generated or mark it @generated NOT

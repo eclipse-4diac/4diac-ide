@@ -94,7 +94,7 @@ public class SubrangeTypeItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SubrangeType"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/SubrangeType")); //$NON-NLS-1$
 	}
 
 	/**
@@ -107,8 +107,8 @@ public class SubrangeTypeItemProvider
 	public String getText(Object object) {
 		String label = ((SubrangeType)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_SubrangeType_type") :
-			getString("_UI_SubrangeType_type") + " " + label;
+			getString("_UI_SubrangeType_type") : //$NON-NLS-1$
+			getString("_UI_SubrangeType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

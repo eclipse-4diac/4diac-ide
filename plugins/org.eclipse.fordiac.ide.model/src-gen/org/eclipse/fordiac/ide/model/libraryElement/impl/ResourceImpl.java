@@ -148,6 +148,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetwork getFBNetwork() {
 		return fBNetwork;
 	}
@@ -172,6 +173,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFBNetwork(FBNetwork newFBNetwork) {
 		if (newFBNetwork != fBNetwork) {
 			NotificationChain msgs = null;
@@ -190,6 +192,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getX() {
 		return x;
 	}
@@ -198,6 +201,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setX(String newX) {
 		String oldX = x;
 		x = newX;
@@ -209,6 +213,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getY() {
 		return y;
 	}
@@ -217,6 +222,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setY(String newY) {
 		String oldY = y;
 		y = newY;
@@ -228,6 +234,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Device getDevice() {
 		if (eContainerFeatureID() != LibraryElementPackage.RESOURCE__DEVICE) return null;
 		return (Device)eContainer();
@@ -255,10 +262,11 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDevice(Device newDevice) {
 		if (newDevice != eInternalContainer() || (eContainerFeatureID() != LibraryElementPackage.RESOURCE__DEVICE && newDevice != null)) {
 			if (EcoreUtil.isAncestor(this, newDevice))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
 			NotificationChain msgs = null;
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
@@ -275,6 +283,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isDeviceTypeResource() {
 		return deviceTypeResource;
 	}
@@ -283,6 +292,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDeviceTypeResource(boolean newDeviceTypeResource) {
 		boolean oldDeviceTypeResource = deviceTypeResource;
 		deviceTypeResource = newDeviceTypeResource;
@@ -294,6 +304,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
 			varDeclarations = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.RESOURCE__VAR_DECLARATIONS);
@@ -306,6 +317,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AutomationSystem getAutomationSystem() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
@@ -315,6 +327,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ResourceType getType() {
 		//this cannot be moved to the annotation class because there we don't have the super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
@@ -518,11 +531,11 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (x: ");
+		result.append(" (x: "); //$NON-NLS-1$
 		result.append(x);
-		result.append(", y: ");
+		result.append(", y: "); //$NON-NLS-1$
 		result.append(y);
-		result.append(", deviceTypeResource: ");
+		result.append(", deviceTypeResource: "); //$NON-NLS-1$
 		result.append(deviceTypeResource);
 		result.append(')');
 		return result.toString();

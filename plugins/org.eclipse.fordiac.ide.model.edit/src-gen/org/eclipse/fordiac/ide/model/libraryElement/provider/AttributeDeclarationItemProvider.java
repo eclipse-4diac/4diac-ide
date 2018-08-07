@@ -74,8 +74,8 @@ public class AttributeDeclarationItemProvider extends I4DIACElementItemProvider 
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_INamedElement_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", "_UI_INamedElement_type"),
+				 getString("_UI_INamedElement_name_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", "_UI_INamedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.INAMED_ELEMENT__NAME,
 				 true,
 				 false,
@@ -96,8 +96,8 @@ public class AttributeDeclarationItemProvider extends I4DIACElementItemProvider 
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_INamedElement_comment_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", "_UI_INamedElement_type"),
+				 getString("_UI_INamedElement_comment_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", "_UI_INamedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.INAMED_ELEMENT__COMMENT,
 				 true,
 				 false,
@@ -118,8 +118,8 @@ public class AttributeDeclarationItemProvider extends I4DIACElementItemProvider 
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_TypedElement_type_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_TypedElement_type_feature", "_UI_TypedElement_type"),
+				 getString("_UI_TypedElement_type_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_TypedElement_type_feature", "_UI_TypedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.TYPED_ELEMENT__TYPE,
 				 true,
 				 false,
@@ -140,8 +140,8 @@ public class AttributeDeclarationItemProvider extends I4DIACElementItemProvider 
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_AttributeDeclaration_initialValue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AttributeDeclaration_initialValue_feature", "_UI_AttributeDeclaration_type"),
+				 getString("_UI_AttributeDeclaration_initialValue_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_AttributeDeclaration_initialValue_feature", "_UI_AttributeDeclaration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION__INITIAL_VALUE,
 				 true,
 				 false,
@@ -159,7 +159,7 @@ public class AttributeDeclarationItemProvider extends I4DIACElementItemProvider 
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AttributeDeclaration"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/AttributeDeclaration")); //$NON-NLS-1$
 	}
 
 	/**
@@ -172,8 +172,8 @@ public class AttributeDeclarationItemProvider extends I4DIACElementItemProvider 
 	public String getText(Object object) {
 		String label = ((AttributeDeclaration)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_AttributeDeclaration_type") :
-			getString("_UI_AttributeDeclaration_type") + " " + label;
+			getString("_UI_AttributeDeclaration_type") : //$NON-NLS-1$
+			getString("_UI_AttributeDeclaration_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 

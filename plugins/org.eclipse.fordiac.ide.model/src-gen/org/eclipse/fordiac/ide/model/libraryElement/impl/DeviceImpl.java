@@ -175,6 +175,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Resource> getResource() {
 		if (resource == null) {
 			resource = new EObjectContainmentWithInverseEList<Resource>(Resource.class, this, LibraryElementPackage.DEVICE__RESOURCE, LibraryElementPackage.RESOURCE__DEVICE);
@@ -186,6 +187,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getX() {
 		return x;
 	}
@@ -195,6 +197,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setX(int newX) {
 		int oldX = x;
 		x = newX;
@@ -206,6 +209,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getY() {
 		return y;
 	}
@@ -215,6 +219,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setY(int newY) {
 		int oldY = y;
 		y = newY;
@@ -227,6 +232,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Color getColor() {
 		if (color != null && color.eIsProxy()) {
 			InternalEObject oldColor = (InternalEObject)color;
@@ -274,6 +280,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setColor(Color newColor) {
 		if (newColor != color) {
 			NotificationChain msgs = null;
@@ -292,6 +299,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
 			varDeclarations = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.DEVICE__VAR_DECLARATIONS);
@@ -303,6 +311,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getProfile() {
 		return profile;
 	}
@@ -311,6 +320,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProfile(String newProfile) {
 		String oldProfile = profile;
 		profile = newProfile;
@@ -322,6 +332,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Link> getInConnections() {
 		if (inConnections == null) {
 			inConnections = new EObjectWithInverseResolvingEList<Link>(Link.class, this, LibraryElementPackage.DEVICE__IN_CONNECTIONS, LibraryElementPackage.LINK__DEVICE);
@@ -334,6 +345,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AutomationSystem getAutomationSystem() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
@@ -343,6 +355,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SystemConfiguration getSystemConfiguration() {
 		return org.eclipse.fordiac.ide.model.Annotations.getSystemConfiguration(this);
 	}
@@ -352,6 +365,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DeviceType getType() {
 		//this cannot be moved to the annotation class because there we don't have the super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
@@ -366,6 +380,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Resource getResourceNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getResourceNamed(this, name);
 	}
@@ -375,6 +390,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Color getColorGen() {
 		if (color != null && color.eIsProxy()) {
 			InternalEObject oldColor = (InternalEObject)color;
@@ -616,11 +632,11 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (x: ");
+		result.append(" (x: "); //$NON-NLS-1$
 		result.append(x);
-		result.append(", y: ");
+		result.append(", y: "); //$NON-NLS-1$
 		result.append(y);
-		result.append(", profile: ");
+		result.append(", profile: "); //$NON-NLS-1$
 		result.append(profile);
 		result.append(')');
 		return result.toString();

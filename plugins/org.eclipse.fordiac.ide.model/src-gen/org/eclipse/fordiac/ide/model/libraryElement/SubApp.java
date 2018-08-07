@@ -62,6 +62,7 @@ public interface SubApp extends FBNetworkElement {
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//this cannot be moved to the annotation class because there we don\'t have the super access!!!\r\norg.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();\r\nif(type instanceof SubAppType){\r\n   return (SubAppType) type; \r\n}\r\nreturn null;'"
 	 * @generated
 	 */
+	@Override
 	SubAppType getType();
 
 } // SubApp

@@ -74,6 +74,7 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public int getTestResult() {
 		return testResult;
 	}
@@ -83,6 +84,7 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public void setTestResult(int newTestResult) {
 		int oldTestResult = testResult;
 		testResult=newTestResult;
@@ -95,6 +97,7 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 	 * <!-- end-user-doc -->
 	 * @generated not
 	 */
+	@Override
 	public void unsetTestResult() {
 		int oldTestResult = testResult;
 		testResult=TEST_RESULT_EDEFAULT;
@@ -108,6 +111,7 @@ public class OutputPrimitiveImpl extends PrimitiveImpl implements OutputPrimitiv
 	 * <!-- end-user-doc -->
 	 * @generated not
 	 */
+	@Override
 	public boolean isSetTestResult() {
 		return (testResult != TEST_RESULT_EDEFAULT);
 	}

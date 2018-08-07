@@ -60,7 +60,7 @@ public class SegmentTypePaletteEntryItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SegmentTypePaletteEntry"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/SegmentTypePaletteEntry")); //$NON-NLS-1$
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class SegmentTypePaletteEntryItemProvider
 	public String getText(Object object) {
 		String label = ((SegmentTypePaletteEntry)object).getLabel();
 		return label == null || label.length() == 0 ?
-			getString("_UI_SegmentTypePaletteEntry_type") :
-			getString("_UI_SegmentTypePaletteEntry_type") + " " + label;
+			getString("_UI_SegmentTypePaletteEntry_type") : //$NON-NLS-1$
+			getString("_UI_SegmentTypePaletteEntry_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

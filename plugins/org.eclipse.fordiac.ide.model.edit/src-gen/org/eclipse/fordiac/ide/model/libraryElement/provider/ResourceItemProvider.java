@@ -72,8 +72,8 @@ public class ResourceItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Resource_x_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Resource_x_feature", "_UI_Resource_type"),
+				 getString("_UI_Resource_x_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Resource_x_feature", "_UI_Resource_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.RESOURCE__X,
 				 true,
 				 false,
@@ -94,8 +94,8 @@ public class ResourceItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Resource_y_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Resource_y_feature", "_UI_Resource_type"),
+				 getString("_UI_Resource_y_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Resource_y_feature", "_UI_Resource_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.RESOURCE__Y,
 				 true,
 				 false,
@@ -116,8 +116,8 @@ public class ResourceItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Resource_deviceTypeResource_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Resource_deviceTypeResource_feature", "_UI_Resource_type"),
+				 getString("_UI_Resource_deviceTypeResource_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Resource_deviceTypeResource_feature", "_UI_Resource_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.RESOURCE__DEVICE_TYPE_RESOURCE,
 				 true,
 				 false,

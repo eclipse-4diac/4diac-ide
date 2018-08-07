@@ -161,6 +161,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getAuthor() {
 		return author;
 	}
@@ -170,6 +171,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAuthor(String newAuthor) {
 		String oldAuthor = author;
 		author = newAuthor;
@@ -182,6 +184,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getDate() {
 		return date;
 	}
@@ -191,6 +194,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(String newDate) {
 		String oldDate = date;
 		date = newDate;
@@ -203,6 +207,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getOrganization() {
 		return organization;
 	}
@@ -212,6 +217,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOrganization(String newOrganization) {
 		String oldOrganization = organization;
 		organization = newOrganization;
@@ -224,6 +230,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getRemarks() {
 		return remarks;
 	}
@@ -233,6 +240,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRemarks(String newRemarks) {
 		String oldRemarks = remarks;
 		remarks = newRemarks;
@@ -245,6 +253,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVersion() {
 		return version;
 	}
@@ -254,6 +263,7 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVersion(String newVersion) {
 		String oldVersion = version;
 		version = newVersion;
@@ -369,15 +379,15 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (author: ");
+		result.append(" (author: "); //$NON-NLS-1$
 		result.append(author);
-		result.append(", date: ");
+		result.append(", date: "); //$NON-NLS-1$
 		result.append(date);
-		result.append(", organization: ");
+		result.append(", organization: "); //$NON-NLS-1$
 		result.append(organization);
-		result.append(", remarks: ");
+		result.append(", remarks: "); //$NON-NLS-1$
 		result.append(remarks);
-		result.append(", version: ");
+		result.append(", version: "); //$NON-NLS-1$
 		result.append(version);
 		result.append(')');
 		return result.toString();

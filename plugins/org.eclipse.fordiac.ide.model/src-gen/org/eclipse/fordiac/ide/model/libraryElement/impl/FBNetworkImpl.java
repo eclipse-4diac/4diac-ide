@@ -112,6 +112,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FBNetworkElement> getNetworkElements() {
 		if (networkElements == null) {
 			networkElements = new EObjectContainmentEList<FBNetworkElement>(FBNetworkElement.class, this, LibraryElementPackage.FB_NETWORK__NETWORK_ELEMENTS);
@@ -124,6 +125,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<DataConnection> getDataConnections() {
 		if (dataConnections == null) {
 			dataConnections = new EObjectContainmentEList<DataConnection>(DataConnection.class, this, LibraryElementPackage.FB_NETWORK__DATA_CONNECTIONS);
@@ -136,6 +138,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<EventConnection> getEventConnections() {
 		if (eventConnections == null) {
 			eventConnections = new EObjectContainmentEList.Resolving<EventConnection>(EventConnection.class, this, LibraryElementPackage.FB_NETWORK__EVENT_CONNECTIONS);
@@ -147,6 +150,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<AdapterConnection> getAdapterConnections() {
 		if (adapterConnections == null) {
 			adapterConnections = new EObjectContainmentEList<AdapterConnection>(AdapterConnection.class, this, LibraryElementPackage.FB_NETWORK__ADAPTER_CONNECTIONS);
@@ -159,6 +163,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void addConnection(final Connection connection) {
 		org.eclipse.fordiac.ide.model.Annotations.addConnection(this, connection);
 	}
@@ -168,6 +173,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void removeConnection(final Connection connection) {
 		org.eclipse.fordiac.ide.model.Annotations.removeConnection(this, connection);
 	}
@@ -177,6 +183,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isApplicationNetwork() {
 		return org.eclipse.fordiac.ide.model.Annotations.isApplicationNetwork(this);
 	}
@@ -186,6 +193,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSubApplicationNetwork() {
 		return org.eclipse.fordiac.ide.model.Annotations.isSubApplicationNetwork(this);
 	}
@@ -195,6 +203,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isResourceNetwork() {
 		return org.eclipse.fordiac.ide.model.Annotations.isResourceNetwork(this);
 	}
@@ -204,6 +213,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isCFBTypeNetwork() {
 		return org.eclipse.fordiac.ide.model.Annotations.isCFBTypeNetwork(this);
 	}
@@ -213,6 +223,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AutomationSystem getAutomationSystem() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
@@ -222,6 +233,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Application getApplication() {
 		return org.eclipse.fordiac.ide.model.Annotations.getApplication(this);
 	}
@@ -231,6 +243,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FB getFBNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getFBNamed(this, name);
 	}
@@ -240,6 +253,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SubApp getSubAppNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getSubAppNamed(this, name);
 	}
@@ -249,6 +263,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetworkElement getElementNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getElementNamed(this, name);
 	}

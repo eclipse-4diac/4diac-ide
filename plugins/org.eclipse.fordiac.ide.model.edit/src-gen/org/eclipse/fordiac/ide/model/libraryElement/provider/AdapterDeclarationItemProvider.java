@@ -68,8 +68,8 @@ public class AdapterDeclarationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_AdapterDeclaration_adapterFB_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AdapterDeclaration_adapterFB_feature", "_UI_AdapterDeclaration_type"),
+				 getString("_UI_AdapterDeclaration_adapterFB_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_AdapterDeclaration_adapterFB_feature", "_UI_AdapterDeclaration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.ADAPTER_DECLARATION__ADAPTER_FB,
 				 true,
 				 false,
@@ -90,8 +90,8 @@ public class AdapterDeclarationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_AdapterDeclaration_paletteEntry_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AdapterDeclaration_paletteEntry_feature", "_UI_AdapterDeclaration_type"),
+				 getString("_UI_AdapterDeclaration_paletteEntry_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_AdapterDeclaration_paletteEntry_feature", "_UI_AdapterDeclaration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.ADAPTER_DECLARATION__PALETTE_ENTRY,
 				 true,
 				 false,

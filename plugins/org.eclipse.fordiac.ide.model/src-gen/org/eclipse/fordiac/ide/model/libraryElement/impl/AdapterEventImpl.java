@@ -68,6 +68,7 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterDeclaration getAdapterDeclaration() {
 		if (adapterDeclaration != null && adapterDeclaration.eIsProxy()) {
 			InternalEObject oldAdapterDeclaration = (InternalEObject)adapterDeclaration;
@@ -94,6 +95,7 @@ public class AdapterEventImpl extends EventImpl implements AdapterEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAdapterDeclaration(AdapterDeclaration newAdapterDeclaration) {
 		AdapterDeclaration oldAdapterDeclaration = adapterDeclaration;
 		adapterDeclaration = newAdapterDeclaration;

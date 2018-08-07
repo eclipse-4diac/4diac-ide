@@ -68,8 +68,8 @@ public class SubAppItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SubApp_subAppNetwork_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SubApp_subAppNetwork_feature", "_UI_SubApp_type"),
+				 getString("_UI_SubApp_subAppNetwork_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_SubApp_subAppNetwork_feature", "_UI_SubApp_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.SUB_APP__SUB_APP_NETWORK,
 				 true,
 				 false,

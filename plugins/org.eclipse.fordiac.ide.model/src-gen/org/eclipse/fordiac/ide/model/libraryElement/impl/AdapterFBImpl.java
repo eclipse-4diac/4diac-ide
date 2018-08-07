@@ -67,6 +67,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterDeclaration getAdapterDecl() {
 		if (adapterDecl != null && adapterDecl.eIsProxy()) {
 			InternalEObject oldAdapterDecl = (InternalEObject)adapterDecl;
@@ -108,6 +109,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAdapterDecl(AdapterDeclaration newAdapterDecl) {
 		if (newAdapterDecl != adapterDecl) {
 			NotificationChain msgs = null;
@@ -126,6 +128,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isPlug() {
 		return org.eclipse.fordiac.ide.model.Annotations.isPlug(this);
 	}
@@ -164,6 +167,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSocket() {
 		return org.eclipse.fordiac.ide.model.Annotations.isSocket(this);
 	}
@@ -173,6 +177,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBType getType() {
 		return org.eclipse.fordiac.ide.model.Annotations.getType(this);
 	}

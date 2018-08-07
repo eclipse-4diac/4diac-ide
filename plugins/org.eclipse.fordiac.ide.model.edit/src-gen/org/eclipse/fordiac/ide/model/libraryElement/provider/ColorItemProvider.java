@@ -84,8 +84,8 @@ public class ColorItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Color_red_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Color_red_feature", "_UI_Color_type"),
+				 getString("_UI_Color_red_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Color_red_feature", "_UI_Color_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.COLOR__RED,
 				 true,
 				 false,
@@ -106,8 +106,8 @@ public class ColorItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Color_green_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Color_green_feature", "_UI_Color_type"),
+				 getString("_UI_Color_green_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Color_green_feature", "_UI_Color_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.COLOR__GREEN,
 				 true,
 				 false,
@@ -128,8 +128,8 @@ public class ColorItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Color_blue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Color_blue_feature", "_UI_Color_type"),
+				 getString("_UI_Color_blue_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Color_blue_feature", "_UI_Color_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.COLOR__BLUE,
 				 true,
 				 false,
@@ -147,7 +147,7 @@ public class ColorItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Color"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Color")); //$NON-NLS-1$
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class ColorItemProvider
 	@Override
 	public String getText(Object object) {
 		Color color = (Color)object;
-		return getString("_UI_Color_type") + " " + color.getRed();
+		return getString("_UI_Color_type") + " " + color.getRed(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 

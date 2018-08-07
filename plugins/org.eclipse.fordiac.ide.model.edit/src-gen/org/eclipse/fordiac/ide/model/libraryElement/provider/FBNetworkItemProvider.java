@@ -114,7 +114,7 @@ public class FBNetworkItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_FBNetwork_type");
+		return getString("_UI_FBNetwork_type"); //$NON-NLS-1$
 	}
 
 	/**

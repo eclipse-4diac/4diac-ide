@@ -95,7 +95,7 @@ public class FBTypeItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBType"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBType")); //$NON-NLS-1$
 	}
 
 	/**
@@ -108,8 +108,8 @@ public class FBTypeItemProvider
 	public String getText(Object object) {
 		String label = ((FBType)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_FBType_type") :
-			getString("_UI_FBType_type") + " " + label;
+			getString("_UI_FBType_type") : //$NON-NLS-1$
+			getString("_UI_FBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

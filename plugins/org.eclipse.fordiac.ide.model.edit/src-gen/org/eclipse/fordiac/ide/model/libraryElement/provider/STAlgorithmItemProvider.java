@@ -60,7 +60,7 @@ public class STAlgorithmItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/STAlgorithm"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/STAlgorithm")); //$NON-NLS-1$
 	}
 
 	/**

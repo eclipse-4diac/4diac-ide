@@ -87,8 +87,8 @@ public class IdentificationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Identification_applicationDomain_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Identification_applicationDomain_feature", "_UI_Identification_type"),
+				 getString("_UI_Identification_applicationDomain_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Identification_applicationDomain_feature", "_UI_Identification_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.IDENTIFICATION__APPLICATION_DOMAIN,
 				 true,
 				 false,
@@ -109,8 +109,8 @@ public class IdentificationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Identification_classification_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Identification_classification_feature", "_UI_Identification_type"),
+				 getString("_UI_Identification_classification_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Identification_classification_feature", "_UI_Identification_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.IDENTIFICATION__CLASSIFICATION,
 				 true,
 				 false,
@@ -131,8 +131,8 @@ public class IdentificationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Identification_description_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Identification_description_feature", "_UI_Identification_type"),
+				 getString("_UI_Identification_description_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Identification_description_feature", "_UI_Identification_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.IDENTIFICATION__DESCRIPTION,
 				 true,
 				 false,
@@ -153,8 +153,8 @@ public class IdentificationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Identification_function_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Identification_function_feature", "_UI_Identification_type"),
+				 getString("_UI_Identification_function_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Identification_function_feature", "_UI_Identification_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.IDENTIFICATION__FUNCTION,
 				 true,
 				 false,
@@ -175,8 +175,8 @@ public class IdentificationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Identification_standard_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Identification_standard_feature", "_UI_Identification_type"),
+				 getString("_UI_Identification_standard_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Identification_standard_feature", "_UI_Identification_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.IDENTIFICATION__STANDARD,
 				 true,
 				 false,
@@ -197,8 +197,8 @@ public class IdentificationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Identification_type_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Identification_type_feature", "_UI_Identification_type"),
+				 getString("_UI_Identification_type_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Identification_type_feature", "_UI_Identification_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.IDENTIFICATION__TYPE,
 				 true,
 				 false,
@@ -216,7 +216,7 @@ public class IdentificationItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Identification"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Identification")); //$NON-NLS-1$
 	}
 
 	/**
@@ -229,8 +229,8 @@ public class IdentificationItemProvider
 	public String getText(Object object) {
 		String label = ((Identification)object).getApplicationDomain();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Identification_type") :
-			getString("_UI_Identification_type") + " " + label;
+			getString("_UI_Identification_type") : //$NON-NLS-1$
+			getString("_UI_Identification_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

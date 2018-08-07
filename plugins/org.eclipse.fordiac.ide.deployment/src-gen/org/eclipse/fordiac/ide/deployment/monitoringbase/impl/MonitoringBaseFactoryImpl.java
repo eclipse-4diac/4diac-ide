@@ -72,7 +72,7 @@ public class MonitoringBaseFactoryImpl extends EFactoryImpl implements Monitorin
 			case MonitoringBasePackage.PORT_ELEMENT: return createPortElement();
 			case MonitoringBasePackage.BREAKPOINTS: return createBreakpoints();
 			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -81,6 +81,7 @@ public class MonitoringBaseFactoryImpl extends EFactoryImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PortElement createPortElement() {
 		PortElementImpl portElement = new PortElementImpl();
 		return portElement;
@@ -91,6 +92,7 @@ public class MonitoringBaseFactoryImpl extends EFactoryImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Breakpoints createBreakpoints() {
 		BreakpointsImpl breakpoints = new BreakpointsImpl();
 		return breakpoints;
@@ -101,6 +103,7 @@ public class MonitoringBaseFactoryImpl extends EFactoryImpl implements Monitorin
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MonitoringBasePackage getMonitoringBasePackage() {
 		return (MonitoringBasePackage)getEPackage();
 	}

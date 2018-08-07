@@ -130,7 +130,7 @@ public abstract class AbstractSection extends AbstractPropertySection {
 		}
 	}
 	
-	protected Text createGroupText(Composite group, Boolean editable) {			
+	protected Text createGroupText(Composite group, boolean editable) {			
 		Text text = getWidgetFactory().createText(group, "", SWT.BORDER); //$NON-NLS-1$
 		text.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		text.setEditable(editable);	

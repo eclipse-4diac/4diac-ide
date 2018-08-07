@@ -69,6 +69,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public InterfaceList getInterfaceList() {
 		return org.eclipse.fordiac.ide.model.Annotations.getInterfaceList(this);
 	}
@@ -78,6 +79,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterFBType getAdapterFBType() {
 		return adapterFBType;
 	}
@@ -87,6 +89,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAdapterFBType(AdapterFBType newAdapterFBType) {
 		AdapterFBType oldAdapterFBType = adapterFBType;
 		adapterFBType = newAdapterFBType;
@@ -99,6 +102,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterFBType getPlugType() {
 		return org.eclipse.fordiac.ide.model.Annotations.getPlugType(this);
 	}
@@ -108,6 +112,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterFBType getSocketType() {
 		return org.eclipse.fordiac.ide.model.Annotations.getSocketType(this);
 	}

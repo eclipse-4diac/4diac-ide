@@ -98,6 +98,7 @@ public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -107,6 +108,7 @@ public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -119,6 +121,7 @@ public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getValue() {
 		return value;
 	}
@@ -128,6 +131,7 @@ public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(String newValue) {
 		String oldValue = value;
 		value = newValue;
@@ -212,10 +216,10 @@ public class VirtualDNSEntryImpl extends EObjectImpl implements VirtualDNSEntry 
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", value: ");
+		result.append(", value: "); //$NON-NLS-1$
 		result.append(value);
 		result.append(')');
 		return result.toString();

@@ -76,6 +76,7 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getLanguage() {
 		return language;
 	}
@@ -85,6 +86,7 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLanguage(String newLanguage) {
 		String oldLanguage = language;
 		language = newLanguage;
@@ -160,7 +162,7 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (language: ");
+		result.append(" (language: "); //$NON-NLS-1$
 		result.append(language);
 		result.append(')');
 		return result.toString();

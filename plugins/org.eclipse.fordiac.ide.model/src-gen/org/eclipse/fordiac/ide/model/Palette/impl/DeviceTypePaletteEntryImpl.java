@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DEVTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 /**
  * <!-- begin-user-doc -->
@@ -59,6 +60,7 @@ public class DeviceTypePaletteEntryImpl extends PaletteEntryImpl implements Devi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DeviceType getDeviceType() {
 		LibraryElement type = getType();
 		if((null !=type) && (type instanceof DeviceType)){
@@ -72,6 +74,7 @@ public class DeviceTypePaletteEntryImpl extends PaletteEntryImpl implements Devi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(final LibraryElement type) {
 		if((null != type) && (type instanceof DeviceType)){
 			super.setType(type);
@@ -84,10 +87,11 @@ public class DeviceTypePaletteEntryImpl extends PaletteEntryImpl implements Devi
 		}
 	}
 
+	@Override
 	protected LibraryElement loadType() {
 		DeviceType type = null;
 		Palette palette = getGroup().getPallete();
-		if (TypeLibrary.DEVICE_TYPE_FILE_ENDING.equalsIgnoreCase(getFile().getFileExtension())) {
+		if (TypeLibraryTags.DEVICE_TYPE_FILE_ENDING.equalsIgnoreCase(getFile().getFileExtension())) {
 			type = DEVImporter.importDEVType(getFile(), palette);
 		} else {
 			IDeviceTypeImporter importer = DEVTypeLibrary.getInstance().getDeviceTypeImporter(getFile().getFileExtension());

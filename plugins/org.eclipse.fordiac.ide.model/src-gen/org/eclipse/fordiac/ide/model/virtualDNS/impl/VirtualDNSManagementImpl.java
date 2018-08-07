@@ -84,6 +84,7 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VirtualDNSCollection> getAvailableDNSCollections() {
 		if (availableDNSCollections == null) {
 			availableDNSCollections = new EObjectContainmentEList<VirtualDNSCollection>(VirtualDNSCollection.class, this, VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS);
@@ -95,6 +96,7 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VirtualDNSCollection getActiveVirtualDNS() {
 		if (activeVirtualDNS != null && activeVirtualDNS.eIsProxy()) {
 			InternalEObject oldActiveVirtualDNS = (InternalEObject)activeVirtualDNS;
@@ -119,6 +121,7 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setActiveVirtualDNS(VirtualDNSCollection newActiveVirtualDNS) {
 		VirtualDNSCollection oldActiveVirtualDNS = activeVirtualDNS;
 		activeVirtualDNS = newActiveVirtualDNS;
@@ -207,6 +210,7 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements
 		return super.eIsSet(featureID);
 	}
 
+	@Override
 	public String getReplacedString(String value) {
 		String replacedValue = new String();
 		

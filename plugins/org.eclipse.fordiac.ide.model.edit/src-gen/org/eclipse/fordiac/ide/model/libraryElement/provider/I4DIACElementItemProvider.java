@@ -73,7 +73,7 @@ public class I4DIACElementItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_I4DIACElement_type");
+		return getString("_UI_I4DIACElement_type"); //$NON-NLS-1$
 	}
 
 	/**

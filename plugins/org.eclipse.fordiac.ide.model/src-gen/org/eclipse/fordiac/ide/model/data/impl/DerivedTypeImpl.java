@@ -68,6 +68,7 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ElementaryType getBaseType() {
 		if (baseType != null && baseType.eIsProxy()) {
 			InternalEObject oldBaseType = (InternalEObject)baseType;
@@ -94,6 +95,7 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseType(ElementaryType newBaseType) {
 		ElementaryType oldBaseType = baseType;
 		baseType = newBaseType;

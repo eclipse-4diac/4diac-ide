@@ -73,6 +73,7 @@ public class AdapterPortElementImpl extends PortElementImpl implements AdapterPo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PortElement> getPorts() {
 		if (ports == null) {
 			ports = new EObjectContainmentEList<PortElement>(PortElement.class, this, MonitoringPackage.ADAPTER_PORT_ELEMENT__PORTS);

@@ -126,6 +126,7 @@ public class DataImpl extends EObjectImpl implements Data {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getValue() {
 		return value;
 	}
@@ -135,6 +136,7 @@ public class DataImpl extends EObjectImpl implements Data {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(String newValue) {
 		String oldValue = value;
 		value = newValue;
@@ -147,6 +149,7 @@ public class DataImpl extends EObjectImpl implements Data {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getTime() {
 		return time;
 	}
@@ -156,6 +159,7 @@ public class DataImpl extends EObjectImpl implements Data {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTime(String newTime) {
 		String oldTime = time;
 		time = newTime;
@@ -168,6 +172,7 @@ public class DataImpl extends EObjectImpl implements Data {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getForced() {
 		return forced;
 	}
@@ -177,6 +182,7 @@ public class DataImpl extends EObjectImpl implements Data {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setForced(String newForced) {
 		String oldForced = forced;
 		forced = newForced;
@@ -272,11 +278,11 @@ public class DataImpl extends EObjectImpl implements Data {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (value: ");
+		result.append(" (value: "); //$NON-NLS-1$
 		result.append(value);
-		result.append(", time: ");
+		result.append(", time: "); //$NON-NLS-1$
 		result.append(time);
-		result.append(", forced: ");
+		result.append(", forced: "); //$NON-NLS-1$
 		result.append(forced);
 		result.append(')');
 		return result.toString();

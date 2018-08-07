@@ -97,6 +97,7 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ServiceSequence> getServiceSequence() {
 		if (serviceSequence == null) {
 			serviceSequence = new EObjectContainmentEList.Resolving<ServiceSequence>(ServiceSequence.class, this, LibraryElementPackage.SERVICE__SERVICE_SEQUENCE);
@@ -109,6 +110,7 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ServiceInterface getRightInterface() {
 		if (rightInterface != null && rightInterface.eIsProxy()) {
 			InternalEObject oldRightInterface = (InternalEObject)rightInterface;
@@ -156,6 +158,7 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRightInterface(ServiceInterface newRightInterface) {
 		if (newRightInterface != rightInterface) {
 			NotificationChain msgs = null;
@@ -175,6 +178,7 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ServiceInterface getLeftInterface() {
 		if (leftInterface != null && leftInterface.eIsProxy()) {
 			InternalEObject oldLeftInterface = (InternalEObject)leftInterface;
@@ -222,6 +226,7 @@ public class ServiceImpl extends I4DIACElementImpl implements Service {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLeftInterface(ServiceInterface newLeftInterface) {
 		if (newLeftInterface != leftInterface) {
 			NotificationChain msgs = null;
