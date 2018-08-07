@@ -13,6 +13,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
+import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,15 +23,14 @@ import java.util.regex.Pattern;
  */
 public final class IdentifierVerifyer {
 
-	private static final String IDENTIFIER_HAS_TO_START_WITH_UNDERSCORE_OR_A_CHARACTER = "Identifier has to start with '_' or a character";
-	private final static String IDENTIFIER_LENGTH_LOWER_THAN_ONE = "Length < 1";
-	private final static String IdentifierRegex = "[_A-Za-z][_A-Za-z\\d]*";
-	private final static Pattern IdentifierPattern = Pattern.compile(IdentifierRegex, Pattern.MULTILINE);
-	private final static String InvalidIdentifierRegex = "[^_A-Za-z\\d]";
-	private final static Pattern InvalidIdentifierPattern = Pattern.compile(InvalidIdentifierRegex, Pattern.MULTILINE);
-	
+	private static final String IDENTIFIER_REGEX = "[_A-Za-z][_A-Za-z\\d]*"; //$NON-NLS-1$
+	private static final Pattern IDENTIFIER_PATTERN = Pattern.compile(IDENTIFIER_REGEX, Pattern.MULTILINE);
+	private static final String INVALID_IDENTIFIER_REGEX = "[^_A-Za-z\\d]"; //$NON-NLS-1$
+	private static final Pattern INVALID_IDENTIFIER_PATTERN = Pattern.compile(INVALID_IDENTIFIER_REGEX,
+			Pattern.MULTILINE);
+
 	private IdentifierVerifyer() {
-		//we don't want this util class to be instantiable
+		// we don't want this util class to be instantiable
 	}
 
 	/**
@@ -41,9 +41,10 @@ public final class IdentifierVerifyer {
 	 * @return true, if is valid identifier
 	 */
 	public static boolean isValidIdentifier(String identifier) {
-		final Matcher matcher = IdentifierPattern.matcher(identifier);
+		final Matcher matcher = IDENTIFIER_PATTERN.matcher(identifier);
 		return matcher.matches();
 	}
+
 	/**
 	 * Checks if is valid identifier.
 	 * 
@@ -52,21 +53,22 @@ public final class IdentifierVerifyer {
 	 * @return null if it is an valid identifier otherwise an Error message
 	 */
 	public static String isValidIdentifierWithErrorMessage(String identifier) {
-		if(isValidIdentifier(identifier)) {
+		if (isValidIdentifier(identifier)) {
 			return null;
 		}
 		if (identifier.length() < 1) {
-			return IDENTIFIER_LENGTH_LOWER_THAN_ONE;
+			return Messages.IdentifierVerifyer_ERROR_IdentifierLengthZero;
 		}
 		String firstChar = identifier.substring(0, 1);
-		final Matcher startSymbolMatcher = IdentifierPattern.matcher(firstChar);
+		final Matcher startSymbolMatcher = IDENTIFIER_PATTERN.matcher(firstChar);
 		if (!startSymbolMatcher.matches()) {
-			return IDENTIFIER_HAS_TO_START_WITH_UNDERSCORE_OR_A_CHARACTER;
+			return Messages.IdentifierVerifyer_ERROR_InvalidStartSymbol;
 		}
-		final Matcher invalidExpressionSymbolsMatcher = InvalidIdentifierPattern.matcher(identifier);
-		if(invalidExpressionSymbolsMatcher.find()) {
-			return "Invalid symbol " + invalidExpressionSymbolsMatcher.group(0).toString() + " used in identifier";
+		final Matcher invalidExpressionSymbolsMatcher = INVALID_IDENTIFIER_PATTERN.matcher(identifier);
+		if (invalidExpressionSymbolsMatcher.find()) {
+			return MessageFormat.format(Messages.IdentifierVerifyer_ERROR_InvalidSymbolUsedInIdentifer,
+					invalidExpressionSymbolsMatcher.group(0).toString());
 		}
-		return "Unkown expression error";
+		return Messages.IdentifierVerifyer_ERROR_UnkownExpressionError;
 	}
 }
