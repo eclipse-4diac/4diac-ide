@@ -148,6 +148,7 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		compilerInfoNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
 		compilerInfoNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		compilerInfoNew.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				executeCommand(new AddNewCompilerCommand((FBType)type));
 				compilerViewer.refresh();
@@ -156,15 +157,18 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		compilerInfoDelete = getWidgetFactory().createButton(buttonComp, "Delete", SWT.PUSH);
 		compilerInfoDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		compilerInfoDelete.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				executeCommand(new DeleteCompilerCommand(((FBType)type).getCompilerInfo(), (Compiler)((IStructuredSelection) compilerViewer.getSelection()).getFirstElement()));
 				compilerViewer.refresh();
 			}
 		});
 		compilerViewer.setCellModifier(new ICellModifier() {
+			@Override
 			public boolean canModify(final Object element, final String property) {
 				return true;
 			}
+			@Override
 			public Object getValue(final Object element, final String property) {
 				if (COMPILER_LANGUAGE.equals(property)) {
 					String language = ((Compiler) element).getLanguage().getName();
@@ -185,6 +189,7 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 					return ((Compiler) element).getVersion();
 				}
 			}
+			@Override
 			public void modify(final Object element, final String property, final Object value) {
 				TableItem tableItem = (TableItem) element;
 				Compiler data = (Compiler) tableItem.getData();

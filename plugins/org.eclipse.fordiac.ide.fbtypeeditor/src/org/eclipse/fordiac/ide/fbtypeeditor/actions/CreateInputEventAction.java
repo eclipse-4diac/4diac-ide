@@ -33,6 +33,7 @@ public class CreateInputEventAction extends WorkbenchPartAction {
 		return fbType;
 	}
 
+	@Override
 	public IWorkbenchPart getWorkbenchPart() {
 		return super.getWorkbenchPart();
 	}

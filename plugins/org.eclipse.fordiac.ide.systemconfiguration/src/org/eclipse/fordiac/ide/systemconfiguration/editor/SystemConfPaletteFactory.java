@@ -64,34 +64,40 @@ public final class SystemConfPaletteFactory {
 				
 		FlyoutPreferences preferences = new FlyoutPreferences() {
 			
+			@Override
 			public int getDockLocation() {
 				return org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault()
 						.getPreferenceStore().getInt(PALETTE_DOCK_LOCATION);
 			}
 
+			@Override
 			public int getPaletteState() {
 				return org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault()
 						.getPreferenceStore().getInt(PALETTE_STATE);
 
 			}
 
+			@Override
 			public int getPaletteWidth() {
 				return org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault()
 						.getPreferenceStore().getInt(PALETTE_SIZE);
 
 			}
 
+			@Override
 			public void setDockLocation(final int location) {
 				org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault()
 						.getPreferenceStore().setValue(PALETTE_DOCK_LOCATION, location);
 			}
 
+			@Override
 			public void setPaletteState(final int state) {
 				org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault()
 						.getPreferenceStore().setValue(PALETTE_STATE, state);
 
 			}
 
+			@Override
 			public void setPaletteWidth(final int width) {
 				org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault()
 						.getPreferenceStore().setValue(PALETTE_SIZE, width);

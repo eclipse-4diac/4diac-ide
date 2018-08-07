@@ -37,6 +37,7 @@ public abstract class AbstractDeviceInterfaceSection extends AbstractDevResInter
 		getWidgetFactory().createCLabel(composite, "Instance Name:"); 
 		nameText = createGroupText(composite, true);
 		nameText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
@@ -59,6 +60,7 @@ public abstract class AbstractDeviceInterfaceSection extends AbstractDevResInter
 		gridData.horizontalSpan = 2;
 		commentText.setLayoutData(gridData);
 		commentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));

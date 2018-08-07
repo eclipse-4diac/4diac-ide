@@ -28,6 +28,7 @@ public abstract class ConnectionSection extends AbstractSection {
 	private Text sourceText;
 	private Text targetText;
 	
+	@Override
 	protected Connection getType(){
 		return (Connection) type;
 	}
@@ -46,6 +47,7 @@ public abstract class ConnectionSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, Messages.ConnectionSection_Comment); 
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));

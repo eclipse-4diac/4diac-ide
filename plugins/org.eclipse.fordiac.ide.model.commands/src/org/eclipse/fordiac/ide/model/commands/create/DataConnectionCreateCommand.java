@@ -28,6 +28,7 @@ public class DataConnectionCreateCommand extends AbstractConnectionCreateCommand
 		super(parent);
 	}
 
+	@Override
 	protected Connection createConnectionElement(){
 		return LibraryElementFactory.eINSTANCE.createDataConnection();
 	}

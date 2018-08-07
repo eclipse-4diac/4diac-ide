@@ -352,6 +352,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 		ConnectionLocator constraintLocator = new ConnectionLocator(connection,
 				ConnectionLocator.MIDDLE) {
+			@Override
 			protected Point getReferencePoint() {
 				
 				Path path = new Path(null);
@@ -437,6 +438,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		}
 	}
 
+	@Override
 	public DragTracker getDragTracker(Request request) {
 		return new org.eclipse.gef.tools.DragEditPartsTracker(this) {
 

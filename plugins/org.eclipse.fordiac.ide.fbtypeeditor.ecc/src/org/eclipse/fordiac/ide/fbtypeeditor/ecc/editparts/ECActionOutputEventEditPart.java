@@ -220,6 +220,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart{
 	 * 
 	 * @return the manager
 	 */
+	@Override
 	public DirectEditManager getManager() {
 		if (manager == null) {
 			manager = new ComboDirectEditManager(this,
@@ -233,6 +234,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart{
 	/**
 	 * performs the directEdit.
 	 */
+	@Override
 	public void performDirectEdit() {
 		ArrayList<String> eventNames = new ArrayList<String>();
 		List<Event> events = ECActionHelpers.getOutputEvents(ECActionHelpers
@@ -274,6 +276,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart{
 	protected IFigure createFigure() {
 		Label eventLabel = new Label(){
 			
+		@Override
 		protected void paintFigure(Graphics graphics) {	
 				Display display = Display.getCurrent();	
 				Rectangle boundingRect = getBounds();

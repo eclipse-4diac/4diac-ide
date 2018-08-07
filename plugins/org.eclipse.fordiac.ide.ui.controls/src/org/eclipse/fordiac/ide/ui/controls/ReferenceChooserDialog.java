@@ -80,6 +80,7 @@ public class ReferenceChooserDialog extends Dialog {
 		tableViewer
 				.addSelectionChangedListener(new ISelectionChangedListener() {
 
+					@Override
 					public void selectionChanged(
 							final SelectionChangedEvent event) {
 						selected = ((StructuredSelection) event.getSelection())

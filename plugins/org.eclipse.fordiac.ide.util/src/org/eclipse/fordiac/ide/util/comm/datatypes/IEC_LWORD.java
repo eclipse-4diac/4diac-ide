@@ -112,11 +112,13 @@ public class IEC_LWORD extends IEC_ANY_BIT {
 		return this.toHexString();
 	}
 	
+	@Override
 	protected String ConvertHexString()
 	{
 		return Long.toHexString(value);
 	}
 	
+	@Override
 	protected String ConvertBinString()
 	{
 		return Long.toBinaryString(value);

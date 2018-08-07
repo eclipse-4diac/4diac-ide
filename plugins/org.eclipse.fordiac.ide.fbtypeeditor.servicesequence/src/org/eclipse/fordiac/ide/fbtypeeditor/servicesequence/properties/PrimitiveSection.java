@@ -56,6 +56,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 	
 	protected PrimitiveEditPart editPart;
 	
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
 		createEventSection(leftComposite);
@@ -70,6 +71,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		getWidgetFactory().createCLabel(composite, "Event: ");
 		eventText = createGroupText(composite, true);	
 		eventText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangePrimitiveEventCommand(getType(), eventText.getText()));
@@ -85,6 +87,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		qiGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 	    buttonNone = getWidgetFactory().createButton(qiGroup, "none", SWT.RADIO);
 	    buttonNone.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				changeEventText("none");
 				refresh();
@@ -92,6 +95,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		});
 	    buttonTrue = getWidgetFactory().createButton(qiGroup, "true", SWT.RADIO); //$NON-NLS-1$
 	    buttonTrue.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				changeEventText("true"); //$NON-NLS-1$
 				refresh();
@@ -99,6 +103,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		});
 	    buttonFalse = getWidgetFactory().createButton(qiGroup, "false", SWT.RADIO); //$NON-NLS-1$
 	    buttonFalse.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				changeEventText("false"); //$NON-NLS-1$
 				refresh();
@@ -141,6 +146,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		getWidgetFactory().createCLabel(composite, "Parameters:"); 
 		parametersText = createGroupText(composite, true);	
 		parametersText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangePrimitiveParameterCommand(getType(), parametersText.getText()));
@@ -149,6 +155,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		});
 	}
 	
+	@Override
 	protected Primitive getInputType(Object input) {
 		if(input instanceof InputPrimitiveEditPart || input instanceof OutputPrimitiveEditPart){
 			editPart = (PrimitiveEditPart) input;
@@ -163,6 +170,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		return null;
 	}
 	
+	@Override
 	protected void setInputCode() {
 		parametersText.setEnabled(false);
 		serviceInterfaceCombo.removeAll();
@@ -190,6 +198,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		commandStack = commandStackBuffer;
 	}
 	
+	@Override
 	protected Primitive getType(){
 		return (Primitive)type;
 	}

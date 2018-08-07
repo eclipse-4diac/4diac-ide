@@ -104,6 +104,7 @@ public class CreateConnectionSection extends AbstractSection {
 		createConnectionButton.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
 		createConnectionButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createConnectionButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				AbstractConnectionCreateCommand cmd = null;
 				FBNetwork nw = editParts.get(0).getModel().getFBNetworkElement().getFbNetwork();

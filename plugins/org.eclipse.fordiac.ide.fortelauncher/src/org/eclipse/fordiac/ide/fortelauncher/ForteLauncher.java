@@ -75,6 +75,7 @@ public class ForteLauncher implements IRuntimeLauncher {
 		return params;
 	}
 
+	@Override
 	public LaunchParameter setParam(final String name, final String value) {
 		boolean found = false;
 		for (int i = 0; i < params.size(); i++) {

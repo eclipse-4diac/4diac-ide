@@ -220,6 +220,7 @@ public class StateSection extends AbstractECSection {
 		});
 	}
 
+	@Override
 	protected void setInputCode() {
 		commentText.setEnabled(false);
 		nameText.setEnabled(false);

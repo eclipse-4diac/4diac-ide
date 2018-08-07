@@ -858,7 +858,7 @@ public class FBTImporter implements LibraryElementTags {
 	 *             the FBT import exception
 	 */
 	private void parseECState(final ECC ecc, final Node node,
-			final Boolean initialState) throws TypeImportException {
+			final boolean initialState) throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
 		ECState state = LibraryElementFactory.eINSTANCE.createECState();
 		ecc.getECState().add(state);

@@ -73,6 +73,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements Ed
 		}
 	}
 
+	@Override
 	public IInterfaceElement getCastedModel() {
 		return ((TypeField) getModel()).getReferencedElement();
 	}
@@ -86,6 +87,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements Ed
 		return comment;
 	}
 
+	@Override
 	protected void update() {
 		comment.setText(getTypeName());
 	}
@@ -144,6 +146,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements Ed
 		}
 	}
 
+	@Override
 	public DirectEditManager getManager() {
 		if (manager == null) {
 			manager = new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(comment),
@@ -152,6 +155,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements Ed
 		return manager;
 	}
 
+	@Override
 	public void performDirectEdit() {
 		// CCombo combo = getManager().getComboBox();
 		// First update the list of available types

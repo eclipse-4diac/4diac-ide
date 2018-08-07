@@ -78,6 +78,7 @@ public class WatchesImpl extends EObjectImpl implements Watches {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Resource> getResources() {
 		if (resources == null) {
 			resources = new EObjectResolvingEList<Resource>(Resource.class, this, DevResponsePackage.WATCHES__RESOURCES);

@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gef.figures;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
@@ -24,7 +25,7 @@ public class VerticalLineCompartmentFigure extends Figure {
 
 	public VerticalLineCompartmentFigure() {
 		ToolbarLayout layout = new ToolbarLayout();
-		layout.setMinorAlignment(ToolbarLayout.ALIGN_TOPLEFT);
+		layout.setMinorAlignment(OrderedLayout.ALIGN_TOPLEFT);
 		layout.setStretchMinorAxis(false);
 		setLayoutManager(layout);
 		setBorder(new AdvancedLineBorder(PositionConstants.NORTH));

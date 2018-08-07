@@ -58,6 +58,7 @@ public class InterfaceElementSection extends AbstractSection {
 	protected Text parameterText;
 	protected CLabel valueCLabel;
 	
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
@@ -74,6 +75,7 @@ public class InterfaceElementSection extends AbstractSection {
 		nameText = createGroupText(composite, true);	
 		nameText.addVerifyListener(new IdentifierVerifyListener());
 		nameText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeSubAppIENameCommand(getType(), nameText.getText()));
@@ -83,6 +85,7 @@ public class InterfaceElementSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, "Comment:"); 
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
@@ -120,6 +123,7 @@ public class InterfaceElementSection extends AbstractSection {
 		valueCLabel = getWidgetFactory().createCLabel(composite, "Value:"); 
 		parameterText = createGroupText(composite, true);
 		parameterText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeValueCommand((VarDeclaration) getType(), parameterText.getText()));
@@ -241,6 +245,7 @@ public class InterfaceElementSection extends AbstractSection {
 		return null;
 	}
 
+	@Override
 	protected IInterfaceElement getInputType(Object input) {
 		if(input instanceof InterfaceEditPart){
 			return ((InterfaceEditPart) input).getModel();
@@ -248,6 +253,7 @@ public class InterfaceElementSection extends AbstractSection {
 		return null;
 	}
 
+	@Override
 	protected IInterfaceElement getType() {
 		return (IInterfaceElement)type;
 	}

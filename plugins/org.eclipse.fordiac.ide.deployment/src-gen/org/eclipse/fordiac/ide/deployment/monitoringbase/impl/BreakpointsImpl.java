@@ -76,6 +76,7 @@ public class BreakpointsImpl extends EObjectImpl implements Breakpoints {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<MonitoringBaseElement> getBreakpoints() {
 		if (breakpoints == null) {
 			breakpoints = new EObjectContainmentEList<MonitoringBaseElement>(MonitoringBaseElement.class, this, MonitoringBasePackage.BREAKPOINTS__BREAKPOINTS);

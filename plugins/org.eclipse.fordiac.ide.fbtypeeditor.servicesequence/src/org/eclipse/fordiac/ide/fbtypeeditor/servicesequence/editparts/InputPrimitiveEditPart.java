@@ -35,6 +35,7 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart{
 		connectingConnection = new ConnectingConnection();
 	}
 	
+	@Override
 	public InputPrimitive getCastedModel() {
 		return (InputPrimitive) getModel();
 	}

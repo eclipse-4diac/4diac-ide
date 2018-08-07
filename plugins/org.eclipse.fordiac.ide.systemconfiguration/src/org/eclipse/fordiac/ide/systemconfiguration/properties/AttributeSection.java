@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.SegmentEditPart;
 
 public class AttributeSection extends AbstractAttributeSection {
+	@Override
 	protected ConfigurableObject getInputType(Object input) {
 		if(input instanceof DeviceEditPart){
 			return ((DeviceEditPart) input).getModel();

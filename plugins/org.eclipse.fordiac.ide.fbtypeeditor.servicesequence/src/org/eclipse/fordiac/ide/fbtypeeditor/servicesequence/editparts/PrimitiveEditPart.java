@@ -97,6 +97,7 @@ public abstract class PrimitiveEditPart extends AbstractDirectEditableEditPart i
 		return new PrimitiveFigure(isLeftInterface(), getCastedModel().getEvent());
 	}
 
+	@Override
 	public Label getNameLabel() {
 		return ((PrimitiveFigure)getFigure()).getLabel();
 	}

@@ -456,6 +456,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 * org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor
 	 * #getContributorId()
 	 */
+	@Override
 	public String getContributorId() {
 		return PROPERTY_CONTRIBUTOR_ID;
 	}

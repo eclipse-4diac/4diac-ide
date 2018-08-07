@@ -86,10 +86,12 @@ public abstract class TypeInfoSection extends AbstractSection {
 	private static final String DATE_PROPERTY = "date"; //$NON-NLS-1$
 	private static final String REMARKS_PROPERTY = "remarks";	 //$NON-NLS-1$
 	
+	@Override
 	protected LibraryElement getType(){
 		return (LibraryElement)type;
 	}
 	
+	@Override
 	protected void setInputInit(){
 		//nothing todo here
 	}
@@ -111,6 +113,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, "Comment:"); 
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			}
@@ -216,6 +219,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 		versionInfoNew.setToolTipText("New info element");
 		versionInfoNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
 		versionInfoNew.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				executeCommand(new AddNewVersionInfoCommand(getType()));
 				versionViewer.refresh();
@@ -225,15 +229,18 @@ public abstract class TypeInfoSection extends AbstractSection {
 		versionInfoDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		versionInfoDelete.setToolTipText("Delete selected info element");
 		versionInfoDelete.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				executeCommand(new DeleteVersionInfoCommand(getType(), (VersionInfo)((IStructuredSelection) versionViewer.getSelection()).getFirstElement()));
 				versionViewer.refresh();
 			}
 		});
 		versionViewer.setCellModifier(new ICellModifier() {
+			@Override
 			public boolean canModify(final Object element, final String property) {
 				return true;
 			}
+			@Override
 			public Object getValue(final Object element, final String property) {
 				if (VERSION_PROPERTY.equals(property)) {
 					return ((VersionInfo) element).getVersion();
@@ -247,6 +254,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 					return ((VersionInfo) element).getRemarks();
 				}
 			}
+			@Override
 			public void modify(final Object element, final String property, final Object value) {
 				TableItem tableItem = (TableItem) element;
 				VersionInfo data = (VersionInfo) tableItem.getData();

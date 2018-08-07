@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gef.router;
 
 import org.eclipse.draw2d.Connection;
+import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.gef.ConnectionEditPart;
@@ -34,10 +35,10 @@ public class LineSegmentHandle extends BendpointCreationHandle {
 		Point pt1 = points.getPoint(index);
 		Point pt2 = points.getPoint(index + 1);
 		if (Math.abs(pt1.x - pt2.x) < Math.abs(pt1.y - pt2.y)) {
-			setCursor(SharedCursors.SIZEWE);
+			setCursor(Cursors.SIZEWE);
 			setPreferredSize(DEFAULT_HANDLE_SIZE-2, Math.abs(pt1.y-pt2.y));
 		} else {
-			setCursor(SharedCursors.SIZENS);
+			setCursor(Cursors.SIZENS);
 			setPreferredSize(Math.abs(pt1.x-pt2.x),DEFAULT_HANDLE_SIZE-2);
 		}
 		

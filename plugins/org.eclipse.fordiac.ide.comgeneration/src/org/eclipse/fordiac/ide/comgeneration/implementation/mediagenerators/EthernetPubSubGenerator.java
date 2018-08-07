@@ -55,6 +55,7 @@ public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
 		return PROTOCOL_ID;
 	}
 	
+	@Override
 	public FBTypePaletteEntry getPaletteType(ChannelEnd end, int numDataPorts, boolean local) {
 		String[] palletEntries;
 		

@@ -72,6 +72,7 @@ public class SetableAlphaLabel extends Label implements ITransparencyFigure {
 	/**
 	 * @see Figure#paintFigure(Graphics)
 	 */
+	@Override
 	protected void paintFigure(Graphics graphics) {
 		graphics.setAlpha(getAlpha());
 		if(isOpaque()){

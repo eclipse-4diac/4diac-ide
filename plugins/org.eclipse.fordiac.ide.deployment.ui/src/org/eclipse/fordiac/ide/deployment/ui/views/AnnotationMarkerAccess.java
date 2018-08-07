@@ -40,6 +40,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	 * 
 	 * @see org.eclipse.jface.text.source.IAnnotationAccessExtension#getTypeLabel(org.eclipse.jface.text.source.Annotation)
 	 */
+	@Override
 	public String getTypeLabel(final Annotation annotation) {
 		if (annotation instanceof ErrorAnnotation) {
 			return Messages.AnnotationMarkerAccess_LABEL_ErrorAnnotation;
@@ -55,6 +56,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	 * 
 	 * @see org.eclipse.jface.text.source.IAnnotationAccessExtension#getLayer(org.eclipse.jface.text.source.Annotation)
 	 */
+	@Override
 	public int getLayer(final Annotation annotation) {
 		if (annotation instanceof ErrorAnnotation) {
 			return ((ErrorAnnotation) annotation).getLayer();
@@ -70,6 +72,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	 *      org.eclipse.swt.graphics.GC, org.eclipse.swt.widgets.Canvas,
 	 *      org.eclipse.swt.graphics.Rectangle)
 	 */
+	@Override
 	public void paint(final Annotation annotation, final GC gc,
 			final Canvas canvas, final Rectangle bounds) {
 		if (annotation instanceof ErrorAnnotation) {
@@ -87,6 +90,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	 * 
 	 * @see org.eclipse.jface.text.source.IAnnotationAccessExtension#isPaintable(org.eclipse.jface.text.source.Annotation)
 	 */
+	@Override
 	public boolean isPaintable(final Annotation annotation) {
 		if (annotation instanceof ErrorAnnotation) {
 			return ((ErrorAnnotation) annotation).getImage() != null;
@@ -104,6 +108,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	 * @see org.eclipse.jface.text.source.IAnnotationAccessExtension#isSubtype(java.lang.Object,
 	 *      java.lang.Object)
 	 */
+	@Override
 	public boolean isSubtype(final Object annotationType,
 			final Object potentialSupertype) {
 		if (annotationType.equals(potentialSupertype)) {
@@ -119,6 +124,7 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	 * 
 	 * @see org.eclipse.jface.text.source.IAnnotationAccessExtension#getSupertypes(java.lang.Object)
 	 */
+	@Override
 	public Object[] getSupertypes(final Object annotationType) {
 		return new Object[0];
 	}

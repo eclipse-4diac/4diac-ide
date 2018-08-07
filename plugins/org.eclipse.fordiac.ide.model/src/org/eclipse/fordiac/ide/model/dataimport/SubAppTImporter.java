@@ -40,6 +40,7 @@ public class SubAppTImporter extends FBTImporter{
 	 * 
 	 * @param palette
 	 */
+	@Override
 	public void setPalette(Palette palette){
 		super.setPalette(palette);
 	}
@@ -103,7 +104,7 @@ public class SubAppTImporter extends FBTImporter{
 				}
 				
 				if (n.getNodeName().equals(LibraryElementTags.SUBAPPNETWORK_ELEMENT)) {
-					((SubAppType)getType()).setFBNetwork(new SubAppNetworkImporter(getPalette(), getType().getInterfaceList()).parseFBNetwork(n));
+					getType().setFBNetwork(new SubAppNetworkImporter(getPalette(), getType().getInterfaceList()).parseFBNetwork(n));
 				}
 			
 			}

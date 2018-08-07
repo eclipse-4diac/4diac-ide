@@ -34,8 +34,8 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 
 	private static final String APPLICATION_NAME_PREFIX = "App"; //$NON-NLS-1$
 
-	private Boolean importDefaultPalette = true;
-	private Boolean openApplication = true;
+	private boolean importDefaultPalette = true;
+	private boolean openApplication = true;
 
 	private Button advancedButton;
 	
@@ -161,6 +161,7 @@ public class NewSystemPage extends WizardNewProjectCreationPage {
 		data.horizontalAlignment = GridData.BEGINNING;
 		advancedButton.setLayoutData(data);
 		advancedButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleAdvancedButtonSelect();
 			}

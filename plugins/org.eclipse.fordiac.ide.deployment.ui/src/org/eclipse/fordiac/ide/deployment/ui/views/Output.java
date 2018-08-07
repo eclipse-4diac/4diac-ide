@@ -153,6 +153,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 * 
 		 * @see org.eclipse.jface.text.source.ISharedTextColors#getColor(org.eclipse.swt.graphics.RGB)
 		 */
+		@Override
 		public Color getColor(final RGB rgb) {
 			if (!rgbs.containsKey(rgb)) {
 				rgbs.put(rgb, new Color(Display.getDefault(), rgb));
@@ -165,6 +166,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 * 
 		 * @see org.eclipse.jface.text.source.ISharedTextColors#dispose()
 		 */
+		@Override
 		public void dispose() {
 			for (Entry<RGB, Color> entry : rgbs.entrySet()) {
 				if (!entry.getValue().isDisposed()) {
@@ -267,6 +269,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 * @see org.eclipse.jface.text.source.IAnnotationHover#getHoverInfo(org.eclipse.jface.text.source.ISourceViewer,
 		 *      int)
 		 */
+		@Override
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public String getHoverInfo(final ISourceViewer sourceViewer,
 				final int lineNumber) {
@@ -293,6 +296,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 * @see org.eclipse.jface.text.ITextHover#getHoverInfo(org.eclipse.jface.text.ITextViewer,
 		 *      org.eclipse.jface.text.IRegion)
 		 */
+		@Override
 		public String getHoverInfo(final ITextViewer textViewer,
 				final IRegion hoverRegion) {
 			return null;
@@ -304,6 +308,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 * @see org.eclipse.jface.text.ITextHover#getHoverRegion(org.eclipse.jface.text.ITextViewer,
 		 *      int)
 		 */
+		@Override
 		public IRegion getHoverRegion(final ITextViewer textViewer,
 				final int offset) {
 			return null;
@@ -320,6 +325,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 * 
 		 * @see org.eclipse.jface.text.IInformationControlCreator#createInformationControl(org.eclipse.swt.widgets.Shell)
 		 */
+		@Override
 		public IInformationControl createInformationControl(final Shell shell) {
 			return new DefaultInformationControl(shell);
 		}

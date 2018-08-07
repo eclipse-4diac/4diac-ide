@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.util;
 
+import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
@@ -96,7 +97,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	@Override
 	protected Cursor getDefaultCursor() {
 		if (isInState(PAN | PAN_IN_PROGRESS)) {
-			return SharedCursors.HAND;
+			return Cursors.HAND;
 		}
 		return super.getDefaultCursor();
 	}

@@ -99,10 +99,10 @@ public final class TypeLibrary implements TypeLibraryTags{
 
 	public static boolean isIEC61499TypeFile(String filename){
 		return ((filename.toUpperCase().endsWith(FB_TYPE_FILE_ENDING_WITH_DOT)) || 
-				(filename.toUpperCase().endsWith(TypeLibrary.ADAPTER_TYPE_FILE_ENDING_WITH_DOT)) ||
-				(filename.toUpperCase().endsWith(TypeLibrary.DEVICE_TYPE_FILE_ENDING_WITH_DOT)) ||
-				(filename.toUpperCase().endsWith(TypeLibrary.RESOURCE_TYPE_FILE_ENDING_WITH_DOT)) ||
-				(filename.toUpperCase().endsWith(TypeLibrary.SEGMENT_TYPE_FILE_ENDING_WITH_DOT)));
+				(filename.toUpperCase().endsWith(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING_WITH_DOT)) ||
+				(filename.toUpperCase().endsWith(TypeLibraryTags.DEVICE_TYPE_FILE_ENDING_WITH_DOT)) ||
+				(filename.toUpperCase().endsWith(TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING_WITH_DOT)) ||
+				(filename.toUpperCase().endsWith(TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING_WITH_DOT)));
 	}
 
 	/** Find the corresponding palette group for the given IContainer
@@ -116,7 +116,7 @@ public final class TypeLibrary implements TypeLibraryTags{
 		}		
 		ArrayList<String> groupList = new ArrayList<String>();
 		groupList.addAll(Arrays.asList(groups));
-		if(TypeLibrary.TOOL_LIBRARY_PROJECT_NAME.equals(groupList.get(0))){
+		if(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME.equals(groupList.get(0))){
 			groupList.remove(0);
 		}
 		return palette.findGroup(groupList);
@@ -135,7 +135,7 @@ public final class TypeLibrary implements TypeLibraryTags{
 		}		
 		ArrayList<String> groupList = new ArrayList<String>();
 		groupList.addAll(Arrays.asList(groups));
-		if(TypeLibrary.TOOL_LIBRARY_PROJECT_NAME.equals(groupList.get(0))){
+		if(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME.equals(groupList.get(0))){
 			groupList.remove(0);
 		}
 		return palette.getGroup(groupList, false);
@@ -472,7 +472,7 @@ public final class TypeLibrary implements TypeLibraryTags{
 			location = new Path(typeLibPath);
 		}
 		else {
-			location = new Path(Platform.getInstallLocation().getURL().getFile() + TypeLibrary.TYPE_LIBRARY);
+			location = new Path(Platform.getInstallLocation().getURL().getFile() + TypeLibraryTags.TYPE_LIBRARY);
 		}
 		if (workspace.validateLinkLocation(link, location).isOK()) {
 			try {
@@ -552,32 +552,32 @@ public final class TypeLibrary implements TypeLibraryTags{
 		PaletteGroup group = null;
 
 
-		if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.FB_TYPE_FILE_ENDING)){ 
+		if (srcFile.getName().toUpperCase().endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING)){ 
 			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);				
 			group = getTargetGroup(relativeDestionationPath, palette, FB_TYPE_FILE_ENDING_WITH_DOT);
 			loadReferencedFBTypes(srcFile, palette, group, relativeDestionationPath, selectedFiles, shell);
 
-		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.ADAPTER_TYPE_FILE_ENDING)) {
+		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING)) {
 			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);				
 
 			group = getTargetGroup(relativeDestionationPath, palette, ADAPTER_TYPE_FILE_ENDING_WITH_DOT);
 
-		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.DEVICE_TYPE_FILE_ENDING)) {
+		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibraryTags.DEVICE_TYPE_FILE_ENDING)) {
 			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);	
 
 			group = getTargetGroup(relativeDestionationPath, palette, DEVICE_TYPE_FILE_ENDING_WITH_DOT);
 			loadReferencedRESTypes(srcFile, palette, group,  relativeDestionationPath, selectedFiles, shell);
 
-		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.RESOURCE_TYPE_FILE_ENDING)) {
+		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING)) {
 			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);				
 
 			group = getTargetGroup(relativeDestionationPath, palette, RESOURCE_TYPE_FILE_ENDING_WITH_DOT);
 
 			loadReferencedFBTypes(srcFile, palette, group, relativeDestionationPath, selectedFiles, shell);
 
-		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.SEGMENT_TYPE_FILE_ENDING)) {
+		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING)) {
 			group = getTargetGroup(relativeDestionationPath, palette, SEGMENT_TYPE_FILE_ENDING_WITH_DOT);
-		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.SUBAPP_TYPE_FILE_ENDING)) {
+		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING)) {
 			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);				
 
 			group = getTargetGroup(relativeDestionationPath, palette, SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
@@ -675,14 +675,17 @@ public final class TypeLibrary implements TypeLibraryTags{
 				ReferenceChooserDialog referenceChooser = new ReferenceChooserDialog(
 						new IStructuredContentProvider() {
 
+							@Override
 							public Object[] getElements(Object inputElement) {
 								return fbTypes.toArray();
 							}
 
+							@Override
 							public void dispose() {
 								// nothing to do
 							}
 
+							@Override
 							public void inputChanged(Viewer viewer,
 									Object oldInput, Object newInput) {
 								// nothing to do
@@ -691,30 +694,36 @@ public final class TypeLibrary implements TypeLibraryTags{
 
 						}, new ITableLabelProvider() {
 
+							@Override
 							public String getColumnText(Object element,
 									int columnIndex) {
 								return element.toString();
 							}
 
+							@Override
 							public Image getColumnImage(Object element,
 									int columnIndex) {
 								return null;
 							}
 
+							@Override
 							public void addListener(
 									ILabelProviderListener listener) {
 								// nothing to do
 							}
 
+							@Override
 							public void dispose() {
 								// nothing to do
 							}
 
+							@Override
 							public boolean isLabelProperty(Object element,
 									String property) {
 								return false;
 							}
 
+							@Override
 							public void removeListener(
 									ILabelProviderListener listener) {
 								// nothing to do

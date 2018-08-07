@@ -34,6 +34,7 @@ public abstract class PersistableUntypedEditorInput extends UntypedEditorInput i
 	 * 
 	 * @see org.eclipse.ui.IEditorInput#getPersistable()
 	 */
+	@Override
 	public IPersistableElement getPersistable() {
 		return this;
 	}

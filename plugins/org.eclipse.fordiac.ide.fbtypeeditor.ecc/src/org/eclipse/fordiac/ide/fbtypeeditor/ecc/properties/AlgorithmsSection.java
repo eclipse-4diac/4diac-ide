@@ -57,10 +57,12 @@ public class AlgorithmsSection extends ECCSection {
 		algorithmGroup = new AlgorithmGroup(rightComposite, getWidgetFactory());
 	}
 
+	@Override
 	protected void setInputCode() {
 		//algorithmViewer.setCellModifier(null);
 	}
 
+	@Override
 	protected void setInputInit() {
 		algorithmGroup.initialize(getType(), commandStack);
 		getAlgorithmList().initialize(getType(), commandStack);

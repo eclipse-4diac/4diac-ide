@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -187,7 +188,7 @@ public class DEVImporter {
 			// FIX - ResTypeLibrary was used by error
 			PaletteEntry entry = null;
 			if(type.getNodeValue().contains("/")){ //$NON-NLS-1$
-				entry = palette.getTypeEntryForPath(type.getNodeValue(), TypeLibrary.RESOURCE_TYPE_FILE_ENDING_WITH_DOT);				
+				entry = palette.getTypeEntryForPath(type.getNodeValue(), TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING_WITH_DOT);				
 			}
 			else{
 				entry = palette.getTypeEntry(type.getNodeName());

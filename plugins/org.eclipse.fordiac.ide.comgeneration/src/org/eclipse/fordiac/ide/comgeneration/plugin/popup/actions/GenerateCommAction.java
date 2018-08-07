@@ -35,10 +35,12 @@ public class GenerateCommAction implements IObjectActionDelegate {
 		super();
 	}
 
+	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		//currently nothing todo here
 	}
 
+	@Override
 	public void run(IAction action) {
 		if (selectedApplication != null) {
 			Palette palette = selectedApplication.getAutomationSystem().getPalette();
@@ -59,6 +61,7 @@ public class GenerateCommAction implements IObjectActionDelegate {
 		} 
 	}
 
+	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		selectedApplication = null;
 		if (selection instanceof StructuredSelection) {

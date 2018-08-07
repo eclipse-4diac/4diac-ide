@@ -112,10 +112,12 @@ public class IEC_BYTE extends IEC_ANY_BIT {
 		return this.toHexString();
 	}
 
+	@Override
 	protected String ConvertHexString(){
 		return Integer.toHexString(value);
 	}
 	
+	@Override
 	protected String ConvertBinString(){
 		return Integer.toBinaryString(value);
 	}

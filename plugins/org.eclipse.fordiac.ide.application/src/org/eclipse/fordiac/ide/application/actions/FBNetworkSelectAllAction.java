@@ -33,6 +33,7 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 		this.part = part;
 	}
 
+	@Override
 	public void run() {
 		GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {

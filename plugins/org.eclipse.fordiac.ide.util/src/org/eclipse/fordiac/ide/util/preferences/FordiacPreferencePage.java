@@ -55,6 +55,7 @@ public class FordiacPreferencePage extends FieldEditorPreferencePage implements
 
 	}
 
+	@Override
 	public void init(final IWorkbench workbench) {
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription(Messages.FordiacPreferencePage_LABEL_PreferencePageDescription);

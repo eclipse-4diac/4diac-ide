@@ -120,6 +120,7 @@ public class DirectoryChooserControl extends Composite {
 			 * org.eclipse.swt.events.TraverseListener#keyTraversed(org.eclipse
 			 * .swt.events.TraverseEvent)
 			 */
+			@Override
 			public void keyTraversed(TraverseEvent e) {
 				if (e.detail == SWT.TRAVERSE_RETURN) {
 					e.doit = false;

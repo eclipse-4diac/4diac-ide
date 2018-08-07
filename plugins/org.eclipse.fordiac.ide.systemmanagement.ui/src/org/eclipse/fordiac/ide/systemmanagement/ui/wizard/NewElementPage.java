@@ -132,6 +132,7 @@ public abstract class NewElementPage extends WizardPage {
 			treeViewer.setSelection(new StructuredSelection(system));
 		}
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
 				setPageComplete(validatePage());
 			}

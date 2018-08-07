@@ -26,6 +26,7 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -65,6 +66,7 @@ public class RenameApplication extends AbstractHandler {
 						return null;
 					}			
 		}){
+			@Override
 			protected Control createDialogArea(Composite parent){
 				Control retval = super.createDialogArea(parent);
 				getText().addVerifyListener(new IdentifierVerifyListener());
@@ -72,7 +74,7 @@ public class RenameApplication extends AbstractHandler {
 			}
 		};		
 		int ret = dialog.open();
-		if (ret == InputDialog.OK) {
+		if (ret == Window.OK) {
 			return dialog.getValue();
 		}		
 		return null;

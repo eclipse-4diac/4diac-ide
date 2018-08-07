@@ -299,7 +299,7 @@ public class FBTHelper {
 						TestPrimitive tp = new TestPrimitive(null);
 						
 						String event = op.getEvent();
-						Boolean outputQualifier=false;
+						boolean outputQualifier=false;
 						boolean useOutputQualifier=false;
 						/** Evaluate Event-Data */
 						if (event.contains("-")) { //$NON-NLS-1$
@@ -324,7 +324,7 @@ public class FBTHelper {
 
 								if (0<=qoID) {
 									qoDT = FBTHelper.getDODataType(fbType, qoID);
-									DataVariable qo = new DataVariable("QO", qoID, qoDT, false, outputQualifier.toString() ); //$NON-NLS-1$
+									DataVariable qo = new DataVariable("QO", qoID, qoDT, false, Boolean.toString(outputQualifier)); //$NON-NLS-1$
 									tp.addData(qo);
 								}
 							}

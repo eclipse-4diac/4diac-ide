@@ -26,6 +26,7 @@ import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
@@ -202,6 +203,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 		/** The action container. */
 		private final Figure actionContainer = new Figure(){
+			@Override
 			public void add(IFigure figure, Object constraint, int index) {
 				super.add(figure, constraint, index);
 				setConstraint(figure, new GridData(SWT.FILL, SWT.BEGINNING, true,
@@ -230,12 +232,13 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 			layout.setMajorSpacing(0);
 			layout.setMinorSpacing(0);
 			layout.setHorizontal(true);
-			layout.setMinorAlignment(FlowLayout.ALIGN_CENTER);
+			layout.setMinorAlignment(OrderedLayout.ALIGN_CENTER);
 			stateLabel.setLayoutManager(layout);
 			
 			
 			stateLabel.add(nameLabel = new Label() {
 				
+			@Override
 			protected void paintFigure(Graphics graphics) {	
 					Display display = Display.getCurrent();	
 					Rectangle boundingRect = getBounds();

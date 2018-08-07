@@ -120,6 +120,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	
 	private static void setAttribute(Device device, String string, Set<String> hashSet) {
 		Display.getDefault().asyncExec(new Runnable() {
+			@Override
 			public void run() {
 				device.setAttribute(string, "STRING", String.join(", ", hashSet), "created during deployment"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}

@@ -163,6 +163,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 	public IPropertyChangeListener getPreferenceChangeListener() {
 		if (listener == null) {
 			listener = new IPropertyChangeListener() {
+				@Override
 				public void propertyChange(final PropertyChangeEvent event) {
 					if (event
 							.getProperty()
@@ -180,6 +181,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 
 
 
+	@Override
 	public String getSpecificLayer() {
 		return ZoomScalableFreeformRootEditPart.TOPLAYER;
 	}

@@ -45,6 +45,7 @@ public class NewStateAction extends WorkbenchPartAction {
 		viewerControl = control;
 		if(null != viewerControl){
 			viewerControl.addMenuDetectListener(new MenuDetectListener() {
+				@Override
 				public void menuDetected(MenuDetectEvent e) {
 				  pos = viewerControl.toControl(e.x, e.y);			  
 				}

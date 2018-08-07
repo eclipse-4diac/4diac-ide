@@ -27,6 +27,7 @@ public class ChangeArraySizeCommand extends Command {
 		this.newArraySizeString = newArraySizeString;
 	}
 	
+	@Override
 	public boolean canExecute() {
 		return (null != variable)&&(null != newArraySizeString);
 	}

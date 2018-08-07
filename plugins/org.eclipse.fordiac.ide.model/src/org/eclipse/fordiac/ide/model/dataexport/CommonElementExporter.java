@@ -204,15 +204,15 @@ public abstract class CommonElementExporter {
 		try {
 			if (iFile.exists()) {				
 				iFile.setContents(new ByteArrayInputStream(stringWriter.toString().getBytes("UTF-8")), //$NON-NLS-1$ 
-						IFile.KEEP_HISTORY | IFile.FORCE, null);
+						IResource.KEEP_HISTORY | IResource.FORCE, null);
 			} else {
 				IFolder folder = iFile.getProject().getFolder(iFile.getProjectRelativePath().removeLastSegments(1));
 				if (!folder.exists()) {
 					folder.create(true, true, null);
-					folder.refreshLocal(IFolder.DEPTH_ZERO, null);
+					folder.refreshLocal(IResource.DEPTH_ZERO, null);
 				}
 				iFile.create(new ByteArrayInputStream(result.toString().getBytes("UTF-8")), //$NON-NLS-1$ 
-						IFile.KEEP_HISTORY | IFile.FORCE, null);
+						IResource.KEEP_HISTORY | IResource.FORCE, null);
 			}
 
 			iFile.getParent().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());

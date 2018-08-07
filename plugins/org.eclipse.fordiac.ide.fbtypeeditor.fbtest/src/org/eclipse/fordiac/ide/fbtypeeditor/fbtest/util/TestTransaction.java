@@ -49,7 +49,8 @@ public TestPrimitive getInputPrimitive() {
 	  this.outputPrimitives.add(outputPrimitive);
   }
   
-  public String toString() {
+  @Override
+public String toString() {
 	  String retval="";
 	  if (null!= inputPrimitive) {
 		  retval="\nInputPrimitive: "+inputPrimitive.toString()+"\n";

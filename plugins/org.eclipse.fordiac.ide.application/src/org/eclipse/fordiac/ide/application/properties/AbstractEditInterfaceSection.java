@@ -135,6 +135,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		createInput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createInput.setToolTipText("Create interface element");
 		createInput.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				CreateInterfaceElementCommand cmd = newCommand(true);
 				executeCommand(cmd);
@@ -144,6 +145,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		inputUp = getWidgetFactory().createButton(composite, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
 		inputUp.setToolTipText("Move interface element up");	
 		inputUp.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
@@ -155,6 +157,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		inputDown = getWidgetFactory().createButton(composite, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
 		inputDown.setToolTipText("Move interface element down");	
 		inputDown.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
@@ -167,6 +170,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		deleteInput.setToolTipText("Delete selected interface element");	
 		deleteInput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		deleteInput.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
@@ -205,6 +209,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		createOutput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createOutput.setToolTipText("Create interface element");
 		createOutput.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				CreateInterfaceElementCommand cmd = newCommand(false);
 				executeCommand(cmd);
@@ -214,6 +219,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		outputUp = getWidgetFactory().createButton(composite, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
 		outputUp.setToolTipText("Move interface element up");	
 		outputUp.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
@@ -225,6 +231,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		outputDown = getWidgetFactory().createButton(composite, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
 		outputDown.setToolTipText("Move interface element down");	
 		outputDown.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
@@ -237,6 +244,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		deleteOutput.setToolTipText("Delete selected interface element");	
 		deleteOutput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		deleteOutput.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
@@ -370,6 +378,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			this.viewer = viewer;
 		}
 		
+		@Override
 		public boolean canModify(final Object element, final String property) {
 			if(TYPE.equals(property)) {
 				if(element instanceof IInterfaceElement &&
@@ -381,6 +390,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			return true;
 		}
 		
+		@Override
 		public Object getValue(final Object element, final String property) {
 			if(NAME.equals(property)) {
 				return ((INamedElement) element).getName();
@@ -409,6 +419,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			return null;
 		}
 		
+		@Override
 		public void modify(final Object element, final String property, final Object value) {
 			TableItem tableItem = (TableItem) element;
 			Object data =  tableItem.getData();

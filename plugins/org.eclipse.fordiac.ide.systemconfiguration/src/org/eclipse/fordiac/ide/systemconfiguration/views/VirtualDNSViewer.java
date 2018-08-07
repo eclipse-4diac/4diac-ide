@@ -48,6 +48,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
@@ -320,11 +321,13 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 		source.addDragListener(new DragSourceListener() {
 
+			@Override
 			public void dragFinished(DragSourceEvent event) {
 				if (event.detail == DND.DROP_MOVE) {
 				}
 			}
 
+			@Override
 			public void dragSetData(DragSourceEvent event) {
 				if (type.isSupportedType(event.dataType)) {
 					ISelection sel = filteredTree.getViewer().getSelection();
@@ -337,6 +340,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 				}
 			}
 
+			@Override
 			public void dragStart(DragSourceEvent event) {
 				TreeItem[] selection = filteredTree.getViewer().getTree()
 						.getSelection();
@@ -486,6 +490,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 	private void creteNewConfiguration() {
 		IInputValidator validator = new IInputValidator() {
+			@Override
 			public String isValid(String newText) {
 				if (newText.length() > 0) {
 					return null;
@@ -501,9 +506,9 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 				"Configuration", validator);
 		collectionName.setBlockOnOpen(true);
 		int ret = collectionName.open();
-		if (ret == InputDialog.CANCEL) {
+		if (ret == Window.CANCEL) {
 			return;
-		} else if (ret == InputDialog.OK) {
+		} else if (ret == Window.OK) {
 
 			VirtualDNSCollection collection = VirtualDNSFactory.eINSTANCE
 					.createVirtualDNSCollection();

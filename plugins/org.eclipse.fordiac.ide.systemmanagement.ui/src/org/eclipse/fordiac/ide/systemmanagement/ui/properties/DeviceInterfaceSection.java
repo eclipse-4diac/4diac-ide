@@ -15,6 +15,7 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractDeviceInterfaceSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
 public class DeviceInterfaceSection extends AbstractDeviceInterfaceSection {
+	@Override
 	protected Device getInputType(Object input) {
 		if(input instanceof Device){
 			profile.removeAll();

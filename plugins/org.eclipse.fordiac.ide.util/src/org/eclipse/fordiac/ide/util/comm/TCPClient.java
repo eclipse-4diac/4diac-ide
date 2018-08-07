@@ -37,6 +37,7 @@ public class TCPClient extends IIecNetCommRcv implements IIecSender,IIecReceivab
 		return retval;
 	}
 	
+	@Override
 	public void sendIECData(List<IEC_ANY> sendData) throws CommException{
 			ChannelManager.send(m_sID, IChannel.TCP, sendData);
 		

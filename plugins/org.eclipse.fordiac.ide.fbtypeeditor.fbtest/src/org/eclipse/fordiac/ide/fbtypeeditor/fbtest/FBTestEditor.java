@@ -252,6 +252,7 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 				return retval;
 		}
 		
+		@Override
 		public void update(ViewerCell cell) {
 			Object element = cell.getElement();
 			cell.setText(getText(element));

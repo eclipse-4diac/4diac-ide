@@ -92,6 +92,7 @@ public class TransactionSection extends AbstractServiceSection {
 		leftInputPrimitiveNew = getWidgetFactory().createButton(buttonComp, "Create Left Primitive", SWT.PUSH);
 		leftInputPrimitiveNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		leftInputPrimitiveNew.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				executeCommand(new CreateInputPrimitiveCommand(ServiceInterfacePaletteFactory.LEFT_INPUT_PRIMITIVE, getType()));
 				refreshInputPrimitive();
@@ -109,6 +110,7 @@ public class TransactionSection extends AbstractServiceSection {
 		rightInputPrimitiveNew = getWidgetFactory().createButton(buttonComp, "Create Right Primitive", SWT.PUSH);
 		rightInputPrimitiveNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		rightInputPrimitiveNew.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				executeCommand(new CreateInputPrimitiveCommand(ServiceInterfacePaletteFactory.RIGHT_INPUT_PRIMITIVE, getType()));
 				refreshInputPrimitive();
@@ -130,6 +132,7 @@ public class TransactionSection extends AbstractServiceSection {
 		leftOutputPrimitivesViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
 		new AdapterFactoryTreeEditor(leftOutputPrimitivesViewer.getTree(), adapterFactory);
 		leftOutputPrimitivesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
 				Object selection = ((IStructuredSelection) leftOutputPrimitivesViewer.getSelection()).getFirstElement();
 				if(selection instanceof OutputPrimitive){
@@ -143,6 +146,7 @@ public class TransactionSection extends AbstractServiceSection {
 		leftOutputPrimitivesNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
 		leftOutputPrimitivesNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
 		leftOutputPrimitivesNew.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				executeCommand(new CreateOutputPrimitiveCommand(ServiceInterfacePaletteFactory.LEFT_OUTPUT_PRIMITIVE, getType(), null));
 				leftOutputPrimitivesViewer.refresh();
@@ -179,6 +183,7 @@ public class TransactionSection extends AbstractServiceSection {
 		rightOutputPrimitivesViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
 		new AdapterFactoryTreeEditor(rightOutputPrimitivesViewer.getTree(), adapterFactory);
 		rightOutputPrimitivesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
 				Object selection = ((IStructuredSelection) rightOutputPrimitivesViewer.getSelection()).getFirstElement();
 				if(selection instanceof OutputPrimitive){
@@ -192,6 +197,7 @@ public class TransactionSection extends AbstractServiceSection {
 		rightOutputPrimitivesNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
 		rightOutputPrimitivesNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
 		rightOutputPrimitivesNew.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				executeCommand(new CreateOutputPrimitiveCommand(ServiceInterfacePaletteFactory.RIGHT_OUTPUT_PRIMITIVE, getType(), null));
 				rightOutputPrimitivesViewer.refresh();
@@ -208,6 +214,7 @@ public class TransactionSection extends AbstractServiceSection {
 			});
 	}		
 	
+	@Override
 	protected ServiceTransaction getType(){
 		return (ServiceTransaction)type;
 	}

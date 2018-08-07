@@ -67,6 +67,7 @@ public class FBPaletteViewer extends PaletteViewer {
 
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				if (e.detail == SWT.CANCEL) {
 					setSearchFilter(""); //$NON-NLS-1$
@@ -77,6 +78,7 @@ public class FBPaletteViewer extends PaletteViewer {
 
 		});
 		text.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				setSearchFilter(text.getText());
 			}

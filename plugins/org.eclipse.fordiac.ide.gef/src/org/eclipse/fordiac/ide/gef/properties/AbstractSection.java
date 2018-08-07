@@ -104,6 +104,7 @@ public abstract class AbstractSection extends AbstractPropertySection {
 		}
 	}
 	
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
 		if(createSuperControls){

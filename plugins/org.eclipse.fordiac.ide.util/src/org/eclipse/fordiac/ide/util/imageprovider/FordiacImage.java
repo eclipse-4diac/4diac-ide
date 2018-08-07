@@ -22,6 +22,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -210,7 +211,7 @@ public enum FordiacImage {
 	private static URL getImageURL(String name) {
 		String fileName = foridacImageProperties.getString(name);
 		return FileLocator.find(Activator.getDefault().getBundle(), 
-				new Path(IMAGES_DIRECTORY + Path.SEPARATOR + fileName), null);
+				new Path(IMAGES_DIRECTORY + IPath.SEPARATOR + fileName), null);
 	}
 
 	private static Image getErrorImage() {

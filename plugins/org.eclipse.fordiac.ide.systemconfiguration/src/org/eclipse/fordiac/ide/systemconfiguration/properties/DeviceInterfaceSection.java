@@ -26,6 +26,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 
 public class DeviceInterfaceSection extends AbstractDeviceInterfaceSection {
+	@Override
 	protected Device getInputType(Object input) {
 		if(input instanceof DeviceEditPart){
 			return ((DeviceEditPart) input).getModel();

@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Notification;
@@ -154,7 +155,7 @@ public class FBTypeEditor extends FormEditor implements
 		if (editorInput instanceof FileEditorInput) {
 			IFile fbTypeFile = ((FileEditorInput) editorInput).getFile();
 			if(!fbTypeFile.exists()) {
-				throw new PartInitException(new Status(Status.ERROR, Activator.PLUGIN_ID, "Type file does not exist!"));
+				throw new PartInitException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Type file does not exist!"));
 			}
 
 			fbPalette = FBTypeUtils.getPalletteForFBTypeFile(fbTypeFile);
@@ -306,6 +307,7 @@ public class FBTypeEditor extends FormEditor implements
 	 * @see org.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui.
 	 * IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
 	 */
+	@Override
 	public void selectionChanged(final IWorkbenchPart part,
 			final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor())) {
@@ -313,6 +315,7 @@ public class FBTypeEditor extends FormEditor implements
 		}
 	}
 
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getAdapter(Class required) {
 		if (IContentOutlinePage.class.equals(required)) {

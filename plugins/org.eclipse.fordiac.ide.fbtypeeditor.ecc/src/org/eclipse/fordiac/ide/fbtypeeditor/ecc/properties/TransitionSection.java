@@ -115,6 +115,7 @@ public class TransitionSection extends AbstractECSection {
 		getWidgetFactory().createCLabel(composite, "Comment:"); 
 		commentText = createGroupText(composite, true);	
 		commentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeECTransitionCommentCommand(getType(), commentText.getText()));
@@ -151,12 +152,14 @@ public class TransitionSection extends AbstractECSection {
 		closingBraket = getWidgetFactory().createCLabel(conditionEditingContainer, "]"); //$NON-NLS-1$
 	}
 
+	@Override
 	protected void setInputInit() {
 		if(null == editor){
 			createTransitionEditor(conditionEditingContainer);
 		}
 	}
 
+	@Override
 	protected void setInputCode() {
 		commentText.setEnabled(false);
 		eventCombo.removeAll();

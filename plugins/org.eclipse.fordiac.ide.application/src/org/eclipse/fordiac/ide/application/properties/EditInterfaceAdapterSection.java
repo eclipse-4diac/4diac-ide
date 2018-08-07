@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceSection {
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		inputsViewer.setContentProvider(new InterfaceContentProvider(true, InterfaceContentProviderType.ADAPTER));

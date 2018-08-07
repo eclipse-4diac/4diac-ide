@@ -26,6 +26,7 @@ public class XMLDoubleClickStrategy implements ITextDoubleClickStrategy {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.text.ITextDoubleClickStrategy#doubleClicked(org.eclipse.jface.text.ITextViewer)
 	 */
+	@Override
 	public void doubleClicked(final ITextViewer part) {
 		int pos = part.getSelectedRange().x;
 

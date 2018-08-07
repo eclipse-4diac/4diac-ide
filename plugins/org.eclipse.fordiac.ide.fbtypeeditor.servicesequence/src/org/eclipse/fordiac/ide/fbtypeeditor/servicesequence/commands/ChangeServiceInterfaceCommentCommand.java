@@ -27,6 +27,7 @@ public class ChangeServiceInterfaceCommentCommand extends Command {
 		this.comment = comment;
 	}
 	
+	@Override
 	public void execute(){
 		if(isLeftInterface){
 			oldComment = service.getLeftInterface().getComment();
@@ -36,6 +37,7 @@ public class ChangeServiceInterfaceCommentCommand extends Command {
 		redo();
 	}
 	
+	@Override
 	public void undo() {
 		if(isLeftInterface){
 			service.getLeftInterface().setComment(oldComment);
@@ -44,6 +46,7 @@ public class ChangeServiceInterfaceCommentCommand extends Command {
 		}
 	}
 
+	@Override
 	public void redo() {
 		if(isLeftInterface){
 			service.getLeftInterface().setComment(comment);

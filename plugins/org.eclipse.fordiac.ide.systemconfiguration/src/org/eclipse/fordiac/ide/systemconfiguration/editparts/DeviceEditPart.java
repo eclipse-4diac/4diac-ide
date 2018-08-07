@@ -210,6 +210,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		private Figure dataInputs = new Figure();
 		private Figure contentPane;
 
+		@Override
 		public int getIntersectionStyle(Point location) {
 			if (instanceNameLabel.intersects(new Rectangle(location, new Dimension(1, 1)))) {
 				return InteractionStyleFigure.REGION_DRAG; // move/drag

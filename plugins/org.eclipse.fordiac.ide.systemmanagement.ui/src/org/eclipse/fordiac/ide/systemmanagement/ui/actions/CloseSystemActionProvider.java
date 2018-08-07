@@ -49,6 +49,7 @@ public class CloseSystemActionProvider extends CommonActionProvider {
 		updateActionBars();
 	}
 	
+	@Override
 	public void fillContextMenu(IMenuManager menu) {
 		IProject project = getSelectedProject();
 		if(null != project){

@@ -81,6 +81,7 @@ public class OutputPrimitiveEditPart extends PrimitiveEditPart{
 
 	}
 
+	@Override
 	public OutputPrimitive getCastedModel() {
 		return (OutputPrimitive) getModel();
 	}

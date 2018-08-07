@@ -18,11 +18,13 @@ public class ParameterValueFactory implements CreationFactory {
 
    private String text = ""; //$NON-NLS-1$
 
-   public Object getNewObject() {
+   @Override
+public Object getNewObject() {
 	   return text;
    }
 
-   public Object getObjectType() {
+   @Override
+public Object getObjectType() {
       return String.class;
    }
 

@@ -32,8 +32,7 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
         final StringBuffer result = new StringBuffer();
         result.append(this.getQuote());
         for (int i = new Function0<Integer>() {
-          @Override
-		public Integer apply() {
+          public Integer apply() {
             try {
               return reader.read();
             } catch (Throwable _e) {
@@ -172,7 +171,7 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
             }
           }
           if (!_matched) {
-            result.append(this.toHexLiteral((c)));
+            result.append(this.toHexLiteral(((char) c)));
           }
         }
         result.append(this.getQuote());
@@ -201,8 +200,7 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
         final StringReader reader = new StringReader(value);
         final StringBuffer result = new StringBuffer();
         for (int i = new Function0<Integer>() {
-          @Override
-		public Integer apply() {
+          public Integer apply() {
             try {
               return reader.read();
             } catch (Throwable _e) {
@@ -420,9 +418,9 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
                   }
                   _switchResult_1 = Character.valueOf(_xblockexpression_3);
                 }
-                _xblockexpression_2 = (_switchResult_1);
+                _xblockexpression_2 = ((Object)_switchResult_1);
               }
-              _switchResult = (_xblockexpression_2);
+              _switchResult = ((Object)_xblockexpression_2);
             }
           }
           if (!_matched) {

@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -109,6 +110,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		setControl(composite);
 	}
 
+	@Override
 	protected boolean validatePage() {
 		if((null == templateList) || (0 == templateList.length)){
 			setErrorMessage("No type templates found! Please check the templates directory!");
@@ -164,7 +166,8 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
     	return openType;
     }
     
-    protected void createAdvancedControls(Composite parent) {
+    @Override
+	protected void createAdvancedControls(Composite parent) {
     	createTemplateTypeSelection(parent);
     	super.createAdvancedControls(parent);
     }
@@ -225,7 +228,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			public boolean accept(File pathname) {
 				return pathname.getName().toUpperCase().endsWith(".FBT") //$NON-NLS-1$
 						|| pathname.getName().toUpperCase().endsWith(".ADP") //$NON-NLS-1$
-						|| pathname.getName().toUpperCase().endsWith(TypeLibrary.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
+						|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
 			}
 		};
 	}

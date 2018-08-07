@@ -39,6 +39,7 @@ public abstract class AbstractDevResInterfaceSection extends AbstractInterfaceSe
 		getWidgetFactory().createCLabel(composite, "Instance Name:"); 
 		nameText = createGroupText(composite, true);
 		nameText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
@@ -48,6 +49,7 @@ public abstract class AbstractDevResInterfaceSection extends AbstractInterfaceSe
 		getWidgetFactory().createCLabel(composite, "Instance Comment:"); 
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
@@ -56,6 +58,7 @@ public abstract class AbstractDevResInterfaceSection extends AbstractInterfaceSe
 		});
 	}
 	
+	@Override
 	public void refresh() {
 		super.refresh();
 	}

@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.TextUtilities;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.emf.common.notify.Notification;
@@ -42,7 +43,7 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 			layout.setStretchMinorAxis(true);
 			if (getModel() instanceof VariableInputContainer || 
 					getModel() instanceof SocketContainer){
-			  layout.setMinorAlignment(FlowLayout.ALIGN_BOTTOMRIGHT);
+			  layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 			}
 			setLayoutManager(layout);
 			setPreferredSize(30, 10);

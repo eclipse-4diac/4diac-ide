@@ -37,6 +37,7 @@ public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.propert
 	private Button delConnection;
 	private Group group;
 	
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);

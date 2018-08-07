@@ -51,6 +51,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	private Text commentText;
 	protected Combo typeCombo;
 	
+	@Override
 	protected IInterfaceElement getInputType(Object input) {
 		if(input instanceof InterfaceEditPart){
 			return ((InterfaceEditPart) input).getCastedModel();	
@@ -70,6 +71,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		return null;
 	}
 	
+	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
 		if(part instanceof FBTypeEditor){
 			return ((FBTypeEditor)part).getCommandStack();
@@ -80,6 +82,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		return null;
 	}
 	
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
 		createTypeAndCommentSection(leftComposite);	
@@ -92,6 +95,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		nameText = createGroupText(parent, true);	
 		nameText.addVerifyListener(new IdentifierVerifyListener());
 		nameText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
@@ -101,6 +105,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		getWidgetFactory().createCLabel(parent, "Comment:"); 
 		commentText = createGroupText(parent, true);
 		commentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
@@ -120,6 +125,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 			});
 	}
 
+	@Override
 	protected void setInputCode() {
 		nameText.setEnabled(false);
 		commentText.setEnabled(false);

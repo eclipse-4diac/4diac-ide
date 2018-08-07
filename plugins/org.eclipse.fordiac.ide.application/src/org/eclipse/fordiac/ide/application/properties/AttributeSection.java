@@ -15,6 +15,7 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractAttributeSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 
 public class AttributeSection extends AbstractAttributeSection {
+	@Override
 	protected Application getInputType(Object input) {
 		if(input instanceof FBNetworkEditPart){
 			return ((FBNetworkEditPart) input).getModel().getApplication();

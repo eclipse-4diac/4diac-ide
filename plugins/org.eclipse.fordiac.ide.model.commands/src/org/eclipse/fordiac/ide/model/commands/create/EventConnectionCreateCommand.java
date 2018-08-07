@@ -28,6 +28,7 @@ public class EventConnectionCreateCommand extends AbstractConnectionCreateComman
 		super(parent);
 	}
 
+	@Override
 	protected Connection createConnectionElement() {
 		return LibraryElementFactory.eINSTANCE.createEventConnection();
 	}

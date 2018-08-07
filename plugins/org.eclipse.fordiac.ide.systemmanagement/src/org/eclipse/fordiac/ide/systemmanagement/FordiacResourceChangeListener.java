@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.controls.editors.EditorUtils;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -71,6 +72,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			// get the delta, if any, for the documentation directory
 
 			IResourceDeltaVisitor visitor = new IResourceDeltaVisitor() {
+				@Override
 				public boolean visit(final IResourceDelta delta) {
 					switch (delta.getKind()) {
 					case IResourceDelta.CHANGED:
@@ -128,12 +130,12 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 						final String projectName = delta.getResource().getProject().getName();
 						AutomationSystem system = systemManager.getSystemForName(projectName);
 						if ((null == system)
-								&& (!TypeLibrary.TOOL_LIBRARY_PROJECT_NAME.equals(projectName))) {
+								&& (!TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME.equals(projectName))) {
 							loadSystem(delta.getResource().getProject());
 						}
 
 						if ((null != system)
-								|| (projectName.equals(TypeLibrary.TOOL_LIBRARY_PROJECT_NAME))) {
+								|| (projectName.equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME))) {
 							switch (delta.getResource().getType()) {
 							case IResource.FILE:
 								handleFileCopy(delta);
@@ -264,6 +266,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				final IProject project = file.getProject();
 				if(!file.getName().equals(file.getProject().getName() + ".xml")){ //$NON-NLS-1$
 					WorkspaceJob job = new WorkspaceJob("Renaming system file") {
+						@Override
 						public IStatus runInWorkspace(IProgressMonitor monitor) {
 							// do the actual work in here
 							
@@ -348,6 +351,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		if (null != system) {
 			WorkspaceJob job = new WorkspaceJob("Save system: "
 					+ system.getName() + " after type movement") {
+				@Override
 				public IStatus runInWorkspace(IProgressMonitor monitor) {
 					// do the actual work in here
 					SystemManager.INSTANCE.saveSystem(system);
@@ -405,6 +409,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			entry.setFile(newFile);
 
 			WorkspaceJob job = new WorkspaceJob("Save Renamed type: " + entry.getLabel()) {
+				@Override
 				public IStatus runInWorkspace(IProgressMonitor monitor) {
 					// do the actual work in here
 					final LibraryElement type = entry.getType();
@@ -428,6 +433,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		if (!systemImportWatingList.contains(projectName)) {
 			systemImportWatingList.add(projectName);
 			WorkspaceJob job = new WorkspaceJob( "Load system: " + projectName) {
+				@Override
 				public IStatus runInWorkspace(IProgressMonitor monitor) {
 					// do the actual work in here
 					AutomationSystem system = systemManager.loadProject(project);
@@ -469,6 +475,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		system.setProject(project);     //update to the new project
 		
 		WorkspaceJob job = new WorkspaceJob("Save system configuration: " + newProjectName) {
+			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) {
 				// do the actual work in here
 				try {

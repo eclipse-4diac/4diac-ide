@@ -28,6 +28,7 @@ public class TypeListPatternFilter extends PatternFilter {
 		setIncludeLeadingWildcard(true);
 	}
 
+	@Override
 	protected boolean isParentMatch(Viewer viewer, Object element){
 		//prevent children filtering if is a file, avoids type loading on filtering
 		if((element instanceof IFolder) ||
@@ -38,6 +39,7 @@ public class TypeListPatternFilter extends PatternFilter {
 		return false;
 	}
 	
+	@Override
 	protected boolean isLeafMatch(Viewer viewer, Object element){
 		if((element instanceof EObject) ||
 		   (element instanceof TransientInterfaceListItemProvider) ||

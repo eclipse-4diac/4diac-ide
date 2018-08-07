@@ -139,6 +139,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	public IPropertyChangeListener getPreferenceChangeListener() {
 		if (listener == null) {
 			listener = new IPropertyChangeListener() {
+				@Override
 				public void propertyChange(final PropertyChangeEvent event) {
 					if (event.getProperty().equals(
 							DiagramPreferences.SNAP_TO_GRID)) {

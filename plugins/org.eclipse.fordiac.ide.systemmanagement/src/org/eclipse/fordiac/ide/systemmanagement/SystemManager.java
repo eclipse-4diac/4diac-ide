@@ -349,6 +349,7 @@ public enum SystemManager {
 	private Runnable createUniqueFBNamesValidity(final AutomationSystem system) {
 
 		return new Runnable() {
+			@Override
 			public void run() {
 				for (Application app : system.getApplication()) {
 					checkAndCreateAnnotation(system, app.getFBNetwork().getNetworkElements());
@@ -405,9 +406,9 @@ public enum SystemManager {
 			IFile iec61499SystemFile = project.getFile(system.getName() + SYSTEM_FILE_ENDING);
 			ByteArrayInputStream stream = new ByteArrayInputStream(stringWriter.toString().getBytes("UTF-8")); //$NON-NLS-1$
 			if (iec61499SystemFile.exists()) {
-				iec61499SystemFile.setContents(stream, IFile.KEEP_HISTORY | IFile.FORCE, null);
+				iec61499SystemFile.setContents(stream, IResource.KEEP_HISTORY | IResource.FORCE, null);
 			} else {
-				iec61499SystemFile.create(stream, IFile.KEEP_HISTORY | IFile.FORCE, null);
+				iec61499SystemFile.create(stream, IResource.KEEP_HISTORY | IResource.FORCE, null);
 			}
 		} catch (Exception e) {
 			// TODO Perform correct error handling

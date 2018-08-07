@@ -83,6 +83,7 @@ public class UDPChannel extends CChannel {
 		return new UDPChannel(UDP_PACKET_LENGTH, UDP_ID, receiver);
 	}
 
+	@Override
 	public void deregister() throws CommException {
 		commThread.interrupt();
 		if (socket instanceof MulticastSocket)
@@ -96,6 +97,7 @@ public class UDPChannel extends CChannel {
 		socket.disconnect();
 	}
 
+	@Override
 	public List<IEC_ANY> receiveFrom() throws IOException {
 		if (socket == null)
 			return null;
@@ -132,8 +134,8 @@ public class UDPChannel extends CChannel {
 	public static void send(String ID, List<IEC_ANY> Data) {
 		try {
 			DatagramSocket myDataGramSocket = new DatagramSocket();
-			InetAddress inetAddress = UDPChannel.getInetAddress(ID);
-			int Port = UDPChannel.getPort(ID);
+			InetAddress inetAddress = CChannel.getInetAddress(ID);
+			int Port = CChannel.getPort(ID);
 
 			ByteArrayOutputStream Output = new ByteArrayOutputStream();
 			for (IEC_ANY elem : Data) {

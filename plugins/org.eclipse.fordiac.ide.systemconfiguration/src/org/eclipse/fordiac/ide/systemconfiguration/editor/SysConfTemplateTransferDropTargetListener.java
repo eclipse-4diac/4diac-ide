@@ -39,10 +39,12 @@ public class SysConfTemplateTransferDropTargetListener extends
 			this.typeTemplate = typeTemplate;
 		}
 
+		@Override
 		public Object getNewObject() {
 			return null;
 		}
 
+		@Override
 		public Object getObjectType() {
 			return typeTemplate;
 		}

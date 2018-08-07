@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.dataimport.IDeviceTypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DEVTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 /**

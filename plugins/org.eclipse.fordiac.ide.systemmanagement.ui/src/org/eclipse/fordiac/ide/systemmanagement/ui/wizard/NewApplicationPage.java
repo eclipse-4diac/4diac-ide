@@ -49,7 +49,7 @@ public class NewApplicationPage extends NewElementPage {
 		return null;
 	}
 
-	public Boolean getOpenApplication() {
+	public boolean getOpenApplication() {
 		return openApplicationCheckbox.getSelection();
 	}
 	

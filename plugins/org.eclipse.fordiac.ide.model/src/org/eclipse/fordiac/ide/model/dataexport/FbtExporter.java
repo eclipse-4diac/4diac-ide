@@ -53,6 +53,7 @@ class FbtExporter extends CommonElementExporter{
 	 * @param fb
 	 *            the fb
 	 */
+	@Override
 	protected void addType(final Document dom, final FBType fbType){
 		Element rootElement = createRootElement(dom, fbType, LibraryElementTags.FB_TYPE);
 		
@@ -68,6 +69,7 @@ class FbtExporter extends CommonElementExporter{
 		addService(dom, rootElement, fbType);
 	}
 	
+	@Override
 	protected FBType getType(PaletteEntry entry){
 		return ((FBTypePaletteEntry)entry).getFBType();
 	}

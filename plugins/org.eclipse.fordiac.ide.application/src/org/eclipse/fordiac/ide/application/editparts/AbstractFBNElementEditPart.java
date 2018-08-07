@@ -186,7 +186,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		//FBNetwork elements need a special rename command therefore we remove the standard edit policy and add a adjusted one
 		removeEditPolicy(EditPolicy.DIRECT_EDIT_ROLE);
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy() {
-			 protected Command getDirectEditCommand(DirectEditRequest request) {
+			 @Override
+			protected Command getDirectEditCommand(DirectEditRequest request) {
 			        if (getHost() instanceof AbstractFBNElementEditPart) {
 			            return new ChangeFBNetworkElementName(((AbstractFBNElementEditPart) getHost()).getModel(),
 						(String) request.getCellEditor().getValue());

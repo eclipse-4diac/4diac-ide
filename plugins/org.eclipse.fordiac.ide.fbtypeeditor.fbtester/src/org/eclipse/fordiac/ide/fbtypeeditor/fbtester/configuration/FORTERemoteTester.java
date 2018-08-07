@@ -379,6 +379,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 		}
 	}
 
+	@Override
 	public void sendEvent(TestElement element) {
 		if (isRunning()) {
 			DataOutputStream outputStream = null;

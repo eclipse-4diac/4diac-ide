@@ -48,6 +48,7 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	private Table tableWith;
 	private Group eventComposite;
 	
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
 		createEventSection(rightComposite);
@@ -108,6 +109,7 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 		});
 	}
 	
+	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
 		Assert.isTrue(selection instanceof IStructuredSelection);

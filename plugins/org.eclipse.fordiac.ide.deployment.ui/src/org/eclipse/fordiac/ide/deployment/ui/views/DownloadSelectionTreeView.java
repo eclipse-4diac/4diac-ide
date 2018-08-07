@@ -253,6 +253,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 				Messages.DownloadSelectionTreeView_LABEL_PopupMenu);
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
+			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
 				DownloadSelectionTreeView.this.fillContextMenu(manager);
 			}
@@ -360,6 +361,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 	 */
 	private void hookDoubleClickAction() {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
 			public void doubleClick(final DoubleClickEvent event) {
 				// doubleClickAction.run();
 			}

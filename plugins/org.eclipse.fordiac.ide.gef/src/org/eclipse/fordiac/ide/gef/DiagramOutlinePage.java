@@ -118,6 +118,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 					.getLayer(LayerConstants.PRINTABLE_LAYERS));
 			lws.setContents(thumbnail);
 			disposeListener = new DisposeListener() {
+				@Override
 				public void widgetDisposed(final DisposeEvent e) {
 					if (thumbnail != null) {
 						thumbnail.deactivate();
@@ -134,6 +135,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 	 * 
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
+	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") final Class type) {
 		if (type == ZoomManager.class) {
 			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
@@ -160,6 +162,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 	 * org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener
 	 * (org.eclipse.jface.viewers.ISelectionChangedListener)
 	 */
+	@Override
 	public void addSelectionChangedListener(
 			final ISelectionChangedListener listener) {
 		// not used
@@ -171,6 +174,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 	 * 
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#getSelection()
 	 */
+	@Override
 	public ISelection getSelection() {
 		// not used
 		return null;
@@ -183,6 +187,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 	 * removeSelectionChangedListener
 	 * (org.eclipse.jface.viewers.ISelectionChangedListener)
 	 */
+	@Override
 	public void removeSelectionChangedListener(
 			final ISelectionChangedListener listener) {
 		// not used
@@ -196,6 +201,7 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 	 * org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse
 	 * .jface.viewers.ISelection)
 	 */
+	@Override
 	public void setSelection(final ISelection selection) {
 		// not used
 

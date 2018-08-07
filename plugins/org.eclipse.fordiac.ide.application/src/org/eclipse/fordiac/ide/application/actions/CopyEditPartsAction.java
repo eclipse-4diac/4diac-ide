@@ -73,6 +73,7 @@ public class CopyEditPartsAction extends WorkbenchPartAction implements
 	 * org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org
 	 * .eclipse.jface.viewers.SelectionChangedEvent)
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void selectionChanged(SelectionChangedEvent event) {
 		ISelection s = event.getSelection();

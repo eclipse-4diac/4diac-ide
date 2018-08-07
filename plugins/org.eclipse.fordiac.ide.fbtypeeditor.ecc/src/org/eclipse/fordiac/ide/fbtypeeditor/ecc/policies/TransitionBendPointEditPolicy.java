@@ -60,6 +60,7 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 	/**
 	 * @see SelectionHandlesEditPolicy#createSelectionHandles()
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	protected List createSelectionHandles() {
 		return createHandlesForUserBendpoints();

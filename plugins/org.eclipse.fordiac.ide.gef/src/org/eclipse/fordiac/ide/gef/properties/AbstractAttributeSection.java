@@ -61,6 +61,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	private Button attributeNew;
 	private Button attributeDelete;
 	
+	@Override
 	protected abstract ConfigurableObject getInputType(Object input);
 	@Override
 	protected abstract EObject getType();
@@ -147,12 +148,14 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		});
 		attributeViewer.setColumnProperties(new String[] {NAME, TYPE, VALUE, COMMENT});
 		attributeViewer.setCellModifier(new ICellModifier() {
+			@Override
 			public boolean canModify(final Object element, final String property) {
 				if(element instanceof Attribute && TYPE.equals(property) && null != ((Attribute)element).getAttributeDeclaration()) {
 					return false;
 				}
 				return true;
 			}
+			@Override
 			public Object getValue(final Object element, final String property) {
 				switch (property) {
 				case NAME:
@@ -167,6 +170,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 					return null;
 				}
 			}
+			@Override
 			public void modify(final Object element, final String property, final Object value) {
 				Attribute data = (Attribute)((TableItem) element).getData();
 				AttributeChangeCommand cmd = null;

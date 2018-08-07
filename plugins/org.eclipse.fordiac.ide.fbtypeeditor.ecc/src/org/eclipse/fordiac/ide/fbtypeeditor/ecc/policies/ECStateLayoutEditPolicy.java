@@ -49,6 +49,7 @@ public class ECStateLayoutEditPolicy extends XYLayoutEditPolicy implements
 	}
 
 
+	@Override
 	public Command getCommand(Request request) {
 		Object type = request.getType();
 

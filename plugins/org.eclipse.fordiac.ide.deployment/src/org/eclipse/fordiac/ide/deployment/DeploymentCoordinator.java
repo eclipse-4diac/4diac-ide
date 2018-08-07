@@ -120,6 +120,7 @@ public class DeploymentCoordinator implements IDeploymentListener {
 		 * @throws InvocationTargetException the invocation target exception
 		 * @throws InterruptedException      the interrupted exception
 		 */
+		@Override
 		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 			monitor.beginTask(Messages.DeploymentCoordinator_LABEL_PerformingDownload, calculateWorkAmount());
 

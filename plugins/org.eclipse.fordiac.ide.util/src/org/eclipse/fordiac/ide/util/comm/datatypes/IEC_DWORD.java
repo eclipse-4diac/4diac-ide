@@ -112,11 +112,13 @@ public class IEC_DWORD extends IEC_ANY_BIT {
 	}
 
 
+	@Override
 	protected String ConvertHexString()
 	{
 		return Integer.toHexString(value);
 	}
 	
+	@Override
 	protected String ConvertBinString()
 	{
 		return Integer.toBinaryString(value);

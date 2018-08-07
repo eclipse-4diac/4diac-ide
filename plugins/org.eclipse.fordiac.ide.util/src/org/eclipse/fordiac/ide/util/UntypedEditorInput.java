@@ -52,6 +52,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 * 
 	 * @see org.eclipse.ui.IEditorInput#exists()
 	 */
+	@Override
 	public boolean exists() {
 		return true; //our models do always exist
 	}
@@ -61,6 +62,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 * 
 	 * @see org.eclipse.ui.IEditorInput#getImageDescriptor()
 	 */
+	@Override
 	public ImageDescriptor getImageDescriptor() {
 		return ImageDescriptor.getMissingImageDescriptor();
 	}
@@ -70,6 +72,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 * 
 	 * @see org.eclipse.ui.IEditorInput#getName()
 	 */
+	@Override
 	public String getName() {
 		return name == null ? "" : name; //$NON-NLS-1$
 	}
@@ -79,6 +82,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 * 
 	 * @see org.eclipse.ui.IEditorInput#getToolTipText()
 	 */
+	@Override
 	public String getToolTipText() {
 		return tooltip == null ? "" : tooltip; //$NON-NLS-1$
 	}
@@ -88,6 +92,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 * 
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getAdapter(final Class adapter) {
 		return null;

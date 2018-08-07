@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl;
+import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
@@ -350,7 +351,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	@Override
 	public void setSelected(int value) {
 		if (value == 0) { // clear possible statusmessage
-			Activator.statusLineErrorMessage(null);
+			Abstract4DIACUIPlugin.statusLineErrorMessage(null);
 		}
 		super.setSelected(value);
 	}

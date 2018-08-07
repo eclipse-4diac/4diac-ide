@@ -314,6 +314,7 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
+	@Override
 	public void createPartControl(final Composite parent) {
 		SashForm s = new SashForm(parent, SWT.VERTICAL | SWT.SMOOTH);
 		Composite graphicaEditor = new Composite(s, SWT.NONE);

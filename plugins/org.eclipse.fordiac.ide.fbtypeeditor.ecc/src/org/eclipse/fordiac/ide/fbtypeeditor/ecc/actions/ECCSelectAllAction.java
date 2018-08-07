@@ -35,6 +35,7 @@ public class ECCSelectAllAction extends SelectAllAction {
 	/**
 	 * Selects all ECC State and Transition edit parts in the active workbench part.
 	 */
+	@Override
 	public void run() {
 		GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {

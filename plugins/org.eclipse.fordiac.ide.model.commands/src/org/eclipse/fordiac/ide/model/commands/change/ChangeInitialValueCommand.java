@@ -28,6 +28,7 @@ public class ChangeInitialValueCommand extends Command {
 		this.newInitialValue = newInitialValue;
 	}
 	
+	@Override
 	public boolean canExecute() {
 		return (null != variable)&&(null != newInitialValue);
 	}

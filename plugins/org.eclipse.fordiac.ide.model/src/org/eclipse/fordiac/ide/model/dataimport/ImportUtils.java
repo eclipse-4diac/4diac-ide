@@ -241,7 +241,7 @@ public class ImportUtils {
 	 */
 	public static int parseConnectionValue(String value) {
 		try {
-			return (int) ImportUtils.convertCoordinate(Double.parseDouble(value));
+			return ImportUtils.convertCoordinate(Double.parseDouble(value));
 		} catch (Exception ex) {
 			return 0;
 		}
@@ -291,7 +291,7 @@ public class ImportUtils {
 		if (!out.getParent().exists()) {
 			// create folder if does not exist
 			((IFolder) out.getParent()).create(true, true, null);
-			out.getParent().refreshLocal(IFolder.DEPTH_ZERO, null);
+			out.getParent().refreshLocal(IResource.DEPTH_ZERO, null);
 		}
 
 		Files.copy(in.toPath(), out.getLocation().toFile().toPath(), StandardCopyOption.REPLACE_EXISTING);

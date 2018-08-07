@@ -61,6 +61,7 @@ public class MonitoringPreferences extends FieldEditorPreferencePage implements
 
 	}
 
+	@Override
 	public void init(IWorkbench workbench) {
 		//nothing todo here
 	}

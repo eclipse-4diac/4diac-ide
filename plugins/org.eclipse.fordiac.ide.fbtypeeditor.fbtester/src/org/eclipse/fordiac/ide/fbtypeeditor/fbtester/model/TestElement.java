@@ -181,6 +181,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 		return part;
 	}
 
+	@Override
 	public EditPart createEditPart() {
 		if (part == null) {
 			if (getInterfaceElement() instanceof Event

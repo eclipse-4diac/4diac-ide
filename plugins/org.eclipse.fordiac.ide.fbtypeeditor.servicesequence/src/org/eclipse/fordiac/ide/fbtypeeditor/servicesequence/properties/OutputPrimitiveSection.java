@@ -30,6 +30,7 @@ public class OutputPrimitiveSection extends PrimitiveSection {
 
 	private Text testResultText;
 	
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
 		createOutputPrimitiveSection(leftComposite);	
@@ -42,6 +43,7 @@ public class OutputPrimitiveSection extends PrimitiveSection {
 		getWidgetFactory().createCLabel(composite, "Test Result:"); 
 		testResultText = createGroupText(composite, true);	
 		testResultText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeOutputPrimitiveResultCommand(getType(), testResultText.getText()));
@@ -50,6 +52,7 @@ public class OutputPrimitiveSection extends PrimitiveSection {
 		});
 	}	
 	
+	@Override
 	protected OutputPrimitive getType(){
 		return (OutputPrimitive)type;
 	}

@@ -28,6 +28,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 * @seeorg.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
 	 * initializeDefaultPreferences()
 	 */
+	@Override
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		boolean isWin32 = Platform.getOS().equalsIgnoreCase(Platform.OS_WIN32);

@@ -24,6 +24,7 @@ public class EventOutputContainer extends AbstractContainerElement {
 		super(fbtype);
 	}
 
+	@Override
 	public List<IInterfaceElement> getChildren() {
 		return new ArrayList<IInterfaceElement>(getFbType().getInterfaceList().getEventOutputs());
 	}

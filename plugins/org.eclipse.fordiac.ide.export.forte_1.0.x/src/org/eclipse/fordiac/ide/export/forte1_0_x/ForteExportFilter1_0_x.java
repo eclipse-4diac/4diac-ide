@@ -311,7 +311,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 		}
 	}
 
-	private static Boolean extractDataTypeNames(
+	private static boolean extractDataTypeNames(
 			final EList<VarDeclaration> pa_InputVars,
 			HashSet<String> pa_datatypeNames, boolean pa_UsesArray) {
 		if (!pa_InputVars.isEmpty()) {
@@ -1565,6 +1565,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 		}
 	}
 
+	@Override
 	protected void handleNotPresentEOTag() {
 		StringBuilder withs = new StringBuilder();
 		String withIndexes = "-1"; //$NON-NLS-1$

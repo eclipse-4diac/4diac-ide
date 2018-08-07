@@ -61,6 +61,7 @@ public class FBTypeContentOutline extends ContentOutlinePage {
 		this.commandStack = editor.getCommandStack();
 	}
 		
+	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 

@@ -47,7 +47,7 @@ public class SystemConfigurationEditorLinkHelper extends AbstractEditorLinkHelpe
 			refObject = aSelection.getFirstElement();
 			sysConf = ((Device)refObject).getSystemConfiguration();
 		}else if(aSelection.getFirstElement() instanceof Segment){
-			refObject = (Segment)aSelection.getFirstElement();
+			refObject = aSelection.getFirstElement();
 			sysConf = (SystemConfiguration)((Segment)refObject).eContainer();
 		}		
 		

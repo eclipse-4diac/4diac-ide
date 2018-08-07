@@ -82,7 +82,7 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 				obj = ((Device)obj).getSystemConfiguration();				
 			}else if (obj instanceof Segment){
 				refObject = obj;
-				obj = (SystemConfiguration)((Segment)refObject).eContainer();
+				obj = ((Segment)refObject).eContainer();
 			}
 
 			IEditorPart editor = OpenListenerManager.openEditor((I4DIACElement) obj);

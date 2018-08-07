@@ -44,6 +44,7 @@ public class FBTypeEditorContributor extends
 		super();
 	}
 	
+	@Override
 	public void setActiveEditor(IEditorPart editor) {
 		ActionRegistry registry = editor.getAdapter(ActionRegistry.class);
 		if(null != registry){
@@ -82,6 +83,7 @@ public class FBTypeEditorContributor extends
 	}
 
 	
+	@Override
 	public void contributeToToolBar(final IToolBarManager toolBarManager) {
 
 		toolBarManager.add(getAction(ActionFactory.UNDO.getId()));
@@ -132,6 +134,7 @@ public class FBTypeEditorContributor extends
 		this.addGlobalActionKey(ActionFactory.SELECT_ALL.getId());
 	}
 	
+	@Override
 	public void init(IActionBars bars) {
 		buildActions();
 		declareGlobalActionKeys();

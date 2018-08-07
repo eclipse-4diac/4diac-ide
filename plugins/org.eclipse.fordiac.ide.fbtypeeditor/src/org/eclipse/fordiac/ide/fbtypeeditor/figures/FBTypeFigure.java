@@ -23,6 +23,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MarginBorder;
+import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
@@ -244,7 +245,7 @@ public class FBTypeFigure extends Shape {
 		outputContainerLayout.setHorizontal(false);
 		outputContainerLayout.setStretchMinorAxis(true);
 		outputContainerLayout.setMajorSpacing(0);
-		outputContainerLayout.setMinorAlignment(FlowLayout.ALIGN_BOTTOMRIGHT);
+		outputContainerLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomOutputContainer.setLayoutManager(outputContainerLayout);
 		
 		bottom.add(bottomOutputContainer);
@@ -253,7 +254,7 @@ public class FBTypeFigure extends Shape {
 		//
 		ToolbarLayout bottomOutputsLayout = new ToolbarLayout(false);
 		bottomOutputsLayout.setStretchMinorAxis(true);
-		bottomOutputsLayout.setMinorAlignment(ToolbarLayout.ALIGN_BOTTOMRIGHT);
+		bottomOutputsLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomOutputsLayout.setSpacing(0);
 
 		dataOutputs.setLayoutManager(bottomOutputsLayout);
@@ -264,13 +265,13 @@ public class FBTypeFigure extends Shape {
 		bottomDataOutputContainer.setLayoutManager(bottomDataOutputLayout);
 		
 		bottomOutputContainer.add(bottomDataOutputContainer);
-		bottomOutputContainer.setConstraint(bottomDataOutputContainer, FlowLayout.ALIGN_BOTTOMRIGHT);
+		bottomOutputContainer.setConstraint(bottomDataOutputContainer, OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomDataOutputContainer.add(dataOutputs);
 		bottomDataOutputContainer.setConstraint(dataOutputs, BorderLayout.RIGHT);
 		
 		ToolbarLayout bottomPlugsLayout = new ToolbarLayout(false);
 		bottomPlugsLayout.setStretchMinorAxis(true);
-		bottomPlugsLayout.setMinorAlignment(ToolbarLayout.ALIGN_BOTTOMRIGHT);
+		bottomPlugsLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		plugs.setLayoutManager(bottomPlugsLayout);
 		plugs.setBorder(new MarginBorder(0, 0, 4, 0));
 		
@@ -279,7 +280,7 @@ public class FBTypeFigure extends Shape {
 		bottomPlugsContainer.setLayoutManager(bottomPlugsContainerLayout);
 		
 		bottomOutputContainer.add(bottomPlugsContainer);
-		bottomOutputContainer.setConstraint(bottomPlugsContainer, FlowLayout.ALIGN_BOTTOMRIGHT);
+		bottomOutputContainer.setConstraint(bottomPlugsContainer, OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomPlugsContainer.add(plugs);
 		bottomPlugsContainer.setConstraint(plugs, BorderLayout.RIGHT);
 	}

@@ -108,10 +108,12 @@ public class TesterFBEditPart extends
 		if (controlListener == null) {
 			controlListener = new ControlListener() {
 
+				@Override
 				public void controlResized(final ControlEvent e) {
 					updatePosition();
 				}
 
+				@Override
 				public void controlMoved(final ControlEvent e) {
 
 				}

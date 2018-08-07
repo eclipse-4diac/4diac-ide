@@ -148,6 +148,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 
 	}
 
+	@Override
 	public void createConnection(final Resource resource, final ConnectionDeploymentData connData) throws DeploymentException {
 		IInterfaceElement source = connData.source;
 		IInterfaceElement destination = connData.destination;
@@ -204,6 +205,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		}
 	}
 
+	@Override
 	public void deleteResource(Resource res) throws DeploymentException {
 		String kill = MessageFormat.format(Messages.DeploymentExecutor_KillFB,
 				new Object[] {id++, res.getName() });

@@ -136,6 +136,7 @@ public class IEC_ARRAY extends IEC_ANY {
 		this.value = value.clone();
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder tempString = new StringBuilder("["); //$NON-NLS-1$
 		for (int i = 0; i < value.length; i++) {

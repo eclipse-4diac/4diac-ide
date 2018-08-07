@@ -16,6 +16,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 
 public class AttributeSection extends AbstractAttributeSection {
+	@Override
 	protected ConfigurableObject getInputType(Object input) {
 		if(input instanceof Device){
 			return (Device) input;

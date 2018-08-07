@@ -861,7 +861,7 @@ public class StructuredTextEmitter {
 			statement = tokens.nextToken().toUpperCase();
 		}
 		pwCPP.print(" ){"); //$NON-NLS-1$
-		Boolean first = true;
+		boolean first = true;
 		
 		statement = tokens.nextToken().toUpperCase();
 		while (true) {

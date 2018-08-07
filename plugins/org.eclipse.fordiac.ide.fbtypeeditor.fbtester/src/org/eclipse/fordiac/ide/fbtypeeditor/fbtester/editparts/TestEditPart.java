@@ -181,6 +181,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 	 * 
 	 * @return the casted model
 	 */
+	@Override
 	public TestElement getModel() {
 		return (TestElement) super.getModel();
 	}
@@ -283,6 +284,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 		return null;
 	}
 
+	@Override
 	public String getSpecificLayer() {
 		return ZoomScalableFreeformRootEditPart.TOPLAYER;
 	}
