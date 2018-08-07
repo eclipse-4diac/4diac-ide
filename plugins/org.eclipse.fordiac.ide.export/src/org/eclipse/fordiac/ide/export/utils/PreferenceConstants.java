@@ -15,7 +15,11 @@ package org.eclipse.fordiac.ide.export.utils;
 /**
  * Constant definitions.
  */
-public class PreferenceConstants {
+public final class PreferenceConstants {
+
+	private PreferenceConstants() {
+		/* Util class shall not have a public ctor */
+	}
 
 	/** The Constant for the Compare Editor Preference. */
 	public static final String P_COMPARE_EDITOR = "compareeditor"; //$NON-NLS-1$
