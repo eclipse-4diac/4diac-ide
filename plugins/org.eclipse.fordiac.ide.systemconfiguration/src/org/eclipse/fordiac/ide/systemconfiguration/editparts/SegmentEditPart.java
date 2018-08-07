@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2011 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2011 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH, 
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -108,6 +109,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		return (SegmentFigure) getFigure();
 	}
 
+	@Override
 	protected void backgroundColorChanged(IFigure figure) {
 		// TODO model refactoring - default value for colors if not persisted
 		org.eclipse.fordiac.ide.model.libraryElement.Color fordiacColor = getModel().getColor();
@@ -132,6 +134,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
+			@Override
 			public Command getCommand(Request request) {
 				Object type = request.getType();
 				if (REQ_ALIGN.equals(type))

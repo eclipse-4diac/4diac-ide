@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2016, 2017 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2008, 2009, 2016, 2017 Profactor GbmH, fortiss GmbH, 
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,12 +50,14 @@ public class LinkCreateCommand extends Command {
 		redo();
 	}
 
+	@Override
 	public void undo() {
 		source.getOutConnections().remove(link);
 		destination.getInConnections().remove(link);
 		systemConfiguration.getLinks().remove(link);
 	}
 
+	@Override
 	public void redo() {
 		source.getOutConnections().add(link);
 		destination.getInConnections().add(link);

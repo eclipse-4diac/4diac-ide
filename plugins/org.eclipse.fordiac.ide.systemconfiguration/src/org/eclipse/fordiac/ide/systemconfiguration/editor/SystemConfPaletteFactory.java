@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2012 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH,  
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -124,13 +125,11 @@ public final class SystemConfPaletteFactory {
 
 			@Override
 			public void notifyChanged(final Notification notification) {
-				Display.getDefault().syncExec(new Runnable() {
-					public void run() {
-						palette.setVisible(false);
-						palette.getChildren().clear();
-						fillPalette(palette, system);
-						palette.setVisible(true);
-					}
+				Display.getDefault().syncExec(() -> {
+					palette.setVisible(false);
+					palette.getChildren().clear();
+					fillPalette(palette, system);
+					palette.setVisible(true);
 				});
 			}
 		});
@@ -171,7 +170,7 @@ public final class SystemConfPaletteFactory {
 		
 		paletteContainer.addAll(createRESEntries(group));
 		
-		if(paletteContainer.getChildren().size() != 0){ 
+		if(!paletteContainer.getChildren().isEmpty()){ 
 			palette.add(paletteContainer);
 		}
 
@@ -184,7 +183,7 @@ public final class SystemConfPaletteFactory {
 		
 		paletteContainer.addAll(createDEVEntries(group));
 		
-		if(paletteContainer.getChildren().size() != 0){ 
+		if(!paletteContainer.getChildren().isEmpty()){ 
 			palette.add(paletteContainer);
 		}
 
@@ -197,7 +196,7 @@ public final class SystemConfPaletteFactory {
 			
 		paletteContainer.addAll(createSEGEntries(group));
 		
-		if(paletteContainer.getChildren().size() != 0){ 
+		if(!paletteContainer.getChildren().isEmpty()){ 
 			palette.add(paletteContainer);
 		}
 		return paletteContainer;
@@ -205,7 +204,7 @@ public final class SystemConfPaletteFactory {
 
 	private static List<PaletteEntry> createRESEntries(
 			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
+		List<PaletteEntry> entries = new ArrayList<>();
 		
 		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
 			if(entry instanceof ResourceTypeEntry){
@@ -220,7 +219,7 @@ public final class SystemConfPaletteFactory {
 
 	private static List<PaletteEntry> createDEVEntries(
 			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
+		List<PaletteEntry> entries = new ArrayList<>();
 		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
 			if(entry instanceof DeviceTypePaletteEntry){
 				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_Device.getImageDescriptor());
@@ -234,7 +233,7 @@ public final class SystemConfPaletteFactory {
 
 	private static List<PaletteEntry> createSEGEntries(
 			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
+		List<PaletteEntry> entries = new ArrayList<>();
 		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
 			if(entry instanceof SegmentTypePaletteEntry){
 				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_Segment.getImageDescriptor());
@@ -259,10 +258,12 @@ public final class SystemConfPaletteFactory {
 		if (type == null) {
 			return null;
 		}
-		CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(
-				type.getName(), type.getComment(), new TemplateCreationFactory(entry),
+		return new CombinedTemplateCreationEntry(type.getName(), type.getComment(), new TemplateCreationFactory(entry),
 				desc, desc);
-		return combined;
+	}
+	
+	private SystemConfPaletteFactory() {
+		throw new UnsupportedOperationException("Class SystemconfPaletteFactory should not be insantiated!");
 	}
 
 }

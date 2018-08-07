@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2016 Profactor GbmH
+ * Copyright (c) 2008, 2016 Profactor GbmH, 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.policies;
 
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.DeviceDeleteCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
 import org.eclipse.gef.commands.Command;
@@ -34,10 +33,7 @@ public class DeleteDeviceEditPolicy extends
 	@Override
 	protected Command createDeleteCommand(final GroupRequest request) {
 		if (getHost() instanceof DeviceEditPart) {
-			Device device = ((DeviceEditPart) getHost())
-					.getModel();
-			DeviceDeleteCommand c = new DeviceDeleteCommand(device);
-			return c;
+			return new DeviceDeleteCommand(((DeviceEditPart) getHost()).getModel());
 		}
 		return null;
 	}

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2012 Profactor GbmH, TU Wien ACIN 
+ * Copyright (c) 2008, 2009, 2012 Profactor GbmH, TU Wien ACIN, 
+ * 				 2018 Johannes Kepler University 
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -66,7 +67,6 @@ public class ModifiedMoveHandle extends MoveHandle {
 	@Override
 	protected void initialize() {
 		setOpaque(false);
-		// setBorder(new LineBorder(ColorConstants.gray));
 		setBorder(SimpleEtchedBorder.singleton);
 		setBorder(new SchemeBorder() {
 

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2016 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2016 Profactor GbmH, fortiss GmbH,  
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -88,7 +89,6 @@ public class SysConfTemplateTransferDropTargetListener extends
 
 	@Override
 	protected void handleDrop() {
-		System.out.println("Handle drop: " + getCurrentEvent().data.getClass().getName()); //$NON-NLS-1$
 		if (!isSysConfEditorType(getCurrentEvent().data) 
 				&& !(getCurrentEvent().data instanceof TemplateCreationFactory)) {
 			return;
