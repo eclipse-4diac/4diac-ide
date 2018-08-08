@@ -19,8 +19,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -43,7 +43,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -61,14 +60,37 @@ import org.w3c.dom.NodeList;
  * export functionality to create *.cpp and *.h files in the FORTE V1.0.x format
  * 
  */
-public class ForteExportFilter1_0_x extends ExportFilter implements
-		IExportFilter {
+public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilter {
 
-	protected class adapterInstance {
-		public String stName;
-		public String stAdapterType;
-		public boolean bIsPlug;
-		public AdapterFBType oAdapterFBType;
+	protected class AdapterInstance {
+		public AdapterInstance(String name, String adapterType, boolean isPlug,
+				org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType adapterFBType) {
+			this.name = name;
+			this.adapterType = adapterType;
+			this.isPlug = isPlug;
+			this.adapterFBType = adapterFBType;
+		}
+
+		private String name;
+		private String adapterType;
+		private boolean isPlug;
+		private AdapterFBType adapterFBType;
+
+		public String getAdapterType() {
+			return adapterType;
+		}
+
+		public boolean isPlug() {
+			return isPlug;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public AdapterFBType getAdapterFBType() {
+			return adapterFBType;
+		}
 	}
 
 	private String baseClass;
@@ -85,25 +107,20 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 	protected int adapterCount;
 
-	protected ArrayList<adapterInstance> adapters = new ArrayList<adapterInstance>();
+	protected List<AdapterInstance> adapters = new ArrayList<>();
 
-	Vector<FB> internalFBs = new Vector<FB>();
+	protected List<String> eventInputs = new ArrayList<>();
 
-	protected Vector<String> eventInputs = new Vector<String>();
-
-	private StructuredTextEmitter structuredTextEmitter = new StructuredTextEmitter(
-			this);
+	private StructuredTextEmitter structuredTextEmitter = new StructuredTextEmitter(this);
 
 	/**
 	 * Holds all vars that have an special initial value set.
 	 */
-	private Vector<VarDefinition> initialValues = new Vector<VarDefinition>();
+	private List<VarDefinition> initialValues = new ArrayList<>();
 
-	private final ArrayList<String> anyVars = new ArrayList<String>();
+	private final List<String> anyVars = new ArrayList<>();
 
 	private boolean inputWithsUsed;
-
-	// private boolean usesArrays = false;
 
 	public ForteExportFilter1_0_x() {
 		// empty default constructor
@@ -118,18 +135,18 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 	}
 
 	public void addWarningMsg(final String msg) {
-		forteEmitterWarnings.add(" - " + libraryType.getName() + ": "  + msg); //$NON-NLS-1$ //$NON-NLS-2$
+		forteEmitterWarnings.add(" - " + libraryType.getName() + ": " + msg); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void addInfoMsg(final String msg) {
-		forteEmitterInfos.add(" - " + libraryType.getName() + ": "  + msg); //$NON-NLS-1$ //$NON-NLS-2$
+		forteEmitterInfos.add(" - " + libraryType.getName() + ": " + msg); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public Map<String, VarDefinition> getVars() {
 		return vars;
 	}
 
-	public ArrayList<adapterInstance> getAdapters() {
+	public List<AdapterInstance> getAdapters() {
 		return adapters;
 	}
 
@@ -161,20 +178,15 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 		pwH.println(buf);
 		pwCPP.println(buf);
 
-		if (libraryType instanceof FBType)
-
-			if (!((FBType) libraryType).getVersionInfo().isEmpty()) {
-				for (int i = 0; i < ((FBType) libraryType).getVersionInfo()
-						.size(); ++i) {
-					VersionInfo vi = ((FBType) libraryType).getVersionInfo()
-							.get(i);
-					buf = " ***     " + vi.getVersion() + ": " + vi.getDate() //$NON-NLS-1$ //$NON-NLS-2$
-							+ "/" + vi.getAuthor() + " - "  //$NON-NLS-1$//$NON-NLS-2$
-							+ vi.getOrganization() + " - " + vi.getRemarks(); //$NON-NLS-1$
-					pwH.println(buf);
-					pwCPP.println(buf);
-				}
+		if (libraryType instanceof FBType && !((FBType) libraryType).getVersionInfo().isEmpty()) {
+			for (VersionInfo vi : ((FBType) libraryType).getVersionInfo()) {
+				buf = " ***     " + vi.getVersion() + ": " + vi.getDate() //$NON-NLS-1$ //$NON-NLS-2$
+						+ "/" + vi.getAuthor() + " - " //$NON-NLS-1$//$NON-NLS-2$
+						+ vi.getOrganization() + " - " + vi.getRemarks(); //$NON-NLS-1$
+				pwH.println(buf);
+				pwCPP.println(buf);
 			}
+		}
 
 		buf = " *************************************************************************/"; //$NON-NLS-1$
 		pwH.println(buf);
@@ -187,23 +199,23 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 		// export the stuff that is only in the cpp file
 		buf = "\n#include \"" + libraryType.getName() + ".h\""; //$NON-NLS-1$ //$NON-NLS-2$
 		pwCPP.println(buf);
-		
+
 		pwCPP.println("#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP"); //$NON-NLS-1$
-		pwCPP.println("#include \"" + libraryType.getName() +"_gen.cpp\""); //$NON-NLS-1$ //$NON-NLS-2$
+		pwCPP.println("#include \"" + libraryType.getName() + "_gen.cpp\""); //$NON-NLS-1$ //$NON-NLS-2$
 		pwCPP.println("#endif"); //$NON-NLS-1$
-		
+
 		exportCompilerInfoHeaders();
 	}
 
 	private void exportCompilerInfoHeaders() {
-		if(libraryType instanceof CompilableType){
-			CompilableType type = (CompilableType)libraryType;
-			if(null != type.getCompilerInfo()){
-				if(null != type.getCompilerInfo().getHeader()){
+		if (libraryType instanceof CompilableType) {
+			CompilableType type = (CompilableType) libraryType;
+			if (null != type.getCompilerInfo()) {
+				if (null != type.getCompilerInfo().getHeader()) {
 					pwCPP.println(type.getCompilerInfo().getHeader());
-				}		
+				}
 			}
-		}		
+		}
 	}
 
 	@Override
@@ -221,13 +233,15 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 		if (libraryType instanceof BasicFBType) {
 			baseClass = "CBasicFB"; //$NON-NLS-1$
 			pwH.println("\n#include <basicfb.h>"); //$NON-NLS-1$
-			forteEmitterInfos.add("  - Creating header and source files for Basic Function Block " + libraryType.getName());
+			forteEmitterInfos
+					.add("  - Creating header and source files for Basic Function Block " + libraryType.getName());
 			interfaceList = ((FBType) libraryType).getInterfaceList();
 		} else if (libraryType instanceof CompositeFBType) {
 			pwH.println("\n#include <cfb.h>"); //$NON-NLS-1$
 			pwH.println("#include <typelib.h>"); //$NON-NLS-1$
 			baseClass = "CCompositeFB"; //$NON-NLS-1$
-			forteEmitterInfos.add("  - Creating header and source files for Composite Function Block " + libraryType.getName());
+			forteEmitterInfos
+					.add("  - Creating header and source files for Composite Function Block " + libraryType.getName());
 			interfaceList = ((FBType) libraryType).getInterfaceList();
 
 		} else if (libraryType instanceof ServiceInterfaceFBType) {
@@ -239,25 +253,24 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 			pwH.println("\n#include <adapter.h>"); //$NON-NLS-1$
 			pwH.println("#include <typelib.h>"); //$NON-NLS-1$
 			baseClass = "CAdapter"; //$NON-NLS-1$
-			forteEmitterInfos.add("  - Creating header and source files for Adapter Function Block " + libraryType.getName());
+			forteEmitterInfos
+					.add("  - Creating header and source files for Adapter Function Block " + libraryType.getName());
 			interfaceList = ((AdapterType) libraryType).getInterfaceList();
 		} else {
-			forteEmitterErrors.add("  - FB is not of supported class {Basic Function Block, Composite Function Block, Service Interface Function Block}");
+			forteEmitterErrors.add(
+					"  - FB is not of supported class {Basic Function Block, Composite Function Block, Service Interface Function Block}");
 		}
 
 		if (interfaceList != null) {
-			HashSet<String> datatypeNames = new HashSet<String>();
-			HashSet<String> adapterNames = new HashSet<String>();
+			Set<String> datatypeNames = new HashSet<>();
+			Set<String> adapterNames = new HashSet<>();
 			boolean lArrayUsed = false;
 
-			lArrayUsed = extractDataTypeNames(interfaceList.getInputVars(),
-					datatypeNames, lArrayUsed);
-			lArrayUsed = extractDataTypeNames(interfaceList.getOutputVars(),
-					datatypeNames, lArrayUsed);
+			lArrayUsed = extractDataTypeNames(interfaceList.getInputVars(), datatypeNames, lArrayUsed);
+			lArrayUsed = extractDataTypeNames(interfaceList.getOutputVars(), datatypeNames, lArrayUsed);
 			if (libraryType instanceof BasicFBType) {
-				lArrayUsed = extractDataTypeNames(
-						((BasicFBType) libraryType).getInternalVars(),
-						datatypeNames, lArrayUsed);
+				lArrayUsed = extractDataTypeNames(((BasicFBType) libraryType).getInternalVars(), datatypeNames,
+						lArrayUsed);
 			}
 
 			if (!datatypeNames.isEmpty()) {
@@ -265,9 +278,10 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 				for (int i = 0; i < x.length; ++i) {
 					pwH.println("#include <forte_" + x[i].toLowerCase() + ".h>"); //$NON-NLS-1$ //$NON-NLS-2$
 					if (x[i].startsWith("ANY")) { //$NON-NLS-1$
-						pwH.println("\n#ERROR type contains variables of type ANY. Please check the usage of these variables as we can not gurantee correct usage on export!\n"); //$NON-NLS-1$
+						pwH.println(
+								"\n#ERROR type contains variables of type ANY. Please check the usage of these variables as we can not gurantee correct usage on export!\n"); //$NON-NLS-1$
 
-					} 
+					}
 				}
 				if (lArrayUsed) {
 					pwH.println("#include <forte_array.h>"); //$NON-NLS-1$
@@ -302,30 +316,25 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 	}
 
-	private static void extractAdapterTypeNames(EList<AdapterDeclaration> pa_Adapters,
-			HashSet<String> pa_datatypeNames) {
-		if (!pa_Adapters.isEmpty()) {
-			for (int i = 0; i < pa_Adapters.size(); i++) {
-				pa_datatypeNames.add(pa_Adapters.get(i).getTypeName());
+	private static void extractAdapterTypeNames(EList<AdapterDeclaration> adapters, Set<String> dataTypeNames) {
+		if (!adapters.isEmpty()) {
+			for (int i = 0; i < adapters.size(); i++) {
+				dataTypeNames.add(adapters.get(i).getTypeName());
 			}
 		}
 	}
 
-	private static boolean extractDataTypeNames(
-			final EList<VarDeclaration> pa_InputVars,
-			HashSet<String> pa_datatypeNames, boolean pa_UsesArray) {
-		if (!pa_InputVars.isEmpty()) {
-			for (int i = 0; i < pa_InputVars.size(); i++) {
-				VarDeclaration var = pa_InputVars.get(i);
-				if (!(var instanceof AdapterDeclaration)) {
-					pa_datatypeNames.add(var.getTypeName());
-					if (var.isArray()) {
-						pa_UsesArray = true;
-					}
+	private static boolean extractDataTypeNames(final EList<VarDeclaration> inputVars, Set<String> datatypeNames,
+			boolean usesArray) {
+		for (VarDeclaration var : inputVars) {
+			if (!(var instanceof AdapterDeclaration)) {
+				datatypeNames.add(var.getTypeName());
+				if (var.isArray()) {
+					usesArray = true;
 				}
 			}
 		}
-		return pa_UsesArray;
+		return usesArray;
 	}
 
 	@Override
@@ -336,15 +345,16 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 	protected void exportSIFBExecuteEvent() {
 		pwH.println("\n  void executeEvent(int pa_nEIID);"); //$NON-NLS-1$
 
-		pwCPP.println("\nvoid FORTE_" + name + "::executeEvent(int pa_nEIID){");  //$NON-NLS-1$//$NON-NLS-2$
+		pwCPP.println("\nvoid FORTE_" + name + "::executeEvent(int pa_nEIID){"); //$NON-NLS-1$//$NON-NLS-2$
 		pwCPP.println("  switch(pa_nEIID){"); //$NON-NLS-1$
 
-		for (int i = 0; i < eventInCount; i++) {
-			pwCPP.println("    case scm_nEvent" + eventInputs.elementAt(i) //$NON-NLS-1$
+		for (String eventInput : eventInputs) {
+			pwCPP.println("    case scm_nEvent" + eventInput //$NON-NLS-1$
 					+ "ID:"); //$NON-NLS-1$
-			pwCPP.println("#error add code for " + eventInputs.elementAt(i) //$NON-NLS-1$
+			pwCPP.println("#error add code for " + eventInput //$NON-NLS-1$
 					+ " event!"); //$NON-NLS-1$
-			pwCPP.println("/*\n  do not forget to send output event, calling e.g.\n      sendOutputEvent(scm_nEventCNFID);\n*/"); //$NON-NLS-1$
+			pwCPP.println(
+					"/*\n  do not forget to send output event, calling e.g.\n      sendOutputEvent(scm_nEventCNFID);\n*/"); //$NON-NLS-1$
 			pwCPP.println("      break;"); //$NON-NLS-1$
 		}
 		pwCPP.println("  }"); //$NON-NLS-1$
@@ -361,11 +371,9 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 		if (baseClass.equals("CBasicFB")) { //$NON-NLS-1$
 			pwH.println("  FORTE_" //$NON-NLS-1$
-					+ name
-					+ "(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : "); //$NON-NLS-1$
+					+ name + "(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : "); //$NON-NLS-1$
 			pwH.print("       " //$NON-NLS-1$
-					+ baseClass
-					+ "(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId"); //$NON-NLS-1$
+					+ baseClass + "(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId"); //$NON-NLS-1$
 			if (internalCount != 0) {
 				pwH.print(",\n           &scm_stInternalVars"); //$NON-NLS-1$
 			} else {
@@ -411,7 +419,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 		pwH.println("  DECLARE_FIRMWARE_FB(FORTE_" + name + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 		pwH.println("\nprivate:"); //$NON-NLS-1$
 
-		pwCPP.println("\nDEFINE_FIRMWARE_FB(FORTE_" + name + ", g_nStringId"  //$NON-NLS-1$//$NON-NLS-2$
+		pwCPP.println("\nDEFINE_FIRMWARE_FB(FORTE_" + name + ", g_nStringId" //$NON-NLS-1$//$NON-NLS-2$
 				+ name + ");\n"); //$NON-NLS-1$
 
 		exportVarInputs(docel);
@@ -420,20 +428,19 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 	@Override
 	protected void exportResConstructor() {
-		pwH.println("\n  C61499Class0ObjectHandler m_oClass0ObjectHandler;  //!< The object handler to be used for this resources"); //$NON-NLS-1$
+		pwH.println(
+				"\n  C61499Class0ObjectHandler m_oClass0ObjectHandler;  //!< The object handler to be used for this resources"); //$NON-NLS-1$
 
 		pwH.println("\npublic:"); //$NON-NLS-1$
 		pwH.println("  FORTE_" //$NON-NLS-1$
-				+ name
-				+ "(CStringDictionary::TStringId pa_nInstanceNameId, CResource* pa_poDevice);"); //$NON-NLS-1$
-		pwH.println("  virtual ~FORTE_" + name + "(){};");  //$NON-NLS-1$//$NON-NLS-2$
+				+ name + "(CStringDictionary::TStringId pa_nInstanceNameId, CResource* pa_poDevice);"); //$NON-NLS-1$
+		pwH.println("  virtual ~FORTE_" + name + "(){};"); //$NON-NLS-1$//$NON-NLS-2$
 
 		pwCPP.println("FORTE_" //$NON-NLS-1$
-				+ name
-				+ "::FORTE_" //$NON-NLS-1$
-				+ name
-				+ "(CStringDictionary::TStringId pa_nInstanceNameId, CResource* pa_poDevice) : "); //$NON-NLS-1$
-		pwCPP.println("       CResource(pa_poDevice, &scm_stFBInterfaceSpec, pa_nInstanceNameId, m_oClass0ObjectHandler, m_anFBConnData, m_anFBVarsData),"); //$NON-NLS-1$
+				+ name + "::FORTE_" //$NON-NLS-1$
+				+ name + "(CStringDictionary::TStringId pa_nInstanceNameId, CResource* pa_poDevice) : "); //$NON-NLS-1$
+		pwCPP.println(
+				"       CResource(pa_poDevice, &scm_stFBInterfaceSpec, pa_nInstanceNameId, m_oClass0ObjectHandler, m_anFBConnData, m_anFBVarsData),"); //$NON-NLS-1$
 		pwCPP.println("       m_oClass0ObjectHandler(*this){"); //$NON-NLS-1$
 
 		exportDevResElements("FB"); //$NON-NLS-1$
@@ -449,7 +456,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 		pwH.println("\n#include <device.h>"); //$NON-NLS-1$
 		pwH.println("#include <class1objhand.h>"); //$NON-NLS-1$
-		forteEmitterInfos.add("  - Creating header and source files for Device " + name); 
+		forteEmitterInfos.add("  - Creating header and source files for Device " + name);
 
 		exportResDevHeader();
 
@@ -462,14 +469,16 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 	@Override
 	protected void exportDeviceConstructor() {
-		pwH.println("\n  C61499Class1ObjectHandler m_oClass1ObjectHandler;  //!< The object handler to be used for this device"); //$NON-NLS-1$
+		pwH.println(
+				"\n  C61499Class1ObjectHandler m_oClass1ObjectHandler;  //!< The object handler to be used for this device"); //$NON-NLS-1$
 
 		pwH.println("\npublic:"); //$NON-NLS-1$
 		pwH.println("  FORTE_" + name + "();"); //$NON-NLS-1$ //$NON-NLS-2$
 		pwH.println("  virtual ~FORTE_" + name + "(){};"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		pwCPP.println("FORTE_" + name + "::FORTE_" + name + "() : "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		pwCPP.println("       CDevice(&scm_stFBInterfaceSpec, CStringDictionary::scm_nInvalidStringId, m_oClass1ObjectHandler, m_anFBConnData, m_anFBVarsData),"); //$NON-NLS-1$
+		pwCPP.println(
+				"       CDevice(&scm_stFBInterfaceSpec, CStringDictionary::scm_nInvalidStringId, m_oClass1ObjectHandler, m_anFBConnData, m_anFBVarsData),"); //$NON-NLS-1$
 		pwCPP.println("       m_oClass1ObjectHandler(*this){"); //$NON-NLS-1$
 
 		exportDevResElements("Resource"); //$NON-NLS-1$
@@ -479,7 +488,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 	}
 
 	private void exportResDevHeader() {
-		HashSet<String> resVarsTypes = new HashSet<String>();
+		Set<String> resVarsTypes = new HashSet<>();
 		NodeList l1 = docel.getElementsByTagName("VarDeclaration"); //$NON-NLS-1$
 		for (int i = 0; i < l1.getLength(); i++) {
 			org.w3c.dom.Node node = l1.item(i);
@@ -504,33 +513,25 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 					org.w3c.dom.Node childnode = childs.item(i);
 					if (childnode instanceof Element) {
 						Element childel = (Element) childnode;
-						// pwCPP
-						// .println("
-						// createConnection(CConnection::genConPortId(\""
-						// + childel.getAttribute("Source")
-						// + "\"), CConnection::genConPortId(\""
-						// + childel.getAttribute("Destination")
-						// + "\"));");
+
 						String[] source = childel.getAttribute("Source").split( //$NON-NLS-1$
 								"\\."); //$NON-NLS-1$
 						String[] dest = childel.getAttribute("Destination") //$NON-NLS-1$
 								.split("\\."); //$NON-NLS-1$
 
-						pwCPP.println(MessageFormat
-								.format("  m_roObjectHandler.createConnection({0}, {1});", //$NON-NLS-1$
-										new Object[] {
-												source.length == 2 ? MessageFormat
-														.format("GENERATE_CONNECTION_PORT_ID_2_ARG(g_nStringId{0}, g_nStringId{1})", //$NON-NLS-1$
-																(Object[]) source)
-														: MessageFormat
-																.format("GENERATE_CONNECTION_PORT_ID_1_ARG(g_nStringId{0})", //$NON-NLS-1$
-																		(Object[]) source),
-												dest.length == 2 ? MessageFormat
-														.format("GENERATE_CONNECTION_PORT_ID_2_ARG(g_nStringId{0}, g_nStringId{1})", //$NON-NLS-1$
-																(Object[]) dest)
-														: MessageFormat
-																.format("GENERATE_CONNECTION_PORT_ID_1_ARG(g_nStringId{0})", //$NON-NLS-1$
-																		(Object[]) dest) }));
+						pwCPP.println(MessageFormat.format("  m_roObjectHandler.createConnection({0}, {1});", //$NON-NLS-1$
+								new Object[] { source.length == 2
+										? MessageFormat.format(
+												"GENERATE_CONNECTION_PORT_ID_2_ARG(g_nStringId{0}, g_nStringId{1})", //$NON-NLS-1$
+												(Object[]) source)
+										: MessageFormat.format("GENERATE_CONNECTION_PORT_ID_1_ARG(g_nStringId{0})", //$NON-NLS-1$
+												(Object[]) source),
+										dest.length == 2 ? MessageFormat.format(
+												"GENERATE_CONNECTION_PORT_ID_2_ARG(g_nStringId{0}, g_nStringId{1})", //$NON-NLS-1$
+												(Object[]) dest)
+												: MessageFormat.format(
+														"GENERATE_CONNECTION_PORT_ID_1_ARG(g_nStringId{0})", //$NON-NLS-1$
+														(Object[]) dest) }));
 					}
 				}
 			}
@@ -552,18 +553,11 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 					org.w3c.dom.Node childnode = childs.item(j);
 					if (childnode instanceof Element) {
 						Element childel = (Element) childnode;
-						// pwCPP.println(" createValue(\""
-						// + trimSTRING(childel.getAttribute("Value"))
-						// + "\", \"" + childel.getAttribute("Name")
-						// + "\");");
-						// FIX gebenh -> createValue lead to compile erros
-						// TODO azoitl -> please check whether this is a correct
-						// way to set values
-						pwCPP.println(MessageFormat
-								.format("  m_roObjectHandler.getFB(g_nStringId{0})->getDataInput(g_nStringId{1})->fromString(\"{2}\");", //$NON-NLS-1$
-										new Object[] { el.getAttribute("Name"), //$NON-NLS-1$
-												childel.getAttribute("Name"), //$NON-NLS-1$
-												childel.getAttribute("Value") })); //$NON-NLS-1$
+						pwCPP.println(MessageFormat.format(
+								"  m_roObjectHandler.getFB(g_nStringId{0})->getDataInput(g_nStringId{1})->fromString(\"{2}\");", //$NON-NLS-1$
+								new Object[] { el.getAttribute("Name"), //$NON-NLS-1$
+										childel.getAttribute("Name"), //$NON-NLS-1$
+										childel.getAttribute("Value") })); //$NON-NLS-1$
 					}
 				}
 			}
@@ -571,8 +565,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 	}
 
 	@Override
-	protected void exportVarNameArrays(final String namePrefix,
-			final NodeList nodes) {
+	protected void exportVarNameArrays(final String namePrefix, final NodeList nodes) {
 		int count = 0;
 		StringBuilder names = new StringBuilder();
 		StringBuilder typenames = new StringBuilder();
@@ -592,12 +585,12 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 					String arraySize = el.getAttribute("ArraySize"); //$NON-NLS-1$
 					if (null != arraySize) {
 						if (!arraySize.equals("")) { //$NON-NLS-1$
-							typenames.append("g_nStringIdARRAY, ");  //$NON-NLS-1$
+							typenames.append("g_nStringIdARRAY, "); //$NON-NLS-1$
 							typenames.append(arraySize);
 							typenames.append(", "); //$NON-NLS-1$
 						}
 					}
-					typenames.append("g_nStringId");  //$NON-NLS-1$
+					typenames.append("g_nStringId"); //$NON-NLS-1$
 					typenames.append(el.getAttribute("Type")); //$NON-NLS-1$
 				}
 			}
@@ -622,13 +615,12 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 	}
 
 	@Override
-	protected void exportEvents(final String namePrefix, final NodeList nodes,
-			final List<String> varNames) {
+	protected void exportEvents(final String namePrefix, final NodeList nodes, final List<String> varNames) {
 
 		int count = 0;
-		String names = ""; //$NON-NLS-1$
-		String withs = ""; //$NON-NLS-1$
-		String withIndexes = ""; //$NON-NLS-1$
+		StringBuilder names = new StringBuilder();
+		StringBuilder withs = new StringBuilder();
+		StringBuilder withIndexes = new StringBuilder();
 		int withcount[] = new int[varNames.size()];
 		for (int i = 0; i < varNames.size(); ++i) {
 			withcount[i] = 0;
@@ -637,8 +629,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 		int startindex;
 		int len = nodes.getLength();
 
-		if ((libraryType instanceof AdapterType)
-				&& (!(namePrefix.equals("EventInputs")))) { //$NON-NLS-1$
+		if ((libraryType instanceof AdapterType) && (!(namePrefix.equals("EventInputs")))) { //$NON-NLS-1$
 			pwH.println(" public:"); //$NON-NLS-1$
 		}
 
@@ -650,10 +641,10 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 					exportEventID(el.getAttribute("Name"), count); //$NON-NLS-1$
 					count++;
 					if (count != 1) {
-						names += ", "; //$NON-NLS-1$
-						withIndexes += ", "; //$NON-NLS-1$
+						names.append(", "); //$NON-NLS-1$
+						withIndexes.append(", "); //$NON-NLS-1$
 					}
-					names += "g_nStringId" + el.getAttribute("Name"); //$NON-NLS-1$ //$NON-NLS-2$
+					names.append("g_nStringId").append(el.getAttribute("Name")); //$NON-NLS-1$ //$NON-NLS-2$
 					if (namePrefix.equals("EventInput")) { //$NON-NLS-1$
 						eventInputs.add(el.getAttribute("Name")); //$NON-NLS-1$
 					}
@@ -671,20 +662,20 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 								int pos = varNames.indexOf(var);
 								++(withcount[pos]);
 								if (indexCount != 0) {
-									withs += ", "; //$NON-NLS-1$
+									withs.append(", "); //$NON-NLS-1$
 								}
-								withs += pos;
+								withs.append(pos);
 								indexCount++;
 								eventwithcount++;
 							}
 						}
 					}
 					if (eventwithcount == 0) {
-						withIndexes += "-1"; //$NON-NLS-1$
+						withIndexes.append("-1"); //$NON-NLS-1$
 					} else {
-						withs += ", 255"; //$NON-NLS-1$
+						withs.append(", 255"); //$NON-NLS-1$
 						indexCount++;
-						withIndexes += startindex;
+						withIndexes.append(startindex);
 					}
 				}
 			}
@@ -704,37 +695,38 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 					for (int i = 0; i < dataOutCount; ++i) {
 						if (withcount[i] == 0) {
 							if (indexCount != 0) {
-								withs += ", "; //$NON-NLS-1$
+								withs.append(", "); //$NON-NLS-1$
 							}
-							withs += i;
+							withs.append(i);
 							++nowithcount;
 							++indexCount;
 						}
 					}
 					if (nowithcount == 0) {
-						withIndexes += ", -1"; //$NON-NLS-1$
+						withIndexes.append(", -1"); //$NON-NLS-1$
 					} else {
-						withs += ", 255"; //$NON-NLS-1$
-						withIndexes += ", " + startindex; //$NON-NLS-1$
+						withs.append(", 255"); //$NON-NLS-1$
+						withIndexes.append(", ").append(startindex); //$NON-NLS-1$
 					}
 					pwH.println("  static const TDataIOID scm_anEOWith[];"); //$NON-NLS-1$
 					pwCPP.println("const TDataIOID FORTE_" + name //$NON-NLS-1$
 							+ "::scm_anEOWith[] = {" + withs + "};"); //$NON-NLS-1$ //$NON-NLS-2$
 				} else {
-					withIndexes += ", -1"; //$NON-NLS-1$
+					withIndexes.append(", -1"); //$NON-NLS-1$
 				}
 			} else {
 				if (dataOutCount != 0) {
 					pwH.println("  static const TDataIOID scm_anEOWith[];"); //$NON-NLS-1$
 					for (int i = 0; i < dataOutCount; ++i) {
-						withs += i + ", "; //$NON-NLS-1$
+						withs.append(i);
+						withs.append(", "); //$NON-NLS-1$
 					}
-					withs += "255"; //$NON-NLS-1$
+					withs.append("255"); //$NON-NLS-1$
 					pwCPP.println("const TDataIOID FORTE_" + name //$NON-NLS-1$
 							+ "::scm_anEOWith[] = {" + withs + "};"); //$NON-NLS-1$ //$NON-NLS-2$
-					withIndexes += "0"; //$NON-NLS-1$
+					withIndexes.append("0"); //$NON-NLS-1$
 				} else {
-					withIndexes += "-1"; //$NON-NLS-1$
+					withIndexes.append("-1"); //$NON-NLS-1$
 				}
 			}
 			pwCPP.println("const TForteInt16 FORTE_" + name //$NON-NLS-1$
@@ -750,37 +742,38 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 						for (int i = 0; i < dataInCount; ++i) {
 							if (withcount[i] == 0) {
 								if (indexCount != 0) {
-									withs += ", "; //$NON-NLS-1$
+									withs.append(", "); //$NON-NLS-1$
 								}
-								withs += i;
+								withs.append(i);
 								++nowithcount;
 								++indexCount;
 							}
 						}
 						if (nowithcount == 0) {
-							withIndexes += ", -1"; //$NON-NLS-1$
+							withIndexes.append(", -1"); //$NON-NLS-1$
 						} else {
-							withs += ", 255"; //$NON-NLS-1$
-							withIndexes += ", " + startindex; //$NON-NLS-1$
+							withs.append(", 255"); //$NON-NLS-1$
+							withIndexes.append(", ").append(startindex); //$NON-NLS-1$
 						}
 						pwH.println("  static const TDataIOID scm_anEIWith[];"); //$NON-NLS-1$
 						pwCPP.println("const TDataIOID FORTE_" + name //$NON-NLS-1$
 								+ "::scm_anEIWith[] = {" + withs + "};"); //$NON-NLS-1$ //$NON-NLS-2$
 					} else {
-						withIndexes += ", -1"; //$NON-NLS-1$
+						withIndexes.append(", -1"); //$NON-NLS-1$
 					}
 				} else {
 					if (dataInCount != 0) {
 						pwH.println("  static const TDataIOID scm_anEIWith[];"); //$NON-NLS-1$
 						for (int i = 0; i < dataInCount; ++i) {
-							withs += i + ", "; //$NON-NLS-1$
+							withs.append(i);
+							withs.append(", "); //$NON-NLS-1$
 						}
-						withs += "255"; //$NON-NLS-1$
+						withs.append("255"); //$NON-NLS-1$
 						pwCPP.println("const TDataIOID FORTE_" + name //$NON-NLS-1$
 								+ "::scm_anEIWith[] = {" + withs + "};"); //$NON-NLS-1$ //$NON-NLS-2$
-						withIndexes += "0"; //$NON-NLS-1$
+						withIndexes.append("0"); //$NON-NLS-1$
 					} else {
-						withIndexes += "-1"; //$NON-NLS-1$
+						withIndexes.append("-1"); //$NON-NLS-1$
 					}
 				}
 				pwCPP.println("const TForteInt16 FORTE_" + name //$NON-NLS-1$
@@ -791,11 +784,11 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 					pwCPP.println("const TForteInt16 FORTE_" + name //$NON-NLS-1$
 							+ "::scm_anEIWithIndexes[] = {" + withIndexes //$NON-NLS-1$
 							+ "};"); //$NON-NLS-1$
-					if ((dataInCount != 0)  && (0 != withs.length())){
-							//we have input withs
-							pwH.println("  static const TDataIOID scm_anEIWith[];"); //$NON-NLS-1$
-							pwCPP.println("const TDataIOID FORTE_" + name //$NON-NLS-1$
-									+ "::scm_anEIWith[] = {" + withs + "};"); //$NON-NLS-1$ //$NON-NLS-2$
+					if ((dataInCount != 0) && (0 != withs.length())) {
+						// we have input withs
+						pwH.println("  static const TDataIOID scm_anEIWith[];"); //$NON-NLS-1$
+						pwCPP.println("const TDataIOID FORTE_" + name //$NON-NLS-1$
+								+ "::scm_anEIWith[] = {" + withs + "};"); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 
 				}
@@ -825,8 +818,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 	}
 
 	@Override
-	protected void exportAlgorithm(final String algName, final String type,
-			final String src) {
+	protected void exportAlgorithm(final String algName, final String type, final String src) {
 		pwH.println("  void alg_" + algName + "(void);"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		pwCPP.println("void FORTE_" + name + "::alg_" + algName + "(void){"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -930,8 +922,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 	@Override
 	protected void exportFBVar() {
 		if (libraryType instanceof CompositeFBType) {
-			FBNetwork fbNetwork = ((CompositeFBType) libraryType)
-					.getFBNetwork();
+			FBNetwork fbNetwork = ((CompositeFBType) libraryType).getFBNetwork();
 
 			EList<FBNetworkElement> allIntFBs = fbNetwork.getNetworkElements();
 
@@ -979,8 +970,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 			if (!fbNetwork.getDataConnections().isEmpty()) {
 				pwCPP.println("  " //$NON-NLS-1$
-						+ (fbNetwork.getDataConnections().size() - fannedOutDataConns)
-						+ ", scm_astDataConnections,"); //$NON-NLS-1$
+						+ (fbNetwork.getDataConnections().size() - fannedOutDataConns) + ", scm_astDataConnections,"); //$NON-NLS-1$
 				if (0 != fannedOutDataConns) {
 					pwCPP.println("  " + fannedOutDataConns //$NON-NLS-1$
 							+ ", scm_astFannedOutDataConnections,"); //$NON-NLS-1$
@@ -1033,32 +1023,21 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 			}
 
 			if (interfaceList != null) {
-				// we are a FB and only FBs have adapters 
+				// we are a FB and only FBs have adapters
 				EList<AdapterDeclaration> myPlugs = interfaceList.getPlugs();
-				EList<AdapterDeclaration> mySockets = interfaceList
-						.getSockets();
+				EList<AdapterDeclaration> mySockets = interfaceList.getSockets();
 
 				adapterCount = myPlugs.size() + mySockets.size();
 
-				for (int i = 0; i < myPlugs.size(); i++) {
-					adapterInstance myLocalAdapterInst = new adapterInstance();
-					myLocalAdapterInst.stName = myPlugs.get(i).getName();
-					myLocalAdapterInst.stAdapterType = myPlugs.get(i)
-							.getTypeName();
-					myLocalAdapterInst.bIsPlug = true;
-					myLocalAdapterInst.oAdapterFBType = findAdapterType(myPlugs
-							.get(i));
+				for (AdapterDeclaration adapterDeclaration : myPlugs) {
+					AdapterInstance myLocalAdapterInst = new AdapterInstance(adapterDeclaration.getName(),
+							adapterDeclaration.getTypeName(), true, findAdapterType(adapterDeclaration));
 					adapters.add(myLocalAdapterInst);
 				}
 
-				for (int i = 0; i < mySockets.size(); i++) {
-					adapterInstance myLocalAdapterInst = new adapterInstance();
-					myLocalAdapterInst.stName = mySockets.get(i).getName();
-					myLocalAdapterInst.stAdapterType = mySockets.get(i)
-							.getTypeName();
-					myLocalAdapterInst.bIsPlug = false;
-					myLocalAdapterInst.oAdapterFBType = findAdapterType(mySockets
-							.get(i));
+				for (AdapterDeclaration adapterDeclaration : mySockets) {
+					AdapterInstance myLocalAdapterInst = new AdapterInstance(adapterDeclaration.getName(),
+							adapterDeclaration.getTypeName(), false, findAdapterType(adapterDeclaration));
 					adapters.add(myLocalAdapterInst);
 
 				}
@@ -1067,26 +1046,26 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 					pwCPP.println("const SAdapterInstanceDef FORTE_" + name //$NON-NLS-1$
 							+ "::scm_astAdapterInstances[] = {"); //$NON-NLS-1$
 					for (int i = 0; i < adapters.size(); i++) {
-						adapterInstance myAdapter = adapters.get(i);
+						AdapterInstance myAdapter = adapters.get(i);
 						if (i > 0)
 							pwCPP.println(","); //$NON-NLS-1$
-						pwCPP.print("{g_nStringId" + myAdapter.stAdapterType //$NON-NLS-1$
-								+ ", " + "g_nStringId" + myAdapter.stName //$NON-NLS-1$ //$NON-NLS-2$
+						pwCPP.print("{g_nStringId" + myAdapter.getAdapterType() //$NON-NLS-1$
+								+ ", " + "g_nStringId" + myAdapter.getName() //$NON-NLS-1$ //$NON-NLS-2$
 								+ ", "); //$NON-NLS-1$
-						if (myAdapter.bIsPlug) {
+						if (myAdapter.isPlug()) {
 							pwCPP.print("true }"); //$NON-NLS-1$
 						} else {
 							pwCPP.print("false }"); //$NON-NLS-1$
 						}
 
-						pwH.print("  FORTE_" + myAdapter.stAdapterType + "& " //$NON-NLS-1$ //$NON-NLS-2$
-								+ myAdapter.stName + "() {\n" //$NON-NLS-1$
+						pwH.print("  FORTE_" + myAdapter.getAdapterType() + "& " //$NON-NLS-1$ //$NON-NLS-2$
+								+ myAdapter.getName() + "() {\n" //$NON-NLS-1$
 								+ "    return (*static_cast<FORTE_" //$NON-NLS-1$
-								+ myAdapter.stAdapterType + "*>(m_apoAdapters[" //$NON-NLS-1$
+								+ myAdapter.getAdapterType() + "*>(m_apoAdapters[" //$NON-NLS-1$
 								+ i + "]));\n  };\n"); //$NON-NLS-1$
 
 						pwH.println("  static const int scm_n" //$NON-NLS-1$
-								+ myAdapter.stName + "AdpNum = " + i + ";"); //$NON-NLS-1$ //$NON-NLS-2$
+								+ myAdapter.getName() + "AdpNum = " + i + ";"); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					pwCPP.println("};\n"); //$NON-NLS-1$
 				}
@@ -1280,18 +1259,19 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 			}
 		}
 		pwCPP.println("      default:"); //$NON-NLS-1$
-		pwCPP.println("      DEVLOG_ERROR(\"The state is not in the valid range! The state value is: %d. The max value can be: " //$NON-NLS-1$
-				+ stateCount + ".\", m_nECCState.operator TForteUInt16 ());"); //$NON-NLS-1$
+		pwCPP.println(
+				"      DEVLOG_ERROR(\"The state is not in the valid range! The state value is: %d. The max value can be: " //$NON-NLS-1$
+						+ stateCount + ".\", m_nECCState.operator TForteUInt16 ());"); //$NON-NLS-1$
 		pwCPP.println("        m_nECCState = 0; //0 is always the initial state"); //$NON-NLS-1$
 		pwCPP.println("        break;"); //$NON-NLS-1$
 		pwCPP.println("    }"); //$NON-NLS-1$
-		pwCPP.println("    pa_nEIID = cg_nInvalidEventID;  // we have to clear the event after the first check in order to ensure correct behavior"); //$NON-NLS-1$
+		pwCPP.println(
+				"    pa_nEIID = cg_nInvalidEventID;  // we have to clear the event after the first check in order to ensure correct behavior"); //$NON-NLS-1$
 		pwCPP.println("  }while(bTransitionCleared);"); //$NON-NLS-1$
 		pwCPP.println("}"); //$NON-NLS-1$
 	}
 
-	private void emitEnterState(final String stateName,
-			final NodeList actionNodes) {
+	private void emitEnterState(final String stateName, final NodeList actionNodes) {
 		pwH.println("  void enterState" + stateName + "(void);"); //$NON-NLS-1$ //$NON-NLS-2$
 		pwCPP.println("void FORTE_" + name + "::enterState" + stateName //$NON-NLS-1$ //$NON-NLS-2$
 				+ "(void){"); //$NON-NLS-1$
@@ -1328,24 +1308,24 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 	private String getAdapterTypeName(String string) {
 		InterfaceList interfaceList = ((FBType) libraryType).getInterfaceList();
-		
+
 		for (AdapterDeclaration adapter : interfaceList.getPlugs()) {
-			if(adapter.getName().equals(string)){
+			if (adapter.getName().equals(string)) {
 				return adapter.getTypeName();
-			}				
+			}
 		}
-		
+
 		for (AdapterDeclaration adapter : interfaceList.getSockets()) {
-			if(adapter.getName().equals(string)){
+			if (adapter.getName().equals(string)) {
 				return adapter.getTypeName();
-			}				
+			}
 		}
 		return ""; //$NON-NLS-1$
 	}
-	
-	private ECState getStateNamed(final String stateName){
+
+	private ECState getStateNamed(final String stateName) {
 		for (ECState state : ((BasicFBType) libraryType).getECC().getECState()) {
-			if(state.getName().equals(stateName)){
+			if (state.getName().equals(stateName)) {
 				return state;
 			}
 		}
@@ -1353,14 +1333,14 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 	}
 
 	private void emitStateTransitions(final ECState state) {
-		if(null != state){
-			String alternativeGuard = ""; //$NON-NLS-1$
-			String alternativeEvent = ""; //$NON-NLS-1$
-			
+		if (null != state) {
+			StringBuilder alternativeGuard = new StringBuilder();
+			StringBuilder alternativeEvent = new StringBuilder();
+
 			for (ECTransition transition : state.getOutTransitions()) {
 				String event = (null != transition.getConditionEvent()) ? transition.getConditionEvent().getName() : ""; //$NON-NLS-1$
-				String guard = transition.getConditionExpression();					
-		
+				String guard = transition.getConditionExpression();
+
 				if ((event.length() != 0) || (guard.length() != 0)) {
 					pwCPP.print("        if("); //$NON-NLS-1$
 
@@ -1379,7 +1359,8 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 						pwCPP.print(" == pa_nEIID"); //$NON-NLS-1$
 
 						if (guard.length() != 0) {
-							pwCPP.print(") && ((");  //add a second pair of parenthesis to ensure that the guard condition is treated as whole //$NON-NLS-1$
+							pwCPP.print(") && (("); // add a second pair of parenthesis to ensure that the //$NON-NLS-1$
+													// guard condition is treated as whole
 							emitGuardCondition(guard);
 							pwCPP.print("))"); //$NON-NLS-1$
 						}
@@ -1390,7 +1371,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 						boolean AdapterEvent = false;
 						StringTokenizer mySTok = new StringTokenizer(guard, "&", true); //$NON-NLS-1$
 						String myTestString = new String();
-						
+
 						// retrieve first element (adapter-events are
 						// given as first element of guarding condition;
 						// should be in events finally)
@@ -1403,7 +1384,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 							AdapterFBType myAd = checkIfAdapter(myTestString2);
 							if (null != myAd) {
-								alternativeEvent = myTestString2 + "()."; //$NON-NLS-1$
+								alternativeEvent.append(myTestString2).append("()."); //$NON-NLS-1$
 								if (mySTok2.hasMoreTokens()) {
 									String myTest4Event = mySTok2.nextToken();
 									myTest4Event = myTest4Event.trim();
@@ -1413,34 +1394,33 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 									EList<Event> myOEvents = myIL.getEventOutputs();
 									Iterator<Event> myIterE = myIEvents.iterator();
 									while (myIterE.hasNext()) {
-										Event Test4Event = myIterE.next();
-										if (Test4Event.getName().equals(myTest4Event)) {
-											myEv = Test4Event;
+										Event test4Event = myIterE.next();
+										if (test4Event.getName().equals(myTest4Event)) {
+											myEv = test4Event;
 											break;
 										}
 									}
 									if (null == myEv) {
 										myIterE = myOEvents.iterator();
 										while (myIterE.hasNext()) {
-											Event Test4Event = myIterE.next();
-											if (Test4Event.getName().equals(myTest4Event)) {
-												myEv = Test4Event;
+											Event test4Event = myIterE.next();
+											if (test4Event.getName().equals(myTest4Event)) {
+												myEv = test4Event;
 												break;
 											}
 										}
 									}
 									if (null != myEv) {
-										alternativeEvent += myTest4Event
-												+ "()"; //$NON-NLS-1$
+										alternativeEvent.append(myTest4Event).append("()"); //$NON-NLS-1$
 										AdapterEvent = true;
 										// remove separator "&" from
 										// token-list...
 										if (mySTok.hasMoreTokens()) {
-											myTestString = mySTok.nextToken();
+											mySTok.nextToken();
 										}
-										alternativeGuard = ""; //$NON-NLS-1$
+										alternativeGuard.setLength(0); // Reset sting
 										while (mySTok.hasMoreTokens()) {
-											alternativeGuard += mySTok.nextToken();
+											alternativeGuard.append(mySTok.nextToken());
 										}
 									}
 								}
@@ -1451,11 +1431,10 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 							if (alternativeGuard.length() != 0) {
 								pwCPP.print("("); //$NON-NLS-1$
 							}
-							pwCPP.print(alternativeEvent
-									+ " == pa_nEIID"); //$NON-NLS-1$
+							pwCPP.print(alternativeEvent + " == pa_nEIID"); //$NON-NLS-1$
 							if (alternativeGuard.length() != 0) {
 								pwCPP.print(") && (("); //$NON-NLS-1$
-								emitGuardCondition(alternativeGuard);
+								emitGuardCondition(alternativeGuard.toString());
 								pwCPP.print("))"); //$NON-NLS-1$
 							}
 						} else {
@@ -1468,20 +1447,20 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 					pwCPP.println("        else"); //$NON-NLS-1$
 				}
 			}
-							
-		}else{
-			//TODO add some error here
+
+		} else {
+			// TODO add some error here
 		}
 	}
 
 	private AdapterFBType checkIfAdapter(final String Name) {
 
-		Iterator<adapterInstance> myIter = adapters.iterator();
-		adapterInstance myAdapterInfo;
+		Iterator<AdapterInstance> myIter = adapters.iterator();
+		AdapterInstance myAdapterInfo;
 		while (myIter.hasNext()) {
 			myAdapterInfo = myIter.next();
-			if (myAdapterInfo.stName.equals(Name)) {
-				return myAdapterInfo.oAdapterFBType;
+			if (myAdapterInfo.getName().equals(Name)) {
+				return myAdapterInfo.getAdapterFBType();
 			}
 		}
 		return null;
@@ -1497,34 +1476,14 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 		}
 	}
 
-//	private void extractDataTypes(final NodeList nodes, final HashSet datatypes) {
-//		int len = nodes.getLength();
-//		for (int ii = 0; ii < len; ++ii) {
-//			org.w3c.dom.Node node = nodes.item(ii);
-//			if (node instanceof Element) {
-//				Element el = (Element) node;
-//				if (el.getNodeName().equals("VarDeclaration")) {
-//					String type = el.getAttribute("Type");
-//					if (type.length() != 0) {
-//						datatypes.add(type);
-//					}
-//					if (el.getAttribute("ArraySize") != null) {
-//						usesArrays = true;
-//					}
-//				}
-//			}
-//		}
-//	}
-
 	@Override
-	public void export(IFile typeFile, final String destination,
-			final boolean forceOverwrite) throws ExportException {
+	public void export(IFile typeFile, final String destination, final boolean forceOverwrite) throws ExportException {
 
 		eventInCount = 0;
 
 		eventOutCount = 0;
 
-		eventInputs = new Vector<String>();
+		eventInputs = new ArrayList<>();
 
 		adapterCount = 0;
 
@@ -1534,19 +1493,15 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 		anyVars.clear();
 
-		// usesArrays = false;
-
 		if (typeFile.exists()) {
 
 			try {
-				DocumentBuilderFactory dbf = DocumentBuilderFactory
-						.newInstance();
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 				dbf.setNamespaceAware(false);
 				DocumentBuilder db;
 
 				// TODO: set local dtd for validating!
-				dbf.setAttribute(
-						"http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
+				dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
 						Boolean.FALSE);
 				db = dbf.newDocumentBuilder();
 				Document document;
@@ -1588,11 +1543,9 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 
 	int getInputIdForContainedFB(String name, String paramName) {
 		int retVal = 0;
-		FBNetwork containedNetwork = ((CompositeFBType) libraryType)
-				.getFBNetwork();
+		FBNetwork containedNetwork = ((CompositeFBType) libraryType).getFBNetwork();
 
-		EList<VarDeclaration> inputs = containedNetwork.getFBNamed(name)
-				.getInterface().getInputVars();
+		EList<VarDeclaration> inputs = containedNetwork.getFBNamed(name).getInterface().getInputVars();
 
 		Iterator<VarDeclaration> itRunner = inputs.iterator();
 		while (itRunner.hasNext()) {
@@ -1628,26 +1581,22 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 				if (var.type.equals("STRING") || var.type.equals("WSTRING")) { //$NON-NLS-1$ //$NON-NLS-2$
 					pwCPP.println(" = \"" + var.initialValue + "\";"); //$NON-NLS-1$ //$NON-NLS-2$
 					continue;
-				}
-				else{
-					if(var.type.equals("ARRAY")) { //$NON-NLS-1$
+				} else {
+					if (var.type.equals("ARRAY")) { //$NON-NLS-1$
 						pwCPP.println(".fromString(\"" + var.initialValue //$NON-NLS-1$
 								+ "\");"); //$NON-NLS-1$
 						continue;
-					}
-					else{				
-						if((var.type.equals("TIME")) || //$NON-NLS-1$
+					} else {
+						if ((var.type.equals("TIME")) || //$NON-NLS-1$
 								(var.type.equals("DATE")) || //$NON-NLS-1$
 								(var.type.equals("TIME_OF_DAY")) || //$NON-NLS-1$
 								(var.type.equals("DATE_AND_TIME")) //$NON-NLS-1$
-								){
+						) {
 							pwCPP.print(".fromString(\"" + var.initialValue + "\")"); //$NON-NLS-1$ //$NON-NLS-2$
-						}
-						else{
-							if(var.type.equals("BOOL")){ //$NON-NLS-1$
+						} else {
+							if (var.type.equals("BOOL")) { //$NON-NLS-1$
 								pwCPP.print(" = " + var.initialValue.toLowerCase()); //$NON-NLS-1$
-							}
-							else{
+							} else {
 								pwCPP.print(" = " + var.initialValue); //$NON-NLS-1$
 							}
 						}
@@ -1679,7 +1628,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 	private void exportCFBParams(EList<FBNetworkElement> fbs) {
 		numCompFBParams = 0;
 		StringBuilder paramString = new StringBuilder();
-		
+
 		// TODO: check for adapters!
 
 		for (FBNetworkElement fb : fbs) {
@@ -1687,16 +1636,17 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 			if (il != null) { // normally interface has to be set
 				for (VarDeclaration v : il.getInputVars()) {
 					Value value = v.getValue();
-					if (value != null && v.getInputConnections().size() == 0) { 
-						// to be sure that there is no input connection --> the input can have a parameter
-						if (value.getValue() != null && !value.getValue().isEmpty()) { 
+					if (value != null && v.getInputConnections().isEmpty()) {
+						// to be sure that there is no input connection --> the input can have a
+						// parameter
+						if (value.getValue() != null && !value.getValue().isEmpty()) {
 							// to be sure that value is not null(not set) and value is not empty
-							paramString.append("  {");  //$NON-NLS-1$
+							paramString.append("  {"); //$NON-NLS-1$
 							paramString.append(getCompFBIndex(fbs, fb));
-							paramString.append(", g_nStringId");  //$NON-NLS-1$
+							paramString.append(", g_nStringId"); //$NON-NLS-1$
 							paramString.append(v.getName());
 							paramString.append(", \""); //$NON-NLS-1$
-							paramString.append(value.getValue()); 
+							paramString.append(value.getValue());
 							paramString.append("\"},\n"); //$NON-NLS-1$
 							numCompFBParams++;
 						}
@@ -1714,11 +1664,10 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 		}
 	}
 
-	private void exportCFBEventConns(EList<EventConnection> eConns,
-			EList<FBNetworkElement> fbs) {
+	private void exportCFBEventConns(EList<EventConnection> eConns, EList<FBNetworkElement> fbs) {
 		fannedOutEventConns = 0;
 		if (!eConns.isEmpty()) {
-			HashSet<EventConnection> conSet = new HashSet<EventConnection>();
+			Set<EventConnection> conSet = new HashSet<>();
 			StringBuilder fannedOutConns = new StringBuilder();
 
 			pwH.println("\n  static const SCFB_FBConnectionData scm_astEventConnections[];"); //$NON-NLS-1$
@@ -1733,14 +1682,11 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 					Event src = eConn.getEventSource();
 					Event dst = eConn.getEventDestination();
 
-					INamedElement srcFB = (INamedElement) src.eContainer()
-							.eContainer();
-					INamedElement dstFB = (INamedElement) dst.eContainer()
-							.eContainer();
+					INamedElement srcFB = (INamedElement) src.eContainer().eContainer();
+					INamedElement dstFB = (INamedElement) dst.eContainer().eContainer();
 
-					pwCPP.println(genConnString(src.getName(), srcFB.getName(),
-							getCompFBIndex(fbs, srcFB), dst.getName(),
-							dstFB.getName(), getCompFBIndex(fbs, dstFB)));
+					pwCPP.println(genConnString(src.getName(), srcFB.getName(), getCompFBIndex(fbs, srcFB),
+							dst.getName(), dstFB.getName(), getCompFBIndex(fbs, dstFB)));
 
 					if ((src.getOutputConnections().size() > 1)) {
 						// we have fan out
@@ -1748,7 +1694,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 						itRunner.next(); // we don't want to start with the
 						// first
 						while (itRunner.hasNext()) {
-							eConn = (EventConnection)itRunner.next();
+							eConn = (EventConnection) itRunner.next();
 							conSet.add(eConn);
 
 							src = eConn.getEventSource();
@@ -1757,9 +1703,8 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 							srcFB = src.getFBNetworkElement();
 							dstFB = dst.getFBNetworkElement();
 
-							fannedOutConns.append(genFannedOutConnString(
-									eConnNumber, getCompFBIndex(fbs, srcFB),
-									dst.getName(), (null != dstFB) ? dstFB.getName() : "",  ////$NON-NLS-1$
+							fannedOutConns.append(genFannedOutConnString(eConnNumber, getCompFBIndex(fbs, srcFB),
+									dst.getName(), (null != dstFB) ? dstFB.getName() : "", ////$NON-NLS-1$
 									getCompFBIndex(fbs, dstFB)));
 							fannedOutEventConns++;
 						}
@@ -1780,14 +1725,14 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 		}
 	}
 
-	private String genConnString(String srcName, String srcFBName,
-			int srcFBNum, String dstName, String dstFBName, int dstFBNum) {
-		String retVal = new String("  {"); //$NON-NLS-1$
-		retVal += genConnPortPartString(srcName, srcFBName, srcFBNum);
-		retVal += ", "; //$NON-NLS-1$
-		retVal += genConnPortPartString(dstName, dstFBName, dstFBNum);
-		retVal += "},"; //$NON-NLS-1$
-		return retVal;
+	private String genConnString(String srcName, String srcFBName, int srcFBNum, String dstName, String dstFBName,
+			int dstFBNum) {
+		StringBuilder retVal = new StringBuilder("  {"); //$NON-NLS-1$
+		retVal.append(genConnPortPartString(srcName, srcFBName, srcFBNum));
+		retVal.append(", "); //$NON-NLS-1$
+		retVal.append(genConnPortPartString(dstName, dstFBName, dstFBNum));
+		retVal.append("},"); //$NON-NLS-1$
+		return retVal.toString();
 	}
 
 	private String genConnPortPartString(String name, String fBName, int fBNum) {
@@ -1800,36 +1745,34 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 			retVal.append(", g_nStringId"); //$NON-NLS-1$
 		}
 		if (-2 == fBNum) { // Adapter
-			retVal.append(name); 
+			retVal.append(name);
 			retVal.append("), CCompositeFB::scm_nAdapterMarker |"); //$NON-NLS-1$
 			for (int i = 0; i < adapterCount; i++) {
-				if (adapters.get(i).stName.equals(fBName)) {
+				if (adapters.get(i).getName().equals(fBName)) {
 					retVal.append(i);
 					break;
 				}
 			}
 		} else {
 			retVal.append(name);
-			retVal.append("), ");  //$NON-NLS-1$
+			retVal.append("), "); //$NON-NLS-1$
 			retVal.append(fBNum);
 		}
 		return retVal.toString();
 	}
 
-	private String genFannedOutConnString(int connNum, int srcFBNum,
-			String dstName, String dstFBName, int dstFBNum) {
-		String retVal = new String("  {"); //$NON-NLS-1$
-		retVal += connNum + ", "; //$NON-NLS-1$
-		retVal += genConnPortPartString(dstName, dstFBName, dstFBNum);
-		retVal += "},\n"; //$NON-NLS-1$
-		return retVal;
+	private String genFannedOutConnString(int connNum, int srcFBNum, String dstName, String dstFBName, int dstFBNum) {
+		StringBuilder retVal = new StringBuilder("  {"); //$NON-NLS-1$
+		retVal.append(connNum).append(", "); //$NON-NLS-1$
+		retVal.append(genConnPortPartString(dstName, dstFBName, dstFBNum));
+		retVal.append("},\n"); //$NON-NLS-1$
+		return retVal.toString();
 	}
 
-	private void exportCFBDataConns(EList<DataConnection> dataConns,
-			EList<FBNetworkElement> fbs) {
+	private void exportCFBDataConns(EList<DataConnection> dataConns, EList<FBNetworkElement> fbs) {
 		fannedOutDataConns = 0;
 		if (!dataConns.isEmpty()) {
-			HashSet<DataConnection> conSet = new HashSet<DataConnection>();
+			Set<DataConnection> conSet = new HashSet<>();
 			StringBuilder fannedOutConns = new StringBuilder();
 
 			pwH.println("\n  static const SCFB_FBConnectionData scm_astDataConnections[];"); //$NON-NLS-1$
@@ -1847,45 +1790,41 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 					VarDeclaration src = primConn.getDataSource();
 					VarDeclaration dst = primConn.getDataDestination();
 
-					if((null != src) && (null != dst)){
-						INamedElement srcFB = (INamedElement) src.eContainer()
-								.eContainer();
-						INamedElement dstFB = (INamedElement) dst.eContainer()
-								.eContainer();
+					if ((null != src) && (null != dst)) {
+						INamedElement srcFB = (INamedElement) src.eContainer().eContainer();
+						INamedElement dstFB = (INamedElement) dst.eContainer().eContainer();
 						int primDstIndex = getCompFBIndex(fbs, dstFB);
-	
-						pwCPP.println(genConnString(src.getName(), srcFB.getName(),
-								getCompFBIndex(fbs, srcFB), dst.getName(),
-								dstFB.getName(), primDstIndex));
-	
+
+						pwCPP.println(genConnString(src.getName(), srcFB.getName(), getCompFBIndex(fbs, srcFB),
+								dst.getName(), dstFB.getName(), primDstIndex));
+
 						if ((src.getOutputConnections().size() > 1)) {
 							// we have fan out
 							for (Connection itRunner : src.getOutputConnections()) {
-								DataConnection dataConn = (DataConnection)itRunner;
+								DataConnection dataConn = (DataConnection) itRunner;
 								if (!conSet.contains(itRunner)) {
 									conSet.add(dataConn);
-	
+
 									src = dataConn.getDataSource();
 									dst = dataConn.getDataDestination();
-	
-									srcFB = (INamedElement) src.eContainer()
-											.eContainer();
-									dstFB = (INamedElement) dst.eContainer()
-											.eContainer();
-	
+
+									srcFB = (INamedElement) src.eContainer().eContainer();
+									dstFB = (INamedElement) dst.eContainer().eContainer();
+
 									int dstIndex = getCompFBIndex(fbs, dstFB);
 									if ((-1 == dstIndex) && (-1 == primDstIndex)) {
-										fannedOutConns.append("#error a fannout to several composite FB's outputs is currently not supported: "); //$NON-NLS-1$
+										fannedOutConns.append(
+												"#error a fannout to several composite FB's outputs is currently not supported: "); //$NON-NLS-1$
 										forteEmitterErrors.add(" - " + name
-														+ " FORTE does currently not allow that a data a composite's data connection may be connected to several data outputs of the composite FB."); //$NON-NLS-1$
+												+ " FORTE does currently not allow that a data a composite's data connection may be connected to several data outputs of the composite FB."); //$NON-NLS-1$
 									}
-	
-									fannedOutConns.append(genFannedOutConnString(dConnNumber, getCompFBIndex(fbs, srcFB),
-											dst.getName(), dstFB.getName(), dstIndex));
+
+									fannedOutConns.append(genFannedOutConnString(dConnNumber,
+											getCompFBIndex(fbs, srcFB), dst.getName(), dstFB.getName(), dstIndex));
 									fannedOutDataConns++;
 								}
 							}
-						}					
+						}
 						dConnNumber++;
 					}
 				}
@@ -1921,13 +1860,11 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 		pwH.println(", " + adapterCount + ");"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	private DataConnection getInterfaceDstedDataConn(
-			EList<Connection> dataConns) {
+	private DataConnection getInterfaceDstedDataConn(EList<Connection> dataConns) {
 		for (Connection dc : dataConns) {
-			if ((null != dc.getDestination()) &&  
-			     (null!= dc.getDestination().eContainer()) && 
-			     (dc.getDestination().eContainer().eContainer() instanceof CompositeFBType)) {
-				return (DataConnection)dc;
+			if ((null != dc.getDestination()) && (null != dc.getDestination().eContainer())
+					&& (dc.getDestination().eContainer().eContainer() instanceof CompositeFBType)) {
+				return (DataConnection) dc;
 			}
 		}
 		return null;
@@ -1936,10 +1873,8 @@ public class ForteExportFilter1_0_x extends ExportFilter implements
 	private int getCompFBIndex(EList<FBNetworkElement> fbs, INamedElement fb) {
 		int retval = -1;
 		retval = fbs.indexOf(fb);
-		if (retval != -1) {
-			if (fbs.get(retval).getType() instanceof AdapterFBType) {
-				retval = -2;
-			}
+		if (retval != -1 && fbs.get(retval).getType() instanceof AdapterFBType) {
+			retval = -2;
 		}
 		return retval;
 	}
