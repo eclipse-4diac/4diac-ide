@@ -69,8 +69,7 @@ public class ZoomScalableFreeformRootEditPart extends
 	
 	@Override	
 	public DragTracker getDragTracker(Request req) {
-		MarqueeDragTracker dragTracker = new AdvancedMarqueeDragTracker();
-		return dragTracker;
+		return new AdvancedMarqueeDragTracker();
 	}
 
 
@@ -105,7 +104,7 @@ public class ZoomScalableFreeformRootEditPart extends
 	
 	
 	private void configureZoomManger() {
-		List<String> zoomLevels = new ArrayList<String>(3);
+		List<String> zoomLevels = new ArrayList<>(3);
 		zoomLevels.add(ZoomManager.FIT_ALL);
 		zoomLevels.add(ZoomManager.FIT_WIDTH);
 		zoomLevels.add(ZoomManager.FIT_HEIGHT);

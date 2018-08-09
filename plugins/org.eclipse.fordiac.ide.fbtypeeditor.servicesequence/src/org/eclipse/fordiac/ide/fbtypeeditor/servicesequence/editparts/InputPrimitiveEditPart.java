@@ -46,7 +46,7 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart{
 	
 	@Override
 	public List<Object> getModelSourceConnections() {
-		ArrayList<Object> temp = new ArrayList<Object>();
+		ArrayList<Object> temp = new ArrayList<>();
 		OutputPrimitive view = getCastedParent().getPossibleOutputPrimitive(getCastedModel());
 		if (view != null) {
 			temp.add(connectingConnection);
@@ -57,7 +57,7 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart{
 
 	@Override
 	public List<Object> getModelTargetConnections() {
-		ArrayList<Object> temp = new ArrayList<Object>();
+		ArrayList<Object> temp = new ArrayList<>();
 		temp.add(connection);
 		return temp;
 	}

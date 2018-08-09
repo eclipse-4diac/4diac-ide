@@ -13,10 +13,9 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies;
 
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ReconnectTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateTransitionCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ReconnectTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.CreateConnectionRequest;
@@ -25,8 +24,7 @@ import org.eclipse.gef.requests.ReconnectRequest;
 /**
  * The Class TransitionNodeEditPolicy.
  */
-public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy implements
-		EditPolicy {
+public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy {
 
 	/*
 	 * (non-Javadoc)
@@ -85,8 +83,7 @@ public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy implements
 	 */
 	@Override
 	protected Command getReconnectSourceCommand(final ReconnectRequest request) {
-		ReconnectTransitionCommand cmd = new ReconnectTransitionCommand(request);
-		return cmd;
+		return new ReconnectTransitionCommand(request);
 	}
 
 	/*
@@ -96,8 +93,7 @@ public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy implements
 	 */
 	@Override
 	protected Command getReconnectTargetCommand(final ReconnectRequest request) {
-		ReconnectTransitionCommand cmd = new ReconnectTransitionCommand(request);
-		return cmd;
+		return new ReconnectTransitionCommand(request);
 	}
 
 }

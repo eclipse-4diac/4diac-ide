@@ -99,13 +99,7 @@ public class ComboDirectEditManager extends DirectEditManager {
 	 * @param initialChar the initial char
 	 */
 	public void show(final char initialChar) {
-		//initialString = new String(new char[] { initialChar });
 		this.show();
-		// Get the Text control
-		// Text textControl = (Text) getCellEditor().getControl();
-		// // Set the controls text and position the caret at the end of the
-		// text
-		// textControl.setSelection(1);
 		setDirty(true);
 		getLocator().relocate(getCellEditor());
 	}

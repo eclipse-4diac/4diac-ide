@@ -50,7 +50,7 @@ public class VersionLabelProvider extends LabelProvider implements
 			case 3:
 				return ((VersionInfo) element).getDate();
 			case 4:
-				return (null == ((VersionInfo) element).getRemarks()) ? new String("") : ((VersionInfo) element).getRemarks(); //$NON-NLS-1$
+				return (null == ((VersionInfo) element).getRemarks()) ? "" : ((VersionInfo) element).getRemarks(); //$NON-NLS-1$
 			default:
 				break;
 			}

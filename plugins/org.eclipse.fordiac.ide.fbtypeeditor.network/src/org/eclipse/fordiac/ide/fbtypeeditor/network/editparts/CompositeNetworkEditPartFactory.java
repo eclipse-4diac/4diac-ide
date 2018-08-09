@@ -34,8 +34,7 @@ public class CompositeNetworkEditPartFactory extends ElementEditPartFactory {
 	protected EditPart getPartForElement(final EditPart context,
 			final Object modelElement) {
 		if (modelElement instanceof FBNetwork) {
-			CompositeNetworkEditPart compositeNetEP = new CompositeNetworkEditPart();
-			return compositeNetEP;
+			return new CompositeNetworkEditPart();
 		}
 		if (modelElement instanceof IInterfaceElement) {
 			IInterfaceElement iElement = (IInterfaceElement)modelElement;

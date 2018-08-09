@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class FBTHelper {
+public final class FBTHelper {
 
 	public static int getEISize(FBType fbType) {
 		int retval=0;
@@ -211,16 +211,9 @@ public class FBTHelper {
 	}
 	
 	public static List<TestSequence> extractTestSequences(FBType fbType) {
-		
-		List<TestSequence> testSequences = new ArrayList<TestSequence>();
-		
-
-		for (int i=0; i<fbType.getService().getServiceSequence().size(); i++) {
-			ServiceSequence sq;
-			sq = fbType.getService().getServiceSequence().get(i);
-			
+		List<TestSequence> testSequences = new ArrayList<>();
+		for (ServiceSequence sq : fbType.getService().getServiceSequence()) {
 			testSequences.add(extractTestSequence(fbType,sq));
-
 		}
 		return testSequences;
 	}
@@ -241,11 +234,11 @@ public class FBTHelper {
 				boolean useInputQualifier=false;
 				/** Evaluate Event-Data */
 				if (event.contains("-")) { //$NON-NLS-1$
-					event = event.substring(0, event.indexOf("-")); //$NON-NLS-1$
+					event = event.substring(0, event.indexOf('-')); 
 					inputQualifier=false;
 					useInputQualifier=true;
 				} else if(event.contains("+")) { //$NON-NLS-1$
-					event = event.substring(0, event.indexOf("+")); //$NON-NLS-1$
+					event = event.substring(0, event.indexOf('+'));
 					inputQualifier=true;
 					useInputQualifier=true;
 				}
@@ -293,7 +286,7 @@ public class FBTHelper {
 				} 
 			}
 			if (null != st.getOutputPrimitive()) {
-				if (st.getOutputPrimitive().size()>0) {
+				if (!st.getOutputPrimitive().isEmpty()) {
 					for (Iterator<OutputPrimitive> iterator = st.getOutputPrimitive().iterator(); iterator.hasNext();) {
 						OutputPrimitive op = iterator.next();
 						TestPrimitive tp = new TestPrimitive(null);
@@ -303,11 +296,11 @@ public class FBTHelper {
 						boolean useOutputQualifier=false;
 						/** Evaluate Event-Data */
 						if (event.contains("-")) { //$NON-NLS-1$
-							event = event.substring(0, event.indexOf("-")); //$NON-NLS-1$
+							event = event.substring(0, event.indexOf('-'));
 							outputQualifier=false;
 							useOutputQualifier=true;
 						} else if(event.contains("+")) { //$NON-NLS-1$
-							event = event.substring(0, event.indexOf("+")); //$NON-NLS-1$
+							event = event.substring(0, event.indexOf('+'));
 							outputQualifier=true;
 							useOutputQualifier=true;
 						}
@@ -366,13 +359,12 @@ public class FBTHelper {
 	public static int getMaxOutputPrimitives(List<TestSequence> paTests) {
 		int retval = 0;
 		
-		for (Iterator<TestSequence> TSiterator = paTests.iterator(); TSiterator.hasNext();) {
-			TestSequence TS = TSiterator.next();
-			if ((TS.getTestTransactions() != null) && (TS.getTestTransactions().size()>0)) {
-				for (Iterator<TestTransaction> TTiterator = TS.getTestTransactions().iterator(); TTiterator.hasNext();) {
-					TestTransaction TT = TTiterator.next();
-					if (null != TT.getOutputPrimitives()) {
-						retval = Math.max(retval, TT.getOutputPrimitives().size());
+		for (TestSequence ts : paTests) {
+			if ((ts.getTestTransactions() != null) && (!ts.getTestTransactions().isEmpty())) {
+				for (Iterator<TestTransaction> TTiterator = ts.getTestTransactions().iterator(); TTiterator.hasNext();) {
+					TestTransaction tt = TTiterator.next();
+					if (null != tt.getOutputPrimitives()) {
+						retval = Math.max(retval, tt.getOutputPrimitives().size());
 					}
 				}
 			}
@@ -382,5 +374,9 @@ public class FBTHelper {
 		return retval;
 		
 	}
+
 	
+	private FBTHelper() {
+		throw new UnsupportedOperationException("The class FBThelper should not be insantiated!");
+	}
 }

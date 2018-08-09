@@ -48,8 +48,6 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 	@Named(Constants.FILE_EXTENSIONS)
 	public String fileExtension;
 		
-	public XTextAlgorithmCreator() {
-	}
 
 	@Override
 	public IAlgorithmEditor createAlgorithmEditor(Composite parent, final BasicFBType fbType) {
@@ -68,8 +66,7 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 					createAdapterResource(resourceSet, copier, adapter);
 				}
 				copier.copyReferences();
-				Resource resource = resourceSet.createResource(computeUnusedUri(resourceSet, fileExtension));
-				return (XtextResource) resource;
+				return (XtextResource) resourceSet.createResource(computeUnusedUri(resourceSet, fileExtension));
 			}
 
 			private void createAdapterResource(XtextResourceSet resourceSet, EcoreUtil.Copier copier,

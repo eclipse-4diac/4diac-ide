@@ -88,8 +88,7 @@ public class SocketContainerLayoutEditPolicy extends AbstractInterfaceContainerL
 			if (ref != null) {
 				index = type.getInterfaceList().getSockets().indexOf(ref.getModel());
 			}
-			CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand((DataType) childClass, type.getInterfaceList(), true, index);
-			return cmd;
+			return new CreateInterfaceElementCommand((DataType) childClass, type.getInterfaceList(), true, index);
 		}
 		return null;
 	}

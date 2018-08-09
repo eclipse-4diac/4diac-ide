@@ -44,15 +44,7 @@ public class HideableConnection extends PolylineConnection {
 	public void setHidden(boolean hidden) {
 		this.hidden = hidden;
 	}
-
 	
-	@Override
-	public void addMouseListener(MouseListener listener) {
-		super.addMouseListener(listener);
-	}
-
-	
-
 	@Override
 	protected void outlineShape(Graphics g) {
 		if (isHidden()) {

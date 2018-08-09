@@ -85,8 +85,7 @@ public class EventInputContainerLayoutEditPolicy extends AbstractInterfaceContai
 			index = type.getInterfaceList().getEventInputs().indexOf(ref.getModel());
 		}
 		if (childClass instanceof EventType && type != null) {
-			CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand((DataType)childClass, type.getInterfaceList(), true, index);
-			return cmd;
+			return new CreateInterfaceElementCommand((DataType)childClass, type.getInterfaceList(), true, index);
 		}
 		return null;
 	}

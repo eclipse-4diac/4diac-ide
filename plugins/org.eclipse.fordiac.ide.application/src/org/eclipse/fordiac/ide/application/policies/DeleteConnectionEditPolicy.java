@@ -31,8 +31,7 @@ public class DeleteConnectionEditPolicy extends
 	@Override
 	protected Command getDeleteCommand(final GroupRequest request) {
 		if (getHost() instanceof ConnectionEditPart) {
-			DeleteConnectionCommand c = new DeleteConnectionCommand(((ConnectionEditPart) getHost()).getModel());
-			return c;
+			return new DeleteConnectionCommand(((ConnectionEditPart) getHost()).getModel());
 		}
 		return null;
 	}

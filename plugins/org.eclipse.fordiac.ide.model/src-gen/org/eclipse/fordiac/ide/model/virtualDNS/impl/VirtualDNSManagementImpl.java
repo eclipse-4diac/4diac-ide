@@ -212,37 +212,37 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements
 
 	@Override
 	public String getReplacedString(String value) {
-		String replacedValue = new String();
+		StringBuilder replacedValue = new StringBuilder(); 
 		
-		int start = value.indexOf("%", 0); //$NON-NLS-1$
+		int start = value.indexOf('%', 0);
 		int end = -1;
 		
 		if(0 != start){
 			//the % is not in the first position
-			replacedValue = value.substring(0, start);
+			replacedValue.append(value.substring(0, start));
 		}
 		
 		while(-1 != start){
 			start++; //pass by the starting %
-			end = value.indexOf("%", start); //$NON-NLS-1$
+			end = value.indexOf('%', start); 
 			if(-1 != end){
 				String name = value.substring(start, end);
 				name = getValueForName(name);
 				if(null != name){
-					replacedValue += name;	
+					replacedValue.append(name);	
 				}
-				start = value.indexOf("%", end + 1); //$NON-NLS-1$
+				start = value.indexOf('%', end + 1);
 				if((-1 != start) && (start != end + 1)){
-					replacedValue += value.substring(end + 1, start);
+					replacedValue.append(value.substring(end + 1, start));
 				}
 			}else{
-				return replacedValue + value.substring(start -1);
+				replacedValue.append(value.substring(start -1));
+				return replacedValue.toString();
 			}
 		}
 		
-		replacedValue += value.substring(end + 1);
-		
-		return replacedValue;
+		replacedValue.append(value.substring(end + 1));		
+		return replacedValue.toString();
 	}
 
 	private String getValueForName(String name) {

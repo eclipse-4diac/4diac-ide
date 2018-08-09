@@ -74,13 +74,6 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 		this.commandStack = commandStack;
 	}
 
-	public CompositeNetworkEditor() {}
-
-	@Override
-	protected void initializeGraphicalViewer() {
-		super.initializeGraphicalViewer();
-	}
-
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
 		return new CompositeNetworkEditPartFactory(this, getZoomManger() );
@@ -142,22 +135,17 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 		Map map = getGraphicalViewer().getEditPartRegistry();
 
 		for (Object key : map.keySet()) {
-			if (key instanceof FB) {
-				if (((FB) key) == selectedElement) {
-					selectedElement = key;
-					break;
-				}
+			if (key instanceof FB && ((FB) key) == selectedElement) {
+				selectedElement = key;
+				break;
 			}
-			if (key instanceof Connection) {
-				if (((Connection) key) == selectedElement) {
-					selectedElement = key;
-					break;
-				}
+			if (key instanceof Connection && ((Connection) key) == selectedElement) {
+				selectedElement = key;
+				break;
 			}
 		}
 
-		Object obj = getGraphicalViewer().getEditPartRegistry().get(
-				selectedElement);
+		Object obj = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
 		if (obj instanceof EditPart) {
 			return (EditPart) obj;
 		}
@@ -212,7 +200,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	
 	@Override
 	protected String getPalletNavigatorID() {
-		return "org.eclipse.fordiac.ide.compositefbpaletteviewer"; //$NON-NLS-1$;
+		return "org.eclipse.fordiac.ide.compositefbpaletteviewer"; //$NON-NLS-1$
 	}
 	
 	@Override

@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 
 /**
@@ -39,16 +37,7 @@ public class ConnectingConnectionEditPart extends AbstractConnectionEditPart {
 	 */
 	@Override
 	protected void createEditPolicies() {
+		//currently no policies for this edit part
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.editparts.AbstractConnectionEditPart#createFigure()
-	 */
-	@Override
-	protected IFigure createFigure() {
-		PolylineConnection connection = (PolylineConnection) super.createFigure();
-		return connection;
-	}
 }

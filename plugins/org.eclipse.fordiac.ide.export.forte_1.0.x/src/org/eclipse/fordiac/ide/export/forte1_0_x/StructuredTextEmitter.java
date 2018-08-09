@@ -391,8 +391,8 @@ public class StructuredTextEmitter {
 						return;
 					}
 					statement = tokens.nextToken();
+					pwCPP.print(statement);
 					// print till end of multi line comment
-
 					String var;
 					boolean endTag = false;
 					while (!endTag) {

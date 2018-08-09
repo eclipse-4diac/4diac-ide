@@ -68,11 +68,11 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		super(pageName, selection);
 	}
 
-	private final ArrayList<IExportFilter> exportFilters = new ArrayList<IExportFilter>();
+	private final ArrayList<IExportFilter> exportFilters = new ArrayList<>();
 	private Combo filters;
 
 	private void addAvailableExportFilter(final Group group) {
-		SortedMap<Integer, IExportFilter> sortedExportFiltersMap = new TreeMap<Integer, IExportFilter>();
+		SortedMap<Integer, IExportFilter> sortedExportFiltersMap = new TreeMap<>();
 
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elems = registry.getConfigurationElementsFor(

@@ -177,8 +177,8 @@ public class Output extends ViewPart implements IDeploymentListener {
 	}
 
 	/** The ERRO r_ type. */
-	private static String ERROR_TYPE = Messages.Output_DownloadError;
-	private static String WARNING_TYPE = Messages.Output_DownloadWarning;
+	private static final String ERROR_TYPE = Messages.Output_DownloadError;
+	private static final String WARNING_TYPE = Messages.Output_DownloadWarning;
 
 	/** The annotation model. */
 	protected AnnotationModel fAnnotationModel = new AnnotationModel();
@@ -338,6 +338,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 	 */
 	@Override
 	public void setFocus() {
+		//nothing to do here	
 	}
 
 	@Override
@@ -346,8 +347,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 			@Override
 			public void run() {
-				String temp = MessageFormat.format(Messages.Output_Comment,
-						new Object[] { destination });
+				String temp = MessageFormat.format(Messages.Output_Comment, destination );
 				buffer.append("\n\n");//$NON-NLS-1$ 
 				buffer.append(temp);
 				buffer.append("\n");//$NON-NLS-1$ 
@@ -396,8 +396,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 			org.w3c.dom.Document doc = documentBuilder.parse(new InputSource(
 					new StringReader(command)));
 
-			TransformerFactory transformerFactory = TransformerFactory
-					.newInstance();
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
@@ -411,9 +410,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 			OutputStream outputStream = new ByteArrayOutputStream();
 			StreamResult streamResult = new StreamResult(outputStream);
 			transformer.transform(domSource, streamResult);
-			String newXML = outputStream.toString();
-			return newXML;
-
+			return outputStream.toString();
 		} catch (Exception e) {
 			return "The given command:\n" + command +"\n has an issue. The reason is: " + e.getMessage();
 		}
@@ -424,14 +421,9 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 	@Override
 	public void responseReceived(final String response, final String source) {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				buffer.append("\n");//$NON-NLS-1$ 
-				buffer.append(getFormattedXML(response));
-			}
-
+		Display.getDefault().asyncExec(() -> {
+			buffer.append("\n");//$NON-NLS-1$ 
+			buffer.append(getFormattedXML(response));
 		});
 	}
 
@@ -439,18 +431,15 @@ public class Output extends ViewPart implements IDeploymentListener {
 	public void finished() {		
 		IDocument document = sv.getDocument(); 
 		if(null != document){
-			Display.getDefault().asyncExec(new Runnable() {	
-				@Override
-				public void run() {
-					document.set(buffer.toString());
-				}
-	
+			Display.getDefault().asyncExec(() -> {
+				document.set(buffer.toString());
 			});
 		}
 	}
 
 	@Override
-	public void postCommandSent(String info, String destination, String command) {		
+	public void postCommandSent(String info, String destination, String command) {
+		//nothing to do here
 	}
 
 	public void clearOutput() {

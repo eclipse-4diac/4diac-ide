@@ -40,7 +40,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	public DynamicTypeLoadDeploymentExecutor(Device dev, AbstractDeviceManagementCommunicationHandler overrideHandler) {
 		super(dev, overrideHandler);
-		// nothing todo here
+		// nothing to do here
 	}
 
 
@@ -103,8 +103,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private String createLuaRequestMessage(final FBType fbType) {
 		ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 		String luaSkript = luaFilter.createLUA(fbType);
-		String request = MessageFormat.format(Messages.DTL_CreateFBType, new Object[] { id++, fbType.getName(), luaSkript });
-		return request;
+		return MessageFormat.format(Messages.DTL_CreateFBType, id++, fbType.getName(), luaSkript);
 	}
 
 	private static boolean isAttribute(Device device, String fbTypeName, String attributeType) {

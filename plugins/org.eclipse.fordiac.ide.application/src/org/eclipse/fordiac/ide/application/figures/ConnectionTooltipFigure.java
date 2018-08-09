@@ -36,7 +36,7 @@ public class ConnectionTooltipFigure extends Figure {
 	public ConnectionTooltipFigure(final Connection connection) {
 		setLayoutManager(new GridLayout());
 
-		StringBuffer label = new StringBuffer();
+		StringBuilder label = new StringBuilder();
 		
 		if(null != connection){
 			getEndpointLabel(label, connection.getSource());
@@ -66,7 +66,7 @@ public class ConnectionTooltipFigure extends Figure {
 
 	}
 
-	private void getEndpointLabel(StringBuffer label, IInterfaceElement interfaceElement) {
+	private static void getEndpointLabel(StringBuilder label, IInterfaceElement interfaceElement) {
 		if(null != interfaceElement){
 			if(null != interfaceElement.getFBNetworkElement()){
 				label.append(interfaceElement.getFBNetworkElement().getName());

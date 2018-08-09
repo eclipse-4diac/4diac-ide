@@ -52,8 +52,7 @@ public class EventConnectionCreateCommand extends AbstractConnectionCreateComman
 			return false;
 		}
 		
-		boolean retVal = LinkConstraints.canExistEventConnection((Event) source, (Event)destination);
-		return retVal;
+		return LinkConstraints.canExistEventConnection((Event) source, (Event)destination);
 	}
 	
 	private boolean duplicateConnection() {

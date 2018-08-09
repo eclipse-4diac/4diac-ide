@@ -30,8 +30,8 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 public class BootFileDeviceManagementCommunicationHandler extends AbstractDeviceManagementCommunicationHandler {
-	StringBuffer stringBuffer = new StringBuffer();
-	public String origMgrID;
+	private StringBuilder stringBuffer = new StringBuilder();
+	private String origMgrID;
 
 	public static void createBootFile(List<Object> workList, String fileName, Shell shell) {
 		if (null != fileName) {
@@ -85,8 +85,7 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractDevice
 		int res = SWT.YES;
 		if (bootFile.exists()) {
 			MessageBox msgBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.ICON_QUESTION);
-			String msg = MessageFormat.format("File Exists, overwrite {0}?",
-					new Object[] { bootFile.getAbsolutePath() });
+			String msg = MessageFormat.format("File Exists, overwrite {0}?", bootFile.getAbsolutePath());
 			msgBox.setMessage(msg);
 			res = msgBox.open();
 		} else {
@@ -109,7 +108,7 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractDevice
 	}
 
 	public void clearStringBuffer() {
-		stringBuffer = new StringBuffer();
+		stringBuffer = new StringBuilder();
 	}
 
 }

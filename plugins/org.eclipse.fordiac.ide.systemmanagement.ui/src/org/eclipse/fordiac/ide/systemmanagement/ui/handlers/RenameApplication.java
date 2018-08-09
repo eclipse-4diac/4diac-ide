@@ -58,7 +58,7 @@ public class RenameApplication extends AbstractHandler {
 					@Override
 					public String isValid(String newText) {
 						if(application.getName().equals(newText)){
-							return new String("Application name not different!");
+							return "Application name not different!";
 						}
 						if (!NameRepository.isValidName(application, newText)) {
 							return Messages.NewApplicationPage_ErrorMessageInvalidAppName;

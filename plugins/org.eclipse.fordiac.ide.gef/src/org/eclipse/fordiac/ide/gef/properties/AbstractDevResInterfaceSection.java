@@ -59,13 +59,12 @@ public abstract class AbstractDevResInterfaceSection extends AbstractInterfaceSe
 	}
 	
 	@Override
-	public void refresh() {
-		super.refresh();
+	protected void setInputInit(){
+		//currently nothing to do here
 	}
-
-	@Override
-	protected void setInputInit(){}
 	
 	@Override
-	protected void setInputCode(){}
+	protected void setInputCode(){
+		//currently nothing to do here
+	}
 }

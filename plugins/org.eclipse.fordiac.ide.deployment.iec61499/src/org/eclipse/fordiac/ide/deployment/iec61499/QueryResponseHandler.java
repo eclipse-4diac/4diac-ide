@@ -29,11 +29,11 @@ public class QueryResponseHandler extends DefaultHandler {
 	private static final String PATTERN = "([A-Za-z_]\\w+)(\\1,\\s*[A-Za-z_]\\w+)*"; //$NON-NLS-1$
 
 	public QueryResponseHandler() {
-		queryResult = new HashSet<String>();
+		queryResult = new HashSet<>();
 	}
 
 	public void reset() {
-		queryResult = new HashSet<String>();
+		queryResult = new HashSet<>();
 	}
 
 	@Override

@@ -22,7 +22,7 @@ abstract class StringValueConverter extends AbstractNullSafeConverter<String> {
 
 	override protected internalToString(String value) {
 		val reader = new StringReader(value)
-		val result = new StringBuffer()
+		val result = new StringBuilder()
 		result.append(quote)
 		for (var i = reader.read; i != -1; i = reader.read) {
 			switch c : i as char {
@@ -73,7 +73,7 @@ abstract class StringValueConverter extends AbstractNullSafeConverter<String> {
 		}
 		val value = string.substring(1, string.length - 1)
 		val reader = new StringReader(value)
-		val result = new StringBuffer()
+		val result = new StringBuilder()
 		for (var int i = reader.read; i !== -1; i = reader.read) {
 			result.append(
 				switch c : i as char {

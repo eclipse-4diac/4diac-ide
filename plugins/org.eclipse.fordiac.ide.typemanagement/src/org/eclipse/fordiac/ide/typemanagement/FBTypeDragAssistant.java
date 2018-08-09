@@ -25,13 +25,9 @@ import org.eclipse.ui.navigator.CommonDragAdapterAssistant;
 
 public class FBTypeDragAssistant extends CommonDragAdapterAssistant {
 
-	public FBTypeDragAssistant() {
-	}
-
 	@Override
 	public Transfer[] getSupportedTransferTypes() {
-		Transfer[] types = new Transfer[] { TemplateTransfer.getInstance() };
-		return types;
+		return new Transfer[] { TemplateTransfer.getInstance() };
 	}
 
 	@Override

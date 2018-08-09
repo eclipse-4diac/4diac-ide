@@ -379,7 +379,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 		List<VarDeclaration> temp = DeploymentCoordinator.getInstance()
 				.getSelectedDeviceProperties((Device) element);
 		if (temp != null) {
-			StringBuffer buffer = new StringBuffer();
+			StringBuilder buffer = new StringBuilder();
 			buffer.append("["); //$NON-NLS-1$
 			boolean first = true;
 			for (VarDeclaration varDeclaration : temp) {

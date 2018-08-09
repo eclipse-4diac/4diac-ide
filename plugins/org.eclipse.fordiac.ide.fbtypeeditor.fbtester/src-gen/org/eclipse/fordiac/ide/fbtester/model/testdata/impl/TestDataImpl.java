@@ -554,7 +554,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 			return super.toString();
 		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (testName: ");
 		result.append(testName);
 		result.append(", testIntstance: ");

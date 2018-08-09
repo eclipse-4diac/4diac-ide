@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
@@ -34,12 +35,8 @@ public class CleanDeviceHandler extends AbstractDeploymentCommand {
 	}
 
 	@Override
-	protected void executeCommand(IDeviceManagementInteractor executor) throws Exception {
-		try {
-			executor.clearDevice(device);
-		} catch (Exception e) {
-			throw e;
-		}
+	protected void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
+		executor.clearDevice(device);
 	}
 
 	@Override

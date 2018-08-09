@@ -1370,7 +1370,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 						// TODO: Check for adapter-event!
 						boolean AdapterEvent = false;
 						StringTokenizer mySTok = new StringTokenizer(guard, "&", true); //$NON-NLS-1$
-						String myTestString = new String();
+						String myTestString = ""; //$NON-NLS-1$
 
 						// retrieve first element (adapter-events are
 						// given as first element of guarding condition;
