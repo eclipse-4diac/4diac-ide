@@ -10,21 +10,24 @@ package org.eclipse.fordiac.ide.fmu.wizard;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.PatternSyntaxException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.eclipse.fordiac.ide.fmu.Activator;
-import org.eclipse.fordiac.ide.fmu.Preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -33,7 +36,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.deployment.AbstractDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -51,7 +53,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
-public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManagementCommunicationHandler {
+public final class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManagementCommunicationHandler {
 	
 	public static class FMUInputOutput{
 		
@@ -70,11 +72,11 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 		}
 		
 		
-		String mName;
-		boolean mIsInput;
-		variableScope mScope;
-		variableType mVarType;
-		String mInitialValue;
+		private String mName;
+		private boolean mIsInput;
+		private variableScope mScope;
+		private variableType mVarType;
+		private String mInitialValue;
 		
 		public FMUInputOutput() {
 			this.mName = "";
@@ -90,18 +92,16 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 			this.mVarType = varType;
 			this.mScope = variable;
 			this.mInitialValue = initialValue;
-			if(this.mVarType == variableType.BOOLEAN){
-				if(this.mInitialValue.equals("0") || this.mInitialValue.equals("") || this.mInitialValue == null){
-					this.mInitialValue = "false"; 
-				}else{
-					this.mInitialValue = "true";
-				}
+
+			if (this.mVarType == variableType.BOOLEAN) {
+				setBooleanInitValue();
 			}
 			
 			if(null == mInitialValue || mInitialValue.equals("")){
 				switch(varType){
 				case BOOLEAN:
 					this.mInitialValue = "false";
+					break;
 				case INTEGER:
 					this.mInitialValue = "0";
 					break;
@@ -114,6 +114,14 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 				case UNKNOWN: 
 					break;
 				}
+			}
+		}
+		
+		private void setBooleanInitValue() {
+			if (this.mInitialValue == null || this.mInitialValue.equals("0") || this.mInitialValue.equals("")) {
+				this.mInitialValue = "false";
+			} else {
+				this.mInitialValue = "true";
 			}
 		}
 		
@@ -145,17 +153,11 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 			variableType varType;
 			if (text.equals("BOOL")) {
 				varType = FMUInputOutput.variableType.BOOLEAN;
-			} else if (text.equals("BYTE") 
-					|| text.equals("WORD") || text.equals("DWORD") || text.equals("LWORD")
-					|| text.equals("INT") || text.equals("DINT") || text.equals("LINT")
-					|| text.equals("SINT") || text.equals("USINT") 
-					|| text.equals("UINT") || text.equals("UDINT") || text.equals("ULINT")
-					|| text.equals("ANY_INT")) {
+			} else if (text.matches("BYTE|WORD|DWORD|LWORD|INT|DINT|LINT|SINT|USINT|UINT|UDINT|ULINT|ANY_INT")){
 				varType = FMUInputOutput.variableType.INTEGER;
-			} else if (text.equals("STRING") || text.equals("WSTRING") || text.equals("ANY_STRING") || text.equals("DATE") || text.equals("DATE_AND_TIME") 
-					|| text.equals("TIME_OF_DAY") || text.equals("ANY_DATE") || text.equals("TIME")) {
+			} else if (text.matches("STRING|WSTRING|ANY_STRING|DATE|DATE_AND_TIME|TIME_OF_DAY|ANY_DATE|TIME")){
 				varType = FMUInputOutput.variableType.STRING;
-			} else if (text.equals("REAL") || text.equals("LREAL") || text.equals("ANY_REAL")){
+			} else if (text.matches("REAL|LREAL|ANY_REAL")){
 				varType = FMUInputOutput.variableType.REAL;
 			}else{
 				varType = FMUInputOutput.variableType.UNKNOWN;
@@ -164,105 +166,130 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 		}
 	}
 	
-	private StringBuffer bootfileResult = new StringBuffer();
+	private static final String BINARIES_FOLDER_NAME = "binaries";
 	
-	public StringBuffer getBootfileResult() {
+	private static final String RESOURCES_FOLDER_NAME = "resources";
+	
+	private static final int ZIP_BUFFER = 1024;
+	
+	private StringBuilder bootfileResult = new StringBuilder();
+	
+	public StringBuilder getBootfileResult() {
 		return bootfileResult;
 	}
 
-	private ArrayList<FMUInputOutput> inputsAndOutputs = new ArrayList<FMUInputOutput>();
-	private String error = "";
-	
+	private List<FMUInputOutput> inputsAndOutputs = new ArrayList<>();
+
 	/** The original MgrID. */
-	public String origMgrID;
+	private String origMgrID;
 	
 	private Device device;
 	
-	public String getError(){
-		return error;
-	}
-
-	static public void createFMU(Device device, List<Resource> resources, HashMap<String, Boolean> librariesToAdd, String directory, Shell shell, IProgressMonitor monitor){
+	public static void createFMU(Device device, List<Resource> resources, List<String> librariesToAdd, String directory, Shell shell, IProgressMonitor monitor){
 		if(null != directory){
-			monitor.beginTask("Generating FMUs for device " + device.getName(), 100);
-			String outputName = device.getAutomationSystem().getName() + "_" + device.getName();
-			DeploymentCoordinator deployment = DeploymentCoordinator.getInstance();
-			FMUDeviceManagementCommunicationHandler FMUFileHandler = new FMUDeviceManagementCommunicationHandler(device);
-			deployment.performDeployment(resources.toArray(), FMUFileHandler); //will call the callbacks, sendREQ among them
-			monitor.worked(70);
-			
-			if (!FMUFileHandler.getError().equals("")){
-				showErrorMessage("Error in application. Cannot create FMU\n" + FMUFileHandler.getError(), shell);
-				return;
-			}
-			
-			File direc = new File(directory);
-			if (!direc.exists()){
-				if (!direc.mkdir()){
-					showErrorMessage("Output folder " + directory + " doesn't exist and couldn't be created\n", shell);
-					return;
-				}
-			}
-			
-			File destZipFile = new File(directory + File.separatorChar + outputName + ".fmu");
-			try {
-				int res = SWT.YES;
-				if (destZipFile.exists()) {
-					MessageBox msgBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.ICON_QUESTION);
-					msgBox.setMessage("Output fmu " + outputName + " file exists, overwrite it?");
-					res = msgBox.open();
-				}
-				if(SWT.YES == res) {
-					String tempFolder = Files.createTempDirectory("temp").toString();
-					do {
-					    File binariesDirectory = new File(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH));
-						if(!binariesDirectory.exists() || !binariesDirectory.isDirectory()) { 
-							showErrorMessage("Binary directory " + binariesDirectory.toPath() + " does not exist. Check the FMU Page in the preferences", shell);
-							break;
-						}
-						if (!FMUDeviceManagementCommunicationHandler.createTempFoldersAndFiles(tempFolder, outputName, librariesToAdd, shell)){
-							break;
-						}
-						
-						if (!writeToFile(
-								new File(tempFolder + File.separatorChar + "resources" + File.separatorChar
-										+ "forte.fboot").getAbsolutePath(),
-								FMUFileHandler.getBootfileResult().toString(), shell)) {
-							showErrorMessage("Couldn't write to bootfile in the resource folder of the FMU", shell);
-							break;
-						}
-
-						if (!writeToFile(
-								new File(tempFolder + File.separatorChar + "modelDescription.xml").getAbsolutePath(),
-								FMUFileHandler.createModelDescription(outputName).toString(), shell)) {
-							showErrorMessage("Couldn't write to the modelDescription of the FMU", shell);
-							break;
-						}
-						
-						monitor.worked(90);
-						try {
-							FileOutputStream fos = new FileOutputStream(destZipFile);
-							ZipOutputStream zos = new ZipOutputStream(fos);
-							
-							FMUDeviceManagementCommunicationHandler.zipFolder(tempFolder, tempFolder,  zos);
-							monitor.worked(100);
-							
-							zos.flush();
-							zos.close();
-							break;
-						} catch (IOException e) {
-							MessageBox msgBox = new MessageBox(shell, SWT.RETRY | SWT.ICON_ERROR | SWT.CANCEL);
-							msgBox.setMessage(e.getLocalizedMessage() + "\nDo you want to retry?");
-							res = msgBox.open();
-						}
-					}while (SWT.RETRY == res);
-					FMUDeviceManagementCommunicationHandler.deleteFolder(tempFolder);
+			if (!librariesToAdd.isEmpty()) {
+				monitor.beginTask("Generating FMUs for device " + device.getName(), 100);
+				String outputName = device.getAutomationSystem().getName() + "_" + device.getName();
+				DeploymentCoordinator deployment = DeploymentCoordinator.getInstance();
+				FMUDeviceManagementCommunicationHandler fmuFileHandler = new FMUDeviceManagementCommunicationHandler(device);
+				deployment.performDeployment(resources.toArray(), fmuFileHandler); //will call the callbacks, sendREQ among them
+				monitor.worked(70);
+				
+				File destZipFile = createZipFile(directory, outputName, shell);
+				if (null != destZipFile) {
+					createZip(fmuFileHandler, outputName, librariesToAdd, shell, destZipFile);
+					monitor.worked(100);
 				}
 				
-			} catch (IOException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+			}else {
+				showErrorMessage("No selected libraries were found.\n", shell);
+			}
+		}else {
+			showErrorMessage("The directory is invalid\n", shell);
+		}
+	}
+	
+	private static void createZip(FMUDeviceManagementCommunicationHandler fmuFileHandler, String outputName,
+			List<String> librariesToAdd, Shell shell, File destZipFile) {
+
+		String tempFolder = createTempFolderWithFMUStructure(outputName, librariesToAdd, shell);
+		if (null != tempFolder) {
+			if(writeAllFiles(fmuFileHandler, tempFolder, outputName, shell)) {
+				int res = SWT.RETRY;
+				do {
+					try (FileOutputStream fos = new FileOutputStream(destZipFile)) {
+						
+						ZipOutputStream zos = new ZipOutputStream(fos);
+						zipFolder(tempFolder, tempFolder, zos);
+
+						zos.flush();
+						zos.close();
+						break;
+					} catch (IOException e) {
+						MessageBox msgBox = new MessageBox(shell, SWT.RETRY | SWT.ICON_ERROR | SWT.CANCEL);
+						msgBox.setMessage(e.getLocalizedMessage() + "\nDo you want to retry?");
+						res = msgBox.open();
+					}
+				} while (SWT.RETRY == res);
+			}
+			
+			deleteFolder(tempFolder);
+		}
+	}
+	
+	private static File createZipFile(String directoryPath, String outputName, Shell shell) {
+		File direc = new File(directoryPath);
+		if (!direc.exists() && !direc.mkdir()) {
+			showErrorMessage("Output folder " + directoryPath + " doesn't exist and couldn't be created\n", shell);
+		} else {
+			File destZipFile = new File(directoryPath + File.separatorChar + outputName + ".fmu");
+
+			int res = SWT.YES;
+			if (destZipFile.exists()) {
+				MessageBox msgBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.ICON_QUESTION);
+				msgBox.setMessage("Output fmu " + outputName + " file exists, overwrite it?");
+				res = msgBox.open();
+			}
+			if (SWT.YES == res) {
+				return destZipFile;
 			}
 		}
+		
+		return null;
+	}
+	
+	
+	
+	private static String createTempFolderWithFMUStructure(String outputName, List<String> librariesToAdd, Shell shell) {
+		try {
+			String tempFolder = Files.createTempDirectory("temp").toString();
+			File binariesDirectory = new File(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH));
+			if (binariesDirectory.exists() && binariesDirectory.isDirectory()) {
+				if (createTempFoldersAndFiles(tempFolder, outputName,
+						librariesToAdd, shell)) {
+					return tempFolder;
+				}else {
+					showErrorMessage("Couldn't create the components inside the temporary folder " + tempFolder, shell);
+				}
+			} else {
+				showErrorMessage("Binary directory " + binariesDirectory.toPath()
+						+ " does not exist. Check the FMU Page in the preferences", shell);
+			}
+		} catch (IOException e) {
+			showErrorMessage("Couldn't create the temporary folder", shell);
+		}
+		return null;
+	}
+	
+	private static boolean writeAllFiles(FMUDeviceManagementCommunicationHandler fmuFileHandler, String tempFolder,
+			String outputName, Shell shell) {
+		return (
+				writeToFile(new File(tempFolder + File.separatorChar + RESOURCES_FOLDER_NAME + File.separatorChar + "forte.fboot")
+						.getAbsolutePath(),
+				fmuFileHandler.getBootfileResult().toString(), shell) 
+				&&
+			writeToFile(new File(tempFolder + File.separatorChar + "modelDescription.xml").getAbsolutePath(),
+					fmuFileHandler.createModelDescription(outputName).toString(), shell));
 	}
 	
 	private static void showErrorMessage(String message, Shell shell) {
@@ -273,102 +300,116 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 	
 	private static boolean deleteFolder(String pathS) {
 		File path = new File(pathS);
-		if (path.exists()) {
-			File[] files = path.listFiles();
-			for (int i = 0; i < files.length; i++) {
-				if (files[i].isDirectory()) {
-					deleteFolder(files[i].getAbsolutePath());
-				} else {
-					files[i].delete();
+		File[] files;
+		if (path.exists() && null != (files = path.listFiles())) {
+			for (File file : files) {
+				if(!deleteFileOrFolder(file)) {
+					return false;
 				}
 			}
 		}
-		return (path.delete());
+		try {
+			Files.delete(Paths.get(path.getAbsolutePath()));
+		} catch (IOException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
+			return false;
+		}
+		
+		return true;
 	}
 	
-	private static boolean createTempFoldersAndFiles(String root, String outputName, HashMap<String, Boolean> librariesToAdd, Shell shell){
-	/*Creates all the folders structure needed for the FMU*/
-		
-		File sourceFile = new File(""); //the new if to avoid errors when used later
-		File tempFile = new File(root + File.separatorChar + "binaries");
-		tempFile.mkdir();
-		
-		tempFile = new File(root + File.separatorChar + "resources");
-		tempFile.mkdir();
-		tempFile = new File(root + File.separatorChar + "resources" + File.separatorChar + "forte.fboot");
-		try {
-			tempFile.createNewFile();
-			tempFile = new File(root + File.separatorChar + "modelDescription.xml");
-			tempFile.createNewFile();
-		} catch (IOException e1) {
-			Activator.getDefault().logError(e1.getMessage(), e1);
-			MessageBox msgBox = new MessageBox(shell, SWT.OK | SWT.ICON_ERROR);
-			msgBox.setMessage("Couldn't write the files in the fmu\n");
-			msgBox.open();
-			return false;
-		}
-		
-		//copy libraries
-		int librariesCount = 0;
-		ArrayList<String> missingLibraries = new ArrayList<String>();
-		for (String entry : librariesToAdd.keySet()) {
-			if (librariesToAdd.get(entry)) {
-				librariesCount++;
-				if (entry.equals(PreferenceConstants.P_FMU_WIN32)) {
-					tempFile = new File(root + File.separatorChar + "binaries" + File.separatorChar + "win32");
-					tempFile.mkdir();
-					tempFile = new File(root + File.separatorChar + "binaries" + File.separatorChar + "win32" + File.separatorChar + outputName + ".dll");
-					sourceFile = new File(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH) + File.separatorChar + "win32Forte.dll");
-				} else if (entry.equals(PreferenceConstants.P_FMU_WIN64)) {
-					tempFile = new File(root + File.separatorChar + "binaries" + File.separatorChar + "win64");
-					tempFile.mkdir();
-					tempFile = new File(root + File.separatorChar + "binaries" + File.separatorChar + "win64" + File.separatorChar + outputName + ".dll");
-					sourceFile = new File(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH) + File.separatorChar + "win64Forte.dll");
-				} else if (entry.equals(PreferenceConstants.P_FMU_LIN32)) {
-					tempFile = new File(root + File.separatorChar + "binaries" + File.separatorChar + "linux32");
-					tempFile.mkdir();
-					tempFile = new File(root + File.separatorChar + "binaries" + File.separatorChar + "linux32" + File.separatorChar + outputName + ".so");
-					sourceFile = new File(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH) + File.separatorChar + "linux32Forte.so");
-
-				} else if (entry.equals(PreferenceConstants.P_FMU_LIN64)) {
-					tempFile = new File(root + File.separatorChar + "binaries" + File.separatorChar + "linux64");
-					tempFile.mkdir();
-					tempFile = new File(root + File.separatorChar + "binaries" + File.separatorChar + "linux64" + File.separatorChar + outputName + ".so");
-					sourceFile = new File(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH) + File.separatorChar + "linux64Forte.so");
-				}
-				if (sourceFile.exists()) {
-					try {
-						Files.copy(sourceFile.toPath(), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-					} catch (IOException e) {
-						MessageBox msg = new MessageBox(shell, SWT.ERROR);
-						msg.setMessage("FMU creation error: Internal error when copying the file " + sourceFile.getAbsolutePath() + " into " + tempFile.getAbsolutePath() + "\n");
-						msg.open();
-						Activator.getDefault().logError(e.getMessage(), e);
-						return false;
-					}
-				} else {
-					missingLibraries.add(sourceFile.getAbsolutePath());
-				}
+	private static boolean deleteFileOrFolder(File file) {
+		if (file.isDirectory()) {
+			return deleteFolder(file.getAbsolutePath());
+		} else {
+			try {
+				Files.delete(Paths.get(file.getAbsolutePath()));
+			} catch (IOException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
+				return false;
 			}
-		}
-	
-		if (0 == librariesCount){
-			MessageBox msg = new MessageBox(shell, SWT.ERROR);
-			msg.setMessage("FMU creation error: No selected libraries were found.\n");
-			msg.open();
-			return false;
-		}
-		
-		if (0 != missingLibraries.size()){
-			MessageBox msg = new MessageBox(shell, SWT.ICON_WARNING);
-			String message = "FMU creation warning: The following libraries were selected but not found:\n";
-			for (String lib : missingLibraries){
-				message += lib + "\n"; 
-			}
-			msg.setMessage(message);
-			msg.open();
 		}
 		return true;
+	}
+	
+	private static boolean createTempFoldersAndFiles(String root, String outputName, List<String> librariesToAdd, Shell shell){
+
+		Map<String, String> librariesToNames = new HashMap<>();
+		
+		librariesToNames.put( PreferenceConstants.P_FMU_WIN32,  PreferenceConstants.P_FMU_WIN32_LIBRARY);
+		librariesToNames.put( PreferenceConstants.P_FMU_WIN64,  PreferenceConstants.P_FMU_WIN64_LIBRARY);
+		librariesToNames.put( PreferenceConstants.P_FMU_LIN32,  PreferenceConstants.P_FMU_LIN32_LIBRARY);
+		librariesToNames.put( PreferenceConstants.P_FMU_LIN64,  PreferenceConstants.P_FMU_LIN64_LIBRARY);
+		
+		if (createNotBinaryFiles(root, shell)) {
+			// copy libraries
+			for (String name : librariesToAdd) {
+				String libraryName = librariesToNames.get(name);
+				if (!copyLibraries(root + File.separatorChar + BINARIES_FOLDER_NAME + File.separatorChar + name,
+						outputName,
+						Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH)
+								+ File.separatorChar + libraryName,
+						libraryName.substring(libraryName.indexOf('.')), shell)) {
+					return false;
+				}
+			}
+		}else {
+			return false;
+		}
+
+		return true;
+	}
+	
+	private static boolean createNotBinaryFiles(String root, Shell shell) {
+		File[] folders = { new File(root + File.separatorChar + BINARIES_FOLDER_NAME), 
+				new File(root + File.separatorChar + RESOURCES_FOLDER_NAME)};
+		File[] files = {new File(root + File.separatorChar + RESOURCES_FOLDER_NAME + File.separatorChar + "forte.fboot"),
+				new File(root + File.separatorChar + "modelDescription.xml")};
+		
+		for(File folder : folders) {
+			if (!folder.mkdir()) {
+				showErrorMessage("Couldn't create " + folder.getAbsolutePath() + " in the temporary folder", shell);
+				return false;
+			}
+		}
+		
+		for(File file : files) {
+			try {
+				if (!file.createNewFile()) {
+					showErrorMessage("Couldn't create " + file.getAbsolutePath() + " in the temporary folder", shell);
+					return false;
+				}	
+			}catch (IOException e) {
+				showErrorMessage("Couldn't create the files in the fmu:\n" + e.getMessage(), shell);
+				return false;
+			}
+		}
+		return true;
+		
+	}
+	
+	private static boolean copyLibraries(String outputFolder, String outputName, String sourceBinary, String extension, Shell shell) {
+		File tempFile = new File(outputFolder);
+		if(tempFile.mkdir()) {
+			tempFile = new File(outputFolder + File.separatorChar + outputName + extension);
+			File sourceFile = new File(sourceBinary);
+			
+			if (sourceFile.exists()) {
+				try {
+					Files.copy(sourceFile.toPath(), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+					return true;
+				} catch (IOException e) {
+					showErrorMessage("Internal error when copying the file" + sourceFile.getAbsolutePath() + " into " + tempFile.getAbsolutePath() + "\n" + e.getMessage(), shell);
+				}
+			} else {
+				showErrorMessage("Library " + sourceFile.getAbsolutePath() + "couldn't be found", shell);
+			}
+			
+		}else {
+			showErrorMessage("Unable to create " + outputFolder, shell);
+		}
+		
+		return false;
 	}
 	
 	/*take the current state of the string buffer and write it to the given file */
@@ -377,19 +418,20 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 
 		if (!outputFile.exists()) {
 			try {
-				outputFile.createNewFile();
+				if(!outputFile.createNewFile()) {
+					return false;
+				}
 			} catch (IOException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 				return false;
 			}
 		}
-		try {
-			PrintWriter boot = new PrintWriter(new FileOutputStream(outputFile));
+		try(Writer boot = 
+				new OutputStreamWriter(new FileOutputStream(outputFile), StandardCharsets.UTF_8)){
 			boot.write(toWrite);
 			boot.flush();
-			boot.close();
-		} catch (FileNotFoundException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+		} catch (IOException e) {
+			showErrorMessage("Couldn't write file " + fileName + "\nException: \n" + e.getMessage() , shell);
 			return false;
 		}
 		return true;
@@ -397,36 +439,37 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 	
 	private static void zipFolder(String root, String directoryPath, ZipOutputStream zos){
 		
-		for (String dirElement : new File(directoryPath).list()) {
-
-			String dirElementPath = directoryPath + "/" + dirElement; //File.separatorChar doesn't work properly
-
-			if (new File(dirElementPath).isDirectory()) {
-				FMUDeviceManagementCommunicationHandler.zipFolder(root, dirElementPath, zos);
-			} else {
-				try {
-					ZipEntry ze = new ZipEntry(dirElementPath.substring(root.length() + 1));
-					try {
-						zos.putNextEntry(ze);
-
-						FileInputStream fis = new FileInputStream(dirElementPath);
-
-						byte[] bytesRead = new byte[1024];
-
-						int bytesNum;
-						while ((bytesNum = fis.read(bytesRead)) > 0) {
-							zos.write(bytesRead, 0, bytesNum);
-						}
-						zos.closeEntry();
-						fis.close();
-						
-					} catch (IOException e) {
-						Activator.getDefault().logError(e.getMessage(), e);
-					}
-				} catch (PatternSyntaxException e) {
-					Activator.getDefault().logError(e.getMessage(), e);
-				}
+		String[] listOfDirectories = new File(directoryPath).list();
+		if (null != listOfDirectories) {
+			for (String dirElement : listOfDirectories) {
+				zipFoderCore(root, directoryPath, dirElement, zos);
 			}
+		}
+	}
+	
+	private static void zipFoderCore(String root, String directoryPath, String dirElement, ZipOutputStream zos) {
+		String dirElementPath = directoryPath + File.separatorChar + dirElement; 
+
+		if (new File(dirElementPath).isDirectory()) {
+			FMUDeviceManagementCommunicationHandler.zipFolder(root, dirElementPath, zos);
+		} else {
+			try (FileInputStream fis =
+					new FileInputStream(dirElementPath)) {
+				ZipEntry ze = new ZipEntry(dirElementPath.substring(root.length() + 1));
+				zos.putNextEntry(ze);
+
+				byte[] bytesRead = new byte[ZIP_BUFFER];
+
+				int bytesNum;
+				while ((bytesNum = fis.read(bytesRead)) > 0) {
+					zos.write(bytesRead, 0, bytesNum);
+				}
+				zos.closeEntry();
+				
+			} catch (PatternSyntaxException | IOException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
+			}
+			
 		}
 	}
 	
@@ -444,12 +487,11 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 			bootfileResult.append(destination + ";" + request + "\n"); 
 
 			if (request.contains("Action=\"CREATE\"><FB ") && !destination.equals("")) {
-				int typeIndex = request.indexOf("Type=\"") + 6;
-				String type = request.substring(typeIndex, request.indexOf("\"", typeIndex));
-				String FBName = request.substring(request.indexOf("Name=\"") + 6, request.indexOf(" Type") - 1);
-				if(!populateInputsAndOutputs(FBName, type, device.getResourceNamed(destination).getFBNetwork(), "")) {
-					error = getErrorFromRequest(request) + error;
-				}
+				String type = getSubstringAfterMatch(request, "Type=\"");
+				type = type.substring(0, type.indexOf('"'));
+				String fbName =  getSubstringAfterMatch(request, "Name=\"");
+				fbName = fbName.substring(0, fbName.indexOf('"'));
+				populateInputsAndOutputs(fbName, type, device.getResourceNamed(destination).getFBNetwork(), "");
 			}
 
 			String info = origMgrID;
@@ -462,169 +504,159 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 		return "";
 	}
 	
-	private boolean populateInputsAndOutputs(String FBName, String FBType, FBNetwork pa_FBNetwork, String previousNames){
-		
-		boolean IO = false;
+	private void handlePubSubVars(FBNetwork fbNetwork, String fbName, String previousNames, EList<VarDeclaration> var, boolean isInput) {
+		for(int i = 2; i <  var.size(); i++){ //skip two first variables
+			for (DataConnection con : fbNetwork.getDataConnections()) { //If an SD or RD has no connected endpoint and therefore the type is unknown, the variable shouldn't be added
+				if(isItsConnection(isInput, con, fbName, var.get(i))){
+					IInterfaceElement otherEndpoint = (isInput) ? con.getSource() : con.getDestination();
+					FMUInputOutput.variableType varType;
+					if ((FMUInputOutput.variableType.UNKNOWN != (varType = FMUInputOutput.getTypeFromString(otherEndpoint.getType().getName())))) {
+						inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "@" + otherEndpoint.getFBNetworkElement().getName() + "." + otherEndpoint.getName(), !isInput, FMUInputOutput.variableScope.IO, varType, ""));	//@ to avoid problems if some part of the interface has the same name
+					}
+					break;
+				}
+			}
+		}
+	}
+	
+	private void handleIO(boolean pubSub, String previousNames, String fbName, FBNetwork fbNetwork, boolean input, FMUInputOutput.variableType varType) {
+		if (pubSub) { 
+			FB commFB = fbNetwork.getFBNamed(fbName);
+			handlePubSubVars(fbNetwork, fbName, previousNames, commFB.getInterface().getInputVars(), true);
+			handlePubSubVars(fbNetwork, fbName, previousNames, commFB.getInterface().getOutputVars(), false);
+		}else{
+			inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName, input, FMUInputOutput.variableScope.IO, varType, ""));	
+		}
+	}
+	
+	private List<Object> getInfoFromIO(String fbName, String fbType, FBNetwork fbNetwork){
+		boolean io = false;
 		boolean input = false;
 		boolean pubSub = false;
 		FMUInputOutput.variableType varType = FMUInputOutput.variableType.UNKNOWN;
-		if (FBType.equals("IX")) {
-			IO = true;
+		if (fbType.equals("IX")) {
+			io = true;
 			input = true;
 			varType = FMUInputOutput.variableType.BOOLEAN;
-		} else if (FBType.equals("QX")) {
-			IO = true;
+		} else if (fbType.equals("QX")) {
+			io = true;
 			varType = FMUInputOutput.variableType.BOOLEAN;
-		} else if (FBType.equals("IW")) {
-			IO = true;
+		} else if (fbType.equals("IW")) {
+			io = true;
 			input = true;
 			varType = FMUInputOutput.variableType.INTEGER;
-		} else if (FBType.equals("QW")) {
-			IO = true;
+		} else if (fbType.equals("QW")) {
+			io = true;
 			varType = FMUInputOutput.variableType.INTEGER;
-		} else if ( FBType.regionMatches(0, "PUBLISH_", 0, 8)	|| 
-					FBType.regionMatches(0, "SUBSCRIBE_", 0, 10) ||
-					FBType.regionMatches(0, "CLIENT_", 0, 7) ||
-					FBType.regionMatches(0, "SERVER_", 0, 7)) {
+		} else if ( 0 == fbType.indexOf("PUBLISH_")   || 
+				    0 == fbType.indexOf("SUBSCRIBE_") || 
+				    0 == fbType.indexOf("CLIENT_")    || 
+				    0 == fbType.indexOf("SERVER_")) {
 
-			Value value = pa_FBNetwork.getFBNamed(FBName).getInterface().getVariable("ID").getValue();
+			Value value = fbNetwork.getFBNamed(fbName).getInterface().getVariable("ID").getValue();
 			if (value != null && null != value.getValue() && "fmu[]".equals(value.getValue())) { //has some literal
 				pubSub = true;
-				IO = true;						
-			}
-		}
-
-		if (IO) {
-			if (pubSub) { 
-				FB commFB = pa_FBNetwork.getFBNamed(FBName);
-				DataType destinationType = null; 
-				
-				int skipper = 0;
-				for(VarDeclaration inputVar : commFB.getInterface().getInputVars()){
-					if(skipper < 2) {
-						skipper++;
-						continue;
-					}
-					for (DataConnection con : pa_FBNetwork.getDataConnections()) { //TODO: What happens when SD or RD has no connection? And if it has a literal?
-						if(con.getDestinationElement().getName().equals(FBName) && con.getDestination().getName().equals(inputVar.getName())){
-							destinationType = con.getSource().getType();
-							if (null != destinationType) {
-								varType = FMUInputOutput.getTypeFromString(destinationType.getName());
-								inputsAndOutputs.add(new FMUInputOutput(previousNames + FBName + "@" + con.getSourceElement().getName(), false, FMUInputOutput.variableScope.IO,  varType, ""));	//@ to avoid problems if some part of the interface has the same name
-								break;
-							}
-							break;
-						}
-					}
-				}
-				
-				skipper = 0;
-				for(VarDeclaration outputVar : commFB.getInterface().getOutputVars()){
-					if(skipper < 2) {
-						skipper++;
-						continue;
-					}
-					for (DataConnection con : pa_FBNetwork.getDataConnections()) {
-						if(con.getSourceElement().getName().equals(FBName) && con.getSource().getName().equals(outputVar.getName())){
-							destinationType = con.getDestination().getType();
-							if (null != destinationType) {
-								varType = FMUInputOutput.getTypeFromString(destinationType.getName());
-								inputsAndOutputs.add(new FMUInputOutput(previousNames + FBName + "@" + con.getDestinationElement().getName(), true, FMUInputOutput.variableScope.IO, varType, ""));	
-								break;
-							}
-							break;
-						}
-					}
-				}
-			}else{
-				inputsAndOutputs.add(new FMUInputOutput(previousNames + FBName, input, FMUInputOutput.variableScope.IO, varType, ""));	
+				io = true;						
 			}
 		}
 		
-		getAllVariablesFromInterface(FBName, pa_FBNetwork, previousNames);
-		FBType typeFB = pa_FBNetwork.getFBNamed(FBName).getType();
-		if (typeFB instanceof BasicFBType) {
-			BasicFBType basic = (BasicFBType) typeFB;
-			for (VarDeclaration var : basic.getInternalVars()) {
-				// store internal variables
-				varType = FMUInputOutput.getTypeFromString(var.getTypeName());
-				if (FMUInputOutput.variableType.UNKNOWN == varType) {
-					continue;
-				}
-				inputsAndOutputs.add(new FMUInputOutput(previousNames + FBName + "." + var.getName(), false, FMUInputOutput.variableScope.INTERNAL,
-						varType, (null != var.getVarInitialization()) ? var.getVarInitialization().getInitialValue() : null));
-			}
-			// store ECC
-			inputsAndOutputs.add(new FMUInputOutput(previousNames + FBName + ".$ECC", false, FMUInputOutput.variableScope.INTERNAL,
-					FMUInputOutput.variableType.INTEGER, "0"));
-		} else if (typeFB instanceof CompositeFBType) {
-			// store internal FB. Take care of the names
-			CompositeFBType composite = (CompositeFBType) typeFB;
-			for (FBNetworkElement elem : composite.getFBNetwork().getNetworkElements()) {
-				if (elem instanceof FBImpl && !(elem instanceof AdapterFBImpl)) {
-					FBImpl fb = (FBImpl) elem;
-					populateInputsAndOutputs(fb.getName(), fb.getTypeName(), composite.getFBNetwork(), previousNames + FBName + ".");
-				}
-			}
-		}
-		return true;	
+		List<Object> returnValue = new ArrayList<>();
+		returnValue.add(io);
+		returnValue.add(input);
+		returnValue.add(pubSub);
+		returnValue.add(varType);
+		return returnValue;
 	}
 	
-	private void getAllVariablesFromInterface(String FBName, FBNetwork paFBNetwork, String previousNames){
-		//Add the interface var and events as variables
-		InterfaceList FBInterface = paFBNetwork.getFBNamed(FBName).getInterface();
+	private void populateInputsAndOutputs(String fbName, String fbType, FBNetwork fbNetwork, String previousNames){
 		
-		ArrayList<EList<? extends IInterfaceElement>> interfaceLists = new ArrayList<EList<? extends IInterfaceElement>>();
-		interfaceLists.add(FBInterface.getInputVars());
-		interfaceLists.add(FBInterface.getOutputVars());
-		interfaceLists.add(FBInterface.getEventInputs());
-		interfaceLists.add(FBInterface.getEventOutputs());
+		List<Object> ioInfo = getInfoFromIO(fbName, fbType, fbNetwork);
+		FMUInputOutput.variableType varType = (FMUInputOutput.variableType) ioInfo.get(3);
+		if ((boolean) ioInfo.get(0)) {
+			handleIO((boolean) ioInfo.get(2), previousNames, fbName, fbNetwork, (boolean) ioInfo.get(1), varType);
+		}
+		
+		getAllVariablesFromInterface(fbName, fbNetwork, previousNames);
+		FBType typeFB = fbNetwork.getFBNamed(fbName).getType();
+		if (typeFB instanceof BasicFBType) {
+			handleBasicFB((BasicFBType) typeFB, previousNames, fbName);
+		} else if (typeFB instanceof CompositeFBType) {
+			handleCompositeFB((CompositeFBType) typeFB, previousNames, fbName);
+		}
+	}
+	
+	private void handleBasicFB(BasicFBType basic, String previousNames, String fbName ) {
+		if(basic.getName().matches("E_CTU|E_D_FF|E_DEMUX|E_MERGE|E_PERMIT|E_REND|E_RS|E_SELECT|E_SPLIT|E_SR|E_SWITCH")) { //these FBs are implemented as SIFB in the 4diac-RTE
+			return;
+		}
+		
+		for (VarDeclaration var : basic.getInternalVars()) {
+			// store internal variables
+			FMUInputOutput.variableType varType = FMUInputOutput.getTypeFromString(var.getTypeName());
+			if (FMUInputOutput.variableType.UNKNOWN == varType) {
+				continue;
+			}
+			inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + var.getName(), false, FMUInputOutput.variableScope.INTERNAL,
+					varType, (null != var.getVarInitialization()) ? var.getVarInitialization().getInitialValue() : null));
+		}
+		// store ECC
+		inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + ".$ECC", false, FMUInputOutput.variableScope.INTERNAL,
+				FMUInputOutput.variableType.INTEGER, "0"));
+	}
+	
+	private void handleCompositeFB(CompositeFBType composite, String previousNames, String fbName) {
+		if(composite.getName().matches("E_CYCLE|E_F_TRIG|E_R_TRIG|E_TimeOut")) { //these FBs are implemented as SIFB in the 4diac-RTE
+			return;
+		}
+		
+		// store internal FB. Take care of the names
+		for (FBNetworkElement elem : composite.getFBNetwork().getNetworkElements()) {
+			if (elem instanceof FBImpl && !(elem instanceof AdapterFBImpl)) {
+				FBImpl fb = (FBImpl) elem;
+				populateInputsAndOutputs(fb.getName(), fb.getTypeName(), composite.getFBNetwork(), previousNames + fbName + ".");
+			}
+		}
+	}
+	
+	private void getAllVariablesFromInterface(String fbName, FBNetwork paFBNetwork, String previousNames){
+		//Add the interface var and events as variables
+		InterfaceList fbInterface = paFBNetwork.getFBNamed(fbName).getInterface();
+		
+		ArrayList<EList<? extends IInterfaceElement>> interfaceLists = new ArrayList<>();
+		interfaceLists.add(fbInterface.getInputVars());
+		interfaceLists.add(fbInterface.getOutputVars());
+		interfaceLists.add(fbInterface.getEventInputs());
+		interfaceLists.add(fbInterface.getEventOutputs());
 		
 		
 		for(EList<? extends IInterfaceElement> list : interfaceLists){
  			for(IInterfaceElement var : list){
  				FMUInputOutput varInfo = new FMUInputOutput();
 				if(var instanceof VarDeclaration){
-					varInfo = getInfoFromVar(paFBNetwork, FBName, var);
+					varInfo = getInfoFromVar(paFBNetwork, fbName, var);
 					if (FMUInputOutput.variableType.UNKNOWN == varInfo.getVarType()) {
 						continue;
 					}
-				}else{//event
-					//do nothing;
+				}else{//event: don't do anything
+					
 				}
-				inputsAndOutputs.add(new FMUInputOutput(previousNames + FBName + "." + var.getName(), false, varInfo.getScope(), varInfo.getVarType(), varInfo.getInitialValue()));
+				inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + var.getName(), false, varInfo.getScope(), varInfo.getVarType(), varInfo.getInitialValue()));
 			}
 		}
 	}
 	
-	private FMUInputOutput getInfoFromVar(FBNetwork paFBNetwork, String FBName, IInterfaceElement var){
+	private FMUInputOutput getInfoFromVar(FBNetwork paFBNetwork, String fbName, IInterfaceElement var){
 		
 		FMUInputOutput returnValue = new FMUInputOutput();
-		FB commFB = paFBNetwork.getFBNamed(FBName);
-		String destinationType = null; 
-		FMUInputOutput.variableType type = FMUInputOutput.variableType.UNKNOWN;
+		FB commFB = paFBNetwork.getFBNamed(fbName);
+		FMUInputOutput.variableType type;
 		Value value = var.getValue();
 		String initialValue = "";
 		
 		type = FMUInputOutput.getTypeFromString(commFB.getInterface().getVariable(var.getName()).getTypeName());
 		
 		if(FMUInputOutput.variableType.UNKNOWN == type){ //It's an abstract type, check the other side of the connection
-			boolean isInput = commFB.getInterface().getVariable(var.getName()).isIsInput();
-			for (DataConnection con : paFBNetwork.getDataConnections()) {
-				if ( (isInput && con.getDestinationElement().getName().equals(FBName)
-						&& con.getDestination().getName().equals(var.getName()))
-						||
-						(!isInput && con.getSourceElement().getName().equals(FBName)
-								&& con.getSource().getName().equals(var.getName()))
-						)
-				{
-					destinationType = isInput ? con.getSource().getTypeName() : con.getDestination().getTypeName();
-					if (null != destinationType) {
-						returnValue.setType(FMUInputOutput.getTypeFromString(destinationType));
-					}
-					break;
-				}
-			}
+			returnValue.setType(getInfoFromConnectedFB(commFB, paFBNetwork, fbName, var));
 		}
 			
 
@@ -637,12 +669,12 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 					initialValue = replaced;
 				}
 			}
-			if (-1 != initialValue.indexOf("#")) {
+			if (-1 != initialValue.indexOf('#')) {
 				if(FMUInputOutput.variableType.UNKNOWN == type){
-					type = FMUInputOutput.getTypeFromString(initialValue.substring(0, initialValue.indexOf("#")));
+					type = FMUInputOutput.getTypeFromString(initialValue.substring(0, initialValue.indexOf('#')));
 				}
 				
-				initialValue = initialValue.substring(initialValue.indexOf("#") + 1);
+				initialValue = initialValue.substring(initialValue.indexOf('#') + 1);
 			}
 			returnValue = new FMUInputOutput("", false, FMUInputOutput.variableScope.PARAM, type, initialValue);
 		}
@@ -651,9 +683,35 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 		return returnValue;
 	}
 	
+	private FMUInputOutput.variableType getInfoFromConnectedFB(FB commFB, FBNetwork paFBNetwork, String fbName, IInterfaceElement var) {
+		FMUInputOutput.variableType returnValue = FMUInputOutput.variableType.UNKNOWN;
+		boolean isInput = commFB.getInterface().getVariable(var.getName()).isIsInput();
+		for (DataConnection con : paFBNetwork.getDataConnections()) {
+			if (isItsConnection(isInput, con, fbName, var))
+			{
+				String destinationType = isInput ? con.getSource().getTypeName() : con.getDestination().getTypeName();
+				if (null != destinationType) {
+					returnValue = FMUInputOutput.getTypeFromString(destinationType);
+				}
+				break;
+			}
+		}
+		return returnValue;
+	}
 	
-	public StringBuffer createModelDescription(String outputName){
-		StringBuffer modelDescription = new StringBuffer();
+	private boolean isItsConnection(boolean isInput, DataConnection con, String fbName, IInterfaceElement var) {
+		if(isInput){
+			return (con.getDestinationElement().getName().equals(fbName)
+					&& con.getDestination().getName().equals(var.getName()));
+		}else {
+			return (con.getSourceElement().getName().equals(fbName)
+					&& con.getSource().getName().equals(var.getName()));
+		}
+	}
+	
+	
+	public StringBuilder createModelDescription(String outputName){
+		StringBuilder modelDescription = new StringBuilder();
 		modelDescription.append(
 				"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<fmiModelDescription\n  fmiVersion=\"2.0\"\n  modelName=\"" + outputName + "\"\n  guid=\"" + outputName + "\">"
 				+ "\n\n<CoSimulation\n  modelIdentifier=\"" + outputName + "\"\n  canHandleVariableCommunicationStepSize=\"true\"/>\n\n<LogCategories>\n  <Category name=\"logAll\"/>\n  <Category name=\"logError\"/>\n  <Category name=\"logCalls\"/>\n</LogCategories>");
@@ -663,10 +721,10 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 		int outputIndex = 0;
 		int noOfOutputs = 0;
 		
-		ArrayList<ArrayList<FMUInputOutput>> allToWrite = new ArrayList<ArrayList<FMUInputOutput>>();
+		List<List<FMUInputOutput>> allToWrite = new ArrayList<>();
 		allToWrite.add(inputsAndOutputs);
 		
-		for (ArrayList<FMUInputOutput> list : allToWrite) {
+		for (List<FMUInputOutput> list : allToWrite) {
 			for (FMUInputOutput element : list) {
 				writeVariableToBuffer(modelDescription, outputIndex, element);
 				if (!element.getInput() && (element.getScope() == FMUInputOutput.variableScope.IO)) {
@@ -694,23 +752,36 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 		return modelDescription;
 	}
 	
-	private void writeVariableToBuffer(StringBuffer modelDescription, int outputIndex, FMUInputOutput element){
+	private void writeVariableToBuffer(StringBuilder modelDescription, int outputIndex, FMUInputOutput element){
+		
+		String causality = "";
+		String variability= "";
+		switch(element.getScope()) {
+		case PARAM:
+			causality = "parameter";
+			variability = "fixed";
+			break;
+		case INTERNAL:
+			causality = "local";
+			break;
+		case IO:
+			if(element.getInput()) {
+				causality = "input";
+			}else {
+				causality = "output";
+			}
+			break;
+		}
+		
+		if(variability.equals("")){
+			variability = (FMUInputOutput.variableType.REAL == element.getVarType()) ?  "continuous" : "discrete";
+		}
 		
 		modelDescription.append("  <ScalarVariable name=\"" + element.getName() + "\" "
 				+ "valueReference=\"" + outputIndex + "\" "
 				+ "description=\"\" "
-				+ "causality=\"" + ((element.getScope() == FMUInputOutput.variableScope.PARAM) ?  
-										"parameter"
-										: ((element.getScope() == FMUInputOutput.variableScope.INTERNAL) ? 
-										"local" 
-										: ((element.getInput() ? 
-												"input" 
-												: "output")))) 
-				 + "\" variability=\"" + ((element.getScope() == FMUInputOutput.variableScope.PARAM) ?
-						 					"fixed\""
-						 					: (FMUInputOutput.variableType.REAL == element.getVarType() ? 
-						 					"continuous\"" 
-						 					: "discrete\""))
+				+ "causality=\"" + causality
+				 + "\" variability=\"" + variability + "\""
 				+ (!element.getInput() || (element.getScope() == FMUInputOutput.variableScope.PARAM) ? 
 						" initial=\"exact\">"
 						: ">" ) 
@@ -735,12 +806,8 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 		modelDescription.append("start=\"" + element.getInitialValue() + "\"/>\n  </ScalarVariable>\n");
 	}
 	
-	private String getErrorFromRequest(String request){
-		String source = request.substring(request.indexOf("Source=") + 8);
-		source = source.substring(0, source.indexOf("\""));
-		String input = request.substring(request.indexOf("Destination=") + 12);
-		input = input.substring(0, input.indexOf("\""));
-		return "Parameter " + source + " in input " + input + "\n";
+	private String getSubstringAfterMatch(String source, String toLook) {
+		return source.substring(source.indexOf(toLook) + toLook.length());
 	}
 
 	@Override
@@ -750,7 +817,7 @@ public class FMUDeviceManagementCommunicationHandler extends AbstractDeviceManag
 
 	@Override
 	public void disconnect() throws DeploymentException {
-		
+		//nothing to do for a file
 	}
 
 	@Override

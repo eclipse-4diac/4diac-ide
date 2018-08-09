@@ -6,10 +6,11 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fmu.Preferences;
+package org.eclipse.fordiac.ide.fmu.preferences;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.jface.preference.*;
@@ -74,19 +75,19 @@ public class FMUPreferencePage
 		gridData.horizontalSpan = 2;
 
 		// Add the fields to the group
-		win32Field = new BooleanFieldEditor(PreferenceConstants.P_FMU_WIN32, "win32", librariesGroup);
+		win32Field = new BooleanFieldEditor(PreferenceConstants.P_FMU_WIN32, PreferenceConstants.P_FMU_WIN32, librariesGroup);
 		win32Field.setEnabled(false, librariesGroup);
 		addField(win32Field);
 		
-		win64Field = new BooleanFieldEditor(PreferenceConstants.P_FMU_WIN64, "win64", librariesGroup);
+		win64Field = new BooleanFieldEditor(PreferenceConstants.P_FMU_WIN64, PreferenceConstants.P_FMU_WIN64, librariesGroup);
 		win64Field.setEnabled(false, librariesGroup);
 		addField(win64Field);
 		
-		linux32Field = new BooleanFieldEditor(PreferenceConstants.P_FMU_LIN32, "linux32", librariesGroup);
+		linux32Field = new BooleanFieldEditor(PreferenceConstants.P_FMU_LIN32, PreferenceConstants.P_FMU_LIN32, librariesGroup);
 		linux32Field.setEnabled(false, librariesGroup);
 		addField(linux32Field);
 		
-		linux64Field = new BooleanFieldEditor(PreferenceConstants.P_FMU_LIN64, "linux64", librariesGroup);
+		linux64Field = new BooleanFieldEditor(PreferenceConstants.P_FMU_LIN64, PreferenceConstants.P_FMU_LIN64, librariesGroup);
 		linux64Field.setEnabled(false, librariesGroup);
 		addField(linux64Field);
 		
@@ -120,13 +121,13 @@ public class FMUPreferencePage
 		
 		if (validPath){
 			win32Field.setEnabled(new File(pathString + File.separatorChar + "win32Forte.dll").
-					exists() ? true : false, librariesGroup);
+					exists(), librariesGroup);
 			win64Field.setEnabled(new File(pathString + File.separatorChar + "win64Forte.dll").
-					exists() ? true : false, librariesGroup);
+					exists(), librariesGroup);
 			linux32Field.setEnabled(new File(pathString + File.separatorChar + "linux32Forte.so").
-					exists() ? true : false, librariesGroup);
+					exists(), librariesGroup);
 			linux64Field.setEnabled(new File(pathString + File.separatorChar + "linux64Forte.so").
-					exists() ? true : false, librariesGroup);
+					exists(), librariesGroup);
 		}else{
 			win32Field.setEnabled(false, librariesGroup);
 			win64Field.setEnabled(false, librariesGroup);
@@ -136,8 +137,8 @@ public class FMUPreferencePage
 		
 	}
 	
-	public static ArrayList<String> getFoundLibraries(){
-		ArrayList<String> found = new ArrayList<String>();
+	public static List<String> getFoundLibraries(){
+		List<String> found = new ArrayList<>();
 		String pathString = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH);
 		if ((new File(pathString + File.separatorChar + "win32Forte.dll").exists())){
 			found.add(PreferenceConstants.P_FMU_WIN32);

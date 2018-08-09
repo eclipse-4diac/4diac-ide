@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fmu.Preferences;
+package org.eclipse.fordiac.ide.fmu.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.fordiac.ide.fmu.Activator;
@@ -30,8 +30,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_FMU_WIN64, false);
 		store.setDefault(PreferenceConstants.P_FMU_LIN32, false);
 		store.setDefault(PreferenceConstants.P_FMU_LIN64, false);
-		//store.setDefault(PreferenceConstants.P_FMU_MAC32, false);
-		//store.setDefault(PreferenceConstants.P_FMU_MAC64, false);
 	}
 
 }
