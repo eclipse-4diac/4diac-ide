@@ -11,12 +11,14 @@ package org.eclipse.fordiac.ide.fmu.wizard;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
-import org.eclipse.fordiac.ide.fmu.Preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -44,8 +46,7 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 
 		IDialogSettings dialogSettings = settings.getSection(FORDIAC_CREATE_FMU_SECTION);
 		if (dialogSettings == null) {
-			dialogSettings = settings
-					.addNewSection(FORDIAC_CREATE_FMU_SECTION);
+			settings.addNewSection(FORDIAC_CREATE_FMU_SECTION);
 		}
 		setDialogSettings(settings);
 	}
@@ -74,28 +75,20 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 		}
 		
 		IRunnableWithProgress iop = new IRunnableWithProgress(){
-
 			@Override
-			public void run(IProgressMonitor monitor)
-					throws InvocationTargetException, InterruptedException {
+			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				
 				String outputDirectory = page.getDirectory();
-				HashMap<Device, ArrayList<Resource> > toDeploy = addResourcesAndDevices(); 
-				
+				Map<Device, List<Resource> > toDeploy = addResourcesAndDevices(); 
 				//Store the selected libraries to include in the FMU
-				HashMap<String, Boolean> librariesToAdd = new HashMap<String, Boolean>();
-				librariesToAdd.put(PreferenceConstants.P_FMU_WIN32, page.getWin32Field().isEnabled() && page.getWin32Field().getSelection());
-				librariesToAdd.put(PreferenceConstants.P_FMU_WIN64, page.getWin64Field().isEnabled() && page.getWin64Field().getSelection());
-				librariesToAdd.put(PreferenceConstants.P_FMU_LIN32, page.getLinux32Field().isEnabled() && page.getLinux32Field().getSelection());
-				librariesToAdd.put(PreferenceConstants.P_FMU_LIN64, page.getLinux64Field().isEnabled() && page.getLinux64Field().getSelection());
-
-				for (Entry<Device, ArrayList<Resource>> entry : toDeploy.entrySet()) {
+				List<String> librariesToAdd = getLibraries();
+				
+				for (Entry<Device, List<Resource>> entry : toDeploy.entrySet()) {
 					FMUDeviceManagementCommunicationHandler.createFMU(entry.getKey(), entry.getValue(), librariesToAdd, outputDirectory, getShell(), monitor);
 					
 				}
 				monitor.done();
 			}
-			
 		};
 		
 		try {	    
@@ -109,10 +102,28 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 
 		return true;
 	}
+	
+	private List<String> getLibraries() {
+		
+		List<String> libs = new ArrayList<>();
+		if(page.getWin32Field().isEnabled() && page.getWin32Field().getSelection()) {
+			libs.add(PreferenceConstants.P_FMU_WIN32);
+		}
+		if(page.getWin64Field().isEnabled() && page.getWin64Field().getSelection()) {
+			libs.add(PreferenceConstants.P_FMU_WIN64);
+		}
+		if (page.getLinux32Field().isEnabled() && page.getLinux32Field().getSelection()) {
+			libs.add(PreferenceConstants.P_FMU_LIN32);
+		}
+		if (page.getLinux64Field().isEnabled() && page.getLinux64Field().getSelection()) {
+			libs.add(PreferenceConstants.P_FMU_LIN64);
+		}
+		return libs;
+	}
 
-	private HashMap<Device, ArrayList<Resource>> addResourcesAndDevices() {
-		Object selectedElements[] = page.getSelectedElements();
-		HashMap<Device, ArrayList<Resource> > toDeploy = new HashMap<Device, ArrayList<Resource> >();
+	private Map<Device, List<Resource>> addResourcesAndDevices() {
+		Object[] selectedElements = page.getSelectedElements();
+		HashMap<Device, List<Resource> > toDeploy = new HashMap<>();
 
 		for (Object object : selectedElements) {
 			if(object instanceof Resource){
@@ -125,14 +136,14 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 		return toDeploy;
 	}
 
-	private void insertResource(HashMap<Device, ArrayList<Resource>> workLoad,
+	private void insertResource(Map<Device, List<Resource>> workLoad,
 			Resource res) {
-		ArrayList<Resource> resList = getWorkLoadEntryList(workLoad, res.getDevice());
+		List<Resource> resList = getWorkLoadEntryList(workLoad, res.getDevice());
 		resList.add(res);
 	}
 
-	private ArrayList<Resource> getWorkLoadEntryList(
-			HashMap<Device, ArrayList<Resource>> toDeploy, Device device) {
+	private List<Resource> getWorkLoadEntryList(
+			Map<Device, List<Resource>> toDeploy, Device device) {
 		if(!toDeploy.containsKey(device)){
 			toDeploy.put(device, new ArrayList<Resource>());
 		}

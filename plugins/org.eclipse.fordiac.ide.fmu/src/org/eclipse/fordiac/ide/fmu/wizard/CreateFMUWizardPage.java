@@ -10,13 +10,16 @@ package org.eclipse.fordiac.ide.fmu.wizard;
 
 import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
-import org.eclipse.fordiac.ide.fmu.Preferences.FMUPreferencePage;
-import org.eclipse.fordiac.ide.fmu.Preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferencePage;
+import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -34,8 +37,7 @@ public class CreateFMUWizardPage extends WizardPage {
 	private IStructuredSelection selection;
 	private DirectoryChooserControl dcc;
 	private DownloadSelectionTree systemTree;
-	private Group librariesGroup;
-	private Button win32Field;
+	
 	public Button getWin32Field() {
 		return win32Field;
 	}
@@ -57,6 +59,7 @@ public class CreateFMUWizardPage extends WizardPage {
 		return storeSelectedLibaries;
 	}
 
+	private Button win32Field;
 	private Button win64Field;
 	private Button linux32Field;
 	private Button linux64Field;
@@ -133,7 +136,6 @@ public class CreateFMUWizardPage extends WizardPage {
 	private void createDestinationGroup(final Composite composite) {
 
 		GridData stretch = new GridData();
-		// stretch.horizontalSpan = 2;
 		stretch.grabExcessHorizontalSpace = true;
 		stretch.horizontalAlignment = SWT.FILL;
 
@@ -160,7 +162,7 @@ public class CreateFMUWizardPage extends WizardPage {
 	 */
 	private void createSelectionLibrariesGroup(final Composite composite) {
 		
-		librariesGroup = new Group(composite, SWT.NONE);
+		Group librariesGroup = new Group(composite, SWT.NONE);
 		librariesGroup.setText("Include the following libraries in exported FMU");
 		
 		GridLayout gridLayout = new GridLayout(1, false);
@@ -170,22 +172,22 @@ public class CreateFMUWizardPage extends WizardPage {
 
 		// Add the fields to the group
 		win32Field = new Button(librariesGroup, SWT.CHECK); 
-		win32Field.setText("win32");
+		win32Field.setText(PreferenceConstants.P_FMU_WIN32);
 		win32Field.setEnabled(false);
 		win32Field.setSelection(false);
 		
 		win64Field = new Button(librariesGroup, SWT.CHECK); 
-		win64Field.setText("win64");
+		win64Field.setText(PreferenceConstants.P_FMU_WIN64);
 		win64Field.setEnabled(false);
 		win64Field.setSelection(false);
 		
 		linux32Field = new Button(librariesGroup, SWT.CHECK); 
-		linux32Field.setText("linux32");
+		linux32Field.setText(PreferenceConstants.P_FMU_LIN32);
 		linux32Field.setEnabled(false);
 		linux32Field.setSelection(false);
 		
 		linux64Field = new Button(librariesGroup, SWT.CHECK); 
-		linux64Field.setText("linux64");
+		linux64Field.setText(PreferenceConstants.P_FMU_LIN64);
 		linux64Field.setEnabled(false);
 		linux64Field.setSelection(false);
 		
@@ -218,6 +220,18 @@ public class CreateFMUWizardPage extends WizardPage {
 		
 		librariesGroup.setLayoutData(gridData);
 		librariesGroup.setLayout(gridLayout);
+		
+		SelectionListener listener = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				setPageComplete(validatePage());
+			}	
+		};
+			
+		win32Field.addSelectionListener(listener);
+		win64Field.addSelectionListener(listener);
+		linux32Field.addSelectionListener(listener);
+		linux64Field.addSelectionListener(listener);
 	}
 	
 	/**
@@ -237,16 +251,24 @@ public class CreateFMUWizardPage extends WizardPage {
 			return false;
 		}
 		
-		if ((!win32Field.isEnabled() || !win32Field.getSelection()) 
-				&& (!win64Field.isEnabled() || !win64Field.getSelection()) 
-				&& (!linux32Field.isEnabled() || !linux32Field.getSelection())
-				&& (!linux64Field.isEnabled() && !linux64Field.getSelection())){
+		if (!isSomeLibrarySelected()){
 			setErrorMessage("No libraries selected to include");
 			return false;
 		}
 
 		setErrorMessage(null);
 		return true;
+	}
+	
+	private boolean isSomeLibrarySelected() {
+		return (isSelected(win32Field) 
+				|| isSelected(win64Field) 
+				|| isSelected(linux32Field) 
+				|| isSelected(linux64Field));
+	}
+	
+	private boolean isSelected(Button toCheck) {
+		return (toCheck.isEnabled() && toCheck.getSelection());
 	}
 	
 	/**
@@ -306,7 +328,6 @@ public class CreateFMUWizardPage extends WizardPage {
 
 	private void expandResource(Resource obj) {
 		expandDevice(obj.getDevice());
-		//systemTree.setExpandedState(obj, true);
 	}
 
 	private void expandDevice(Device obj) {
