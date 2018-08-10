@@ -31,7 +31,7 @@ public class PlusHandle extends SquareHandle {
 	
 	private static final int DEFAULT_PLUS_HANDLE_SIZE = 8;
 	
-	static Color handleColor = ColorManager.getColor(new RGB(114, 175, 73));   //use green as handle color to give more contrast to diagrams 
+	private Color handleColor = ColorManager.getColor(new RGB(114, 175, 73));   //use green as handle color to give more contrast to diagrams 
 	
 	public PlusHandle(GraphicalEditPart owner, Locator loc) {
 		super(owner, loc);

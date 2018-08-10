@@ -137,8 +137,9 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			@Override
 			public Command getCommand(Request request) {
 				Object type = request.getType();
-				if (REQ_ALIGN.equals(type))
+				if (REQ_ALIGN.equals(type) && request instanceof AlignmentRequest) {
 					return getAlignCommand((AlignmentRequest) request);
+				}
 				return null;
 			}
 

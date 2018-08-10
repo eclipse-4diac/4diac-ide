@@ -51,7 +51,7 @@ import org.eclipse.swt.SWT;
 
 public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 	
-	protected EContentAdapter adapter = new EContentAdapter() {
+	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);		
@@ -249,7 +249,7 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	public void performRequest(final Request request) {
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT && request instanceof DirectEditRequest) {
 			performDirectEdit(isLeft((DirectEditRequest) request));
 		} else {
 			super.performRequest(request);

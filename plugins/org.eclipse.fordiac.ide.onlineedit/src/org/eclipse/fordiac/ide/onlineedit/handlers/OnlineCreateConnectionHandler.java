@@ -33,7 +33,7 @@ public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand{
 		if (element instanceof ConnectionEditPart){
 			conn = (Connection)((ConnectionEditPart) element).getModel();
 			Connection resCon = getResourceConnection(conn);
-			if (null != conn && null != resCon){
+			if (null != resCon){
 				res = (Resource) resCon.getFBNetwork().eContainer();
 				if (null != res){
 					device = res.getDevice();
