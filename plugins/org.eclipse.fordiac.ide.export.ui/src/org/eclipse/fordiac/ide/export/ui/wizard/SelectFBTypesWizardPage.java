@@ -329,4 +329,9 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	@Override
 	public void handleEvent(Event event) {
 	}
+	
+	@Override  //this overide is needed to make it public for access by the wizard
+	public void saveWidgetValues() {
+		super.saveWidgetValues();
+	}
 }

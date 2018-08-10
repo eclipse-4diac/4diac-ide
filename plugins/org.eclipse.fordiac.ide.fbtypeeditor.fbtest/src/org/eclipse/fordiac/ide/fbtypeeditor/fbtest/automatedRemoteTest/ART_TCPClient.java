@@ -103,11 +103,7 @@ public class ART_TCPClient implements IIecReceivable, IIecSender {
 	}
 	
 	protected static void sendIECData(String ID, List<IEC_ANY> sendData){
-		try {
-			ChannelManager.send(ID, IChannel.TCP, sendData);
-		} catch (CommException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-		}		
+		ChannelManager.send(ID, IChannel.TCP, sendData);
 	}
 
 	public void setMyReceiveDataList(List<List<IEC_ANY>> myReceiveData) {
