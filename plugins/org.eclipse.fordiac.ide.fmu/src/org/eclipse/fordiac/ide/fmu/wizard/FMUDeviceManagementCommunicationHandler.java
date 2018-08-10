@@ -166,11 +166,60 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 		}
 	}
 	
+	private static class IOInfo{
+		
+		private boolean io;
+		private boolean input;
+		private boolean pubSub;
+		private FMUInputOutput.variableType varType;
+		
+		public boolean isIo() {
+			return io;
+		}
+
+		public void setIo(boolean io) {
+			this.io = io;
+		}
+
+		public boolean isInput() {
+			return input;
+		}
+
+		public void setInput(boolean input) {
+			this.input = input;
+		}
+
+		public boolean isPubSub() {
+			return pubSub;
+		}
+
+		public void setPubSub(boolean pubSub) {
+			this.pubSub = pubSub;
+		}
+
+		public FMUInputOutput.variableType getVarType() {
+			return varType;
+		}
+
+		public void setVarType(FMUInputOutput.variableType varType) {
+			this.varType = varType;
+		}
+		
+		public IOInfo() {
+			io = false;
+			input = false;
+			pubSub = false;
+			varType = FMUInputOutput.variableType.UNKNOWN;
+		}
+	}
+	
 	private static final String BINARIES_FOLDER_NAME = "binaries";
 	
 	private static final String RESOURCES_FOLDER_NAME = "resources";
 	
 	private static final int ZIP_BUFFER = 1024;
+	
+	private static final int TOTAL_MONITOR = 100;
 	
 	private StringBuilder bootfileResult = new StringBuilder();
 	
@@ -188,17 +237,17 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 	public static void createFMU(Device device, List<Resource> resources, List<String> librariesToAdd, String directory, Shell shell, IProgressMonitor monitor){
 		if(null != directory){
 			if (!librariesToAdd.isEmpty()) {
-				monitor.beginTask("Generating FMUs for device " + device.getName(), 100);
+				monitor.beginTask("Generating FMUs for device " + device.getName(), TOTAL_MONITOR);
 				String outputName = device.getAutomationSystem().getName() + "_" + device.getName();
 				DeploymentCoordinator deployment = DeploymentCoordinator.getInstance();
 				FMUDeviceManagementCommunicationHandler fmuFileHandler = new FMUDeviceManagementCommunicationHandler(device);
 				deployment.performDeployment(resources.toArray(), fmuFileHandler); //will call the callbacks, sendREQ among them
-				monitor.worked(70);
+				monitor.worked(TOTAL_MONITOR / 2);
 				
 				File destZipFile = createZipFile(directory, outputName, shell);
 				if (null != destZipFile) {
 					createZip(fmuFileHandler, outputName, librariesToAdd, shell, destZipFile);
-					monitor.worked(100);
+					monitor.worked(TOTAL_MONITOR);
 				}
 				
 			}else {
@@ -298,10 +347,11 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 		msgBox.open();
 	}
 	
-	private static boolean deleteFolder(String pathS) {
-		File path = new File(pathS);
-		File[] files;
-		if (path.exists() && null != (files = path.listFiles())) {
+	private static boolean deleteFolder(String pathToDelete) {
+		File path = new File(pathToDelete);
+		File[] files = path.listFiles();
+		
+		if (path.exists() && null != files ) {
 			for (File file : files) {
 				if(!deleteFileOrFolder(file)) {
 					return false;
@@ -448,7 +498,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 	}
 	
 	private static void zipFoderCore(String root, String directoryPath, String dirElement, ZipOutputStream zos) {
-		String dirElementPath = directoryPath + File.separatorChar + dirElement; 
+		String dirElementPath = directoryPath + '/' + dirElement; //there are some problems when File.separatorChar is used here
 
 		if (new File(dirElementPath).isDirectory()) {
 			FMUDeviceManagementCommunicationHandler.zipFolder(root, dirElementPath, zos);
@@ -509,8 +559,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 			for (DataConnection con : fbNetwork.getDataConnections()) { //If an SD or RD has no connected endpoint and therefore the type is unknown, the variable shouldn't be added
 				if(isItsConnection(isInput, con, fbName, var.get(i))){
 					IInterfaceElement otherEndpoint = (isInput) ? con.getSource() : con.getDestination();
-					FMUInputOutput.variableType varType;
-					if ((FMUInputOutput.variableType.UNKNOWN != (varType = FMUInputOutput.getTypeFromString(otherEndpoint.getType().getName())))) {
+					FMUInputOutput.variableType varType = FMUInputOutput.getTypeFromString(otherEndpoint.getType().getName());
+					if (FMUInputOutput.variableType.UNKNOWN != varType) {
 						inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "@" + otherEndpoint.getFBNetworkElement().getName() + "." + otherEndpoint.getName(), !isInput, FMUInputOutput.variableScope.IO, varType, ""));	//@ to avoid problems if some part of the interface has the same name
 					}
 					break;
@@ -519,61 +569,67 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 		}
 	}
 	
-	private void handleIO(boolean pubSub, String previousNames, String fbName, FBNetwork fbNetwork, boolean input, FMUInputOutput.variableType varType) {
-		if (pubSub) { 
+	private void handleIO(IOInfo info, String previousNames, String fbName, FBNetwork fbNetwork) {
+		if (info.isPubSub()) { 
 			FB commFB = fbNetwork.getFBNamed(fbName);
 			handlePubSubVars(fbNetwork, fbName, previousNames, commFB.getInterface().getInputVars(), true);
 			handlePubSubVars(fbNetwork, fbName, previousNames, commFB.getInterface().getOutputVars(), false);
 		}else{
-			inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName, input, FMUInputOutput.variableScope.IO, varType, ""));	
+			inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName, info.isInput(), FMUInputOutput.variableScope.IO, info.getVarType(), ""));	
 		}
 	}
 	
-	private List<Object> getInfoFromIO(String fbName, String fbType, FBNetwork fbNetwork){
-		boolean io = false;
-		boolean input = false;
-		boolean pubSub = false;
-		FMUInputOutput.variableType varType = FMUInputOutput.variableType.UNKNOWN;
-		if (fbType.equals("IX")) {
-			io = true;
-			input = true;
-			varType = FMUInputOutput.variableType.BOOLEAN;
-		} else if (fbType.equals("QX")) {
-			io = true;
-			varType = FMUInputOutput.variableType.BOOLEAN;
-		} else if (fbType.equals("IW")) {
-			io = true;
-			input = true;
-			varType = FMUInputOutput.variableType.INTEGER;
-		} else if (fbType.equals("QW")) {
-			io = true;
-			varType = FMUInputOutput.variableType.INTEGER;
+	private IOInfo getInfoFromIOAndComm(String fbName, String fbType, FBNetwork fbNetwork){
+		IOInfo returnValue;
+		if (fbType.matches("IX|QX|IW|QW")) {
+			returnValue = getInfoFromIO(fbType);
 		} else if ( 0 == fbType.indexOf("PUBLISH_")   || 
 				    0 == fbType.indexOf("SUBSCRIBE_") || 
 				    0 == fbType.indexOf("CLIENT_")    || 
 				    0 == fbType.indexOf("SERVER_")) {
-
-			Value value = fbNetwork.getFBNamed(fbName).getInterface().getVariable("ID").getValue();
-			if (value != null && null != value.getValue() && "fmu[]".equals(value.getValue())) { //has some literal
-				pubSub = true;
-				io = true;						
-			}
+			returnValue = getInfoFromComm(fbName, fbNetwork);
+		}else {
+			returnValue = new IOInfo();
 		}
 		
-		List<Object> returnValue = new ArrayList<>();
-		returnValue.add(io);
-		returnValue.add(input);
-		returnValue.add(pubSub);
-		returnValue.add(varType);
+		return returnValue;
+	}
+	
+	private IOInfo getInfoFromIO(String fbType){
+		
+		IOInfo returnValue = new IOInfo();
+		returnValue.setIo(true);
+		returnValue.setPubSub(false);
+		if (fbType.equals("IX")) {
+			returnValue.setInput(true);
+			returnValue.setVarType(FMUInputOutput.variableType.BOOLEAN);
+		} else if (fbType.equals("QX")) {
+			returnValue.setVarType(FMUInputOutput.variableType.BOOLEAN);
+		} else if (fbType.equals("IW")) {
+			returnValue.setInput(true);
+			returnValue.setVarType(FMUInputOutput.variableType.INTEGER);
+		} else if (fbType.equals("QW")) {
+			returnValue.setVarType(FMUInputOutput.variableType.INTEGER);
+		}
+		return returnValue;
+	}
+	
+	private IOInfo getInfoFromComm(String fbName, FBNetwork fbNetwork){
+		IOInfo returnValue = new IOInfo();
+		returnValue.setIo(true);
+		returnValue.setPubSub(true);
+		Value value = fbNetwork.getFBNamed(fbName).getInterface().getVariable("ID").getValue();
+		if (value != null && null != value.getValue() && "fmu[]".equals(value.getValue())) { //has some literal
+			returnValue.setPubSub(true);
+			returnValue.setIo(true);						
+		}
 		return returnValue;
 	}
 	
 	private void populateInputsAndOutputs(String fbName, String fbType, FBNetwork fbNetwork, String previousNames){
-		
-		List<Object> ioInfo = getInfoFromIO(fbName, fbType, fbNetwork);
-		FMUInputOutput.variableType varType = (FMUInputOutput.variableType) ioInfo.get(3);
-		if ((boolean) ioInfo.get(0)) {
-			handleIO((boolean) ioInfo.get(2), previousNames, fbName, fbNetwork, (boolean) ioInfo.get(1), varType);
+		IOInfo info = getInfoFromIOAndComm(fbName, fbType, fbNetwork);
+		if (info.isIo()) {
+			handleIO(info, previousNames, fbName, fbNetwork);
 		}
 		
 		getAllVariablesFromInterface(fbName, fbNetwork, previousNames);
@@ -754,28 +810,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 	
 	private void writeVariableToBuffer(StringBuilder modelDescription, int outputIndex, FMUInputOutput element){
 		
-		String causality = "";
-		String variability= "";
-		switch(element.getScope()) {
-		case PARAM:
-			causality = "parameter";
-			variability = "fixed";
-			break;
-		case INTERNAL:
-			causality = "local";
-			break;
-		case IO:
-			if(element.getInput()) {
-				causality = "input";
-			}else {
-				causality = "output";
-			}
-			break;
-		}
-		
-		if(variability.equals("")){
-			variability = (FMUInputOutput.variableType.REAL == element.getVarType()) ?  "continuous" : "discrete";
-		}
+		String causality = getCausality(element);
+		String variability= getVariability(element);
 		
 		modelDescription.append("  <ScalarVariable name=\"" + element.getName() + "\" "
 				+ "valueReference=\"" + outputIndex + "\" "
@@ -804,6 +840,27 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractDevic
 			break;
 		}
 		modelDescription.append("start=\"" + element.getInitialValue() + "\"/>\n  </ScalarVariable>\n");
+	}
+	
+	private String getCausality(FMUInputOutput element) {
+		switch(element.getScope()) {
+		case PARAM:
+			return "parameter";
+		case INTERNAL:
+			return "local";
+		case IO:
+			return element.getInput() ? "input" : "output";
+		default:
+			return "";
+		}
+	}
+	
+	private String getVariability(FMUInputOutput element) {
+		if(FMUInputOutput.variableScope.PARAM == element.getScope()) {
+			return "fixed";
+		}
+		
+		return (FMUInputOutput.variableType.REAL == element.getVarType()) ?  "continuous" : "discrete";
 	}
 	
 	private String getSubstringAfterMatch(String source, String toLook) {

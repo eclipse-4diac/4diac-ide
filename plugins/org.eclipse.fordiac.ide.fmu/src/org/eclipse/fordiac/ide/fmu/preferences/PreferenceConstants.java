@@ -11,7 +11,7 @@ package org.eclipse.fordiac.ide.fmu.preferences;
 /**
  * Constant definitions for plug-in preferences.
  */
-public class PreferenceConstants {
+public final class PreferenceConstants {
 	
 	private PreferenceConstants() {
 	}

@@ -12,8 +12,6 @@ import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferencePage;
 import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -25,12 +23,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+
 import org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTree;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.controls.DirectoryChooserControl;
-import org.eclipse.fordiac.ide.ui.controls.IDirectoryChanged;
 
 public class CreateFMUWizardPage extends WizardPage {
 
@@ -59,7 +57,7 @@ public class CreateFMUWizardPage extends WizardPage {
 		return storeSelectedLibaries;
 	}
 
-	private Button win32Field;
+	private Button win32Field = null;
 	private Button win64Field;
 	private Button linux32Field;
 	private Button linux64Field;
@@ -116,13 +114,7 @@ public class CreateFMUWizardPage extends WizardPage {
 		
 		systemTree.setInput(this); //the systemTree needs this only as reference
 		
-		systemTree.addCheckStateListener(new ICheckStateListener() {
-			@Override
-			public void checkStateChanged(final CheckStateChangedEvent event) {
-				setPageComplete(validatePage());
-			}
-		});
-		
+		systemTree.addCheckStateListener(event -> setPageComplete(validatePage()));
 		
 		checkSelectedElements();
 	}
@@ -140,13 +132,9 @@ public class CreateFMUWizardPage extends WizardPage {
 		stretch.horizontalAlignment = SWT.FILL;
 
 		dcc = new DirectoryChooserControl(composite, SWT.NONE, "Destination: ");
-		dcc.addDirectoryChangedListener(new IDirectoryChanged() {
-
-			@Override
-			public void directoryChanged(String newDirectory) {
+		dcc.addDirectoryChangedListener(newDirectory ->  {
 				saveDir(newDirectory);
 				setPageComplete(validatePage());
-			}
 		});
 
 		dcc.setLayoutData(stretch);
@@ -170,31 +158,21 @@ public class CreateFMUWizardPage extends WizardPage {
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalSpan = 1;
 
-		// Add the fields to the group
-		win32Field = new Button(librariesGroup, SWT.CHECK); 
-		win32Field.setText(PreferenceConstants.P_FMU_WIN32);
-		win32Field.setEnabled(false);
-		win32Field.setSelection(false);
-		
-		win64Field = new Button(librariesGroup, SWT.CHECK); 
-		win64Field.setText(PreferenceConstants.P_FMU_WIN64);
-		win64Field.setEnabled(false);
-		win64Field.setSelection(false);
-		
-		linux32Field = new Button(librariesGroup, SWT.CHECK); 
-		linux32Field.setText(PreferenceConstants.P_FMU_LIN32);
-		linux32Field.setEnabled(false);
-		linux32Field.setSelection(false);
-		
-		linux64Field = new Button(librariesGroup, SWT.CHECK); 
-		linux64Field.setText(PreferenceConstants.P_FMU_LIN64);
-		linux64Field.setEnabled(false);
-		linux64Field.setSelection(false);
-		
+		win32Field = new Button(librariesGroup, SWT.CHECK);
+		win64Field = new Button(librariesGroup, SWT.CHECK);
+		linux32Field = new Button(librariesGroup, SWT.CHECK);
+		linux64Field = new Button(librariesGroup, SWT.CHECK);
 		storeSelectedLibaries = new Button(librariesGroup, SWT.CHECK);
-		storeSelectedLibaries.setText("Save selected libraries for future FMU exports");
+		Button[] buttons = { win32Field, win64Field, linux32Field, linux64Field, storeSelectedLibaries};
+		String[] preferences = {PreferenceConstants.P_FMU_WIN32, PreferenceConstants.P_FMU_WIN64, PreferenceConstants.P_FMU_LIN32, PreferenceConstants.P_FMU_LIN64, "Save selected libraries for future FMU exports"};
+		
+		for(int i = 0; i < buttons.length; i++) {
+			buttons[i].setText(preferences[i]);
+			buttons[i].setEnabled(false);
+			buttons[i].setSelection(false);
+		}
+		
 		storeSelectedLibaries.setEnabled(true);
-		storeSelectedLibaries.setSelection(false);
 		
 		//Enable the found libraries
 		for (String found : FMUPreferencePage.getFoundLibraries()){
@@ -211,27 +189,21 @@ public class CreateFMUWizardPage extends WizardPage {
 			}
 		}
 		
-		//Check the selected libraries from preferences
-		win32Field.setSelection(Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_FMU_WIN32));
-		win64Field.setSelection(Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_FMU_WIN64));
-		linux32Field.setSelection(Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_FMU_LIN32));
-		linux64Field.setSelection(Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_FMU_LIN64));
-		
-		
-		librariesGroup.setLayoutData(gridData);
-		librariesGroup.setLayout(gridLayout);
-		
 		SelectionListener listener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setPageComplete(validatePage());
 			}	
-		};
+		}; 
 			
-		win32Field.addSelectionListener(listener);
-		win64Field.addSelectionListener(listener);
-		linux32Field.addSelectionListener(listener);
-		linux64Field.addSelectionListener(listener);
+		//Check the selected libraries from preferences
+		for(int i = 0; i < buttons.length; i++) {
+			buttons[i].setSelection(Activator.getDefault().getPreferenceStore().getBoolean(preferences[i]));
+			buttons[i].addSelectionListener(listener);
+		}
+		
+		librariesGroup.setLayoutData(gridData);
+		librariesGroup.setLayout(gridLayout);
 	}
 	
 	/**
