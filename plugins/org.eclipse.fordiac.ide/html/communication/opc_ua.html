@@ -1,6 +1,6 @@
 <!DOCTYPE html> 
 <!--
- Copyright (c) 2017 fortiss GmbH
+ Copyright (c) 2017, 2018 fortiss GmbH
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,7 @@
  http://www.eclipse.org/legal/epl-v10.html
  
  Contributors:
-   Stefan Profanter, Jose Cabral
+   Stefan Profanter, Jose Cabral, Kirill Dorofeev
      - initial API and implementation and/or initial documentation
 -->
 <html lang="en">
@@ -27,6 +27,7 @@
 	<li><a href="#variables">Provide OPC UA variables to clients</a></li>
 	<li><a href="#methods">Offer an OPC UA method to be called by clients</a></li>
 	<li><a href="#client">Create an OPC UA client in an IEC 61499 Application</a></li>
+	<li><a href="#subscriptions">Create an OPC UA subscription from OPC UA Client to OPC UA Server in an IEC 61499 Application</a></li>
 </ol>
 
 <p>Prerequisites:</p>
@@ -206,7 +207,7 @@ $ cd open62541 &amp;&amp; mkdir build</div>
 	<li>Connect the function blocks and rename them in the following way:
 		<div><img src="./img/opc_ua_method_full.png" alt="OPC UA Method Application"/></div>
 	</li>
-	<li>The name of the SERVER FB is at the same time the name of the Method which will be created in the OPC UA Server. The RD ports of the SERVER are the method's input arguments, the SD ports the output arguments.
+	<li>The name of the SERVER FB, specified at its ID port, is at the same time the browse path of the Method which will be created in the OPC UA Server. The RD ports of the SERVER are the method's input arguments, the SD ports the output arguments.
 	</li>
 	<li>Deploy the Application to FORTE</li>
 	<li>Open UaExpert and you should see the following address model:
@@ -245,6 +246,25 @@ $ cd open62541 &amp;&amp; mkdir build</div>
 	<li>This will trigger the client to call the add method on the server and gives back the result of the addition as <span class="element4diac">RD_1</span>
 		<div><img src="./img/opc_ua_client_monitor.png" alt="OPC UA Client Monitoring"/></div>
 	</li>
+</ol>
+
+
+<h2 id="subscription">OPC UA Client Subscriptions</h2>
+
+<p>In this step you will see how you can create an OPC UA data subscription in an IEC 61499 application. A client is used to set up a data subscription to variables on an OPC UA server to get the value changes as they appear on the server. It uses the <span class="element4diac">SUBSCRIBE</span> function block which is able to remotely subscribe to the variable value changes.</p>
+<p>We will create a client which subscribes to the <span class="element4diac">Incrementer/Incremented/OUT</span> value from <a href="#variables_remote">example</a> described above. Therefore we extend the OPC UA variables example by adding subscription function block to monitor the value change.</p>
+
+<ol>
+	<li>We change the <span class="element4diac">CLIENT</span> function block used to read variable in the previous example with a <span class="element4diac">SUBSCRIBE</span> function block, so that client gets the updated value automatically without a need to actively trigger read functionality
+	</li>
+	<li>Map the function blocks to the device</li>
+	<li>Connect the function blocks and rename them in the following way:
+		<div><img src="./img/opc_ua_subscriptions.PNG" alt="OPC UA Subscription Application"/></div>
+	</li>
+	<li>The browse path of the node, on which value the client needs to subscribe, is indicated in the <span class="element4diac">ID</span> field of the <span class="element4diac">SUBSCRIBE</span> FB. Note, that for the opc ua subscriptions only <span class="element4diac">SUBSCRIBE_1</span> FB can be used. The <span class="element4diac">RD_1</span> port of the <span class="element4diac">SUBSCRIBE</span> is the current value of the subscribed node. Additionaly, you need to make sure that the data type of the <span class="element4diac">RD</span> port matches the types from the OPC UA variable you want to subscribe to. Use the corresponding <span class="element4diac">conv</span> FBs for that, as shown in this example.
+	</li>
+	<li>Deploy the Application to FORTE</li>
+	<li>If the value you subscribed for has changed on the server, an updated value will appear at <span class="element4diac">RD_1</span> port</li>
 </ol>
 
 <h1>Where to go from here?</h1>
