@@ -114,13 +114,13 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	private String path;
 	private KeyHandler sharedKeyHandler;
 	private StackLayout stack;
-	protected Palette palette;
+	private Palette palette;
 	private final Map<String, IFBTestConfiguration> configurations = new HashMap<>();
 	private Composite configurationParent;
 	private TableViewer testDataViewer;
 	private CommandStack commandStack;
 	private final Map<String, TableColumn> dataColumns = new HashMap<>();
-	private final ArrayList<TestData> testDataCollection = new ArrayList<>();
+	private final List<TestData> testDataCollection = new ArrayList<>();
 	
 	EContentAdapter eContentAdapter = new EContentAdapter() {
 		@Override

@@ -79,14 +79,14 @@ public enum SystemManager {
 	/** The model systems. */
 	private List<AutomationSystem> systems = new ArrayList<>();
 
-	private Map<AutomationSystem, Runnable> runningJobs = new HashMap<AutomationSystem, Runnable>();
+	private Map<AutomationSystem, Runnable> runningJobs = new HashMap<>();
 
-	private final HashMap<AutomationSystem, ArrayList<ITagProvider>> tagProviders = new HashMap<AutomationSystem, ArrayList<ITagProvider>>();
+	private final Map<AutomationSystem, ArrayList<ITagProvider>> tagProviders = new HashMap<>();
 
 	/** The listeners. */
-	ArrayList<DistributedSystemListener> listeners = new ArrayList<DistributedSystemListener>();
+	private List<DistributedSystemListener> listeners = new ArrayList<>();
 	
-	private final Map<AutomationSystem, CommandStack> systemCommandStacks = new HashMap<AutomationSystem, CommandStack>();
+	private final Map<AutomationSystem, CommandStack> systemCommandStacks = new HashMap<>();
 
 	/**
 	 * Gets the command stack.
@@ -346,7 +346,7 @@ public enum SystemManager {
 		return result;
 	}
 
-	private Runnable createUniqueFBNamesValidity(final AutomationSystem system) {
+	private static Runnable createUniqueFBNamesValidity(final AutomationSystem system) {
 
 		return new Runnable() {
 			@Override

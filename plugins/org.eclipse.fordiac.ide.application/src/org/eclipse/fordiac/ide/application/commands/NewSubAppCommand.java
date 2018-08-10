@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.commands;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
@@ -45,11 +46,11 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	/** The input for reopening subApp. */
 	private IEditorInput input = null;
 	private List<?> selection; 
-	private final HashMap<IInterfaceElement, IInterfaceElement> connectionModifiers  = new HashMap<IInterfaceElement, IInterfaceElement>();
-	private final List<List<?>> modifyConnnection = new ArrayList<List<?>>();
+	private final Map<IInterfaceElement, IInterfaceElement> connectionModifiers  = new HashMap<>();
+	private final List<List<?>> modifyConnnection = new ArrayList<>();
 	private final List<FBNetworkElement> contents = new ArrayList<>();
-	CompoundCommand unmappingCmds = new CompoundCommand();  //stores all needed unmapp commands
-	MapToCommand mappSubappCmd = null;  //can not be in the compound command as it needs to be performed when subapp interface is finished
+	private final CompoundCommand unmappingCmds = new CompoundCommand();  //stores all needed unmapp commands
+	private MapToCommand mappSubappCmd = null;  //can not be in the compound command as it needs to be performed when subapp interface is finished
 	
 	boolean createConnection;
 	
@@ -243,8 +244,8 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 		}
 	}
 	
-	private ArrayList<?> markConnectionForModification(Connection connection, Object modifySource, IInterfaceElement iie){
-		ArrayList<Object> list = new ArrayList<Object>();
+	private static List<?> markConnectionForModification(Connection connection, Object modifySource, IInterfaceElement iie){
+		List<Object> list = new ArrayList<>();
 		list.add(connection);
 		list.add(modifySource);
 		list.add(iie);
@@ -252,11 +253,8 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 	
 	private boolean isSubappInternalConnection(Connection con){
-		if((con.getSourceElement().equals(element) || getSubApp().getSubAppNetwork().getNetworkElements().contains(con.getSourceElement())) && 
-				(con.getDestinationElement().equals(element) || getSubApp().getSubAppNetwork().getNetworkElements().contains(con.getDestinationElement()))){
-			return true;
-		}
-		return false;
+		return ((con.getSourceElement().equals(element) || getSubApp().getSubAppNetwork().getNetworkElements().contains(con.getSourceElement())) && 
+				(con.getDestinationElement().equals(element) || getSubApp().getSubAppNetwork().getNetworkElements().contains(con.getDestinationElement())));
 	}
 	
 	private boolean isContained(FBNetworkElement e) {
@@ -307,7 +305,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 	
 	@Override
-	protected InterfaceList getTypeInterfaceList() {
+	protected final InterfaceList getTypeInterfaceList() {
 		return LibraryElementFactory.eINSTANCE.createInterfaceList();
 	}
 	

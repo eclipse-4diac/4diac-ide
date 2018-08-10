@@ -68,7 +68,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		super(pageName, selection);
 	}
 
-	private final ArrayList<IExportFilter> exportFilters = new ArrayList<>();
+	private final List<IExportFilter> exportFilters = new ArrayList<>();
 	private Combo filters;
 
 	private void addAvailableExportFilter(final Group group) {
@@ -236,13 +236,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 			}
 		}
 	}
-	
-	
 
-	@Override
-	public void saveWidgetValues() {
-		super.saveWidgetValues();
-	}
 
 	@Override
 	protected void internalSaveWidgetValues() {

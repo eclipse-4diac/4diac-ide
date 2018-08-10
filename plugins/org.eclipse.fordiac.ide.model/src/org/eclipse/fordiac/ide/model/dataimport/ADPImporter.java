@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -151,16 +152,15 @@ public class ADPImporter {
 	 *             the FBT import exception
 	 */
 	private static void parseEventOutputs(List<Event> eventOutputs,
-			final Node node, HashMap<String, Event> events)
+			final Node node, Map<String, Event> events)
 			throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
 			if (n.getNodeName().equals(LibraryElementTags.EVENT_ELEMENT)) {
-
 				Event e = ImportUtils.parseEvent(n);
 				events.put(e.getName(), e);
-				((IInterfaceElement) e).setIsInput(false);
+				e.setIsInput(false);
 				eventOutputs.add(e);
 			}
 		}
@@ -179,14 +179,14 @@ public class ADPImporter {
 	 *             the FBT import exception
 	 */
 	private static void parseEventInputs(List<Event> eventInputs,
-			final Node node, HashMap<String, Event> events)
+			final Node node, Map<String, Event> events)
 			throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
 			if (n.getNodeName().equals(LibraryElementTags.EVENT_ELEMENT)) {
 				Event e = ImportUtils.parseEvent(n);
-				((IInterfaceElement) e).setIsInput(true);
+				e.setIsInput(true);
 				events.put(e.getName(), e);
 				eventInputs.add(e);
 			}
@@ -210,10 +210,9 @@ public class ADPImporter {
 	 */
 	private static void parseInterfaceList(InterfaceList interfaceList, final Node node)
 			throws TypeImportException {
-		
-		HashMap<String, VarDeclaration> variables = new HashMap<String, VarDeclaration>();
-		HashMap<String, Event> inputEvents = new HashMap<String, Event>();
-		HashMap<String, Event> outputEvents = new HashMap<String, Event>();
+		Map<String, VarDeclaration> variables = new HashMap<>();
+		Map<String, Event> inputEvents = new HashMap<>();
+		Map<String, Event> outputEvents = new HashMap<>();
 		
 		NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {

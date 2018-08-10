@@ -44,7 +44,7 @@ public class MoveableRouter extends BendpointConnectionRouter implements
 
 	private final boolean invalidate = true;
 
-	private final ArrayList<Connection> connections = new ArrayList<Connection>();
+	private final List<Connection> connections = new ArrayList<>();
 
 	public void setDeltaX2(Connection connection, int deltaX2) {
 		deltasX2.put(connection, deltaX2);

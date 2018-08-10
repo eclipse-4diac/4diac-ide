@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -28,11 +29,11 @@ import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 
 public class TypeLibRootContentProvider implements ITreeContentProvider, IResourceChangeListener {
 
-	BaseWorkbenchContentProvider workbenchContentProvider = new BaseWorkbenchContentProvider(); 
+	private BaseWorkbenchContentProvider workbenchContentProvider = new BaseWorkbenchContentProvider(); 
 	
-	HashMap<AutomationSystem, TypeLibRootElement> typeLibElementStore = new HashMap< >();
+	private Map<AutomationSystem, TypeLibRootElement> typeLibElementStore = new HashMap< >();
 	
-	Viewer viewer;
+	private Viewer viewer;
 	
 	public TypeLibRootContentProvider() {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);

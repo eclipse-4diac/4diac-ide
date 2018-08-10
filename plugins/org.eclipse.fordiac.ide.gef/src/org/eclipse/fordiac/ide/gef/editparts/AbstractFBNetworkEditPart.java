@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart{
 
 	/** The child providers. */
-	ArrayList<IChildrenProvider> childProviders = null;
+	List<IChildrenProvider> childProviders = null;
 
 	
 	@Override
@@ -48,7 +48,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart{
 	
 	@Override
 	protected List<?> getModelChildren() {		
-		ArrayList<Object> children = new ArrayList<Object>();
+		List<Object> children = new ArrayList<>();
 		children.addAll(getModel().getNetworkElements());
 		children.addAll(getFBValues());
 		

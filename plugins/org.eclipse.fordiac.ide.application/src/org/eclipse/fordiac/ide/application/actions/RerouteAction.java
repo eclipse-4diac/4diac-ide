@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.draw2d.Connection;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
@@ -26,10 +27,8 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class RerouteAction implements IObjectActionDelegate {
 
-	ArrayList<Connection> connections = new ArrayList<Connection>();
+	private List<Connection> connections = new ArrayList<>();
 
-	public RerouteAction() {
-	}
 
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {

@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -162,8 +163,8 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 	}
 
-	private static ArrayList<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette){
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();		
+	private static List<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette){
+		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();		
 		Palette pal = systemPalette;
 		if(null == pal){
 			pal = TypeLibrary.getInstance().getPalette();
@@ -172,8 +173,8 @@ public class InterfaceElementSection extends AbstractSection {
 		return retVal;
 	}
 	
-	private static ArrayList<AdapterTypePaletteEntry> getAdapterGroup(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();	
+	private static List<AdapterTypePaletteEntry> getAdapterGroup(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
+		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();	
 		for (Iterator<PaletteGroup> iterator = group.getSubGroups().iterator(); iterator.hasNext();) {
 			PaletteGroup paletteGroup = iterator.next();
 			retVal.addAll(getAdapterGroup(paletteGroup));		
@@ -182,8 +183,8 @@ public class InterfaceElementSection extends AbstractSection {
 		return retVal;
 	}
 	
-	private static ArrayList<AdapterTypePaletteEntry> getAdapterGroupEntries(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();	
+	private static List<AdapterTypePaletteEntry> getAdapterGroupEntries(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
+		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();	
 		for (PaletteEntry entry : group.getEntries()) {
 			if(entry instanceof AdapterTypePaletteEntry){
 				retVal.add((AdapterTypePaletteEntry) entry);				

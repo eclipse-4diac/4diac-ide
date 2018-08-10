@@ -14,8 +14,8 @@ package org.eclipse.fordiac.ide.comgeneration.implementation;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.CanPubSubGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.EthernetPubSubGenerator;
@@ -26,7 +26,7 @@ public final class ProtocolSelector {
 	
 	public static void doAutomatedProtocolSelection(CommunicationModel model) {
 		for (CommunicationChannel channel : model.getChannels().values()) {
-			ArrayList<Segment> commonSegments = new ArrayList<Segment>();
+			List<Segment> commonSegments = new ArrayList<>();
 			Iterator<CommunicationChannelDestination> destinationIterator = channel.getDestinations().iterator();
 			
 			CommunicationChannelDestination destination = destinationIterator.next();
@@ -53,7 +53,7 @@ public final class ProtocolSelector {
 			}
 			
 			Segment selectedCommonSegment = null;
-			if (commonSegments.size() > 0) {
+			if (!commonSegments.isEmpty()) {
 				sortSegments(commonSegments);
 				selectedCommonSegment = commonSegments.get(0);
 			}
@@ -101,33 +101,26 @@ public final class ProtocolSelector {
 	}
 	
 	
-	private static void sortSegments(ArrayList<Segment> segmentList) {
-		Collections.sort(segmentList, new Comparator<Segment>() {
-
-			@Override
-			public int compare(Segment o1, Segment o2) {
+	private static void sortSegments(List<Segment> segmentList) {
+		Collections.sort(segmentList, (Segment o1, Segment o2) -> {
 				String name1 = o1.getType().getName();
 				String name2 = o2.getType().getName();
 				
 				if (name1.equalsIgnoreCase("Can")) { //$NON-NLS-1$
 					if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$
 						return 0;
-					} else {
-						return -1;
-					}
+					} 
+					return -1;
 				} else if (name1.equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
 					if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$
 						return 1;
 					} else if (name2.equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
 						return 0;
-					} else {
-						return -1;
-					}
+					} 
+					return -1;
 				}
 				return 0;
-			}
-			
-		});
+			});
 	}
 	
 	private ProtocolSelector() {

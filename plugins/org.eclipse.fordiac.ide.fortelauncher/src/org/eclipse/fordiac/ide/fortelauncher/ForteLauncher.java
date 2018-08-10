@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.runtime.LaunchRuntimeUtils;
  */
 public class ForteLauncher implements IRuntimeLauncher {
 
-	private final ArrayList<LaunchParameter> params = new ArrayList<LaunchParameter>();
+	private final List<LaunchParameter> params = new ArrayList<>();
 
 	/**
 	 * Instantiates a new forte launcher.
@@ -82,8 +82,9 @@ public class ForteLauncher implements IRuntimeLauncher {
 			if (params.get(i).getName().equals(name)) {
 				params.get(i).setValue(value);
 				found = true;
-				if (found)
+				if (found) {
 					return params.get(i);
+				}
 			}
 		}
 		LaunchParameter param = new LaunchParameter();

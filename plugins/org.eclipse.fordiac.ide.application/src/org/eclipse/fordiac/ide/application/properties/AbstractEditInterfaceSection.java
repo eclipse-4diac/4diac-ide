@@ -11,6 +11,7 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
@@ -452,8 +453,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		}
 	}
 
-	protected static ArrayList<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette){
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();		
+	protected static List<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette){
+		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();		
 		Palette pal = systemPalette;
 		if(null == pal){
 			pal = TypeLibrary.getInstance().getPalette();
@@ -462,8 +463,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		return retVal;
 	}
 	
-	protected static ArrayList<AdapterTypePaletteEntry> getAdapterGroup(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();	
+	protected static List<AdapterTypePaletteEntry> getAdapterGroup(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
+		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();	
 		for (Iterator<PaletteGroup> iterator = group.getSubGroups().iterator(); iterator.hasNext();) {
 			PaletteGroup paletteGroup = iterator.next();
 			retVal.addAll(getAdapterGroup(paletteGroup));		
@@ -472,8 +473,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		return retVal;
 	}
 	
-	protected static ArrayList<AdapterTypePaletteEntry> getAdapterGroupEntries(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();	
+	protected static List<AdapterTypePaletteEntry> getAdapterGroupEntries(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
+		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();	
 		for (PaletteEntry entry : group.getEntries()) {
 			if(entry instanceof AdapterTypePaletteEntry){
 				retVal.add((AdapterTypePaletteEntry) entry);				

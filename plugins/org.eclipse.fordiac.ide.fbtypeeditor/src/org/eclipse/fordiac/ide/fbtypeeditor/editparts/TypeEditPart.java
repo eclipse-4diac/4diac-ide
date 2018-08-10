@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -34,7 +35,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -44,7 +44,7 @@ import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
-public class TypeEditPart extends AbstractInterfaceElementEditPart implements EditPart {
+public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
 	private Palette systemPalette;
 	private Label comment;
@@ -112,8 +112,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements Ed
 						String typeName = ((ComboDirectEditManager) getManager()).getComboBox().getItem(index);
 						ChangeTypeCommand cmd;
 						if (getCastedModel() instanceof AdapterDeclaration) {
-							// TODO change to own command in order to update cfb
-							// internals
+							// TODO change to own command in order to update cfb internals
 							cmd = new ChangeTypeCommand((VarDeclaration) getCastedModel(),
 									getAdapterTypeEntry(systemPalette, typeName).getType());
 						} else {
@@ -157,9 +156,8 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements Ed
 
 	@Override
 	public void performDirectEdit() {
-		// CCombo combo = getManager().getComboBox();
 		// First update the list of available types
-		ArrayList<String> dataTypeNames = new ArrayList<String>();
+		ArrayList<String> dataTypeNames = new ArrayList<>();
 		if (getCastedModel() instanceof AdapterDeclaration) {
 			for (AdapterTypePaletteEntry adapterType : getAdapterTypes(systemPalette)) {
 				dataTypeNames.add(adapterType.getLabel());
@@ -180,8 +178,8 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements Ed
 		return (entry instanceof AdapterTypePaletteEntry) ? (AdapterTypePaletteEntry) entry : null;
 	}
 
-	public static ArrayList<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette) {
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();
+	public static List<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette) {
+		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<>();
 		Palette pal = systemPalette;
 		if (null == pal) {
 			pal = TypeLibrary.getInstance().getPalette();
@@ -190,9 +188,9 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements Ed
 		return retVal;
 	}
 
-	private static ArrayList<AdapterTypePaletteEntry> getAdapterGroup(
+	private static List<AdapterTypePaletteEntry> getAdapterGroup(
 			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();
+		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<>();
 		for (Iterator<PaletteGroup> iterator = group.getSubGroups().iterator(); iterator.hasNext();) {
 			PaletteGroup paletteGroup = iterator.next();
 			retVal.addAll(getAdapterGroup(paletteGroup));
@@ -201,9 +199,9 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements Ed
 		return retVal;
 	}
 
-	private static ArrayList<AdapterTypePaletteEntry> getAdapterGroupEntries(
+	private static List<AdapterTypePaletteEntry> getAdapterGroupEntries(
 			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();
+		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<>();
 		for (PaletteEntry entry : group.getEntries()) {
 			if (entry instanceof AdapterTypePaletteEntry) {
 				retVal.add((AdapterTypePaletteEntry) entry);
