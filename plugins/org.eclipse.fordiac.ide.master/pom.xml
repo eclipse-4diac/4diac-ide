@@ -43,6 +43,7 @@
 		<module>../org.eclipse.fordiac.ide.systemconfiguration</module>
 		<module>../org.eclipse.fordiac.ide.ui.controls</module>
 		<module>../org.eclipse.fordiac.ide.util</module>
+		<module>../../tests/org.eclipse.fordiac.ide.test.util</module>
 		<module>../org.eclipse.fordiac.ide.monitoring</module>
 		<module>../org.eclipse.fordiac.ide.systemmanagement</module>
 		<module>../org.eclipse.fordiac.ide.systemmanagement.ui</module>
@@ -63,27 +64,27 @@
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 	</properties>
 
- <repositories>
-  <repository>
-   <id>photon</id>
-   <url>${photon-repo.url}</url>
-   <layout>p2</layout>
-  </repository>
+	<repositories>
+		<repository>
+			<id>photon</id>
+			<url>${photon-repo.url}</url>
+			<layout>p2</layout>
+		</repository>
 
- </repositories>
- 
- <pluginRepositories>
-    <pluginRepository>
-      <id>cbi</id>
-      <url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>cbi</id>
+			<url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<build>
 		<plugins>
@@ -106,17 +107,21 @@
 						</artifact>
 					</target>
 					
-					<dependency-resolution>
-          <extraRequirements>
-            <requirement>
-                <type>eclipse-feature</type>
-                <id>org.eclipse.equinox.executable</id>
-                <versionRange>3.6.0</versionRange>
-            </requirement>
-          </extraRequirements>
-      </dependency-resolution>
-					
-					
+					<dependency-resolution>	
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>org.eclipse.equinox.executable</id>
+								<versionRange>3.6.0</versionRange>
+							</requirement>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>org.eclipse.platform</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+
 					<environments>
 						<environment>
 							<os>linux</os>
@@ -151,30 +156,52 @@
 				<artifactId>tycho-versions-plugin</artifactId>
 				<version>${tycho.version}</version>
 			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<useUIHarness>true</useUIHarness>
+					<dependency-resolution>	
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>org.eclipse.equinox.executable</id>
+								<versionRange>3.6.0</versionRange>
+							</requirement>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>org.eclipse.platform</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
-    <profile>
-      <id>eclipse-sign</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.eclipse.cbi.maven.plugins</groupId>
-            <artifactId>eclipse-jarsigner-plugin</artifactId>
-            <version>1.1.4</version>
-            <executions>
-              <execution>
-                <id>sign</id>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-                <phase>verify</phase>
-              </execution>
-            </executions>
-          </plugin>          
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+		<profile>
+			<id>eclipse-sign</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.cbi.maven.plugins</groupId>
+						<artifactId>eclipse-jarsigner-plugin</artifactId>
+						<version>1.1.4</version>
+						<executions>
+							<execution>
+								<id>sign</id>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+								<phase>verify</phase>
+							</execution>
+						</executions>
+					</plugin>          
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project> 
