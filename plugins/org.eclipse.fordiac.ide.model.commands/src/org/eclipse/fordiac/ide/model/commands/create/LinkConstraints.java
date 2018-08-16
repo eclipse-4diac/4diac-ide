@@ -140,7 +140,7 @@ public final class LinkConstraints {
 	 * @return
 	 */
 	public static boolean isWithConstraintOK(final VarDeclaration varDecl) {
-		if ((!(varDecl instanceof AdapterDeclaration)) && (!varDecl.getWiths().isEmpty())) { // elements which are not connect by withs are not allowed to be connected
+		if ((!(varDecl instanceof AdapterDeclaration)) && (varDecl.getWiths().isEmpty())) { // elements which are not connect by withs are not allowed to be connected
 			EObject obj = varDecl.eContainer();
 			if(null != obj){
 				obj = obj.eContainer();
