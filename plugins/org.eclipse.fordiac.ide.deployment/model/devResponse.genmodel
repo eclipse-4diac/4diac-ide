@@ -12,10 +12,12 @@
       disposableProviderFactory="true" contentTypeIdentifier="" ecorePackage="devResponse.ecore#/">
     <genClasses ecoreClass="devResponse.ecore#//Resource">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Resource/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Resource/type"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Resource/fbs"/>
     </genClasses>
     <genClasses ecoreClass="devResponse.ecore#//FB">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//FB/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//FB/type"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//FB/ports"/>
     </genClasses>
     <genClasses ecoreClass="devResponse.ecore#//Port">
@@ -31,9 +33,13 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Response/ID"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Response/Watches"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Response/Reason"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference devResponse.ecore#//Response/fblist"/>
     </genClasses>
     <genClasses ecoreClass="devResponse.ecore#//Watches">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Watches/resources"/>
+    </genClasses>
+    <genClasses ecoreClass="devResponse.ecore#//FBList">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//FBList/fbs"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

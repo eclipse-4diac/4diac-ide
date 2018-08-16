@@ -3,11 +3,13 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="devResponse" nsURI="org.eclipse.fordiac.ide.deployment" nsPrefix="devResponse">
   <eClassifiers xsi:type="ecore:EClass" name="Resource">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fbs" upperBound="-1" eType="#//FB"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FB">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
         eType="#//Port" containment="true"/>
   </eClassifiers>
@@ -25,9 +27,13 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="Watches" eType="#//Watches"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Reason" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fblist" eType="#//FBList"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Watches">
     <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
         eType="#//Resource"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FBList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fbs" upperBound="-1" eType="#//FB"/>
   </eClassifiers>
 </ecore:EPackage>

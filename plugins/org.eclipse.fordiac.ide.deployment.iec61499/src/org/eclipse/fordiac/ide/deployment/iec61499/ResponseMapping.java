@@ -15,57 +15,52 @@ package org.eclipse.fordiac.ide.deployment.iec61499;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.XMLResource.XMLInfo;
-import org.eclipse.emf.ecore.xmi.impl.XMLInfoImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 
 public class ResponseMapping {
 	private Map<String, Object> loadOptions;
-
+	
 	public ResponseMapping() {
 		loadOptions = new HashMap<String, Object>();
 		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
 
 		XMLMapImpl map = new XMLMapImpl();
 		map.setNoNamespacePackage(DevResponsePackage.eINSTANCE);
-
-		XMLInfoImpl fbInfo = new XMLInfoImpl();
-		fbInfo.setXMLRepresentation(XMLInfo.ELEMENT);
-		EClass fbClass = DevResponsePackage.eINSTANCE.getFB();
-		map.add(fbClass, fbInfo);
-
-		XMLInfoImpl portInfo = new XMLInfoImpl();
-		portInfo.setXMLRepresentation(XMLInfo.ELEMENT);
-		EClass portClass = DevResponsePackage.eINSTANCE.getPort();
-		map.add(portClass, portInfo);
-
-		XMLInfoImpl dataInfo = new XMLInfoImpl();
-		dataInfo.setXMLRepresentation(XMLInfo.ELEMENT);
-		EClass dataClass = DevResponsePackage.eINSTANCE.getData();
-		map.add(dataClass, dataInfo);
-
-		XMLInfoImpl responseInfo = new XMLInfoImpl();
-		responseInfo.setXMLRepresentation(XMLInfo.ELEMENT);
-		EClass responseClass = DevResponsePackage.eINSTANCE.getResponse();
-		map.add(responseClass, responseInfo);
-
-		XMLInfoImpl watchesInfo = new XMLInfoImpl();
-		watchesInfo.setXMLRepresentation(XMLInfo.ELEMENT);
-		EClass watchesClass = DevResponsePackage.eINSTANCE.getWatches();
-		map.add(watchesClass, watchesInfo);
-
-		EClass resourceClass = DevResponsePackage.eINSTANCE.getResource();
-		XMLInfoImpl resourceInfo = new XMLInfoImpl();
-		resourceInfo.setXMLRepresentation(XMLInfo.ELEMENT);
-		resourceInfo.setName("Resource"); //$NON-NLS-1$
-		map.add(resourceClass, resourceInfo);
-
+	
+		//mappings do not seem to make any difference this is why they have been deleted
+		//the loading seems to be case sensitive, therefore attributes in lower case letters
 		loadOptions.put(XMLResource.OPTION_XML_MAP, map);
 	}
-	
+
+/* queryResources
+<Response ID="0">
+  <FBList>
+    <FB Name="RTest" Type="EMB_RES"/>
+  </FBList>
+</Response>	
+*/
+
+/* Monitoring
+<Response ID="43">
+  <Watches>
+    <Resource name="RTest">
+    	<FB name="FlipFlop">
+    		<Port name="Q">
+    			<Data value="FALSE" forced="false"></Data>
+    		</Port>
+    		<Port name="CNF">
+    			<Data value="0" time="0"></Data>
+    		</Port>
+    		<Port name="REQ">
+    			<Data value="0" time="0"></Data>
+    		</Port>
+    	</FB>
+    </Resource>
+  </Watches>
+</Response>
+*/	
 	public Map<String, Object> getLoadOptions() {
 		return loadOptions;
 	}

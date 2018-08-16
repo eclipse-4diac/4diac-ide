@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Port;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getPorts <em>Ports</em>}</li>
  * </ul>
  *
@@ -70,6 +71,26 @@ public class FBImpl extends EObjectImpl implements FB {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String TYPE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected String type = TYPE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' containment reference list.
@@ -129,6 +150,29 @@ public class FBImpl extends EObjectImpl implements FB {
 	 * @generated
 	 */
 	@Override
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setType(String newType) {
+		String oldType = type;
+		type = newType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.FB__TYPE, oldType, type));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<Port> getPorts() {
 		if (ports == null) {
 			ports = new EObjectContainmentEList<Port>(Port.class, this, DevResponsePackage.FB__PORTS);
@@ -160,6 +204,8 @@ public class FBImpl extends EObjectImpl implements FB {
 		switch (featureID) {
 			case DevResponsePackage.FB__NAME:
 				return getName();
+			case DevResponsePackage.FB__TYPE:
+				return getType();
 			case DevResponsePackage.FB__PORTS:
 				return getPorts();
 		}
@@ -177,6 +223,9 @@ public class FBImpl extends EObjectImpl implements FB {
 		switch (featureID) {
 			case DevResponsePackage.FB__NAME:
 				setName((String)newValue);
+				return;
+			case DevResponsePackage.FB__TYPE:
+				setType((String)newValue);
 				return;
 			case DevResponsePackage.FB__PORTS:
 				getPorts().clear();
@@ -197,6 +246,9 @@ public class FBImpl extends EObjectImpl implements FB {
 			case DevResponsePackage.FB__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case DevResponsePackage.FB__TYPE:
+				setType(TYPE_EDEFAULT);
+				return;
 			case DevResponsePackage.FB__PORTS:
 				getPorts().clear();
 				return;
@@ -214,6 +266,8 @@ public class FBImpl extends EObjectImpl implements FB {
 		switch (featureID) {
 			case DevResponsePackage.FB__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case DevResponsePackage.FB__TYPE:
+				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
 			case DevResponsePackage.FB__PORTS:
 				return ports != null && !ports.isEmpty();
 		}
@@ -232,6 +286,8 @@ public class FBImpl extends EObjectImpl implements FB {
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
+		result.append(", type: "); //$NON-NLS-1$
+		result.append(type);
 		result.append(')');
 		return result.toString();
 	}

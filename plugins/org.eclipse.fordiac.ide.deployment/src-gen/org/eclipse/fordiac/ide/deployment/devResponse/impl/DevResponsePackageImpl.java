@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.fordiac.ide.deployment.devResponse.Data;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
+import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
@@ -79,6 +80,13 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * @generated
 	 */
 	private EClass watchesEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass fbListEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -167,8 +175,18 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * @generated
 	 */
 	@Override
+	public EAttribute getResource_Type() {
+		return (EAttribute)resourceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getResource_Fbs() {
-		return (EReference)resourceEClass.getEStructuralFeatures().get(1);
+		return (EReference)resourceEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -197,8 +215,18 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * @generated
 	 */
 	@Override
+	public EAttribute getFB_Type() {
+		return (EAttribute)fbEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getFB_Ports() {
-		return (EReference)fbEClass.getEStructuralFeatures().get(1);
+		return (EReference)fbEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -317,6 +345,16 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * @generated
 	 */
 	@Override
+	public EReference getResponse_Fblist() {
+		return (EReference)responseEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getWatches() {
 		return watchesEClass;
 	}
@@ -329,6 +367,26 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	@Override
 	public EReference getWatches_Resources() {
 		return (EReference)watchesEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getFBList() {
+		return fbListEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getFBList_Fbs() {
+		return (EReference)fbListEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -362,10 +420,12 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		// Create classes and their features
 		resourceEClass = createEClass(RESOURCE);
 		createEAttribute(resourceEClass, RESOURCE__NAME);
+		createEAttribute(resourceEClass, RESOURCE__TYPE);
 		createEReference(resourceEClass, RESOURCE__FBS);
 
 		fbEClass = createEClass(FB);
 		createEAttribute(fbEClass, FB__NAME);
+		createEAttribute(fbEClass, FB__TYPE);
 		createEReference(fbEClass, FB__PORTS);
 
 		portEClass = createEClass(PORT);
@@ -381,9 +441,13 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		createEAttribute(responseEClass, RESPONSE__ID);
 		createEReference(responseEClass, RESPONSE__WATCHES);
 		createEAttribute(responseEClass, RESPONSE__REASON);
+		createEReference(responseEClass, RESPONSE__FBLIST);
 
 		watchesEClass = createEClass(WATCHES);
 		createEReference(watchesEClass, WATCHES__RESOURCES);
+
+		fbListEClass = createEClass(FB_LIST);
+		createEReference(fbListEClass, FB_LIST__FBS);
 	}
 
 	/**
@@ -418,10 +482,12 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		// Initialize classes and features; add operations and parameters
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getResource_Name(), ecorePackage.getEString(), "name", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getResource_Type(), ecorePackage.getEString(), "type", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getResource_Fbs(), this.getFB(), null, "fbs", null, 0, -1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(fbEClass, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, "FB", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getFB_Name(), ecorePackage.getEString(), "name", null, 0, 1, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getFB_Type(), ecorePackage.getEString(), "type", null, 0, 1, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getFB_Ports(), this.getPort(), null, "ports", null, 0, -1, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -437,9 +503,13 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		initEAttribute(getResponse_ID(), ecorePackage.getEString(), "ID", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getResponse_Watches(), this.getWatches(), null, "Watches", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getResponse_Reason(), ecorePackage.getEString(), "Reason", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getResponse_Fblist(), this.getFBList(), null, "fblist", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(watchesEClass, Watches.class, "Watches", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getWatches_Resources(), this.getResource(), null, "resources", null, 0, -1, Watches.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(fbListEClass, FBList.class, "FBList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getFBList_Fbs(), this.getFB(), null, "fbs", null, 0, -1, FBList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

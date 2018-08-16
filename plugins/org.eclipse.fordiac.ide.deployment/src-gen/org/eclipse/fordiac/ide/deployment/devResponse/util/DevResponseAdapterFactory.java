@@ -106,6 +106,10 @@ public class DevResponseAdapterFactory extends AdapterFactoryImpl {
 				return createWatchesAdapter();
 			}
 			@Override
+			public Adapter caseFBList(FBList object) {
+				return createFBListAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -206,6 +210,20 @@ public class DevResponseAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createWatchesAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBList <em>FB List</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FBList
+	 * @generated
+	 */
+	public Adapter createFBListAdapter() {
 		return null;
 	}
 

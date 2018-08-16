@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getFbs <em>Fbs</em>}</li>
  * </ul>
  *
@@ -70,6 +71,26 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String TYPE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected String type = TYPE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getFbs() <em>Fbs</em>}' containment reference list.
@@ -129,6 +150,29 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	 * @generated
 	 */
 	@Override
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setType(String newType) {
+		String oldType = type;
+		type = newType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESOURCE__TYPE, oldType, type));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<FB> getFbs() {
 		if (fbs == null) {
 			fbs = new EObjectContainmentEList<FB>(FB.class, this, DevResponsePackage.RESOURCE__FBS);
@@ -160,6 +204,8 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 		switch (featureID) {
 			case DevResponsePackage.RESOURCE__NAME:
 				return getName();
+			case DevResponsePackage.RESOURCE__TYPE:
+				return getType();
 			case DevResponsePackage.RESOURCE__FBS:
 				return getFbs();
 		}
@@ -177,6 +223,9 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 		switch (featureID) {
 			case DevResponsePackage.RESOURCE__NAME:
 				setName((String)newValue);
+				return;
+			case DevResponsePackage.RESOURCE__TYPE:
+				setType((String)newValue);
 				return;
 			case DevResponsePackage.RESOURCE__FBS:
 				getFbs().clear();
@@ -197,6 +246,9 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 			case DevResponsePackage.RESOURCE__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case DevResponsePackage.RESOURCE__TYPE:
+				setType(TYPE_EDEFAULT);
+				return;
 			case DevResponsePackage.RESOURCE__FBS:
 				getFbs().clear();
 				return;
@@ -214,6 +266,8 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 		switch (featureID) {
 			case DevResponsePackage.RESOURCE__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case DevResponsePackage.RESOURCE__TYPE:
+				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
 			case DevResponsePackage.RESOURCE__FBS:
 				return fbs != null && !fbs.isEmpty();
 		}
@@ -232,6 +286,8 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
+		result.append(", type: "); //$NON-NLS-1$
+		result.append(type);
 		result.append(')');
 		return result.toString();
 	}

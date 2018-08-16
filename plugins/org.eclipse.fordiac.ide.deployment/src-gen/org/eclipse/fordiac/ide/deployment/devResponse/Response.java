@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches <em>Watches</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason <em>Reason</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFblist <em>Fblist</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getResponse()
@@ -114,5 +115,31 @@ public interface Response extends EObject {
 	 * @generated
 	 */
 	void setReason(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Fblist</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fblist</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fblist</em>' reference.
+	 * @see #setFblist(FBList)
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getResponse_Fblist()
+	 * @model
+	 * @generated
+	 */
+	FBList getFblist();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFblist <em>Fblist</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fblist</em>' reference.
+	 * @see #getFblist()
+	 * @generated
+	 */
+	void setFblist(FBList value);
 
 } // Response

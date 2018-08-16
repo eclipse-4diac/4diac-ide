@@ -17,14 +17,13 @@
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
+import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 
@@ -39,6 +38,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getID <em>ID</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getWatches <em>Watches</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getReason <em>Reason</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getFblist <em>Fblist</em>}</li>
  * </ul>
  *
  * @generated
@@ -93,6 +93,16 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * @ordered
 	 */
 	protected String reason = REASON_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getFblist() <em>Fblist</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFblist()
+	 * @generated
+	 * @ordered
+	 */
+	protected FBList fblist;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -205,6 +215,46 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * @generated
 	 */
 	@Override
+	public FBList getFblist() {
+		if (fblist != null && fblist.eIsProxy()) {
+			InternalEObject oldFblist = (InternalEObject)fblist;
+			fblist = (FBList)eResolveProxy(oldFblist);
+			if (fblist != oldFblist) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DevResponsePackage.RESPONSE__FBLIST, oldFblist, fblist));
+			}
+		}
+		return fblist;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FBList basicGetFblist() {
+		return fblist;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFblist(FBList newFblist) {
+		FBList oldFblist = fblist;
+		fblist = newFblist;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__FBLIST, oldFblist, fblist));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case DevResponsePackage.RESPONSE__ID:
@@ -214,6 +264,9 @@ public class ResponseImpl extends EObjectImpl implements Response {
 				return basicGetWatches();
 			case DevResponsePackage.RESPONSE__REASON:
 				return getReason();
+			case DevResponsePackage.RESPONSE__FBLIST:
+				if (resolve) return getFblist();
+				return basicGetFblist();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -223,6 +276,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -234,6 +288,9 @@ public class ResponseImpl extends EObjectImpl implements Response {
 				return;
 			case DevResponsePackage.RESPONSE__REASON:
 				setReason((String)newValue);
+				return;
+			case DevResponsePackage.RESPONSE__FBLIST:
+				setFblist((FBList)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -256,6 +313,9 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			case DevResponsePackage.RESPONSE__REASON:
 				setReason(REASON_EDEFAULT);
 				return;
+			case DevResponsePackage.RESPONSE__FBLIST:
+				setFblist((FBList)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -274,6 +334,8 @@ public class ResponseImpl extends EObjectImpl implements Response {
 				return watches != null;
 			case DevResponsePackage.RESPONSE__REASON:
 				return REASON_EDEFAULT == null ? reason != null : !REASON_EDEFAULT.equals(reason);
+			case DevResponsePackage.RESPONSE__FBLIST:
+				return fblist != null;
 		}
 		return super.eIsSet(featureID);
 	}

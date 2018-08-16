@@ -90,6 +90,15 @@ public interface DevResponseFactory extends EFactory {
 	Watches createWatches();
 
 	/**
+	 * Returns a new object of class '<em>FB List</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>FB List</em>'.
+	 * @generated
+	 */
+	FBList createFBList();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
