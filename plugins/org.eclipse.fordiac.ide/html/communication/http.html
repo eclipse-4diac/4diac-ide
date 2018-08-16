@@ -1,0 +1,125 @@
+<!DOCTYPE html> 
+<!--
+ Copyright (c) 2018 - fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Jose Cabral- initial documentation
+-->
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>HTTP</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+
+<body>
+<h1 id="topOfPage">HTTP</h1>
+<p>This section shows how to make applications communicate using HTTP. For now, 4diac supports client http (get, put, post) and server (get). You should use the client and server
+FBs according to your needs. Publish and Subscribe blocks are currently not supported. All RDs and SDs data output/inputs should be connected to STRING types for it to work. </p>
+
+<h2>Configuration</h2>
+<p>Forte must be compiled from source code for the HTTP module to work. Follow the <a href="../installation/install.html#ownFORTE" target="_blank">steps to build your own FBs</a>. In the step 3 where the features to be compiled are selected, select also FORTE_COM_HTTP. Then follow the same procedure, compile forte, et voil&#xe0;, you have HTTP support on your Forte.</p>
+
+<h2>Client</h2> 
+
+<h3>Type of FB</h3> 
+  
+<ul> 
+  <li>Only GET, PUT and POST are supported</li>
+  <li>Needs a client FB</li>
+  <li>For a GET request, it should have exactly 1 RD (where the output is stored). SDs are ignored</li> 
+  <li>For a PUT/POST request you can set the data to be sent in two ways:
+
+  <ul>
+    <li>On the PARAMETERS in the PARAM data input (see below)</li>
+    <li>In a RD (exactly 1) of the client FB</li>
+   </ul>     
+   If both cases are present, the RD takes precedence and the PARAMETER is ignored.
+   </li>
+</ul>
+
+<h3>PARAM</h3>
+
+<p>http[IP:PORT/PATH?PARAMETERS; POST | PUT | GET ;content-type;response-code]</p>
+
+<h4>Mandatory</h4>
+
+<ul>
+  <li><span class="inlineTitle">IP:PORT</span> &rarr; ip address and port of the remote endpoint</li>
+  <li><span class="inlineTitle">PATH</span> &rarr; path on the server to reach</li>
+  <li><span class="inlineTitle">POST | PUT | GET</span> &rarr; They should be written exactly like this, and they define the type of packet to be sent.</li>
+</ul>
+
+<h4>Optional</h4>
+
+<ul>
+  <li><span class="inlineTitle">PARAMETERS:</span> parameters to be sent</li>
+  <li><span class="inlineTitle">content-type:</span> HTTP content-type of the packet to be sent. If parameters are used with PUT or POST (SD or PARAMETERS), content-type will be ignored and application/x-www-form-urlencoded will be used instead. If  not defined, "text/html" will be used as default</li>
+  <li><span class="inlineTitle">response-code:</span> the response that's expected. If not defined, "HTTP/1.1 200 OK" will be used. If the response-code of a packet is not as defined, the packet is ignored. If "*" is set, the packet is never ignored, no matter what the response code is</li>
+</ul>
+
+<h4>Examples</h4>
+
+<ul>
+  <li>http[34.231.219.193:80/get;GET;text/html;*] &rarr; Accepts all responses</li>
+  <li>http[34.231.219.193:80/get?par1=value1;GET;text/html;*] &rarr; Request with parameters</li>
+  <li>http[34.231.219.193:80/put;PUT;application/json] &rarr; Use application/json content type </li>
+  <li>http[34.231.219.193:80/put;PUT;application/json;HTTP/1.1 201 Created] &rarr; Use application/json content type and discard packets wich have not "HTTP/1.1 201 Created" as response code </li>
+</ul>
+
+<h2>Server</h2>
+
+<h3>Type of FB</h3> 
+
+<ul>
+  <li>Only incomming GET requests are supported</li>
+  <li>Needs a server FB</li>
+  <li>It must have exactly one SD (for the response text)</li>
+  <li>Can have 0 or many RDs for the incoming parameters</li>
+</ul>
+
+<h3>PARAM</h3>
+
+<p>http[PATH]</p>
+
+<p>The server FB will trigger an event when the PATH is accessed with GET request. If parameters are provided, they should match the number of RDs in the FB and should be of type (name=value&amp;....). The "&amp;" should be used to define more than one parameter. The name is actually not used. The values are stored in the RDs in the order they arrived and treated as STRINGs.</p>
+
+<h2>Notes</h2>
+
+<ul>
+  <li>The following IEC 61499 data types are currently NOT supported: DATE, DATE_AND_TIME, TIME_OF_DAY, arrays, structs</li>
+  <li>By default, a GET request is sent as: <br />
+    GET /path HTTP/1.1 <br />
+    Host: ip:port <br />
+  </li>
+  
+  <li>By default, a PUT{POST} request is sent as: <br />
+    PUT{POST} /path HTTP/1.1 <br />
+    Host: ip:port <br />
+    Content-type: text/html <br />
+    Content-length: length_of_data_string <br />
+  </li>
+</ul>
+
+<h1>Where to go from here?</h1>
+
+<p>Go back to Protocols index:</p>
+
+<p><a href="./communicationIndex.html">Communication Index</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+
+</body>
+</html>

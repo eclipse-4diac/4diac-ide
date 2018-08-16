@@ -159,14 +159,7 @@
     </topic>
    
 	
-  <topic href="html/communication/communicationIndex.html" label="Using Communication Protocols"> 
-    <topic href="html/communication/fbdkip.html" label="FBDK/IP">
-       <topic href="html/communication/fbdkip.html#publishSubscribe" label="Publish/Subscribe (UDP)">
-       </topic>
-       <topic href="html/communication/fbdkip.html#clientServer" label="Client/Server (TCP)">
-       </topic>
-    </topic>
-    <topic label="MQTT with Eclipse Paho" href="html/communication/mqttPaho.html"/>
+  <topic href="html/communication/communicationIndex.html" label="Using Communication Protocols">
     <topic label="OPC UA"  href="html/communication/opc_ua.html">
       <topic label="Build FORTE with OPC UA" href="html/communication/opc_ua.html#build" />
       <topic label="OPC UA Variables" href="html/communication/opc_ua.html#variables" />
@@ -174,13 +167,26 @@
       <topic href="html/communication/opc_ua.html#client" label="OPC UA Client">
       </topic>
     </topic>
-    <topic label="OPC DA" href="html/communication/opc.html"/>
-    <topic label="Modbus" href="html/communication/modbus.html"/>
-    <topic label="openPOWERLINK" href="html/communication/openPOWERLINK.html"/>
+ <topic href="html/communication/http.html" label="HTTP">
+ </topic>
+	<topic href="html/communication/ros.html" label="ROS"/>
+    <topic label="MQTT with Eclipse Paho" href="html/communication/mqttPaho.html"/>
     <topic href="html/communication/simulation.html" label="Communicating with Simulation Tools">
        <topic label="Matlab" href="html/communication/simulation.html#matlab" />
+       <topic href="html/communication/simulation.html#fmi" label="FMI">
+       </topic>
     </topic>
-	<topic href="html/communication/ros.html" label="ROS"/>
+    <topic href="html/communication/tsn.html" label="TSN">
+    </topic> 
+    <topic href="html/communication/fbdkip.html" label="FBDK/IP">
+       <topic href="html/communication/fbdkip.html#publishSubscribe" label="Publish/Subscribe (UDP)">
+       </topic>
+       <topic href="html/communication/fbdkip.html#clientServer" label="Client/Server (TCP)">
+       </topic>
+    </topic>
+    <topic label="Modbus" href="html/communication/modbus.html"/>
+    <topic label="OPC DA" href="html/communication/opc.html"/>
+    <topic label="openPOWERLINK" href="html/communication/openPOWERLINK.html"/>
   </topic>  
 		
 	<topic href="html/faq/faq.html" label="Frequently Asked Questions"> 
