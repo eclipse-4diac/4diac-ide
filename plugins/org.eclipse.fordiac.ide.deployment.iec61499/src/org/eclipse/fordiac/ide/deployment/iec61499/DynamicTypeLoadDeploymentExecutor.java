@@ -32,20 +32,30 @@ import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
+import org.eclipse.fordiac.ide.model.Annotations;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.swt.widgets.Display;
 import org.xml.sax.InputSource;
 
@@ -200,14 +210,45 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				InputSource source = new InputSource(new StringReader(result));
 				XMLResource xmlResource = new XMLResourceImpl();
 				xmlResource.load(source, respMapping.getLoadOptions());
-				for (EObject object : xmlResource.getContents()) {
-					if(object instanceof Response) {
-						//TODO create connections
-					}
-				}
+				createConnections(res, xmlResource);
 			}
 		} catch (Exception e) {
 			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Connections")); //$NON-NLS-1$
+		}
+	}
+
+	private void createConnections(Resource res, XMLResource xmlResource) {
+		for (EObject object : xmlResource.getContents()) {
+			if(object instanceof Response) {
+				for(org.eclipse.fordiac.ide.deployment.devResponse.Connection connection : ((Response)object).getEndpointlist().getConnection()) {
+					//TODO currently no subapps supported
+					String[] src = connection.getSource().split("\\.");
+					FB srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
+					IInterfaceElement srcIE = Annotations.getInterfaceElement(srcFB, src[src.length - 1]);
+					String[] dst = connection.getDestination().split("\\.");
+					FB dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
+					IInterfaceElement dstIE = Annotations.getInterfaceElement(dstFB, dst[dst.length - 1]);
+					createConnectionCommand(res.getFBNetwork(), srcIE, dstIE);
+				}
+			}
+		}
+	}
+
+	private void createConnectionCommand(FBNetwork fbNet, IInterfaceElement srcIE, IInterfaceElement dstIE) {
+		AbstractConnectionCreateCommand cmd = null;
+		if(srcIE instanceof Event) {
+			cmd = new EventConnectionCreateCommand(fbNet);
+		}else if(srcIE instanceof AdapterDeclaration){
+			cmd = new AdapterConnectionCreateCommand(fbNet);
+		}else if(srcIE instanceof VarDeclaration) {
+			cmd = new DataConnectionCreateCommand(fbNet);
+		}
+		if(null != cmd) {			
+			cmd.setSource(srcIE);
+			cmd.setDestination(dstIE);
+			if(cmd.canExecute()) {
+				cmd.execute();
+			}
 		}
 	}
 

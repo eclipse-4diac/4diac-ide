@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
+import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
@@ -39,6 +40,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getWatches <em>Watches</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getReason <em>Reason</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getFblist <em>Fblist</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getEndpointlist <em>Endpointlist</em>}</li>
  * </ul>
  *
  * @generated
@@ -103,6 +105,16 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * @ordered
 	 */
 	protected FBList fblist;
+
+	/**
+	 * The cached value of the '{@link #getEndpointlist() <em>Endpointlist</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndpointlist()
+	 * @generated
+	 * @ordered
+	 */
+	protected EndpointList endpointlist;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -255,6 +267,46 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * @generated
 	 */
 	@Override
+	public EndpointList getEndpointlist() {
+		if (endpointlist != null && endpointlist.eIsProxy()) {
+			InternalEObject oldEndpointlist = (InternalEObject)endpointlist;
+			endpointlist = (EndpointList)eResolveProxy(oldEndpointlist);
+			if (endpointlist != oldEndpointlist) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DevResponsePackage.RESPONSE__ENDPOINTLIST, oldEndpointlist, endpointlist));
+			}
+		}
+		return endpointlist;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EndpointList basicGetEndpointlist() {
+		return endpointlist;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setEndpointlist(EndpointList newEndpointlist) {
+		EndpointList oldEndpointlist = endpointlist;
+		endpointlist = newEndpointlist;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__ENDPOINTLIST, oldEndpointlist, endpointlist));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case DevResponsePackage.RESPONSE__ID:
@@ -267,6 +319,9 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			case DevResponsePackage.RESPONSE__FBLIST:
 				if (resolve) return getFblist();
 				return basicGetFblist();
+			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
+				if (resolve) return getEndpointlist();
+				return basicGetEndpointlist();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -292,6 +347,9 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			case DevResponsePackage.RESPONSE__FBLIST:
 				setFblist((FBList)newValue);
 				return;
+			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
+				setEndpointlist((EndpointList)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -316,6 +374,9 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			case DevResponsePackage.RESPONSE__FBLIST:
 				setFblist((FBList)null);
 				return;
+			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
+				setEndpointlist((EndpointList)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -336,6 +397,8 @@ public class ResponseImpl extends EObjectImpl implements Response {
 				return REASON_EDEFAULT == null ? reason != null : !REASON_EDEFAULT.equals(reason);
 			case DevResponsePackage.RESPONSE__FBLIST:
 				return fblist != null;
+			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
+				return endpointlist != null;
 		}
 		return super.eIsSet(featureID);
 	}

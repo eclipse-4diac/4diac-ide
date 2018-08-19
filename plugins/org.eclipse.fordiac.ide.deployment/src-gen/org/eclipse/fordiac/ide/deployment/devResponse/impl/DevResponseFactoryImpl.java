@@ -77,6 +77,8 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 			case DevResponsePackage.RESPONSE: return createResponse();
 			case DevResponsePackage.WATCHES: return createWatches();
 			case DevResponsePackage.FB_LIST: return createFBList();
+			case DevResponsePackage.ENDPOINT_LIST: return createEndpointList();
+			case DevResponsePackage.CONNECTION: return createConnection();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -157,6 +159,28 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	public FBList createFBList() {
 		FBListImpl fbList = new FBListImpl();
 		return fbList;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EndpointList createEndpointList() {
+		EndpointListImpl endpointList = new EndpointListImpl();
+		return endpointList;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Connection createConnection() {
+		ConnectionImpl connection = new ConnectionImpl();
+		return connection;
 	}
 
 	/**

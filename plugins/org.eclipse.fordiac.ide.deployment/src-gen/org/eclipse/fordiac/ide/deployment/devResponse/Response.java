@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches <em>Watches</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason <em>Reason</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFblist <em>Fblist</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getEndpointlist <em>Endpointlist</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getResponse()
@@ -141,5 +142,31 @@ public interface Response extends EObject {
 	 * @generated
 	 */
 	void setFblist(FBList value);
+
+	/**
+	 * Returns the value of the '<em><b>Endpointlist</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Endpointlist</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Endpointlist</em>' reference.
+	 * @see #setEndpointlist(EndpointList)
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getResponse_Endpointlist()
+	 * @model
+	 * @generated
+	 */
+	EndpointList getEndpointlist();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getEndpointlist <em>Endpointlist</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Endpointlist</em>' reference.
+	 * @see #getEndpointlist()
+	 * @generated
+	 */
+	void setEndpointlist(EndpointList value);
 
 } // Response

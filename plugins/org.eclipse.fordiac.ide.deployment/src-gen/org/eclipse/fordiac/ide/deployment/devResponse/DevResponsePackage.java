@@ -291,13 +291,22 @@ public interface DevResponsePackage extends EPackage {
 	int RESPONSE__FBLIST = 3;
 
 	/**
+	 * The feature id for the '<em><b>Endpointlist</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESPONSE__ENDPOINTLIST = 4;
+
+	/**
 	 * The number of structural features of the '<em>Response</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESPONSE_FEATURE_COUNT = 4;
+	int RESPONSE_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl <em>Watches</em>}' class.
@@ -355,6 +364,72 @@ public interface DevResponsePackage extends EPackage {
 	 * @ordered
 	 */
 	int FB_LIST_FEATURE_COUNT = 1;
+
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.EndpointListImpl <em>Endpoint List</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.EndpointListImpl
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getEndpointList()
+	 * @generated
+	 */
+	int ENDPOINT_LIST = 7;
+
+	/**
+	 * The feature id for the '<em><b>Connection</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENDPOINT_LIST__CONNECTION = 0;
+
+	/**
+	 * The number of structural features of the '<em>Endpoint List</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENDPOINT_LIST_FEATURE_COUNT = 1;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ConnectionImpl <em>Connection</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.ConnectionImpl
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getConnection()
+	 * @generated
+	 */
+	int CONNECTION = 8;
+
+	/**
+	 * The feature id for the '<em><b>Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__SOURCE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Destination</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__DESTINATION = 1;
+
+	/**
+	 * The number of structural features of the '<em>Connection</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION_FEATURE_COUNT = 2;
 
 
 	/**
@@ -573,6 +648,17 @@ public interface DevResponsePackage extends EPackage {
 	EReference getResponse_Fblist();
 
 	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getEndpointlist <em>Endpointlist</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Endpointlist</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getEndpointlist()
+	 * @see #getResponse()
+	 * @generated
+	 */
+	EReference getResponse_Endpointlist();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Watches <em>Watches</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -613,6 +699,59 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFBList_Fbs();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.EndpointList <em>Endpoint List</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Endpoint List</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.EndpointList
+	 * @generated
+	 */
+	EClass getEndpointList();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.deployment.devResponse.EndpointList#getConnection <em>Connection</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Connection</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.EndpointList#getConnection()
+	 * @see #getEndpointList()
+	 * @generated
+	 */
+	EReference getEndpointList_Connection();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Connection <em>Connection</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Connection</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Connection
+	 * @generated
+	 */
+	EClass getConnection();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Connection#getSource <em>Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Source</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Connection#getSource()
+	 * @see #getConnection()
+	 * @generated
+	 */
+	EAttribute getConnection_Source();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Connection#getDestination <em>Destination</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Destination</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Connection#getDestination()
+	 * @see #getConnection()
+	 * @generated
+	 */
+	EAttribute getConnection_Destination();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -807,6 +946,14 @@ public interface DevResponsePackage extends EPackage {
 		EReference RESPONSE__FBLIST = eINSTANCE.getResponse_Fblist();
 
 		/**
+		 * The meta object literal for the '<em><b>Endpointlist</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESPONSE__ENDPOINTLIST = eINSTANCE.getResponse_Endpointlist();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl <em>Watches</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -841,6 +988,50 @@ public interface DevResponsePackage extends EPackage {
 		 * @generated
 		 */
 		EReference FB_LIST__FBS = eINSTANCE.getFBList_Fbs();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.EndpointListImpl <em>Endpoint List</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.EndpointListImpl
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getEndpointList()
+		 * @generated
+		 */
+		EClass ENDPOINT_LIST = eINSTANCE.getEndpointList();
+
+		/**
+		 * The meta object literal for the '<em><b>Connection</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ENDPOINT_LIST__CONNECTION = eINSTANCE.getEndpointList_Connection();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ConnectionImpl <em>Connection</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.ConnectionImpl
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getConnection()
+		 * @generated
+		 */
+		EClass CONNECTION = eINSTANCE.getConnection();
+
+		/**
+		 * The meta object literal for the '<em><b>Source</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONNECTION__SOURCE = eINSTANCE.getConnection_Source();
+
+		/**
+		 * The meta object literal for the '<em><b>Destination</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONNECTION__DESTINATION = eINSTANCE.getConnection_Destination();
 
 	}
 
