@@ -46,7 +46,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.swt.widgets.Display;
 import org.xml.sax.InputSource;
 
@@ -182,11 +181,10 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 							res.setPaletteEntry(getResourceType(dev, resource.getType()));
 							res.setFBNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
 							dev.getResource().add(res);
+							queryFBNetwork(res);
+							queryConnections(res);
 						}
 					}
-				}
-				for(Resource res : dev.getResource()) {							
-					queryFBNetworks(res);
 				}
 			}
 		} catch (Exception e) {
@@ -194,7 +192,26 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 	
-	private void queryFBNetworks(Resource res) {
+	private void queryConnections(Resource res) {
+		String request = MessageFormat.format(Messages.DTL_QueryConnections, id++, "*", "*");
+		try {
+			String result = getDevMgmComHandler().sendREQ(res.getName(), request);		
+			if (result != null) {
+				InputSource source = new InputSource(new StringReader(result));
+				XMLResource xmlResource = new XMLResourceImpl();
+				xmlResource.load(source, respMapping.getLoadOptions());
+				for (EObject object : xmlResource.getContents()) {
+					if(object instanceof Response) {
+						//TODO create connections
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Connections")); //$NON-NLS-1$
+		}
+	}
+
+	private void queryFBNetwork(Resource res) {
 		String request = MessageFormat.format(Messages.DTL_QueryFBInstances, id++);
 		try {
 			String result = getDevMgmComHandler().sendREQ(res.getName(), request);		
@@ -226,7 +243,6 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			}
 		}
 	}
-
 
 	private ResourceTypeEntry getResourceType(Device device, String resTypeName) {
 		List<PaletteEntry> typeEntries = device.getPaletteEntry().getGroup().getPallete().getTypeEntries(resTypeName);

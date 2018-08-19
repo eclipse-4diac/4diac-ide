@@ -34,7 +34,7 @@ public class ResponseMapping {
 		loadOptions.put(XMLResource.OPTION_XML_MAP, map);
 	}
 
-/* queryResources
+/* query Resources, query FBs
 <Response ID="0">
   <FBList>
     <FB Name="RTest" Type="EMB_RES"/>
