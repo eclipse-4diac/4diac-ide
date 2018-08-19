@@ -33,7 +33,7 @@ function usage(){
 	echo "   -s       Enable check for user defined syntax. This flag is treated as warning unless -w is specified"
 	echo "   -L       Enable check for lastModified tag in the file"
 	echo "   -r       Look in the folders recursively. Default is false"
-	echo "	 -w       Treat warnings as error"
+	echo "   -w       Treat warnings as error"
 	echo "    FILES   Files to check"
 	echo "    FOLDERS Folders to check"
 	echo "   -h       Print this help"
@@ -96,8 +96,10 @@ done
 if [ $CHECK_LINKS = false ] && [ $CHECK_HTML = false ] && [ $CHECK_SYNTAX = false ] && [ $CHECK_LAST = false ]; then
     if [ $USAGE_REQ = false ]; then
       echo "Error: No check was enabled"
+      usage
 	  return 2
 	else
+	  usage
 	  return 0
 	fi
 fi
@@ -139,6 +141,7 @@ done
 #check if no files were found
 if [ "$FILES" == "  " ]; then
    echo "Error: No file found to check"
+   usage
    return 3
 fi
 
@@ -147,6 +150,7 @@ HTML_FILES="$(echo $FILES | tr ' ' '\n' | grep .html)"
 if [ "$HTML_FILES" == "" ]; then
   if [ $CHECK_LINKS = false ]; then
     echo "You are checking only XML files but -l option is not enabled."
+    usage
     return 4
   fi 
 fi
