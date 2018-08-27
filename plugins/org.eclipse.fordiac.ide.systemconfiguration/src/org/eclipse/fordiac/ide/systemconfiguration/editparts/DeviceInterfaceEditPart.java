@@ -22,11 +22,15 @@ import org.eclipse.fordiac.ide.gef.policies.DataInterfaceLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
+import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceMoveCommand;
 import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.tools.SelectEditPartTracker;
 
@@ -68,6 +72,23 @@ public class DeviceInterfaceEditPart extends InterfaceEditPart {
 					return new ResourceCreateCommand(type, dev, false);
 				}
 				return super.getCreateCommand(request);
+			}
+			
+			@Override
+			protected Command getAddCommand(Request generic) {
+				ChangeBoundsRequest request = (ChangeBoundsRequest) generic;
+				@SuppressWarnings("unchecked")
+				List<EditPart> editParts = request.getEditParts();
+				CompoundCommand command = new CompoundCommand();
+
+				for (EditPart child : editParts) {
+					if (child instanceof ResourceEditPart) {
+						Device targetDevice = (Device)((InterfaceEditPart)getHost()).getModel().eContainer();
+						return new ResourceMoveCommand(((ResourceEditPart)child).getModel(), 
+								targetDevice, targetDevice.getResource().size());
+					}
+				}
+				return command.unwrap();
 			}
 		};
 	}

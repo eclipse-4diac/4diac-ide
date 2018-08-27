@@ -21,14 +21,19 @@ import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
+import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceMoveCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
+import org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy;
 import org.eclipse.gef.requests.AlignmentRequest;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -94,6 +99,16 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		}
 
 		return super.getCommand(request);
+	}
+	
+	@Override
+	protected Command createAddCommand(ChangeBoundsRequest request,
+			EditPart child, Object constraint){
+		if (child instanceof ResourceEditPart) {
+			Device targetDevice = ((DeviceEditPart)getHost()).getModel();
+			return new ResourceMoveCommand((Resource) child.getModel(), targetDevice, targetDevice.getResource().size());
+		}
+		return null;
 	}
 
 	/**
