@@ -52,7 +52,9 @@ class DisableSystemMonitoringRunnable implements IRunnableWithProgress {
 				break;
 			}
 			try {
-				runner.getValue().getDevMgmInteractor().disconnect();
+				if(runner.getValue().getDevMgmInteractor().isConnected()) {
+					runner.getValue().getDevMgmInteractor().disconnect();
+				}
 			} catch (DeploymentException e) {
 				// TODO think if error should be shown to the user
 				Activator.getDefault().logError("Could not disconnect from device", e);

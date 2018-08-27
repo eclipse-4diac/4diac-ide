@@ -83,8 +83,7 @@ class DeviceMonitoringHandler implements Runnable {
 						}
 						//TODO implement when finally providing breakpoint support: commObj.queryBreakpoints(device.getAutomationSystem(), device);
 					} catch (DeploymentException e) {
-						// TODO think if error should be shown to the user
-						Activator.getDefault().logError("Could not update the watches!", e);
+						handleDeviceIssue();						
 					}
 				} else {
 					setRunning(false);
@@ -105,26 +104,41 @@ class DeviceMonitoringHandler implements Runnable {
 					for (Port p : fb.getPorts()) {
 						final MonitoringBaseElement element = systemMonData.getMonitoringElementByPortString(fbName + p.getName());
 						if (element instanceof MonitoringElement) {
-							MonitoringElement monitoringElement = (MonitoringElement)element;
-
-							for (Data d : p.getDataValues()) {
-								long timeAsLong = 0;
-								try {
-									timeAsLong = Long.parseLong(d.getTime());
-								} catch (NumberFormatException nfe) {
-									timeAsLong = 0;
-								}
-								monitoringElement.setSec(timeAsLong / 1000);
-								monitoringElement.setUsec(timeAsLong % 1000);
-								monitoringElement.setCurrentValue(d.getValue());
-								if (d.getForced() != null) {
-									monitoringElement.setForce(d.getForced().equals("true")); //$NON-NLS-1$
-								}
-							}
+							updateMonitoringElement((MonitoringElement)element, p);
 						}
 					}
 				}
 			}
 		}
 	}
+
+	private static void updateMonitoringElement(MonitoringElement monitoringElement, Port p) {
+		for (Data d : p.getDataValues()) {
+			long timeAsLong = 0;
+			try {
+				timeAsLong = Long.parseLong(d.getTime());
+			} catch (NumberFormatException nfe) {
+				timeAsLong = 0;
+			}
+			monitoringElement.setSec(timeAsLong / 1000);
+			monitoringElement.setUsec(timeAsLong % 1000);
+			monitoringElement.setCurrentValue(d.getValue());
+			if (d.getForced() != null) {
+				monitoringElement.setForce(d.getForced().equals("true")); //$NON-NLS-1$
+			}
+		}
+	}
+	
+	private void handleDeviceIssue() {
+		// we have an issue with this device close connection clear monitoring values
+		try {
+			devInteractor.disconnect();
+		} catch (DeploymentException e) {
+			// we don't need to do anything here
+		}
+		systemMonData.getMonitoredElements().stream().
+			filter(el -> (el.getPort().getDevice().equals(device) && (el instanceof MonitoringElement)) ).
+			forEach(el -> ((MonitoringElement)el).setCurrentValue(""));  //$NON-NLS-1$
+	}
+
 }

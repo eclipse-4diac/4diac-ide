@@ -109,7 +109,7 @@ public class SystemMonitoringData {
 
 	public void sendRemoveWatch(MonitoringBaseElement element) {
 		IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(element.getPort().getDevice());
-		if(null != devMgmInteractor){
+		if(null != devMgmInteractor && devMgmInteractor.isConnected()){
 			try {
 				devMgmInteractor.removeWatch(element);
 			} catch (DeploymentException e) {
@@ -121,7 +121,7 @@ public class SystemMonitoringData {
 
 	public void sendAddWatch(MonitoringBaseElement element) {
 		IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(element.getPort().getDevice());
-		if(null != devMgmInteractor){
+		if(null != devMgmInteractor && devMgmInteractor.isConnected()){
 			try {
 				devMgmInteractor.addWatch(element);
 			} catch (DeploymentException e) {
