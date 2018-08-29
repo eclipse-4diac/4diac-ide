@@ -169,7 +169,7 @@ public class CommFBGenerator {
 		// TODO annotation
 		int targetDataIndex = 0;
 		for (int i = 0; i < channel.getSourceEvent().getWith().size(); i++) {
-			if (generatedFBInfo.getWithPorts() != null && generatedFBInfo.getWithPorts().contains(i)) {
+			if (generatedFBInfo.getWithPorts() != null && !generatedFBInfo.getWithPorts().contains(i)) {
 				continue;
 			}
 			With with = channel.getSourceEvent().getWith().get(i);
