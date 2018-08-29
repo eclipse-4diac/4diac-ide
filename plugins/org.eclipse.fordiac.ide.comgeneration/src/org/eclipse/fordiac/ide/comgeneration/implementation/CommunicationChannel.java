@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.comgeneration.implementation;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -21,19 +22,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 class CommunicationChannel {
 	
-	//private InterfaceList sourceInterface;
-	private Resource sourceResource;
-	private Event sourceEvent;
-	
-	private HashMap<Resource, CommunicationChannelDestination> destinations;
-	
+	private Event sourceEvent;	
+	private final Map<Resource, CommunicationChannelDestination> destinations = new HashMap<>();	
 	private boolean local;
-	private int numberOfDataPorts;
 		
 
 	public CommunicationChannel() {
-		super();
-		destinations = new HashMap<Resource, CommunicationChannelDestination>();
 		local = true;
 	}
 	
@@ -52,26 +46,9 @@ class CommunicationChannel {
 		return destinations.values();
 	}
 
-
-	/*public InterfaceList getSourceInterface() {
-		return sourceInterface;
-	}
-
-
-	public void setSourceInterface(InterfaceList sourceInterface) {
-		this.sourceInterface = sourceInterface;
-	}*/
-
-
 	public Resource getSourceResource() {
-		return sourceResource;
+		return sourceEvent.getFBNetworkElement().getResource();
 	}
-
-
-	public void setSourceResource(Resource sourceResource) {
-		this.sourceResource = sourceResource;
-	}
-
 
 	public Event getSourceEvent() {
 		return sourceEvent;
@@ -94,13 +71,8 @@ class CommunicationChannel {
 
 
 	public int getNumberOfDataPorts() {
-		return numberOfDataPorts;
+		return sourceEvent.getWith().size();
 	}
 
-
-	public void setNumberOfDataPorts(int numberOfDataPorts) {
-		this.numberOfDataPorts = numberOfDataPorts;
-	}
-	
 	
 }
