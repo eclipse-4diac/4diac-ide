@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.utilities.CreationPopupDialog;
 import org.eclipse.fordiac.ide.application.utilities.ICreationExecutor;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;

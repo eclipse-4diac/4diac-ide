@@ -15,7 +15,9 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.AutomaticRouter;
 import org.eclipse.draw2d.ConnectionLayer;
+import org.eclipse.draw2d.FanRouter;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
@@ -52,16 +54,14 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	 */
 	@Override
 	protected IFigure createFigure() {
-		Figure f = new FreeformLayer();
-		f.setBorder(new MarginBorder(10));
-		f.setLayoutManager(new FreeformLayout());
-		f.setOpaque(false);
+		IFigure newFigure = new FreeformLayer();
+		newFigure.setBorder(new MarginBorder(10));
+		newFigure.setLayoutManager(new FreeformLayout());
+		newFigure.setOpaque(false);
 		
-		// Create the static router for the connection layer
-		ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
-		connLayer.setConnectionRouter(RouterUtil.getConnectionRouter(f));
+		updateRouter(newFigure);
 
-		return f;
+		return newFigure;
 	}
 
 	/*
@@ -160,7 +160,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 					}
 					if (event.getProperty().equals(
 							DiagramPreferences.CONNECTION_ROUTER)) {
-						updateRouter();
+						updateRouter(getFigure());
 					}
 				}
 			};
@@ -168,10 +168,10 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		return listener;
 	}
 
-	protected void updateRouter() {
+	
+	protected void updateRouter(IFigure figure) {
 		ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
-		connLayer.setConnectionRouter(RouterUtil
-				.getConnectionRouter(getFigure()));
+		connLayer.setConnectionRouter(RouterUtil.getConnectionRouter(figure));
 	}
 
 	protected void updateGrid() {

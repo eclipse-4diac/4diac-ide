@@ -16,8 +16,8 @@ import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.gef.ConnectionEditPart;
-import org.eclipse.gef.SharedCursors;
 import org.eclipse.gef.handles.BendpointCreationHandle;
 import org.eclipse.swt.graphics.Color;
 
@@ -36,12 +36,11 @@ public class LineSegmentHandle extends BendpointCreationHandle {
 		Point pt2 = points.getPoint(index + 1);
 		if (Math.abs(pt1.x - pt2.x) < Math.abs(pt1.y - pt2.y)) {
 			setCursor(Cursors.SIZEWE);
-			setPreferredSize(DEFAULT_HANDLE_SIZE-2, Math.abs(pt1.y-pt2.y));
+			setPreferredSize(DEFAULT_HANDLE_SIZE - 2, Math.abs(pt1.y-pt2.y) - 2 * HideableConnection.BEND_POINT_BEVEL_SIZE);
 		} else {
 			setCursor(Cursors.SIZENS);
-			setPreferredSize(Math.abs(pt1.x-pt2.x),DEFAULT_HANDLE_SIZE-2);
-		}
-		
+			setPreferredSize(Math.abs(pt1.x-pt2.x) - 2 * HideableConnection.BEND_POINT_BEVEL_SIZE, DEFAULT_HANDLE_SIZE - 2);
+		}		
 	}
 	
 	@Override
