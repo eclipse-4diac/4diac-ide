@@ -14,7 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
@@ -29,7 +28,6 @@ import org.eclipse.fordiac.ide.application.policies.DisableConnectionHandleRoleE
 import org.eclipse.fordiac.ide.application.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
-import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.gef.router.RouterUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -104,9 +102,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		PolylineConnection connection = null;
-
-		connection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
+		PolylineConnection connection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
 
 		String status = getModel().getAttributeValue(HIDEN_CON);
 		if (connection instanceof HideableConnection) {
@@ -116,6 +112,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 				((HideableConnection) connection)
 						.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
 			}
+			((HideableConnection) connection).setModel(getModel());
 		}
 
 		PolygonDecoration arrow = new PolygonDecoration();
@@ -151,20 +148,12 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 
-		if (getConnectionFigure() instanceof PolylineConnection) {
-			ConnectionRouter router = getConnectionFigure().getConnectionRouter();
-			if (getModel() != null) {
-				if (router instanceof MoveableRouter) {
-					((MoveableRouter) router).setDeltaX1(getConnectionFigure(), getModel().getDx1());
-					((MoveableRouter) router).setDeltaX2(getConnectionFigure(), getModel().getDx2());
-					((MoveableRouter) router).setDeltaY(getConnectionFigure(), getModel().getDy());
-				}
-				if (getModel().isBrokenConnection()) {
-					((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_DASH);
+		if ((getConnectionFigure() instanceof PolylineConnection) && (getModel() != null)) {
+			if (getModel().isBrokenConnection()) {
+				((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_DASH);
 
-				} else {
-					((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_SOLID);
-				}
+			} else {
+				((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_SOLID);
 			}
 		}
 	}

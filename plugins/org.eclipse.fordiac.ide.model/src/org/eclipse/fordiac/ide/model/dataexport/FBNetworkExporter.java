@@ -144,12 +144,18 @@ class FBNetworkExporter {
 
 	private static void setConnectionCoordinates(
 			final Connection connection, Element connectionElement) {
-		connectionElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE,
-				CommonElementExporter.reConvertCoordinate(connection.getDx1()).toString());
-		connectionElement.setAttribute(LibraryElementTags.DX2_ATTRIBUTE,
-				CommonElementExporter.reConvertCoordinate(connection.getDx2()).toString());
-		connectionElement.setAttribute(LibraryElementTags.DY_ATTRIBUTE,
-				CommonElementExporter.reConvertCoordinate(connection.getDy()).toString());
+		if(0 != connection.getDx1()) {
+			//only export connection routing information if not a straight line
+			connectionElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE,
+					CommonElementExporter.reConvertCoordinate(connection.getDx1()).toString());
+			if(0 != connection.getDx2()) {
+				//only export the second two if a five segment connection
+				connectionElement.setAttribute(LibraryElementTags.DX2_ATTRIBUTE,
+						CommonElementExporter.reConvertCoordinate(connection.getDx2()).toString());
+				connectionElement.setAttribute(LibraryElementTags.DY_ATTRIBUTE,
+						CommonElementExporter.reConvertCoordinate(connection.getDy()).toString());
+			}
+		}
 	}
 
 }

@@ -12,9 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.commands;
 
+import java.text.MessageFormat;
+
 import org.eclipse.draw2d.Connection;
-import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.gef.commands.Command;
 
@@ -37,69 +39,40 @@ public class AdjustConnectionCommand extends Command {
 
 	@Override
 	public void execute() {
-		ConnectionRouter router = connection.getConnectionRouter();
-		if (router instanceof MoveableRouter) {
-			MoveableRouter mr = (MoveableRouter) router;
-			switch (index) {
-			case 1:
-				Point sourceP = connection.getSourceAnchor().getLocation(
-						connection.getSourceAnchor().getReferencePoint());
-				connection.translateToRelative(sourceP);
-				int newX = point.x;
-				int delta = newX - sourceP.x;
-				mr.setDeltaX1(connection, delta);
-				modelConnection.setDx1(delta);
-				break;
-			case 2:
-				Point p3 = connection.getTargetAnchor().getLocation(
-						connection.getTargetAnchor().getReferencePoint()).getCopy();
-				Point temp = connection.getSourceAnchor().getLocation(
-						connection.getSourceAnchor().getReferencePoint()).getCopy();
-				connection.translateToRelative(p3);
-				connection.translateToRelative(temp);
-				int dif = Math.abs(p3.y - temp.y);
-				int y = 0;
-				if (p3.y < temp.y) {
-					y = p3.y + dif / 2;
-				} else {
-					y = temp.y + dif / 2;
-				}
-				int deltaY = point.y - y;
-				mr.setDeltaY(connection, deltaY);
-				modelConnection.setDy(deltaY);
-				break;
-			case 3:
-				sourceP = connection.getTargetAnchor().getLocation(
-						connection.getTargetAnchor().getReferencePoint());
-				connection.translateToRelative(sourceP);
-				newX = point.x;
-				delta = newX - sourceP.x;
-				mr.setDeltaX2(connection, delta);
-				modelConnection.setDx2(delta);
-				break;
-			default:
-				break;
+		Point sourceP = getSourcePoint();
+		Point destP = getDestinationPoint();
+		switch (index) {
+		case 1:
+			int newDx1 = Math.max(point.x - sourceP.x, MoveableRouter.MIN_CONNECTION_FB_DISTANCE);
+			if(0 == modelConnection.getDx2()) {	  
+				//we have three segment connection check that we are not beyond the input
+				newDx1 = Math.min(newDx1, destP.x - sourceP.x - MoveableRouter.MIN_CONNECTION_FB_DISTANCE);
 			}
-			connection.revalidate();
+			modelConnection.setDx1(newDx1);
+			break;
+		case 2:
+			modelConnection.setDy(point.y - sourceP.y);
+			break;
+		case 3:		
+			modelConnection.setDx2(Math.max(destP.x - point.x, MoveableRouter.MIN_CONNECTION_FB_DISTANCE));
+			break;
+		default:
+			Activator.getDefault().logError(MessageFormat.format("Wrong connection segment index ({0}) provided to AdjustConnectionCommand!", index));
+			break;
 		}
+		connection.revalidate();
 	}
 
-	@Override
-	public boolean canExecute() {
-		Point ref1 = connection.getTargetAnchor().getReferencePoint();
-		Point ref2 = connection.getSourceAnchor().getReferencePoint();
-		Point min = connection.getTargetAnchor().getLocation(ref2).getCopy();
-		Point p2 = connection.getSourceAnchor().getLocation(ref1).getCopy();
-		connection.translateToRelative(min);
-		connection.translateToRelative(p2);
-		int x = p2.x;
-		int newX = point.x;
-		int delta = newX - p2.x;
-		// Point 2 (the first after the source anchor)
-		if (min.x - 20 > p2.x + 20) {
-			return (x + delta < min.x - 20);
-		}
-		return true;
+	private Point getDestinationPoint() {
+		Point destP = connection.getTargetAnchor().getLocation(connection.getTargetAnchor().getReferencePoint()).getCopy();
+		connection.translateToRelative(destP);
+		return destP;
+	}
+
+	private Point getSourcePoint() {
+		Point sourceP = connection.getSourceAnchor().getLocation(connection.getSourceAnchor().getReferencePoint()).getCopy();
+		connection.translateToRelative(sourceP);
+		return sourceP;
 	}
 
 	@Override

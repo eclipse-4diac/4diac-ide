@@ -15,19 +15,17 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
-import org.eclipse.fordiac.ide.gef.router.RouterUtil;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
@@ -76,16 +74,14 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		rightInterfaceContainer.add(rightEventContainer);
 		rightInterfaceContainer.add(rightVarContainer);
 		rightInterfaceContainer.add(rightAdapterContainer);
-		FreeformLayer f = new FreeformLayer();
-		f.setBorder(new MarginBorder(10));
-		f.setLayoutManager(new FreeformLayout());
-		f.setOpaque(false);
-		f.add(leftInterfaceContainer);
-		f.add(rightInterfaceContainer);
-		// Create the static router for the connection layer
-		ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
-		connLayer.setConnectionRouter(RouterUtil.getConnectionRouter(f));
-		return f;
+		Layer editorFigure = new FreeformLayer();
+		editorFigure.setBorder(new MarginBorder(10));
+		editorFigure.setLayoutManager(new FreeformLayout());
+		editorFigure.setOpaque(false);
+		editorFigure.add(leftInterfaceContainer);
+		editorFigure.add(rightInterfaceContainer);
+		updateRouter(editorFigure);
+		return editorFigure;
 	}
 
 	public FreeformLayer getCastedFigure() {
