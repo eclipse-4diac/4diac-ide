@@ -15,10 +15,7 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.AutomaticRouter;
 import org.eclipse.draw2d.ConnectionLayer;
-import org.eclipse.draw2d.FanRouter;
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
@@ -43,7 +40,6 @@ import org.eclipse.jface.util.PropertyChangeEvent;
  * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
  */
 public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart {
-
 
 	/**
 	 * Creates the <code>Figure</code> to be used as this part's <i>visuals</i>.
@@ -124,9 +120,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	protected void showGrid() {
 		getViewer().setProperty(
 				SnapToGrid.PROPERTY_GRID_VISIBLE,
-				new Boolean(Activator.getDefault().getPreferenceStore()
-						.getBoolean(DiagramPreferences.SHOW_GRID)));
-
+				Boolean.valueOf(Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_GRID)));
 	}
 
 	private IPropertyChangeListener listener;
