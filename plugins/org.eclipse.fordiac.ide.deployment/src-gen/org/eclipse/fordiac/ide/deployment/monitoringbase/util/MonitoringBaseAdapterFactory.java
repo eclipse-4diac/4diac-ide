@@ -17,13 +17,11 @@ package org.eclipse.fordiac.ide.deployment.monitoringbase.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
-
-import org.eclipse.fordiac.ide.deployment.monitoringbase.*;
-
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 
 /**
@@ -91,10 +89,6 @@ public class MonitoringBaseAdapterFactory extends AdapterFactoryImpl {
 				return createPortElementAdapter();
 			}
 			@Override
-			public Adapter caseBreakpoints(Breakpoints object) {
-				return createBreakpointsAdapter();
-			}
-			@Override
 			public Adapter caseIEditPartCreator(IEditPartCreator object) {
 				return createIEditPartCreatorAdapter();
 			}
@@ -143,20 +137,6 @@ public class MonitoringBaseAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPortElementAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.Breakpoints <em>Breakpoints</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.Breakpoints
-	 * @generated
-	 */
-	public Adapter createBreakpointsAdapter() {
 		return null;
 	}
 

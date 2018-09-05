@@ -188,7 +188,7 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getMonitoringElement_Breakpoint() {
+	public EAttribute getMonitoringElement_CurrentValue() {
 		return (EAttribute)monitoringElementEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -198,7 +198,7 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getMonitoringElement_BreakpointActive() {
+	public EAttribute getMonitoringElement_Sec() {
 		return (EAttribute)monitoringElementEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -208,38 +208,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getMonitoringElement_BreakpointCondition() {
-		return (EAttribute)monitoringElementEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getMonitoringElement_CurrentValue() {
-		return (EAttribute)monitoringElementEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getMonitoringElement_Sec() {
-		return (EAttribute)monitoringElementEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getMonitoringElement_Usec() {
-		return (EAttribute)monitoringElementEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)monitoringElementEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -354,9 +324,6 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		monitoringElementEClass = createEClass(MONITORING_ELEMENT);
 		createEAttribute(monitoringElementEClass, MONITORING_ELEMENT__FORCE);
 		createEAttribute(monitoringElementEClass, MONITORING_ELEMENT__FORCE_VALUE);
-		createEAttribute(monitoringElementEClass, MONITORING_ELEMENT__BREAKPOINT);
-		createEAttribute(monitoringElementEClass, MONITORING_ELEMENT__BREAKPOINT_ACTIVE);
-		createEAttribute(monitoringElementEClass, MONITORING_ELEMENT__BREAKPOINT_CONDITION);
 		createEAttribute(monitoringElementEClass, MONITORING_ELEMENT__CURRENT_VALUE);
 		createEAttribute(monitoringElementEClass, MONITORING_ELEMENT__SEC);
 		createEAttribute(monitoringElementEClass, MONITORING_ELEMENT__USEC);
@@ -420,9 +387,6 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		initEClass(monitoringElementEClass, MonitoringElement.class, "MonitoringElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getMonitoringElement_Force(), theXMLTypePackage.getBoolean(), "force", "false", 0, 1, MonitoringElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 		initEAttribute(getMonitoringElement_ForceValue(), theXMLTypePackage.getString(), "forceValue", null, 0, 1, MonitoringElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getMonitoringElement_Breakpoint(), theXMLTypePackage.getBoolean(), "breakpoint", null, 0, 1, MonitoringElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getMonitoringElement_BreakpointActive(), theXMLTypePackage.getBoolean(), "breakpointActive", null, 0, 1, MonitoringElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getMonitoringElement_BreakpointCondition(), theXMLTypePackage.getString(), "breakpointCondition", null, 0, 1, MonitoringElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getMonitoringElement_CurrentValue(), theXMLTypePackage.getString(), "currentValue", null, 0, 1, MonitoringElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getMonitoringElement_Sec(), theXMLTypePackage.getLong(), "sec", null, 0, 1, MonitoringElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getMonitoringElement_Usec(), theXMLTypePackage.getLong(), "usec", null, 0, 1, MonitoringElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

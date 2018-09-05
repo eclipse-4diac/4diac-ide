@@ -37,22 +37,13 @@ public class WatchesContentProvider implements ITreeContentProvider {
 			int featureID = notification.getFeatureID(MonitoringElement.class);
 			if (featureID == MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE
 					&& notification.getNotifier() instanceof MonitoringElement) {
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
+				Display.getDefault().asyncExec(() -> {
 						if(!viewer.getControl().isDisposed()){
 							((TreeViewer) viewer).refresh(notification.getNotifier());
 						}
 					}
-				});
+				);
 
-			} else if (featureID == MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT_ACTIVE) {
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						((TreeViewer) viewer).refresh();
-					}
-				});
 			}
 		}
 	};

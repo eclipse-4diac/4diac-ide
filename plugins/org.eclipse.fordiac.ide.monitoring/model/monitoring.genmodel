@@ -13,9 +13,6 @@
     <genClasses ecoreClass="monitoring.ecore#//MonitoringElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/force"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/forceValue.1"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/breakpoint"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/breakpointActive"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/breakpointCondition"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/currentValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/sec"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/usec"/>

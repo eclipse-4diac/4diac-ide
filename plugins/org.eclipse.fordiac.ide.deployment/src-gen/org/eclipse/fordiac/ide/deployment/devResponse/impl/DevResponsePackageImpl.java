@@ -16,13 +16,13 @@
  */
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
+import static org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage.RESOURCE;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.eclipse.fordiac.ide.deployment.devResponse.Connection;
 import org.eclipse.fordiac.ide.deployment.devResponse.Data;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;

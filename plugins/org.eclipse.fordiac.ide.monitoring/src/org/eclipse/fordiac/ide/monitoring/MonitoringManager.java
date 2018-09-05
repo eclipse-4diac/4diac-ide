@@ -171,37 +171,6 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		return data.monitoringForSystemEnabled();
 	}
 
-	public enum BreakPoint {
-		ADD, REMOVE, CLEAR
-	}
-
-	/**
-	 * Trigger event.
-	 * 
-	 * @param port
-	 *            the port
-	 */
-	public void toggleBreakpoint(MonitoringBaseElement element, BreakPoint set) {
-		if (element instanceof MonitoringElement){
-			MonitoringElement monitoringElement = (MonitoringElement)element;
-
-			SystemMonitoringData data = getSystemMonitoringData(monitoringElement.getPort().getSystem());
-			IDeviceManagementInteractor devMgmInteractor = data.getDevMgmInteractor(monitoringElement.getPort().getDevice());
-			if(null != devMgmInteractor){
-				//FIXME implement when we finally have breakpoint support
-				//devMgmInteractor.toggleBreakpoint(monitoringElement, set);
-				if (set.equals(BreakPoint.ADD)) {
-					monitoringElement.setBreakpoint(true);
-					breakpoints.getBreakpoints().add(monitoringElement);
-				} else if (set.equals(BreakPoint.REMOVE)) {
-					monitoringElement.setBreakpoint(false);
-					breakpoints.getBreakpoints().remove(monitoringElement);
-				} else if (set.equals(BreakPoint.CLEAR)) {
-				}
-			}
-		}
-	}
-
 	/**
 	 * Trigger event.
 	 * 

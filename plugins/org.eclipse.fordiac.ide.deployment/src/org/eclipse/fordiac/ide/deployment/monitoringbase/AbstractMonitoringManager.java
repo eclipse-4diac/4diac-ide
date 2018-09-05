@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 
@@ -68,8 +67,6 @@ public abstract class AbstractMonitoringManager {
 	}
 	
 
-	protected final Breakpoints breakpoints = MonitoringBaseFactory.eINSTANCE.createBreakpoints();
-
 	/** The monitoring listeners. */
 	private final List<IMonitoringListener> monitoringListeners = new ArrayList<>();
 
@@ -86,13 +83,6 @@ public abstract class AbstractMonitoringManager {
 	}
 
 
-	public void addBreakpointsAdapter(EContentAdapter adapter) {
-		if (!breakpoints.eAdapters().contains(adapter)) {
-			breakpoints.eAdapters().add(adapter);
-		}
-	}
-	
-	
 	/**
 	 * Notify add port.
 	 * 
@@ -129,10 +119,6 @@ public abstract class AbstractMonitoringManager {
 		}
 	}
 	
-
-	public void removeBreakpointsAdapter(EContentAdapter adapter) {
-		breakpoints.eAdapters().remove(adapter);
-	}
 
 	private List<IMonitoringListener> watchesAdapter = new ArrayList<>();
 	

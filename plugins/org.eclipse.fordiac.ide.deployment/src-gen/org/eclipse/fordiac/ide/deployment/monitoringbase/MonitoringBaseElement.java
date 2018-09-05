@@ -16,7 +16,6 @@
 package org.eclipse.fordiac.ide.deployment.monitoringbase;
 
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 
 /**

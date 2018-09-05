@@ -22,7 +22,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.Breakpoints;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseFactory;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
@@ -52,13 +51,6 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * @generated
 	 */
 	private EClass portElementEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass breakpointsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -221,26 +213,6 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * @generated
 	 */
 	@Override
-	public EClass getBreakpoints() {
-		return breakpointsEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getBreakpoints_Breakpoints() {
-		return (EReference)breakpointsEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getIEditPartCreator() {
 		return iEditPartCreatorEClass;
 	}
@@ -283,9 +255,6 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 		createEReference(portElementEClass, PORT_ELEMENT__INTERFACE_ELEMENT);
 		createEReference(portElementEClass, PORT_ELEMENT__RESOURCE);
 		createEAttribute(portElementEClass, PORT_ELEMENT__HIERARCHY);
-
-		breakpointsEClass = createEClass(BREAKPOINTS);
-		createEReference(breakpointsEClass, BREAKPOINTS__BREAKPOINTS);
 
 		iEditPartCreatorEClass = createEClass(IEDIT_PART_CREATOR);
 	}
@@ -348,9 +317,6 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 		addEOperation(portElementEClass, theLibraryElementPackage.getDevice(), "getDevice", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(portElementEClass, theLibraryElementPackage.getAutomationSystem(), "getSystem", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		initEClass(breakpointsEClass, Breakpoints.class, "Breakpoints", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getBreakpoints_Breakpoints(), this.getMonitoringBaseElement(), null, "breakpoints", null, 0, -1, Breakpoints.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(iEditPartCreatorEClass, IEditPartCreator.class, "IEditPartCreator", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 

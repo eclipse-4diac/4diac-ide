@@ -34,9 +34,6 @@
       <genOperations ecoreOperation="monitoringBase.ecore#//PortElement/getSystem"
           body="&#x9;&#x9;return getResource().getAutomationSystem();"/>
     </genClasses>
-    <genClasses ecoreClass="monitoringBase.ecore#//Breakpoints">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference monitoringBase.ecore#//Breakpoints/breakpoints"/>
-    </genClasses>
     <genClasses image="false" ecoreClass="monitoringBase.ecore#//IEditPartCreator"/>
   </genPackages>
 </genmodel:GenModel>

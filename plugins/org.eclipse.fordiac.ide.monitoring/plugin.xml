@@ -2,20 +2,6 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         point="org.eclipse.ui.popupMenus">      
-      <objectContribution
-            adaptable="false"
-            id="org.eclipse.fordiac.ide.monitoring.objectContribution1"
-            objectClass="org.eclipse.fordiac.ide.monitoring.object1">
-         <action
-               class="org.eclipse.fordiac.ide.monitoring.actions.BreakpointsViewContinueBreakpoint"
-               icon="fordiacimage://ICON_Resume"
-               id="org.eclipse.fordiacc.monitoring.action2"
-               label="Continue">
-         </action>
-      </objectContribution>
-   </extension>
-   <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
             id="org.eclipse.fordiac.ide.monitoring.actionSet2"
@@ -48,14 +34,7 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
-      <view
-            class="org.eclipse.fordiac.ide.monitoring.views.BreakpointsView"
-            icon="fordiacimage://ICON_BreakpointsView"
-            id="org.eclipse.fordiac.ide.monitoring.views.BreakpointsView"
-            name="Breakpoints"
-            restorable="true">
-      </view>
-      <view
+       <view
             class="org.eclipse.fordiac.ide.monitoring.views.WatchesView"
             icon="fordiacimage://ICON_WatchesView"
             id="org.eclipse.fordiac.ide.monitoring.views.WatchesView"
@@ -181,16 +160,6 @@
             id="org.eclipse.fordiac.ide.monitoring.commands.clearForce"
             name="Clear Force">
       </command>
-      <command
-            categoryId="org.eclipse.fordiac.ide.monitoring"
-            id="org.eclipse.fordiac.ide.monitoring.commands.breakpoint"
-            name="Breakpoint">
-      </command>
-      <command
-            categoryId="org.eclipse.fordiac.ide.monitoring"
-            id="org.eclipse.fordiac.ide.monitoring.commands.continue"
-            name="Continue">
-      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -242,22 +211,6 @@
                icon="fordiacimage://ICON_ClearForce"
                label="%contributions.menus.debug.clearForce"
                tooltip="%contributions.menus.debug.clearForceToolTop">
-         </command>
-         <separator
-               name="org.eclipse.fordiac.ide.monitoring.breakPointsBegin"
-               visible="true">
-         </separator>
-         <command
-               commandId="org.eclipse.fordiac.ide.monitoring.commands.breakpoint"
-               icon="fordiacimage://ICON_ToggleBreakpoint"
-               label="%contributions.menus.debug.breakPoint = Breakpoint"
-               tooltip="%contributions.menus.debug.breakPointToolTip = Toggle breakpoint.">
-         </command>
-         <command
-               commandId="org.eclipse.fordiac.ide.monitoring.commands.continue"
-               icon="fordiacimage://ICON_Resume"
-               label="%contributions.menus.debug.continue = Continue"
-               tooltip="%contributions.menus.debug.continueToolTip = Continue execution.">
          </command>
          </menu>
       </menuContribution>         
@@ -376,36 +329,6 @@
                </iterate>
             </visibleWhen>
          </command>
-         <separator
-               name="org.eclipse.fordiac.ide.monitoring.breakPointsBegin"
-               visible="true">
-         </separator>
-         <command
-               commandId="org.eclipse.fordiac.ide.monitoring.commands.breakpoint"
-               icon="fordiacimage://ICON_ToggleBreakpoint"
-               label="%contributions.menus.debug.breakPoint = Breakpoint"
-               tooltip="%contributions.menus.debug.breakPointToolTip = Toggle breakpoint.">
-            <visibleWhen checkEnabled="false">
-               <iterate>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
-         <command
-               commandId="org.eclipse.fordiac.ide.monitoring.commands.continue"
-               icon="fordiacimage://ICON_Resume"
-               label="%contributions.menus.debug.continue = Continue"
-               tooltip="%contributions.menus.debug.continueToolTip = Continue execution.">
-            <visibleWhen checkEnabled="false">
-               <iterate>
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
       </menuContribution>
    </extension>
    <extension
@@ -429,14 +352,6 @@
       <handler
             class="org.eclipse.fordiac.ide.monitoring.handlers.ClearForceHandler"
             commandId="org.eclipse.fordiac.ide.monitoring.commands.clearForce">
-      </handler>
-      <handler
-            class="org.eclipse.fordiac.ide.monitoring.handlers.BreakpointHandler"
-            commandId="org.eclipse.fordiac.ide.monitoring.commands.breakpoint">
-      </handler>
-      <handler
-            class="org.eclipse.fordiac.ide.monitoring.handlers.ContinueHandler"
-            commandId="org.eclipse.fordiac.ide.monitoring.commands.continue">
       </handler>
    </extension>
    <extension

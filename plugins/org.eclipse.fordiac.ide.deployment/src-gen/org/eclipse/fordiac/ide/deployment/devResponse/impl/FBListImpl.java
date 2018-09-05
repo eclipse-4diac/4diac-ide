@@ -17,8 +17,8 @@
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
 import java.util.Collection;
-import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;

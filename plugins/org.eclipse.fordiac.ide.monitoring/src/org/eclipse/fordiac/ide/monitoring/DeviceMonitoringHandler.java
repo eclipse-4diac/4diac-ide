@@ -81,7 +81,6 @@ class DeviceMonitoringHandler implements Runnable {
 						if(null != resp) {
 							updateWatches(resp);
 						}
-						//TODO implement when finally providing breakpoint support: commObj.queryBreakpoints(device.getAutomationSystem(), device);
 					} catch (DeploymentException e) {
 						handleDeviceIssue();						
 					}
