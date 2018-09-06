@@ -97,7 +97,7 @@ class ResourceDeploymentData {
 	}
 
 
-	private FBNetwork getFBNetworkForSubApp(SubApp subApp) {
+	private static FBNetwork getFBNetworkForSubApp(SubApp subApp) {
 		FBNetwork retVal = subApp.getSubAppNetwork();
 		if(null == retVal) {
 			if(null != subApp.getType()) {
@@ -149,8 +149,10 @@ class ResourceDeploymentData {
 			String newPrefix = prefix + destination.getFBNetworkElement().getName() + "."; //$NON-NLS-1$
 			subAppHierarchy.addLast((SubApp)destination.getFBNetworkElement());
 			IInterfaceElement internalElement = getSubAppInteralElement(destination);
-			for(Connection con : internalElement.getOutputConnections()) {
-				retVal.addAll(getConnectionEndPoint(subAppHierarchy, newPrefix, con.getDestination()));
+			if(null != internalElement) {
+				for(Connection con : internalElement.getOutputConnections()) {
+					retVal.addAll(getConnectionEndPoint(subAppHierarchy, newPrefix, con.getDestination()));
+				}
 			}
 			subAppHierarchy.removeLast();
 		} else {
@@ -166,26 +168,26 @@ class ResourceDeploymentData {
 		return retVal;
 	}
 
-	private IInterfaceElement getSubAppInteralElement(IInterfaceElement destination) {
+	private static IInterfaceElement getSubAppInteralElement(IInterfaceElement destination) {
 		SubApp subApp = (SubApp)destination.getFBNetworkElement();
 		if(null != subApp.getSubAppNetwork()) {
 			return destination;
-		}else {
-			InterfaceList interfaceList = null;
-			if(null != subApp.getType()) {
-				//we have a typed subapp
-				interfaceList = subApp.getType().getInterfaceList();
-			} else if(null != subApp.getOpposite()) {
-				interfaceList = ((SubApp)subApp.getOpposite()).getInterface();
-			}
-			if(null != interfaceList) {
-				return interfaceList.getInterfaceElement(destination.getName());
-			}
+		}
+		
+		InterfaceList interfaceList = null;
+		if(null != subApp.getType()) {
+			//we have a typed subapp
+			interfaceList = subApp.getType().getInterfaceList();
+		} else if(null != subApp.getOpposite()) {
+			interfaceList = ((SubApp)subApp.getOpposite()).getInterface();
+		}
+		if(null != interfaceList) {
+			return interfaceList.getInterfaceElement(destination.getName());
 		}
 		return null;
 	}
 	
-	private String removeLastEntry(String prefix) {
+	private static String removeLastEntry(String prefix) {
 		int index = prefix.lastIndexOf('.', prefix.length() - 2);
 		if(-1 != index) {
 			return prefix.substring(0, index);
