@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +9,8 @@
  *
  * Contributors:
  *   Monika Wenger - initial API and implementation and/or initial documentation
+ *   Alois Zoitl   - fixed bounds issues and removed redo call from execute to 
+ *   				 allow better subclasing 
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.commands.change;
@@ -37,7 +40,14 @@ public class ChangeInterfaceOrderCommand extends Command {
 	
 	public ChangeInterfaceOrderCommand(IInterfaceElement selection, boolean isInput, boolean moveUp){
 		this(selection, isInput);
-		this.newIndex = oldIndex > 0 && moveUp ? oldIndex - 1 : oldIndex + 1;
+		this.newIndex = moveUp ? oldIndex - 1 : oldIndex + 1;
+		
+		if(newIndex < 0) {
+			newIndex = 0;
+		}
+		if(newIndex >= interfaces.size()) {
+			newIndex = interfaces.size() - 1;
+		}
 	}
 	
 	public ChangeInterfaceOrderCommand(IInterfaceElement selection, boolean isInput, int newIndex){
@@ -71,28 +81,27 @@ public class ChangeInterfaceOrderCommand extends Command {
 	
 	@Override
 	public boolean canExecute() {
-		return null != selection && interfaces.size() > 1 && interfaces.size() >= newIndex;
+		return null != selection && interfaces.size() > 1 && interfaces.size() > newIndex;
 	}
 	
 	@Override
 	public void execute() {
-		if(newIndex > interfaces.indexOf(selection)) {
-			newIndex--;
-		}
-		redo();
+		moveTo(newIndex);
 	}
 	
 	@Override
 	public void redo() {
-		 @SuppressWarnings("unchecked")
-		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
-		temp.move(newIndex, selection);
+		 moveTo(newIndex);
 	}
 	
 	@Override
 	public void undo() {
+		moveTo(oldIndex);
+	}
+	
+	private void moveTo(int index){
 		@SuppressWarnings("unchecked")
 		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
-		temp.move(oldIndex, selection);
+		temp.move(index, selection);
 	}
 }

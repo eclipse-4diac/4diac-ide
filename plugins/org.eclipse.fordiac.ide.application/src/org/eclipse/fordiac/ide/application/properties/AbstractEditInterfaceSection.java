@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017, 2018 fortiss GmbH, Johannes Kepler University
+ * 	
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
@@ -24,7 +26,6 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
@@ -149,8 +150,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
-				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new ChangeInterfaceOrderCommand((IInterfaceElement) selection, true, true));
+				if(selection instanceof IInterfaceElement){
+					executeCommand(new ChangeSubAppInterfaceOrderCommand((IInterfaceElement) selection, true, true));
 					inputsViewer.refresh();
 				}
 			}
@@ -161,8 +162,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
-				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new ChangeInterfaceOrderCommand((IInterfaceElement) selection, true, false));
+				if(selection instanceof IInterfaceElement){
+					executeCommand(new ChangeSubAppInterfaceOrderCommand((IInterfaceElement) selection, true, false));
 					inputsViewer.refresh();
 				}
 			}
@@ -174,7 +175,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
-				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
+				if(selection instanceof IInterfaceElement){
 					executeCommand(new DeleteSubAppInterfaceElementCommand((IInterfaceElement) selection));
 					inputsViewer.refresh();
 				}
@@ -223,8 +224,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
-				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new ChangeInterfaceOrderCommand((IInterfaceElement) selection, false, true));
+				if(selection instanceof IInterfaceElement){
+					executeCommand(new ChangeSubAppInterfaceOrderCommand((IInterfaceElement) selection, false, true));
 					outputsViewer.refresh();
 				}
 			}
@@ -235,8 +236,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
-				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
-					executeCommand(new ChangeInterfaceOrderCommand((IInterfaceElement) selection, false, false));
+				if(selection instanceof IInterfaceElement){
+					executeCommand(new ChangeSubAppInterfaceOrderCommand((IInterfaceElement) selection, false, false));
 					outputsViewer.refresh();
 				}
 			}
@@ -248,7 +249,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
-				if(selection instanceof Event || selection instanceof VarDeclaration || selection instanceof AdapterDeclaration){
+				if(selection instanceof IInterfaceElement){
 					executeCommand(new DeleteSubAppInterfaceElementCommand((IInterfaceElement) selection));
 					outputsViewer.refresh();
 				}
