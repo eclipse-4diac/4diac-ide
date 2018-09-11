@@ -132,40 +132,13 @@ public interface MonitoringPackage extends EPackage {
 	int MONITORING_ELEMENT__FORCE_VALUE = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Breakpoint</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONITORING_ELEMENT__BREAKPOINT = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Breakpoint Active</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONITORING_ELEMENT__BREAKPOINT_ACTIVE = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Breakpoint Condition</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONITORING_ELEMENT__BREAKPOINT_CONDITION = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 4;
-
-	/**
 	 * The feature id for the '<em><b>Current Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MONITORING_ELEMENT__CURRENT_VALUE = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 5;
+	int MONITORING_ELEMENT__CURRENT_VALUE = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Sec</b></em>' attribute.
@@ -174,7 +147,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MONITORING_ELEMENT__SEC = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 6;
+	int MONITORING_ELEMENT__SEC = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Usec</b></em>' attribute.
@@ -183,7 +156,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MONITORING_ELEMENT__USEC = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 7;
+	int MONITORING_ELEMENT__USEC = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Element</em>' class.
@@ -192,7 +165,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MONITORING_ELEMENT_FEATURE_COUNT = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 8;
+	int MONITORING_ELEMENT_FEATURE_COUNT = MonitoringBasePackage.MONITORING_BASE_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -582,39 +555,6 @@ public interface MonitoringPackage extends EPackage {
 	EAttribute getMonitoringElement_ForceValue();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isBreakpoint <em>Breakpoint</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Breakpoint</em>'.
-	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isBreakpoint()
-	 * @see #getMonitoringElement()
-	 * @generated
-	 */
-	EAttribute getMonitoringElement_Breakpoint();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isBreakpointActive <em>Breakpoint Active</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Breakpoint Active</em>'.
-	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isBreakpointActive()
-	 * @see #getMonitoringElement()
-	 * @generated
-	 */
-	EAttribute getMonitoringElement_BreakpointActive();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getBreakpointCondition <em>Breakpoint Condition</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Breakpoint Condition</em>'.
-	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getBreakpointCondition()
-	 * @see #getMonitoringElement()
-	 * @generated
-	 */
-	EAttribute getMonitoringElement_BreakpointCondition();
-
-	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getCurrentValue <em>Current Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -778,30 +718,6 @@ public interface MonitoringPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MONITORING_ELEMENT__FORCE_VALUE = eINSTANCE.getMonitoringElement_ForceValue();
-
-		/**
-		 * The meta object literal for the '<em><b>Breakpoint</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MONITORING_ELEMENT__BREAKPOINT = eINSTANCE.getMonitoringElement_Breakpoint();
-
-		/**
-		 * The meta object literal for the '<em><b>Breakpoint Active</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MONITORING_ELEMENT__BREAKPOINT_ACTIVE = eINSTANCE.getMonitoringElement_BreakpointActive();
-
-		/**
-		 * The meta object literal for the '<em><b>Breakpoint Condition</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MONITORING_ELEMENT__BREAKPOINT_CONDITION = eINSTANCE.getMonitoringElement_BreakpointCondition();
 
 		/**
 		 * The meta object literal for the '<em><b>Current Value</b></em>' attribute feature.

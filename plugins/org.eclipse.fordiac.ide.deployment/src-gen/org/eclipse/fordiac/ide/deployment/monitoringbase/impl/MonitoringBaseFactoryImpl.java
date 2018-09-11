@@ -20,10 +20,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.Breakpoints;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseFactory;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -70,7 +67,6 @@ public class MonitoringBaseFactoryImpl extends EFactoryImpl implements Monitorin
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case MonitoringBasePackage.PORT_ELEMENT: return createPortElement();
-			case MonitoringBasePackage.BREAKPOINTS: return createBreakpoints();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -85,17 +81,6 @@ public class MonitoringBaseFactoryImpl extends EFactoryImpl implements Monitorin
 	public PortElement createPortElement() {
 		PortElementImpl portElement = new PortElementImpl();
 		return portElement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Breakpoints createBreakpoints() {
-		BreakpointsImpl breakpoints = new BreakpointsImpl();
-		return breakpoints;
 	}
 
 	/**

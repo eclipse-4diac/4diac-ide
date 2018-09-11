@@ -18,12 +18,18 @@ package org.eclipse.fordiac.ide.deployment.devResponse.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
-
-import org.eclipse.fordiac.ide.deployment.devResponse.*;
+import org.eclipse.fordiac.ide.deployment.devResponse.Connection;
+import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
+import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
+import org.eclipse.fordiac.ide.deployment.devResponse.FB;
+import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
+import org.eclipse.fordiac.ide.deployment.devResponse.Port;
+import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
+import org.eclipse.fordiac.ide.deployment.devResponse.Response;
+import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 
 /**
  * <!-- begin-user-doc -->

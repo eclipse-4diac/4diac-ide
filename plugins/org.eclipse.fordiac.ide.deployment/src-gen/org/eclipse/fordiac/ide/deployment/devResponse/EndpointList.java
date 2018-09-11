@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.deployment.devResponse;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**

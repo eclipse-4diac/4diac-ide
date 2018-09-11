@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="monitoring" nsURI="org.eclipse.fordiac.monitoring" nsPrefix="monitoring">
-  <eClassifiers xsi:type="ecore:EClass" name="MonitoringElement" eSuperTypes="ecore:EClass ../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.ecore#//MonitoringBaseElement">
+  <eClassifiers xsi:type="ecore:EClass" name="MonitoringElement" eSuperTypes="../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.ecore#//MonitoringBaseElement">
     <eOperations name="forceValue">
       <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="force" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"
         defaultValueLiteral="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="forceValue" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="breakpoint" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="breakpointActive" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="breakpointCondition" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentValue" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sec" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Long"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="usec" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Long"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MonitoringAdapterElement" eSuperTypes="ecore:EClass ../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.ecore#//MonitoringBaseElement">
+  <eClassifiers xsi:type="ecore:EClass" name="MonitoringAdapterElement" eSuperTypes="../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.ecore#//MonitoringBaseElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
         eType="#//MonitoringElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="monitoredAdapterFB" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//AdapterFB"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AdapterPortElement" eSuperTypes="ecore:EClass ../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.ecore#//PortElement">
+  <eClassifiers xsi:type="ecore:EClass" name="AdapterPortElement" eSuperTypes="../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.ecore#//PortElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
-        eType="ecore:EClass ../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.ecore#//PortElement" containment="true"/>
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.ecore#//PortElement"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterMonitoringEvent" eSuperTypes="#//IEditPartCreator ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Event"/>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterMonitoringVarDeclaration" eSuperTypes="#//IEditPartCreator ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>

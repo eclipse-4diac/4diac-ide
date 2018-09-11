@@ -52,11 +52,7 @@ public class WatchesLabelProvider extends LabelProvider implements
 	@Override
 	public Color getBackground(Object element, int columnIndex) {
 		if (element instanceof MonitoringElement) {
-			if (((MonitoringElement) element).isBreakpointActive()) {
-				return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_CYAN);
-			} else {
-				return Display.getCurrent().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
-			}
+			return Display.getCurrent().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
 		}
 		return null;
 	}

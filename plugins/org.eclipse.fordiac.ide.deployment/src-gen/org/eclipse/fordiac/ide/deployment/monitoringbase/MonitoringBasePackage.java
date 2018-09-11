@@ -76,7 +76,7 @@ public interface MonitoringBasePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBasePackageImpl#getIEditPartCreator()
 	 * @generated
 	 */
-	int IEDIT_PART_CREATOR = 3;
+	int IEDIT_PART_CREATOR = 2;
 
 	/**
 	 * The number of structural features of the '<em>IEdit Part Creator</em>' class.
@@ -180,35 +180,6 @@ public interface MonitoringBasePackage extends EPackage {
 	int PORT_ELEMENT_FEATURE_COUNT = 4;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.BreakpointsImpl <em>Breakpoints</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.BreakpointsImpl
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBasePackageImpl#getBreakpoints()
-	 * @generated
-	 */
-	int BREAKPOINTS = 2;
-
-	/**
-	 * The feature id for the '<em><b>Breakpoints</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BREAKPOINTS__BREAKPOINTS = 0;
-
-	/**
-	 * The number of structural features of the '<em>Breakpoints</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BREAKPOINTS_FEATURE_COUNT = 1;
-
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement <em>Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -293,27 +264,6 @@ public interface MonitoringBasePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPortElement_Hierarchy();
-
-	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.Breakpoints <em>Breakpoints</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Breakpoints</em>'.
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.Breakpoints
-	 * @generated
-	 */
-	EClass getBreakpoints();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.Breakpoints#getBreakpoints <em>Breakpoints</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Breakpoints</em>'.
-	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.Breakpoints#getBreakpoints()
-	 * @see #getBreakpoints()
-	 * @generated
-	 */
-	EReference getBreakpoints_Breakpoints();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part Creator</em>}'.
@@ -415,24 +365,6 @@ public interface MonitoringBasePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT_ELEMENT__HIERARCHY = eINSTANCE.getPortElement_Hierarchy();
-
-		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.BreakpointsImpl <em>Breakpoints</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.BreakpointsImpl
-		 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBasePackageImpl#getBreakpoints()
-		 * @generated
-		 */
-		EClass BREAKPOINTS = eINSTANCE.getBreakpoints();
-
-		/**
-		 * The meta object literal for the '<em><b>Breakpoints</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference BREAKPOINTS__BREAKPOINTS = eINSTANCE.getBreakpoints_Breakpoints();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part Creator</em>}' class.

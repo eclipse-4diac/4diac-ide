@@ -50,10 +50,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hierarchy" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Breakpoints">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="breakpoints" upperBound="-1"
-        eType="#//MonitoringBaseElement" containment="true"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IEditPartCreator" instanceClassName="org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator"
       abstract="true" interface="true"/>
 </ecore:EPackage>

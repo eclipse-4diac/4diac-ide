@@ -27,9 +27,6 @@ public class MonitoringPerspective implements IPerspectiveFactory {
 		layout.setEditorAreaVisible(true);
 		layout.setFixed(false);
 
-		//
-		// layout.createFolder("breakpoints", relationship, ratio, refId)
-
 		IFolderLayout left = layout.createFolder(
 				"left", IPageLayout.LEFT, 0.20f, layout.getEditorArea()); //$NON-NLS-1$
 		left.addView("org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"); //$NON-NLS-1$
@@ -37,11 +34,6 @@ public class MonitoringPerspective implements IPerspectiveFactory {
 		IFolderLayout bottomLeft = layout.createFolder(
 				"bottomLeft", IPageLayout.BOTTOM, 0.7f, "left"); //$NON-NLS-1$	//$NON-NLS-2$
 		bottomLeft.addView(IPageLayout.ID_OUTLINE);
-
-		IFolderLayout top = layout.createFolder("top", IPageLayout.TOP, 0.25f, //$NON-NLS-1$
-				layout.getEditorArea());
-
-		top.addView("org.eclipse.fordiac.ide.monitoring.views.BreakpointsView"); //$NON-NLS-1$
 
 		IFolderLayout topRight = layout.createFolder("topRight", IPageLayout.RIGHT, //$NON-NLS-1$
 				0.5f, "top"); //$NON-NLS-1$
