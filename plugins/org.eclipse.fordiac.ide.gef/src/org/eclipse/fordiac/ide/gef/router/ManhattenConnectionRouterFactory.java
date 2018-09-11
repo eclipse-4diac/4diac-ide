@@ -21,11 +21,6 @@ import org.eclipse.draw2d.ManhattanConnectionRouter;
  */
 public class ManhattenConnectionRouterFactory extends AbstractConnectionRouterFactory {
 
-	/**
-	 * Instantiates a new manhatten connection router factory.
-	 */
-	public ManhattenConnectionRouterFactory() {
-	}
 
 	@Override
 	public ConnectionRouter getConnectionRouter(IFigure container) {

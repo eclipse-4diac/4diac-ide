@@ -46,9 +46,8 @@ public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 			IInterfaceElement element = (IInterfaceElement)modelElement;
 			if(element.getFBNetworkElement() instanceof SubApp && null == element.getFBNetworkElement().getType()){
 				return  new UntypedSubAppInterfaceElementEditPartForResource();
-			}else{
-				return new InterfaceEditPartForResourceFBs();
 			}
+			return new InterfaceEditPartForResourceFBs();
 		}
 		if (modelElement instanceof VirtualIO) {	
 			return new VirtualInOutputEditPart();
