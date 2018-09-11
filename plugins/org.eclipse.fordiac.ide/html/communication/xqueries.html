@@ -1,0 +1,202 @@
+<!DOCTYPE html> 
+<!--
+ Copyright (c) 2018, fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Monika Wenger - initial documentation
+-->
+
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>XQueries to BaseX</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+
+<body>
+<h1 id="topOfPage">Access BaseX Database with XQueries</h1>
+<p>This section will show you how to make applications communicate with a <a href="http://basex.org/" target="_blank">BaseX</a> database through XQueries. 
+This allows a component, to initialize itself by accessing its asset administration shell, in terms of an XML database.
+The component is controlled by a specific function block, which produces XQueries to initialize its inputs with values received or calculated from a BaseX database.  
+</p>
+
+<p>The section is devided into three parts. 
+The first part explains how to build the 4diac-rte to run an application which sends XQueries.
+The second part explains how to setup your BaseX database.
+And the thrid part shows how to create an application within the 4diac-ide which sends XQueries.
+The exmple AutomationML file as well as this implementation has been realized as part of the <a href="https://www.basys40.de/">BaSys4.0 project</a>, which receives funding of the <a href="https://www.bmbf.de/en/index.html">Federal Ministry of Education and Research</a>.
+</p>
+
+<!-- ********************************************************************** -->
+<h2 id="build">Build 4diac-rte to run an Application which sends XQueries</h2>
+<p>At first checkout <a href="https://github.com/BaseXdb/basex">BaseX from GitHub</a> to get the C API from BaseX.
+In the downloaded folder you find the C API under <i>.../basex-api/src/main/c</i>.
+Please consider that with the officially available C API from BaseX the authentification to a BaseX database currently fails under Windows.</p>
+
+<div class="code">git clone https://github.com/BaseXdb/basex.git</div>
+
+<p>Then configure CMake to build the 4diac-rte.
+If you do not know how to build the 4diac-rte read the <a href="../installation/install.html#ownFORTE">build instructions first</a>. 
+Besides the usual configuration activate the Xquery Client.
+</p>
+
+<div class="code">FORTE_COM_XqueryClient=ON</div>
+
+<p>Press the <i>Configure</i> button in CMake to get the settings for the Xquery Client.
+Configure the appearing settings.
+Under Linux the openSSL include directory might be at <i>/usr/include/x86_64-linux-gnu/openssl</i>.
+The openSSL libraries <i>libcrypto.a</i> and <i>libssl.a</i> might be at <i>/usr/lib/x86_64-linux-gnu/</i>.
+</p>
+
+<div class="code">FORTE_BASEX_SRC_DIR=path_to_the_C_API_of_BaseX_which_you_downloaded
+OPENSSL_INCLUDE_DIR=path_to_openssl_include_files
+OPENSSL_LINK_DIR=path_to_openssl_libraries
+</div>
+
+<p>Press the <i>Configure</i> button within the CMake GUI until none of the lines is red.
+Afterwards press the <i>Generate</i> button of the CMake GUI.
+Then build the 4diac-rte.</p>
+
+<!-- ********************************************************************** -->
+<h2 id="basex">Setup your BaseX Database</h2>
+<p>Get BaseX for your system from <a href="http://basex.org/download/">here</a>.
+After starting BaseX, load your AutomationML or XML file into BaseX by clicking <i>Database/open and manage</i>.
+As an example AutomationML file you can use the <a href="img/xquery/BaSys_PalletSystem_Model.aml"><i>Pallet System Model</i></a>.
+This example AutomationML file has been created during the <a href="https://www.basys40.de/">BaSys4.0 project</a>, which receives funding of the <a href="https://www.bmbf.de/en/index.html">Federal Ministry of Education and Research</a>.
+Within the <i>General</i> tab enter the path to your file and select the proper input format.
+In case you use an AutomationML file or XML, choose XML.
+Then press OK.
+Your database will be loaded.
+You can now test any XQuery within the GUI of BaseX.
+For further explanation or in case of any problems please have a look at the <a href="http://docs.basex.org/wiki/Main_Page">manual of BaseX</a>.</p>
+
+<p>Now change to the <i>bin</i> directory of your BaseX installation.
+Start the BaseX server there.
+The output should be the BaseX version and the port where you can reach to your database.</p>	
+
+<div class="code">> ./basexserver
+
+BaseX 9.0.2 [Server]
+Server was started (port: 1984).
+</div>
+
+<!-- ********************************************************************** -->
+<h2 id="application">Create an Application to send XQueries to BaseX</h2>
+<p>To send XQueries to your database, create a proper basic function block, which produces the desired XQueries.
+The following images show a possible interface and execution control chart for a basic function block whicht fetches values from your BaseX database during initialization.</p>
+
+<img src="img/xquery/testFB.png" alt="Test function block to send XQueries"/>
+<img src="img/xquery/testFB_ECC.png" alt="Test function block to send XQueries"/>
+
+<p>The algorithm <i>getVMax</i> contains an XQuery which is supposed to calculate the maximum speed of a roller conveyor from values of the database.
+Since the 4diac-ide currently does not provide support for an XQuery algorithm language, you have to use <i>AnyText</i> as algorithm language.
+The <i>AnyText</i> language is interpreted as C++ code during export of your function block.
+Your XQuery is assigned to the desired STRING output of your basic function block, in this case <i>xVMax</i>.
+In case you also want to replace certain elements in your XQuery, maybe by values from your function block's interface, you have to split the String.
+The interface value is then added as parameter of the <i>append</i> method, supported by the 4diac-rte, e.g. <i>name().getValue()</i>.
+The rest of your XQuery is appended afterwards.
+This could look like the following algorithm code for <i>getVMax</i>.</p>
+
+<div class="code">xVMax() = "xquery "
+"let $name := '";
+xVMax().append(name().getValue());
+xVMax().append("' "
+"let $component := //InstanceHierarchy/*/InternalElement[@Name=$name] "
+"let $compType := tokenize($component/RoleRequirements/@RefBaseRoleClassPath/data(),'/')[last()] "
+"let $rollerTable :=  $component/InternalElement/RoleRequirements[contains(@RefBaseRoleClassPath,'RollConveyor')]/.. "
+"let $rollDiameter := $rollerTable/Attribute[@Name='RollDiameter']/Value/data() "
+"let $link := tokenize($component/InternalLink/@RefPartnerSideA/data(),':')[1] "
+"let $motor := //InternalElement[@ID=$link]/RoleRequirements[contains(@RefBaseRoleClassPath,'ElectricMotor')]/.. "
+"let $gearFactor := $motor/Attribute[@Name='Gearfactor']/Value/data() "
+"let $rotSpeed := $motor/Attribute[@Name='Rotational Speed']/Value/data() "
+"let $linSpeed :=  $rotSpeed div (60.0 * $gearFactor) * (2.0 * 3.1416 * 0.5 * $rollDiameter) "
+"return round-half-to-even($linSpeed, 3)");
+</div>
+
+<p>The XQuery algorithm code for <i>getPredecessor</i> could be as follows:</p>
+
+<div class="code">xPredecessor() = "xquery " 
+"let $name := '";
+xPredecessor().append(name().getValue());
+xPredecessor().append("' "
+"let $links := //InstanceHierarchy/InternalElement/InternalLink "
+"let $cp := //InstanceHierarchy/*/InternalElement[@Name=$name] "
+"let $id := $cp/@ID/data() "
+"let $succId := tokenize($links[contains(@RefPartnerSideB, $id)]/@RefPartnerSideA, ':')[1] "
+"let $successor := //InstanceHierarchy/*/InternalElement[@ID=$succId] "
+"return $successor/@Name/data() ");
+</div>
+
+<p>The XQuery algorithm code for <i>getSuccessor</i> could be as follows:</p>
+
+<div class="code">xSuccessor() = "xquery " 
+"let $name := '";
+xSuccessor().append(name().getValue());
+xSuccessor().append("' "
+"let $links := //InstanceHierarchy/InternalElement/InternalLink "
+"let $cp := //InstanceHierarchy/*/InternalElement[@Name=$name] "
+"let $id := $cp/@ID/data() "
+"let $succId := tokenize($links[contains(@RefPartnerSideA, $id)]/@RefPartnerSideB, ':')[1] "
+"let $successor := //InstanceHierarchy/*/InternalElement[@ID=$succId] "
+"return $successor/@Name/data() ");
+</div>
+
+<p>Please consider that your XQuery is dependent on the data structure of your database.
+In this case it is the structure of an AutomationML file for a <a href="img/xquery/BaSys_PalletSystem_Model.aml"><i>Pallet System</i></a>.
+After you have created your test function block, export it and build your 4diac-rte with it.
+Please have a look at the <a href="../installation/install.html#ownFORTE">build instructions</a> if you do not know how to build your own function block.
+
+<p>Now you can use your test function block wihtin an application.
+To send the XQueries to your BaseX database, add a <span class="code">CLIENT_1</span> for each query you want to send.
+Please consider that currently only a <span class="code">CLIENT_1</span> is supported, where you connect the <span class="code">SD_1</span> input with the xquery producing output of your test function block.
+The result of the XQuery is received by the <span class="code">RD_1</span> output.
+A possible test application is shown in the following image.
+Within this application a roller conveyor is initialized by its maximum speed, and its neighbouring roller conveyors.
+</p>
+
+<img src="img/xquery/testApp.png" alt="Test function block to send XQueries"/>
+
+<p>The <span class="code">ID</span> input of the <span class="code">CLIENT_1</span> function block contains a variable <span class="code">%local%</span> which is replaced by a proper value during deployment.
+The <span class="code">ID</span> is configured with the protocol name, the IP address of the computer, where your BaseX database is running, the port where your BaseX server listens for requests, the name of your database, a user name and a password.
+For the example database running on your local machine, the <span class="code">ID</span> can be as follows:
+</p>
+
+<div class="code">xquery[127.0.0.1:1984; BaSys_PalletSystem_Model; admin; admin]</div>
+
+<p>After you have completed your application, mapp your application to a proper device and start the 4diac-rte you built before.
+Then deploy your application to the 4diac-rte you started.
+If everything worked correctly the 4diac-rte should produce something like that:</p>
+
+<div class="code">INFO: T#00ms: FORTE is up and running
+INFO: T#00ms: Using default bootfile location: forte.fboot
+INFO: T#00ms: Boot file forte.fboot could not be opened. Skipping...
+INFO: T#0100722ms: Connection closed by peer
+INFO: T#0100737ms: Connected to DB.
+INFO: T#0101026ms: DB BaSys_PalletSystem_Model opend.
+</div>
+
+<p>If you monitor your application you should get the results from the XQuery requests at the corresponding inputs of your test function block.</p>	
+
+<!-- ********************************************************************** -->
+<h1>Where to go from here?</h1>
+
+<p>Go back to Protocols index:</p>
+
+<p><a href="./communicationIndex.html">Communication Index</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
+
+</body>
+</html>
