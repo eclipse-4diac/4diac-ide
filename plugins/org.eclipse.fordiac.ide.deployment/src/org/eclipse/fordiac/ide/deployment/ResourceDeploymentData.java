@@ -190,7 +190,7 @@ class ResourceDeploymentData {
 	private static String removeLastEntry(String prefix) {
 		int index = prefix.lastIndexOf('.', prefix.length() - 2);
 		if(-1 != index) {
-			return prefix.substring(0, index);
+			return prefix.substring(0, index + 1);
 		}
 		return ""; //$NON-NLS-1$
 	}
