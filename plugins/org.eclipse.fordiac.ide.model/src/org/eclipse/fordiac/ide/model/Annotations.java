@@ -1,9 +1,11 @@
 package org.eclipse.fordiac.ide.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
@@ -54,19 +56,19 @@ public final class Annotations {
 	public static AdapterFBType getPlugType(AdapterType adapterType) {
 		AdapterFBType temp = EcoreUtil.copy(adapterType.getAdapterFBType());
 		// fetch the interface to invert it 
-		ArrayList<Event> inputEvents =  new ArrayList<Event>(temp.getInterfaceList().getEventOutputs());
+		List<Event> inputEvents =  new ArrayList<>(temp.getInterfaceList().getEventOutputs());
 		for (Event event : inputEvents) {
 			event.setIsInput(true);
 		}
-		ArrayList<Event> outputEvents =  new ArrayList<Event>(temp.getInterfaceList().getEventInputs());
+		List<Event> outputEvents =  new ArrayList<>(temp.getInterfaceList().getEventInputs());
 		for (Event event : outputEvents) {
 			event.setIsInput(false);
 		}
-		ArrayList<VarDeclaration> inputVars =  new ArrayList<VarDeclaration>(temp.getInterfaceList().getOutputVars());
+		List<VarDeclaration> inputVars =  new ArrayList<>(temp.getInterfaceList().getOutputVars());
 		for (VarDeclaration varDecl : inputVars) {
 			varDecl.setIsInput(true);
 		}
-		ArrayList<VarDeclaration> outputVars =  new ArrayList<VarDeclaration>(temp.getInterfaceList().getInputVars());
+		List<VarDeclaration> outputVars =  new ArrayList<>(temp.getInterfaceList().getInputVars());
 		for (VarDeclaration varDecl : outputVars) {
 			varDecl.setIsInput(false);
 		}	
@@ -183,9 +185,17 @@ public final class Annotations {
 	
 	//*** FBNetworkElement ***//
 	public static Resource getResource(FBNetworkElement fbne){
-		if(null != fbne.getFbNetwork() && fbne.getFbNetwork().eContainer() instanceof Resource){
-			return (Resource)fbne.getFbNetwork().eContainer();
-		} else if(fbne.isMapped()){
+		if(null != fbne.getFbNetwork()) { 
+			EObject container = fbne.getFbNetwork().eContainer();
+			if(container instanceof Resource){
+				return (Resource)container;
+			}
+			if(container instanceof SubApp){
+				//if we are in a subapp look recursively for a resource
+				return getResource(((SubApp)container));
+			}
+		}
+		if(fbne.isMapped()){
 			//get the Resource of the mapped FB
 			return fbne.getMapping().getTo().getResource();
 		}
@@ -200,11 +210,9 @@ public final class Annotations {
 	}
 	
 	public static FBNetworkElement getOpposite(FBNetworkElement fbne) {
-		//try to find the other coresponding mapped entity if this FBNetworkElement is mapped
+		//try to find the other corresponding mapped entity if this FBNetworkElement is mapped
 		if(fbne.isMapped()){
 			return (fbne == fbne.getMapping().getFrom()) ? fbne.getMapping().getTo() : fbne.getMapping().getFrom();  
-		}else{
-			//TODO model refactoring - if element part of subapp that is mapped recursivly find the according mapped entity 
 		}
 		return null;
 	}
@@ -215,11 +223,10 @@ public final class Annotations {
 	}
 	
 	public static void checkConnections(FBNetworkElement fbne) {
-		for (IInterfaceElement element : fbne.getInterface().getAllInterfaceElements()) {
-			//todo when lambdas are better allowed in EMF replace with 
+		fbne.getInterface().getAllInterfaceElements().forEach(element-> {
 			element.getInputConnections().forEach(conn -> conn.checkIfConnectionBroken());
 			element.getOutputConnections().forEach(conn -> conn.checkIfConnectionBroken());
-		}
+		});
 	}
 	
 	public static boolean isMapped(FBNetworkElement fbne) {
@@ -230,7 +237,7 @@ public final class Annotations {
 	
 	//*** InterfaceList ***
 	public static EList<IInterfaceElement> getAllInterfaceElements(InterfaceList il) {
-		EList<IInterfaceElement> retVal = new BasicEList<IInterfaceElement>();		
+		EList<IInterfaceElement> retVal = new BasicEList<>();		
 		retVal.addAll(il.getEventInputs());
 		retVal.addAll(il.getEventOutputs());
 		retVal.addAll(il.getInputVars());
@@ -564,8 +571,7 @@ public final class Annotations {
 	
 	public static FBType getType(AdapterFB afb) {
 		FBType retVal = null;
-		if ((null != afb.getPaletteEntry()) && (afb.getPaletteEntry() instanceof AdapterTypePaletteEntry)  &&
-				(null != afb.getAdapterDecl())){
+		if ((afb.getPaletteEntry() instanceof AdapterTypePaletteEntry)  && (null != afb.getAdapterDecl())){
 			if (afb.isPlug()) {
 				retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getType().getPlugType();
 			} else {
