@@ -97,7 +97,7 @@ public class SaveAsSubappWizard extends Wizard {
 				setupVersionInfo(type);				
 				performTypeSetup((SubAppType)type);				
 				CommonElementExporter.saveType(entry);	
-				entry.setLastModificationTimestamp(0);  //triggers a reload on the next model access
+				entry.setType(type);
 				
 				if(newFilePage.getOpenType()){
 					openTypeEditor(entry);
