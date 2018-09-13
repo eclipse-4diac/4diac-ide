@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.FigureUtilities;
@@ -236,17 +235,9 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart{
 	 */
 	@Override
 	public void performDirectEdit() {
-		ArrayList<String> eventNames = new ArrayList<String>();
-		List<Event> events = ECActionHelpers.getOutputEvents(ECActionHelpers
-				.getFBType(getAction()));
+		List<String> eventNames = ECActionHelpers.getOutputEventNames(ECActionHelpers.getFBType(getAction()));
 
-		for (Event ev : events) {
-			eventNames.add(ev.getName());
-		}
-		eventNames.add(" "); //$NON-NLS-1$
-
-		int selected = (getAction().getOutput() != null) ? eventNames
-				.indexOf(getAction().getOutput().getName())
+		int selected = (getAction().getOutput() != null) ? eventNames.indexOf(getAction().getOutput().getName())
 				: eventNames.size() - 1;
 
 		((ComboDirectEditManager) getManager()).updateComboData(eventNames);

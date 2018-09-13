@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.FigureUtilities;
@@ -83,10 +82,9 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
-			if (notification.getEventType() == Notification.SET) {
-				if (null != getAction().getAlgorithm() && getAction().getAlgorithm().getName().equals(notification.getNewValue())) {
-						refreshAlgLabel();
-				}
+			if (notification.getEventType() == Notification.SET && null != getAction().getAlgorithm() && 
+					getAction().getAlgorithm().getName().equals(notification.getNewValue())) {
+				refreshAlgLabel();
 			}
 		}
 	};
@@ -227,13 +225,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	 */
 	@Override
 	public void performDirectEdit() {
-		ArrayList<String> algNames = new ArrayList<String>();
-		List<Algorithm> getAlgorithms = ECActionHelpers.getAlgorithms(ECActionHelpers.getFBType(getAction()));
-
-		for (Algorithm algorithm : getAlgorithms) {
-			algNames.add(algorithm.getName());
-		}
-		algNames.add(" "); //$NON-NLS-1$
+		List<String> algNames = ECActionHelpers.getAlgorithmNames(ECActionHelpers.getFBType(getAction()));		
 
 		int selected = (getAction().getAlgorithm() != null) ? algNames.indexOf(getAction().getAlgorithm().getName())
 				: algNames.size() - 1;
