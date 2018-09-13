@@ -88,7 +88,7 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 			if(requires5SegementConnection(sourceP, destP)) {
 				generateInitial5SegmentParams(conn, sourceP, destP);	
 			} else if ( sourceP.x + conn.getDx1()  > destP.x - MIN_CONNECTION_FB_DISTANCE){
-				conn.setDx1(sourceP.x - destP.x - MIN_CONNECTION_FB_DISTANCE);
+				conn.setDx1(destP.x - sourceP.x - MIN_CONNECTION_FB_DISTANCE);
 			}
 		} else {
 			//we have a five point connection check if we should transform it into a 3 point
