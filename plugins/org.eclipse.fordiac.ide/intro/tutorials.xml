@@ -15,34 +15,35 @@
 
 	<extensionContent id="page_tutorials" name="Tutorials" path="tutorials/@">
 		<group style-id="content-group" id="orgfordiacide-introLink-group">
-		<link label="X+3 Tutorial" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/tutorials/x3_tutorial.html" id="orgfordiacide-webLink"  style-id="content-link">
-          	<text>This 4DIAC tutorial explains an existing example System which calculates x+3 and displays it by FBRT.</text>
+		<link label="Use 4DIAC locally (Blinking application)" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/4diacIDE/use4diacLocally.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>This tutorial explains how to develop a sample application and test it localy.</text>
        	</link>
 		
-		<link label="Flip-Flop Tutorial" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/tutorials/flipFlop_tutorial.html" id="orgfordiacide-webLink"  style-id="content-link">
-          	<text>This 4DIAC tutorial let you create an own System which contains a T-Flip-Flop Application and explains how to yous 4DIAC's Monitoring functionality to observe the results.</text>
+		<link label="Create a distributed application" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/4diacIDE/distribute4diac.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>This tutorial explains how to expand the sample application to a distributed one.</text>
+       	</link>
+		
+		<link label="Deploy remotely" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/4diacIDE/use4diacRemotely.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>This tutorial shows how to deploy applications to several devices and debug it.</text>
        	</link>
 		</group>
 	</extensionContent>    
 
 	<extensionContent id="page_fbs" name="Tutorials" path="tutorials/@">
 		<group style-id="content-group" id="orgfordiacide-introLink-group">
-		<link label="Developing Function Blocks" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/tutorials/fbs.html" id="orgfordiacide-webLink"  style-id="content-link">
+		<link label="Developing Function Blocks" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/4diacIDE/createOwnTypes.html" id="orgfordiacide-webLink"  style-id="content-link">
           	<text>This 4DIAC tutorial explains how to create your own Function Block.</text>
        	</link>
-	<group style-id="content-group" id="orgfordiacide-introLink-group" expandable="true" expanded="false">	
-		<link label="Flip-Flop as BFB" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/tutorials/flipFlop_asBFB.html" id="orgfordiacide-webLink"  style-id="content-link">
-          	<text>This 4DIAC tutorial explains how to create a Basic Function Block that provides the T-Flip-Flop behavior.</text>
+
+		<link label="Learn more" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/4diacIDE/otherUseful.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>Further features 4diac-ide offers.</text>
        	</link>
 		
-		<link label="Flip-Flop as CFB" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/tutorials/flipFlop_asCFB.html" id="orgfordiacide-webLink"  style-id="content-link">
-          	<text>This 4DIAC tutorial explains how to create a Composite Function Block that provides the T-Flip-Flop behavior.</text>
+		<link label="Advanced features" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/4diacIDE/advancedFeatures.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>Introduction to adapters and subapplications for structuring bigger applications.</text>
        	</link>
-		
-		<link label="Flip-Flop as SIFB" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/tutorials/flipFlop_asSIFB.html" id="orgfordiacide-webLink"  style-id="content-link">
-          	<text>This 4DIAC tutorial explains how to create a Service Interface Function Block that provides the T-Flip-Flop behavior.</text>
-       	</link>
-		</group>	</group>
+       	
+		</group>
 	</extensionContent> 
 	
 </introContent>
