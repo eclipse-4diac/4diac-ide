@@ -26,7 +26,7 @@ public class ClearForceHandler extends AbstractMonitoringHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		super.execute(event);
 		StructuredSelection selection = (StructuredSelection)HandlerUtil.getCurrentSelection(event);
-		VarDeclaration var = ForceHandler.getVariable(selection);				
+		VarDeclaration var = ForceHandler.getVariable(selection.getFirstElement());				
 		if(null != var){		
 			MonitoringManager manager = MonitoringManager.getInstance();
 			MonitoringBaseElement element = manager.getMonitoringElement(var);
