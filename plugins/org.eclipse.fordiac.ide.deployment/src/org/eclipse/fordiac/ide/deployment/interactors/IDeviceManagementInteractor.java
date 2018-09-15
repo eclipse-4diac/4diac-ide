@@ -30,6 +30,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * 
  */
 public interface IDeviceManagementInteractor {
+	
+	/** simple interface that allows to easily use an IDeviceMangemetnInteractor in a
+	 *  try with resources setup. 
+	 */
+	public interface IDeviceManagementInteractorCloser extends AutoCloseable {
+		@Override
+		void close() throws DeploymentException;
+	}
 
 	/*************** Communication commands **************************/
 

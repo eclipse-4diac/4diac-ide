@@ -39,6 +39,11 @@ public abstract class AbstractMonitoringManager {
 		public void disableSystem(AutomationSystem system) {
 			//in the dummy manager we don't do anything here			
 		}
+		
+		@Override
+		public boolean isSystemMonitored(AutomationSystem system) {
+			return false;
+		}
 	};
 	
 	public static AbstractMonitoringManager getMonitoringManager() {
@@ -147,4 +152,6 @@ public abstract class AbstractMonitoringManager {
 	public abstract void disableSystem(AutomationSystem system);
 	
 	public abstract void enableSystem(AutomationSystem system);
+	
+	public abstract boolean isSystemMonitored(AutomationSystem system);
 }

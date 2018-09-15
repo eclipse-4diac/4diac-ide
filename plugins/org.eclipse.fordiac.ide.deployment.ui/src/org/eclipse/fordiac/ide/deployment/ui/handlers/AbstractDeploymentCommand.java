@@ -13,6 +13,9 @@
 package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
 
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -20,8 +23,11 @@ import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor.IDeviceManagementInteractorCloser;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.AbstractMonitoringManager;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -38,24 +44,15 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 	protected Device device = null;
 	
 	
-	public static class OnlineDeploymentErrorCheckListener implements IDeploymentListener{
+	private static class OnlineDeploymentErrorCheckListener implements IDeploymentListener{
 
-		private AbstractDeploymentCommand currentObject = null;
+		private final AbstractDeploymentCommand currentObject;
 		private String lastMessage = ""; //$NON-NLS-1$
 		private String lastCommand = ""; //$NON-NLS-1$
 		
-		public void setLastMessage(String lastMessage) {
-			this.lastMessage = lastMessage;
-		}
-
-		public void setCurrentObject(AbstractDeploymentCommand currentObject) {
+		public OnlineDeploymentErrorCheckListener(AbstractDeploymentCommand currentObject) {
 			this.currentObject = currentObject;
 		}
-		
-		public void setLastCommand(String lastCommand) {
-			this.lastCommand = lastCommand;
-		}
-
 		
 		@Override
 		public void connectionOpened() {
@@ -78,16 +75,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 		public void connectionClosed() {
 			// nothing to do here			
 		}
-		
-		private static OnlineDeploymentErrorCheckListener instance = null;
-		
-		public static OnlineDeploymentErrorCheckListener getInstance() {
-			if (instance == null) {
-				instance = new OnlineDeploymentErrorCheckListener();
-			}
-			return instance;
-		}
-		
+				
 		public void showDeploymentError(String response, String source, AbstractDeploymentCommand currentElement, boolean showWithConsole){
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			IViewPart view = page.findView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
@@ -116,48 +104,48 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 	}
 	
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		Object[] list = getObjectArrayFromSelection(selection);
-		if (null != list) {
-			for (Object currentElement : list) {
-				if (prepareParametersToExecute(currentElement)) {
-					IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device);
-					if (null != interactor) {
-						DeploymentCoordinator.getInstance().enableOutput(interactor);
-						OnlineDeploymentErrorCheckListener.getInstance().setCurrentObject(this);
-						OnlineDeploymentErrorCheckListener.getInstance().setLastMessage(""); //$NON-NLS-1$
-						OnlineDeploymentErrorCheckListener.getInstance().setLastCommand(""); //$NON-NLS-1$
-						interactor.addDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
-						try {
-							interactor.connect();
-							executeCommand(interactor);
-						} catch (Exception e) {
-							OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID(device), this, true);
-						}finally {
-							try {
-								interactor.disconnect();
-							} catch (DeploymentException e) {
-								OnlineDeploymentErrorCheckListener.getInstance().showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID(device), this, true);
-							}							
-						}
-						interactor.removeDeploymentListener(OnlineDeploymentErrorCheckListener.getInstance());
-						DeploymentCoordinator.getInstance().disableOutput(interactor);
-					}else{
-						manageExecutorError();
+	public Object execute(ExecutionEvent event) throws ExecutionException {		
+		List<Object> list = getObjectSelectionArray(event);
+		for (Object currentElement : list) {
+			if (prepareParametersToExecute(currentElement)) {
+				IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device);
+				if (null != interactor) {
+					DeploymentCoordinator.getInstance().enableOutput(interactor);
+					OnlineDeploymentErrorCheckListener errorChecker = new OnlineDeploymentErrorCheckListener(this);
+					interactor.addDeploymentListener(errorChecker);
+					
+					checkMonitoringOfSystem(device.getAutomationSystem());
+					
+					try (IDeviceManagementInteractorCloser closer = interactor::disconnect) {
+						interactor.connect();
+						executeCommand(interactor);
+					} catch (DeploymentException e) {
+						errorChecker.showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID(device), this, true);
 					}
+					interactor.removeDeploymentListener(errorChecker);
+					DeploymentCoordinator.getInstance().disableOutput(interactor);
+				}else{
+					manageExecutorError();
 				}
 			}
 		}
 		return null;
 	}
 	
-	protected Object[] getObjectArrayFromSelection(ISelection selection){
-		Object[] list = null;
+	private static void checkMonitoringOfSystem(AutomationSystem system) {
+		AbstractMonitoringManager monMan = AbstractMonitoringManager.getMonitoringManager();
+		if(monMan.isSystemMonitored(system)) {
+			monMan.disableSystem(system);
+		}		
+	}
+
+	@SuppressWarnings("unchecked")
+	private static List<Object> getObjectSelectionArray(ExecutionEvent event){
+		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if(selection instanceof StructuredSelection) {
-			list = ((StructuredSelection) selection).toArray();
+			return ((StructuredSelection) selection).toList();
 		}
-		return list;
+		return Collections.emptyList();
 	}
 	
 	protected abstract boolean prepareParametersToExecute(Object element);
