@@ -229,7 +229,14 @@
       </topic>
       <topic label="External Event SIFB" href="html/development/externalEvent_example.html"/>
       <topic label="Contributing to FORTE" href="html/development/contributeToForte.html"/>
-        <topic href="html/development/forte_codequality.html" label="Assuring FORTE Code Quality"/>
+        <topic href="html/development/forte_codequality.html" label="Assuring FORTE Code Quality">
+           <topic href="html/development/forte_codequality.html#staticAnalysis" label="Static Code Analysis">
+           </topic>
+           <topic href="html/development/forte_codequality.html#dynamicAnalysis" label="Dynamic Analysis">
+           </topic>
+           <topic href="html/development/forte_codequality.html#unitTests" label="Unit Tests">
+           </topic>
+        </topic>
     </topic>
   </topic>
  <topic href="html/legal.html" label="Legal">
