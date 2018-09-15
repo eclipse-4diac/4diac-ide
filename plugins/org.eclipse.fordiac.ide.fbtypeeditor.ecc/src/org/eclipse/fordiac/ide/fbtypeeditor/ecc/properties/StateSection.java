@@ -322,7 +322,7 @@ public class StateSection extends AbstractECSection {
 		Button actionDown = getWidgetFactory().createButton(actionButtonComp, "Down", SWT.ARROW |SWT.DOWN);
 		actionDown.setToolTipText("Move action down");
 		actionDown.addListener(SWT.Selection, e -> {
-			Object selection = ((TreeSelection)actionViewer.getSelection()).getFirstElement();
+			Object selection = ((StructuredSelection)actionViewer.getSelection()).getFirstElement();
 			if(selection instanceof ECAction){
 				executeCommand(new ChangeActionOrderCommand(getType(), (ECAction) selection, false));
 				actionViewer.refresh();
@@ -335,7 +335,7 @@ public class StateSection extends AbstractECSection {
 		Button actionUp = getWidgetFactory().createButton(actionButtonComp, "", SWT.ARROW |SWT.UP); //$NON-NLS-1$
 		actionUp.setToolTipText("Move action up");	
 		actionUp.addListener(SWT.Selection, e -> {
-			Object selection = ((TreeSelection)actionViewer.getSelection()).getFirstElement();
+			Object selection = ((StructuredSelection)actionViewer.getSelection()).getFirstElement();
 			if(selection instanceof ECAction){
 				executeCommand(new ChangeActionOrderCommand(getType(), (ECAction) selection, true));
 				actionViewer.refresh();
