@@ -13,53 +13,32 @@
 -->
 <introContent>
 	<extensionContent id="whatsnew-top-left" name="Whats New Current Version" path="whatsnew/@">
-  	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.8">    		
-	       		<group style-id="content-group" id="orgfordiacide-introLink-group" label="4DIAC-IDE">
-	       		 <text> The main changes and improvements in 4DIAC-IDE are:
-	       		 	&lt;UL&gt;
-	       		 		&lt;LI&gt; New more modern icon set
-	       		 		&lt;LI&gt; Added a tree-based FB palette to all FB network editors to avoid dragging from wrong projects 
-	       		 		&lt;LI&gt; Replaced system explorer with a more extensible flexible implementation
-	       		 		&lt;LI&gt; Adapter connections now have an own separate color
-	       		 		&lt;LI&gt; Better routing of network links in the system configuration editor when segments are below of a device.
-	       		 		&lt;LI&gt; Merged ECC, internal variable, and algorithm editor and improved properties for the new ECC editor.
-	       		 		&lt;LI&gt; Better show the transition order in ECCs.
-	       		 		&lt;LI&gt; Improved ST parser for better code completion and syntax highlighting.
-	       		 		&lt;LI&gt; New experimental automatic communication generation plugin.
-	       		 		&lt;LI&gt; Monitoring of adapter interfaces
-	       		 		&lt;LI&gt; Reworked monitoring to be more performant on the tool side.	       		 
-	       			&lt;/UL&gt;
-	       			Furthermore many smaller usability improvements and bug fixes. All in all 75 closed issues!
-	       		 </text>
-	       		 
-				</group>
-	       		<group style-id="content-group" id="orgfordiacide-introLink-group" label="FORTE">
-	       			<text>The main changes and improvements in FORTE are:
-	       		 	&lt;UL&gt;
-	       		 		&lt;LI&gt; Support for new devices: Lego Mindstorms EV3, Raspberry SPS
-	       		 		&lt;LI&gt; Raw communication layer for plain strings
-	       		 		&lt;LI&gt; Simplified the thread abstraction class making it easier to port FORTE to new operating systems.
-	       		 		&lt;LI&gt; Reduced memory requirements of device management by about 2/3rds.
-	       		    &lt;/UL&gt;
-	       		    Furthermore many smaller bug fixes. All in all 15 closed issues!
-	       		    </text>
-	       		</group>
-	       		<group style-id="content-group" id="orgfordiacide-introLink-group" label="4DIAC-LIB">
-	       			<text>The main changes and improvements in 4DIAC-LIB are:
-	       		 		&lt;UL&gt;
-	       		 			&lt;LI&gt; Added device definitions for specific FORTE devices like, BeagleBone Black or RaspberryPI
-	       		 		&lt;/UL&gt;
-	       		 	</text>
-	       		 		
-	       		</group>
-	       		<group style-id="content-group" id="orgfordiacide-introLink-group" label="4DIAC-Systems">
-	       			<text>The main changes and improvements in 4DIAC-Systems are:
-	       		 	&lt;UL&gt;
-	       		 		&lt;LI&gt; Cleaned-up Boiler example
-	       		 		&lt;LI&gt; Updated all examples to use new device definitions.
-	       		    &lt;/UL&gt;</text>
-	       		</group>      		
+  	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.9.0">   
+  	 		<text>  Two years ago we started on a mission of not only finally bringing all 4diac code to Eclipse but 
+  	 		        also prepare the 4diac code for the next 10 years. 
+  	 		        After 240 resolved issues and more 1000 commits we can say that this mission was accomplished!&lt;BR&gt;&lt;BR&gt;
+  	 		        
+  	 		        We worked on so many places. The most prominent improvements for users are:
+					&lt;UL&gt;
+	       		 		&lt;LI&gt; Renewed documentation with clearer information making the learning curve very smooth
+	       		 		&lt;LI&gt; Create and deploy sub-applications
+	       		 		&lt;LI&gt; Add and configure modular devices easily with our new IO infrastructure
+	       		 		&lt;LI&gt; Be part of the IoT and Industry 4.0 with new and improved MQTT and OPC UA features
+	       		 		&lt;LI&gt; Cleaner UI and lots of smaller usability improvements (get more with less clicks)
+					&lt;/UL&gt;
+					And for developers:
+					&lt;UL&gt;
+	       		 		&lt;LI&gt; More features, less code and less bugs
+	       		 		&lt;LI&gt; No CppChecks warning or errors
+	       		 		&lt;LI&gt; Code quality tested with Sonarqube and Coverity Scan
+	       		 		&lt;LI&gt; No more broken nightly versions of 4diac-ide and 4diac-rte with automatic CI triggered on gerrit and git pushes
+					&lt;/UL&gt;  	 	
+		  	</text>  	 	 		
        	</group>
+       	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.9.1">   
+  	 		<text>The first maintenance release for 4DIAC 1.9 providing a set 14 bugfixes for 4diac-ide, and 2 for 4diac forte.
+  	 		</text>  	 	 		
+       	</group>  
    	</extensionContent>
    	
    	<extensionContent id="fordiac-news" style="css/style.css" name="Whats New Extension" path="whatsnew/@">
@@ -74,7 +53,26 @@
   	<extensionContent id="fordiac-older-releases" style="css/style.css" name="Prior Versions" path="whatsnew/@">   			 
 		<group style-id="content-group" id="orgfordiacide-introLink-group"
 		           label="Previous Releases">
-            
+			<link label="1.8.4" url="https://www.eclipse.org/4diac/en_news.php#en_news_20170202" id="orgfordiacide-webLink" style-id="content-link">
+          		<text> We are proud to announce the fourth maintenance release for 4DIAC 1.8 providing a set of bug fixes to 4diac-ide, and forte. As always please download, test, and report problems and bugs. The main changes are in 4diac-ide: added first version of adapter tutorial; property sheet to create connection from 2 selected interface elements; set border color of adapters (fb-networks) to adapter connection color; fix pasting of elements when something is selected; fix mapping menu generation such that at least one function block or subapplication has to be selected; fix for better handling wrong mgr_ID; improved string replacement in virtualDNS; error message dialog to inform the user if killing the device worked and for online start of function blocks; made event connection creation more robust against broken connection parts; improved output if the management command could not be formated; not opening function block types when more then one element is selected; redesign the layout of the FBTest editor; profile saving for system files has been added in order to allow an easy migration from 1.8.x projects to the upcoming 4diac versions; reenabled untyped subapp mapping for testing purposes; order of the menu entries and their names have been changed to better follow the classical workflow; fixed 16 issues reported by AERI and for forte: fix for forcing of values; reworked and fixed issues on the sysfs IOs for Linux based sysems (e.g., RaspberryPI, BeagleBoneBlack); fixed issue in for support external source directories. 
+				</text>
+			</link>	            
+			<link label="1.8.3" url="https://www.eclipse.org/4diac/en_news.php#en_news_20161222" id="orgfordiacide-webLink" style-id="content-link">
+          		<text> the third maintenance release for 4DIAC 1.8 providing a set of bug fixes to 4diac-ide, and FORTE. As always please download, test, and report problems and bugs. Attention: Because of build issues we had to change the name of thread.h to forte_thread.h and from sycn.h to forte_sync.h. If you have your own FORTE extensions using these you need to adjust the include statements accordingly. The main changes are: 4DIAC-IDE: The values and the yellow box of monitored elements are now transperent allowing to see connections below them; Improved ST code generation Removed interface groups in FB outlines and reworked icons for the interface elements; Improved FAQs and MQTT documentation; 12 stability fixes identified through the automatic error reporting infrastructure FORTE: Fixed issue in MQTT initialization and for using MQTT on Windows; Fixed names of the thread and sync include files to solve compiliation issues with some libraries (e.g., Eclipse Paho); Added new CMake option for allowing modules to be outside of the FORTE build tree  
+				</text>
+			</link>	            
+			<link label="1.8.2" url="https://www.eclipse.org/4diac/en_news.php#en_news_20161117" id="orgfordiacide-webLink" style-id="content-link">
+          		<text> The second maintenance release for 4DIAC 1.8 provides a set of bug fixes to 4diac-ide, and FORTE. As always please download, test, and report problems and bugs. The main changes are: 4DIAC-IDE: Improved transition condition editing property sheet with code completion and syntax higlighting of condition expressions; Fixed transition conditions without events to conform to IEC 61499-1 Ed. 2; Fixed handling the array size of internal variables leading to wrong C++ code; Correctly check for names of Algorithms, States, and internal variables; Allow Algorithm editing also in the algorithm overview property sheet; Null pointer exception when reordering actions; and Clean-up of algorithm editing and state editing property sheets FORTE: Fixed serial communication layer on win32 platform; Fixed TOUPPER and TOLOWER string fucntion; Fixed compiler warnings and cppcheck reports; and Fixed memory leak in Posix thread 
+				</text>
+			</link>	            
+			<link label="1.8.1" url="https://www.eclipse.org/4diac/en_news.php#en_news_201610012" id="orgfordiacide-webLink" style-id="content-link">
+          		<text> The first maintenance release for 4DIAC 1.8 provides a set of bug fixes to 4diac-ide, and FORTE. As always please download, test, and report problems and bugs. The main changes are: 4DIAC-IDE: Updated and restructuring the documentation; Better handling of transition condition parsing when arrays are used in transition condition; Cleaned-up and improved usability of action and algorithm editing; Avoiding wrong use of unmap all; Many smaller stabilization points. FORTE: Fixed Modbus with no polling: client FB keeps on opening TCP connection; Fixes in Odriod analogue IO support; Fixes in EXPT function to make it more flexible to use in ST algorithms. 
+				</text>
+			</link>	            		           
+			<link label="1.8.0" url="https://www.eclipse.org/4diac/en_news.php#en_news_20160810" id="orgfordiacide-webLink" style-id="content-link">
+          		<text>The main improvements for 1.8.0 are: updated 4diac-ide icons, rework of the ST algorithm parser, changed to Java 1.8 and Eclipse Neon, added first version to generate communication function blocks automatically, added first version to support monitoring of adapters, improve monitoring, reworked ECC editor, updates for 4diac help files (MQTT, Raspberry-SPS, Lego EV3, Raspberry Pi, openPowerlink), updated boiler example project, reduced memory requirements of device management by about 2/3rds, added raw layer, integrated automated error reporting (aeri), and expanded hardware platform support for: Raspberry-SPS, CONMELON C1 PLC, Lego Mindstorms EV3, analog IOs for Wago PFC 200, Odroid analog inputs. Furthermore many improvements and bug-fixes have been performed. Together with the issues fixed during the maintenance of the last major release 172 issues could be solved. 
+				</text>
+			</link>	            
             <link label="1.7.3" url="https://sourceforge.net/p/fordiac/news/2015/11/third-maintenance-release-for-4diac-17/" id="orgfordiacide-webLink" style-id="content-link">
           		<text>In the 3rd 1.7 maintenance release 4 issues have been resolved in 4DIAC-IDE and 1 in FORTE.</text>
        		</link>

@@ -13,14 +13,20 @@
 --><introContent>
   	<extensionContent id="fordiac-overview-left" name="4DIAC-Framework" path="overview/@">
        	<group style-id="content-group" id="overview-topleft-group1">
-       		<link label="4DIAC Overview" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/overview/overview.html" id="orgfordiacide-webLink"  style-id="content-link">
-          	<text>Gives a short overview on 4DIAC.</text>
+       	<link label="Eclipse 4diac Framework" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/before4DIAC/4diacFramework.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>Overview on the component the 4diac framework provides and their interrelation.</text>
        	</link>
-		<link label="FAQ 4DIAC-IDE" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/faq/ide.html" id="orgfordiacide-webLink"  style-id="content-link">
-          	<text>Frequently Asked Questions on 4DIAC-IDE.</text>
+       	<link label="IEC 61499 101" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/before4DIAC/iec61499.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>Quick introduction to the IEC 61499 domain specific modelling language for distributed control systems implemented by Eclipse 4diac.</text>
        	</link>
-		<link label="FAQ 4DIAC-RTE" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/faq/forte.html" id="orgfordiacide-webLink"  style-id="content-link">
-          	<text>Frequently Asked Questions on 4DIAC-RTE.</text>
+       	<link label="Eclipse 4diac-ide Overview" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/4diacIDE/overview.html" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>Gives a short overview on the 4diac-ide.</text>
+       	</link>
+		<link label="FAQ 4diac-ide" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/faq/faq.html#topOfPage" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>Frequently Asked Questions on 4diac-ide.</text>
+       	</link>
+		<link label="FAQ 4diac FORTE" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/faq/faq.html#faqFORTE" id="orgfordiacide-webLink"  style-id="content-link">
+          	<text>Frequently Asked Questions on 4diac FORTE.</text>
        	</link>
        	</group>
   	</extensionContent>
