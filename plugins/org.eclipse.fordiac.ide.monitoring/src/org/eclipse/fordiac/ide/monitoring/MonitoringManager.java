@@ -157,6 +157,11 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	public void disableSystem(AutomationSystem system) {
 		getSystemMonitoringData(system).disableSystem();
 	}
+	
+	@Override
+	public boolean isSystemMonitored(AutomationSystem system) {
+		return getSystemMonitoringData(system).isMonitoringForSystemEnabled();
+	}
 
 	/**
 	 * Contains system.
@@ -168,7 +173,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 */
 	public boolean monitoringForSystemEnabled(AutomationSystem system) {
 		SystemMonitoringData data = getSystemMonitoringData(system);
-		return data.monitoringForSystemEnabled();
+		return data.isMonitoringForSystemEnabled();
 	}
 
 	/**

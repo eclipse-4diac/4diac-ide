@@ -138,7 +138,7 @@ public class SystemMonitoringData {
 	}
 
 
-	public boolean monitoringForSystemEnabled() {
+	public boolean isMonitoringForSystemEnabled() {
 		return monitoringEnabled;
 	}
 
