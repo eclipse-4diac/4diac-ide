@@ -14,12 +14,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
@@ -145,6 +147,12 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	public void enableSystem(AutomationSystem system) {
 		getSystemMonitoringData(system).enableSystem();
 	}
+	
+	@Override
+	public void enableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
+			throws InvocationTargetException, InterruptedException {
+		getSystemMonitoringData(system).enableSystemSynch(monitor);		
+	}
 
 
 	/**
@@ -156,6 +164,11 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	@Override
 	public void disableSystem(AutomationSystem system) {
 		getSystemMonitoringData(system).disableSystem();
+	}
+	
+	@Override
+	public void disableSystemSynch(AutomationSystem system, IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		getSystemMonitoringData(system).disableSystemSynch(monitor);	
 	}
 	
 	@Override
