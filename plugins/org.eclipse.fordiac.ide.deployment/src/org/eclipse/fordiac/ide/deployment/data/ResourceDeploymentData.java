@@ -8,7 +8,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment;
+package org.eclipse.fordiac.ide.deployment.data;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *  This is the FBs collected from the resource and the mapped subapps as well as the connections and the
  *  subapp interface crossing connections
  */
-class ResourceDeploymentData {
+public class ResourceDeploymentData {
 	
 	public class ParameterData{
 		public String value;

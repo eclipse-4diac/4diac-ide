@@ -10,7 +10,7 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment;
+package org.eclipse.fordiac.ide.deployment.data;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 
