@@ -34,6 +34,10 @@ public class Messages extends NLS {
 	
 	public static String DeploymentCoordinator_MESSAGE_ProfileNotSet;
 
+	public static String DownloadRunnable_DownloadErrorDetails;
+
+	public static String DownloadRunnable_MajorDownloadError;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

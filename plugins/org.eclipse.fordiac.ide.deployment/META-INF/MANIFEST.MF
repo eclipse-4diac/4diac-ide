@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.deployment,
+ org.eclipse.fordiac.ide.deployment.data,
  org.eclipse.fordiac.ide.deployment.devResponse,
  org.eclipse.fordiac.ide.deployment.devResponse.impl,
  org.eclipse.fordiac.ide.deployment.devResponse.util,

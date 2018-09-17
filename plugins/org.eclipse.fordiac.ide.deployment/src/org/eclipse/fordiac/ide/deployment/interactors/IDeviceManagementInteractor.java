@@ -14,8 +14,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
-import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
-import org.eclipse.fordiac.ide.deployment.FBDeploymentData;
+import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
+import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
