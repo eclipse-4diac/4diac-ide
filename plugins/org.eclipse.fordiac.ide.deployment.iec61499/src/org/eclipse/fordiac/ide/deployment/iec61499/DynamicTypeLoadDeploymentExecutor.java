@@ -60,6 +60,14 @@ import org.eclipse.swt.widgets.Display;
 import org.xml.sax.InputSource;
 
 public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
+	
+	private static final String CREATE_FB_TYPE = "<Request ID=\"{0}\" Action=\"CREATE\"><FBType Name=\"{1}\">{2}</FBType></Request>"; //$NON-NLS-1$
+	private static final String CREATE_ADAPTER_TYPE = "<Request ID=\"{0}\" Action=\"CREATE\"><AdapterType Name=\"{1}\">{2}</AdapterType></Request>"; //$NON-NLS-1$
+	private static final String QUERY_FB_TYPES = "<Request ID=\"{0}\" Action=\"QUERY\"><FBType Name=\"*\" /></Request>"; //$NON-NLS-1$
+	private static final String QUERY_ADAPTER_TYPES = "<Request ID=\"{0}\" Action=\"QUERY\"><AdapterType Name=\"*\" /></Request>"; //$NON-NLS-1$
+	private static final String QUERY_FB_INSTANCES = "<Request ID=\"{0}\" Action=\"QUERY\"><FB Name=\"*\" Type=\"*\"/></Request>"; //$NON-NLS-1$
+	private static final String QUERY_CONNECTIONS = "<Request ID=\"{0}\" Action=\"QUERY\"><Connection Source=\"{1}\" Destination=\"{2}\"/></Request>"; //$NON-NLS-1$
+
 
 	private static final Logger logger = Logger.getLogger(DynamicTypeLoadDeploymentExecutor.class);
 	private ResponseMapping respMapping = new ResponseMapping();
@@ -130,7 +138,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private String createLuaRequestMessage(final FBType fbType) {
 		ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 		String luaSkript = luaFilter.createLUA(fbType);
-		return MessageFormat.format(Messages.DTL_CreateFBType, id++, fbType.getName(), luaSkript);
+		return MessageFormat.format(CREATE_FB_TYPE, id++, fbType.getName(), luaSkript);
 	}
 
 	private static boolean isAttribute(Device device, String fbTypeName, String attributeType) {
@@ -158,7 +166,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				!isAttribute(res.getDevice(), adapterKey, "AdapterType")) ) {			
 			ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 			String luaSkript = luaFilter.createLUA(adapters.get(adapterKey));
-			String request = MessageFormat.format(Messages.DTL_CreateAdapterType, id++, adapterKey, luaSkript);
+			String request = MessageFormat.format(CREATE_ADAPTER_TYPE, id++, adapterKey, luaSkript);
 			sendCreateAdapterTypeREQ(adapterKey, request);
 		}
 	}
@@ -177,7 +185,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 	
 	public void queryResources(Device dev) {
-		String request = MessageFormat.format(Messages.DTL_QueryFBInstances, id++);
+		String request = MessageFormat.format(QUERY_FB_INSTANCES, id++);
 		try {
 			String result = getDevMgmComHandler().sendREQ("", request);		
 			if (result != null) {
@@ -204,7 +212,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 	
 	private void queryConnections(Resource res) {
-		String request = MessageFormat.format(Messages.DTL_QueryConnections, id++, "*", "*");
+		String request = MessageFormat.format(QUERY_CONNECTIONS, id++, "*", "*");
 		try {
 			String result = getDevMgmComHandler().sendREQ(res.getName(), request);		
 			if (result != null) {
@@ -254,7 +262,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private void queryFBNetwork(Resource res) {
-		String request = MessageFormat.format(Messages.DTL_QueryFBInstances, id++);
+		String request = MessageFormat.format(QUERY_FB_INSTANCES, id++);
 		try {
 			String result = getDevMgmComHandler().sendREQ(res.getName(), request);		
 			if (result != null) {
@@ -296,7 +304,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	
 	private void queryFBTypes(FB fb, Resource res) {
 		if (null == getTypes()) {
-			String request = MessageFormat.format(Messages.DTL_QueryFBTypes, id++);
+			String request = MessageFormat.format(QUERY_FB_TYPES, id++);
 			try {
 				QueryResponseHandler queryResp = sendQUERY(res.getName(), request);
 				setTypes(queryResp.getQueryResult());
@@ -314,7 +322,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	private void queryAdapterTypes(Map<String, AdapterType> adapters, Resource res) {
 		if (null == getAdapterTypes()) {
-			String request = MessageFormat.format(Messages.DTL_QueryAdapterTypes, id++);
+			String request = MessageFormat.format(QUERY_ADAPTER_TYPES, id++);
 			try {
 				QueryResponseHandler queryResp = sendQUERY(res.getName(), request);
 				setAdapterTypes(queryResp.getQueryResult());

@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Data;
 import org.eclipse.fordiac.ide.deployment.devResponse.FB;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
-import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
+import org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.ValuedVarDecl;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Activator;
@@ -231,7 +231,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 
 	private void addWatch(TestElement element, DataOutputStream outputStream, DataInputStream inputStream) {
 		if (outputStream != null && inputStream != null) {
-			String request = MessageFormat.format(Messages.DeploymentExecutor_Add_Watch,
+			String request = MessageFormat.format(DeploymentExecutor.ADD_WATCH,
 					new Object[] { 0, element.getFBString() + "." + element.getPortString(), "*" }); //$NON-NLS-1$ //$NON-NLS-2$
 			sendRequest(SendType.addWatch, element.getResourceString(), request, outputStream, inputStream);
 		}
@@ -263,7 +263,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				} catch (InterruptedException e) {
 					setRunning(false);
 				}
-				String request = MessageFormat.format(Messages.DeploymentExecutor_Read_Watches, new Object[] { i });
+				String request = MessageFormat.format(DeploymentExecutor.READ_WATCHES, new Object[] { i });
 
 				if (running) {
 					sendRequest(SendType.REQ, "", request, outputStream, inputStream); //$NON-NLS-1$
@@ -370,7 +370,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 				inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 				
-				String request = MessageFormat.format(Messages.DeploymentExecutor_Force_Value,
+				String request = MessageFormat.format(DeploymentExecutor.FORCE_VALUE,
 						new Object[] { 0, element.getValue(), element.getFBString() + "." + element.getPortString(), "true"}); //$NON-NLS-1$ //$NON-NLS-2$
 				sendRequest(SendType.forceValue, element.getResourceString(), request, outputStream, inputStream);
 			}  catch (IOException e) {
@@ -388,7 +388,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 				outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 				inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 				if (element != null) {
-					String request = MessageFormat.format(Messages.DeploymentExecutor_WriteParameter,
+					String request = MessageFormat.format(DeploymentExecutor.WRITE_PARAMETER,
 							new Object[] { 0, "$e", element.getFBString() + "." + element.getPortString()}); //$NON-NLS-1$ //$NON-NLS-2$
 					sendRequest(SendType.triggerEvent, element.getResourceString(), request, outputStream, inputStream);
 				}

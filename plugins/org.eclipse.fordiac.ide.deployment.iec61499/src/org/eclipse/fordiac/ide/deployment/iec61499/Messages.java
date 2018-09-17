@@ -23,25 +23,10 @@ public class Messages extends NLS {
 	public static String DeploymentExecutor_CreateFBInstanceFailedNoTypeFound;
 	public static String DeploymentExecutor_CreateResourceFailed;
 	public static String DeploymentExecutor_DeviceConnectionClosed;
-	public static String DeploymentExecutor_CreateResourceInstance;
-	public static String DeploymentExecutor_CreateFBInstance;
-	public static String DeploymentExecutor_CreateConnection;
 	public static String DeploymentExecutor_StartingResourceFailed;
 	public static String DeploymentExecutor_StartingFBFailed;
 	public static String DeploymentExecutor_StartingDeviceFailed;
 	public static String DeploymentExecutor_WriteFBParameterFailed;
-	public static String DeploymentExecutor_WriteParameter;
-	public static String DeploymentExecutor_Start;
-	public static String DeploymentExecutor_StartFB;
-	public static String DeploymentExecutor_KillFB;
-	public static String DeploymentExecutor_KillDevice;
-	public static String DeploymentExecutor_StopFB;
-	public static String DeploymentExecutor_DeleteFB;
-	public static String DeploymentExecutor_DeleteConnection;
-	public static String DeploymentExecutor_Read_Watches;
-	public static String DeploymentExecutor_Add_Watch;
-	public static String DeploymentExecutor_Delete_Watch;
-	public static String DeploymentExecutor_Force_Value;
 
 	public static String DeploymentExecutor_WriteResourceParameterFailed;
 	public static String DeploymentExecutor_WriteDeviceParameterFailed;
@@ -57,15 +42,8 @@ public class Messages extends NLS {
 	public static String DeploymentExecutor_TriggerEventFailed;
 
 	
-	public static String DTL_CreateFBType;
-	public static String DTL_CreateAdapterType;
-	public static String DTL_QueryFBTypes;
-	public static String DTL_QueryAdapterTypes;
 	public static String DTL_QueryFailed;
 	public static String DTL_CreateTypeFailed;
-	public static String DTL_QueryFBInstances;
-	public static String DTL_QueryConnections;
-	public static String FBDK2_WriteParameter;
 	
 	public static String EthernetComHandler_InvalidMgmtID;
 	

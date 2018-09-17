@@ -14,12 +14,14 @@ package org.eclipse.fordiac.ide.deployment.iec61499.providers;
 
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor;
-import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
 public class FDBK2DevMgmInteractorProvider extends DefaultDevMgmInteractorProvider {
 	private static final String PROFILE_NAME = "FBDK2"; //$NON-NLS-1$	
+	
+	private static final String WRITE_PARAMETER_FBDK2 = "<Request ID=\"{0}\" Action=\"WRITE\"><Parameter Value=\"{1}\" Reference=\"{2}\" /></Request>"; //$NON-NLS-1$
+
 	
 	@Override
 	public String getProfileName(){
@@ -32,7 +34,7 @@ public class FDBK2DevMgmInteractorProvider extends DefaultDevMgmInteractorProvid
 			
 			@Override
 			protected String getWriteParameterMessage() {
-				return Messages.FBDK2_WriteParameter;
+				return WRITE_PARAMETER_FBDK2;
 			}			
 		};
 	}

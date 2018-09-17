@@ -262,15 +262,11 @@ public class ART_DeploymentMgr {
 
 
 	private String createFBRequest(String fbName, String fbTypeName) {
-		return MessageFormat.format(
-				Messages.DeploymentExecutor_CreateFBInstance, this.reqID++,
-						fbName, fbTypeName);
+		return MessageFormat.format(DeploymentExecutor.CREATE_FB_INSTANCE, this.reqID++, fbName, fbTypeName);
 	}
 
 	private String createConnectionRequest(String srcFBName, String srcIfElemName, String dstFBName, String dstIfElemName) {
-		return MessageFormat.format(
-				Messages.DeploymentExecutor_CreateConnection, 
-						this.reqID++, srcFBName + "." //$NON-NLS-1$
+		return MessageFormat.format(DeploymentExecutor.CREATE_CONNECTION, this.reqID++, srcFBName + "." //$NON-NLS-1$
 						+ srcIfElemName,
 						dstFBName + "." //$NON-NLS-1$
 						+ dstIfElemName );
@@ -278,10 +274,7 @@ public class ART_DeploymentMgr {
 
 	
 	private String writeFBParameterRequest(final String Dst, final String value) {
-		return MessageFormat.format(
-				Messages.DeploymentExecutor_WriteParameter, this.reqID++,
-						value, Dst );
-
+		return MessageFormat.format(DeploymentExecutor.WRITE_PARAMETER, this.reqID++, value, Dst);
 	}
 
 	private void sendREQ(final String destination, final String request) throws IOException {

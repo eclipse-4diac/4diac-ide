@@ -45,6 +45,25 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
+	
+	public static final String CREATE_RESOURCE_INSTANCE = "<Request ID=\"{0}\" Action=\"CREATE\"><FB Name=\"{1}\" Type=\"{2}\" /></Request>"; //$NON-NLS-1$
+	public static final String CREATE_FB_INSTANCE = "<Request ID=\"{0}\" Action=\"CREATE\"><FB Name=\"{1}\" Type=\"{2}\" /></Request>"; //$NON-NLS-1$
+	public static final String CREATE_CONNECTION = "<Request ID=\"{0}\" Action=\"CREATE\"><Connection Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
+	public static final String WRITE_PARAMETER = "<Request ID=\"{0}\" Action=\"WRITE\"><Connection Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
+	public static final String START = "<Request ID=\"{0}\" Action=\"START\"/>"; //$NON-NLS-1$
+	public static final String START_FB = "<Request ID=\"{0}\" Action=\"START\"><FB Name=\"{1}\" Type=\"{2}\"/></Request>"; //$NON-NLS-1$
+	public static final String KILL_FB = "<Request ID=\"{0}\" Action=\"KILL\"><FB Name=\"{1}\" Type=\"\"/></Request>"; //$NON-NLS-1$
+	public static final String KILL_DEVICE = "<Request ID=\"{0}\" Action=\"KILL\"></Request>"; //$NON-NLS-1$
+	public static final String STOP_FB = "<Request ID=\"{0}\" Action=\"STOP\"><FB Name=\"{1}\" Type=\"\"/></Request>"; //$NON-NLS-1$
+	public static final String DELETE_FB = "<Request ID=\"{0}\" Action=\"DELETE\"><FB Name=\"{1}\" Type=\"\"/></Request>"; //$NON-NLS-1$
+	public static final String DELETE_CONNECTION = "<Request ID=\"{0}\" Action=\"DELETE\"><Connection Source=\"{1}\" Destination=\"{2}\"/></Request>"; //$NON-NLS-1$
+	public static final String READ_WATCHES = "<Request ID=\"{0}\" Action=\"READ\"><Watches/></Request>"; //$NON-NLS-1$
+	public static final String ADD_WATCH = "<Request ID=\"{0}\" Action=\"CREATE\"><Watch Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
+	public static final String DELETE_WATCH = "<Request ID=\"{0}\" Action=\"DELETE\"><Watch Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
+	public static final String FORCE_VALUE = "<Request ID=\"{0}\" Action=\"WRITE\"><Connection Source=\"{1}\" Destination=\"{2}\" force=\"{3}\" /></Request>"; //$NON-NLS-1$
+
+	
+	
 	private final Set<String> genFBs = new HashSet<>();
 	protected int id = 0;
 	
@@ -79,7 +98,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 
 	@Override
 	public void createResource(final Resource resource) throws DeploymentException {
-		String request = MessageFormat.format(Messages.DeploymentExecutor_CreateResourceInstance,
+		String request = MessageFormat.format(CREATE_RESOURCE_INSTANCE,
 				id++, resource.getName(), resource.getTypeName());
 		try {
 			sendREQ("", request);  //$NON-NLS-1$
@@ -115,7 +134,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 
 	@SuppressWarnings("static-method")  //this method needs to be overwritable by subclasses
 	protected String getWriteParameterMessage() {
-		return Messages.DeploymentExecutor_WriteParameter;
+		return WRITE_PARAMETER;
 	}
 
 	private static String encodeXMLChars(final String value) {
@@ -149,8 +168,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 				null != source.getFBNetworkElement() && null != destination.getFBNetworkElement()){
 			FBNetworkElement sourceFB = source.getFBNetworkElement();
 			FBNetworkElement destFB = destination.getFBNetworkElement();
-			String request = MessageFormat.format(
-					Messages.DeploymentExecutor_CreateConnection, 
+			String request = MessageFormat.format(CREATE_CONNECTION, 
 							this.id++, connData.sourcePrefix + sourceFB.getName() + "." + source.getName(),  //$NON-NLS-1$
 							connData.destinationPrefix + destFB.getName() + "." + destination.getName());  //$NON-NLS-1$
 									
@@ -167,7 +185,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 
 	@Override
 	public void startResource(final Resource res) throws DeploymentException {
-		String request = MessageFormat.format(Messages.DeploymentExecutor_Start, id++);
+		String request = MessageFormat.format(START, id++);
 		try {
 			sendREQ(res.getName(), request);
 		} catch (IOException e) {
@@ -178,7 +196,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 
 	@Override
 	public void startDevice(Device dev) throws DeploymentException {
-		String request = MessageFormat.format(Messages.DeploymentExecutor_Start, id++);
+		String request = MessageFormat.format(START, id++);
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (IOException e) {
@@ -200,9 +218,9 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 
 	@Override
 	public void deleteResource(Resource res) throws DeploymentException {
-		String kill = MessageFormat.format(Messages.DeploymentExecutor_KillFB,
+		String kill = MessageFormat.format(KILL_FB,
 				id++, res.getName());
-		String delete = MessageFormat.format(Messages.DeploymentExecutor_DeleteFB,
+		String delete = MessageFormat.format(DELETE_FB,
 				id++, res.getName());
 		try {
 			sendREQ("", kill); //$NON-NLS-1$
@@ -241,7 +259,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	@Override
 	public void startFB(Resource res, FBDeploymentData fbData) throws DeploymentException {
 		String fullFbInstanceName = fbData.prefix + fbData.fb.getName();
-		String request = MessageFormat.format(Messages.DeploymentExecutor_StartFB,
+		String request = MessageFormat.format(START_FB,
 				id++, fullFbInstanceName, fbData.fb.getTypeName());
 		try {
 			sendREQ(res.getName(), request);
@@ -259,7 +277,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 			throw new DeploymentException((MessageFormat.format(
 					Messages.DeploymentExecutor_CreateFBInstanceFailedNoTypeFound, fullFbInstanceName)));
 		}
-		String request = MessageFormat.format(Messages.DeploymentExecutor_CreateFBInstance,
+		String request = MessageFormat.format(CREATE_FB_INSTANCE,
 				id++, fullFbInstanceName, fbType);
 		try {
 			sendREQ(res.getName(), request);
@@ -271,7 +289,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 
 	@Override
 	public void killDevice(Device dev) throws DeploymentException {
-		String kill = MessageFormat.format(Messages.DeploymentExecutor_KillDevice, id++);
+		String kill = MessageFormat.format(KILL_DEVICE, id++);
 		try {
 			sendREQ("", kill); //$NON-NLS-1$
 		} catch (EOFException e) {
@@ -295,7 +313,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 
 	@Override
 	public Response readWatches() throws DeploymentException {
-		String request = MessageFormat.format(Messages.DeploymentExecutor_Read_Watches, id++);
+		String request = MessageFormat.format(READ_WATCHES, id++);
 
 		try {
 			String response = getDevMgmComHandler().sendREQ("", request);  //$NON-NLS-1$
@@ -319,7 +337,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	
 	@Override
 	public void addWatch(MonitoringBaseElement element) throws DeploymentException {
-		String request = MessageFormat.format(Messages.DeploymentExecutor_Add_Watch, this.id++, element.getQualifiedString(), "*"); //$NON-NLS-1$
+		String request = MessageFormat.format(ADD_WATCH, this.id++, element.getQualifiedString(), "*"); //$NON-NLS-1$
 		try {
 			String response = getDevMgmComHandler().sendREQ(element.getResourceString(), request);
 			
@@ -333,7 +351,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	 
 	@Override
 	public void removeWatch(MonitoringBaseElement element) throws DeploymentException {
-		String request = MessageFormat.format(Messages.DeploymentExecutor_Delete_Watch, this.id++, element.getQualifiedString(), "*"); //$NON-NLS-1$
+		String request = MessageFormat.format(DELETE_WATCH, this.id++, element.getQualifiedString(), "*"); //$NON-NLS-1$
 		try {
 			String response = getDevMgmComHandler().sendREQ(element.getResourceString(), request);
 			//TODO show somehow the feedback if the response contained a reason that it didn't work
@@ -357,7 +375,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	
 	@Override
 	public void forceValue(MonitoringBaseElement element, String value) throws DeploymentException{
-		String request = MessageFormat.format(Messages.DeploymentExecutor_Force_Value,
+		String request = MessageFormat.format(FORCE_VALUE,
 				this.id++, value, element.getQualifiedString(), "true"); //$NON-NLS-1$
 		try {
 			sendREQ(element.getResourceString(), request);
@@ -369,7 +387,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	
 	@Override
 	public void clearForce(MonitoringBaseElement element) throws DeploymentException {
-		String request = MessageFormat.format(Messages.DeploymentExecutor_Force_Value,
+		String request = MessageFormat.format(FORCE_VALUE,
 				this.id++, "*", element.getQualifiedString(), "false"); //$NON-NLS-1$ //$NON-NLS-2$
 		try {
 			sendREQ(element.getResourceString(), request);
