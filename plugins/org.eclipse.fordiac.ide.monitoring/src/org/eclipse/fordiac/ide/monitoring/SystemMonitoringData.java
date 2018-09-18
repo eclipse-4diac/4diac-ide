@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
@@ -83,6 +84,12 @@ public class SystemMonitoringData {
 					"Enable Monitoring Aborted");
 		}
 	}
+	
+	public void enableSystemSynch(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		EnableSystemMonitoringRunnable enable = new EnableSystemMonitoringRunnable(this);
+		enable.run(monitor);
+		monitoringEnabled = true;
+	}
 
 
 	public void disableSystem() {
@@ -99,6 +106,12 @@ public class SystemMonitoringData {
 					"Disable Monitoring Aborted");
 		}
 		
+	}
+	
+	public void disableSystemSynch(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		DisableSystemMonitoringRunnable disable = new DisableSystemMonitoringRunnable(this);
+		monitoringEnabled = false;
+		disable.run(monitor);
 	}
 
 

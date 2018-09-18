@@ -16,7 +16,9 @@ package org.eclipse.fordiac.ide.deployment;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
@@ -28,8 +30,10 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor.IDeviceManagementInteractorCloser;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.AbstractMonitoringManager;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -47,6 +51,12 @@ class DownloadRunnable implements IRunnableWithProgress {
 	private final IDeploymentListener outputView;
 	private final String profile;
 	private IProgressMonitor curMonitor;
+	
+	/** set of automation systems where monitoring was active during deployment.
+	 * 
+	 * For these automation systems monitoring was disabled and need to be renabled after deployment.
+	 */
+	private final Set<AutomationSystem> monitoredSystems = new HashSet<>();  
 
 	/**
 	 * DownloadRunnable constructor.
@@ -84,24 +94,30 @@ class DownloadRunnable implements IRunnableWithProgress {
 			if (monitor.isCanceled()) {
 				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 			}
-			IDeviceManagementInteractor executor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(devData.getDevice(), overrideDevMgmCommHandler, profile);
-			if (executor != null) {	
-				addDeploymentListener(executor);
-				try(IDeviceManagementInteractorCloser closer = executor::disconnect){
-					executor.connect();
-					deployResources(devData, executor);
-					deployDevice(devData, executor);					
-				}catch (final DeploymentException e) {
-					showDeploymentErrorDialog(devData.getDevice(), e);					
-				}finally{
-					removeDeploymentListener(executor);
-				}
-				
-			} else {
-				DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(devData.getDevice(), null);
-			}			
+			deployDevice(devData);			
 		}
+		reenableMonitoring();
 		monitor.done();
+	}
+
+	private void deployDevice(DeviceDeploymentData devData) throws InvocationTargetException, InterruptedException {
+		IDeviceManagementInteractor executor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(devData.getDevice(), overrideDevMgmCommHandler, profile);
+		if (executor != null) {	
+			checkMonitoring(devData.getDevice().getAutomationSystem());
+			addDeploymentListener(executor);
+			try(IDeviceManagementInteractorCloser closer = executor::disconnect){
+				executor.connect();
+				deployResources(devData, executor);
+				deployDeviceData(devData, executor);					
+			} catch (final DeploymentException e) {
+				showDeploymentErrorDialog(devData.getDevice(), e);					
+			} finally {
+				removeDeploymentListener(executor);
+			}
+			
+		} else {
+			DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(devData.getDevice(), null);
+		}
 	}
 
 	private void deployResources(DeviceDeploymentData devData, IDeviceManagementInteractor executor) throws InterruptedException, DeploymentException {
@@ -114,7 +130,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 		}
 	}
 
-	private void deployDevice(DeviceDeploymentData devData, IDeviceManagementInteractor executor) throws DeploymentException {
+	private void deployDeviceData(DeviceDeploymentData devData, IDeviceManagementInteractor executor) throws DeploymentException {
 		Device device = devData.getDevice();
 		
 		for(VarDeclaration var : devData.getSelectedDevParams()) {
@@ -227,6 +243,23 @@ class DownloadRunnable implements IRunnableWithProgress {
 					}
 				}
 			}
+		}
+	}
+
+	private void checkMonitoring(AutomationSystem automationSystem) throws InvocationTargetException, InterruptedException {
+		if(!monitoredSystems.contains(automationSystem)) {
+			AbstractMonitoringManager monitoringManager = AbstractMonitoringManager.getMonitoringManager();
+			if(monitoringManager.isSystemMonitored(automationSystem)) {
+				monitoringManager.disableSystemSynch(automationSystem, curMonitor);
+				monitoredSystems.add(automationSystem);
+			}
+		}		
+	}
+
+	private void reenableMonitoring() throws InvocationTargetException, InterruptedException {
+		AbstractMonitoringManager monitoringManager = AbstractMonitoringManager.getMonitoringManager();
+		for (AutomationSystem system : monitoredSystems) {
+			monitoringManager.enableSystemSynch(system, curMonitor);
 		}
 	}
 

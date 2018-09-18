@@ -14,12 +14,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.monitoringbase;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -36,7 +38,19 @@ public abstract class AbstractMonitoringManager {
 		}
 		
 		@Override
+		public void enableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
+				throws InvocationTargetException, InterruptedException {
+			//in the dummy manager we don't do anything here			
+		}
+		
+		@Override
 		public void disableSystem(AutomationSystem system) {
+			//in the dummy manager we don't do anything here			
+		}
+		
+		@Override
+		public void disableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
+				throws InvocationTargetException, InterruptedException {
 			//in the dummy manager we don't do anything here			
 		}
 		
@@ -151,7 +165,11 @@ public abstract class AbstractMonitoringManager {
 	
 	public abstract void disableSystem(AutomationSystem system);
 	
+	public abstract void disableSystemSynch(AutomationSystem system, IProgressMonitor monitor) throws InvocationTargetException, InterruptedException;
+	
 	public abstract void enableSystem(AutomationSystem system);
+	
+	public abstract void enableSystemSynch(AutomationSystem system, IProgressMonitor monitor) throws InvocationTargetException, InterruptedException;
 	
 	public abstract boolean isSystemMonitored(AutomationSystem system);
 }
