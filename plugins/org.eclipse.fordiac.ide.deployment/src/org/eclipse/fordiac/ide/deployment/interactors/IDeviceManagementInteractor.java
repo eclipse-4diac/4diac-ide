@@ -14,6 +14,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
@@ -208,6 +210,18 @@ public interface IDeviceManagementInteractor {
 	 */
 	void killDevice(Device dev) throws DeploymentException;
 
+	
+	/********************************************************************************************
+	 * Query Commands
+	 ********************************************************************************************/
+	
+	/** query the list of currently instantiated resources within the device
+	 * 
+	 * @return unmodifiable list of the queried resources
+	 */
+	List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources() throws DeploymentException;
+	
+	
 	/***********************
 	 * monitoring commands
 	 ****************************************************/

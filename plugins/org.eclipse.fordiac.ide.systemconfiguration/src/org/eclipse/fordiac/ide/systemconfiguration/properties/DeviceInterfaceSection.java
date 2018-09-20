@@ -48,7 +48,7 @@ public class DeviceInterfaceSection extends AbstractDeviceInterfaceSection {
 						DeploymentCoordinator.getInstance().enableOutput(interactor);
 						try {
 							interactor.connect();
-							((DynamicTypeLoadDeploymentExecutor) interactor).queryResources((Device)getType());
+							((DynamicTypeLoadDeploymentExecutor) interactor).queryResourcesWithNetwork((Device)getType());
 						} catch (Exception e) {
 							Activator.getDefault().logError(e.getMessage(), e);
 						}finally {

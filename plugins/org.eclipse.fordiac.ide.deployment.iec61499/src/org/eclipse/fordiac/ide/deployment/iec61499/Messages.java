@@ -34,6 +34,9 @@ public class Messages extends NLS {
 	public static String DeploymentExecutor_KillFBFailed;
 	public static String DeploymentExecutor_KillDeviceFailed;
 	public static String DeploymentExecutor_DeleteFBFailed;
+	
+	public static String DeploymentExecutor_QueryResourcesFailed;
+	
 	public static String DeploymentExecutor_ReadWatchesFailed;
 	public static String DeploymentExecutor_AddWatchesFailed;
 	public static String DeploymentExecutor_DeleteWatchesFailed;

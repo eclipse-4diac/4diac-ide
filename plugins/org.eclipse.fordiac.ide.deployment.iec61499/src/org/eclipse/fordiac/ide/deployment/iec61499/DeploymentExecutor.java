@@ -18,12 +18,11 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -31,6 +30,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
+import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
@@ -42,7 +42,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	
@@ -57,12 +56,15 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	public static final String STOP_FB = "<Request ID=\"{0}\" Action=\"STOP\"><FB Name=\"{1}\" Type=\"\"/></Request>"; //$NON-NLS-1$
 	public static final String DELETE_FB = "<Request ID=\"{0}\" Action=\"DELETE\"><FB Name=\"{1}\" Type=\"\"/></Request>"; //$NON-NLS-1$
 	public static final String DELETE_CONNECTION = "<Request ID=\"{0}\" Action=\"DELETE\"><Connection Source=\"{1}\" Destination=\"{2}\"/></Request>"; //$NON-NLS-1$
+
+	public static final String QUERY_FB_INSTANCES = "<Request ID=\"{0}\" Action=\"QUERY\"><FB Name=\"*\" Type=\"*\"/></Request>"; //$NON-NLS-1$
+	
 	public static final String READ_WATCHES = "<Request ID=\"{0}\" Action=\"READ\"><Watches/></Request>"; //$NON-NLS-1$
 	public static final String ADD_WATCH = "<Request ID=\"{0}\" Action=\"CREATE\"><Watch Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
 	public static final String DELETE_WATCH = "<Request ID=\"{0}\" Action=\"DELETE\"><Watch Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
 	public static final String FORCE_VALUE = "<Request ID=\"{0}\" Action=\"WRITE\"><Connection Source=\"{1}\" Destination=\"{2}\" force=\"{3}\" /></Request>"; //$NON-NLS-1$
 
-	
+	public static final Response EMPTY_RESPONSE = DevResponseFactory.eINSTANCE.createResponse();
 	
 	private final Set<String> genFBs = new HashSet<>();
 	protected int id = 0;
@@ -302,37 +304,45 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		}
 	}
 	
-	public QueryResponseHandler sendQUERY(final String destination, final String request) throws IOException, ParserConfigurationException, SAXException {
-		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-		SAXParser saxParser = saxParserFactory.newSAXParser();
-		QueryResponseHandler handler = new QueryResponseHandler();
-		String response = getDevMgmComHandler().sendREQ(destination, request);
-		saxParser.parse(new InputSource(new StringReader(response)), handler);
-		return handler;
+	@Override
+	public List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources()  throws DeploymentException {
+		String result;
+		try {
+			result = getDevMgmComHandler().sendREQ("", MessageFormat.format(QUERY_FB_INSTANCES, id++) ); //$NON-NLS-1$
+			return parseResponse(result).getFblist().getFbs().stream().map( fb -> {
+					org.eclipse.fordiac.ide.deployment.devResponse.Resource res = DevResponseFactory.eINSTANCE.createResource();
+					res.setName(fb.getName());
+					res.setType(fb.getType());
+					return res;
+				}).collect(Collectors.toList());
+		} catch (IOException e) {
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_QueryResourcesFailed, getDevice().getName()), e);
+		}		
+	}
+	
+	protected Response parseResponse(String result) throws IOException {
+		if(null != result) {
+			InputSource source = new InputSource(new StringReader(result));
+			XMLResource xmlResource = new XMLResourceImpl();
+			xmlResource.load(source, respMapping.getLoadOptions());
+			for (EObject object : xmlResource.getContents()) {
+				if(object instanceof Response) {
+					return (Response)object;
+				}
+			}
+		}
+		return EMPTY_RESPONSE;
 	}
 
 	@Override
 	public Response readWatches() throws DeploymentException {
 		String request = MessageFormat.format(READ_WATCHES, id++);
-
 		try {
-			String response = getDevMgmComHandler().sendREQ("", request);  //$NON-NLS-1$
-			if (response != null) {
-				XMLResource resource = new XMLResourceImpl();
-				InputSource source = new InputSource(new StringReader(response));
-				resource.load(source, respMapping.getLoadOptions());
-				for (EObject object : resource.getContents()) {
-					if (object instanceof Response) {
-						return (Response)object;
-					}
-				}
-			}
+			return parseResponse(getDevMgmComHandler().sendREQ("", request));  //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_ReadWatchesFailed,
 					getDevice().getName()), e);
 		}  
-		
-		return null;
 	}
 	
 	@Override

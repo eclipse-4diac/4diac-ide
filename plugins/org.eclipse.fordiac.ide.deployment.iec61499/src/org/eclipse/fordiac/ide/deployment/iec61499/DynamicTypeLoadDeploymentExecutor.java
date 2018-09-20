@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -58,6 +62,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.swt.widgets.Display;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	
@@ -65,7 +70,6 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private static final String CREATE_ADAPTER_TYPE = "<Request ID=\"{0}\" Action=\"CREATE\"><AdapterType Name=\"{1}\">{2}</AdapterType></Request>"; //$NON-NLS-1$
 	private static final String QUERY_FB_TYPES = "<Request ID=\"{0}\" Action=\"QUERY\"><FBType Name=\"*\" /></Request>"; //$NON-NLS-1$
 	private static final String QUERY_ADAPTER_TYPES = "<Request ID=\"{0}\" Action=\"QUERY\"><AdapterType Name=\"*\" /></Request>"; //$NON-NLS-1$
-	private static final String QUERY_FB_INSTANCES = "<Request ID=\"{0}\" Action=\"QUERY\"><FB Name=\"*\" Type=\"*\"/></Request>"; //$NON-NLS-1$
 	private static final String QUERY_CONNECTIONS = "<Request ID=\"{0}\" Action=\"QUERY\"><Connection Source=\"{1}\" Destination=\"{2}\"/></Request>"; //$NON-NLS-1$
 
 
@@ -176,35 +180,23 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			String result = getDevMgmComHandler().sendREQ("", request); //$NON-NLS-1$
 			if (result.contains("Reason")) { //$NON-NLS-1$
 				throw new DeploymentException("LUA skript for " + adapterKey + " AdapterType not executed");
-			} else {
-				getAdapterTypes().add(adapterKey);
-			}
+			} 
+			getAdapterTypes().add(adapterKey);
 		} catch (IOException e) {
 			logger.error(MessageFormat.format(Messages.DTL_CreateTypeFailed, "Adapter")); //$NON-NLS-1$
 		}
 	}
 	
-	public void queryResources(Device dev) {
-		String request = MessageFormat.format(QUERY_FB_INSTANCES, id++);
+	public void queryResourcesWithNetwork(Device dev) {
 		try {
-			String result = getDevMgmComHandler().sendREQ("", request);		
-			if (result != null) {
-				InputSource source = new InputSource(new StringReader(result));
-				XMLResource xmlResource = new XMLResourceImpl();
-				xmlResource.load(source, respMapping.getLoadOptions());
-				for (EObject object : xmlResource.getContents()) {
-					if(object instanceof Response) {
-						for(org.eclipse.fordiac.ide.deployment.devResponse.FB resource : ((Response)object).getFblist().getFbs()) {								
-							Resource res = LibraryElementFactory.eINSTANCE.createResource();
-							res.setName(resource.getName());
-							res.setPaletteEntry(getResourceType(dev, resource.getType()));
-							res.setFBNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
-							dev.getResource().add(res);
-							queryFBNetwork(res);
-							queryConnections(res);
-						}
-					}
-				}
+			for(org.eclipse.fordiac.ide.deployment.devResponse.Resource resource : queryResources()) {
+				Resource res = LibraryElementFactory.eINSTANCE.createResource();
+				res.setName(resource.getName());
+				res.setPaletteEntry(getResourceType(dev, resource.getType()));
+				res.setFBNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
+				dev.getResource().add(res);
+				queryFBNetwork(res);
+				queryConnections(res);
 			}
 		} catch (Exception e) {
 			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Resources")); //$NON-NLS-1$
@@ -212,38 +204,31 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 	
 	private void queryConnections(Resource res) {
-		String request = MessageFormat.format(QUERY_CONNECTIONS, id++, "*", "*");
+		String request = MessageFormat.format(QUERY_CONNECTIONS, id++, "*", "*"); //$NON-NLS-1$ //$NON-NLS-2$
 		try {
 			String result = getDevMgmComHandler().sendREQ(res.getName(), request);		
 			if (result != null) {
-				InputSource source = new InputSource(new StringReader(result));
-				XMLResource xmlResource = new XMLResourceImpl();
-				xmlResource.load(source, respMapping.getLoadOptions());
-				createConnections(res, xmlResource);
+				createConnections(res, parseResponse(result));
 			}
 		} catch (Exception e) {
 			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Connections")); //$NON-NLS-1$
 		}
 	}
 
-	private void createConnections(Resource res, XMLResource xmlResource) {
-		for (EObject object : xmlResource.getContents()) {
-			if(object instanceof Response) {
-				for(org.eclipse.fordiac.ide.deployment.devResponse.Connection connection : ((Response)object).getEndpointlist().getConnection()) {
-					//TODO currently no subapps supported
-					String[] src = connection.getSource().split("\\.");
-					FB srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
-					IInterfaceElement srcIE = Annotations.getInterfaceElement(srcFB, src[src.length - 1]);
-					String[] dst = connection.getDestination().split("\\.");
-					FB dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
-					IInterfaceElement dstIE = Annotations.getInterfaceElement(dstFB, dst[dst.length - 1]);
-					createConnectionCommand(res.getFBNetwork(), srcIE, dstIE);
-				}
-			}
+	private static void createConnections(Resource res, Response response) {
+		for(org.eclipse.fordiac.ide.deployment.devResponse.Connection connection : response.getEndpointlist().getConnection()) {
+			//TODO currently no subapps supported
+			String[] src = connection.getSource().split("\\."); //$NON-NLS-1$
+			FB srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
+			IInterfaceElement srcIE = Annotations.getInterfaceElement(srcFB, src[src.length - 1]);
+			String[] dst = connection.getDestination().split("\\."); //$NON-NLS-1$
+			FB dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
+			IInterfaceElement dstIE = Annotations.getInterfaceElement(dstFB, dst[dst.length - 1]);
+			createConnectionCommand(res.getFBNetwork(), srcIE, dstIE);
 		}
 	}
 
-	private void createConnectionCommand(FBNetwork fbNet, IInterfaceElement srcIE, IInterfaceElement dstIE) {
+	private static void createConnectionCommand(FBNetwork fbNet, IInterfaceElement srcIE, IInterfaceElement dstIE) {
 		AbstractConnectionCreateCommand cmd = null;
 		if(srcIE instanceof Event) {
 			cmd = new EventConnectionCreateCommand(fbNet);
@@ -276,7 +261,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private void createFBNetwork(Resource res, XMLResource xmlResource) {
+	private static void createFBNetwork(Resource res, XMLResource xmlResource) {
 		for (EObject object : xmlResource.getContents()) {
 			if(object instanceof Response) {
 				int i = 0;
@@ -294,7 +279,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private ResourceTypeEntry getResourceType(Device device, String resTypeName) {
+	private static ResourceTypeEntry getResourceType(Device device, String resTypeName) {
 		List<PaletteEntry> typeEntries = device.getPaletteEntry().getGroup().getPallete().getTypeEntries(resTypeName);
 		if(!typeEntries.isEmpty() && typeEntries.get(0) instanceof ResourceTypeEntry) {
 			return (ResourceTypeEntry)typeEntries.get(0);
@@ -342,4 +327,15 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			}
 		});
 	}
+	
+	private QueryResponseHandler sendQUERY(final String destination, final String request) throws IOException, ParserConfigurationException, SAXException {
+		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+		SAXParser saxParser = saxParserFactory.newSAXParser();
+		QueryResponseHandler handler = new QueryResponseHandler();
+		String response = getDevMgmComHandler().sendREQ(destination, request);
+		saxParser.parse(new InputSource(new StringReader(response)), handler);
+		return handler;
+	}
+
+
 }
