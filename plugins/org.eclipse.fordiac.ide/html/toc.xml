@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (c) 2014 - 2017 fortiss GmbH, University of Thessaloniki
+               2018 Andrea Zoitl
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +12,7 @@
     Monika Wenger, Alois Zoitl, Giorgis Sfiris, Waldemar Eisenmenger, 
     Milan Vatoopan, Gerd Kainz, Jose Cabral, Stefan Profanter
      - initial API and implementation and/or initial documentation
+    Andrea Zoitl - cleaning up tutorials for 1.10 realese
 -->
 
 <?NLS TYPE="org.eclipse.help.toc"?>
@@ -50,20 +52,24 @@
     </topic>
 	
    	<topic label="Step by Step Tutorial">
-       <topic href="html/4diacIDE/overview.html" label="Step 0 - An overview">
-          <topic href="html/4diacIDE/overview.html#elements" label="4DIAC Elements">
+       <topic href="html/4diacIDE/overview.html" label="Step 0 - 4diac-IDE Overview">
+          <topic href="html/4diacIDE/overview.html#startingUp" label="Starting up 4diac-IDE">
+          </topic>  
+          <topic href="html/4diacIDE/overview.html#elements" label="4diac-IDE Elements">
           </topic>
-          <topic href="html/4diacIDE/overview.html#systemPerspective" label="System Perspective">
+          <topic href="html/4diacIDE/overview.html#perspectives" label="4diac-IDE Perspectives"> 
+          	<topic href="html/4diacIDE/overview.html#systemPerspective" label="System Perspective">
+          	</topic>
+            <topic href="html/4diacIDE/overview.html#typeManagementPerspective" label="Type Management perspective">
+            </topic>
+            <topic href="html/4diacIDE/overview.html#deploymentPerspective" label="Deployment Perspective">
+            </topic>
+            <topic href="html/4diacIDE/overview.html#debugPerspective" label="Debug Perspective">
+            </topic>
           </topic>
-          <topic href="html/4diacIDE/overview.html#typeManagementPerspective" label="Type Management perspective">
+          <topic href="html/4diacIDE/overview.html#preferences" label="4diac-IDE Preferences">
           </topic>
-          <topic href="html/4diacIDE/overview.html#deploymentPerspective" label="Deployment Perspective">
-          </topic>
-          <topic href="html/4diacIDE/overview.html#debugPerspective" label="Debug Perspective">
-          </topic>
-          <topic href="html/4diacIDE/overview.html#preferences" label="4DIAC Preferences">
-          </topic>
-          <topic href="html/4diacIDE/overview.html#toolbar" label="4DIAC Toolbar">
+          <topic href="html/4diacIDE/overview.html#toolbar" label="Toolbar">
           </topic>
      </topic>
        <topic href="html/4diacIDE/use4diacLocally.html" label="Step 1 - Use 4DIAC locally (Blinking application)">
