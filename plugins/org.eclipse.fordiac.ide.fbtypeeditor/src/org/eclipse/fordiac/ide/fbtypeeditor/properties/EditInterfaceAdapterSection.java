@@ -7,53 +7,66 @@
  *
  * Monika Wenger - initial implementation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.properties;
+package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCommand;
-import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
-import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeContentOutline;
+import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeRootEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceAdapterSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.views.contentoutline.ContentOutline;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
 	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
 		AdapterType type = getAdapterTypes(getPalette()).get(0).getType();
-		return new CreateSubAppInterfaceElementCommand(type, getType().getInterface(), isInput, -1);
+		return new CreateInterfaceElementCommand(type, getType().getInterfaceList(), isInput, -1);
 	}
 
 	@Override
 	protected INamedElement getInputType(Object input) {
-		if (input instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) input).getModel();
+		if(input instanceof FBTypeEditPart){
+			return ((FBTypeEditPart) input).getModel();	
 		}
-		if (input instanceof UISubAppNetworkEditPart) {
-			return ((UISubAppNetworkEditPart) input).getSubApp();
+		if(input instanceof FBTypeRootEditPart){
+				return ((FBTypeRootEditPart) input).getCastedFBTypeModel();
 		}
 		return null;
 	}
 
 	@Override
 	protected DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection) {
-		return new DeleteSubAppInterfaceElementCommand(selection);
+		return new DeleteInterfaceCommand(selection);
 	}
 
 	@Override
 	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput,
 			boolean moveUp) {
-		return new ChangeSubAppInterfaceOrderCommand(selection, isInput, moveUp);
+		return new ChangeInterfaceOrderCommand(selection, isInput, moveUp);
 	}
 	
 	@Override
-	protected SubApp getType() {
-		return (SubApp)type;
+	protected FBType getType() {
+		return (FBType)type;
+	}
+	
+	@Override
+	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
+		if(part instanceof FBTypeEditor){
+			return ((FBTypeEditor)part).getCommandStack();
+		}
+		if(part instanceof ContentOutline){
+			return ((FBTypeContentOutline) ((ContentOutline)part).getCurrentPage()).getCommandStack();
+		}
+		return null;
 	}
 }

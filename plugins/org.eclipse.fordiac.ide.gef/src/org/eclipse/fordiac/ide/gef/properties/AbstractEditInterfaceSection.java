@@ -8,30 +8,27 @@
  *
  * Monika Wenger, Alois Zoitl - initial implementation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.properties;
+package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCommand;
-import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
-import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
-import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -83,16 +80,27 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	private Group outputsGroup;
 	private Button outputUp;
 	private Button outputDown;
-	protected Button createInput;
-	protected Button createOutput;
-	protected Button deleteInput;
-	protected Button deleteOutput;
+	private Button createInput;
+	private Button createOutput;
+	private Button deleteInput;
+	private Button deleteOutput;
 	protected enum InterfaceContentProviderType{
 		EVENT, DATA, ADAPTER
 	}
 	
-	protected abstract CreateSubAppInterfaceElementCommand newCommand(boolean isInput);
+	protected abstract CreateInterfaceElementCommand newCreateCommand(boolean isInput);
+	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);
+	protected abstract ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput, boolean moveUp);
 	protected abstract String[] fillTypeCombo();
+	protected abstract INamedElement getInputType(Object input);	
+
+	@Override
+	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
+		if(part instanceof DiagramEditorWithFlyoutPalette){
+			return ((DiagramEditorWithFlyoutPalette)part).getCommandStack();
+		}
+		return null;
+	}
 	
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -121,7 +129,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	}
 	
 	private void createInputEdit(Composite parent){
-		inputsGroup = getWidgetFactory().createGroup(parent, "Inputs");
+		inputsGroup = getWidgetFactory().createGroup(parent, "Inputs"); //$NON-NLS-1$
 		inputsGroup.setLayout(new GridLayout(2, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		inputsViewer = new TableViewer(inputsGroup, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.FILL);
@@ -135,48 +143,51 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		composite.setLayout(new FillLayout(SWT.VERTICAL));
 		createInput = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
 		createInput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-		createInput.setToolTipText("Create interface element");
+		createInput.setToolTipText("Create interface element"); //$NON-NLS-1$
 		createInput.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				CreateInterfaceElementCommand cmd = newCommand(true);
+				CreateInterfaceElementCommand cmd = newCreateCommand(true);
 				executeCommand(cmd);
 				inputsViewer.refresh();
 			}
 		});
 		inputUp = getWidgetFactory().createButton(composite, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
-		inputUp.setToolTipText("Move interface element up");	
+		inputUp.setToolTipText("Move interface element up"); //$NON-NLS-1$
 		inputUp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof IInterfaceElement){
-					executeCommand(new ChangeSubAppInterfaceOrderCommand((IInterfaceElement) selection, true, true));
+					ChangeInterfaceOrderCommand cmd = newOrderCommand((IInterfaceElement) selection, true, true);
+					executeCommand(cmd);
 					inputsViewer.refresh();
 				}
 			}
 		});
 		inputDown = getWidgetFactory().createButton(composite, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
-		inputDown.setToolTipText("Move interface element down");	
+		inputDown.setToolTipText("Move interface element down"); //$NON-NLS-1$
 		inputDown.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof IInterfaceElement){
-					executeCommand(new ChangeSubAppInterfaceOrderCommand((IInterfaceElement) selection, true, false));
+					ChangeInterfaceOrderCommand cmd = newOrderCommand((IInterfaceElement) selection, true, false);
+					executeCommand(cmd);
 					inputsViewer.refresh();
 				}
 			}
 		});
 		deleteInput = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
-		deleteInput.setToolTipText("Delete selected interface element");	
+		deleteInput.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
 		deleteInput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		deleteInput.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof IInterfaceElement){
-					executeCommand(new DeleteSubAppInterfaceElementCommand((IInterfaceElement) selection));
+					DeleteInterfaceCommand cmd = newDeleteCommand((IInterfaceElement) selection);
+					executeCommand(cmd);
 					inputsViewer.refresh();
 				}
 			}
@@ -195,7 +206,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	}
 
 	private void createOutputEdit(Composite parent){
-		outputsGroup = getWidgetFactory().createGroup(parent, "Outputs");
+		outputsGroup = getWidgetFactory().createGroup(parent, "Outputs"); //$NON-NLS-1$
 		outputsGroup.setLayout(new GridLayout(2, false));
 		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		outputsViewer = new TableViewer(outputsGroup, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.FILL);
@@ -209,71 +220,55 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		composite.setLayout(new FillLayout(SWT.VERTICAL));
 		createOutput = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
 		createOutput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-		createOutput.setToolTipText("Create interface element");
+		createOutput.setToolTipText("Create interface element"); //$NON-NLS-1$
 		createOutput.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				CreateInterfaceElementCommand cmd = newCommand(false);
+				CreateInterfaceElementCommand cmd = newCreateCommand(false);
 				executeCommand(cmd);
 				outputsViewer.refresh();
 			}
 		});
 		outputUp = getWidgetFactory().createButton(composite, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
-		outputUp.setToolTipText("Move interface element up");	
+		outputUp.setToolTipText("Move interface element up"); //$NON-NLS-1$
 		outputUp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof IInterfaceElement){
-					executeCommand(new ChangeSubAppInterfaceOrderCommand((IInterfaceElement) selection, false, true));
+					ChangeInterfaceOrderCommand cmd = newOrderCommand((IInterfaceElement) selection, false, true);
+					executeCommand(cmd);
 					outputsViewer.refresh();
 				}
 			}
 		});
 		outputDown = getWidgetFactory().createButton(composite, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
-		outputDown.setToolTipText("Move interface element down");	
+		outputDown.setToolTipText("Move interface element down"); //$NON-NLS-1$
 		outputDown.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof IInterfaceElement){
-					executeCommand(new ChangeSubAppInterfaceOrderCommand((IInterfaceElement) selection, false, false));
+					ChangeInterfaceOrderCommand cmd = newOrderCommand((IInterfaceElement) selection, false, false);
+					executeCommand(cmd);
 					outputsViewer.refresh();
 				}
 			}
 		});
 		deleteOutput = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
-		deleteOutput.setToolTipText("Delete selected interface element");	
+		deleteOutput.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
 		deleteOutput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		deleteOutput.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
 				if(selection instanceof IInterfaceElement){
-					executeCommand(new DeleteSubAppInterfaceElementCommand((IInterfaceElement) selection));
+					DeleteInterfaceCommand cmd = newDeleteCommand((IInterfaceElement) selection);
+					executeCommand(cmd);
 					outputsViewer.refresh();
 				}
 			}
 		});
-	}
-	
-	@Override
-	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if(part instanceof DiagramEditorWithFlyoutPalette){
-			return ((DiagramEditorWithFlyoutPalette)part).getCommandStack();
-		}
-		return null;
-	}
-
-	@Override
-	protected SubApp getInputType(Object input) {
-		if(input instanceof SubAppForFBNetworkEditPart){
-			return ((SubAppForFBNetworkEditPart) input).getModel();
-		}
-		if(input instanceof UISubAppNetworkEditPart){
-			return ((UISubAppNetworkEditPart)input).getSubApp();
-		}
-		return null;
 	}
 
 	@Override
@@ -293,11 +288,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		} 
 		commandStack = commandStackBuffer;
 	}
-
-	@Override
-	protected SubApp getType() {
-		return (SubApp)type;
-	}
 	
 	public class InterfaceContentProvider implements IStructuredContentProvider {
 		private boolean inputs;
@@ -311,28 +301,62 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		private Object[] getInputs(Object inputElement){
 			switch(type){
 			case EVENT:
-				return ((SubApp)inputElement).getInterface().getEventInputs().toArray();
+				if(inputElement instanceof SubApp) {
+					return ((SubApp)inputElement).getInterface().getEventInputs().toArray();
+				}
+				if(inputElement instanceof FBType) {
+					return ((FBType)inputElement).getInterfaceList().getEventInputs().toArray();
+				}
 			case ADAPTER:
-				return ((SubApp)inputElement).getInterface().getSockets().toArray();
+				if(inputElement instanceof SubApp) {
+					return ((SubApp)inputElement).getInterface().getSockets().toArray();
+				}
+				if(inputElement instanceof FBType) {
+					return ((FBType)inputElement).getInterfaceList().getSockets().toArray();
+				}
+			case DATA:
+				if(inputElement instanceof SubApp) {
+					return ((SubApp)inputElement).getInterface().getInputVars().toArray();
+				}
+				if(inputElement instanceof FBType) {
+					return ((FBType)inputElement).getInterfaceList().getInputVars().toArray();
+				}
 			default:
-				return ((SubApp)inputElement).getInterface().getInputVars().toArray();
-			}	
+				return null;	
+			}
 		}
 		
 		private Object[] getOutputs(Object inputElement){
 			switch(type){
 			case EVENT:
-				return ((SubApp)inputElement).getInterface().getEventOutputs().toArray();
+				if(inputElement instanceof SubApp) {
+					return ((SubApp)inputElement).getInterface().getEventOutputs().toArray();
+				}
+				if(inputElement instanceof FBType) {
+					return ((FBType)inputElement).getInterfaceList().getEventOutputs().toArray();
+				}
 			case ADAPTER:
-				return ((SubApp)inputElement).getInterface().getPlugs().toArray();
+				if(inputElement instanceof SubApp) {
+					return ((SubApp)inputElement).getInterface().getPlugs().toArray();
+				}
+				if(inputElement instanceof FBType) {
+					return ((FBType)inputElement).getInterfaceList().getPlugs().toArray();
+				}
+			case DATA:
+				if(inputElement instanceof SubApp) {
+					return ((SubApp)inputElement).getInterface().getOutputVars().toArray();
+				}
+				if(inputElement instanceof FBType) {
+					return ((FBType)inputElement).getInterfaceList().getOutputVars().toArray();
+				}
 			default:
-				return ((SubApp)inputElement).getInterface().getOutputVars().toArray();
+				return null;
 			}	
 		}
 		
 		@Override
 		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof SubApp) {
+			if (inputElement instanceof SubApp || inputElement instanceof FBType) {
 				if(inputs){
 					return getInputs(inputElement);
 				}else{
@@ -372,6 +396,13 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		}
 	}
 
+
+	protected Palette getPalette() {
+		if(getType() instanceof SubApp) {
+			return ((SubApp)getType()).getFbNetwork().getApplication().getAutomationSystem().getPalette();
+		}
+		return null;
+	}
 	
 	private class InterfaceCellModifier implements ICellModifier{
 		private TableViewer viewer;
@@ -413,7 +444,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		}
 		
 		private DataType getTypeForSelection(String text) {
-			for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFbNetwork().getApplication().getAutomationSystem().getPalette())){
+			for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getPalette())){
 				if(adaptertype.getType().getName().equals(text)) {
 					return adaptertype.getType();
 				}
