@@ -60,14 +60,14 @@
 
 	<properties>
 		<tycho.version>1.2.0</tycho.version>
-		<photon-repo.url>http://download.eclipse.org/releases/photon</photon-repo.url>
+		<tycho-repo.url>http://download.eclipse.org/releases/2018-09</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 	</properties>
 
 	<repositories>
 		<repository>
-			<id>photon</id>
-			<url>${photon-repo.url}</url>
+			<id>tycho-latest</id>
+			<url>${tycho-repo.url}</url>
 			<layout>p2</layout>
 		</repository>
 
