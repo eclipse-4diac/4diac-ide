@@ -170,7 +170,7 @@ public interface IDeviceManagementInteractor {
 	 * 
 	 * @throws Exception the exception
 	 */
-	void deleteResource(Resource res) throws DeploymentException;
+	void deleteResource(String resName) throws DeploymentException;
 
 	/**
 	 * Delete fb instance.
@@ -191,15 +191,6 @@ public interface IDeviceManagementInteractor {
 	 * @throws Exception the exception
 	 */
 	void deleteConnection(Resource res, ConnectionDeploymentData con) throws DeploymentException;
-
-	/**
-	 * Clear device.
-	 * 
-	 * @param dev the device
-	 * 
-	 * @throws Exception the exception
-	 */
-	void clearDevice(Device dev) throws DeploymentException;
 
 	/**
 	 * Kill device.

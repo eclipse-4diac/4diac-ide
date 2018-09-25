@@ -219,33 +219,23 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	}
 
 	@Override
-	public void deleteResource(Resource res) throws DeploymentException {
+	public void deleteResource(String resName) throws DeploymentException {
 		String kill = MessageFormat.format(KILL_FB,
-				id++, res.getName());
+				id++, resName);
 		String delete = MessageFormat.format(DELETE_FB,
-				id++, res.getName());
+				id++, resName);
 		try {
 			sendREQ("", kill); //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(
-					MessageFormat.format(Messages.DeploymentExecutor_KillFBFailed, res.getName()), e);
+					MessageFormat.format(Messages.DeploymentExecutor_KillFBFailed, resName), e);
 		}
 		try {
 			sendREQ("", delete); //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(
-					MessageFormat.format(Messages.DeploymentExecutor_DeleteFBFailed, res.getName()), e);
+					MessageFormat.format(Messages.DeploymentExecutor_DeleteFBFailed, resName), e);
 		}
-	}
-
-	@Override
-	public void clearDevice(Device dev) throws DeploymentException {
-		for (Resource res : dev.getResource()) {
-			if (!res.isDeviceTypeResource()) {
-				deleteResource(res);
-			}
-		}
-
 	}
 
 	@Override

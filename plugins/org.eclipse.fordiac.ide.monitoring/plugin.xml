@@ -164,7 +164,7 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+            locationURI="menu:org.eclipse.ui.main.menu?after=org.eclipse.ui.run">
          <menu
                label="%contributions.menus.debug.label"
                mnemonic="%contributions.menus.debug.menmonic"

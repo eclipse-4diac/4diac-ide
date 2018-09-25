@@ -47,7 +47,7 @@ public class DeleteResourceHandler extends AbstractDeploymentCommand {
 
 	@Override
 	protected void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
-		executor.deleteResource(resource);
+		executor.deleteResource(resource.getName());
 	}
 
 	
