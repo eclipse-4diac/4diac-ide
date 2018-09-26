@@ -19,6 +19,8 @@ import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
@@ -41,6 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
@@ -51,6 +54,10 @@ class DownloadRunnable implements IRunnableWithProgress {
 	private final IDeploymentListener outputView;
 	private final String profile;
 	private IProgressMonitor curMonitor;
+	
+	/** flag indicating if an existing resource should automatically be overriden or if the user should be asked
+	 */
+	private boolean overrideAll = false;
 	
 	/** set of automation systems where monitoring was active during deployment.
 	 * 
@@ -121,12 +128,26 @@ class DownloadRunnable implements IRunnableWithProgress {
 	}
 
 	private void deployResources(DeviceDeploymentData devData, IDeviceManagementInteractor executor) throws InterruptedException, DeploymentException {
+		Set<String> resources = executor.queryResources().stream().map(res -> res.getName()).collect(Collectors.toSet());
+		
 		for (ResourceDeploymentData resData : devData.getResData()) {
 			if (curMonitor.isCanceled()) {
 				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 			}
+			if(resources.contains(resData.res.getName())) {
+				//the resource is in the device
+				if(overrideAll) {
+					executor.deleteResource(resData.res.getName());
+				}else {
+					if(askOverrideForResource(resData.res)){
+						executor.deleteResource(resData.res.getName());
+					}else {
+						//the user has canceled to override this resource
+						continue;
+					}
+				}
+			} 			
 			deployResource(resData, executor);
-			executor.startResource(resData.res);
 		}
 	}
 
@@ -204,6 +225,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 			createFBInstance(resDepData, executor);
 			deployParamters(resDepData, executor); // this needs to be done before the connections are created
 			deployConnections(resDepData, executor);
+			executor.startResource(resDepData.res);
 		}
 	}
 
@@ -262,5 +284,63 @@ class DownloadRunnable implements IRunnableWithProgress {
 			monitoringManager.enableSystemSynch(system, curMonitor);
 		}
 	}
+	
+	private boolean askOverrideForResource(Resource res) throws InterruptedException {	
+		final AtomicInteger result = new AtomicInteger();
+		Display.getDefault().syncExec(() -> {
+				final Shell shell = Display.getDefault().getActiveShell();
+				MessageDialog dialog = new MessageDialog(shell, 
+						Messages.DownloadRunnable_ResourceAlreadyExists, null, 
+						MessageFormat.format(Messages.DownloadRunnable_ResourceOverrideQuestion, res.getName(), res.getDevice().getName()), MessageDialog.QUESTION, 
+						new String[] { Messages.DownloadRunnable_Replace,  SWT.getMessage("SWT_Abort"), SWT.getMessage("SWT_Cancel"), Messages.DownloadRunnable_ReplaceAll }, 0);  //$NON-NLS-1$ //$NON-NLS-2$
+				result.set(dialog.open());
+			});
+				
+		switch(result.get()) {
+		case 0:  // replace
+			return true; //override the resource
+		case 1:  // abort
+			throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
+		case 3: // replace all
+			reasureOverrideAll();
+			
+			return true;
+		default:
+			break;
+		}
+		
+		return false;  //in the default case we don't want to override the resoruce
+	}
+
+	private void reasureOverrideAll() throws InterruptedException {
+		final StringBuilder message = new StringBuilder(Messages.DownloadRunnable_ReassureOveride);
+		
+		for (DeviceDeploymentData data : deploymentData) {
+			message.append("\n\t- ");  //$NON-NLS-1$
+			message.append(data.getDevice().getName());
+			message.append(":"); //$NON-NLS-1$
+			for(ResourceDeploymentData resData: data.getResData()) {
+				message.append("\n\t\t- ");  //$NON-NLS-1$
+				message.append(resData.res.getName());
+			}
+		}
+		
+		final AtomicInteger result = new AtomicInteger();
+		Display.getDefault().syncExec(() -> {
+			final Shell shell = Display.getDefault().getActiveShell();
+			MessageDialog dialog = new MessageDialog(shell, 
+					Messages.DownloadRunnable_ReassureOverideHeader, null, 
+					message.toString(), MessageDialog.QUESTION, 
+					new String[] { Messages.DownloadRunnable_ReplaceAll,  SWT.getMessage("SWT_Abort")}, 0);  //$NON-NLS-1$
+			result.set(dialog.open());
+		});
+		
+		if(1 == result.get()) {
+			throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
+		}
+		//if the user selects ReplaceAll we don't need to do anything special
+		overrideAll = true;
+	}
+
 
 }
