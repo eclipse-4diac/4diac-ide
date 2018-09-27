@@ -1163,4 +1163,22 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EEnum data.ecore#//BaseType1"
         defaultValueLiteral="STRING"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleFBType" eSuperTypes="#//FBType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="algorithm" lowerBound="1"
+        eType="#//Algorithm" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Algorithm"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="internalVars" upperBound="-1"
+        eType="#//VarDeclaration" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="VarDeclaration"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
 </ecore:EPackage>
