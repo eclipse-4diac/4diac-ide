@@ -46,7 +46,7 @@
                         value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
                   </instanceof>
                </with>
-               <iterate>
+               <iterate ifEmpty="false">
                   <instanceof
                         value="org.eclipse.fordiac.ide.resourceediting.editparts.ResFBEditPart">
                   </instanceof>
@@ -70,7 +70,7 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:org.eclipse.fordiac.ide.application.menus.4DIACMenu">
+            locationURI="menu:navigate?after=additions">
          <command
                commandId="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
                id="org.eclipse.fordiac.ide.resourceediting.menus.ShowFBInAppCommand"
