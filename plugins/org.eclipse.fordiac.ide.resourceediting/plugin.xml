@@ -56,6 +56,11 @@
       <handler
             class="org.eclipse.fordiac.ide.resourceediting.handlers.OpenConnectionOppositeResource"
             commandId="org.eclipse.fordiac.ide.resourceediting.commands.OpenConnectionOppositeResource">
+      	<activeWhen>
+        	<iterate ifEmpty="false">
+            	<instanceof value="org.eclipse.fordiac.ide.resourceediting.editparts.VirtualInOutputEditPart"/>
+        	</iterate>
+      	</activeWhen>
       </handler>
    </extension>
    <extension
@@ -71,11 +76,13 @@
          point="org.eclipse.ui.menus">
       <menuContribution
             locationURI="menu:navigate?after=additions">
-         <command
-               commandId="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
-               id="org.eclipse.fordiac.ide.resourceediting.menus.ShowFBInAppCommand"
-               mnemonic="S">
-         </command>
+        <command commandId="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
+        	id="org.eclipse.fordiac.ide.resourceediting.menus.ShowFBInAppCommand"
+        	mnemonic="S">
+        </command>
+		<command commandId="org.eclipse.fordiac.ide.resourceediting.commands.OpenConnectionOppositeResource"
+			tooltip="Open the resouce at the opposite end of the connection">
+		</command>
       </menuContribution>
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
@@ -109,7 +116,7 @@
             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <command
                commandId="org.eclipse.fordiac.ide.resourceediting.commands.OpenConnectionOppositeResource"
-               tooltip="Open the resouce with the opposite end of the connection">
+               tooltip="Open the resouce at the opposite end of the connection">
             <visibleWhen
                   checkEnabled="true">
                <iterate>
