@@ -173,6 +173,10 @@
 	</menuContribution>
 	<menuContribution
             locationURI="menu:org.eclipse.ui.run?after=additions">
+        <separator
+                  name="deviceInteractions"
+                  visible="true">
+            </separator>    
 		<command
 		    commandId="org.eclipse.fordiac.ide.deployment.ui.cleanDevice"
 		    icon="fordiacimage://ICON_ClearDevice"
@@ -196,6 +200,14 @@
 			 label="Delete Resource"
 			 style="push">
 		</command>
+		<separator
+                  name="deviceInteractionsEnd"
+                  visible="false">
+            </separator>   
+		<separator
+                  name="BootFile"
+                  visible="true">
+            </separator>
 		<command
 			 commandId="org.eclipse.ui.file.export"
 			 label="Create boot-files">
@@ -210,9 +222,8 @@
       point="org.eclipse.core.expressions.definitions">
    <definition
          id="org.eclipse.fordiac.ide.deployment.ui.ResourceDefinition">
-       <with
-               variable="selection">
-               <iterate>
+       <with variable="selection">
+               <iterate ifEmpty="false">
                   <or>
                     <instanceof
                           value="org.eclipse.fordiac.ide.model.libraryElement.Resource">
@@ -226,9 +237,8 @@
    </definition>
    <definition
          id="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition">
-       <with
-               variable="selection">
-               <iterate>
+       <with variable="selection">
+               <iterate ifEmpty="false">
                   <or>
                     <instanceof
                           value="org.eclipse.fordiac.ide.model.libraryElement.Device">

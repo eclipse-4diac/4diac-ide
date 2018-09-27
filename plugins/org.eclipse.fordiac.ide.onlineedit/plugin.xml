@@ -28,7 +28,7 @@
             <with
                   variable="selection">
                <iterate
-                     operator="and">
+                     operator="and"  ifEmpty="false">
                   <instanceof
                         value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart">
                   </instanceof>
@@ -39,10 +39,16 @@
       <handler
             class="org.eclipse.fordiac.ide.onlineedit.handlers.OnlineCreateFBHandler"
             commandId="org.eclipse.fordiac.ide.onlineedit.onlineCreateFB">
-      </handler>
+            <activeWhen>
+               <reference definitionId="org.eclipse.fordiac.ide.onlineedit.FBDefinition" />
+            </activeWhen>
+       </handler>
       <handler
             class="org.eclipse.fordiac.ide.onlineedit.handlers.OnlineStartFBHandler"
             commandId="org.eclipse.fordiac.ide.onlineedit.onlineStartFB">
+            <activeWhen>
+               <reference definitionId="org.eclipse.fordiac.ide.onlineedit.FBDefinition" />
+            </activeWhen>
       </handler>
    </extension>
    <extension
@@ -97,14 +103,35 @@
             </visibleWhen>
          </command>
       </menuContribution>
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.run?after=deviceInteractionsEnd">
+		<separator
+		      name="onlineEdit"
+		      visible="true">
+		</separator>
+		<command
+		   commandId="org.eclipse.fordiac.ide.onlineedit.onlineCreateConnection"
+		   label="Online Create Connection"
+		   style="push">
+		</command>
+		<command
+			commandId="org.eclipse.fordiac.ide.onlineedit.onlineCreateFB"
+		    label="Online Create FB"
+		    style="push">
+		</command>
+		<command
+			commandId="org.eclipse.fordiac.ide.onlineedit.onlineStartFB"
+		    label="Online Start FB">
+		</command>
+      </menuContribution>
    </extension>
 <extension
       point="org.eclipse.core.expressions.definitions">
    <definition
          id="org.eclipse.fordiac.ide.onlineedit.FBDefinition">
        <with
-               variable="selection">
-               <iterate>
+               variable="selection" >
+               <iterate ifEmpty="false">
                   <or>
                     <instanceof
                           value="org.eclipse.fordiac.ide.model.libraryElement.FB">
