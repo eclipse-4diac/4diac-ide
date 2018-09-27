@@ -33,11 +33,6 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class ClearFocusOn extends AbstractHandler {
 	private static final int NOT_TRANSPARENT = 255;
 
-	/**
-	 * The constructor.
-	 */
-	public ClearFocusOn() {
-	}
 
 	/**
 	 * the command has been executed, so extract extract the needed information
