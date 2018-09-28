@@ -9,11 +9,11 @@
             class="org.eclipse.fordiac.ide.export.ui.wizard.FordiacExportWizard"
             icon="fordiacimage://ICON_Export"
             id="org.eclipse.fordiac.ide.export.ui.wizard.FordiacExportWizard"
-            name="4DIAC Type Export">
+            name="4diac IDE Type Export">
       </wizard>
       <category
             id="org.eclipse.fordiac.ide.export.ui"
-            name="4diac">
+            name="4diac IDE">
       </category>
    </extension>
    <extension

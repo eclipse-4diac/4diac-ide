@@ -12,26 +12,22 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
-      <category
-            id="org.eclipse.fordiac.ide.deployment.ui"
-            name="Deployment">
-      </category>
       <view
-            category="org.eclipse.fordiac.ide.deployment.ui"
+            category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView"
             icon="fordiacimage://ICON_DownloadSelectionTreeView"
             id="org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView"
             name="Deployment Selection">
       </view>
       <view
-            category="org.eclipse.fordiac.ide.deployment.ui"
+            category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.deployment.ui.views.Output"
             icon="fordiacimage://ICON_DeploymentConsole"
             id="org.eclipse.fordiac.ide.deployment.ui.views.Output"
             name="Deployment Console">
       </view>
       <view
-            category="org.eclipse.fordiac.ide.deployment.ui"
+            category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.deployment.ui.views.Mode"
             icon="fordiacimage://ICON_Download"
             id="org.eclipse.fordiac.ide.deployment.ui.views.Mode"
@@ -50,22 +46,22 @@
 <extension
       point="org.eclipse.ui.commands">
    <command
-         categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+         categoryId="org.eclipse.fordiac.ide.commands.category"
          id="org.eclipse.fordiac.ide.deployment.ui.cleanDevice"
          name="Clean Device">
    </command>
    <command
-         categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+         categoryId="org.eclipse.fordiac.ide.commands.category"
          id="org.eclipse.fordiac.ide.deployment.ui.fullyCleanDevice"
          name="%contributions.menus.run.fullyCleanDevice">
    </command>
    <command
-         categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+         categoryId="org.eclipse.fordiac.ide.commands.category"
          id="org.eclipse.fordiac.ide.deployment.ui.killDevice"
          name="Kill Device">
    </command>
    <command
-         categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+         categoryId="org.eclipse.fordiac.ide.commands.category"
          id="org.eclipse.fordiac.ide.deployment.ui.deleteResource"
          name="Delete Resource">
    </command>

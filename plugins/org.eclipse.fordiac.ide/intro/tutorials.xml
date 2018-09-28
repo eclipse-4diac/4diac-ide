@@ -15,7 +15,7 @@
 
 	<extensionContent id="page_tutorials" name="Tutorials" path="tutorials/@">
 		<group style-id="content-group" id="orgfordiacide-introLink-group">
-		<link label="Use 4DIAC locally (Blinking application)" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/4diacIDE/use4diacLocally.html" id="orgfordiacide-webLink"  style-id="content-link">
+		<link label="Use 4diac IDE locally (Blinking application)" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/4diacIDE/use4diacLocally.html" id="orgfordiacide-webLink"  style-id="content-link">
           	<text>This tutorial explains how to develop a sample application and test it localy.</text>
        	</link>
 		
@@ -32,11 +32,11 @@
 	<extensionContent id="page_fbs" name="Tutorials" path="tutorials/@">
 		<group style-id="content-group" id="orgfordiacide-introLink-group">
 		<link label="Developing Function Blocks" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/4diacIDE/createOwnTypes.html" id="orgfordiacide-webLink"  style-id="content-link">
-          	<text>This 4DIAC tutorial explains how to create your own Function Block.</text>
+          	<text>This 4diac tutorial explains how to create your own Function Block.</text>
        	</link>
 
 		<link label="Learn more" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/4diacIDE/otherUseful.html" id="orgfordiacide-webLink"  style-id="content-link">
-          	<text>Further features 4diac-ide offers.</text>
+          	<text>Further features 4diac IDE offers.</text>
        	</link>
 		
 		<link label="Advanced features" url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.eclipse.fordiac.ide/html/4diacIDE/advancedFeatures.html" id="orgfordiacide-webLink"  style-id="content-link">

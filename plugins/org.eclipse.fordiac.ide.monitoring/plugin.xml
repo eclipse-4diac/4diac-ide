@@ -35,6 +35,7 @@
    <extension
          point="org.eclipse.ui.views">
        <view
+       		category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.monitoring.views.WatchesView"
             icon="fordiacimage://ICON_WatchesView"
             id="org.eclipse.fordiac.ide.monitoring.views.WatchesView"
@@ -48,7 +49,7 @@
             class="org.eclipse.fordiac.ide.monitoring.MonitoringPerspective"
             icon="fordiacimage://ICON_MonitoringPerspective"
             id="org.eclipse.fordiac.ide.monitoring.MonitoringPerspective"
-            name="4DIAC Debug">
+            name="4diac IDE Debug">
       </perspective>
    </extension>
    <extension
@@ -60,7 +61,7 @@
    <extension
          point="org.eclipse.ui.commands"> 
       <command
-            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.monitoring.MonitorSystem"
             name="Monitor System">
          <state id="org.eclipse.ui.commands.toggleState"
@@ -133,7 +134,7 @@
          point="org.eclipse.ui.commands">
       <category
             id="org.eclipse.fordiac.ide.monitoring"
-            name="4DIAC Monitoring">
+            name="4diac IDE Monitoring Commands">
       </category>
       <command
             categoryId="org.eclipse.fordiac.ide.monitoring"

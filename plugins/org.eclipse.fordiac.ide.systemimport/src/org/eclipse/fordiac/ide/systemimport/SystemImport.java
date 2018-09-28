@@ -67,7 +67,7 @@ public class SystemImport extends Wizard implements IImportWizard {
 	public void addPages() {
 		super.addPages();
 		page = new IEC61499_2ImportWizardPage("Import System");
-		page.setDescription("Importing a system configuration to 4diac");
+		page.setDescription("Importing a system configuration to 4diac IDE");
 		page.setTitle("System Import");
 		addPage(page);
 	}

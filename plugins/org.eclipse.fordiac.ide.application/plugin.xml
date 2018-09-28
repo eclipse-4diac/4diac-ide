@@ -258,6 +258,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+      		category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.application.FordiacMarkersView"
             icon="fordiacimage://ICON_FB"
             id="org.eclipse.fordiac.ide.application.FordiacMarkersView"
@@ -268,27 +269,27 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            id="org.eclipse.fordiac.ide.application.commands.category4DIAC"
-            name="4DIAC">
+            id="org.eclipse.fordiac.ide.commands.category"
+            name="4diac IDE Commands">
       </category> 
        <command
-            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor"
             name="Focus On Predecessor">
       </command>
       <command
-            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
             name="Clear Focus-On">
       </command>
       <command
-            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.NewSubApplication"
             id="org.eclipse.fordiac.ide.application.commands.newSubApp"
             name="New Subapplication">
       </command>
       <command
-            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.FlattenSubApplication"
             id="org.eclipse.fordiac.ide.application.commands.flattenSubApp"
             name="Flatten Subapplication">
@@ -428,7 +429,7 @@
          point="org.eclipse.ui.ide.markerSupport">
       <markerContentGenerator
             id="org.eclipse.fordiac.ide.application.fordiacmarkerContentGenerator"
-            name="4DIAC Marker Generator">
+            name="4diac IDE Marker Generator">
          <markerFieldReference
                id="org.eclipse.ui.ide.severityAndDescriptionField">
          </markerFieldReference>

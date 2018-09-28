@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <wizard
-            category="org.eclipse.fordiac.ide.systemmanagement.ui"
+            category="org.eclipse.fordiac.ide.newWizard.category"
             class="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"
             icon="fordiacimage://ICON_System"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"
@@ -15,7 +15,7 @@
          </description>
       </wizard>
       <wizard
-            category="org.eclipse.fordiac.ide.systemmanagement.ui"
+            category="org.eclipse.fordiac.ide.newWizard.category"
             class="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"
             icon="fordiacimage://ICON_Application"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"
@@ -26,18 +26,18 @@
          </description>
       </wizard>
       <category
-            id="org.eclipse.fordiac.ide.systemmanagement.ui"
-            name="%LABEL_Category">
+            id="org.eclipse.fordiac.ide.newWizard.category"
+            name="%4DIAC_IDE_Category">
       </category>
    </extension>
    <extension
          point="org.eclipse.ui.views">
       <category
-            id="org.eclipse.fordiac.ide.systemmanagement"
-            name="%category.name.0">
+            id="org.eclipse.fordiac.ide.view.category"
+            name="%4DIAC_IDE_Category">
       </category>
       <view
-      		category="org.eclipse.fordiac.ide.systemmanagement"
+      		category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemExplorer"
             icon="fordiacimage://ICON_SystemExplorer"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"
@@ -135,7 +135,7 @@
       <extension
          point="org.eclipse.ui.commands"> 
       <command
-            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.refresh"
             name="%SystemExplorer_Refresh">
       </command>
