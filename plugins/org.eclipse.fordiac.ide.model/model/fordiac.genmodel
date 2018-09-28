@@ -514,6 +514,10 @@
     <genClasses image="false" ecoreClass="lib.ecore#//TypedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TypedElement/type"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//SimpleFBType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleFBType/algorithm"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleFBType/internalVars"/>
+    </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">
