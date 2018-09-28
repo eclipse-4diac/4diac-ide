@@ -38,7 +38,7 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 			switch (type) {
 				case Notification.SET:
 					if (featureId == LibraryElementPackage.SUB_APP__NAME) {
-						setPartName(getSubApp().getName());
+						updateEditorTitle(getSubApp().getName());
 					}
 			}
 			firePropertyChange(PROP_DIRTY);
@@ -79,13 +79,10 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 			setModel(subAppInput.getSubApp().getSubAppNetwork()); 
 			// register EContentAdapter to be informed on changes of the subapplication name
 			getSubApp().eAdapters().add(adapter);
-			if (input.getName() != null) {
-				setPartName(input.getName());
-			}
 		}
 		super.setModel(input);
 	}
-
+		
 	@Override
 	protected EditPartFactory getEditPartFactory() {		
 		return new UntypedSubAppEditPartFactory(this, getZoomManger());
