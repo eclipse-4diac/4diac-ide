@@ -1,10 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2007 - 2010 4DIAC - consortium.
+ * Copyright (c) 2017 - 2018 fortiss GmbH
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *   Jose Cabral
+ *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fmu.preferences;
 
@@ -120,13 +124,13 @@ public class FMUPreferencePage
 	private void updateEnabledLibraries(Boolean validPath, String pathString){
 		
 		if (validPath){
-			win32Field.setEnabled(new File(pathString + File.separatorChar + "win32Forte.dll").
+			win32Field.setEnabled(new File(pathString + File.separatorChar + "win32Forte.dll"). //$NON-NLS-1$
 					exists(), librariesGroup);
-			win64Field.setEnabled(new File(pathString + File.separatorChar + "win64Forte.dll").
+			win64Field.setEnabled(new File(pathString + File.separatorChar + "win64Forte.dll"). //$NON-NLS-1$
 					exists(), librariesGroup);
-			linux32Field.setEnabled(new File(pathString + File.separatorChar + "linux32Forte.so").
+			linux32Field.setEnabled(new File(pathString + File.separatorChar + "linux32Forte.so"). //$NON-NLS-1$
 					exists(), librariesGroup);
-			linux64Field.setEnabled(new File(pathString + File.separatorChar + "linux64Forte.so").
+			linux64Field.setEnabled(new File(pathString + File.separatorChar + "linux64Forte.so"). //$NON-NLS-1$
 					exists(), librariesGroup);
 		}else{
 			win32Field.setEnabled(false, librariesGroup);
@@ -140,16 +144,16 @@ public class FMUPreferencePage
 	public static List<String> getFoundLibraries(){
 		List<String> found = new ArrayList<>();
 		String pathString = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH);
-		if ((new File(pathString + File.separatorChar + "win32Forte.dll").exists())){
+		if ((new File(pathString + File.separatorChar + "win32Forte.dll").exists())){ //$NON-NLS-1$
 			found.add(PreferenceConstants.P_FMU_WIN32);
 		}
-		if ((new File(pathString + File.separatorChar + "win64Forte.dll").exists())){
+		if ((new File(pathString + File.separatorChar + "win64Forte.dll").exists())){ //$NON-NLS-1$
 			found.add(PreferenceConstants.P_FMU_WIN64);
 		}
-		if ((new File(pathString + File.separatorChar + "linux32Forte.so").exists())){
+		if ((new File(pathString + File.separatorChar + "linux32Forte.so").exists())){ //$NON-NLS-1$
 			found.add(PreferenceConstants.P_FMU_LIN32);
 		}
-		if ((new File(pathString + File.separatorChar + "linux64Forte.so").exists())){
+		if ((new File(pathString + File.separatorChar + "linux64Forte.so").exists())){ //$NON-NLS-1$
 			found.add(PreferenceConstants.P_FMU_LIN64);
 		}
 		

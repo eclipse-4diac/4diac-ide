@@ -1,10 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2007 - 2013 4DIAC - consortium.
+ * Copyright (c) 2017 - 2018 fortiss GmbH
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *   Jose Cabral
+ *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fmu.wizard;
 
@@ -76,7 +80,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		private String mInitialValue;
 		
 		public FMUInputOutput() {
-			this.mName = "";
+			this.mName = ""; //$NON-NLS-1$
 			this.mIsInput = false;
 			this.mVarType = variableType.INTEGER;
 			this.mScope = variableScope.INTERNAL;
@@ -94,19 +98,19 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 				setBooleanInitValue();
 			}
 			
-			if(null == mInitialValue || mInitialValue.equals("")){
+			if(null == mInitialValue || mInitialValue.equals("")){ //$NON-NLS-1$
 				switch(varType){
 				case BOOLEAN:
-					this.mInitialValue = "false";
+					this.mInitialValue = "false"; //$NON-NLS-1$
 					break;
 				case INTEGER:
-					this.mInitialValue = "0";
+					this.mInitialValue = "0"; //$NON-NLS-1$
 					break;
 				case REAL:
-					this.mInitialValue = "0.0";
+					this.mInitialValue = "0.0"; //$NON-NLS-1$
 					break;
 				case STRING:
-					this.mInitialValue = "";
+					this.mInitialValue = ""; //$NON-NLS-1$
 					break;
 				case UNKNOWN: 
 					break;
@@ -116,9 +120,9 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		
 		private void setBooleanInitValue() {
 			if (this.mInitialValue == null || this.mInitialValue.equals("0") || this.mInitialValue.equals("")) {
-				this.mInitialValue = "false";
+				this.mInitialValue = "false"; //$NON-NLS-1$
 			} else {
-				this.mInitialValue = "true";
+				this.mInitialValue = "true"; //$NON-NLS-1$
 			}
 		}
 		
@@ -148,13 +152,13 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		
 		static variableType getTypeFromString(String text){
 			variableType varType;
-			if (text.equals("BOOL")) {
+			if (text.equals("BOOL")) { //$NON-NLS-1$
 				varType = FMUInputOutput.variableType.BOOLEAN;
-			} else if (text.matches("BYTE|WORD|DWORD|LWORD|INT|DINT|LINT|SINT|USINT|UINT|UDINT|ULINT|ANY_INT")){
+			} else if (text.matches("BYTE|WORD|DWORD|LWORD|INT|DINT|LINT|SINT|USINT|UINT|UDINT|ULINT|ANY_INT")){ //$NON-NLS-1$
 				varType = FMUInputOutput.variableType.INTEGER;
-			} else if (text.matches("STRING|WSTRING|ANY_STRING|DATE|DATE_AND_TIME|TIME_OF_DAY|ANY_DATE|TIME")){
+			} else if (text.matches("STRING|WSTRING|ANY_STRING|DATE|DATE_AND_TIME|TIME_OF_DAY|ANY_DATE|TIME")){ //$NON-NLS-1$
 				varType = FMUInputOutput.variableType.STRING;
-			} else if (text.matches("REAL|LREAL|ANY_REAL")){
+			} else if (text.matches("REAL|LREAL|ANY_REAL")){ //$NON-NLS-1$
 				varType = FMUInputOutput.variableType.REAL;
 			}else{
 				varType = FMUInputOutput.variableType.UNKNOWN;
@@ -210,9 +214,9 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		}
 	}
 	
-	private static final String BINARIES_FOLDER_NAME = "binaries";
+	private static final String BINARIES_FOLDER_NAME = "binaries"; //$NON-NLS-1$
 	
-	private static final String RESOURCES_FOLDER_NAME = "resources";
+	private static final String RESOURCES_FOLDER_NAME = "resources"; //$NON-NLS-1$
 	
 	private static final int ZIP_BUFFER = 1024;
 	
@@ -299,7 +303,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	
 	private static String createTempFolderWithFMUStructure(String outputName, List<String> librariesToAdd, Shell shell) {
 		try {
-			String tempFolder = Files.createTempDirectory("temp").toString();
+			String tempFolder = Files.createTempDirectory("temp").toString(); //$NON-NLS-1$
 			File binariesDirectory = new File(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH));
 			if (binariesDirectory.exists() && binariesDirectory.isDirectory()) {
 				if (createTempFoldersAndFiles(tempFolder, outputName,
@@ -324,7 +328,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 				fmuFileHandler.writeToBootFile(new File(tempFolder + File.separatorChar + RESOURCES_FOLDER_NAME + File.separatorChar + "forte.fboot")
 						.getAbsolutePath(), true, shell) 
 				&&
-				writeToAnyFile(new File(tempFolder + File.separatorChar + "modelDescription.xml").getAbsolutePath(),
+				writeToAnyFile(new File(tempFolder + File.separatorChar + "modelDescription.xml").getAbsolutePath(), //$NON-NLS-1$
 					fmuFileHandler.createModelDescription(outputName).toString(), true, shell));
 	}
 	
@@ -476,13 +480,13 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	@Override
 	public String sendREQ(String destination, String request) throws IOException {
 
-		if (!request.contains("Action=\"START\"")) { //don't print the start request, since the it should be started from the FMI
-			if (request.contains("Action=\"CREATE\"><FB ") && !destination.equals("")) {
-				String type = getSubstringAfterMatch(request, "Type=\"");
+		if (!request.contains("Action=\"START\"")) { //don't print the start request, since the it should be started from the FMI //$NON-NLS-1$
+			if (request.contains("Action=\"CREATE\"><FB ") && !destination.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
+				String type = getSubstringAfterMatch(request, "Type=\"");//$NON-NLS-1$
 				type = type.substring(0, type.indexOf('"'));
-				String fbName =  getSubstringAfterMatch(request, "Name=\"");
+				String fbName =  getSubstringAfterMatch(request, "Name=\"");//$NON-NLS-1$
 				fbName = fbName.substring(0, fbName.indexOf('"'));
-				populateInputsAndOutputs(fbName, type, device.getResourceNamed(destination).getFBNetwork(), "");
+				populateInputsAndOutputs(fbName, type, device.getResourceNamed(destination).getFBNetwork(), destination + "."); //$NON-NLS-1$
 			}
 			return super.sendREQ(destination, request);
 		}
@@ -496,7 +500,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 					IInterfaceElement otherEndpoint = (isInput) ? con.getSource() : con.getDestination();
 					FMUInputOutput.variableType varType = FMUInputOutput.getTypeFromString(otherEndpoint.getType().getName());
 					if (FMUInputOutput.variableType.UNKNOWN != varType) {
-						inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "@" + otherEndpoint.getFBNetworkElement().getName() + "." + otherEndpoint.getName(), !isInput, FMUInputOutput.variableScope.IO, varType, ""));	//@ to avoid problems if some part of the interface has the same name
+						inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "@" + otherEndpoint.getFBNetworkElement().getName() + "." + otherEndpoint.getName(), !isInput, FMUInputOutput.variableScope.IO, varType, ""));	//@ to avoid problems if some part of the interface has the same name //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					}
 					break;
 				}
@@ -516,12 +520,12 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	
 	private IOInfo getInfoFromIOAndComm(String fbName, String fbType, FBNetwork fbNetwork){
 		IOInfo returnValue;
-		if (fbType.matches("IX|QX|IW|QW")) {
+		if (fbType.matches("IX|QX|IW|QW")) { //$NON-NLS-1$
 			returnValue = getInfoFromIO(fbType);
-		} else if ( 0 == fbType.indexOf("PUBLISH_")   || 
-				    0 == fbType.indexOf("SUBSCRIBE_") || 
-				    0 == fbType.indexOf("CLIENT_")    || 
-				    0 == fbType.indexOf("SERVER_")) {
+		} else if ( 0 == fbType.indexOf("PUBLISH_")   ||  //$NON-NLS-1$
+				    0 == fbType.indexOf("SUBSCRIBE_") ||  //$NON-NLS-1$
+				    0 == fbType.indexOf("CLIENT_")    ||  //$NON-NLS-1$
+				    0 == fbType.indexOf("SERVER_")) { //$NON-NLS-1$
 			returnValue = getInfoFromComm(fbName, fbNetwork);
 		}else {
 			returnValue = new IOInfo();
@@ -535,15 +539,15 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		IOInfo returnValue = new IOInfo();
 		returnValue.setIo(true);
 		returnValue.setPubSub(false);
-		if (fbType.equals("IX")) {
+		if (fbType.equals("IX")) { //$NON-NLS-1$
 			returnValue.setInput(true);
 			returnValue.setVarType(FMUInputOutput.variableType.BOOLEAN);
-		} else if (fbType.equals("QX")) {
+		} else if (fbType.equals("QX")) { //$NON-NLS-1$
 			returnValue.setVarType(FMUInputOutput.variableType.BOOLEAN);
-		} else if (fbType.equals("IW")) {
+		} else if (fbType.equals("IW")) { //$NON-NLS-1$
 			returnValue.setInput(true);
 			returnValue.setVarType(FMUInputOutput.variableType.INTEGER);
-		} else if (fbType.equals("QW")) {
+		} else if (fbType.equals("QW")) { //$NON-NLS-1$
 			returnValue.setVarType(FMUInputOutput.variableType.INTEGER);
 		}
 		return returnValue;
@@ -553,8 +557,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		IOInfo returnValue = new IOInfo();
 		returnValue.setIo(true);
 		returnValue.setPubSub(true);
-		Value value = fbNetwork.getFBNamed(fbName).getInterface().getVariable("ID").getValue();
-		if (value != null && null != value.getValue() && "fmu[]".equals(value.getValue())) { //has some literal
+		Value value = fbNetwork.getFBNamed(fbName).getInterface().getVariable("ID").getValue(); //$NON-NLS-1$
+		if (value != null && null != value.getValue() && "fmu[]".equals(value.getValue())) { //has some literal //$NON-NLS-1$
 			returnValue.setPubSub(true);
 			returnValue.setIo(true);						
 		}
@@ -577,7 +581,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	}
 	
 	private void handleBasicFB(BasicFBType basic, String previousNames, String fbName ) {
-		if(basic.getName().matches("E_CTU|E_D_FF|E_DEMUX|E_MERGE|E_PERMIT|E_REND|E_RS|E_SELECT|E_SPLIT|E_SR|E_SWITCH")) { //these FBs are implemented as SIFB in the 4diac-RTE
+		if(basic.getName().matches("E_CTU|E_D_FF|E_DEMUX|E_MERGE|E_PERMIT|E_REND|E_RS|E_SELECT|E_SPLIT|E_SR|E_SWITCH")) { //these FBs are implemented as SIFB in the 4diac-RTE //$NON-NLS-1$
 			return;
 		}
 		
@@ -587,16 +591,16 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			if (FMUInputOutput.variableType.UNKNOWN == varType) {
 				continue;
 			}
-			inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + var.getName(), false, FMUInputOutput.variableScope.INTERNAL,
+			inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + var.getName(), false, FMUInputOutput.variableScope.INTERNAL, //$NON-NLS-1$
 					varType, (null != var.getVarInitialization()) ? var.getVarInitialization().getInitialValue() : null));
 		}
 		// store ECC
-		inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + ".$ECC", false, FMUInputOutput.variableScope.INTERNAL,
-				FMUInputOutput.variableType.INTEGER, "0"));
+		inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + ".$ECC", false, FMUInputOutput.variableScope.INTERNAL, //$NON-NLS-1$
+				FMUInputOutput.variableType.INTEGER, "0")); //$NON-NLS-1$
 	}
 	
 	private void handleCompositeFB(CompositeFBType composite, String previousNames, String fbName) {
-		if(composite.getName().matches("E_CYCLE|E_F_TRIG|E_R_TRIG|E_TimeOut")) { //these FBs are implemented as SIFB in the 4diac-RTE
+		if(composite.getName().matches("E_CYCLE|E_F_TRIG|E_R_TRIG|E_TimeOut")) { //these FBs are implemented as SIFB in the 4diac-RTE //$NON-NLS-1$
 			return;
 		}
 		
@@ -604,7 +608,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		for (FBNetworkElement elem : composite.getFBNetwork().getNetworkElements()) {
 			if (elem instanceof FBImpl && !(elem instanceof AdapterFBImpl)) {
 				FBImpl fb = (FBImpl) elem;
-				populateInputsAndOutputs(fb.getName(), fb.getTypeName(), composite.getFBNetwork(), previousNames + fbName + ".");
+				populateInputsAndOutputs(fb.getName(), fb.getTypeName(), composite.getFBNetwork(), previousNames + fbName + "."); //$NON-NLS-1$
 			}
 		}
 	}
@@ -631,7 +635,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 				}else{//event: don't do anything
 					
 				}
-				inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + var.getName(), false, varInfo.getScope(), varInfo.getVarType(), varInfo.getInitialValue()));
+				inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + var.getName(), false, varInfo.getScope(), varInfo.getVarType(), varInfo.getInitialValue())); //$NON-NLS-1$
 			}
 		}
 	}
@@ -642,7 +646,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		FB commFB = paFBNetwork.getFBNamed(fbName);
 		FMUInputOutput.variableType type;
 		Value value = var.getValue();
-		String initialValue = "";
+		String initialValue = ""; //$NON-NLS-1$
 		
 		type = FMUInputOutput.getTypeFromString(commFB.getInterface().getVariable(var.getName()).getTypeName());
 		
@@ -651,23 +655,23 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		}
 			
 
-		if (value != null && null != value.getValue() && !"".equals(value.getValue())) { // has some literal
+		if (value != null && null != value.getValue() && !"".equals(value.getValue())) { // has some literal //$NON-NLS-1$
 			initialValue = value.getValue();
-			if (initialValue.contains("%")) {
+			if (initialValue.contains("%")) { //$NON-NLS-1$
 				String replaced = SystemManager.INSTANCE.getReplacedString(paFBNetwork.getAutomationSystem(),
 						initialValue);
 				if (replaced != null) {
 					initialValue = replaced;
 				}
 			}
-			if (-1 != initialValue.indexOf('#')) {
+			if (-1 != initialValue.indexOf('#')) { //$NON-NLS-1$
 				if(FMUInputOutput.variableType.UNKNOWN == type){
-					type = FMUInputOutput.getTypeFromString(initialValue.substring(0, initialValue.indexOf('#')));
+					type = FMUInputOutput.getTypeFromString(initialValue.substring(0, initialValue.indexOf('#'))); //$NON-NLS-1$
 				}
 				
-				initialValue = initialValue.substring(initialValue.indexOf('#') + 1);
+				initialValue = initialValue.substring(initialValue.indexOf('#') + 1); //$NON-NLS-1$
 			}
-			returnValue = new FMUInputOutput("", false, FMUInputOutput.variableScope.PARAM, type, initialValue);
+			returnValue = new FMUInputOutput("", false, FMUInputOutput.variableScope.PARAM, type, initialValue); //$NON-NLS-1$
 		}
 
 		
@@ -704,10 +708,12 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	public StringBuilder createModelDescription(String outputName){
 		StringBuilder modelDescription = new StringBuilder();
 		modelDescription.append(
-				"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<fmiModelDescription\n  fmiVersion=\"2.0\"\n  modelName=\"" + outputName + "\"\n  guid=\"" + outputName + "\">"
-				+ "\n\n<CoSimulation\n  modelIdentifier=\"" + outputName + "\"\n  canHandleVariableCommunicationStepSize=\"true\"/>\n\n<LogCategories>\n  <Category name=\"logAll\"/>\n  <Category name=\"logError\"/>\n  <Category name=\"logCalls\"/>\n</LogCategories>");
+				"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<fmiModelDescription\n  fmiVersion=\"2.0\"\n  modelName=\"" + outputName + //$NON-NLS-1$
+				"\"\n  guid=\"" + outputName + //$NON-NLS-1$
+				"\">\n\n<CoSimulation\n  modelIdentifier=\"" + outputName + //$NON-NLS-1$
+				"\"\n  canHandleVariableCommunicationStepSize=\"true\"/>\n\n<LogCategories>\n  <Category name=\"logAll\"/>\n  <Category name=\"logError\"/>\n  <Category name=\"logCalls\"/>\n</LogCategories>"); //$NON-NLS-1$
 		
-		modelDescription.append("\n\n<ModelVariables>\n");
+		modelDescription.append("\n\n<ModelVariables>\n"); //$NON-NLS-1$
 		
 		int outputIndex = 0;
 		int noOfOutputs = 0;
@@ -725,21 +731,21 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			}
 		}
 		
-		modelDescription.append("</ModelVariables>\n\n<ModelStructure>\n");
+		modelDescription.append("</ModelVariables>\n\n<ModelStructure>\n"); //$NON-NLS-1$
 		if (0 != noOfOutputs) {
-			modelDescription.append("  <Outputs>\n");
+			modelDescription.append("  <Outputs>\n"); //$NON-NLS-1$
 
 			outputIndex = 0;
 			for (FMUInputOutput element : inputsAndOutputs) {
 				outputIndex++;
 				if (!element.getInput() && (element.getScope() == FMUInputOutput.variableScope.IO)){ 
-					modelDescription.append("    <Unknown index=\"" + outputIndex + "\" dependencies=\"\"/>\n");
+					modelDescription.append("    <Unknown index=\"" + outputIndex + "\" dependencies=\"\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 
 			}
-			modelDescription.append("  </Outputs>\n");
+			modelDescription.append("  </Outputs>\n"); //$NON-NLS-1$
 		}
-		modelDescription.append("</ModelStructure>\n\n</fmiModelDescription>");
+		modelDescription.append("</ModelStructure>\n\n</fmiModelDescription>"); //$NON-NLS-1$
 		return modelDescription;
 	}
 	
@@ -748,54 +754,54 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		String causality = getCausality(element);
 		String variability= getVariability(element);
 		
-		modelDescription.append("  <ScalarVariable name=\"" + element.getName() + "\" "
-				+ "valueReference=\"" + outputIndex + "\" "
-				+ "description=\"\" "
-				+ "causality=\"" + causality
+		modelDescription.append("  <ScalarVariable name=\"" + element.getName() + "\" " //$NON-NLS-1$  //$NON-NLS-2$
+				+ "valueReference=\"" + outputIndex + "\" " //$NON-NLS-1$  //$NON-NLS-2$
+				+ "description=\"\" " //$NON-NLS-1$
+				+ "causality=\"" + causality //$NON-NLS-1$
 				 + "\" variability=\"" + variability + "\""
 				+ (!element.getInput() || (element.getScope() == FMUInputOutput.variableScope.PARAM) ? 
-						" initial=\"exact\">"
-						: ">" ) 
-				+ "\n    <");
+						" initial=\"exact\">" //$NON-NLS-1$
+						: ">" )  //$NON-NLS-1$
+				+ "\n    <"); //$NON-NLS-1$
 		switch(element.getVarType()){
 		case BOOLEAN:
-			modelDescription.append("Boolean ");
+			modelDescription.append("Boolean "); //$NON-NLS-1$
 			break;
 		case INTEGER:
-			modelDescription.append("Integer ");
+			modelDescription.append("Integer "); //$NON-NLS-1$
 			break;
 		case REAL:
-			modelDescription.append("Real ");
+			modelDescription.append("Real "); //$NON-NLS-1$
 			break;
 		case STRING:
-			modelDescription.append("String ");
+			modelDescription.append("String "); //$NON-NLS-1$
 			break;
 		default:
 			
 			break;
 		}
-		modelDescription.append("start=\"" + element.getInitialValue() + "\"/>\n  </ScalarVariable>\n");
+		modelDescription.append("start=\"" + element.getInitialValue() + "\"/>\n  </ScalarVariable>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private String getCausality(FMUInputOutput element) {
 		switch(element.getScope()) {
 		case PARAM:
-			return "parameter";
+			return "parameter"; //$NON-NLS-1$
 		case INTERNAL:
-			return "local";
+			return "local"; //$NON-NLS-1$
 		case IO:
-			return element.getInput() ? "input" : "output";
+			return element.getInput() ? "input" : "output"; //$NON-NLS-1$ //$NON-NLS-2$
 		default:
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 	
 	private String getVariability(FMUInputOutput element) {
 		if(FMUInputOutput.variableScope.PARAM == element.getScope()) {
-			return "fixed";
+			return "fixed"; //$NON-NLS-1$
 		}
 		
-		return (FMUInputOutput.variableType.REAL == element.getVarType()) ?  "continuous" : "discrete";
+		return (FMUInputOutput.variableType.REAL == element.getVarType()) ?  "continuous" : "discrete"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private String getSubstringAfterMatch(String source, String toLook) {
