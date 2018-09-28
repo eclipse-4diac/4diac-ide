@@ -12,64 +12,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
 
+import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteGroup;
 import org.eclipse.gef.palette.PaletteRoot;
-import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
-import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 public final class ECCPaletteFactory {
-	private static final String PALETTE_DOCK_LOCATION = "ECCPaletteFactory.Location"; //$NON-NLS-1$
-	private static final String PALETTE_SIZE = "ECCPaletteFactory.Size"; //$NON-NLS-1$
-	private static final String PALETTE_STATE = "ECCPaletteFactory.State"; //$NON-NLS-1$
-
-	public static FlyoutPreferences createPalettePreferences() {
-		boolean val = Activator.getDefault().getPreferenceStore().contains(PALETTE_STATE);
-		FlyoutPreferences preferences = new FlyoutPreferences() {
-			@Override
-			public int getDockLocation() {
-				return Activator.getDefault().getPreferenceStore().getInt(PALETTE_DOCK_LOCATION);
-			}
-
-			@Override
-			public int getPaletteState() {
-				return Activator.getDefault().getPreferenceStore().getInt(PALETTE_STATE);
-
-			}
-
-			@Override
-			public int getPaletteWidth() {
-				return Activator.getDefault().getPreferenceStore().getInt(PALETTE_SIZE);
-
-			}
-
-			@Override
-			public void setDockLocation(final int location) {
-				Activator.getDefault().getPreferenceStore().setValue(PALETTE_DOCK_LOCATION, location);
-			}
-
-			@Override
-			public void setPaletteState(final int state) {
-				Activator.getDefault().getPreferenceStore().setValue(PALETTE_STATE, state);
-
-			}
-
-			@Override
-			public void setPaletteWidth(final int width) {
-				Activator.getDefault().getPreferenceStore().setValue(PALETTE_SIZE, width);
-
-			}
-		};
-
-		if (!val) {
-			preferences.setPaletteState(FlyoutPaletteComposite.STATE_PINNED_OPEN);
-			preferences.setPaletteWidth(125);
-		}
-		return preferences;
-	}
-
+	public static final PaletteFlyoutPreferences PALETTE_PREFERENCES = new PaletteFlyoutPreferences(
+			"ECCPaletteFactory.Location", //$NON-NLS-1$
+			"ECCPaletteFactory.Size", //$NON-NLS-1$
+			"ECCPaletteFactory.State"); //$NON-NLS-1$
+	
 	public static PaletteRoot createPalette() {
 		final PaletteRoot palette = new PaletteRoot();
 		fillPalette(palette);
@@ -94,4 +49,7 @@ public final class ECCPaletteFactory {
 		palette.add(eccGroup);
 	}
 
+	private ECCPaletteFactory() {
+		throw new UnsupportedOperationException("Class ECCPaletterFactory should not be created!\n"); //$NON-NLS-1$
+	}
 }

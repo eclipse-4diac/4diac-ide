@@ -84,13 +84,6 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	/** The outline page. */
 	private DiagramOutlinePage outlinePage;
 
-	/**
-	 * Instantiates a new diagram editor.
-	 */
-	public DiagramEditorWithFlyoutPalette() {
-		// setEditDomain(new DefaultEditDomain(this));
-	}
-
 	//needed for tabbed property sheets
 	@Override public CommandStack getCommandStack() {
 		return super.getCommandStack();
