@@ -16,10 +16,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.ui.ide.workbench"
-            name="4diac-ide">
+            name="4diac IDE">
          <property
                name="appName"
-               value="4diac-ide">
+               value="4diac IDE">
          </property>
          <property
                name="aboutImage"
@@ -157,7 +157,7 @@
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.buildAll"/>
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.rebuildAll"/>
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.buildLast"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtext.ui*"/>        
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtext.ui.*"/>        
    </extension>
 
 </plugin>

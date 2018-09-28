@@ -7,7 +7,7 @@
       <page
             class="org.eclipse.fordiac.ide.util.preferences.FordiacPreferencePage"
             id="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
-            name="4DIAC">
+            name="4diac IDE">
       </page>
    </extension>
    <extension
@@ -20,7 +20,7 @@
          point="org.eclipse.ui.actionSets">
       <actionSet
             id="org.eclipse.fordiac.ide.application.actionSet1"
-            label="4DIAC"
+            label="4diac IDE"
             visible="true">
          <action
                class="org.eclipse.fordiac.ide.util.action.HideDataConnectionsAction"

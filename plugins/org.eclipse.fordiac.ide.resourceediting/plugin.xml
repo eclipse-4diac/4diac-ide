@@ -23,12 +23,12 @@
   <extension
          point="org.eclipse.ui.commands">
       <command
-            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
             name="Show FB in Application">
       </command>
        <command
-            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.resourceediting.commands.OpenConnectionOppositeResource"
             name="Open connection opposite resource">
       </command>
