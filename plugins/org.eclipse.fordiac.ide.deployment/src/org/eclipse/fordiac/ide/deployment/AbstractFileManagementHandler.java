@@ -45,7 +45,7 @@ public abstract class AbstractFileManagementHandler
 	@Override
 	public String sendREQ(String destination, String request) throws IOException { 
 		if(request.contains("Action=\"QUERY\"")) { //return an empty list always
-			return "<Response ID=\"1\">\\n  <NameList>\\n </NameList>\\n</Response>";
+			return "<Response ID=\"0\"/>"; //$NON-NLS-1$
 		}else {
 			stringBuffer.append(destination + ";" + request + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			return ""; //$NON-NLS-1$
