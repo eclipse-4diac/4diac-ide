@@ -33,9 +33,9 @@ import org.eclipse.fordiac.ide.application.editparts.ElementEditPartFactory;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.utilities.ApplicationEditorTemplateTransferDropTargetListener;
-import org.eclipse.fordiac.ide.application.utilities.FBNetworkFlyoutPreferences;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -67,6 +67,11 @@ import org.eclipse.ui.actions.ActionFactory;
  * The main editor for FBNetworks.
  */
 public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements ISystemEditor{
+	
+	private static final PaletteFlyoutPreferences PALETTE_PREFERENCES = new PaletteFlyoutPreferences(
+				"FBNetworkPalette.Location", //$NON-NLS-1$
+				"FBNetworkPalette.Size", //$NON-NLS-1$
+				"FBNetworkPalette.State"); //$NON-NLS-1$
 
 
 	private FBNetwork model;
@@ -74,7 +79,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 	protected void setModel(FBNetwork model) {
 		this.model = model;
 	}
-
 	
 	public CommandStack getFBEditorCommandStack() {
 		return getCommandStack();
@@ -124,8 +128,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 							editPartsToSelect.removeAll(editPartsToDeselect);
 						}
 
-						getCurrentViewer().setSelection(
-								new StructuredSelection(editPartsToSelect.toArray()));
+						getCurrentViewer().setSelection(new StructuredSelection(editPartsToSelect.toArray()));
 					}
 				};
 				
@@ -154,12 +157,9 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 	}
 
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(
-			final ScrollingGraphicalViewer viewer,
+	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
-		ContextMenuProvider cmp = new UIFBNetworkContextMenuProvider(this,
-				getActionRegistry(), zoomManager, getPalette());
-		return cmp;
+		return new UIFBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager, getPalette());
 	}
 
 	protected Palette getPalette() {
@@ -274,12 +274,12 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 	 */
 	@SuppressWarnings("static-method")
 	protected String getPalletNavigatorID() {
-		return "org.eclipse.fordiac.ide.fbpaletteviewer"; //$NON-NLS-1$;
+		return "org.eclipse.fordiac.ide.fbpaletteviewer"; //$NON-NLS-1$
 	}
 
 	@Override
 	protected FlyoutPreferences getPalettePreferences(){
-		return FBNetworkFlyoutPreferences.INSTANCE;
+		return PALETTE_PREFERENCES;
 	}
 
 	public void selectFB(FB fb) {
@@ -295,6 +295,4 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 		// empty
 	}
 	
-	
-
 }

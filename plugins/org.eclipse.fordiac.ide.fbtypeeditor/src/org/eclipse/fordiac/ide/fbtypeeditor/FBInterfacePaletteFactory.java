@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
@@ -28,67 +29,13 @@ import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.gef.palette.PaletteRoot;
-import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
-import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 public final class FBInterfacePaletteFactory {
-	private static final String PALETTE_DOCK_LOCATION = "FBInterfacePaletteFactory.Location"; //$NON-NLS-1$
-	private static final String PALETTE_SIZE = "FBInterfacePaletteFactory.Size"; //$NON-NLS-1$
-	private static final String PALETTE_STATE = "FBInterfacePaletteFactory.State"; //$NON-NLS-1$
-
-	public static FlyoutPreferences createPalettePreferences() {
-		boolean val = Activator.getDefault().getPreferenceStore().contains(PALETTE_STATE);
-		
-		FlyoutPreferences preferences = new FlyoutPreferences() {
-
-			@Override
-			public int getDockLocation() {
-				return Activator.getDefault().getPreferenceStore().getInt(
-						PALETTE_DOCK_LOCATION);
-			}
-
-			@Override
-			public int getPaletteState() {
-				return Activator.getDefault().getPreferenceStore()
-						.getInt(PALETTE_STATE);
-
-			}
-
-			@Override
-			public int getPaletteWidth() {
-				return Activator.getDefault().getPreferenceStore().getInt(PALETTE_SIZE);
-
-			}
-
-			@Override
-			public void setDockLocation(final int location) {
-				Activator.getDefault().getPreferenceStore().setValue(
-						PALETTE_DOCK_LOCATION, location);
-			}
-
-			@Override
-			public void setPaletteState(final int state) {
-				Activator.getDefault().getPreferenceStore().setValue(PALETTE_STATE,
-						state);
-
-			}
-
-			@Override
-			public void setPaletteWidth(final int width) {
-				Activator.getDefault().getPreferenceStore().setValue(PALETTE_SIZE,
-						width);
-
-			}
-		};
-		
-		if(!val){
-			preferences.setPaletteState(FlyoutPaletteComposite.STATE_PINNED_OPEN);
-			preferences.setPaletteWidth(125);
-		}
-		
-		return preferences;
-	}
+	public static final PaletteFlyoutPreferences PALETTE_PREFERENCES = new PaletteFlyoutPreferences(
+			"FBInterfacePaletteFactory.Location", //$NON-NLS-1$
+			"FBInterfacePaletteFactory.Size", //$NON-NLS-1$
+			"FBInterfacePaletteFactory.State"); //$NON-NLS-1$
 
 	public static PaletteRoot createPalette(Palette systemPalette) {
 		final PaletteRoot palette = new PaletteRoot();
@@ -132,7 +79,7 @@ public final class FBInterfacePaletteFactory {
 		}	
 		
 		PaletteDrawer drawer = createGroup(pal.getRootGroup(), "", palette); //$NON-NLS-1$
-		if (drawer.getChildren().size() > 0) {
+		if (!drawer.getChildren().isEmpty()) {
 			palette.add(drawer);
 		}
 	}
@@ -152,7 +99,7 @@ public final class FBInterfacePaletteFactory {
 				.hasNext();) {
 			PaletteGroup paletteGroup = iterator.next();
 			PaletteDrawer drawer = createGroup(paletteGroup, newParent, palette);
-			if (drawer.getChildren().size() > 0) {
+			if (!drawer.getChildren().isEmpty()) {
 				palette.add(drawer);
 			}
 
@@ -166,20 +113,23 @@ public final class FBInterfacePaletteFactory {
 
 	private static List<PaletteEntry> createAdapterEntries(
 			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
+		List<PaletteEntry> entries = new ArrayList<>();
 		
 		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry paletteEntry : group.getEntries()) {
 			if(paletteEntry instanceof AdapterTypePaletteEntry){
 				AdapterTypePaletteEntry entry = (AdapterTypePaletteEntry) paletteEntry;
 				ImageDescriptor desc = FordiacImage.ICON_DataType.getImageDescriptor();
-				CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(
+				entries.add(new CombinedTemplateCreationEntry(
 						entry.getLabel(), entry.getType().getComment(), 
-						new DataTypeCreationFactory(entry.getType()), desc, desc);
-				if (combined != null) {
-					entries.add(combined);
-				}
+						new DataTypeCreationFactory(entry.getType()), desc, desc));
 			}
 		}
 		return entries;
 	}
+	
+	private FBInterfacePaletteFactory(){
+		throw new UnsupportedOperationException("Class FBInterfacePaletteFactory should not be created!\n"); //$NON-NLS-1$
+	}
+
+
 }
