@@ -20,7 +20,7 @@ import org.eclipse.ui.IMemento;
 public class ApplicationEditorInput extends PersistableUntypedEditorInput {
 
 	public ApplicationEditorInput(Application app) {
-		super(app.getFBNetwork().eContainer(), app.getName(), app.getComment());
+		super(app, app.getName());
 	}
 	
 	@Override
@@ -35,11 +35,11 @@ public class ApplicationEditorInput extends PersistableUntypedEditorInput {
 	}
 	
 	public AutomationSystem getAutomationSystem(){
-		return getApplication().getAutomationSystem();
+		return getContent().getAutomationSystem();
 	}
 
-
-	public Application getApplication() {
-		return (Application)getContent();
+	@Override
+	public Application getContent() {
+		return (Application)super.getContent();
 	}
 }

@@ -44,7 +44,7 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 			Object feature = notification.getFeature();
 			if ((LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) && 
 					(getResource().equals(notification.getNotifier()))){				
-				setPartName(ResourceEditorInput.getResourceEditorName(getResource()));
+				updateEditorTitle(ResourceEditorInput.getResourceEditorName(getResource()));
 			}
 			super.notifyChanged(notification);
 		}
@@ -85,21 +85,16 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 
 	@Override
 	protected void setModel(final IEditorInput input) {
-		if (input instanceof org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput) {
-			org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput untypedInput = (org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput) input;
-			Object content = untypedInput.getContent();
-			if (content instanceof Resource) {
-				setModel(((Resource) content).getFBNetwork());				
-				getResource().eAdapters().add(resourceAdapter);
-				getResource().getDevice().eAdapters().add(colorChangeListener);
-				if (input.getName() != null) {
-					setPartName(input.getName());
-				}
-			}
+		if (input instanceof ResourceEditorInput) {
+			ResourceEditorInput resInput = (ResourceEditorInput) input;
+			Resource res = resInput.getContent();
+			setModel(res.getFBNetwork());				
+			getResource().eAdapters().add(resourceAdapter);
+			getResource().getDevice().eAdapters().add(colorChangeListener);
 		}
 		super.setModel(input);
 	}
-	
+		
 	@Override
 	public void dispose() {		
 		if(null != getResource()){

@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput;
 import org.eclipse.ui.IMemento;
@@ -20,9 +19,7 @@ import org.eclipse.ui.IMemento;
 public class SystemConfigurationEditorInput extends PersistableUntypedEditorInput {
 
 	public SystemConfigurationEditorInput(SystemConfiguration sysConf) {
-		super(sysConf, 
-				((AutomationSystem)sysConf.eContainer()).getName(), 
-				((AutomationSystem)sysConf.eContainer()).getComment());
+		super(sysConf,  sysConf.getAutomationSystem().getName());
 	}
 	
 	@Override
@@ -35,7 +32,8 @@ public class SystemConfigurationEditorInput extends PersistableUntypedEditorInpu
 		return SystemConfigurationEditorInputFactory.getFactoryId();
 	}
 	
-	public SystemConfiguration getSystemConfiguration(){
-		return (SystemConfiguration)getContent();
+	@Override
+	public SystemConfiguration getContent(){
+		return (SystemConfiguration)super.getContent();
 	}
 }

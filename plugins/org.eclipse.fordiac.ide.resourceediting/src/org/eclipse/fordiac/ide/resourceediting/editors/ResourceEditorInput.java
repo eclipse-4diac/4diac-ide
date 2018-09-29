@@ -19,7 +19,7 @@ import org.eclipse.ui.IMemento;
 public class ResourceEditorInput extends PersistableUntypedEditorInput {
 
 	public ResourceEditorInput(Resource res) {
-		super(res, getResourceEditorName(res), getResourceEditorName(res));
+		super(res, getResourceEditorName(res));
 	}
 	
 	@Override
