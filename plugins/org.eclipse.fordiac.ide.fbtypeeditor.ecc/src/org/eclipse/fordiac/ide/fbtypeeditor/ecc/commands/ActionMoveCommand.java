@@ -31,7 +31,7 @@ public class ActionMoveCommand extends Command {
 	}
 	@Override
 	public boolean canExecute() {
-		return action != null && targetState != null;
+		return action != null && targetState != null && !targetState.isStartState();
 	}
 	
 	@Override
