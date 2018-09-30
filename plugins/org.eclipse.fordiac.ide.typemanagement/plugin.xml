@@ -3,13 +3,9 @@
 <plugin>
    <extension
          point="org.eclipse.ui.views">
-       <category
-            id="org.eclipse.fordiac.ide.typemanagement.typemanagement"
-            name="Type Management">
-      </category>  
       <view
             allowMultiple="false"
-            category="org.eclipse.fordiac.ide.typemanagement.typemanagement"
+            category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.typemanagement.navigator.TypeNavigator"
             icon="fordiacimage://ICON_TypeNavigator"
             id="org.eclipse.fordiac.ide.typemanagement.navigator.view"
@@ -46,7 +42,7 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <wizard
-            category="org.eclipse.fordiac.ide.systemmanagement.ui"
+            category="org.eclipse.fordiac.ide.newWizard.category"
             class="org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard"
             icon="fordiacimage://ICON_FB"
             id="org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard"

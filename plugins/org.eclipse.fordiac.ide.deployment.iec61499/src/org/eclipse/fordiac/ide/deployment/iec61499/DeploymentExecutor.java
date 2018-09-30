@@ -64,7 +64,15 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	public static final String DELETE_WATCH = "<Request ID=\"{0}\" Action=\"DELETE\"><Watch Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
 	public static final String FORCE_VALUE = "<Request ID=\"{0}\" Action=\"WRITE\"><Connection Source=\"{1}\" Destination=\"{2}\" force=\"{3}\" /></Request>"; //$NON-NLS-1$
 
-	public static final Response EMPTY_RESPONSE = DevResponseFactory.eINSTANCE.createResponse();
+	public static final Response EMPTY_RESPONSE;
+	
+	static {
+		//ensure that all entries in the empty response return appropriate empty values
+		EMPTY_RESPONSE = DevResponseFactory.eINSTANCE.createResponse();
+		EMPTY_RESPONSE.setFblist(DevResponseFactory.eINSTANCE.createFBList());
+		EMPTY_RESPONSE.setID("0"); //$NON-NLS-1$
+		EMPTY_RESPONSE.setWatches(DevResponseFactory.eINSTANCE.createWatches());
+	}
 	
 	private final Set<String> genFBs = new HashSet<>();
 	protected int id = 0;
@@ -219,33 +227,23 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	}
 
 	@Override
-	public void deleteResource(Resource res) throws DeploymentException {
+	public void deleteResource(String resName) throws DeploymentException {
 		String kill = MessageFormat.format(KILL_FB,
-				id++, res.getName());
+				id++, resName);
 		String delete = MessageFormat.format(DELETE_FB,
-				id++, res.getName());
+				id++, resName);
 		try {
 			sendREQ("", kill); //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(
-					MessageFormat.format(Messages.DeploymentExecutor_KillFBFailed, res.getName()), e);
+					MessageFormat.format(Messages.DeploymentExecutor_KillFBFailed, resName), e);
 		}
 		try {
 			sendREQ("", delete); //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(
-					MessageFormat.format(Messages.DeploymentExecutor_DeleteFBFailed, res.getName()), e);
+					MessageFormat.format(Messages.DeploymentExecutor_DeleteFBFailed, resName), e);
 		}
-	}
-
-	@Override
-	public void clearDevice(Device dev) throws DeploymentException {
-		for (Resource res : dev.getResource()) {
-			if (!res.isDeviceTypeResource()) {
-				deleteResource(res);
-			}
-		}
-
 	}
 
 	@Override
@@ -309,12 +307,16 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 		String result;
 		try {
 			result = getDevMgmComHandler().sendREQ("", MessageFormat.format(QUERY_FB_INSTANCES, id++) ); //$NON-NLS-1$
-			return parseResponse(result).getFblist().getFbs().stream().map( fb -> {
+			Response resp = parseResponse(result);
+			if(null != resp.getFblist() && null != resp.getFblist().getFbs()) {
+				return resp.getFblist().getFbs().stream().map( fb -> {
 					org.eclipse.fordiac.ide.deployment.devResponse.Resource res = DevResponseFactory.eINSTANCE.createResource();
 					res.setName(fb.getName());
 					res.setType(fb.getType());
 					return res;
 				}).collect(Collectors.toList());
+			}
+			return Collections.emptyList();
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_QueryResourcesFailed, getDevice().getName()), e);
 		}		

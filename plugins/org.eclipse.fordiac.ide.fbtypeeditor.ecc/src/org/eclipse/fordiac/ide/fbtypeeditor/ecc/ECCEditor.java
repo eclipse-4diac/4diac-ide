@@ -109,12 +109,6 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 		}
 	};
 
-	/**
-	 * Instantiates a new eCC editor.
-	 */
-	public ECCEditor() {
-	}
-
 	private RulerComposite rulerComp;
 
 	@Override
@@ -298,7 +292,9 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 	 */
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-		paletteRoot = ECCPaletteFactory.createPalette();
+		if(null == paletteRoot) {
+			paletteRoot = ECCPaletteFactory.createPalette();
+		}
 		return paletteRoot;
 	}
 
@@ -434,6 +430,6 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 	
 	@Override
 	protected FlyoutPreferences getPalettePreferences() {
-		return ECCPaletteFactory.createPalettePreferences();
+		return ECCPaletteFactory.PALETTE_PREFERENCES;
 	}
 }

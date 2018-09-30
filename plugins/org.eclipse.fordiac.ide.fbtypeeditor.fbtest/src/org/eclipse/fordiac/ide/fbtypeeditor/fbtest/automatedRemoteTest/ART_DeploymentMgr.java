@@ -127,7 +127,7 @@ public class ART_DeploymentMgr {
 			executor.connect();
 			deploymentResponseCounter++; //Kill Res
 			deploymentResponseCounter++; //Delete Res
-			executor.deleteResource(res);
+			executor.deleteResource(res.getName());
 			executor.disconnect();
 			
 		} catch (Exception e) {

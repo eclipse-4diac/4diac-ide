@@ -76,6 +76,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -738,6 +739,17 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.TYPED_ELEMENT: {
 				TypedElement typedElement = (TypedElement)theEObject;
 				T result = caseTypedElement(typedElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.SIMPLE_FB_TYPE: {
+				SimpleFBType simpleFBType = (SimpleFBType)theEObject;
+				T result = caseSimpleFBType(simpleFBType);
+				if (result == null) result = caseFBType(simpleFBType);
+				if (result == null) result = caseCompilableType(simpleFBType);
+				if (result == null) result = caseLibraryElement(simpleFBType);
+				if (result == null) result = caseINamedElement(simpleFBType);
+				if (result == null) result = caseI4DIACElement(simpleFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1777,6 +1789,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTypedElement(TypedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Simple FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Simple FB Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSimpleFBType(SimpleFBType object) {
 		return null;
 	}
 

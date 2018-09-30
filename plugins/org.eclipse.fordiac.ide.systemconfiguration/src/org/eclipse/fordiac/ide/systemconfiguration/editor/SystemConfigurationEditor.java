@@ -35,9 +35,6 @@ import org.eclipse.ui.IEditorPart;
 public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette implements ISystemEditor {
 	private SystemConfiguration sysConf;
 
-	public SystemConfigurationEditor() {
-		// setEditDomain(new DefaultEditDomain(this));
-	}
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
@@ -62,17 +59,11 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 
 	@Override
 	protected void setModel(final IEditorInput input) {
-		if (input instanceof org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput) {
-			org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput untypedInput = (org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput) input;
-			Object content = untypedInput.getContent();
-			if (content instanceof SystemConfiguration) {
-				sysConf = (SystemConfiguration) content;
-				if (input.getName() != null) {
-					setPartName(input.getName());
-				}
-			}
-			super.setModel(untypedInput);
+		if (input instanceof SystemConfigurationEditorInput) {
+			SystemConfigurationEditorInput sysConfInput = (SystemConfigurationEditorInput) input;
+			sysConf = sysConfInput.getContent();
 		}
+		super.setModel(input);
 	}
 
 	@Override
@@ -90,7 +81,7 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 
 	@Override
 	protected FlyoutPreferences getPalettePreferences() {
-		return SystemConfPaletteFactory.createPalettePreferences();
+		return SystemConfPaletteFactory.PALETTE_PREFERENCES;
 	}
 
 	@Override

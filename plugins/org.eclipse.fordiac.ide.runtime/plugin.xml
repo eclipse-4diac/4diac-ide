@@ -4,12 +4,8 @@
    <extension-point id="RuntimeLauncher" name="org.eclipse.fordiac.ide.runtime.launcher" schema="schema/RuntimeLauncher.exsd"/>
    <extension
          point="org.eclipse.ui.views">
-      <category
-            id="org.eclipse.fordiac.ide.runtime"
-            name="Runtime Management">
-      </category>
       <view
-            category="org.eclipse.fordiac.ide.runtime"
+            category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.runtime.views.RuntimeLauncherView"
             icon="fordiacimage://ICON_RuntimeLauncher"
             id="org.eclipse.fordiac.ide.runtime.views.RuntimeLauncherView"

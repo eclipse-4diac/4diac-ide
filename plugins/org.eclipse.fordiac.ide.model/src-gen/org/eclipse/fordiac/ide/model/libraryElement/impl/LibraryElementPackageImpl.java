@@ -87,6 +87,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -588,6 +589,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass typedElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass simpleFBTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2800,6 +2808,36 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EClass getSimpleFBType() {
+		return simpleFBTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSimpleFBType_Algorithm() {
+		return (EReference)simpleFBTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSimpleFBType_InternalVars() {
+		return (EReference)simpleFBTypeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getAttribute() {
 		return attributeEClass;
 	}
@@ -3179,6 +3217,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		typedElementEClass = createEClass(TYPED_ELEMENT);
 		createEAttribute(typedElementEClass, TYPED_ELEMENT__TYPE);
 
+		simpleFBTypeEClass = createEClass(SIMPLE_FB_TYPE);
+		createEReference(simpleFBTypeEClass, SIMPLE_FB_TYPE__ALGORITHM);
+		createEReference(simpleFBTypeEClass, SIMPLE_FB_TYPE__INTERNAL_VARS);
+
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
 
@@ -3278,6 +3320,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		adapterFBEClass.getESuperTypes().add(this.getFB());
 		attributeDeclarationEClass.getESuperTypes().add(this.getINamedElement());
 		attributeDeclarationEClass.getESuperTypes().add(this.getTypedElement());
+		simpleFBTypeEClass.getESuperTypes().add(this.getFBType());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterDeclarationEClass, AdapterDeclaration.class, "AdapterDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -3736,6 +3779,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(typedElementEClass, TypedElement.class, "TypedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getTypedElement_Type(), theDataPackage.getBaseType1(), "type", "STRING", 0, 1, TypedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+
+		initEClass(simpleFBTypeEClass, SimpleFBType.class, "SimpleFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSimpleFBType_Algorithm(), this.getAlgorithm(), null, "algorithm", null, 1, 1, SimpleFBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSimpleFBType_InternalVars(), this.getVarDeclaration(), null, "internalVars", null, 0, -1, SimpleFBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$
@@ -4275,6 +4322,22 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   new String[] {
 			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
 			   "name", "Parameters" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getSimpleFBType_Algorithm(),
+		   source,
+		   new String[] {
+			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "Algorithm", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getSimpleFBType_InternalVars(),
+		   source,
+		   new String[] {
+			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "VarDeclaration", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 	}
 

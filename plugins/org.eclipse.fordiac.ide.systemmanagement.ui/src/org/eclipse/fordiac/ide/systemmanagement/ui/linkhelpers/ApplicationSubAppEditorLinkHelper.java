@@ -36,7 +36,7 @@ public class ApplicationSubAppEditorLinkHelper extends AbstractEditorLinkHelper 
 	public IStructuredSelection findSelection(IEditorInput anInput) {		
 		if(anInput instanceof ApplicationEditorInput){
 			ApplicationEditorInput appInput = (ApplicationEditorInput)anInput;
-			return new StructuredSelection(appInput.getApplication());
+			return new StructuredSelection(appInput.getContent());
 		}else if (anInput instanceof SubApplicationEditorInput){
 			SubApplicationEditorInput subAppInput = (SubApplicationEditorInput)anInput;
 			return new StructuredSelection(subAppInput.getSubApp());

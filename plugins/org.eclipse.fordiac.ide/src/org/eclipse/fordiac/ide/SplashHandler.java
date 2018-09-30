@@ -21,7 +21,7 @@ import org.eclipse.ui.branding.IProductConstants;
 import org.eclipse.ui.splash.BasicSplashHandler;
 
 /**
- * SplashHandler for the 4DIAC-IDE diplaying a progress bar.
+ * SplashHandler for the 4diac IDE diplaying a progress bar.
  * 
  * Although that this splash handler is only doing default things it helps us that 
  * the ide plugin will be the first plugin that will be loaded. With that the image url

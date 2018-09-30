@@ -28,7 +28,7 @@ public class SystemConfigurationEditorLinkHelper extends AbstractEditorLinkHelpe
 	public IStructuredSelection findSelection(IEditorInput anInput) {		
 		if(anInput instanceof SystemConfigurationEditorInput){
 			SystemConfigurationEditorInput sysConfInput = (SystemConfigurationEditorInput)anInput;
-			return new StructuredSelection(sysConfInput.getSystemConfiguration());
+			return new StructuredSelection(sysConfInput.getContent());
 		}
 		return StructuredSelection.EMPTY;
 	}

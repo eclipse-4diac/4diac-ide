@@ -75,6 +75,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -189,6 +190,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements
 			case LibraryElementPackage.COLOR: return createColor();
 			case LibraryElementPackage.COLORIZABLE_ELEMENT: return createColorizableElement();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
+			case LibraryElementPackage.SIMPLE_FB_TYPE: return createSimpleFBType();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -847,6 +849,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements
 	public AttributeDeclaration createAttributeDeclaration() {
 		AttributeDeclarationImpl attributeDeclaration = new AttributeDeclarationImpl();
 		return attributeDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SimpleFBType createSimpleFBType() {
+		SimpleFBTypeImpl simpleFBType = new SimpleFBTypeImpl();
+		return simpleFBType;
 	}
 
 	/**

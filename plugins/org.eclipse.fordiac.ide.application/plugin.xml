@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor"
+            class="org.eclipse.fordiac.ide.application.editors.ApplicationEditor"
             contributorClass="org.eclipse.fordiac.ide.util.ZoomUndoRedoActionBarContributor"
             default="true"
             icon="fordiacimage://ICON_Application"
@@ -254,20 +254,11 @@
                label="Redraw">
          </action>
       </objectContribution>
-      <objectContribution
-            adaptable="false"
-            id="org.eclipse.fordiac.ide.application.editparts.FBEditPart.FocusOnPredecessor"
-            objectClass="org.eclipse.fordiac.ide.application.editparts.FBEditPart">
-         <action
-               class="org.eclipse.fordiac.ide.application.FocusOnPredecessor"
-               id="org.eclipse.fordiac.ide.application.action1"
-               label="Focus On Predecessor">
-         </action>
-      </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.views">
       <view
+      		category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.application.FordiacMarkersView"
             icon="fordiacimage://ICON_FB"
             id="org.eclipse.fordiac.ide.application.FordiacMarkersView"
@@ -278,22 +269,27 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            id="org.eclipse.fordiac.ide.application.commands.category4DIAC"
-            name="4DIAC">
+            id="org.eclipse.fordiac.ide.commands.category"
+            name="4diac IDE Commands">
       </category> 
+       <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            id="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor"
+            name="Focus On Predecessor">
+      </command>
       <command
-            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
             name="Clear Focus-On">
       </command>
       <command
-            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.NewSubApplication"
             id="org.eclipse.fordiac.ide.application.commands.newSubApp"
             name="New Subapplication">
       </command>
       <command
-            categoryId="org.eclipse.fordiac.ide.application.commands.category4DIAC"
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.FlattenSubApplication"
             id="org.eclipse.fordiac.ide.application.commands.flattenSubApp"
             name="Flatten Subapplication">
@@ -302,12 +298,32 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
+            class="org.eclipse.fordiac.ide.application.handlers.FocusOnPredecessor"
+            commandId="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor">
+            <activeWhen>
+			 <and>
+			    <reference definitionId="org.eclipse.fordiac.ide.application.FocusOnActivation" />
+			    <with variable="selection">
+	               <iterate ifEmpty="false">
+	                  <or>
+	                    <instanceof
+	                          value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
+	                    </instanceof>
+	                    <instanceof
+	                          value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+	                    </instanceof>
+	                  </or>
+	               </iterate>
+         		</with> 
+			 </and>   
+			</activeWhen>
+
+      </handler>
+      <handler
             class="org.eclipse.fordiac.ide.application.handlers.ClearFocusOn"
             commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn">
 			<activeWhen>
-			    <with variable="activeEditorId">
-			       <equals value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor"/>
-			    </with>
+			    <reference definitionId="org.eclipse.fordiac.ide.application.FocusOnActivation" />
 			</activeWhen>
       </handler>
       <handler 
@@ -334,16 +350,12 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               id="org.eclipse.fordiac.ide.application.menus.4DIACMenu"
-               label="4DIAC"
-               mnemonic="M">
+            locationURI="menu:navigate?after=additions">
+            <command commandId="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor" />
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
                   mnemonic="S">
             </command>
-         </menu>
       </menuContribution>
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
@@ -378,11 +390,7 @@
 		         </with>
             </visibleWhen>
          </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
-         <command
-               commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp"
+         <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp"
                label="Flatten subapplication"
                tooltip="Flatten the subapplication">
             <visibleWhen
@@ -391,6 +399,16 @@
                      definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
                </reference>
             </visibleWhen>
+         </command>
+         <command commandId="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor"> 
+         	<visibleWhen checkEnabled="false">
+	             <reference definitionId="org.eclipse.fordiac.ide.application.FocusOnActivation" />     
+	         </visibleWhen>         
+         </command>
+         <command commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn" mnemonic="S">
+	         <visibleWhen checkEnabled="false">
+	             <reference definitionId="org.eclipse.fordiac.ide.application.FocusOnActivation" />     
+	         </visibleWhen>         
          </command>
       </menuContribution>
    </extension>
@@ -411,7 +429,7 @@
          point="org.eclipse.ui.ide.markerSupport">
       <markerContentGenerator
             id="org.eclipse.fordiac.ide.application.fordiacmarkerContentGenerator"
-            name="4DIAC Marker Generator">
+            name="4diac IDE Marker Generator">
          <markerFieldReference
                id="org.eclipse.ui.ide.severityAndDescriptionField">
          </markerFieldReference>
@@ -524,6 +542,16 @@
                   </or>
                </iterate>
          </with>  
-      </definition>
-   </extension>
+      </definition>      
+	   <definition
+	         id="org.eclipse.fordiac.ide.application.FocusOnActivation">
+	       <with variable="activeEditorId">
+       	   		<or>
+			       <equals value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor"/>
+			       <equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor"/>
+			       <equals value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor"/>
+	        	</or>
+		    </with>
+	   </definition>
+   </extension>   
 </plugin>
