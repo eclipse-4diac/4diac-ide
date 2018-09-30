@@ -67,7 +67,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 				selectedProperties.add(varDecl);
 			}
 		}
-		DeploymentCoordinator.getInstance().setDeviceProperties(device,
+		DeploymentCoordinator.INSTANCE.setDeviceProperties(device,
 				selectedProperties);
 	}
 	
@@ -359,10 +359,8 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 						DeviceParametersDialog dialog = new DeviceParametersDialog(cellEditorWindow.getShell());
 						if (((TreeSelection) getSelection()).getFirstElement() instanceof Device) {
 							dialog.setDevice((Device) ((TreeSelection) getSelection()).getFirstElement());
-							int ret = dialog.open();
-							if (ret == Window.OK) {
-								DeploymentCoordinator.getInstance().setDeviceProperties(
-										dialog.getDevice(), dialog.getSelectedProperties());
+							if (Window.OK == dialog.open() ) {
+								DeploymentCoordinator.INSTANCE.setDeviceProperties(dialog.getDevice(), dialog.getSelectedProperties());
 								refresh(dialog.getDevice(), true);
 							} 
 						}
@@ -376,8 +374,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 	}
 	
 	private static String getSelectedString(Object element) {
-		List<VarDeclaration> temp = DeploymentCoordinator.getInstance()
-				.getSelectedDeviceProperties((Device) element);
+		List<VarDeclaration> temp = DeploymentCoordinator.INSTANCE.getSelectedDeviceProperties((Device) element);
 		if (temp != null) {
 			StringBuilder buffer = new StringBuilder();
 			buffer.append("["); //$NON-NLS-1$

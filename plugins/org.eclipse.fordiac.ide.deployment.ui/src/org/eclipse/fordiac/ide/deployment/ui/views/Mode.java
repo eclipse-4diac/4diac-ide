@@ -61,12 +61,8 @@ public class Mode extends ViewPart implements ISelectionListener {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				Object[] selected = treeView.getSelectedElements();
-				
-				clearDownloadConsole();
-				
-				DeploymentCoordinator deployment = DeploymentCoordinator
-						.getInstance();
-				deployment.performDeployment(selected);
+				clearDownloadConsole();				
+				DeploymentCoordinator.INSTANCE.performDeployment(selected);
 			}
 
 			

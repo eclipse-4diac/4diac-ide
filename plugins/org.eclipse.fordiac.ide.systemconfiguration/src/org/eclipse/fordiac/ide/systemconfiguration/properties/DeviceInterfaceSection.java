@@ -45,7 +45,7 @@ public class DeviceInterfaceSection extends AbstractDeviceInterfaceSection {
 				if(type instanceof Device){
 					IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor((Device)getType());
 					if(interactor instanceof DynamicTypeLoadDeploymentExecutor) {
-						DeploymentCoordinator.getInstance().enableOutput(interactor);
+						DeploymentCoordinator.INSTANCE.enableOutput(interactor);
 						try {
 							interactor.connect();
 							((DynamicTypeLoadDeploymentExecutor) interactor).queryResourcesWithNetwork((Device)getType());
@@ -58,7 +58,7 @@ public class DeviceInterfaceSection extends AbstractDeviceInterfaceSection {
 								Activator.getDefault().logError(e.getMessage(), e);
 							}							
 						}
-						DeploymentCoordinator.getInstance().disableOutput(interactor);
+						DeploymentCoordinator.INSTANCE.disableOutput(interactor);
 					}
 				}
 			}

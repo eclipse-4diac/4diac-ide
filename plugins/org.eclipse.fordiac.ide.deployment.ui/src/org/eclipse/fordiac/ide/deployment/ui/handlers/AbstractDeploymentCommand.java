@@ -110,7 +110,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 			if (prepareParametersToExecute(currentElement)) {
 				IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device);
 				if (null != interactor) {
-					DeploymentCoordinator.getInstance().enableOutput(interactor);
+					DeploymentCoordinator.INSTANCE.enableOutput(interactor);
 					OnlineDeploymentErrorCheckListener errorChecker = new OnlineDeploymentErrorCheckListener(this);
 					interactor.addDeploymentListener(errorChecker);
 					
@@ -123,7 +123,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 						errorChecker.showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID(device), this, true);
 					}
 					interactor.removeDeploymentListener(errorChecker);
-					DeploymentCoordinator.getInstance().disableOutput(interactor);
+					DeploymentCoordinator.INSTANCE.disableOutput(interactor);
 				}else{
 					manageExecutorError();
 				}

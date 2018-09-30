@@ -140,8 +140,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 		downloadButton.addListener( SWT.Selection, e ->{
 			Object[] selected = treeView.getSelectedElements();
 			clearDownloadConsole();
-			DeploymentCoordinator deployment = DeploymentCoordinator.getInstance();
-			deployment.performDeployment(selected);
+			DeploymentCoordinator.INSTANCE.performDeployment(selected);
 		});
 
 		makeActions();
