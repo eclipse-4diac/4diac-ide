@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -64,6 +65,9 @@ class FbtExporter extends CommonElementExporter{
 		} else {
 			if (fbType instanceof BasicFBType) {
 				addBasicFB(dom, rootElement, (BasicFBType) fbType);
+			}
+			else if(fbType instanceof SimpleFBType) {
+				addSimpleFB(dom, rootElement, (SimpleFBType) fbType);
 			}
 		}
 		addService(dom, rootElement, fbType);
@@ -368,7 +372,51 @@ class FbtExporter extends CommonElementExporter{
 			basicElement.appendChild(internalVarsElement);
 		}
 	}
-
 	
+	/**
+	 * Adds the simple fb.
+	 * 
+	 * @param dom
+	 *            the dom
+	 * @param rootEle
+	 *            the root ele
+	 * @param type
+	 *            the type
+	 */
+	private void addSimpleFB(final Document dom, final Element rootEle,
+			final SimpleFBType type) {
+		Element simpleElement = dom.createElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
+		addInternalVars(dom, simpleElement, type.getInternalVars());
+		addAlgorithmSimple(dom, simpleElement, type.getAlgorithm());
+		rootEle.appendChild(simpleElement);
+	}
+
+	/**
+	 * Adds the algorithm.
+	 * 
+	 * @param dom
+	 *            the dom
+	 * @param basicElement
+	 *            the basic element
+	 * @param algorithms
+	 *            the algorithms
+	 */
+	private void addAlgorithmSimple(final Document dom,
+			final Element basicElement, final Algorithm algorithm) {
+			Element algorithmElement = dom.createElement(LibraryElementTags.ALGORITHM_ELEMENT);
+			
+			setNameAttribute(algorithmElement, algorithm.getName());
+			setCommentAttribute(algorithmElement, algorithm);
+			
+			if (algorithm instanceof STAlgorithm) {
+				addSTAlgorithm(dom, algorithmElement, (STAlgorithm) algorithm);
+			} else if (algorithm instanceof OtherAlgorithm) {
+				addOtherAlgorithm(dom, algorithmElement,
+						(OtherAlgorithm) algorithm);
+			}
+			
+			basicElement.appendChild(algorithmElement);
+	}
+
 
 }
