@@ -44,8 +44,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 
-public final class DeploymentCoordinator {
-	private static DeploymentCoordinator instance;
+public enum DeploymentCoordinator {
+	INSTANCE;
+	
 	private static final String OUTPUT_VIEW_ID = "org.eclipse.fordiac.ide.deployment.ui.views.Output";
 
 	private final Map<Device, List<VarDeclaration>> deployedDeviceProperties = new HashMap<>();
@@ -82,17 +83,6 @@ public final class DeploymentCoordinator {
 			retVal = Collections.emptyList();
 		}
 		return retVal;
-	}
-
-	private DeploymentCoordinator() {
-		// empty private constructor
-	}
-
-	public static DeploymentCoordinator getInstance() {
-		if (instance == null) {
-			instance = new DeploymentCoordinator();
-		}
-		return instance;
 	}
 	
 	public static void printUnsupportedDeviceProfileMessageBox(final Device device, final Resource res) {

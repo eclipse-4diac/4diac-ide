@@ -23,9 +23,8 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractFileMa
 	
 	public static void createBootFile(List<Object> workList, String fileName, Shell shell) {
 		if (null != fileName) {
-			DeploymentCoordinator deployment = DeploymentCoordinator.getInstance();
 			BootFileDeviceManagementCommunicationHandler bootFileHandler = new BootFileDeviceManagementCommunicationHandler();
-			deployment.performDeployment(workList.toArray(), bootFileHandler, null);
+			DeploymentCoordinator.INSTANCE.performDeployment(workList.toArray(), bootFileHandler, null);
 			bootFileHandler.writeToBootFile(fileName, false, shell);
 		}
 	}

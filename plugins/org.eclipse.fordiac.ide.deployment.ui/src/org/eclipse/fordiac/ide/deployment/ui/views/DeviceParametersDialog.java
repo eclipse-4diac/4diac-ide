@@ -72,7 +72,7 @@ public class DeviceParametersDialog extends org.eclipse.jface.dialogs.Dialog {
 		main.setLayout(new GridLayout(1, false));
 		main.setLayoutData(new GridData(GridData.FILL_BOTH));
 		if (device != null) {
-			selectedProperties = DeploymentCoordinator.getInstance().getSelectedDeviceProperties(device);
+			selectedProperties = DeploymentCoordinator.INSTANCE.getSelectedDeviceProperties(device);
 
 			for (VarDeclaration varDecl : device.getVarDeclarations()) {
 				Button bt = new Button(main, SWT.CHECK);

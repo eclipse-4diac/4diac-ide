@@ -231,9 +231,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			if (!librariesToAdd.isEmpty()) {
 				monitor.beginTask("Generating FMUs for device " + device.getName(), TOTAL_MONITOR);
 				String outputName = device.getAutomationSystem().getName() + "_" + device.getName();
-				DeploymentCoordinator deployment = DeploymentCoordinator.getInstance();
 				FMUDeviceManagementCommunicationHandler fmuFileHandler = new FMUDeviceManagementCommunicationHandler(device);
-				deployment.performDeployment(resources.toArray(), fmuFileHandler, null); //will call the callbacks, sendREQ among them
+				DeploymentCoordinator.INSTANCE.performDeployment(resources.toArray(), fmuFileHandler, null); //will call the callbacks, sendREQ among them
 				monitor.worked(TOTAL_MONITOR / 2);
 				
 				File destZipFile = createZipFile(directory, outputName, shell);
