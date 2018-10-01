@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -63,6 +64,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.w3c.dom.Document;
@@ -240,6 +242,10 @@ public class FBTImporter implements LibraryElementTags {
 					type = convertoToBasicType(type);
 					parseBasicFB((BasicFBType) type, n);
 				}
+				if (n.getNodeName().equals(SIMPLE_F_B_ELEMENT)) {
+					type = convertoToSimpleType(type);
+					parseSimpleFB((SimpleFBType) type, n);
+				}
 				if (n.getNodeName().equals(FBNETWORK_ELEMENT)) {
 					// parse the composite FBs as last
 					type = convertToCompositeType(type);
@@ -255,7 +261,8 @@ public class FBTImporter implements LibraryElementTags {
 			}
 			if ((type instanceof BasicFBType)
 					|| (type instanceof CompositeFBType)
-					|| (type instanceof ServiceInterfaceFBType)) {
+					|| (type instanceof ServiceInterfaceFBType)
+					|| (type instanceof SimpleFBType)) {
 				return type;
 			} 
 			type = convertToServiceInterfaceType(type);
@@ -496,6 +503,16 @@ public class FBTImporter implements LibraryElementTags {
 		dstType.getVersionInfo().addAll(srcType.getVersionInfo());
 		dstType.setService(srcType.getService());
 	}
+	
+	private void copySimpleTypeInformation(FBType dstType, FBType srcType) {
+		dstType.setName(srcType.getName());
+		dstType.setComment(srcType.getComment());
+		dstType.setCompilerInfo(srcType.getCompilerInfo());
+		dstType.setInterfaceList(srcType.getInterfaceList());
+		dstType.setIdentification(srcType.getIdentification());
+		dstType.getVersionInfo().addAll(srcType.getVersionInfo());
+		dstType.setService(srcType.getService());
+	}
 
 	/**
 	 * This method parses a compositeFBType.
@@ -599,6 +616,90 @@ public class FBTImporter implements LibraryElementTags {
 		}
 	}
 
+	/**
+	 * This method parses a SimpleFBType.
+	 * 
+	 * @param type
+	 *            - the simpleFBType that is being parsed
+	 * @param node
+	 *            - the node in the DTD of the SimpleFBType that is being parsed
+	 * @param palette
+	 *            the palette
+	 * 
+	 * @throws TypeImportException
+	 *             the FBT import exception
+	 * @throws ReferencedTypeNotFoundException
+	 *             the referenced type not found exception
+	 */
+	private void parseSimpleFB(final SimpleFBType type, final Node node) throws TypeImportException,
+			ReferencedTypeNotFoundException {
+		NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node n = childNodes.item(i);
+			if (n.getNodeName().equals(INTERNAL_VARS_ELEMENT)) {
+				parseInternalVars(type, n);
+			}
+			if (n.getNodeName().equals(ALGORITHM_ELEMENT)) {
+				parseAlgorithm(type, n);
+			}
+		}
+	}
+	
+	/**
+	 * This method parses an Algorithm of SimpleFB.
+	 * 
+	 * @param type
+	 *            - the SimpleFBType containing the Algorithm
+	 * @param n
+	 *            - the node in the DTD of the algorithm that is being parsed
+	 * @throws TypeImportException
+	 *             the FBT import exception
+	 * @throws ReferencedTypeNotFoundException
+	 *             the referenced type not found exception
+	 */
+	private void parseAlgorithm(final SimpleFBType type, final Node n) throws TypeImportException,
+			ReferencedTypeNotFoundException {
+		NamedNodeMap map = n.getAttributes();
+		Node nameNode = map.getNamedItem(NAME_ATTRIBUTE);
+		Node commentNode = map.getNamedItem(COMMENT_ATTRIBUTE);
+		String name = null;
+		String comment = null;
+		if (nameNode != null) {
+			name = nameNode.getNodeValue();
+		}
+		if (commentNode != null) {
+			comment = commentNode.getNodeValue();
+		}
+
+		NodeList childNodes = n.getChildNodes(); // should have only one
+		// child node
+		for (int i = 0; i < childNodes.getLength(); i++) {
+
+			Node node = childNodes.item(i);
+			String nodeName = node.getNodeName();
+			Algorithm algorithm = (Algorithm) type.getAlgorithm();
+			if (nodeName.equals(FBD_ELEMENT)) {
+				throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!");
+			} else if (nodeName.equals(ST_ELEMENT)) {
+				STAlgorithm sT = LibraryElementFactory.eINSTANCE
+						.createSTAlgorithm();
+				sT.setName(name);
+				sT.setComment(comment);
+				parseST(sT, node);
+				algorithm = sT;
+			} else if (nodeName.equals(LD_ELEMENT)) {
+				throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!");
+			} else if (nodeName.equals(OTHER_ELEMENT)) {
+				OtherAlgorithm other = LibraryElementFactory.eINSTANCE
+						.createOtherAlgorithm();
+				other.setName(name);
+				other.setComment(comment);
+				parseOtherAlg(other, node);
+				algorithm = other;
+			}
+		}
+	}
+	
 	/**
 	 * This method parses an Algorithm.
 	 * 
@@ -939,6 +1040,31 @@ public class FBTImporter implements LibraryElementTags {
 			}
 		}
 	}
+	
+	/**
+	 * This method parses Internal Variables of a SimpleFBType.
+	 * 
+	 * @param type
+	 *            - the SimpleFBType of which the Internal Variables will be
+	 *            parsed
+	 * @param n
+	 *            - the node in the DTD of the Internal Variable being parsed
+	 * 
+	 * @throws TypeImportException
+	 *             the FBT import exception
+	 */
+	private void parseInternalVars(final SimpleFBType type, final Node n)
+			throws TypeImportException {
+		NodeList childNodes = n.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node node = childNodes.item(i);
+			if (node.getNodeName().equals(VAR_DECLARATION_ELEMENT)) {
+				VarDeclaration v = ImportUtils.parseVarDeclaration(node);
+				type.getInternalVars().add(v);
+				internalVariables.put(v.getName(), v);
+			}
+		}
+	}	
 
 	/**
 	 * This method parses a FBType to a BasicFBType.
@@ -955,6 +1081,21 @@ public class FBTImporter implements LibraryElementTags {
 		return basicType;
 	}
 
+	/**
+	 * This method parses a FBType to a SimpleFBType.
+	 * 
+	 * @param type
+	 *            - the FBType being parsed to SimpleFBType
+	 * 
+	 * @return the simpleFBType
+	 */
+	private FBType convertoToSimpleType(final FBType type) {
+		SimpleFBType simpleType = LibraryElementFactory.eINSTANCE
+				.createSimpleFBType();
+		copySimpleTypeInformation(simpleType, type);
+		return simpleType;
+	}
+	
 	/**
 	 * This method parses the InterfaceList of a FBType.
 	 * 
