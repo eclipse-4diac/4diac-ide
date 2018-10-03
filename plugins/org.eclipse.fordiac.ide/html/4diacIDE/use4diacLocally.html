@@ -117,7 +117,8 @@
     <p>Check that the Profile in the Properties tab is set to HOLOBLOC.</p>
     <p>The color is automatically generated for better orientation in the system. When several devices or segments are in use, you can see at a glance where the FB belongs to. If you like to change the color, click on the device or segment. In the property view on the bottom of the screen you find the tab Apperance. Here you can choose a color you like best.</p>
     
-    <p>The resource is automatically generated for your convenience. EMB_RES stands for Embedded Resource. For this tutorial it is best to change it in the property view to Blinky_RES for a better understanding. You can also double-click on the name.</p>
+    <p>For this tutorial we give the device the name <i>testee</i>. Device names help us to distinguish the different devices from each other. Names can be changes in the property view or by double-clicking on the name. 
+    <br/>The <b>resource</b> is automatically generated for your convenience. EMB_RES stands for Embedded Resource. We named it <i>Blinky_RES</i>.</p>
        <img src="./img/changeResourceName.png" alt="changing the name of the Resource" />
     
     <p>Device and Resource parameters can either be specified directly at each Device/Resource or via the Properties View. The <span class="view4diac">Properties View</span> shows the parameters of a IEC 61499 Device/Resource (if it is selected either in the <span class="view4diac">System Configuration Editor</span> or in the <span class="view4diac">System Manager View</span>). The most important parameters are the IP address and the port of the device management interface as they are required for the communication between the engineering tool and the Devices (e.g. Download of IEC 61499 Applications).</p>
@@ -147,13 +148,62 @@
 
     <h2 id="configureResource">Configure the Resource</h2>
 
-    <p>You can open the <b>Resource Editor</b> by double clicking the Resource in the System Configuration, or in the tree in the System Explorer on the left.</p>
+    <p>You can open the <b>Resource Editor</b> by double clicking the Resource (<i>Blinky_RES</i>) in the System Configuration, or in the tree in the System Explorer on the left.</p>
 
     <p>There you can find a START function block in white. This is the default starter fuction block of the EMB_RES. This will trigger a COLD event when starting. The STOP is triggered when the PLC is set to a STOP state, and the WARM when the PLC changes from a STOP state back to a RUN state. Connect both COLD and WARM to E_CYCLE.START.</p>
      
 	   <img src="./img/resourceComplete.png" alt="Resource completely connected"/>
 
-     <p>You also see the FBs that were previosly mapped. You can add more FBs directly here and they will be already mapped to the resource, or you can unmap the FBs.</p>
+     <p>You also see the FBs that were previously mapped. You can add more FBs directly here and they will be already mapped to the resource, or you can unmap the FBs.</p>
+
+<!----------------------------------------------------------------------------------------------------------------->
+
+    <h2 id="overviewEditors">Overview of the editors</h2>
+    
+    <p>Before we test our application, let's briefly summarize the elements we've worked with.</p>
+
+<table>
+    <thead>
+        <tr>
+          <th>Element</th>
+          <th>Creation</th>
+          <th>Editation</th>
+          <th>Tutorial Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <th>System</th>
+          <td>new System</td>
+          <td>only children can be edited</td>
+          <td>BlinkTest</td>
+        </tr>
+        <tr>
+          <th>Application</th>
+          <td>first ist automatically generated, further more via menu</td>
+          <td>Application Editor</td>
+          <td>BlinkTestApp</td>
+        </tr>
+        <tr>
+          <th>System Configuration</th>
+          <td>automatically generated, only one per system</td>
+          <td>System Configuration Editor</td>
+          <td></td>
+        </tr>
+        <tr>
+          <th>Device</th>
+          <td>System Configuration Editor</td>
+          <td>System Configuration Editor</td>
+          <td>Testee</td>
+        </tr>
+        <tr>
+          <th>Resource</th>
+          <td>System Configuration Editor</td>
+          <td>Resource Editor</td>
+          <td>Blinky_RES</td>
+        </tr>
+    </tbody>
+</table>
 
 <!----------------------------------------------------------------------------------------------------------------->
 
