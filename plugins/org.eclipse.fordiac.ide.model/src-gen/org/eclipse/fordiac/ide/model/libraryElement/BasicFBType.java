@@ -25,14 +25,13 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getECC <em>ECC</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getAlgorithm <em>Algorithm</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getInternalVars <em>Internal Vars</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getBasicFBType()
  * @model
  * @generated
  */
-public interface BasicFBType extends FBType {
+public interface BasicFBType extends BaseFBType {
 	/**
 	 * Returns the value of the '<em><b>ECC</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
@@ -76,22 +75,5 @@ public interface BasicFBType extends FBType {
 	 * @generated
 	 */
 	EList<Algorithm> getAlgorithm();
-
-	/**
-	 * Returns the value of the '<em><b>Internal Vars</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Internal Vars</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Internal Vars</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getBasicFBType_InternalVars()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='VarDeclaration' namespace='##targetNamespace'"
-	 * @generated
-	 */
-	EList<VarDeclaration> getInternalVars();
 
 } // BasicFBType

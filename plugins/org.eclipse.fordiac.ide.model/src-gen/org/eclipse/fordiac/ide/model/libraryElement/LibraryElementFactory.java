@@ -590,6 +590,15 @@ public interface LibraryElementFactory extends EFactory {
 	SimpleFBType createSimpleFBType();
 
 	/**
+	 * Returns a new object of class '<em>Base FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Base FB Type</em>'.
+	 * @generated
+	 */
+	BaseFBType createBaseFBType();
+
+	/**
 	 * Returns a new object of class '<em>Attribute</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -1337,13 +1337,23 @@ public interface LibraryElementPackage extends EPackage {
 	int FB_TYPE_FEATURE_COUNT = COMPILABLE_TYPE_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl <em>Base FB Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBaseFBType()
+	 * @generated
+	 */
+	int BASE_FB_TYPE = 71;
+
+	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_FB_TYPE__ANNOTATIONS = FB_TYPE__ANNOTATIONS;
+	int BASE_FB_TYPE__ANNOTATIONS = FB_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1352,7 +1362,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_FB_TYPE__NAME = FB_TYPE__NAME;
+	int BASE_FB_TYPE__NAME = FB_TYPE__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -1361,7 +1371,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
+	int BASE_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -1370,7 +1380,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_FB_TYPE__VERSION_INFO = FB_TYPE__VERSION_INFO;
+	int BASE_FB_TYPE__VERSION_INFO = FB_TYPE__VERSION_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
@@ -1379,7 +1389,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_FB_TYPE__IDENTIFICATION = FB_TYPE__IDENTIFICATION;
+	int BASE_FB_TYPE__IDENTIFICATION = FB_TYPE__IDENTIFICATION;
 
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
@@ -1388,7 +1398,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_FB_TYPE__PALETTE_ENTRY = FB_TYPE__PALETTE_ENTRY;
+	int BASE_FB_TYPE__PALETTE_ENTRY = FB_TYPE__PALETTE_ENTRY;
 
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
@@ -1397,7 +1407,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_FB_TYPE__COMPILER_INFO = FB_TYPE__COMPILER_INFO;
+	int BASE_FB_TYPE__COMPILER_INFO = FB_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
@@ -1406,7 +1416,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_FB_TYPE__INTERFACE_LIST = FB_TYPE__INTERFACE_LIST;
+	int BASE_FB_TYPE__INTERFACE_LIST = FB_TYPE__INTERFACE_LIST;
 
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference.
@@ -1415,25 +1425,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_FB_TYPE__SERVICE = FB_TYPE__SERVICE;
-
-	/**
-	 * The feature id for the '<em><b>ECC</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASIC_FB_TYPE__ECC = FB_TYPE_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Algorithm</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASIC_FB_TYPE__ALGORITHM = FB_TYPE_FEATURE_COUNT + 1;
+	int BASE_FB_TYPE__SERVICE = FB_TYPE__SERVICE;
 
 	/**
 	 * The feature id for the '<em><b>Internal Vars</b></em>' containment reference list.
@@ -1442,7 +1434,124 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_FB_TYPE__INTERNAL_VARS = FB_TYPE_FEATURE_COUNT + 2;
+	int BASE_FB_TYPE__INTERNAL_VARS = FB_TYPE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Base FB Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__ANNOTATIONS = BASE_FB_TYPE__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__NAME = BASE_FB_TYPE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__COMMENT = BASE_FB_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__VERSION_INFO = BASE_FB_TYPE__VERSION_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__IDENTIFICATION = BASE_FB_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__PALETTE_ENTRY = BASE_FB_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__COMPILER_INFO = BASE_FB_TYPE__COMPILER_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__INTERFACE_LIST = BASE_FB_TYPE__INTERFACE_LIST;
+
+	/**
+	 * The feature id for the '<em><b>Service</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__SERVICE = BASE_FB_TYPE__SERVICE;
+
+	/**
+	 * The feature id for the '<em><b>Internal Vars</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__INTERNAL_VARS = BASE_FB_TYPE__INTERNAL_VARS;
+
+	/**
+	 * The feature id for the '<em><b>ECC</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__ECC = BASE_FB_TYPE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Algorithm</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__ALGORITHM = BASE_FB_TYPE_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Basic FB Type</em>' class.
@@ -1451,7 +1560,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 3;
+	int BASIC_FB_TYPE_FEATURE_COUNT = BASE_FB_TYPE_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Compiler</b></em>' containment reference list.
@@ -5429,7 +5538,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_FB_TYPE__ANNOTATIONS = FB_TYPE__ANNOTATIONS;
+	int SIMPLE_FB_TYPE__ANNOTATIONS = BASE_FB_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5438,7 +5547,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_FB_TYPE__NAME = FB_TYPE__NAME;
+	int SIMPLE_FB_TYPE__NAME = BASE_FB_TYPE__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -5447,7 +5556,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
+	int SIMPLE_FB_TYPE__COMMENT = BASE_FB_TYPE__COMMENT;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -5456,7 +5565,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_FB_TYPE__VERSION_INFO = FB_TYPE__VERSION_INFO;
+	int SIMPLE_FB_TYPE__VERSION_INFO = BASE_FB_TYPE__VERSION_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
@@ -5465,7 +5574,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_FB_TYPE__IDENTIFICATION = FB_TYPE__IDENTIFICATION;
+	int SIMPLE_FB_TYPE__IDENTIFICATION = BASE_FB_TYPE__IDENTIFICATION;
 
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
@@ -5474,7 +5583,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_FB_TYPE__PALETTE_ENTRY = FB_TYPE__PALETTE_ENTRY;
+	int SIMPLE_FB_TYPE__PALETTE_ENTRY = BASE_FB_TYPE__PALETTE_ENTRY;
 
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
@@ -5483,7 +5592,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_FB_TYPE__COMPILER_INFO = FB_TYPE__COMPILER_INFO;
+	int SIMPLE_FB_TYPE__COMPILER_INFO = BASE_FB_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
@@ -5492,7 +5601,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_FB_TYPE__INTERFACE_LIST = FB_TYPE__INTERFACE_LIST;
+	int SIMPLE_FB_TYPE__INTERFACE_LIST = BASE_FB_TYPE__INTERFACE_LIST;
 
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference.
@@ -5501,16 +5610,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_FB_TYPE__SERVICE = FB_TYPE__SERVICE;
-
-	/**
-	 * The feature id for the '<em><b>Algorithm</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_FB_TYPE__ALGORITHM = FB_TYPE_FEATURE_COUNT + 0;
+	int SIMPLE_FB_TYPE__SERVICE = BASE_FB_TYPE__SERVICE;
 
 	/**
 	 * The feature id for the '<em><b>Internal Vars</b></em>' containment reference list.
@@ -5519,7 +5619,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_FB_TYPE__INTERNAL_VARS = FB_TYPE_FEATURE_COUNT + 1;
+	int SIMPLE_FB_TYPE__INTERNAL_VARS = BASE_FB_TYPE__INTERNAL_VARS;
+
+	/**
+	 * The feature id for the '<em><b>Algorithm</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_FB_TYPE__ALGORITHM = BASE_FB_TYPE_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Simple FB Type</em>' class.
@@ -5528,7 +5637,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 2;
+	int SIMPLE_FB_TYPE_FEATURE_COUNT = BASE_FB_TYPE_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
@@ -5538,7 +5647,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 71;
+	int LANGUAGE = 72;
 
 
 	/**
@@ -5549,7 +5658,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 72;
+	int IPROJECT = 73;
 
 
 	/**
@@ -5667,17 +5776,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getBasicFBType_Algorithm();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getInternalVars <em>Internal Vars</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Internal Vars</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getInternalVars()
-	 * @see #getBasicFBType()
-	 * @generated
-	 */
-	EReference getBasicFBType_InternalVars();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo <em>Compiler Info</em>}'.
@@ -7826,15 +7924,25 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getSimpleFBType_Algorithm();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getInternalVars <em>Internal Vars</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType <em>Base FB Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Base FB Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+	 * @generated
+	 */
+	EClass getBaseFBType();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getInternalVars <em>Internal Vars</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Internal Vars</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getInternalVars()
-	 * @see #getSimpleFBType()
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getInternalVars()
+	 * @see #getBaseFBType()
 	 * @generated
 	 */
-	EReference getSimpleFBType_InternalVars();
+	EReference getBaseFBType_InternalVars();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute <em>Attribute</em>}'.
@@ -8030,14 +8138,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference BASIC_FB_TYPE__ALGORITHM = eINSTANCE.getBasicFBType_Algorithm();
-
-		/**
-		 * The meta object literal for the '<em><b>Internal Vars</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference BASIC_FB_TYPE__INTERNAL_VARS = eINSTANCE.getBasicFBType_InternalVars();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl <em>Compiler Info</em>}' class.
@@ -9778,12 +9878,22 @@ public interface LibraryElementPackage extends EPackage {
 		EReference SIMPLE_FB_TYPE__ALGORITHM = eINSTANCE.getSimpleFBType_Algorithm();
 
 		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl <em>Base FB Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBaseFBType()
+		 * @generated
+		 */
+		EClass BASE_FB_TYPE = eINSTANCE.getBaseFBType();
+
+		/**
 		 * The meta object literal for the '<em><b>Internal Vars</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SIMPLE_FB_TYPE__INTERNAL_VARS = eINSTANCE.getSimpleFBType_InternalVars();
+		EReference BASE_FB_TYPE__INTERNAL_VARS = eINSTANCE.getBaseFBType_InternalVars();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeImpl <em>Attribute</em>}' class.

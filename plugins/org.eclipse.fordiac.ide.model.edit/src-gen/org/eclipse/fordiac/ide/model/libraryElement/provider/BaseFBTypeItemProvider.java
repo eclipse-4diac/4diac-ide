@@ -26,24 +26,24 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType} object.
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class BasicFBTypeItemProvider extends BaseFBTypeItemProvider {
+public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public BasicFBTypeItemProvider(AdapterFactory adapterFactory) {
+	public BaseFBTypeItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -74,8 +74,7 @@ public class BasicFBTypeItemProvider extends BaseFBTypeItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.BASIC_FB_TYPE__ECC);
-			childrenFeatures.add(LibraryElementPackage.Literals.BASIC_FB_TYPE__ALGORITHM);
+			childrenFeatures.add(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS);
 		}
 		return childrenFeatures;
 	}
@@ -94,14 +93,14 @@ public class BasicFBTypeItemProvider extends BaseFBTypeItemProvider {
 	}
 
 	/**
-	 * This returns BasicFBType.gif.
+	 * This returns BaseFBType.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/BasicFBType")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/BaseFBType")); //$NON-NLS-1$
 	}
 
 	/**
@@ -112,10 +111,10 @@ public class BasicFBTypeItemProvider extends BaseFBTypeItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((BasicFBType)object).getName();
+		String label = ((BaseFBType)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_BasicFBType_type") : //$NON-NLS-1$
-			getString("_UI_BasicFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_BaseFBType_type") : //$NON-NLS-1$
+			getString("_UI_BaseFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 
@@ -130,9 +129,8 @@ public class BasicFBTypeItemProvider extends BaseFBTypeItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(BasicFBType.class)) {
-			case LibraryElementPackage.BASIC_FB_TYPE__ECC:
-			case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
+		switch (notification.getFeatureID(BaseFBType.class)) {
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -152,18 +150,13 @@ public class BasicFBTypeItemProvider extends BaseFBTypeItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LibraryElementPackage.Literals.BASIC_FB_TYPE__ECC,
-				 LibraryElementFactory.eINSTANCE.createECC()));
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
+				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LibraryElementPackage.Literals.BASIC_FB_TYPE__ALGORITHM,
-				 LibraryElementFactory.eINSTANCE.createOtherAlgorithm()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.BASIC_FB_TYPE__ALGORITHM,
-				 LibraryElementFactory.eINSTANCE.createSTAlgorithm()));
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
+				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 	}
 
 }

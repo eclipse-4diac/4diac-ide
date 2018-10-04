@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
  * <!-- begin-user-doc -->
@@ -38,12 +37,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl#getECC <em>ECC</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl#getAlgorithm <em>Algorithm</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl#getInternalVars <em>Internal Vars</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class BasicFBTypeImpl extends FBTypeImpl implements BasicFBType {
+public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 	/**
 	 * The cached value of the '{@link #getECC() <em>ECC</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -63,16 +61,6 @@ public class BasicFBTypeImpl extends FBTypeImpl implements BasicFBType {
 	 * @ordered
 	 */
 	protected EList<Algorithm> algorithm;
-
-	/**
-	 * The cached value of the '{@link #getInternalVars() <em>Internal Vars</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getInternalVars()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<VarDeclaration> internalVars;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -157,27 +145,12 @@ public class BasicFBTypeImpl extends FBTypeImpl implements BasicFBType {
 	 * @generated
 	 */
 	@Override
-	public EList<VarDeclaration> getInternalVars() {
-		if (internalVars == null) {
-			internalVars = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.BASIC_FB_TYPE__INTERNAL_VARS);
-		}
-		return internalVars;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.BASIC_FB_TYPE__ECC:
 				return basicSetECC(null, msgs);
 			case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
 				return ((InternalEList<?>)getAlgorithm()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.BASIC_FB_TYPE__INTERNAL_VARS:
-				return ((InternalEList<?>)getInternalVars()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -194,8 +167,6 @@ public class BasicFBTypeImpl extends FBTypeImpl implements BasicFBType {
 				return getECC();
 			case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
 				return getAlgorithm();
-			case LibraryElementPackage.BASIC_FB_TYPE__INTERNAL_VARS:
-				return getInternalVars();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -216,10 +187,6 @@ public class BasicFBTypeImpl extends FBTypeImpl implements BasicFBType {
 				getAlgorithm().clear();
 				getAlgorithm().addAll((Collection<? extends Algorithm>)newValue);
 				return;
-			case LibraryElementPackage.BASIC_FB_TYPE__INTERNAL_VARS:
-				getInternalVars().clear();
-				getInternalVars().addAll((Collection<? extends VarDeclaration>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -238,9 +205,6 @@ public class BasicFBTypeImpl extends FBTypeImpl implements BasicFBType {
 			case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
 				getAlgorithm().clear();
 				return;
-			case LibraryElementPackage.BASIC_FB_TYPE__INTERNAL_VARS:
-				getInternalVars().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -257,8 +221,6 @@ public class BasicFBTypeImpl extends FBTypeImpl implements BasicFBType {
 				return eCC != null;
 			case LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM:
 				return algorithm != null && !algorithm.isEmpty();
-			case LibraryElementPackage.BASIC_FB_TYPE__INTERNAL_VARS:
-				return internalVars != null && !internalVars.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
