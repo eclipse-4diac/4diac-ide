@@ -23,6 +23,7 @@
 		<module>../org.eclipse.fordiac.ide.fbtypeeditor.ecc</module>
 		<module>../org.eclipse.fordiac.ide.fbtypeeditor.network</module>
 		<module>../org.eclipse.fordiac.ide.fbtypeeditor.servicesequence</module>
+		<module>../org.eclipse.fordiac.ide.fbtypeeditor.simplefb</module>
 		<module>../org.eclipse.fordiac.ide.typemanagement</module>
 		<module>../org.eclipse.fordiac.ide.fortelauncher</module>
 		<module>../org.eclipse.fordiac.ide.fmu</module>
