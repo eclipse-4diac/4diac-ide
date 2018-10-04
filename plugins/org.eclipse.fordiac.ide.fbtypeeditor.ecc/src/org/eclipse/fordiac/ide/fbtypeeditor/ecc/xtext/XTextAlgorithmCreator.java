@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditorCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xtext.Constants;
@@ -50,7 +51,7 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 		
 
 	@Override
-	public IAlgorithmEditor createAlgorithmEditor(Composite parent, final BasicFBType fbType) {
+	public IAlgorithmEditor createAlgorithmEditor(Composite parent, final BaseFBType fbType) {
 		IEditedResourceProvider resourceProvider = new IEditedResourceProvider() {
 
 			@Override
@@ -98,7 +99,7 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 	 * 
 	 * Should be overridden if you need a special XTextAlogrithm which performs additional setups for your DSL.
 	 */
-	protected XTextAlgorithmEditor createXTextAlgorithmEditor(BasicFBType fbType,
+	protected XTextAlgorithmEditor createXTextAlgorithmEditor(BaseFBType fbType,
 			EmbeddedEditor editor) {
 		return new XTextAlgorithmEditor(editor, fbType);
 	}

@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
 
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -28,7 +28,7 @@ public class TextEditorCreator implements IAlgorithmEditorCreator {
 	}
 
 	@Override
-	public IAlgorithmEditor createAlgorithmEditor(final Composite parent, BasicFBType fbType) {
+	public IAlgorithmEditor createAlgorithmEditor(final Composite parent, BaseFBType fbType) {
 		TextEditor editor = new TextEditor(parent, null, null, false,
 				SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		return editor;
