@@ -89,11 +89,11 @@ public class ToolTipFigure extends Figure {
 
 	private void addVarDefaultValue(VarDeclaration var) {
 		VarDeclaration typeVar = getTypevariable(var);		
-		if(null != typeVar && null != typeVar.getVarInitialization()){
+		if(null != typeVar && null != typeVar.getValue()){
 			String initvalue = "Inital value: ";  
-			if(null != typeVar.getVarInitialization().getInitialValue() && 
-					!typeVar.getVarInitialization().getInitialValue().isEmpty()){
-				initvalue += var.getVarInitialization().getInitialValue();
+			if(null != typeVar.getValue().getValue() && 
+					!typeVar.getValue().getValue().isEmpty()){
+				initvalue += var.getValue().getValue();
 			}
 			line.add(new Label(initvalue));
 		}

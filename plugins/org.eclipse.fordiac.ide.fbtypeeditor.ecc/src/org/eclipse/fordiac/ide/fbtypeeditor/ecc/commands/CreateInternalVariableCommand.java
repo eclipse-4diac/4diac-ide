@@ -62,9 +62,6 @@ public class CreateInternalVariableCommand extends Command {
 		varDecl.setTypeName(dataType.getName());
 		varDecl.setComment("Internal Variable"); //$NON-NLS-1$
 		varDecl.setArraySize(0);
-		VarInitialization varInitialization = DataFactory.eINSTANCE.createVarInitialization();
-		varInitialization.setInitialValue(""); //$NON-NLS-1$
-		varDecl.setVarInitialization(varInitialization);
 		Value value = LibraryElementFactory.eINSTANCE.createValue();
 		value.setValue(""); //$NON-NLS-1$
 		varDecl.setValue(value);

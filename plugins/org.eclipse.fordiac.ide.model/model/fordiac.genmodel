@@ -346,7 +346,6 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VarDeclaration">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VarDeclaration/arraySize"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//VarDeclaration/varInitialization"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//VarDeclaration/withs"/>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/isArray" body="return org.eclipse.fordiac.ide.model.Annotations.isArray(this);"/>
     </genClasses>
@@ -569,9 +568,6 @@
     </genClasses>
     <genClasses ecoreClass="data.ecore#//SubrangeType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//SubrangeType/subrange"/>
-    </genClasses>
-    <genClasses ecoreClass="data.ecore#//VarInitialization">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//VarInitialization/initialValue"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//ValueType"/>
     <genClasses ecoreClass="data.ecore#//ElementaryType"/>

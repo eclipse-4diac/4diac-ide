@@ -181,9 +181,9 @@ public class ImportUtils {
 
 		Node initialValue = map.getNamedItem(LibraryElementTags.INITIALVALUE_ATTRIBUTE);
 		if (initialValue != null) {
-			VarInitialization varInitialization = DataFactory.eINSTANCE.createVarInitialization();
-			varInitialization.setInitialValue(initialValue.getNodeValue());
-			v.setVarInitialization(varInitialization);
+			Value varInitialization = LibraryElementFactory.eINSTANCE.createValue();
+			varInitialization.setValue(initialValue.getNodeValue());
+			v.setValue(varInitialization);
 		}
 		Node comment = map.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (comment != null) {

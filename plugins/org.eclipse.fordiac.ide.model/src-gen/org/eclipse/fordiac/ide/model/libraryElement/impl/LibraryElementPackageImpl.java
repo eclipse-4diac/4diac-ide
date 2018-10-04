@@ -2016,18 +2016,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EReference getVarDeclaration_VarInitialization() {
-		return (EReference)varDeclarationEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getVarDeclaration_Withs() {
-		return (EReference)varDeclarationEClass.getEStructuralFeatures().get(2);
+		return (EReference)varDeclarationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -3111,7 +3101,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		varDeclarationEClass = createEClass(VAR_DECLARATION);
 		createEAttribute(varDeclarationEClass, VAR_DECLARATION__ARRAY_SIZE);
-		createEReference(varDeclarationEClass, VAR_DECLARATION__VAR_INITIALIZATION);
 		createEReference(varDeclarationEClass, VAR_DECLARATION__WITHS);
 
 		versionInfoEClass = createEClass(VERSION_INFO);
@@ -3620,7 +3609,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(varDeclarationEClass, VarDeclaration.class, "VarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getVarDeclaration_ArraySize(), theXMLTypePackage.getInt(), "arraySize", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getVarDeclaration_VarInitialization(), theDataPackage.getVarInitialization(), null, "varInitialization", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getVarDeclaration_Withs(), this.getWith(), this.getWith_Variables(), "withs", null, 0, -1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(varDeclarationEClass, theXMLTypePackage.getBoolean(), "isArray", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

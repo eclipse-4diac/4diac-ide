@@ -24,7 +24,6 @@ import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.VarInitialization;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -49,7 +48,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getArraySize <em>Array Size</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getVarInitialization <em>Var Initialization</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getWiths <em>Withs</em>}</li>
  * </ul>
  *
@@ -195,16 +193,6 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @ordered
 	 */
 	protected int arraySize = ARRAY_SIZE_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getVarInitialization() <em>Var Initialization</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVarInitialization()
-	 * @generated
-	 * @ordered
-	 */
-	protected VarInitialization varInitialization;
 
 	/**
 	 * The cached value of the '{@link #getWiths() <em>Withs</em>}' reference list.
@@ -366,74 +354,6 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 		type = newType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__TYPE, oldType, type));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public VarInitialization getVarInitialization() {
-		if (varInitialization != null && varInitialization.eIsProxy()) {
-			InternalEObject oldVarInitialization = (InternalEObject)varInitialization;
-			varInitialization = (VarInitialization)eResolveProxy(oldVarInitialization);
-			if (varInitialization != oldVarInitialization) {
-				InternalEObject newVarInitialization = (InternalEObject)varInitialization;
-				NotificationChain msgs = oldVarInitialization.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, null, null);
-				if (newVarInitialization.eInternalContainer() == null) {
-					msgs = newVarInitialization.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, oldVarInitialization, varInitialization));
-			}
-		}
-		return varInitialization;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public VarInitialization basicGetVarInitialization() {
-		return varInitialization;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetVarInitialization(VarInitialization newVarInitialization, NotificationChain msgs) {
-		VarInitialization oldVarInitialization = varInitialization;
-		varInitialization = newVarInitialization;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, oldVarInitialization, newVarInitialization);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVarInitialization(VarInitialization newVarInitialization) {
-		if (newVarInitialization != varInitialization) {
-			NotificationChain msgs = null;
-			if (varInitialization != null)
-				msgs = ((InternalEObject)varInitialization).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, null, msgs);
-			if (newVarInitialization != null)
-				msgs = ((InternalEObject)newVarInitialization).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, null, msgs);
-			msgs = basicSetVarInitialization(newVarInitialization, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, newVarInitialization, newVarInitialization));
 	}
 
 	/**
@@ -619,8 +539,6 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.VAR_DECLARATION__VALUE:
 				return basicSetValue(null, msgs);
-			case LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION:
-				return basicSetVarInitialization(null, msgs);
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				return ((InternalEList<?>)getWiths()).basicRemove(otherEnd, msgs);
 		}
@@ -655,9 +573,6 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 				return getTypeName();
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				return getArraySize();
-			case LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION:
-				if (resolve) return getVarInitialization();
-				return basicGetVarInitialization();
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				return getWiths();
 		}
@@ -702,9 +617,6 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				setArraySize((Integer)newValue);
 				return;
-			case LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION:
-				setVarInitialization((VarInitialization)newValue);
-				return;
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				getWiths().clear();
 				getWiths().addAll((Collection<? extends With>)newValue);
@@ -748,9 +660,6 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				setArraySize(ARRAY_SIZE_EDEFAULT);
 				return;
-			case LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION:
-				setVarInitialization((VarInitialization)null);
-				return;
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				getWiths().clear();
 				return;
@@ -784,8 +693,6 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				return arraySize != ARRAY_SIZE_EDEFAULT;
-			case LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION:
-				return varInitialization != null;
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				return withs != null && !withs.isEmpty();
 		}

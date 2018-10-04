@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.data.SubrangeType;
 import org.eclipse.fordiac.ide.model.data.ValueType;
-import org.eclipse.fordiac.ide.model.data.VarInitialization;
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -163,12 +162,6 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseLibraryElement(subrangeType);
 				if (result == null) result = caseINamedElement(subrangeType);
 				if (result == null) result = caseI4DIACElement(subrangeType);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DataPackage.VAR_INITIALIZATION: {
-				VarInitialization varInitialization = (VarInitialization)theEObject;
-				T result = caseVarInitialization(varInitialization);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -335,21 +328,6 @@ public class DataSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSubrangeType(SubrangeType object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Var Initialization</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Var Initialization</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseVarInitialization(VarInitialization object) {
 		return null;
 	}
 

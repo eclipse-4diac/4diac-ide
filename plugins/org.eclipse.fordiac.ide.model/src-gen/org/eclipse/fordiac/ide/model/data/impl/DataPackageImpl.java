@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.data.SubrangeType;
 import org.eclipse.fordiac.ide.model.data.ValueType;
-import org.eclipse.fordiac.ide.model.data.VarInitialization;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl;
 
@@ -102,13 +101,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	private EClass subrangeTypeEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass varInitializationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -405,26 +397,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getVarInitialization() {
-		return varInitializationEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getVarInitialization_InitialValue() {
-		return (EAttribute)varInitializationEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getValueType() {
 		return valueTypeEClass;
 	}
@@ -534,9 +506,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		subrangeTypeEClass = createEClass(SUBRANGE_TYPE);
 		createEReference(subrangeTypeEClass, SUBRANGE_TYPE__SUBRANGE);
 
-		varInitializationEClass = createEClass(VAR_INITIALIZATION);
-		createEAttribute(varInitializationEClass, VAR_INITIALIZATION__INITIAL_VALUE);
-
 		valueTypeEClass = createEClass(VALUE_TYPE);
 
 		elementaryTypeEClass = createEClass(ELEMENTARY_TYPE);
@@ -619,9 +588,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 		initEClass(subrangeTypeEClass, SubrangeType.class, "SubrangeType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSubrangeType_Subrange(), this.getSubrange(), null, "subrange", null, 1, 1, SubrangeType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-
-		initEClass(varInitializationEClass, VarInitialization.class, "VarInitialization", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getVarInitialization_InitialValue(), ecorePackage.getEString(), "initialValue", "", 0, 1, VarInitialization.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		initEClass(valueTypeEClass, ValueType.class, "ValueType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 

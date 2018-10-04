@@ -21,7 +21,6 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -280,7 +279,6 @@ public class VarDeclarationItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(LibraryElementPackage.Literals.IINTERFACE_ELEMENT__VALUE);
-			childrenFeatures.add(LibraryElementPackage.Literals.VAR_DECLARATION__VAR_INITIALIZATION);
 		}
 		return childrenFeatures;
 	}
@@ -344,7 +342,6 @@ public class VarDeclarationItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-			case LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -366,11 +363,6 @@ public class VarDeclarationItemProvider
 			(createChildParameter
 				(LibraryElementPackage.Literals.IINTERFACE_ELEMENT__VALUE,
 				 LibraryElementFactory.eINSTANCE.createValue()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.VAR_DECLARATION__VAR_INITIALIZATION,
-				 DataFactory.eINSTANCE.createVarInitialization()));
 	}
 	
 }

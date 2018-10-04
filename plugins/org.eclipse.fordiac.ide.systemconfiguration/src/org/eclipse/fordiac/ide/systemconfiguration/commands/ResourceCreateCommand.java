@@ -189,7 +189,7 @@ public class ResourceCreateCommand extends Command {
 					var.setName(dataCon.getSource().getName());
 					var.setIsInput(true);
 					Value value = LibraryElementFactory.eINSTANCE.createValue();
-					value.setValue(dataCon.getDataSource().getVarInitialization().getInitialValue());
+					value.setValue(dataCon.getDataSource().getValue().getValue());
 					var.setValue(value);
 					device.getVarDeclarations().add(var);
 				}

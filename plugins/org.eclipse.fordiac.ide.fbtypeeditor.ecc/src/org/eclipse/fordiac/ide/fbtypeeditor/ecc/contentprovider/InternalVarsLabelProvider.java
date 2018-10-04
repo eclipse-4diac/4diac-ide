@@ -54,7 +54,7 @@ public class InternalVarsLabelProvider extends LabelProvider implements
 			case 3:
 				return ((VarDeclaration) element).getArraySize() > 0 ? Integer.toString(((VarDeclaration) element).getArraySize()) : ""; //$NON-NLS-1$
 			case 4:
-				return ((VarDeclaration) element).getVarInitialization() != null && ((VarDeclaration) element).getVarInitialization().getInitialValue() !=  null ? ((VarDeclaration) element).getVarInitialization().getInitialValue() : ""; //$NON-NLS-1$
+				return ((VarDeclaration) element).getValue() != null && ((VarDeclaration) element).getValue().getValue() !=  null ? ((VarDeclaration) element).getValue().getValue() : ""; //$NON-NLS-1$
 			default:
 				break;
 			}

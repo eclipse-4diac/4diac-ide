@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.data.SubrangeType;
 import org.eclipse.fordiac.ide.model.data.ValueType;
-import org.eclipse.fordiac.ide.model.data.VarInitialization;
 
 /**
  * <!-- begin-user-doc -->
@@ -85,7 +84,6 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 			case DataPackage.STRUCTURED_TYPE: return createStructuredType();
 			case DataPackage.SUBRANGE: return createSubrange();
 			case DataPackage.SUBRANGE_TYPE: return createSubrangeType();
-			case DataPackage.VAR_INITIALIZATION: return createVarInitialization();
 			case DataPackage.VALUE_TYPE: return createValueType();
 			case DataPackage.ELEMENTARY_TYPE: return createElementaryType();
 			case DataPackage.DERIVED_TYPE: return createDerivedType();
@@ -200,17 +198,6 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	public SubrangeType createSubrangeType() {
 		SubrangeTypeImpl subrangeType = new SubrangeTypeImpl();
 		return subrangeType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public VarInitialization createVarInitialization() {
-		VarInitializationImpl varInitialization = new VarInitializationImpl();
-		return varInitialization;
 	}
 
 	/**

@@ -496,22 +496,13 @@ public interface MonitoringPackage extends EPackage {
 	int ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE = IEDIT_PART_CREATOR_FEATURE_COUNT + 9;
 
 	/**
-	 * The feature id for the '<em><b>Var Initialization</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__VAR_INITIALIZATION = IEDIT_PART_CREATOR_FEATURE_COUNT + 10;
-
-	/**
 	 * The feature id for the '<em><b>Withs</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__WITHS = IEDIT_PART_CREATOR_FEATURE_COUNT + 11;
+	int ADAPTER_MONITORING_VAR_DECLARATION__WITHS = IEDIT_PART_CREATOR_FEATURE_COUNT + 10;
 
 	/**
 	 * The number of structural features of the '<em>Adapter Monitoring Var Declaration</em>' class.
@@ -520,7 +511,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 12;
+	int ADAPTER_MONITORING_VAR_DECLARATION_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 11;
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement <em>Element</em>}'.

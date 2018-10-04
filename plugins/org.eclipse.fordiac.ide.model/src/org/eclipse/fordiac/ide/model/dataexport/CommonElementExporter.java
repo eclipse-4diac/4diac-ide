@@ -507,9 +507,9 @@ public abstract class CommonElementExporter {
 		if (varDecl.isArray()) {
 			variableElement.setAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE, Integer.toString(varDecl.getArraySize()));
 		}
-		if (varDecl.getVarInitialization() != null
-				&& varDecl.getVarInitialization().getInitialValue() != null) {
-			variableElement.setAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl.getVarInitialization().getInitialValue());
+		if (varDecl.getValue() != null
+				&& varDecl.getValue().getValue() != null) {
+			variableElement.setAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl.getValue().getValue());
 		}
 
 		parentElement.appendChild(variableElement);

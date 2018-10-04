@@ -133,7 +133,7 @@ public class InternalVarsSection extends ECCSection {
 				} else if (IV_ARRAY.equals(property)) {
 					return Integer.toString(((VarDeclaration) element).getArraySize());
 				} else{
-					return ((VarDeclaration) element).getVarInitialization().getInitialValue();
+					return ((VarDeclaration) element).getValue().getValue();
 				}
 			}
 			@Override

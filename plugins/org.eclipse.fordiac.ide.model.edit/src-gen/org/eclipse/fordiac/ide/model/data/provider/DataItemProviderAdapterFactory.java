@@ -239,29 +239,6 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory implement
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.VarInitialization} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected VarInitializationItemProvider varInitializationItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.VarInitialization}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createVarInitializationAdapter() {
-		if (varInitializationItemProvider == null) {
-			varInitializationItemProvider = new VarInitializationItemProvider(this);
-		}
-
-		return varInitializationItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.ValueType} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -465,7 +442,6 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory implement
 		if (structuredTypeItemProvider != null) structuredTypeItemProvider.dispose();
 		if (subrangeItemProvider != null) subrangeItemProvider.dispose();
 		if (subrangeTypeItemProvider != null) subrangeTypeItemProvider.dispose();
-		if (varInitializationItemProvider != null) varInitializationItemProvider.dispose();
 		if (valueTypeItemProvider != null) valueTypeItemProvider.dispose();
 		if (elementaryTypeItemProvider != null) elementaryTypeItemProvider.dispose();
 		if (derivedTypeItemProvider != null) derivedTypeItemProvider.dispose();

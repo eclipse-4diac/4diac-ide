@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -358,11 +359,35 @@ public class SystemImporter {
 		for (VarDeclaration varDecl : element.getVarDeclarations()) {
 			Value value = LibraryElementFactory.eINSTANCE.createValue();
 			varDecl.setValue(value);
-			if (varDecl.getVarInitialization() != null && varDecl.getVarInitialization().getInitialValue() != null) {
-				String initialValue = varDecl.getVarInitialization().getInitialValue();
-				value.setValue(initialValue);
+			VarDeclaration typeVar = getTypeVariable(varDecl);
+			if (null != typeVar && null != typeVar.getValue() && null != typeVar.getValue().getValue()) {
+				value.setValue(typeVar.getValue().getValue());
 			}
 		}
+	}
+	
+	private static VarDeclaration getTypeVariable(VarDeclaration var) {
+		EList<VarDeclaration> varList = null;
+		if(var.eContainer() instanceof Device){
+			Device dev = (Device)var.eContainer();
+			if(null != dev.getType()) {
+				varList = dev.getType().getVarDeclaration();
+			}
+		} else if(var.eContainer() instanceof Resource){
+			Resource res = (Resource)var.eContainer();
+			if(null != res.getType()) {
+				varList = res.getType().getVarDeclaration();
+			}
+		}
+		
+		if(null != varList) {
+			for(VarDeclaration typeVar : varList){
+				if(typeVar.getName().equals(var.getName())){
+					return typeVar;
+				}
+			}
+		}
+		return null;
 	}
 
 	private VarDeclaration getDeviceParamter(Device device, String name) {

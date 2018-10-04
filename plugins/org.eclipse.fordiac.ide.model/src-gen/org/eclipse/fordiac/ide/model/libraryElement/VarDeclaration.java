@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.data.VarInitialization;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,7 +24,6 @@ import org.eclipse.fordiac.ide.model.data.VarInitialization;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getArraySize <em>Array Size</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getVarInitialization <em>Var Initialization</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getWiths <em>Withs</em>}</li>
  * </ul>
  *
@@ -60,32 +58,6 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * @generated
 	 */
 	void setArraySize(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Var Initialization</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Var Initialization</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Var Initialization</em>' containment reference.
-	 * @see #setVarInitialization(VarInitialization)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getVarDeclaration_VarInitialization()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	VarInitialization getVarInitialization();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getVarInitialization <em>Var Initialization</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Var Initialization</em>' containment reference.
-	 * @see #getVarInitialization()
-	 * @generated
-	 */
-	void setVarInitialization(VarInitialization value);
 
 	/**
 	 * Returns the value of the '<em><b>Withs</b></em>' reference list.

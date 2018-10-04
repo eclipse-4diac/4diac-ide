@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.data.SubrangeType;
 import org.eclipse.fordiac.ide.model.data.ValueType;
-import org.eclipse.fordiac.ide.model.data.VarInitialization;
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -121,10 +120,6 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSubrangeType(SubrangeType object) {
 				return createSubrangeTypeAdapter();
-			}
-			@Override
-			public Adapter caseVarInitialization(VarInitialization object) {
-				return createVarInitializationAdapter();
 			}
 			@Override
 			public Adapter caseValueType(ValueType object) {
@@ -283,20 +278,6 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSubrangeTypeAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.VarInitialization <em>Var Initialization</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.data.VarInitialization
-	 * @generated
-	 */
-	public Adapter createVarInitializationAdapter() {
 		return null;
 	}
 

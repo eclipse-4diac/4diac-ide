@@ -591,7 +591,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 				continue;
 			}
 			inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + var.getName(), false, FMUInputOutput.variableScope.INTERNAL, //$NON-NLS-1$
-					varType, (null != var.getVarInitialization()) ? var.getVarInitialization().getInitialValue() : null));
+					varType, (null != var.getValue()) ? var.getValue().getValue() : null));
 		}
 		// store ECC
 		inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + ".$ECC", false, FMUInputOutput.variableScope.INTERNAL, //$NON-NLS-1$

@@ -813,8 +813,6 @@
         <details key="name" value="ArraySize"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="varInitialization" eType="ecore:EClass data.ecore#//VarInitialization"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="withs" upperBound="-1"
         eType="#//With" eOpposite="#//With/variables"/>
   </eClassifiers>
