@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ * 				 2018 TU Wien/ACIN
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,6 +9,9 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   
+ *   Peter Gsellmann
+ *     - incorporating simple fb
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
@@ -42,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
@@ -292,6 +296,7 @@ public class FBTypeEditor extends FormEditor implements
 				(editorType.equals("ForAllFBTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllNonAdapterFBTypes") && !(fbType instanceof AdapterFBType)) || //$NON-NLS-1$
 				(fbType instanceof BasicFBType && editorType.equals("basic")) || //$NON-NLS-1$
+				(fbType instanceof SimpleFBType && editorType.equals("simple")) || //$NON-NLS-1$
 			    (fbType instanceof ServiceInterfaceFBType && editorType.equals("serviceInterface")) || //$NON-NLS-1$
 			    (fbType instanceof CompositeFBType && editorType.equals("composite"))		 //$NON-NLS-1$
 		);

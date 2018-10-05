@@ -1,5 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2018 TU Wien/ACIN
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,9 @@
  * Contributors:
  *  Gerhard Ebenhofer, Ingo Hegny, Alois Zoitl, Martin Jobst
  *    - initial API and implementation and/or initial documentation
+ *    
+ *  Peter Gsellmann
+ *    - incorporating simple fb
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -677,7 +681,7 @@ public class FBTImporter implements LibraryElementTags {
 
 			Node node = childNodes.item(i);
 			String nodeName = node.getNodeName();
-			Algorithm algorithm = (Algorithm) type.getAlgorithm();
+			
 			if (nodeName.equals(FBD_ELEMENT)) {
 				throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!");
 			} else if (nodeName.equals(ST_ELEMENT)) {
@@ -686,7 +690,7 @@ public class FBTImporter implements LibraryElementTags {
 				sT.setName(name);
 				sT.setComment(comment);
 				parseST(sT, node);
-				algorithm = sT;
+				type.setAlgorithm(sT);
 			} else if (nodeName.equals(LD_ELEMENT)) {
 				throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!");
 			} else if (nodeName.equals(OTHER_ELEMENT)) {
@@ -695,7 +699,7 @@ public class FBTImporter implements LibraryElementTags {
 				other.setName(name);
 				other.setComment(comment);
 				parseOtherAlg(other, node);
-				algorithm = other;
+				type.setAlgorithm(other);
 			}
 		}
 	}

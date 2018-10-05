@@ -15,10 +15,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets.AlgorithmEditingComposite;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTypeCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets.AlgorithmEditingComposite;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
@@ -43,8 +46,7 @@ class AlgorithmGroup extends AlgorithmEditingComposite {
 		languageLabel = widgetFactory.createCLabel(langAndComents, "Langugage: ");
 		languageCombo = new Combo(langAndComents, SWT.SINGLE | SWT.READ_ONLY);
 		fillLanguageDropDown();
-		languageCombo.addListener(SWT.Selection, event -> executeCommand(
-				new ChangeAlgorithmTypeCommand(getBasicFBType(), getAlgorithm(), languageCombo.getText())));
+		languageCombo.addListener(SWT.Selection, event -> executeCommand(getChangeAlgorithmTypeCommand(getBasicFBType(), getAlgorithm(), languageCombo.getText())));
 
 		commentLabel = widgetFactory.createCLabel(langAndComents, "Comment:");
 		commentText = widgetFactory.createText(langAndComents, ""); //$NON-NLS-1$
@@ -63,6 +65,11 @@ class AlgorithmGroup extends AlgorithmEditingComposite {
 		codeEditors.setLayoutData(codeEditorsGridData);
 
 		disableAllFields();
+	}
+
+	@Override
+	protected Command getChangeAlgorithmTypeCommand(BaseFBType fbType, Algorithm oldAlgorithm, String algorithmType) {
+		return new ChangeAlgorithmTypeCommand(fbType, oldAlgorithm, algorithmType);
 	}
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2016 fortiss GmbH, 2018 TU Wien/ACIN
+ * Copyright (c) 22018 TU Wien/ACIN
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,33 +7,28 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *   Alois Zoitl, Monika Wenger
- *     - initial API and implementation and/or initial documentation
- *   
  *   Peter Gsellmann
- *     - incorporation of simple fb
+ *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
+package org.eclipse.fordiac.ide.fbtypeeditor.simplefb.commands;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
-import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.gef.commands.Command;
 
-public class ChangeAlgorithmTypeCommand extends Command {
+public class ChangeAlgorithmTypeCommandSimpleFB extends Command {
 
 	protected final BaseFBType fbType;
 	protected Algorithm oldAlgorithm;
 	protected Algorithm newAlgorithm;
 	private String algorithmType;
 
-	public ChangeAlgorithmTypeCommand(BaseFBType fbType, Algorithm oldAlgorithm, String algorithmType) {
+	public ChangeAlgorithmTypeCommandSimpleFB(BaseFBType fbType, Algorithm oldAlgorithm, String algorithmType) {
 		this.fbType = fbType;
 		this.oldAlgorithm = oldAlgorithm;
 		this.algorithmType = algorithmType;
@@ -87,34 +82,12 @@ public class ChangeAlgorithmTypeCommand extends Command {
 
 	@Override
 	public void undo() {
-		((BasicFBType) fbType).getAlgorithm().add(((BasicFBType) fbType).getAlgorithm().indexOf(newAlgorithm),
-				oldAlgorithm);
-		updateECActions(false);
-		((BasicFBType) fbType).getAlgorithm().remove(newAlgorithm);
+		((SimpleFBType) fbType).setAlgorithm(oldAlgorithm);
 	}
 
 	@Override
 	public void redo() {
-		((BasicFBType) fbType).getAlgorithm().add(((BasicFBType) fbType).getAlgorithm().indexOf(oldAlgorithm),
-				newAlgorithm);
-		updateECActions(true);
-		((BasicFBType) fbType).getAlgorithm().remove(oldAlgorithm);
-	}
-
-	private void updateECActions(boolean redo) {
-		for (ECState state : ((BasicFBType) fbType).getECC().getECState()) {
-			for (ECAction action : state.getECAction()) {
-				if (true == redo) {
-					if (action.getAlgorithm() == oldAlgorithm) {
-						action.setAlgorithm(newAlgorithm);
-					}
-				} else {
-					if (action.getAlgorithm() == newAlgorithm) {
-						action.setAlgorithm(oldAlgorithm);
-					}
-				}
-			}
-		}
+		((SimpleFBType) fbType).setAlgorithm(newAlgorithm);
 	}
 
 	public Algorithm getNewAlgorithm() {

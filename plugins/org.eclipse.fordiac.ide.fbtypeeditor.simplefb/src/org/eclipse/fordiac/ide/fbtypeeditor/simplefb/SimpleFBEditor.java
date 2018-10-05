@@ -11,6 +11,119 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.simplefb;
 
-public class SimpleFBEditor {
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.part.EditorPart;
+
+public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
+
+	protected AlgorithmEditingCompositeSimpleFB baseAlgorithm;
+	private SimpleFBType fbType;
+	protected CommandStack commandStack;
+	protected Algorithm alg;
+
+	public SimpleFBEditor(){
+	}
+
+
+	@Override
+	public void createPartControl(Composite parent) {
+		baseAlgorithm = new AlgorithmEditingCompositeSimpleFB(parent);
+		baseAlgorithm.commandStack = commandStack;
+		baseAlgorithm.loadEditors(fbType);
+		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
+	}
 	
+	@Override
+	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+			setInput(input);
+			if (input instanceof FBTypeEditorInput) {
+				FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+				if (untypedInput.getContent() instanceof SimpleFBType) {
+					fbType = (SimpleFBType) untypedInput.getContent();
+				}
+			}
+			setCommonCommandStack(commandStack);
+			setSite(site);
+			setPartName("Algorithm");
+			setTitleImage(FordiacImage.ICON_Algorithm.getImage());
+			getSite().getWorkbenchWindow().getSelectionService()
+					.addSelectionListener(this);
+	}
+
+
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+		commandStack.markSaveLocation();
+		firePropertyChange(IEditorPart.PROP_DIRTY);
+		
+	}
+
+	@Override
+	public void doSaveAs() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public boolean isDirty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean isSaveAsAllowed() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+	@Override
+	public void setFocus() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
+		
+	}
+
+
+	@Override
+	public boolean outlineSelectionChanged(Object selectedElement) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public void setCommonCommandStack(CommandStack commandStack) {
+		this.commandStack = commandStack;	
+	}
+
+	@Override
+	public void dispose()
+	{
+		getSite().getWorkbenchWindow().getSelectionService()
+		.removeSelectionListener(this);
+		super.dispose();
+	}
 }
