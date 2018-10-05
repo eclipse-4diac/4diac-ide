@@ -158,7 +158,7 @@
 
 <!----------------------------------------------------------------------------------------------------------------->
 
-    <h2 id="overviewEditors">Overview of the editors</h2>
+    <h2 id="overviewEditors">Overview of the Editors</h2>
     
     <p>Before we test our application, let's briefly summarize the elements we've worked with.</p>
 
@@ -188,7 +188,7 @@
           <th>System Configuration</th>
           <td>automatically generated, only one per system</td>
           <td>System Configuration Editor</td>
-          <td></td>
+          <td>System</td>
         </tr>
         <tr>
           <th>Device</th>
@@ -207,27 +207,35 @@
 
 <!----------------------------------------------------------------------------------------------------------------->
 
-     <h2 id="deployingToForte">Deploying application to FORTE</h2>
+     <h2 id="deployingToForte">Deploying application to 4diac FORTE</h2>
      
-     <p>In this step, the Blink application will be deployed to FORTE running locally.</p>
+     <p>In this step, the Blink application will be deployed to 4diac FORTE running locally on your computer.</p>
 
      <ol>
-       <li>Go to <span class="menu4diac">Windows &rarr; Preferences &rarr; 4DIAC &rarr; FORTE Preferences</span>, and in <span class="addressDoc">FORTE Location</span> look for FORTE inside your 4DIAC folder in <span class="fileLocation">runtime/FORTE/1.8RC3/[YOUR_OS]/forte[.exe]</span> and then click OK.</li>
-       <li>Change to the Deployment Persperctive using the <img src="./img/perspective/deploymentButton.gif" alt="Deployment Perspective Button" class="inlineImg"/> button.</li>
+       <li>You have to select a 4diac FORTE. 
+       <br/>You can either build your own 4diac FORTE as <a href="../installation/install.html#ownFORTE">shown here</a> or you can choose the 4diac FORTE that is provided for you for this tutorial in the 4diac IDE folder. Go to <span class="menu4diac">Windows &rarr; Preferences &rarr; 4diac IDE &rarr; FORTE Preferences</span>, and in <span class="addressDoc">FORTE Location</span> look for FORTE inside your 4diac IDE folder in <span class="fileLocation">runtime/FORTE/1.8RC3/[YOUR_OS]/forte[.exe]</span> and then click OK.</li>
+       <li>Change to the <i>Deployment Perspective</i> using the <img src="./img/perspective/deploymentButton.gif" alt="Deployment Perspective Button" class="inlineImg"/> button.</li>
        <li>Set the port to 61499 (the same define before, remember <span class="address">localhost:61499</span> in the System Configuration?)</li>
-       <li><span class="button4diac">Launch Local FORTE</span></li>
-       <li>You should see the the location of your FORTE and the STOP button enable in the Console.</li>
-       <li>Select the elements to deploy. In case you have many devices with many resources, you can select the devices to deploy and even which resources to deploy.</li>
-       <li>Click the <span class="button4diac">Download</span> button</li>
-       <li>Check that the deployment console shows some output, and that no red warning appears on the right nor left of it. If you get somthing red, something went wrong.</li>
+       <li><span class="button4diac">Launch Local 4diac FORTE</span></li>
+       <li>You should see the the location of your 4diac FORTE and the <b>Terminate</b> button enabled in the Console.</li>
+       <li>Select the elements to deploy. 
+           For this tutorial select our device <i>Testee</i>. 
+           In case you have many devices with many resources, you can select the devices to deploy and even which resources to deploy.</li>
+       <li>Click the <span class="button4diac">Deploy</span> button</li>
+       <li>Check that the <i>Deployment Console</i> shows some output, and that no red warning appears on the right nor left of it. If you get something red, something went wrong.</li>
      </ol>
      <img src="./img/deploymentExample.png" alt="Resource completely connected"/>
-    <p><span class="noteTitle">Note:</span><span class="noteText"> With the runtime launcher you can only start run-time environments in your local development computer. It is not possible to start run-time environments on remote computers or control devices. In order to perform this task device specific means to start the run-time environment have to be performed.</span></p>
+    <p><span class="noteTitle">Note:</span><span class="noteText"> With the runtime launcher you can only start run-time environments on your local development computer. 
+    It is not possible to start run-time environments on remote computers or control devices. 
+    In order to perform this task device specific means to start the run-time environment have to be performed.</span></p>
 
-    <p>The <span class="view4diac">Deployment Console</span> is automatically cleared before each download. Furthermore, with the icon <img src="./img/clearDeploymentConsole.png" alt="Clear Deployment Console" class="inlineImg" /> in the upper right corner of the <span class="view4diac">Deployment Console</span> the deployment messages can be cleared.</p>
+    <p>The <i>Deployment Console</i> is automatically cleared before each download. 
+    Furthermore, with the icon <img src="./img/clearDeploymentConsole.png" alt="Clear Deployment Console" class="inlineImg" /> in the upper right corner of the <i>Deployment Console</i> the deployment messages can be cleared.</p>
    
-    <p>By selecting a Device or Resource the corresponding IEC 61499 element can be cleaned. This means that the Device or Resource configuration are cleaned and reset to the default configuration without any Function Block Network.</p>
-    <p><span class="menu4diac">Delete All Resources</span> leaves the Device empty, and <span class="menu4diac">Kill Device</span> stops FORTE. You can deploy again after cleaning the Device</p>
+    <p>By selecting a Device or Resource the corresponding IEC 61499 element can be cleaned. 
+    This means that the Device or Resource configuration are cleaned and reset to the default configuration without any Function Block Network.</p>
+    <p><span class="menu4diac">Delete All Resources</span> leaves the Device empty, and <span class="menu4diac">Kill Device</span> stops 4diac FORTE. 
+    You can deploy again after cleaning the Device.</p>
     <img src="./img/cleanDevice.png" width="1024" alt="Clean Device" />
     <p><span class="menu4diac">Delete Resource</span> deletes just the selected resource:</p>
     <img src="./img/cleanResource.png" width="1024" alt="Clean Resource" />
