@@ -627,7 +627,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
  			for(IInterfaceElement var : list){
  				FMUInputOutput varInfo = new FMUInputOutput();
 				if(var instanceof VarDeclaration){
-					varInfo = getInfoFromVar(paFBNetwork, fbName, var);
+					varInfo = getInfoFromVar(paFBNetwork, fbName, (VarDeclaration)var);
 					if (FMUInputOutput.variableType.UNKNOWN == varInfo.getVarType()) {
 						continue;
 					}
@@ -639,8 +639,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		}
 	}
 	
-	private FMUInputOutput getInfoFromVar(FBNetwork paFBNetwork, String fbName, IInterfaceElement var){
-		
+	private FMUInputOutput getInfoFromVar(FBNetwork paFBNetwork, String fbName, VarDeclaration var){		
 		FMUInputOutput returnValue = new FMUInputOutput();
 		FB commFB = paFBNetwork.getFBNamed(fbName);
 		FMUInputOutput.variableType type;

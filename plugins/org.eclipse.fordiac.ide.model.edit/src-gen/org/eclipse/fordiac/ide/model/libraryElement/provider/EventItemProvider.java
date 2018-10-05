@@ -1,6 +1,6 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2007 - 2011 4DIAC - consortium.
+ *  * Copyright (c) 2007 - 2011 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
@@ -232,7 +232,6 @@ public class EventItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.IINTERFACE_ELEMENT__VALUE);
 			childrenFeatures.add(LibraryElementPackage.Literals.EVENT__WITH);
 		}
 		return childrenFeatures;
@@ -295,7 +294,6 @@ public class EventItemProvider
 			case LibraryElementPackage.EVENT__TYPE_NAME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case LibraryElementPackage.EVENT__VALUE:
 			case LibraryElementPackage.EVENT__WITH:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -313,11 +311,6 @@ public class EventItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.IINTERFACE_ELEMENT__VALUE,
-				 LibraryElementFactory.eINSTANCE.createValue()));
 
 		newChildDescriptors.add
 			(createChildParameter

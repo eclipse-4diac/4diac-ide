@@ -375,8 +375,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	}
 
 	public ValueEditPart getReferencedValueEditPart() {
-		if (referencedPart == null) {
-			Object temp = getViewer().getEditPartRegistry().get(getModel().getValue()); 
+		if (null == referencedPart && getModel() instanceof VarDeclaration) {
+			Object temp = getViewer().getEditPartRegistry().get(((VarDeclaration)getModel()).getValue()); 
 			if (temp instanceof ValueEditPart) {
 				referencedPart = (ValueEditPart)temp;
 			}

@@ -304,13 +304,14 @@ public class UpdateFBTypeCommand extends Command {
 		InterfaceList interfaceList = src.getInterface();
 		if (interfaceList != null) {
 			for (VarDeclaration varDecl : interfaceList .getInputVars()) {
-				if (dst.getInterfaceElement(varDecl.getName()) != null) {
+				VarDeclaration destVar = dst.getInterface().getVariable(varDecl.getName());
+				if (null != destVar) {
 					// interface exist on new type
 					Value value = varDecl.getValue();
 					if (value != null && value.getValue() != null) {
 						Value newValue = LibraryElementFactory.eINSTANCE.createValue();
 						newValue.setValue(value.getValue());
-						dst.getInterfaceElement(varDecl.getName()).setValue(newValue);
+						destVar.setValue(newValue);
 					}
 				}
 			}
@@ -318,7 +319,7 @@ public class UpdateFBTypeCommand extends Command {
 	}
 	
 	protected void createValues(FB copiedFB) {
-		for (IInterfaceElement element : copiedFB.getInterface().getInputVars()) {
+		for (VarDeclaration element : copiedFB.getInterface().getInputVars()) {
 			Value value = LibraryElementFactory.eINSTANCE.createValue();
 			element.setValue(value);
 		}

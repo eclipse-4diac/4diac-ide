@@ -15,10 +15,10 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IEditorPart;
@@ -79,9 +79,9 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command {
 	}
 	
 	protected void createValues() {
-		for(IInterfaceElement element : element.getInterface().getInputVars()) {
+		for(VarDeclaration inputVar : element.getInterface().getInputVars()) {
 			Value value = LibraryElementFactory.eINSTANCE.createValue();
-			element.setValue(value);
+			inputVar.setValue(value);
 		}
 	}
 	

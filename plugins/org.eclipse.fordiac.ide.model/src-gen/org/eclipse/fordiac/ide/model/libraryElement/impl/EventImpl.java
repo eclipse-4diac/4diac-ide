@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 /**
@@ -46,7 +45,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getWith <em>With</em>}</li>
  * </ul>
@@ -143,16 +141,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * @ordered
 	 */
 	protected DataType type;
-
-	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected Value value;
 
 	/**
 	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
@@ -370,74 +358,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * @generated
 	 */
 	@Override
-	public Value getValue() {
-		if (value != null && value.eIsProxy()) {
-			InternalEObject oldValue = (InternalEObject)value;
-			value = (Value)eResolveProxy(oldValue);
-			if (value != oldValue) {
-				InternalEObject newValue = (InternalEObject)value;
-				NotificationChain msgs = oldValue.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EVENT__VALUE, null, null);
-				if (newValue.eInternalContainer() == null) {
-					msgs = newValue.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EVENT__VALUE, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.EVENT__VALUE, oldValue, value));
-			}
-		}
-		return value;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Value basicGetValue() {
-		return value;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetValue(Value newValue, NotificationChain msgs) {
-		Value oldValue = value;
-		value = newValue;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__VALUE, oldValue, newValue);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setValue(Value newValue) {
-		if (newValue != value) {
-			NotificationChain msgs = null;
-			if (value != null)
-				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EVENT__VALUE, null, msgs);
-			if (newValue != null)
-				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EVENT__VALUE, null, msgs);
-			msgs = basicSetValue(newValue, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__VALUE, newValue, newValue));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getTypeName() {
 		return typeName;
 	}
@@ -484,8 +404,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 				return ((InternalEList<?>)getInputConnections()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
 				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.EVENT__VALUE:
-				return basicSetValue(null, msgs);
 			case LibraryElementPackage.EVENT__WITH:
 				return ((InternalEList<?>)getWith()).basicRemove(otherEnd, msgs);
 		}
@@ -513,9 +431,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 			case LibraryElementPackage.EVENT__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case LibraryElementPackage.EVENT__VALUE:
-				if (resolve) return getValue();
-				return basicGetValue();
 			case LibraryElementPackage.EVENT__TYPE_NAME:
 				return getTypeName();
 			case LibraryElementPackage.EVENT__WITH:
@@ -552,9 +467,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 				return;
 			case LibraryElementPackage.EVENT__TYPE:
 				setType((DataType)newValue);
-				return;
-			case LibraryElementPackage.EVENT__VALUE:
-				setValue((Value)newValue);
 				return;
 			case LibraryElementPackage.EVENT__TYPE_NAME:
 				setTypeName((String)newValue);
@@ -593,9 +505,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 			case LibraryElementPackage.EVENT__TYPE:
 				setType((DataType)null);
 				return;
-			case LibraryElementPackage.EVENT__VALUE:
-				setValue((Value)null);
-				return;
 			case LibraryElementPackage.EVENT__TYPE_NAME:
 				setTypeName(TYPE_NAME_EDEFAULT);
 				return;
@@ -626,8 +535,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 				return outputConnections != null && !outputConnections.isEmpty();
 			case LibraryElementPackage.EVENT__TYPE:
 				return type != null;
-			case LibraryElementPackage.EVENT__VALUE:
-				return value != null;
 			case LibraryElementPackage.EVENT__TYPE_NAME:
 				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case LibraryElementPackage.EVENT__WITH:

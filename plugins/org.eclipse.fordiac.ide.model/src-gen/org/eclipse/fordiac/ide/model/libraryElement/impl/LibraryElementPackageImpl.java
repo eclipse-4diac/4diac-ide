@@ -2026,6 +2026,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EReference getVarDeclaration_Value() {
+		return (EReference)varDeclarationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getVersionInfo() {
 		return versionInfoEClass;
 	}
@@ -2316,18 +2326,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EReference getIInterfaceElement_Value() {
-		return (EReference)iInterfaceElementEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getIInterfaceElement_TypeName() {
-		return (EAttribute)iInterfaceElementEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)iInterfaceElementEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -3102,6 +3102,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		varDeclarationEClass = createEClass(VAR_DECLARATION);
 		createEAttribute(varDeclarationEClass, VAR_DECLARATION__ARRAY_SIZE);
 		createEReference(varDeclarationEClass, VAR_DECLARATION__WITHS);
+		createEReference(varDeclarationEClass, VAR_DECLARATION__VALUE);
 
 		versionInfoEClass = createEClass(VERSION_INFO);
 		createEAttribute(versionInfoEClass, VERSION_INFO__AUTHOR);
@@ -3143,7 +3144,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__INPUT_CONNECTIONS);
 		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS);
 		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__TYPE);
-		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__VALUE);
 		createEAttribute(iInterfaceElementEClass, IINTERFACE_ELEMENT__TYPE_NAME);
 
 		valueEClass = createEClass(VALUE);
@@ -3610,6 +3610,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(varDeclarationEClass, VarDeclaration.class, "VarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getVarDeclaration_ArraySize(), theXMLTypePackage.getInt(), "arraySize", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getVarDeclaration_Withs(), this.getWith(), this.getWith_Variables(), "withs", null, 0, -1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getVarDeclaration_Value(), this.getValue(), null, "value", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(varDeclarationEClass, theXMLTypePackage.getBoolean(), "isArray", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -3677,7 +3678,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getIInterfaceElement_InputConnections(), this.getConnection(), this.getConnection_Destination(), "inputConnections", null, 0, -1, IInterfaceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getIInterfaceElement_OutputConnections(), this.getConnection(), this.getConnection_Source(), "outputConnections", null, 0, -1, IInterfaceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getIInterfaceElement_Type(), theDataPackage.getDataType(), null, "type", null, 1, 1, IInterfaceElement.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getIInterfaceElement_Value(), this.getValue(), null, "value", null, 0, 1, IInterfaceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getIInterfaceElement_TypeName(), ecorePackage.getEString(), "typeName", null, 0, 1, IInterfaceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(iInterfaceElementEClass, this.getFBNetworkElement(), "getFBNetworkElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionFBParameter;
 import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionOfFb;
@@ -101,20 +102,16 @@ public class ListFBCreateCommand extends FBCreateCommand {
 						if (res instanceof TransferDataSelectionOfFb) {
 							TransferDataSelectionOfFb element = ((TransferDataSelectionOfFb) res);
 							// get PaletteEntry for fbTypeName
-							List<PaletteEntry> fbTypes = system.getPalette().getTypeEntries(
-									element.getFbTypeName());
-							if (fbTypes.size() > 0
-									&& fbTypes.get(0) instanceof FBTypePaletteEntry) {
-								element.setTypePaletteEntry(((FBTypePaletteEntry) fbTypes
-										.get(0)));
+							List<PaletteEntry> fbTypes = system.getPalette().getTypeEntries(element.getFbTypeName());
+							if (!fbTypes.isEmpty() && fbTypes.get(0) instanceof FBTypePaletteEntry) {
+								element.setTypePaletteEntry(((FBTypePaletteEntry) fbTypes.get(0)));
 								ListFBCreateCommand.this.paletteEntry = element.getTypePaletteEntry();
 								ListFBCreateCommand.super.execute();
 
-								for (TransferDataSelectionFBParameter fbParametert : element
-										.getFbParameters()) {
+								for (TransferDataSelectionFBParameter fbParametert : element.getFbParameters()) {
 									IInterfaceElement fbInterfaceElement = ListFBCreateCommand.this.element.getInterfaceElement(fbParametert.getName());
-									if (fbInterfaceElement != null) {
-										Value val = fbInterfaceElement.getValue();
+									if (fbInterfaceElement instanceof VarDeclaration){
+										Value val = ((VarDeclaration)fbInterfaceElement).getValue();
 										val.setValue(fbParametert.getValue());
 									}
 								}

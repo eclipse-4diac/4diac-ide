@@ -25,6 +25,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getArraySize <em>Array Size</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getWiths <em>Withs</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getVarDeclaration()
@@ -76,6 +77,32 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * @generated
 	 */
 	EList<With> getWiths();
+
+	/**
+	 * Returns the value of the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Value</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Value</em>' containment reference.
+	 * @see #setValue(Value)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getVarDeclaration_Value()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	Value getValue();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getValue <em>Value</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Value</em>' containment reference.
+	 * @see #getValue()
+	 * @generated
+	 */
+	void setValue(Value value);
 
 	/**
 	 * <!-- begin-user-doc -->

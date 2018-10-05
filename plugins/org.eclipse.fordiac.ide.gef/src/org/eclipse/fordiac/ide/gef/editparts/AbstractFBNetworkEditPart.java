@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart{
 
@@ -65,7 +65,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart{
 	private Collection<? extends Object> getFBValues() {
 		ArrayList<Object> valueElenents = new ArrayList<>();
 		for(FBNetworkElement element : getModel().getNetworkElements()){
-			for (IInterfaceElement interfaceElement : element.getInterface().getInputVars()) {
+			for (VarDeclaration interfaceElement : element.getInterface().getInputVars()) {
 				if (null != interfaceElement.getValue()) {
 					valueElenents.add(interfaceElement.getValue());
 				}

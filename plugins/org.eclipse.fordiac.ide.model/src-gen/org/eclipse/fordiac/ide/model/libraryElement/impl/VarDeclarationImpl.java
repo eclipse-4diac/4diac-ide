@@ -45,10 +45,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getArraySize <em>Array Size</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getWiths <em>Withs</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -145,16 +145,6 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	protected DataType type;
 
 	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected Value value;
-
-	/**
 	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -203,6 +193,16 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @ordered
 	 */
 	protected EList<With> withs;
+
+	/**
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected Value value;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -537,10 +537,10 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 				return ((InternalEList<?>)getInputConnections()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
 				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				return basicSetValue(null, msgs);
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				return ((InternalEList<?>)getWiths()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.VAR_DECLARATION__VALUE:
+				return basicSetValue(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -566,15 +566,15 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				if (resolve) return getValue();
-				return basicGetValue();
 			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
 				return getTypeName();
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				return getArraySize();
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				return getWiths();
+			case LibraryElementPackage.VAR_DECLARATION__VALUE:
+				if (resolve) return getValue();
+				return basicGetValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -608,9 +608,6 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				setType((DataType)newValue);
 				return;
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				setValue((Value)newValue);
-				return;
 			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
 				setTypeName((String)newValue);
 				return;
@@ -620,6 +617,9 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				getWiths().clear();
 				getWiths().addAll((Collection<? extends With>)newValue);
+				return;
+			case LibraryElementPackage.VAR_DECLARATION__VALUE:
+				setValue((Value)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -651,9 +651,6 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				setType((DataType)null);
 				return;
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				setValue((Value)null);
-				return;
 			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
 				setTypeName(TYPE_NAME_EDEFAULT);
 				return;
@@ -662,6 +659,9 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 				return;
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				getWiths().clear();
+				return;
+			case LibraryElementPackage.VAR_DECLARATION__VALUE:
+				setValue((Value)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -687,14 +687,14 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 				return outputConnections != null && !outputConnections.isEmpty();
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				return type != null;
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				return value != null;
 			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
 				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				return arraySize != ARRAY_SIZE_EDEFAULT;
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				return withs != null && !withs.isEmpty();
+			case LibraryElementPackage.VAR_DECLARATION__VALUE:
+				return value != null;
 		}
 		return super.eIsSet(featureID);
 	}

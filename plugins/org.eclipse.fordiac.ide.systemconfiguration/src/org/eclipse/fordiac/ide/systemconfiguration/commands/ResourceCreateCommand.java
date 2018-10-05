@@ -132,9 +132,6 @@ public class ResourceCreateCommand extends Command {
 				eventCopy.setName(event.getName());
 				eventCopy.setComment(event.getComment());
 				eventCopy.setIsInput(event.isIsInput());
-				if (event.getValue() != null) {
-					eventCopy.setValue(EcoreUtil.copy(event.getValue()));
-				}
 				events.put(element.getName() + "." + event.getName(), eventCopy); //$NON-NLS-1$
 				interfaceList.getEventInputs().add(eventCopy);
 			}
@@ -143,9 +140,6 @@ public class ResourceCreateCommand extends Command {
 				eventCopy.setName(event.getName());
 				eventCopy.setComment(event.getComment());
 				eventCopy.setIsInput(event.isIsInput());
-				if (event.getValue() != null) {
-					eventCopy.setValue(EcoreUtil.copy(event.getValue()));
-				}
 				events.put(element.getName() + "." + event.getName(), eventCopy); //$NON-NLS-1$
 				interfaceList.getEventOutputs().add(eventCopy);
 			}

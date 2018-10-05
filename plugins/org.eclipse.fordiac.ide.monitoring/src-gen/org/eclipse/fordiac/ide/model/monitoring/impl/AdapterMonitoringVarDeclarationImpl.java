@@ -55,10 +55,10 @@ import org.eclipse.gef.EditPart;
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getArraySize <em>Array Size</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getWiths <em>Withs</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -165,16 +165,6 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	protected DataType type;
 
 	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected Value value;
-
-	/**
 	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -223,6 +213,16 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @ordered
 	 */
 	protected EList<With> withs;
+
+	/**
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected Value value;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -589,10 +589,10 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				return ((InternalEList<?>)getInputConnections()).basicRemove(otherEnd, msgs);
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
 				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
-				return basicSetValue(null, msgs);
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				return ((InternalEList<?>)getWiths()).basicRemove(otherEnd, msgs);
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
+				return basicSetValue(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -620,15 +620,15 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
-				if (resolve) return getValue();
-				return basicGetValue();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE_NAME:
 				return getTypeName();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
 				return getArraySize();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				return getWiths();
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
+				if (resolve) return getValue();
+				return basicGetValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -666,9 +666,6 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
 				setType((DataType)newValue);
 				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
-				setValue((Value)newValue);
-				return;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE_NAME:
 				setTypeName((String)newValue);
 				return;
@@ -678,6 +675,9 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				getWiths().clear();
 				getWiths().addAll((Collection<? extends With>)newValue);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
+				setValue((Value)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -712,9 +712,6 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
 				setType((DataType)null);
 				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
-				setValue((Value)null);
-				return;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE_NAME:
 				setTypeName(TYPE_NAME_EDEFAULT);
 				return;
@@ -723,6 +720,9 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				return;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				getWiths().clear();
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
+				setValue((Value)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -750,14 +750,14 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				return outputConnections != null && !outputConnections.isEmpty();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
 				return type != null;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
-				return value != null;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE_NAME:
 				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
 				return arraySize != ARRAY_SIZE_EDEFAULT;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				return withs != null && !withs.isEmpty();
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
+				return value != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -788,7 +788,6 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS: return LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS;
 				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS: return LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
 				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE: return LibraryElementPackage.IINTERFACE_ELEMENT__TYPE;
-				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE: return LibraryElementPackage.IINTERFACE_ELEMENT__VALUE;
 				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE_NAME: return LibraryElementPackage.IINTERFACE_ELEMENT__TYPE_NAME;
 				default: return -1;
 			}
@@ -797,6 +796,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 			switch (derivedFeatureID) {
 				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE: return LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE;
 				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS: return LibraryElementPackage.VAR_DECLARATION__WITHS;
+				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE: return LibraryElementPackage.VAR_DECLARATION__VALUE;
 				default: return -1;
 			}
 		}
@@ -829,7 +829,6 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				case LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS;
 				case LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS;
 				case LibraryElementPackage.IINTERFACE_ELEMENT__TYPE: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE;
-				case LibraryElementPackage.IINTERFACE_ELEMENT__VALUE: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE;
 				case LibraryElementPackage.IINTERFACE_ELEMENT__TYPE_NAME: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE_NAME;
 				default: return -1;
 			}
@@ -838,6 +837,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 			switch (baseFeatureID) {
 				case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE;
 				case LibraryElementPackage.VAR_DECLARATION__WITHS: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS;
+				case LibraryElementPackage.VAR_DECLARATION__VALUE: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE;
 				default: return -1;
 			}
 		}

@@ -1,11 +1,15 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2007 - 2011 4DIAC - consortium.
+ *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *  *
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
  *  * http://www.eclipse.org/legal/epl-v10.html
  *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *  *     - initial API and implementation and/or initial documentation
  *  *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
@@ -16,15 +20,17 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration} object.
@@ -32,8 +38,7 @@ import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
  * <!-- end-user-doc -->
  * @generated
  */
-public class VarDeclarationItemProvider
-	extends I4DIACElementItemProvider {
+public class VarDeclarationItemProvider extends I4DIACElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -135,28 +140,6 @@ public class VarDeclarationItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Array Size feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addArraySizePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VarDeclaration_arraySize_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_VarDeclaration_arraySize_feature", "_UI_VarDeclaration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.VAR_DECLARATION__ARRAY_SIZE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Input Connections feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -245,6 +228,28 @@ public class VarDeclarationItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Array Size feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addArraySizePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VarDeclaration_arraySize_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VarDeclaration_arraySize_feature", "_UI_VarDeclaration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.VAR_DECLARATION__ARRAY_SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Withs feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -278,7 +283,7 @@ public class VarDeclarationItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.IINTERFACE_ELEMENT__VALUE);
+			childrenFeatures.add(LibraryElementPackage.Literals.VAR_DECLARATION__VALUE);
 		}
 		return childrenFeatures;
 	}
@@ -300,27 +305,27 @@ public class VarDeclarationItemProvider
 	 * This returns VarDeclaration.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated not
+	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, ((VarDeclaration)object).isIsInput() ?
-				FordiacImage.ICON_DataInput.getImage() : FordiacImage.ICON_DataOutput.getImage());
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VarDeclaration")); //$NON-NLS-1$
 	}
 
 	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated not
+	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((VarDeclaration)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_VarDeclaration_type") :
-			label;
+			getString("_UI_VarDeclaration_type") : //$NON-NLS-1$
+			getString("_UI_VarDeclaration_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -361,8 +366,8 @@ public class VarDeclarationItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LibraryElementPackage.Literals.IINTERFACE_ELEMENT__VALUE,
+				(LibraryElementPackage.Literals.VAR_DECLARATION__VALUE,
 				 LibraryElementFactory.eINSTANCE.createValue()));
 	}
-	
+
 }
