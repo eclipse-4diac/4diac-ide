@@ -112,12 +112,20 @@
             <li><span class="element4diac">Ethernet</span> Segment</li>
         </ol>
     <p>from the Palette. 
-    <p>Connect them by clicking on one  and dragging to the other. The segment is divided in two areas, the left is for moving, the right for connections. The device can be connecting by clicking on the device type (second row). One EMB_RES resource is already present in the device. The MGR_ID <span class="address">localhost:61499</span> specifies the IP:PORT where the device will run. In this case it'll run locally and will listen at the port 61499.</p>
+    <p>Connect them by clicking on one  and dragging to the other. The segment is divided in two areas, the left is for moving, the right for connections. The device can be connecting by clicking on the device type (second row). One EMB_RES resource is already present in the device. The MGR_ID <span class="address">localhost:61499</span> specifies the IP:PORT where the device will run. In this case it'll run locally and will listen at the port 61499.</p>     
       <img src="./img/systemConfigurationEditor.png" alt="System Configuration Editor" />
+      
+    <p>The color is automatically generated for better orientation in the system. 
+    When several devices or segments are in use, you can see at a glance where the FB belongs to. 
+    If you like to change the color, click on the device or segment. 
+    In the property view on the bottom of the screen you find the tab Appearance. 
+    Here you can choose a color you like best.</p>
+      
     <p>Check that the Profile in the Properties tab is set to HOLOBLOC.</p>
-    <p>The color is automatically generated for better orientation in the system. When several devices or segments are in use, you can see at a glance where the FB belongs to. If you like to change the color, click on the device or segment. In the property view on the bottom of the screen you find the tab Apperance. Here you can choose a color you like best.</p>
     
-    <p>For this tutorial we give the device the name <i>testee</i>. Device names help us to distinguish the different devices from each other. Names can be changes in the property view or by double-clicking on the name. 
+    <p>For this tutorial we give the device the name <i>testee</i>. 
+    Device names help us to distinguish the different devices from each other. 
+    Names can be changes in the property view or by double-clicking on the name. 
     <br/>The <b>resource</b> is automatically generated for your convenience. EMB_RES stands for Embedded Resource. We named it <i>Blinky_RES</i>.</p>
        <img src="./img/changeResourceName.png" alt="changing the name of the Resource" />
     
@@ -180,7 +188,7 @@
         </tr>
         <tr>
           <th>Application</th>
-          <td>first ist automatically generated, further more via menu</td>
+          <td>first is automatically generated, furthermore via menu</td>
           <td>Application Editor</td>
           <td>BlinkTestApp</td>
         </tr>
@@ -188,7 +196,7 @@
           <th>System Configuration</th>
           <td>automatically generated, only one per system</td>
           <td>System Configuration Editor</td>
-          <td>System</td>
+          <td></td>
         </tr>
         <tr>
           <th>Device</th>
@@ -213,7 +221,9 @@
 
      <ol>
        <li>You have to select a 4diac FORTE. 
-       <br/>You can either build your own 4diac FORTE as <a href="../installation/install.html#ownFORTE">shown here</a> or you can choose the 4diac FORTE that is provided for you for this tutorial in the 4diac IDE folder. Go to <span class="menu4diac">Windows &rarr; Preferences &rarr; 4diac IDE &rarr; FORTE Preferences</span>, and in <span class="addressDoc">FORTE Location</span> look for FORTE inside your 4diac IDE folder in <span class="fileLocation">runtime/FORTE/1.8RC3/[YOUR_OS]/forte[.exe]</span> and then click OK.</li>
+       <br/>You can either build your own 4diac FORTE as <a href="../installation/install.html#ownFORTE">shown here</a> or you can download the 4diac FORTE that is provided for you for this tutorial on <a href="https://www.eclipse.org/4diac/en_dow.php">our Homepage</a>. You can save the .exe wherever you like, we have chosen F:\4diac\4diac-ide\. 
+       Go to <span class="menu4diac">Windows &rarr; Preferences &rarr; 4diac IDE &rarr; FORTE Preferences</span>, and in <span class="addressDoc">FORTE Location</span> look for the 4diac FORTE and then click <i>Apply and Close</i>. 
+          <br><img src="./img/selectForte.png" width="600" alt="select your 4diac FORTE" /></li></br>
        <li>Change to the <i>Deployment Perspective</i> using the <img src="./img/perspective/deploymentButton.gif" alt="Deployment Perspective Button" class="inlineImg"/> button.</li>
        <li>Set the port to 61499 (the same define before, remember <span class="address">localhost:61499</span> in the System Configuration?)</li>
        <li><span class="button4diac">Launch Local 4diac FORTE</span></li>
@@ -236,15 +246,14 @@
     This means that the Device or Resource configuration are cleaned and reset to the default configuration without any Function Block Network.</p>
     <p><span class="menu4diac">Delete All Resources</span> leaves the Device empty, and <span class="menu4diac">Kill Device</span> stops 4diac FORTE. 
     You can deploy again after cleaning the Device.</p>
-    <img src="./img/cleanDevice.png" width="1024" alt="Clean Device" />
     <p><span class="menu4diac">Delete Resource</span> deletes just the selected resource:</p>
-    <img src="./img/cleanResource.png" width="1024" alt="Clean Resource" />
+    <img src="./img/cleanDeviceOrResource.png" width="1024" alt="Clean Devive or Resource" />
     
 <!----------------------------------------------------------------------------------------------------------------->
   
      <h2 id="monitoringApplication">Monitoring the Application</h2>
 
-     <p>To observe the outputs of your Application you can use 4diac's monitoring functionality. You can enable it in the toolbar under the toolbar icon: <img class="inlineImg" src="./img/properties/startMon.gif" alt="Monitoring" /> or doing the following:</p>
+     <p>To observe the outputs of your Application you can use 4diac's monitoring functionality. You can enable it in the Toolbar under the Toolbar icon: <img class="inlineImg" src="./img/properties/startMon.gif" alt="Monitoring" /> or doing the following:</p>
 
      <ol>
        <li>Change to Debug Perspective using the <img src="./img/perspective/debugButton.gif" alt="Debug Perspective Button" class="inlineImg"/> button.</li>
@@ -252,23 +261,23 @@
        <div><img src="./img/enableMonitoring.png" alt="Resource completely connected"/></div></li>
      </ol>
 
-     <p>A green sign shows that the monitoring is enabled for the system. To watch variables, you can:</p>
+     <p>A green circle will appear in the system icon indicating that monitoring is enabled for the system. To watch variables, you can:</p>
 
      <ul>
       <li>Right Click on a <span class="menu4diac">FB &rarr; Watch All</span> or</li>
       <li>Right Click on a <span class="menu4diac">Variable &rarr; Watch</span>
-      <div><img src="./img/monitoringWatchAll.png" alt="Resource completely connected"/></div></li>
+      <div><img src="./img/monitoringWatch.png" alt="Resource completely connected"/></div></li>
      </ul>
 
-     <p>The Data and Events are monitored. The Data shows the current value and the Events show the times it was triggered. You can watch on the directly on the Element or in the Watches view.</p>
+     <p>The Data and Events are monitored. The Data shows the current value and the Events show the times it was triggered. 
+     You can watch on the directly on the Element or in the Watches view.</p>
+     <p>Now you can see that <i>true</i> and <i>false</i> alternate. If a controller output were connected, a light would now blink at 1 second intervals.</p>
 
      <img src="./img/monitoringWatching.png" alt="Resource completely connected"/>
 
-     <p>You can force values to data inputs and trigger events by right clickin on it and selecting the corresponding command.</p>
+     <p>You can force values to data inputs and trigger events by right clicking on it and selecting the corresponding command.</p>
 
-      <img src="./img/monitoringForce.png" alt="Force value"/>
-
-      <img src="./img/monitoringTrigger.png" alt="Trigger Event"/>
+      <img src="./img/monitoringForceOrTrigger.png" alt="Force value"/>
 
 <!----------------------------------------------------------------------------------------------------------------->
 
