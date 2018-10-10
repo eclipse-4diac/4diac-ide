@@ -13,7 +13,6 @@ package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -30,7 +29,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.ui.part.EditorPart;
 
 public class Deploy extends AbstractHandler{
 
@@ -55,14 +53,13 @@ public class Deploy extends AbstractHandler{
 	}
 
 
-	@SuppressWarnings("rawtypes")
 	private static Collection<EObject> getDeployableObjects(ISelection selection){
 		Set<EObject> retVal = new HashSet<>();
 		if (selection instanceof StructuredSelection) {
 			for (Object selectedObject : (( StructuredSelection)selection).toArray()) {
 				if(selectedObject instanceof EObject) {
 					addEObject((EObject)selectedObject, retVal);					
-				} else if(selectedObject instanceof EditorPart &&
+				} else if(selectedObject instanceof EditPart &&
 						((EditPart)selectedObject).getModel() instanceof EObject) {
 					addEObject((EObject)((EditPart)selectedObject).getModel(), retVal);
 				}				
