@@ -96,40 +96,11 @@ class FbtExporter extends CommonElementExporter{
 		Element basicElement = dom.createElement(LibraryElementTags.BASIC_F_B_ELEMENT);
 		addInternalVars(dom, basicElement, type.getInternalVars());
 		addECC(dom, basicElement, type.getECC());
-		addAlgorithm(dom, basicElement, type.getAlgorithm());
+		type.getAlgorithm().forEach(alg -> addAlgorithm(dom, basicElement, alg));
 		rootEle.appendChild(basicElement);
 	}
 
-	/**
-	 * Adds the algorithm.
-	 * 
-	 * @param dom
-	 *            the dom
-	 * @param basicElement
-	 *            the basic element
-	 * @param algorithms
-	 *            the algorithms
-	 */
-	private void addAlgorithm(final Document dom,
-			final Element basicElement, final List<Algorithm> algorithms) {
-		for (Iterator<Algorithm> iter = algorithms.iterator(); iter.hasNext();) {
-			Algorithm algorithm = iter.next();
-			Element algorithmElement = dom.createElement(LibraryElementTags.ALGORITHM_ELEMENT);
-			
-			setNameAttribute(algorithmElement, algorithm.getName());
-			setCommentAttribute(algorithmElement, algorithm);
-			
-			if (algorithm instanceof STAlgorithm) {
-				addSTAlgorithm(dom, algorithmElement, (STAlgorithm) algorithm);
-			} else if (algorithm instanceof OtherAlgorithm) {
-				addOtherAlgorithm(dom, algorithmElement,
-						(OtherAlgorithm) algorithm);
-			}
-			// TODO: add all Algorithms
-
-			basicElement.appendChild(algorithmElement);
-		}
-	}
+	
 
 	/**
 	 * Adds the other algorithm.
@@ -387,7 +358,7 @@ class FbtExporter extends CommonElementExporter{
 			final SimpleFBType type) {
 		Element simpleElement = dom.createElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
 		addInternalVars(dom, simpleElement, type.getInternalVars());
-		addAlgorithmSimple(dom, simpleElement, type.getAlgorithm());
+		addAlgorithm(dom, simpleElement, type.getAlgorithm());
 		rootEle.appendChild(simpleElement);
 	}
 
@@ -401,7 +372,7 @@ class FbtExporter extends CommonElementExporter{
 	 * @param algorithms
 	 *            the algorithms
 	 */
-	private void addAlgorithmSimple(final Document dom,
+	private void addAlgorithm(final Document dom,
 			final Element basicElement, final Algorithm algorithm) {
 			Element algorithmElement = dom.createElement(LibraryElementTags.ALGORITHM_ELEMENT);
 			
