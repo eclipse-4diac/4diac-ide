@@ -1,5 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2018 Johannes Keppler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,15 +10,14 @@
  * Contributors:
  *  Gerhard Ebenhofer, Monika Wenger, Alois Zoitl, Matthias Plasch
  *    - initial API and implementation and/or initial documentation
+ *  Alois Zoitl - Refactored class hierarchy of xml exporters  
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -25,78 +25,54 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
  * The Class FbtExporter.
  */
-class FbtExporter extends CommonElementExporter{
+class FbtExporter extends AbstractTypeExporter{
 
-
+	
 	/**
 	 * Instantiates a new fbt exporter.
+	 * @param entry 
 	 */
-	public FbtExporter() {
-
-	}
-
-	/**
-	 * Adds the fb type.
-	 * 
-	 * @param dom
-	 *            the dom
-	 * @param fb
-	 *            the fb
-	 */
-	@Override
-	protected void addType(final Document dom, final FBType fbType){
-		Element rootElement = createRootElement(dom, fbType, LibraryElementTags.FB_TYPE);
-		
-		addCompileAbleTypeData(dom, rootElement, fbType);		
-		addInterfaceList(dom, rootElement, fbType.getInterfaceList());
-		if (fbType instanceof CompositeFBType) {
-			rootElement.appendChild(new FBNetworkExporter(dom).createFBNetworkElement(((CompositeFBType) fbType).getFBNetwork()));
-		} else {
-			if (fbType instanceof BasicFBType) {
-				addBasicFB(dom, rootElement, (BasicFBType) fbType);
-			}
-			else if(fbType instanceof SimpleFBType) {
-				addSimpleFB(dom, rootElement, (SimpleFBType) fbType);
-			}
-		}
-		addService(dom, rootElement, fbType);
+	FbtExporter(FBTypePaletteEntry entry) {
+		super(entry.getFBType());
 	}
 	
 	@Override
-	protected FBType getType(PaletteEntry entry){
-		return ((FBTypePaletteEntry)entry).getFBType();
+	protected void createTypeSpecificXMLEntries(Element rootElement){
+		if (getType() instanceof CompositeFBType) {
+			FBNetworkExporter nwExporter = new FBNetworkExporter(getDom());
+			rootElement.appendChild(nwExporter.createFBNetworkElement(((CompositeFBType) getType()).getFBNetwork()));
+		} else if (getType() instanceof BasicFBType) {
+			addBasicFB(rootElement, (BasicFBType) getType());
+		} else if(getType() instanceof SimpleFBType) {
+			addSimpleFB(rootElement, (SimpleFBType) getType());
+		}
 	}
-
+	
 	/*
 	 * <!ELEMENT BasicFB (InternalVars?,ECC?,Algorithm)>
 	 */
 	/**
 	 * Adds the basic fb.
 	 * 
-	 * @param dom
-	 *            the dom
 	 * @param rootEle
 	 *            the root ele
 	 * @param type
 	 *            the type
 	 */
-	private void addBasicFB(final Document dom, final Element rootEle,
-			final BasicFBType type) {
-		Element basicElement = dom.createElement(LibraryElementTags.BASIC_F_B_ELEMENT);
-		addInternalVars(dom, basicElement, type.getInternalVars());
-		addECC(dom, basicElement, type.getECC());
-		type.getAlgorithm().forEach(alg -> addAlgorithm(dom, basicElement, alg));
+	private void addBasicFB(final Element rootEle, final BasicFBType type) {
+		Element basicElement = createElement(LibraryElementTags.BASIC_F_B_ELEMENT);
+		addInternalVars(basicElement, type.getInternalVars());
+		addECC(basicElement, type.getECC());
+		type.getAlgorithm().forEach(alg -> addAlgorithm(basicElement, alg));
 		rootEle.appendChild(basicElement);
 	}
 
@@ -105,16 +81,13 @@ class FbtExporter extends CommonElementExporter{
 	/**
 	 * Adds the other algorithm.
 	 * 
-	 * @param dom
-	 *            the dom
 	 * @param algorithmElement
 	 *            the algorithm element
 	 * @param algorithm
 	 *            the algorithm
 	 */
-	private static void addOtherAlgorithm(final Document dom,
-			final Element algorithmElement, final OtherAlgorithm algorithm) {
-		Element st = dom.createElement(LibraryElementTags.OTHER_ELEMENT);
+	private void addOtherAlgorithm(final Element algorithmElement, final OtherAlgorithm algorithm) {
+		Element st = createElement(LibraryElementTags.OTHER_ELEMENT);
 		if (algorithm.getLanguage() != null) {
 			st.setAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE, algorithm.getLanguage());
 		} else {
@@ -138,9 +111,8 @@ class FbtExporter extends CommonElementExporter{
 	 * @param algorithm
 	 *            the algorithm
 	 */
-	private static void addSTAlgorithm(final Document dom,
-			final Element algorithmElement, final STAlgorithm algorithm) {
-		Element st = dom.createElement(LibraryElementTags.ST_ELEMENT);
+	private void addSTAlgorithm(final Element algorithmElement, final STAlgorithm algorithm) {
+		Element st = createElement(LibraryElementTags.ST_ELEMENT);
 		if (algorithm.getText() != null) {
 			st.setAttribute(LibraryElementTags.TEXT_ATTRIBUTE, algorithm.getText());
 		} else {
@@ -155,19 +127,17 @@ class FbtExporter extends CommonElementExporter{
 	/**
 	 * Adds the ecc.
 	 * 
-	 * @param dom
-	 *            the dom
 	 * @param basicElement
 	 *            the basic element
 	 * @param ecc
 	 *            the ecc
 	 */
-	private void addECC(final Document dom, final Element basicElement,
+	private void addECC(final Element basicElement,
 			final ECC ecc) {
-		Element eccElement = dom.createElement(LibraryElementTags.ECC_ELEMENT);
+		Element eccElement = createElement(LibraryElementTags.ECC_ELEMENT);
 		if (ecc != null) {
-			addECStates(dom, eccElement, ecc.getECState(), ecc.getStart());
-			addECTransitions(dom, eccElement, ecc);
+			addECStates(eccElement, ecc.getECState(), ecc.getStart());
+			ecc.getECTransition().forEach(transition -> eccElement.appendChild(createTransitionEntry(transition)) );
 		}
 		basicElement.appendChild(eccElement);
 	}
@@ -180,39 +150,14 @@ class FbtExporter extends CommonElementExporter{
 	 * Condition CDATA #REQUIRED Comment CDATA #IMPLIED x CDATA #IMPLIED y CDATA
 	 * #IMPLIED >
 	 */
-	/**
-	 * Adds the ec transitions.
-	 * 
-	 * @param dom
-	 *            the dom
-	 * @param eccElement
-	 *            the ecc element
-	 * @param ecc
-	 *            the ecc
-	 */
-	private void addECTransitions(final Document dom,
-			final Element eccElement, final ECC ecc) {
-		for (Iterator<ECTransition> iter = ecc.getECTransition().iterator(); iter
-				.hasNext();) {
-			ECTransition transition = iter.next();
-			addTransition(dom, eccElement, transition);
-		}
-	}
 
-	/**
-	 * Adds the transition.
+	/** Create a transition entry for the dom
 	 * 
-	 * @param dom
-	 *            the dom
-	 * @param eccElement
-	 *            the ecc element
 	 * @param transition
 	 *            the transition
 	 */
-	private void addTransition(final Document dom,
-			final Element eccElement, final ECTransition transition) {
-
-		Element transElement = dom.createElement(LibraryElementTags.ECTRANSITION_ELEMENT);
+	private Element createTransitionEntry(final ECTransition transition) {
+		Element transElement = createElement(LibraryElementTags.ECTRANSITION_ELEMENT);
 		transElement.setAttribute(LibraryElementTags.SOURCE_ATTRIBUTE, transition.getSource().getName());
 		transElement.setAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE, transition.getDestination()
 				.getName());
@@ -221,7 +166,8 @@ class FbtExporter extends CommonElementExporter{
 		
 		transElement.setAttribute(LibraryElementTags.X_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(transition.getX()).toString());
 		transElement.setAttribute(LibraryElementTags.Y_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(transition.getY()).toString());
-		eccElement.appendChild(transElement);
+		
+		return transElement;
 	}
 
 	/*
@@ -233,8 +179,6 @@ class FbtExporter extends CommonElementExporter{
 	/**
 	 * Adds the ec states.
 	 * 
-	 * @param dom
-	 *            the dom
 	 * @param eccElement
 	 *            the ecc element
 	 * @param states
@@ -242,22 +186,14 @@ class FbtExporter extends CommonElementExporter{
 	 * @param startState
 	 *            the start state
 	 */
-	private void addECStates(final Document dom,
-			final Element eccElement, final List<ECState> states,
+	private void addECStates(final Element eccElement, final List<ECState> states,
 			final ECState startState) {
-		Element stateElement = createECState(dom, startState);
-		if (stateElement != null) {
-			eccElement.appendChild(stateElement);
-		}
-		for (Iterator<ECState> iter = states.iterator(); iter.hasNext();) {
-			ECState state = iter.next();
+		eccElement.appendChild(createECState(startState));
+		states.forEach(state -> {
 			if (!state.equals(startState)) {
-				stateElement = createECState(dom, state);
-				if (stateElement != null) {
-					eccElement.appendChild(stateElement);
-				}
+				eccElement.appendChild(createECState(state));
 			}
-		}
+		});
 
 	}
 
@@ -271,21 +207,18 @@ class FbtExporter extends CommonElementExporter{
 	 * 
 	 * @return the element
 	 */
-	private Element createECState(final Document dom, final ECState state) {
-		if (state != null) {
-			Element stateElement = dom.createElement(LibraryElementTags.ECSTATE_ELEMENT);
-			
-			setNameAttribute(stateElement, state.getName());
-			setCommentAttribute(stateElement, state);
-			
-			stateElement.setAttribute(LibraryElementTags.X_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(state.getX()).toString());
-			stateElement.setAttribute(LibraryElementTags.Y_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(state.getY()).toString());
+	private Element createECState(final ECState state) {
+		Element stateElement = createElement(LibraryElementTags.ECSTATE_ELEMENT);
+		
+		setNameAttribute(stateElement, state.getName());
+		setCommentAttribute(stateElement, state);
+		
+		stateElement.setAttribute(LibraryElementTags.X_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(state.getX()).toString());
+		stateElement.setAttribute(LibraryElementTags.Y_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(state.getY()).toString());
 
-			addECActions(dom, stateElement, state.getECAction());
+		addECActions(stateElement, state.getECAction());
 
-			return stateElement;
-		}
-		return null;
+		return stateElement;
 	}
 
 	/*
@@ -303,11 +236,9 @@ class FbtExporter extends CommonElementExporter{
 	 * @param actions
 	 *            the actions
 	 */
-	private static void addECActions(final Document dom,
-			final Element stateElement, final List<ECAction> actions) {
-		for (Iterator<ECAction> iter = actions.iterator(); iter.hasNext();) {
-			ECAction action = iter.next();
-			Element actionElement = dom.createElement(LibraryElementTags.ECACTION_ELEMENT);
+	private void addECActions(final Element stateElement, final List<ECAction> actions) {
+		for (ECAction action : actions) {
+			Element actionElement = createElement(LibraryElementTags.ECACTION_ELEMENT);
 			if (action.getAlgorithm() != null) {
 				actionElement.setAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm()
 						.getName());
@@ -330,16 +261,10 @@ class FbtExporter extends CommonElementExporter{
 	 * @param internalVars
 	 *            the internal vars
 	 */
-	private void addInternalVars(final Document dom,
-			final Element basicElement, final List<VarDeclaration> internalVars) {
-		Iterator<VarDeclaration> iter = internalVars.iterator();
-		if (iter.hasNext()) {
-			Element internalVarsElement = dom.createElement(LibraryElementTags.INTERNAL_VARS_ELEMENT);
-			while (iter.hasNext()) {
-				VarDeclaration internalVar = iter.next();
-				addVariable(dom, internalVarsElement,
-						internalVar);
-			}
+	private void addInternalVars(final Element basicElement, final List<VarDeclaration> internalVars) {
+		if(!internalVars.isEmpty()) {
+			Element internalVarsElement = createElement(LibraryElementTags.INTERNAL_VARS_ELEMENT);
+			internalVars.forEach(internalVar -> addVariable(internalVarsElement, internalVar));
 			basicElement.appendChild(internalVarsElement);
 		}
 	}
@@ -354,11 +279,10 @@ class FbtExporter extends CommonElementExporter{
 	 * @param type
 	 *            the type
 	 */
-	private void addSimpleFB(final Document dom, final Element rootEle,
-			final SimpleFBType type) {
-		Element simpleElement = dom.createElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
-		addInternalVars(dom, simpleElement, type.getInternalVars());
-		addAlgorithm(dom, simpleElement, type.getAlgorithm());
+	private void addSimpleFB(final Element rootEle, final SimpleFBType type) {
+		Element simpleElement = createElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
+		addInternalVars(simpleElement, type.getInternalVars());
+		addAlgorithm(simpleElement, type.getAlgorithm());
 		rootEle.appendChild(simpleElement);
 	}
 
@@ -372,22 +296,20 @@ class FbtExporter extends CommonElementExporter{
 	 * @param algorithms
 	 *            the algorithms
 	 */
-	private void addAlgorithm(final Document dom,
-			final Element basicElement, final Algorithm algorithm) {
-			Element algorithmElement = dom.createElement(LibraryElementTags.ALGORITHM_ELEMENT);
-			
-			setNameAttribute(algorithmElement, algorithm.getName());
-			setCommentAttribute(algorithmElement, algorithm);
-			
-			if (algorithm instanceof STAlgorithm) {
-				addSTAlgorithm(dom, algorithmElement, (STAlgorithm) algorithm);
-			} else if (algorithm instanceof OtherAlgorithm) {
-				addOtherAlgorithm(dom, algorithmElement,
-						(OtherAlgorithm) algorithm);
-			}
-			
-			basicElement.appendChild(algorithmElement);
+	private void addAlgorithm(final Element basicElement, final Algorithm algorithm) {
+		Element algorithmElement = createElement(LibraryElementTags.ALGORITHM_ELEMENT);
+		
+		setNameAttribute(algorithmElement, algorithm.getName());
+		setCommentAttribute(algorithmElement, algorithm);
+		
+		if (algorithm instanceof STAlgorithm) {
+			addSTAlgorithm(algorithmElement, (STAlgorithm) algorithm);
+		} else if (algorithm instanceof OtherAlgorithm) {
+			addOtherAlgorithm(algorithmElement,
+					(OtherAlgorithm) algorithm);
+		}
+		
+		basicElement.appendChild(algorithmElement);
 	}
-
 
 }

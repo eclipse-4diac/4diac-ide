@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -114,7 +114,7 @@ public class FBTypeEditor extends FormEditor implements
 				}
 				
 				getCommandStack().markSaveLocation();
-				CommonElementExporter.saveType(paletteEntry);			
+				AbstractTypeExporter.saveType(paletteEntry);			
 				firePropertyChange(IEditorPart.PROP_DIRTY);
 			}
 		}

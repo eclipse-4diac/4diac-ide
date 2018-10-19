@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -96,7 +96,7 @@ public class SaveAsSubappWizard extends Wizard {
 				
 				setupVersionInfo(type);				
 				performTypeSetup((SubAppType)type);				
-				CommonElementExporter.saveType(entry);	
+				AbstractTypeExporter.saveType(entry);	
 				entry.setType(type);
 				
 				if(newFilePage.getOpenType()){
