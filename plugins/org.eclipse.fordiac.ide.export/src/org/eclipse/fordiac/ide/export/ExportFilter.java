@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 			2018, TU Wien/ACIN
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Ingo Hegny, Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians - adds export for SimpleFB
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export;
 
@@ -485,28 +487,34 @@ public abstract class ExportFilter implements IExportFilter {
 			}
 		}
 
-		l1 = docel.getElementsByTagName("BasicFB"); //$NON-NLS-1$
-		if (0 != l1.getLength()) {
+		// l1 = docel.getElementsByTagName("BasicFB"); //$NON-NLS-1$
+		if (0 != docel.getElementsByTagName("BasicFB").getLength()) {
+			l1 = docel.getElementsByTagName("BasicFB");
 			node = l1.item(0);
 			if (node instanceof Element) {
 				el = (Element) node;
 				exportBasicFB(el.getChildNodes());
 			}
-		} else {
-			l1 = docel.getElementsByTagName("FBNetwork"); //$NON-NLS-1$
-			if (0 != l1.getLength()) {
-				node = l1.item(0);
-				if (node instanceof Element) {
-					el = (Element) node;
-					exportFBNetwork(el.getChildNodes());
-				}
-			} else if (libraryType instanceof FBType) {
-				exportSIFBExecuteEvent();
+		} else if (0 != docel.getElementsByTagName("FBNetwork").getLength()) {
+			l1 = docel.getElementsByTagName("FBNetwork");
+			node = l1.item(0);
+			if (node instanceof Element) {
+				el = (Element) node;
+				exportFBNetwork(el.getChildNodes());
 			}
-
+		} else if (0 != docel.getElementsByTagName("SimpleFB").getLength()) {
+			l1 = docel.getElementsByTagName("SimpleFB");
+			node = l1.item(0);
+			if (node instanceof Element) {
+				el = (Element) node;
+				exportSimpleFB(el.getChildNodes());
+			}
+		} else if (libraryType instanceof FBType) {
+			exportSIFBExecuteEvent();
 		}
 
 		exportFBConstructor();
+
 	}
 
 	private void exportFBInterface() {
@@ -621,6 +629,27 @@ public abstract class ExportFilter implements IExportFilter {
 
 		if (eccNode != null) {
 			exportECC(eccNode);
+		}
+	}
+
+	private void exportSimpleFB(final NodeList simpleFBNodes) {
+		int len = simpleFBNodes.getLength();
+		for (int i = 0; i < len; ++i) {
+			org.w3c.dom.Node node = simpleFBNodes.item(i);
+			if (node instanceof Element) {
+				Element el = (Element) node;
+				if (el.getNodeName().equals("Algorithm")) { //$NON-NLS-1$
+					NodeList nodes = el.getChildNodes();
+					int alglen = nodes.getLength();
+					for (int ii = 0; ii < alglen; ++ii) {
+						org.w3c.dom.Node node2 = nodes.item(ii);
+						if (node2 instanceof Element) {
+							exportAlgorithm(el.getAttribute("Name"), ((Element) node2) //$NON-NLS-1$
+									.getNodeName(), ((Element) node2).getAttribute("Text")); //$NON-NLS-1$
+						}
+					}
+				}
+			}
 		}
 	}
 

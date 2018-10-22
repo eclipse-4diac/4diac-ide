@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2009, - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2009, - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH.
+ * 			2018, TU Wie/ACIN
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +11,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Martin Melik Merkumians, Monika Wenger, 
  *   Ingo Hegny, Matthias Plasch, Jose Cabral, Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians - adds export for SimpleFB
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte1_0_x;
 
@@ -49,6 +51,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -231,10 +234,16 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 		InterfaceList interfaceList = null;
 
 		if (libraryType instanceof BasicFBType) {
-			baseClass = C_BASIC_FB; //$NON-NLS-1$
+			baseClass = C_BASIC_FB; // $NON-NLS-1$
 			pwH.println("\n#include <basicfb.h>"); //$NON-NLS-1$
 			forteEmitterInfos
 					.add("  - Creating header and source files for Basic Function Block " + libraryType.getName());
+			interfaceList = ((FBType) libraryType).getInterfaceList();
+		} else if (libraryType instanceof SimpleFBType) {
+			baseClass = "CSimpleFB"; // $NON-NLS-1$
+			pwH.println("\n#include <simplefb.h>"); //$NON-NLS-1$
+			forteEmitterInfos
+					.add("  - Creating header and source files for Simple Function Block " + libraryType.getName());
 			interfaceList = ((FBType) libraryType).getInterfaceList();
 		} else if (libraryType instanceof CompositeFBType) {
 			pwH.println("\n#include <cfb.h>"); //$NON-NLS-1$
@@ -369,7 +378,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 	protected void exportFBConstructor() {
 		pwH.println("\npublic:"); //$NON-NLS-1$
 
-		if (baseClass.equals(C_BASIC_FB)) { //$NON-NLS-1$
+		if (baseClass.equals(C_BASIC_FB) | baseClass.equals("CSimpleFB")) { // $NON-NLS-1$
 			pwH.println("  FORTE_" //$NON-NLS-1$
 					+ name + "(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : "); //$NON-NLS-1$
 			pwH.print("       " //$NON-NLS-1$
@@ -1131,7 +1140,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 
 		pwCPP.println("\n"); //$NON-NLS-1$
 
-		if (baseClass.equals(C_BASIC_FB)) { //$NON-NLS-1$
+		if (baseClass.equals(C_BASIC_FB)) { // $NON-NLS-1$
 			if (0 != internalCount) {
 				pwH.println("\n  static const SInternalVarsInformation scm_stInternalVars;\n"); //$NON-NLS-1$
 				pwCPP.println("\nconst SInternalVarsInformation FORTE_" + name //$NON-NLS-1$
@@ -1841,7 +1850,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 	}
 
 	private void exportFBDataArray() {
-		if (baseClass.equals(C_BASIC_FB)) { //$NON-NLS-1$
+		if (baseClass.equals(C_BASIC_FB)) { // $NON-NLS-1$
 			pwH.print("   FORTE_BASIC_FB_DATA_ARRAY("); //$NON-NLS-1$
 		} else {
 			if (libraryType instanceof AdapterType) {
@@ -1852,7 +1861,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 		}
 
 		pwH.print(eventOutCount + ", " + dataInCount + ", " + dataOutCount); //$NON-NLS-1$ //$NON-NLS-2$
-		if (baseClass.equals(C_BASIC_FB)) { //$NON-NLS-1$
+		if (baseClass.equals(C_BASIC_FB)) { // $NON-NLS-1$
 			pwH.print(", " + internalCount); //$NON-NLS-1$
 		}
 		// TODO add correct number of adapters here
