@@ -77,13 +77,15 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	
 	
 	private void createXMLEntries() {
-		Element rootElement = createRootElement(getType(), LibraryElementTags.FB_TYPE);
+		Element rootElement = createRootElement(getType(), getRootTag());
 		
 		addCompileAbleTypeData(rootElement, getType());		
 		addInterfaceList(rootElement, getType().getInterfaceList());
 		createTypeSpecificXMLEntries(rootElement);
 		addService(rootElement, getType());
 	}
+	
+	protected abstract String getRootTag();
 
 	protected abstract void createTypeSpecificXMLEntries(Element rootElement);
 	
