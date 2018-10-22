@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.export;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -58,39 +57,39 @@ public abstract class ExportFilter implements IExportFilter {
 
 	protected String name;
 
-	protected Map<String, VarDefinition> vars = new HashMap<String, VarDefinition>();
+	protected Map<String, VarDefinition> vars = new HashMap<>();
 
 	protected int dataInCount;
 
 	protected int dataOutCount;
 	protected int internalCount;
-	protected int FBCount;
+	protected int fBCount;
 
-	protected List<String> inputVars = new ArrayList<String>();
-	protected List<String> outputVars = new ArrayList<String>();
-	protected List<VarDefinition> internalVars = new ArrayList<VarDefinition>();
-	
-	protected List<FBDefinition> FBs = new ArrayList<FBDefinition>();
+	protected List<String> inputVars = new ArrayList<>();
+	protected List<String> outputVars = new ArrayList<>();
+	protected List<VarDefinition> internalVars = new ArrayList<>();
 
-	protected Set<String> Internal2InterfaceEventConns = new HashSet<String>();
+	protected List<FBDefinition> funtionBlocks = new ArrayList<>();
 
-	protected List<Element> EventConn = new ArrayList<Element>();
+	protected Set<String> internal2InterfaceEventConns = new HashSet<>();
 
-	protected Set<String> EventConnHash = new HashSet<String>();
+	protected List<Element> eventConn = new ArrayList<>();
 
-	protected List<Element> DataConn = new ArrayList<Element>();
+	protected Set<String> eventConnHash = new HashSet<>();
 
-	protected Set<String> DataConnHash = new HashSet<String>();
+	protected List<Element> dataConn = new ArrayList<>();
 
-	protected Set<String> Interface2InternalDataConns = new HashSet<String>();
+	protected Set<String> dataConnHash = new HashSet<>();
 
-	protected Set<String> Internal2InterfaceDataConns = new HashSet<String>();
+	protected Set<String> interface2InternalDataConns = new HashSet<>();
 
-	protected List<String> forteEmitterErrors = new ArrayList<String>();
+	protected Set<String> internal2InterfaceDataConns = new HashSet<>();
 
-	protected List<String> forteEmitterWarnings = new ArrayList<String>();
+	protected List<String> forteEmitterErrors = new ArrayList<>();
 
-	protected List<String> forteEmitterInfos = new ArrayList<String>();
+	protected List<String> forteEmitterWarnings = new ArrayList<>();
+
+	protected List<String> forteEmitterInfos = new ArrayList<>();
 
 	protected LibraryElement libraryType;
 
@@ -100,65 +99,139 @@ public abstract class ExportFilter implements IExportFilter {
 	public class VarDefinition {
 
 		/** The name. */
-		public String name;
+		private String name;
 
 		/** The type. */
-		public String type;
+		private String type;
 
 		/** The array size. */
-		public int arraySizeValue;
-		
+		private int arraySizeValue;
 
 		/** The initial value. */
-		public String initialValue;
-		
+		private String initialValue;
+
 		/** The number of the var e.g., 0 means the first input */
-		public int count;
-		
-		/** defines if it is an input: 0, output: 1, or an internal var: 2 
-		 * FIXME change to enum */
-		public int inoutinternal;
-		
-		
-		public VarDefinition(Element el, int count, int inoutinternal){
+		private int count;
+
+		/**
+		 * defines if it is an input: 0, output: 1, or an internal var: 2 FIXME change
+		 * to enum
+		 */
+		private int inOutInternal;
+
+		public VarDefinition(Element el, int count, int inoutinternal) {
 			name = el.getAttribute("Name"); //$NON-NLS-1$
 			type = el.getAttribute("Type"); //$NON-NLS-1$
 			String arraySize = el.getAttribute("ArraySize"); //$NON-NLS-1$
 			int val = 0;
-			
-			if(null != arraySize && !"".equals(arraySize)){ //$NON-NLS-1$
-				val = Integer.parseInt(arraySize);	
+
+			if (null != arraySize && !"".equals(arraySize)) { //$NON-NLS-1$
+				val = Integer.parseInt(arraySize);
 			}
 			arraySizeValue = val;
-			
+
 			initialValue = el.getAttribute("InitialValue"); //$NON-NLS-1$
 			this.count = count;
-			this.inoutinternal = inoutinternal;
+			this.inOutInternal = inoutinternal;
 		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public int getArraySizeValue() {
+			return arraySizeValue;
+		}
+
+		public void setArraySizeValue(int arraySizeValue) {
+			this.arraySizeValue = arraySizeValue;
+		}
+
+		public String getInitialValue() {
+			return initialValue;
+		}
+
+		public void setInitialValue(String initialValue) {
+			this.initialValue = initialValue;
+		}
+
+		public int getCount() {
+			return count;
+		}
+
+		public void setCount(int count) {
+			this.count = count;
+		}
+
+		public int getInOutInternal() {
+			return inOutInternal;
+		}
+
+		public void setInOutInternal(int inOutInternal) {
+			this.inOutInternal = inOutInternal;
+		}
+
 	}
 
 	protected class FBDefinition {
-		public String name;
+		private String name;
 
-		public String type;
+		private String type;
 
-		public String[] paramName;
+		private String[] paramName;
 
-		public String[] paramValue;
-	}
+		private String[] paramValue;
 
-	protected class ConnDefinition {
-		public String source;
+		public String getName() {
+			return name;
+		}
 
-		public String destination;
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public String[] getParamName() {
+			return paramName;
+		}
+
+		public void setParamName(String[] paramName) {
+			this.paramName = paramName;
+		}
+
+		public String[] getParamValue() {
+			return paramValue;
+		}
+
+		public void setParamValue(String[] paramValue) {
+			this.paramValue = paramValue;
+		}
 	}
 
 	/**
 	 * Converts the given Document element to LibraryElement2.dtd format if
 	 * necessary. // OOONEIDA Workbench code!
 	 * 
-	 * @param docel
-	 *          the docel
+	 * @param docel the docel
 	 */
 	public static void convertToLibraryElement2(final Element docel) {
 		// Convert "EVENT" type names to empty strings
@@ -227,10 +300,8 @@ public abstract class ExportFilter implements IExportFilter {
 	/**
 	 * Instantiates a new export filter.
 	 * 
-	 * @param doc
-	 *          the doc
-	 * @param destDir
-	 *          the dest dir
+	 * @param doc     the doc
+	 * @param destDir the dest dir
 	 */
 	public ExportFilter(final Document doc, final String destDir) {
 		document = doc;
@@ -241,8 +312,8 @@ public abstract class ExportFilter implements IExportFilter {
 	}
 
 	@Override
-	public void export(IFile typeFile, String destination, boolean forceOverwrite,
-			LibraryElement type) throws org.eclipse.fordiac.ide.export.utils.ExportException {
+	public void export(IFile typeFile, String destination, boolean forceOverwrite, LibraryElement type)
+			throws org.eclipse.fordiac.ide.export.utils.ExportException {
 		this.libraryType = type;
 		export(typeFile, destination, forceOverwrite);
 	}
@@ -250,38 +321,37 @@ public abstract class ExportFilter implements IExportFilter {
 	/**
 	 * Start export.
 	 * 
-	 * @param overwrite
-	 *          the overwrite
+	 * @param overwrite the overwrite
 	 */
 	public void startExport(final boolean overwrite) {
 		// clear all vectors & hashtables
-		vars = new HashMap<String, VarDefinition>();
+		vars = new HashMap<>();
 
 		dataInCount = 0;
 
 		dataOutCount = 0;
 		internalCount = 0;
-		FBCount = 0;
+		fBCount = 0;
 
-		inputVars = new ArrayList<String>();
+		inputVars = new ArrayList<>();
 
-		outputVars = new ArrayList<String>();
-		internalVars = new ArrayList<VarDefinition>();
-		FBs = new ArrayList<FBDefinition>();
+		outputVars = new ArrayList<>();
+		internalVars = new ArrayList<>();
+		funtionBlocks = new ArrayList<>();
 
-		Internal2InterfaceEventConns = new HashSet<String>();
+		internal2InterfaceEventConns = new HashSet<>();
 
-		EventConn = new ArrayList<Element>();
+		eventConn = new ArrayList<>();
 
-		EventConnHash = new HashSet<String>();
+		eventConnHash = new HashSet<>();
 
-		DataConn = new ArrayList<Element>();
+		dataConn = new ArrayList<>();
 
-		DataConnHash = new HashSet<String>();
+		dataConnHash = new HashSet<>();
 
-		Interface2InternalDataConns = new HashSet<String>();
+		interface2InternalDataConns = new HashSet<>();
 
-		Internal2InterfaceDataConns = new HashSet<String>();
+		internal2InterfaceDataConns = new HashSet<>();
 
 		String name = docel.getAttribute("Name"); //$NON-NLS-1$
 
@@ -292,17 +362,21 @@ public abstract class ExportFilter implements IExportFilter {
 				File h = new File(fName + ".h"); //$NON-NLS-1$
 				if ((!overwrite) && (f.exists() || h.exists())) {
 					ICompareEditorOpener opener = CompareEditorOpenerUtil.getOpener();
-					String msg = MessageFormat .format( "Overwrite "  + name + ".cpp"  + " and " + name + ".h. " 
-											+ ((opener != null) ? "\nMerge will create a backup of the original File and open an editor to merge the files manually!" 
-													: ""), new Object[] { f.getAbsolutePath() }); //$NON-NLS-1$
-					
-					MessageDialog msgDiag = new MessageDialog(Display.getDefault().getActiveShell(), "File Exists", null, msg, MessageDialog.QUESTION_WITH_CANCEL,  
+					String msg = MessageFormat.format(
+							"Overwrite " + name + ".cpp" + " and " + name + ".h. " + ((opener != null)
+									? "\nMerge will create a backup of the original File and open an editor to merge the files manually!"
+									: ""), //$NON-NLS-1$
+							new Object[] { f.getAbsolutePath() });
+
+					MessageDialog msgDiag = new MessageDialog(Display.getDefault().getActiveShell(), "File Exists",
+							null, msg, MessageDialog.QUESTION_WITH_CANCEL,
 							new String[] { JFaceResources.getString(IDialogLabelKeys.YES_LABEL_KEY), "Merge",
-										   JFaceResources.getString(IDialogLabelKeys.CANCEL_LABEL_KEY)}, 0);	
-					
+									JFaceResources.getString(IDialogLabelKeys.CANCEL_LABEL_KEY) },
+							0);
+
 					int res = msgDiag.open();
-					
-					switch(res){ 
+
+					switch (res) {
 					case 0:
 						pwCPP = new PrintWriter(new FileOutputStream(fName + ".cpp")); //$NON-NLS-1$
 						pwH = new PrintWriter(new FileOutputStream(fName + ".h")); //$NON-NLS-1$
@@ -329,14 +403,13 @@ public abstract class ExportFilter implements IExportFilter {
 		}
 	}
 
-	private void performManualMerge(String name, String fName, File f, File h,
-			ICompareEditorOpener opener) throws IOException,
-			FileNotFoundException {
+	private void performManualMerge(String name, String fName, File f, File h, ICompareEditorOpener opener)
+			throws IOException {
 		// manually merge the files
 		if (opener != null) {
 			boolean diffs = false;
-			File originalCpp = Utils.createBakFile(f); 
-			File originalH = Utils.createBakFile(h); 
+			File originalCpp = Utils.createBakFile(f);
+			File originalH = Utils.createBakFile(h);
 			File tempcpp = new File(fName + ".cpp"); //$NON-NLS-1$
 			File temph = new File(fName + ".h"); //$NON-NLS-1$
 			pwCPP = new PrintWriter(new FileOutputStream(tempcpp));
@@ -361,11 +434,11 @@ public abstract class ExportFilter implements IExportFilter {
 				opener.openCompareEditor();
 				diffs = true;
 			}
-			
-			if(!diffs){
-				//there where no differences inform the user
-				MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No Differences", 
-						"There where no differences between the orignal file and the newly generated one!"); 
+
+			if (!diffs) {
+				// there where no differences inform the user
+				MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No Differences",
+						"There where no differences between the orignal file and the newly generated one!");
 			}
 		}
 	}
@@ -384,7 +457,6 @@ public abstract class ExportFilter implements IExportFilter {
 		} else if ((type.equals("FBType")) || (type.equals("AdapterType"))) { //$NON-NLS-1$ //$NON-NLS-2$
 			exportFB();
 		}
-		
 
 		exportClosingCode();
 	}
@@ -428,7 +500,7 @@ public abstract class ExportFilter implements IExportFilter {
 					el = (Element) node;
 					exportFBNetwork(el.getChildNodes());
 				}
-			} else if(libraryType instanceof FBType){
+			} else if (libraryType instanceof FBType) {
 				exportSIFBExecuteEvent();
 			}
 
@@ -474,10 +546,10 @@ public abstract class ExportFilter implements IExportFilter {
 	}
 
 	private void exportFBNetworkConnections() {
-		EventConn.clear();
-		EventConnHash.clear();
-		DataConn.clear();
-		DataConnHash.clear();
+		eventConn.clear();
+		eventConnHash.clear();
+		dataConn.clear();
+		dataConnHash.clear();
 		NodeList l1 = docel.getElementsByTagName("EventConnections"); //$NON-NLS-1$
 		if (l1.getLength() > 0) {
 			org.w3c.dom.Node node = l1.item(0);
@@ -487,11 +559,11 @@ public abstract class ExportFilter implements IExportFilter {
 				if (node instanceof Element) {
 					Element el = (Element) node;
 					if (el.getNodeName().equals("Connection")) { //$NON-NLS-1$
-						EventConn.add(el);
+						eventConn.add(el);
 						if (-1 == (el.getAttribute("Destination")).indexOf('.')) { //$NON-NLS-1$
-							Internal2InterfaceEventConns.add(el.getAttribute("Source")); //$NON-NLS-1$
+							internal2InterfaceEventConns.add(el.getAttribute("Source")); //$NON-NLS-1$
 						} else {
-							EventConnHash.add(el.getAttribute("Source")); //$NON-NLS-1$
+							eventConnHash.add(el.getAttribute("Source")); //$NON-NLS-1$
 						}
 					}
 				}
@@ -508,13 +580,13 @@ public abstract class ExportFilter implements IExportFilter {
 				if (node instanceof Element) {
 					Element el = (Element) node;
 					if (el.getNodeName().equals("Connection")) { //$NON-NLS-1$
-						DataConn.add(el);
+						dataConn.add(el);
 						if (-1 == (el.getAttribute("Source")).indexOf('.')) { //$NON-NLS-1$
-							Interface2InternalDataConns.add(el.getAttribute("Source")); //$NON-NLS-1$
+							interface2InternalDataConns.add(el.getAttribute("Source")); //$NON-NLS-1$
 						} else if (-1 == (el.getAttribute("Destination")).indexOf('.')) { //$NON-NLS-1$
-							Internal2InterfaceDataConns.add(el.getAttribute("Source")); //$NON-NLS-1$
+							internal2InterfaceDataConns.add(el.getAttribute("Source")); //$NON-NLS-1$
 						} else {
-							DataConnHash.add(el.getAttribute("Source")); //$NON-NLS-1$
+							dataConnHash.add(el.getAttribute("Source")); //$NON-NLS-1$
 						}
 					}
 				}
@@ -554,14 +626,14 @@ public abstract class ExportFilter implements IExportFilter {
 
 	private void exportFBNetwork(final NodeList fbnNodes) {
 		int len = fbnNodes.getLength();
-		FBCount = 0;
-		FBs.clear();
+		fBCount = 0;
+		funtionBlocks.clear();
 		for (int i = 0; i < len; i++) {
 			org.w3c.dom.Node node = fbnNodes.item(i);
 			if (node instanceof Element) {
 				Element el = (Element) node;
 				if (el.getNodeName().equals("FB")) { //$NON-NLS-1$
-					++FBCount;
+					++fBCount;
 					FBDefinition newFBDef = new FBDefinition();
 					newFBDef.type = el.getAttribute("Type"); //$NON-NLS-1$
 					newFBDef.name = el.getAttribute("Name"); //$NON-NLS-1$
@@ -570,7 +642,7 @@ public abstract class ExportFilter implements IExportFilter {
 					// to avoid a fixed size array where elements can be null
 					List<String> paramNames = new ArrayList<String>();
 					List<String> paramValues = new ArrayList<String>();
-					
+
 					for (int j = 0; j < parameterNodes.getLength(); j++) {
 						org.w3c.dom.Node nodeParam = parameterNodes.item(j);
 						if (nodeParam instanceof Element) {
@@ -579,11 +651,9 @@ public abstract class ExportFilter implements IExportFilter {
 							paramValues.add(parameter.getAttribute("Value")); //$NON-NLS-1$
 						}
 					}
-					newFBDef.paramName = paramNames
-							.toArray(new String[paramNames.size()]);
-					newFBDef.paramValue = paramValues.toArray(new String[paramNames
-							.size()]);
-					FBs.add(newFBDef);
+					newFBDef.paramName = paramNames.toArray(new String[paramNames.size()]);
+					newFBDef.paramValue = paramValues.toArray(new String[paramNames.size()]);
+					funtionBlocks.add(newFBDef);
 				}
 			}
 		}
@@ -601,7 +671,7 @@ public abstract class ExportFilter implements IExportFilter {
 			org.w3c.dom.Node node = l1.item(i);
 			if (node instanceof Element) {
 				Element el = (Element) node;
-				if (el.getNodeName().equals("VarDeclaration")) {					 //$NON-NLS-1$
+				if (el.getNodeName().equals("VarDeclaration")) { //$NON-NLS-1$
 					VarDefinition newVarDef = new VarDefinition(el, dataInCount, 0);
 					inputVars.add(newVarDef.name);
 					vars.put(newVarDef.name, newVarDef);
@@ -678,11 +748,9 @@ public abstract class ExportFilter implements IExportFilter {
 
 	protected abstract void exportVarNameArrays(String namePrefix, NodeList nodes);
 
-	protected abstract void exportEvents(String namePrefix, NodeList nodes,
-			List<String> varNames);
+	protected abstract void exportEvents(String namePrefix, NodeList nodes, List<String> varNames);
 
-	protected abstract void exportAlgorithm(String algName, String type,
-			String src);
+	protected abstract void exportAlgorithm(String algName, String type, String src);
 
 	protected abstract void exportVariable(VarDefinition newVarDef);
 
@@ -701,14 +769,13 @@ public abstract class ExportFilter implements IExportFilter {
 	/**
 	 * Trim string.
 	 * 
-	 * @param value
-	 *          the value
+	 * @param value the value
 	 * 
 	 * @return the string
 	 */
 	public static String trimSTRING(String value) {
 		final String trimValue1 = "\""; //$NON-NLS-1$
-		final String trimValue2 = "'";		 //$NON-NLS-1$
+		final String trimValue2 = "'"; //$NON-NLS-1$
 
 		if (value.startsWith(trimValue1) || value.startsWith(trimValue2)) {
 			value = value.substring(1);
