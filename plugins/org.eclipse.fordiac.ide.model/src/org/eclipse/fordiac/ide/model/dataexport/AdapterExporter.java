@@ -14,6 +14,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.w3c.dom.Element;
 
@@ -21,6 +22,11 @@ class AdapterExporter extends AbstractTypeExporter {
 	
 	public AdapterExporter(AdapterTypePaletteEntry entry) {
 		super(entry.getType().getAdapterFBType());
+	}
+	
+	@Override
+	protected String getRootTag() {
+		return  LibraryElementTags.ADAPTER_TYPE;
 	}
 
 	@Override

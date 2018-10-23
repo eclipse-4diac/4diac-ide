@@ -39,6 +39,11 @@ class SubApplicationTypeExporter extends AbstractTypeExporter {
 	}
 	
 	@Override
+	protected String getRootTag() {
+		return  LibraryElementTags.SUBAPPTYPE_ELEMENT;
+	}
+	
+	@Override
 	protected void createTypeSpecificXMLEntries(Element rootElement) {
 		rootElement.appendChild(new FBNetworkExporter(getDom()).createFBNetworkElement(getType().getFBNetwork()));
 	}

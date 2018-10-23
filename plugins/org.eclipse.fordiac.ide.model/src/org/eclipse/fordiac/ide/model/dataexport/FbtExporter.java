@@ -46,6 +46,11 @@ class FbtExporter extends AbstractTypeExporter{
 	}
 	
 	@Override
+	protected String getRootTag() {
+		return  LibraryElementTags.FB_TYPE;
+	}
+	
+	@Override
 	protected void createTypeSpecificXMLEntries(Element rootElement){
 		if (getType() instanceof CompositeFBType) {
 			FBNetworkExporter nwExporter = new FBNetworkExporter(getDom());
