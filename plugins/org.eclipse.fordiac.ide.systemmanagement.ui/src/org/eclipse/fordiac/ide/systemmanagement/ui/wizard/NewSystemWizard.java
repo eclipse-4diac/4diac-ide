@@ -23,11 +23,12 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
+import org.eclipse.fordiac.ide.application.commands.NewAppCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -134,7 +135,8 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 			setupVersionInfo(system);
 			SystemManager.INSTANCE.addSystem(system);
 			
-			NewApplicationWizard.performApplicationCreation(system, page.getInitialApplicationName(), page.getOpenApplication(), getShell());
+			NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(), Messages.NewApplicationWizard_Comment);
+			cmd.execute(monitor, null);
 			
 			SystemManager.INSTANCE.saveSystem(system);
 			
