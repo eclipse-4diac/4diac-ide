@@ -63,9 +63,13 @@ public class AlgorithmEditingCompositeSimpleFB extends AlgorithmEditingComposite
 		languageCombo = new Combo(langAndComents, SWT.BEGINNING | SWT.SINGLE | SWT.READ_ONLY);
 
 		fillLanguageDropDown();
-		languageCombo.addListener(SWT.Selection,
-				event -> executeCommand(getChangeAlgorithmTypeCommand(getSimpleFBType(), getAlgorithm(), languageCombo.getText())));
 
+		languageCombo.addListener(SWT.Selection, event -> {
+			Command changeAlgorithmTypeCommand = getChangeAlgorithmTypeCommand(getSimpleFBType(), getAlgorithm(),
+					languageCombo.getText());
+			executeCommand(changeAlgorithmTypeCommand);
+			setAlgorithm(((ChangeAlgorithmTypeCommandSimpleFB) changeAlgorithmTypeCommand).getNewAlgorithm());
+		});
 		commentLabel = new CLabel(langAndComents, SWT.BEGINNING);
 		commentLabel.setBackground(langAndComents.getBackground());
 		commentLabel.setText("Comment:");
@@ -83,7 +87,7 @@ public class AlgorithmEditingCompositeSimpleFB extends AlgorithmEditingComposite
 		codeEditorsGridData.horizontalSpan = 2;
 		codeEditorsGridData.minimumHeight = 250;
 
-		codeEditors = new Composite(parent, SWT.SHADOW_NONE); 
+		codeEditors = new Composite(parent, SWT.SHADOW_NONE);
 		codeEditors.setLayout(stack = new StackLayout());
 		codeEditors.setLayoutData(codeEditorsGridData);
 
@@ -118,9 +122,9 @@ public class AlgorithmEditingCompositeSimpleFB extends AlgorithmEditingComposite
 
 	@Override
 	protected Command getChangeAlgorithmTypeCommand(BaseFBType fbType, Algorithm oldAlgorithm, String algorithmType) {
-		return new ChangeAlgorithmTypeCommandSimpleFB(fbType, getAlgorithm(), languageCombo.getText());
+		return new ChangeAlgorithmTypeCommandSimpleFB(fbType, oldAlgorithm, algorithmType);
 	}
-	
+
 	protected SimpleFBType getSimpleFBType() {
 		return (SimpleFBType) currentAlgorithm.eContainer();
 	}

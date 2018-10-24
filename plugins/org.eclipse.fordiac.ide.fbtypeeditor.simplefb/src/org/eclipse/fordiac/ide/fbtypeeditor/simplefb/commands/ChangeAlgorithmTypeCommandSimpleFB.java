@@ -93,5 +93,4 @@ public class ChangeAlgorithmTypeCommandSimpleFB extends Command {
 	public Algorithm getNewAlgorithm() {
 		return newAlgorithm;
 	}
-
 }
