@@ -36,6 +36,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Activator;
@@ -134,11 +135,7 @@ abstract class CommonElementExporter {
 				iFile.setContents(new ByteArrayInputStream(stringWriter.toString().getBytes("UTF-8")), //$NON-NLS-1$ 
 						IResource.KEEP_HISTORY | IResource.FORCE, null);
 			} else {
-				IFolder folder = iFile.getProject().getFolder(iFile.getProjectRelativePath().removeLastSegments(1));
-				if (!folder.exists()) {
-					folder.create(true, true, null);
-					folder.refreshLocal(IResource.DEPTH_ZERO, null);
-				}
+				checkAndCreateFolderHierarchy(iFile);
 				iFile.create(new ByteArrayInputStream(result.toString().getBytes("UTF-8")), //$NON-NLS-1$ 
 						IResource.KEEP_HISTORY | IResource.FORCE, null);
 			}
@@ -148,6 +145,23 @@ abstract class CommonElementExporter {
 		} catch (CoreException |UnsupportedEncodingException|TransformerException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		} 
+	}
+
+	/** Check if the folders in the file's path exist and if not create them accordingly
+	 * 
+	 * @param file for which the path should be checked
+	 * @throws CoreException
+	 */
+	private static void checkAndCreateFolderHierarchy(IFile file) throws CoreException {
+		IPath path = file.getProjectRelativePath().removeLastSegments(1);
+		
+		if(!path.isEmpty()) {
+			IFolder folder = file.getProject().getFolder(path);
+			if (!folder.exists()) {
+				folder.create(true, true, null);
+				folder.refreshLocal(IResource.DEPTH_ZERO, null);
+			}
+		}
 	}
 	
 	/*
