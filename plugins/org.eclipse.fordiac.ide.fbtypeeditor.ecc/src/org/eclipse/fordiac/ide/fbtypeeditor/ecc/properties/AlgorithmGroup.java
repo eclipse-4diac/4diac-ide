@@ -7,14 +7,15 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *   Alois Zoitl 
- *   - initial API and implementation and/or initial documentation
- *   Peter Gsellmann
- *   - extraction to AlgorithmEditingComposite
- *   Martin Melik-Merkumians
- *   - moved AlgorithmGroup specific methods from base class to this class
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Peter Gsellmann - extraction to AlgorithmEditingComposite
+ *   Martin Melik-Merkumians - moved AlgorithmGroup specific methods from base 
+ *   						   class to this class
+ *   Alois Zoitl - moved more code into AlgorithmEditingComposite
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
+
+import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTypeCommand;
@@ -23,16 +24,19 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 class AlgorithmGroup extends AlgorithmEditingComposite {
+	
+	private Group algorithmGroup;
+	
 
 	AlgorithmGroup(final Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
 		algorithmGroup = widgetFactory.createGroup(parent, Messages.ECAlgorithmGroup_Title);
@@ -75,30 +79,22 @@ class AlgorithmGroup extends AlgorithmEditingComposite {
 
 	@Override
 	protected void enableAllFields() {
-		languageLabel.setEnabled(true);
 		algorithmGroup.setEnabled(true);
-		commentLabel.setEnabled(true);
-		commentText.setEnabled(true);
-		languageCombo.setEnabled(true);
+		super.enableAllFields();
 	}
 
 	@Override
 	protected void disableAllFields() {
-		languageLabel.setEnabled(false);
 		algorithmGroup.setEnabled(false);
-		commentLabel.setEnabled(false);
-		commentText.setEnabled(false);
-		languageCombo.setEnabled(false);
+		super.disableAllFields();
 	}
 
 	@Override
 	protected void updateAlgFields() {
-		algorithmGroup.setText(Messages.ECAlgorithmGroup_Title + " " + currentAlgorithm.getName());
-		commentText.setText(getAlgorithm().getComment());
-		languageCombo.select(languageCombo.indexOf(getAlgorithmTypeString(getAlgorithm())));
-		if (null != currentAlgEditor) {
-			currentAlgEditor.setAlgorithmText(((TextAlgorithm) getAlgorithm()).getText());
-		}
+		Algorithm alg = getAlgorithm();
+		algorithmGroup.setText(MessageFormat.format(Messages.ECAlgorithmGroup_Title, 
+				(null != alg) ? alg.getName() : "")); //$NON-NLS-1$
+		super.updateAlgFields();
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2018 TU Wien/ACIN
+ * Copyright (c) 2018 TU Wien/ACIN, Johannes Kepler University
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,6 +13,7 @@
  *   Martin Melik-Merkumians
  *   	- made several methods abstract and moved implementation to respective
  *   sub-classes, also removed non-shareable methods to specialized sub-classes
+ *   Alois Zoitl - harmonized code from algorithm group and simple alg editing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets;
 
@@ -26,7 +28,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditorCreator;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTextCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.AbstractECSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -41,12 +42,10 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
 public abstract class AlgorithmEditingComposite {
 
-	protected Group algorithmGroup;
 	protected CLabel languageLabel;
 	protected Combo languageCombo;
 	protected CLabel commentLabel;
@@ -130,28 +129,39 @@ public abstract class AlgorithmEditingComposite {
 				if (null != currentAlgorithm) {
 					initializeEditor();
 					enableAllFields();
-					updateAlgFields();
 				} else {
-					algorithmGroup.setText(Messages.ECAlgorithmGroup_Title);
-					commentText.setText(""); //$NON-NLS-1$
-					languageCombo.select(0);
 					stack.topControl = null;
 					codeEditors.layout();
 					disableAllFields();
 				}
-			} else if (null != currentAlgorithm) {
-				// update the content of the algorithm only
-				updateAlgFields();
-			}
+			} 
+			updateAlgFields();
 			setCommandStack(commandStackBuffer);
 		}
 	}
 
-	protected abstract void enableAllFields();
+	protected void enableAllFields() {
+		languageLabel.setEnabled(true);
+		commentLabel.setEnabled(true);
+		commentText.setEnabled(true);
+		languageCombo.setEnabled(true);
+	}
 
-	protected abstract void disableAllFields();
+	protected void disableAllFields() {
+		languageLabel.setEnabled(false);
+		commentLabel.setEnabled(false);
+		commentText.setEnabled(false);
+		languageCombo.setEnabled(false);
+	}
 
-	protected abstract void updateAlgFields();
+	protected void updateAlgFields(){
+		Algorithm alg = getAlgorithm();
+		commentText.setText((null != alg) ? alg.getComment() : ""); //$NON-NLS-1$
+		languageCombo.select((null != alg) ? languageCombo.indexOf(getAlgorithmTypeString(getAlgorithm())) : 0 );
+		if (alg instanceof TextAlgorithm) {
+			currentAlgEditor.setAlgorithmText(((TextAlgorithm) alg).getText());
+		} 
+	}
 
 	private void initializeEditor() {
 		if (null != currentAlgEditor) {

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2018 TU Wien/ACIN
+ * Copyright (c) 2018 TU Wien/ACIN, Johannes Kepler University
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,6 +11,7 @@
  *   - initial implementation and/or initial documentation
  *   Martin Melik-Merkumians
  *   - changes access modifiers for OO encapsulation
+ *   Alois Zoitl - moved more code into AlgorithmEditingComposite
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets;
 
@@ -19,7 +21,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -96,31 +97,6 @@ public class AlgorithmEditingCompositeSimpleFB extends AlgorithmEditingComposite
 
 		disableAllFields();
 
-	}
-
-	@Override
-	protected void enableAllFields() {
-		languageLabel.setEnabled(true);
-		commentLabel.setEnabled(true);
-		commentText.setEnabled(true);
-		languageCombo.setEnabled(true);
-	}
-
-	@Override
-	protected void disableAllFields() {
-		languageLabel.setEnabled(false);
-		commentLabel.setEnabled(false);
-		commentText.setEnabled(false);
-		languageCombo.setEnabled(false);
-	}
-
-	@Override
-	protected void updateAlgFields() {
-		commentText.setText(getAlgorithm().getComment());
-		languageCombo.select(languageCombo.indexOf(getAlgorithmTypeString(getAlgorithm())));
-		if (null != currentAlgEditor) {
-			currentAlgEditor.setAlgorithmText(((TextAlgorithm) getAlgorithm()).getText());
-		}
 	}
 
 	@Override
