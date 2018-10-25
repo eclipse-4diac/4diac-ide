@@ -8,6 +8,8 @@
  * Contributors:
  *   Peter Gsellmann 
  *   - initial implementation and/or initial documentation
+ *   Martin Melik-Merkumians
+ *   - changes access modifiers for OO encapsulation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets;
 
@@ -22,7 +24,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
@@ -39,28 +40,30 @@ public class AlgorithmEditingCompositeSimpleFB extends AlgorithmEditingComposite
 		gridLayout.numColumns = 2;
 		parent.setLayout(gridLayout);
 
-		Composite langAndComents = new Composite(parent, SWT.NONE | Window.getDefaultOrientation());
-		langAndComents.setBackground(parent.getBackground());
+		Composite langAndComments = new Composite(parent, SWT.NONE | Window.getDefaultOrientation());
+		langAndComments.setBackground(parent.getBackground());
 
-		langAndComents.addMouseListener(new MouseAdapter() {
+		langAndComments.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				((Control) e.widget).setFocus();
 			}
 		});
 
-		if (langAndComents.getParent() != null)
-			langAndComents.setMenu(langAndComents.getParent().getMenu());
-		langAndComents.setBackground(parent.getBackground());
+		if (langAndComments.getParent() != null) {
+			langAndComments.setMenu(langAndComments.getParent().getMenu());
+		}
 
-		langAndComents.setLayout(new GridLayout(2, false));
-		langAndComents.setLayoutData(new GridData(GridData.FILL, 0, true, false));
+		langAndComments.setBackground(parent.getBackground());
 
-		languageLabel = new CLabel(langAndComents, SWT.BEGINNING);
-		languageLabel.setBackground(langAndComents.getBackground());
+		langAndComments.setLayout(new GridLayout(2, false));
+		langAndComments.setLayoutData(new GridData(GridData.FILL, 0, true, false));
+
+		languageLabel = new CLabel(langAndComments, SWT.BEGINNING);
+		languageLabel.setBackground(langAndComments.getBackground());
 		languageLabel.setText("Language:");
 
-		languageCombo = new Combo(langAndComents, SWT.BEGINNING | SWT.SINGLE | SWT.READ_ONLY);
+		languageCombo = new Combo(langAndComments, SWT.BEGINNING | SWT.SINGLE | SWT.READ_ONLY);
 
 		fillLanguageDropDown();
 
@@ -70,15 +73,15 @@ public class AlgorithmEditingCompositeSimpleFB extends AlgorithmEditingComposite
 			executeCommand(changeAlgorithmTypeCommand);
 			setAlgorithm(((ChangeAlgorithmTypeCommandSimpleFB) changeAlgorithmTypeCommand).getNewAlgorithm());
 		});
-		commentLabel = new CLabel(langAndComents, SWT.BEGINNING);
-		commentLabel.setBackground(langAndComents.getBackground());
+		commentLabel = new CLabel(langAndComments, SWT.BEGINNING);
+		commentLabel.setBackground(langAndComments.getBackground());
 		commentLabel.setText("Comment:");
 
-		commentText = new Text(langAndComents, SWT.BEGINNING | SWT.BORDER | Window.getDefaultOrientation());
+		commentText = new Text(langAndComments, SWT.BEGINNING | SWT.BORDER | Window.getDefaultOrientation());
 		commentText.setText("");
 		commentText.setEditable(true);
 		commentText.setEnabled(true);
-		commentText.setForeground(langAndComents.getForeground());
+		commentText.setForeground(langAndComments.getForeground());
 		commentText.setLayoutData(new GridData(GridData.FILL, 0, true, false));
 		commentText.addListener(SWT.Modify,
 				e -> executeCommand(new ChangeCommentCommand(getAlgorithm(), commentText.getText())));
@@ -88,7 +91,7 @@ public class AlgorithmEditingCompositeSimpleFB extends AlgorithmEditingComposite
 		codeEditorsGridData.minimumHeight = 250;
 
 		codeEditors = new Composite(parent, SWT.SHADOW_NONE);
-		codeEditors.setLayout(stack = new StackLayout());
+		codeEditors.setLayout(stack);
 		codeEditors.setLayoutData(codeEditorsGridData);
 
 		disableAllFields();
@@ -125,7 +128,7 @@ public class AlgorithmEditingCompositeSimpleFB extends AlgorithmEditingComposite
 		return new ChangeAlgorithmTypeCommandSimpleFB(fbType, oldAlgorithm, algorithmType);
 	}
 
-	protected SimpleFBType getSimpleFBType() {
+	private SimpleFBType getSimpleFBType() {
 		return (SimpleFBType) currentAlgorithm.eContainer();
 	}
 }

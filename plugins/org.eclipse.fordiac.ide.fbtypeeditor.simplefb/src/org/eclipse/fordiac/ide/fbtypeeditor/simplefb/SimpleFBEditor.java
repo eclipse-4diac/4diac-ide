@@ -35,49 +35,46 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 	protected CommandStack commandStack;
 	protected Algorithm alg;
 
-	public SimpleFBEditor(){
+	public SimpleFBEditor() {
+		// No initialization needed
 	}
-
 
 	@Override
 	public void createPartControl(Composite parent) {
 		baseAlgorithm = new AlgorithmEditingCompositeSimpleFB(parent);
-		baseAlgorithm.commandStack = commandStack;
+		baseAlgorithm.setCommandStack(commandStack);
 		baseAlgorithm.loadEditors(fbType);
 		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
 	}
-	
+
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-			setInput(input);
-			if (input instanceof FBTypeEditorInput) {
-				FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
-				if (untypedInput.getContent() instanceof SimpleFBType) {
-					fbType = (SimpleFBType) untypedInput.getContent();
-				}
+		setInput(input);
+		if (input instanceof FBTypeEditorInput) {
+			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+			if (untypedInput.getContent() instanceof SimpleFBType) {
+				fbType = (SimpleFBType) untypedInput.getContent();
 			}
-			setCommonCommandStack(commandStack);
-			setSite(site);
-			setPartName("Algorithm");
-			setTitleImage(FordiacImage.ICON_Algorithm.getImage());
-			getSite().getWorkbenchWindow().getSelectionService()
-					.addSelectionListener(this);
+		}
+		setCommonCommandStack(commandStack);
+		setSite(site);
+		setPartName("Algorithm");
+		setTitleImage(FordiacImage.ICON_Algorithm.getImage());
+		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 	}
-
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		commandStack.markSaveLocation();
 		firePropertyChange(IEditorPart.PROP_DIRTY);
-		
+
 	}
 
 	@Override
 	public void doSaveAs() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public boolean isDirty() {
@@ -85,27 +82,23 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 		return false;
 	}
 
-
 	@Override
 	public boolean isSaveAsAllowed() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
-
 	@Override
 	public void setFocus() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
-		
-	}
 
+	}
 
 	@Override
 	public boolean outlineSelectionChanged(Object selectedElement) {
@@ -113,17 +106,14 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 		return false;
 	}
 
-
 	@Override
 	public void setCommonCommandStack(CommandStack commandStack) {
-		this.commandStack = commandStack;	
+		this.commandStack = commandStack;
 	}
 
 	@Override
-	public void dispose()
-	{
-		getSite().getWorkbenchWindow().getSelectionService()
-		.removeSelectionListener(this);
+	public void dispose() {
+		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		super.dispose();
 	}
 }
