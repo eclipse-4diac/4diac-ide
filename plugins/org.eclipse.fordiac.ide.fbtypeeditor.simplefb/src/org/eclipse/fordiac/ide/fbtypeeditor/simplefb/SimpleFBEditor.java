@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 TU Wien/ACIN
+ * Copyright (c) 2018 TU Wien/ACIN, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,13 +8,13 @@
  * Contributors:
  *   Peter Gsellmann 
  *   - initial implementation and/or initial documentation
+ *   Alois Zoitl - reworked algorithm edting to reduce duplicated code
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.simplefb;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB;
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
@@ -26,14 +26,14 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
 
 public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 
-	protected AlgorithmEditingCompositeSimpleFB baseAlgorithm;
+	private final AlgorithmEditingCompositeSimpleFB baseAlgorithm = new AlgorithmEditingCompositeSimpleFB();
 	private SimpleFBType fbType;
-	protected CommandStack commandStack;
-	protected Algorithm alg;
+	private CommandStack commandStack;
 
 	public SimpleFBEditor() {
 		// No initialization needed
@@ -41,7 +41,8 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		baseAlgorithm = new AlgorithmEditingCompositeSimpleFB(parent);
+		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+		baseAlgorithm.createControls(parent, toolkit);
 		baseAlgorithm.initialize(fbType, commandStack);
 		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
 	}

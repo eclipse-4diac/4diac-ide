@@ -55,6 +55,11 @@ public class Messages extends NLS {
 	public static String FordiacECCPreferencePage_LABEL_ECCTransitionColor;
 	
 	public static String ECAlgorithmGroup_Title;
+	
+	public static String AlgorithmComposite_Language;
+	
+	public static String AlgorithmComposite_Comment;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

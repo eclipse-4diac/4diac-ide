@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditorCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.resource.XtextResource;
