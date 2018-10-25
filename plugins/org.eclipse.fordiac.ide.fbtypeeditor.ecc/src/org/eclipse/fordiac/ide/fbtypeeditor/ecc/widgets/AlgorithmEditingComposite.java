@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTextComm
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.AbstractECSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.gef.commands.Command;
@@ -92,12 +91,12 @@ public abstract class AlgorithmEditingComposite {
 		}
 	}
 
-	public void initialize(BasicFBType basicFBType, CommandStack commandStack) {
+	public void initialize(BaseFBType fbType, CommandStack commandStack) {
 		this.setCommandStack(commandStack);
-		loadEditors(basicFBType);
+		loadEditors(fbType);
 	}
 
-	public void loadEditors(BaseFBType basicFBType) {
+	private void loadEditors(BaseFBType basicFBType) {
 		editors.clear();
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.ecc.algorithmEditor"); //$NON-NLS-1$
@@ -187,11 +186,11 @@ public abstract class AlgorithmEditingComposite {
 	protected abstract Command getChangeAlgorithmTypeCommand(BaseFBType fbType, Algorithm oldAlgorithm,
 			String algorithmType);
 
-	public CommandStack getCommandStack() {
+	private CommandStack getCommandStack() {
 		return commandStack;
 	}
 
-	public void setCommandStack(CommandStack commandStack) {
+	private void setCommandStack(CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
 }

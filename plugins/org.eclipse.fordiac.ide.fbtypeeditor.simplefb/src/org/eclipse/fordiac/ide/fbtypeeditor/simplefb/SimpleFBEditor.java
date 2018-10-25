@@ -42,8 +42,7 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		baseAlgorithm = new AlgorithmEditingCompositeSimpleFB(parent);
-		baseAlgorithm.setCommandStack(commandStack);
-		baseAlgorithm.loadEditors(fbType);
+		baseAlgorithm.initialize(fbType, commandStack);
 		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
 	}
 
