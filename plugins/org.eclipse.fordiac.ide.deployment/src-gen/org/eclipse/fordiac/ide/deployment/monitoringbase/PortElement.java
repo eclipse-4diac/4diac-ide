@@ -132,7 +132,7 @@ public interface PortElement extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Hierarchy</em>' attribute list.
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getPortElement_Hierarchy()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @model unique="false" dataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */
 	EList<String> getHierarchy();

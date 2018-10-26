@@ -310,7 +310,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 		initEReference(getPortElement_Fb(), theLibraryElementPackage.getFB(), null, "fb", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPortElement_InterfaceElement(), theLibraryElementPackage.getIInterfaceElement(), null, "interfaceElement", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPortElement_Resource(), theLibraryElementPackage.getResource(), null, "resource", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getPortElement_Hierarchy(), theXMLTypePackage.getString(), "hierarchy", null, 0, -1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getPortElement_Hierarchy(), theXMLTypePackage.getString(), "hierarchy", null, 0, -1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(portElementEClass, theXMLTypePackage.getString(), "getPortString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 

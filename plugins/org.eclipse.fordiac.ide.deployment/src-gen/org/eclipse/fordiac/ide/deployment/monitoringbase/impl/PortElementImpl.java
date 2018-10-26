@@ -23,7 +23,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -237,7 +237,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	@Override
 	public EList<String> getHierarchy() {
 		if (hierarchy == null) {
-			hierarchy = new EDataTypeUniqueEList<String>(String.class, this, MonitoringBasePackage.PORT_ELEMENT__HIERARCHY);
+			hierarchy = new EDataTypeEList<String>(String.class, this, MonitoringBasePackage.PORT_ELEMENT__HIERARCHY);
 		}
 		return hierarchy;
 	}
