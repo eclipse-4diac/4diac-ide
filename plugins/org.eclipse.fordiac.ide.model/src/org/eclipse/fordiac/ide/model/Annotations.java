@@ -1,3 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2018 Johannes Kepler University
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *     - initial API and implementation and/or initial documentation
+ *   Monika Wenger - extracted the model helper methods into this annotations class
+ *   Monika Wenger - introduced IEC 61499 attribute support into the model
+ *   Alois Zoitl - reworked model helper functions for better mapping and sub-app
+ *                 support  
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
 import java.util.ArrayList;
@@ -393,17 +410,8 @@ public final class Annotations {
 	
 	public static SubApp getSubAppNamed(FBNetwork fbn, String name) {
 		for (FBNetworkElement element : fbn.getNetworkElements()) {
-			if(element instanceof SubApp){ 
-				if(element.getName().equals(name)){
-					return (SubApp)element; 
-				}
-				if(null != ((SubApp)element).getSubAppNetwork()) {
-					//for typed subapps getSubAppNetwork returns null, currently we don't want to search inside typed subapps
-					SubApp retVal = ((SubApp)element).getSubAppNetwork().getSubAppNamed(name);
-					if(retVal != null){
-						return retVal;
-					}
-				}
+			if(element instanceof SubApp && element.getName().equals(name)){
+				return (SubApp)element; 
 			}
 		}	
 		return null;

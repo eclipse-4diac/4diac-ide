@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2016, 2017 fortiss GmbH
+ * 				 2018 Johnnes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,14 +8,17 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *   Alois Zoitl 
- *   - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - reworked sub app name storage to contain the full hierarchical 
+ *   			   name
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.util.AbstractUntypedEditorInputFactory;
@@ -47,7 +51,7 @@ public class SubApplicationEditorInputFactory extends AbstractUntypedEditorInput
     		AutomationSystem system = SystemManager.INSTANCE.getSystemForName(systemName);
 			if(null != system){
 				Application application = system.getApplicationNamed(applicationName);
-				SubApp subApp = application.getFBNetwork().getSubAppNamed(subApplicationName);
+				SubApp subApp = findSubApp(application, subApplicationName);
 				if(null != subApp){
 					return new SubApplicationEditorInput(subApp);
 				}
@@ -76,8 +80,39 @@ public class SubApplicationEditorInputFactory extends AbstractUntypedEditorInput
     	if(null != app) {
 	    	saveAutomationSystem(memento, app.getAutomationSystem());
 	    	memento.putString(TAG_APPLICATION, app.getName());
-	    	memento.putString(TAG_SUB_APPLICATION, input.getName());
+	    	memento.putString(TAG_SUB_APPLICATION, createHierarchicalSubAppName(input.getSubApp()));
     	}
     }
+
+	private static String createHierarchicalSubAppName(final SubApp subApp) {
+		StringBuilder builder = new StringBuilder(subApp.getName());
+		
+		EObject runner = subApp.getFbNetwork().eContainer();
+		while(runner instanceof SubApp) {
+			SubApp parent = (SubApp) runner;
+			builder.insert(0, '.');
+			builder.insert(0, parent.getName());
+			runner = parent.getFbNetwork().eContainer();			
+		}
+		return builder.toString();
+	}
+
+	
+	private static SubApp findSubApp(Application application, String subApplicationName) {
+		String[] nameList = subApplicationName.split("\\."); //$NON-NLS-1$
+		FBNetwork network = application.getFBNetwork();
+		SubApp retVal = null;
+		
+		for(String name : nameList) {
+			retVal = network.getSubAppNamed(name);
+			if(null == retVal) {
+				break;
+			}
+			network = retVal.getSubAppNetwork();
+		}		
+		
+		return retVal;
+	}
+
 
 }
