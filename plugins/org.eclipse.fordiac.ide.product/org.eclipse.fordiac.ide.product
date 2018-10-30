@@ -16,7 +16,7 @@
    <launcherArgs>
       <programArgs>-nl en
       </programArgs>
-      <vmArgs>-Declipse.buildId=1.10.0_RC1
+      <vmArgs>-Declipse.buildId=1.10.0_RC2
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
