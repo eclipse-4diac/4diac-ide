@@ -13,32 +13,29 @@
 -->
 <introContent>
 	<extensionContent id="whatsnew-top-left" name="Whats New Current Version" path="whatsnew/@">
-  	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.9.0">   
-  	 		<text>  Two years ago we started on a mission of not only finally bringing all 4diac code to Eclipse but 
-  	 		        also prepare the 4diac code for the next 10 years. 
-  	 		        After 240 resolved issues and more 1000 commits we can say that this mission was accomplished!&lt;BR&gt;&lt;BR&gt;
-  	 		        
-  	 		        We worked on so many places. The most prominent improvements for users are:
-					&lt;UL&gt;
-	       		 		&lt;LI&gt; Renewed documentation with clearer information making the learning curve very smooth
-	       		 		&lt;LI&gt; Create and deploy sub-applications
-	       		 		&lt;LI&gt; Add and configure modular devices easily with our new IO infrastructure
-	       		 		&lt;LI&gt; Be part of the IoT and Industry 4.0 with new and improved MQTT and OPC UA features
-	       		 		&lt;LI&gt; Cleaner UI and lots of smaller usability improvements (get more with less clicks)
-					&lt;/UL&gt;
-					And for developers:
-					&lt;UL&gt;
-	       		 		&lt;LI&gt; More features, less code and less bugs
-	       		 		&lt;LI&gt; No CppChecks warning or errors
-	       		 		&lt;LI&gt; Code quality tested with Sonarqube and Coverity Scan
-	       		 		&lt;LI&gt; No more broken nightly versions of 4diac IDE and 4diac rte with automatic CI triggered on gerrit and git pushes
-					&lt;/UL&gt;  	 	
-		  	</text>  	 	 		
+  	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.10.0">   
+  	 		<text> With 4diac 1.10.0 we continued to improve performance, stability, and useability of our two main components. The main changes are:
+                    &lt;UL&gt;
+                            &lt;LI&gt;&lt;I&gt;&lt;b&gt;4diac IDE&lt;/b&gt;&lt;/I&gt; 
+                        &lt;UL&gt;
+                                &lt;LI&gt;Finally you can develop Simple FBs&lt;/LI&gt;
+                                &lt;LI&gt;We reworked the deployment and monitoring infrastructure removing many usability issues we had there&lt;/LI&gt;
+                            &lt;LI&gt;Stabilized Subapp support (e.g., monitoring inside of subapps)&lt;/LI&gt;
+                            &lt;LI&gt;Update to Eclipse 2018-09 as base platform giving you higher performance&lt;/LI&gt;
+                            &lt;LI&gt;Export device configurations as FMUs&lt;/LI&gt;
+                            &lt;LI&gt;Many smaller usability improvements&lt;/LI&gt;
+                        &lt;/UL&gt;&lt;/LI&gt; 
+                        &lt;LI&gt;&lt;I&gt;&lt;b&gt;4diac FORTE&lt;/b&gt;&lt;/I&gt; 
+                        &lt;UL&gt;
+                            &lt;LI&gt;4diac FORTE got more then 10% faster&lt;/LI&gt; 
+                            &lt;LI&gt;HTTP communication layer&lt;/LI&gt; 
+                            &lt;LI&gt;FMI/FMU support for connecting 4diac FORTE to different simulation tools&lt;/LI&gt; 
+                            &lt;LI&gt;New platforms: PLCnext, pikeOS, freeRTOS, and ROS&lt;/LI&gt; 
+                        &lt;/UL&gt;&lt;/LI&gt;
+                   &lt;/UL&gt; 
+            </text>
+  	 	 		
        	</group>
-       	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.9.1">   
-  	 		<text>The first maintenance release for 4diac 1.9 providing a set 14 bugfixes for 4diac IDE, and 2 for 4diac forte.
-  	 		</text>  	 	 		
-       	</group>  
    	</extensionContent>
    	
    	<extensionContent id="fordiac-news" style="css/style.css" name="Whats New Extension" path="whatsnew/@">
@@ -53,6 +50,16 @@
   	<extensionContent id="fordiac-older-releases" style="css/style.css" name="Prior Versions" path="whatsnew/@">   			 
 		<group style-id="content-group" id="orgfordiacide-introLink-group"
 		           label="Previous Releases">
+		    <link label="1.9.1" url="http://www.eclipse.org/4diac/en_news.php#en_news_20180527" id="orgfordiacide-webLink" style-id="content-link">
+                <text>The first maintenance release for 4diac 1.9 providing a set 14 bugfixes for 4diac IDE, and 2 for 4diac forte. 
+                </text>
+            </link> 
+            <link label="1.9.0" url="http://www.eclipse.org/4diac/en_news.php#en_news_20180420" id="orgfordiacide-webLink" style-id="content-link">
+                <text>Two years ago we started on a mission of not only finally bringing all 4diac code to Eclipse but 
+                    also prepare the 4diac code for the next 10 years. 
+                    After 240 resolved issues and more 1000 commits we can say that this mission was accomplished!          
+                </text>
+            </link> 
 			<link label="1.8.4" url="https://www.eclipse.org/4diac/en_news.php#en_news_20170202" id="orgfordiacide-webLink" style-id="content-link">
           		<text> We are proud to announce the fourth maintenance release for 4diac 1.8 providing a set of bug fixes to 4diac IDE, and forte. As always please download, test, and report problems and bugs. The main changes are in 4diac IDE: added first version of adapter tutorial; property sheet to create connection from 2 selected interface elements; set border color of adapters (fb-networks) to adapter connection color; fix pasting of elements when something is selected; fix mapping menu generation such that at least one function block or subapplication has to be selected; fix for better handling wrong mgr_ID; improved string replacement in virtualDNS; error message dialog to inform the user if killing the device worked and for online start of function blocks; made event connection creation more robust against broken connection parts; improved output if the management command could not be formated; not opening function block types when more then one element is selected; redesign the layout of the FBTest editor; profile saving for system files has been added in order to allow an easy migration from 1.8.x projects to the upcoming 4diac versions; reenabled untyped subapp mapping for testing purposes; order of the menu entries and their names have been changed to better follow the classical workflow; fixed 16 issues reported by AERI and for forte: fix for forcing of values; reworked and fixed issues on the sysfs IOs for Linux based sysems (e.g., RaspberryPI, BeagleBoneBlack); fixed issue in for support external source directories. 
 				</text>
