@@ -1,6 +1,7 @@
 <!DOCTYPE html> 
 <!--
  Copyright (c) 2017 fortiss GmbH
+               2018 Andrea Zoitl
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +11,7 @@
  Contributors:
     Jose Cabral 
      - initial API and implementation and/or initial documentation
+    Andrea Zoitl - cleaning up tutorials for 1.10 release
 -->
 
 <html lang="en">
@@ -62,6 +64,8 @@
     </ol>
     
     <p>Remember, Event and Data connections can not be mixed.</p>
+    
+    <img src="./img/Step2/counterFBs.png" alt="architecture for the current step" />
  <!-----------------------------------------------------------------------------------------------------------------> 
     
     <h2 id="AddAnotherDevice">Add Another Device</h2>
@@ -71,11 +75,17 @@
 
     <ol>
       <li>Drag and Drop a <b>FORTE_PC</b> device next to the existing one.</li>
-      <li>Rename it to <b>Counter</b>.</li>
+      <li>Rename the device to <b>Counter</b>.</li>
       <li>Set the localhost to 61500. The devices need to have different localhosts, they can not have the same.</li>
+      <li>Rename the resource to <b>Counter_RES</b>.</li>
     </ol>
     
-     <p>Change back to the <i>BlinkTestApp</i> Application Editor and map the two new FB to the Resource <i>Counter_RES</i>.</p> 
+    <img src="./img/Step2/addAnotherDevice.png" alt="Add another device to the system" />
+    
+    <p>Change back to the <i>BlinkTestApp</i> Application Editor and map the two new FBs to the Resource <i>Counter_RES</i>.
+    You can see the dashed connections between the two devices.</p>
+          
+    <img src="./img/Step2/mapToCounter.png" alt="Mapping of Function Block Instances within the Application Editor" /> 
          
  <!-----------------------------------------------------------------------------------------------------------------> 
   
@@ -89,6 +99,8 @@
     We fix it by adding special Communications FBs.
     You can find more information about broken connections <a href="../before4DIAC/iec61499.html#brokenConnection">here on our Homepage</a>.</p> 
     
+    <img src="./img/Step2/incompleteFBs.png" alt="incomplete FBs show die broken connection beween two devices" />
+    
     <!---------------------->
      <h3 id="SetUpBlinking">Set up the Blinking Part of the Application </h3>
      
@@ -96,6 +108,8 @@
      
      <p>Drag and Drop a <b>PUBLISH_1</b> FB from the folder net of the Palette and set up the connections.
      The PUBLISH FB must be initialized, so it is best to connect its INIT event directly to the START.</p>
+     
+     <img src="./img/Step2/blinkyResourceComplete.png" alt="Blinky_RES completely connected" />
      
     <!---------------------->
      <h3 id="SetUpCounting">Set up the Counting Part of the Application</h3>
@@ -105,7 +119,7 @@
      <p>Drag and Drop a <b>SUBSCRIBE_1</b> FB from the folder net of the Palette and set up the connections.
      The SUBSCRIBE FB must also be initialized.</p>
      
-     <p>Back in the <i>BlinkTest</i> System Configuration Editor you can see the dashed connections between the two devices.</p>
+     <img src="./img/Step2/counterResourceComplete.png" alt="Counter_RES completely connected" />
         
  <!-----------------------------------------------------------------------------------------------------------------> 
   
@@ -126,10 +140,14 @@
       <li>Check that the <i>Deployment Console</i> shows some output, and that no red warning appears on the right nor left of it. 
           If you get something red, something went wrong.</li>
     </ol>
+    
+    <img src="./img/Step2/deployCounter.png" alt="deploying of the application" />
        
  <!-----------------------------------------------------------------------------------------------------------------> 
   
     <h2 id="testApplication">Test it! </h2>
+    
+    <img src="./img/Step2/monitoringApp.png" alt="monitoring of the application" />
        
  <!-----------------------------------------------------------------------------------------------------------------> 
   
