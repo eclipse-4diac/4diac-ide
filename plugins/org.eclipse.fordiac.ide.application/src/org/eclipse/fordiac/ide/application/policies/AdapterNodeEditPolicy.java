@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2017 fortiss GmbH
+ * Copyright (c) 2016 - 2018 fortiss GmbH, Johannes Kepler University
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,7 +15,6 @@ import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.commands.ReconnectAdapterConnectionCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.gef.commands.Command;
@@ -28,10 +28,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class AdapterNodeEditPolicy extends InterfaceElementEditPolicy {
-
-	public AdapterNodeEditPolicy() {
-		super(AdapterConnectionCreateCommand.class);
-	}
 
 	@Override
 	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {

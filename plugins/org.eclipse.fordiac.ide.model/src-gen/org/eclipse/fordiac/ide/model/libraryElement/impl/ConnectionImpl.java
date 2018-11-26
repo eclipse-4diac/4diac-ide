@@ -187,6 +187,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDx1() {
 		return dx1;
 	}
@@ -196,6 +197,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDx1(int newDx1) {
 		int oldDx1 = dx1;
 		dx1 = newDx1;
@@ -208,6 +210,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDx2() {
 		return dx2;
 	}
@@ -217,6 +220,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDx2(int newDx2) {
 		int oldDx2 = dx2;
 		dx2 = newDx2;
@@ -229,6 +233,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDy() {
 		return dy;
 	}
@@ -238,6 +243,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDy(int newDy) {
 		int oldDy = dy;
 		dy = newDy;
@@ -250,6 +256,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isResTypeConnection() {
 		return resTypeConnection;
 	}
@@ -259,6 +266,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setResTypeConnection(boolean newResTypeConnection) {
 		boolean oldResTypeConnection = resTypeConnection;
 		resTypeConnection = newResTypeConnection;
@@ -271,8 +279,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isResourceConnection() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isResourceConnection(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isResourceConnection(this);
 	}
 
 	/**
@@ -280,8 +289,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetwork getFBNetwork() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetwork(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getFBNetwork(this);
 	}
 
 	/**
@@ -289,8 +299,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void checkIfConnectionBroken() {
-		org.eclipse.fordiac.ide.model.Annotations.GEN.checkifConnectionBroken(this);
+		org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);
 	}
 
 	/**
@@ -298,6 +309,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBrokenConnection() {
 		return brokenConnection;
 	}
@@ -307,6 +319,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBrokenConnection(boolean newBrokenConnection) {
 		boolean oldBrokenConnection = brokenConnection;
 		brokenConnection = newBrokenConnection;
@@ -319,6 +332,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IInterfaceElement getSource() {
 		if (source != null && source.eIsProxy()) {
 			InternalEObject oldSource = (InternalEObject)source;
@@ -359,6 +373,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	/** 
 	 * @generated not
 	 */
+	@Override
 	public void setSource(IInterfaceElement newSource) {
 		setSourceGen(newSource);
 		if(null != getSource() && null != getDestination()){
@@ -389,6 +404,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IInterfaceElement getDestination() {
 		if (destination != null && destination.eIsProxy()) {
 			InternalEObject oldDestination = (InternalEObject)destination;
@@ -428,6 +444,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	/** 
 	 * @generated not
 	 */
+	@Override
 	public void setDestination(IInterfaceElement newDestination) {
 		setDestinationGen(newDestination);
 		if(null != getSource() && null != getDestination()){
@@ -459,8 +476,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetworkElement getSourceElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSourceElement(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);
 	}
 
 	/**
@@ -468,8 +486,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetworkElement getDestinationElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDestinationElement(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getDestinationElement(this);
 	}
 
 	/**
@@ -637,16 +656,16 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (dx1: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (dx1: "); //$NON-NLS-1$
 		result.append(dx1);
-		result.append(", dx2: ");
+		result.append(", dx2: "); //$NON-NLS-1$
 		result.append(dx2);
-		result.append(", dy: ");
+		result.append(", dy: "); //$NON-NLS-1$
 		result.append(dy);
-		result.append(", resTypeConnection: ");
+		result.append(", resTypeConnection: "); //$NON-NLS-1$
 		result.append(resTypeConnection);
-		result.append(", brokenConnection: ");
+		result.append(", brokenConnection: "); //$NON-NLS-1$
 		result.append(brokenConnection);
 		result.append(')');
 		return result.toString();

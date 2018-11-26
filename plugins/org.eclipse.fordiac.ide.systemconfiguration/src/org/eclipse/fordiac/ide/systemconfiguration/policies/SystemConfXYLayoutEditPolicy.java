@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012, 2014, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2012, 2014, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,  
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -62,12 +63,6 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	@Override
-	protected Command createAddCommand(final EditPart child,
-			final Object constraint) {
-		return null;
-	}
-
-	@Override
 	protected Command getDeleteDependantCommand(final Request request) {
 		return null;
 	}
@@ -89,13 +84,6 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 				return new SetPositionCommand(temp, request, rec);
 			}
 		}
-		return null;
-	}
-
-	@Override
-	protected Command createChangeConstraintCommand(final EditPart child,
-			final Object constraint) {
-		// not used in this example
 		return null;
 	}
 

@@ -181,9 +181,9 @@ public class ImportUtils {
 
 		Node initialValue = map.getNamedItem(LibraryElementTags.INITIALVALUE_ATTRIBUTE);
 		if (initialValue != null) {
-			VarInitialization varInitialization = DataFactory.eINSTANCE.createVarInitialization();
-			varInitialization.setInitialValue(initialValue.getNodeValue());
-			v.setVarInitialization(varInitialization);
+			Value varInitialization = LibraryElementFactory.eINSTANCE.createValue();
+			varInitialization.setValue(initialValue.getNodeValue());
+			v.setValue(varInitialization);
 		}
 		Node comment = map.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (comment != null) {
@@ -241,7 +241,7 @@ public class ImportUtils {
 	 */
 	public static int parseConnectionValue(String value) {
 		try {
-			return (int) ImportUtils.convertCoordinate(Double.parseDouble(value));
+			return ImportUtils.convertCoordinate(Double.parseDouble(value));
 		} catch (Exception ex) {
 			return 0;
 		}
@@ -291,7 +291,7 @@ public class ImportUtils {
 		if (!out.getParent().exists()) {
 			// create folder if does not exist
 			((IFolder) out.getParent()).create(true, true, null);
-			out.getParent().refreshLocal(IFolder.DEPTH_ZERO, null);
+			out.getParent().refreshLocal(IResource.DEPTH_ZERO, null);
 		}
 
 		Files.copy(in.toPath(), out.getLocation().toFile().toPath(), StandardCopyOption.REPLACE_EXISTING);

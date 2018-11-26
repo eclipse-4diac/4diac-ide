@@ -111,6 +111,7 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -120,6 +121,7 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -132,6 +134,7 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getComment() {
 		return comment;
 	}
@@ -141,6 +144,7 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
 		comment = newComment;
@@ -153,6 +157,7 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
 			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES);
@@ -165,8 +170,9 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
-		org.eclipse.fordiac.ide.model.Annotations.GEN.setAttribute(this, attributeName, type, value, comment);
+		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
 	}
 
 	/**
@@ -174,8 +180,9 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Attribute getAttribute(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAttribute(this, attributeName);
+		return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);
 	}
 
 	/**
@@ -183,8 +190,9 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getAttributeValue(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAttributeValue(this, attributeName);
+		return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);
 	}
 
 	/**
@@ -290,10 +298,10 @@ public class ConfigurableObjectImpl extends I4DIACElementImpl implements Configu
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", comment: ");
+		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
 		result.append(')');
 		return result.toString();

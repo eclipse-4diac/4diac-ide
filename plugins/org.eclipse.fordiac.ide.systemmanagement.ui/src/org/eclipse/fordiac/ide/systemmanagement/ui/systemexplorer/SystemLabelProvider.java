@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -29,9 +30,9 @@ import org.eclipse.ui.navigator.IDescriptionProvider;
 
 public class SystemLabelProvider extends AdapterFactoryLabelProvider implements IDescriptionProvider{
 
-	static private ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
+	private static ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 	
-	ILabelProvider workbenchLabelProvider = WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider();
+	private ILabelProvider workbenchLabelProvider = WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider();
 	
 	
 	public SystemLabelProvider() {
@@ -70,7 +71,7 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 		return super.getText(anElement);
 	}
 
-	private final static ArrayList<AdapterFactory> createFactoryList(){
+	private static List<AdapterFactory> createFactoryList(){
 		ArrayList<AdapterFactory> factories = new ArrayList<AdapterFactory>();
 		factories.add(new LibraryElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());

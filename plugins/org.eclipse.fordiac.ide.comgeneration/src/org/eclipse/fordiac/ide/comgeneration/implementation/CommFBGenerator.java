@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.MediaSpecificGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.MediaSpecificGeneratorFactory;
+import org.eclipse.fordiac.ide.comgeneration.plugin.Activator;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
@@ -37,10 +38,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 public class CommFBGenerator {
-	private static final String GENERATED_ANNOTATION = "generatedComm";
-	private static final String GENERATED_SOURCE_FB_ANNOTATION = "generatedSrcFB";
-	private static final String GENERATED_DESTINATION_FB_ANNOTATION = "generatedDestFB";
-	private static final String GENERATED_FOR_CONNECTION_ANNOTATION = "generatedForConnection";
+	private static final String GENERATED_ANNOTATION = "generatedComm"; //$NON-NLS-1$
+	private static final String GENERATED_SOURCE_FB_ANNOTATION = "generatedSrcFB"; //$NON-NLS-1$
+	private static final String GENERATED_DESTINATION_FB_ANNOTATION = "generatedDestFB"; //$NON-NLS-1$
+	private static final String GENERATED_FOR_CONNECTION_ANNOTATION = "generatedForConnection"; //$NON-NLS-1$
 	private Set<GeneratedFBInfo> generatedFBs;
 	private TransferedData transferedData;
 	private MediaSpecificGeneratorFactory specificGeneratorFactory;
@@ -76,7 +77,7 @@ public class CommFBGenerator {
 		
 	private void generateFBs(CommunicationChannelDestination destination) {
 		if (destination.getSelectedMedia() == null || destination.getSelectedProtocolId() == null) {
-			System.err.println("No media or protocol selected for " + destination);
+			Activator.getDefault().logError("No media or protocol selected for " + destination);
 			return;
 		}
 		int numberDataPorts = 0;
@@ -101,7 +102,7 @@ public class CommFBGenerator {
 		}
 		MediaSpecificGenerator specificGenerator = specificGeneratorFactory.getForProtocolId(destination.getSelectedProtocolId());
 		if (specificGenerator == null) {
-			System.err.println("No generator for protocol " + destination.getSelectedProtocolId() + "!");
+			Activator.getDefault().logError("No generator for protocol " + destination.getSelectedProtocolId() + "!");
 		} else { 
 			GeneratedFBInfo sourceGeneratedFBInfo = generateFB(ChannelEnd.SOURCE, numberDataPorts, withPorts, destination, specificGenerator);
 			GeneratedFBInfo destinationGeneratedFBInfo = generateFB(ChannelEnd.DESTINATION, numberDataPorts, withPorts, destination, specificGenerator);
@@ -168,7 +169,7 @@ public class CommFBGenerator {
 		// TODO annotation
 		int targetDataIndex = 0;
 		for (int i = 0; i < channel.getSourceEvent().getWith().size(); i++) {
-			if (generatedFBInfo.getWithPorts() != null && generatedFBInfo.getWithPorts().contains(i)) {
+			if (generatedFBInfo.getWithPorts() != null && !generatedFBInfo.getWithPorts().contains(i)) {
 				continue;
 			}
 			With with = channel.getSourceEvent().getWith().get(i);
@@ -228,7 +229,7 @@ public class CommFBGenerator {
 		if (sourceEvents.size() == 0) {
 			FB startFB = resource.getFBNetwork().getFBNamed("START");
 			if (startFB == null) {
-				System.err.println("No start FB in resource " + resource.getName() + "!");
+				Activator.getDefault().logError("No start FB in resource " + resource.getName() + "!");
 				return;
 			}
 			sourceEvents.add(startFB.getInterface().getEventOutputs().get(0));

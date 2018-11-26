@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2015 Profactor GbmH, TU Wien 
+ * Copyright (c) 2008, 2009, 2011, 2015 Profactor GbmH, TU Wien, 
+ * 				 2018 Johannes Kepler University 
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,6 +36,7 @@ public class HighlightEditPolicy extends
 	 * org.eclipse.gef.editpolicies.AbstractEditPolicy#eraseTargetFeedback(org
 	 * .eclipse.gef.Request)
 	 */
+	@Override	
 	public void eraseTargetFeedback(Request request) {
 		if (revertColor != null) {
 			setContainerBackground(revertColor);
@@ -47,10 +49,7 @@ public class HighlightEditPolicy extends
 	}
 
 	private IFigure getContainerFigure() {
-
-		IFigure figure = ((GraphicalEditPart) getHost()).getFigure();
-
-		return figure;
+		return ((GraphicalEditPart) getHost()).getFigure();
 	}
 
 	/*
@@ -60,6 +59,7 @@ public class HighlightEditPolicy extends
 	 * org.eclipse.gef.editpolicies.AbstractEditPolicy#getTargetEditPart(org
 	 * .eclipse.gef.Request)
 	 */
+	@Override
 	public EditPart getTargetEditPart(Request request) {
 		return request.getType().equals(RequestConstants.REQ_SELECTION_HOVER) ? getHost()
 				: null;
@@ -83,6 +83,7 @@ public class HighlightEditPolicy extends
 	 * org.eclipse.gef.editpolicies.AbstractEditPolicy#showTargetFeedback(org
 	 * .eclipse.gef.Request)
 	 */
+	@Override
 	public void showTargetFeedback(Request request) {
 		showHighlight();
 	}

@@ -119,6 +119,7 @@ public class ColorImpl extends EObjectImpl implements Color {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getRed() {
 		return red;
 	}
@@ -128,6 +129,7 @@ public class ColorImpl extends EObjectImpl implements Color {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRed(int newRed) {
 		int oldRed = red;
 		red = newRed;
@@ -140,6 +142,7 @@ public class ColorImpl extends EObjectImpl implements Color {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getGreen() {
 		return green;
 	}
@@ -149,6 +152,7 @@ public class ColorImpl extends EObjectImpl implements Color {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGreen(int newGreen) {
 		int oldGreen = green;
 		green = newGreen;
@@ -161,6 +165,7 @@ public class ColorImpl extends EObjectImpl implements Color {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getBlue() {
 		return blue;
 	}
@@ -170,6 +175,7 @@ public class ColorImpl extends EObjectImpl implements Color {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBlue(int newBlue) {
 		int oldBlue = blue;
 		blue = newBlue;
@@ -264,12 +270,12 @@ public class ColorImpl extends EObjectImpl implements Color {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (red: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (red: "); //$NON-NLS-1$
 		result.append(red);
-		result.append(", green: ");
+		result.append(", green: "); //$NON-NLS-1$
 		result.append(green);
-		result.append(", blue: ");
+		result.append(", blue: "); //$NON-NLS-1$
 		result.append(blue);
 		result.append(')');
 		return result.toString();

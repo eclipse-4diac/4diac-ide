@@ -40,7 +40,7 @@ public class SystemPaletteManagement {
 	 */
 	public static void copyToolTypeLibToProject(final IProject project) {		
 		try {
-			copyDirectory(TypeLibrary.getInstance().getToolLibFolder(), project);
+			copyDirectory(TypeLibrary.getToolLibFolder(), project);
 		} catch (Exception e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}

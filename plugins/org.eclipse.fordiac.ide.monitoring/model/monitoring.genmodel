@@ -1,47 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright (c) 2012, 2015 - 2017 Profactor GmbH, fortiss GmbH
-  
- All rights reserved. This program and the accompanying materials
- are made available under the terms of the Eclipse Public License v1.0
- which accompanies this distribution, and is available at
- http://www.eclipse.org/legal/epl-v10.html
- 
- Contributors:
-   Gerhard Ebenhofer, Alois Zoitl
-     - initial API and implementation and/or initial documentation
--->
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="******************************************************************************&#xD;&#xA; * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH&#xD;&#xA; * &#xD;&#xA; * All rights reserved. This program and the accompanying materials&#xD;&#xA; * are made available under the terms of the Eclipse Public License v1.0&#xD;&#xA; * which accompanies this distribution, and is available at&#xD;&#xA; * http://www.eclipse.org/legal/epl-v10.html&#xD;&#xA; *&#xD;&#xA; * Contributors:&#xD;&#xA; *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz&#xD;&#xA; *     - initial API and implementation and/or initial documentation&#xD;&#xA; ******************************************************************************&#xD;&#xA;"
     modelDirectory="/org.eclipse.fordiac.ide.monitoring/src-gen" editDirectory="/org.eclipse.fordiac.ide.monitoring.edit/src-gen"
     editorDirectory="/org.eclipse.fordiac.ide.monitoring.editor/src-gen" modelPluginID="org.eclipse.fordiac.ide.monitoring"
-    modelName="Monitoring" importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0"
-    copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.monitoring.edit"
-    editorPluginID="org.eclipse.fordiac.ide.monitoring.editor" usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data">
+    modelName="monitoring" nonNLSMarkers="true" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="8.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.monitoring.edit"
+    editorPluginID="org.eclipse.fordiac.ide.monitoring.editor" usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.genmodel#//monitoringbase"
+    importOrganizing="true" cleanup="true">
   <foreignModel>monitoring.ecore</foreignModel>
   <genPackages prefix="Monitoring" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="monitoring.ecore#/">
-    <genClasses image="false" ecoreClass="monitoring.ecore#//MonitoringBaseElement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoring.ecore#//MonitoringBaseElement/port"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringBaseElement/offline"/>
-      <genOperations ecoreOperation="monitoring.ecore#//MonitoringBaseElement/getPortString"/>
-      <genOperations ecoreOperation="monitoring.ecore#//MonitoringBaseElement/getResourceString"/>
-      <genOperations ecoreOperation="monitoring.ecore#//MonitoringBaseElement/getFBString"/>
-      <genOperations ecoreOperation="monitoring.ecore#//MonitoringBaseElement/getQualifiedString"/>
-    </genClasses>
     <genClasses ecoreClass="monitoring.ecore#//MonitoringElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/force"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/forceValue.1"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/breakpoint"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/breakpointActive"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/breakpointCondition"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/currentValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/sec"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//MonitoringElement/usec"/>
-      <genOperations ecoreOperation="monitoring.ecore#//MonitoringElement/updateValue">
-        <genParameters ecoreParameter="monitoring.ecore#//MonitoringElement/updateValue/value"/>
-        <genParameters ecoreParameter="monitoring.ecore#//MonitoringElement/updateValue/refresh"/>
-      </genOperations>
       <genOperations ecoreOperation="monitoring.ecore#//MonitoringElement/forceValue">
         <genParameters ecoreParameter="monitoring.ecore#//MonitoringElement/forceValue/value"/>
       </genOperations>
@@ -50,23 +24,11 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference monitoring.ecore#//MonitoringAdapterElement/elements"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoring.ecore#//MonitoringAdapterElement/monitoredAdapterFB"/>
     </genClasses>
-    <genClasses ecoreClass="monitoring.ecore#//Breakpoints">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference monitoring.ecore#//Breakpoints/breakpoints"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="monitoring.ecore#//IEditPartCreator"/>
-    <genClasses ecoreClass="monitoring.ecore#//PortElement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoring.ecore#//PortElement/fb"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoring.ecore#//PortElement/interfaceElement"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoring.ecore#//PortElement/resource"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoring.ecore#//PortElement/device"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoring.ecore#//PortElement/system"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoring.ecore#//PortElement/hierarchy"/>
-      <genOperations ecoreOperation="monitoring.ecore#//PortElement/getPortString"/>
-    </genClasses>
     <genClasses ecoreClass="monitoring.ecore#//AdapterPortElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference monitoring.ecore#//AdapterPortElement/ports"/>
     </genClasses>
     <genClasses ecoreClass="monitoring.ecore#//AdapterMonitoringEvent"/>
     <genClasses ecoreClass="monitoring.ecore#//AdapterMonitoringVarDeclaration"/>
+    <genClasses image="false" ecoreClass="monitoring.ecore#//IEditPartCreator"/>
   </genPackages>
 </genmodel:GenModel>

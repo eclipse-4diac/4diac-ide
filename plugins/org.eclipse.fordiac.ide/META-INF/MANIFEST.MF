@@ -5,9 +5,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.util
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-Name: Main (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.eclipse.fordiac.ide

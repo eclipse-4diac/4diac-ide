@@ -107,6 +107,7 @@ public class ArrayTypeImpl extends DataTypeImpl implements ArrayType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Subrange> getSubranges() {
 		if (subranges == null) {
 			subranges = new EObjectContainmentEList<Subrange>(Subrange.class, this, DataPackage.ARRAY_TYPE__SUBRANGES);
@@ -119,6 +120,7 @@ public class ArrayTypeImpl extends DataTypeImpl implements ArrayType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getInitialValues() {
 		return initialValues;
 	}
@@ -128,6 +130,7 @@ public class ArrayTypeImpl extends DataTypeImpl implements ArrayType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInitialValues(String newInitialValues) {
 		String oldInitialValues = initialValues;
 		initialValues = newInitialValues;
@@ -140,6 +143,7 @@ public class ArrayTypeImpl extends DataTypeImpl implements ArrayType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DataType getBaseType() {
 		if (baseType != null && baseType.eIsProxy()) {
 			InternalEObject oldBaseType = (InternalEObject)baseType;
@@ -166,6 +170,7 @@ public class ArrayTypeImpl extends DataTypeImpl implements ArrayType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseType(DataType newBaseType) {
 		DataType oldBaseType = baseType;
 		baseType = newBaseType;
@@ -277,8 +282,8 @@ public class ArrayTypeImpl extends DataTypeImpl implements ArrayType {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (initialValues: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (initialValues: "); //$NON-NLS-1$
 		result.append(initialValues);
 		result.append(')');
 		return result.toString();

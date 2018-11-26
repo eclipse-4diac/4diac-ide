@@ -13,27 +13,32 @@
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 
-class FBTypeComposedAdapterFactory {
+final class FBTypeComposedAdapterFactory {
 	
 	private static ComposedAdapterFactory fbTypeCompAdapterFactory;
 	
-	final static ComposedAdapterFactory getAdapterFactory(){
+	static ComposedAdapterFactory getAdapterFactory(){
 		if (fbTypeCompAdapterFactory == null){
 			fbTypeCompAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 		}
 		return fbTypeCompAdapterFactory;
 	}
 	
-	private final static ArrayList<AdapterFactory> createFactoryList(){
+	private static List<AdapterFactory> createFactoryList(){
 		ArrayList<AdapterFactory> factories = new ArrayList<AdapterFactory>();
 		factories.add(new LibraryElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());
 		return factories;
+	}
+	
+	private FBTypeComposedAdapterFactory() {
+		throw new UnsupportedOperationException("Utility class FBTypecomposedAdapterFactory should not be insantiated!");
 	}
 }

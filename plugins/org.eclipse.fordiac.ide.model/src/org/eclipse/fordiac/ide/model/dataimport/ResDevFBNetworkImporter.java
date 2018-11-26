@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 class ResDevFBNetworkImporter extends SubAppNetworkImporter {
 	
-	final EList<VarDeclaration> varInputs;
+	private final EList<VarDeclaration> varInputs;
 	
 	ResDevFBNetworkImporter(Palette palette, EList<VarDeclaration> varInputs){
 		super(palette);
@@ -30,6 +30,7 @@ class ResDevFBNetworkImporter extends SubAppNetworkImporter {
 		this.varInputs = varInputs;
 	}
 	
+	@Override
 	protected IInterfaceElement getContainingInterfaceElement(String interfaceElement) {
 		for (VarDeclaration var : varInputs) {
 			if(var.getName().equals(interfaceElement)){

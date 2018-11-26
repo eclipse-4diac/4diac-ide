@@ -69,6 +69,27 @@
                image="fordiacimage://ICON_Data"
                label="Data">
          </propertyTab>
+         <propertyTab
+               afterTab="property.tab.fbtypeinfo"
+               category="fb"
+               id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditEvents"
+               indented="true"
+               label="Edit Events">
+         </propertyTab>
+         <propertyTab
+               afterTab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData"
+               category="fb"
+               id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditAdapters"
+               indented="true"
+               label="Edit Adapters">
+         </propertyTab>
+         <propertyTab
+               afterTab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditEvents"
+               category="fb"
+               id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData"
+               indented="true"
+               label="Edit Data">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -132,6 +153,39 @@
             </input>
             <input
                   type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentEditPart">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceAdapterSection"
+               id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditAdapters"
+               tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditAdapters">
+            <input
+                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart">
+            </input>
+            <input
+                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeRootEditPart">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceEventSection"
+               id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditEvents"
+               tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditEvents">
+            <input
+                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart">
+            </input>
+            <input
+                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeRootEditPart">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceDataSection"
+               id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditData"
+               tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData">
+            <input
+                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart">
+            </input>
+            <input
+                  type="org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeRootEditPart">
             </input>
          </propertySection>
       </propertySections>

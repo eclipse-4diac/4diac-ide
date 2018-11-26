@@ -98,6 +98,7 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getX() {
 		return x;
 	}
@@ -107,6 +108,7 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setX(int newX) {
 		int oldX = x;
 		x = newX;
@@ -119,6 +121,7 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getY() {
 		return y;
 	}
@@ -128,6 +131,7 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setY(int newY) {
 		int oldY = y;
 		y = newY;
@@ -212,10 +216,10 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (x: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (x: "); //$NON-NLS-1$
 		result.append(x);
-		result.append(", y: ");
+		result.append(", y: "); //$NON-NLS-1$
 		result.append(y);
 		result.append(')');
 		return result.toString();

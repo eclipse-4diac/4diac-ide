@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 fortiss GmbH
+ * Copyright (c) 2016 - 2018 fortiss GmbH, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,36 +7,37 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
-import org.eclipse.fordiac.ide.monitoring.communication.TCPCommunicationObject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-class SystemMonitoringData {
+public class SystemMonitoringData {
 	
 	private final AutomationSystem system;
 	
-	private final Map<IInterfaceElement, MonitoringBaseElement> monitoredElements = new Hashtable<>();
-	private final Map<String, MonitoringBaseElement> monitoredElementsPerPortStrings = new Hashtable<>();
+	private final Map<IInterfaceElement, MonitoringBaseElement> monitoredElements = new HashMap<>();
+	private final Map<String, MonitoringBaseElement> monitoredElementsPerPortStrings = new HashMap<>();
 
-	//TODO of java has a something like a c++ std::tuple it would be good to use here
-	private final Hashtable<Device, TCPCommunicationObject> openCommunication = new Hashtable<>();
-	private final Hashtable<Device, DevicePolling> pollingThreads = new Hashtable<>();
+	private final Map<Device, DeviceMonitoringHandler> deviceHandlers = new HashMap<>();
 	
 	private boolean monitoringEnabled = false;
 	
@@ -52,25 +53,21 @@ class SystemMonitoringData {
 	Collection<MonitoringBaseElement> getMonitoredElements(){ 
 		return monitoredElements.values();
 	}
-
-	TCPCommunicationObject getCommObject(Device dev){
-		return openCommunication.get(dev);
+	
+	DeviceMonitoringHandler getDevMonitoringHandler(Device dev){
+		return deviceHandlers.get(dev);
 	}
 	
-	void addCommObject(Device dev, TCPCommunicationObject comObj){
-		openCommunication.put(dev, comObj);
+	void addDevMonitoringHandler(Device dev, DeviceMonitoringHandler handler){
+		deviceHandlers.put(dev, handler);
 	}
 	
-	DevicePolling getPollingThread(Device dev){
-		return pollingThreads.get(dev);
+	Map<Device, DeviceMonitoringHandler>getDevMonitoringHandlers(){
+		return deviceHandlers;
 	}
 	
-	void addPollingThread(Device dev, DevicePolling thread){
-		pollingThreads.put(dev, thread);
-	}
-	
-	void removePollingThread(Device dev){
-		pollingThreads.remove(dev);
+	void removeDeviceMonitoringHandler(Device dev){
+		deviceHandlers.remove(dev);
 	}
 	
 	public void enableSystem() {
@@ -86,6 +83,12 @@ class SystemMonitoringData {
 			MessageDialog.openInformation(shell, "Enable Monitoring Aborted",
 					"Enable Monitoring Aborted");
 		}
+	}
+	
+	public void enableSystemSynch(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		EnableSystemMonitoringRunnable enable = new EnableSystemMonitoringRunnable(this);
+		enable.run(monitor);
+		monitoringEnabled = true;
 	}
 
 
@@ -104,6 +107,12 @@ class SystemMonitoringData {
 		}
 		
 	}
+	
+	public void disableSystemSynch(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		DisableSystemMonitoringRunnable disable = new DisableSystemMonitoringRunnable(this);
+		monitoringEnabled = false;
+		disable.run(monitor);
+	}
 
 
 	public MonitoringBaseElement getMonitoringElementByPortString(String portString) {
@@ -112,21 +121,37 @@ class SystemMonitoringData {
 
 
 	public void sendRemoveWatch(MonitoringBaseElement element) {
-		TCPCommunicationObject commObject = getCommObject(element.getPort().getDevice());
-		if(null != commObject){
-			commObject.removeWatch(element);
+		IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(element.getPort().getDevice());
+		if(null != devMgmInteractor && devMgmInteractor.isConnected()){
+			try {
+				devMgmInteractor.removeWatch(element);
+			} catch (DeploymentException e) {
+				// TODO think if error should be shown to the user
+				Activator.getDefault().logError("Could not remove watch for " + element.getQualifiedString(), e);
+			}
 		}		
 	}
 
 	public void sendAddWatch(MonitoringBaseElement element) {
-		TCPCommunicationObject commObject = getCommObject(element.getPort().getDevice());
-		if(null != commObject){
-			commObject.addWatch(element);
+		IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(element.getPort().getDevice());
+		if(null != devMgmInteractor && devMgmInteractor.isConnected()){
+			try {
+				devMgmInteractor.addWatch(element);
+			} catch (DeploymentException e) {
+				// TODO think if error should be shown to the user
+				Activator.getDefault().logError("Could not add watch for " + element.getQualifiedString(), e);
+			}
 		}
 	}
 
 
-	public boolean monitoringForSystemEnabled() {
+	public IDeviceManagementInteractor getDevMgmInteractor(Device device) {
+		DeviceMonitoringHandler handler = getDevMonitoringHandler(device);
+		return (null != handler) ? handler.getDevMgmInteractor() : null;
+	}
+
+
+	public boolean isMonitoringForSystemEnabled() {
 		return monitoringEnabled;
 	}
 

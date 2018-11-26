@@ -13,9 +13,11 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies;
 
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ActionMoveCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -28,101 +30,76 @@ import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 
-/**
- * The Class ECStateLayoutEditPolicy.
- */
-public class ECStateLayoutEditPolicy extends XYLayoutEditPolicy implements
-		EditPolicy {
-	
+public class ECStateLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
-	protected Command getResizeChildrenCommand(ChangeBoundsRequest request) {
-		for (Object editPart : request.getEditParts()) {
-			if((editPart instanceof ECActionAlgorithmEditPart) || 
-					(editPart instanceof ECActionOutputEventEditPart)){
-				//actions should not be moved or resized
-				return null;
-			}
-		}
-		
-		
-		return super.getResizeChildrenCommand(request);
-	}
-
-
 	public Command getCommand(Request request) {
 		Object type = request.getType();
-
-		if (REQ_ALIGN.equals(type))
+		if (REQ_ALIGN.equals(type) && request instanceof AlignmentRequest) {
 			return getAlignCommand((AlignmentRequest) request);
-
-		//return null;
+		}
 		return super.getCommand(request);
 	}
 
 	protected Command getAlignCommand(AlignmentRequest request) {
-		AlignmentRequest req = new AlignmentRequest(
-				REQ_ALIGN_CHILDREN);
+		AlignmentRequest req = new AlignmentRequest(REQ_ALIGN_CHILDREN);
 		req.setEditParts(getHost());
 		req.setAlignment(request.getAlignment());
-		req.setAlignmentRectangle(request
-				.getAlignmentRectangle());
+		req.setAlignmentRectangle(request.getAlignmentRectangle());
 		return getHost().getParent().getCommand(req);
 	}
+
+	@Override
+	protected Command getCreateCommand(final CreateRequest request) {
+		if (request.getNewObjectType().equals(ECAction.class) && getHost().getModel() instanceof ECState) {
+			ECState state = (ECState) getHost().getModel();
+			if ((null != state) && (!state.isStartState())) {
+				// only create an action when the target is not the initial state
+				return new CreateECActionCommand((ECAction) request.getNewObject(), state);
+			}
+		}
+		return null;
+	}
+
 
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
 		ModifiedNonResizeableEditPolicy editPolicy = new ModifiedNonResizeableEditPolicy(0, new Insets(0)){
 			@Override
-			protected Command getMoveCommand(ChangeBoundsRequest request) {	
-				//algorithms and states should not be movable relative to the state
-				return null;
-			}			
-		};
-		
-		editPolicy.setDragAllowed(false);
-		return editPolicy;
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seeorg.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy#
-	 * createChangeConstraintCommand(org.eclipse.gef.EditPart, java.lang.Object)
-	 */
-	@Override
-	protected Command createChangeConstraintCommand(final EditPart child,
-			final Object constraint) {
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.LayoutEditPolicy#getCreateCommand(org.eclipse
-	 * .gef.requests.CreateRequest)
-	 */
-	@Override
-	protected Command getCreateCommand(final CreateRequest request) {
-		if (request.getNewObjectType().equals(ECAction.class)
-				&& getHost().getModel() instanceof ECState) {
-			ECState state = (ECState) getHost().getModel();
-			if((null != state) && (!state.isStartState())){
-				//only create an action when the target is not the initial state
-				return new CreateECActionCommand((ECAction) request.getNewObject(), state);
+			protected Command getMoveCommand(ChangeBoundsRequest request) {
+				return getActionMoveCommand(request);
 			}
-		}
-
-		return null;
+		};
+		editPolicy.setDragAllowed(true);
+		return editPolicy;
 	}
-
+	
 	@Override
 	protected Command getAddCommand(Request generic) {
-		// currently we don't allow to add any children
+		//move actions between states
+		if(generic instanceof ChangeBoundsRequest) {
+			return getActionMoveCommand((ChangeBoundsRequest) generic);
+		}
 		return null;
 	}
-	
-	
 
+	private Command getActionMoveCommand(ChangeBoundsRequest request) {
+		Command cmd = null;
+		ECState targetState = null;
+		ECAction action = null;
+		int index = -1; 
+		if (getHost() instanceof ECStateEditPart) {
+			targetState = ((ECStateEditPart)getHost()).getCastedModel();
+			index = targetState.getECAction().size();
+			if(!((ChangeBoundsRequest)request).getEditParts().isEmpty()) {
+				if(((ChangeBoundsRequest)request).getEditParts().get(0) instanceof ECActionAlgorithmEditPart) {
+					action = ((ECActionAlgorithmEditPart)((ChangeBoundsRequest)request).getEditParts().get(0)).getAction();
+				}
+				if(((ChangeBoundsRequest)request).getEditParts().get(0) instanceof ECActionOutputEventEditPart) {
+					action = ((ECActionOutputEventEditPart)((ChangeBoundsRequest)request).getEditParts().get(0)).getAction();
+				}
+			}
+			cmd = new ActionMoveCommand(action, targetState, index);
+		}
+		return cmd;
+	}
 }

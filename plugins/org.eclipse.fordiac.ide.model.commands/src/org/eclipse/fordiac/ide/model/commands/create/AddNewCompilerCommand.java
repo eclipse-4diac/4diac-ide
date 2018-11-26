@@ -40,7 +40,7 @@ public class AddNewCompilerCommand extends ChangeComplierInfoCommand {
 	public void execute() {
 		compiler = LibraryElementFactory.eINSTANCE.createCompiler();
 		compiler.setLanguage(Language.OTHER);
-		compiler.setVersion("1.0");
+		compiler.setVersion("1.0"); //$NON-NLS-1$
 		compiler.setVendor("Unknown");
 		compiler.setProduct("Unknown");
 		

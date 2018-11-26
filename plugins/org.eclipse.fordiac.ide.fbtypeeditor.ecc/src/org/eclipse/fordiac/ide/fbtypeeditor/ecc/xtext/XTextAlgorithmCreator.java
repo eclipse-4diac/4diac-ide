@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditorCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.resource.XtextResource;
@@ -36,7 +36,7 @@ import com.google.inject.name.Named;
 @SuppressWarnings("restriction")
 public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 	
-	private final static String LINKING_FILE_EXTENSION = "xtextfbt";   //$NON-NLS-1$
+	private static final String LINKING_FILE_EXTENSION = "xtextfbt";   //$NON-NLS-1$
 	
 	@Inject
 	protected EmbeddedEditorFactory editorFactory;
@@ -48,11 +48,9 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 	@Named(Constants.FILE_EXTENSIONS)
 	public String fileExtension;
 		
-	public XTextAlgorithmCreator() {
-	}
 
 	@Override
-	public IAlgorithmEditor createAlgorithmEditor(Composite parent, final BasicFBType fbType) {
+	public IAlgorithmEditor createAlgorithmEditor(Composite parent, final BaseFBType fbType) {
 		IEditedResourceProvider resourceProvider = new IEditedResourceProvider() {
 
 			@Override
@@ -68,8 +66,7 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 					createAdapterResource(resourceSet, copier, adapter);
 				}
 				copier.copyReferences();
-				Resource resource = resourceSet.createResource(computeUnusedUri(resourceSet, fileExtension));
-				return (XtextResource) resource;
+				return (XtextResource) resourceSet.createResource(computeUnusedUri(resourceSet, fileExtension));
 			}
 
 			private void createAdapterResource(XtextResourceSet resourceSet, EcoreUtil.Copier copier,
@@ -101,7 +98,7 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 	 * 
 	 * Should be overridden if you need a special XTextAlogrithm which performs additional setups for your DSL.
 	 */
-	protected XTextAlgorithmEditor createXTextAlgorithmEditor(BasicFBType fbType,
+	protected XTextAlgorithmEditor createXTextAlgorithmEditor(BaseFBType fbType,
 			EmbeddedEditor editor) {
 		return new XTextAlgorithmEditor(editor, fbType);
 	}

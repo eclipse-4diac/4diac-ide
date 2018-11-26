@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.ui.preferences;
 
-import java.util.Hashtable;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.export.utils.CompareEditorOpenerUtil;
@@ -55,7 +55,7 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 		compare.setText("Compare Editor for Merging");
 		GridLayout routerLayout = new GridLayout(2, false);
 
-		Hashtable<String, ICompareEditorOpener> compareEditorOpeners = CompareEditorOpenerUtil.getCompareEditorOpeners();
+		Map<String, ICompareEditorOpener> compareEditorOpeners = CompareEditorOpenerUtil.getCompareEditorOpeners();
 
 		
 		Set<String> keySet = compareEditorOpeners.keySet();
@@ -88,7 +88,9 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 	 * @see
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
+		//Currently nothing to do here
 	}
 
 }

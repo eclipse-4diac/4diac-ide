@@ -51,6 +51,7 @@ public class FortePreferencePage
 	 * of preferences. Each field editor knows how to save and
 	 * restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 		addField(new FileFieldEditor(PreferenceConstants.P_PATH, 
 				"&FORTE location (e.g. forte.exe):", getFieldEditorParent()));
@@ -59,6 +60,7 @@ public class FortePreferencePage
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 	}
 	

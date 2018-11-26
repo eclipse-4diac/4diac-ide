@@ -12,33 +12,50 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import java.util.ArrayList;
-
+import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
+import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class EditInterfaceDataSection extends AbstractEditInterfaceSection {
-	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);
-		inputsViewer.setContentProvider(new InterfaceContentProvider(true, InterfaceContentProviderType.DATA));
-		outputsViewer.setContentProvider(new InterfaceContentProvider(false, InterfaceContentProviderType.DATA));
-		setCellEditors();
-	}
-
+public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
-	protected CreateSubAppInterfaceElementCommand newCommand(boolean isInput) {
+	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
 		return new CreateSubAppInterfaceElementCommand(DataTypeLibrary.getInstance().getType(fillTypeCombo()[2]), getType().getInterface(), isInput, -1);
 	}
 
 	@Override
-	protected String[] fillTypeCombo() {
-		ArrayList<String> list = new ArrayList<String>();
-		for(DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()){
-			list.add(dataType.getName());
+	protected INamedElement getInputType(Object input) {
+		if(input instanceof SubAppForFBNetworkEditPart){
+			return ((SubAppForFBNetworkEditPart) input).getModel();
 		}
-		return list.toArray(new String[0]);
+		if(input instanceof UISubAppNetworkEditPart){
+			return ((UISubAppNetworkEditPart)input).getSubApp();
+		}
+		return null;
+	}
+
+	@Override
+	protected DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection) {
+		return new DeleteSubAppInterfaceElementCommand(selection);
+	}
+	
+	@Override
+	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput,
+			boolean moveUp) {
+		return new ChangeSubAppInterfaceOrderCommand(selection, isInput, moveUp);
+	}
+	
+	@Override
+	protected SubApp getType() {
+		return (SubApp)type;
 	}
 }

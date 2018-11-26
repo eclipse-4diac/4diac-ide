@@ -55,7 +55,7 @@ public class SystemConfigurationEditorInputFactory extends AbstractUntypedEditor
      * @param input the application editor input
      */
     public static void saveState(IMemento memento, SystemConfigurationEditorInput input) {
-    	saveAutomationSystem(memento, (AutomationSystem)input.getSystemConfiguration().eContainer());
+    	saveAutomationSystem(memento, input.getContent().getAutomationSystem());
     }
 
 }

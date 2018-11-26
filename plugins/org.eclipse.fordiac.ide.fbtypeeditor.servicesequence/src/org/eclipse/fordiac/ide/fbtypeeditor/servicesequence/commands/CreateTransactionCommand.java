@@ -37,7 +37,7 @@ public class CreateTransactionCommand extends Command {
 	public void execute() {
 		transaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 		InputPrimitive primitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
-		primitive.setEvent("INIT");
+		primitive.setEvent("INIT"); //$NON-NLS-1$
 		primitive.setInterface(((Service)parent.eContainer()).getLeftInterface());
 		transaction.setInputPrimitive(primitive);
 		parent.getServiceTransaction().add(transaction);

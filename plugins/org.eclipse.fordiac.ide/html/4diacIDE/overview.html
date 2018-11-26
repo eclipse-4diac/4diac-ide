@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <!--
  Copyright (c) 2010 - 2015 Profactor GmbH, TU Wien ACIN, fortiss GmbH
-  
+               2018 Andrea Zoitl
+                 
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
  which accompanies this distribution, and is available at
@@ -11,19 +12,22 @@
    Gerhard Ebenhofer, Thomas Strasser, Monika Wenger, Alois Zoitl, 
    Gerd Kainz, Carolyn Oates, Jose Cabral 
      - initial API and implementation and/or initial documentation
+   Andrea Zoitl - cleaning up tutorials for 1.10 release
 -->
 
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Step 0 - 4DIAC-IDE - Overview</title>
+	<title>Step 0 - 4DIAC IDE - Overview</title>
 	<link rel="stylesheet" type="text/css" href="../help.css">
 </head>
 <body>
 
-<h1 id="topOfPage">Step 0 - 4DIAC Overview</h1>
+<!------------------------------------------------------------------------------------------------>
 
-<p>This page is part of a guide that gives a walkthrough over the major 4DIAC features.</p>
+<h1 id="topOfPage">Step 0 - 4diac IDE Overview</h1>
+
+<p>This page is part of a guide that gives a walkthrough over the major 4diac IDE features.</p>
 
     <ol start="0">
       <li>Overview (YOU ARE HERE!)</li>
@@ -35,10 +39,32 @@
       <li><a href="./advancedFeatures.html">Advanced Features [optional]</a></li>
     </ol>
 
-<p>In this Step 0, it's presented an overview about Elements, Perspectives and Properties of 4DIAC that you need to know for a smoother use of it.</p>
+<p>In this Step 0, it's presented an overview about Elements, Perspectives and Properties of 4diac IDE that you need to know for a smoother use of it.</p>
 
-<h2 id="elements">4DIAC Elements</h2>
-<p>Since 4DIAC is compliant to the IEC 61499 standard, 4DIAC-IDE provides the standard's elements for work (you can check <a href="../before4DIAC/iec61499.html#IEC61499" target="_blank">here</a> to rememeber the elements):</p>
+<!------------------------------------------------------------------------------------------------>
+
+<h2 id="startingUp">Starting up 4diac IDE</h2>
+
+<p>To start the tutorial open 4diac IDE. 
+You will be prompted to select or create your workspace. 
+For this tutorial we name our workspace "Tutorial".
+A workspace is a folder on your computer to store one or more 4diac projects.</p>
+
+<p><img src="./img/Step0/workspaceSelection.png" alt="workspace selection"/></p>
+
+<p>After you created a workspace 4diac IDE presents its welcome screen. 
+Here you can get an overview about 4diac, create a new project, import an existing project or you can read more about the chapters of the tutorial.</p>
+
+<p><img src="./img/Step0/welcomeScreen.png" alt="welcome screen of 4diac IDE"/></p>
+
+<p>At first it's best to unselect the checkbox so you can start up 4diac faster the next time.</p>
+
+<p>Next you click at the <i>workbench</i> button. This brings you to the main screen of 4diac IDE.</p>
+
+<!------------------------------------------------------------------------------------------------>
+
+<h2 id="elements">4diac IDE Elements</h2>
+<p>Since 4diac is compliant to the IEC 61499 standard, 4diac IDE provides the standard's elements for work (you can check <a href="../before4DIAC/iec61499.html#IEC61499" target="_blank">here</a> to rememeber the elements):</p>
 <ul>
 	<li><img src="./img/system.png" alt="System" class="inlineImg" /> <span class="inlineTitle">System</span>: contains the <span class="view4diac">System Configuration</span> and its corresponding <span class="element61499">Applications</span></li>
 	<li><img src="./img/app16.png" alt="Application" class="inlineImg"/> <span class="inlineTitle">Application</span>: contains the desired application in terms of a FB network</li>
@@ -53,43 +79,37 @@
 	<li><img src="./img/adapter.png" alt="Adapter" class="inlineImg"/> <span class="element61499">Adapter</span>: combines a set of input/output events and data to one connection, at the one hand it simplifies the IEC 61499 <span class="element61499">Application</span> and on the other hand it better decouples <span class="element61499">Application</span> parts providing an interface concept allowing to adopt the polymorphic concept of object oriented programming</li>
 </ul>
 
-<h2 id="perspectives">4DIAC Perspectives</h2>
+<!------------------------------------------------------------------------------------------------>
 
-<p>The 4DIAC-IDE provides four perspectives, which can be added by the <img src="./img/perspective/new_persp.gif" alt="add perspective" class="inlineImg"/> button in the upper right corner:</p>
+<h2 id="perspectives">4diac IDE Perspectives</h2>
+
+<p>The 4diac IDE provides three perspectives, which can be added by the <img src="./img/perspective/new_persp.gif" alt="add perspective" class="inlineImg"/> button in the upper right corner:</p>
+<img src="./img/Step0/perspectiveSelection.png" alt="perspective selection"/>
 <ol>
-	<li><span class="inlineTitle">System </span>perspective is used to configure everything regarding your system. It includes:
+	<li><span class="inlineTitle"> <img src="./img/system.png" alt="System Perspective Button" class="inlineImg"/> System </span>perspective is used to configure everything regarding your system. It includes:
 		<ul>
 		<li><span class="inlineTitle">System Manager</span> which allows to create and edit your System and Applications. 
 		<li><span class="inlineTitle">System Configuration</span>, which allows to manage <span class="element61499">Devices</span>, <span class="element61499">Resources</span> and <span class="element61499">Segments</span> according to IEC 61499. The <span class="element61499">Resources</span> are used for <span class="element61499">Application</span> mapping and insertion of communication function blocks to other <span class="element61499">Devices</span> and <span class="element61499">Resources</span>.
 		</li>
-		<li><span class="inlineTitle">Applications</span> according to the IEC 61499 <span class="element61499">Application</span> Model and found under 4DIAC-IDE System Model</li>
+		<li><span class="inlineTitle">Applications</span> according to the IEC 61499 <span class="element61499">Application</span> Model and found under 4diac IDE System Model</li>
 		</ul>
-	<li><span class="inlineTitle">Type Management </span> perspective, which allows to manage the available function block types</li>
-	<li><span class="inlineTitle">Deployment </span> perspective where the <span class="element61499">Applications</span> are launched and tested</li>
-	<li><span class="inlineTitle">4diac Debug </span> perspective where <span class="element61499">Applications</span> can be monitored</li>
+	<li><span class="inlineTitle"> <img src="./img/perspective/deploymentButton.gif" alt="Deployment Perspective Button" class="inlineImg"/> Deployment </span> perspective where the <span class="element61499">Applications</span> are launched and tested</li>
+	<li><span class="inlineTitle"> <img src="./img/perspective/debugButton.gif" alt="Debug Perspective Button" class="inlineImg"/> 4diac Debug </span> perspective where <span class="element61499">Applications</span> can be monitored</li>
 </ol>
+
+<!--------------->
 
 <h3 id="systemPerspective">System Perspective</h3>
 <p>In the right upper corner the perspective can be changed. The System perspective is reached by the <img src="./img/system.png" alt="System Perspective Button" class="inlineImg"/> button. The System perspective is divided into the following five areas.</p>
 <ol>
 	<li><span class="inlineTitle">System Management area</span>, which is used for the management of IEC 61499 compliant applications and to configure <span class="element61499">Devices</span> and <span class="element61499">Resources</span>. In a tab next to it, there's the <span class="IDEelement">Type Navigator</span>, which lists the available function block library for every <span class="element61499">System</span> as well as the default library.</li> 
 	<li><span class="inlineTitle">Editor area</span>, which contains the <span class="IDEelement">Application editor</span> for modeling of control applications, the <span class="IDEelement">System editor</span> for modeling the <span class="element61499">System</span> configuration, and the <span class="IDEelement">Device</span> and <span class="IDEelement">Resource editor</span> for modeling the <span class="element61499">Resource</span> configuration</li>
-	<li><span class="inlineTitle">Palette</span>: shows the elements that you can add to the editor.</li>
 	<li><span class="inlineTitle">Outline</span> of <span class="element61499">Applications</span>, <span class="element61499">System</span> configurations, <span class="element61499">Devices</span>, and <span class="element61499">Resources</span></li>
 	<li><span class="inlineTitle">Property view</span>, which allows the parameterization of function block instances, <span class="element61499">Devices</span>, and <span class="element61499">Resources</span></li>
 </ol>
 <p><img src="./img/perspective/systemPerspective.png" alt="System Perspective Button"/></p>
 
-
-<h3 id="typeManagementPerspective">Type Management Perspective</h3>
-<p>In the right upper corner the perspective can be changed. The <span class="view4diac">Type Management</span> perspective is reached by the <img src="./img/perspective/typeButton.png" alt="Type Management Perspective Button" class="inlineImg"/> button. The <span class="view4diac">Type Management</span> perspective is divided into the following three areas.</p>
-<ul>
-	<li>Type Navigator for the management of different type libraries, tool and project specific ones as well as the management of IEC 61499 element types</li> 
-	<li>Type Editor for the modification of IEC 61499 element types, like Basic, Composite, and
-Service Interface Function Block Types</li>
-	<li>Outline of FB types</li>
-</ul>
-<p><img src="./img/perspective/typeManagementPerspective.png" alt="Type Management Perspective Button"/></p>
+<!--------------->
 
 <h3 id="deploymentPerspective">Deployment Perspective</h3>
 <p>In the right upper corner the perspective can be changed. The <span class="view4diac">Deployment perspective</span> is reached by the <img src="./img/perspective/deploymentButton.gif" alt="Deployment Perspective Button" class="inlineImg"/> button. The <span class="view4diac">Deployment Management</span> perspective is divided into the following four areas.</p>
@@ -101,26 +121,34 @@ Service Interface Function Block Types</li>
 </ol>
 <p><img src="./img/perspective/deploymentPerspective.png" alt="Deployment Perspective Button"/></p>
 
+<!--------------->
+
 <h3 id="debugPerspective">Debug Perspective</h3>
 <p>In the right upper corner the perspective can be changed. The <span class="view4diac">Debug perspective</span> is reached by the <img src="./img/perspective/debugButton.gif" alt="Debug Perspective Button" class="inlineImg"/> button. The <span class="view4diac">Debug perspective</span> is divided into the following five areas.</p>
 <ol>
-	<li>System selection where Systems can be marked for monitoring with right click and choosing <span class="menu4diac">Monitor System</span></li> 
-	<li>Breakpoints view which lists the defined breakpoints and allows their activation and deactivation, this feature is currently not supported</li>
+	<li>System selection where Systems can be marked for monitoring with right click and choosing <span class="menu4diac">Monitor System</span></li>
+	<li>Application editor which shows your <span class="element61499">Application</span> and highlights the variables marked for watching</li> 
 	<li>Watches view which allow to watch the actual values of the variables you marked for watching</li>
-	<li>Application editor which shows your <span class="element61499">Application</span> and highlights the variables marked for watching</li>
 	<li>Outline</li>
 </ol>
 <p><img src="./img/perspective/debugPerspective.png" alt="Debug Perspective Button"/></p>
 
-<h2 id="properties">4diac-IDE Properties</h2>
+<!------------------------------------------------------------------------------------------------>
 
-<h3 id="preferences">Preferences</h3>
+<h2 id="preferences">4diac IDE Preferences</h2>
+<p>Before starting with the engineering process of IEC 61499 <span class="element61499">Applications</span>, you should set the preferences for the 4diac IDE under <span class="menu4diac">Window &rarr; Preferences &rarr; 4DIAC</span>.</p> 
+<p>Later in <i>Step 1 - Use 4diac IDE locally</i> you learn more about the preferences. For now it’s good to know there are different preference pages where various parameter settings for the 4diac IDE can be made, like different colors or connection routers.
+   In order to use the Runtime Launcher of the <a href="#deploymentPerspective">deployment perspective</a> the location of the run executable files must be set in the properties. Currently 2 runtime envirements are supported.</p>
+<ol>
+	<li><a href="http://www.eclipse.org/4diac/en_rte.php" >4diac Forte</a>: <span class="fileLocation">path/forte.exe</span></li>
+    <li><a href="https://www.holobloc.com/">Holobloc’s FBRT</a>: <span class="fileLocation">path/fbrt.jar</span></li>
+</ol>
+ 
+<img src="./img/properties/4DIACpreferences.png" alt="4DIAC IDE Preferences"/>
 
-<p>Before starting with the engineering process of IEC 61499 <span class="element61499">Applications</span>, you should set the preferences for the 4DIAC-IDE under <span class="menu4diac">Window &rarr; Preferences &rarr; 4DIAC</span>. There are different preference pages where various parameter settings for the 4DIAC-IDE can be made, like different colors, connection routers or the location of the FORTE executable. Please set the location within <span class="menu4diac">FBRT Preferences</span> and <span class="menu4diac">FORTE Preferences</span> if you want to start FBDK or FORTE within the Deployment perspective of 4DIAC-IDE. For FBRT specify the <span class="fileLocation">path/fbrt.jar</span> and for FORTE <span class="fileLocation">path/forte.exe</span>.</p> 
+<!------------------------------------------------------------------------------------------------>
 
-<img src="./img/properties/4DIACpreferences.png" alt="4DIAC-IDE Preferences"/>
-
-<h3 id="toolbar">Toolbar</h3>
+<h2 id="toolbar">Toolbar</h2>
 <p>Selecting an element (e.g. <span class="element61499">Systems</span>, <span class="element61499">Devices</span>, <span class="element61499">Resources</span>, <span class="element61499">Applications</span>, <span class="element61499">Function Blocks</span>, ...) and pressing the right mouse button opens the context menu with several menus to manipulate the specific element. The following general toolbar items are provided:</p>
 
 <ul>
@@ -131,15 +159,17 @@ Service Interface Function Block Types</li>
 	<li><img src="./img/properties/undoredo.png" alt="Undo/Redo Icon" class="inlineImg"/> provides undo and/or redo of last changes</li>
 	<li><img src="./img/properties/zoom.png" alt="Zoom Functionality" class="inlineImg"/> provides zoom functionality in the toolbar or the menu entries in the context menu of an editor but also by pressing <span class="button4diac">Ctrl</span> and scrolling the mouse wheel</li>
 	<li>Function Block instances and <span class="element61499">Devices</span> respectively can be deleted using the <span class="button4diac">Del</span> key or the context menu entry Delete.</li>
-	<li>Instance names of Function Blocks, <span class="element61499">Resources</span> or <span class="element61499">Devices</span> can be changed by double click that enables the instance name field to be editable. It is also possible to change the instance name in the Properties View at the bottom of the window.
+	<li>Instance names of Function Blocks, <span class="element61499">Resources</span> or <span class="element61499">Devices</span> can be changed by double click that enables the instance name field to be editable. It is also possible to change the instance name in the Properties View at the bottom of the window.<br/>
 	<img src="./img/properties/instanceName.png" alt="change instance name by double click or property view"/></li> 
 </ul>
 
+<!------------------------------------------------------------------------------------------------>
+
 <h1>Where to go from here?</h1>
 
-<p>Now that you had an overlook about the major things about 4DIAC, you can start using it: </p>
+<p>Now that you had an overlook about the major things about 4diac IDE, you can start using it: </p>
 
-<p><a href="./use4diacLocally.html">Step 1 - Use 4DIAC-IDE locally</a></p>
+<p><a href="./use4diacLocally.html">Step 1 - Use 4diac IDE locally</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 

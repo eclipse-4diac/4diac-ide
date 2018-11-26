@@ -109,10 +109,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VarInitialization">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        defaultValueLiteral=""/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ValueType" eSuperTypes="#//DataType"/>
   <eClassifiers xsi:type="ecore:EClass" name="ElementaryType" eSuperTypes="#//ValueType"/>
   <eClassifiers xsi:type="ecore:EClass" name="DerivedType" eSuperTypes="#//ValueType">

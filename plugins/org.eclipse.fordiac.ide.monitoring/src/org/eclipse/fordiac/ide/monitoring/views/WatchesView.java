@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.views;
 
+import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
-import org.eclipse.fordiac.ide.monitoring.IMonitoringListener;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesContentProvider;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesLabelProvider;
@@ -37,10 +37,11 @@ public class WatchesView extends ViewPart {
 	private FilteredTree filteredTree;
 
 	
-	IMonitoringListener listener = new IMonitoringListener() {
+	private IMonitoringListener listener = new IMonitoringListener() {
 		
 		@Override
-		public void notifyTriggerEvent(PortElement port) {			
+		public void notifyTriggerEvent(PortElement port) {	
+			//currently nothing to do
 		}
 		
 		@Override
@@ -131,7 +132,7 @@ public class WatchesView extends ViewPart {
 
 	@Override
 	public void setFocus() {
-
+		//currently nothing to do
 	}
 
 }

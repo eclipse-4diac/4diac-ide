@@ -17,6 +17,6 @@ import org.eclipse.ui.IEditorPart;
 @FunctionalInterface
 public interface EditorAction {
 	
-	public void run(IEditorPart part);
+	void run(IEditorPart part);
 	
 }

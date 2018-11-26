@@ -87,7 +87,8 @@ public class OutArgumentImpl extends ArgumentImpl implements OutArgument
    * <!-- end-user-doc -->
    * @generated
    */
-  public boolean isNot()
+  @Override
+public boolean isNot()
   {
     return not;
   }
@@ -97,7 +98,8 @@ public class OutArgumentImpl extends ArgumentImpl implements OutArgument
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setNot(boolean newNot)
+  @Override
+public void setNot(boolean newNot)
   {
     boolean oldNot = not;
     not = newNot;
@@ -110,7 +112,8 @@ public class OutArgumentImpl extends ArgumentImpl implements OutArgument
    * <!-- end-user-doc -->
    * @generated
    */
-  public Variable getExpr()
+  @Override
+public Variable getExpr()
   {
     return expr;
   }
@@ -137,7 +140,8 @@ public class OutArgumentImpl extends ArgumentImpl implements OutArgument
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setExpr(Variable newExpr)
+  @Override
+public void setExpr(Variable newExpr)
   {
     if (newExpr != expr)
     {

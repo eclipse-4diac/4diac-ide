@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FB tester (Incubation)
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.fbtester;singleton:=true
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -14,8 +14,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.debug.core,
  org.eclipse.fordiac.ide.ui.controls,
  org.eclipse.ui.externaltools,
- org.eclipse.fordiac.ide.monitoring,
- org.eclipse.fordiac.ide.typemanagement
+ org.eclipse.fordiac.ide.typemanagement,
+ org.eclipse.fordiac.ide.deployment,
+ org.eclipse.fordiac.ide.deployment.iec61499
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Eclipse 4diac
@@ -28,3 +29,4 @@ Export-Package: org.eclipse.fordiac.ide.fbtester.model.testdata,
  org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts,
  org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model,
  org.eclipse.fordiac.ide.fbtypeeditor.fbtester.policies
+Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.fbtester

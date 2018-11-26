@@ -1,11 +1,15 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2007 - 2012 4DIAC - consortium.
+ *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *  *
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
  *  * http://www.eclipse.org/legal/epl-v10.html
  *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *  *     - initial API and implementation and/or initial documentation
  *  *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
@@ -16,13 +20,11 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
@@ -71,8 +73,8 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PositionableElement_x_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_x_feature", "_UI_PositionableElement_type"),
+				 getString("_UI_PositionableElement_x_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_x_feature", "_UI_PositionableElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__X,
 				 true,
 				 false,
@@ -93,8 +95,8 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PositionableElement_y_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_y_feature", "_UI_PositionableElement_type"),
+				 getString("_UI_PositionableElement_y_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_y_feature", "_UI_PositionableElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__Y,
 				 true,
 				 false,
@@ -115,8 +117,8 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_FBNetworkElement_mapping_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_FBNetworkElement_mapping_feature", "_UI_FBNetworkElement_type"),
+				 getString("_UI_FBNetworkElement_mapping_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_FBNetworkElement_mapping_feature", "_UI_FBNetworkElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.FB_NETWORK_ELEMENT__MAPPING,
 				 true,
 				 false,
@@ -127,36 +129,6 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.FB_NETWORK_ELEMENT__INTERFACE);
-		}
-		return childrenFeatures;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
 	 * This returns FBNetworkElement.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -164,7 +136,7 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBNetworkElement"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBNetworkElement")); //$NON-NLS-1$
 	}
 
 	/**
@@ -177,8 +149,8 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 	public String getText(Object object) {
 		String label = ((FBNetworkElement)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_FBNetworkElement_type") :
-			getString("_UI_FBNetworkElement_type") + " " + label;
+			getString("_UI_FBNetworkElement_type") : //$NON-NLS-1$
+			getString("_UI_FBNetworkElement_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 
@@ -196,10 +168,8 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 		switch (notification.getFeatureID(FBNetworkElement.class)) {
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__X:
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__Y:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -215,11 +185,6 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.FB_NETWORK_ELEMENT__INTERFACE,
-				 LibraryElementFactory.eINSTANCE.createInterfaceList()));
 	}
 
 }

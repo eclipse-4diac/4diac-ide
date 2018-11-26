@@ -54,13 +54,14 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractAttributeSection extends AbstractSection {
 	private TableViewer attributeViewer;
-	private final String NAME = "name"; //$NON-NLS-1$
-	private final String VALUE = "value"; //$NON-NLS-1$
-	private final String TYPE = "type"; //$NON-NLS-1$
-	private final String COMMENT = "comment"; //$NON-NLS-1$
+	private static final String NAME = "name"; //$NON-NLS-1$
+	private static final String VALUE = "value"; //$NON-NLS-1$
+	private static final String TYPE = "type"; //$NON-NLS-1$
+	private static final String COMMENT = "comment"; //$NON-NLS-1$
 	private Button attributeNew;
 	private Button attributeDelete;
 	
+	@Override
 	protected abstract ConfigurableObject getInputType(Object input);
 	@Override
 	protected abstract EObject getType();
@@ -79,7 +80,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
-		attributeNew = getWidgetFactory().createButton(composite, "", SWT.PUSH);
+		attributeNew = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
 		attributeNew.setToolTipText("create attribute");
 		attributeNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
 		attributeNew.addSelectionListener(new SelectionAdapter() {
@@ -91,7 +92,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 				}
 			}
 		});
-		attributeDelete = getWidgetFactory().createButton(composite, "", SWT.PUSH);
+		attributeDelete = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
 		attributeDelete.setToolTipText("delete selected attribute");
 		attributeDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		attributeDelete.addSelectionListener(new SelectionAdapter() {
@@ -147,12 +148,14 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		});
 		attributeViewer.setColumnProperties(new String[] {NAME, TYPE, VALUE, COMMENT});
 		attributeViewer.setCellModifier(new ICellModifier() {
+			@Override
 			public boolean canModify(final Object element, final String property) {
 				if(element instanceof Attribute && TYPE.equals(property) && null != ((Attribute)element).getAttributeDeclaration()) {
 					return false;
 				}
 				return true;
 			}
+			@Override
 			public Object getValue(final Object element, final String property) {
 				switch (property) {
 				case NAME:
@@ -167,6 +170,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 					return null;
 				}
 			}
+			@Override
 			public void modify(final Object element, final String property, final Object value) {
 				Attribute data = (Attribute)((TableItem) element).getData();
 				AttributeChangeCommand cmd = null;
@@ -210,6 +214,8 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	@Override
 	protected void setInputCode() {	
 		attributeViewer.setCellModifier(null);
+		attributeDelete.setEnabled(false);
+		attributeNew.setEnabled(false);
 	}
 	
 	@Override

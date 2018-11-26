@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2014, 2016 Profactor GmbH, TU Wien ACIN fortiss GmbH
+ * Copyright (c) 2012, 2014, 2016 Profactor GmbH, TU Wien ACIN fortiss GmbH,
+ * 				 2018 Johannes Kepler University		
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,8 +13,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.gef.EditPolicy;
@@ -118,7 +117,7 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 		return getEditorInput().getPaletteEntry();
 	}
 
-	private final Map<IInterfaceElement, CommentTypeField> commentMapping = new Hashtable<>();
+	private final Map<IInterfaceElement, CommentTypeField> commentMapping = new HashMap<>();
 
 	@Override
 	protected List<?> getModelChildren() {
@@ -179,18 +178,7 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 		return element;
 	}
 
-	protected void createValues(FB fB) {
-		ArrayList<IInterfaceElement> iInterfaceElements = new ArrayList<>();
-
-		// iInterfaceElements.addAll(fB.getInterface().getEventInputs());
-		iInterfaceElements.addAll(fB.getInterface().getInputVars());
-
-		for (Iterator<IInterfaceElement> iterator = iInterfaceElements.iterator(); iterator
-				.hasNext();) {
-			IInterfaceElement element = iterator.next();
-			Value value = LibraryElementFactory.eINSTANCE.createValue();
-			element.setValue(value);
-
-		}
+	protected static void createValues(FB fB) {
+		fB.getInterface().getInputVars().forEach(var -> var.setValue(LibraryElementFactory.eINSTANCE.createValue()));
 	}
 }

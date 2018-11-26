@@ -1,11 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Model Edit (Incubation)
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.edit;singleton:=true
-Bundle-Version: 1.9.0.qualifier
+Automatic-Module-Name: org.eclipse.fordiac.ide.model.edit
+Bundle-Version: 1.10.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin$Implementation
-Bundle-Vendor: Eclipse 4diac
+Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.fordiac.ide.model.Palette.provider,

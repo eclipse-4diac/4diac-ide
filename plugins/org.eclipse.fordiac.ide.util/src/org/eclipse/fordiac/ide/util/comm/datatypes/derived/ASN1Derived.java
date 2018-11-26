@@ -15,17 +15,17 @@ package org.eclipse.fordiac.ide.util.comm.datatypes.derived;
 public interface ASN1Derived {
 
 	/** IEC 61131-3 datatypes of Class PRIVATE */
-	public static final class PRIVATE {
+	static final class PRIVATE {
 		/** IEC 61131-3 primitive data type tag ids */
 		public static final class PRIMITIVE {
 			/* ITA DirectlyDerivedType REAL */
-			public static final int Freq =13;
+			public static final int FREQ =13;
 		}
 
 		/** IEC 61131-3 constructed data type tag ids */
 		public static final class CONSTRUCTED {
 			/** TESTBED Datatype for representation of palette object */
-			public static final int Palette = 1;
+			public static final int PALETTE = 1;
 		}
 	}
 

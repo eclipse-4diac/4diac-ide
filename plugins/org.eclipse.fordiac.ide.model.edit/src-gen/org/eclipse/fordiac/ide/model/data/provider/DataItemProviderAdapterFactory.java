@@ -1,11 +1,14 @@
 /**
- * *******************************************************************************
- *  * Copyright (c) 2007 - 2011 4DIAC - consortium.
+ *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *  *
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
  *  * http://www.eclipse.org/legal/epl-v10.html
  *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *  *     - initial API and implementation and/or initial documentation
  *  *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.data.provider;
@@ -239,29 +242,6 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory implement
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.VarInitialization} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected VarInitializationItemProvider varInitializationItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.VarInitialization}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createVarInitializationAdapter() {
-		if (varInitializationItemProvider == null) {
-			varInitializationItemProvider = new VarInitializationItemProvider(this);
-		}
-
-		return varInitializationItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.ValueType} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -359,6 +339,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ComposeableAdapterFactory getRootAdapterFactory() {
 		return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
 	}
@@ -369,6 +350,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory) {
 		this.parentAdapterFactory = parentAdapterFactory;
 	}
@@ -417,6 +399,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void addListener(INotifyChangedListener notifyChangedListener) {
 		changeNotifier.addListener(notifyChangedListener);
 	}
@@ -427,6 +410,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void removeListener(INotifyChangedListener notifyChangedListener) {
 		changeNotifier.removeListener(notifyChangedListener);
 	}
@@ -437,6 +421,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void fireNotifyChanged(Notification notification) {
 		changeNotifier.fireNotifyChanged(notification);
 
@@ -451,6 +436,7 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void dispose() {
 		if (arrayTypeItemProvider != null) arrayTypeItemProvider.dispose();
 		if (directlyDerivedTypeItemProvider != null) directlyDerivedTypeItemProvider.dispose();
@@ -459,7 +445,6 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory implement
 		if (structuredTypeItemProvider != null) structuredTypeItemProvider.dispose();
 		if (subrangeItemProvider != null) subrangeItemProvider.dispose();
 		if (subrangeTypeItemProvider != null) subrangeTypeItemProvider.dispose();
-		if (varInitializationItemProvider != null) varInitializationItemProvider.dispose();
 		if (valueTypeItemProvider != null) valueTypeItemProvider.dispose();
 		if (elementaryTypeItemProvider != null) elementaryTypeItemProvider.dispose();
 		if (derivedTypeItemProvider != null) derivedTypeItemProvider.dispose();

@@ -13,10 +13,9 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ReconnectTransitionCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.TransitionCreateCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.CreateConnectionRequest;
@@ -25,8 +24,7 @@ import org.eclipse.gef.requests.ReconnectRequest;
 /**
  * The Class TransitionNodeEditPolicy.
  */
-public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy implements
-		EditPolicy {
+public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy {
 
 	/*
 	 * (non-Javadoc)
@@ -36,8 +34,8 @@ public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy implements
 	@Override
 	protected Command getConnectionCompleteCommand(
 			final CreateConnectionRequest request) {
-		if (request.getStartCommand() instanceof TransitionCreateCommand) {
-			TransitionCreateCommand command = (TransitionCreateCommand) request
+		if (request.getStartCommand() instanceof CreateTransitionCommand) {
+			CreateTransitionCommand command = (CreateTransitionCommand) request
 					.getStartCommand();
 			if (getHost() instanceof ECStateEditPart) {
 
@@ -63,7 +61,7 @@ public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy implements
 	protected Command getConnectionCreateCommand(
 			final CreateConnectionRequest request) {
 
-		TransitionCreateCommand cmd = new TransitionCreateCommand();
+		CreateTransitionCommand cmd = new CreateTransitionCommand();
 		if (getHost() instanceof ECStateEditPart) {
 				
 
@@ -85,8 +83,7 @@ public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy implements
 	 */
 	@Override
 	protected Command getReconnectSourceCommand(final ReconnectRequest request) {
-		ReconnectTransitionCommand cmd = new ReconnectTransitionCommand(request);
-		return cmd;
+		return new ReconnectTransitionCommand(request);
 	}
 
 	/*
@@ -96,8 +93,7 @@ public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy implements
 	 */
 	@Override
 	protected Command getReconnectTargetCommand(final ReconnectRequest request) {
-		ReconnectTransitionCommand cmd = new ReconnectTransitionCommand(request);
-		return cmd;
+		return new ReconnectTransitionCommand(request);
 	}
 
 }

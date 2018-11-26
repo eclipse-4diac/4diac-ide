@@ -70,6 +70,7 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetwork getFBNetwork() {
 		if (fBNetwork != null && fBNetwork.eIsProxy()) {
 			InternalEObject oldFBNetwork = (InternalEObject)fBNetwork;
@@ -117,6 +118,7 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFBNetwork(FBNetwork newFBNetwork) {
 		if (newFBNetwork != fBNetwork) {
 			NotificationChain msgs = null;
@@ -136,8 +138,9 @@ public class ApplicationImpl extends ConfigurableObjectImpl implements Applicati
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AutomationSystem getAutomationSystem() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
 
 	/**

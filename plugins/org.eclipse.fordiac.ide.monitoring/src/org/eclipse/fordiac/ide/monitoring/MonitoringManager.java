@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2016 Profactor GmbH, AIT, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2012 - 2018 Profactor GmbH, AIT, TU Wien ACIN, fortiss GmbH,
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,24 +10,29 @@
  * Contributors:
  *   Gerhard Ebenhofer, Matthias Plasch, Filip Andren, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.AbstractMonitoringManager;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
-import org.eclipse.fordiac.ide.monitoring.communication.TCPCommunicationObject;
-import org.eclipse.fordiac.ide.systemmanagement.Activator;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -34,15 +40,10 @@ import org.eclipse.swt.widgets.Display;
 /**
  * Singleton instance that Coordinates and manages all the Ports to be
  * monitored.
- * 
- * @author gebenh
  */
 public class MonitoringManager extends AbstractMonitoringManager {
-
-	/** The instance. */
-	private static MonitoringManager instance;
 	
-	private final Map<String, SystemMonitoringData> systemMonitoringData = new Hashtable<>();
+	private final Map<AutomationSystem, SystemMonitoringData> systemMonitoringData = new HashMap<>();
 
 	/**
 	 * Gets the single instance of MonitoringManager.
@@ -50,54 +51,9 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 * @return single instance of MonitoringManager
 	 */
 	public static MonitoringManager getInstance() {
-		if (instance == null) {
-			instance = new MonitoringManager();
-		}
-		return instance;
-	}
-
-	/**
-	 * Instantiates a new monitoring manager.
-	 */
-	private MonitoringManager() {
+		return (MonitoringManager)AbstractMonitoringManager.getMonitoringManager();
 	}
 	
-
-	/**
-	 * Notify add port.
-	 * 
-	 * @param port
-	 *            the port
-	 */
-	private void notifyAddPort(PortElement port) {
-		for (IMonitoringListener monitoringListener : monitoringListeners) {
-			monitoringListener.notifyAddPort(port);
-		}
-	}
-
-	/**
-	 * Notify remove port.
-	 * 
-	 * @param port
-	 *            the port
-	 */
-	private void notifyRemovePort(PortElement port) {
-		for (IMonitoringListener monitoringListener : monitoringListeners) {
-			monitoringListener.notifyRemovePort(port);
-		}
-	}
-
-	/**
-	 * Notify trigger event.
-	 * 
-	 * @param port
-	 *            the port
-	 */
-	private void notifyTriggerEvent(PortElement port) {
-		for (IMonitoringListener monitoringListener : monitoringListeners) {
-			monitoringListener.notifyTriggerEvent(port);
-		}
-	}
 
 	/**
 	 * Gets the monitoring element.
@@ -188,16 +144,14 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 *            the system
 	 */
 	@Override
-	public void enableSystem(String system) {
-		// get system from the SystemManager
-		AutomationSystem automationSystem = SystemManager.INSTANCE.getSystemForName(system);
-		if (automationSystem == null) {
-			Activator.getDefault().logError(system + " could not be found.");
-			return;
-		} 
-		
-		SystemMonitoringData systemData = getSystemMonitoringData(system);
-		systemData.enableSystem();
+	public void enableSystem(AutomationSystem system) {
+		getSystemMonitoringData(system).enableSystem();
+	}
+	
+	@Override
+	public void enableSystemSynch(AutomationSystem system, IProgressMonitor monitor)
+			throws InvocationTargetException, InterruptedException {
+		getSystemMonitoringData(system).enableSystemSynch(monitor);		
 	}
 
 
@@ -208,15 +162,18 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 *            the system
 	 */
 	@Override
-	public void disableSystem(String system) {
-		AutomationSystem automationSystem = SystemManager.INSTANCE.getSystemForName(system);
-		if (automationSystem == null) {
-			Activator.getDefault().logError(system + " could not be found for deactivating monitoring.");
-			return;
-		} 
-		
-		SystemMonitoringData systemData = getSystemMonitoringData(system);
-		systemData.disableSystem();
+	public void disableSystem(AutomationSystem system) {
+		getSystemMonitoringData(system).disableSystem();
+	}
+	
+	@Override
+	public void disableSystemSynch(AutomationSystem system, IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		getSystemMonitoringData(system).disableSystemSynch(monitor);	
+	}
+	
+	@Override
+	public boolean isSystemMonitored(AutomationSystem system) {
+		return getSystemMonitoringData(system).isMonitoringForSystemEnabled();
 	}
 
 	/**
@@ -229,37 +186,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 */
 	public boolean monitoringForSystemEnabled(AutomationSystem system) {
 		SystemMonitoringData data = getSystemMonitoringData(system);
-		return data.monitoringForSystemEnabled();
-	}
-
-	public enum BreakPoint {
-		add, remove, clear
-	}
-
-	/**
-	 * Trigger event.
-	 * 
-	 * @param port
-	 *            the port
-	 */
-	public void toggleBreakpoint(MonitoringBaseElement element, BreakPoint set) {
-		if (element instanceof MonitoringElement){
-			MonitoringElement monitoringElement = (MonitoringElement)element;
-
-			SystemMonitoringData data = getSystemMonitoringData(monitoringElement.getPort().getSystem());
-			TCPCommunicationObject commObject = data.getCommObject(monitoringElement.getPort().getDevice());
-			if(null != commObject){
-				commObject.toggleBreakpoint(monitoringElement, set);
-				if (set.equals(BreakPoint.add)) {
-					monitoringElement.setBreakpoint(true);
-					breakpoints.getBreakpoints().add(monitoringElement);
-				} else if (set.equals(BreakPoint.remove)) {
-					monitoringElement.setBreakpoint(false);
-					breakpoints.getBreakpoints().remove(monitoringElement);
-				} else if (set.equals(BreakPoint.clear)) {
-				}
-			}
-		}
+		return data.isMonitoringForSystemEnabled();
 	}
 
 	/**
@@ -276,9 +203,14 @@ public class MonitoringManager extends AbstractMonitoringManager {
 			MonitoringElement monitoringElement = (MonitoringElement)element;
 
 			SystemMonitoringData data = getSystemMonitoringData(monitoringElement.getPort().getSystem());
-			TCPCommunicationObject commObject = data.getCommObject(monitoringElement.getPort().getDevice());
-			if(commObject != null){
-				commObject.triggerEvent(monitoringElement);
+			IDeviceManagementInteractor devMgmInteractor = data.getDevMgmInteractor(monitoringElement.getPort().getDevice());
+			if(devMgmInteractor != null){
+				try {
+					devMgmInteractor.triggerEvent(monitoringElement);
+				} catch (DeploymentException e) {
+					// TODO think if error should be shown to the user
+					Activator.getDefault().logError("Could not trigger event for " + element.getQualifiedString(), e);
+				}
 				notifyTriggerEvent(monitoringElement.getPort());
 			}
 		} 
@@ -288,75 +220,64 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		AutomationSystem automationSystem = element.getPort().getSystem();
 
 		if (automationSystem == null) {
-			Activator.getDefault().logError("System could not be found to write value (" + element.getPort() + ").");
-			MessageDialog.openError(Display.getDefault().getActiveShell(),
-					"Error", "System could not be found for write value ("
-							+ element.getPort() + ").");
+			showSystemNotFoundErrorMsg(element);
 			return;
 		}
 		Device device = element.getPort().getDevice();
 		if (device == null) {
-			Activator.getDefault().logError("Device could not be found for write value (" + element.getPort() + ").");
-			MessageDialog.openError(Display.getDefault().getActiveShell(),
-					"Error", "Device could not be found for write value ("
-							+ element.getPort() + ").");
+			showDeviceNotFounderroMsg(element);
 			return;
 		}
 		
-		TCPCommunicationObject commObject = getSystemMonitoringData(automationSystem).getCommObject(device);
+		IDeviceManagementInteractor devMgmInteractor = getSystemMonitoringData(automationSystem).getDevMgmInteractor(device);
 
-		if(commObject != null){
-			commObject.writeValue(element, value);
+		if(devMgmInteractor != null){
+			String fullName = element.getQualifiedString();
+			fullName = fullName.substring(0, fullName.lastIndexOf('.')); // strip interface name
+			fullName = fullName.substring(0, fullName.lastIndexOf('.') +1 ); // strip fbName
+			
+			FBDeploymentData data = new FBDeploymentData(fullName, element.getPort().getFb());
+			try {
+				devMgmInteractor.writeFBParameter(element.getPort().getResource(), value, data, (VarDeclaration)element.getPort().getInterfaceElement());
+			} catch (DeploymentException e) {
+				// TODO think if error should be shown to the user
+				Activator.getDefault().logError("Could not write value to " + element.getQualifiedString(), e);
+			}
 		}
 	}
-	
 
 	public void forceValue(MonitoringElement element, String value) {
 		AutomationSystem automationSystem = element.getPort().getSystem();
 
 		if (automationSystem == null) {
-			Activator.getDefault().logError("System could not be found to force value (" + element.getPort() + ").");
-			MessageDialog.openError(Display.getDefault().getActiveShell(),
-					"Error", "System could not be found for force value ("
-							+ element.getPort() + ").");
+			showSystemNotFoundErrorMsg(element);
 			return;
 		}
 		Device device = element.getPort().getDevice();
 		if (device == null) {
-			Activator.getDefault().logError("Device could not be found for force value (" + element.getPort() + ").");
-			MessageDialog.openError(Display.getDefault().getActiveShell(),
-					"Error", "Device could not be found for force value ("
-							+ element.getPort() + ").");
+			showDeviceNotFounderroMsg(element);
 			return;
 		}
 		
 		element.forceValue(value);
-		TCPCommunicationObject commObject = getSystemMonitoringData(automationSystem).getCommObject(device);
+		IDeviceManagementInteractor devMgmInteractor = getSystemMonitoringData(automationSystem).getDevMgmInteractor(device);
 
-		if(commObject != null){
-			if (element.isForce()) {
-				commObject.forceValue(element, value);
-			} else {
-				commObject.clearForce(element);				
+		if(devMgmInteractor != null){
+			try {
+				if (element.isForce()) {
+						devMgmInteractor.forceValue(element, value);
+				} else {
+					devMgmInteractor.clearForce(element);				
+				}
+			} catch (DeploymentException e) {
+				// TODO think if error should be shown to the user
+				Activator.getDefault().logError("Could not force value of " + element.getQualifiedString() + "to " + value, e);
 			}
 		}
 	}
-
-	public MonitoringBaseElement getMonitoringElementByPortString(String systemName, String portString) {
-		return getSystemMonitoringData(systemName).getMonitoringElementByPortString(portString);
-	}
-
-	private SystemMonitoringData getSystemMonitoringData(String systemName) {
-		SystemMonitoringData retVal = systemMonitoringData.get(systemName);
-		if(null == retVal){
-			retVal = createSystemMonitoringData(
-						SystemManager.INSTANCE.getSystemForName(systemName));
-		}
-		return retVal;
-	}
 	
-	private SystemMonitoringData getSystemMonitoringData(AutomationSystem system) {
-		SystemMonitoringData retVal = systemMonitoringData.get(system.getName());
+	public SystemMonitoringData getSystemMonitoringData(AutomationSystem system) {
+		SystemMonitoringData retVal = systemMonitoringData.get(system);
 		if(null == retVal){
 			retVal = createSystemMonitoringData(system);
 		}
@@ -365,7 +286,17 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 	private SystemMonitoringData createSystemMonitoringData(AutomationSystem system) {
 		SystemMonitoringData newData = new SystemMonitoringData(system);
-		systemMonitoringData.put(system.getName(), newData);
+		systemMonitoringData.put(system, newData); 
 		return newData;
 	}
+	
+	private static void showDeviceNotFounderroMsg(MonitoringElement element) {
+		MessageDialog.openError(Display.getDefault().getActiveShell(), "Error", "Device could not be found for FB port: " + element.getPort() + ".");
+	}
+
+	private static void showSystemNotFoundErrorMsg(MonitoringElement element) {
+		MessageDialog.openError(Display.getDefault().getActiveShell(), "Error", "System could not be found for FB port: " + element.getPort() + ".");
+	}
+	
+
 }

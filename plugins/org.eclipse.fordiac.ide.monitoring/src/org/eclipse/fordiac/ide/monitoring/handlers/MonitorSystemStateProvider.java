@@ -33,11 +33,9 @@ public class MonitorSystemStateProvider extends State {
 			   IWorkbenchPage page = win.getActivePage();
 			   if(null != page){
 				   ISelection selection = page.getSelection();
-				   if(selection instanceof TreeSelection){
-					   if(((TreeSelection)selection).getFirstElement() instanceof AutomationSystem){
-						   AutomationSystem system = (AutomationSystem)((TreeSelection)selection).getFirstElement();	
-						   return Boolean.valueOf(MonitoringManager.getInstance().monitoringForSystemEnabled(system));
-					   }
+				   if((selection instanceof TreeSelection) && (((TreeSelection)selection).getFirstElement() instanceof AutomationSystem)){
+					   AutomationSystem system = (AutomationSystem)((TreeSelection)selection).getFirstElement();	
+					   return Boolean.valueOf(MonitoringManager.getInstance().monitoringForSystemEnabled(system));
 				   }
 			   }
 		   }

@@ -94,6 +94,7 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VirtualDNSEntry> getVirtualDNSEntries() {
 		if (virtualDNSEntries == null) {
 			virtualDNSEntries = new EObjectContainmentEList<VirtualDNSEntry>(VirtualDNSEntry.class, this, VirtualDNSPackage.VIRTUAL_DNS_COLLECTION__VIRTUAL_DNS_ENTRIES);
@@ -105,6 +106,7 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -113,6 +115,7 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -208,13 +211,14 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(')');
 		return result.toString();
 	}
 
+	@Override
 	public String getValueFor(String name) {
 		for (VirtualDNSEntry entry : getVirtualDNSEntries()) {
 			if (entry.getName().equals(name)) {

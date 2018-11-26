@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart;
@@ -31,9 +32,6 @@ import org.eclipse.gef.EditPart;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#isForce <em>Force</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getForceValue <em>Force Value</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#isBreakpoint <em>Breakpoint</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#isBreakpointActive <em>Breakpoint Active</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getBreakpointCondition <em>Breakpoint Condition</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getCurrentValue <em>Current Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getSec <em>Sec</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getUsec <em>Usec</em>}</li>
@@ -78,64 +76,6 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * @ordered
 	 */
 	protected String forceValue = FORCE_VALUE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isBreakpoint() <em>Breakpoint</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #isBreakpoint()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean BREAKPOINT_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isBreakpoint() <em>Breakpoint</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #isBreakpoint()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean breakpoint = BREAKPOINT_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isBreakpointActive() <em>Breakpoint Active</em>}' attribute.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * @see #isBreakpointActive()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean BREAKPOINT_ACTIVE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isBreakpointActive() <em>Breakpoint Active</em>}' attribute.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * @see #isBreakpointActive()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean breakpointActive = BREAKPOINT_ACTIVE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getBreakpointCondition() <em>Breakpoint Condition</em>}' attribute.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * @see #getBreakpointCondition()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String BREAKPOINT_CONDITION_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getBreakpointCondition() <em>Breakpoint Condition</em>}' attribute.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * @see #getBreakpointCondition()
-	 * @generated
-	 * @ordered
-	 */
-	protected String breakpointCondition = BREAKPOINT_CONDITION_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getCurrentValue() <em>Current Value</em>}' attribute.
@@ -218,6 +158,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isForce() {
 		return force;
 	}
@@ -226,6 +167,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setForce(boolean newForce) {
 		boolean oldForce = force;
 		force = newForce;
@@ -237,6 +179,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getForceValue() {
 		return forceValue;
 	}
@@ -245,6 +188,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setForceValue(String newForceValue) {
 		String oldForceValue = forceValue;
 		forceValue = newForceValue;
@@ -254,73 +198,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isBreakpoint() {
-		return breakpoint;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setBreakpoint(boolean newBreakpoint) {
-		boolean oldBreakpoint = breakpoint;
-		breakpoint = newBreakpoint;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT, oldBreakpoint, breakpoint));
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isBreakpointActive() {
-		return breakpointActive;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated NOT
 	 */
-	public void setBreakpointActive(boolean newBreakpointActive) {
-		if (breakpointActive != newBreakpointActive) {
-			boolean oldBreakpointActive = breakpointActive;
-			breakpointActive = newBreakpointActive;
-			if (eNotificationRequired()) {
-				eNotify(new ENotificationImpl(
-						this,
-						Notification.SET,
-						MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT_ACTIVE,
-						oldBreakpointActive, breakpointActive));
-			}
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getBreakpointCondition() {
-		return breakpointCondition;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setBreakpointCondition(String newBreakpointCondition) {
-		String oldBreakpointCondition = breakpointCondition;
-		breakpointCondition = newBreakpointCondition;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT_CONDITION, oldBreakpointCondition, breakpointCondition));
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated NOT
-	 */
+	@Override
 	public String getCurrentValue() {
 		return (null == currentValue) ? "N/A" : currentValue;
 	}
@@ -336,6 +216,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public void setCurrentValue(String newCurrentValue) {
 		if (currentValue == null
 				|| ((currentValue != null) && !currentValue
@@ -358,6 +239,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getSec() {
 		return sec;
 	}
@@ -366,6 +248,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSec(long newSec) {
 		long oldSec = sec;
 		sec = newSec;
@@ -377,6 +260,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getUsec() {
 		return usec;
 	}
@@ -385,6 +269,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUsec(long newUsec) {
 		long oldUsec = usec;
 		usec = newUsec;
@@ -397,6 +282,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public void forceValue(String value) {
 		if (value != null && !value.equals("")) {
 			setForce(true);
@@ -418,12 +304,6 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 				return isForce();
 			case MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE:
 				return getForceValue();
-			case MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT:
-				return isBreakpoint();
-			case MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT_ACTIVE:
-				return isBreakpointActive();
-			case MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT_CONDITION:
-				return getBreakpointCondition();
 			case MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE:
 				return getCurrentValue();
 			case MonitoringPackage.MONITORING_ELEMENT__SEC:
@@ -446,15 +326,6 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 				return;
 			case MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE:
 				setForceValue((String)newValue);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT:
-				setBreakpoint((Boolean)newValue);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT_ACTIVE:
-				setBreakpointActive((Boolean)newValue);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT_CONDITION:
-				setBreakpointCondition((String)newValue);
 				return;
 			case MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE:
 				setCurrentValue((String)newValue);
@@ -482,15 +353,6 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 			case MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE:
 				setForceValue(FORCE_VALUE_EDEFAULT);
 				return;
-			case MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT:
-				setBreakpoint(BREAKPOINT_EDEFAULT);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT_ACTIVE:
-				setBreakpointActive(BREAKPOINT_ACTIVE_EDEFAULT);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT_CONDITION:
-				setBreakpointCondition(BREAKPOINT_CONDITION_EDEFAULT);
-				return;
 			case MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE:
 				setCurrentValue(CURRENT_VALUE_EDEFAULT);
 				return;
@@ -515,12 +377,6 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 				return force != FORCE_EDEFAULT;
 			case MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE:
 				return FORCE_VALUE_EDEFAULT == null ? forceValue != null : !FORCE_VALUE_EDEFAULT.equals(forceValue);
-			case MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT:
-				return breakpoint != BREAKPOINT_EDEFAULT;
-			case MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT_ACTIVE:
-				return breakpointActive != BREAKPOINT_ACTIVE_EDEFAULT;
-			case MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT_CONDITION:
-				return BREAKPOINT_CONDITION_EDEFAULT == null ? breakpointCondition != null : !BREAKPOINT_CONDITION_EDEFAULT.equals(breakpointCondition);
 			case MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE:
 				return CURRENT_VALUE_EDEFAULT == null ? currentValue != null : !CURRENT_VALUE_EDEFAULT.equals(currentValue);
 			case MonitoringPackage.MONITORING_ELEMENT__SEC:
@@ -539,66 +395,21 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (force: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (force: "); //$NON-NLS-1$
 		result.append(force);
-		result.append(", forceValue: ");
+		result.append(", forceValue: "); //$NON-NLS-1$
 		result.append(forceValue);
-		result.append(", breakpoint: ");
-		result.append(breakpoint);
-		result.append(", breakpointActive: ");
-		result.append(breakpointActive);
-		result.append(", breakpointCondition: ");
-		result.append(breakpointCondition);
-		result.append(", currentValue: ");
+		result.append(", currentValue: "); //$NON-NLS-1$
 		result.append(currentValue);
-		result.append(", sec: ");
+		result.append(", sec: "); //$NON-NLS-1$
 		result.append(sec);
-		result.append(", usec: ");
+		result.append(", usec: "); //$NON-NLS-1$
 		result.append(usec);
 		result.append(')');
 		return result.toString();
 	}
-	
-	@Override
-	public int getCurrentPos() {
-		return currentInt;
-	}
 
-	@Override
-	public long getHistorySec(int pos) {
-		if (pos >= historySec.size()) {
-			return 0;
-		}
-		return historySec.get(pos);
-
-	}
-
-	@Override
-	public long getHistoryUSec(int pos) {
-		if (pos >= historyUSec.size()) {
-			return 0;
-		}
-		return historyUSec.get(pos);
-
-	}
-
-	@Override
-	public String getHistoryValue(int pos, boolean time) {
-		if (pos >= historyValues.size()) {
-			return "No Data available";
-		}
-		if (time) {
-			return historyValues.get(pos);// + " (sec: " + historySec.get(pos)
-											// +" usec: " + historyUSec.get(pos)
-											// + ")";
-
-		}
-		return historyValues.get(pos); // + " (sec: " + historySec.get(pos)
-										// +" usec: " + historyUSec.get(pos) +
-										// ")";
-
-	}
 
 	@Override
 	public EditPart createEditPart() {

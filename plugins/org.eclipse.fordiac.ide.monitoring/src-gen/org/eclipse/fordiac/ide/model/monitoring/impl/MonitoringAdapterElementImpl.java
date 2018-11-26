@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
@@ -89,6 +90,7 @@ public class MonitoringAdapterElementImpl extends MonitoringBaseElementImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<MonitoringElement> getElements() {
 		if (elements == null) {
 			elements = new EObjectContainmentEList<MonitoringElement>(MonitoringElement.class, this, MonitoringPackage.MONITORING_ADAPTER_ELEMENT__ELEMENTS);
@@ -101,6 +103,7 @@ public class MonitoringAdapterElementImpl extends MonitoringBaseElementImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterFB getMonitoredAdapterFB() {
 		if (monitoredAdapterFB != null && monitoredAdapterFB.eIsProxy()) {
 			InternalEObject oldMonitoredAdapterFB = (InternalEObject)monitoredAdapterFB;
@@ -127,6 +130,7 @@ public class MonitoringAdapterElementImpl extends MonitoringBaseElementImpl impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMonitoredAdapterFB(AdapterFB newMonitoredAdapterFB) {
 		AdapterFB oldMonitoredAdapterFB = monitoredAdapterFB;
 		monitoredAdapterFB = newMonitoredAdapterFB;

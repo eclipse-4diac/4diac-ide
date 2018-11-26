@@ -13,11 +13,11 @@
 package org.eclipse.fordiac.ide.ui.controls.editors;
 
 
-/** Interface of an editor hanlding a 4diac model element
+/** Interface of an editor handling a 4diac model element
  * 
  */
 public interface I4diacModelEditor {
 
 	
-	public Object getModel(); 
+	Object getModel(); 
 }

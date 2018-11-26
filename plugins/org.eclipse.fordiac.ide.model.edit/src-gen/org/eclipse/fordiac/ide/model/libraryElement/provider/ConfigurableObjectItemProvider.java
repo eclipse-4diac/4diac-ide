@@ -1,11 +1,15 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2007 - 2011 4DIAC - consortium.
+ *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *  *
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
  *  * http://www.eclipse.org/legal/epl-v10.html
  *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *  *     - initial API and implementation and/or initial documentation
  *  *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
@@ -71,8 +75,8 @@ public class ConfigurableObjectItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_INamedElement_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", "_UI_INamedElement_type"),
+				 getString("_UI_INamedElement_name_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", "_UI_INamedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.INAMED_ELEMENT__NAME,
 				 true,
 				 false,
@@ -93,8 +97,8 @@ public class ConfigurableObjectItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_INamedElement_comment_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", "_UI_INamedElement_type"),
+				 getString("_UI_INamedElement_comment_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", "_UI_INamedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.INAMED_ELEMENT__COMMENT,
 				 true,
 				 false,
@@ -142,7 +146,7 @@ public class ConfigurableObjectItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ConfigurableObject"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ConfigurableObject")); //$NON-NLS-1$
 	}
 
 	/**
@@ -155,8 +159,8 @@ public class ConfigurableObjectItemProvider
 	public String getText(Object object) {
 		String label = ((ConfigurableObject)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_ConfigurableObject_type") :
-			getString("_UI_ConfigurableObject_type") + " " + label;
+			getString("_UI_ConfigurableObject_type") : //$NON-NLS-1$
+			getString("_UI_ConfigurableObject_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

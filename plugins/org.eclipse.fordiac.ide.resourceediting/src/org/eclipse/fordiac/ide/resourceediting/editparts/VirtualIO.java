@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public class VirtualIO implements Notifier{
 	
-	final private IInterfaceElement referencedInterfaceElement;
+	private final IInterfaceElement referencedInterfaceElement;
 
 	public IInterfaceElement getReferencedInterfaceElement() {
 		return referencedInterfaceElement;

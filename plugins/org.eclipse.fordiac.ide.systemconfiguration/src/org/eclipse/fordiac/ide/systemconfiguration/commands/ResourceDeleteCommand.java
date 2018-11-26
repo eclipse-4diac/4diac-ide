@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2013, 2015 - 2017 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2008, 2009, 2013, 2015 - 2017 Profactor GbmH, fortiss GmbH, 
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -63,10 +64,8 @@ public class ResourceDeleteCommand extends Command {
 	}
 
 	private void closeResourceEditor() {
-		EditorUtils.closeEditorsFiltered((IEditorPart editor) -> {
-			return (editor instanceof DiagramEditorWithFlyoutPalette) && (
-					resource.getFBNetwork().equals(((DiagramEditorWithFlyoutPalette)editor).getModel()));
-		});
+		EditorUtils.closeEditorsFiltered((IEditorPart editorPart) -> (editorPart instanceof DiagramEditorWithFlyoutPalette) && (
+					resource.getFBNetwork().equals(((DiagramEditorWithFlyoutPalette)editorPart).getModel())));
 	}
 
 	@Override

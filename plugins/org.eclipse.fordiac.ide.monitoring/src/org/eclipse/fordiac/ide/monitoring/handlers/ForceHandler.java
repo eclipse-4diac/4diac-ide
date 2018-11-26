@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016, 2018 fortiss GmbH
+ * Copyright (c) 2015, 2016, 2018 fortiss GmbH, Johannes Kepler University
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,15 +8,16 @@
  *
  * Contributors:
  *   Gerd Kainz, Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring   
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart;
@@ -35,7 +37,7 @@ public class ForceHandler extends AbstractMonitoringHandler {
 		if (null != var) {
 			MonitoringManager manager = MonitoringManager.getInstance();
 			MonitoringBaseElement element = manager.getMonitoringElement(var);
-			if (element != null && element instanceof MonitoringElement) {
+			if (element instanceof MonitoringElement) {
 				MonitoringElement monitoringElement = (MonitoringElement) element;
 
 				InputDialog input = new InputDialog(Display.getDefault().getActiveShell(), "Force Value", "Value",

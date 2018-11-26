@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="downloadexecutor" name="downloadexecutor" schema="schema/downloadexecutor.exsd"/>
-   <extension-point id="devicemanagementcommunicationhandler" name="devicemanagementcommunicationhandler" schema="schema/devicemanagementcommunicationhandler.exsd"/>
+   <extension-point id="devicemanagementinteractor" name="devicemanagementinteractor" schema="schema/devicemanagementinteractor.exsd"/>
+   <extension-point id="monitoringmanager" name="Monitoring Manager" schema="schema/monitoringmanager.exsd"/>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated devResponse -->
+      <package
+            uri="org.eclipse.fordiac.ide.deployment"
+            class="org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage"
+            genModel="model/devResponse.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated monitoringBase -->
+      <package
+            uri="org.eclipse.fordiac.depolyment.monitoringbase"
+            class="org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage"
+            genModel="model/monitoringBase.genmodel"/>
+   </extension>
 
 </plugin>

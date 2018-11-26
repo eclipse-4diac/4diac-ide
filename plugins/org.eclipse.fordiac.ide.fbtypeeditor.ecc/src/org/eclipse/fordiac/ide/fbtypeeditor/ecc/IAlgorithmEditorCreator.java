@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
 
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -28,6 +28,6 @@ public interface IAlgorithmEditorCreator {
 	 * 
 	 * @return the i algorithm editor
 	 */
-	public IAlgorithmEditor createAlgorithmEditor(Composite parent, BasicFBType fbType);
+	IAlgorithmEditor createAlgorithmEditor(Composite parent, BaseFBType fbType);
 
 }

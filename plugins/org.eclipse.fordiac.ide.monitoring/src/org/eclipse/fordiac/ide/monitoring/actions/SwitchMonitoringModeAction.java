@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2012 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,7 +30,7 @@ import org.eclipse.ui.IWorkbenchWindowPulldownDelegate2;
 public class SwitchMonitoringModeAction implements
 		IWorkbenchWindowPulldownDelegate2 {
 
-	boolean selectAll = true;
+	private boolean selectAll = true;
 
 	@Override
 	public Menu getMenu(Menu parent) {
@@ -45,11 +46,12 @@ public class SwitchMonitoringModeAction implements
 	
 	@Override
 	public void dispose() {
-
+		//currently nothing to do here
 	}
 
 	@Override
 	public void init(IWorkbenchWindow window) {
+		//currently nothing to do here
 	}
 
 	@Override
@@ -58,14 +60,14 @@ public class SwitchMonitoringModeAction implements
 			for (Iterator<AutomationSystem> iterator = SystemManager.INSTANCE.getSystems()
 					.iterator(); iterator.hasNext();) {
 				AutomationSystem system = iterator.next();
-				MonitoringManager.getInstance().enableSystem(system.getName());
+				MonitoringManager.getInstance().enableSystem(system);
 			}
 			selectAll = false;
 		} else {
 			for (Iterator<AutomationSystem> iterator = SystemManager.INSTANCE.getSystems()
 					.iterator(); iterator.hasNext();) {
 				AutomationSystem system = iterator.next();
-				MonitoringManager.getInstance().disableSystem(system.getName());
+				MonitoringManager.getInstance().disableSystem(system);
 			}
 			selectAll = true;
 		}
@@ -74,6 +76,7 @@ public class SwitchMonitoringModeAction implements
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
+		//currently nothing to do here
 	}
 	
 }

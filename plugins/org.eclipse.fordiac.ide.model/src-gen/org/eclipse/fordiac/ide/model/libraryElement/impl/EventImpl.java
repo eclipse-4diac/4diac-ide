@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 /**
@@ -46,7 +45,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getWith <em>With</em>}</li>
  * </ul>
@@ -145,16 +143,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	protected DataType type;
 
 	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected Value value;
-
-	/**
 	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -208,6 +196,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<With> getWith() {
 		if (with == null) {
 			with = new EObjectContainmentEList<With>(With.class, this, LibraryElementPackage.EVENT__WITH);
@@ -220,8 +209,9 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetworkElement getFBNetworkElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
 	}
 
 	/**
@@ -229,6 +219,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getComment() {
 		return comment;
 	}
@@ -238,6 +229,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
 		comment = newComment;
@@ -250,6 +242,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -259,6 +252,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated not
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -274,6 +268,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isIsInput() {
 		return isInput;
 	}
@@ -283,6 +278,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIsInput(boolean newIsInput) {
 		boolean oldIsInput = isInput;
 		isInput = newIsInput;
@@ -295,6 +291,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
 			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.EVENT__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
@@ -307,6 +304,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
 			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
@@ -319,6 +317,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DataType getType() {
 		if (type != null && type.eIsProxy()) {
 			InternalEObject oldType = (InternalEObject)type;
@@ -345,6 +344,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(DataType newType) {
 		DataType oldType = type;
 		type = newType;
@@ -357,72 +357,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Value getValue() {
-		if (value != null && value.eIsProxy()) {
-			InternalEObject oldValue = (InternalEObject)value;
-			value = (Value)eResolveProxy(oldValue);
-			if (value != oldValue) {
-				InternalEObject newValue = (InternalEObject)value;
-				NotificationChain msgs = oldValue.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EVENT__VALUE, null, null);
-				if (newValue.eInternalContainer() == null) {
-					msgs = newValue.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EVENT__VALUE, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.EVENT__VALUE, oldValue, value));
-			}
-		}
-		return value;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Value basicGetValue() {
-		return value;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetValue(Value newValue, NotificationChain msgs) {
-		Value oldValue = value;
-		value = newValue;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__VALUE, oldValue, newValue);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setValue(Value newValue) {
-		if (newValue != value) {
-			NotificationChain msgs = null;
-			if (value != null)
-				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EVENT__VALUE, null, msgs);
-			if (newValue != null)
-				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EVENT__VALUE, null, msgs);
-			msgs = basicSetValue(newValue, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__VALUE, newValue, newValue));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public String getTypeName() {
 		return typeName;
 	}
@@ -432,6 +367,7 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTypeName(String newTypeName) {
 		String oldTypeName = typeName;
 		typeName = newTypeName;
@@ -468,8 +404,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 				return ((InternalEList<?>)getInputConnections()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.EVENT__OUTPUT_CONNECTIONS:
 				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.EVENT__VALUE:
-				return basicSetValue(null, msgs);
 			case LibraryElementPackage.EVENT__WITH:
 				return ((InternalEList<?>)getWith()).basicRemove(otherEnd, msgs);
 		}
@@ -497,9 +431,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 			case LibraryElementPackage.EVENT__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case LibraryElementPackage.EVENT__VALUE:
-				if (resolve) return getValue();
-				return basicGetValue();
 			case LibraryElementPackage.EVENT__TYPE_NAME:
 				return getTypeName();
 			case LibraryElementPackage.EVENT__WITH:
@@ -536,9 +467,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 				return;
 			case LibraryElementPackage.EVENT__TYPE:
 				setType((DataType)newValue);
-				return;
-			case LibraryElementPackage.EVENT__VALUE:
-				setValue((Value)newValue);
 				return;
 			case LibraryElementPackage.EVENT__TYPE_NAME:
 				setTypeName((String)newValue);
@@ -577,9 +505,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 			case LibraryElementPackage.EVENT__TYPE:
 				setType((DataType)null);
 				return;
-			case LibraryElementPackage.EVENT__VALUE:
-				setValue((Value)null);
-				return;
 			case LibraryElementPackage.EVENT__TYPE_NAME:
 				setTypeName(TYPE_NAME_EDEFAULT);
 				return;
@@ -610,8 +535,6 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 				return outputConnections != null && !outputConnections.isEmpty();
 			case LibraryElementPackage.EVENT__TYPE:
 				return type != null;
-			case LibraryElementPackage.EVENT__VALUE:
-				return value != null;
 			case LibraryElementPackage.EVENT__TYPE_NAME:
 				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case LibraryElementPackage.EVENT__WITH:
@@ -629,14 +552,14 @@ public class EventImpl extends I4DIACElementImpl implements Event {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", comment: ");
+		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
-		result.append(", isInput: ");
+		result.append(", isInput: "); //$NON-NLS-1$
 		result.append(isInput);
-		result.append(", typeName: ");
+		result.append(", typeName: "); //$NON-NLS-1$
 		result.append(typeName);
 		result.append(')');
 		return result.toString();

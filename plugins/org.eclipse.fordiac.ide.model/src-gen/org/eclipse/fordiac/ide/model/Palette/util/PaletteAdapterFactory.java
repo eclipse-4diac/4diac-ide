@@ -16,7 +16,16 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.Palette.*;
+import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
+import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
+import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
+import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 
 /**
  * <!-- begin-user-doc -->

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2014 TU Wien ACIN, Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2011 - 2014 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * 						2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,9 +16,10 @@ package org.eclipse.fordiac.ide.fbtypeeditor.fbtest.automatedRemoteTest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtest.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtest.util.DataVariable;
@@ -38,27 +40,27 @@ import org.eclipse.fordiac.ide.util.comm.exceptions.CommException;
 
 public class AutomatedRemoteTest {
 
-	FBType fbType;
-	String fbInterface="";
-	String MgrID;
+	private FBType fbType;
+	private String fbInterface=""; //$NON-NLS-1$
+	private String MgrID;
 	
-	List<IEC_ANY> sendList = new ArrayList<IEC_ANY>();
-	List<IEC_ANY> recvListTemplate = new ArrayList<IEC_ANY>();
-	List<List<IEC_ANY>> recvList = new ArrayList<List<IEC_ANY>>();
-	Hashtable<String,Integer> InputEventTable = new Hashtable<String,Integer>();
-	Hashtable<String,Integer> OutputEventTable = new Hashtable<String,Integer>();
-	int nNumberOfInputEvents = 0;
-	int nNumberOfOutputEvents = 0;
+	private List<IEC_ANY> sendList = new ArrayList<IEC_ANY>();
+	private List<IEC_ANY> recvListTemplate = new ArrayList<IEC_ANY>();
+	private List<List<IEC_ANY>> recvList = new ArrayList<List<IEC_ANY>>();
+	private Map<String,Integer> InputEventTable = new HashMap<>();
+	private Map<String,Integer> OutputEventTable = new HashMap<>();
+	private int nNumberOfInputEvents = 0;
+	private int nNumberOfOutputEvents = 0;
 
-	Hashtable<String,Integer> InputVarsTable = new Hashtable<String,Integer>();
-	Hashtable<String,Integer> OutputVarsTable = new Hashtable<String,Integer>();
+	private Map<String,Integer> InputVarsTable = new HashMap<>();
+	private Map<String,Integer> OutputVarsTable = new HashMap<>();
 	
-	List<TestSequence> Tests = null;
+	private List<TestSequence> Tests = null;
 	
-	ART_TCPClient TCPTestInterface;
+	private ART_TCPClient TCPTestInterface;
 	
-	ART_DeploymentMgr DMgr;
-	public String DMgr_response="";
+	private ART_DeploymentMgr DMgr;
+	public String DMgr_response=""; //$NON-NLS-1$
 	
 	public boolean prepareART (FBType fbType, List<TestSequence> paTestSequences) {
 		this.fbType = fbType;
@@ -86,7 +88,7 @@ public class AutomatedRemoteTest {
 	}
 
 	private boolean prepareInterface () {
-		fbInterface="";
+		fbInterface=""; //$NON-NLS-1$
 		IEC_UINT InputEventID = new IEC_UINT();
 		IEC_UINT OutputEventID = new IEC_UINT();
 		
@@ -241,7 +243,7 @@ public class AutomatedRemoteTest {
 							SLcounter++;
 						}
 						
-						TCPTestInterface.SendIECData(sendList);
+						TCPTestInterface.sendIECData(sendList);
 					} catch (CommException e) {
 						Activator.getDefault().logError(e.getMessage(), e);
 					}

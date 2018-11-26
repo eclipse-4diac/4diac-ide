@@ -28,8 +28,6 @@ import org.eclipse.fordiac.ide.export.utils.IExportFilter;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -70,11 +68,11 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		super(pageName, selection);
 	}
 
-	private final ArrayList<IExportFilter> exportFilters = new ArrayList<IExportFilter>();
+	private final List<IExportFilter> exportFilters = new ArrayList<>();
 	private Combo filters;
 
 	private void addAvailableExportFilter(final Group group) {
-		SortedMap<Integer, IExportFilter> sortedExportFiltersMap = new TreeMap<Integer, IExportFilter>();
+		SortedMap<Integer, IExportFilter> sortedExportFiltersMap = new TreeMap<>();
 
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
@@ -119,18 +117,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 			filters.add(exportFilter.getExportFilterName());
 		}
 
-		filters.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				updatePageCompletion();
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
-
-		});
+		filters.addListener( SWT.Selection, event -> updatePageCompletion());
 	}
 
 	/**
@@ -145,7 +132,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	@Override
 	protected boolean validateDestinationGroup() {
 
-		if (getDirectory() == null || getDirectory().equals("")
+		if (getDirectory() == null || getDirectory().equals("") //$NON-NLS-1$
 				|| !new File(getDirectory()).isDirectory()) {
 			setErrorMessage("Destination directory needs to be choosen!");
 			return false;
@@ -249,13 +236,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 			}
 		}
 	}
-	
-	
 
-	@Override
-	public void saveWidgetValues() {
-		super.saveWidgetValues();
-	}
 
 	@Override
 	protected void internalSaveWidgetValues() {
@@ -308,10 +289,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		Button destinationBrowseButton = new Button(destinationSelectionGroup,
 				SWT.PUSH);
 		destinationBrowseButton.setText("B&rowse...");
-		destinationBrowseButton.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
+		destinationBrowseButton.addListener( SWT.Selection, event -> {
 				DirectoryDialog dialog = new DirectoryDialog(getContainer()
 						.getShell(), SWT.SAVE | SWT.SHEET);
 				dialog.setMessage("Select a directory to export to.");
@@ -324,13 +302,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 					setDirectory(selectedDirectoryName);
 				}
 				updatePageCompletion();
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-
-		});
+			});
 
 		destinationBrowseButton.setFont(font);
 		setButtonLayoutData(destinationBrowseButton);
@@ -356,5 +328,10 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 	@Override
 	public void handleEvent(Event event) {
+	}
+	
+	@Override  //this overide is needed to make it public for access by the wizard
+	public void saveWidgetValues() {
+		super.saveWidgetValues();
 	}
 }

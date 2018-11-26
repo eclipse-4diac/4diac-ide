@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.iec61499;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,17 +23,17 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class QueryResponseHandler extends DefaultHandler {
 
-	private HashSet<String> queryResult = null;
+	private Set<String> queryResult = null;
 	private boolean response = false;
 	private boolean nameList = false;
-	private final String PATTERN = "([A-Za-z_]\\w+)(\\1,\\s*[A-Za-z_]\\w+)*"; //$NON-NLS-1$
+	private static final String PATTERN = "([A-Za-z_]\\w+)(\\1,\\s*[A-Za-z_]\\w+)*"; //$NON-NLS-1$
 
 	public QueryResponseHandler() {
-		queryResult = new HashSet<String>();
+		queryResult = new HashSet<>();
 	}
 
 	public void reset() {
-		queryResult = new HashSet<String>();
+		queryResult = new HashSet<>();
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class QueryResponseHandler extends DefaultHandler {
 		}
 	}
 
-	public HashSet<String> getQueryResult() {
+	public Set<String> getQueryResult() {
 		return this.queryResult;
 	}
 }

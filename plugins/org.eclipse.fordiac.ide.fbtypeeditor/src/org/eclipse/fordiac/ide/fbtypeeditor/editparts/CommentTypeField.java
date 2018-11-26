@@ -25,7 +25,7 @@ public class CommentTypeField {
 	
 	class CommentTypeSeparator{
 		String getLabel(){
-			return "    -    ";
+			return "    -    "; //$NON-NLS-1$
 		}		
 	}
 	

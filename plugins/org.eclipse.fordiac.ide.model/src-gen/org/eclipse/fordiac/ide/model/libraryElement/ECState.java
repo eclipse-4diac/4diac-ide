@@ -90,7 +90,7 @@ public interface ECState extends INamedElement, PositionableElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.isStartState(this);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);'"
 	 * @generated
 	 */
 	boolean isStartState();

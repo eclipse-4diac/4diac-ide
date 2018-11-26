@@ -82,6 +82,7 @@ public class IEC_STRING extends IEC_WSTRING {
 	 * @param value
 	 *            the value to set
 	 */
+	@Override
 	public boolean setValue(String value) {
 		try {
 			this.value = new String(value.getBytes("UTF-8")); //$NON-NLS-1$

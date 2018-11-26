@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.controls.editors.I4diacModelEditor;
 import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
+import org.eclipse.fordiac.ide.util.UntypedEditorInput;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
@@ -75,20 +76,13 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
-	public final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
+	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
 
 	/** The shared key handler. */
 	private KeyHandler sharedKeyHandler;
 
 	/** The outline page. */
 	private DiagramOutlinePage outlinePage;
-
-	/**
-	 * Instantiates a new diagram editor.
-	 */
-	public DiagramEditorWithFlyoutPalette() {
-		// setEditDomain(new DefaultEditDomain(this));
-	}
 
 	//needed for tabbed property sheets
 	@Override public CommandStack getCommandStack() {
@@ -242,7 +236,16 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 			throws PartInitException {
 		setModel(input);
 		super.init(site, input);
+		if (input.getName() != null) {
+			setPartName(input.getName());
+		}
 	}
+	
+	protected void updateEditorTitle(String newTitel) {
+		((UntypedEditorInput)getEditorInput()).setName(newTitel); //update the editor input so that the tooltip and header bars are correct as well
+		setPartName(newTitel);
+	}
+
 
 	/**
 	 * Sets the model.
@@ -350,16 +353,6 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	 */
 	protected FigureCanvas getEditor() {
 		return (FigureCanvas) getGraphicalViewer().getControl();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getActionRegistry()
-	 */
-	@Override
-	protected ActionRegistry getActionRegistry() {
-		return super.getActionRegistry();
 	}
 
 	/*

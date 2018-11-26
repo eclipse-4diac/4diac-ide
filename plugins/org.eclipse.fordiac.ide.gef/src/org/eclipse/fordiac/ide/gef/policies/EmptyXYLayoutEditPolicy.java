@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2013, 2015, 2017 Profactor GbmH, fortiss GmbH 
+ * Copyright (c) 2008, 2013, 2015, 2017 Profactor GbmH, fortiss GmbH, 
+ * 				 2018 Johannes Kepler University 
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +15,6 @@ package org.eclipse.fordiac.ide.gef.policies;
 
 import java.util.List;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
@@ -37,17 +37,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 public class EmptyXYLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	private static final Dimension DEFAULT_SIZE = new Dimension(-1, -1);
 
-	@Override
-	protected Command createAddCommand(final EditPart child,
-			final Object constraint) {
-		return null;
-	}
-
-	@Override
-	protected Command createChangeConstraintCommand(final EditPart child,
-			final Object constraint) {
-		return null;
-	}
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
@@ -95,16 +84,6 @@ public class EmptyXYLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		return new Rectangle(r);
 	}
 
-	@Override
-	protected void showSizeOnDropFeedback(CreateRequest request) {
-		super.showSizeOnDropFeedback(request);
-	}
-
-	@Override
-	protected void addFeedback(IFigure figure) {
-		super.addFeedback(figure);
-	}
-
 	protected EditPart getInsertionReference(Point mousePoint){
 		@SuppressWarnings("unchecked")
 		List<EditPart> children = getHost().getChildren();
@@ -119,10 +98,8 @@ public class EmptyXYLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 				Rectangle childBoundCopy = ((AbstractGraphicalEditPart)child).getFigure().getBounds().getCopy();
 				((AbstractGraphicalEditPart)child).getFigure().translateToAbsolute(childBoundCopy);
 				Rectangle childBound = transposer.t(childBoundCopy);
-				if(requestPoint.y > parentBound.y){
-					if(requestPoint.y <= childBound.bottom()){
+				if((requestPoint.y > parentBound.y) && (requestPoint.y <= childBound.bottom())){
 						return child;
-					}
 				}
 			}
 		}

@@ -88,7 +88,7 @@ public class SaveAsSubApplicationTypeAction extends SelectionAction {
 		dialog.open();
 	}
 
-	private Boolean checkContainedSubApps(SubApp subApp) {
+	private boolean checkContainedSubApps(SubApp subApp) {
 		for (FBNetworkElement element : subApp.getSubAppNetwork().getNetworkElements()) {
 			if ((element instanceof SubApp) && (null == element.getPaletteEntry())){
 				//we have an untyped subapplication 

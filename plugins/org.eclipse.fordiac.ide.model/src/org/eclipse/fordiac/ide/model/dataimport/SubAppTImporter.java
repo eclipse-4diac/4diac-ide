@@ -40,8 +40,9 @@ public class SubAppTImporter extends FBTImporter{
 	 * 
 	 * @param palette
 	 */
+	@Override
 	public void setPalette(Palette palette){
-		this.palette = palette;
+		super.setPalette(palette);
 	}
 
 	/**
@@ -58,8 +59,8 @@ public class SubAppTImporter extends FBTImporter{
 	public SubAppType importSubAppType(final IFile subapptFile,
 			final Palette palette) throws ReferencedTypeNotFoundException {
 		FBType newType = importType(subapptFile, palette);
-		if((null != newType) && (type instanceof SubAppType)){
-			return (SubAppType)type;
+		if(newType instanceof SubAppType){
+			return (SubAppType)newType;
 		}		
 		return null;
 	}
@@ -69,45 +70,46 @@ public class SubAppTImporter extends FBTImporter{
 		return LibraryElementFactory.eINSTANCE.createSubAppType();
 	}
 
+	@Override
+	protected SubAppType getType() {
+		return (SubAppType)super.getType();
+	}
 	
 	
 	@Override
 	protected FBType parseType(Node rootNode) throws TypeImportException,
 			ReferencedTypeNotFoundException, ParseException {
 		if (rootNode.getNodeName().equals(LibraryElementTags.SUBAPPTYPE_ELEMENT)) {
-			CommonElementImporter.readNameCommentAttributes(type, rootNode.getAttributes());
+			CommonElementImporter.readNameCommentAttributes(getType(), rootNode.getAttributes());
 			
 			NodeList childNodes = rootNode.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); i++) {
 				Node n = childNodes.item(i);
 				if (n.getNodeName().equals(IDENTIFICATION_ELEMENT)) {
-					type.setIdentification(CommonElementImporter
-							.parseIdentification(type, n));
+					getType().setIdentification(CommonElementImporter.parseIdentification(getType(), n));
 				}
 				if (n.getNodeName().equals(VERSION_INFO_ELEMENT)) {
-					type.getVersionInfo().add(
-							CommonElementImporter.parseVersionInfo(type, n));
+					getType().getVersionInfo().add(
+							CommonElementImporter.parseVersionInfo(getType(), n));
 				}
 				if (n.getNodeName().equals(COMPILER_INFO_ELEMENT)) {
-					type.setCompilerInfo(CompilableElementImporter
-							.parseCompilerInfo(type, n));
-					// parseCompilerInfo(type, n);
+					getType().setCompilerInfo(CompilableElementImporter.parseCompilerInfo(getType(), n));
 				}
 				if (n.getNodeName().equals(SUBAPPINTERFACE_LIST_ELEMENT)) {
-					type.setInterfaceList(parseInterfaceList(n));
+					getType().setInterfaceList(parseInterfaceList(n));
 				}
 				
 				if (n.getNodeName().equals(SERVICE_ELEMENT)) {
-					parseService(type, n);
+					parseService(getType(), n);
 				}
 				
 				if (n.getNodeName().equals(LibraryElementTags.SUBAPPNETWORK_ELEMENT)) {
-					((SubAppType)type).setFBNetwork(new SubAppNetworkImporter(palette, type.getInterfaceList()).parseFBNetwork(n));
+					getType().setFBNetwork(new SubAppNetworkImporter(getPalette(), getType().getInterfaceList()).parseFBNetwork(n));
 				}
 			
 			}
 			
-			return type;
+			return getType();
 		}
 		throw new ParseException(Messages.SubAppTImporter_ERROR, 0);
 	}

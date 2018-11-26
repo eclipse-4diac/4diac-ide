@@ -24,9 +24,8 @@ import org.eclipse.ui.IPersistableElement;
  */
 public abstract class PersistableUntypedEditorInput extends UntypedEditorInput implements  IPersistableElement, IPersistable {
 
-	public PersistableUntypedEditorInput(Object content, String name,
-			String toolTip) {
-		super(content, name, toolTip);
+	public PersistableUntypedEditorInput(Object content, String name) {
+		super(content, name);
 	}
 
 	/*
@@ -34,6 +33,7 @@ public abstract class PersistableUntypedEditorInput extends UntypedEditorInput i
 	 * 
 	 * @see org.eclipse.ui.IEditorInput#getPersistable()
 	 */
+	@Override
 	public IPersistableElement getPersistable() {
 		return this;
 	}

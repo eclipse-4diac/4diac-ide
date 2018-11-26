@@ -32,6 +32,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class TypeNavigator extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 	private PatternFilter patternFilter = null;
 	
+	@Override
 	public void createPartControl(Composite aParent) {
 		Composite container = new Composite(aParent, SWT.NONE);
 		GridLayout layout = new GridLayout(1, false);
@@ -43,15 +44,17 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 		final Text text = new Text(container, SWT.SEARCH | SWT.ICON_CANCEL);	
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				if (e.detail == SWT.CANCEL) {
-					setSearchFilter("");
+					setSearchFilter(""); //$NON-NLS-1$
 				} else {
 					setSearchFilter(text.getText());
 				}
 			}
 		});
 		text.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				setSearchFilter(text.getText());
 			}
@@ -78,9 +81,10 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 
 	@Override
 	public String getContributorId() {
-		return "property.contributor.fb";
+		return "property.contributor.fb"; //$NON-NLS-1$
 	}
 
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getAdapter(Class required) {
 		if(required == IPropertySheetPage.class){

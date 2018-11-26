@@ -44,7 +44,7 @@ public class CreateOutputPrimitiveCommand extends Command {
 	public void execute() {
 		Service service = (Service) parent.eContainer().eContainer();
 		newElement = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
-		newElement.setEvent("INITO");	
+		newElement.setEvent("INITO");	 //$NON-NLS-1$
 		if (type.equals(ServiceInterfacePaletteFactory.LEFT_OUTPUT_PRIMITIVE)) {			
 			newElement.setInterface(service.getLeftInterface());
 		} else if (type.equals(ServiceInterfacePaletteFactory.RIGHT_OUTPUT_PRIMITIVE)) {

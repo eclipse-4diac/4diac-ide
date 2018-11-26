@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.controls;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.widgets.Display;
@@ -37,23 +38,23 @@ public abstract class Abstract4DIACUIPlugin extends AbstractUIPlugin {
 	}
 
 	public void logError(String msg, Exception e) {
-		getLog().log(new Status(Status.ERROR, getID(), msg, e));
+		getLog().log(new Status(IStatus.ERROR, getID(), msg, e));
 	}
 
 	public void logError(String msg) {
-		getLog().log(new Status(Status.ERROR, getID(), msg));
+		getLog().log(new Status(IStatus.ERROR, getID(), msg));
 	}
 
 	public void logWarning(String msg, Exception e) {
-		getLog().log(new Status(Status.WARNING, getID(), msg, e));
+		getLog().log(new Status(IStatus.WARNING, getID(), msg, e));
 	}
 
 	public void logWarning(String msg) {
-		getLog().log(new Status(Status.WARNING, getID(), msg));
+		getLog().log(new Status(IStatus.WARNING, getID(), msg));
 	}
 
 	public void logInfo(String msg) {
-		getLog().log(new Status(Status.INFO, getID(), msg));
+		getLog().log(new Status(IStatus.INFO, getID(), msg));
 	}
 
 	public static void statusLineMessage(IWorkbenchPart part, final String msg) {

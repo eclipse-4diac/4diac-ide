@@ -1,0 +1,31 @@
+/*******************************************************************************
+ * Copyright (c) 2018 Johannes Kepler University
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *   Alois Zoitl
+ *     - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+package org.eclipse.fordiac.ide.application.policies;
+
+import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editpolicies.ComponentEditPolicy;
+import org.eclipse.gef.requests.GroupRequest;
+
+public class DeleteSubAppInterfaceElementPolicy extends ComponentEditPolicy {
+
+	@Override
+	protected Command createDeleteCommand(final GroupRequest request) {
+		if (getHost().getModel() instanceof IInterfaceElement) {
+			return new DeleteSubAppInterfaceElementCommand((IInterfaceElement) getHost().getModel());
+		}
+		return null;
+	}
+
+}

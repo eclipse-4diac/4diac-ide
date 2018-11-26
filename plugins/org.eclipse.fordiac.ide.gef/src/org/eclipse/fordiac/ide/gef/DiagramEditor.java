@@ -70,7 +70,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 		implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
-	public final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
+	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
 
 	/** The shared key handler. */
 	private KeyHandler sharedKeyHandler;
@@ -361,16 +361,6 @@ public abstract class DiagramEditor extends GraphicalEditor
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getActionRegistry()
-	 */
-	@Override
-	protected ActionRegistry getActionRegistry() {
-		return super.getActionRegistry();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#createActions()
 	 */
 	@SuppressWarnings("unchecked")
@@ -466,6 +456,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 * org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor
 	 * #getContributorId()
 	 */
+	@Override
 	public String getContributorId() {
 		return PROPERTY_CONTRIBUTOR_ID;
 	}

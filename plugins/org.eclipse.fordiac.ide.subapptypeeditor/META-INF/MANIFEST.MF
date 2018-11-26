@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Subapplication Type Editor (Incubation)
 Bundle-SymbolicName: org.eclipse.fordiac.ide.subapptypeeditor;singleton:=true
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.subapptypeeditor.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.views.properties.tabbed,
@@ -19,3 +19,4 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Eclipse 4diac
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.eclipse.fordiac.ide.subapptypeeditor

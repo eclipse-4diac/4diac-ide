@@ -3,3 +3,4 @@
 **/target/**
 **/*.xtendbin
 **/*java._trace
+/.sonarlint/

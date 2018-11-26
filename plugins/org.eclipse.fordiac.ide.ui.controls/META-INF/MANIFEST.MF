@@ -7,9 +7,10 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.ui.workbench
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-Name: Common UI Controls (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.ui.controls.ControlsPlugin
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.ui.controls;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.eclipse.fordiac.ide.ui.controls

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2012, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,  
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +22,6 @@ import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -51,7 +51,7 @@ public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			((Notifier) getModel()).eAdapters().add(getContentAdapter());
+			getModel().eAdapters().add(getContentAdapter());
 		}
 	}
 
@@ -59,7 +59,7 @@ public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
+			getModel().eAdapters().remove(getContentAdapter());
 		}
 	}
 
@@ -110,7 +110,7 @@ public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 	}
 	
 	
-	 private List<? extends EObject> getDeviceInputValues(EList<Device> devices) {
+	 private static List<? extends EObject> getDeviceInputValues(EList<Device> devices) {
 		 List<Value> children = new ArrayList<>();
 		 for (Device dev : devices) {
 			 for (VarDeclaration varDecl : dev.getVarDeclarations()) {

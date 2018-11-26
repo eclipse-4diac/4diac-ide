@@ -20,8 +20,7 @@ public class STAlgorithmCreationFactory implements CreationFactory {
 
 	@Override
 	public Object getNewObject() {
-		STAlgorithm algorithm = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-		return algorithm;
+		return LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 Profactor GbmH
+ * Copyright (c) 2012, 2018 Profactor GbmH, Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring     
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.preferences;
 
@@ -40,6 +41,7 @@ public class MonitoringPreferences extends FieldEditorPreferencePage implements
 				PreferenceConstants.P_WATCH_COLOR, "Watch Color",
 				getFieldEditorParent());
 		addField(watchColor);
+		
 		ColorFieldEditor forceColor = new ColorFieldEditor(
 				PreferenceConstants.P_FORCE_COLOR, "Force Color",
 				getFieldEditorParent());
@@ -49,15 +51,7 @@ public class MonitoringPreferences extends FieldEditorPreferencePage implements
 				PreferenceConstants.P_POLLING_INTERVAL, "Polling interval in ms",
 				getFieldEditorParent(), PreferenceConstants.P_POLLING_INTERVAL_DEVAULT_VALUE);
 		polling.setValidRange(1, 60000);
-
 		addField(polling);
-
-		IntegerFieldEditor connectionTimeout = new IntegerFieldEditor(
-				PreferenceConstants.P_RESPONSE_TIMEOUT, "Response Timout in ms",
-				getFieldEditorParent(), PreferenceConstants.P_RESPONSE_TIMEOUT_DEVAULT_VALUE);
-		connectionTimeout.setValidRange(1, 60000);
-		addField(connectionTimeout);
-		
 
 		IntegerFieldEditor monitoringTransparency = new IntegerFieldEditor(
 				PreferenceConstants.P_MONITORING_TRANSPARENCY, "Monitoring indicator transparency level",
@@ -67,6 +61,7 @@ public class MonitoringPreferences extends FieldEditorPreferencePage implements
 
 	}
 
+	@Override
 	public void init(IWorkbench workbench) {
 		//nothing todo here
 	}

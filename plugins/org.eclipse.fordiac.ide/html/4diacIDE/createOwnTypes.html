@@ -1,6 +1,7 @@
 <!DOCTYPE html> 
 <!--
  Copyright (c) 2010 - 2017 TU Wien ACIN, fortiss GmbH
+               2018 Andrea Zoitl
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +11,7 @@
  Contributors:
    Carolyn Oates, Monika Wenger, Jose Cabral 
      - initial API and implementation and/or initial documentation
+   Andrea Zoitl - cleaning up tutorials for 1.10 release
 -->
 
 <html lang="en">
@@ -19,7 +21,7 @@
     <link rel="stylesheet" type="text/css" href="../help.css" />
   </head>
   <body>
-  
+    
 <h1 id="topOfPage">Step 4 - Create Function Block Types</h1>
 
 <p>This page is part of a guide that gives a walkthrough over the major 4DIAC features.</p>
@@ -34,118 +36,248 @@
       <li><a href="./advancedFeatures.html">Advanced Features [optional]</a></li>
     </ol>
 
-<p>This page will show how to create a Basic, a Composite and a Service Function Block. The new FBs are then available in the FB palette for use in the Systems' Applications. New function blocks need to be created when the needed functionality doesn't exist or multiple FBs should be combined into just one FB. First you have to define the interface with its input and output events and data. And then define the FB internals, which are defined by the kind of FB. We implement the Blinking functionality inside all three different FB types to introduce their creation process</p>
+<!------------------------------------------------------------------------------------------------>  
 
-<p>To create new Function Block Types you have three options</p>
-<ol>
-	<li>From the context menu in the System Explorer <span class="button4diac">New &rarr; New Type</span>
-	<li>From the menu: <span class="button4diac">File &rarr; New &rarr; New Type</span></li>
-	<li>From the menu: <span class="button4diac">File &rarr; New &rarr; Other.. &rarr; 4DIAC &rarr; New Type</span></li>
-</ol>
-<p>In the wizard page, select BlinkTest as the parent folder. The name and the type will be selected according to which type of Function Block we are doing.</p>
+<p>In this tutorial, you will learn how to create your own Function Block.
+There are several different types of function blocks, we will show how to create a Basic, a Simple, a Composite and a Service Function Block. 
+The new FBs are then available in the FB Palette for use in the Systems' Applications.
+<br>
+New function blocks need to be created when the needed functionality doesn't exist or multiple FBs should be combined into just one FB. 
+First you have to define the interface with its input and output events and data. 
+Afterwards define the FB internals, which are defined by the kind of FB. 
+<br>We implement the Blinking functionality inside all three different FB types to introduce their creation process.
+All 4 types do the same thing in different ways.
+At an event input, the boolean data output will be toggled and the event output will send the message that the value has changed.</p>
 
-<img src="./img/newTypeWizard.png" alt="new Type Wizard" />
+<p>Create new Function Block by selecting: 
+   <br><b><span class="button4diac">File &rarr; New &rarr; New Type</span></b></p>
+
+<!------------------------------------------------------------------------------------------------>
 
 <h2 id="createBasic">Create a Basic Function Block</h2>
 
-<p>In the wizard page, choose a name for the type (we use BasicTest) and select Basic.fbt as Type Name, and click Finish. The Type Editor view is open.</p>
+<p>Follow the instructions in the creation wizard. 
+For this tutorial select BlinkTest as the parent folder. Choose a name for the new FB, we name it <i>BasicTest</i>. 
+Afterwards select the type of FB you want to create, in this case we choose <i>Basic</i>.
+The <b>Function Block Type Editor (FBT Editor)</b> is opening after clicking Finish.</p>
 
-<img src="./img/typeBasicGeneral.png" alt="new Type Wizard" />
+<img src="./img/Step4/newTypeWizardBasic.png" alt="New Type Wizard - Create a Basic Function Block" />
 
 <ol>
-	<li>Your new created type appears in the System Explorer (press F5 to refresh).</li>
-	<li>The main view shows what you are working on. Initially it shows the interface of the Function Block.</li>
-	<li>The Palette shows all that you can add to the main view.</li>
-	<li>The tabs below the main view identify the current part of the Function Block you're editing. The picture shows the Interface tab selected.</li>
+	<li>Your new created type appears in your System's Type Library.</li>
+	<li>The central editing area shows the FB part you are currently working on. 
+	Initially it shows the interface of the Function Block.</li>
+	<li>The Palette shows all elements you can add to the FB interface.</li>
+	<li>The tabs below the central editing area identify the current part of the Function Block you're editing. 
+	The picture shows the Interface tab selected.</li>
 	<li>The properties below show the information about the Function Block.</li>
 </ol>
 
+<img src="./img/Step4/typeBasicGeneral.png" alt="General View after Creating a Basic Function Block" />
+
+<!---------------------->
+
 <h3 id="changeInterface">Change the interface</h3>
 
-<p>In this example, we are doing a Blinking Function Block. This should have then one input Event that triggers the change, one output Event as an indicator of a change, and a output boolean Data for the state.</p>
+<p>The Basic FB already has some inputs and outputs which are mostly used.
+If you need another just drag and drop it from the Palette into the FB or right clicking at the FB to set another input or output.
+Of course you can also delete them by pressing the Delete key or right click &rarr; Delete.</p>
+
+<p>In this example, we are doing a Blinking Function Block. 
+This should have then one input event that triggers the change, one output event as an indicator of a change, and a boolean data output for the state.
+<br>By default, the Boolean output is set to <i>false</i> and remembers the state until a new event comes in and converts the boolean to <i>true</i> until the next input arrives.
+<br>Right now the Basic FB has more inputs and outputs then we need.</p>
 
 <ol>
-	<li>Select the INIT event, and delete it by pressing the Delete key, or right click &rarr; Delete. Do the same for QI and INITO.</li>
-	<li>Select the QO output, and change its name to STATE by either double cliking on it, or in the Properties below. You can change the Comment for each event and data also in the Properties.</li>
-	<li>Check that the Type of STATE is boolean in Properties.</li>
-	<li>Check the lines between data and events which represent the WITH. They indicate wihch data outputs are refreshed when an Event occurs. Similarly occurs with Event and data inputs, but in this case there's no data input to refresh. Since the STATE is changed when CNF is triggered, there's a WITH line between them.</li>
-	<li>Try and add Events and differnt types of Data input and outputs to the interface to play around from the Palette. Then leave it again as the image.</li>
+	<li>Select the INIT event, and delete it. Do the same for QI and INITO.</li>
+	<li>Select the QO output, and change its name to STATE by either double clicking on it, or in the Properties below. 
+    	You can change the Comment for each event and data also in the Properties.</li>
+	<li>Check that the Type of STATE is BOOL in Properties.</li>
+	<li>Check the lines between events and data which represent the WITH. 
+	    They indicate which data outputs are refreshed when an Event occurs. 
+	    Similarly occurs with event and data inputs, but in this case there's no data input to refresh. 
+	    Since the STATE is changed when CNF is triggered, there's a WITH line between them.</li>
+	<li>Try and add Events and different types of Data input and outputs to the interface to play around from the Palette. 
+	    Then leave it again as the image.</li>
 </ol>
 
-<img src="./img/createBasicInterface.png" alt="Create Basic Type - Interface"/>
+<img src="./img/Step4/createBasicInterface.png" alt="Create Basic Type - Interface"/>
+
+<!---------------------->
 
 <h3>Change the ECC</h3>
 
-<p>Select the ECC tab, and you will see a state-machine picture. This is the default one, and here's where you actually code the behavior of the Function Block. Lila boxes are states (double border is the initial one), the yellow ones represent the Algorithms that are executed when the Function Block enter the state, and the green ones are the triggered events after the algorithm. The arrows between them represent Events that arrives to the Function Block. They can have conditions. A "1" means that it will always change state after the algorithm. Events are consumed only one at a time. The small number at the beggining of the transition are the priorities, in case more than one transition is possible. Don't try to understand everything at once. With a little practice the terms and concepts become easier.</p>
+<p>Select the <b>ECC (Execution Control Chart) tab</b> of the bottom of the central editing area, and you will see a state-machine picture. 
+This is the default one, and here's where you actually code the behavior of the Function Block. 
+Purple boxes are states (double frame is the initial one), the yellow ones represent the Algorithms that are executed when the Function Block enter the state, and the green ones are the triggered events after the algorithm. 
+The arrows between them represent Events that arrives to the Function Block. 
+They can have conditions. A "1" means that it will always change state after the algorithm. 
+Events are consumed only one at a time. The small number at the begining of the transition are the priorities, in case more than one transition is possible. 
+Don't try to understand everything at once. With a little practice the terms and concepts become easier.</p>
 
 <ol>
-	<li>Select everything (Click and Drag), excecept the START state, and delete them.</li>
-	<li>Add a State from the Palette on the right (Drag and Drop).</li>
-	<li>Change its name to REQUESTED by either double clicking on it, or selecting and then in Properties below.</li>
-	<li>Add an Action to the REQUESTED state by dragging it to it from the Palette.</li>
-	<li>Select nothing by clicking in the background of the main view, and select the Algorithms tab in Properties. Here you see the all the default Algorithms for the Function Block. Delete them all by selecting and clicking the read cross, since we don't use in this example.</li>
-	<li>Add one algorithm. Select the name and change it to CHANGE. Depending on the selected algorithm type, different algorithm editors are provided. Currently the most used algorithm language is IEC 61131-3 structured text. For this also syntax highlighting is provided. We'll see later that this code is converted to FORTE code. If you select AnyText, no conversion is done, so you should know the syntax for FORTE (or other Runtime). </li>
-	<li>In the Internal Vars tab, you can add variables that retain their values between events, and are unaccesible outside of the Function Block. For this example, we don't use them.</li>
-	<li>Select the CHANGE algorithm, and on the right side, you can write your code. This just need to negate the previous value. Using the name of the Data Output (or input or internal vairable), you access its value for reading and writing.
-	<div class="code">STATE := NOT STATE;</div>
-	</li>
-	<li>Draw a transition from state START to REQUESTED. Select it, and in the Properties view, in the Condition field, select the REQ events. Next to it, you have the possibility to add a condition (for example, if STATE == TRUE or similar). In this example, no condition except the REQ event is needed.</li>
-	<li>Draw a transition from state REQUESTED to START and leave it with condition 1.</li>
-	<li>Double click on the yellow box next to REQUESTED and select the CHANGE algorithm.</li>
-	<li>Double click on the green box next to REQUESTED and select the CNF event.</li>
+	<li>Select everything (Click and Drag), except the <i>START</i> state, and delete them.</li>
+	<li>Add a State from the Palette on the right by Drag and Drop from the Palette. 
+	    Change its name to <i>On</i> by either double clicking on it, or selecting and then in Properties below.</li>
+	<li>Add another State and name it <i>Off</i>.</li>
+	<li>Add an Action to the states <i>On</i> by Drag and Drop from the Palette or right click &rarr; Add Action.</li>
+	<li>Select nothing by clicking in the background of the central editing area, and select the Algorithms tab in Property view. 
+	    Here you see the all the default Algorithms for the Function Block. 
+	    Delete them all by selecting and clicking the read cross, since we don't use in this example.</li>
+	<li>Add one algorithm by clicking on the green plus. Select the name and change it to <i>turnOn</i>. 
+	    <br>Depending on the selected algorithm type, different algorithm editors are provided. 
+	    Currently the most used algorithm language is IEC 61131-3 Structured Text (ST). The ST Editor provides syntax highlighting and code completion. 
+	    We'll see later that this code is converted to FORTE code. 
+	    If you select AnyText, no conversion is done, so you should know the syntax for FORTE (or other Runtime).    
+		<p>On the right side, you can write your code.
+	    As the name implies in the <i>turnOn</i> algorithm we set you STATE variable to TRUE.
+	    Using the name of the Data Output (or input or internal variable), you access its value for reading and writing.</p>
+	    <div class="code">STATE := TRUE;</div> 
+	    <br><img src="./img/Step4/addAlgorithm.png" alt="Add an Algorithm to the Action"/></li>	
+	<li>Double-click on the yellow box of the action of the <i>On</i> state and select the <i>turnOn</i> algorithm. 
+	    Alternatively, you can also select this in the Property view.</li>
+	<li>Double-click on the green box of the action of the <i>On</i> state and select the <i>CNF</i> output event. 
+	    Alternatively, you can also select this in the Property view.</li>
+	<li>Add another algorithm by clicking on the green plus. Select the name and change it to <i>turnOff</i>. 
+	    As the name implies in the <i>turnOff</i> algorithm we set you STATE variable to FALSE.
+	    <div class="code">STATE := FALSE;</div></li>
+	<li>Double-click on the yellow box of the action of the <i>Off</i> state and select the <i>turnOff</i> algorithm.</li>
+	<li>Double-click on the green box of the action of the <i>Off</i> state and select the <i>CNF</i> output event.
+	    <br><img src="./img/Step4/stateAndActions.png" alt="Current score of the States And Actions"/></li>
+	<li>Draw a transition by drag and drop from the <i>START</i> to the state <i>On</i>. 
+	Select it, and in the transition tab of the Properties view select the condition <i>REQ</i>.
+	Next to it, you have the possibility to add a condition (for example, if STATE == TRUE or similar). 
+	In this example, no condition except the <i>REQ</i> event is needed.</li>
+    <li>Draw a transition by drag and drop from the state <i>On</i> to the state <i>Off</i>. 
+	Select it, and in the transition tab of the Properties view select the condition <i>REQ</i>.</li>
+    <li>Draw a transition by drag and drop from the state <i>Off</i> to the state <i>On</i>. 
+	Select it, and in the transition tab of the Properties view select the condition <i>REQ</i>.</li>
 </ol>
 
-<img src="./img/createBasicECC.png" alt="Basic ECC example">
+<img src="./img/Step4/createBasicECC.png" alt="Basic ECC example">
 
-<p>At the beginning, the FB is on the START state. When a REQ event arrives, it jumps to the REQUESTED state, execute algorithm CHANGE, triggers CNF output event, and then follows the 1 back to START. That's how the ECC works.</p>
+<p>At the beginning, the FB is on the START state. 
+When a REQ event arrives, it jumps to the <i>On</i> state, execute algorithm <i>turnOn</i> and triggers the <i>CNF</i> output event.
+When the next event arrives, it jumps to <i>Off</i> state, execute algorithm <i>turnOff</i> and triggers the <i>CNF</i> output event.
+   That's how the ECC works.</p>
 
-<p>In case the transition with a "1" had also a REQ event, an infinite loop won't happen since the event is consumed only once. You would need to REQ events to go back.</p>
+<p>In case the transition with a "1" had also a REQ event, an infinite loop won't happen since the event is consumed only once. 
+   You would need to REQ events to go back.</p>
 
-<p><a href="#exportTypes">Exporting</a> the Function Block and <a href="#testFunctionBlock">testing</a> are presented after the <a href="#createComposite">Composite</a> and <a href="#createService">Service</a> Function Block</p>
+<p><a href="#exportTypes">Exporting</a> the Function Block and <a href="#testFunctionBlock">testing</a> are presented after the chapter Create a <a href="#createComposite">Composite</a> and <a href="#createService">Service</a> Function Block.</p>
+
+<!------------------------------------------------------------------------------------------------>
+
+<h2 id="createSimple">Create a Simple Function Block</h2>
+
+<p>The Simple FB has only one algorithm and no ECC.</p>
+
+<p>Create a new Type follow the instructions in the creation wizard. 
+For this tutorial select BlinkTest as the parent folder. Choose a name for the new FB, we name it <i>SimpleTest</i>. 
+Afterwards select the type of FB you want to create, in this case we choose <i>Simple</i>.
+The <i>Function Block Type Editor (FBT Editor)</i> is opening after clicking Finish.</p>
+
+<img src="./img/Step4/newTypeWizardSimple.png" alt="New Type Wizard - Create a Simple Function Block" />
+
+<ol>
+	<li>Change the interface as <a href="#changeInterface">before</a>.
+	<br><img src="./img/Step4/createSimpleInterface.png" alt="Create Simple Type - Interface"/></li>
+	<li>Select the <b>Algorithm tab</b> of the bottom of the central editing area. In this view you can define a algorithm of the Simple FB. 
+		<div><img src="./img/Step4/createSimpleFBAlgorithm.png" alt="Simple FB Algorithm example"></div></li>
+</ol>
+
+<p>That's all you need to do for the Simple function block.</p>
+
+<!------------------------------------------------------------------------------------------------>
 
 <h2 id="createComposite">Create a Composite Function Block</h2>
 
-<p>Create a new Type as shown before. In the wizard page, choose a name for the type (we use CompositeTest) and select Basic.fbt as Type Name, and click Finish. The Type Editor view is open.</p>
+<p>Create a new Type follow the instructions in the creation wizard. 
+For this tutorial select BlinkTest as the parent folder. Choose a name for the new FB, we name it <i>CompositeTest</i>. 
+Afterwards select the type of FB you want to create, in this case we choose <i>Composite</i>.
+The <i>Function Block Type Editor (FBT Editor)</i> is opening after clicking Finish.</p>
+
+<img src="./img/Step4/newTypeWizardComposite.png" alt="New Type Wizard - Create a Composite Function Block" />
 
 <ol>
-	<li>Change the interface as <a href="#changeInterface">before</a>.</li>
-	<li>Move to the Composite Network tab. In this view you can create your own network of FBs inside the Function Block. For this example, use the E_SWITCH and E_SR and connect them as the original Blink example.</li>
-	<li>On the edges of the main view, you can see events and data that correspond to the interface of the Composite. Connect them as the image below.
-		<div><img src="./img/createCompositeNetwork.png" alt="Composite Network example"></div></li>
+	<li>Change the interface as <a href="#changeInterface">before</a>.
+	<br><img src="./img/Step4/createCompositeInterface.png" alt="Create Composite Type - Interface"/></li>
+	<li>Select the <b>Composite Network tab</b> of the bottom of the central editing area. 
+	    In this view you can create your own network of FBs inside the Function Block. 
+	    For this example, use the E_SWITCH and E_SR and connect them as the original Blink example.</li>
+	<li>On the edges of the central editing area, you can see events and data that correspond to the interface of the Composite. 
+	    Connect them as the image below.
+		<div><img src="./img/Step4/createCompositeNetwork.png" alt="Composite Network example"></div></li>
 </ol>
 
 <p>That's all you need to do for the Composite function block.</p>
 
+<!------------------------------------------------------------------------------------------------>
 
 <h2 id="createService">Create a Service Function Block</h2>
 
-<p>Create a new Type as shown before. In the wizard page, choose a name for the type (we use ServiceTest) and select ServiceInterface.fbt as Type Name, and click Finish. The Type Editor view is open.</p>
+<p>Create a new Type follow the instructions in the creation wizard. 
+For this tutorial select BlinkTest as the parent folder. Choose a name for the new FB, we name it <i>ServiceInterfaceTest</i>. 
+Afterwards select the type of FB you want to create, in this case we choose <i>Service Interface</i>.
+The <i>Function Block Type Editor (FBT Editor)</i> is opening after clicking Finish.</p>
+   
+   <img src="./img/Step4/newTypeWizardServiceInterface.png" alt="New Type Wizard - Create a Service Interface Function Block" />
 
-<p>The defatult interface of the Function Block looks different, but change it again and leave similar to the <a href="#changeInterface">Basic</a> and Composite examples.</p>
+<p>Change the interface as <a href="#changeInterface">before</a></p>
+<br><img src="./img/Step4/createServiceInterfaceInterface.png" alt="Create Service Interface Type - Interface"/>
 
-<p>That's it. The behavior of the Service Function Block must be implemented directly in the code that's generated from it. You will need to implement the functionality for each incomming event, manage the internal variables and send output events by yourself after exporting. <a href="#finishService">Below</a> you find the code for this example.</p>
+<p>That's it. The behavior of the Service Function Block must be implemented directly in the code that's generated from it. 
+You will need to implement the functionality for each incomming event, manage the internal variables and send output events by yourself after exporting. <a href="#finishService">Below</a> you find the code for this example.</p>
+
+<!------------------------------------------------------------------------------------------------>
 
 <h2 id="exportTypes">Export Function Block types</h2>
 
-<p>4DIAC-IDE provides an export filter to generate C++ code which can be included in the FORTE development process. In order to export a Function Block Type, select either</p>
+<p>4diac IDE provides an export filter to generate C++ code which can be included in the 4diac FORTE development process. 
+In order to export a Function Block Type, select either</p>
+
 <ul>
-	<li>File &rarr; Export &rarr; 4DIAC &rarr; 4DIAC Type Export</li>
-	<li>Right click on the function block to export and select Export &rarr; 4DIAC &rarr; 4DIAC Type Export</li>
+	<li>File &rarr; Export &rarr; 4diac IDE &rarr; 4diac IDE Type Export &rarr; Next</li>
+	<li>Right click on the function block to export and select Export &rarr; 4diac IDE &rarr; 4diac Type Export</li>
 </ul>
 
-<img src="./img/selectExportType.png" alt="Select Export Type" />
+<img src="./img/Step4/selectExportType.png" alt="Select Export Type" />
 
-<p>Before exporting one or more Function Block Types, the corresponding types and the output directory have to be chosen. Furthermore the version of the FORTE C++ format have to be selected. We'll export the three just created.</p>
+<p>Select the FBs to be exported on the right side of the wizard. 
+It makes sense to use your own folder, we choose <i>ExportedFBs</i>.
+Before exporting one or more Function Block Types, the Export Destination and the Exporter (FORTE 1.x)have to be chosen.
+Furthermore the version of the 4diac FORTE C++ format have to be selected. We'll export the three just created.</p>
+<p class="attention"><span class="inlineTitle">Attention:</span> Make sure that not all FBs are checked, otherwise all existing FBs will be exported!</p>
 
-<img src="./img/export4DIACTypeWizard.png" alt="Export Type Wizard" />
+<img src="./img/Step4/export4DIACTypeWizard.png" alt="Export Type Wizard" />
 
-<p>After pressing the Fnish-Button a dialog window will inform when the export to the FORTE C++ format was not successful. If the output directory already contains an older version of the exported Function Block Type it is possible to overwrite the old file or to open a Merge Editor where manual merges can be performed.</p>
+<p>After pressing the Finish-Button and no warning pop up everything went fine. Your exported FBs are in the folder you choose before.
+<br>If a dialog window will pop up, something went wrong and it will inform you that the export to the 4diac FORTE C++ format was not successful.</p> 
 
-<img src="./img/exportMergeWindow.png" width="1024" alt="Export Merge Window" />
+<p>If the output directory already contains an older version of the exported Function Block Type it is possible to overwrite the old file or to open a Merge Editor where manual merges can be performed.</p>
 
-<h3 id="finishService">Finish the Service Test</h3>
+<img src="./img/Step4/exportMergeWindow.png" width="1024" alt="Export Merge Window" />
 
-<p>Now that you have exported the Service Function Block, you need to edit it in order to get the desired behavior. Open the ServiceTest.cpp file that was recently exported, and take a look at the executeEvent function at the bottom. You write there the toggling effect.</p>
+<!--------------->
+
+<h3 id="finishService">Finish the Service Interface Test</h3>
+
+<p>Now that you have exported the Service Interface Function Block, you need to edit it in order to get the desired behavior. 
+Open the ServiceTest.cpp file that was recently exported, and take a look at the executeEvent function at the bottom.</p>
+
+<div class="code">void FORTE_ServiceInterfaceTest::executeEvent(int pa_nEIID){
+  switch(pa_nEIID){
+    case scm_nEventREQID:
+#error add code for REQ event!
+/*
+  do not forget to send output event, calling e.g.
+      sendOutputEvent(scm_nEventCNFID);
+*/
+      break;
+  }
+}</div>
+
+<p>The comment reminds us to set an output event. replace <i>#error add code for REQ event!</i> with <i>STATE() = !STATE();</i> for the toggling effect.</p>
 
 <div class="code">void FORTE_ServiceTest::executeEvent(int pa_nEIID){
   switch(pa_nEIID){
@@ -156,20 +288,36 @@
   }
 }</div>
 
-<p>To get or set an internal variable or data input, in the FORTE template, you use the name and the parenthesis. The sendOutputEvent is the specific function to send output events.</p>
+<p>To get or set an internal variable or data input, in the 4diac FORTE template, you use the name and the parenthesis. 
+The sendOutputEvent is the specific function to send output events.</p>
+
+<!------------------------------------------------------------------------------------------------>
 
 <h2 id="OtherEditors">Other Type Editors</h2>
-<p>Currently only the management (i.e. creation, deletion and modification) of Basic, Composite and Service Interface Function Block types as well as Adapter types is supported. The management of Device and Resource Types is currently not supported, Sub-applications are currently under development.</p>
+<p>Currently only the management (i.e. creation, deletion and modification) of the Basic, Simple, Composite, Service Interface and Sub Application (SubApp) Function Block types as well as Adapter types are supported. 
+The management of Device and Resource Types is currently not supported.</p>
+
+<!------------------------------------------------------------------------------------------------>
 
 <h2 id="testFunctionBlock">Test Function Block</h2>
 
-<p>The FBTester tab is available for all Function Blocks. It allows to test the functionality of a Function Block by executing it on a target device. But first, FORTE must know about these FBs. So, you need to compile forte using these Function Block just created. The guide to compile FORTE is <a href="../installation/install.html#ownFORTE">here</a>. See the External Module section to add the files for compilation. Also, the CMake option FORTE_SUPPORT_MONITORING must be marked, which is the default value.</p>
+<p>The <b>FBTester tab</b> of the bottom of the central editing area is available for all Function Blocks. 
+It allows to test the functionality of a Function Block by executing it on a target device. 
+But first, 4diac FORTE must know about these FBs. 
+So, you need to compile 4diac FORTE using these Function Block just created. 
+The guide to compile 4diac FORTE is <a href="../installation/install.html#ownFORTE">here</a>. 
+See the External Module section to add the files for compilation. 
+Also, the CMake option FORTE_SUPPORT_MONITORING must be marked, which is the default value.</p>
 
-<p>Once compiled, you can go to the FBTester, select FORTE Remote Tester in Test Configuration, and then set the IP and PORT for the FORTE that was compiled with the Function Blocks to be tested. The default is locally, but you can test them on any reachable FORTE.</p>
+<p>Once compiled, you can go to the FBTester, select 4diac FORTE Remote Tester in Test Configuration, and then set the IP and PORT for the 4diac FORTE that was compiled with the Function Blocks to be tested. 
+The default is locally, but you can test them on any reachable FORTE.</p>
 
-<p>Press Start Testing FB, and the FB will be load in FORTE, and you can manually set input values of your FB, trigger input events and inspect the resulting output events and output data. Furthermore you can store input/output sequences and execute them to automatically test a certain functionality of your FB.</p>
+<p>Press Start Testing FB, and the FB will be load in 4diac FORTE, and you can manually set input values of your FB, trigger input events and inspect the resulting output events and output data. 
+Furthermore you can store input/output sequences and execute them to automatically test a certain functionality of your FB.</p>
 
-<img src="./img/functionBlockTester.png" width="1024" alt="Functionblock Tester" />
+<img src="./img/Step4/functionBlockTester.png" width="1024" alt="Functionblock Tester" />
+
+<!------------------------------------------------------------------------------------------------>
 
 <h1>Where to go from here?</h1>
 

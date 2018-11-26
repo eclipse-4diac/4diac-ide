@@ -60,7 +60,8 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 
 	@Override
 	public boolean hasChildren(Object object) {
-		return subAppNetworkItemProvider.hasChildren(getFBNetwork(object));
+		FBNetwork fbNetwork = getFBNetwork(object);
+		return (null != fbNetwork) ? subAppNetworkItemProvider.hasChildren(fbNetwork) : false;
 	}
 
 	@Override
@@ -74,7 +75,7 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 
 	private FBNetwork getFBNetwork(Object object) {
 		FBNetwork subAppNetwork = ((SubApp)object).getSubAppNetwork();
-		if(!subAppNetwork.eAdapters().contains(subAppNetworkItemProvider)){
+		if(null != subAppNetwork && !subAppNetwork.eAdapters().contains(subAppNetworkItemProvider)){
 			//register to the subappnetwork changes so that the viewer is updated
 			subAppNetwork.eAdapters().add(subAppNetworkItemProvider);
 		}

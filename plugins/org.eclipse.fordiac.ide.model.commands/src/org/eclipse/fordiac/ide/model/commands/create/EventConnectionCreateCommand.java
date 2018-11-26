@@ -28,6 +28,7 @@ public class EventConnectionCreateCommand extends AbstractConnectionCreateComman
 		super(parent);
 	}
 
+	@Override
 	protected Connection createConnectionElement() {
 		return LibraryElementFactory.eINSTANCE.createEventConnection();
 	}
@@ -51,8 +52,7 @@ public class EventConnectionCreateCommand extends AbstractConnectionCreateComman
 			return false;
 		}
 		
-		boolean retVal = LinkConstraints.canExistEventConnection((Event) source, (Event)destination);
-		return retVal;
+		return LinkConstraints.canExistEventConnection((Event) source, (Event)destination);
 	}
 	
 	private boolean duplicateConnection() {

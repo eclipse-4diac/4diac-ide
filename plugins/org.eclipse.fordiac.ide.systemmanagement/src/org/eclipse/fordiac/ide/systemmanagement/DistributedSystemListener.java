@@ -22,6 +22,6 @@ public interface DistributedSystemListener {
 	/**
 	 * Distributed system workspace changed.
 	 */
-	public abstract void distributedSystemWorkspaceChanged();
+	void distributedSystemWorkspaceChanged();
 
 }

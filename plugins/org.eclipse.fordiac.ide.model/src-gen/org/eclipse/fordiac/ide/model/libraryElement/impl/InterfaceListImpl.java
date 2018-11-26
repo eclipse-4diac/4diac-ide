@@ -132,6 +132,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<AdapterDeclaration> getPlugs() {
 		if (plugs == null) {
 			plugs = new EObjectContainmentEList<AdapterDeclaration>(AdapterDeclaration.class, this, LibraryElementPackage.INTERFACE_LIST__PLUGS);
@@ -144,6 +145,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<AdapterDeclaration> getSockets() {
 		if (sockets == null) {
 			sockets = new EObjectContainmentEList<AdapterDeclaration>(AdapterDeclaration.class, this, LibraryElementPackage.INTERFACE_LIST__SOCKETS);
@@ -156,6 +158,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Event> getEventInputs() {
 		if (eventInputs == null) {
 			eventInputs = new EObjectContainmentEList<Event>(Event.class, this, LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS);
@@ -168,6 +171,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Event> getEventOutputs() {
 		if (eventOutputs == null) {
 			eventOutputs = new EObjectContainmentEList<Event>(Event.class, this, LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS);
@@ -180,6 +184,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VarDeclaration> getInputVars() {
 		if (inputVars == null) {
 			inputVars = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.INTERFACE_LIST__INPUT_VARS);
@@ -192,6 +197,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VarDeclaration> getOutputVars() {
 		if (outputVars == null) {
 			outputVars = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS);
@@ -204,8 +210,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<IInterfaceElement> getAllInterfaceElements() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAllInterfaceElements(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getAllInterfaceElements(this);
 	}
 
 	/**
@@ -213,8 +220,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Event getEvent(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getEvent(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getEvent(this, name);
 	}
 
 	/**
@@ -222,8 +230,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VarDeclaration getVariable(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getVariable(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getVariable(this, name);
 	}
 
 	/**
@@ -231,8 +240,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IInterfaceElement getInterfaceElement(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceElement(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);
 	}
 
 	/**
@@ -240,8 +250,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetworkElement getFBNetworkElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
 	}
 
 	/**
@@ -249,8 +260,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterDeclaration getAdapter(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAdapter(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getAdapter(this, name);
 	}
 
 	/**

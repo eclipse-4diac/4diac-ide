@@ -81,6 +81,7 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Algorithm getAlgorithm() {
 		if (algorithm != null && algorithm.eIsProxy()) {
 			InternalEObject oldAlgorithm = (InternalEObject)algorithm;
@@ -107,6 +108,7 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAlgorithm(Algorithm newAlgorithm) {
 		Algorithm oldAlgorithm = algorithm;
 		algorithm = newAlgorithm;
@@ -119,6 +121,7 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Event getOutput() {
 		if (output != null && output.eIsProxy()) {
 			InternalEObject oldOutput = (InternalEObject)output;
@@ -145,6 +148,7 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOutput(Event newOutput) {
 		Event oldOutput = output;
 		output = newOutput;

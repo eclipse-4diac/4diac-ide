@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
@@ -76,6 +77,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -184,6 +186,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.BASIC_FB_TYPE: {
 				BasicFBType basicFBType = (BasicFBType)theEObject;
 				T result = caseBasicFBType(basicFBType);
+				if (result == null) result = caseBaseFBType(basicFBType);
 				if (result == null) result = caseFBType(basicFBType);
 				if (result == null) result = caseCompilableType(basicFBType);
 				if (result == null) result = caseLibraryElement(basicFBType);
@@ -738,6 +741,29 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.TYPED_ELEMENT: {
 				TypedElement typedElement = (TypedElement)theEObject;
 				T result = caseTypedElement(typedElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.SIMPLE_FB_TYPE: {
+				SimpleFBType simpleFBType = (SimpleFBType)theEObject;
+				T result = caseSimpleFBType(simpleFBType);
+				if (result == null) result = caseBaseFBType(simpleFBType);
+				if (result == null) result = caseFBType(simpleFBType);
+				if (result == null) result = caseCompilableType(simpleFBType);
+				if (result == null) result = caseLibraryElement(simpleFBType);
+				if (result == null) result = caseINamedElement(simpleFBType);
+				if (result == null) result = caseI4DIACElement(simpleFBType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.BASE_FB_TYPE: {
+				BaseFBType baseFBType = (BaseFBType)theEObject;
+				T result = caseBaseFBType(baseFBType);
+				if (result == null) result = caseFBType(baseFBType);
+				if (result == null) result = caseCompilableType(baseFBType);
+				if (result == null) result = caseLibraryElement(baseFBType);
+				if (result == null) result = caseINamedElement(baseFBType);
+				if (result == null) result = caseI4DIACElement(baseFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1777,6 +1803,36 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTypedElement(TypedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Simple FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Simple FB Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSimpleFBType(SimpleFBType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Base FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Base FB Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBaseFBType(BaseFBType object) {
 		return null;
 	}
 

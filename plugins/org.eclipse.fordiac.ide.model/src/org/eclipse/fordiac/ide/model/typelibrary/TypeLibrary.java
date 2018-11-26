@@ -1,5 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems
+ * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +11,8 @@
  *  Gerhard Ebenhofer, Martijn Rooker, Alois Zoitl, Monika Wenger, Jens Reimann,
  *  Waldemar Eisenmenger, Gerd Kainz
  *    - initial API and implementation and/or initial documentation
+ *  Martin Melik-Merkumians
+ *    - adds convenience methods
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -65,7 +68,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-public class TypeLibrary implements TypeLibraryTags{
+public final class TypeLibrary implements TypeLibraryTags{
 	
 
 	/** The palette. */
@@ -81,13 +84,11 @@ public class TypeLibrary implements TypeLibraryTags{
 	/** The instance. */
 	private static TypeLibrary instance;
 
-	static public String getTypeNameFromFile(IFile element) {
-		//String name = element.getName().replaceAll(
-		//		"." + element.getFileExtension() + "$", "");
+	public static String getTypeNameFromFile(IFile element) {
 		return getTypeNameFromFileName(element.getName());
 	}
 
-	static public String getTypeNameFromFileName(final String fileName){
+	public static String getTypeNameFromFileName(final String fileName){
 		String name = fileName;
 		int index = fileName.lastIndexOf('.'); 
 		if(-1 != index){
@@ -96,26 +97,26 @@ public class TypeLibrary implements TypeLibraryTags{
 		return name;
 	}
 
-	static public boolean isIEC61499TypeFile(String filename){
+	public static boolean isIEC61499TypeFile(String filename){
 		return ((filename.toUpperCase().endsWith(FB_TYPE_FILE_ENDING_WITH_DOT)) || 
-				(filename.toUpperCase().endsWith(TypeLibrary.ADAPTER_TYPE_FILE_ENDING_WITH_DOT)) ||
-				(filename.toUpperCase().endsWith(TypeLibrary.DEVICE_TYPE_FILE_ENDING_WITH_DOT)) ||
-				(filename.toUpperCase().endsWith(TypeLibrary.RESOURCE_TYPE_FILE_ENDING_WITH_DOT)) ||
-				(filename.toUpperCase().endsWith(TypeLibrary.SEGMENT_TYPE_FILE_ENDING_WITH_DOT)));
+				(filename.toUpperCase().endsWith(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING_WITH_DOT)) ||
+				(filename.toUpperCase().endsWith(TypeLibraryTags.DEVICE_TYPE_FILE_ENDING_WITH_DOT)) ||
+				(filename.toUpperCase().endsWith(TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING_WITH_DOT)) ||
+				(filename.toUpperCase().endsWith(TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING_WITH_DOT)));
 	}
 
 	/** Find the corresponding palette group for the given IContainer
 	 *
 	 * If the group is not found it will not be created.
 	 */
-	static public PaletteGroup getPaletteGroup(Palette palette, IContainer groupDst) {		
+	public static PaletteGroup getPaletteGroup(Palette palette, IContainer groupDst) {		
 		String[] groups = groupDst.getProjectRelativePath().toString().split("/"); //$NON-NLS-1$
 		if((0 == groups.length) || ((1 == groups.length) && (0 == groups[0].length()))){
 			return palette.getRootGroup();
 		}		
 		ArrayList<String> groupList = new ArrayList<String>();
 		groupList.addAll(Arrays.asList(groups));
-		if(TypeLibrary.TOOL_LIBRARY_PROJECT_NAME.equals(groupList.get(0))){
+		if(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME.equals(groupList.get(0))){
 			groupList.remove(0);
 		}
 		return palette.findGroup(groupList);
@@ -127,14 +128,14 @@ public class TypeLibrary implements TypeLibraryTags{
 	 * @param groupDst
 	 * @return
 	 */
-	static public PaletteGroup getPaletteGroupWithAdd(Palette palette, IContainer groupDst) {		
+	public static PaletteGroup getPaletteGroupWithAdd(Palette palette, IContainer groupDst) {		
 		String[] groups = groupDst.getProjectRelativePath().toString().split("/"); //$NON-NLS-1$
 		if((0 == groups.length) || ((1 == groups.length) && (0 == groups[0].length()))){
 			return palette.getRootGroup();
 		}		
 		ArrayList<String> groupList = new ArrayList<String>();
 		groupList.addAll(Arrays.asList(groups));
-		if(TypeLibrary.TOOL_LIBRARY_PROJECT_NAME.equals(groupList.get(0))){
+		if(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME.equals(groupList.get(0))){
 			groupList.remove(0);
 		}
 		return palette.getGroup(groupList, false);
@@ -146,7 +147,7 @@ public class TypeLibrary implements TypeLibraryTags{
 	 * @param entryTypeFile the IFile representing the type
 	 * @return the palette entry or null
 	 */
-	static public PaletteEntry getPaletteEntry(final Palette palette, final IFile entryTypeFile) {
+	public static PaletteEntry getPaletteEntry(final Palette palette, final IFile entryTypeFile) {
 		PaletteEntry retVal = null;		
 		PaletteGroup group = getPaletteGroup(palette, entryTypeFile.getParent());
 		if(null != group){
@@ -411,19 +412,26 @@ public class TypeLibrary implements TypeLibraryTags{
 		AutomationSystem system = palette.getAutomationSystem();
 
 		if (system == null) {
-			libPath = TypeLibrary.getInstance().getToolLibFolder();
+			libPath = TypeLibrary.getToolLibFolder();
 		}else {
 			libPath = system.getProject();
 		}
 		return libPath;
 	}
+	
+	/**
+	 * Returns the tool library project.
+	 * @return the tool library project of the 4diac-ide instance
+	 */
+	public static IProject getToolLibProject() {
+		IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		
+		return myWorkspaceRoot.getProject(TOOL_LIBRARY_PROJECT_NAME);
+	}
 
-	public IFolder getToolLibFolder() {
+	public static IFolder getToolLibFolder() {
 
-		IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace()
-				.getRoot();
-
-		IProject toolLibProject = myWorkspaceRoot.getProject(TOOL_LIBRARY_PROJECT_NAME);
+		IProject toolLibProject = getToolLibProject();
 
 		if (!toolLibProject.exists()) {
 			createToolLibProject(toolLibProject);
@@ -456,7 +464,7 @@ public class TypeLibrary implements TypeLibraryTags{
 
 		IFolder link = toolLibProject.getFolder(TOOL_LIBRARY_PROJECT_NAME);
 
-		final String typeLibPath = System.getProperty("4diac.typelib.path");
+		final String typeLibPath = System.getProperty("4diac.typelib.path"); //$NON-NLS-1$
 
 		final IPath location;
 
@@ -464,7 +472,7 @@ public class TypeLibrary implements TypeLibraryTags{
 			location = new Path(typeLibPath);
 		}
 		else {
-			location = new Path(Platform.getInstallLocation().getURL().getFile() + TypeLibrary.TYPE_LIBRARY);
+			location = new Path(Platform.getInstallLocation().getURL().getFile() + TypeLibraryTags.TYPE_LIBRARY);
 		}
 		if (workspace.validateLinkLocation(link, location).isOK()) {
 			try {
@@ -485,7 +493,7 @@ public class TypeLibrary implements TypeLibraryTags{
 	 */
 	public static void loadAdapterType(final PaletteEntry entry,
 			final Palette palette) {
-		if (((AdapterTypePaletteEntry) entry).getAdapterType() == null) {
+		if (((AdapterTypePaletteEntry) entry).getType() == null) {
 			AdapterType type = null;
 
 			if (ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(entry.getFile().getFileExtension())) {
@@ -499,7 +507,7 @@ public class TypeLibrary implements TypeLibraryTags{
 		boolean retval = false;
 		if (!srcFile.isDirectory()) {
 			try {
-				PaletteGroup group = performTypeSpecificImportPreparation(srcFile, palette, relativeDestionationPath, overWrite, selectedFiles, shell);
+				PaletteGroup group = performTypeSpecificImportPreparation(srcFile, palette, relativeDestionationPath, selectedFiles, shell);
 
 				IFile dstFile = TypeLibrary.getLibPath(palette).getFile(new Path(relativeDestionationPath));
 
@@ -540,38 +548,37 @@ public class TypeLibrary implements TypeLibraryTags{
 	}
 
 	private static PaletteGroup performTypeSpecificImportPreparation(
-			File srcFile, Palette palette, String relativeDestionationPath, boolean overWrite,
-			Set<String> selectedFiles, Shell shell) throws TypeImportException, CoreException  {
+			File srcFile, Palette palette, String relativeDestionationPath, Set<String> selectedFiles, Shell shell) throws TypeImportException, CoreException  {
 		PaletteGroup group = null;
 
 
-		if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.FB_TYPE_FILE_ENDING)){ 
-			DataTypeLibrary.getInstance().loadReferencedDataTypes(srcFile, shell);				
+		if (srcFile.getName().toUpperCase().endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING)){ 
+			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);				
 			group = getTargetGroup(relativeDestionationPath, palette, FB_TYPE_FILE_ENDING_WITH_DOT);
 			loadReferencedFBTypes(srcFile, palette, group, relativeDestionationPath, selectedFiles, shell);
 
-		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.ADAPTER_TYPE_FILE_ENDING)) {
-			DataTypeLibrary.getInstance().loadReferencedDataTypes(srcFile, shell);				
+		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING)) {
+			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);				
 
 			group = getTargetGroup(relativeDestionationPath, palette, ADAPTER_TYPE_FILE_ENDING_WITH_DOT);
 
-		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.DEVICE_TYPE_FILE_ENDING)) {
-			DataTypeLibrary.getInstance().loadReferencedDataTypes(srcFile, shell);	
+		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibraryTags.DEVICE_TYPE_FILE_ENDING)) {
+			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);	
 
 			group = getTargetGroup(relativeDestionationPath, palette, DEVICE_TYPE_FILE_ENDING_WITH_DOT);
 			loadReferencedRESTypes(srcFile, palette, group,  relativeDestionationPath, selectedFiles, shell);
 
-		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.RESOURCE_TYPE_FILE_ENDING)) {
-			DataTypeLibrary.getInstance().loadReferencedDataTypes(srcFile, shell);				
+		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING)) {
+			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);				
 
 			group = getTargetGroup(relativeDestionationPath, palette, RESOURCE_TYPE_FILE_ENDING_WITH_DOT);
 
 			loadReferencedFBTypes(srcFile, palette, group, relativeDestionationPath, selectedFiles, shell);
 
-		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.SEGMENT_TYPE_FILE_ENDING)) {
+		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING)) {
 			group = getTargetGroup(relativeDestionationPath, palette, SEGMENT_TYPE_FILE_ENDING_WITH_DOT);
-		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibrary.SUBAPP_TYPE_FILE_ENDING)) {
-			DataTypeLibrary.getInstance().loadReferencedDataTypes(srcFile, shell);				
+		} else if (srcFile.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING)) {
+			DataTypeLibrary.loadReferencedDataTypes(srcFile, shell);				
 
 			group = getTargetGroup(relativeDestionationPath, palette, SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
 
@@ -650,7 +657,7 @@ public class TypeLibrary implements TypeLibraryTags{
 		return false;
 	}
 
-	static private boolean checkForReferencedTypeInPalette(
+	private static boolean checkForReferencedTypeInPalette(
 			Palette palette, String typeName, Shell shell) {
 
 		final List<PaletteEntry> fbTypes = palette.getTypeEntries(typeName);
@@ -668,49 +675,58 @@ public class TypeLibrary implements TypeLibraryTags{
 				ReferenceChooserDialog referenceChooser = new ReferenceChooserDialog(
 						new IStructuredContentProvider() {
 
+							@Override
 							public Object[] getElements(Object inputElement) {
 								return fbTypes.toArray();
 							}
 
+							@Override
 							public void dispose() {
-								// nothing to do;
+								// nothing to do
 							}
 
+							@Override
 							public void inputChanged(Viewer viewer,
 									Object oldInput, Object newInput) {
-								// nothing to do;
+								// nothing to do
 
 							}
 
 						}, new ITableLabelProvider() {
 
+							@Override
 							public String getColumnText(Object element,
 									int columnIndex) {
 								return element.toString();
 							}
 
+							@Override
 							public Image getColumnImage(Object element,
 									int columnIndex) {
 								return null;
 							}
 
+							@Override
 							public void addListener(
 									ILabelProviderListener listener) {
-								// nothing to do;
+								// nothing to do
 							}
 
+							@Override
 							public void dispose() {
-								// nothing to do;
+								// nothing to do
 							}
 
+							@Override
 							public boolean isLabelProperty(Object element,
 									String property) {
 								return false;
 							}
 
+							@Override
 							public void removeListener(
 									ILabelProviderListener listener) {
-								// nothing to do;
+								// nothing to do
 							}
 
 						}, shell);

@@ -95,15 +95,6 @@ public interface DataFactory extends EFactory {
 	SubrangeType createSubrangeType();
 
 	/**
-	 * Returns a new object of class '<em>Var Initialization</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Var Initialization</em>'.
-	 * @generated
-	 */
-	VarInitialization createVarInitialization();
-
-	/**
 	 * Returns a new object of class '<em>Value Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

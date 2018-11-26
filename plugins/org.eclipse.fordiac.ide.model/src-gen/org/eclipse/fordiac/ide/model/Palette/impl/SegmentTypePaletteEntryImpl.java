@@ -55,6 +55,7 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SegmentType getSegmentType() {
 		LibraryElement type = getType();
 		if((null !=type) && (type instanceof SegmentType)){
@@ -68,6 +69,7 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(final LibraryElement type) {
 		if((null != type) && (type instanceof SegmentType)){
 			super.setType(type);
@@ -80,6 +82,7 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 		}
 	}
 
+	@Override
 	protected LibraryElement loadType(){
 		return SEGImporter.importSEGType(getFile());
 	}

@@ -30,17 +30,6 @@ public class ResourceMoveCommand extends Command {
 		this.indexNew = indexNew;
 		this.targetDevice = targetDevice;
 	}
-
-	@Override
-	public boolean canExecute() {
-		if(resource.getDevice() != targetDevice && resource.getDevice().getResource().size() == 1) {
-			Abstract4DIACUIPlugin.statusLineErrorMessage("Device needs at least one Resource!");
-			return false;
-		}else {
-			Abstract4DIACUIPlugin.statusLineErrorMessage("");
-			return true;
-		}
-	}
 	
 	@Override
 	public boolean canUndo() {

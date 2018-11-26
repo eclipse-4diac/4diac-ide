@@ -52,7 +52,7 @@ public class SegmentCreateCommand extends Command {
 
 	@Override
 	public void execute() {
-		setLabel(getLabel() + "(" + (editor != null ? editor.getTitle() : "") + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+		setLabel(getLabel() + "(" + (editor != null ? editor.getTitle() : "") + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		segment = LibraryElementFactory.eINSTANCE.createSegment();
 		segment.setColor(ColorHelper.createRandomColor());
 		segment.setPaletteEntry(type);

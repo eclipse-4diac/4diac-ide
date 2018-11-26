@@ -21,6 +21,7 @@ public class AdapterConnectionCreateCommand extends AbstractConnectionCreateComm
 		super(parent);
 	}
 
+	@Override
 	protected Connection createConnectionElement(){
 		return LibraryElementFactory.eINSTANCE.createAdapterConnection();		
 	}

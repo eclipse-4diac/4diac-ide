@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009, 2011, 2014, 2017 Profactor GbmH, fortiss GmbH
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,29 +37,25 @@ public class IdentifierVerifyListener implements VerifyListener {
 	 */
 	@Override
 	public void verifyText(VerifyEvent event) {
-		if (!event.doit) { // other verifylisteners which are first can
-			// already
-			// set it
+		if (!event.doit) { 
+			// other verifylisteners which are first can already set it
 			return;
 		}
-		// Get the character typed
-		char myChar = event.character;
-		String text = ((Text) event.widget).getText();
+		
 		if (event.keyCode == SWT.DEL || event.keyCode == SWT.BS) {
 			return;
 		}
-		if ((myChar == '_' || IdentifierVerifyer.isIdentifierChar(myChar)) && text.length() == 0) {
-			event.doit = true;
-		} else if (myChar == SWT.NULL) {
-			event.doit = true;
-		} else if ((IdentifierVerifyer.isIdentifierChar(myChar) || Character.isDigit(myChar) || myChar == '_')
-				&& text.length() >= 1) {
+
+		if (event.character == SWT.NULL) {
 			event.doit = true;
 		} else {
-			event.doit = false;
+			String currentValue = ((Text) event.widget).getText();
+			String resultingValue = currentValue.substring(0, event.start) + event.text + currentValue.substring(event.end);
+			if(resultingValue.isEmpty()) {
+				resultingValue = String.valueOf(event.character);
+			}
+			event.doit = IdentifierVerifyer.isValidIdentifier(resultingValue);			
 		}
 	}
-
-	
 	
 }

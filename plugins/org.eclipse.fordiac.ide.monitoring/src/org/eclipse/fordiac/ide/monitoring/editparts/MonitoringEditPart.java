@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -192,26 +191,5 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 		}
 	}
 
-	@Override
-	protected void refreshVisuals() {
-		super.refreshVisuals();
-		updateBreakpoint();
-	}
-
-	public void updateBreakpoint() {
-		if (getModel().isBreakpoint()) {
-			if ((((Label) getFigure()).getIcon() == null)) {
-				((Label) getFigure()).setIcon(FordiacImage.ICON_BreakPoint.getImage());
-			}
-		} else {
-			((Label) getFigure()).setIcon(null);
-		}
-
-		if (getModel().isBreakpointActive()) {
-			getFigure().setBackgroundColor(org.eclipse.draw2d.ColorConstants.red);
-		} else {
-			setBackgroundColor(getFigure());
-		}
-	}
 	
 }

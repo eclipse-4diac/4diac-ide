@@ -28,7 +28,7 @@ public class SubAppNetworkEditor extends CompositeNetworkEditor{
 	
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
-		return new SubAppTypeNetworkEditPartFactory(this, fbType, getZoomManger());
+		return new SubAppTypeNetworkEditPartFactory(this, getZoomManger());
 	}
 	
 	@Override

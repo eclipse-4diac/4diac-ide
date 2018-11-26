@@ -6,9 +6,6 @@ import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.Lexer;
 
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 @SuppressWarnings("all")
 public class InternalFBTypeLexer extends Lexer {
@@ -32,7 +29,8 @@ public class InternalFBTypeLexer extends Lexer {
         super(input,state);
 
     }
-    public String getGrammarFileName() { return "InternalFBTypeLexer.g"; }
+    @Override
+	public String getGrammarFileName() { return "InternalFBTypeLexer.g"; }
 
     // $ANTLR start "RULE_ID"
     public final void mRULE_ID() throws RecognitionException {
@@ -532,7 +530,8 @@ public class InternalFBTypeLexer extends Lexer {
     }
     // $ANTLR end "RULE_ANY_OTHER"
 
-    public void mTokens() throws RecognitionException {
+    @Override
+	public void mTokens() throws RecognitionException {
         // InternalFBTypeLexer.g:1:8: ( RULE_ID | RULE_INT | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER )
         int alt12=7;
         alt12 = dfa12.predict(input);
@@ -652,10 +651,12 @@ public class InternalFBTypeLexer extends Lexer {
             this.special = DFA12_special;
             this.transition = DFA12_transition;
         }
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "1:1: Tokens : ( RULE_ID | RULE_INT | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER );";
         }
-        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+        @Override
+		public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;
         	int _s = s;
             switch ( s ) {

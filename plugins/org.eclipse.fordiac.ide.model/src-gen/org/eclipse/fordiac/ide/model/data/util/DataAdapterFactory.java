@@ -16,7 +16,19 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.data.*;
+import org.eclipse.fordiac.ide.model.data.ArrayType;
+import org.eclipse.fordiac.ide.model.data.DataPackage;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.DerivedType;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.data.ElementaryType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
+import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.data.Subrange;
+import org.eclipse.fordiac.ide.model.data.SubrangeType;
+import org.eclipse.fordiac.ide.model.data.ValueType;
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -108,10 +120,6 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSubrangeType(SubrangeType object) {
 				return createSubrangeTypeAdapter();
-			}
-			@Override
-			public Adapter caseVarInitialization(VarInitialization object) {
-				return createVarInitializationAdapter();
 			}
 			@Override
 			public Adapter caseValueType(ValueType object) {
@@ -270,20 +278,6 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSubrangeTypeAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.VarInitialization <em>Var Initialization</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.data.VarInitialization
-	 * @generated
-	 */
-	public Adapter createVarInitializationAdapter() {
 		return null;
 	}
 

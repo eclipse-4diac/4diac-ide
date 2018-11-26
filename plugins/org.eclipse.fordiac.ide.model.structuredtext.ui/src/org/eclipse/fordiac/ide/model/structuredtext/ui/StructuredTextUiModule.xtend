@@ -14,7 +14,6 @@ import org.eclipse.xtext.resource.IResourceDescriptions
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.resource.impl.ResourceSetBasedResourceDescriptions
 import org.eclipse.xtext.resource.impl.SimpleResourceDescriptionsBasedContainerManager
-import org.eclipse.xtext.ui.editor.autoedit.AbstractEditStrategyProvider
 import org.eclipse.xtext.ui.editor.autoedit.DefaultAutoEditStrategyProvider
 import org.eclipse.xtext.ui.editor.model.ResourceForIEditorInputFactory
 import org.eclipse.xtext.ui.resource.SimpleResourceSetProvider

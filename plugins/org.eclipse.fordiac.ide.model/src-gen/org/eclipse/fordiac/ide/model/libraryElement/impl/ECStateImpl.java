@@ -177,6 +177,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ECAction> getECAction() {
 		if (eCAction == null) {
 			eCAction = new EObjectContainmentEList<ECAction>(ECAction.class, this, LibraryElementPackage.EC_STATE__EC_ACTION);
@@ -188,6 +189,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getComment() {
 		return comment;
 	}
@@ -196,6 +198,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
 		comment = newComment;
@@ -208,6 +211,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getX() {
 		return x;
 	}
@@ -217,6 +221,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setX(int newX) {
 		int oldX = x;
 		x = newX;
@@ -229,6 +234,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getY() {
 		return y;
 	}
@@ -238,6 +244,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setY(int newY) {
 		int oldY = y;
 		y = newY;
@@ -249,6 +256,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -258,6 +266,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -280,6 +289,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ECTransition> getOutTransitions() {
 		if (outTransitions == null) {
 			outTransitions = new EObjectWithInverseResolvingEList<ECTransition>(ECTransition.class, this, LibraryElementPackage.EC_STATE__OUT_TRANSITIONS, LibraryElementPackage.EC_TRANSITION__SOURCE);
@@ -291,6 +301,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ECTransition> getInTransitions() {
 		if (inTransitions == null) {
 			inTransitions = new EObjectWithInverseResolvingEList<ECTransition>(ECTransition.class, this, LibraryElementPackage.EC_STATE__IN_TRANSITIONS, LibraryElementPackage.EC_TRANSITION__DESTINATION);
@@ -303,8 +314,9 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isStartState() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isStartState(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);
 	}
 
 	/**
@@ -502,14 +514,14 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", comment: ");
+		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
-		result.append(", x: ");
+		result.append(", x: "); //$NON-NLS-1$
 		result.append(x);
-		result.append(", y: ");
+		result.append(", y: "); //$NON-NLS-1$
 		result.append(y);
 		result.append(')');
 		return result.toString();

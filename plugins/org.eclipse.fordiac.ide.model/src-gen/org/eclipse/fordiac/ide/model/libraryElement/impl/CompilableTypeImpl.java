@@ -69,6 +69,7 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CompilerInfo getCompilerInfo() {
 		if (compilerInfo != null && compilerInfo.eIsProxy()) {
 			InternalEObject oldCompilerInfo = (InternalEObject)compilerInfo;
@@ -116,6 +117,7 @@ public class CompilableTypeImpl extends LibraryElementImpl implements Compilable
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCompilerInfo(CompilerInfo newCompilerInfo) {
 		if (newCompilerInfo != compilerInfo) {
 			NotificationChain msgs = null;

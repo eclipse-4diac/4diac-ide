@@ -13,9 +13,10 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.IFigure;
@@ -37,7 +38,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 
-	private final Hashtable<IInterfaceElement, CommentTypeField> commentMapping = new Hashtable<IInterfaceElement, CommentTypeField>();
+	private final Map<IInterfaceElement, CommentTypeField> commentMapping = new HashMap<>();
 	private EContentAdapter adapter;
 
 	@Override

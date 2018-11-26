@@ -36,7 +36,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-abstract public class AbstractSection extends AbstractPropertySection {
+public abstract class AbstractSection extends AbstractPropertySection {
 	
 	protected Object type;
 	protected CommandStack commandStack;
@@ -48,11 +48,11 @@ abstract public class AbstractSection extends AbstractPropertySection {
 	//block updates triggered by any command
 	protected boolean blockRefresh = false;
 	
-	abstract protected EObject getType();
-	abstract protected CommandStack getCommandStack(IWorkbenchPart part, Object input);
-	abstract protected Object getInputType(Object input);
-	abstract protected void setInputCode();
-	abstract protected void setInputInit();
+	protected abstract EObject getType();
+	protected abstract CommandStack getCommandStack(IWorkbenchPart part, Object input);
+	protected abstract Object getInputType(Object input);
+	protected abstract void setInputCode();
+	protected abstract void setInputInit();
 	
 	protected void setType(Object input){
 		type = getInputType(input);
@@ -104,6 +104,7 @@ abstract public class AbstractSection extends AbstractPropertySection {
 		}
 	}
 	
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
 		if(createSuperControls){
@@ -130,7 +131,7 @@ abstract public class AbstractSection extends AbstractPropertySection {
 		}
 	}
 	
-	protected Text createGroupText(Composite group, Boolean editable) {			
+	protected Text createGroupText(Composite group, boolean editable) {			
 		Text text = getWidgetFactory().createText(group, "", SWT.BORDER); //$NON-NLS-1$
 		text.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		text.setEditable(editable);	

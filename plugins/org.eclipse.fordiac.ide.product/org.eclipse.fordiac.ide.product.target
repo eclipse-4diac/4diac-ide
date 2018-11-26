@@ -1,18 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="4diac-ide Target" sequenceNumber="20">
-<locations>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.pde.feature.group" version="3.13.4.v20180330-0640"/>
-<unit id="org.eclipse.platform.sdk" version="4.7.3.M20180330-0640"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.7"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.emf.sdk.feature.group" version="2.13.0.v20170609-0928"/>
-<unit id="org.eclipse.epp.logging.aeri.feature.feature.group" version="2.0.7.v20170906-1327"/>
-<unit id="org.eclipse.gef.sdk.feature.group" version="3.11.0.201606061308"/>
-<unit id="org.eclipse.jdt.feature.group" version="3.13.4.v20180330-0919"/>
-<unit id="org.eclipse.xtext.sdk.feature.group" version="2.12.0.v20170519-1412"/>
-<repository location="http://download.eclipse.org/releases/oxygen"/>
-</location>
-</locations>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="4diac-ide Target" sequenceNumber="20">
+	<locations>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.platform.sdk" version="4.9.0.I20180906-0745"/>
+			<repository location="http://download.eclipse.org/eclipse/updates/4.9"/>
+			<unit id="org.eclipse.jdt.feature.group" version="3.15.0.v20180906-0745"/>
+			<unit id="org.eclipse.pde.feature.group" version="3.13.200.v20180906-0745"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.emf.sdk.feature.group" version="2.15.0.v20180905-1732"/>
+			<unit id="org.eclipse.epp.logging.aeri.feature.feature.group" version="2.0.7.v20180504-0806"/>
+			<unit id="org.eclipse.gef.sdk.feature.group" version="3.11.0.201606061308"/>
+			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.15.0.v20180916-1232"/>
+			<repository location="http://download.eclipse.org/releases/2018-09"/>
+		</location>
+	</locations>
 </target>

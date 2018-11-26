@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -22,7 +23,7 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -58,6 +59,7 @@ public class InterfaceElementSection extends AbstractSection {
 	protected Text parameterText;
 	protected CLabel valueCLabel;
 	
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
@@ -74,15 +76,17 @@ public class InterfaceElementSection extends AbstractSection {
 		nameText = createGroupText(composite, true);	
 		nameText.addVerifyListener(new IdentifierVerifyListener());
 		nameText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
-				executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
+				executeCommand(new ChangeSubAppIENameCommand(getType(), nameText.getText()));
 				addContentAdapter();
 			}
 		});
 		getWidgetFactory().createCLabel(composite, "Comment:"); 
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
@@ -107,8 +111,8 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 			private DataType getTypeForSelection(String text) {
 				for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette())){
-					if(adaptertype.getAdapterType().getName().equals(text)) {
-						return adaptertype.getAdapterType();
+					if(adaptertype.getType().getName().equals(text)) {
+						return adaptertype.getType();
 					}
 				}
 				return null;
@@ -120,6 +124,7 @@ public class InterfaceElementSection extends AbstractSection {
 		valueCLabel = getWidgetFactory().createCLabel(composite, "Value:"); 
 		parameterText = createGroupText(composite, true);
 		parameterText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeValueCommand((VarDeclaration) getType(), parameterText.getText()));
@@ -138,7 +143,7 @@ public class InterfaceElementSection extends AbstractSection {
 			if(getType() instanceof AdapterDeclaration) {
 				if(null != getType() && null != getType().getFBNetworkElement().getFbNetwork().getApplication()) {
 					for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette())){
-						typeCombo.add(adaptertype.getAdapterType().getName());
+						typeCombo.add(adaptertype.getType().getName());
 					}
 				}
 			}else {
@@ -158,8 +163,8 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 	}
 
-	private static ArrayList<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette){
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();		
+	private static List<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette){
+		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();		
 		Palette pal = systemPalette;
 		if(null == pal){
 			pal = TypeLibrary.getInstance().getPalette();
@@ -168,8 +173,8 @@ public class InterfaceElementSection extends AbstractSection {
 		return retVal;
 	}
 	
-	private static ArrayList<AdapterTypePaletteEntry> getAdapterGroup(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();	
+	private static List<AdapterTypePaletteEntry> getAdapterGroup(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
+		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();	
 		for (Iterator<PaletteGroup> iterator = group.getSubGroups().iterator(); iterator.hasNext();) {
 			PaletteGroup paletteGroup = iterator.next();
 			retVal.addAll(getAdapterGroup(paletteGroup));		
@@ -178,8 +183,8 @@ public class InterfaceElementSection extends AbstractSection {
 		return retVal;
 	}
 	
-	private static ArrayList<AdapterTypePaletteEntry> getAdapterGroupEntries(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<AdapterTypePaletteEntry>();	
+	private static List<AdapterTypePaletteEntry> getAdapterGroupEntries(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
+		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();	
 		for (PaletteEntry entry : group.getEntries()) {
 			if(entry instanceof AdapterTypePaletteEntry){
 				retVal.add((AdapterTypePaletteEntry) entry);				
@@ -212,13 +217,14 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : "");			 //$NON-NLS-1$
-			String itype = "";
-			if(type instanceof VarDeclaration){
-				itype = ((VarDeclaration)getType()).getType() != null ? ((VarDeclaration)getType()).getType().getName() : "";
+			String itype = ""; //$NON-NLS-1$
+			if(getType() instanceof VarDeclaration){
+				VarDeclaration var = (VarDeclaration)getType(); 
+				itype = var.getType() != null ? var.getType().getName() : ""; //$NON-NLS-1$
 				if(getType().isIsInput()){
 					parameterText.setVisible(true);
 					valueCLabel.setVisible(true);
-					parameterText.setText(getType().getValue() != null && getType().getValue().getValue() != null ? getType().getValue().getValue() : ""); //$NON-NLS-1$
+					parameterText.setText(var.getValue() != null && var.getValue().getValue() != null ? var.getValue().getValue() : ""); //$NON-NLS-1$
 				}else{
 					valueCLabel.setVisible(false);
 					parameterText.setVisible(false);
@@ -241,6 +247,7 @@ public class InterfaceElementSection extends AbstractSection {
 		return null;
 	}
 
+	@Override
 	protected IInterfaceElement getInputType(Object input) {
 		if(input instanceof InterfaceEditPart){
 			return ((InterfaceEditPart) input).getModel();
@@ -248,6 +255,7 @@ public class InterfaceElementSection extends AbstractSection {
 		return null;
 	}
 
+	@Override
 	protected IInterfaceElement getType() {
 		return (IInterfaceElement)type;
 	}

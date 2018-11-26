@@ -12,6 +12,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.TestEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.TestEventEditPart;
@@ -41,10 +42,10 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	
 	
 	private int nrOfHistory = 500;
-	private ArrayList<String> historyValues = new ArrayList<>(nrOfHistory);
-	private ArrayList<Integer> historyCycles = new ArrayList<>(nrOfHistory);
-	private ArrayList<Long> historySec = new ArrayList<>(nrOfHistory);
-	private ArrayList<Long> historyUSec = new ArrayList<>(nrOfHistory);
+	private List<String> historyValues = new ArrayList<>(nrOfHistory);
+	private List<Integer> historyCycles = new ArrayList<>(nrOfHistory);
+	private List<Long> historySec = new ArrayList<>(nrOfHistory);
+	private List<Long> historyUSec = new ArrayList<>(nrOfHistory);
 	private int currentInt = 0;
 	
 
@@ -181,6 +182,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 		return part;
 	}
 
+	@Override
 	public EditPart createEditPart() {
 		if (part == null) {
 			if (getInterfaceElement() instanceof Event
@@ -194,7 +196,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	}
 
 	/** The value listeners. */
-	private final ArrayList<ISetValueListener> valueListeners = new ArrayList<ISetValueListener>();
+	private final List<ISetValueListener> valueListeners = new ArrayList<>();
 
 	/**
 	 * Adds the set value listener.
@@ -209,7 +211,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	}
 
 	/** The event listners. */
-	private final ArrayList<ITriggerEventListener> eventListners = new ArrayList<ITriggerEventListener>();
+	private final List<ITriggerEventListener> eventListners = new ArrayList<>();
 
 	/**
 	 * Adds the trigger event listener.

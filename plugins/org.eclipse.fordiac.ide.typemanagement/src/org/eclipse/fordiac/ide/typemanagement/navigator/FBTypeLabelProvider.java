@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
@@ -52,11 +53,11 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	private static Image getImageForFBFile(IFile element) {
 		Image image = null;
 		
-		if(TypeLibrary.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())){
+		if(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())){
 			image = FordiacImage.ICON_Adapter.getImage();
-		} else if(TypeLibrary.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())){
+		} else if(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())){
 			image = FordiacImage.ICON_SubApp.getImage();
-		} else if(TypeLibrary.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())){
+		} else if(TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())){
 			Palette palette = FBTypeUtils.getPalletteForFBTypeFile(element);
 			if(palette != null){
 				PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, element);
@@ -105,13 +106,13 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		Scanner scanner = null;
 		try{
 			scanner =  new Scanner(element.getContents());
-			if(null != scanner.findWithinHorizon("BasicFB", 0)){
+			if(null != scanner.findWithinHorizon("BasicFB", 0)){ //$NON-NLS-1$
 				image = FordiacImage.ICON_BasicFB.getImage();
 				
 			}
 			else{
 				scanner.reset();
-				if(null != scanner.findWithinHorizon("FBNetwork", 0)){
+				if(null != scanner.findWithinHorizon("FBNetwork", 0)){ //$NON-NLS-1$
 					image = FordiacImage.ICON_CompositeFB.getImage();
 					
 				}else{
@@ -143,9 +144,9 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		String text = null;
 		
 		
-		if(TypeLibrary.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())|| 
-		   TypeLibrary.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())||
-		   TypeLibrary.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())){
+		if(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())|| 
+		   TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())||
+		   TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())){
 			text = TypeLibrary.getTypeNameFromFile(element);
 		}
 		return text;
@@ -163,7 +164,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	private static String getDescriptionForFBFile(IFile fbtFile) {
 		FBType type = null;
-		if(TypeLibrary.FB_TYPE_FILE_ENDING.equalsIgnoreCase(fbtFile.getFileExtension())){
+		if(TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(fbtFile.getFileExtension())){
 			Palette palette = FBTypeUtils.getPalletteForFBTypeFile(fbtFile);
 			if(palette != null){
 				PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, fbtFile);
@@ -174,19 +175,19 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 			}
 		}
 		else{
-			if(TypeLibrary.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(fbtFile.getFileExtension())){
+			if(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(fbtFile.getFileExtension())){
 				Palette palette = FBTypeUtils.getPalletteForFBTypeFile(fbtFile);
 				if(palette != null){
 					PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, fbtFile);
 					if(null != entry){
-						type = ((AdapterTypePaletteEntry)entry).getAdapterType().getAdapterFBType();
+						type = ((AdapterTypePaletteEntry)entry).getType().getAdapterFBType();
 					}
 				}
 			}
 		}
 		
 		if(null != type){
-			return type.getName() + ": " + ((null == type.getComment()) ? "" : type.getComment());
+			return type.getName() + ": " + ((null == type.getComment()) ? "" : type.getComment()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 		return null;

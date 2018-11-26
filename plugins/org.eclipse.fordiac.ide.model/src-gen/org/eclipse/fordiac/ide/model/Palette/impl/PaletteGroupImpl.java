@@ -103,6 +103,7 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PaletteEntry> getEntries() {
 		if (entries == null) {
 			entries = new EObjectContainmentEList.Resolving<PaletteEntry>(PaletteEntry.class, this, PalettePackage.PALETTE_GROUP__ENTRIES);
@@ -114,6 +115,7 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PaletteGroup> getSubGroups() {
 		if (subGroups == null) {
 			subGroups = new EObjectContainmentEList.Resolving<PaletteGroup>(PaletteGroup.class, this, PalettePackage.PALETTE_GROUP__SUB_GROUPS);
@@ -125,6 +127,7 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getLabel() {
 		return label;
 	}
@@ -133,6 +136,7 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLabel(String newLabel) {
 		String oldLabel = label;
 		label = newLabel;
@@ -240,13 +244,14 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (label: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (label: "); //$NON-NLS-1$
 		result.append(label);
 		result.append(')');
 		return result.toString();
 	}
 
+	@Override
 	public CompilableType getTypeforName(String name) {
 		for (Iterator<PaletteEntry> iterator = getEntries().iterator(); iterator
 				.hasNext();) {
@@ -266,16 +271,19 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 	 * @param entry
 	 *          - the entry that will be added to the paletteGroup
 	 */
+	@Override
 	public void addEntry(final PaletteEntry entry) {
 		if (entry != null) {
 			getEntries().add(entry);
 		}
 	}
 	
+	@Override
 	public boolean isEmpty(){
 		return (getSubGroups().isEmpty() && getEntries().isEmpty());
 	}
 	
+	@Override
 	public PaletteGroup getGroup(String label){
 		PaletteGroup retVal = null;
 		EList<PaletteGroup> groups = getSubGroups();
@@ -290,6 +298,7 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 		return retVal;
 	}
 	
+	@Override
 	public Palette getPallete(){
 		Palette retval = null;
 		
@@ -315,6 +324,7 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 		
 	}
 	
+	@Override
 	public PaletteEntry getEntry(String entryName){
 		PaletteEntry retVal = null;
 		if(null != getEntries()){

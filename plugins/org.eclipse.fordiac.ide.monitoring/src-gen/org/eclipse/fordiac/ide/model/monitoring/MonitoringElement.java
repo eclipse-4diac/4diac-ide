@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.monitoring;
 
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '
@@ -23,9 +24,6 @@ package org.eclipse.fordiac.ide.model.monitoring;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isForce <em>Force</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getForceValue <em>Force Value</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isBreakpoint <em>Breakpoint</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isBreakpointActive <em>Breakpoint Active</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getBreakpointCondition <em>Breakpoint Condition</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getCurrentValue <em>Current Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getSec <em>Sec</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getUsec <em>Usec</em>}</li>
@@ -91,88 +89,6 @@ public interface MonitoringElement extends MonitoringBaseElement{
 	 * @generated
 	 */
 	void setForceValue(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Breakpoint</b></em>' attribute. <!--
-	 * begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Breakpoint</em>' attribute isn't clear, there
-	 * really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * 
-	 * @return the value of the '<em>Breakpoint</em>' attribute.
-	 * @see #setBreakpoint(boolean)
-	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getMonitoringElement_Breakpoint()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 * @generated
-	 */
-	boolean isBreakpoint();
-
-	/**
-	 * Sets the value of the '
-	 * {@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isBreakpoint
-	 * <em>Breakpoint</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 * 
-	 * @param value
-	 *          the new value of the '<em>Breakpoint</em>' attribute.
-	 * @see #isBreakpoint()
-	 * @generated
-	 */
-	void setBreakpoint(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Breakpoint Active</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Breakpoint Active</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Breakpoint Active</em>' attribute.
-	 * @see #setBreakpointActive(boolean)
-	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getMonitoringElement_BreakpointActive()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 * @generated
-	 */
-	boolean isBreakpointActive();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#isBreakpointActive <em>Breakpoint Active</em>}' attribute.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * @param value the new value of the '<em>Breakpoint Active</em>' attribute.
-	 * @see #isBreakpointActive()
-	 * @generated
-	 */
-	void setBreakpointActive(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Breakpoint Condition</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Breakpoint Condition</em>' attribute isn't
-	 * clear, there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Breakpoint Condition</em>' attribute.
-	 * @see #setBreakpointCondition(String)
-	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getMonitoringElement_BreakpointCondition()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
-	 * @generated
-	 */
-	String getBreakpointCondition();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement#getBreakpointCondition <em>Breakpoint Condition</em>}' attribute.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * @param value the new value of the '<em>Breakpoint Condition</em>' attribute.
-	 * @see #getBreakpointCondition()
-	 * @generated
-	 */
-	void setBreakpointCondition(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Current Value</b></em>' attribute. <!--
@@ -259,11 +175,5 @@ public interface MonitoringElement extends MonitoringBaseElement{
 	 * @generated
 	 */
 	void forceValue(String value);
-
-	int getCurrentPos();
-	
-	String getHistoryValue(int pos, boolean time);
-	public long getHistorySec(int pos) ;
-	public long getHistoryUSec(int pos) ;
 	
 } // MonitoringElement

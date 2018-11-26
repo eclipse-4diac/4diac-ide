@@ -37,8 +37,6 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -53,6 +51,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	private Text commentText;
 	protected Combo typeCombo;
 	
+	@Override
 	protected IInterfaceElement getInputType(Object input) {
 		if(input instanceof InterfaceEditPart){
 			return ((InterfaceEditPart) input).getCastedModel();	
@@ -72,6 +71,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		return null;
 	}
 	
+	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
 		if(part instanceof FBTypeEditor){
 			return ((FBTypeEditor)part).getCommandStack();
@@ -82,6 +82,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		return null;
 	}
 	
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
 		createTypeAndCommentSection(leftComposite);	
@@ -94,6 +95,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		nameText = createGroupText(parent, true);	
 		nameText.addVerifyListener(new IdentifierVerifyListener());
 		nameText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
@@ -103,6 +105,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		getWidgetFactory().createCLabel(parent, "Comment:"); 
 		commentText = createGroupText(parent, true);
 		commentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
@@ -113,22 +116,16 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		typeCombo = new Combo(parent, SWT.SINGLE | SWT.READ_ONLY | SWT.BORDER);
 		GridData languageComboGridData = new GridData(SWT.FILL, 0, true, false);
 		typeCombo.setLayoutData(languageComboGridData);	
-		typeCombo.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
+		typeCombo.addListener( SWT.Selection, event ->  {
 				DataType newType = getTypeForSelection(typeCombo.getText());
 				if(null != newType){
 					executeCommand(new ChangeTypeCommand((VarDeclaration)type, newType));
 					//refresh();
 				}
-			}
-			
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
-		});
+			});
 	}
 
+	@Override
 	protected void setInputCode() {
 		nameText.setEnabled(false);
 		commentText.setEnabled(false);
@@ -173,7 +170,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		FBType fbType = (FBType)getType().eContainer().eContainer();
 		PaletteEntry entry = fbType.getPaletteEntry();
 		for (AdapterTypePaletteEntry adaptertype : TypeEditPart.getAdapterTypes(entry.getGroup().getPallete())) {
-			types.add(adaptertype.getAdapterType());
+			types.add(adaptertype.getType());
 		}
 		return types;
 	}

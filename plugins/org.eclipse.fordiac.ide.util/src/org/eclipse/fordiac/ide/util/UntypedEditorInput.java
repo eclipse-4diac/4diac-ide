@@ -26,9 +26,8 @@ public abstract class UntypedEditorInput implements IEditorInput {
 
 	private final Object content;
 
-	private final String name;
+	private String name;
 
-	private final String tooltip;
 
 	/**
 	 * Constructor of UntypedEditorInput.
@@ -40,11 +39,9 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 * @param toolTip
 	 *          the tool tip
 	 */
-	public UntypedEditorInput(final Object content, final String name,
-			final String toolTip) {
+	public UntypedEditorInput(final Object content, final String name) {
 		this.content = content;
 		this.name = name;
-		this.tooltip = toolTip;
 	}
 
 	/*
@@ -52,6 +49,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 * 
 	 * @see org.eclipse.ui.IEditorInput#exists()
 	 */
+	@Override
 	public boolean exists() {
 		return true; //our models do always exist
 	}
@@ -61,6 +59,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 * 
 	 * @see org.eclipse.ui.IEditorInput#getImageDescriptor()
 	 */
+	@Override
 	public ImageDescriptor getImageDescriptor() {
 		return ImageDescriptor.getMissingImageDescriptor();
 	}
@@ -70,17 +69,21 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 * 
 	 * @see org.eclipse.ui.IEditorInput#getName()
 	 */
+	@Override
 	public String getName() {
 		return name == null ? "" : name; //$NON-NLS-1$
 	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.IEditorInput#getToolTipText()
+	/*In 4diac IDE we would like to have the tooltip the same as the name
+	 * Tooltip is the thing shown in the title. Name mostly in the part tab.
 	 */
+	@Override
 	public String getToolTipText() {
-		return tooltip == null ? "" : tooltip; //$NON-NLS-1$
+		return getName();
 	}
 
 	/*
@@ -88,6 +91,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 * 
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getAdapter(final Class adapter) {
 		return null;

@@ -30,7 +30,11 @@ public class ChangeBackgroundcolorCommand extends Command {
 
 	@Override
 	public boolean canUndo() {
-		return editor.equals(Abstract4DIACUIPlugin.getCurrentActiveEditor());
+		if(null != editor) {
+			return editor.equals(Abstract4DIACUIPlugin.getCurrentActiveEditor());
+		}else {
+			return false;
+		}
 	}
 
 	@Override

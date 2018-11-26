@@ -70,6 +70,7 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Color getColor() {
 		if (color != null && color.eIsProxy()) {
 			InternalEObject oldColor = (InternalEObject)color;
@@ -117,6 +118,7 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setColor(Color newColor) {
 		if (newColor != color) {
 			NotificationChain msgs = null;
@@ -136,6 +138,7 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Color getColorGen() {
 		if (color != null && color.eIsProxy()) {
 			InternalEObject oldColor = (InternalEObject)color;

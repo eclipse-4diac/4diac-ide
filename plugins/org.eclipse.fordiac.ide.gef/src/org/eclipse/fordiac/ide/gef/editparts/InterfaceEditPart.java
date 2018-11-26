@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH 
+ * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH, 
+ * 				 2018 Johannes Kepler University 
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Waldemar Eisenmenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - allowed resource drop on on whole interfaces  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -23,15 +25,13 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
+import org.eclipse.fordiac.ide.gef.policies.DataInterfaceLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl;
+import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
@@ -48,15 +49,12 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
-import org.eclipse.gef.requests.CreateRequest;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart implements
 		NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
-	private InterfaceFigure figure;
 	private ValueEditPart referencedPart;
 	protected int mouseState;
 	
@@ -152,10 +150,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 
 	@Override
 	protected IFigure createFigure() {
-		if (figure == null) {
-			figure = new InterfaceFigure();
-		}
-		return figure;
+		return new InterfaceFigure();
 	}
 
 	@Override
@@ -244,39 +239,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 		if (isVariable()) {
 			// layoutrole that allows to drop "strings" to an Input Variable
 			// which is than used as Parameter
-			installEditPolicy(EditPolicy.LAYOUT_ROLE, new LayoutEditPolicy() {
-
-				@Override
-				protected Command getMoveChildrenCommand(Request request) {
-					return null;
-				}
-
-				@Override
-				public Command getCommand(Request request) {
-					if (REQ_CREATE.equals(request.getType())) {
-						return getCreateCommand((CreateRequest) request);
-					}
-					return null;
-				}
-
-				@Override
-				protected Command getCreateCommand(CreateRequest request) {
-					if ((getHost() instanceof InterfaceEditPart) && (!(request.getNewObjectType() instanceof ResourceTypeEntry))){
-						//TODO think of a better check that allows only appropriate request object types
-						InterfaceEditPart host = (InterfaceEditPart) getHost();
-						if ((host.getModel() instanceof VarDeclaration) && (!(host.getModel() instanceof AdapterDeclaration))) {
-							VarDeclaration v = (VarDeclaration) host.getModel();
-							return new ChangeValueCommand(v, request.getNewObject() != null ? request.getNewObject().toString():""); //$NON-NLS-1$
-						}
-					}
-					return null;
-				}
-
-				@Override
-				protected EditPolicy createChildEditPolicy(EditPart child) {
-					return null;
-				}
-			});
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, getLayoutPolicy());
 			
 			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
 					new ValueEditPartChangeEditPolicy(){
@@ -286,6 +249,11 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 						}					
 			});
 		}
+	}
+
+	@SuppressWarnings("static-method")  // we want to allow subclasses to provide different layout policies
+	protected LayoutEditPolicy getLayoutPolicy() {
+		return new DataInterfaceLayoutEditPolicy();
 	}
 
 	@Override
@@ -327,7 +295,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			((Notifier) getModel()).eAdapters().add(getContentAdapter());			
+			getModel().eAdapters().add(getContentAdapter());			
 		}
 	}
 
@@ -335,7 +303,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
+			getModel().eAdapters().remove(getContentAdapter());
 		}
 		referencedPart = null;
 	}
@@ -383,7 +351,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	@Override
 	public void setSelected(int value) {
 		if (value == 0) { // clear possible statusmessage
-			Activator.statusLineErrorMessage(null);
+			Abstract4DIACUIPlugin.statusLineErrorMessage(null);
 		}
 		super.setSelected(value);
 	}
@@ -407,8 +375,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	}
 
 	public ValueEditPart getReferencedValueEditPart() {
-		if (referencedPart == null) {
-			Object temp = getViewer().getEditPartRegistry().get(getModel().getValue()); 
+		if (null == referencedPart && getModel() instanceof VarDeclaration) {
+			Object temp = getViewer().getEditPartRegistry().get(((VarDeclaration)getModel()).getValue()); 
 			if (temp instanceof ValueEditPart) {
 				referencedPart = (ValueEditPart)temp;
 			}

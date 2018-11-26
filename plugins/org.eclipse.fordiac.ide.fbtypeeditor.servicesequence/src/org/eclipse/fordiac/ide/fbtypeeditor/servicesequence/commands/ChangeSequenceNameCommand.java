@@ -25,15 +25,18 @@ public class ChangeSequenceNameCommand extends Command {
 		this.name = name;
 	}
 	
+	@Override
 	public void execute(){
 		oldName = sequence.getName();
 		redo();
 	}
 	
+	@Override
 	public void undo() {
 		sequence.setName(oldName);
 	}
 
+	@Override
 	public void redo() {
 		sequence.setName(name);
 	}

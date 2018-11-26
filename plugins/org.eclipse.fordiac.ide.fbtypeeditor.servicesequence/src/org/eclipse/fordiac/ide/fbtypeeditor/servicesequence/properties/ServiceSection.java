@@ -64,10 +64,12 @@ public class ServiceSection extends AbstractServiceSection {
 	
 	public ServiceSection() {}
 
+	@Override
 	protected FBType getType(){
 		return (FBType) type;
 	}
 	
+	@Override
 	protected FBType getInputType(Object input) {
 		if(input instanceof SequenceRootEditPart){
 			return (FBType) ((SequenceRootEditPart) input).getCastedModel().eContainer();
@@ -92,6 +94,7 @@ public class ServiceSection extends AbstractServiceSection {
 		getWidgetFactory().createCLabel(serviceGroup1, "Name:"); 
 		leftNameText = createGroupText(serviceGroup1, true);
 		leftNameText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeServiceInterfaceNameCommand(leftNameText.getText(), getType(), true));
@@ -101,6 +104,7 @@ public class ServiceSection extends AbstractServiceSection {
 		getWidgetFactory().createCLabel(serviceGroup1, "Comment:"); 
 		leftCommentText = createGroupText(serviceGroup1, true);
 		leftCommentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeServiceInterfaceCommentCommand(leftCommentText.getText(), getType().getService(), true));
@@ -114,6 +118,7 @@ public class ServiceSection extends AbstractServiceSection {
 		getWidgetFactory().createCLabel(serviceGroup2, "Name:"); 
 		rightNameText = createGroupText(serviceGroup2, true);
 		rightNameText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeServiceInterfaceNameCommand(rightNameText.getText(), getType(), false));
@@ -123,6 +128,7 @@ public class ServiceSection extends AbstractServiceSection {
 		getWidgetFactory().createCLabel(serviceGroup2, "Comment:"); 	
 		rightCommentText = createGroupText(serviceGroup2, true);
 		rightCommentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeServiceInterfaceCommentCommand(rightCommentText.getText(), getType().getService(), false));
@@ -145,6 +151,7 @@ public class ServiceSection extends AbstractServiceSection {
 		sequencesViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
 		new AdapterFactoryTreeEditor(sequencesViewer.getTree(), adapterFactory);
 		sequencesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
 //				Object selection = ((IStructuredSelection) sequencesViewer.getSelection()).getFirstElement();
 //				if(selection instanceof ServiceSequence){
@@ -209,10 +216,10 @@ public class ServiceSection extends AbstractServiceSection {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;		
 		if(null != type) {
-			leftNameText.setText(null != getType().getService().getLeftInterface() ? getType().getService().getLeftInterface().getName() : "");
-			leftCommentText.setText(null != getType().getService().getLeftInterface() && null != getType().getService().getLeftInterface().getComment() ? getType().getService().getLeftInterface().getComment() : "");
-			rightNameText.setText(null != getType().getService().getRightInterface() ? getType().getService().getRightInterface().getName() : "");
-			rightCommentText.setText(null != getType().getService().getRightInterface() && null != getType().getService().getRightInterface().getComment() ? getType().getService().getRightInterface().getComment() : "");		
+			leftNameText.setText(null != getType().getService().getLeftInterface() ? getType().getService().getLeftInterface().getName() : ""); //$NON-NLS-1$
+			leftCommentText.setText(null != getType().getService().getLeftInterface() && null != getType().getService().getLeftInterface().getComment() ? getType().getService().getLeftInterface().getComment() : ""); //$NON-NLS-1$
+			rightNameText.setText(null != getType().getService().getRightInterface() ? getType().getService().getRightInterface().getName() : ""); //$NON-NLS-1$
+			rightCommentText.setText(null != getType().getService().getRightInterface() && null != getType().getService().getRightInterface().getComment() ? getType().getService().getRightInterface().getComment() : "");		 //$NON-NLS-1$
 			sequencesViewer.setInput(getType().getService());
 		} 
 		commandStack = commandStackBuffer;

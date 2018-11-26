@@ -57,6 +57,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	private Table tableWith;
 	private Group eventComposite;
 	
+	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
 		createDataSection(leftComposite);	
@@ -67,6 +68,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		getWidgetFactory().createCLabel(parent, "Array Size:"); 
 		arraySizeText = createGroupText(parent, true);		
 		arraySizeText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeArraySizeCommand((VarDeclaration)type, arraySizeText.getText()));
@@ -76,6 +78,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		getWidgetFactory().createCLabel(parent, "Initial Value:"); 
 		initValueText = createGroupText(parent, true);
 		initValueText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeInitialValueCommand((VarDeclaration)type, initValueText.getText()));
@@ -138,6 +141,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		});
 	}
 	
+	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
 		Assert.isTrue(selection instanceof IStructuredSelection);	
@@ -163,7 +167,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		commandStack = null;
 		if(null != type) {
 			arraySizeText.setText(0 >= getType().getArraySize() ? "" : (Integer.toString((getType()).getArraySize()))); //$NON-NLS-1$
-			initValueText.setText(null == getType().getVarInitialization() ? "" : getType().getVarInitialization().getInitialValue()); //$NON-NLS-1$
+			initValueText.setText(null == getType().getValue() ? "" : getType().getValue().getValue()); //$NON-NLS-1$
 			if(getType().eContainer().eContainer() instanceof FBType){
 				eventComposite.setVisible(true);
 				withEventsViewer.setAllChecked(false);

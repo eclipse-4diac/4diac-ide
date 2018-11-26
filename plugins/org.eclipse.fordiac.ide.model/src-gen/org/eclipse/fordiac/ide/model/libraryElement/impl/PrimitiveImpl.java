@@ -111,6 +111,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getEvent() {
 		return event;
 	}
@@ -120,6 +121,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEvent(String newEvent) {
 		String oldEvent = event;
 		event = newEvent;
@@ -132,6 +134,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getParameters() {
 		return parameters;
 	}
@@ -141,6 +144,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setParameters(String newParameters) {
 		String oldParameters = parameters;
 		parameters = newParameters;
@@ -153,6 +157,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ServiceInterface getInterface() {
 		if (interface_ != null && interface_.eIsProxy()) {
 			InternalEObject oldInterface = (InternalEObject)interface_;
@@ -179,6 +184,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInterface(ServiceInterface newInterface) {
 		ServiceInterface oldInterface = interface_;
 		interface_ = newInterface;
@@ -274,10 +280,10 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (event: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (event: "); //$NON-NLS-1$
 		result.append(event);
-		result.append(", parameters: ");
+		result.append(", parameters: "); //$NON-NLS-1$
 		result.append(parameters);
 		result.append(')');
 		return result.toString();

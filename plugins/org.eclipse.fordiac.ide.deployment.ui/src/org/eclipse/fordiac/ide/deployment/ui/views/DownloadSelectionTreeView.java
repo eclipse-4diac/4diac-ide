@@ -14,12 +14,12 @@ package org.eclipse.fordiac.ide.deployment.ui.views;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.systemmanagement.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.util.ISelectedElementsChangedListener;
 import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
@@ -29,14 +29,10 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -44,7 +40,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -70,32 +65,18 @@ public class DownloadSelectionTreeView extends ViewPart {
 	/** The drilldownadapter. */
 	private DrillDownAdapter drillDownAdapter;
 
-	private final ArrayList<Device> initialized = new ArrayList<Device>();
-	
-	
+	private final List<Device> initialized = new ArrayList<>();
 
 	/**
 	 * The constructor.
 	 */
 	public DownloadSelectionTreeView() {
-		SystemManager.INSTANCE.addWorkspaceListener(
-				new DistributedSystemListener() {
-					@Override
-					public void distributedSystemWorkspaceChanged() {
-						Display.getDefault().asyncExec(new Runnable() {
-
-							@Override
-							public void run() {
-								if (!viewer.getTree().isDisposed()) {
-									viewer.refresh(true);
-
-								}
-
-							}
-
-						});
-					}
-				});
+		SystemManager.INSTANCE.addWorkspaceListener(() -> Display.getDefault().asyncExec(() -> {
+				if (!viewer.getTree().isDisposed()) {
+					viewer.refresh(true);
+				}
+			})
+		);
 	}
 
 	private void initializeDeviceProperties() {
@@ -138,36 +119,16 @@ public class DownloadSelectionTreeView extends ViewPart {
 		
 		viewer.setInput(getViewSite());
 		
-		viewer.addCheckStateListener(new ICheckStateListener() {
-			@Override
-			public void checkStateChanged(final CheckStateChangedEvent event) {
-				notifyListeners();
-			}
-		});
+		viewer.addCheckStateListener(event -> notifyListeners());
 
 		getSite().setSelectionProvider(viewer);
 
-		getSite()
-		.getPage()
-		.addSelectionListener(
-				"org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView", //$NON-NLS-1$
-				new ISelectionListener() {					
-					/*
-					 * (non-Javadoc)
-					 * 
-					 * @seeorg.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui.
-					 * IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
-					 */
-					@Override
-					public void selectionChanged(final IWorkbenchPart part,
-							final ISelection selection) {
-						if (part instanceof DownloadSelectionTreeView) {
-							if (treeView != part) {
-								treeView = (DownloadSelectionTreeView) part;
-								treeView.addSelectedElementsChangedListener(getChangeListener());
-								getChangeListener().selectionChanged();
-							}
-						}
+		getSite().getPage().addSelectionListener("org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView", //$NON-NLS-1$
+				(final IWorkbenchPart part, final ISelection selection) -> {
+					if ((part instanceof DownloadSelectionTreeView) && (treeView != part)) {
+						treeView = (DownloadSelectionTreeView) part;
+						treeView.addSelectedElementsChangedListener(getChangeListener());
+						getChangeListener().selectionChanged();
 					}
 				});
 
@@ -176,26 +137,10 @@ public class DownloadSelectionTreeView extends ViewPart {
 		downloadButton.setImage(FordiacImage.ICON_Download.getImage());
 		downloadButton.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false));
 		downloadButton.setEnabled(false);
-		downloadButton.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				Object[] selected = treeView.getSelectedElements();
-				
-				clearDownloadConsole();
-				
-				DeploymentCoordinator deployment = DeploymentCoordinator
-						.getInstance();
-				deployment.performDeployment(selected);
-			}
-
-			
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-				// nothing to do!
-			}
-
+		downloadButton.addListener( SWT.Selection, e ->{
+			Object[] selected = treeView.getSelectedElements();
+			clearDownloadConsole();
+			DeploymentCoordinator.INSTANCE.performDeployment(selected);
 		});
 
 		makeActions();
@@ -206,15 +151,14 @@ public class DownloadSelectionTreeView extends ViewPart {
 	}
 
 
-	private void clearDownloadConsole() {
+	private static void clearDownloadConsole() {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IViewPart view = page.findView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
 		
-		if ((null != view) && (view instanceof Output)){
+		if (view instanceof Output){
 			Output output = (Output)view;
 			output.clearOutput();
-		}
-				
+		}				
 	}
 
 	/** The tree view. */
@@ -224,14 +168,11 @@ public class DownloadSelectionTreeView extends ViewPart {
 
 	private ISelectedElementsChangedListener getChangeListener() {
 		if(null == changeListener){
-			changeListener = new ISelectedElementsChangedListener() {
-					@Override
-					public void selectionChanged() {
-						if((null != treeView) && (!downloadButton.isDisposed())){						
-							downloadButton.setEnabled((treeView.getSelectedElements().length > 0));						
-						}
-					}
-				};
+			changeListener = () -> {
+				if((null != treeView) && (!downloadButton.isDisposed())){						
+					downloadButton.setEnabled((treeView.getSelectedElements().length > 0));						
+				}
+			};
 		}
 		return changeListener;
 	}
@@ -253,6 +194,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 				Messages.DownloadSelectionTreeView_LABEL_PopupMenu);
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
+			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
 				DownloadSelectionTreeView.this.fillContextMenu(manager);
 			}
@@ -360,6 +302,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 	 */
 	private void hookDoubleClickAction() {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
 			public void doubleClick(final DoubleClickEvent event) {
 				// doubleClickAction.run();
 			}
@@ -375,7 +318,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 	}
 
 	/** The listeners. */
-	private final ArrayList<ISelectedElementsChangedListener> listeners = new ArrayList<ISelectedElementsChangedListener>();
+	private final List<ISelectedElementsChangedListener> listeners = new ArrayList<>();
 
 	/** The download button. */
 	private Button downloadButton;

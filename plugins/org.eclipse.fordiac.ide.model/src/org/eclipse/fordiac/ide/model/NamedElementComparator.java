@@ -21,7 +21,7 @@ public enum NamedElementComparator implements Comparator<INamedElement> {
 	
 	INSTANCE;
 
-	Collator col = Collator.getInstance();
+	private Collator col = Collator.getInstance();
 	
 	@Override
 	public int compare(INamedElement o1, INamedElement o2) {

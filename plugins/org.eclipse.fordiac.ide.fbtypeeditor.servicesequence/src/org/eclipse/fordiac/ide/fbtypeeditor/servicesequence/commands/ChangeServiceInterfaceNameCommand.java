@@ -29,6 +29,7 @@ public class ChangeServiceInterfaceNameCommand extends Command {
 		this.name = name;
 	}
 	
+	@Override
 	public void execute(){
 		if(fb.getService() == null){
 			fb.setService(LibraryElementFactory.eINSTANCE.createService());
@@ -51,6 +52,7 @@ public class ChangeServiceInterfaceNameCommand extends Command {
 		redo();
 	}
 	
+	@Override
 	public void undo() {
 		if(isLeftInterface){
 			fb.getService().getLeftInterface().setName(oldName);
@@ -59,6 +61,7 @@ public class ChangeServiceInterfaceNameCommand extends Command {
 		}
 	}
 
+	@Override
 	public void redo() {
 		if(isLeftInterface){
 			fb.getService().getLeftInterface().setName(name);

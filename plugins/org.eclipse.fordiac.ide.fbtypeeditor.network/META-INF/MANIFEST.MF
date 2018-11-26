@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.commands
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-Name: Composite FB Network (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.network.Activator
 Bundle-ManifestVersion: 2
@@ -26,3 +26,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.fordiac.ide.fbtypeeditor.network.editparts,
  org.eclipse.fordiac.ide.fbtypeeditor.network.viewer
+Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.network

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 - 2017 fortiss GmbH
+ * Copyright (c) 2016 - 2017 fortiss GmbH, 2018 Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,12 +15,14 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -357,11 +359,35 @@ public class SystemImporter {
 		for (VarDeclaration varDecl : element.getVarDeclarations()) {
 			Value value = LibraryElementFactory.eINSTANCE.createValue();
 			varDecl.setValue(value);
-			if (varDecl.getVarInitialization() != null && varDecl.getVarInitialization().getInitialValue() != null) {
-				String initialValue = varDecl.getVarInitialization().getInitialValue();
-				value.setValue(initialValue);
+			VarDeclaration typeVar = getTypeVariable(varDecl);
+			if (null != typeVar && null != typeVar.getValue() && null != typeVar.getValue().getValue()) {
+				value.setValue(typeVar.getValue().getValue());
 			}
 		}
+	}
+	
+	private static VarDeclaration getTypeVariable(VarDeclaration var) {
+		EList<VarDeclaration> varList = null;
+		if(var.eContainer() instanceof Device){
+			Device dev = (Device)var.eContainer();
+			if(null != dev.getType()) {
+				varList = dev.getType().getVarDeclaration();
+			}
+		} else if(var.eContainer() instanceof Resource){
+			Resource res = (Resource)var.eContainer();
+			if(null != res.getType()) {
+				varList = res.getType().getVarDeclaration();
+			}
+		}
+		
+		if(null != varList) {
+			for(VarDeclaration typeVar : varList){
+				if(typeVar.getName().equals(var.getName())){
+					return typeVar;
+				}
+			}
+		}
+		return null;
 	}
 
 	private VarDeclaration getDeviceParamter(Device device, String name) {
@@ -407,8 +433,8 @@ public class SystemImporter {
 
 	public static void createResourceTypeNetwork(final ResourceType type,
 			final FBNetwork resourceFBNetwork) {
-		Hashtable<String, Event> events = new Hashtable<>();
-		Hashtable<String, VarDeclaration> varDecls = new Hashtable<>();
+		Map<String, Event> events = new HashMap<>();
+		Map<String, VarDeclaration> varDecls = new HashMap<>();
 
 		for (FBNetworkElement element : type.getFBNetwork().getNetworkElements()){
 			FB copy = LibraryElementFactory.eINSTANCE.createResourceTypeFB();
@@ -457,9 +483,6 @@ public class SystemImporter {
 				eventCopy.setName(event.getName());
 				eventCopy.setComment(event.getComment());
 				eventCopy.setIsInput(event.isIsInput());
-				if (event.getValue() != null) {
-					eventCopy.setValue(EcoreUtil.copy(event.getValue()));
-				}
 				events.put(element.getName() + "." + event.getName(), eventCopy); //$NON-NLS-1$
 				interfaceList.getEventInputs().add(eventCopy);
 			}
@@ -470,9 +493,6 @@ public class SystemImporter {
 				eventCopy.setName(event.getName());
 				eventCopy.setComment(event.getComment());
 				eventCopy.setIsInput(event.isIsInput());
-				if (event.getValue() != null) {
-					eventCopy.setValue(EcoreUtil.copy(event.getValue()));
-				}
 				events.put(element.getName() + "." + event.getName(), eventCopy); //$NON-NLS-1$
 				interfaceList.getEventOutputs().add(eventCopy);
 			}

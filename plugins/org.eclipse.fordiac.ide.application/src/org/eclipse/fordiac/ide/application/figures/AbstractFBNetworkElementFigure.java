@@ -23,6 +23,7 @@ import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.MouseMotionListener;
+import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
@@ -263,7 +264,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		GridData topOutputsLayoutData = new GridData(
 				GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL
 						| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-		topOutputsLayout.setMinorAlignment(ToolbarLayout.ALIGN_BOTTOMRIGHT);
+		topOutputsLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		eventOutputs.setLayoutManager(topOutputsLayout);
 		top.add(eventOutputs);
 		top.setConstraint(eventOutputs, topOutputsLayoutData);
@@ -289,7 +290,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		//
 		Figure bottomOutputArea = new Figure();
 		bottomOutputArea.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout)bottomOutputArea.getLayoutManager()).setMinorAlignment(ToolbarLayout.ALIGN_BOTTOMRIGHT);
+		((ToolbarLayout)bottomOutputArea.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		
 		// bottomOutputsLayout.setStretchMinorAxis(true);		
 		GridData bottomOutputsLayoutData = new GridData(
@@ -300,11 +301,11 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		
 		
 		dataOutputs.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout)dataOutputs.getLayoutManager()).setMinorAlignment(ToolbarLayout.ALIGN_BOTTOMRIGHT);
+		((ToolbarLayout)dataOutputs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomOutputArea.add(dataOutputs);
 		
 		plugs.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout)plugs.getLayoutManager()).setMinorAlignment(ToolbarLayout.ALIGN_BOTTOMRIGHT);
+		((ToolbarLayout)plugs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomOutputArea.add(plugs);
 	}
 
@@ -551,6 +552,6 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		getInstanceNameLabel().setIcon(image);
 	}
 	
-	abstract protected boolean isResoruceTypeFBNElement();
+	protected abstract boolean isResoruceTypeFBNElement();
 
 }

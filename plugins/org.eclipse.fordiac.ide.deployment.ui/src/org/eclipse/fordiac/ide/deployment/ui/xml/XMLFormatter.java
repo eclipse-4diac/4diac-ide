@@ -17,6 +17,7 @@ import java.io.Reader;
 import java.io.StringReader;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -44,7 +45,7 @@ public class XMLFormatter {
 		protected String readTag() throws IOException {
 			int intChar;
 			char c;
-			StringBuffer node = new StringBuffer();
+			StringBuilder node = new StringBuilder();
 
 			while (!complete && (intChar = reader.read()) != -1) {
 				c = (char) intChar;
@@ -77,7 +78,7 @@ public class XMLFormatter {
 		protected String readTag() throws IOException {
 			int intChar;
 			char c;
-			StringBuffer node = new StringBuffer();
+			StringBuilder node = new StringBuilder();
 
 			while (!complete && (intChar = reader.read()) != -1) {
 				c = (char) intChar;
@@ -111,7 +112,7 @@ public class XMLFormatter {
 		protected String readTag() throws IOException {
 			int intChar;
 			char c;
-			StringBuffer node = new StringBuffer();
+			StringBuilder node = new StringBuilder();
 
 			while (!complete && (intChar = reader.read()) != -1) {
 				c = (char) intChar;
@@ -126,7 +127,7 @@ public class XMLFormatter {
 		}
 	}
 
-	private static abstract class TagReader {
+	private abstract static class TagReader {
 
 		protected Reader reader;
 
@@ -142,7 +143,7 @@ public class XMLFormatter {
 			return 0;
 		}
 
-		abstract public String getStartOfTag();
+		public abstract String getStartOfTag();
 
 		public String getTagText() {
 			return this.tagText;
@@ -234,7 +235,7 @@ public class XMLFormatter {
 		@Override
 		protected String readTag() throws IOException {
 
-			StringBuffer node = new StringBuffer();
+			StringBuilder node = new StringBuilder();
 
 			while (!complete) {
 
@@ -260,7 +261,7 @@ public class XMLFormatter {
 
 			} else if (node.toString().trim().length() == 0) {
 				String whitespace = node.toString();
-				node = new StringBuffer();
+				node = new StringBuilder();
 				for (int i = 0; i < whitespace.length(); i++) {
 					char whitespaceCharacter = whitespace.charAt(i);
 					if (whitespaceCharacter == '\n'
@@ -333,7 +334,7 @@ public class XMLFormatter {
 		@Override
 		protected String readTag() throws IOException {
 
-			StringBuffer node = new StringBuffer();
+			StringBuilder node = new StringBuilder();
 
 			boolean insideQuote = false;
 			int intChar;
@@ -357,7 +358,7 @@ public class XMLFormatter {
 
 	private int depth;
 
-	private StringBuffer formattedXml;
+	private StringBuilder formattedXml;
 
 	private boolean lastNodeWasText;
 
@@ -371,7 +372,7 @@ public class XMLFormatter {
 		depth = -1;
 	}
 
-	private void copyNode(final Reader reader, final StringBuffer out)
+	private void copyNode(final Reader reader, final StringBuilder out)
 			throws IOException {
 
 		TagReader tag = TagReaderFactory.createTagReaderFor(reader);
@@ -462,7 +463,7 @@ public class XMLFormatter {
 		Assert.isNotNull(documentText);
 
 		Reader reader = new StringReader(documentText);
-		formattedXml = new StringBuffer();
+		formattedXml = new StringBuilder();
 
 		if (depth == -1) {
 			depth = 0;
@@ -482,18 +483,18 @@ public class XMLFormatter {
 			}
 			reader.close();
 		} catch (IOException e) {
-			// DevcomPlugin.logWarning(e);
+			Activator.getDefault().logWarning("Eception during xml formating", e);
 		}
 		return formattedXml.toString();
 	}
 
-	private boolean hasNewlineAlready(final StringBuffer out) {
+	private boolean hasNewlineAlready(final StringBuilder out) {
 		return out.lastIndexOf("\n") == formattedXml.length() - 1 //$NON-NLS-1$
 				|| out.lastIndexOf("\r") == formattedXml.length() - 1; //$NON-NLS-1$
 	}
 
 	private String indent(final String canonicalIndent) {
-		StringBuffer indent = new StringBuffer(30);
+		StringBuilder indent = new StringBuilder(30);
 		for (int i = 0; i < depth; i++) {
 			indent.append(canonicalIndent);
 		}
@@ -511,7 +512,7 @@ public class XMLFormatter {
 
 	/**
 	 * Returns the indentation of the line at <code>offset</code> as a
-	 * <code>StringBuffer</code>. If the offset is not valid, the empty
+	 * <code>StringBuilder</code>. If the offset is not valid, the empty
 	 * string is returned.
 	 * 
 	 * @param offset the offset in the document
@@ -520,9 +521,9 @@ public class XMLFormatter {
 	 * @return the indentation (leading whitespace) of the line in which
 	 * <code>offset</code> is located
 	 */
-	public static StringBuffer getLeadingWhitespace(final int offset,
+	public static StringBuilder getLeadingWhitespace(final int offset,
 			final IDocument document) {
-		StringBuffer indent = new StringBuffer();
+		StringBuilder indent = new StringBuilder();
 		try {
 			IRegion line = document.getLineInformationOfOffset(offset);
 			int lineOffset = line.getOffset();
@@ -569,8 +570,8 @@ public class XMLFormatter {
 	 * 
 	 * @return one indentation
 	 */
-	public static StringBuffer createIndent() {
-		StringBuffer oneIndent = new StringBuffer();
+	public static StringBuilder createIndent() {
+		StringBuilder oneIndent = new StringBuilder();
 		oneIndent.append('\t'); // default
 
 		return oneIndent;

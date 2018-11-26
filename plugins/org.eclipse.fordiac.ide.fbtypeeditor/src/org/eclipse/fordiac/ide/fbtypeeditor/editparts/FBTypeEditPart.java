@@ -208,6 +208,7 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart{
 		if (controlListener == null) {
 			controlListener = new ControlListener() {
 
+				@Override
 				public void controlResized(final ControlEvent e) {
 					Point p = getParent().getViewer().getControl().getSize();
 					Dimension dim = getFigure().getPreferredSize(-1, -1);
@@ -219,6 +220,7 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart{
 					update(rect);
 				}
 
+				@Override
 				public void controlMoved(final ControlEvent e) {
 
 				}

@@ -25,7 +25,6 @@ public abstract class IIecNetCommRcv implements IIecReceivable {
 	protected ChannelManager m_oManager;
 	protected List<IEC_ANY> m_loReceiveData;
 
-	protected boolean m_bInitialized=false;
 	protected String m_sID;
 	
 	public IIecNetCommRcv() {
@@ -34,9 +33,9 @@ public abstract class IIecNetCommRcv implements IIecReceivable {
 	}
 
 	
-	protected boolean Initialize(String pa_sID, int pa_nChannelType) {
+	protected boolean initialize(String sID, int nChannelType) {
 		try {
-			m_oManager.register(pa_sID, pa_nChannelType, this);
+			m_oManager.register(sID, nChannelType, this);
 		} catch (CommException e) {
 			//registration failed
 			return false;
@@ -44,7 +43,8 @@ public abstract class IIecNetCommRcv implements IIecReceivable {
 		return true;
 	}
 
-	public boolean DeInitialize(String pa_sID) {
+	@Override
+	public boolean deInitialize(String pa_sID) {
 		try {
 			m_oManager.deregister(pa_sID);
 		} catch (CommException e) {
@@ -55,7 +55,7 @@ public abstract class IIecNetCommRcv implements IIecReceivable {
 		
 	}
 	
-	protected boolean ReceivedDataTypeMatch(List<IEC_ANY> receivedList) {
+	protected boolean receivedDataTypeMatch(List<IEC_ANY> receivedList) {
 		if (receivedList.size()!= m_loReceiveData.size())
 			return false;
 		boolean equal=true;
@@ -66,8 +66,9 @@ public abstract class IIecNetCommRcv implements IIecReceivable {
 		return equal;
 	}
 
-	public void ReceiveIECData(List<IEC_ANY> inList) {
-			if (!ReceivedDataTypeMatch(inList))
+	@Override
+	public void receiveIECData(List<IEC_ANY> inList) {
+			if (!receivedDataTypeMatch(inList))
 				{
 				System.out.println("did not receive expected data");
 				return;
@@ -80,6 +81,7 @@ public abstract class IIecNetCommRcv implements IIecReceivable {
 	
 		}
 
+	@Override
 	public void setMyReceiveData(List<IEC_ANY> pa_loReceiveData) {
 		this.m_loReceiveData = pa_loReceiveData;
 		System.out.println(pa_loReceiveData.toString());

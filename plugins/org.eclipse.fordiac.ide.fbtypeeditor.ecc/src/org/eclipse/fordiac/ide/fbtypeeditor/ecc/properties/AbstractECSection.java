@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IWorkbenchPart;
 
-abstract class AbstractECSection extends AbstractSection {
+public abstract class AbstractECSection extends AbstractSection {
 	
 	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
@@ -36,9 +36,9 @@ abstract class AbstractECSection extends AbstractSection {
 		return null;
 	}
 
-	static List<String> getLanguages() {
-		ArrayList<String> languages = new ArrayList<String>();
-		IExtensionRegistry registry = Platform.getExtensionRegistry();	
+	public static List<String> getLanguages() {
+		List<String> languages = new ArrayList<>();
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.ecc.algorithmEditor"); //$NON-NLS-1$
 		IExtension[] extensions = point.getExtensions();
 		for (int i = 0; i < extensions.length; i++) {

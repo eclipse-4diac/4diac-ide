@@ -36,7 +36,7 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 	private String newLine = "";
 		
 	public ExportStatusMessageDialog(Shell parentShell, final List<String> warnings, final List<String> errors) {
-		super(parentShell, "4DIAC Type Export Errors", "During Type export the following issues have been identified:", 
+		super(parentShell, "4diac IDE Type Export Errors", "During Type export the following issues have been identified:", 
 				new Status(IStatus.INFO, "pluginid", errors.size() + " errors and " + warnings.size() + " warnings!"), 
 				IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR);
 		 
@@ -117,7 +117,7 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 			if(null != string){
 				count += string.length();
 				text.append(string);
-				newLine = "\n";
+				newLine = "\n"; //$NON-NLS-1$
 				text.append(newLine);
 				count += newLine.length();
 			}

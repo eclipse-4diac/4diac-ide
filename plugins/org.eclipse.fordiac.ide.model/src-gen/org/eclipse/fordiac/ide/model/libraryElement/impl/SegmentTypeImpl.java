@@ -72,6 +72,7 @@ public class SegmentTypeImpl extends CompilableTypeImpl implements SegmentType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<VarDeclaration> getVarDeclaration() {
 		if (varDeclaration == null) {
 			varDeclaration = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION);

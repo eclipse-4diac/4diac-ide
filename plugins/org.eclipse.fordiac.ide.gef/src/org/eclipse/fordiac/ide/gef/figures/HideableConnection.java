@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.gef.figures;
 
 import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -23,11 +22,20 @@ import org.eclipse.draw2d.geometry.Rectangle;
 
 public class HideableConnection extends PolylineConnection {
 	
-	static final int BEND_POINT_BEVEL_SIZE = 5;
+	public static final int BEND_POINT_BEVEL_SIZE = 5;
 	
 	boolean hidden = false;
 	String label = ""; //$NON-NLS-1$
 	Rectangle moveRect = new Rectangle();
+	org.eclipse.fordiac.ide.model.libraryElement.Connection model;
+	
+	public void setModel(org.eclipse.fordiac.ide.model.libraryElement.Connection newModel){
+		model = newModel;
+	}
+	
+	public org.eclipse.fordiac.ide.model.libraryElement.Connection getModel() {
+		return model;
+	}
 	
 	public String getLabel() {
 		return label;
@@ -44,15 +52,7 @@ public class HideableConnection extends PolylineConnection {
 	public void setHidden(boolean hidden) {
 		this.hidden = hidden;
 	}
-
 	
-	@Override
-	public void addMouseListener(MouseListener listener) {
-		super.addMouseListener(listener);
-	}
-
-	
-
 	@Override
 	protected void outlineShape(Graphics g) {
 		if (isHidden()) {
@@ -105,7 +105,7 @@ public class HideableConnection extends PolylineConnection {
 		g.drawPolyline(beveledPoints);
 	}
 	
-	private Point calcualtedBeveledPoint(Point refPoint, Point otherPoint, int bevelSize){
+	private static Point calcualtedBeveledPoint(Point refPoint, Point otherPoint, int bevelSize){
 		if(0 == (refPoint.x - otherPoint.x)){
 			return new Point(refPoint.x, 
 					refPoint.y + (((refPoint.y - otherPoint.y) > 0) ? -bevelSize : bevelSize));				

@@ -20,7 +20,16 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.fordiac.ide.model.Palette.*;
+import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
+import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
+import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
+import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
+import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 
 /**
  * <!-- begin-user-doc -->
@@ -75,7 +84,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 			case PalettePackage.ADAPTER_TYPE_PALETTE_ENTRY: return createAdapterTypePaletteEntry();
 			case PalettePackage.SUB_APPLICATION_TYPE_PALETTE_ENTRY: return createSubApplicationTypePaletteEntry();
 			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -92,7 +101,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 			case PalettePackage.IPROJECT:
 				return createIProjectFromString(eDataType, initialValue);
 			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -109,7 +118,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 			case PalettePackage.IPROJECT:
 				return convertIProjectToString(eDataType, instanceValue);
 			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -118,6 +127,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Palette createPalette() {
 		PaletteImpl palette = new PaletteImpl();
 		return palette;
@@ -128,6 +138,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PaletteGroup createPaletteGroup() {
 		PaletteGroupImpl paletteGroup = new PaletteGroupImpl();
 		return paletteGroup;
@@ -138,6 +149,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBTypePaletteEntry createFBTypePaletteEntry() {
 		FBTypePaletteEntryImpl fbTypePaletteEntry = new FBTypePaletteEntryImpl();
 		return fbTypePaletteEntry;
@@ -148,6 +160,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DeviceTypePaletteEntry createDeviceTypePaletteEntry() {
 		DeviceTypePaletteEntryImpl deviceTypePaletteEntry = new DeviceTypePaletteEntryImpl();
 		return deviceTypePaletteEntry;
@@ -158,6 +171,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ResourceTypeEntry createResourceTypeEntry() {
 		ResourceTypeEntryImpl resourceTypeEntry = new ResourceTypeEntryImpl();
 		return resourceTypeEntry;
@@ -168,6 +182,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SegmentTypePaletteEntry createSegmentTypePaletteEntry() {
 		SegmentTypePaletteEntryImpl segmentTypePaletteEntry = new SegmentTypePaletteEntryImpl();
 		return segmentTypePaletteEntry;
@@ -178,6 +193,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterTypePaletteEntry createAdapterTypePaletteEntry() {
 		AdapterTypePaletteEntryImpl adapterTypePaletteEntry = new AdapterTypePaletteEntryImpl();
 		return adapterTypePaletteEntry;
@@ -188,6 +204,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SubApplicationTypePaletteEntry createSubApplicationTypePaletteEntry() {
 		SubApplicationTypePaletteEntryImpl subApplicationTypePaletteEntry = new SubApplicationTypePaletteEntryImpl();
 		return subApplicationTypePaletteEntry;
@@ -234,6 +251,7 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PalettePackage getPalettePackage() {
 		return (PalettePackage)getEPackage();
 	}

@@ -64,12 +64,9 @@ public class FBInterfaceEditor extends GraphicalEditorWithFlyoutPalette implemen
 	private RulerComposite rulerComp;
 	private CommandStack commandStack;
 	private FBType fbType;
-	protected ZoomManager zoomManager;
 	private KeyHandler sharedKeyHandler;
 	protected PaletteRoot paletteRoot;
 	protected Palette palette;
-
-	public FBInterfaceEditor() {}
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -136,7 +133,11 @@ public class FBInterfaceEditor extends GraphicalEditorWithFlyoutPalette implemen
 	}
 
 	protected EditPartFactory getEditPartFactory() {
-		return new FBInterfaceEditPartFactory(this, palette, zoomManager);
+		return new FBInterfaceEditPartFactory(this, palette, getZoomManger());
+	}
+	
+	protected ZoomManager getZoomManger(){		
+		return ((ScalableFreeformRootEditPart)(getGraphicalViewer().getRootEditPart())).getZoomManager();
 	}
 
 	@Override
@@ -194,7 +195,7 @@ public class FBInterfaceEditor extends GraphicalEditorWithFlyoutPalette implemen
 	public boolean outlineSelectionChanged(Object selectedElement) {	
 		Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
 		getGraphicalViewer().flush();
-		if (editpart != null && editpart instanceof EditPart && ((EditPart) editpart).isSelectable()) {
+		if (editpart instanceof EditPart && ((EditPart) editpart).isSelectable()) {
 			getGraphicalViewer().select((EditPart) editpart);
 			return true;
 		}
@@ -211,7 +212,7 @@ public class FBInterfaceEditor extends GraphicalEditorWithFlyoutPalette implemen
 	
 	@Override
 	protected FlyoutPreferences getPalettePreferences() {
-		return FBInterfacePaletteFactory.createPalettePreferences();
+		return FBInterfacePaletteFactory.PALETTE_PREFERENCES;
 	}
 	
 	/** Override so that we can add a template transferdragsourcelistener for drag and drop

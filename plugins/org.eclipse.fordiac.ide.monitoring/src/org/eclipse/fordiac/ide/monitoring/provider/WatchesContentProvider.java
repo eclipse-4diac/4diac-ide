@@ -13,9 +13,10 @@
 package org.eclipse.fordiac.ide.monitoring.provider;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
@@ -29,48 +30,33 @@ public class WatchesContentProvider implements ITreeContentProvider {
 
 	private Viewer viewer;
 
-	EContentAdapter adapter = new EContentAdapter() {
+	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(
 				final org.eclipse.emf.common.notify.Notification notification) {
 			int featureID = notification.getFeatureID(MonitoringElement.class);
 			if (featureID == MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE
 					&& notification.getNotifier() instanceof MonitoringElement) {
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
+				Display.getDefault().asyncExec(() -> {
 						if(!viewer.getControl().isDisposed()){
 							((TreeViewer) viewer).refresh(notification.getNotifier());
 						}
 					}
-				});
+				);
 
-			} else if (featureID == MonitoringPackage.MONITORING_ELEMENT__BREAKPOINT_ACTIVE) {
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						((TreeViewer) viewer).refresh();
-					}
-				});
 			}
 		}
 	};
-	ArrayList<MonitoringBaseElement> watchedElements = new ArrayList<MonitoringBaseElement>();
+	
+	private List<MonitoringBaseElement> watchedElements = new ArrayList<>();
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof MonitoringElement) {
 			return new Object[0];
 		}
-		// ArrayList<MonitoringElement> oldWatchedElements = new
-		// ArrayList<MonitoringElement>();
-		// oldWatchedElements.addAll(watchedElements);
 
-		for (MonitoringBaseElement element : watchedElements) {
-			if (element.eAdapters().contains(adapter)) {
-				element.eAdapters().remove(adapter);
-			}
-		}
+		removeAdapterFromChildrenList();
 
 		watchedElements.clear();
 
@@ -101,7 +87,7 @@ public class WatchesContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
-
+		removeAdapterFromChildrenList();
 	}
 
 	@Override
@@ -109,4 +95,12 @@ public class WatchesContentProvider implements ITreeContentProvider {
 		this.viewer = viewer;
 	}
 
+	private void removeAdapterFromChildrenList() {
+		for (MonitoringBaseElement element : watchedElements) {
+			if (element.eAdapters().contains(adapter)) {
+				element.eAdapters().remove(adapter);
+			}
+		}
+	}
+	
 }

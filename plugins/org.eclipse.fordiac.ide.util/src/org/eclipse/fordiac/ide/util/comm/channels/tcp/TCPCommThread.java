@@ -36,7 +36,7 @@ public class TCPCommThread extends CCommThread {
 			try {
 
 				if (!channel.getSocket().isClosed())
-					receiver.ReceiveIECData(channel.receiveFrom());
+					receiver.receiveIECData(channel.receiveFrom());
 			} catch (IOException e) {
 				if (!isInterrupted()) {
 					Activator.getDefault().logError(e.getMessage(), e);

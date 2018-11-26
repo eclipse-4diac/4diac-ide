@@ -81,6 +81,7 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetworkElement getFrom() {
 		if (from != null && from.eIsProxy()) {
 			InternalEObject oldFrom = (InternalEObject)from;
@@ -107,6 +108,7 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFrom(FBNetworkElement newFrom) {
 		FBNetworkElement oldFrom = from;
 		from = newFrom;
@@ -119,6 +121,7 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetworkElement getTo() {
 		if (to != null && to.eIsProxy()) {
 			InternalEObject oldTo = (InternalEObject)to;
@@ -145,6 +148,7 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTo(FBNetworkElement newTo) {
 		FBNetworkElement oldTo = to;
 		to = newTo;
@@ -157,8 +161,9 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AutomationSystem getAutomationSystem() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
 
 	/**

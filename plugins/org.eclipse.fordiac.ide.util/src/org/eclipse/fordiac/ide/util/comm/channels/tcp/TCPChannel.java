@@ -92,6 +92,7 @@ public class TCPChannel extends CChannel {
 		return new TCPChannel(TCP_PACKET_LENGTH, TCP_ID, receiver);
 	}
 
+	@Override
 	public void deregister() throws CommException {
 		commThread.interrupt();
 		try {
@@ -104,6 +105,7 @@ public class TCPChannel extends CChannel {
 		}
 	}
 
+	@Override
 	public List<IEC_ANY> receiveFrom() throws IOException, CommException {
 		if (socket == null)
 			return null;

@@ -21,10 +21,10 @@ import org.eclipse.swt.widgets.Composite;
 public interface IFBTestConfiguratonCreator extends ISetValueListener,
 		ITriggerEventListener {
 
-	public IFBTestConfiguration createConfigurationPage(Composite parent);
+	IFBTestConfiguration createConfigurationPage(Composite parent);
 
-	public void setType(FBType type);
+	void setType(FBType type);
 	
-	public void setGroup(PaletteGroup group);
+	void setGroup(PaletteGroup group);
 
 }

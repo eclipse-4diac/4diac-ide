@@ -1,14 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Monitoring (Incubation)
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.fordiac.ide.monitoring;singleton:=true
-Bundle-Version: 1.9.0.qualifier
+Automatic-Module-Name: org.eclipse.fordiac.ide.monitoring
+Bundle-Version: 1.10.0.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.monitoring.Activator
-Bundle-Vendor: Eclipse 4diac
+Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
- org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.eclipse.fordiac.ide.model;visibility:=reexport,
  org.eclipse.fordiac.ide.application,
  org.eclipse.gef,
@@ -19,14 +19,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui.controls,
  org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.fordiac.ide.deployment.ui,
- org.eclipse.ui.navigator
+ org.eclipse.ui.navigator,
+ org.eclipse.fordiac.ide.deployment;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
 Export-Package: org.eclipse.fordiac.ide.model.monitoring,
  org.eclipse.fordiac.ide.model.monitoring.impl,
- org.eclipse.fordiac.ide.model.monitoring.util,
- org.eclipse.fordiac.ide.monitoring.monCom,
- org.eclipse.fordiac.ide.monitoring.monCom.impl,
- org.eclipse.fordiac.ide.monitoring.monCom.util,
- org.eclipse.fordiac.ide.monitoring.communication
-Bundle-ClassPath: .
+ org.eclipse.fordiac.ide.model.monitoring.util

@@ -2,22 +2,22 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         point="org.eclipse.fordiac.ide.deployment.downloadexecutor">
-      <DeploymentExecutor
-            class="org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor">
-      </DeploymentExecutor>
+         point="org.eclipse.fordiac.ide.deployment.devicemanagementinteractor">
+      <DeviceManagementInteractorProvider
+            class="org.eclipse.fordiac.ide.deployment.iec61499.providers.DefaultDevMgmInteractorProvider">
+      </DeviceManagementInteractorProvider>
    </extension>
    <extension
-         point="org.eclipse.fordiac.ide.deployment.downloadexecutor">
-      <DeploymentExecutor
-            class="org.eclipse.fordiac.ide.deployment.iec61499.FDBK2_DeploymentExecutor">
-      </DeploymentExecutor>
+         point="org.eclipse.fordiac.ide.deployment.devicemanagementinteractor">
+      <DeviceManagementInteractorProvider
+            class="org.eclipse.fordiac.ide.deployment.iec61499.providers.FDBK2DevMgmInteractorProvider">
+      </DeviceManagementInteractorProvider>
    </extension>
    <extension
-         point="org.eclipse.fordiac.ide.deployment.downloadexecutor">
-      <DeploymentExecutor
-            class="org.eclipse.fordiac.ide.deployment.iec61499.DynamicTypeLoad_DeploymentExecutor">
-      </DeploymentExecutor>
+         point="org.eclipse.fordiac.ide.deployment.devicemanagementinteractor">
+      <DeviceManagementInteractorProvider
+            class="org.eclipse.fordiac.ide.deployment.iec61499.providers.DynamicTypeLoadDevMgmInteractorProvider">
+      </DeviceManagementInteractorProvider>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -34,11 +34,4 @@
             class="org.eclipse.fordiac.ide.deployment.iec61499.preferences.PreferenceInitializer">
       </initializer>
    </extension>
-   <extension
-         point="org.eclipse.fordiac.ide.deployment.devicemanagementcommunicationhandler">
-      <DeviceManagementComunicationHandler
-            class="org.eclipse.fordiac.ide.deployment.iec61499.EthernetDeviceManagementCommunicationHandler">
-      </DeviceManagementComunicationHandler>
-   </extension>
-
 </plugin>

@@ -34,8 +34,21 @@ public class Messages extends NLS {
 	
 	public static String DeploymentCoordinator_MESSAGE_ProfileNotSet;
 
-	/** The InvalidMgmtID_LABEL_InvalidMgmtID. */
-	public static String InvalidMgmtID_LABEL_InvalidMgmtID;
+	public static String DownloadRunnable_DownloadErrorDetails;
+
+	public static String DownloadRunnable_MajorDownloadError;
+	
+	public static String DownloadRunnable_ResourceAlreadyExists;
+	
+	public static String DownloadRunnable_ResourceOverrideQuestion;
+	
+	public static String DownloadRunnable_Replace;
+	
+	public static String DownloadRunnable_ReplaceAll;
+	
+	public static String DownloadRunnable_ReassureOverideHeader;
+	public static String DownloadRunnable_ReassureOveride;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

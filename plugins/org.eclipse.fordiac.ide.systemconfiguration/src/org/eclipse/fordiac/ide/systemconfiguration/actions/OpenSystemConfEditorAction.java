@@ -28,7 +28,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class OpenSystemConfEditorAction extends OpenListener {
-	private final static String OPEN_SYSTEM_LISTENER_ID = "org.eclipse.fordiac.ide.systemconfiguration.actions.OpenSystemConfEditorAction"; //$NON-NLS-1$
+	private static final String OPEN_SYSTEM_LISTENER_ID = "org.eclipse.fordiac.ide.systemconfiguration.actions.OpenSystemConfEditorAction"; //$NON-NLS-1$
 
 	/** The sys conf. */
 	private SystemConfiguration sysConf;

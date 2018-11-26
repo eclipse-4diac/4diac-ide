@@ -1,10 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2007 - 2010 4DIAC - consortium.
+ * Copyright (c) 2008, 2009, 2013, 2014, 2016 Profactor GbmH, fortiss GmbH
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
+ *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.provider;
 
@@ -50,7 +54,7 @@ public class VersionLabelProvider extends LabelProvider implements
 			case 3:
 				return ((VersionInfo) element).getDate();
 			case 4:
-				return (null == ((VersionInfo) element).getRemarks()) ? new String("") : ((VersionInfo) element).getRemarks(); //$NON-NLS-1$
+				return (null == ((VersionInfo) element).getRemarks()) ? "" : ((VersionInfo) element).getRemarks(); //$NON-NLS-1$
 			default:
 				break;
 			}

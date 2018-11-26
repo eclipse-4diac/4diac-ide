@@ -23,7 +23,7 @@ public class IEC_WORD extends IEC_ANY_BIT {
 
 	private short value;
 
-	protected final int OCTETS = 2;
+	private static final int OCTETS = 2;
 
 	public IEC_WORD() {
 		super();
@@ -111,10 +111,12 @@ public class IEC_WORD extends IEC_ANY_BIT {
 		return this.toHexString();
 	}
 
+	@Override
 	protected String ConvertHexString() {
 		return Integer.toHexString(value);
 	}
 
+	@Override
 	protected String ConvertBinString() {
 		return Integer.toBinaryString(value);
 	}

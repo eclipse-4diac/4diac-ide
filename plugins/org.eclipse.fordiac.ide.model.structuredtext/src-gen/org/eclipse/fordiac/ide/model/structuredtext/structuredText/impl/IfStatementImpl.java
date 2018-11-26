@@ -109,7 +109,8 @@ public class IfStatementImpl extends StatementImpl implements IfStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getExpression()
+  @Override
+public Expression getExpression()
   {
     return expression;
   }
@@ -136,7 +137,8 @@ public class IfStatementImpl extends StatementImpl implements IfStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setExpression(Expression newExpression)
+  @Override
+public void setExpression(Expression newExpression)
   {
     if (newExpression != expression)
     {
@@ -157,7 +159,8 @@ public class IfStatementImpl extends StatementImpl implements IfStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public StatementList getStatments()
+  @Override
+public StatementList getStatments()
   {
     return statments;
   }
@@ -184,7 +187,8 @@ public class IfStatementImpl extends StatementImpl implements IfStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setStatments(StatementList newStatments)
+  @Override
+public void setStatments(StatementList newStatments)
   {
     if (newStatments != statments)
     {
@@ -205,7 +209,8 @@ public class IfStatementImpl extends StatementImpl implements IfStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<ElseIfClause> getElseif()
+  @Override
+public EList<ElseIfClause> getElseif()
   {
     if (elseif == null)
     {
@@ -219,7 +224,8 @@ public class IfStatementImpl extends StatementImpl implements IfStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public ElseClause getElse()
+  @Override
+public ElseClause getElse()
   {
     return else_;
   }
@@ -246,7 +252,8 @@ public class IfStatementImpl extends StatementImpl implements IfStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setElse(ElseClause newElse)
+  @Override
+public void setElse(ElseClause newElse)
   {
     if (newElse != else_)
     {

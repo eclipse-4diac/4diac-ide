@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.util.comm.channels;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.util.comm.channels.tcp.TCPChannel;
 import org.eclipse.fordiac.ide.util.comm.channels.udp.UDPChannel;
@@ -28,7 +29,7 @@ import org.eclipse.fordiac.ide.util.comm.exceptions.CommException;
 public class ChannelManager {
 
 	private static ChannelManager manager;
-	private static HashMap<String, CChannel> channels = new HashMap<String, CChannel>();
+	private static Map<String, CChannel> channels = new HashMap<>();
 
 	private ChannelManager() {
 		super();
@@ -52,7 +53,7 @@ public class ChannelManager {
 	 *            unique ID of the remote communication partner
 	 * @return Channel
 	 */
-	public CChannel getChannel(String channelID) {
+	private static CChannel getChannel(String channelID) {
 		return channels.get(channelID);
 	}
 
@@ -64,7 +65,7 @@ public class ChannelManager {
 	 *            unique ID of the remote communication partner
 	 * @return boolean
 	 */
-	public boolean existsChannel(String channelID) {
+	private static boolean existsChannel(String channelID) {
 		return channels.get(channelID) != null;
 	}
 
@@ -76,17 +77,17 @@ public class ChannelManager {
 	 *            unique ID of the remote communication partner
 	 * @param channelType
 	 *            type of communication {@link IChannel}
-	 * @param Receiver
+	 * @param receiver
 	 *            the receiver of remote messages, must be of type
 	 *            {@link IIecReceivable}
 	 * @throws CommException
 	 */
-	public void register(String channelID, int channelType,
-			IIecReceivable Receiver) throws CommException {
-		if (existsChannel(channelID))
+	public static void register(String channelID, int channelType,
+			IIecReceivable receiver) throws CommException {
+		if (existsChannel(channelID)) {
 			throw new CommException("Channel already in use.");
-		channels.put(channelID, ChannelFactory.getChannel(channelID,
-				channelType, Receiver));
+		}
+		channels.put(channelID, ChannelFactory.getChannel(channelID, channelType, receiver));
 	}
 
 	/**
@@ -97,14 +98,15 @@ public class ChannelManager {
 	 *            unique ID of the remote communication partner
 	 * @throws CommException
 	 */
-	public void deregister(String channelID) throws CommException {
+	public static void deregister(String channelID) throws CommException {
 		CChannel channel = getChannel(channelID);
 		if (channel != null) {
 			channel.deregister();
 			channels. remove(channelID);
 		}
-		else
+		else {
 			throw new CommException("No Such Channel.");
+		}
 	}
 
 	/**
@@ -115,23 +117,23 @@ public class ChannelManager {
 	 *            unique ID of the remote communication partner
 	 * @param channelType
 	 *            type of communication {@link IChannel}
-	 * @param Data
+	 * @param data
 	 *            List of {@link IEC_ANY} structures to be encoded and sent to
 	 *            communication partner
 	 * @throws CommException
 	 */
 	public static void send(String channelID, int channelType,
-			List<IEC_ANY> Data) throws CommException {
+			List<IEC_ANY> data) {
 		switch (channelType) {
 
 		case IChannel.UDP: 
-			UDPChannel.send(channelID, Data);
+			UDPChannel.send(channelID, data);
 			break;
 		
 		case IChannel.TCP: {
 				CChannel channel = channels.get(channelID);
-				if (channel != null && channel instanceof TCPChannel) {
-					((TCPChannel) channel).send(Data);
+				if (channel instanceof TCPChannel) {
+					((TCPChannel) channel).send(data);
 				}
 			}
 		}

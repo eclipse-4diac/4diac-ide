@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+<extension
+         point="org.eclipse.ui.exportWizards">
+      <wizard
+            category="org.eclipse.fordiac.ide.export.ui"
+            class="org.eclipse.fordiac.ide.fmu.wizard.CreateFMUWizard"
+            icon="fordiacimage://ICON_FMU"
+            id="org.eclipse.fordiac.ide.fmu.wizard.CreateFMU"
+            name="Create FMU">
+      </wizard>
+   </extension>
+<extension
+      point="org.eclipse.core.runtime.preferences">
+   <initializer
+         class="org.eclipse.fordiac.ide.fmu.preferences.PreferenceInitializer">
+   </initializer>
+</extension>
+<extension
+      point="org.eclipse.ui.preferencePages">
+   <page
+         category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+         class="org.eclipse.fordiac.ide.fmu.preferences.FMUPreferencePage"
+         id="org.eclipse.fordiac.ide.fmu.preferences.FMUPreferencePage"
+         name="FMU Preferences">
+   </page>
+</extension>
+</plugin>

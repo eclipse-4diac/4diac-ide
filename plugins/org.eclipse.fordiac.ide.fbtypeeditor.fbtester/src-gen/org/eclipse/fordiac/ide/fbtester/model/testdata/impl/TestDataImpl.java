@@ -198,6 +198,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated
 	 */
+	@Override
 	public String getTestName() {
 		return testName;
 	}
@@ -207,6 +208,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated
 	 */
+	@Override
 	public void setTestName(String newTestName) {
 		String oldTestName = testName;
 		testName = newTestName;
@@ -221,6 +223,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated
 	 */
+	@Override
 	public Event getEvent() {
 		if (event != null && event.eIsProxy()) {
 			InternalEObject oldEvent = (InternalEObject) event;
@@ -249,6 +252,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated
 	 */
+	@Override
 	public void setEvent(Event newEvent) {
 		Event oldEvent = event;
 		event = newEvent;
@@ -263,6 +267,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated
 	 */
+	@Override
 	public String getTestIntstance() {
 		return testIntstance;
 	}
@@ -272,6 +277,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated
 	 */
+	@Override
 	public void setTestIntstance(String newTestIntstance) {
 		String oldTestIntstance = testIntstance;
 		testIntstance = newTestIntstance;
@@ -287,6 +293,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<Event> getEventOutputs() {
 		if (eventOutputs == null) {
 			eventOutputs = new EObjectResolvingEList<Event>(Event.class, this,
@@ -300,6 +307,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<ValuedVarDecl> getValues() {
 		if (values == null) {
 			values = new EObjectResolvingEList<ValuedVarDecl>(
@@ -314,6 +322,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<ValuedVarDecl> getResults() {
 		if (results == null) {
 			results = new EObjectResolvingEList<ValuedVarDecl>(
@@ -328,6 +337,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated
 	 */
+	@Override
 	public String getLine() {
 		return line;
 	}
@@ -337,6 +347,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public void setLine(String newLine) {
 		String oldLine = line;
 		line = newLine;
@@ -352,6 +363,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated
 	 */
+	@Override
 	public FBType getType() {
 		if (type != null && type.eIsProxy()) {
 			InternalEObject oldType = (InternalEObject) type;
@@ -380,6 +392,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * 
 	 * @generated
 	 */
+	@Override
 	public void setType(FBType newType) {
 		FBType oldType = type;
 		type = newType;
@@ -541,7 +554,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 			return super.toString();
 		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (testName: ");
 		result.append(testName);
 		result.append(", testIntstance: ");
@@ -614,6 +627,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		}
 	}
 
+	@Override
 	public String getValueFor(String text) {
 		for (ValuedVarDecl valueVarDecl : getValues()){
 			if (valueVarDecl.getVarDeclaration().getName().equals(text)) {
@@ -623,6 +637,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		return null;
 	}
 
+	@Override
 	public void setValueFor(String text, String value) {
 		for (ValuedVarDecl valueVarDecl : getValues()){
 			if (valueVarDecl.getVarDeclaration().getName().equals(text)) {
@@ -632,6 +647,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	}
 
 	//
+	@Override
 	public String getResultFor(String text) {
 		for (ValuedVarDecl valueVarDecl : getResults()){
 			if (valueVarDecl.getVarDeclaration() != null) {
@@ -645,6 +661,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	}
 
+	@Override
 	public void setResultFor(String text, String value) {
 		for (ValuedVarDecl valueVarDecl : getResults()){
 			if (valueVarDecl.getVarDeclaration().getName().equals(text)) {
@@ -653,6 +670,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		}
 	}
 
+	@Override
 	public String getOutputEvents() {
 		String events = "";
 		for (int i = 0; i < getEventOutputs().size(); i++) {
@@ -665,6 +683,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		return events;
 	}
 
+	@Override
 	public String _getLine() {
 		String dataLine = getTestName() + ";";
 		dataLine += type.getName();

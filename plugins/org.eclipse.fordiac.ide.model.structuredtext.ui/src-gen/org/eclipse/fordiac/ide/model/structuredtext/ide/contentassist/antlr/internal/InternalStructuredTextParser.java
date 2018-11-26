@@ -2,14 +2,7 @@ package org.eclipse.fordiac.ide.model.structuredtext.ide.contentassist.antlr.int
 import java.util.Map;
 import java.util.HashMap;
 
-import java.io.InputStream;
 import org.eclipse.xtext.*;
-import org.eclipse.xtext.parser.*;
-import org.eclipse.xtext.parser.impl.*;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.xtext.parser.antlr.XtextTokenStream;
-import org.eclipse.xtext.parser.antlr.XtextTokenStream.HiddenTokens;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.AbstractInternalContentAssistParser;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.DFA;
 import org.eclipse.fordiac.ide.model.structuredtext.services.StructuredTextGrammarAccess;
@@ -17,9 +10,6 @@ import org.eclipse.fordiac.ide.model.structuredtext.services.StructuredTextGramm
 
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 @SuppressWarnings("all")
 public class InternalStructuredTextParser extends AbstractInternalContentAssistParser {
@@ -158,8 +148,10 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
         }
         
 
-    public String[] getTokenNames() { return InternalStructuredTextParser.tokenNames; }
-    public String getGrammarFileName() { return "InternalStructuredTextParser.g"; }
+    @Override
+	public String[] getTokenNames() { return InternalStructuredTextParser.tokenNames; }
+    @Override
+	public String getGrammarFileName() { return "InternalStructuredTextParser.g"; }
 
 
     	private StructuredTextGrammarAccess grammarAccess;
@@ -32077,7 +32069,8 @@ public class InternalStructuredTextParser extends AbstractInternalContentAssistP
             this.special = dfa_6;
             this.transition = dfa_7;
         }
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "2161:1: rule__Unary_Expr__Alternatives : ( ( ( rule__Unary_Expr__Group_0__0 ) ) | ( rulePrimary_Expr ) | ( ruleConstant ) );";
         }
     }

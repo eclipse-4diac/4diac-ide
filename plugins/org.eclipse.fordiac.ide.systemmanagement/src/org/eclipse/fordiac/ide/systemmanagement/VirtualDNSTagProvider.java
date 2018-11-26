@@ -48,8 +48,8 @@ public class VirtualDNSTagProvider implements ITagProvider {
 		options.put(XMLResource.OPTION_ENCODING, ENCODING_UTF_8);
 		options.put(XMLResource.OPTION_DISABLE_NOTIFY, true);
 		// TODO check whether the following options are faster
-		options.put(XMLResource.OPTION_SAVE_ONLY_IF_CHANGED,
-				XMLResource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
+		options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED,
+				Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
 		options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF,
 				XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
 		// options.put(XMLResource.OPTION_ZIP, Boolean.TRUE)

@@ -1,11 +1,15 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2007 - 2012 4DIAC - consortium.
+ *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *  *
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
  *  * http://www.eclipse.org/legal/epl-v10.html
  *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *  *     - initial API and implementation and/or initial documentation
  *  *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
@@ -66,8 +70,8 @@ public class AdapterFBItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_AdapterFB_adapterDecl_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AdapterFB_adapterDecl_feature", "_UI_AdapterFB_type"),
+				 getString("_UI_AdapterFB_adapterDecl_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_AdapterFB_adapterDecl_feature", "_UI_AdapterFB_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.ADAPTER_FB__ADAPTER_DECL,
 				 true,
 				 false,
@@ -85,7 +89,7 @@ public class AdapterFBItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AdapterFB"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/AdapterFB")); //$NON-NLS-1$
 	}
 
 	/**
@@ -98,8 +102,8 @@ public class AdapterFBItemProvider
 	public String getText(Object object) {
 		String label = ((AdapterFB)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_AdapterFB_type") :
-			getString("_UI_AdapterFB_type") + " " + label;
+			getString("_UI_AdapterFB_type") : //$NON-NLS-1$
+			getString("_UI_AdapterFB_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

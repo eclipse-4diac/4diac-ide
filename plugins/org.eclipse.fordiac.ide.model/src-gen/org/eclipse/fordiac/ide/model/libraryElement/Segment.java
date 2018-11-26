@@ -103,6 +103,7 @@ public interface Segment extends TypedConfigureableObject, PositionableElement, 
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//this cannot be moved to the annotation class because there we don\'t have the super access!!!\r\norg.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();\r\nif(type instanceof SegmentType){\r\n\treturn (SegmentType) type; \r\n}\r\nreturn null;'"
 	 * @generated
 	 */
+	@Override
 	SegmentType getType();
 
 } // Segment

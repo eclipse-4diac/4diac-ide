@@ -74,7 +74,8 @@ public class ConstantImpl extends ExpressionImpl implements Constant
    * <!-- end-user-doc -->
    * @generated
    */
-  public Type getType()
+  @Override
+public Type getType()
   {
     return type;
   }
@@ -84,7 +85,8 @@ public class ConstantImpl extends ExpressionImpl implements Constant
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setType(Type newType)
+  @Override
+public void setType(Type newType)
   {
     Type oldType = type;
     type = newType == null ? TYPE_EDEFAULT : newType;

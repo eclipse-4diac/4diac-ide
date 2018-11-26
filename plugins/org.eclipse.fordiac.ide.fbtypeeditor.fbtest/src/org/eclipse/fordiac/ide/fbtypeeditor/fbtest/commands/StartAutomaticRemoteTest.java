@@ -22,14 +22,19 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.text.IDocument;
 
 public class StartAutomaticRemoteTest extends Command {
-	private FBType fbType;
+	private static int artCount = 0;
 
-	private boolean isRunning=false;
+	private final FBType fbType;
+	private final IDocument document;
+	private boolean isRunning = false;
+	private int numART = 0;
 	
-	static int ARTCount = 0;
-	int numART = 0;
-
-	IDocument document;
+	private static synchronized int getNewARTCount() {
+		//get a thread save correct number
+		int retVal = artCount;
+		artCount++;		
+		return retVal;
+	}
 	
 	/**
 	 * Instantiates a new adds the service sequence command.
@@ -39,8 +44,7 @@ public class StartAutomaticRemoteTest extends Command {
 	 */
 	public StartAutomaticRemoteTest(FBType fbType, IDocument document) {
 		this.fbType = fbType;
-		numART=ARTCount;
-		ARTCount++;
+		numART = getNewARTCount();
 		this.document=document;
 	}
 
@@ -61,38 +65,38 @@ public class StartAutomaticRemoteTest extends Command {
         boolean isAutomatedTest=true;
 
         List<TestSequence> testSequences = FBTHelper.extractTestSequences(fbType);
-        String CommID="localhost:"+(60000+numART);
+        String commID="localhost:"+(60000+numART); //$NON-NLS-1$
         
         if (isAutomatedTest) {
-			boolean isOK=true;
-        	AutomatedRemoteTest ART = new AutomatedRemoteTest();
+			boolean isOK = true;
+        	AutomatedRemoteTest art = new AutomatedRemoteTest();
 			
-			isOK = ART.prepareART(fbType, testSequences);
+			isOK = art.prepareART(fbType, testSequences);
 			
 			if (isOK) {
 				//TODO download:
 				// server, Mux, DeMUX, FBuT, configure (unique ID)
 				// use deployment.iec61499
-				isOK = ART.deployTestRes(CommID,numART);
+				isOK = art.deployTestRes(commID,numART);
 
 				if (isOK) {
-					isOK = ART.configureCommunication(CommID);
+					isOK = art.configureCommunication(commID);
 
 					if (isOK) {
-						isOK = ART.runTests();
+						isOK = art.runTests();
 
-						String result = ART.evaluateTestResults(testSequences,true);
+						String result = art.evaluateTestResults(testSequences,true);
 
 						document.set(result);
 
 
-						ART.stopCommunication();
+						art.stopCommunication();
 					}
-					ART.cleanRes();
+					art.cleanRes();
 				} else {
-					document.set(ART.DMgr_response);
+					document.set(art.DMgr_response);
 				}
-				}
+			}
 			isRunning=false;
 		}
 		

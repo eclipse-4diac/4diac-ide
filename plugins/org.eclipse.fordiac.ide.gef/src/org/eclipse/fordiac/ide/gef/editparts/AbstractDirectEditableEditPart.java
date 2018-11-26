@@ -49,6 +49,10 @@ public abstract class AbstractDirectEditableEditPart extends
 		}
 
 	};
+	
+	protected EContentAdapter getNameAdapter() {
+		return adapter;
+	}
 
 	public void refreshName() {
 		getNameLabel().setText(getINamedElement().getName());
@@ -67,8 +71,9 @@ public abstract class AbstractDirectEditableEditPart extends
 	@Override
 	public void activate() {
 		super.activate();
-		if (getINamedElement() != null)
+		if (getINamedElement() != null) {
 			getINamedElement().eAdapters().add(adapter);
+		}
 
 	}
 
@@ -78,16 +83,16 @@ public abstract class AbstractDirectEditableEditPart extends
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		if (getINamedElement() != null)
+		if (getINamedElement() != null) {
 			getINamedElement().eAdapters().remove(adapter);
+		}
 	}
 
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 		// EditPolicy which allows the direct edit of the Instance Name
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
-				new INamedElementRenameEditPolicy());
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy());
 
 	}
 
@@ -97,7 +102,7 @@ public abstract class AbstractDirectEditableEditPart extends
 	@Override
 	public void performRequest(final Request request) {
 		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
-				performDirectEdit();
+			performDirectEdit();
 		} else {
 			super.performRequest(request);
 		}
@@ -111,10 +116,8 @@ public abstract class AbstractDirectEditableEditPart extends
 	public DirectEditManager getManager() {
 		if (manager == null) {
 			Label l = getNameLabel();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class,
-					new NameCellEditorLocator(l), l);
+			manager = new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
 		}
-
 		return manager;
 	}
 
@@ -133,12 +136,10 @@ public abstract class AbstractDirectEditableEditPart extends
 	}
 	
 	//TODO already duplicated on several places put it into a util class
-	static public void executeCommand(Command cmd){
-		Object viewer = Abstract4DIACUIPlugin.getCurrentActiveEditor().getAdapter(
-				GraphicalViewer.class);
+	public static void executeCommand(Command cmd){
+		Object viewer = Abstract4DIACUIPlugin.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
 		if (viewer instanceof GraphicalViewer) {
-			((GraphicalViewer) viewer).getEditDomain().getCommandStack().execute(
-					cmd);
+			((GraphicalViewer) viewer).getEditDomain().getCommandStack().execute(cmd);
 		} else {
 			cmd.execute();
 		}

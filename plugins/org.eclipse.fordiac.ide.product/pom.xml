@@ -6,7 +6,7 @@
     <relativePath>../org.eclipse.fordiac.ide.master/pom.xml</relativePath>
     <groupId>org.eclipse.fordiac</groupId>
     <artifactId>parent</artifactId>
-    <version>1.9.0-SNAPSHOT</version>
+    <version>1.10.0-SNAPSHOT</version>
   </parent>
 
 
@@ -34,7 +34,7 @@
             <artifact>
               <groupId>org.eclipse.fordiac</groupId>
               <artifactId>org.eclipse.fordiac.ide.product</artifactId>
-              <version>1.9.0-SNAPSHOT</version>
+              <version>1.10.0-SNAPSHOT</version>
             </artifact>
           </target>
         </configuration>

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2012, 2014, 2015 Profactor GmbH, fortiss GmbH 
+ * Copyright (c) 2008, 2009, 2012, 2014, 2015 Profactor GmbH, fortiss GmbH,
+ * 				 2018 Johannes Kepler University 
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.router;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -48,7 +50,7 @@ public class RouterUtil {
 	 * @return the connection router
 	 */
 	public static IConnectionRouterFactory getConnectionRouterFactory(IFigure container) {
-		Hashtable<String, IConnectionRouterFactory> connectionRouter = new Hashtable<String, IConnectionRouterFactory>();
+		Map<String, IConnectionRouterFactory> connectionRouter = new HashMap<>();
 
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elems = registry.getConfigurationElementsFor(

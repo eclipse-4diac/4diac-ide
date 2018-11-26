@@ -112,7 +112,8 @@ public class ForStatementImpl extends StatementImpl implements ForStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public PrimaryVariable getVariable()
+  @Override
+public PrimaryVariable getVariable()
   {
     return variable;
   }
@@ -139,7 +140,8 @@ public class ForStatementImpl extends StatementImpl implements ForStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setVariable(PrimaryVariable newVariable)
+  @Override
+public void setVariable(PrimaryVariable newVariable)
   {
     if (newVariable != variable)
     {
@@ -160,7 +162,8 @@ public class ForStatementImpl extends StatementImpl implements ForStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getFrom()
+  @Override
+public Expression getFrom()
   {
     return from;
   }
@@ -187,7 +190,8 @@ public class ForStatementImpl extends StatementImpl implements ForStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setFrom(Expression newFrom)
+  @Override
+public void setFrom(Expression newFrom)
   {
     if (newFrom != from)
     {
@@ -208,7 +212,8 @@ public class ForStatementImpl extends StatementImpl implements ForStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getTo()
+  @Override
+public Expression getTo()
   {
     return to;
   }
@@ -235,7 +240,8 @@ public class ForStatementImpl extends StatementImpl implements ForStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setTo(Expression newTo)
+  @Override
+public void setTo(Expression newTo)
   {
     if (newTo != to)
     {
@@ -256,7 +262,8 @@ public class ForStatementImpl extends StatementImpl implements ForStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getBy()
+  @Override
+public Expression getBy()
   {
     return by;
   }
@@ -283,7 +290,8 @@ public class ForStatementImpl extends StatementImpl implements ForStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setBy(Expression newBy)
+  @Override
+public void setBy(Expression newBy)
   {
     if (newBy != by)
     {
@@ -304,7 +312,8 @@ public class ForStatementImpl extends StatementImpl implements ForStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public StatementList getStatements()
+  @Override
+public StatementList getStatements()
   {
     return statements;
   }
@@ -331,7 +340,8 @@ public class ForStatementImpl extends StatementImpl implements ForStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setStatements(StatementList newStatements)
+  @Override
+public void setStatements(StatementList newStatements)
   {
     if (newStatements != statements)
     {

@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.gef,
+ org.eclipse.fordiac.ide.gef.commands,
  org.eclipse.fordiac.ide.gef.dnd,
  org.eclipse.fordiac.ide.gef.draw2d,
  org.eclipse.fordiac.ide.gef.editparts,
@@ -20,16 +21,16 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.ui.controls,
- org.eclipse.fordiac.ide.deployment,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.emf.edit,
  org.eclipse.emf.ecore.edit,
  org.eclipse.fordiac.ide.model.edit
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-Name: Graphical Utilites (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.gef.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.gef;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.eclipse.fordiac.ide.gef

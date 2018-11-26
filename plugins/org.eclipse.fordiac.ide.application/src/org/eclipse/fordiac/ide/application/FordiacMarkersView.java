@@ -46,6 +46,7 @@ public class FordiacMarkersView extends MarkerSupportView {
 				 * org.eclipse.ui.OpenAndLinkWithEditorHelper#activate(org.eclipse
 				 * .jface.viewers.ISelection )
 				 */
+				@Override
 				protected void activate(ISelection selection) {
 					final int currentMode = OpenStrategy.getOpenMethod();
 					try {
@@ -63,6 +64,7 @@ public class FordiacMarkersView extends MarkerSupportView {
 				 * org.eclipse.ui.OpenAndLinkWithEditorHelper#linkToEditor(org
 				 * .eclipse .jface.viewers .ISelection)
 				 */
+				@Override
 				protected void linkToEditor(ISelection selection) {
 					// Not supported by this part
 				}
@@ -74,6 +76,7 @@ public class FordiacMarkersView extends MarkerSupportView {
 				 * org.eclipse.ui.OpenAndLinkWithEditorHelper#open(org.eclipse
 				 * .jface .viewers.ISelection, boolean)
 				 */
+				@Override
 				protected void open(ISelection selection, boolean activate) {
 					openMySelectedMarkers();
 				}

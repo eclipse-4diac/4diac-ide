@@ -22,9 +22,9 @@ public class UDPSubscriber extends IIecNetCommRcv  {
 	}
 	
 	@Override
-	public boolean Initialize(String pa_sID) {
+	public boolean initialize(String sID) {
 		boolean retval=false;
-		retval=Initialize(pa_sID, IChannel.UDP);
+		retval = initialize(sID, IChannel.UDP);
 		return retval;
 	}
 

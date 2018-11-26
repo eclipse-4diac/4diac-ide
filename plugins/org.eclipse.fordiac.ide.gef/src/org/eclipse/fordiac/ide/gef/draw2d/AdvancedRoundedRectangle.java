@@ -51,6 +51,7 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 		this.side = side;
 	}
 
+	@Override
 	protected void fillShape(Graphics graphics) {
 		if (useGradient) {
 			setPattern(graphics, true);

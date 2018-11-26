@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.util.comm.exceptions.DataTypeValueOutOfBoundsExce
 
 public class IEC_LREAL extends IEC_REAL {
 
-	protected static final long BOUNDS_MASK_32bit=0xFFFFFFFF00000000L;
+	private static final long BOUNDS_MASK_32bit=0xFFFFFFFF00000000L;
 	protected double value;
 	
 	/**

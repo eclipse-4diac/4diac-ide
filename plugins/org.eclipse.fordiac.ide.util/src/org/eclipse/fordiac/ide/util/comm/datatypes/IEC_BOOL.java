@@ -16,7 +16,7 @@ import java.io.DataInputStream;
 
 public class IEC_BOOL extends IEC_ANY {
 
-	public boolean value;
+	private boolean value;
 
 	
 	public IEC_BOOL(int ASN1typeID) {

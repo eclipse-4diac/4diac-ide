@@ -127,6 +127,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getX() {
 		return x;
 	}
@@ -136,6 +137,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setX(int newX) {
 		int oldX = x;
 		x = newX;
@@ -148,6 +150,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getY() {
 		return y;
 	}
@@ -157,6 +160,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setY(int newY) {
 		int oldY = y;
 		y = newY;
@@ -169,6 +173,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public InterfaceList getInterface() {
 		if (interface_ != null && interface_.eIsProxy()) {
 			InternalEObject oldInterface = (InternalEObject)interface_;
@@ -216,6 +221,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInterface(InterfaceList newInterface) {
 		if (newInterface != interface_) {
 			NotificationChain msgs = null;
@@ -235,6 +241,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Mapping getMapping() {
 		if (mapping != null && mapping.eIsProxy()) {
 			InternalEObject oldMapping = (InternalEObject)mapping;
@@ -261,6 +268,7 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated not
 	 */
+	@Override
 	public void setMapping(Mapping newMapping) {
 		setMappingGen(newMapping);
 		checkConnections();
@@ -283,8 +291,9 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Resource getResource() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getResource(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getResource(this);
 	}
 
 	/**
@@ -292,8 +301,9 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IInterfaceElement getInterfaceElement(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceElement(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);
 	}
 
 	/**
@@ -301,8 +311,9 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetworkElement getOpposite() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getOpposite(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getOpposite(this);
 	}
 
 	/**
@@ -310,8 +321,9 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetwork getFbNetwork() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFbNetwork(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getFbNetwork(this);
 	}
 
 	/**
@@ -319,8 +331,9 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void checkConnections() {
-		org.eclipse.fordiac.ide.model.Annotations.GEN.checkConnections(this);
+		org.eclipse.fordiac.ide.model.Annotations.checkConnections(this);
 	}
 
 	/**
@@ -328,8 +341,9 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isMapped() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isMapped(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isMapped(this);
 	}
 
 	/**
@@ -479,10 +493,10 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (x: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (x: "); //$NON-NLS-1$
 		result.append(x);
-		result.append(", y: ");
+		result.append(", y: "); //$NON-NLS-1$
 		result.append(y);
 		result.append(')');
 		return result.toString();

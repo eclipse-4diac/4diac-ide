@@ -31,7 +31,7 @@ import org.eclipse.ui.PlatformUI;
  */
 public class OpenSubApplicationEditorAction extends OpenListener {
 	
-	private final static String OPEN_SUBAPP_LISTENER_ID = "org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"; //$NON-NLS-1$
+	private static final String OPEN_SUBAPP_LISTENER_ID = "org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"; //$NON-NLS-1$
 
 	/** The uiSubAppNetwork. */
 	private SubApp subApp;

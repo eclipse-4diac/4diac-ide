@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.ChannelEnd;
 import org.eclipse.fordiac.ide.comgeneration.implementation.CommunicationMediaInfo;
+import org.eclipse.fordiac.ide.comgeneration.plugin.Activator;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
@@ -22,14 +23,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
-	public static String[] paletteEntrySourceLocal = {"net/PUBL_0", "net/PUBL_1", "net/PUBL_2", "net/PUBL_3", "net/PUBL_4"};
-	public static String[] paletteEntryDestinationsLocal = {"net/SUBL_0", "net/SUBL_1", "net/SUBL_2", "net/SUBL_3", "net/SUBL_4"};
-	public static String[] paletteEntrySource = {"net/PUBLISH_0", "net/PUBLISH_1", "net/PUBLISH_2", "net/PUBLISH_3", "net/PUBLISH_4"};
-	public static String[] paletteEntryDestinations = {"net/SUBSCRIBE_0", "net/SUBSCRIBE_1", "net/SUBSCRIBE_2", "net/SUBSCRIBE_3", "net/SUBSCRIBE_4"};
+	private static final String[] PALETTE_ENTRY_SOURCE_LOCAL = {"net/PUBL_0", "net/PUBL_1", "net/PUBL_2", "net/PUBL_3", "net/PUBL_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	private static final String[] PALETTE_ENTRY_DESTINATION_LOCAL = {"net/SUBL_0", "net/SUBL_1", "net/SUBL_2", "net/SUBL_3", "net/SUBL_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	private static final String[] PALETTE_ENTRY_SOURCE = {"net/PUBLISH_0", "net/PUBLISH_1", "net/PUBLISH_2", "net/PUBLISH_3", "net/PUBLISH_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	private static final String[] PALETTE_ENTRY_DESTINATION = {"net/SUBSCRIBE_0", "net/SUBSCRIBE_1", "net/SUBSCRIBE_2", "net/SUBSCRIBE_3", "net/SUBSCRIBE_4"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
-	public static String PROTOCOL_ID = "CanPubSub";
+	public static final String PROTOCOL_ID = "CanPubSub"; //$NON-NLS-1$
 	
-	public static int DEFAULT_START_MESSAGE_ID = 500;
+	private static final int DEFAULT_START_MESSAGE_ID = 500;
 	
 	
 	private int startMessageId; 
@@ -43,7 +44,7 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 
 	@Override
 	public String getMediaType() {
-		return "Ethernet";
+		return "Ethernet"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -51,16 +52,17 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 		return PROTOCOL_ID;
 	}
 	
+	@Override
 	public FBTypePaletteEntry getPaletteType(ChannelEnd end, int numDataPorts, boolean local) {
 		String[] palletEntries;
 		
 		if (local) {
-			palletEntries = (end == ChannelEnd.SOURCE) ? paletteEntrySourceLocal : paletteEntryDestinationsLocal;
+			palletEntries = (end == ChannelEnd.SOURCE) ? PALETTE_ENTRY_SOURCE_LOCAL : PALETTE_ENTRY_DESTINATION_LOCAL;
 		} else {
-			palletEntries = (end == ChannelEnd.SOURCE) ? paletteEntrySource : paletteEntryDestinations;
+			palletEntries = (end == ChannelEnd.SOURCE) ? PALETTE_ENTRY_SOURCE : PALETTE_ENTRY_DESTINATION;
 		}
 		
-		String[] paletteEntryPath = palletEntries[numDataPorts].split("/");
+		String[] paletteEntryPath = palletEntries[numDataPorts].split("/"); //$NON-NLS-1$
 		
 		PaletteGroup group = palette.getRootGroup();
 		
@@ -76,7 +78,7 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 					}
 				}
 				
-				System.err.println("FB type palette entry '" + currentPath + "' not found!");
+				Activator.getDefault().logError("FB type palette entry '" + currentPath + "' not found!"); 
 				
 			} else {
 				boolean foundSubGroup = false;
@@ -88,7 +90,7 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 					}
 				}
 				if (!foundSubGroup) {
-					System.err.println("No subgroup '" + currentPath + "'!");
+					Activator.getDefault().logError("No subgroup '" + currentPath + "'!"); 
 					return null;
 				} 
 			}
@@ -122,27 +124,27 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 		String sourceValue = sourceId.getValue().getValue(); 
 		if (sourceValue == null) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("CAN:");
+			sb.append("CAN:"); //$NON-NLS-1$
 			sb.append(mediaInfo.getSegment().getName());
-			sb.append(":");
+			sb.append(":"); //$NON-NLS-1$
 			sb.append(currentMessageId);
 			currentMessageId++;
 			sourceValue = sb.toString();
 			sourceId.getValue().setValue(sourceValue);
 			if (sourceQI != null) {
-				sourceQI.getValue().setValue("1");
+				sourceQI.getValue().setValue("1"); //$NON-NLS-1$
 			}
 		}
 		
 		destinationId.getValue().setValue(sourceValue);
 		if (destinationQI != null) {
-			destinationQI.getValue().setValue("1");
+			destinationQI.getValue().setValue("1"); //$NON-NLS-1$
 		}
 	}
 	
 	@Override
 	public VarDeclaration getTargetInputData(int index, FB fb) {
-		String dataName = "SD_" + (index + 1);
+		String dataName = "SD_" + (index + 1); //$NON-NLS-1$
 		for (VarDeclaration var : fb.getInterface().getInputVars()) {
 			if (var.getName().equals(dataName)) {
 				return var;
@@ -153,7 +155,7 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 
 	@Override
 	public VarDeclaration getTargetOutputData(int index, FB fb) {
-		String dataName = "RD_" + (index + 1);
+		String dataName = "RD_" + (index + 1); //$NON-NLS-1$
 		for (VarDeclaration var : fb.getInterface().getInputVars()) {
 			if (var.getName().equals(dataName)) {
 				return var;

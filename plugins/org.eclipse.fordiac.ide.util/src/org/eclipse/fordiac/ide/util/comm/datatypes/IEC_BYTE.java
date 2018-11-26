@@ -21,8 +21,8 @@ import org.eclipse.fordiac.ide.util.Activator;
 
 public class IEC_BYTE extends IEC_ANY_BIT {
 
-	protected byte value;
-	protected final int OCTETS=1;
+	private byte value;
+	private static final int OCTETS=1;
 	/**
 	 * 
 	 */
@@ -112,10 +112,12 @@ public class IEC_BYTE extends IEC_ANY_BIT {
 		return this.toHexString();
 	}
 
+	@Override
 	protected String ConvertHexString(){
 		return Integer.toHexString(value);
 	}
 	
+	@Override
 	protected String ConvertBinString(){
 		return Integer.toBinaryString(value);
 	}

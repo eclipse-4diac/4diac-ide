@@ -40,6 +40,7 @@ public class SetTestValueEditPolicy extends DirectEditPolicy {
 			// return a dummy command needed to fulfill requirements of direct edit of interface value for testing.
 			// canExecute is set to false so that it is not put onto the command stack and makes the editor dirty.
 			return new Command(){
+				@Override
 				public boolean canExecute() {
 					return false;
 				}

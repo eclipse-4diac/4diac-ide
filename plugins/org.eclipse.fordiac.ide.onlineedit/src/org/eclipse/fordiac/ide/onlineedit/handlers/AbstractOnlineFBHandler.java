@@ -23,6 +23,7 @@ public abstract class AbstractOnlineFBHandler extends AbstractDeploymentCommand{
 	Resource resource = null;
 	FB resFB = null;
 	
+	@Override
 	protected boolean prepareParametersToExecute(Object element){
 		if (element instanceof FBEditPart){
 			fb = ((FBEditPart) element).getModel();

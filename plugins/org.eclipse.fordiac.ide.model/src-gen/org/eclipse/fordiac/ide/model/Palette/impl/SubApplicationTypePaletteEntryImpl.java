@@ -55,6 +55,7 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SubAppType getSubApplicationType() {
 		LibraryElement type = getType();
 		if((null !=type) && (type instanceof SubAppType)){
@@ -68,6 +69,7 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(final LibraryElement type) {
 		if((null != type) && (type instanceof SubAppType)){
 			super.setType(type);

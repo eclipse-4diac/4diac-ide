@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 fortiss GmbH
+ * Copyright (c) 2015, 2016, 2018 fortiss GmbH, Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,8 +13,8 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -28,7 +28,7 @@ public class SystemConfigurationEditorLinkHelper extends AbstractEditorLinkHelpe
 	public IStructuredSelection findSelection(IEditorInput anInput) {		
 		if(anInput instanceof SystemConfigurationEditorInput){
 			SystemConfigurationEditorInput sysConfInput = (SystemConfigurationEditorInput)anInput;
-			return new StructuredSelection(sysConfInput.getSystemConfiguration());
+			return new StructuredSelection(sysConfInput.getContent());
 		}
 		return StructuredSelection.EMPTY;
 	}
@@ -40,20 +40,21 @@ public class SystemConfigurationEditorLinkHelper extends AbstractEditorLinkHelpe
 		}
 		
 		SystemConfiguration sysConf = null;
-		Device refDev = null;
+		Object refObject = null;
 		if (aSelection.getFirstElement() instanceof SystemConfiguration) {
 			sysConf = (SystemConfiguration)aSelection.getFirstElement();
 		}else if(aSelection.getFirstElement() instanceof Device){
-			refDev = (Device)aSelection.getFirstElement();
-			sysConf = refDev.getSystemConfiguration();
+			refObject = aSelection.getFirstElement();
+			sysConf = ((Device)refObject).getSystemConfiguration();
+		}else if(aSelection.getFirstElement() instanceof Segment){
+			refObject = aSelection.getFirstElement();
+			sysConf = (SystemConfiguration)((Segment)refObject).eContainer();
 		}		
 		
 		if (null != sysConf) {
 			IEditorInput sysConfInput = new SystemConfigurationEditorInput(sysConf);
 			IEditorPart editor = activateEditor(aPage, sysConfInput);
-			if ((null != editor) && (editor instanceof SystemConfigurationEditor) && (null != refDev)){
-				((SystemConfigurationEditor)editor).selectDevice(refDev);
-			}
+			selectObject(editor, refObject);
 		}
 		
 	}

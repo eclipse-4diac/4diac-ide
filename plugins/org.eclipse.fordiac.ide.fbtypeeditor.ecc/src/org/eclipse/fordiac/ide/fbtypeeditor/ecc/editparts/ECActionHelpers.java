@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
@@ -32,10 +33,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
  * 
  *
  */
-public class ECActionHelpers {
+public final class ECActionHelpers {
 		
 	public static List<Event> getOutputEvents(BasicFBType type) {
-		ArrayList<Event> events = new ArrayList<Event>();
+		List<Event> events = new ArrayList<>();
 		if(null != type){
 			events.addAll(type.getInterfaceList().getEventOutputs());
 	
@@ -60,18 +61,16 @@ public class ECActionHelpers {
 	}
 
 	public static List<String> getOutputEventNames(BasicFBType type) {
-		ArrayList<String> eventNames = new ArrayList<String>();
-		for (Event event : getOutputEvents(type)) {
-			eventNames.add(event.getName());
-		}
-		return eventNames;
+		List<String> eventNames = getOutputEvents(type).stream().map(ev -> ev.getName()).collect(Collectors.toList());
+		eventNames.add(" "); //$NON-NLS-1$
+		return eventNames;		
 	}
 
 	// TODO move to a utility class as same function is used in
 	// ECTransitionEditPart
 	public static List<Event> createAdapterEventList(EList<Event> events,
 			AdapterDeclaration adapter) {
-		ArrayList<Event> adapterEvents = new ArrayList<Event>();
+		List<Event> adapterEvents = new ArrayList<>();
 
 		for (Event event : events) {
 			AdapterEvent ae = LibraryElementFactory.eINSTANCE
@@ -85,20 +84,31 @@ public class ECActionHelpers {
 	}
 
 	public static List<Algorithm> getAlgorithms(BasicFBType type) {
-		ArrayList<Algorithm> algorithms = new ArrayList<Algorithm>();
+		List<Algorithm> algorithms = new ArrayList<>();
 		algorithms.addAll(type.getAlgorithm());
 
 		Collections.sort(algorithms, NamedElementComparator.INSTANCE);
 		return algorithms;
 	}
+	
+	public static List<String> getAlgorithmNames(BasicFBType type) {
+		List<String> algNames = getAlgorithms(type).stream().map(alg -> alg.getName()).collect(Collectors.toList());
+		algNames.add(" "); //$NON-NLS-1$
+		return algNames;
+	}
 
-	static public BasicFBType getFBType(ECAction action) {
+	public static BasicFBType getFBType(ECAction action) {
 		if (action.eContainer() != null
 				&& action.eContainer().eContainer() != null
-				&& action.eContainer().eContainer().eContainer() != null)
+				&& action.eContainer().eContainer().eContainer() != null) {
 			return (BasicFBType) action.eContainer().eContainer().eContainer();
+		}
 		return null;
 	}
 	
 	static boolean setOutputEventRunning = false;
+	
+	private ECActionHelpers() {
+		throw new UnsupportedOperationException("ECActionHelpers should not be instantiated!");
+	}
 }

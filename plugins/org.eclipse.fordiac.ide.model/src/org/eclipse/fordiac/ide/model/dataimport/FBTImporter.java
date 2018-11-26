@@ -1,5 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2018 TU Wien/ACIN
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,9 @@
  * Contributors:
  *  Gerhard Ebenhofer, Ingo Hegny, Alois Zoitl, Martin Jobst
  *    - initial API and implementation and/or initial documentation
+ *    
+ *  Peter Gsellmann
+ *    - incorporating simple fb
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -17,7 +21,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +44,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -50,7 +55,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -63,6 +67,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.w3c.dom.Document;
@@ -82,32 +87,44 @@ import org.xml.sax.SAXException;
 public class FBTImporter implements LibraryElementTags {
 
 	/** The variables. */
-	public Map<String, VarDeclaration> variables = new HashMap<>();
+	private Map<String, VarDeclaration> variables = new HashMap<>();
 
 	/** The internal variables. */
-	public Map<String, VarDeclaration> internalVariables = new HashMap<>();
+	private Map<String, VarDeclaration> internalVariables = new HashMap<>();
 
 	/** The input events. */
-	public Map<String, Event> inputEvents = new HashMap<>();
+	private Map<String, Event> inputEvents = new HashMap<>();
 	
 	/** The output events. */
-	public Map<String, Event> outputEvents = new HashMap<>();
+	private Map<String, Event> outputEvents = new HashMap<>();
 
 	/** The adapters. */
-	public Map<String, AdapterDeclaration> adapters = new HashMap<>();
-	public Map<String, PositionableElement> adapterPositions = new HashMap<>();
+	private Map<String, AdapterDeclaration> adapters = new HashMap<>();
+	private Map<String, PositionableElement> adapterPositions = new HashMap<>();
 
 	/** The algorithm name ec action mapping. */
-	public Map<String, ArrayList<ECAction>> algorithmNameECActionMapping = new HashMap<>();
+	private Map<String, List<ECAction>> algorithmNameECActionMapping = new HashMap<>();
 
 	/** The ec states. */
-	public Map<String, ECState> ecStates = new HashMap<>();
+	private Map<String, ECState> ecStates = new HashMap<>();
 	
-	protected FBType type;
+	private FBType type;
 
 	private IFile file;
 	
-	protected Palette palette;
+	private Palette palette;
+	
+	protected FBType getType() {
+		return type;
+	}
+	
+	protected Palette getPalette() {
+		return palette; 
+	}
+	
+	protected void setPalette(Palette palette) {
+		this.palette = palette;
+	}
 
 	/**
 	 * Import fb type.
@@ -225,8 +242,12 @@ public class FBTImporter implements LibraryElementTags {
 					type.setInterfaceList(parseInterfaceList(n));
 				}
 				if (n.getNodeName().equals(BASIC_F_B_ELEMENT)) {
-					type = convertoToBasicType(type);
+					type = convertToBasicType(type);
 					parseBasicFB((BasicFBType) type, n);
+				}
+				if (n.getNodeName().equals(SIMPLE_F_B_ELEMENT)) {
+					type = convertToSimpleType(type);
+					parseSimpleFB((SimpleFBType) type, n);
 				}
 				if (n.getNodeName().equals(FBNETWORK_ELEMENT)) {
 					// parse the composite FBs as last
@@ -243,7 +264,8 @@ public class FBTImporter implements LibraryElementTags {
 			}
 			if ((type instanceof BasicFBType)
 					|| (type instanceof CompositeFBType)
-					|| (type instanceof ServiceInterfaceFBType)) {
+					|| (type instanceof ServiceInterfaceFBType)
+					|| (type instanceof SimpleFBType)) {
 				return type;
 			} 
 			type = convertToServiceInterfaceType(type);
@@ -471,11 +493,11 @@ public class FBTImporter implements LibraryElementTags {
 	private static FBType convertToServiceInterfaceType(final FBType type) {
 		ServiceInterfaceFBType serviceType = LibraryElementFactory.eINSTANCE
 				.createServiceInterfaceFBType();
-		copyBasicTypeInformation(serviceType, type);
+		copyGeneralTypeInformation(serviceType, type);
 		return serviceType;
 	}
 
-	private static void copyBasicTypeInformation(FBType dstType, FBType srcType) {
+	private static void copyGeneralTypeInformation(FBType dstType, FBType srcType) {
 		dstType.setName(srcType.getName());
 		dstType.setComment(srcType.getComment());
 		dstType.setCompilerInfo(srcType.getCompilerInfo());
@@ -484,7 +506,7 @@ public class FBTImporter implements LibraryElementTags {
 		dstType.getVersionInfo().addAll(srcType.getVersionInfo());
 		dstType.setService(srcType.getService());
 	}
-
+	
 	/**
 	 * This method parses a compositeFBType.
 	 * 
@@ -551,7 +573,7 @@ public class FBTImporter implements LibraryElementTags {
 	private static FBType convertToCompositeType(final FBType type) {
 		CompositeFBType compositeType = LibraryElementFactory.eINSTANCE
 				.createCompositeFBType();
-		copyBasicTypeInformation(compositeType, type);
+		copyGeneralTypeInformation(compositeType, type);
 		return compositeType;
 	}
 
@@ -570,8 +592,7 @@ public class FBTImporter implements LibraryElementTags {
 	 * @throws ReferencedTypeNotFoundException
 	 *             the referenced type not found exception
 	 */
-	private void parseBasicFB(final BasicFBType type, final Node node) throws TypeImportException,
-			ReferencedTypeNotFoundException {
+	private void parseBasicFB(final BasicFBType type, final Node node) throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
@@ -582,11 +603,48 @@ public class FBTImporter implements LibraryElementTags {
 				parseECC(type, n);
 			}
 			if (n.getNodeName().equals(ALGORITHM_ELEMENT)) {
-				parseAlgorithm(type, n, palette);
+				Algorithm alg = parseAlgorithm(n);
+				if(null != alg) {
+					type.getAlgorithm().add(alg);
+					List<ECAction> list = algorithmNameECActionMapping.get(alg.getName());
+					if (list != null) {
+						for (ECAction action : list) {
+							action.setAlgorithm(alg);
+						}
+					}
+				}
 			}
 		}
 	}
 
+	/**
+	 * This method parses a SimpleFBType.
+	 * 
+	 * @param type
+	 *            - the simpleFBType that is being parsed
+	 * @param node
+	 *            - the node in the DTD of the SimpleFBType that is being parsed
+	 * @param palette
+	 *            the palette
+	 * 
+	 * @throws TypeImportException
+	 *             the FBT import exception
+	 * @throws ReferencedTypeNotFoundException
+	 *             the referenced type not found exception
+	 */
+	private void parseSimpleFB(final SimpleFBType type, final Node node) throws TypeImportException {
+		NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node n = childNodes.item(i);
+			if (n.getNodeName().equals(INTERNAL_VARS_ELEMENT)) {
+				parseInternalVars(type, n);
+			}
+			if (n.getNodeName().equals(ALGORITHM_ELEMENT)) {
+				type.setAlgorithm(parseAlgorithm(n));
+			}
+		}
+	}
+	
 	/**
 	 * This method parses an Algorithm.
 	 * 
@@ -602,9 +660,7 @@ public class FBTImporter implements LibraryElementTags {
 	 * @throws ReferencedTypeNotFoundException
 	 *             the referenced type not found exception
 	 */
-	private void parseAlgorithm(final BasicFBType type, final Node n,
-			final Palette palette) throws TypeImportException,
-			ReferencedTypeNotFoundException {
+	private static Algorithm parseAlgorithm(final Node n) throws TypeImportException {
 		NamedNodeMap map = n.getAttributes();
 		Node nameNode = map.getNamedItem(NAME_ATTRIBUTE);
 		Node commentNode = map.getNamedItem(COMMENT_ATTRIBUTE);
@@ -617,50 +673,28 @@ public class FBTImporter implements LibraryElementTags {
 			comment = commentNode.getNodeValue();
 		}
 
-		NodeList childNodes = n.getChildNodes(); // should have only one
-		// child node
+		Algorithm retVal = null;
+		NodeList childNodes = n.getChildNodes(); // should have only one child node
 		for (int i = 0; i < childNodes.getLength(); i++) {
-
 			Node node = childNodes.item(i);
 			String nodeName = node.getNodeName();
 			if (nodeName.equals(FBD_ELEMENT)) {
 				throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!");
 			} else if (nodeName.equals(ST_ELEMENT)) {
-				STAlgorithm sT = LibraryElementFactory.eINSTANCE
-						.createSTAlgorithm();
-				sT.setName(name);
-				sT.setComment(comment);
-				parseST(sT, node);
-				type.getAlgorithm().add(sT);
-				ArrayList<ECAction> list = algorithmNameECActionMapping.get(sT
-						.getName());
-				if (list != null) {
-					for (ECAction action : list) {
-						action.setAlgorithm(sT);
-					}
-				}
+				retVal = LibraryElementFactory.eINSTANCE.createSTAlgorithm();				
+				parseST((STAlgorithm)retVal, node);
 			} else if (nodeName.equals(LD_ELEMENT)) {
 				throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!");
 			} else if (nodeName.equals(OTHER_ELEMENT)) {
-				OtherAlgorithm other = LibraryElementFactory.eINSTANCE
-						.createOtherAlgorithm();
-				other.setName(name);
-				other.setComment(comment);
-				parseOtherAlg(other, node);
-				type.getAlgorithm().add(other);
-				ArrayList<ECAction> list = algorithmNameECActionMapping
-						.get(other.getName());
-				if (list != null) {
-					for (ECAction action : list) {
-						action.setAlgorithm(other);
-					}
-				}
+				retVal = LibraryElementFactory.eINSTANCE.createOtherAlgorithm();
+				parseOtherAlg((OtherAlgorithm)retVal, node);
 			}
-
-			// throw new FBTImportException(
-			// "Algorithm: Unsupported Algorithmtype (only FBD, ST, LD and Other
-			// possible)!");
 		}
+		if(null != retVal) {
+			retVal.setName(name);
+			retVal.setComment(comment);
+		}
+		return retVal;
 	}
 
 	/**
@@ -800,8 +834,7 @@ public class FBTImporter implements LibraryElementTags {
 		CommonElementImporter.getXandY(map, ecTransition);
 	}
 
-	private void validateTransitionCondition(ECTransition ecTransition,
-			String condition) throws TypeImportException {
+	private void validateTransitionCondition(ECTransition ecTransition, String condition) {
 		Event event;
 		String expression;
 		
@@ -847,7 +880,7 @@ public class FBTImporter implements LibraryElementTags {
 	 *             the FBT import exception
 	 */
 	private void parseECState(final ECC ecc, final Node node,
-			final Boolean initialState) throws TypeImportException {
+			final boolean initialState) throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
 		ECState state = LibraryElementFactory.eINSTANCE.createECState();
 		ecc.getECState().add(state);
@@ -883,15 +916,12 @@ public class FBTImporter implements LibraryElementTags {
 		type.getECAction().add(ecAction);
 		Node algorithm = map.getNamedItem(ALGORITHM_ELEMENT);
 		if (algorithm != null) {
-			if (algorithmNameECActionMapping.containsKey(algorithm
-					.getNodeValue())) {
-				algorithmNameECActionMapping.get(algorithm.getNodeValue()).add(
-						ecAction);
+			if (algorithmNameECActionMapping.containsKey(algorithm.getNodeValue())) {
+				algorithmNameECActionMapping.get(algorithm.getNodeValue()).add(ecAction);
 			} else {
-				ArrayList<ECAction> temp = new ArrayList<ECAction>();
+				List<ECAction> temp = new ArrayList<>();
 				temp.add(ecAction);
-				algorithmNameECActionMapping
-						.put(algorithm.getNodeValue(), temp);
+				algorithmNameECActionMapping.put(algorithm.getNodeValue(), temp);
 			}
 		}
 		Node output = map.getNamedItem(OUTPUT_ATTRIBUTE);
@@ -905,18 +935,15 @@ public class FBTImporter implements LibraryElementTags {
 	}
 
 	/**
-	 * This method parses Internal Variables of a BasicFBType.
+	 * This method parses Internal Variables of a BaseFBType.
 	 * 
-	 * @param type
-	 *            - the BasicFBType of which the Internal Variables will be
+	 * @param type - the BaseFBType of which the Internal Variables will be
 	 *            parsed
-	 * @param n
-	 *            - the node in the DTD of the Internal Variable being parsed
+	 * @param n - the node in the DTD of the Internal Variable being parsed
 	 * 
-	 * @throws TypeImportException
-	 *             the FBT import exception
+	 * @throws TypeImportException the FBT import exception
 	 */
-	private void parseInternalVars(final BasicFBType type, final Node n)
+	private void parseInternalVars(final BaseFBType type, final Node n)
 			throws TypeImportException {
 		NodeList childNodes = n.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
@@ -927,7 +954,7 @@ public class FBTImporter implements LibraryElementTags {
 				internalVariables.put(v.getName(), v);
 			}
 		}
-	}
+	}	
 
 	/**
 	 * This method parses a FBType to a BasicFBType.
@@ -937,13 +964,26 @@ public class FBTImporter implements LibraryElementTags {
 	 * 
 	 * @return the basicFBType
 	 */
-	private static FBType convertoToBasicType(final FBType type) {
-		BasicFBType basicType = LibraryElementFactory.eINSTANCE
-				.createBasicFBType();
-		copyBasicTypeInformation(basicType, type);
+	private static FBType convertToBasicType(final FBType type) {
+		BasicFBType basicType = LibraryElementFactory.eINSTANCE.createBasicFBType();
+		copyGeneralTypeInformation(basicType, type);
 		return basicType;
 	}
 
+	/**
+	 * This method parses a FBType to a SimpleFBType.
+	 * 
+	 * @param type
+	 *            - the FBType being parsed to SimpleFBType
+	 * 
+	 * @return the simpleFBType
+	 */
+	private static FBType convertToSimpleType(final FBType type) {
+		SimpleFBType simpleType = LibraryElementFactory.eINSTANCE.createSimpleFBType();
+		copyGeneralTypeInformation(simpleType, type);
+		return simpleType;
+	}
+	
 	/**
 	 * This method parses the InterfaceList of a FBType.
 	 * 
@@ -968,20 +1008,13 @@ public class FBTImporter implements LibraryElementTags {
 			}
 			if (n.getNodeName().equals(INPUT_VARS_ELEMENT)) {
 				List<VarDeclaration> vars = ImportUtils.parseInputVariables(n);
-				for (Iterator<VarDeclaration> iterator = vars.iterator(); iterator
-						.hasNext();) {
-					VarDeclaration v = iterator.next();
-					interfaceList.getInputVars().add(v);
-					variables.put(v.getName(), v);
-				}
+				vars.forEach(v -> variables.put(v.getName(), v));
+				interfaceList.getInputVars().addAll(vars);
 			}
 			if (n.getNodeName().equals(OUTPUT_VARS_ELEMENT)) {
 				List<VarDeclaration> vars = ImportUtils.parseOutputVariables(n);
-				for (Iterator<VarDeclaration> iterator = vars.iterator(); iterator.hasNext();) {
-					VarDeclaration v = iterator.next();
-					interfaceList.getOutputVars().add(v);
-					variables.put(v.getName(), v);
-				}
+				vars.forEach(v -> variables.put(v.getName(), v));
+				interfaceList.getOutputVars().addAll(vars);
 			}
 			if (n.getNodeName().equals(SOCKETS_ELEMENT)) {
 				parseSockets(interfaceList, n, palette);
@@ -994,10 +1027,12 @@ public class FBTImporter implements LibraryElementTags {
 		return interfaceList;
 	}
 
+	@SuppressWarnings("static-method")
 	protected String getEventOutputElement() {
 		return EVENT_OUTPUTS;
 	}
 
+	@SuppressWarnings("static-method")
 	protected String getEventInputElement() {
 		return EVENT_INPUTS_ELEMENT;
 	}
@@ -1115,7 +1150,7 @@ public class FBTImporter implements LibraryElementTags {
 			a.setPaletteEntry(entry);
 			AdapterType dataType = null;
 			if (entry != null) {
-				dataType = entry.getAdapterType();
+				dataType = entry.getType();
 			}
 			a.setTypeName(typeName.getNodeValue());
 			if (dataType != null) {
@@ -1149,59 +1184,26 @@ public class FBTImporter implements LibraryElementTags {
 			Map<String, VarDeclaration> variables) {
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(getEventInputElement())) {
-				NodeList inputEventNodes = n.getChildNodes();
-				for (int j = 0; j < inputEventNodes.getLength(); j++) {
-					Node eventNode = inputEventNodes.item(j);
-					if (eventNode.getNodeName().equals(getEventElement())) {
-						NamedNodeMap map = eventNode.getAttributes();
-						Node name = map.getNamedItem(NAME_ATTRIBUTE);
-						Event e = eventInputs.get(name.getNodeValue());
-						NodeList withs = eventNode.getChildNodes();
-						for (int k = 0; k < withs.getLength(); k++) {
-							Node with = withs.item(k);
-							if (with.getNodeName().equals(WITH_ELEMENT)) {
-								NamedNodeMap withAttributes = with
-										.getAttributes();
-								Node var = withAttributes
-										.getNamedItem(VAR_ATTRIBUTE);
-								if (var != null) {
-									With withConstruct = LibraryElementFactory.eINSTANCE
-											.createWith();
-									e.getWith().add(withConstruct);
-									VarDeclaration v = variables.get(var
-											.getNodeValue());
-									withConstruct.setVariables(v);
-								}
-							}
-						}
-					}
-				}
-			}
-			if (n.getNodeName().equals(getEventOutputElement())) {
-				NodeList outputEventNodes = n.getChildNodes();
-				for (int j = 0; j < outputEventNodes.getLength(); j++) {
-					Node eventNode = outputEventNodes.item(j);
-					if (eventNode.getNodeName().equals(getEventElement())) {
-						NamedNodeMap map = eventNode.getAttributes();
-						Node name = map.getNamedItem(NAME_ATTRIBUTE);
-						Event e = eventOutputs.get(name.getNodeValue());
-						NodeList withs = eventNode.getChildNodes();
-						for (int k = 0; k < withs.getLength(); k++) {
-							Node with = withs.item(k);
-							if (with.getNodeName().equals(WITH_ELEMENT)) {
-								NamedNodeMap withAttributes = with
-										.getAttributes();
-								Node var = withAttributes
-										.getNamedItem(VAR_ATTRIBUTE);
-								if (var != null) {
-									With withConstruct = LibraryElementFactory.eINSTANCE
-											.createWith();
-									e.getWith().add(withConstruct);
-									VarDeclaration v = variables.get(var
-											.getNodeValue());
-									withConstruct.setVariables(v);
-								}
+			Map<String, Event> eventMap = (n.getNodeName().equals(getEventInputElement())) ?
+					eventInputs : eventOutputs;
+			NodeList eventNodes = n.getChildNodes();
+			for (int j = 0; j < eventNodes.getLength(); j++) {
+				Node eventNode = eventNodes.item(j);
+				if (eventNode.getNodeName().equals(getEventElement())) {
+					NamedNodeMap map = eventNode.getAttributes();
+					Node name = map.getNamedItem(NAME_ATTRIBUTE);
+					Event e = eventMap.get(name.getNodeValue());
+					NodeList withs = eventNode.getChildNodes();
+					for (int k = 0; k < withs.getLength(); k++) {
+						Node with = withs.item(k);
+						if (with.getNodeName().equals(WITH_ELEMENT)) {
+							NamedNodeMap withAttributes = with.getAttributes();
+							Node var = withAttributes.getNamedItem(VAR_ATTRIBUTE);
+							if (var != null) {
+								With withConstruct = LibraryElementFactory.eINSTANCE.createWith();
+								e.getWith().add(withConstruct);
+								VarDeclaration v = variables.get(var.getNodeValue());
+								withConstruct.setVariables(v);
 							}
 						}
 					}
@@ -1228,13 +1230,14 @@ public class FBTImporter implements LibraryElementTags {
 			Node n = childNodes.item(i);
 			if (n.getNodeName().equals(getEventElement())) {
 				Event e = ImportUtils.parseEvent(n);
-				((IInterfaceElement) e).setIsInput(true);
+				e.setIsInput(true);
 				inputEvents.put(e.getName(), e);
 				interfaceList.getEventInputs().add(e);
 			}
 		}
 	}
 
+	@SuppressWarnings("static-method")
 	protected String getEventElement() {
 		return EVENT_ELEMENT;
 	}
@@ -1255,10 +1258,9 @@ public class FBTImporter implements LibraryElementTags {
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
 			if (n.getNodeName().equals(getEventElement())) {
-
 				Event e = ImportUtils.parseEvent(n);
 				outputEvents.put(e.getName(), e);
-				((IInterfaceElement) e).setIsInput(false);
+				e.setIsInput(false);
 				interfaceList.getEventOutputs().add(e);
 			}
 		}
@@ -1274,13 +1276,11 @@ public class FBTImporter implements LibraryElementTags {
 	 * @return references - a list containing all the references
 	 */
 	public static List<String> getReferencedDataTypes(final File file) {
-		ArrayList<String> references = new ArrayList<String>();
+		List<String> references = new ArrayList<>();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
 
-		dbf
-				.setAttribute(
-						"http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
+		dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
 						Boolean.FALSE);
 		try {
 			db = dbf.newDocumentBuilder();
@@ -1315,13 +1315,11 @@ public class FBTImporter implements LibraryElementTags {
 	 * @return references - a list containing all the references
 	 */
 	public static List<String> getReferencedFBTypes(final File file) {
-		ArrayList<String> references = new ArrayList<String>();
+		List<String> references = new ArrayList<>();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
 
-		dbf
-				.setAttribute(
-						"http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
+		dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
 						Boolean.FALSE);
 		try {
 			db = dbf.newDocumentBuilder();

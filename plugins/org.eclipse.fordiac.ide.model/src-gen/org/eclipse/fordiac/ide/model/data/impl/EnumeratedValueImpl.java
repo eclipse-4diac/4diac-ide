@@ -98,6 +98,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getComment() {
 		return comment;
 	}
@@ -107,6 +108,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
 		comment = newComment;
@@ -119,6 +121,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -128,6 +131,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -212,10 +216,10 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (comment: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (comment: "); //$NON-NLS-1$
 		result.append(comment);
-		result.append(", name: ");
+		result.append(", name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(')');
 		return result.toString();

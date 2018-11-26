@@ -1,0 +1,6 @@
+[gerrit]
+host=git.eclipse.org
+port=29418
+project=4diac/orig.eclipse.4diac.forte.ide
+defaultbranch=develop
+defaultremote=origin

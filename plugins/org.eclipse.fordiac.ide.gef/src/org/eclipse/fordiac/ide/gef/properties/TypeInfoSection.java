@@ -80,17 +80,20 @@ public abstract class TypeInfoSection extends AbstractSection {
 	private Group versionInfoGroup;
 	private Button versionInfoNew;
 	private Button versionInfoDelete;
-	private static final String VERSION_PROPERTY = "version";
-	private static final String ORGANIZATION_PROPERTY = "organization";
-	private static final String AUTHOR_PROPERTY = "author";
-	private static final String DATE_PROPERTY = "date";
-	private static final String REMARKS_PROPERTY = "remarks";	
+	private static final String VERSION_PROPERTY = "version"; //$NON-NLS-1$
+	private static final String ORGANIZATION_PROPERTY = "organization"; //$NON-NLS-1$
+	private static final String AUTHOR_PROPERTY = "author"; //$NON-NLS-1$
+	private static final String DATE_PROPERTY = "date"; //$NON-NLS-1$
+	private static final String REMARKS_PROPERTY = "remarks";	 //$NON-NLS-1$
 	
+	@Override
 	protected LibraryElement getType(){
 		return (LibraryElement)type;
 	}
 	
+	@Override
 	protected void setInputInit(){
+		//nothing todo here
 	}
 	
 	@Override
@@ -110,6 +113,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, "Comment:"); 
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			}
@@ -163,7 +167,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 		});
 		CLabel label = getWidgetFactory().createCLabel(identificationGroup, "Description: ");
 		label.setLayoutData(new GridData(SWT.NONE, SWT.TOP, false, false));
-		descriptionText = getWidgetFactory().createText(identificationGroup, "", SWT.WRAP | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);	
+		descriptionText = getWidgetFactory().createText(identificationGroup, "", SWT.WRAP | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);	 //$NON-NLS-1$
 		GridData descriptionTextData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		descriptionText.setLayoutData(descriptionTextData);
 		descriptionText.addModifyListener(new ModifyListener() {
@@ -211,26 +215,32 @@ public abstract class TypeInfoSection extends AbstractSection {
 		
 		Composite buttonComp = new Composite(versionInfoGroup, SWT.NONE);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		versionInfoNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
+		versionInfoNew = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH);
+		versionInfoNew.setToolTipText("New info element");
 		versionInfoNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
 		versionInfoNew.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				executeCommand(new AddNewVersionInfoCommand(getType()));
 				versionViewer.refresh();
 			}
 		});
-		versionInfoDelete = getWidgetFactory().createButton(buttonComp, "Delete", SWT.PUSH);
+		versionInfoDelete = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH);
 		versionInfoDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
+		versionInfoDelete.setToolTipText("Delete selected info element");
 		versionInfoDelete.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				executeCommand(new DeleteVersionInfoCommand(getType(), (VersionInfo)((IStructuredSelection) versionViewer.getSelection()).getFirstElement()));
 				versionViewer.refresh();
 			}
 		});
 		versionViewer.setCellModifier(new ICellModifier() {
+			@Override
 			public boolean canModify(final Object element, final String property) {
 				return true;
 			}
+			@Override
 			public Object getValue(final Object element, final String property) {
 				if (VERSION_PROPERTY.equals(property)) {
 					return ((VersionInfo) element).getVersion();
@@ -244,6 +254,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 					return ((VersionInfo) element).getRemarks();
 				}
 			}
+			@Override
 			public void modify(final Object element, final String property, final Object value) {
 				TableItem tableItem = (TableItem) element;
 				VersionInfo data = (VersionInfo) tableItem.getData();
@@ -287,15 +298,15 @@ public abstract class TypeInfoSection extends AbstractSection {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;		
 		if(null != type) {
-			fbTypeNameText.setText(getType().getName() != null ? getType().getName() : "");
-			commentText.setText(getType().getComment() != null ? getType().getComment() : "");
+			fbTypeNameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
+			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			if(getType().getIdentification() != null){
-				standardText.setText(getType().getIdentification().getStandard() != null ? getType().getIdentification().getStandard() : "");
-				classificationText.setText(getType().getIdentification().getClassification() != null ? getType().getIdentification().getClassification() : "");
-				domainText.setText(getType().getIdentification().getApplicationDomain() != null ? getType().getIdentification().getApplicationDomain() : "");
-				functionText.setText(getType().getIdentification().getFunction() != null ? getType().getIdentification().getFunction() : "");
-				typeText.setText(getType().getIdentification().getType() != null ? getType().getIdentification().getType() : "");
-				descriptionText.setText(getType().getIdentification().getDescription() != null ? getType().getIdentification().getDescription() : "");		
+				standardText.setText(getType().getIdentification().getStandard() != null ? getType().getIdentification().getStandard() : ""); //$NON-NLS-1$
+				classificationText.setText(getType().getIdentification().getClassification() != null ? getType().getIdentification().getClassification() : ""); //$NON-NLS-1$
+				domainText.setText(getType().getIdentification().getApplicationDomain() != null ? getType().getIdentification().getApplicationDomain() : ""); //$NON-NLS-1$
+				functionText.setText(getType().getIdentification().getFunction() != null ? getType().getIdentification().getFunction() : ""); //$NON-NLS-1$
+				typeText.setText(getType().getIdentification().getType() != null ? getType().getIdentification().getType() : ""); //$NON-NLS-1$
+				descriptionText.setText(getType().getIdentification().getDescription() != null ? getType().getIdentification().getDescription() : "");		 //$NON-NLS-1$
 				versionViewer.setInput(getType());
 			}else{
 				getType().setIdentification(LibraryElementFactory.eINSTANCE.createIdentification());

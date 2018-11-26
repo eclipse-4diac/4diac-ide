@@ -248,7 +248,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getValueType()
 	 * @generated
 	 */
-	int VALUE_TYPE = 9;
+	int VALUE_TYPE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
@@ -321,7 +321,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDerivedType()
 	 * @generated
 	 */
-	int DERIVED_TYPE = 11;
+	int DERIVED_TYPE = 10;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
@@ -807,34 +807,6 @@ public interface DataPackage extends EPackage {
 	int SUBRANGE_TYPE_FEATURE_COUNT = DERIVED_TYPE_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.VarInitializationImpl <em>Var Initialization</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.data.impl.VarInitializationImpl
-	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getVarInitialization()
-	 * @generated
-	 */
-	int VAR_INITIALIZATION = 8;
-
-	/**
-	 * The feature id for the '<em><b>Initial Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_INITIALIZATION__INITIAL_VALUE = 0;
-
-	/**
-	 * The number of structural features of the '<em>Var Initialization</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_INITIALIZATION_FEATURE_COUNT = 1;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.ElementaryTypeImpl <em>Elementary Type</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -842,7 +814,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getElementaryType()
 	 * @generated
 	 */
-	int ELEMENTARY_TYPE = 10;
+	int ELEMENTARY_TYPE = 9;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
@@ -915,7 +887,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getEventType()
 	 * @generated
 	 */
-	int EVENT_TYPE = 12;
+	int EVENT_TYPE = 11;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
@@ -988,7 +960,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getBaseType1()
 	 * @generated
 	 */
-	int BASE_TYPE1 = 13;
+	int BASE_TYPE1 = 12;
 
 
 	/**
@@ -1180,27 +1152,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSubrangeType_Subrange();
-
-	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.VarInitialization <em>Var Initialization</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Var Initialization</em>'.
-	 * @see org.eclipse.fordiac.ide.model.data.VarInitialization
-	 * @generated
-	 */
-	EClass getVarInitialization();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.VarInitialization#getInitialValue <em>Initial Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Initial Value</em>'.
-	 * @see org.eclipse.fordiac.ide.model.data.VarInitialization#getInitialValue()
-	 * @see #getVarInitialization()
-	 * @generated
-	 */
-	EAttribute getVarInitialization_InitialValue();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.ValueType <em>Value Type</em>}'.
@@ -1444,24 +1395,6 @@ public interface DataPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SUBRANGE_TYPE__SUBRANGE = eINSTANCE.getSubrangeType_Subrange();
-
-		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.VarInitializationImpl <em>Var Initialization</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.model.data.impl.VarInitializationImpl
-		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getVarInitialization()
-		 * @generated
-		 */
-		EClass VAR_INITIALIZATION = eINSTANCE.getVarInitialization();
-
-		/**
-		 * The meta object literal for the '<em><b>Initial Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VAR_INITIALIZATION__INITIAL_VALUE = eINSTANCE.getVarInitialization_InitialValue();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.ValueTypeImpl <em>Value Type</em>}' class.

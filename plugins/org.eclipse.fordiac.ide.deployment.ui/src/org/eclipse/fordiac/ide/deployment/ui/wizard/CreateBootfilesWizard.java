@@ -58,8 +58,6 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.selection = new StructuredSelection(selection.toList());
 	}
-	
-	
 
 	@Override
 	public void addPages() {
@@ -99,7 +97,7 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 	}
 
 	private Map<Device, List<Object>> prepareWorkload() {
-		Object selectedElements[] = page.getSelectedElements();
+		Object[] selectedElements = page.getSelectedElements();
 		Map<Device, List<Object> > workLoad = new HashMap<>();
 
 		for (Object object : selectedElements) {
@@ -122,7 +120,6 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 		if(!workLoad.containsKey(device)){
 			workLoad.put(device, new ArrayList<Object>());
 		}
-		
 		return workLoad.get(device);
 	}
 	

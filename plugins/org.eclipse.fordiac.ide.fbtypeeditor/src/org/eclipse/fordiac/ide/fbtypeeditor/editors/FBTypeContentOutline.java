@@ -42,12 +42,13 @@ public class FBTypeContentOutline extends ContentOutlinePage {
 
 		@Override
 		public void notifyChanged(Notification notification) {
-			Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					getTreeViewer().expandAll();
-				}
-			});
+			if(!getTreeViewer().getControl().isDisposed()) {
+				Display.getDefault().asyncExec(() -> {
+					if(!getTreeViewer().getControl().isDisposed()) {
+						getTreeViewer().expandAll();
+					}
+				});
+			}
 		}
 	};
 	
@@ -60,6 +61,7 @@ public class FBTypeContentOutline extends ContentOutlinePage {
 		this.commandStack = editor.getCommandStack();
 	}
 		
+	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 

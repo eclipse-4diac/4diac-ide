@@ -52,10 +52,12 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 public class AlgorithmList {
 	
 	private class AlgorithmViewerCellModifier implements ICellModifier {
+		@Override
 		public boolean canModify(final Object element, final String property) {
 			return true;
 		}
 
+		@Override
 		public Object getValue(final Object element, final String property) {
 			switch (property) {
 			case A_NAME:
@@ -67,6 +69,7 @@ public class AlgorithmList {
 			}
 		}
 
+		@Override
 		public void modify(final Object element, final String property, final Object value) {
 			TableItem tableItem = (TableItem) element;
 			Algorithm data = (Algorithm) tableItem.getData();

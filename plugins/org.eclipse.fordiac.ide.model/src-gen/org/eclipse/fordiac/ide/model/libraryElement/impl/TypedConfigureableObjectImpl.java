@@ -69,6 +69,7 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PaletteEntry getPaletteEntry() {
 		if (paletteEntry != null && paletteEntry.eIsProxy()) {
 			InternalEObject oldPaletteEntry = (InternalEObject)paletteEntry;
@@ -95,6 +96,7 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPaletteEntry(PaletteEntry newPaletteEntry) {
 		PaletteEntry oldPaletteEntry = paletteEntry;
 		paletteEntry = newPaletteEntry;
@@ -107,8 +109,9 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getTypeName() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getTypeName(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getTypeName(this);
 	}
 
 	/**
@@ -116,8 +119,9 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public LibraryElement getType() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getType(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getType(this);
 	}
 
 	/**

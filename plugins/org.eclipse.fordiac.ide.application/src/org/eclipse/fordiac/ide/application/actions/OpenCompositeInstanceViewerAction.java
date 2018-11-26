@@ -41,7 +41,7 @@ public class OpenCompositeInstanceViewerAction extends Action {
 	public OpenCompositeInstanceViewerAction(FBEditPart fbEditPart, final FB fb){
 		this.fb = fb;
 		this.fbEditPart = fbEditPart;
-		setText(getActionText());
+		setText(Messages.OpenCompositeInstanceViewerAction_Name);
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class OpenCompositeInstanceViewerAction extends Action {
 	 */
 	@Override
 	public void run() {
-		CompositeInstanceViewerInput input = new CompositeInstanceViewerInput(fbEditPart, fb, fb.getName(), fb.getName());
+		CompositeInstanceViewerInput input = new CompositeInstanceViewerInput(fbEditPart, fb, fb.getName());
 
 		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
@@ -59,10 +59,6 @@ public class OpenCompositeInstanceViewerAction extends Action {
 			ApplicationPlugin.getDefault().logError(
 					"Composite Instance editor can not be opened: ", e); //$NON-NLS-1$
 		}
-	}
-
-	private String getActionText() {
-		return Messages.OpenCompositeInstanceViewerAction_Name;
 	}
 
 }

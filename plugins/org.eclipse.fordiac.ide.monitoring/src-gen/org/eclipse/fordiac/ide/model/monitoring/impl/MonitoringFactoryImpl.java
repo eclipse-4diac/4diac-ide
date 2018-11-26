@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +19,13 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.fordiac.ide.model.monitoring.*;
+import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
+import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
+import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -66,13 +73,11 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 		switch (eClass.getClassifierID()) {
 			case MonitoringPackage.MONITORING_ELEMENT: return createMonitoringElement();
 			case MonitoringPackage.MONITORING_ADAPTER_ELEMENT: return createMonitoringAdapterElement();
-			case MonitoringPackage.BREAKPOINTS: return createBreakpoints();
-			case MonitoringPackage.PORT_ELEMENT: return createPortElement();
 			case MonitoringPackage.ADAPTER_PORT_ELEMENT: return createAdapterPortElement();
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT: return createAdapterMonitoringEvent();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION: return createAdapterMonitoringVarDeclaration();
 			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -81,6 +86,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MonitoringElement createMonitoringElement() {
 		MonitoringElementImpl monitoringElement = new MonitoringElementImpl();
 		return monitoringElement;
@@ -91,6 +97,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MonitoringAdapterElement createMonitoringAdapterElement() {
 		MonitoringAdapterElementImpl monitoringAdapterElement = new MonitoringAdapterElementImpl();
 		return monitoringAdapterElement;
@@ -101,26 +108,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Breakpoints createBreakpoints() {
-		BreakpointsImpl breakpoints = new BreakpointsImpl();
-		return breakpoints;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PortElement createPortElement() {
-		PortElementImpl portElement = new PortElementImpl();
-		return portElement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public AdapterPortElement createAdapterPortElement() {
 		AdapterPortElementImpl adapterPortElement = new AdapterPortElementImpl();
 		return adapterPortElement;
@@ -131,6 +119,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterMonitoringEvent createAdapterMonitoringEvent() {
 		AdapterMonitoringEventImpl adapterMonitoringEvent = new AdapterMonitoringEventImpl();
 		return adapterMonitoringEvent;
@@ -141,6 +130,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterMonitoringVarDeclaration createAdapterMonitoringVarDeclaration() {
 		AdapterMonitoringVarDeclarationImpl adapterMonitoringVarDeclaration = new AdapterMonitoringVarDeclarationImpl();
 		return adapterMonitoringVarDeclaration;
@@ -151,6 +141,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MonitoringPackage getMonitoringPackage() {
 		return (MonitoringPackage)getEPackage();
 	}

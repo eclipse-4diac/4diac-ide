@@ -17,7 +17,7 @@ import java.io.DataInputStream;
 public abstract class IEC_ANY_BIT extends IEC_ANY {
 
 	private static final int NIBBLES_PER_OCTET = 2;
-	protected final int BITS_PER_OCTET = 8;
+	private static final int BITS_PER_OCTET = 8;
 
 	/**
 	 * 

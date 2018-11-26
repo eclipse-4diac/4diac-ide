@@ -20,6 +20,6 @@ public class SubAppInterfaceEditor extends FBInterfaceEditor{
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		return new SubAppInterfaceEditPartFactory(this, palette, zoomManager);
+		return new SubAppInterfaceEditPartFactory(this, palette, getZoomManger());
 	}
 }

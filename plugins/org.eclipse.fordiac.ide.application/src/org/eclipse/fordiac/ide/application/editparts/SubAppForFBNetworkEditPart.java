@@ -103,7 +103,12 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 				// we have a type open the sub-app type editor
 				AbstractFBNetworkElementFigure.openTypeInEditor(getModel());
 			} else {
-				new OpenSubApplicationEditorAction(getModel()).run();
+				SubApp subApp = getModel();
+				if(null == subApp.getSubAppNetwork() && subApp.isMapped()) {
+					//we are mapped and the subapp in the resource
+					subApp = (SubApp)subApp.getOpposite();
+				}				
+				new OpenSubApplicationEditorAction(subApp).run();
 			}					
 		} else {
 			super.performRequest(request);

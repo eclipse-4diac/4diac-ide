@@ -145,6 +145,7 @@ public class AdvancedLineBorder extends LineBorder {
 	/* (non-Javadoc)
 	 * @see org.eclipse.draw2d.LineBorder#setStyle(int)
 	 */
+	@Override
 	public void setStyle(int style) {
 		this.style = style;
 	}

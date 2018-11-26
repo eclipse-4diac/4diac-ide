@@ -71,14 +71,14 @@
             class="org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage"
             genModel="model/virtualDNS.genmodel"/>
    </extension>
-   
-   <!-- this is needed to load old pre eclipse version projects -->
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated virtualDNS -->
+      <!-- added for loading virtualDNS files with the old name space -->
       <package
             uri="org.fordiac.ide.virtualDNS"
             class="org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage"
             genModel="model/virtualDNS.genmodel"/>
    </extension>
-
+   
+   <!-- this is needed to load old pre eclipse version projects -->
+null
 </plugin>

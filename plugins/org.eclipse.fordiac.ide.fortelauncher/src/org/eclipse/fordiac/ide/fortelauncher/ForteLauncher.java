@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.runtime.LaunchRuntimeUtils;
  */
 public class ForteLauncher implements IRuntimeLauncher {
 
-	private final ArrayList<LaunchParameter> params = new ArrayList<LaunchParameter>();
+	private final List<LaunchParameter> params = new ArrayList<>();
 
 	/**
 	 * Instantiates a new forte launcher.
@@ -61,7 +61,7 @@ public class ForteLauncher implements IRuntimeLauncher {
 			throw new LaunchRuntimeException(
 					Messages.ForteLauncher_ERROR_WrongPort);
 		} catch (Exception ex) {
-			System.err.println(ex.toString());
+			Activator.getDefault().logError("Could not launch FORTE", ex);
 		}
 	}
 
@@ -75,14 +75,16 @@ public class ForteLauncher implements IRuntimeLauncher {
 		return params;
 	}
 
+	@Override
 	public LaunchParameter setParam(final String name, final String value) {
 		boolean found = false;
 		for (int i = 0; i < params.size(); i++) {
 			if (params.get(i).getName().equals(name)) {
 				params.get(i).setValue(value);
 				found = true;
-				if (found)
+				if (found) {
 					return params.get(i);
+				}
 			}
 		}
 		LaunchParameter param = new LaunchParameter();

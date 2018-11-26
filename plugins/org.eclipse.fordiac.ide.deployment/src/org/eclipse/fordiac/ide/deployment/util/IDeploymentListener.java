@@ -19,35 +19,8 @@ package org.eclipse.fordiac.ide.deployment.util;
  */
 public interface IDeploymentListener {
 
-	/**
-	 * Post command sent.
-	 * 
-	 * @param command the command - formatted as XML
-	 * @param destination the destination - formatted as XML comment
-	 */
-	void postCommandSent(String command, String destination);
 	
-	/**
-	 * Post command sent.
-	 * 
-	 * @param message - written unformatted to output window
-	 */
-	void postCommandSent(final String message);
-
-	/**
-	 * Response received.
-	 * 
-	 * @param response the response
-	 * @param source the source
-	 */
-	void responseReceived(String response, String source);
-
-	/**
-	 * Finished.
-	 */
-	void finished();
-
-	
+	void connectionOpened();
 	/**
 	 * 
 	 * @param info a string containing "ip:port : resource"
@@ -55,5 +28,18 @@ public interface IDeploymentListener {
 	 * @param command the command
 	 */
 	void postCommandSent(String info, String destination, String command);
+	
+	/**
+	 * Response received.
+	 * 
+	 * @param response the response
+	 * @param source the source
+	 */
+	void postResponseReceived(String response, String source);
+
+	/**
+	 * Finished.
+	 */
+	void connectionClosed();
 
 }

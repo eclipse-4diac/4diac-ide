@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+ Copyright (c) 2008, 2018 Profactor GmbH, Johannes Kepler University
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Gerhard Ebenhofer, Alois Zoitl
+     - initial API and implementation and/or initial documentation
+-->
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.fordiac.ide.deployment" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.eclipse.fordiac.ide.deployment" id="org.eclipse.fordiac.ide.deployment.devicemanagementinteractor" name="devicemanagementinteractor"/>
+      </appInfo>
+      <documentation>
+         This extensionpoint is used to implement a &quot;device management interactor&quot; for a new Profile.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appInfo>
+            <meta.element />
+         </appInfo>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="DeviceManagementInteractorProvider"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="DeviceManagementInteractorProvider">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagmentInteractorProvider"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         0.1
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         The following is an example of Holobloc Compliance Profile extension definition: 
+&lt;p&gt;
+&lt;pre&gt;
+   &lt;extension
+         point=&quot;org.eclipse.fordiac.ide.deployment.devicemanagementinteractor&quot;&gt;
+      &lt;DeploymentExecutor
+            class=&quot;org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor&quot;&gt;
+      &lt;/DeploymentExecutor&gt;
+   &lt;/extension&gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+
+</schema>

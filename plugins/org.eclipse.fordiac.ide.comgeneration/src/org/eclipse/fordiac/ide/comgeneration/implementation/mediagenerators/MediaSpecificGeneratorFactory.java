@@ -15,15 +15,13 @@ package org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class MediaSpecificGeneratorFactory {
-	HashMap<String, MediaSpecificGenerator> generators;
-	
-	
+	private final Map<String, MediaSpecificGenerator> generators = new HashMap<>();
 
 	public MediaSpecificGeneratorFactory() {
 		super();
-		generators = new HashMap<String, MediaSpecificGenerator>();
 	}
 
 	public void addGenerator(MediaSpecificGenerator generator) {

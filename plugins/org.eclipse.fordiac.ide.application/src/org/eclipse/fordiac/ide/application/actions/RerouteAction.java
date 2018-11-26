@@ -14,9 +14,9 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.draw2d.Connection;
-import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -26,10 +26,8 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class RerouteAction implements IObjectActionDelegate {
 
-	ArrayList<Connection> connections = new ArrayList<Connection>();
+	private List<Connection> connections = new ArrayList<>();
 
-	public RerouteAction() {
-	}
 
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
@@ -38,11 +36,6 @@ public class RerouteAction implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 		for (Connection conn : connections) {
-			if (conn.getConnectionRouter() instanceof MoveableRouter) {
-				((MoveableRouter) conn.getConnectionRouter()).setDeltaX1(conn, 0);
-				((MoveableRouter) conn.getConnectionRouter()).setDeltaX2(conn, 0);
-				((MoveableRouter) conn.getConnectionRouter()).setDeltaY(conn, 0);
-			}
 			conn.revalidate();
 		}
 

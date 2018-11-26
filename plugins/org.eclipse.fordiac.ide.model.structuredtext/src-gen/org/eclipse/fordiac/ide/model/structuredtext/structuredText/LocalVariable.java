@@ -65,7 +65,8 @@ public interface LocalVariable extends VarDeclaration
    * @model
    * @generated
    */
-  boolean isArray();
+  @Override
+boolean isArray();
 
   /**
    * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocalVariable#isArray <em>Array</em>}' attribute.

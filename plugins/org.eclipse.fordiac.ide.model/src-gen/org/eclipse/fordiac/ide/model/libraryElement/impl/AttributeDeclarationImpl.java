@@ -1,6 +1,6 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2008 - 2017 4DIAC - consortium.
+ *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *  *
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
@@ -143,6 +143,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -152,6 +153,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -164,6 +166,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getComment() {
 		return comment;
 	}
@@ -173,6 +176,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
 		comment = newComment;
@@ -185,6 +189,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseType1 getType() {
 		return type;
 	}
@@ -194,6 +199,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(BaseType1 newType) {
 		BaseType1 oldType = type;
 		type = newType == null ? TYPE_EDEFAULT : newType;
@@ -206,6 +212,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getInitialValue() {
 		return initialValue;
 	}
@@ -215,6 +222,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInitialValue(String newInitialValue) {
 		String oldInitialValue = initialValue;
 		initialValue = newInitialValue;
@@ -351,14 +359,14 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", comment: ");
+		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
-		result.append(", type: ");
+		result.append(", type: "); //$NON-NLS-1$
 		result.append(type);
-		result.append(", initialValue: ");
+		result.append(", initialValue: "); //$NON-NLS-1$
 		result.append(initialValue);
 		result.append(')');
 		return result.toString();

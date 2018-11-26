@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.export.feature"
       label="Export Function Block Types"
-      version="1.9.0.qualifier"
+      version="1.10.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
@@ -152,6 +152,13 @@ This Agreement is governed by the laws of the State of New York and the intellec
 
    <plugin
          id="org.eclipse.fordiac.ide.export.forte_lua"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+         
+   <plugin
+         id="org.eclipse.fordiac.ide.fmu"
          download-size="0"
          install-size="0"
          version="0.0.0"

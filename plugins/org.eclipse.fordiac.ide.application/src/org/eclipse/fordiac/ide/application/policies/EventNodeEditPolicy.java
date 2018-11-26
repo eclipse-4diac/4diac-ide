@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2016 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008, 2016, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,15 +21,8 @@ import org.eclipse.gef.requests.ReconnectRequest;
 
 /**
  * An EditPolicy which allows drawing Connections between EventInterfaces.
- * 
- * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
-public class EventNodeEditPolicy extends
-		InterfaceElementEditPolicy {
-
-	public EventNodeEditPolicy() {
-		super(EventConnectionCreateCommand.class);
-	}
+public class EventNodeEditPolicy extends InterfaceElementEditPolicy {
 
 	/*
 	 * (non-Javadoc)
@@ -37,8 +30,7 @@ public class EventNodeEditPolicy extends
 	 * @see org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy#getConnectionCreateCommand(org.eclipse.gef.requests.CreateConnectionRequest)
 	 */
 	@Override
-	protected Command getConnectionCreateCommand(
-			final CreateConnectionRequest request) {
+	protected Command getConnectionCreateCommand( final CreateConnectionRequest request) {
 		EventConnectionCreateCommand cmd = new EventConnectionCreateCommand(getParentNetwork());
 		cmd.setSource(((InterfaceEditPart) getHost()).getModel());
 		request.setStartCommand(cmd);

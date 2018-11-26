@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: fbt UI (Incubation)
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.xtext.fbt.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.fordiac.ide.model,
@@ -19,3 +19,4 @@ Import-Package: org.apache.log4j
 Export-Package: org.eclipse.fordiac.ide.model.xtext.fbt.ide.contentassist.antlr.internal,
  org.eclipse.fordiac.ide.model.xtext.fbt.ide.contentassist.antlr.lexer,
  org.eclipse.fordiac.ide.model.xtext.fbt.ide.contentassist.antlr
+Automatic-Module-Name: org.eclipse.fordiac.ide.model.xtext.fbt.ui

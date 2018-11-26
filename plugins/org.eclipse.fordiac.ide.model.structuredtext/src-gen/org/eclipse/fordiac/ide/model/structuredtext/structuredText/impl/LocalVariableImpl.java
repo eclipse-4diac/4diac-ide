@@ -110,7 +110,8 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
    * <!-- end-user-doc -->
    * @generated
    */
-  public boolean isConstant()
+  @Override
+public boolean isConstant()
   {
     return constant;
   }
@@ -120,7 +121,8 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setConstant(boolean newConstant)
+  @Override
+public void setConstant(boolean newConstant)
   {
     boolean oldConstant = constant;
     constant = newConstant;
@@ -133,7 +135,8 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
    * <!-- end-user-doc -->
    * @generated
    */
-  public boolean isArray()
+  @Override
+public boolean isArray()
   {
     return array;
   }
@@ -143,7 +146,8 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setArray(boolean newArray)
+  @Override
+public void setArray(boolean newArray)
   {
     boolean oldArray = array;
     array = newArray;
@@ -156,7 +160,8 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
    * <!-- end-user-doc -->
    * @generated
    */
-  public Constant getInitialValue()
+  @Override
+public Constant getInitialValue()
   {
     return initialValue;
   }
@@ -183,7 +188,8 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setInitialValue(Constant newInitialValue)
+  @Override
+public void setInitialValue(Constant newInitialValue)
   {
     if (newInitialValue != initialValue)
     {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 fortiss GmbH
+ * Copyright (c) 2016, 2018 fortiss GmbH, Johannes Kepler Universtiy
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,25 +23,12 @@ import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.requests.ReconnectRequest;
 
 public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy {
-	
-	@SuppressWarnings("rawtypes")
-	private Class cmdRef;
-
-	@SuppressWarnings("rawtypes")
-	public InterfaceElementEditPolicy(Class cmdRef) {
-		super();
-		this.cmdRef = cmdRef;
-	}
-	
+		
 	@Override
-	protected Command getConnectionCompleteCommand(
-			final CreateConnectionRequest request) {
-		if (request.getStartCommand().getClass().equals(cmdRef)) {
-			AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
-			command.setDestination(((InterfaceEditPart) getHost()).getModel());
-			return command;
-		}
-		return null;
+	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
+		AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
+		command.setDestination(((InterfaceEditPart) getHost()).getModel());
+		return command;
 	}
 
 

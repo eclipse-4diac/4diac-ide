@@ -1,2 +1,2 @@
 instructions.configure=\
-  addRepository(type:0,location:http${#58}//download.eclipse.org/4diac/updates/1.9,name:Eclipse 4diac 1.9.0 Update Site);
+  addRepository(type:0,location:http${#58}//download.eclipse.org/4diac/updates/latest,name:Eclipse 4diac Latest Release);

@@ -111,9 +111,11 @@ public class InternalVarsSection extends ECCSection {
 		internalVarsViewer.setContentProvider(new ArrayContentProvider());
 		internalVarsViewer.setLabelProvider(new InternalVarsLabelProvider());
 		internalVarsViewer.setCellModifier(new ICellModifier() {
+			@Override
 			public boolean canModify(final Object element, final String property) {
 				return true;
 			}
+			@Override
 			public Object getValue(final Object element, final String property) {
 				if (IV_NAME.equals(property)) {
 					return ((VarDeclaration) element).getName();
@@ -131,9 +133,10 @@ public class InternalVarsSection extends ECCSection {
 				} else if (IV_ARRAY.equals(property)) {
 					return Integer.toString(((VarDeclaration) element).getArraySize());
 				} else{
-					return ((VarDeclaration) element).getVarInitialization().getInitialValue();
+					return ((VarDeclaration) element).getValue().getValue();
 				}
 			}
+			@Override
 			public void modify(final Object element, final String property, final Object value) {
 				TableItem tableItem = (TableItem) element;
 				VarDeclaration data = (VarDeclaration) tableItem.getData();
@@ -204,6 +207,7 @@ public class InternalVarsSection extends ECCSection {
 		return new CellEditor[] { varNameEditor, typeDropDown, new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) };
 	}
 
+	@Override
 	protected void setInputCode() {
 		internalVarsViewer.setCellModifier(null);
 	}	

@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.util.Activator;
 public class IEC_DWORD extends IEC_ANY_BIT {
 
 	private int value;
-	protected final int OCTETS = 4; 
+	private static final int OCTETS = 4; 
 	
 	/**
 	 * 
@@ -112,11 +112,13 @@ public class IEC_DWORD extends IEC_ANY_BIT {
 	}
 
 
+	@Override
 	protected String ConvertHexString()
 	{
 		return Integer.toHexString(value);
 	}
 	
+	@Override
 	protected String ConvertBinString()
 	{
 		return Integer.toBinaryString(value);

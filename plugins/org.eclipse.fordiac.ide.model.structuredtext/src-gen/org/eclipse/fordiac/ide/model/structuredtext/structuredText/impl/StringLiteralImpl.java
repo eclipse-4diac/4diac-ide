@@ -94,7 +94,8 @@ public class StringLiteralImpl extends ConstantImpl implements StringLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public long getLength()
+  @Override
+public long getLength()
   {
     return length;
   }
@@ -104,7 +105,8 @@ public class StringLiteralImpl extends ConstantImpl implements StringLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setLength(long newLength)
+  @Override
+public void setLength(long newLength)
   {
     long oldLength = length;
     length = newLength;
@@ -117,7 +119,8 @@ public class StringLiteralImpl extends ConstantImpl implements StringLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getValue()
+  @Override
+public String getValue()
   {
     return value;
   }
@@ -127,7 +130,8 @@ public class StringLiteralImpl extends ConstantImpl implements StringLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setValue(String newValue)
+  @Override
+public void setValue(String newValue)
   {
     String oldValue = value;
     value = newValue;

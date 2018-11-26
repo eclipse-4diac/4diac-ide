@@ -43,10 +43,8 @@ public class WatchesLabelProvider extends LabelProvider implements
 	public String getColumnText(Object element, int columnIndex) {
 		if (columnIndex == 0) {
 			return getText(element);
-		} else if (columnIndex == 1) {
-			if (element instanceof MonitoringElement) {
-				return ((MonitoringElement) element).getCurrentValue();
-			}
+		} else if ((columnIndex == 1) && (element instanceof MonitoringElement)) {
+			return ((MonitoringElement) element).getCurrentValue();
 		}
 		return ""; //$NON-NLS-1$
 	}
@@ -54,11 +52,7 @@ public class WatchesLabelProvider extends LabelProvider implements
 	@Override
 	public Color getBackground(Object element, int columnIndex) {
 		if (element instanceof MonitoringElement) {
-			if (((MonitoringElement) element).isBreakpointActive()) {
-				return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_CYAN);
-			} else {
-				return Display.getCurrent().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
-			}
+			return Display.getCurrent().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
 		}
 		return null;
 	}

@@ -130,6 +130,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Application> getApplication() {
 		if (application == null) {
 			application = new EObjectContainmentEList<Application>(Application.class, this, LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION);
@@ -141,6 +142,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Mapping> getMapping() {
 		if (mapping == null) {
 			mapping = new EObjectContainmentEList<Mapping>(Mapping.class, this, LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING);
@@ -153,6 +155,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	 * 
 	 * @generated NOT
 	 */
+	@Override
 	public Palette getPalette() {
 		if (palette != null && palette.eIsProxy()) {
 			InternalEObject oldPalette = (InternalEObject) palette;
@@ -197,6 +200,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPalette(Palette newPalette) {
 		if (newPalette != palette) {
 			NotificationChain msgs = null;
@@ -215,6 +219,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SystemConfiguration getSystemConfiguration() {
 		if (systemConfiguration != null && systemConfiguration.eIsProxy()) {
 			InternalEObject oldSystemConfiguration = (InternalEObject)systemConfiguration;
@@ -260,6 +265,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSystemConfiguration(
 			SystemConfiguration newSystemConfiguration) {
 		if (newSystemConfiguration != systemConfiguration) {
@@ -280,6 +286,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IProject getProject() {
 		return project;
 	}
@@ -289,6 +296,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProject(IProject newProject) {
 		IProject oldProject = project;
 		project = newProject;
@@ -301,8 +309,9 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Device getDeviceNamed(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDeviceNamed(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);
 	}
 
 	/**
@@ -310,8 +319,9 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Application getApplicationNamed(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getApplicationNamed(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getApplicationNamed(this, name);
 	}
 
 	/**
@@ -458,8 +468,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (project: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (project: "); //$NON-NLS-1$
 		result.append(project);
 		result.append(')');
 		return result.toString();

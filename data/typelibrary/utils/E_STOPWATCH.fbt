@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="FB for stopping time between events" Name="E_STOPWATCH">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Ben Schneider" Date="2018-08-29" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Start the stopwatch" Name="START" Type="Event"/>
+      <Event Comment="Stop the stopwatch" Name="STOP" Type="Event"/>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Event Output" Name="EO" Type="Event">
+        <With Var="TD"/>
+      </Event>
+    </EventOutputs>
+    <InputVars/>
+    <OutputVars>
+      <VarDeclaration Comment="The measured time difference in milliseconds" Name="TD" Type="TIME"/>
+    </OutputVars>
+  </InterfaceList>
+</FBType>

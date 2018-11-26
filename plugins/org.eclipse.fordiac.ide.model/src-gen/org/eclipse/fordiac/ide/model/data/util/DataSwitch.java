@@ -15,7 +15,19 @@ package org.eclipse.fordiac.ide.model.data.util;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
-import org.eclipse.fordiac.ide.model.data.*;
+import org.eclipse.fordiac.ide.model.data.ArrayType;
+import org.eclipse.fordiac.ide.model.data.DataPackage;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.DerivedType;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.data.ElementaryType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
+import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.data.Subrange;
+import org.eclipse.fordiac.ide.model.data.SubrangeType;
+import org.eclipse.fordiac.ide.model.data.ValueType;
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -150,12 +162,6 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseLibraryElement(subrangeType);
 				if (result == null) result = caseINamedElement(subrangeType);
 				if (result == null) result = caseI4DIACElement(subrangeType);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DataPackage.VAR_INITIALIZATION: {
-				VarInitialization varInitialization = (VarInitialization)theEObject;
-				T result = caseVarInitialization(varInitialization);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -322,21 +328,6 @@ public class DataSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSubrangeType(SubrangeType object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Var Initialization</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Var Initialization</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseVarInitialization(VarInitialization object) {
 		return null;
 	}
 

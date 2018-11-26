@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2016 fortiss GmbH. Profactor GmbH
+ * Copyright (c) 2015 - 2016 fortiss GmbH. Profactor GmbH,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,11 +16,13 @@ package org.eclipse.fordiac.ide.util.imageprovider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -45,8 +48,6 @@ public enum FordiacImage {
 	ICON_Algorithm,
 	ICON_Application,
 	ICON_BasicFB,
-	ICON_BreakPoint,
-	ICON_BreakpointsView,
 	ICON_ClearDevice,
 	ICON_ClearForce,
 	ICON_CompositeFB,
@@ -73,6 +74,7 @@ public enum FordiacImage {
 	ICON_FBTest,
 	ICON_FBTester,
 	ICON_FirmwareResource,
+	ICON_FMU,
 	ICON_ForceValue,
 	ICON_HideData,
 	ICON_HideEvent,
@@ -117,7 +119,6 @@ public enum FordiacImage {
 	ICON_TesterTemplate,
 	ICON_TestFailed,
 	ICON_TestOK,
-	ICON_ToggleBreakpoint,
 	ICON_Tools,
 	ICON_TypeNavigator,
 	ICON_Transaction,
@@ -132,12 +133,12 @@ public enum FordiacImage {
 	
 	// @formatter:on
 
-	private static final String IMAGES_DIRECTORY = "images";
-	private static final String FORDIAC_IMAGE_PROPERTIES = "fordiacimages";
+	private static final String IMAGES_DIRECTORY = "images"; //$NON-NLS-1$
+	private static final String FORDIAC_IMAGE_PROPERTIES = "fordiacimages"; //$NON-NLS-1$
 	private static ResourceBundle foridacImageProperties = ResourceBundle
 			.getBundle(FORDIAC_IMAGE_PROPERTIES);
 
-	private static Hashtable<Image, Image> errorImages = new Hashtable<Image, Image>();
+	private static Map<Image, Image> errorImages = new HashMap<>();
 	private static int count = 0;
 	
 	//FIXME: find a better way to handle overlay images
@@ -208,7 +209,7 @@ public enum FordiacImage {
 	private static URL getImageURL(String name) {
 		String fileName = foridacImageProperties.getString(name);
 		return FileLocator.find(Activator.getDefault().getBundle(), 
-				new Path(IMAGES_DIRECTORY + Path.SEPARATOR + fileName), null);
+				new Path(IMAGES_DIRECTORY + IPath.SEPARATOR + fileName), null);
 	}
 
 	private static Image getErrorImage() {

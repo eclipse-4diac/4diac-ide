@@ -31,8 +31,7 @@ public class DeleteFBNElementEditPolicy extends
 	@Override
 	protected Command createDeleteCommand(final GroupRequest request) {
 		if (getHost() instanceof AbstractFBNElementEditPart) {
-			DeleteFBNetworkElementCommand c = new DeleteFBNetworkElementCommand(((AbstractFBNElementEditPart) getHost()).getModel());
-			return c;
+			return new DeleteFBNetworkElementCommand(((AbstractFBNElementEditPart) getHost()).getModel());
 		}
 		return null;
 	}

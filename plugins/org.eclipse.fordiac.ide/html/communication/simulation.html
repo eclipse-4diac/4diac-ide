@@ -23,6 +23,82 @@
 
 <h1 id="topOfPage">Communicating with Simulation Tools</h1>
 
+
+<h2 id="fmi">FMI</h2>
+
+<h3>About FMI</h3>
+
+<p>The Functional Mockup Interface (FMI) is a standard which creates a common interface for simulation of systems from different areas. The idea behind it is to have a common language between different simulation tools in a way that they can communicate with each other. Each system that implements this interface is exported in a so called a Functional Mockup Unit (FMU). The standard is free and more information about it can be found <a href="https://fmi-standard.org/" target="_blank">here</a>.</p>
+
+<p>4DIAC has the capability to export each device of a system as a FMU. The idea behind this is to have in 4DIAC the controller of a physical system, and export it as an FMU. On the other side, the physical system itself can be modeled in a tool that's specialized in its area, and which also allows an FMU exportation of the system. With both FMUs in hand, a co-simulation tool can be used to connect the inputs and outputs of both systems together and co-simulate them and see how the system will behave with the implemented controller.</p>
+
+<h3>How to export and FMU in 4DIAC?</h3>
+
+<ol>
+  <li>First, a special 4diac-rte has to be compiled. Follow the <a href="../installation/install.html#ownFORTE" target="_blank">steps to build your own FBs</a>. In the step 3 where the features to be compiled are selected, select also FORTE_ENABLE_FMU. The FORTE_FMU_INCLUDE variable should be set to the path where the headers files from the fmi standard are located. This will generate a dynamic library, whose name will depend on the operative system forte was compiled. This library must be renamed to one of the following supported ones: win32Forte.dll, win64Forte.dll, linux32Forte.so or linux64Forte.so (for windows 32 bits, windows 64 bits, linux 32 bits and linux 64 bits operative systems respectively). An FMU can have many different libraries, wich will allow the FMU to be simulated in these Operative Systems. </li>
+
+  <li>In the 4DIAC-IDE, go to Windows &rarr; Preferences &rarr; 4DIAC &rarr; FMU Preferences and in the "Binaries Location" field, select the path where the compiled forte (with the right new name) is located. Many libraries from the different OS can be placed in the same folder, wich will be detected by the preference, enabling the OS to be possibly included in the FMUs. Apply the changes and close.</li>
+
+  <li>Go to File &rarr; Export... &rarr; 4diac &rarr; Create FMU &rarr; Next. In the tree of projects, select the Devices with the resources to be exported as FMU. Remember, one FMU for each device will be exported. Choose the directory to export the FMU, the libraries to be included (only the libraries found in the step before will be enable to be selected). The last option allows the user to save the selected libraries for the next time. Click Finish and it's done.</li> 
+</ol>
+
+<h3>Notes</h3>
+
+<ul>
+<li>The IX and QX FBS are treated as boolean inputs and outputs respectively of the FMU.</li>
+
+<li>The IW and QW FBS are treated as integer inputs and outputs respectively of the FMU.</li>
+
+<li>Literals in data inputs are treated as parameters of the FMU.</li>
+
+<li>Types BYTE, WORD, DWORD, LWORD, INT, DINT, LINT, SINT, USINT, UINT, UDINT, ULINT, ANY_INT are treated as integer in the FMU.</li>
+
+<li>Types STRING, WSTRING, ANY_STRING, DATE, DATE_AND_TIME, TIME_OF_DAY, ANY_DATE, TIME are treated as strings in the FMU.</li>
+
+<li>Types REAL, LREAL, ANY_REAL are treated as real in the FMU.</li>
+
+<li>Type BOOL is treated as boolean in the FMU.</li>
+
+<li>Data inputs and outputs which are defined to abstract types (not any of the above) are no included in the FMU</li>
+
+<li>Communication FBs are also treated as inputs and outputs of the FMU if the PARAM data input is set to "fmu[]". Each SD and RD is treated as an output and input respectively. </li>
+
+<li>All the data inputs and data outputs, as well as internal variables in basic function blocks (and current state of the ECC), and internal FBs in a composite FB are exported as internal variables of the FMU, meaning that can be monitored when co-simulating. The number of time an events has been triggered is also available. Service Function Blocks have only their interface available, since the implementation is hidden.</li>
+
+<li>The FBs: E_CYCLE, E_F_TRIG, E_R_TRIG, E_TimeOut, E_CTU, E_D_FF, E_DEMUX, E_MERGE, E_PERMIT, E_REND, E_RS, E_SELECT, E_SPLIT, E_SR, E_SWITCH are treated as Service Function Blocks.</li>
+
+<li>Adapters are not yet supported.</li>
+
+</ul>
+
+<h3>Example</h3>
+
+<p>A simple tank system was modelled in OpenModelica as in the picture below. it has a "firstValve" which is to be controlled, which fills the tank. The "secondValve" is always open, so the tank tends to be empty.</p>
+
+<img src="./img/fmi/tankModel.png" alt="Model of a tank in openModelica">
+
+<p>DA and DS stand for "dummy actuator" (for controlling the first valve) and "dummy sensor" (which measures the current level of the tank) respectively, which just transform the physical measurement into a 16bits integer, which are the input and output of the tank system. </p>
+
+<p>In 4diac, the following PID controller was implemented. The main PID function block is a basic function block, which keeps the level of the tank to the desired position (ERROR_CALC.IN2). The tank is always loosing water (remember, just an example). TANK_LEVEL_IN (IW) and FILL_VALVE (QW) are the FBs that are the input and output of the exported FMU. </p>
+
+<img src="./img/fmi/application.png" alt="controller implemented in 4DIAC">
+
+<p>Once both system are exported as FMUs, they can be co-simulated using the <a href="https://github.com/into-cps/intocps-ui" target="_blank">INTO-CPS</a> tool. Inputs and outputs of both model are connected properly (sensor of the level of the tank to the input of the controller, and the output of the controller to the actuator of the valve of the tank). Since the Kp, Ki and Kd of the PID controller are literals, they're treated as parameters, which can be set in every co-simulation, making it easier to tune it.</p>
+
+<p>Below the first tries to tune the PID using the Ziegler-Nichols method</p>
+
+<img src="./img/fmi/kp1500.png" alt="Simulation with kp 1500">
+
+<img src="./img/fmi/kp2000.png" alt="Simulation with kp 2000">
+
+<img src="./img/fmi/kp2500.png" alt="Simulation with kp 2500">
+
+<p>And the final result of the tunning is seen below</p>
+
+<img src="./img/fmi/classicPID.png" alt="Final tunning of the controller">
+
+<p>This shows how two system from different areas can be easily coupled. The 4diac FMU also help finding bugs in your application to see if it behaves are expected.</p>
+
 <h2 id="matlab">Matlab</h2>
 
 <p>4diac user Marc Jakobi developed a communicating library in Matlab, which allows connecting IEC 61499 control applications with simulation models in Matlab. The library, which is available as open source, implements the Client/Server protocol defined in the <a href="http://www.holobloc.com/doc/ita/index.htm" target="_blank">IEC 61499 compliance profile for feasibility demonstrations</a>. Therefore, on the 4diac side you just need to insert a server communication function block. For detailed documentation as well as the library code, please have a look at the <a href="https://github.com/MrcJkb/tcpip4diac" target="_blank">tcpip4diac project on GitHub</a>.</p>

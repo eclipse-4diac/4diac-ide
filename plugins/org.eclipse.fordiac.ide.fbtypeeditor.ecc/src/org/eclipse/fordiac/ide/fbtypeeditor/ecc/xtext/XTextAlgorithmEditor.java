@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.source.AbstractRulerColumn;
@@ -44,7 +44,7 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 
 	private EmbeddedEditorModelAccess embeddedEditorModelAccess;
 
-	private BasicFBType fbType;
+	private BaseFBType fbType;
 
 	private final EContentAdapter adapter = new EContentAdapter() {
 
@@ -66,7 +66,7 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 		}
 	};
 
-	public XTextAlgorithmEditor(EmbeddedEditor editor, BasicFBType fbType) {
+	public XTextAlgorithmEditor(EmbeddedEditor editor, BaseFBType fbType) {
 		this.editor = editor;
 		this.fbType = fbType;
 		embeddedEditorModelAccess = this.editor.createPartialEditor("","","", true); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -99,7 +99,7 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 		updatePrefix();
 	}
 
-	protected BasicFBType getFBType() {
+	protected BaseFBType getFBType() {
 		return fbType;
 	}
 

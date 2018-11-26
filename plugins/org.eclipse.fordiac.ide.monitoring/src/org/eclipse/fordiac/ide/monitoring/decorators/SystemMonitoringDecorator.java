@@ -25,6 +25,12 @@ public class SystemMonitoringDecorator implements ILabelDecorator {
 
 	@Override
 	public void addListener(ILabelProviderListener listener) {
+		//currently nothing to do here
+	}
+
+	@Override
+	public void removeListener(ILabelProviderListener listener) {
+		//currently nothing to do here
 	}
 
 	@Override
@@ -39,10 +45,6 @@ public class SystemMonitoringDecorator implements ILabelDecorator {
 		return false;
 	}
 
-	@Override
-	public void removeListener(ILabelProviderListener listener) {
-
-	}
 
 	@Override
 	public Image decorateImage(Image image, Object element) {
@@ -62,9 +64,9 @@ public class SystemMonitoringDecorator implements ILabelDecorator {
 
 	private Image getOverlayImage(Image image) {
 		if(null == overlayImage){
-			DecorationOverlayIcon DOC = new DecorationOverlayIcon(image, 
+			DecorationOverlayIcon icon = new DecorationOverlayIcon(image, 
 					FordiacImage.ICON_MonitoringDecorator.getImageDescriptor(), IDecoration.TOP_LEFT);
-			overlayImage = DOC.createImage();
+			overlayImage = icon.createImage();
 		}
 		
 		return overlayImage;

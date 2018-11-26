@@ -30,8 +30,9 @@ public class CreateNewPlugAction extends CreateFromNewAdapterAction {
 		return ID;
 	}
 
+	@Override
 	protected Command getCreationCommand(AdapterTypePaletteEntry adpEntry) {
-		return new CreateInterfaceElementCommand(adpEntry.getAdapterType(), getFbType().getInterfaceList(), false, -1);
+		return new CreateInterfaceElementCommand(adpEntry.getType(), getFbType().getInterfaceList(), false, -1);
 	}
 
 }

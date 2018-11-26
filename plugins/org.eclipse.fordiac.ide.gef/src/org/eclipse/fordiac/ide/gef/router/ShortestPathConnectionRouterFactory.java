@@ -21,11 +21,6 @@ import org.eclipse.draw2d.ShortestPathConnectionRouter;
  */
 public class ShortestPathConnectionRouterFactory extends AbstractConnectionRouterFactory {
 
-	/**
-	 * Instantiates a new ShortestPath connection router factory.
-	 */
-	public ShortestPathConnectionRouterFactory() {
-	}
 
 	@Override
 	public ConnectionRouter getConnectionRouter(IFigure container) {

@@ -3,9 +3,8 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext.services;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import java.util.List;
+
 import org.eclipse.xtext.Action;
 import org.eclipse.xtext.Alternatives;
 import org.eclipse.xtext.Assignment;
@@ -19,9 +18,11 @@ import org.eclipse.xtext.Keyword;
 import org.eclipse.xtext.ParserRule;
 import org.eclipse.xtext.RuleCall;
 import org.eclipse.xtext.TerminalRule;
-import org.eclipse.xtext.service.AbstractElementFinder.AbstractEnumRuleElementFinder;
 import org.eclipse.xtext.service.AbstractElementFinder.AbstractGrammarElementFinder;
 import org.eclipse.xtext.service.GrammarProvider;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 @Singleton
 public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
@@ -2362,6 +2363,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum Or_Operator returns BinaryOperator:
 		//	OR;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//OR
@@ -2377,6 +2379,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum Xor_Operator returns BinaryOperator:
 		//	XOR;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//XOR
@@ -2395,6 +2398,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum And_Operator returns BinaryOperator:
 		//	AND | AND='&';
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//AND | AND='&'
@@ -2422,6 +2426,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum Compare_Operator returns BinaryOperator:
 		//	EQ='=' | NE='<>';
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//EQ='=' | NE='<>'
@@ -2453,6 +2458,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum Equ_Operator returns BinaryOperator:
 		//	LT='<' | LE='<=' | GT='>' | GE='>=';
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//LT='<' | LE='<=' | GT='>' | GE='>='
@@ -2492,6 +2498,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum Add_Operator returns BinaryOperator:
 		//	ADD='+' | SUB='-';
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//ADD='+' | SUB='-'
@@ -2521,6 +2528,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum Term_Operator returns BinaryOperator:
 		//	MUL='*' | DIV='/' | MOD;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//MUL='*' | DIV='/' | MOD
@@ -2551,6 +2559,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum Power_Operator returns BinaryOperator:
 		//	POWER='**';
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//POWER='**'
@@ -2571,6 +2580,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum Unary_Operator returns UnaryOperator:
 		//	MINUS='-' | PLUS='+' | NOT;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//MINUS='-' | PLUS='+' | NOT
@@ -2614,6 +2624,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum Duration_Unit:
 		//	DAYS='d' | HOURS='h' | MINUTES='m' | SECONDS='s' | MILLIS='ms' | MICROS='us' | NANOS='ns';
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//DAYS='d' | HOURS='h' | MINUTES='m' | SECONDS='s' | MILLIS='ms' | MICROS='us' | NANOS='ns'
@@ -2685,6 +2696,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		//	DINT | INT | SINT | LINT //Sign_Int_Type_Name
 		//	| UINT | USINT | UDINT | ULINT //Unsign_Int_Type_Name
 		//;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//DINT | INT | SINT | LINT //Sign_Int_Type_Name
@@ -2749,6 +2761,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum Real_Type_Name returns Type:
 		//	REAL | LREAL;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//REAL | LREAL
@@ -2780,6 +2793,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum String_Type_Name returns Type:
 		//	STRING | WSTRING | CHAR | WCHAR;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//STRING | WSTRING | CHAR | WCHAR
@@ -2824,6 +2838,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		//enum Time_Type_Name returns Type:
 		//	TIME | LTIME | T | LT // also allow short type names
 		//;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//TIME | LTIME | T | LT
@@ -2868,6 +2883,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		//enum Tod_Type_Name returns Type:
 		//	TIME_OF_DAY | LTIME_OF_DAY | TOD | LTOD // also allow 'LTIME_OF_DAY'
 		//;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//TIME_OF_DAY | LTIME_OF_DAY | TOD | LTOD
@@ -2912,6 +2928,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		//enum Date_Type_Name returns Type:
 		//	DATE | LDATE | D | LD // also allow short type names
 		//;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//DATE | LDATE | D | LD
@@ -2956,6 +2973,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		//enum DT_Type_Name returns Type:
 		//	DATE_AND_TIME | LDATE_AND_TIME | DT | LDT // also allow 'LDATE_AND_TIME'
 		//;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//DATE_AND_TIME | LDATE_AND_TIME | DT | LDT
@@ -2992,6 +3010,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum Bool_Type_Name returns Type:
 		//	BOOL;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//BOOL
@@ -3014,6 +3033,7 @@ public class StructuredTextGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//enum Any_Bit_Type_Name returns Type:
 		//	BYTE | WORD | DWORD | LWORD;
+		@Override
 		public EnumRule getRule() { return rule; }
 		
 		//BYTE | WORD | DWORD | LWORD

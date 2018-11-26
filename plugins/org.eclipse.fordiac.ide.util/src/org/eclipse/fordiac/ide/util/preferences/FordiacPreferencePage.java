@@ -51,10 +51,11 @@ public class FordiacPreferencePage extends FieldEditorPreferencePage implements
 
 	private String[][] getSupportedProfiles() {
 		// FIXME return installed/supported profiles
-		return new String[][] { { "HOLOBLOC", "HOLOBLOC" }, {"FBDK2", "FBDK2"}, {"DynamicTypeLoad", "DynamicTypeLoad"}}; //$NON-NLS-1$ //$NON-NLS-2$
+		return new String[][] { { "HOLOBLOC", "HOLOBLOC" }, {"FBDK2", "FBDK2"}, {"DynamicTypeLoad", "DynamicTypeLoad"}}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 
 	}
 
+	@Override
 	public void init(final IWorkbench workbench) {
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription(Messages.FordiacPreferencePage_LABEL_PreferencePageDescription);

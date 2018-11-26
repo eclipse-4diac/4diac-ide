@@ -1,6 +1,6 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2007 - 2011 4DIAC - consortium.
+ *  * Copyright (c) 2007 - 2011 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
@@ -77,8 +77,8 @@ public class EventItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_INamedElement_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", "_UI_INamedElement_type"),
+				 getString("_UI_INamedElement_name_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", "_UI_INamedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.INAMED_ELEMENT__NAME,
 				 true,
 				 false,
@@ -99,8 +99,8 @@ public class EventItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_INamedElement_comment_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", "_UI_INamedElement_type"),
+				 getString("_UI_INamedElement_comment_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", "_UI_INamedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.INAMED_ELEMENT__COMMENT,
 				 true,
 				 false,
@@ -121,8 +121,8 @@ public class EventItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_IInterfaceElement_isInput_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_IInterfaceElement_isInput_feature", "_UI_IInterfaceElement_type"),
+				 getString("_UI_IInterfaceElement_isInput_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_IInterfaceElement_isInput_feature", "_UI_IInterfaceElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.IINTERFACE_ELEMENT__IS_INPUT,
 				 true,
 				 false,
@@ -143,8 +143,8 @@ public class EventItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_IInterfaceElement_inputConnections_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_IInterfaceElement_inputConnections_feature", "_UI_IInterfaceElement_type"),
+				 getString("_UI_IInterfaceElement_inputConnections_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_IInterfaceElement_inputConnections_feature", "_UI_IInterfaceElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.IINTERFACE_ELEMENT__INPUT_CONNECTIONS,
 				 true,
 				 false,
@@ -165,8 +165,8 @@ public class EventItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_IInterfaceElement_outputConnections_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_IInterfaceElement_outputConnections_feature", "_UI_IInterfaceElement_type"),
+				 getString("_UI_IInterfaceElement_outputConnections_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_IInterfaceElement_outputConnections_feature", "_UI_IInterfaceElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS,
 				 true,
 				 false,
@@ -187,8 +187,8 @@ public class EventItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_IInterfaceElement_type_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_IInterfaceElement_type_feature", "_UI_IInterfaceElement_type"),
+				 getString("_UI_IInterfaceElement_type_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_IInterfaceElement_type_feature", "_UI_IInterfaceElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.IINTERFACE_ELEMENT__TYPE,
 				 true,
 				 false,
@@ -209,8 +209,8 @@ public class EventItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_IInterfaceElement_typeName_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_IInterfaceElement_typeName_feature", "_UI_IInterfaceElement_type"),
+				 getString("_UI_IInterfaceElement_typeName_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_IInterfaceElement_typeName_feature", "_UI_IInterfaceElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.IINTERFACE_ELEMENT__TYPE_NAME,
 				 true,
 				 false,
@@ -232,7 +232,6 @@ public class EventItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.IINTERFACE_ELEMENT__VALUE);
 			childrenFeatures.add(LibraryElementPackage.Literals.EVENT__WITH);
 		}
 		return childrenFeatures;
@@ -295,7 +294,6 @@ public class EventItemProvider
 			case LibraryElementPackage.EVENT__TYPE_NAME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case LibraryElementPackage.EVENT__VALUE:
 			case LibraryElementPackage.EVENT__WITH:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -313,11 +311,6 @@ public class EventItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.IINTERFACE_ELEMENT__VALUE,
-				 LibraryElementFactory.eINSTANCE.createValue()));
 
 		newChildDescriptors.add
 			(createChildParameter

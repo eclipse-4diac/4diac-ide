@@ -2,24 +2,13 @@ package org.eclipse.fordiac.ide.model.xtext.fbt.ide.contentassist.antlr.internal
 import java.util.Map;
 import java.util.HashMap;
 
-import java.io.InputStream;
 import org.eclipse.xtext.*;
-import org.eclipse.xtext.parser.*;
-import org.eclipse.xtext.parser.impl.*;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.xtext.parser.antlr.XtextTokenStream;
-import org.eclipse.xtext.parser.antlr.XtextTokenStream.HiddenTokens;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.AbstractInternalContentAssistParser;
-import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.DFA;
 import org.eclipse.fordiac.ide.model.xtext.fbt.services.FBTypeGrammarAccess;
 
 
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 @SuppressWarnings("all")
 public class InternalFBTypeParser extends AbstractInternalContentAssistParser {
@@ -48,8 +37,10 @@ public class InternalFBTypeParser extends AbstractInternalContentAssistParser {
         }
         
 
-    public String[] getTokenNames() { return InternalFBTypeParser.tokenNames; }
-    public String getGrammarFileName() { return "InternalFBTypeParser.g"; }
+    @Override
+	public String[] getTokenNames() { return InternalFBTypeParser.tokenNames; }
+    @Override
+	public String getGrammarFileName() { return "InternalFBTypeParser.g"; }
 
 
     	private FBTypeGrammarAccess grammarAccess;

@@ -79,6 +79,7 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Segment getSegment() {
 		if (segment != null && segment.eIsProxy()) {
 			InternalEObject oldSegment = (InternalEObject)segment;
@@ -120,6 +121,7 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSegment(Segment newSegment) {
 		if (newSegment != segment) {
 			NotificationChain msgs = null;
@@ -139,6 +141,7 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Device getDevice() {
 		if (device != null && device.eIsProxy()) {
 			InternalEObject oldDevice = (InternalEObject)device;
@@ -180,6 +183,7 @@ public class LinkImpl extends ConfigurableObjectImpl implements Link {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDevice(Device newDevice) {
 		if (newDevice != device) {
 			NotificationChain msgs = null;

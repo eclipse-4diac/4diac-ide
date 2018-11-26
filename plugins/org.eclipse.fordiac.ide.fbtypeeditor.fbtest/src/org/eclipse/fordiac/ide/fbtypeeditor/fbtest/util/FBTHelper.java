@@ -23,9 +23,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class FBTHelper {
+public final class FBTHelper {
 
-	static public int getEISize(FBType fbType) {
+	public static int getEISize(FBType fbType) {
 		int retval=0;
 		try {
 			retval = fbType.getInterfaceList().getEventInputs().size();
@@ -34,7 +34,7 @@ public class FBTHelper {
 		}
 		return retval;
 	}
-	static public int getEOSize(FBType fbType) {
+	public static int getEOSize(FBType fbType) {
 		int retval=0;
 		try {
 			retval = fbType.getInterfaceList().getEventOutputs().size();
@@ -44,7 +44,7 @@ public class FBTHelper {
 		return retval;
 	}
 
-	static public int getDISize(FBType fbType) {
+	public static int getDISize(FBType fbType) {
 		int retval=0;
 		try {
 			retval = fbType.getInterfaceList().getInputVars().size();
@@ -54,7 +54,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public int getDOSize(FBType fbType) {
+	public static int getDOSize(FBType fbType) {
 		int retval=0;
 		try {
 			retval = fbType.getInterfaceList().getOutputVars().size();
@@ -64,7 +64,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public int getEIID(FBType fbType, String eventName) {
+	public static int getEIID(FBType fbType, String eventName) {
 		int retval = -1;
 
 		try {
@@ -82,7 +82,7 @@ public class FBTHelper {
 		return retval;
 	}
 
-	static public int getEOID(FBType fbType, String eventName) {
+	public static int getEOID(FBType fbType, String eventName) {
 		int retval = -1;
 		
 		try {
@@ -100,7 +100,7 @@ public class FBTHelper {
 		return retval;
 	}
 
-	static public int getDIID(final FBType fbType, final String DIName) {
+	public static int getDIID(final FBType fbType, final String DIName) {
 		int retval = -1;
 		try {
 		for (Iterator<VarDeclaration> iterator = fbType.getInterfaceList().getInputVars().iterator(); iterator
@@ -118,7 +118,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public String getDIDataType(final FBType fbType, final int DIID) {
+	public static String getDIDataType(final FBType fbType, final int DIID) {
 		String retval = null;
 		
 		try {
@@ -131,7 +131,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public int getDOID(final FBType fbType, final String DOName) {
+	public static int getDOID(final FBType fbType, final String DOName) {
 		int retval = -1;
 		try {
 		for (Iterator<VarDeclaration> iterator = fbType.getInterfaceList().getOutputVars().iterator(); iterator
@@ -149,7 +149,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public String getDODataType(final FBType fbType, final int DOID) {
+	public static String getDODataType(final FBType fbType, final int DOID) {
 		String retval = null;
 		
 		try {
@@ -162,7 +162,7 @@ public class FBTHelper {
 		return retval;
 	}
 
-	static public String getDINameByIndex(final FBType fbType, final int index) {
+	public static String getDINameByIndex(final FBType fbType, final int index) {
 		String retval = null;
 		
 		try {
@@ -174,7 +174,7 @@ public class FBTHelper {
 		return retval;
 	}
 
-	static public String getDONameByIndex(final FBType fbType, final int index) {
+	public static String getDONameByIndex(final FBType fbType, final int index) {
 		String retval = null;
 		
 		try {
@@ -186,7 +186,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public String getEINameByIndex(final FBType fbType, final int index) {
+	public static String getEINameByIndex(final FBType fbType, final int index) {
 		String retval = null;
 		
 		try {
@@ -198,7 +198,7 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public String getEONameByIndex(final FBType fbType, final int index) {
+	public static String getEONameByIndex(final FBType fbType, final int index) {
 		String retval = null;
 		
 		try {
@@ -210,22 +210,15 @@ public class FBTHelper {
 		return retval;
 	}
 	
-	static public List<TestSequence> extractTestSequences(FBType fbType) {
-		
-		List<TestSequence> testSequences = new ArrayList<TestSequence>();
-		
-
-		for (int i=0; i<fbType.getService().getServiceSequence().size(); i++) {
-			ServiceSequence sq;
-			sq = fbType.getService().getServiceSequence().get(i);
-			
+	public static List<TestSequence> extractTestSequences(FBType fbType) {
+		List<TestSequence> testSequences = new ArrayList<>();
+		for (ServiceSequence sq : fbType.getService().getServiceSequence()) {
 			testSequences.add(extractTestSequence(fbType,sq));
-
 		}
 		return testSequences;
 	}
 	
-	static public TestSequence extractTestSequence(FBType fbType, ServiceSequence sq) {
+	public static TestSequence extractTestSequence(FBType fbType, ServiceSequence sq) {
 		TestSequence ts = new TestSequence();
 		ts.setName(sq.getName());
 		ts.setRelatedModelElement(sq);
@@ -237,15 +230,15 @@ public class FBTHelper {
 			tt.setRelatedModelElement(st);
 			if (null != st.getInputPrimitive()) {
 				String event = st.getInputPrimitive().getEvent();
-				Boolean inputQualifier=false;
+				boolean inputQualifier=false;
 				boolean useInputQualifier=false;
 				/** Evaluate Event-Data */
-				if (event.contains("-")) {
-					event = event.substring(0, event.indexOf("-"));
+				if (event.contains("-")) { //$NON-NLS-1$
+					event = event.substring(0, event.indexOf('-')); 
 					inputQualifier=false;
 					useInputQualifier=true;
-				} else if(event.contains("+")) {
-					event = event.substring(0, event.indexOf("+"));
+				} else if(event.contains("+")) { //$NON-NLS-1$
+					event = event.substring(0, event.indexOf('+'));
 					inputQualifier=true;
 					useInputQualifier=true;
 				}
@@ -258,11 +251,11 @@ public class FBTHelper {
 
 					if (useInputQualifier) {
 						String qiDT = null;
-						int qiID = FBTHelper.getDIID(fbType, "QI");
+						int qiID = FBTHelper.getDIID(fbType, "QI"); //$NON-NLS-1$
 
 						if (0<=qiID) {
 							qiDT = FBTHelper.getDIDataType(fbType, qiID);
-							DataVariable qi = new DataVariable("QI", qiID, qiDT, true, inputQualifier.toString() );
+							DataVariable qi = new DataVariable("QI", qiID, qiDT, true, Boolean.toString(inputQualifier)); //$NON-NLS-1$
 							tp.addData(qi);
 						}
 					}
@@ -272,11 +265,11 @@ public class FBTHelper {
 					//					String params = ;
 					//TODO extract input data
 					if (null != st.getInputPrimitive().getParameters()) {
-						String[] parameters = st.getInputPrimitive().getParameters().split(";");
+						String[] parameters = st.getInputPrimitive().getParameters().split(";"); //$NON-NLS-1$
 						for (String param : parameters) {
-							param = param.replace(" ", "");
-							param = param.replace("\t", "");
-							String[] left= param.split(":=");
+							param = param.replace(" ", ""); //$NON-NLS-1$ //$NON-NLS-2$
+							param = param.replace("\t", ""); //$NON-NLS-1$ //$NON-NLS-2$
+							String[] left= param.split(":="); //$NON-NLS-1$
 							if (left.length==2) {
 								String diDT = null;
 								int diID = FBTHelper.getDIID(fbType, left[0]);
@@ -293,21 +286,21 @@ public class FBTHelper {
 				} 
 			}
 			if (null != st.getOutputPrimitive()) {
-				if (st.getOutputPrimitive().size()>0) {
+				if (!st.getOutputPrimitive().isEmpty()) {
 					for (Iterator<OutputPrimitive> iterator = st.getOutputPrimitive().iterator(); iterator.hasNext();) {
 						OutputPrimitive op = iterator.next();
 						TestPrimitive tp = new TestPrimitive(null);
 						
 						String event = op.getEvent();
-						Boolean outputQualifier=false;
+						boolean outputQualifier=false;
 						boolean useOutputQualifier=false;
 						/** Evaluate Event-Data */
-						if (event.contains("-")) {
-							event = event.substring(0, event.indexOf("-"));
+						if (event.contains("-")) { //$NON-NLS-1$
+							event = event.substring(0, event.indexOf('-'));
 							outputQualifier=false;
 							useOutputQualifier=true;
-						} else if(event.contains("+")) {
-							event = event.substring(0, event.indexOf("+"));
+						} else if(event.contains("+")) { //$NON-NLS-1$
+							event = event.substring(0, event.indexOf('+'));
 							outputQualifier=true;
 							useOutputQualifier=true;
 						}
@@ -320,11 +313,11 @@ public class FBTHelper {
 
 							if (useOutputQualifier) {
 								String qoDT = null;
-								int qoID = FBTHelper.getDOID(fbType, "QO");
+								int qoID = FBTHelper.getDOID(fbType, "QO"); //$NON-NLS-1$
 
 								if (0<=qoID) {
 									qoDT = FBTHelper.getDODataType(fbType, qoID);
-									DataVariable qo = new DataVariable("QO", qoID, qoDT, false, outputQualifier.toString() );
+									DataVariable qo = new DataVariable("QO", qoID, qoDT, false, Boolean.toString(outputQualifier)); //$NON-NLS-1$
 									tp.addData(qo);
 								}
 							}
@@ -334,11 +327,11 @@ public class FBTHelper {
 						//					String params = ;
 						//TODO extract output data
 						if (null != op.getParameters()) {
-							String[] parameters = op.getParameters().split(";");
+							String[] parameters = op.getParameters().split(";"); //$NON-NLS-1$
 							for (String param : parameters) {
-								param = param.replace(" ", "");
-								param = param.replace("\t", "");
-								String[] left= param.split(":=");
+								param = param.replace(" ", ""); //$NON-NLS-1$ //$NON-NLS-2$
+								param = param.replace("\t", ""); //$NON-NLS-1$ //$NON-NLS-2$
+								String[] left= param.split(":="); //$NON-NLS-1$
 								if (left.length==2) {
 									String doDT = null;
 									int doID = FBTHelper.getDOID(fbType, left[0]);
@@ -366,13 +359,12 @@ public class FBTHelper {
 	public static int getMaxOutputPrimitives(List<TestSequence> paTests) {
 		int retval = 0;
 		
-		for (Iterator<TestSequence> TSiterator = paTests.iterator(); TSiterator.hasNext();) {
-			TestSequence TS = TSiterator.next();
-			if ((TS.getTestTransactions() != null) && (TS.getTestTransactions().size()>0)) {
-				for (Iterator<TestTransaction> TTiterator = TS.getTestTransactions().iterator(); TTiterator.hasNext();) {
-					TestTransaction TT = TTiterator.next();
-					if (null != TT.getOutputPrimitives()) {
-						retval = Math.max(retval, TT.getOutputPrimitives().size());
+		for (TestSequence ts : paTests) {
+			if ((ts.getTestTransactions() != null) && (!ts.getTestTransactions().isEmpty())) {
+				for (Iterator<TestTransaction> TTiterator = ts.getTestTransactions().iterator(); TTiterator.hasNext();) {
+					TestTransaction tt = TTiterator.next();
+					if (null != tt.getOutputPrimitives()) {
+						retval = Math.max(retval, tt.getOutputPrimitives().size());
 					}
 				}
 			}
@@ -382,5 +374,9 @@ public class FBTHelper {
 		return retval;
 		
 	}
+
 	
+	private FBTHelper() {
+		throw new UnsupportedOperationException("The class FBThelper should not be insantiated!");
+	}
 }

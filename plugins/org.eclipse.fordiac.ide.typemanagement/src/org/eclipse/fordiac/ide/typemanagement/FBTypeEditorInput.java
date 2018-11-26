@@ -32,26 +32,32 @@ public class FBTypeEditorInput implements IEditorInput {
 		this.entry = entry;
 	}
 
+	@Override
 	public boolean exists() {
 		return false;
 	}
 
+	@Override
 	public ImageDescriptor getImageDescriptor() {
 		return ImageDescriptor.getMissingImageDescriptor();
 	}
 
+	@Override
 	public String getName() {
 		return fbType.getName() == null ? "" : fbType.getName(); //$NON-NLS-1$
 	}
 
+	@Override
 	public IPersistableElement getPersistable() {
 		return null;
 	}
 
+	@Override
 	public String getToolTipText() {
 		return fbType.getComment() == null ? "" : fbType.getComment() + " (" + entry.getFile().getProjectRelativePath().toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
+	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object getAdapter(final Class adapter) {
 		return null;

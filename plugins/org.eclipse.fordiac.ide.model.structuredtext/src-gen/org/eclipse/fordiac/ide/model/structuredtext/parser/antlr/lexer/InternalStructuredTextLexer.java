@@ -6,9 +6,6 @@ import org.eclipse.xtext.parser.antlr.Lexer;
 
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 @SuppressWarnings("all")
 public class InternalStructuredTextLexer extends Lexer {
@@ -142,7 +139,8 @@ public class InternalStructuredTextLexer extends Lexer {
         super(input,state);
 
     }
-    public String getGrammarFileName() { return "InternalStructuredTextLexer.g"; }
+    @Override
+	public String getGrammarFileName() { return "InternalStructuredTextLexer.g"; }
 
     // $ANTLR start "LDATE_AND_TIME"
     public final void mLDATE_AND_TIME() throws RecognitionException {
@@ -6316,7 +6314,8 @@ public class InternalStructuredTextLexer extends Lexer {
     }
     // $ANTLR end "RULE_ANY_OTHER"
 
-    public void mTokens() throws RecognitionException {
+    @Override
+	public void mTokens() throws RecognitionException {
         // InternalStructuredTextLexer.g:1:8: ( LDATE_AND_TIME | DATE_AND_TIME | LTIME_OF_DAY | TIME_OF_DAY | END_REPEAT | END_WHILE | CONSTANT | CONTINUE | END_CASE | END_FOR | END_VAR | WSTRING | END_IF | REPEAT | RETURN | STRING | DWORD | ELSIF | FALSE | LDATE | LREAL | LTIME | LWORD | SUPER | UDINT | ULINT | UNTIL | USINT | WCHAR | WHILE | BOOL | BYTE | CASE | CHAR | DATE | DINT | ELSE | EXIT | LINT | LTOD | REAL | SINT | THEN | TIME | TRUE | UINT | WORD | AND | FOR | INT | LDT | MOD | NOT | TOD | VAR | XOR | AsteriskAsterisk | ColonEqualsSign | LessThanSignEqualsSign | LessThanSignGreaterThanSign | EqualsSignGreaterThanSign | GreaterThanSignEqualsSign | BY | DO | DT | IF | LD | LT | OF | OR | TO | Ms | Ns | Us | NumberSign | Ampersand | LeftParenthesis | RightParenthesis | Asterisk | PlusSign | Comma | HyphenMinus | FullStop | Solidus | Colon | Semicolon | LessThanSign | EqualsSign | GreaterThanSign | E | T | LeftSquareBracket | RightSquareBracket | KW__ | D_1 | H | M | S | RULE_ID | RULE_BINARY_INT | RULE_OCTAL_INT | RULE_HEX_INT | RULE_UNSIGNED_INT | RULE_S_BYTE_CHAR_STR | RULE_D_BYTE_CHAR_STR | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER )
         int alt22=109;
         alt22 = dfa22.predict(input);
@@ -7156,7 +7155,8 @@ public class InternalStructuredTextLexer extends Lexer {
             this.special = DFA14_special;
             this.transition = DFA14_transition;
         }
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "238:35: ( ' ' | '!' | '#' | '%' | '&' | '(' .. '/' | '0' .. '9' | ':' .. '@' | 'A' .. 'Z' | '[' .. '`' | 'a' .. 'z' | '{' .. '~' | '$$' | '$L' | '$N' | '$P' | '$R' | '$T' )";
         }
     }
@@ -7577,10 +7577,12 @@ public class InternalStructuredTextLexer extends Lexer {
             this.special = DFA22_special;
             this.transition = DFA22_transition;
         }
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "1:1: Tokens : ( LDATE_AND_TIME | DATE_AND_TIME | LTIME_OF_DAY | TIME_OF_DAY | END_REPEAT | END_WHILE | CONSTANT | CONTINUE | END_CASE | END_FOR | END_VAR | WSTRING | END_IF | REPEAT | RETURN | STRING | DWORD | ELSIF | FALSE | LDATE | LREAL | LTIME | LWORD | SUPER | UDINT | ULINT | UNTIL | USINT | WCHAR | WHILE | BOOL | BYTE | CASE | CHAR | DATE | DINT | ELSE | EXIT | LINT | LTOD | REAL | SINT | THEN | TIME | TRUE | UINT | WORD | AND | FOR | INT | LDT | MOD | NOT | TOD | VAR | XOR | AsteriskAsterisk | ColonEqualsSign | LessThanSignEqualsSign | LessThanSignGreaterThanSign | EqualsSignGreaterThanSign | GreaterThanSignEqualsSign | BY | DO | DT | IF | LD | LT | OF | OR | TO | Ms | Ns | Us | NumberSign | Ampersand | LeftParenthesis | RightParenthesis | Asterisk | PlusSign | Comma | HyphenMinus | FullStop | Solidus | Colon | Semicolon | LessThanSign | EqualsSign | GreaterThanSign | E | T | LeftSquareBracket | RightSquareBracket | KW__ | D_1 | H | M | S | RULE_ID | RULE_BINARY_INT | RULE_OCTAL_INT | RULE_HEX_INT | RULE_UNSIGNED_INT | RULE_S_BYTE_CHAR_STR | RULE_D_BYTE_CHAR_STR | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER );";
         }
-        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+        @Override
+		public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;
         	int _s = s;
             switch ( s ) {

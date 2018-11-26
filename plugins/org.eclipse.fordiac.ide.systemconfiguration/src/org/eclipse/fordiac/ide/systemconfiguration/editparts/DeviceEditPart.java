@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -172,6 +173,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		return new DeviceFigure();
 	}
 
+	@Override
 	protected void backgroundColorChanged(IFigure figure) {
 		// TODO model refactoring - default value for colors if not persisted
 		org.eclipse.fordiac.ide.model.libraryElement.Color fordiacColor = getModel().getColor();
@@ -208,6 +210,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		private Figure dataInputs = new Figure();
 		private Figure contentPane;
 
+		@Override
 		public int getIntersectionStyle(Point location) {
 			if (instanceNameLabel.intersects(new Rectangle(location, new Dimension(1, 1)))) {
 				return InteractionStyleFigure.REGION_DRAG; // move/drag
@@ -216,21 +219,22 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		}
 
 		private RoundedRectangle bottom = new RoundedRectangle(){
-				protected void fillShape(Graphics graphics){
-					Display display=Display.getCurrent();
-					Rectangle boundingRect = getBounds().getCopy();
-					boundingRect.scale(zoomManager.getZoom());
-					Point topLeft = boundingRect.getTopLeft();
-					Point bottomRight = boundingRect.getBottomRight();
-					Color first=ColorHelper.lighter(getBackgroundColor());
-					Pattern pattern = new Pattern(display,topLeft.x,topLeft.y,bottomRight.x,bottomRight.y,first,getBackgroundColor());
-					graphics.setBackgroundPattern(pattern);
-					graphics.fillRoundRectangle(getBounds(),getCornerDimensions().width,getCornerDimensions().height);
-					graphics.setBackgroundPattern(null);
-					pattern.dispose();
-					first.dispose();
-				}
-			};
+			@Override	
+			protected void fillShape(Graphics graphics){
+				Display display=Display.getCurrent();
+				Rectangle boundingRect = getBounds().getCopy();
+				boundingRect.scale(zoomManager.getZoom());
+				Point topLeft = boundingRect.getTopLeft();
+				Point bottomRight = boundingRect.getBottomRight();
+				Color first=ColorHelper.lighter(getBackgroundColor());
+				Pattern pattern = new Pattern(display,topLeft.x,topLeft.y,bottomRight.x,bottomRight.y,first,getBackgroundColor());
+				graphics.setBackgroundPattern(pattern);
+				graphics.fillRoundRectangle(getBounds(),getCornerDimensions().width,getCornerDimensions().height);
+				graphics.setBackgroundPattern(null);
+				pattern.dispose();
+				first.dispose();
+			}
+		};
 
 			public DeviceFigure() {
 				setBackgroundColor(ColorConstants.white);
@@ -368,7 +372,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	@SuppressWarnings("unchecked")
 	@Override
 	protected List<?> getModelTargetConnections() {
-		ArrayList<Object> connections = new ArrayList<Object>();
+		List<Object> connections = new ArrayList<>();
 		connections.addAll(getModel().getInConnections());
 		connections.addAll(super.getModelTargetConnections());
 		return connections;

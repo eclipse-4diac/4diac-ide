@@ -52,6 +52,7 @@ public class FBRTPreferencePage
 	 * of preferences. Each field editor knows how to save and
 	 * restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 		addField(new FileFieldEditor(PreferenceConstants.P_PATH, 
 				"&FBRT location (fbrt.jar):", getFieldEditorParent()));
@@ -62,6 +63,7 @@ public class FBRTPreferencePage
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 	}
 	

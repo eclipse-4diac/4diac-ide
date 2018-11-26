@@ -20,7 +20,7 @@ import org.eclipse.ui.IMemento;
 public class SubApplicationEditorInput extends PersistableUntypedEditorInput {
 
 	public SubApplicationEditorInput(SubApp subApp) {
-		super(subApp, subApp.getName(), subApp.getName());
+		super(subApp, subApp.getName());
 	}
 	
 	@Override

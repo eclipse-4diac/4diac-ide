@@ -29,11 +29,11 @@ public interface IConnectionRouterFactory {
 	 * 
 	 * @return the connection router
 	 */
-	public ConnectionRouter getConnectionRouter(IFigure container);
+	ConnectionRouter getConnectionRouter(IFigure container);
 	
 	/**
 	 * Creates the Connectionfigure for this router which needs to be a PolylineConnection.
 	 */
-	public PolylineConnection createConnectionFigure();
+	PolylineConnection createConnectionFigure();
 
 }

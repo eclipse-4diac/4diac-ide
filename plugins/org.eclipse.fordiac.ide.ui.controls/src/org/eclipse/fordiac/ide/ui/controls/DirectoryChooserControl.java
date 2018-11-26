@@ -14,12 +14,11 @@ package org.eclipse.fordiac.ide.ui.controls;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -35,14 +34,8 @@ import org.eclipse.swt.widgets.Text;
  */
 public class DirectoryChooserControl extends Composite {
 
-	/** The c label. */
-	private CLabel cLabel = null;
-
 	/** The text. */
 	private Text text = null;
-
-	/** The button. */
-	private Button button = null;
 
 	/** The label text. */
 	private final String labelText;
@@ -73,7 +66,7 @@ public class DirectoryChooserControl extends Composite {
 		gridLayout.numColumns = 3;
 		gridLayout.marginHeight = 5;
 		gridLayout.marginWidth = 0;
-		cLabel = new CLabel(this, SWT.NONE);
+		CLabel cLabel = new CLabel(this, SWT.NONE);
 		if (useLabel) {
 			cLabel.setText(this.labelText);
 		} else {
@@ -81,7 +74,7 @@ public class DirectoryChooserControl extends Composite {
 		}
 		text = new Text(this, SWT.BORDER);
 		text.setLayoutData(gridData);
-		button = new Button(this, SWT.NONE);
+		Button button = new Button(this, SWT.NONE);
 		button.setText(Messages.DirectoryChooserControl_LABEL_Browse);
 		button
 				.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
@@ -105,28 +98,16 @@ public class DirectoryChooserControl extends Composite {
 						if (selectedDirectory != null) {
 							text.setText(selectedDirectory);
 							notifyDirectoryListeners();
-							// validateInput();
 						}
 
 					}
 				});
 
-		text.addTraverseListener(new TraverseListener() {
-
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.eclipse.swt.events.TraverseListener#keyTraversed(org.eclipse
-			 * .swt.events.TraverseEvent)
-			 */
-			public void keyTraversed(TraverseEvent e) {
-				if (e.detail == SWT.TRAVERSE_RETURN) {
-					e.doit = false;
-					notifyDirectoryListeners();
-				}
+		text.addTraverseListener(e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN) {
+				e.doit = false;
+				notifyDirectoryListeners();
 			}
-
 		});
 
 		text.addFocusListener(new FocusAdapter() {
@@ -146,11 +127,10 @@ public class DirectoryChooserControl extends Composite {
 		});
 
 		this.setLayout(gridLayout);
-		// setSize(new org.eclipse.swt.graphics.Point(300,27));
 	}
 
 	/** The listeners. */
-	ArrayList<IDirectoryChanged> listeners = new ArrayList<IDirectoryChanged>();
+	private List<IDirectoryChanged> listeners = new ArrayList<>();
 
 	/**
 	 * Adds the directory changed listener.

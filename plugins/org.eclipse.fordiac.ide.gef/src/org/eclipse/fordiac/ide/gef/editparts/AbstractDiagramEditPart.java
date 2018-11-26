@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.ConnectionLayer;
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
@@ -42,7 +41,6 @@ import org.eclipse.jface.util.PropertyChangeEvent;
  */
 public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart {
 
-
 	/**
 	 * Creates the <code>Figure</code> to be used as this part's <i>visuals</i>.
 	 * 
@@ -52,16 +50,14 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	 */
 	@Override
 	protected IFigure createFigure() {
-		Figure f = new FreeformLayer();
-		f.setBorder(new MarginBorder(10));
-		f.setLayoutManager(new FreeformLayout());
-		f.setOpaque(false);
+		IFigure newFigure = new FreeformLayer();
+		newFigure.setBorder(new MarginBorder(10));
+		newFigure.setLayoutManager(new FreeformLayout());
+		newFigure.setOpaque(false);
 		
-		// Create the static router for the connection layer
-		ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
-		connLayer.setConnectionRouter(RouterUtil.getConnectionRouter(f));
+		updateRouter(newFigure);
 
-		return f;
+		return newFigure;
 	}
 
 	/*
@@ -80,8 +76,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	private void updateRuler() {
 		getViewer().setProperty(
 				RulerProvider.PROPERTY_RULER_VISIBILITY,
-				Activator.getDefault().getPreferenceStore()
-						.getBoolean(DiagramPreferences.SHOW_RULERS));
+				Boolean.valueOf(Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_RULERS)));
 	}
 
 	/*
@@ -125,9 +120,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	protected void showGrid() {
 		getViewer().setProperty(
 				SnapToGrid.PROPERTY_GRID_VISIBLE,
-				new Boolean(Activator.getDefault().getPreferenceStore()
-						.getBoolean(DiagramPreferences.SHOW_GRID)));
-
+				Boolean.valueOf(Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_GRID)));
 	}
 
 	private IPropertyChangeListener listener;
@@ -140,6 +133,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	public IPropertyChangeListener getPreferenceChangeListener() {
 		if (listener == null) {
 			listener = new IPropertyChangeListener() {
+				@Override
 				public void propertyChange(final PropertyChangeEvent event) {
 					if (event.getProperty().equals(
 							DiagramPreferences.SNAP_TO_GRID)) {
@@ -160,7 +154,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 					}
 					if (event.getProperty().equals(
 							DiagramPreferences.CONNECTION_ROUTER)) {
-						updateRouter();
+						updateRouter(getFigure());
 					}
 				}
 			};
@@ -168,10 +162,10 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		return listener;
 	}
 
-	protected void updateRouter() {
+	
+	protected void updateRouter(IFigure figure) {
 		ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
-		connLayer.setConnectionRouter(RouterUtil
-				.getConnectionRouter(getFigure()));
+		connLayer.setConnectionRouter(RouterUtil.getConnectionRouter(figure));
 	}
 
 	protected void updateGrid() {

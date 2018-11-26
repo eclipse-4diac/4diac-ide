@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2017 fortiss GmbH
+ * Copyright (c) 2015 - 2018 fortiss GmbH, Johannes Kepler University
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +8,7 @@
  *
  * Contributors:
  *   Gerd Kainz, Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring   
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
@@ -18,13 +20,13 @@ import java.util.Set;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart;
@@ -115,7 +117,7 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 		return foundElements;
 	}
 
-	static private Set<IInterfaceElement> getWatchedIfElementsForFB(MonitoringManager manager,
+	private static Set<IInterfaceElement> getWatchedIfElementsForFB(MonitoringManager manager,
 			FBNetworkElement model) {
 		Set<IInterfaceElement> foundElements = new HashSet<>();
 		for (IInterfaceElement element : model.getInterface().getAllInterfaceElements()) {
@@ -135,7 +137,7 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 		return foundElements;
 	}
 	
-	static private void removeMonitoringElement(MonitoringManager manager, IInterfaceElement port) {	
+	private static void removeMonitoringElement(MonitoringManager manager, IInterfaceElement port) {	
 		MonitoringBaseElement element = manager.getMonitoringElement(port);
 
 		if (element instanceof MonitoringAdapterElement) {

@@ -150,6 +150,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * <!-- end-user-doc -->
 	 * @generated not
 	 */
+	@Override
 	public PaletteGroup getRootGroup() {
 		PaletteGroup root = getRootGroupGen();
 		
@@ -192,6 +193,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRootGroup(PaletteGroup newRootGroup) {
 		if (newRootGroup != rootGroup) {
 			NotificationChain msgs = null;
@@ -212,6 +214,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IProject getProject() {
 		return project;
 	}
@@ -221,6 +224,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProject(IProject newProject) {
 		IProject oldProject = project;
 		project = newProject;
@@ -233,6 +237,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AutomationSystem getAutomationSystem() {
 		if (automationSystem != null && automationSystem.eIsProxy()) {
 			InternalEObject oldAutomationSystem = (InternalEObject)automationSystem;
@@ -274,6 +279,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAutomationSystem(AutomationSystem newAutomationSystem) {
 		if (newAutomationSystem != automationSystem) {
 			NotificationChain msgs = null;
@@ -293,6 +299,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PaletteEntry getTypeEntry(final String typeName) {
 		PaletteEntry entry = null;
 		//TODO reconsider when namespaces are coming how to retrieve the type
@@ -420,8 +427,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (project: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (project: "); //$NON-NLS-1$
 		result.append(project);
 		result.append(')');
 		return result.toString();
@@ -434,6 +441,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 *          - the eclipse resource file representation
 	 * @return the newly created PaletteEntry
 	 */
+	@Override
 	public PaletteEntry createFBTypeEntry(final IFile file, PaletteGroup parent) {
 		FBTypePaletteEntry entry = PaletteFactory.eINSTANCE
 				.createFBTypePaletteEntry();
@@ -442,12 +450,14 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	}	
 	
 
+	@Override
 	public PaletteEntry createDeviceEntry(IFile file, PaletteGroup parent){
 		DeviceTypePaletteEntry entry = PaletteFactory.eINSTANCE.createDeviceTypePaletteEntry();
 		configurePaletteEntry(entry, file, parent);
 		return entry;
 	}
 	
+	@Override
 	public PaletteEntry createResourceTypeEntry(final IFile file, PaletteGroup parent) {
 		ResourceTypeEntry entry = PaletteFactory.eINSTANCE
 				.createResourceTypeEntry();
@@ -455,6 +465,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return entry;
 	}
 	
+	@Override
 	public PaletteEntry createSegmentTypeEntry(final IFile file, PaletteGroup parent) {
 		SegmentTypePaletteEntry entry = PaletteFactory.eINSTANCE
 				.createSegmentTypePaletteEntry();
@@ -462,12 +473,14 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return entry;
 	}
 	
+	@Override
 	public PaletteEntry createAdapterEntry(IFile file, PaletteGroup parent){
 		AdapterTypePaletteEntry entry = PaletteFactory.eINSTANCE.createAdapterTypePaletteEntry();
 		configurePaletteEntry(entry, file, parent);
 		return entry;
 	}
 	
+	@Override
 	public PaletteEntry createSubApplicationEntry(IFile file, PaletteGroup parent){
 		SubApplicationTypePaletteEntry entry = PaletteFactory.eINSTANCE.createSubApplicationTypePaletteEntry();
 		configurePaletteEntry(entry, file, parent);
@@ -492,6 +505,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 *          - the name of the new paletteGroup
 	 * @return pGroup - the new created group, or null if no name has been given
 	 */
+	@Override
 	public PaletteGroup createGroup(final PaletteGroup parent,
 			final String groupName) {
 		if (groupName != null) {
@@ -504,6 +518,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	}
 	
 	
+	@Override
 	public PaletteGroup createGroupWithFolder(final PaletteGroup parent, final String groupName){
 		PaletteGroup pGroup = createGroup(parent, groupName);
 		
@@ -538,6 +553,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * @param createDir - create the directory if the group has to be created 
 	 * @return group - the group that is indicated in the path name
 	 */
+	@Override
 	public PaletteGroup getGroup(final List<String> path, boolean createDir) {
 		String dirName = null;
 		PaletteGroup group = getRootGroup();
@@ -599,6 +615,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	}
 
+	@Override
 	public boolean removeGroups(final List<PaletteGroup> groups) {
 		for (Iterator<PaletteGroup> iterator = groups.iterator(); iterator
 				.hasNext();) {
@@ -611,6 +628,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return false;
 	}
 
+	@Override
 	public List<PaletteGroup> getAllGroups(final PaletteGroup group) {
 		List<PaletteGroup> temp = new ArrayList<PaletteGroup>();
 		temp.addAll(group.getSubGroups());
@@ -621,6 +639,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return temp;
 	}
 
+	@Override
 	public List<PaletteGroup> getAllParentGroups(final PaletteGroup group) {
 		List<PaletteGroup> temp = new ArrayList<PaletteGroup>();
 		PaletteGroup parent = group.getParentGroup();
@@ -638,6 +657,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 *          - the name of the FBType searched for
 	 * @return types - a list containing all occurences of FBType in the Palette
 	 */
+	@Override
 	public List<FBType> getFBTypes(final String typeName) {
 		return checkGroupsForFBType(getRootGroup(), typeName);
 	}
@@ -650,10 +670,12 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * @return types - a list containing all occurrences of PaletteEntries in the
 	 *         Palette
 	 */
+	@Override
 	public List<PaletteEntry> getTypeEntries(final String typeName) {
 		return checkGroupsForFBTypeEntries(getRootGroup(), typeName);
 	}
 
+	@Override
 	public PaletteEntry getTypeEntryForPath(String typePath, String typeEnding){
 		
 		//TODO similar code is in TypeLibrary.getTargetGroup(...);
@@ -686,6 +708,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return group.getEntry(TypeLibrary.getTypeNameFromFileName(path[path.length - 1]));
 	}
 
+	@Override
 	public PaletteGroup findGroup(final List<String> path) {
 		String dirName = null;
 		PaletteGroup group = getRootGroup();

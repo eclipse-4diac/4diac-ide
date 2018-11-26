@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2010, 2012, 2013, 2016, 2017 Profactor GbmH, fortiss GmbH
+ *   , 2018 TU Vienna/ACIN
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians
+ *     - makes ctor private and class final
  *******************************************************************************/
 package org.eclipse.fordiac.ide.util;
 
@@ -19,7 +22,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 
-public class ColorHelper {
+public final class ColorHelper {
+	
+	private ColorHelper() {
+		
+	}
 
 	private static final float VALUE_MULTIPLIER = 0.6f;
 
@@ -28,7 +35,7 @@ public class ColorHelper {
 	}
 	
 	public static Color transformColorLightness(Color original, double scale) {
-		double hsl[] = rgbToHSL(original.getRGB());
+		double[] hsl = rgbToHSL(original.getRGB());
 		hsl[2] = Math.min(1.0, hsl[2] * scale);
 		return new Color(null, hslToRGB(hsl));
 	}
@@ -53,7 +60,7 @@ public class ColorHelper {
 		double max = Math.max(Math.max(r, g), b);
 		double min = Math.min(Math.min(r, g), b);
 		
-		double hsl[] = new double[]{0, 0, (max + min)/2 };
+		double[] hsl = new double[]{0, 0, (max + min)/2 };
 		
 		if(max != min){
 			//we are not just grey
@@ -134,7 +141,7 @@ public class ColorHelper {
 		return (int)(255.0 * retVal);
 	}
 
-	private static double golden_ratio_conjugate = 0.618033988749895;
+	private static final double GOLDEN_RATIO_CONJUGATE = 0.618033988749895;
 	private static Random rand = new Random(System.currentTimeMillis());
 	private static double h = rand.nextDouble(); // static to get different colors
 	
@@ -149,13 +156,12 @@ public class ColorHelper {
 	}
 	
 	public static RGB createRandomColor(float s, float v) {
-		h += golden_ratio_conjugate;
+		h += GOLDEN_RATIO_CONJUGATE;
 		h %= 1;
 		
 		s += (rand.nextDouble() * 0.5 - 0.25 );
 		v += (rand.nextDouble() * 0.2 - 0.1 );
 		
-		//return hsvToRGB(h, s,v);
 		return new RGB((float)(h * 360.0), s, v);
 	}
 	

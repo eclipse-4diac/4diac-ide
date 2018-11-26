@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.NameRepository;
@@ -90,8 +92,8 @@ public class ResourceCreateCommand extends Command {
 
 	//TODO model refactoring - Can this also be used for the resoruce parsing?
 	public void createResourceTypeNetwork(final Resource resource,  final ResourceType type, final FBNetwork resourceFBNetwork) {
-		Hashtable<String, Event> events = new Hashtable<>();
-		Hashtable<String, VarDeclaration> varDecls = new Hashtable<>();
+		Map<String, Event> events = new HashMap<>();
+		Map<String, VarDeclaration> varDecls = new HashMap<>();
 		for (FBNetworkElement element : type.getFBNetwork().getNetworkElements()) {
 			FB copy = LibraryElementFactory.eINSTANCE.createResourceTypeFB();
 			resource.getFBNetwork().getNetworkElements().add(copy);
@@ -130,9 +132,6 @@ public class ResourceCreateCommand extends Command {
 				eventCopy.setName(event.getName());
 				eventCopy.setComment(event.getComment());
 				eventCopy.setIsInput(event.isIsInput());
-				if (event.getValue() != null) {
-					eventCopy.setValue(EcoreUtil.copy(event.getValue()));
-				}
 				events.put(element.getName() + "." + event.getName(), eventCopy); //$NON-NLS-1$
 				interfaceList.getEventInputs().add(eventCopy);
 			}
@@ -141,9 +140,6 @@ public class ResourceCreateCommand extends Command {
 				eventCopy.setName(event.getName());
 				eventCopy.setComment(event.getComment());
 				eventCopy.setIsInput(event.isIsInput());
-				if (event.getValue() != null) {
-					eventCopy.setValue(EcoreUtil.copy(event.getValue()));
-				}
 				events.put(element.getName() + "." + event.getName(), eventCopy); //$NON-NLS-1$
 				interfaceList.getEventOutputs().add(eventCopy);
 			}
@@ -187,7 +183,7 @@ public class ResourceCreateCommand extends Command {
 					var.setName(dataCon.getSource().getName());
 					var.setIsInput(true);
 					Value value = LibraryElementFactory.eINSTANCE.createValue();
-					value.setValue(dataCon.getDataSource().getVarInitialization().getInitialValue());
+					value.setValue(dataCon.getDataSource().getValue().getValue());
 					var.setValue(value);
 					device.getVarDeclarations().add(var);
 				}

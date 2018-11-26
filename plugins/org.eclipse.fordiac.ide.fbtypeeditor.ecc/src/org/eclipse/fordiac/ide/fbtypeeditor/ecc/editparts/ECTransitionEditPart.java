@@ -48,7 +48,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.util.STStringTokenHandling;
 import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -153,24 +152,11 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 								&& (notification.getOldValue() instanceof AdapterDeclaration) && (((AdapterEvent) getCastedModel()
 								.getConditionEvent()).getAdapterDeclaration() == notification
 								.getOldValue()))) {
-					AbstractDirectEditableEditPart.executeCommand(new ChangeConditionEventCommand(
-									getCastedModel(), "")); //$NON-NLS-1$
+					AbstractDirectEditableEditPart.executeCommand(new ChangeConditionEventCommand(getCastedModel(), "")); //$NON-NLS-1$
 				}
 			} else if (notification.getEventType() == Notification.SET) {
 				if (null != getCastedModel().getConditionEvent()) {
-					if (notification.getNewValue() instanceof String) {
-						if (getCastedModel().getConditionEvent().getName().equals(notification.getNewValue())) {
-							super.notifyChanged(notification);
-							refresh();
-						} else if ((getCastedModel().getConditionEvent() instanceof AdapterEvent)
-								&& (((AdapterEvent) getCastedModel()
-										.getConditionEvent())
-										.getAdapterDeclaration().getName()
-										.equals(notification.getNewValue()))) {
-							super.notifyChanged(notification);
-							refresh();
-						}
-					}
+					handleCondiationEventUpdate(notification);
 				}
 
 				if (notification.getNotifier() instanceof VarDeclaration) {
@@ -179,26 +165,31 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 		}
 
-		private void checkConditionExpresion(Notification notification) {
+		private void handleCondiationEventUpdate(Notification notification) {
 			if (notification.getNewValue() instanceof String) {
-
-				Object feature = notification.getFeature();
-
-				if (LibraryElementPackage.eINSTANCE.getINamedElement_Name()
-						.equals(feature)) {
-
-					if (null != getCastedModel().getConditionExpression()) {
-						if (-1 != getCastedModel().getConditionExpression().indexOf(notification.getOldStringValue())) {
-							String expresion = STStringTokenHandling.replaceSTToken(getCastedModel().getConditionExpression(),
-									notification.getOldStringValue(), notification.getNewStringValue());
-							getCastedModel().setConditionExpression(expresion);
-							refresh();
-						}
-					}
+				String newValue = (String)notification.getNewValue();
+				if ((getCastedModel().getConditionEvent().getName().equals(newValue)) ||
+						((getCastedModel().getConditionEvent() instanceof AdapterEvent) && 
+								(((AdapterEvent) getCastedModel().getConditionEvent()).getAdapterDeclaration().getName().equals(newValue)))) {
+					super.notifyChanged(notification);
+					refresh();
 				}
 			}
 		}
 
+		private void checkConditionExpresion(Notification notification) {
+			if (notification.getNewValue() instanceof String) {
+				Object feature = notification.getFeature();
+				if ((LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) && 
+						(null != getCastedModel().getConditionExpression()) && 
+						(-1 != getCastedModel().getConditionExpression().indexOf(notification.getOldStringValue()))) {
+					String expresion = STStringTokenHandling.replaceSTToken(getCastedModel().getConditionExpression(),
+							notification.getOldStringValue(), notification.getNewStringValue());
+					getCastedModel().setConditionExpression(expresion);
+					refresh();
+				}
+			}
+		}
 	};
 
 	/**
@@ -241,7 +232,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 			@Override
 			public Command getCommand(Request request) {
-				if (RequestConstants.REQ_MOVE.equals(request.getType())) {
+				if (RequestConstants.REQ_MOVE.equals(request.getType()) && request instanceof ChangeBoundsRequest) {
 					return getTransitionMoveCommand((ChangeBoundsRequest) request);
 				}
 				return null;
@@ -253,8 +244,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 			}
 
-			protected Command getTransitionMoveCommand(
-					ChangeBoundsRequest request) {
+			private Command getTransitionMoveCommand(ChangeBoundsRequest request) {
 
 				Point p = new Point(getCastedModel().getX(), getCastedModel().getY());
 				p.x += request.getMoveDelta().x;
@@ -264,19 +254,10 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 
 			@Override
-			protected EditPolicy createChildEditPolicy(EditPart child) {
-				return null;
-			}
-
-			@Override
 			protected Command getCreateCommand(CreateRequest request) {
 				return null;
 			}
-
-			@Override
-			protected Command getMoveChildrenCommand(Request request) {
-				return null;
-			}
+			
 		});
 	}
 
@@ -310,7 +291,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		updateOrderLabel();
 
 		AbsoluteBendpoint ab = new AbsoluteBendpoint(getCastedModel().getX(), getCastedModel().getY());
-		List<Bendpoint> bendPoints = new ArrayList<Bendpoint>();
+		List<Bendpoint> bendPoints = new ArrayList<>();
 		bendPoints.add(ab);
 
 		getConnectionFigure().getConnectionRouter().setConstraint(
@@ -352,6 +333,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 		ConnectionLocator constraintLocator = new ConnectionLocator(connection,
 				ConnectionLocator.MIDDLE) {
+			@Override
 			protected Point getReferencePoint() {
 				
 				Path path = new Path(null);
@@ -437,6 +419,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		}
 	}
 
+	@Override
 	public DragTracker getDragTracker(Request request) {
 		return new org.eclipse.gef.tools.DragEditPartsTracker(this) {
 

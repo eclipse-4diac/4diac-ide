@@ -69,6 +69,7 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Subrange getSubrange() {
 		return subrange;
 	}
@@ -93,6 +94,7 @@ public class SubrangeTypeImpl extends DerivedTypeImpl implements SubrangeType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSubrange(Subrange newSubrange) {
 		if (newSubrange != subrange) {
 			NotificationChain msgs = null;

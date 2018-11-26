@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2014, 2017 Profactor GmbH, fortiss GmbH
+ * 				 2018 Johannes Keppler University
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl 
  *       - initial API and implementation and/or initial documentation
+ *  Alois Zoitl - Refactored class hierarchy of xml exporters  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
@@ -31,11 +33,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-class FBNetworkExporter {
-	private final Document dom;
+class FBNetworkExporter extends CommonElementExporter{
+	
 
 	FBNetworkExporter(Document dom) {
-		this.dom = dom;
+		super(dom);
 	}
 	
 	
@@ -47,7 +49,7 @@ class FBNetworkExporter {
 			elementName = LibraryElementTags.FBNETWORK_ELEMENT;
 		}
 		
-		Element fbNetworkElement = dom.createElement(elementName); 
+		Element fbNetworkElement = createElement(elementName); 
 		
 		addFBNetworkElements(fbNetworkElement, fbNetwork);
 		addConnections(fbNetworkElement, fbNetwork.getDataConnections(), LibraryElementTags.DATA_CONNECTIONS_ELEMENT, fbNetwork);
@@ -62,13 +64,13 @@ class FBNetworkExporter {
 		for (FBNetworkElement element : network.getNetworkElements()) {			
 			Element fbElement = createFNElementDomNode(element);
 			if(null != fbElement){				
-				CommonElementExporter.setNameAttribute(fbElement, element.getName());
+				setNameAttribute(fbElement, element.getName());
 				if(null != element.getType()){
-					CommonElementExporter.setTypeAttribute(fbElement, element.getType());
+					setTypeAttribute(fbElement, element.getType());
 				}
-				CommonElementExporter.setCommentAttribute(fbElement, element);					
-				CommonElementExporter.exportXandY(element, fbElement);					
-				CommonElementExporter.addParamsConfig(dom, fbElement, element.getInterface().getInputVars());
+				setCommentAttribute(fbElement, element);					
+				exportXandY(element, fbElement);					
+				addParamsConfig(fbElement, element.getInterface().getInputVars());
 				fbNetwork.appendChild(fbElement);
 			}
 		}
@@ -77,10 +79,10 @@ class FBNetworkExporter {
 	private Element createFNElementDomNode(FBNetworkElement element) {
 		if (!(element.getType() instanceof AdapterFBType)) {
 			if((element instanceof FB) && !(element instanceof ResourceTypeFB)) {				
-				return dom.createElement(LibraryElementTags.FB_ELEMENT);
+				return createElement(LibraryElementTags.FB_ELEMENT);
 			}
 			if(element instanceof SubApp){
-				Element subAppElement = dom.createElement(LibraryElementTags.SUBAPP_ELEMENT); 
+				Element subAppElement = createElement(LibraryElementTags.SUBAPP_ELEMENT); 
 				if(null == ((SubApp)element).getType()){
 					//we have an untyped subapp therefore add the subapp contents to it
 					createUntypedSubAppcontents(subAppElement, (SubApp)element);
@@ -92,17 +94,17 @@ class FBNetworkExporter {
 	}
 	
 	private void createUntypedSubAppcontents(Element subAppElement, SubApp element) {
-		new SubApplicationTypeExporter().addInterfaceList(dom, subAppElement, element.getInterface());	
+		new SubApplicationTypeExporter(getDom()).addInterfaceList(subAppElement, element.getInterface());	
 		if(null != element.getSubAppNetwork()){
 			//if mapped the subapp may be empty
-			subAppElement.appendChild(new FBNetworkExporter(dom).createFBNetworkElement(element.getSubAppNetwork()));
+			subAppElement.appendChild(new FBNetworkExporter(getDom()).createFBNetworkElement(element.getSubAppNetwork()));
 		}
 	}
 
 
 	private void addConnections(final Element fbNetworkElement, final List<? extends Connection> connections, 
 			final String connectionElementName, FBNetwork fbNetwork) {
-		Element connectionList = dom.createElement(connectionElementName);
+		Element connectionList = createElement(connectionElementName);
 		for (Connection connection : connections) {
 			addConnection(connectionList, connection, fbNetwork);
 		}
@@ -113,7 +115,7 @@ class FBNetworkExporter {
 	}
 
 	private void addConnection(final Element connectionsContainer, final Connection connection, FBNetwork fbNetwork) {
-		Element connectionElement = dom.createElement(LibraryElementTags.CONNECTION_ELEMENT);
+		Element connectionElement = createElement(LibraryElementTags.CONNECTION_ELEMENT);
 		if (connection.getSource() != null
 				&& connection.getSource().eContainer() instanceof InterfaceList) {
 			connectionElement.setAttribute(LibraryElementTags.SOURCE_ATTRIBUTE, 
@@ -125,7 +127,7 @@ class FBNetworkExporter {
 			connectionElement.setAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE, 
 					getConnectionEndpointIdentifier(connection.getDestination(), fbNetwork));
 		} 
-		CommonElementExporter.setCommentAttribute(connectionElement, connection);
+		setCommentAttribute(connectionElement, connection);
 		setConnectionCoordinates(connection, connectionElement);
 		connectionsContainer.appendChild(connectionElement);
 	}
@@ -144,12 +146,18 @@ class FBNetworkExporter {
 
 	private static void setConnectionCoordinates(
 			final Connection connection, Element connectionElement) {
-		connectionElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE,
-				CommonElementExporter.reConvertCoordinate(connection.getDx1()).toString());
-		connectionElement.setAttribute(LibraryElementTags.DX2_ATTRIBUTE,
-				CommonElementExporter.reConvertCoordinate(connection.getDx2()).toString());
-		connectionElement.setAttribute(LibraryElementTags.DY_ATTRIBUTE,
-				CommonElementExporter.reConvertCoordinate(connection.getDy()).toString());
+		if(0 != connection.getDx1()) {
+			//only export connection routing information if not a straight line
+			connectionElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE,
+					reConvertCoordinate(connection.getDx1()).toString());
+			if(0 != connection.getDx2()) {
+				//only export the second two if a five segment connection
+				connectionElement.setAttribute(LibraryElementTags.DX2_ATTRIBUTE,
+						reConvertCoordinate(connection.getDx2()).toString());
+				connectionElement.setAttribute(LibraryElementTags.DY_ATTRIBUTE,
+						reConvertCoordinate(connection.getDy()).toString());
+			}
+		}
 	}
 
 }

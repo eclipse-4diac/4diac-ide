@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.properties;
 
+import org.eclipse.fordiac.ide.gef.properties.AbstractDevResInterfaceSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart;
 

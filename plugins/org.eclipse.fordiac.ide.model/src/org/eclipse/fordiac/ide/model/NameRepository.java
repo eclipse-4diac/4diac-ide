@@ -40,7 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 
-public class NameRepository {
+public final class NameRepository {
 
 
 	private static final Set<String> RESERVED_KEYWORDS =
@@ -176,7 +176,7 @@ public class NameRepository {
 	 * @param nameProposal a proposal for a name as starting point
 	 * @return a unique name
 	 */
-	static private String getUniqueName(Set<String> existingNameList, String nameProposal){
+	private static String getUniqueName(Set<String> existingNameList, String nameProposal){
 		String temp = nameProposal;
 		
 		int i = 1;

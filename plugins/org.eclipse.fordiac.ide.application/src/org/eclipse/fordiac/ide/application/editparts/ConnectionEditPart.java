@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
@@ -22,12 +22,12 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
+import org.eclipse.fordiac.ide.application.policies.ConnectionGraphicalNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DisableConnectionHandleRoleEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
-import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.gef.router.RouterUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -56,51 +56,26 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		return (Connection) super.getModel();
 	}
 
-	@Override
-	public void setSelected(int value) {
-		super.setSelected(value);
-	}
-
 	private final IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
-			if (event.getProperty().equals(
-				PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
-				&& getModel() instanceof EventConnection) {
-				getFigure()
-								.setForegroundColor(
-										PreferenceGetter
-												.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
-					}
-					if (event.getProperty().equals(
-							PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)
-							&& getModel() instanceof AdapterConnection) {
-						getFigure()
-								.setForegroundColor(
-										PreferenceGetter
-												.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
-					}
-					if (event.getProperty().equals(
-							PreferenceConstants.P_DATA_CONNECTOR_COLOR)
-							&& getModel() instanceof DataConnection) {
-						getFigure()
-								.setForegroundColor(
-										PreferenceGetter
-												.getColor(PreferenceConstants.P_DATA_CONNECTOR_COLOR));
-					}
-					if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON)) {
-						if (getModel() instanceof DataConnection) {
-							getFigure().setVisible(!((Boolean) event.getNewValue()));
-						}
-					}
-					if (event.getProperty()
-							.equals(PreferenceConstants.P_HIDE_EVENT_CON)) {
-						if (getModel() instanceof EventConnection) {
-							getFigure().setVisible(!((Boolean) event.getNewValue()));
-						}
-					}
-				}
-			};
+			if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR) &&  getModel() instanceof EventConnection) {
+				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
+			}
+			if (event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR) && getModel() instanceof AdapterConnection) {
+				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
+			}
+			if (event.getProperty().equals(PreferenceConstants.P_DATA_CONNECTOR_COLOR) && getModel() instanceof DataConnection) {
+				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_DATA_CONNECTOR_COLOR));
+			}
+			if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON) && getModel() instanceof DataConnection) {
+				getFigure().setVisible(!((Boolean) event.getNewValue()));
+			}
+			if (event.getProperty().equals(PreferenceConstants.P_HIDE_EVENT_CON) && getModel() instanceof EventConnection) {
+				getFigure().setVisible(!((Boolean) event.getNewValue()));
+			}
+		}
+	};
 
 	@Override
 	protected void createEditPolicies() {
@@ -121,14 +96,13 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 							.getConnectionRouter())
 							.getBendpointPolicy(getModel()));
 		}
-
+		
+		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new ConnectionGraphicalNodeEditPolicy());
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		PolylineConnection connection = null;
-
-		connection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
+		PolylineConnection connection = RouterUtil.getConnectionRouterFactory(null).createConnectionFigure();
 
 		String status = getModel().getAttributeValue(HIDEN_CON);
 		if (connection instanceof HideableConnection) {
@@ -138,6 +112,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 				((HideableConnection) connection)
 						.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
 			}
+			((HideableConnection) connection).setModel(getModel());
 		}
 
 		PolygonDecoration arrow = new PolygonDecoration();
@@ -173,20 +148,12 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 
-		if (getConnectionFigure() instanceof PolylineConnection) {
-			ConnectionRouter router = getConnectionFigure().getConnectionRouter();
-			if (getModel() != null) {
-				if (router instanceof MoveableRouter) {
-					((MoveableRouter) router).setDeltaX1(getConnectionFigure(), getModel().getDx1());
-					((MoveableRouter) router).setDeltaX2(getConnectionFigure(), getModel().getDx2());
-					((MoveableRouter) router).setDeltaY(getConnectionFigure(), getModel().getDy());
-				}
-				if (getModel().isBrokenConnection()) {
-					((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_DASH);
+		if ((getConnectionFigure() instanceof PolylineConnection) && (getModel() != null)) {
+			if (getModel().isBrokenConnection()) {
+				((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_DASH);
 
-				} else {
-					((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_SOLID);
-				}
+			} else {
+				((PolylineConnection) getConnectionFigure()).setLineStyle(SWT.LINE_SOLID);
 			}
 		}
 	}

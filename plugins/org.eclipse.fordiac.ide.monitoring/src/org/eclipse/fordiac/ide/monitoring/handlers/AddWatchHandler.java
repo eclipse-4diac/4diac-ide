@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
+ * Copyright (c) 2015 - 2018 fortiss GmbH, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,7 +7,8 @@
  *
  * Contributors:
  *   Gerd Kainz, Alois Zoitl, Monika Wenger 
- *   - initial API and implementation and/or initial documentation
+ *               - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
@@ -23,6 +24,9 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseFactory;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
@@ -35,10 +39,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringAdapterInterfaceEditPart;
@@ -123,19 +125,16 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		List<MonitoringElement> childElements = adpaterElement.getElements();
 			InterfaceList interfaceList =  adpaterElement.getMonitoredAdapterFB().getInterface();
 		List<PortElement> ports = ((AdapterPortElement)port).getPorts();
-		MonitoringFactory monitoringFactory = MonitoringFactory.eINSTANCE;
 		ArrayList<IInterfaceElement> ios = new ArrayList<>();
 		ios.addAll(interfaceList.getEventInputs());
 		ios.addAll(interfaceList.getEventOutputs());
 		ios.addAll(interfaceList.getInputVars());
 		ios.addAll(interfaceList.getOutputVars());
 		for (IInterfaceElement io : ios) {
-			PortElement newPort = monitoringFactory.createPortElement();
-			newPort.setDevice(port.getDevice());
+			PortElement newPort = MonitoringBaseFactory.eINSTANCE.createPortElement();
 			newPort.setFb(port.getFb());
 			newPort.setInterfaceElement(io);
 			newPort.setResource(port.getResource());
-			newPort.setSystem(port.getSystem());
 			ports.add(newPort);
 			childElements.add((MonitoringElement)createMonitoringElement(manager, newPort));
 		}

@@ -69,8 +69,9 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public InterfaceList getInterfaceList() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getInterfaceList(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getInterfaceList(this);
 	}
 
 	/**
@@ -78,6 +79,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterFBType getAdapterFBType() {
 		return adapterFBType;
 	}
@@ -87,6 +89,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAdapterFBType(AdapterFBType newAdapterFBType) {
 		AdapterFBType oldAdapterFBType = adapterFBType;
 		adapterFBType = newAdapterFBType;
@@ -99,8 +102,9 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterFBType getPlugType() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getPlugType(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getPlugType(this);
 	}
 
 	/**
@@ -108,8 +112,9 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterFBType getSocketType() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSocketType(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getSocketType(this);
 	}
 
 	/**
@@ -169,20 +174,22 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 		}
 		return super.eIsSet(featureID);
 	}
-
+	
+	//TODO move to model and annotations
+	@Override
 	public void setName(String value) {
 		super.setName(value);
-		getAdapterFBType().setName(value);
+		if(null != getAdapterFBType()) { 
+			getAdapterFBType().setName(value);
+		}
 	}
-	
+	//TODO move to model and annotations
 	@Override
-	public String getName() {
-		return getAdapterFBType().getName();
-	}
-	
-	@Override
-	public String getComment() {
-		return getAdapterFBType().getComment();
+	public void setComment(String value) {
+		super.setComment(value);
+		if(null != getAdapterFBType()) { 
+			getAdapterFBType().setComment(value);
+		}
 	}
 	
 } //AdapterTypeImpl

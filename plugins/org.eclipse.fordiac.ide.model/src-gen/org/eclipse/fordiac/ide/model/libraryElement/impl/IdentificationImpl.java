@@ -182,6 +182,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getApplicationDomain() {
 		return applicationDomain;
 	}
@@ -191,6 +192,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setApplicationDomain(String newApplicationDomain) {
 		String oldApplicationDomain = applicationDomain;
 		applicationDomain = newApplicationDomain;
@@ -203,6 +205,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getClassification() {
 		return classification;
 	}
@@ -212,6 +215,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setClassification(String newClassification) {
 		String oldClassification = classification;
 		classification = newClassification;
@@ -224,6 +228,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -233,6 +238,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDescription(String newDescription) {
 		String oldDescription = description;
 		description = newDescription;
@@ -245,6 +251,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getFunction() {
 		return function;
 	}
@@ -254,6 +261,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFunction(String newFunction) {
 		String oldFunction = function;
 		function = newFunction;
@@ -266,6 +274,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getStandard() {
 		return standard;
 	}
@@ -275,6 +284,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStandard(String newStandard) {
 		String oldStandard = standard;
 		standard = newStandard;
@@ -287,6 +297,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getType() {
 		return type;
 	}
@@ -296,6 +307,7 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(String newType) {
 		String oldType = type;
 		type = newType;
@@ -420,18 +432,18 @@ public class IdentificationImpl extends EObjectImpl implements Identification {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (applicationDomain: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (applicationDomain: "); //$NON-NLS-1$
 		result.append(applicationDomain);
-		result.append(", classification: ");
+		result.append(", classification: "); //$NON-NLS-1$
 		result.append(classification);
-		result.append(", description: ");
+		result.append(", description: "); //$NON-NLS-1$
 		result.append(description);
-		result.append(", function: ");
+		result.append(", function: "); //$NON-NLS-1$
 		result.append(function);
-		result.append(", standard: ");
+		result.append(", standard: "); //$NON-NLS-1$
 		result.append(standard);
-		result.append(", type: ");
+		result.append(", type: "); //$NON-NLS-1$
 		result.append(type);
 		result.append(')');
 		return result.toString();

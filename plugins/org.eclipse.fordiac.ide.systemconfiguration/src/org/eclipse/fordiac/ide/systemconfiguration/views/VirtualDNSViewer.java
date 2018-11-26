@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.systemconfiguration.views;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterValueTemplateTransfer;
@@ -41,13 +42,12 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
@@ -55,8 +55,6 @@ import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -80,7 +78,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 	private VirtualDNSManagement management;
 	private FilteredTree filteredTree;
 
-	private final ArrayList<VirtualDNSCollection> dnsCollection = new ArrayList<VirtualDNSCollection>();
+	private final List<VirtualDNSCollection> dnsCollection = new ArrayList<>();
 	private VirtualDNSCollection selectedCollection;
 	private Button selected;
 	private Button delete;
@@ -92,9 +90,6 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 	
 	/** The delete entry action. */
 	private IAction deleteEntryAction;
-
-	public VirtualDNSViewer() {
-	}
 
 	@Override
 	public void createPartControl(Composite parent) {	
@@ -110,53 +105,24 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 		availableDNS = new CCombo(sectionClient, SWT.Expand);
 		availableDNS.setSize(240, -1);
-		availableDNS.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleDNSSelection(availableDNS.getSelectionIndex());				
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {		
-				
-			}
-		});
+		availableDNS.addListener(SWT.Selection, e -> handleDNSSelection(availableDNS.getSelectionIndex()));
 
 		newConfiguration = new Button(sectionClient, SWT.NONE);
 		newConfiguration.setText("New");
 		newConfiguration.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-		newConfiguration.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (system != null) {
-					creteNewConfiguration();
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+		newConfiguration.addListener(SWT.Selection, e -> {
+			if (system != null) {
+				creteNewConfiguration();
 			}
 		});
 		
 		delete = new Button(sectionClient, SWT.NONE);
 		delete.setText("Delete");		
 		delete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		delete.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				management.getAvailableDNSCollections().remove(
-						selectedCollection);
-				updateAvailableCollections();
-				SystemManager.INSTANCE.saveTagProvider(system, provider);
-
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
+		delete.addListener(SWT.Selection, e -> {
+			management.getAvailableDNSCollections().remove(selectedCollection);
+			updateAvailableCollections();
+			SystemManager.INSTANCE.saveTagProvider(system, provider);
 		});
 		
 
@@ -169,18 +135,9 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		gridData.grabExcessHorizontalSpace = true;
 		selected.setLayoutData(gridData);
 		
-		selected.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (selected.getSelection()) {
-					management.setActiveVirtualDNS(selectedCollection);
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-
+		selected.addListener(SWT.Selection, e -> {
+			if (selected.getSelection()) {
+				management.setActiveVirtualDNS(selectedCollection);
 			}
 		});
 
@@ -285,16 +242,11 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 				new VirtualDNSEntryLabelProvider());
 		
 		
-		filteredTree.getViewer().addPostSelectionChangedListener(new ISelectionChangedListener() {
+		filteredTree.getViewer().addPostSelectionChangedListener(event -> {
+			boolean enabled = (!filteredTree.getViewer().getSelection().isEmpty() && 
+					((IStructuredSelection) filteredTree.getViewer().getSelection()).getFirstElement() instanceof VirtualDNSEntry);
 
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				boolean enabled = (!filteredTree.getViewer().getSelection().isEmpty() && 
-						((IStructuredSelection) filteredTree.getViewer().getSelection()).getFirstElement() instanceof VirtualDNSEntry);
-
-				deleteEntryAction.setEnabled(enabled);
-			}
-
+			deleteEntryAction.setEnabled(enabled);
 		});
 		
 		
@@ -320,11 +272,13 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 		source.addDragListener(new DragSourceListener() {
 
+			@Override
 			public void dragFinished(DragSourceEvent event) {
 				if (event.detail == DND.DROP_MOVE) {
 				}
 			}
 
+			@Override
 			public void dragSetData(DragSourceEvent event) {
 				if (type.isSupportedType(event.dataType)) {
 					ISelection sel = filteredTree.getViewer().getSelection();
@@ -337,6 +291,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 				}
 			}
 
+			@Override
 			public void dragStart(DragSourceEvent event) {
 				TreeItem[] selection = filteredTree.getViewer().getTree()
 						.getSelection();
@@ -451,7 +406,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		}
 	}
 	
-	private AutomationSystem handleSystemTreeSelection(TreeSelection selection) {
+	private static AutomationSystem handleSystemTreeSelection(TreeSelection selection) {
 		AutomationSystem retval = null;
 		if(1 == selection.size()){
 			Object obj = selection.getFirstElement();
@@ -477,7 +432,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		return retval;
 	}
 
-	private AutomationSystem getSystemForSubApp(SubApp obj) {
+	private static AutomationSystem getSystemForSubApp(SubApp obj) {
 		AutomationSystem retval = null;
 		FBNetwork fbNetwork = (FBNetwork)obj.eContainer();
 		retval = fbNetwork.getAutomationSystem();
@@ -486,6 +441,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 	private void creteNewConfiguration() {
 		IInputValidator validator = new IInputValidator() {
+			@Override
 			public String isValid(String newText) {
 				if (newText.length() > 0) {
 					return null;
@@ -501,9 +457,9 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 				"Configuration", validator);
 		collectionName.setBlockOnOpen(true);
 		int ret = collectionName.open();
-		if (ret == InputDialog.CANCEL) {
+		if (ret == Window.CANCEL) {
 			return;
-		} else if (ret == InputDialog.OK) {
+		} else if (ret == Window.OK) {
 
 			VirtualDNSCollection collection = VirtualDNSFactory.eINSTANCE
 					.createVirtualDNSCollection();
@@ -586,15 +542,12 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		 */
 		@Override
 		public void run() {
-			if (selectedCollection != null) {				
-				if(((IStructuredSelection) filteredTree.getViewer().getSelection()).getFirstElement() instanceof VirtualDNSEntry){
-					VirtualDNSEntry entry  = (VirtualDNSEntry)((IStructuredSelection) filteredTree.getViewer().getSelection()).getFirstElement();
-					selectedCollection.getVirtualDNSEntries().remove(entry);
-					filteredTree.getViewer().refresh();
-				}
+			if ((selectedCollection != null) && (((IStructuredSelection) filteredTree.getViewer().getSelection()).getFirstElement() instanceof VirtualDNSEntry)){
+				VirtualDNSEntry entry  = (VirtualDNSEntry)((IStructuredSelection) filteredTree.getViewer().getSelection()).getFirstElement();
+				selectedCollection.getVirtualDNSEntries().remove(entry);
+				filteredTree.getViewer().refresh();
 			}
 		}
 	}
-
 
 }

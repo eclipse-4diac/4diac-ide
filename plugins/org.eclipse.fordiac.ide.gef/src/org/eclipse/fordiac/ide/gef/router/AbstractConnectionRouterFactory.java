@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.gef.router;
 
 import org.eclipse.draw2d.PolylineConnection;
 
-abstract public class AbstractConnectionRouterFactory implements IConnectionRouterFactory {
+public abstract class AbstractConnectionRouterFactory implements IConnectionRouterFactory {
 
 	@Override
 	public PolylineConnection createConnectionFigure() {

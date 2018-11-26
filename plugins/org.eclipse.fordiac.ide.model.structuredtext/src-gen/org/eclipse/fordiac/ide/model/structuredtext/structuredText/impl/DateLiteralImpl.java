@@ -75,7 +75,8 @@ public class DateLiteralImpl extends TimeLiteralImpl implements DateLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public Date getValue()
+  @Override
+public Date getValue()
   {
     return value;
   }
@@ -85,7 +86,8 @@ public class DateLiteralImpl extends TimeLiteralImpl implements DateLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setValue(Date newValue)
+  @Override
+public void setValue(Date newValue)
   {
     Date oldValue = value;
     value = newValue;

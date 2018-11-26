@@ -70,6 +70,7 @@ public abstract class AbstractStructuredTextRuntimeModule extends DefaultRuntime
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+	@Override
 	public Class<? extends ITokenToStringConverter> bindITokenToStringConverter() {
 		return AntlrTokenToStringConverter.class;
 	}
@@ -85,6 +86,7 @@ public abstract class AbstractStructuredTextRuntimeModule extends DefaultRuntime
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+	@Override
 	public Class<? extends ITokenDefProvider> bindITokenDefProvider() {
 		return AntlrTokenDefProvider.class;
 	}
@@ -117,6 +119,7 @@ public abstract class AbstractStructuredTextRuntimeModule extends DefaultRuntime
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
+	@Override
 	public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
 		return DefaultDeclarativeQualifiedNameProvider.class;
 	}

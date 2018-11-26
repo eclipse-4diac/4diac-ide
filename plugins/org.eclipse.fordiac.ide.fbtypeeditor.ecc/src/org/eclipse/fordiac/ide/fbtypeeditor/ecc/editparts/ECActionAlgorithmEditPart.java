@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.FigureUtilities;
@@ -83,10 +82,9 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
-			if (notification.getEventType() == Notification.SET) {
-				if (null != getAction().getAlgorithm() && getAction().getAlgorithm().getName().equals(notification.getNewValue())) {
-						refreshAlgLabel();
-				}
+			if (notification.getEventType() == Notification.SET && null != getAction().getAlgorithm() && 
+					getAction().getAlgorithm().getName().equals(notification.getNewValue())) {
+				refreshAlgLabel();
 			}
 		}
 	};
@@ -115,6 +113,10 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		if (!isActive()) {
 			super.activate();
 			getAction().eAdapters().add(adapter);
+			if (getINamedElement() != null) {
+				//We don't want that the the base class registers to the algorithm as it is hard to track if algorithm changes
+				getINamedElement().eAdapters().remove(getNameAdapter());
+			}
 			// addapt to the fbtype so that we get informed on alg name changes
 			ECActionHelpers.getFBType(getAction()).eAdapters().add(fbAdapter);
 			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
@@ -208,6 +210,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	 * 
 	 * @return the manager
 	 */
+	@Override
 	public DirectEditManager getManager() {
 		if (manager == null) {
 			manager = new ComboDirectEditManager(this, ComboBoxCellEditor.class,
@@ -220,14 +223,9 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	/**
 	 * performs the directEdit.
 	 */
+	@Override
 	public void performDirectEdit() {
-		ArrayList<String> algNames = new ArrayList<String>();
-		List<Algorithm> getAlgorithms = ECActionHelpers.getAlgorithms(ECActionHelpers.getFBType(getAction()));
-
-		for (Algorithm algorithm : getAlgorithms) {
-			algNames.add(algorithm.getName());
-		}
-		algNames.add(" "); //$NON-NLS-1$
+		List<String> algNames = ECActionHelpers.getAlgorithmNames(ECActionHelpers.getFBType(getAction()));		
 
 		int selected = (getAction().getAlgorithm() != null) ? algNames.indexOf(getAction().getAlgorithm().getName())
 				: algNames.size() - 1;
@@ -263,6 +261,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	protected IFigure createFigure() {
 		Label algorithmLabel = new Label() {
 
+			@Override
 			protected void paintFigure(Graphics graphics) {
 				Display display = Display.getCurrent();
 				Rectangle boundingRect = getBounds();

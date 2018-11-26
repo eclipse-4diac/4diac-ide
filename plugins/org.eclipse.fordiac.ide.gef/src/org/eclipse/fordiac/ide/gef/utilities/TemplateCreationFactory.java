@@ -36,6 +36,7 @@ public class TemplateCreationFactory implements CreationFactory {
 	 * 
 	 * @see org.eclipse.gef.requests.CreationFactory#getNewObject()
 	 */
+	@Override
 	public Object getNewObject() {
 		// TODO implement
 		return null;
@@ -46,6 +47,7 @@ public class TemplateCreationFactory implements CreationFactory {
 	 * 
 	 * @see org.eclipse.gef.requests.CreationFactory#getObjectType()
 	 */
+	@Override
 	public Object getObjectType() {
 		return typeTemplate;
 	}

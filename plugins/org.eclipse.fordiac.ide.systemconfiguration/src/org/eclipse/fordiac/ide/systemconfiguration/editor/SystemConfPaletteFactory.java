@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2012 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH,  
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.gef.utilities.TemplateCreationFactory;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -29,8 +31,6 @@ import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.gef.palette.PaletteRoot;
-import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
-import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 
@@ -43,68 +43,10 @@ import org.eclipse.swt.widgets.Display;
  */
 public final class SystemConfPaletteFactory {
 
-	/** Preference ID used to persist the palette location. */
-	private static final String PALETTE_DOCK_LOCATION = "SystemConfPaletteFactory.Location";//$NON-NLS-1$
-
-	/** Preference ID used to persist the palette size. */
-	private static final String PALETTE_SIZE = "SystemConfPaletteFactory.Size";//$NON-NLS-1$
-
-	/** Preference ID used to persist the flyout palette's state. */
-	private static final String PALETTE_STATE = "SystemConfPaletteFactory.State";//$NON-NLS-1$
-
-	/**
-	 * Return a FlyoutPreferences instance used to save/load the preferences of a
-	 * flyout palette.
-	 * 
-	 * @return the flyout preferences
-	 */
-	public static FlyoutPreferences createPalettePreferences() {
-		boolean val = org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault().getPreferenceStore().contains(PALETTE_STATE);
-				
-		FlyoutPreferences preferences = new FlyoutPreferences() {
-			
-			public int getDockLocation() {
-				return org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault()
-						.getPreferenceStore().getInt(PALETTE_DOCK_LOCATION);
-			}
-
-			public int getPaletteState() {
-				return org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault()
-						.getPreferenceStore().getInt(PALETTE_STATE);
-
-			}
-
-			public int getPaletteWidth() {
-				return org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault()
-						.getPreferenceStore().getInt(PALETTE_SIZE);
-
-			}
-
-			public void setDockLocation(final int location) {
-				org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault()
-						.getPreferenceStore().setValue(PALETTE_DOCK_LOCATION, location);
-			}
-
-			public void setPaletteState(final int state) {
-				org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault()
-						.getPreferenceStore().setValue(PALETTE_STATE, state);
-
-			}
-
-			public void setPaletteWidth(final int width) {
-				org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault()
-						.getPreferenceStore().setValue(PALETTE_SIZE, width);
-
-			}
-		};
-		
-		if(!val){
-			preferences.setPaletteState(FlyoutPaletteComposite.STATE_PINNED_OPEN);
-			preferences.setPaletteWidth(125);
-		}
-		
-		return preferences;
-	}
+	public static final PaletteFlyoutPreferences PALETTE_PREFERENCES = new PaletteFlyoutPreferences(
+			"SystemConfPaletteFactory.Location",	//$NON-NLS-1$
+			"SystemConfPaletteFactory.Size",	//$NON-NLS-1$
+			"SystemConfPaletteFactory.State");//$NON-NLS-1$
 
 	/**
 	 * Creates the PaletteRoot for a PaletteViewer with the contents from
@@ -124,13 +66,11 @@ public final class SystemConfPaletteFactory {
 
 			@Override
 			public void notifyChanged(final Notification notification) {
-				Display.getDefault().syncExec(new Runnable() {
-					public void run() {
-						palette.setVisible(false);
-						palette.getChildren().clear();
-						fillPalette(palette, system);
-						palette.setVisible(true);
-					}
+				Display.getDefault().syncExec(() -> {
+					palette.setVisible(false);
+					palette.getChildren().clear();
+					fillPalette(palette, system);
+					palette.setVisible(true);
 				});
 			}
 		});
@@ -171,7 +111,7 @@ public final class SystemConfPaletteFactory {
 		
 		paletteContainer.addAll(createRESEntries(group));
 		
-		if(paletteContainer.getChildren().size() != 0){ 
+		if(!paletteContainer.getChildren().isEmpty()){ 
 			palette.add(paletteContainer);
 		}
 
@@ -184,7 +124,7 @@ public final class SystemConfPaletteFactory {
 		
 		paletteContainer.addAll(createDEVEntries(group));
 		
-		if(paletteContainer.getChildren().size() != 0){ 
+		if(!paletteContainer.getChildren().isEmpty()){ 
 			palette.add(paletteContainer);
 		}
 
@@ -197,7 +137,7 @@ public final class SystemConfPaletteFactory {
 			
 		paletteContainer.addAll(createSEGEntries(group));
 		
-		if(paletteContainer.getChildren().size() != 0){ 
+		if(!paletteContainer.getChildren().isEmpty()){ 
 			palette.add(paletteContainer);
 		}
 		return paletteContainer;
@@ -205,7 +145,7 @@ public final class SystemConfPaletteFactory {
 
 	private static List<PaletteEntry> createRESEntries(
 			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
+		List<PaletteEntry> entries = new ArrayList<>();
 		
 		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
 			if(entry instanceof ResourceTypeEntry){
@@ -220,7 +160,7 @@ public final class SystemConfPaletteFactory {
 
 	private static List<PaletteEntry> createDEVEntries(
 			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
+		List<PaletteEntry> entries = new ArrayList<>();
 		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
 			if(entry instanceof DeviceTypePaletteEntry){
 				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_Device.getImageDescriptor());
@@ -234,7 +174,7 @@ public final class SystemConfPaletteFactory {
 
 	private static List<PaletteEntry> createSEGEntries(
 			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
+		List<PaletteEntry> entries = new ArrayList<>();
 		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
 			if(entry instanceof SegmentTypePaletteEntry){
 				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_Segment.getImageDescriptor());
@@ -259,10 +199,12 @@ public final class SystemConfPaletteFactory {
 		if (type == null) {
 			return null;
 		}
-		CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(
-				type.getName(), type.getComment(), new TemplateCreationFactory(entry),
+		return new CombinedTemplateCreationEntry(type.getName(), type.getComment(), new TemplateCreationFactory(entry),
 				desc, desc);
-		return combined;
+	}
+	
+	private SystemConfPaletteFactory() {
+		throw new UnsupportedOperationException("Class SystemconfPaletteFactory should not be insantiated!"); //$NON-NLS-1$
 	}
 
 }

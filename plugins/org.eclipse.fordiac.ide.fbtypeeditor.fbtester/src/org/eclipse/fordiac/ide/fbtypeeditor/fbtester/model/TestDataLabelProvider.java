@@ -65,17 +65,11 @@ public class TestDataLabelProvider extends LabelProvider implements
 		} else if (columnType.equals(FBTester.EVENT)) {
 			return data.getEvent().getName();
 		} else if (columnType.equals(FBTester.INPUT_VARIABLE)) {
-			VarDeclaration varDecl = (VarDeclaration) col
-					.getData(FBTester.INPUT_VARIABLE);
-
-			String value = data.getValueFor(varDecl.getName());
-			return value;
+			VarDeclaration varDecl = (VarDeclaration) col.getData(FBTester.INPUT_VARIABLE);
+			return data.getValueFor(varDecl.getName());
 		} else if (columnType.equals(FBTester.OUTPUT_VARIABLE)) {
-			VarDeclaration varDecl = (VarDeclaration) col
-					.getData(FBTester.OUTPUT_VARIABLE);
-
-			String value = data.getResultFor(varDecl.getName());
-			return value;
+			VarDeclaration varDecl = (VarDeclaration) col.getData(FBTester.OUTPUT_VARIABLE);
+			return data.getResultFor(varDecl.getName());
 		} else if (columnType.equals(FBTester.EXPECTED_EVENTS)) {
 			return data.getOutputEvents();
 		}

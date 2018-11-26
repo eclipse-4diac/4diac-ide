@@ -13,18 +13,18 @@
 package org.eclipse.fordiac.ide.comgeneration.implementation;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 
 public class CommunicationModel {
-	private HashMap<Event, CommunicationChannel> channels;
+	private final Map<Event, CommunicationChannel> channels = new HashMap<>();
 
 	public CommunicationModel() {
 		super();
-		channels = new HashMap<Event, CommunicationChannel>();
 	}
 
-	public HashMap<Event, CommunicationChannel> getChannels() {
+	public Map<Event, CommunicationChannel> getChannels() {
 		return channels;
 	}
 }

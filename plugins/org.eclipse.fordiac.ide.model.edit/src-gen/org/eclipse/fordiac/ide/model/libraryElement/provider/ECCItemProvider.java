@@ -1,11 +1,15 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2007 - 2011 4DIAC - consortium.
+ *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *  *
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
  *  * http://www.eclipse.org/legal/epl-v10.html
  *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *  *     - initial API and implementation and/or initial documentation
  *  *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
@@ -84,8 +88,8 @@ public class ECCItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ECC_start_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ECC_start_feature", "_UI_ECC_type"),
+				 getString("_UI_ECC_start_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ECC_start_feature", "_UI_ECC_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.ECC__START,
 				 true,
 				 false,
@@ -145,7 +149,7 @@ public class ECCItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_ECC_type");
+		return getString("_UI_ECC_type"); //$NON-NLS-1$
 	}
 
 	/**

@@ -26,6 +26,7 @@ import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
@@ -64,47 +65,39 @@ import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Pattern;
 import org.eclipse.swt.widgets.Display;
 
-/**
- * The Class ECStateEditPart.
- */
 public class ECStateEditPart extends AbstractDirectEditableEditPart implements NodeEditPart {
-
+	private List<Object> stateChildren;
+	
 	private final EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
-			
-			if(Notification.REMOVING_ADAPTER != notification.getEventType()){
+			if (Notification.REMOVING_ADAPTER != notification.getEventType()) {
 				Object feature = notification.getFeature();
-				
-				if (!((LibraryElementPackage.eINSTANCE.getECAction_Algorithm().equals(feature))|| 
-						(LibraryElementPackage.eINSTANCE.getECAction_Output().equals(feature))||
-						(LibraryElementPackage.eINSTANCE.getECState().equals(feature)))) {
+				if (!((LibraryElementPackage.eINSTANCE.getECAction_Algorithm().equals(feature))
+						|| (LibraryElementPackage.eINSTANCE.getECAction_Output().equals(feature))
+						|| (LibraryElementPackage.eINSTANCE.getECState().equals(feature)))) {
 					refresh();
 				}
 			}
 		}
-
 	};
 
 	/** The ecc adapter. */
 	private final EContentAdapter eccAdapter = new EContentAdapter() {
-
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
 			updateBorder();
 		}
-
 	};
-	
+
 	public ECStateEditPart() {
 		setConnectable(true);
 	}
@@ -115,11 +108,9 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 			super.activate();
 			getCastedModel().eAdapters().add(adapter);
 			((ECC) getCastedModel().eContainer()).eAdapters().add(eccAdapter);
-			Activator.getDefault().getPreferenceStore()
-					.addPropertyChangeListener(propertyChangeListener);
+			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		}
 	}
-		
 
 	@Override
 	public void deactivate() {
@@ -128,17 +119,15 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 			getCastedModel().eAdapters().remove(adapter);
 
 			if (getCastedModel().eContainer() != null) {
-				((ECC) getCastedModel().eContainer()).eAdapters().remove(
-						eccAdapter);
+				((ECC) getCastedModel().eContainer()).eAdapters().remove(eccAdapter);
 			}
-			Activator.getDefault().getPreferenceStore()
-					.removePropertyChangeListener(propertyChangeListener);
+			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		}
 	}
 
 	public class StateBorder extends LineBorder {
-		boolean initialState;
-		Rectangle tempRect2;
+		private boolean initialState;
+		private Rectangle tempRect2;
 
 		public boolean isInitialState() {
 			return initialState;
@@ -168,18 +157,14 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		}
 
 		@Override
-		public void paint(final IFigure figure, final Graphics graphics,
-				final Insets insets) {
+		public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
 
 			super.paint(figure, graphics, insets);
 
-			graphics.setBackgroundColor(PreferenceGetter
-					.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
-			graphics.setForegroundColor(PreferenceGetter
-					.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
-			figure.setForegroundColor(PreferenceGetter
-					.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
-			
+			graphics.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
+			graphics.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
+			figure.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
+
 			graphics.drawRectangle(tempRect);
 			if (initialState) {
 				tempRect2 = new Rectangle(tempRect);
@@ -190,87 +175,59 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	}
 
-	/**
-	 * The Class ECStateFigure.
-	 */
 	public class ECStateFigure extends Figure implements InteractionStyleFigure {
-
 		private StateBorder stateBorder = new StateBorder();
-
-		/** The name label. */
 		private Label nameLabel;
-
-		/** The action container. */
-		private final Figure actionContainer = new Figure(){
+		private final Figure line = new HorizontalLineFigure(15);
+		private final Figure actionContainer = new Figure() {
+			@Override
 			public void add(IFigure figure, Object constraint, int index) {
 				super.add(figure, constraint, index);
-				setConstraint(figure, new GridData(SWT.FILL, SWT.BEGINNING, true,
-						false));
+				setConstraint(figure, new GridData(SWT.FILL, SWT.BEGINNING, true, false));
 			}
 		};
 
-		/** The line. */
-		private final Figure line = new HorizontalLineFigure(15);
-
-		/**
-		 * Instantiates a new eC state figure.
-		 */
-		public ECStateFigure() {			
+		public ECStateFigure() {
 			ToolbarLayout tbLayout = new ToolbarLayout();
 			tbLayout.setStretchMinorAxis(false);
 			tbLayout.setHorizontal(true);
 			setLayoutManager(tbLayout);
-			
-
 			Figure stateLabel = new Figure();
-			
 			add(stateLabel);
 			FlowLayout layout = new FlowLayout();
 			layout.setStretchMinorAxis(true);
 			layout.setMajorSpacing(0);
 			layout.setMinorSpacing(0);
 			layout.setHorizontal(true);
-			layout.setMinorAlignment(FlowLayout.ALIGN_CENTER);
+			layout.setMinorAlignment(OrderedLayout.ALIGN_CENTER);
 			stateLabel.setLayoutManager(layout);
-			
-			
 			stateLabel.add(nameLabel = new Label() {
-				
-			protected void paintFigure(Graphics graphics) {	
-					Display display = Display.getCurrent();	
+				@Override
+				protected void paintFigure(Graphics graphics) {
+					Display display = Display.getCurrent();
 					Rectangle boundingRect = getBounds();
-	
-					Point topLeft = boundingRect.getTopLeft();	
+					Point topLeft = boundingRect.getTopLeft();
 					Point bottomRight = boundingRect.getBottomRight();
-					
 					Color first = FigureUtilities.lighter(nameLabel.getBackgroundColor());
-					Pattern pattern = new Pattern(display, topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, 
-							first, nameLabel.getBackgroundColor());	
-					graphics.setBackgroundPattern(pattern);	
-					graphics.fillRectangle(boundingRect);	
-					graphics.setBackgroundPattern(null);	
+					Pattern pattern = new Pattern(display, topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, first, nameLabel.getBackgroundColor());
+					graphics.setBackgroundPattern(pattern);
+					graphics.fillRectangle(boundingRect);
+					graphics.setBackgroundPattern(null);
 					pattern.dispose();
 					first.dispose();
 					graphics.translate(bounds.x, bounds.y);
 					graphics.drawText(getSubStringText(), getTextLocation());
 					graphics.translate(-bounds.x, -bounds.y);
 				}
-			}
-			);
-			
+			});
 			nameLabel.setText(getCastedModel().getName());
 			nameLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
 			nameLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
 			nameLabel.setOpaque(true);
-
 			nameLabel.setBorder(new StateBorder(isInitialState()));
-
 			stateLabel.add(line);
 			line.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
-			
-
 			add(actionContainer);
-			
 			GridLayout gl = new GridLayout(2, false);
 			gl.horizontalSpacing = -1;
 			gl.verticalSpacing = 0;
@@ -282,27 +239,16 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		/**
 		 * Sets the checks for action.
 		 * 
-		 * @param hasAction
-		 *            the new checks for action
+		 * @param hasAction the new checks for action
 		 */
 		public void setHasAction(final boolean hasAction) {
 			line.setVisible(hasAction);
 		}
 
-		/**
-		 * Gets the content pane.
-		 * 
-		 * @return the content pane
-		 */
 		public Figure getContentPane() {
 			return actionContainer;
 		}
 
-		/**
-		 * Gets the name label.
-		 * 
-		 * @return the name label
-		 */
 		public Label getNameLabel() {
 			return nameLabel;
 		}
@@ -318,79 +264,49 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		@Override
 		public int getIntersectionStyle(Point location) {
 			Rectangle bounds = nameLabel.getBounds().getCopy();
-			bounds.x = bounds.x+3;
+			bounds.x = bounds.x + 3;
 			bounds.y = bounds.y + 3;
 			bounds.width = bounds.width - 6;
 			bounds.height = bounds.height - 6;
-			if (bounds.intersects(new Rectangle(location, new Dimension(1,1)))) {
-				return InteractionStyleFigure.REGION_CONNECTION; // connection 
-			} 
+			if (bounds.intersects(new Rectangle(location, new Dimension(1, 1)))) {
+				return InteractionStyleFigure.REGION_CONNECTION; // connection
+			}
 			return InteractionStyleFigure.REGION_DRAG; // move/drag
 		}
-
 	}
 
-	/**
-	 * Update border.
-	 */
 	private void updateBorder() {
 		getNameLabel().setBorder(new StateBorder(isInitialState()));
 	}
 
-	/**
-	 * Checks if is initial state.
-	 * 
-	 * @return true, if is initial state
-	 */
 	private boolean isInitialState() {
 		return getCastedModel().isStartState();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#getContentPane()
-	 */
 	@Override
 	public IFigure getContentPane() {
 		return ((ECStateFigure) getFigure()).getContentPane();
 	}
-	
-	ArrayList<Object> stateChildren; 
 
-	public ArrayList<Object> getCurrentChildren(){
+	public List<Object> getCurrentChildren() {
 		return stateChildren;
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
-	 */
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected List getModelChildren() {
-		if(null == stateChildren){
-			stateChildren = new ArrayList<Object>();
-		}
-		else{
+		if (null == stateChildren) {
+			stateChildren = new ArrayList<>();
+		} else {
 			stateChildren.clear();
 		}
-		
 		for (ECAction ecAction : getCastedModel().getECAction()) {
 			stateChildren.add(new ECActionAlgorithm(ecAction));
-			stateChildren.add(new ECActionOutputEvent(ecAction));			
+			stateChildren.add(new ECActionOutputEvent(ecAction));
 		}
-		
 		return stateChildren;
 	}
-	
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
-	 */
 	@Override
 	protected IFigure createFigure() {
 		ECStateFigure figure = new ECStateFigure();
@@ -401,44 +317,30 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
-		installEditPolicy(EditPolicy.LAYOUT_ROLE,
-				new ECStateLayoutEditPolicy());
-		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE,
-				new TransitionNodeEditPolicy());
-
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ECStateLayoutEditPolicy());
+		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new TransitionNodeEditPolicy());
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
-
 			@Override
 			protected Command getDeleteCommand(final GroupRequest request) {
 				return new DeleteECStateCommand(getCastedModel());
 			}
-
 		});
-
 		// Highlight In and Out-Transitions of the selected State
 		installEditPolicy("Highlight_IN_OUTS", //$NON-NLS-1$
 				new ECStateSelectionPolicy());
-
 	}
 
 	@Override
 	public void performRequest(final Request request) {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
-		
 		if (request.getType() == RequestConstants.REQ_OPEN) {
 			// transform doubleclick to direct edit
 			request.setType(RequestConstants.REQ_DIRECT_EDIT);
 		}
-
 		super.performRequest(request);
 	}
 
-	/**
-	 * Gets the casted model.
-	 * 
-	 * @return the casted model
-	 */
 	public ECState getCastedModel() {
 		return (ECState) getModel();
 	}
@@ -446,12 +348,8 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	@Override
 	protected void refreshVisuals() {
 		Rectangle rect = new Rectangle(getCastedModel().getX(), getCastedModel().getY(), -1, -1);
-
-		((GraphicalEditPart) getParent()).setLayoutConstraint(this,
-				getFigure(), rect);
-
-		((ECStateFigure) getFigure()).setHasAction(getCastedModel()
-				.getECAction().size() > 0);
+		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rect);
+		((ECStateFigure) getFigure()).setHasAction(!getCastedModel().getECAction().isEmpty());
 		super.refreshVisuals();
 	}
 
@@ -466,12 +364,9 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	}
 
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(
-			final ConnectionEditPart connection) {
-		if (connection.getTarget() != null
-				&& connection.getTarget().equals(connection.getSource())) {
-			return new FixedAnchor(
-					((ECStateFigure) getFigure()).getNameLabel(), false);
+	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
+		if (connection.getTarget() != null && connection.getTarget().equals(connection.getSource())) {
+			return new FixedAnchor(((ECStateFigure) getFigure()).getNameLabel(), false);
 		}
 		return new ChopboxAnchor(((ECStateFigure) getFigure()).getNameLabel());
 	}
@@ -482,12 +377,9 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(
-			final ConnectionEditPart connection) {
-		if (connection.getSource() != null
-				&& connection.getSource().equals(connection.getTarget())) {
-			return new FixedAnchor(
-					((ECStateFigure) getFigure()).getNameLabel(), true);
+	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
+		if (connection.getSource() != null && connection.getSource().equals(connection.getTarget())) {
+			return new FixedAnchor(((ECStateFigure) getFigure()).getNameLabel(), true);
 		}
 		return new ChopboxAnchor(((ECStateFigure) getFigure()).getNameLabel());
 	}
@@ -508,29 +400,14 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	}
 
 	/** The property change listener. */
-	private final IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
-		@Override
-		public void propertyChange(PropertyChangeEvent event) {
-			if (event.getProperty().equals(
-					PreferenceConstants.P_ECC_STATE_COLOR)) {
-				getNameLabel()
-						.setBackgroundColor(
-								PreferenceGetter
-										.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
-			}
-			if (event.getProperty().equals(
-					PreferenceConstants.P_ECC_STATE_BORDER_COLOR)) {
-				getNameLabel()
-						.setForegroundColor(
-								PreferenceGetter
-										.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
-				((ECStateFigure) getFigure())
-						.getLine()
-						.setForegroundColor(
-								PreferenceGetter
-										.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
-
-			}
+	private final IPropertyChangeListener propertyChangeListener = event -> {
+		if (event.getProperty().equals(PreferenceConstants.P_ECC_STATE_COLOR)) {
+			getNameLabel().setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
+		}
+		if (event.getProperty().equals(PreferenceConstants.P_ECC_STATE_BORDER_COLOR)) {
+			getNameLabel().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
+			((ECStateFigure) getFigure()).getLine()
+					.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
 		}
 	};
 
@@ -547,21 +424,13 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		}
 	}
 
-	/**
-	 * Gets the manager.
-	 * 
-	 * @return the manager
-	 */
 	@Override
 	public DirectEditManager getManager() {
 		if (manager == null) {
 			Label l = getNameLabel();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class,
-					new NameCellEditorLocator(l), l,
+			manager = new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
 					new IdentifierVerifyListener());
 		}
-
 		return manager;
 	}
-
 }

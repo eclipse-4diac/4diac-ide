@@ -92,6 +92,7 @@ public abstract class IEC_ANY implements Cloneable{
 	
 	public abstract boolean setValue(String source);
 	
+	@Override
 	public Object clone() {
 		try {
 			return super.clone();

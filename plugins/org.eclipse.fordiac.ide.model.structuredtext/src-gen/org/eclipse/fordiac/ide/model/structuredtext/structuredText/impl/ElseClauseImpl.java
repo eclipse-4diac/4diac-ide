@@ -67,7 +67,8 @@ public class ElseClauseImpl extends MinimalEObjectImpl.Container implements Else
    * <!-- end-user-doc -->
    * @generated
    */
-  public StatementList getStatements()
+  @Override
+public StatementList getStatements()
   {
     return statements;
   }
@@ -94,7 +95,8 @@ public class ElseClauseImpl extends MinimalEObjectImpl.Container implements Else
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setStatements(StatementList newStatements)
+  @Override
+public void setStatements(StatementList newStatements)
   {
     if (newStatements != statements)
     {

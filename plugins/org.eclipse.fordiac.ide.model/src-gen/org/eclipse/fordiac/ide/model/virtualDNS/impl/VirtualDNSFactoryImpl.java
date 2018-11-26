@@ -71,7 +71,7 @@ public class VirtualDNSFactoryImpl extends EFactoryImpl implements VirtualDNSFac
 			case VirtualDNSPackage.VIRTUAL_DNS_COLLECTION: return createVirtualDNSCollection();
 			case VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT: return createVirtualDNSManagement();
 			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -80,6 +80,7 @@ public class VirtualDNSFactoryImpl extends EFactoryImpl implements VirtualDNSFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VirtualDNSEntry createVirtualDNSEntry() {
 		VirtualDNSEntryImpl virtualDNSEntry = new VirtualDNSEntryImpl();
 		return virtualDNSEntry;
@@ -90,6 +91,7 @@ public class VirtualDNSFactoryImpl extends EFactoryImpl implements VirtualDNSFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VirtualDNSCollection createVirtualDNSCollection() {
 		VirtualDNSCollectionImpl virtualDNSCollection = new VirtualDNSCollectionImpl();
 		return virtualDNSCollection;
@@ -100,6 +102,7 @@ public class VirtualDNSFactoryImpl extends EFactoryImpl implements VirtualDNSFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VirtualDNSManagement createVirtualDNSManagement() {
 		VirtualDNSManagementImpl virtualDNSManagement = new VirtualDNSManagementImpl();
 		return virtualDNSManagement;
@@ -110,6 +113,7 @@ public class VirtualDNSFactoryImpl extends EFactoryImpl implements VirtualDNSFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VirtualDNSPackage getVirtualDNSPackage() {
 		return (VirtualDNSPackage)getEPackage();
 	}

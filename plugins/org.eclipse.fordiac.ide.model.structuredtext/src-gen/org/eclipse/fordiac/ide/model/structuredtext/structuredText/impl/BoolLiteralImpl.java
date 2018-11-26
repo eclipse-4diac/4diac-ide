@@ -73,7 +73,8 @@ public class BoolLiteralImpl extends ConstantImpl implements BoolLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public boolean isValue()
+  @Override
+public boolean isValue()
   {
     return value;
   }
@@ -83,7 +84,8 @@ public class BoolLiteralImpl extends ConstantImpl implements BoolLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setValue(boolean newValue)
+  @Override
+public void setValue(boolean newValue)
   {
     boolean oldValue = value;
     value = newValue;

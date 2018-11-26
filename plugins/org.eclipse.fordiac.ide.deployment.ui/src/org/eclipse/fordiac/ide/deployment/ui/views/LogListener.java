@@ -55,6 +55,7 @@ public class LogListener implements IDocumentListener {
 	 * 
 	 * @see org.eclipse.jface.text.IDocumentListener#documentAboutToBeChanged(org.eclipse.jface.text.DocumentEvent)
 	 */
+	@Override
 	public void documentAboutToBeChanged(final DocumentEvent event) {
 		// not used
 	}
@@ -64,6 +65,7 @@ public class LogListener implements IDocumentListener {
 	 * 
 	 * @see org.eclipse.jface.text.IDocumentListener#documentChanged(org.eclipse.jface.text.DocumentEvent)
 	 */
+	@Override
 	public void documentChanged(final DocumentEvent event) {
 		try {
 			IDocument doc = event.getDocument();

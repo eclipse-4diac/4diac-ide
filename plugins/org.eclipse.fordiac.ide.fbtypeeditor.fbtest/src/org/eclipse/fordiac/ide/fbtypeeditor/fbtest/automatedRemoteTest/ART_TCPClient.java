@@ -34,7 +34,7 @@ public class ART_TCPClient implements IIecReceivable, IIecSender {
 		return receiveDataList;
 	}
 
-	private int ReceiveListSize = 0;
+	private int receiveListSize = 0;
 	
 	private int counter=0;
 	
@@ -48,77 +48,73 @@ public class ART_TCPClient implements IIecReceivable, IIecSender {
 		manager = ChannelManager.getInstance();
 		channelID=paID;
 		
-		if (!this.Initialize(paID)) throw new CommException("Initialisation of CommunicationChannel to Runtime failed");
+		if (!this.initialize(paID)) { 
+			throw new CommException("Initialisation of CommunicationChannel to Runtime failed");
+		}
 		
 		receiveDataList=paReceiveDataListList;
-		ReceiveListSize = paListSize;
+		receiveListSize = paListSize;
 		if (null != receiveDataList) {
 			if (receiveDataList.size()!= paListSize) {
-				ReceiveListSize = receiveDataList.size();
+				receiveListSize = receiveDataList.size();
 			}
 		} else {
 			paListSize = 0;
 		}
 	}
 	
-	private boolean ReceivedDataTypeMatch(List<IEC_ANY> receivedList,List<IEC_ANY> localList)
-	{
+	private static boolean receivedDataTypeMatch(List<IEC_ANY> receivedList,List<IEC_ANY> localList){
 		
-		if (receivedList.size()!= localList.size())
+		if (receivedList.size()!= localList.size()) {
 			return false;
+		}
 		boolean equal=true;
-		for (int i=0;i<receivedList.size();i++)
-			if (receivedList.get(i).getClass()!=localList.get(i).getClass())
+		for (int i=0;i<receivedList.size();i++) {
+			if (receivedList.get(i).getClass()!=localList.get(i).getClass()) {
 				equal=false;
+			}
+		}
 		
 		return equal;
 	}
 	
-	private boolean CopyData(List<IEC_ANY> receivedList,List<IEC_ANY> localList)
-	{
-		
-		if (receivedList.size()!= localList.size())
+	private static boolean copyData(List<IEC_ANY> receivedList,List<IEC_ANY> localList){		
+		if (receivedList.size()!= localList.size()) {
 			return false;
-		for (int i=0;i<receivedList.size();i++)
-			if (receivedList.get(i).getClass()==localList.get(i).getClass())
+		}
+		for (int i=0;i<receivedList.size();i++) {
+			if (receivedList.get(i).getClass()==localList.get(i).getClass()) {
 				localList.set(i, receivedList.get(i));
+			}
+		}
 		
 		return true;
 	}
 
-	synchronized public void ReceiveIECData(List<IEC_ANY> inList) {
-		if (ReceiveListSize>counter) {
-		if (!ReceivedDataTypeMatch(inList, receiveDataList.get(counter)))
-			{
-			System.out.println("did not receive expected data");
-			return;
+	@Override
+	public synchronized void receiveIECData(List<IEC_ANY> inList) {
+		if (receiveListSize>counter) {
+			if (!receivedDataTypeMatch(inList, receiveDataList.get(counter))){
+				return;
 			}
-//		System.out.println("List size: " + inList.size());
-		CopyData(inList, receiveDataList.get(counter));
-		++counter;
-		} else {
-			System.out.println("no space for received data");
-		}
+			copyData(inList, receiveDataList.get(counter));
+			++counter;
+		} 
 	}
 	
-	protected void SendIECData(String ID, List<IEC_ANY> sendData){
-		try {
-			ChannelManager.send(ID, IChannel.TCP, sendData);
-		} catch (CommException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-		}
-		
+	protected static void sendIECData(String ID, List<IEC_ANY> sendData){
+		ChannelManager.send(ID, IChannel.TCP, sendData);
 	}
 
 	public void setMyReceiveDataList(List<List<IEC_ANY>> myReceiveData) {
 		this.receiveDataList = myReceiveData;
 	}
 
-	public void setCounter(int counter) {
+	public synchronized void setCounter(int counter) {
 		this.counter = counter;
 	}
 
-	public int getCounter() {
+	public synchronized int getCounter() {
 		return counter;
 	}
 
@@ -127,10 +123,9 @@ public class ART_TCPClient implements IIecReceivable, IIecSender {
 	}
 
 	@Override
-	public boolean Initialize(String pa_sID) {
-		
+	public boolean initialize(String id) {		
 		try {
-			manager.register(pa_sID, IChannel.TCP, this);
+			manager.register(id, IChannel.TCP, this);
 		} catch (CommException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 			return false;
@@ -139,9 +134,9 @@ public class ART_TCPClient implements IIecReceivable, IIecSender {
 	}
 
 	@Override
-	public boolean DeInitialize(String pa_sID) {
+	public boolean deInitialize(String id) {
 		try {
-			manager.deregister(pa_sID);
+			manager.deregister(id);
 		} catch (CommException e) {
 			//deregistration failed
 			return false;
@@ -150,16 +145,15 @@ public class ART_TCPClient implements IIecReceivable, IIecSender {
 	}
 
 	@Override
-	synchronized public void SendIECData(List<IEC_ANY> sendData) throws CommException {
+	public synchronized void sendIECData(List<IEC_ANY> sendData) throws CommException {
 		ChannelManager.send(channelID, IChannel.TCP, sendData);
 		counter=0;
 	}
 
 	@Override
-	public void setMyReceiveData(List<IEC_ANY> pa_loReceiveData) {
-		this.receiveDataList = new ArrayList<List<IEC_ANY>>();
-		this.receiveDataList.add(pa_loReceiveData);
-		
+	public void setMyReceiveData(List<IEC_ANY> receiveData) {
+		this.receiveDataList = new ArrayList<>();
+		this.receiveDataList.add(receiveData);		
 	}
 	
 }

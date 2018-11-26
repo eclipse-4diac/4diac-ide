@@ -94,6 +94,7 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Device> getDevices() {
 		if (devices == null) {
 			devices = new EObjectContainmentEList<Device>(Device.class, this, LibraryElementPackage.SYSTEM_CONFIGURATION__DEVICES);
@@ -106,6 +107,7 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Segment> getSegments() {
 		if (segments == null) {
 			segments = new EObjectContainmentEList<Segment>(Segment.class, this, LibraryElementPackage.SYSTEM_CONFIGURATION__SEGMENTS);
@@ -118,6 +120,7 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Link> getLinks() {
 		if (links == null) {
 			links = new EObjectContainmentEList<Link>(Link.class, this, LibraryElementPackage.SYSTEM_CONFIGURATION__LINKS);
@@ -130,8 +133,9 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AutomationSystem getAutomationSystem() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getAutomationSystem(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
 
 	/**
@@ -139,8 +143,9 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Segment getSegmentNamed(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getSegmentNamed(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getSegmentNamed(this, name);
 	}
 
 	/**
@@ -148,8 +153,9 @@ public class SystemConfigurationImpl extends I4DIACElementImpl implements System
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Device getDeviceNamed(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getDeviceNamed(this, name);
+		return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);
 	}
 
 	/**

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
+ * 				 2018 Johannes Kepler University 
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,47 +10,31 @@
  * Contributors:
  *   Jose Cabral, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - introduce abstract base class for devcie deployment commands  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
-import org.eclipse.fordiac.ide.deployment.IDeploymentExecutor;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 /**
  * The Class SendClearAction.
  */
-public class CleanDeviceHandler extends AbstractDeploymentCommand {
+public class CleanDeviceHandler extends AbstractDeviceDeploymentCommand {
 
 	@Override
-	protected boolean prepareParametersToExecute(Object element) {
-		if (element instanceof Device){
-			device =  (Device) element;
-			return true;
-		}else if(element instanceof DeviceEditPart){
-			device =  ((DeviceEditPart) element).getModel();
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	protected void executeCommand(IDeploymentExecutor executor) throws Exception {
-		try {
-			executor.clearDevice(device);
-		} catch (Exception e) {
-			throw e;
+	protected void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
+		for (Resource res : device.getResource()) {
+			if (!res.isDeviceTypeResource()) {
+				executor.deleteResource(res.getName());
+			}
 		}
 	}
 
 	@Override
 	protected String getErrorMessageHeader() {
 		return "Clean Device Error";
-	}
-
-	@Override
-	protected String getCurrentElementName() {
-		return "Device: " + device.getName();
 	}
 
 }

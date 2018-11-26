@@ -31,6 +31,7 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart implements
 
 	private Label comment;
 
+	@Override
 	public IInterfaceElement getCastedModel() {
 		return ((CommentField)getModel()).getReferencedElement();
 	}
@@ -42,6 +43,7 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart implements
 		return comment;
 	}
 
+	@Override
 	protected void update() {
 		comment.setText(((CommentField)getModel()).getLabel());
 	}

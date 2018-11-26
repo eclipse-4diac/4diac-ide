@@ -78,6 +78,7 @@ public class IEC_WSTRING extends IEC_ANY {
 	/**
 	 * @see java.lang.String#toString()
 	 */
+	@Override
 	public String toString() {
 		return value;
 	}
@@ -92,6 +93,7 @@ public class IEC_WSTRING extends IEC_ANY {
 	/**
 	 * @param value the value to set
 	 */
+	@Override
 	public boolean setValue(String value) {
 		this.value = value;
 		return true;

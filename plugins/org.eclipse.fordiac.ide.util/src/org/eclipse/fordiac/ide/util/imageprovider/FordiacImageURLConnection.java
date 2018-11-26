@@ -19,7 +19,7 @@ import java.net.URLConnection;
 
 public class FordiacImageURLConnection extends URLConnection {
 
-	String imageName;
+	private String imageName;
 
 	protected FordiacImageURLConnection(URL url) {
 		super(url);

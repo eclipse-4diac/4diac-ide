@@ -45,17 +45,13 @@ public class CompositeInstanceViewer extends DiagramEditor {
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		CompositeViewerEditPartFactory factory = new CompositeViewerEditPartFactory(this, 
-				fb, fbEditPart, getZoomManger());
-		return factory;
+		return new CompositeViewerEditPartFactory(this, fb, fbEditPart, getZoomManger());
 	}
 
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer,
 			ZoomManager zoomManager) {
-		ZoomUndoRedoContextMenuProvider cmp = new ZoomUndoRedoContextMenuProvider(getGraphicalViewer(),
-				zoomManager, getActionRegistry());
-		return cmp;
+		return new ZoomUndoRedoContextMenuProvider(getGraphicalViewer(), zoomManager, getActionRegistry());
 	}
 
 	@Override
@@ -84,15 +80,13 @@ public class CompositeInstanceViewer extends DiagramEditor {
 		if (input instanceof CompositeInstanceViewerInput) {
 			CompositeInstanceViewerInput untypedInput = (CompositeInstanceViewerInput) input;
 			Object content = untypedInput.getContent();
-			if (content instanceof FB) {
-				if (((FB) content).getType() instanceof CompositeFBType) {
-					fb = (FB) content;
-					setPartName(getNameHierarchy());
-					//we need to copy the type so that we have an instance specific network TODO consider using here the type
-					//cfbt = EcoreUtil.copy((CompositeFBType) fb.getFBType()); 
-					cfbt = (CompositeFBType) fb.getType();
-					this.fbEditPart = untypedInput.getFbEditPart();
-				}
+			if ((content instanceof FB) && (((FB) content).getType() instanceof CompositeFBType)) {
+				fb = (FB) content;
+				setPartName(getNameHierarchy());
+				//we need to copy the type so that we have an instance specific network TODO consider using here the type
+				//cfbt = EcoreUtil.copy((CompositeFBType) fb.getFBType()); 
+				cfbt = (CompositeFBType) fb.getType();
+				this.fbEditPart = untypedInput.getFbEditPart();
 			}
 		}
 	}
@@ -119,11 +113,6 @@ public class CompositeInstanceViewer extends DiagramEditor {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		// nothing to do as its a viewer!
-	}
-	
-	@Override
-	public void doSaveAs() {
-		super.doSaveAs();
 	}
 	
 	private String getNameHierarchy() {

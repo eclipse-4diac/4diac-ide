@@ -79,6 +79,7 @@ public class TestdataFactoryImpl extends EFactoryImpl implements TestdataFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TestData createTestData() {
 		TestDataImpl testData = new TestDataImpl();
 		return testData;
@@ -89,6 +90,7 @@ public class TestdataFactoryImpl extends EFactoryImpl implements TestdataFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ValuedVarDecl createValuedVarDecl() {
 		ValuedVarDeclImpl valuedVarDecl = new ValuedVarDeclImpl();
 		return valuedVarDecl;
@@ -99,6 +101,7 @@ public class TestdataFactoryImpl extends EFactoryImpl implements TestdataFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TestdataPackage getTestdataPackage() {
 		return (TestdataPackage)getEPackage();
 	}

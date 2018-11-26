@@ -14,8 +14,9 @@ package org.eclipse.fordiac.ide.onlineedit.handlers;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.deployment.ConnectionDeploymentData;
-import org.eclipse.fordiac.ide.deployment.IDeploymentExecutor;
+import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.ui.handlers.AbstractDeploymentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -32,7 +33,7 @@ public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand{
 		if (element instanceof ConnectionEditPart){
 			conn = (Connection)((ConnectionEditPart) element).getModel();
 			Connection resCon = getResourceConnection(conn);
-			if (null != conn && null != resCon){
+			if (null != resCon){
 				res = (Resource) resCon.getFBNetwork().eContainer();
 				if (null != res){
 					device = res.getDevice();
@@ -44,15 +45,11 @@ public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand{
 	}
 
 	@Override
-	protected void executeCommand(IDeploymentExecutor executor) throws Exception {
-		try {
-			executor.createConnection(res, new ConnectionDeploymentData("", conn.getSource(), "", conn.getDestination())); //$NON-NLS-1$ //$NON-NLS-2$
-		} catch (Exception e) {
-			throw e;
-		}
+	protected void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
+		executor.createConnection(res, new ConnectionDeploymentData("", conn.getSource(), "", conn.getDestination())); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
-	private Connection getResourceConnection(Connection conn) {
+	private static Connection getResourceConnection(Connection conn) {
 		if(conn.getFBNetwork().eContainer() instanceof Resource){
 			return conn;
 		}		

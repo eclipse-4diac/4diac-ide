@@ -28,6 +28,7 @@ public class DataConnectionCreateCommand extends AbstractConnectionCreateCommand
 		super(parent);
 	}
 
+	@Override
 	protected Connection createConnectionElement(){
 		return LibraryElementFactory.eINSTANCE.createDataConnection();
 	}
@@ -44,8 +45,7 @@ public class DataConnectionCreateCommand extends AbstractConnectionCreateCommand
 			return false;
 		}
 
-		boolean retVal = LinkConstraints.canCreateDataConnection((VarDeclaration) source, (VarDeclaration) destination);
-		return retVal;
+		return LinkConstraints.canCreateDataConnection((VarDeclaration) source, (VarDeclaration) destination);
 	}
 
 	@Override

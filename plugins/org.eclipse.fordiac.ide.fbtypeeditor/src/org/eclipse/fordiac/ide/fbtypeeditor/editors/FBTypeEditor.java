@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ * 				 2018 TU Wien/ACIN
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,6 +9,9 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   
+ *   Peter Gsellmann
+ *     - incorporating simple fb
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
@@ -24,6 +27,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Notification;
@@ -33,7 +37,7 @@ import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -41,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
@@ -109,7 +114,7 @@ public class FBTypeEditor extends FormEditor implements
 				}
 				
 				getCommandStack().markSaveLocation();
-				CommonElementExporter.saveType(paletteEntry);			
+				AbstractTypeExporter.saveType(paletteEntry);			
 				firePropertyChange(IEditorPart.PROP_DIRTY);
 			}
 		}
@@ -154,7 +159,7 @@ public class FBTypeEditor extends FormEditor implements
 		if (editorInput instanceof FileEditorInput) {
 			IFile fbTypeFile = ((FileEditorInput) editorInput).getFile();
 			if(!fbTypeFile.exists()) {
-				throw new PartInitException(new Status(Status.ERROR, Activator.PLUGIN_ID, "Type file does not exist!"));
+				throw new PartInitException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Type file does not exist!"));
 			}
 
 			fbPalette = FBTypeUtils.getPalletteForFBTypeFile(fbTypeFile);
@@ -189,7 +194,7 @@ public class FBTypeEditor extends FormEditor implements
 		if(paletteEntry instanceof FBTypePaletteEntry){
 			return ((FBTypePaletteEntry)paletteEntry).getFBType();
 		} else if(paletteEntry instanceof AdapterTypePaletteEntry){
-			return ((AdapterTypePaletteEntry)paletteEntry).getAdapterType().getAdapterFBType();
+			return ((AdapterTypePaletteEntry)paletteEntry).getType().getAdapterFBType();
 		}
 		return null;
 	}
@@ -291,6 +296,7 @@ public class FBTypeEditor extends FormEditor implements
 				(editorType.equals("ForAllFBTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllNonAdapterFBTypes") && !(fbType instanceof AdapterFBType)) || //$NON-NLS-1$
 				(fbType instanceof BasicFBType && editorType.equals("basic")) || //$NON-NLS-1$
+				(fbType instanceof SimpleFBType && editorType.equals("simple")) || //$NON-NLS-1$
 			    (fbType instanceof ServiceInterfaceFBType && editorType.equals("serviceInterface")) || //$NON-NLS-1$
 			    (fbType instanceof CompositeFBType && editorType.equals("composite"))		 //$NON-NLS-1$
 		);
@@ -306,6 +312,7 @@ public class FBTypeEditor extends FormEditor implements
 	 * @see org.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui.
 	 * IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
 	 */
+	@Override
 	public void selectionChanged(final IWorkbenchPart part,
 			final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor())) {
@@ -313,6 +320,7 @@ public class FBTypeEditor extends FormEditor implements
 		}
 	}
 
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getAdapter(Class required) {
 		if (IContentOutlinePage.class.equals(required)) {

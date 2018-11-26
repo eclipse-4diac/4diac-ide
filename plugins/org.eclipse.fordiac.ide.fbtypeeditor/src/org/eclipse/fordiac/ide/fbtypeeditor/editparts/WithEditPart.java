@@ -136,6 +136,7 @@ public class WithEditPart extends AbstractConnectionEditPart {
 	}
 
 	private final IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
+		@Override
 		public void propertyChange(PropertyChangeEvent event) {
 		}
 	};

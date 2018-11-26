@@ -78,7 +78,8 @@ public class WhileStatementImpl extends StatementImpl implements WhileStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getExpression()
+  @Override
+public Expression getExpression()
   {
     return expression;
   }
@@ -105,7 +106,8 @@ public class WhileStatementImpl extends StatementImpl implements WhileStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setExpression(Expression newExpression)
+  @Override
+public void setExpression(Expression newExpression)
   {
     if (newExpression != expression)
     {
@@ -126,7 +128,8 @@ public class WhileStatementImpl extends StatementImpl implements WhileStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public StatementList getStatements()
+  @Override
+public StatementList getStatements()
   {
     return statements;
   }
@@ -153,7 +156,8 @@ public class WhileStatementImpl extends StatementImpl implements WhileStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setStatements(StatementList newStatements)
+  @Override
+public void setStatements(StatementList newStatements)
   {
     if (newStatements != statements)
     {

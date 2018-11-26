@@ -9,41 +9,51 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import java.util.ArrayList;
-
+import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceAdapterSection;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
+import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
-public class EditInterfaceAdapterSection extends AbstractEditInterfaceSection {
-	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);
-		inputsViewer.setContentProvider(new InterfaceContentProvider(true, InterfaceContentProviderType.ADAPTER));
-		outputsViewer.setContentProvider(new InterfaceContentProvider(false, InterfaceContentProviderType.ADAPTER));
-	}
-
+public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
-	protected void setType(Object input) {
-		super.setType(input);
-		setCellEditors();  //only now the types are correctly set
-	}
-
-	@Override
-	protected CreateSubAppInterfaceElementCommand newCommand(boolean isInput) {
-		AdapterType type = (AdapterType) getType().getFbNetwork().getApplication().getAutomationSystem().getPalette().getTypeEntry(fillTypeCombo()[0]).getType();
+	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
+		AdapterType type = getAdapterTypes(getPalette()).get(0).getType();
 		return new CreateSubAppInterfaceElementCommand(type, getType().getInterface(), isInput, -1);
 	}
 
 	@Override
-	protected String[] fillTypeCombo() {
-		ArrayList<String> list = new ArrayList<String>();
-		if(null != getType()) {
-			for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFbNetwork().getApplication().getAutomationSystem().getPalette())){
-				list.add(adaptertype.getAdapterType().getName());
-			}
+	protected INamedElement getInputType(Object input) {
+		if (input instanceof SubAppForFBNetworkEditPart) {
+			return ((SubAppForFBNetworkEditPart) input).getModel();
 		}
-		return list.toArray(new String[0]);		
+		if (input instanceof UISubAppNetworkEditPart) {
+			return ((UISubAppNetworkEditPart) input).getSubApp();
+		}
+		return null;
+	}
+
+	@Override
+	protected DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection) {
+		return new DeleteSubAppInterfaceElementCommand(selection);
+	}
+
+	@Override
+	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput,
+			boolean moveUp) {
+		return new ChangeSubAppInterfaceOrderCommand(selection, isInput, moveUp);
+	}
+	
+	@Override
+	protected SubApp getType() {
+		return (SubApp)type;
 	}
 }

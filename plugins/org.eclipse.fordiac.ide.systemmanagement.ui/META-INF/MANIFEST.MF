@@ -30,7 +30,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.systemconfiguration,
  org.eclipse.fordiac.ide.model.commands
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-Activator: org.eclipse.fordiac.ide.systemmanagement.ui.Activator
 Bundle-SymbolicName: org.eclipse.fordiac.ide.systemmanagement.ui;singleton:=true
+Automatic-Module-Name: org.eclipse.fordiac.ide.systemmanagement.ui

@@ -13,9 +13,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.VarInitialization;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -62,9 +60,6 @@ public class CreateInternalVariableCommand extends Command {
 		varDecl.setTypeName(dataType.getName());
 		varDecl.setComment("Internal Variable"); //$NON-NLS-1$
 		varDecl.setArraySize(0);
-		VarInitialization varInitialization = DataFactory.eINSTANCE.createVarInitialization();
-		varInitialization.setInitialValue(""); //$NON-NLS-1$
-		varDecl.setVarInitialization(varInitialization);
 		Value value = LibraryElementFactory.eINSTANCE.createValue();
 		value.setValue(""); //$NON-NLS-1$
 		varDecl.setValue(value);

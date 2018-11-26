@@ -1,5 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2010, 2011, 2013, 2014  Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2010, 2011, 2013, 2014, 2018  Profactor GmbH, TU Wien ACIN, 
+ * 										 fortiss GmbH, Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,8 +15,8 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -45,13 +45,6 @@ import org.w3c.dom.NodeList;
  */
 
 public class ADPImporter {
-	/** The variables. */
-	public static HashMap<String, VarDeclaration> variables = new HashMap<String, VarDeclaration>();
-	public static HashMap<String, VarDeclaration> adapterVariables = new HashMap<String, VarDeclaration>();
-
-	/** The events. */
-	public static HashMap<String, Event> events = new HashMap<String, Event>();
-	public static HashMap<String, Event> adapterEvents = new HashMap<String, Event>();
 
 	/**
 	 * Import Adapter types.
@@ -75,11 +68,8 @@ public class ADPImporter {
 				db = dbf.newDocumentBuilder();
 				Document document = db.parse(iFile.getContents());
 				Element rootNode = document.getDocumentElement();
-				AdapterType type = LibraryElementFactory.eINSTANCE
-						.createAdapterType();
 				// parse document and fill type
-				return parseAdapterType(type, rootNode);
-
+				return parseAdapterType(rootNode);
 			} catch (Exception e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
@@ -102,68 +92,48 @@ public class ADPImporter {
 	 *             the FBT import exception
 	 * @throws ParseException 
 	 */
-	private static AdapterType parseAdapterType(final AdapterType type,
-			final Node rootNode) throws TypeImportException, ParseException {
-		variables.clear();
-		adapterVariables.clear();
-		events.clear();
-		adapterEvents.clear();
-
-		AdapterFBType adapterFBType = LibraryElementFactory.eINSTANCE
-				.createAdapterFBType();
+	private static AdapterType parseAdapterType(final Node rootNode) throws TypeImportException, ParseException {
+		AdapterType type = LibraryElementFactory.eINSTANCE.createAdapterType();
+		AdapterFBType adapterFBType = LibraryElementFactory.eINSTANCE.createAdapterFBType();
 		type.setAdapterFBType(adapterFBType);
 		adapterFBType.setAdapterType(type);
 		if (rootNode.getNodeName().equals(LibraryElementTags.ADAPTER_TYPE)) {
 			NamedNodeMap map = rootNode.getAttributes();
 			Node name = map.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE);
 			if (name != null) {
-				adapterFBType.setName(name.getNodeValue());
+				type.setName(name.getNodeValue());
 			}
-			Node comment = map
-					.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
+			Node comment = map.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
 			if (comment != null) {
-				adapterFBType.setComment(type.getComment());
+				type.setComment(comment.getNodeValue());
 			}
 			NodeList childNodes = rootNode.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); i++) {
 				Node n = childNodes.item(i);
-				if (n.getNodeName().equals(
-						LibraryElementTags.IDENTIFICATION_ELEMENT)) {
-					adapterFBType.setIdentification(CommonElementImporter
-							.parseIdentification(adapterFBType, n));
-				}
-				if (n.getNodeName().equals(
-						LibraryElementTags.VERSION_INFO_ELEMENT)) {
-					adapterFBType.getVersionInfo().add(
-							CommonElementImporter.parseVersionInfo(adapterFBType, n));
-				}
-				if (n.getNodeName().equals(
-						LibraryElementTags.COMPILER_INFO_ELEMENT)) {
+				switch (n.getNodeName()) {
+				case LibraryElementTags.IDENTIFICATION_ELEMENT:
+					adapterFBType.setIdentification(CommonElementImporter.parseIdentification(adapterFBType, n));
+					break;
+				case LibraryElementTags.VERSION_INFO_ELEMENT:
+					adapterFBType.getVersionInfo().add(CommonElementImporter.parseVersionInfo(adapterFBType, n));
+					break;
+				case LibraryElementTags.COMPILER_INFO_ELEMENT:
 					// TODO compiler info for Adapter
 					// type.setCompilerInfo(CompilableElementImporter
 					// .parseCompilerInfo(type, n));
-				}
-				if (n.getNodeName().equals(
-						LibraryElementTags.INTERFACE_LIST_ELEMENT)) {
-					InterfaceList interfaceList_socket = LibraryElementFactory.eINSTANCE
-							.createInterfaceList();
-					adapterFBType.setInterfaceList(interfaceList_socket);
-					parseInterfaceList(interfaceList_socket, n, adapterEvents,
-							adapterVariables, false);
-
-				}
-				
-				if (n.getNodeName().equals(LibraryElementTags.SERVICE_ELEMENT)) {
-					// type = convertToServiceInterfaceType(type); // FIX:
-					// gebenh: every
-					// fbtype can have a service
-					
-					Service service = LibraryElementFactory.eINSTANCE.createService();
-					adapterFBType.setService(service);
+					break;
+				case LibraryElementTags.INTERFACE_LIST_ELEMENT:
+					adapterFBType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
+					parseInterfaceList(adapterFBType.getInterfaceList(), n);
+					break;
+				case LibraryElementTags.SERVICE_ELEMENT:
+					adapterFBType.setService(LibraryElementFactory.eINSTANCE.createService());
 					new FBTImporter().parseService(adapterFBType, n);
+					break;
+				default:
+					break;
 				}
 			}
-
 			return type;
 		}
 		throw new ParseException("Parse Adaptertype Exception", 0);
@@ -182,16 +152,15 @@ public class ADPImporter {
 	 *             the FBT import exception
 	 */
 	private static void parseEventOutputs(List<Event> eventOutputs,
-			final Node node, HashMap<String, Event> events)
+			final Node node, Map<String, Event> events)
 			throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
 			if (n.getNodeName().equals(LibraryElementTags.EVENT_ELEMENT)) {
-
 				Event e = ImportUtils.parseEvent(n);
 				events.put(e.getName(), e);
-				((IInterfaceElement) e).setIsInput(false);
+				e.setIsInput(false);
 				eventOutputs.add(e);
 			}
 		}
@@ -210,14 +179,14 @@ public class ADPImporter {
 	 *             the FBT import exception
 	 */
 	private static void parseEventInputs(List<Event> eventInputs,
-			final Node node, HashMap<String, Event> events)
+			final Node node, Map<String, Event> events)
 			throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
 			if (n.getNodeName().equals(LibraryElementTags.EVENT_ELEMENT)) {
 				Event e = ImportUtils.parseEvent(n);
-				((IInterfaceElement) e).setIsInput(true);
+				e.setIsInput(true);
 				events.put(e.getName(), e);
 				eventInputs.add(e);
 			}
@@ -239,64 +208,38 @@ public class ADPImporter {
 	 * @throws TypeImportException
 	 *             the FBT import exception
 	 */
-	private static void parseInterfaceList(InterfaceList interfaceList,
-			final Node node, HashMap<String, Event> events,
-			HashMap<String, VarDeclaration> variables, boolean invertInterface)
+	private static void parseInterfaceList(InterfaceList interfaceList, final Node node)
 			throws TypeImportException {
-		// InterfaceList interfaceList = LibraryElementFactory.eINSTANCE
-		// .createInterfaceList();
-		// type.setInterfaceList(interfaceList);
+		Map<String, VarDeclaration> variables = new HashMap<>();
+		Map<String, Event> inputEvents = new HashMap<>();
+		Map<String, Event> outputEvents = new HashMap<>();
+		
 		NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
-			if (n.getNodeName().equals(LibraryElementTags.EVENT_INPUTS_ELEMENT)) {
-				if (invertInterface) {
-					parseEventOutputs(interfaceList.getEventOutputs(), n,
-							events);
-				} else {
-					parseEventInputs(interfaceList.getEventInputs(), n, events);
-				}
-			}
-			if (n.getNodeName().equals(LibraryElementTags.EVENT_OUTPUTS)) {
-				if (invertInterface) {
-					parseEventInputs(interfaceList.getEventInputs(), n, events);
-				} else {
-					parseEventOutputs(interfaceList.getEventOutputs(), n,
-							events);
-				}
-			}
-			if (n.getNodeName().equals(LibraryElementTags.INPUT_VARS_ELEMENT)) {
-				List<VarDeclaration> vars = ImportUtils.parseInputVariables(n);
-				for (Iterator<VarDeclaration> iterator = vars.iterator(); iterator
-						.hasNext();) {
-					VarDeclaration v = iterator.next();
-					if (invertInterface) {
-						v.setIsInput(false);
-						interfaceList.getOutputVars().add(v);
-					} else {
-						v.setIsInput(true);
-						interfaceList.getInputVars().add(v);
-					}
+			switch (n.getNodeName()) {
+			case LibraryElementTags.EVENT_INPUTS_ELEMENT:
+				parseEventInputs(interfaceList.getEventInputs(), n, inputEvents);
+				break;
+			case LibraryElementTags.EVENT_OUTPUTS:
+				parseEventOutputs(interfaceList.getEventOutputs(), n, outputEvents);
+				break;
+			case LibraryElementTags.INPUT_VARS_ELEMENT:
+				for (VarDeclaration v : ImportUtils.parseInputVariables(n)) {
+					interfaceList.getInputVars().add(v);
 					variables.put(v.getName(), v);
 				}
-			}
-			if (n.getNodeName().equals(LibraryElementTags.OUTPUT_VARS_ELEMENT)) {
-				List<VarDeclaration> vars = ImportUtils.parseOutputVariables(n);
-				for (Iterator<VarDeclaration> iterator = vars.iterator(); iterator
-						.hasNext();) {
-					VarDeclaration v = iterator.next();
-					if (invertInterface) {
-						v.setIsInput(true);
-						interfaceList.getInputVars().add(v);
-					} else {
-						v.setIsInput(false);
-						interfaceList.getOutputVars().add(v);
-					}
+				break;
+			case LibraryElementTags.OUTPUT_VARS_ELEMENT:
+				for (VarDeclaration v : ImportUtils.parseOutputVariables(n)){
+					interfaceList.getOutputVars().add(v);
 					variables.put(v.getName(), v);
 				}
+				break;
+			default:
+				break;
 			}
-
 		}
-		new FBTImporter().parseWithConstructs(childNodes, events, events, variables);
+		new FBTImporter().parseWithConstructs(childNodes, inputEvents, outputEvents, variables);
 	}
 }

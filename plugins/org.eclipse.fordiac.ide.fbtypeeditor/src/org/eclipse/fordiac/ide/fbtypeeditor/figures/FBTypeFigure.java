@@ -23,6 +23,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MarginBorder;
+import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
@@ -58,8 +59,7 @@ public class FBTypeFigure extends Shape {
 	private final Figure sockets = new Figure();
 	private final Figure dataOutputs = new Figure();
 	private final Figure plugs = new Figure();
-	protected TopBorder bottomBorder;
-	protected Label typeName;
+	private Label typeName;
 	private Label versionInfoLabel;
 	private FBType type;
 	private ZoomManager zoomManager; 
@@ -122,9 +122,6 @@ public class FBTypeFigure extends Shape {
 		tpl.marginHeight = 0;
 
 		topInputs.setLayoutManager(tpl);
-		// topInputs.add(new Label("comment ..."));
-		// topInputs.add(new Label("type "));
-		// topInputs.add(new Label(" "));
 
 		//		
 		ToolbarLayout topInputsLayout = new ToolbarLayout(false);
@@ -147,8 +144,8 @@ public class FBTypeFigure extends Shape {
 		top.setConstraint(eventOutputs, BorderLayout.RIGHT);
 
 		Figure middleContainer = new Figure();
-		BorderLayout borderLayout;
-		middleContainer.setLayoutManager(borderLayout = new BorderLayout());
+		BorderLayout borderLayout = new BorderLayout();
+		middleContainer.setLayoutManager(borderLayout);
 		borderLayout.setHorizontalSpacing(10);
 		middleContainer.setBorder(new MarginBorder(0, 7, 0, 7));
 
@@ -168,8 +165,8 @@ public class FBTypeFigure extends Shape {
 		middle.setBorder(new TopBorder(getBackgroundColor(), 0));
 		middleLayout.marginHeight = 0;
 		middleLayout.verticalSpacing = 1;
-		middle.add(typeName = new Label(type.getName() != null ? type.getName()
-				: "N/D"));
+		typeName = new Label(type.getName() != null ? type.getName() : "N/D");
+		middle.add(typeName);
 		typeName.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
 		typeName.setTextAlignment(PositionConstants.CENTER);
 		middle.setConstraint(typeName, new GridData(GridData.HORIZONTAL_ALIGN_FILL
@@ -184,13 +181,8 @@ public class FBTypeFigure extends Shape {
 				| GridData.GRAB_HORIZONTAL));
 
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
-		bottom
-				.setBorder(bottomBorder = new TopBorder(getBackgroundColor(), 14 - 4));
+		bottom.setBorder(new TopBorder(getBackgroundColor(), 14 - 4));
 
-		// GridLayout bottomLayout = new GridLayout(2, false);
-		// bottomLayout.marginHeight = 4;
-		// bottomLayout.marginWidth = 1;
-		// bottomLayout.horizontalSpacing = 0;
 		BorderLayout bottomLayout = new BorderLayout();
 		bottom.setLayoutManager(bottomLayout);
 		GridData bottomLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL
@@ -253,7 +245,7 @@ public class FBTypeFigure extends Shape {
 		outputContainerLayout.setHorizontal(false);
 		outputContainerLayout.setStretchMinorAxis(true);
 		outputContainerLayout.setMajorSpacing(0);
-		outputContainerLayout.setMinorAlignment(FlowLayout.ALIGN_BOTTOMRIGHT);
+		outputContainerLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomOutputContainer.setLayoutManager(outputContainerLayout);
 		
 		bottom.add(bottomOutputContainer);
@@ -262,7 +254,7 @@ public class FBTypeFigure extends Shape {
 		//
 		ToolbarLayout bottomOutputsLayout = new ToolbarLayout(false);
 		bottomOutputsLayout.setStretchMinorAxis(true);
-		bottomOutputsLayout.setMinorAlignment(ToolbarLayout.ALIGN_BOTTOMRIGHT);
+		bottomOutputsLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomOutputsLayout.setSpacing(0);
 
 		dataOutputs.setLayoutManager(bottomOutputsLayout);
@@ -273,13 +265,13 @@ public class FBTypeFigure extends Shape {
 		bottomDataOutputContainer.setLayoutManager(bottomDataOutputLayout);
 		
 		bottomOutputContainer.add(bottomDataOutputContainer);
-		bottomOutputContainer.setConstraint(bottomDataOutputContainer, FlowLayout.ALIGN_BOTTOMRIGHT);
+		bottomOutputContainer.setConstraint(bottomDataOutputContainer, OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomDataOutputContainer.add(dataOutputs);
 		bottomDataOutputContainer.setConstraint(dataOutputs, BorderLayout.RIGHT);
 		
 		ToolbarLayout bottomPlugsLayout = new ToolbarLayout(false);
 		bottomPlugsLayout.setStretchMinorAxis(true);
-		bottomPlugsLayout.setMinorAlignment(ToolbarLayout.ALIGN_BOTTOMRIGHT);
+		bottomPlugsLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		plugs.setLayoutManager(bottomPlugsLayout);
 		plugs.setBorder(new MarginBorder(0, 0, 4, 0));
 		
@@ -288,7 +280,7 @@ public class FBTypeFigure extends Shape {
 		bottomPlugsContainer.setLayoutManager(bottomPlugsContainerLayout);
 		
 		bottomOutputContainer.add(bottomPlugsContainer);
-		bottomOutputContainer.setConstraint(bottomPlugsContainer, FlowLayout.ALIGN_BOTTOMRIGHT);
+		bottomOutputContainer.setConstraint(bottomPlugsContainer, OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomPlugsContainer.add(plugs);
 		bottomPlugsContainer.setConstraint(plugs, BorderLayout.RIGHT);
 	}
@@ -321,7 +313,7 @@ public class FBTypeFigure extends Shape {
 		return typeName;
 	}
 	
-	public void updateVersionInfoLabel(){
+	public final void updateVersionInfoLabel(){
 		VersionInfo versionInfo = null;
 		if (type.getVersionInfo().size() > 0) {
 			versionInfo = type.getVersionInfo().get(type.getVersionInfo().size() - 1);
@@ -364,9 +356,12 @@ public class FBTypeFigure extends Shape {
 
 	@Override
 	protected void fillShape(final Graphics graphics) {
+		//nothing to do here
 	}
 
 	@Override
 	protected void outlineShape(final Graphics graphics) {
+		//nothing to do here
 	}
+	
 }

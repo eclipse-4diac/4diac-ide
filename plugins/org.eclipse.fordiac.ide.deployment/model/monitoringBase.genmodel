@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="******************************************************************************&#xD;&#xA; * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH&#xD;&#xA; * &#xD;&#xA; * All rights reserved. This program and the accompanying materials&#xD;&#xA; * are made available under the terms of the Eclipse Public License v1.0&#xD;&#xA; * which accompanies this distribution, and is available at&#xD;&#xA; * http://www.eclipse.org/legal/epl-v10.html&#xD;&#xA; *&#xD;&#xA; * Contributors:&#xD;&#xA; *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz&#xD;&#xA; *     - initial API and implementation and/or initial documentation&#xD;&#xA; ******************************************************************************&#xD;&#xA;"
+    modelDirectory="/org.eclipse.fordiac.ide.deployment/src-gen" editDirectory="/org.eclipse.fordiac.ide.deployment.edit/src-gen"
+    editorDirectory="/org.eclipse.fordiac.ide.deployment.editor/src-gen" modelPluginID="org.eclipse.fordiac.ide.deployment"
+    modelName="monitoringBase" nonNLSMarkers="true" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="8.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.deployment.edit"
+    editorPluginID="org.eclipse.fordiac.ide.deployment.editor" usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data"
+    importOrganizing="true" cleanup="true">
+  <foreignModel>monitoringBase.ecore</foreignModel>
+  <genPackages prefix="MonitoringBase" basePackage="org.eclipse.fordiac.ide.deployment"
+      disposableProviderFactory="true" ecorePackage="monitoringBase.ecore#/">
+    <genClasses image="false" ecoreClass="monitoringBase.ecore#//MonitoringBaseElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoringBase.ecore#//MonitoringBaseElement/port"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoringBase.ecore#//MonitoringBaseElement/offline"/>
+      <genOperations ecoreOperation="monitoringBase.ecore#//MonitoringBaseElement/getPortString"
+          body="String hierarchy = &quot;&quot;; &#xA;&#x9;&#x9;for (String element : getPort().getHierarchy()) {&#xA;&#x9;&#x9;&#x9;hierarchy += element; &#xA;&#x9;&#x9;&#x9;hierarchy += &quot;.&quot;; &#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;String adapter = &quot;&quot;;&#xA;&#x9;&#x9;if (getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {&#xA;&#x9;&#x9;&#x9;adapter += ((PortElementImpl)getPort().eContainer()).getInterfaceElement().getName();&#xA;&#x9;&#x9;&#x9;adapter += &quot;.&quot;;&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;return hierarchy +  getPort().getFb().getName() + &quot;.&quot; +&#xA;&#x9;&#x9;&#x9;&#x9;adapter + getPort().getInterfaceElement().getName();"/>
+      <genOperations ecoreOperation="monitoringBase.ecore#//MonitoringBaseElement/getResourceString"
+          body="return getPort().getResource().getName();"/>
+      <genOperations ecoreOperation="monitoringBase.ecore#//MonitoringBaseElement/getFBString"
+          body="return getPort().getFb().getName();"/>
+      <genOperations ecoreOperation="monitoringBase.ecore#//MonitoringBaseElement/getQualifiedString"
+          body="String hierarchy = &quot;&quot;; &#xA;for (String element : getPort().getHierarchy()) {&#xA;&#x9;hierarchy += element; &#xA;&#x9;hierarchy += &quot;.&quot;; &#xA;}&#xA;&#xA;String adapter = &quot;&quot;;&#xA;if (getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {&#xA;&#x9;adapter += ((PortElementImpl)getPort().eContainer()).getInterfaceElement().getName();&#xA;&#x9;adapter += &quot;.&quot;;&#xA;}&#xA;&#xA;return hierarchy +  getPort().getFb().getName() + &quot;.&quot; +&#xA;&#x9;&#x9;adapter + getPort().getInterfaceElement().getName();"/>
+    </genClasses>
+    <genClasses ecoreClass="monitoringBase.ecore#//PortElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoringBase.ecore#//PortElement/fb"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoringBase.ecore#//PortElement/interfaceElement"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoringBase.ecore#//PortElement/resource"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute monitoringBase.ecore#//PortElement/hierarchy"/>
+      <genOperations ecoreOperation="monitoringBase.ecore#//PortElement/getPortString"
+          body="&#x9;&#x9;String hierarchy = &quot;&quot;; &#xD;&#xA;&#x9;&#x9;for (String element : getHierarchy()) {&#xD;&#xA;&#x9;&#x9;&#x9;hierarchy += element; &#xD;&#xA;&#x9;&#x9;&#x9;hierarchy += &quot;.&quot;; &#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;String adapter = &quot;&quot;;&#xD;&#xA;&#x9;&#x9;if (interfaceElement.eContainer().eContainer() instanceof AdapterFB) {&#xD;&#xA;&#x9;&#x9;&#x9;adapter += ((PortElementImpl)eContainer()).interfaceElement.getName();&#xD;&#xA;&#x9;&#x9;&#x9;adapter += &quot;.&quot;;&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;return getResource().getDevice().getName() + &quot;.&quot;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;+ resource.getName() + &quot;.&quot; + hierarchy +  fb.getName() + &quot;.&quot;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;+ adapter + interfaceElement.getName();"/>
+      <genOperations ecoreOperation="monitoringBase.ecore#//PortElement/getDevice"
+          body="&#x9;&#x9;return getResource().getDevice();"/>
+      <genOperations ecoreOperation="monitoringBase.ecore#//PortElement/getSystem"
+          body="&#x9;&#x9;return getResource().getAutomationSystem();"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="monitoringBase.ecore#//IEditPartCreator"/>
+  </genPackages>
+</genmodel:GenModel>

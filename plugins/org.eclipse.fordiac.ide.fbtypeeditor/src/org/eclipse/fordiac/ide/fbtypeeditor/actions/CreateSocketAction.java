@@ -39,7 +39,7 @@ public class CreateSocketAction extends WorkbenchPartAction {
 
 	@Override
 	public void run() {
-		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(entry.getAdapterType(), fbType.getInterfaceList(), true, -1);
+		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(entry.getType(), fbType.getInterfaceList(), true, -1);
 		execute(cmd);
 	}
 

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2012 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,16 +10,19 @@
  * Contributors:
  *   Gerhard Ebenhofer, Matthias Plasch, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring     
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IChildrenProvider;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringBaseElement;
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
 
 
 public class MonitoringChildren implements IMonitoringListener,
@@ -29,8 +33,8 @@ public class MonitoringChildren implements IMonitoringListener,
 	}
 
 	@Override
-	public ArrayList<IEditPartCreator> getChildren(FBNetwork fbNetwork) {
-		ArrayList<IEditPartCreator> arrayList = new ArrayList<>();
+	public List<IEditPartCreator> getChildren(FBNetwork fbNetwork) {
+		List<IEditPartCreator> arrayList = new ArrayList<>();
 		
 		//TODO - model refactoring fetch only the list of monitored elements of the same system
 		for (MonitoringBaseElement element : MonitoringManager.getInstance().getElementsToMonitor()) {			
@@ -58,17 +62,17 @@ public class MonitoringChildren implements IMonitoringListener,
 
 	@Override
 	public void notifyAddPort(PortElement port) {
-		// nothing to do;
+		// nothing to do
 	}
 
 	@Override
 	public void notifyRemovePort(PortElement port) {
-		// nothing to do;
+		// nothing to do
 	}
 
 	@Override
 	public void notifyTriggerEvent(PortElement port) {
-		// nothing to do;
+		// nothing to do
 	}
 
 }

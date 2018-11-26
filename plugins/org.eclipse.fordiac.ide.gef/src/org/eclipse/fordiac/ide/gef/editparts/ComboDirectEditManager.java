@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -40,7 +40,7 @@ public class ComboDirectEditManager extends DirectEditManager {
 	/** The scaled font. */
 	private Font scaledFont;
 	
-	private ArrayList<String> comboData;
+	private List<String> comboData;
 	
 	private int selectedItem = -1;
 
@@ -99,13 +99,7 @@ public class ComboDirectEditManager extends DirectEditManager {
 	 * @param initialChar the initial char
 	 */
 	public void show(final char initialChar) {
-		//initialString = new String(new char[] { initialChar });
 		this.show();
-		// Get the Text control
-		// Text textControl = (Text) getCellEditor().getControl();
-		// // Set the controls text and position the caret at the end of the
-		// text
-		// textControl.setSelection(1);
 		setDirty(true);
 		getLocator().relocate(getCellEditor());
 	}
@@ -175,7 +169,7 @@ public class ComboDirectEditManager extends DirectEditManager {
 		// combo.selectAll();
 	}
 	
-	public void updateComboData(ArrayList<String> comboData){
+	public void updateComboData(List<String> comboData){
 		this.comboData = comboData;
 		if((null != combo) && (!combo.isDisposed())){
 			combo.removeAll();

@@ -22,8 +22,8 @@ import org.eclipse.fordiac.ide.util.comm.exceptions.DataTypeValueOutOfBoundsExce
 
 public class IEC_LINT extends IEC_INT {
 	
-	protected static final long BOUNDS_MASK=0x0L;
-	protected static final long BOUNDS_MASK_32bit=0xFFFFFFFF00000000L;
+	private static final long BOUNDS_MASK=0x0L;
+	private static final long BOUNDS_MASK_32bit=0xFFFFFFFF00000000L;
 	protected long value;
 	
 	public IEC_LINT(){

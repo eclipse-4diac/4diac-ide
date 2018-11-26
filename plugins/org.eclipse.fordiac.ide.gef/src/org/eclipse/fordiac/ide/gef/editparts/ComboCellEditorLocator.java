@@ -40,6 +40,7 @@ public class ComboCellEditorLocator implements CellEditorLocator {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.tools.CellEditorLocator#relocate(org.eclipse.jface.viewers.CellEditor)
 	 */
+	@Override
 	public void relocate(final CellEditor celleditor) {
 		CCombo combo = (CCombo) celleditor.getControl();
 		Point pref = combo.computeSize(-1, -1);

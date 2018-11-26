@@ -91,7 +91,7 @@ public class NewAppCommand extends AbstractOperation {
 			SystemManager.INSTANCE.saveSystem(system); 
 			return Status.OK_STATUS;
 		}
-		return new Status(Status.ERROR, Activator.PLUGIN_ID, Status.ERROR, "", null);
+		return new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, "", null); //$NON-NLS-1$
 
 	}
 
@@ -108,7 +108,7 @@ public class NewAppCommand extends AbstractOperation {
 			SystemManager.INSTANCE.saveSystem(system); // to save the	
 			return Status.OK_STATUS;
 		}
-		return new Status(Status.ERROR, Activator.PLUGIN_ID, Status.ERROR, "", null);
+		return new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, "", null); //$NON-NLS-1$
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class NewAppCommand extends AbstractOperation {
 			SystemManager.INSTANCE.saveSystem(system);			
 			return Status.OK_STATUS;
 		}
-		return new Status(Status.ERROR, Activator.PLUGIN_ID, Status.ERROR, "", null);
+		return new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, "", null); //$NON-NLS-1$
 
 	}
 	

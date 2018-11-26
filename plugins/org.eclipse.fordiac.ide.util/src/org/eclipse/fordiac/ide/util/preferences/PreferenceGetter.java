@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2008, 2009 Profactor GbmH, fortiss GmbH,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.util.preferences;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -31,7 +33,7 @@ import org.eclipse.swt.graphics.RGB;
 public class PreferenceGetter {
 
 	/** The used colors. */
-	static Hashtable<RGB, Color> usedColors = new Hashtable<RGB, Color>();
+	static Map<RGB, Color> usedColors = new HashMap<RGB, Color>();
 
 	/**
 	 * Returns the color for the specified preference.

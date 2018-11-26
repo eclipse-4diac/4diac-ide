@@ -116,6 +116,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<org.eclipse.fordiac.ide.model.libraryElement.Compiler> getCompiler() {
 		if (compiler == null) {
 			compiler = new EObjectContainmentEList<org.eclipse.fordiac.ide.model.libraryElement.Compiler>(org.eclipse.fordiac.ide.model.libraryElement.Compiler.class, this, LibraryElementPackage.COMPILER_INFO__COMPILER);
@@ -128,6 +129,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getClassdef() {
 		return classdef;
 	}
@@ -137,6 +139,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setClassdef(String newClassdef) {
 		String oldClassdef = classdef;
 		classdef = newClassdef;
@@ -149,6 +152,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getHeader() {
 		return header;
 	}
@@ -158,6 +162,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHeader(String newHeader) {
 		String oldHeader = header;
 		header = newHeader;
@@ -268,10 +273,10 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (classdef: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (classdef: "); //$NON-NLS-1$
 		result.append(classdef);
-		result.append(", header: ");
+		result.append(", header: "); //$NON-NLS-1$
 		result.append(header);
 		result.append(')');
 		return result.toString();

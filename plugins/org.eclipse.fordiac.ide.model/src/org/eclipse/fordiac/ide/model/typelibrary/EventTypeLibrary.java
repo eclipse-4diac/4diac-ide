@@ -20,8 +20,8 @@ import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 
-public class EventTypeLibrary {
-	protected Map<String, DataType> typeMap;
+public final class EventTypeLibrary {
+	private Map<String, DataType> typeMap;
 	private static EventTypeLibrary instance;
 
 	private EventTypeLibrary() {

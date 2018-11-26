@@ -67,7 +67,7 @@ public class SystemImport extends Wizard implements IImportWizard {
 	public void addPages() {
 		super.addPages();
 		page = new IEC61499_2ImportWizardPage("Import System");
-		page.setDescription("Importing a system configuration to 4diac");
+		page.setDescription("Importing a system configuration to 4diac IDE");
 		page.setTitle("System Import");
 		addPage(page);
 	}
@@ -84,12 +84,10 @@ public class SystemImport extends Wizard implements IImportWizard {
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				system = SystemManager.INSTANCE.createLocalProject(page.getProjectName());
-				try {
-					SystemImporter sysImporter = new SystemImporter();
-					InputStream stream = new FileInputStream(page.getSelectedSystemFile());
+				try(InputStream stream = new FileInputStream(page.getSelectedSystemFile());) {
+					SystemImporter sysImporter = new SystemImporter();					
 					sysImporter.importSystem(stream, system);
 					SystemManager.INSTANCE.saveSystem(system);
-					stream.close();
 				} catch (IOException e) {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}

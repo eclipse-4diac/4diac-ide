@@ -1,6 +1,7 @@
 <!DOCTYPE html> 
 <!--
  Copyright (c) 2010 - 2017 TU Wien ACIN, fortiss GmbH
+               2018 Andrea Zoitl
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +12,7 @@
    Carolyn Oates, Alois Zoitl, Monika Wenger, Milan Vathoopan,
    Gerhard Ebenhofer, Gerd Kainz, Thomas Strasser, Jose Cabral
      - initial API and implementation and/or initial documentation
+   Andrea Zoitl - cleaning up tutorials for 1.10 release
 -->
 
 <html lang="en">
@@ -21,13 +23,13 @@
   </head>
   <body>
 
-    <h1 id="topOfPage">Step 1 - Use 4DIAC-IDE locally (Blinking tutorial)</h1>
+    <h1 id="topOfPage">Step 1 - Use 4diac IDE locally (Blinking tutorial)</h1>
 
-    <p>This page is part of a guide that gives a walkthrough over the major 4DIAC features.</p>
+    <p>This page is part of a guide that gives a walkthrough over the major 4diac-IDE features.</p>
 
     <ol start="0">
       <li><a href="./overview.html">Overview</a></li>
-      <li>Use 4DIAC locally (YOU ARE HERE!)</li>
+      <li>Use 4diac IDE locally (YOU ARE HERE!)</li>
       <li><a href="./distribute4diac.html">Create a distributed application</a></li>
       <li><a href="./use4diacRemotely.html">Deploy remotely</a></li>
       <li><a href="./createOwnTypes.html">Create your own Function Blocks</a></li>
@@ -35,87 +37,62 @@
       <li><a href="./advancedFeatures.html">Advanced Features [optional]</a></li>
     </ol>
 
-    <p>In this guide, it will be shown a simple Blinking application. It's the "Hello World" of automation programs, so it will be enough to understand the key aspects and workflow of 4DIAC. The application will run locally, so no connection to any PLC or external hardware is needed. The architecture is shown below.</p>
+    <p>In this tutorial you create a simple Blinking application. It's the "Hello World" of automation programs, so it will be enough to understand the key aspects and workflow of 4diac IDE. The application will run locally, so no connection to any PLC or external hardware is needed. The architecture is shown below.</p>
 
     <img src="./img/locallyArchitecture.png" alt="architecture for the current step" />
+
+    <p>After completing Step 0 switch to the system perspective using the <img src="./img/system.png" alt="System Perspective Button" class="inlineImg"/> Button.</p>
+
+<!----------------------------------------------------------------------------------------------------------------->
 
     <h2 id="createSystem">Create a new IEC 61499 System</h2>
 
      <ol>
-       <li>Select the System Perspective using the <img src="./img/system.png" alt="System Perspective Button" class="inlineImg"/> button create a new IEC 61499 System, by selecting either
-        <ul>
-          <li>Context menu of the <span class="menu4diac">System Explorer &rarr; New &rarr; New System</span>,</li>
-          <li><span class="menu4diac">File &rarr; New &rarr; New System</span>.</li>
-          <li><span class="menu4diac">File &rarr; New &rarr; Other... &rarr; 4DIAC</span> and select <span class="menu4diac">New System</span>.
-          <div><img src="./img/newSystemWizardSelection.png" alt="Create a new IEC 61499 System" /></div></li>
-        </ul>
-       </li>
-       <li>Follow the instructions in the creation wizard. In the following wizard, the project name has to be specified.
-       <div><img src="./img/newSystemWizard.png" alt="Create a new IEC 61499 System" /></div></li>
+       <li>In the upper left corner of the system perspective there is the main menü. Create a new system by selecting
+       <br><span class="menu4diac">File &rarr; New &rarr; New System</span></li>
+       <li>Follow the instructions in the creation wizard. For this tutorial we name our new system <i>BlinkTest</i>.
+       <div><img src="./img/Step1/newSystemWizard.png" alt="Create a new IEC 61499 System" /></div></li>
     </ol>
 
-    <p>The system appears in the <span class="view4diac">System Explorer</span> on the left. There you can see two things now:</p>
+    <p>The system appears in the <span class="view4diac">System Explorer</span> on the left, click on the <i>BlinkTest</i> to unfold the tree. 
+    There you can see three things now:</p>
 
     <ul>
-      <li>System Configuration: The definition of the devices present in your System.</li>
-      <li>Type Library: You find here all the available Function Blocks for this System.</li>
+      <li><b><i>BlinkTest</i>App</b>: The automatically generated initial control application. 
+      The name can be freely chosen. Your application is located here.
+      <li><b>System Configuration</b>: The definition of the devices present in your System.</li>
+      <li><b>Type Library</b>: You find here all the available Function Blocks for this System.</li>
     </ul>
 
-    <p>You will see here also later the applications you develop.</p>
+    <p>New systems per default contain a copy the types in the Type Library. 
+    If different types are need, for example from another project or another IEC 61499 engineering tool, these type files can be easily added by copying them into the project directory at the desired place. 
+    Furthermore the <span class="view4diac">Type Navigator</span> allows to drag and drop types between projects as well as within a project to a different folder.</p>
 
-    <p>New systems per default contain a copy the types in the Type Library. If different types are need, for example from another project or another IEC 61499 engineering tool, these type files can be easily added by copying them into the project directory at the desired place. Furthermore the <span class="view4diac">Type Navigator</span> allows to drag and drop types between projects as well as within a project to a different folder.</p>
+<!----------------------------------------------------------------------------------------------------------------->
 
-    <h2 id="configureHardware">Configuration of the Automation Hardware</h2>
-      <p>First, let's define the devices that are present in out system. The automation hardware can be modelled with the <span class="view4diac">System Configuration Editor</span>. It can be opened by double clicking on the <span class="view4diac">System Configuration</span> tree node in the <span class="view4diac">System Explorer</span> on the left. By using Drag and Drop, Device, Resource and Segment types can be added from the palette. On an IEC 61499 Device several IEC 61499 Resources can be configured. Resources can be directly added to Devices.</p>
-      <p> Drag and Drop a <span class="element4diac">FORTE_PC</span> Device and a <span class="element4diac">Ethernet</span> Segment from the Palette. Connect them clicking on one of them and dragging to the other. One EMB_RES resource is already present in the device. The MGR_ID <span class="address">localhost:61499</span> specifies the IP:PORT where the device will run. In this case it'll run locally and will listen at the port 61499.</p>
-      <img src="./img/systemConfigurationEditor.png" alt="System Configuration Editor" />
-      <p></p>
-    
-    <p>Device and Resource parameters can either be specified directly at each Device/Resource or via the Properties View. The <span class="view4diac">Properties View</span> shows the parameters of a IEC 61499 Device/Resource (if it is selected either in the <span class="view4diac">System Configuration Editor</span> or in the <span class="view4diac">System Manager View</span>). The most important parameters are the IP address and the port of the device management interface as they are required for the communication between the engineering tool and the Devices (e.g. Download of IEC 61499 Applications).</p>
-
-    <p>Check that the Profile in the Properties tab is set to HOLOBLOC.</p>
-    
-    <h3 id="deviceProfileConfiguration">Configuration of the Device's Configuration Profile</h3>
-    <p>In order to support different device vendors' download mechanism you need to specify the device profile to be used for your device.
-    currently 4DIAC-IDE supports the following two device profiles:
-    </p>
-    <ul>
-      <li><span class="specificText">HOLOBLOC</span> Device conforming to the <span class="specificText">"IEC 61499 Compliance Profile for Feasibility Demonstrations"</span>. Currently the devices supporting this profile are all <span class="specificText">FORTE</span> devices and <span class="specificText">FBDK</span> devices older than 2009.</li>
-      <li><span class="specificText">FBDK2</span> for FBDK devices version 2 or later.</li>
-    </ul>
-    
-    <h2 id="createApplication">Create a new IEC 61499 Application</h2>
-      <ol>
-        <li>Create a new IEC 61499 Application, by selecting either
-          <ul>
-            <li>Select a System, and on the context menu: <span class="menu4diac">New &rarr; New Application</span></li>
-            <li><span class="menu4diac">File &rarr; New &rarr; New Application</span></li>
-            <li><span class="menu4diac">File &rarr; New &rarr; Other... &rarr; 4DIAC</span> and select <span class="button4diac">New Application</span>.
-            <div><img src="./img/createApplicationWizardSelection.png" alt="Create a new IEC 61499 Application" /></div></li>
-          </ul>
-        </li>
-        <li> Follow the instruction in the creation wizard. In the following page of the wizard, the name of the Application and the corresponding parent System have to be specified. The number of applications that can be created is not limited.
-        <div><img src="./img/createApplicationSystemSelection.png" alt="Create a new IEC 61499 Application Select target system" /></div></li>
-      </ol>
-    
-    <h2 id="createNetwork">Create a network of FBs for the Blink application</h2>
+    <h2 id="createNetwork">Create a FB network for the Blink application</h2>
       <p>A double-click on an Application in the System Explorer tab on the left opens the Application Editor for this specific application in the editor area.</p>
       <ol>
-        <li>Drag and Drop the following Function Blocks (FBs) to the Editor. Use the Palette on the right or the Type Libary in the System Explorer (the three are in the <span class="folderLocation">event</span> folder):
+        <li>Drag and Drop the following Function Blocks (FBs) to the Editor. Open the Palette (if not already open) on the upper right of <b>editor area</b> by clicking on the left arrow or use the Type Library in the System Explorer. 
+        The three FBs are in the <span class="folderLocation">event</span> folder:
           <ul>
             <li>E_CYCLE </li>
             <li>E_SWTICH</li>
             <li>E_SR</li>
           </ul>
-          <img src="./img/blinkFBs.png" alt="Function Blocks for the blink example" />
-          <p>The name in the middle of the FB is the type of it. If you CTRL + click on it, you can access the definition of the type of the FB. There you can see the interface and how it works. Check E_SWITCH and E_SR and go to the ECC tab to see how it behaves.</p>
+          <img src="./img/Step1/blinkFBs.png" alt="Function Blocks for the blink example" />
+          <p>The name in the middle of the FB is the type of it. If you CTRL + click on it, you can access the definition of the type of the FB. 
+          There you can see the interface and how it works. Check E_SWITCH and E_SR and go to the ECC tab to see how it behaves.</p>
 
-          <p>The name on top of the FB is the instace name. Two FBs cannot have the same instance name. You can double click on it to change it for a better organized application.</p>
+          <p>The name on top of the FB is the instance name. Two FBs cannot have the same instance name. 
+          You can double click on it to change it for a better organized application.</p>
         </li>
         <li>Create the connections between the FBs
-          <p>Event (red, on top part of FBs) and Data (blue, on lower part of FBs) connections can be generated by connecting the Event-/Data in- and outputs. Position the mouse pointer over an Event-/Data in- or output, click and drag to the other end of the connection to create one. Remember, Event and Data connections cannot be mixed. Events connections allow fan-in and fan-out. Data connections allow fan-out but not fan-in.</p>
+          <p><b>Event</b> (red, on top part of FBs) and <b>Data</b> (blue, on lower part of FBs) <b>connections</b> can be generated by connecting the Event-/Data in- and outputs. 
+          Position the mouse pointer over an Event-/Data in- or output, click and drag to the other end of the connection to create one. 
+          Remember, Event and Data connections cannot be mixed. Events connections allow fan-in and fan-out. Data connections allow fan-out but not fan-in.</p>
 
-          <img src="./img/blinkWithConnections.png" alt="Function Blocks for the blink example" />
+          <img src="./img/Step1/blinkWithConnections.png" alt="Function Blocks for the blink example" />
 
           <p>Here are some tips about editing the application:</p>
           <ul>
@@ -127,88 +104,208 @@
         <li>Set a literal as an input data connection. The DT input data connection of E_CYCLE must be set to a value in order for it to work. You can do it by either:
           <ul>
             <li>Double click on the data connection in the Application Editor</li>
-            <li>Selec the FB or the Data connection itself, and change the value in the Properties tab below.</li>
+            <li>Select the DT of the FB and change the value in the Properties tab below or double-click on DT and set the value directly</li>
           </ul>
           <p>Set the value to <span class="specificText">T#1s</span>, meaning 1 second.</p>
 
-          <img src="./img/blinkComplete.png" alt="Function Blocks for the blink example" />
+          <img src="./img/Step1/blinkComplete.png" alt="Function Blocks for the blink example" />
         </li>
       </ol>
-    <p>Now the application is done. You should try to understand how the application works. Something missing is the starting event. This would be done later when the hardware is configured. For now, imagine an event arrives to E_CYCLE.START. Every 1 second, and event output will be triggered in E_CYCLE.EO. The E_SWITCH will trigger an event output EO0 when G is zero, and EO1 when G is one. The value Q of E_SR will be 1 when an event at S arrive and 0 when an event at R arrive. Try to follow the flow of events and understand why this application makes Q toogle, considering it starts at 0.</p>
+    <p>Now the application is done. You should try to understand how the application works. Something missing is the starting event. 
+    This would be done later when the hardware is configured. For now, imagine an event arrives to E_CYCLE.START. Every 1 second, and event output will be triggered in E_CYCLE.EO. The E_SWITCH will trigger an event output EO0 when G is zero, and EO1 when G is one. The value Q of E_SR will be 1 when an event at S arrive and 0 when an event at R arrive. Try to follow the flow of events and understand why this application makes Q toogle, considering it starts at 0.</p>
+
+<!----------------------------------------------------------------------------------------------------------------->
     
-	  
+    <h2 id="configureHardware">Configuration of the Automation Hardware</h2>
+      <p>First, let's define the devices that are present in out system. The automation hardware can be modelled with the <span class="view4diac">System Configuration Editor</span>. 
+      It can be opened by double clicking on the <span class="view4diac">System Configuration</span> tree node in the <span class="view4diac">System Explorer</span> on the left. 
+      By using Drag and Drop, Device, Resource and Segment types can be added from the palette. 
+      On an IEC 61499 Device several IEC 61499 Resources can be configured. Resources can be directly added to Devices.</p>
+      <p> Drag and Drop a</p> 
+         <ol>
+            <li><span class="element4diac">FORTE_PC</span> Device</li>
+            <li><span class="element4diac">Ethernet</span> Segment</li>
+        </ol>
+    <p>from the Palette. 
+    <p>Connect them by clicking on one  and dragging to the other. The segment is divided in two areas, the left is for moving, the right for connections. 
+    The device can be connecting by clicking on the device type (second row). 
+    One EMB_RES resource is already present in the device. The MGR_ID <span class="address">localhost:61499</span> specifies the IP:PORT where the device will run. 
+    In this case it'll run locally and will listen at the port 61499.</p>     
+      <img src="./img/Step1/systemConfigurationEditor.png" alt="System Configuration Editor" />
+      
+    <p>The color is automatically generated for better orientation in the system. 
+    When several devices or segments are in use, you can see at a glance where the FB belongs to. 
+    If you like to change the color, click on the device or segment. 
+    In the property view on the bottom of the screen you find the tab Appearance. 
+    Here you can choose a color you like best.</p>
+      
+    <p>Check that the Profile in the Properties tab is set to HOLOBLOC.</p>
+    
+    <p>For this tutorial we give the device the name <i>testee</i>. 
+    Device names help us to distinguish the different devices from each other. 
+    Names can be changes in the property view or by double-clicking on the name. 
+    <br/>The <b>resource</b> is automatically generated for your convenience. EMB_RES stands for Embedded Resource. 
+    We named it <i>Blinky_RES</i>.</p>
+       <img src="./img/Step1/changeResourceName.png" alt="changing the name of the Resource" />
+    
+    <p>Device and Resource parameters can either be specified directly at each Device/Resource or via the Properties View. 
+    The <span class="view4diac">Properties View</span> shows the parameters of a IEC 61499 Device/Resource (if it is selected either in the <span class="view4diac">System Configuration Editor</span> or in the <span class="view4diac">System Manager View</span>). 
+    The most important parameters are the IP address and the port of the device management interface as they are required for the communication between the engineering tool and the Devices (e.g. Download of IEC 61499 Applications).</p>
+    
+    <h3 id="deviceProfileConfiguration">Configuration of the Device's Configuration Profile</h3>
+    <p>In order to support different device vendors' download mechanism you need to specify the device profile to be used for your device.
+    currently 4DIAC-IDE supports the following two device profiles:
+    </p>
+    <ul>
+      <li><span class="specificText">HOLOBLOC</span> Device conforming to the <span class="specificText">"IEC 61499 Compliance Profile for Feasibility Demonstrations"</span>. 
+      Currently the devices supporting this profile are all <span class="specificText">FORTE</span> devices and <span class="specificText">FBDK</span> devices older than 2009.</li>
+      <li><span class="specificText">FBDK2</span> for FBDK devices version 2 or later.</li>
+    </ul>
+
+<!----------------------------------------------------------------------------------------------------------------->    	  
     
     <h2 id="mapNetworks">Mapping of Function Block Networks to Devices/Resources</h2>
-    <p>Mapping FBs means specifing in which Hardware will each FBs run. All mapped FBs are changing their fill color to the Device's color during the mapping process.</p>
+    <p>Mapping FBs means defining in which device each FBs will run. 
+    All mapped FBs are changing their fill color to the device's color during the mapping process.</p>
 	
-    <p>Go to the Application created before, select the FBs you want to map (in this case all of them), <span class="menu4diac">right click &rarr; Map to ... &rarr; FORTE_PC &rarr; EMB_RES</span></p>
+    <p>Go to the Application created before, select the FBs you want to map by clicking left and draw a rectangle over it (in this case all of them), 
+    <p><span class="menu4diac">right click &rarr; Map to ... &rarr; FORTE_PC &rarr; Blinky_RES</span></p>
 
-    <img src="./img/mappingInAppEditor.png" alt="Mapping of Function Block Instances within the Application Editor" />
+    <img src="./img/Step1/mappingInAppEditor.png" alt="Mapping of Function Block Instances within the Application Editor" />
 
     <p>To unmap a Function Block instance from a Resource, use the context menu entry <span class="menu4diac">Unmap</span> of a Function Block in the corresponding <span class="button4diac">Application</span>.</p>
 
+<!----------------------------------------------------------------------------------------------------------------->
+
     <h2 id="configureResource">Configure the Resource</h2>
 
-    <p>You can ope the Resource Configuration by double clicking the Resource in the System Configuration, or in the tree in the System Explorer on the left.</p>
+    <p>You can open the <b>Resource Editor</b> by double clicking the Resource (<i>Blinky_RES</i>) in the System Configuration, or in the tree in the System Explorer on the left.</p>
 
-    <p>There you can find a START function block in white. This is the default starter fuction block of the EMB_RES. This will trigger a COLD event when starting. The STOP is triggered when the PLC is set to a STOP state, and the WARM when the PLC changes from a STOP state back to a RUN state. Connect both COLD and WARM to E_CYCLE.START.</p>
+    <p>There you can find a START function block in white. This is the default starter function block of the EMB_RES. This will trigger a COLD event when starting. 
+    The STOP is triggered when the PLC is set to a STOP state, and the WARM when the PLC changes from a STOP state back to a RUN state. 
+    Connect both COLD and WARM to E_CYCLE.START.</p>
      
-	   <img src="./img/resourceComplete.png" alt="Resource completely connected"/>
+	   <img src="./img/Step1/resourceComplete.png" alt="Resource completely connected"/>
 
-     <p>You also see the FBs that were previosly mapped. You can add more FBs directly here and they will be already mapped to the resource, or you can unmap the FBs.</p>
+     <p>You also see the FBs that were previously mapped. You can add more FBs directly here and they will be already mapped to the resource, or you can unmap the FBs.</p>
 
-     <h2 id="deployingToForte">Deploying application to FORTE</h2>
+<!----------------------------------------------------------------------------------------------------------------->
+
+    <h2 id="overviewEditors">Overview of the Editors</h2>
+    
+    <p>Before we test our application, let's briefly summarize the elements we've worked with.</p>
+
+<table>
+    <thead>
+        <tr>
+          <th>Element</th>
+          <th>Creation</th>
+          <th>Editation</th>
+          <th>Tutorial Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <th>System</th>
+          <td>new System</td>
+          <td>only children can be edited</td>
+          <td>BlinkTest</td>
+        </tr>
+        <tr>
+          <th>Application</th>
+          <td>first is automatically generated, furthermore via menu</td>
+          <td>Application Editor</td>
+          <td>BlinkTestApp</td>
+        </tr>
+        <tr>
+          <th>System Configuration</th>
+          <td>automatically generated, only one per system</td>
+          <td>System Configuration Editor</td>
+          <td></td>
+        </tr>
+        <tr>
+          <th>Device</th>
+          <td>System Configuration Editor</td>
+          <td>System Configuration Editor</td>
+          <td>Testee</td>
+        </tr>
+        <tr>
+          <th>Resource</th>
+          <td>System Configuration Editor</td>
+          <td>Resource Editor</td>
+          <td>Blinky_RES</td>
+        </tr>
+    </tbody>
+</table>
+
+<!----------------------------------------------------------------------------------------------------------------->
+
+     <h2 id="deployingToForte">Deploying application to 4diac FORTE</h2>
      
-     <p>In this step, the Blink application will be deployed to FORTE running locally.</p>
+     <p>In this step, the Blink application will be deployed to 4diac FORTE running locally on your computer.</p>
 
      <ol>
-       <li>Go to <span class="menu4diac">Windows &rarr; Preferences &rarr; 4DIAC &rarr; FORTE Preferences</span>, and in <span class="addressDoc">FORTE Location</span> look for FORTE inside your 4DIAC folder in <span class="fileLocation">runtime/FORTE/1.8RC3/[YOUR_OS]/forte[.exe]</span> and then click OK.</li>
-       <li>Change to the Deployment Persperctive using the <img src="./img/perspective/deploymentButton.gif" alt="Deployment Perspective Button" class="inlineImg"/> button.</li>
+       <li>You have to select a 4diac FORTE. 
+       <br/>You can either build your own 4diac FORTE as <a href="../installation/install.html#ownFORTE">shown here</a> or you can download the 4diac FORTE that is provided for you for this tutorial on <a href="https://www.eclipse.org/4diac/en_dow.php">our Homepage</a>. 
+       You can save the .exe wherever you like, we have chosen F:\4diac\4diac-ide\. 
+       Go to <span class="menu4diac">Windows &rarr; Preferences &rarr; 4diac IDE &rarr; FORTE Preferences</span>, and in <span class="addressDoc">FORTE Location</span> look for the 4diac FORTE and then click <i>Apply and Close</i>. 
+          <br><img src="./img/Step1/selectForte.png" width="600" alt="select your 4diac FORTE" /></li>
+       <li>Change to the <i>Deployment Perspective</i> using the <img src="./img/perspective/deploymentButton.gif" alt="Deployment Perspective Button" class="inlineImg"/> button.</li>
        <li>Set the port to 61499 (the same define before, remember <span class="address">localhost:61499</span> in the System Configuration?)</li>
-       <li><span class="button4diac">Launch Local FORTE</span></li>
-       <li>You should see the the location of your FORTE and the STOP button enable in the Console.</li>
-       <li>Select the elements to deploy. In case you have many devices with many resources, you can select the devices to deploy and even which resources to deploy.</li>
-       <li>Click the <span class="button4diac">Download</span> button</li>
-       <li>Check that the deployment console shows some output, and that no red warning appears on the right nor left of it. If you get somthing red, something went wrong.</li>
+       <li><span class="button4diac">Launch Local 4diac FORTE</span></li>
+       <li>You should see the the location of your 4diac FORTE and the <b>Terminate</b> button enabled in the Console.</li>
+       <li>Select the elements to deploy. 
+           For this tutorial select our device <i>Testee</i>. 
+           In case you have many devices with many resources, you can select the devices to deploy and even which resources to deploy.</li>
+       <li>Click the <span class="button4diac">Deploy</span> button</li>
+       <li>Check that the <i>Deployment Console</i> shows some output, and that no red warning appears on the right nor left of it. If you get something red, something went wrong.</li>
      </ol>
-     <img src="./img/deploymentExample.png" alt="Resource completely connected"/>
-    <p><span class="noteTitle">Note:</span><span class="noteText"> With the runtime launcher you can only start run-time environments in your local development computer. It is not possible to start run-time environments on remote computers or control devices. In order to perform this task device specific means to start the run-time environment have to be performed.</span></p>
+     <img src="./img/Step1/deploymentExample.png" alt="deploying of the application"/>
+    <p><span class="noteTitle">Note:</span><span class="noteText"> With the runtime launcher you can only start run-time environments on your local development computer. 
+    It is not possible to start run-time environments on remote computers or control devices. 
+    In order to perform this task device specific means to start the run-time environment have to be performed.</span></p>
 
-    <p>The <span class="view4diac">Deployment Console</span> is automatically cleared before each download. Furthermore, with the icon <img src="./img/clearDeploymentConsole.png" alt="Clear Deployment Console" class="inlineImg" /> in the upper right corner of the <span class="view4diac">Deployment Console</span> the deployment messages can be cleared.</p>
+    <p>The <i>Deployment Console</i> is automatically cleared before each download. 
+    Furthermore, with the icon <img src="./img/Step1/clearDeploymentConsole.png" alt="Clear Deployment Console" class="inlineImg" /> in the upper right corner of the <i>Deployment Console</i> the deployment messages can be cleared.</p>
    
-    <p>By selecting a Device or Resource the corresponding IEC 61499 element can be cleaned. This means that the Device or Resource configuration are cleaned and reset to the default configuration without any Function Block Network.</p>
-    <p><span class="menu4diac">Delete All Resources</span> leaves the Device empty, and <span class="menu4diac">Kill Device</span> stops FORTE. You can deploy again after cleaning the Device</p>
-    <img src="./img/cleanDevice.png" width="1024" alt="Clean Device" />
+    <p>By selecting a Device or Resource the corresponding IEC 61499 element can be cleaned. 
+    This means that the Device or Resource configuration are cleaned and reset to the default configuration without any Function Block Network.</p>
+    <p><span class="menu4diac">Delete All Resources</span> leaves the Device empty, and <span class="menu4diac">Kill Device</span> stops 4diac FORTE. 
+    You can deploy again after cleaning the Device.</p>
     <p><span class="menu4diac">Delete Resource</span> deletes just the selected resource:</p>
-    <img src="./img/cleanResource.png" width="1024" alt="Clean Resource" />
+    <img src="./img/Step1/cleanDeviceOrResource.png" width="1024" alt="Clean Devive or Resource" />
     
+<!----------------------------------------------------------------------------------------------------------------->
+  
      <h2 id="monitoringApplication">Monitoring the Application</h2>
 
-     <p>To observe the outputs of your Application you can use 4diac's monitoring functionality. You can enable it in the toolbar under the toolbar icon: <img class="inlineImg" src="./img/properties/startMon.gif" alt="Monitoring" /> or doing the following:</p>
+     <p>To observe the outputs of your Application you can use 4diac's monitoring functionality. You can enable it in the Toolbar under the Toolbar icon: <img class="inlineImg" src="./img/properties/startMon.gif" alt="Monitoring" /> or doing the following:</p>
 
      <ol>
        <li>Change to Debug Perspective using the <img src="./img/perspective/debugButton.gif" alt="Debug Perspective Button" class="inlineImg"/> button.</li>
        <li>In the System Explorer, right click on the System &rarr; Monitor System
-       <div><img src="./img/enableMonitoring.png" alt="Resource completely connected"/></div></li>
+       <div><img src="./img/Step1/enableMonitoring.png" alt="Resource completely connected"/></div></li>
      </ol>
 
-     <p>A green sign shows that the monitoring is enabled for the system. To watch variables, you can:</p>
+     <p>A green circle will appear in the system icon indicating that monitoring is enabled for the system. To watch variables, you can:</p>
 
      <ul>
       <li>Right Click on a <span class="menu4diac">FB &rarr; Watch All</span> or</li>
       <li>Right Click on a <span class="menu4diac">Variable &rarr; Watch</span>
-      <div><img src="./img/monitoringWatchAll.png" alt="Resource completely connected"/></div></li>
+      <div><img src="./img/Step1/monitoringWatch.png" alt="Resource completely connected"/></div></li>
      </ul>
 
-     <p>The Data and Events are monitored. The Data shows the current value and the Events show the times it was triggered. You can watch on the directly on the Element or in the Watches view.</p>
+     <p>The Data and Events are monitored. The Data shows the current value and the Events show the times it was triggered. 
+     You can watch on the directly on the Element or in the Watches view.</p>
+     <p>Now you can see that <i>true</i> and <i>false</i> alternate. If a controller output were connected, a light would now blink at 1 second intervals.</p>
 
-     <img src="./img/monitoringWatching.png" alt="Resource completely connected"/>
+     <img src="./img/Step1/monitoringWatching.png" alt="Resource completely connected"/>
 
-     <p>You can force values to data inputs and trigger events by right clickin on it and selecting the corresponding command.</p>
+     <p>You can force values to data inputs and trigger events by right clicking on it and selecting the corresponding command.</p>
 
-      <img src="./img/monitoringForce.png" alt="Force value"/>
+      <img src="./img/Step1/monitoringForceOrTrigger.png" alt="Force value"/>
 
-      <img src="./img/monitoringTrigger.png" alt="Trigger Event"/>
+<!----------------------------------------------------------------------------------------------------------------->
 
 <h1>Where to go from here?</h1>
 

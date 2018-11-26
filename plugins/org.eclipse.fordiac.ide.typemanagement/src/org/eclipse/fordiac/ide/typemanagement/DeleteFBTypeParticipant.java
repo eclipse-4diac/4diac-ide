@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.typemanagement;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceDelta;
@@ -38,7 +39,7 @@ import org.eclipse.ltk.core.refactoring.participants.ResourceChangeChecker;
 
 public class DeleteFBTypeParticipant extends DeleteParticipant {
 
-	ArrayList<String> typeNames = new ArrayList<String>();
+	List<String> typeNames = new ArrayList<>();
 	
 	@Override
 	protected boolean initialize(Object element) {
@@ -94,10 +95,8 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 				network = ((SubAppType)entry.getType()).getFBNetwork();
 			}
 			
-			if(null != network){
-				if(containsElementWithType(searchTypeName, network)){
-					typeNames.add(entry.getLabel());
-				}
+			if(null != network && containsElementWithType(searchTypeName, network)){
+				typeNames.add(entry.getLabel());
 			}
 		}
 		
@@ -107,7 +106,7 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 		
 	}
 
-	private boolean containsElementWithType(String searchTypeName, FBNetwork network) {
+	private static boolean containsElementWithType(String searchTypeName, FBNetwork network) {
 		for (FBNetworkElement element : network.getNetworkElements()) {
 			if(searchTypeName.equals(element.getTypeName())){
 				return true;

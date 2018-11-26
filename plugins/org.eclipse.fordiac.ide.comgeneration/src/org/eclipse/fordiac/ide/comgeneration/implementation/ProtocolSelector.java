@@ -14,17 +14,19 @@ package org.eclipse.fordiac.ide.comgeneration.implementation;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.CanPubSubGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.EthernetPubSubGenerator;
+import org.eclipse.fordiac.ide.comgeneration.plugin.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 
-public class ProtocolSelector {
+public final class ProtocolSelector {
+	
 	public static void doAutomatedProtocolSelection(CommunicationModel model) {
 		for (CommunicationChannel channel : model.getChannels().values()) {
-			ArrayList<Segment> commonSegments = new ArrayList<Segment>();
+			List<Segment> commonSegments = new ArrayList<>();
 			Iterator<CommunicationChannelDestination> destinationIterator = channel.getDestinations().iterator();
 			
 			CommunicationChannelDestination destination = destinationIterator.next();
@@ -51,7 +53,7 @@ public class ProtocolSelector {
 			}
 			
 			Segment selectedCommonSegment = null;
-			if (commonSegments.size() > 0) {
+			if (!commonSegments.isEmpty()) {
 				sortSegments(commonSegments);
 				selectedCommonSegment = commonSegments.get(0);
 			}
@@ -74,57 +76,54 @@ public class ProtocolSelector {
 				}
 				
 				if (selectedSegment != null) {
-				for (CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
-					if (mediaInfo.getSegment() == selectedSegment) {
-						destination.setSelectedMedia(mediaInfo);
-						destination.setSelectedProtocolId(getProtocolIdForMetiaType(mediaInfo.getSegment()));
-						break;
+					for (CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
+						if (mediaInfo.getSegment() == selectedSegment) {
+							destination.setSelectedMedia(mediaInfo);
+							destination.setSelectedProtocolId(getProtocolIdForMetiaType(mediaInfo.getSegment()));
+							break;
+						}
 					}
-				}
 				} else {
-					System.err.println("No connection available for ");
+					Activator.getDefault().logError("No connection available for ");
 				}
 				
-							}
+			}
 		}
 	}
 	
 	private static String getProtocolIdForMetiaType(Segment segment) {
-		if (segment.getType().getName().equalsIgnoreCase("Ethernet")) {
+		if (segment.getType().getName().equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
 			return EthernetPubSubGenerator.PROTOCOL_ID;
-		} else if (segment.getType().getName().equalsIgnoreCase("Can")) {
+		} else if (segment.getType().getName().equalsIgnoreCase("Can")) { //$NON-NLS-1$
 			return CanPubSubGenerator.PROTOCOL_ID;
 		}
 		return null;
 	}
 	
 	
-	private static void sortSegments(ArrayList<Segment> segmentList) {
-		Collections.sort(segmentList, new Comparator<Segment>() {
-
-			@Override
-			public int compare(Segment o1, Segment o2) {
+	private static void sortSegments(List<Segment> segmentList) {
+		Collections.sort(segmentList, (Segment o1, Segment o2) -> {
 				String name1 = o1.getType().getName();
 				String name2 = o2.getType().getName();
 				
-				if (name1.equalsIgnoreCase("Can")) {
-					if (name2.equalsIgnoreCase("Can")) {
+				if (name1.equalsIgnoreCase("Can")) { //$NON-NLS-1$
+					if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$
 						return 0;
-					} else {
-						return -1;
-					}
-				} else if (name1.equalsIgnoreCase("Ethernet")) {
-					if (name2.equalsIgnoreCase("Can")) {
+					} 
+					return -1;
+				} else if (name1.equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
+					if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$
 						return 1;
-					} else if (name2.equalsIgnoreCase("Ethernet")) {
+					} else if (name2.equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
 						return 0;
-					} else {
-						return -1;
-					}
+					} 
+					return -1;
 				}
 				return 0;
-			}
-			
-		});
+			});
+	}
+	
+	private ProtocolSelector() {
+		throw new UnsupportedOperationException("ProtocolSelector utilioty class should not be instantiated!");
 	}
 }

@@ -13,8 +13,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
@@ -60,20 +58,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 	private FBType fbType;
 	private KeyHandler sharedKeyHandler;
 	private CommandStack commandStack;
-	private final EContentAdapter adapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(Notification notification) {
-			super.notifyChanged(notification);
-		}
-	};
 
-	@Override
-	public void dispose() {
-		if (fbType != null && fbType.eAdapters().contains(adapter)) {
-			fbType.eAdapters().remove(adapter);
-		}
-		super.dispose();
-	}
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -81,7 +66,6 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 		if (input instanceof FBTypeEditorInput) {
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			fbType = untypedInput.getContent();
-			fbType.eAdapters().add(adapter);
 		}
 		setSite(site);
 		setEditDomain(new FBTypeEditDomain(this, commandStack));

@@ -24,39 +24,36 @@ import org.eclipse.fordiac.ide.util.comm.exceptions.CommException;
 
 public class UDPPublisher implements IIecSender {
 
-	protected ChannelManager m_oManager;
-	protected boolean m_bInitialized=false;
-	protected String m_sID;
+	private String id;
 	
 	public UDPPublisher() {
-		m_oManager = ChannelManager.getInstance();
 	}
 	
-	public boolean Initialize(String pa_sID) {
-		m_bInitialized=false;
-		m_sID=""; //$NON-NLS-1$
+	@Override
+	public boolean initialize(String id) {
+		this.id=""; //$NON-NLS-1$
 		try {
-			CChannel.getInetAddress(pa_sID);
-			CChannel.getPort(pa_sID);
+			CChannel.getInetAddress(id);
+			CChannel.getPort(id);
 		}
 		catch (CommException e) {
 			return false;
 		}
-		m_bInitialized=true;
-		m_sID=pa_sID;
+		this.id=id;
 		return true;
 	}
 
-	public void SendIECData(List<IEC_ANY> sendData) throws CommException {
-			ChannelManager.send(m_sID, IChannel.UDP, sendData);
+	@Override
+	public void sendIECData(List<IEC_ANY> sendData) throws CommException {
+			ChannelManager.send(id, IChannel.UDP, sendData);
 		
 	}
 
 	@Override
-	public boolean DeInitialize(String pa_sID) {
-		//only abstract methods used;
-		m_bInitialized=false;
-		m_sID=""; //$NON-NLS-1$
+	public boolean deInitialize(String id) {
+		//only abstract methods used
+		this.
+		id=""; //$NON-NLS-1$
 		return true;
 	}
 

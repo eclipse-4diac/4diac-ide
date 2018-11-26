@@ -39,7 +39,7 @@ public class ReconnectTransitionCommand extends Command {
 	protected DeleteTransitionCommand cmd;
 
 	/** The dccc. */
-	protected TransitionCreateCommand dccc;
+	protected CreateTransitionCommand dccc;
 
 	/*
 	 * (non-Javadoc)
@@ -94,7 +94,7 @@ public class ReconnectTransitionCommand extends Command {
 	protected void doReconnectSource() {
 		ECTransition transition = ((ECTransitionEditPart)request.getConnectionEditPart()).getCastedModel();
 		cmd = new DeleteTransitionCommand(transition);
-		dccc = new TransitionCreateCommand();
+		dccc = new CreateTransitionCommand();
 		dccc.setSource(((ECStateEditPart) request.getTarget()).getCastedModel());
 		dccc.setDestination(((ECStateEditPart) request.getConnectionEditPart().getTarget()).getCastedModel());
 
@@ -113,7 +113,7 @@ public class ReconnectTransitionCommand extends Command {
 	protected void doReconnectTarget() {
 		ECTransition transition = ((ECTransitionEditPart)request.getConnectionEditPart()).getCastedModel();
 		cmd = new DeleteTransitionCommand(transition);
-		dccc = new TransitionCreateCommand();
+		dccc = new CreateTransitionCommand();
 		dccc.setSource(((ECStateEditPart) request.getConnectionEditPart()
 				.getSource()).getCastedModel());
 		dccc.setDestination(((ECStateEditPart) request.getTarget()).getCastedModel());

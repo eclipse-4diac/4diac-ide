@@ -4,15 +4,15 @@
    <extension
          point="org.eclipse.ui.importWizards">
       <wizard
-            category="org.eclipse.fordiac.ide.typeimport.ui.importCategory"
+            category="org.eclipse.fordiac.ide.import"
             class="org.eclipse.fordiac.ide.systemimport.SystemImport"
             icon="fordiacimage://ICON_System"
             id="org.eclipse.fordiac.ide.systemimport.SystemImport"
             name="System Import">
       </wizard>
       <category
-            id="org.eclipse.fordiac.ide.typeimport.ui.importCategory"
-            name="4DIAC">
+            id="org.eclipse.fordiac.ide.import"
+            name="4diac IDE">
       </category>
    </extension>
 

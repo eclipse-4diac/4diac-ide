@@ -72,7 +72,7 @@ public class DeviceCreateCommand extends Command {
 	@Override
 	public void execute() {
 		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
-		setLabel(getLabel() + "(" + (editor != null ? editor.getTitle() : "") + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+		setLabel(getLabel() + "(" + (editor != null ? editor.getTitle() : "") + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		if (parent != null) {
 			createDevice();
 			device.setPaletteEntry(entry);
@@ -103,7 +103,7 @@ public class DeviceCreateCommand extends Command {
 
 	private void setDeviceProfile() {
 		String profile;
-		if(null != device.getType().getProfile() && !"".equals(device.getType().getProfile())){
+		if(null != device.getType().getProfile() && !"".equals(device.getType().getProfile())){ //$NON-NLS-1$
 			profile = device.getType().getProfile();
 		}else{ 
 			profile = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE);

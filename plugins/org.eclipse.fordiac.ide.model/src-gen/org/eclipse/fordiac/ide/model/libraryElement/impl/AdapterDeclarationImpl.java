@@ -80,6 +80,7 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterFB getAdapterFB() {
 		if (adapterFB != null && adapterFB.eIsProxy()) {
 			InternalEObject oldAdapterFB = (InternalEObject)adapterFB;
@@ -121,6 +122,7 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAdapterFB(AdapterFB newAdapterFB) {
 		if (newAdapterFB != adapterFB) {
 			NotificationChain msgs = null;
@@ -140,6 +142,7 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AdapterTypePaletteEntry getPaletteEntry() {
 		if (paletteEntry != null && paletteEntry.eIsProxy()) {
 			InternalEObject oldPaletteEntry = (InternalEObject)paletteEntry;
@@ -166,6 +169,7 @@ public class AdapterDeclarationImpl extends VarDeclarationImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPaletteEntry(AdapterTypePaletteEntry newPaletteEntry) {
 		AdapterTypePaletteEntry oldPaletteEntry = paletteEntry;
 		paletteEntry = newPaletteEntry;

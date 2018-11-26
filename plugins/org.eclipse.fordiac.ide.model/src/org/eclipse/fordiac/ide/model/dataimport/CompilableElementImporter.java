@@ -24,7 +24,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class CompilableElementImporter {
+public final class CompilableElementImporter {
 
 	/**
 	 * Parses the compiler info.
@@ -81,13 +81,13 @@ public class CompilableElementImporter {
 		Node language = map.getNamedItem(LibraryElementTags.LANGUAGE_ATTRIBUTE);
 
 		if (language != null) {
-			if (language.getNodeValue().toUpperCase().equals("C")) { //$NON-NLS-1$
+			if ("C".equalsIgnoreCase(language.getNodeValue())) { //$NON-NLS-1$
 				comp.setLanguage(Language.C);
-			} else if (language.getNodeValue().toUpperCase().equals("CPP")) { //$NON-NLS-1$
+			} else if ("CPP".equalsIgnoreCase(language.getNodeValue())) { //$NON-NLS-1$
 				comp.setLanguage(Language.CPP);
-			} else if (language.getNodeValue().toUpperCase().equals("JAVA")) { //$NON-NLS-1$
+			} else if ("JAVA".equalsIgnoreCase(language.getNodeValue())) { //$NON-NLS-1$
 				comp.setLanguage(Language.JAVA);
-			} else if (language.getNodeValue().toUpperCase().equals("OTHER")) { //$NON-NLS-1$
+			} else if ("OTHER".equalsIgnoreCase(language.getNodeValue())) { //$NON-NLS-1$
 				comp.setLanguage(Language.OTHER);
 			} else {
 				throw new TypeImportException(
@@ -119,5 +119,9 @@ public class CompilableElementImporter {
 					Messages.CompilableElementImporter_ERROR_VersionNotSet);
 		}
 		compilerInfo.getCompiler().add(comp);
+	}
+	
+	private CompilableElementImporter() {
+		throw new UnsupportedOperationException("Utility class CompilableElementImporter should not be insantiated!");
 	}
 }

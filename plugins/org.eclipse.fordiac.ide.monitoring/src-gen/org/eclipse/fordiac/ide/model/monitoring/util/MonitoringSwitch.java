@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,13 +17,20 @@ package org.eclipse.fordiac.ide.model.monitoring.util;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.monitoring.*;
+import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
+import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
+import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -81,18 +89,11 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case MonitoringPackage.MONITORING_BASE_ELEMENT: {
-				MonitoringBaseElement monitoringBaseElement = (MonitoringBaseElement)theEObject;
-				T result = caseMonitoringBaseElement(monitoringBaseElement);
-				if (result == null) result = caseIEditPartCreator(monitoringBaseElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case MonitoringPackage.MONITORING_ELEMENT: {
 				MonitoringElement monitoringElement = (MonitoringElement)theEObject;
 				T result = caseMonitoringElement(monitoringElement);
 				if (result == null) result = caseMonitoringBaseElement(monitoringElement);
-				if (result == null) result = caseIEditPartCreator(monitoringElement);
+				if (result == null) result = caseMonitoringBase_IEditPartCreator(monitoringElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -100,25 +101,7 @@ public class MonitoringSwitch<T> extends Switch<T> {
 				MonitoringAdapterElement monitoringAdapterElement = (MonitoringAdapterElement)theEObject;
 				T result = caseMonitoringAdapterElement(monitoringAdapterElement);
 				if (result == null) result = caseMonitoringBaseElement(monitoringAdapterElement);
-				if (result == null) result = caseIEditPartCreator(monitoringAdapterElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MonitoringPackage.BREAKPOINTS: {
-				Breakpoints breakpoints = (Breakpoints)theEObject;
-				T result = caseBreakpoints(breakpoints);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MonitoringPackage.IEDIT_PART_CREATOR: {
-				IEditPartCreator iEditPartCreator = (IEditPartCreator)theEObject;
-				T result = caseIEditPartCreator(iEditPartCreator);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MonitoringPackage.PORT_ELEMENT: {
-				PortElement portElement = (PortElement)theEObject;
-				T result = casePortElement(portElement);
+				if (result == null) result = caseMonitoringBase_IEditPartCreator(monitoringAdapterElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -151,23 +134,14 @@ public class MonitoringSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case MonitoringPackage.IEDIT_PART_CREATOR: {
+				IEditPartCreator iEditPartCreator = (IEditPartCreator)theEObject;
+				T result = caseIEditPartCreator(iEditPartCreator);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Base Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Base Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseMonitoringBaseElement(MonitoringBaseElement object) {
-		return null;
 	}
 
 	/**
@@ -201,17 +175,17 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Breakpoints</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>IEdit Part Creator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Breakpoints</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>IEdit Part Creator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseBreakpoints(Breakpoints object) {
+	public T caseIEditPartCreator(IEditPartCreator object) {
 		return null;
 	}
 
@@ -226,7 +200,22 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseIEditPartCreator(IEditPartCreator object) {
+	public T caseMonitoringBase_IEditPartCreator(IEditPartCreator object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMonitoringBaseElement(MonitoringBaseElement object) {
 		return null;
 	}
 

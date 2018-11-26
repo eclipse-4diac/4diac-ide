@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2010 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2010 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * 				 2018 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,11 +17,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.text.MessageFormat;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,7 +31,6 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.ui.xml.XMLConfiguration;
 import org.eclipse.fordiac.ide.deployment.ui.xml.XMLPartitionScanner;
@@ -81,15 +80,6 @@ public class Output extends ViewPart implements IDeploymentListener {
 	/** The sourceViewer. */
 	private SourceViewer sv;
 
-	/** The composite ruler. */
-	private CompositeRuler compositeRuler;
-
-	/** The overview ruler. */
-	private OverviewRuler overviewRuler;
-
-	/** The ap. */
-	private AnnotationPainter ap;
-
 	/**
 	 * Instantiates a new output.
 	 */
@@ -107,10 +97,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		Composite root = new Composite(parent, SWT.None);
 		root.setLayout(new GridLayout());
 		createSourceViewer(root);
-
 		contributeToActionBars();
-
-		DeploymentCoordinator.getInstance().addDeploymentListener(this);
 	}
 
 	/**
@@ -143,16 +130,17 @@ public class Output extends ViewPart implements IDeploymentListener {
 	/**
 	 * The Class ColorCache.
 	 */
-	class ColorCache implements ISharedTextColors {
+	static class ColorCache implements ISharedTextColors {
 
 		/** The rgbs. */
-		private final Hashtable<RGB, Color> rgbs = new Hashtable<RGB, Color>();
+		private final Map<RGB, Color> rgbs = new HashMap<>();
 
 		/*
 		 * (non-Javadoc)
 		 * 
 		 * @see org.eclipse.jface.text.source.ISharedTextColors#getColor(org.eclipse.swt.graphics.RGB)
 		 */
+		@Override
 		public Color getColor(final RGB rgb) {
 			if (!rgbs.containsKey(rgb)) {
 				rgbs.put(rgb, new Color(Display.getDefault(), rgb));
@@ -165,23 +153,24 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 * 
 		 * @see org.eclipse.jface.text.source.ISharedTextColors#dispose()
 		 */
+		@Override
 		public void dispose() {
-			Enumeration<Color> colors = rgbs.elements();
-			while (colors.hasMoreElements()) {
-				Color c = colors.nextElement();
-				if (!c.isDisposed()) {
-					c.dispose();
+			for (Entry<RGB, Color> entry : rgbs.entrySet()) {
+				if (!entry.getValue().isDisposed()) {
+					entry.getValue().dispose();
 				}
 			}
 		}
 	}
 
 	/** The ERRO r_ type. */
-	private static String ERROR_TYPE = Messages.Output_DownloadError;
-	private static String WARNING_TYPE = Messages.Output_DownloadWarning;
+	private static final String ERROR_TYPE = Messages.Output_DownloadError;
+	private static final String WARNIGN_TYPE = Messages.Output_DownloadWarning;
+	private static final int OVERVIEW_RULER_WIDTH = 12;
+	private static final int ANNOTATION_RULES_COLUMN_WIDTH = 16;
 
 	/** The annotation model. */
-	protected AnnotationModel fAnnotationModel = new AnnotationModel();
+	private AnnotationModel fAnnotationModel = new AnnotationModel();
 
 	/**
 	 * Creates the source viewer.
@@ -195,10 +184,10 @@ public class Output extends ViewPart implements IDeploymentListener {
 		//
 		ColorCache colorCache = new ColorCache();
 
-		compositeRuler = new CompositeRuler();
-		overviewRuler = new OverviewRuler(annotationMarker, 12, colorCache);
+		CompositeRuler compositeRuler = new CompositeRuler();
+		OverviewRuler overviewRuler = new OverviewRuler(annotationMarker, OVERVIEW_RULER_WIDTH, colorCache);
 		AnnotationRulerColumn annotationRuler = new AnnotationRulerColumn(
-				fAnnotationModel, 16, annotationMarker);
+				fAnnotationModel, ANNOTATION_RULES_COLUMN_WIDTH, annotationMarker);
 		compositeRuler.setModel(fAnnotationModel);
 		overviewRuler.setModel(fAnnotationModel);
 
@@ -207,19 +196,19 @@ public class Output extends ViewPart implements IDeploymentListener {
 		//
 		// // add what types are show on the different rulers
 		annotationRuler.addAnnotationType(ERROR_TYPE);
-		annotationRuler.addAnnotationType(WARNING_TYPE);
+		annotationRuler.addAnnotationType(WARNIGN_TYPE);
 		overviewRuler.addAnnotationType(ERROR_TYPE);
-		overviewRuler.addAnnotationType(WARNING_TYPE);
+		overviewRuler.addAnnotationType(WARNIGN_TYPE);
 		overviewRuler.addHeaderAnnotationType(ERROR_TYPE);
-		overviewRuler.addHeaderAnnotationType(WARNING_TYPE);
+		overviewRuler.addHeaderAnnotationType(WARNIGN_TYPE);
 		// // set what layer this type is on
 		overviewRuler.setAnnotationTypeLayer(ERROR_TYPE, 3);
-		overviewRuler.setAnnotationTypeLayer(WARNING_TYPE, 4);
+		overviewRuler.setAnnotationTypeLayer(WARNIGN_TYPE, 4);
 		// // set what color is used on the overview ruler for the type
 		overviewRuler.setAnnotationTypeColor(ERROR_TYPE, colorCache
 				.getColor(new RGB(255, 0, 0)));
-		overviewRuler.setAnnotationTypeColor(WARNING_TYPE, colorCache
-				.getColor(new RGB(	255,255,0)));
+		overviewRuler.setAnnotationTypeColor(WARNIGN_TYPE, colorCache
+				.getColor(new RGB(255, 255, 0)));
 
 		sv = new SourceViewer(parent, compositeRuler, overviewRuler, true,
 				SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -228,18 +217,13 @@ public class Output extends ViewPart implements IDeploymentListener {
 		sv.getControl().setLayoutData(gd);
 
 		Document document = new Document();
-		// document.set("Test");
 		sv.setDocument(document);
 		sv.setEditable(false);
 		document.addDocumentListener(new LogListener(fAnnotationModel));
-		if (document != null) {
-			IDocumentPartitioner partitioner = new FastPartitioner(
-					new XMLPartitionScanner(), new String[] {
-							XMLPartitionScanner.XML_TAG,
-							XMLPartitionScanner.XML_COMMENT });
-			partitioner.connect(document);
-			document.setDocumentPartitioner(partitioner);
-		}
+		IDocumentPartitioner partitioner = new FastPartitioner(new XMLPartitionScanner(),
+				new String[] { XMLPartitionScanner.XML_TAG, XMLPartitionScanner.XML_COMMENT });
+		partitioner.connect(document);
+		document.setDocumentPartitioner(partitioner);
 		sv.setDocument(document, fAnnotationModel);
 
 		sv.configure(new XMLConfiguration());
@@ -250,7 +234,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 				new AnnotationConfiguration());
 		fAnnotationHoverManager.install(annotationRuler.getControl());
 
-		ap = new AnnotationPainter(sv, annotationMarker);
+		AnnotationPainter ap = new AnnotationPainter(sv, annotationMarker);
 		ap.addAnnotationType(ERROR_TYPE);
 		ap.setAnnotationTypeColor(ERROR_TYPE, colorCache.getColor(new RGB(255,
 				0, 0)));
@@ -269,6 +253,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 * @see org.eclipse.jface.text.source.IAnnotationHover#getHoverInfo(org.eclipse.jface.text.source.ISourceViewer,
 		 *      int)
 		 */
+		@Override
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public String getHoverInfo(final ISourceViewer sourceViewer,
 				final int lineNumber) {
@@ -295,6 +280,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 * @see org.eclipse.jface.text.ITextHover#getHoverInfo(org.eclipse.jface.text.ITextViewer,
 		 *      org.eclipse.jface.text.IRegion)
 		 */
+		@Override
 		public String getHoverInfo(final ITextViewer textViewer,
 				final IRegion hoverRegion) {
 			return null;
@@ -306,6 +292,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 		 * @see org.eclipse.jface.text.ITextHover#getHoverRegion(org.eclipse.jface.text.ITextViewer,
 		 *      int)
 		 */
+		@Override
 		public IRegion getHoverRegion(final ITextViewer textViewer,
 				final int offset) {
 			return null;
@@ -315,13 +302,14 @@ public class Output extends ViewPart implements IDeploymentListener {
 	/**
 	 * The Class AnnotationConfiguration.
 	 */
-	class AnnotationConfiguration implements IInformationControlCreator {
+	static class AnnotationConfiguration implements IInformationControlCreator {
 
 		/*
 		 * (non-Javadoc)
 		 * 
 		 * @see org.eclipse.jface.text.IInformationControlCreator#createInformationControl(org.eclipse.swt.widgets.Shell)
 		 */
+		@Override
 		public IInformationControl createInformationControl(final Shell shell) {
 			return new DefaultInformationControl(shell);
 		}
@@ -334,40 +322,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 	 */
 	@Override
 	public void setFocus() {
-	}
-
-	@Override
-	public void postCommandSent(final String command, final String destination) {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				String temp = MessageFormat.format(Messages.Output_Comment,
-						new Object[] { destination });
-				buffer.append("\n\n");//$NON-NLS-1$ 
-				buffer.append(temp);
-				buffer.append("\n");//$NON-NLS-1$ 
-				buffer.append(getFormattedXML(command));
-			}
-
-		});
-	}
-	
-	@Override
-	public void postCommandSent(final String message) {
-		Display.getDefault().asyncExec(new Runnable() {
-			
-			@Override
-			public void run() {
-//				String temp = MessageFormat.format(Messages.Output_Comment,
-//						new Object[] { destination });
-//				buffer.append("\n\n");//$NON-NLS-1$ 
-//				buffer.append(temp);
-				buffer.append("\n");//$NON-NLS-1$ 
-				buffer.append(message);
-			}
-			
-		});
+		//nothing to do here	
 	}
 
 	/**
@@ -392,8 +347,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 			org.w3c.dom.Document doc = documentBuilder.parse(new InputSource(
 					new StringReader(command)));
 
-			TransformerFactory transformerFactory = TransformerFactory
-					.newInstance();
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
@@ -407,46 +361,46 @@ public class Output extends ViewPart implements IDeploymentListener {
 			OutputStream outputStream = new ByteArrayOutputStream();
 			StreamResult streamResult = new StreamResult(outputStream);
 			transformer.transform(domSource, streamResult);
-			String newXML = outputStream.toString();
-			return newXML;
-
+			return outputStream.toString();
 		} catch (Exception e) {
 			return "The given command:\n" + command +"\n has an issue. The reason is: " + e.getMessage();
 		}
 	}
 
 	/** The buffer. */
-	private StringBuffer buffer = new StringBuffer();
+	private StringBuilder buffer = new StringBuilder();
 
 	@Override
-	public void responseReceived(final String response, final String source) {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				buffer.append("\n");//$NON-NLS-1$ 
-				buffer.append(getFormattedXML(response));
-			}
-
+	public void connectionOpened() {
+		// nothing to do
+	}
+	
+	@Override
+	public void postResponseReceived(final String response, final String source) {
+		Display.getDefault().asyncExec(() -> {
+			buffer.append("\n");//$NON-NLS-1$ 
+			buffer.append(getFormattedXML(response));
 		});
 	}
 
 	@Override
-	public void finished() {		
+	public void postCommandSent(String info, String destination, String command) {
+		Display.getDefault().asyncExec(() -> {
+
+				String temp = MessageFormat.format(Messages.Output_Comment, info);
+				buffer.append("\n\n");//$NON-NLS-1$ 
+				buffer.append(temp);
+				buffer.append("\n");//$NON-NLS-1$ 
+				buffer.append(getFormattedXML(command));
+		});
+	}
+	
+	@Override
+	public void connectionClosed() {		
 		IDocument document = sv.getDocument(); 
 		if(null != document){
-			Display.getDefault().asyncExec(new Runnable() {	
-				@Override
-				public void run() {
-					document.set(buffer.toString());
-				}
-	
-			});
+			Display.getDefault().asyncExec(() -> document.set(buffer.toString()));
 		}
-	}
-
-	@Override
-	public void postCommandSent(String info, String destination, String command) {		
 	}
 
 	public void clearOutput() {

@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
-import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
@@ -39,7 +39,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 
 	@Override
 	public boolean canUndo() {
-		return editor.equals(ApplicationPlugin.getCurrentActiveEditor());	
+		return editor.equals(Abstract4DIACUIPlugin.getCurrentActiveEditor());	
 	}
 	
 	@Override
@@ -71,7 +71,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	
 	@Override
 	public void execute() {
-		editor = ApplicationPlugin.getCurrentActiveEditor();
+		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
 		if (request.getType().equals(RequestConstants.REQ_RECONNECT_TARGET)) {
 			doReconnectTarget();
 		}

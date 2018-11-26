@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.util.comm.exceptions.DataTypeValueOutOfBoundsExce
 
 public class IEC_DINT extends IEC_ANY {
 	
-	protected static final int BOUNDS_MASK = 0x00000000;
+	private static final int BOUNDS_MASK = 0x00000000;
 	protected int value;
 
 	public IEC_DINT(){

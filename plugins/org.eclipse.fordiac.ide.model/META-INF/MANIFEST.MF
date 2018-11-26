@@ -22,13 +22,14 @@ Export-Package: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.virtualDNS,
  org.eclipse.fordiac.ide.model.virtualDNS.impl,
  org.eclipse.fordiac.ide.model.virtualDNS.util
-Bundle-Vendor: Eclipse 4diac
+Bundle-Vendor: %providerName
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-Localization: plugin
-Bundle-Name: Model (Incubation)
+Bundle-Name: %pluginName
 Bundle-Activator: org.eclipse.fordiac.ide.model.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model;singleton:=true
+Automatic-Module-Name: org.eclipse.fordiac.ide.model
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

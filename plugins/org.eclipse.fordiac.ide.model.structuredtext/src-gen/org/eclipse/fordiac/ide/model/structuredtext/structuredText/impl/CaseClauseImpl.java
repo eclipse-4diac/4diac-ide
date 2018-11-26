@@ -86,7 +86,8 @@ public class CaseClauseImpl extends MinimalEObjectImpl.Container implements Case
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<Constant> getCase()
+  @Override
+public EList<Constant> getCase()
   {
     if (case_ == null)
     {
@@ -100,7 +101,8 @@ public class CaseClauseImpl extends MinimalEObjectImpl.Container implements Case
    * <!-- end-user-doc -->
    * @generated
    */
-  public StatementList getStatements()
+  @Override
+public StatementList getStatements()
   {
     return statements;
   }
@@ -127,7 +129,8 @@ public class CaseClauseImpl extends MinimalEObjectImpl.Container implements Case
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setStatements(StatementList newStatements)
+  @Override
+public void setStatements(StatementList newStatements)
   {
     if (newStatements != statements)
     {

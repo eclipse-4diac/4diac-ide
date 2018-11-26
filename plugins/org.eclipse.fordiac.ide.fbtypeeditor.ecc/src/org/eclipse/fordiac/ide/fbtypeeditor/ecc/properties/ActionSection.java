@@ -31,9 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -48,7 +46,7 @@ public class ActionSection extends AbstractECSection {
 	private Composite actionComposite;
 	private Combo algorithmCombo;
 	private Combo outputEventCombo;
-	private AlgorithmGroup algorithmGroup;
+	private final AlgorithmGroup algorithmGroup = new AlgorithmGroup();
 	private AlgorithmList algorithmList;
 	
 	private Map<String, Event> events = new HashMap<>();
@@ -94,7 +92,7 @@ public class ActionSection extends AbstractECSection {
 		parent.setLayout(new GridLayout(3, true));		
 		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		createActionCombos(parent);		
-		algorithmGroup = new AlgorithmGroup(parent, getWidgetFactory());
+		algorithmGroup.createControls(parent, getWidgetFactory());
 		createAlgorithmView(parent);
 	}
 	
@@ -140,12 +138,7 @@ public class ActionSection extends AbstractECSection {
 		algorithmComposite.setLayout(new GridLayout(1, false));
 		algorithmComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		algorithmList = new AlgorithmList(algorithmComposite, getWidgetFactory());
-		algorithmList.getAlgorithmViewer().addSelectionChangedListener(new ISelectionChangedListener() {			
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				refresh();
-			}
-		});
+		algorithmList.getAlgorithmViewer().addSelectionChangedListener(event -> refresh());
 	}
 	
 	

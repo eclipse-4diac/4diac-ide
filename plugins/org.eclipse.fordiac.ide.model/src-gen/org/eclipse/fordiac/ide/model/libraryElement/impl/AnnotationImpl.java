@@ -98,6 +98,7 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -107,6 +108,7 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -119,6 +121,7 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getServity() {
 		return servity;
 	}
@@ -128,6 +131,7 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setServity(int newServity) {
 		int oldServity = servity;
 		servity = newServity;
@@ -212,10 +216,10 @@ public class AnnotationImpl extends EObjectImpl implements Annotation {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", servity: ");
+		result.append(", servity: "); //$NON-NLS-1$
 		result.append(servity);
 		result.append(')');
 		return result.toString();

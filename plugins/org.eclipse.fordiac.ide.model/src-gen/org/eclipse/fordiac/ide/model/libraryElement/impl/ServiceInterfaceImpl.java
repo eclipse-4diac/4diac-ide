@@ -98,6 +98,7 @@ public class ServiceInterfaceImpl extends I4DIACElementImpl implements ServiceIn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -107,6 +108,7 @@ public class ServiceInterfaceImpl extends I4DIACElementImpl implements ServiceIn
 	 * <!-- end-user-doc -->
 	 * @generated not
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -120,6 +122,7 @@ public class ServiceInterfaceImpl extends I4DIACElementImpl implements ServiceIn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getComment() {
 		return comment;
 	}
@@ -129,6 +132,7 @@ public class ServiceInterfaceImpl extends I4DIACElementImpl implements ServiceIn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
 		comment = newComment;
@@ -213,10 +217,10 @@ public class ServiceInterfaceImpl extends I4DIACElementImpl implements ServiceIn
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", comment: ");
+		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
 		result.append(')');
 		return result.toString();

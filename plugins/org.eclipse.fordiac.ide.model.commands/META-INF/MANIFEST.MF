@@ -4,7 +4,7 @@ Bundle-Name: Commands (Incubation)
 Bundle-ActivationPolicy: lazy
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.commands;singleton:=true
 Bundle-Activator: org.eclipse.fordiac.ide.model.commands.ModelCommandsPlugin
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.gef,
@@ -17,3 +17,4 @@ Export-Package: org.eclipse.fordiac.ide.model.commands.change,
  org.eclipse.fordiac.ide.model.commands.create,
  org.eclipse.fordiac.ide.model.commands.delete
 Bundle-Vendor: Eclipse 4diac
+Automatic-Module-Name: org.eclipse.fordiac.ide.model.commands

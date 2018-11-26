@@ -28,9 +28,8 @@ public class CompositeInstanceViewerInput extends UntypedEditorInput {
 		this.fbEditPart = fbEditPart;
 	}
 
-	public CompositeInstanceViewerInput(FBEditPart fbEditPart, Object content,
-			String name, String toolTip) {
-		super(content, name, toolTip);
+	public CompositeInstanceViewerInput(FBEditPart fbEditPart, Object content, String name) {
+		super(content, name);
 		this.fbEditPart = fbEditPart;
 	}
 

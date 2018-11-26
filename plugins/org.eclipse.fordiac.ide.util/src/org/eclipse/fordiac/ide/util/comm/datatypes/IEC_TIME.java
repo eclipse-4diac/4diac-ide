@@ -25,7 +25,7 @@ public class IEC_TIME extends IEC_ANY {
 	/**
 	 * Duration time value in microseconds.
 	 */
-	protected long value;
+	private long value;
 
 
 	public IEC_TIME() {

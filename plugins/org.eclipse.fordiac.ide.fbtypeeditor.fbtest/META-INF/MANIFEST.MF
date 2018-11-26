@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FB test (Incubation)
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.fbtest;singleton:=true
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.fbtest.Activator
 Bundle-Vendor: Eclipse 4diac
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -24,3 +24,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.edit,
  org.eclipse.emf.edit.ui,
  org.eclipse.fordiac.ide.ui.controls
+Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.fbtest

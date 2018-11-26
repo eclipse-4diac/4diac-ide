@@ -15,6 +15,6 @@ import org.eclipse.ui.IEditorPart;
 @FunctionalInterface
 public interface EditorFilter {
 	
-	public boolean filter(IEditorPart part);
+	boolean filter(IEditorPart part);
 
 }

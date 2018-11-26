@@ -55,6 +55,7 @@ public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceT
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ResourceType getResourceType() {
 		LibraryElement type = getType();
 		if((null !=type) && (type instanceof ResourceType)){
@@ -68,6 +69,7 @@ public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceT
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(final LibraryElement type) {
 		if((null != type) && (type instanceof ResourceType)){
 			super.setType(type);
@@ -80,6 +82,7 @@ public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceT
 		}
 	}
 
+	@Override
 	protected LibraryElement loadType() {
 		Palette palette = getGroup().getPallete();
 		return RESImporter.importResType(getFile(), palette);

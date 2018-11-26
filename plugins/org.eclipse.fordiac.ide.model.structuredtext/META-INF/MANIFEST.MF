@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Structured Text (Incubation)
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.structuredtext;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.fordiac.ide.model,
@@ -26,3 +26,4 @@ Export-Package: org.eclipse.fordiac.ide.model.structuredtext,
  org.eclipse.fordiac.ide.model.structuredtext.structuredText.util,
  org.eclipse.fordiac.ide.model.structuredtext.parser.antlr.lexer
 Import-Package: org.apache.log4j
+Automatic-Module-Name: org.eclipse.fordiac.ide.model.structuredtext

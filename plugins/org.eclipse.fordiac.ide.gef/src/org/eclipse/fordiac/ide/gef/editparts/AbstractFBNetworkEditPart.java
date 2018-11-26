@@ -23,12 +23,12 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart{
 
 	/** The child providers. */
-	ArrayList<IChildrenProvider> childProviders = null;
+	List<IChildrenProvider> childProviders = null;
 
 	
 	@Override
@@ -48,7 +48,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart{
 	
 	@Override
 	protected List<?> getModelChildren() {		
-		ArrayList<Object> children = new ArrayList<Object>();
+		List<Object> children = new ArrayList<>();
 		children.addAll(getModel().getNetworkElements());
 		children.addAll(getFBValues());
 		
@@ -65,7 +65,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart{
 	private Collection<? extends Object> getFBValues() {
 		ArrayList<Object> valueElenents = new ArrayList<>();
 		for(FBNetworkElement element : getModel().getNetworkElements()){
-			for (IInterfaceElement interfaceElement : element.getInterface().getInputVars()) {
+			for (VarDeclaration interfaceElement : element.getInterface().getInputVars()) {
 				if (null != interfaceElement.getValue()) {
 					valueElenents.add(interfaceElement.getValue());
 				}

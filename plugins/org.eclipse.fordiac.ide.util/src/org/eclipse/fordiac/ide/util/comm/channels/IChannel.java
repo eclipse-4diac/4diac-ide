@@ -21,11 +21,11 @@ public interface IChannel {
 	 * UDP channel<br>
 	 * decision if it is a unicast, multicast or broadcast channel is made on the inetAddress
 	 */
-	public static final int UDP = 0;
+	int UDP = 0;
 	
 	/**
 	 * TCP channel<br>
      * TODO: Client or Server Role has to be defined! */
-	public static final int TCP = 1;
+	int TCP = 1;
 	
 }

@@ -94,7 +94,8 @@ public class CallImpl extends StatementImpl implements Call
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getFunc()
+  @Override
+public String getFunc()
   {
     return func;
   }
@@ -104,7 +105,8 @@ public class CallImpl extends StatementImpl implements Call
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setFunc(String newFunc)
+  @Override
+public void setFunc(String newFunc)
   {
     String oldFunc = func;
     func = newFunc;
@@ -117,7 +119,8 @@ public class CallImpl extends StatementImpl implements Call
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<Argument> getArgs()
+  @Override
+public EList<Argument> getArgs()
   {
     if (args == null)
     {

@@ -41,6 +41,7 @@ public class DeploymentPerspective implements IPerspectiveFactory {
 	 * @seeorg.eclipse.ui.IPerspectiveFactory#createInitialLayout(org.eclipse.ui.
 	 * IPageLayout)
 	 */
+	@Override
 	public void createInitialLayout(final IPageLayout factory) {
 		this.factory = factory;
 		factory.setEditorAreaVisible(false);

@@ -1081,7 +1081,8 @@ public enum Type implements Enumerator
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getValue()
+  @Override
+public int getValue()
   {
     return value;
   }
@@ -1091,7 +1092,8 @@ public enum Type implements Enumerator
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getName()
+  @Override
+public String getName()
   {
     return name;
   }
@@ -1101,7 +1103,8 @@ public enum Type implements Enumerator
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getLiteral()
+  @Override
+public String getLiteral()
   {
     return literal;
   }

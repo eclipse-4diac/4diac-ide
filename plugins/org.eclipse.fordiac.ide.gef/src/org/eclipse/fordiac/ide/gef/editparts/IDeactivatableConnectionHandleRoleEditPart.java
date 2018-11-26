@@ -23,6 +23,6 @@ public interface IDeactivatableConnectionHandleRoleEditPart {
 	 * 
 	 * @param enabled the enabled
 	 */
-	public void setConnectionHandleRoleEnabled(boolean enabled);
+	void setConnectionHandleRoleEnabled(boolean enabled);
 
 }

@@ -2,11 +2,11 @@
 <feature
       id="org.eclipse.fordiac.ide.typeeditor.feature"
       label="Function Block Type Editor"
-      version="1.9.0.qualifier"
+      version="1.10.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
-      This feature contains the function block type editing functionality of 4diac.
+      This feature contains the function block type editing functionality of 4diac IDE.
    </description>
 
    <copyright>
@@ -163,6 +163,13 @@ Java and all Java-based trademarks are trademarks of Oracle Corporation in the U
 
    <plugin
          id="org.eclipse.fordiac.ide.model.xtext.fbt.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.fbtypeeditor.simplefb"
          download-size="0"
          install-size="0"
          version="0.0.0"

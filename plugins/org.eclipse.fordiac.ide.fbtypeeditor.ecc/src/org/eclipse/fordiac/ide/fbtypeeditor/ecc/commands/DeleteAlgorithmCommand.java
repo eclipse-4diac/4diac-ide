@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -26,7 +27,7 @@ public class DeleteAlgorithmCommand extends Command {
 
 	private Algorithm algorithm;
 	
-	private ArrayList<ECAction> actions = new ArrayList<ECAction>();
+	private List<ECAction> actions = new ArrayList<>();
 	
 	public DeleteAlgorithmCommand(final BasicFBType fbType, Algorithm algorithm){
 		this.fbType = fbType;

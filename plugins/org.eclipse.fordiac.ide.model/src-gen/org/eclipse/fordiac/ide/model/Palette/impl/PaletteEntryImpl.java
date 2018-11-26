@@ -137,6 +137,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getLabel() {
 		return label;
 	}
@@ -146,6 +147,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLabel(String newLabel) {
 		String oldLabel = label;
 		label = newLabel;
@@ -158,6 +160,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IFile getFile() {
 		return file;
 	}
@@ -167,6 +170,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFile(IFile newFile) {
 		IFile oldFile = file;
 		file = newFile;
@@ -179,6 +183,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getLastModificationTimestamp() {
 		return lastModificationTimestamp;
 	}
@@ -188,6 +193,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLastModificationTimestamp(long newLastModificationTimestamp) {
 		long oldLastModificationTimestamp = lastModificationTimestamp;
 		lastModificationTimestamp = newLastModificationTimestamp;
@@ -200,6 +206,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * <!-- end-user-doc -->
 	 * @generated not
 	 */
+	@Override
 	public LibraryElement getType() {
 		if (type != null && type.eIsProxy()) {
 			InternalEObject oldType = (InternalEObject)type;
@@ -236,6 +243,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(LibraryElement newType) {
 		if (newType != type) {
 			NotificationChain msgs = null;
@@ -255,6 +263,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PaletteGroup getGroup() {
 		if(null != eContainer()){
 		  return (PaletteGroup)eContainer();
@@ -267,6 +276,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getProjectRelativeTypePath() {
 		return getFile().getProjectRelativePath().toOSString();
 	}
@@ -398,12 +408,12 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (label: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (label: "); //$NON-NLS-1$
 		result.append(label);
-		result.append(", file: ");
+		result.append(", file: "); //$NON-NLS-1$
 		result.append(file);
-		result.append(", lastModificationTimestamp: ");
+		result.append(", lastModificationTimestamp: "); //$NON-NLS-1$
 		result.append(lastModificationTimestamp);
 		result.append(')');
 		return result.toString();

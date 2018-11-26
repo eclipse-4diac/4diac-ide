@@ -149,6 +149,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Language getLanguage() {
 		return language;
 	}
@@ -158,6 +159,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLanguage(Language newLanguage) {
 		Language oldLanguage = language;
 		language = newLanguage == null ? LANGUAGE_EDEFAULT : newLanguage;
@@ -172,6 +174,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetLanguage() {
 		Language oldLanguage = language;
 		boolean oldLanguageESet = languageESet;
@@ -186,6 +189,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetLanguage() {
 		return languageESet;
 	}
@@ -195,6 +199,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getProduct() {
 		return product;
 	}
@@ -204,6 +209,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProduct(String newProduct) {
 		String oldProduct = product;
 		product = newProduct;
@@ -216,6 +222,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVendor() {
 		return vendor;
 	}
@@ -225,6 +232,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVendor(String newVendor) {
 		String oldVendor = vendor;
 		vendor = newVendor;
@@ -237,6 +245,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVersion() {
 		return version;
 	}
@@ -246,6 +255,7 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVersion(String newVersion) {
 		String oldVersion = version;
 		version = newVersion;
@@ -350,14 +360,14 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (language: ");
-		if (languageESet) result.append(language); else result.append("<unset>");
-		result.append(", product: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (language: "); //$NON-NLS-1$
+		if (languageESet) result.append(language); else result.append("<unset>"); //$NON-NLS-1$
+		result.append(", product: "); //$NON-NLS-1$
 		result.append(product);
-		result.append(", vendor: ");
+		result.append(", vendor: "); //$NON-NLS-1$
 		result.append(vendor);
-		result.append(", version: ");
+		result.append(", version: "); //$NON-NLS-1$
 		result.append(version);
 		result.append(')');
 		return result.toString();

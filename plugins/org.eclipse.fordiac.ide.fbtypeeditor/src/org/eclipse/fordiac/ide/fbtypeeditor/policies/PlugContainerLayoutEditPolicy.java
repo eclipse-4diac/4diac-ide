@@ -86,8 +86,7 @@ public class PlugContainerLayoutEditPolicy extends AbstractInterfaceContainerLay
 			if (ref != null) {
 				index = type.getInterfaceList().getPlugs().indexOf(ref.getModel());
 			}
-			CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand((DataType) childClass, type.getInterfaceList(), false, index);
-			return cmd;
+			return new CreateInterfaceElementCommand((DataType) childClass, type.getInterfaceList(), false, index);
 		}
 		return null;
 	}

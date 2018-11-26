@@ -18,9 +18,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.controls.DirectoryChooserControl;
-import org.eclipse.fordiac.ide.ui.controls.IDirectoryChanged;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -30,6 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class CreateBootFilesWizardPage extends WizardPage {
 
+	private static final String SETTING_CURRENT_DIR = "currentDir"; //$NON-NLS-1$
 	private IStructuredSelection selection;
 	private DirectoryChooserControl dcc;
 	private DownloadSelectionTree systemTree;
@@ -43,9 +41,6 @@ public class CreateBootFilesWizardPage extends WizardPage {
 		setTitle(Messages.FordiacCreateBootfilesWizard_PageTITLE);
 	}
 
-	
-	
-	
 	@Override
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NULL);
@@ -64,7 +59,6 @@ public class CreateBootFilesWizardPage extends WizardPage {
 		setErrorMessage(null);
 		setMessage(null);
 		setControl(composite);
-
 	}
 	
 	
@@ -87,12 +81,7 @@ public class CreateBootFilesWizardPage extends WizardPage {
 		
 		systemTree.setInput(this); //the systemTree needs this only as reference
 		
-		systemTree.addCheckStateListener(new ICheckStateListener() {
-			@Override
-			public void checkStateChanged(final CheckStateChangedEvent event) {
-				setPageComplete(validatePage());
-			}
-		});
+		systemTree.addCheckStateListener(event -> setPageComplete(validatePage()));
 		
 		
 		checkSelectedElements();
@@ -108,18 +97,13 @@ public class CreateBootFilesWizardPage extends WizardPage {
 	private void createDestinationGroup(final Composite composite) {
 
 		GridData stretch = new GridData();
-		// stretch.horizontalSpan = 2;
 		stretch.grabExcessHorizontalSpace = true;
 		stretch.horizontalAlignment = SWT.FILL;
 
 		dcc = new DirectoryChooserControl(composite, SWT.NONE, "Destination: ");
-		dcc.addDirectoryChangedListener(new IDirectoryChanged() {
-
-			@Override
-			public void directoryChanged(String newDirectory) {
+		dcc.addDirectoryChangedListener(newDirectory -> {
 				saveDir(newDirectory);
 				setPageComplete(validatePage());
-			}
 		});
 
 		dcc.setLayoutData(stretch);
@@ -133,7 +117,7 @@ public class CreateBootFilesWizardPage extends WizardPage {
 	 *         if at least one is invalid
 	 */
 	private boolean validatePage() {
-		if (dcc.getDirectory() == null || dcc.getDirectory().equals("")) {
+		if (dcc.getDirectory() == null || dcc.getDirectory().equals("")) { //$NON-NLS-1$
 			setErrorMessage("Destination not selected!");
 			return false;
 		}
@@ -152,7 +136,7 @@ public class CreateBootFilesWizardPage extends WizardPage {
 	 */
 	private void loadDir() {
 		if (getDialogSettings() != null) {
-			String cachedDir = getDialogSettings().get("currentDir");
+			String cachedDir = getDialogSettings().get(SETTING_CURRENT_DIR);
 			if (cachedDir != null) {
 				setDirectory(cachedDir);
 			}
@@ -179,7 +163,7 @@ public class CreateBootFilesWizardPage extends WizardPage {
 	 *          the current dir
 	 */
 	private void saveDir(final String currentDir) {
-		getDialogSettings().put("currentDir", currentDir);
+		getDialogSettings().put(SETTING_CURRENT_DIR, currentDir);
 	}
 
 	
@@ -204,7 +188,6 @@ public class CreateBootFilesWizardPage extends WizardPage {
 
 	private void expandResource(Resource obj) {
 		expandDevice(obj.getDevice());
-		//systemTree.setExpandedState(obj, true);
 	}
 
 	private void expandDevice(Device obj) {

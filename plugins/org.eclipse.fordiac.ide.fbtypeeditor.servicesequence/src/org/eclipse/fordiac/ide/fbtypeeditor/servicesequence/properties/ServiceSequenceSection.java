@@ -56,10 +56,12 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 	private Button transactionNew;
 	private Button transactionDelete;	
 
+	@Override
 	protected ServiceSequence getType(){
 		return (ServiceSequence)type;
 	}
 
+	@Override
 	protected ServiceSequence getInputType(Object input) {
 		if(input instanceof ServiceSequenceEditPart){
 			return ((ServiceSequenceEditPart) input).getCastedModel();	
@@ -84,6 +86,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		getWidgetFactory().createCLabel(composite, "Name:"); 
 		nameText = createGroupText(composite, true);
 		nameText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeSequenceNameCommand(nameText.getText(), getType()));
@@ -93,6 +96,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		getWidgetFactory().createCLabel(composite, "Comment:"); 
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
@@ -115,6 +119,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		transactionViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
 		new AdapterFactoryTreeEditor(transactionViewer.getTree(), adapterFactory);
 		transactionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
 //				Object selection = ((IStructuredSelection) transactionViewer.getSelection()).getFirstElement();
 //				if(selection instanceof ServiceTransaction){
@@ -134,6 +139,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		transactionNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
 		transactionNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
 		transactionNew.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				executeCommand(new CreateTransactionCommand(getType()));
 				transactionViewer.refresh();

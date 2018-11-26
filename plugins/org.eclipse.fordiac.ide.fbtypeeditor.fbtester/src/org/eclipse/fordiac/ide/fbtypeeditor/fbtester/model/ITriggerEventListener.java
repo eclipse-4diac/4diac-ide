@@ -30,5 +30,5 @@ public interface ITriggerEventListener {
 	 * @param element
 	 *          the element
 	 */
-	public void sendEvent(TestElement element);
+	void sendEvent(TestElement element);
 }

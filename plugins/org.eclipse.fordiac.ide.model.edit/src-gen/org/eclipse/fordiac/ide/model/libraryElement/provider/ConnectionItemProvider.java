@@ -1,11 +1,15 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2007 - 2011 4DIAC - consortium.
+ *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *  *
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
  *  * http://www.eclipse.org/legal/epl-v10.html
  *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *  *     - initial API and implementation and/or initial documentation
  *  *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
@@ -74,8 +78,8 @@ public class ConnectionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Connection_dx1_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_dx1_feature", "_UI_Connection_type"),
+				 getString("_UI_Connection_dx1_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_dx1_feature", "_UI_Connection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.CONNECTION__DX1,
 				 true,
 				 false,
@@ -96,8 +100,8 @@ public class ConnectionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Connection_dx2_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_dx2_feature", "_UI_Connection_type"),
+				 getString("_UI_Connection_dx2_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_dx2_feature", "_UI_Connection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.CONNECTION__DX2,
 				 true,
 				 false,
@@ -118,8 +122,8 @@ public class ConnectionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Connection_dy_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_dy_feature", "_UI_Connection_type"),
+				 getString("_UI_Connection_dy_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_dy_feature", "_UI_Connection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.CONNECTION__DY,
 				 true,
 				 false,
@@ -140,8 +144,8 @@ public class ConnectionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Connection_resTypeConnection_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_resTypeConnection_feature", "_UI_Connection_type"),
+				 getString("_UI_Connection_resTypeConnection_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_resTypeConnection_feature", "_UI_Connection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.CONNECTION__RES_TYPE_CONNECTION,
 				 true,
 				 false,
@@ -162,8 +166,8 @@ public class ConnectionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Connection_brokenConnection_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_brokenConnection_feature", "_UI_Connection_type"),
+				 getString("_UI_Connection_brokenConnection_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_brokenConnection_feature", "_UI_Connection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.CONNECTION__BROKEN_CONNECTION,
 				 true,
 				 false,
@@ -184,8 +188,8 @@ public class ConnectionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Connection_source_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_source_feature", "_UI_Connection_type"),
+				 getString("_UI_Connection_source_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_source_feature", "_UI_Connection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.CONNECTION__SOURCE,
 				 true,
 				 false,
@@ -206,8 +210,8 @@ public class ConnectionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Connection_destination_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_destination_feature", "_UI_Connection_type"),
+				 getString("_UI_Connection_destination_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_destination_feature", "_UI_Connection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.CONNECTION__DESTINATION,
 				 true,
 				 false,
@@ -227,8 +231,8 @@ public class ConnectionItemProvider
 	public String getText(Object object) {
 		String label = ((Connection)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Connection_type") :
-			getString("_UI_Connection_type") + " " + label;
+			getString("_UI_Connection_type") : //$NON-NLS-1$
+			getString("_UI_Connection_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

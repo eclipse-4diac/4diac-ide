@@ -87,6 +87,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		this.editor = editor;
 
 		getViewer().getControl().addMenuDetectListener(new MenuDetectListener() {
+			@Override
 			public void menuDetected(MenuDetectEvent e) {
 				pt = getViewer().getControl().toControl(e.x, e.y);			  
 			}
@@ -162,7 +163,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 				
 		action = registry.getAction(UpdateFBTypeAction.ID);
 		if (action != null && action.isEnabled()) {
-			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
+			menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, action);
 		}
 
 		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -186,7 +187,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 			}
 		}
 		MenuManager submenu = new MenuManager(text);
-		menu.appendToGroup(GEFActionConstants.GROUP_ADD, submenu);
+		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
 		fillMenuForPalletteGroup(submenu, palette.getRootGroup().getSubGroups());
 	}
 

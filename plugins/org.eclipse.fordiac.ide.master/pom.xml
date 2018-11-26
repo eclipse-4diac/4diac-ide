@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.fordiac</groupId>
 	<artifactId>parent</artifactId>
-	<version>1.9.0-SNAPSHOT</version>
+	<version>1.10.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>../org.eclipse.fordiac.ide</module>
@@ -23,8 +23,10 @@
 		<module>../org.eclipse.fordiac.ide.fbtypeeditor.ecc</module>
 		<module>../org.eclipse.fordiac.ide.fbtypeeditor.network</module>
 		<module>../org.eclipse.fordiac.ide.fbtypeeditor.servicesequence</module>
+		<module>../org.eclipse.fordiac.ide.fbtypeeditor.simplefb</module>
 		<module>../org.eclipse.fordiac.ide.typemanagement</module>
 		<module>../org.eclipse.fordiac.ide.fortelauncher</module>
+		<module>../org.eclipse.fordiac.ide.fmu</module>
 		<module>../org.eclipse.fordiac.ide.gef</module>
 		<module>../org.eclipse.fordiac.ide.images</module>
 		<module>../org.eclipse.fordiac.ide.model</module>
@@ -42,6 +44,7 @@
 		<module>../org.eclipse.fordiac.ide.systemconfiguration</module>
 		<module>../org.eclipse.fordiac.ide.ui.controls</module>
 		<module>../org.eclipse.fordiac.ide.util</module>
+		<module>../../tests/org.eclipse.fordiac.ide.test.util</module>
 		<module>../org.eclipse.fordiac.ide.monitoring</module>
 		<module>../org.eclipse.fordiac.ide.systemmanagement</module>
 		<module>../org.eclipse.fordiac.ide.systemmanagement.ui</module>
@@ -53,37 +56,36 @@
 		<module>../../features/org.eclipse.fordiac.ide.systemimport.feature</module>
 		<module>../../features/org.eclipse.fordiac.ide.typeeditor.feature</module>
 		<module>../../features/org.eclipse.fordiac.ide.workbench.feature</module>
-		<module>../../features/org.eclipse.fordiac.ide.monitoring.feature</module>
 		<module>../../features/org.eclipse.fordiac.ide.comgeneration.feature</module>
 	</modules>
 
 	<properties>
-		<tycho.version>0.26.0</tycho.version>
-		<oxygen-repo.url>http://download.eclipse.org/releases/oxygen</oxygen-repo.url>
+		<tycho.version>1.2.0</tycho.version>
+		<tycho-repo.url>http://download.eclipse.org/releases/2018-09</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 	</properties>
 
- <repositories>
-  <repository>
-   <id>oxygen</id>
-   <url>${oxygen-repo.url}</url>
-   <layout>p2</layout>
-  </repository>
+	<repositories>
+		<repository>
+			<id>tycho-latest</id>
+			<url>${tycho-repo.url}</url>
+			<layout>p2</layout>
+		</repository>
 
- </repositories>
- 
- <pluginRepositories>
-    <pluginRepository>
-      <id>cbi</id>
-      <url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>cbi</id>
+			<url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<build>
 		<plugins>
@@ -102,21 +104,25 @@
 						<artifact>
 							<groupId>org.eclipse.fordiac</groupId>
 							<artifactId>org.eclipse.fordiac.ide.product</artifactId>
-							<version>1.9.0-SNAPSHOT</version>
+							<version>1.10.0-SNAPSHOT</version>
 						</artifact>
 					</target>
 					
-					<dependency-resolution>
-          <extraRequirements>
-            <requirement>
-                <type>eclipse-feature</type>
-                <id>org.eclipse.equinox.executable</id>
-                <versionRange>3.6.0</versionRange>
-            </requirement>
-          </extraRequirements>
-      </dependency-resolution>
-					
-					
+					<dependency-resolution>	
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>org.eclipse.equinox.executable</id>
+								<versionRange>3.6.0</versionRange>
+							</requirement>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>org.eclipse.platform</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+
 					<environments>
 						<environment>
 							<os>linux</os>
@@ -151,30 +157,52 @@
 				<artifactId>tycho-versions-plugin</artifactId>
 				<version>${tycho.version}</version>
 			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<useUIHarness>true</useUIHarness>
+					<dependency-resolution>	
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>org.eclipse.equinox.executable</id>
+								<versionRange>3.6.0</versionRange>
+							</requirement>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>org.eclipse.platform</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
-    <profile>
-      <id>eclipse-sign</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.eclipse.cbi.maven.plugins</groupId>
-            <artifactId>eclipse-jarsigner-plugin</artifactId>
-            <version>1.1.4</version>
-            <executions>
-              <execution>
-                <id>sign</id>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-                <phase>verify</phase>
-              </execution>
-            </executions>
-          </plugin>          
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+		<profile>
+			<id>eclipse-sign</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.cbi.maven.plugins</groupId>
+						<artifactId>eclipse-jarsigner-plugin</artifactId>
+						<version>1.1.4</version>
+						<executions>
+							<execution>
+								<id>sign</id>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+								<phase>verify</phase>
+							</execution>
+						</executions>
+					</plugin>          
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project> 

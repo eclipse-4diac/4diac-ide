@@ -21,8 +21,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
 
 abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEditPart {
-	abstract public IInterfaceElement getCastedModel();	
-	abstract protected void update();
+	public abstract IInterfaceElement getCastedModel();	
+	protected abstract void update();
 
 	private final EContentAdapter adapter = new EContentAdapter() {
 		@Override

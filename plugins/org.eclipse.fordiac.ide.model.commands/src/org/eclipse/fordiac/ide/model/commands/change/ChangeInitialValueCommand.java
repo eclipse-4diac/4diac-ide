@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.VarInitialization;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
@@ -28,6 +29,7 @@ public class ChangeInitialValueCommand extends Command {
 		this.newInitialValue = newInitialValue;
 	}
 	
+	@Override
 	public boolean canExecute() {
 		return (null != variable)&&(null != newInitialValue);
 	}
@@ -35,23 +37,21 @@ public class ChangeInitialValueCommand extends Command {
 	@Override
 	public void execute() {
 		
-		if (variable.getVarInitialization() != null) {
-			oldInitialValue = variable.getVarInitialization().getInitialValue();
+		if (variable.getValue() != null) {
+			oldInitialValue = variable.getValue().getValue();
 		} else {
-			VarInitialization varInitialization = DataFactory.eINSTANCE
-					.createVarInitialization();
-			variable.setVarInitialization(varInitialization);
+			variable.setValue(LibraryElementFactory.eINSTANCE.createValue());
 		}
-		variable.getVarInitialization().setInitialValue(newInitialValue);
+		variable.getValue().setValue(newInitialValue);
 	}
 	
 	@Override
 	public void undo() {
-		variable.getVarInitialization().setInitialValue(oldInitialValue);
+		variable.getValue().setValue(oldInitialValue);
 	}
 
 	@Override
 	public void redo() {
-		variable.getVarInitialization().setInitialValue(newInitialValue);
+		variable.getValue().setValue(newInitialValue);
 	}
 }

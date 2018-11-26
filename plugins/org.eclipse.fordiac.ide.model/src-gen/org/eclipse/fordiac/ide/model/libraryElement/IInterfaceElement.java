@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getTypeName <em>Type Name</em>}</li>
  * </ul>
  *
@@ -127,32 +126,6 @@ public interface IInterfaceElement extends INamedElement {
 	void setType(DataType value);
 
 	/**
-	 * Returns the value of the '<em><b>Value</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Value</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Value</em>' containment reference.
-	 * @see #setValue(Value)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIInterfaceElement_Value()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	Value getValue();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getValue <em>Value</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Value</em>' containment reference.
-	 * @see #getValue()
-	 * @generated
-	 */
-	void setValue(Value value);
-
-	/**
 	 * Returns the value of the '<em><b>Type Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -182,7 +155,7 @@ public interface IInterfaceElement extends INamedElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);'"
 	 * @generated
 	 */
 	FBNetworkElement getFBNetworkElement();

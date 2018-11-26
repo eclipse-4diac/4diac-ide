@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2016 fortiss GmbH
+ * Copyright (c) 2016- 2018 fortiss GmbH, Johannes Kepler University
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +8,8 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Harmonized deployment and monitoring, removed automatic 
+ *   			   switching to deployment perspective 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
@@ -24,9 +27,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.actions.CompoundContributionItem;
 import org.eclipse.ui.navigator.CommonNavigator;
 
@@ -45,16 +46,9 @@ public class MonitoredSystems extends CompoundContributionItem {
 			MonitoringManager manager = MonitoringManager.getInstance();
 
 			if (menuItem.getSelection()) {
-				manager.enableSystem(system.getName());
-
-				IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-				try {
-					window.getWorkbench().showPerspective("org.eclipse.fordiac.ide.monitoring.MonitoringPerspective", window); //$NON-NLS-1$
-				} catch (WorkbenchException e1) {
-					Activator.getDefault().logError(e1.getMessage(), e1);
-				}
+				manager.enableSystem(system);
 			} else {
-				manager.disableSystem(system.getName());
+				manager.disableSystem(system);
 			}
 			refreshSystemTree();
 		}
@@ -85,7 +79,7 @@ public class MonitoredSystems extends CompoundContributionItem {
 	}
 	
 	private static void createSystemMonitoringMenuEntry(AutomationSystem system, Menu menu, int index){
-		MenuItem item = new MenuItem(menu, SWT.CHECK);
+		MenuItem item = (index == -1 ) ? new MenuItem(menu, SWT.CHECK) : new MenuItem(menu, SWT.CHECK, index);
 		item.setText(system.getName());
 		MonitoringManager manager = MonitoringManager.getInstance();
 		item.setSelection(manager.monitoringForSystemEnabled(system));
@@ -96,7 +90,6 @@ public class MonitoredSystems extends CompoundContributionItem {
 		for (AutomationSystem system : SystemManager.INSTANCE.getSystems()) {	
 			createSystemMonitoringMenuEntry(system, menu, -1);
 		}		
-		
 	}
 
 	public static void refreshSystemTree() {

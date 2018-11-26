@@ -1,11 +1,15 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2007 - 2011 4DIAC - consortium.
+ *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *  *
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
  *  * http://www.eclipse.org/legal/epl-v10.html
  *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *  *     - initial API and implementation and/or initial documentation
  *  *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
@@ -70,6 +74,7 @@ public class SystemConfigurationItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(LibraryElementPackage.Literals.SYSTEM_CONFIGURATION__DEVICES);
+			childrenFeatures.add(LibraryElementPackage.Literals.SYSTEM_CONFIGURATION__SEGMENTS);
 		}
 		return childrenFeatures;
 	}
@@ -106,7 +111,7 @@ public class SystemConfigurationItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_SystemConfiguration_type");
+		return getString("_UI_SystemConfiguration_type"); //$NON-NLS-1$
 	}
 
 	/**
@@ -121,11 +126,11 @@ public class SystemConfigurationItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SystemConfiguration.class)) {
-			case LibraryElementPackage.SYSTEM_CONFIGURATION__SEGMENTS:
 			case LibraryElementPackage.SYSTEM_CONFIGURATION__LINKS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case LibraryElementPackage.SYSTEM_CONFIGURATION__DEVICES:
+			case LibraryElementPackage.SYSTEM_CONFIGURATION__SEGMENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}

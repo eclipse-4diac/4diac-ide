@@ -97,7 +97,8 @@ public class CaseStatementImpl extends StatementImpl implements CaseStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getExpression()
+  @Override
+public Expression getExpression()
   {
     return expression;
   }
@@ -124,7 +125,8 @@ public class CaseStatementImpl extends StatementImpl implements CaseStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setExpression(Expression newExpression)
+  @Override
+public void setExpression(Expression newExpression)
   {
     if (newExpression != expression)
     {
@@ -145,7 +147,8 @@ public class CaseStatementImpl extends StatementImpl implements CaseStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<CaseClause> getCase()
+  @Override
+public EList<CaseClause> getCase()
   {
     if (case_ == null)
     {
@@ -159,7 +162,8 @@ public class CaseStatementImpl extends StatementImpl implements CaseStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public ElseClause getElse()
+  @Override
+public ElseClause getElse()
   {
     return else_;
   }
@@ -186,7 +190,8 @@ public class CaseStatementImpl extends StatementImpl implements CaseStatement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setElse(ElseClause newElse)
+  @Override
+public void setElse(ElseClause newElse)
   {
     if (newElse != else_)
     {

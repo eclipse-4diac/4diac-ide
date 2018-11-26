@@ -28,6 +28,7 @@ datatypes.
 <ol>
 	<li>ROS indigo installed on Ubuntu 14.04.</li>
 	<li>4DIAC-IDE installed</li>
+	<li>CMake</li>
 </ol>
 
 
@@ -35,24 +36,30 @@ datatypes.
 <!--TODO remove setup_posix script and show all cmake variables that have to be set
 Perform the following steps to build forte with ROS communication support:-->
 <ol>
-<li> Checkout the ros branch of forte
+<li> Clone forte and switch to the develop branch
 <div class="code">$ git clone git://git.eclipse.org/gitroot/4diac/org.eclipse.4diac.forte.git
-$ git checkout ros</div></li>
-<li> Set the appropriate CMake variables
-<div class="code">$ cd org.eclipse.4diac.forte
-$ chmod +x setup_posix.sh
-$ ./setup_posix.sh
-$ cmake-gui // or via command line</div>
-The variables you need to change are:
-<div class="code">CMAKE_BUILD_TYPE=Debug
+$ cd org.eclipse.4diac.forte
+$ git checkout develop</div></li>
+<li> Source indigo installation and start cmake from this "sourced" command line:
+<div class="code">$ source /opt/ros/indigo/setup.bash
+$ cmake-gui</div></li>
+<li> Press "configure" and set the appropriate CMake variables
+<div class="code">FORTE_ARCHITECTURE=Posix
+CMAKE_BUILD_TYPE=Debug
 FORTE_MODULE_ROS=On
-FORTE_COM_ROS=On
-FORTE_RTTI_AND_EXCEPTIONS=true
-</div>
-</li>
-<li> Build the forte
-<div class="code">$ cd bin/posix
-$ make</div>
+FORTE_RTTI_AND_EXCEPTIONS=TRUE
+</div></li>
+<li>After that press "configure" again until the red fields disappear and then press "generate" and build forte with:
+<div class="code">$ cd "/path/to/your/forte/build/directory"
+$ make
+</div></li>
+<li>Source your workspace (in the command line where you want to start forte) and start a ROS core (on a different command line):
+<div class="code">$ source "/path/to/your/forte/build/directory"/devel/setup.bash
+
+$ roscore</div></li>
+<li> Start forte:
+<div class="code">$ cd [/path/to/your/forte/build/directory]/src
+$ ./forte</div>
 </li>
 
 </ol>
@@ -109,7 +116,7 @@ general the ID for a ROS publish or subscribe function block looks like this:</p
 
 <p>An example of a ROS publish and subscribe connection within FORTE is shown next.</p>
 
-<img src="./img/topics_example.png" alt="Example Application using publish and subscribe to send and receive ROS topics"/>
+<img src="./img/topics_example.PNG" alt="Example Application using publish and subscribe to send and receive ROS topics"/>
 
 <h2 id="services">ROS Services</h2>
 
@@ -119,7 +126,7 @@ This service client and server function block can be used as a template to imple
 ROS communication function blocks for your specific application. The interfaces of the
 trigger service client and server are shown next.
 <br/>
-<img src="./img/fb_trigger_service.png" alt="Interface of the Trigger Service Server and Client SIFB"/>
+<img src="./img/fb_trigger_service.PNG" alt="Interface of the Trigger Service Server and Client SIFB"/>
 <br/>
 
 A brief Interface description is given by the next 2 tables that show event and data connections of the implemented
@@ -248,7 +255,7 @@ sudo apt-get install ros-indigo-reapp-msgs
 The interface of the client and server FBs is shown in the following figure and described in the diagrams below:
 
 <br/>
-<img src="./img/fb_execute_action.png" alt="Interface of the ExecuteAction Server and Client SIFB"/>
+<img src="./img/fb_execute_action.PNG" alt="Interface of the ExecuteAction Server and Client SIFB"/>
 <br/>
 
 </p>

@@ -12,12 +12,15 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.console,
  org.eclipse.fordiac.ide.ui.controls,
  org.eclipse.fordiac.ide.systemconfiguration,
- org.eclipse.fordiac.ide.gef
+ org.eclipse.fordiac.ide.gef,
+  org.eclipse.gef
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.9.0.qualifier
-Bundle-Name: Deployment UI (Incubation)
+Bundle-Version: 1.10.0.qualifier
+Bundle-Name: %pluginName
 Bundle-Activator: org.eclipse.fordiac.ide.deployment.ui.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.ui;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.ui
+Bundle-Localization: plugin

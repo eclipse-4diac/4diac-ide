@@ -93,9 +93,9 @@
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterTypePaletteEntry" eSuperTypes="#//PaletteEntry">
-    <eOperations name="getAdapterType" eType="ecore:EClass lib.ecore#//AdapterType">
+    <eOperations name="getType" eType="ecore:EClass lib.ecore#//AdapterType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof AdapterType)){&#xA;   return (AdapterType) type;&#xA;}&#xA;return null;"/>
+        <details key="body" value="LibraryElement type = super.getType();&#xA;if((null !=type) &amp;&amp; (type instanceof AdapterType)){&#xA;   return (AdapterType) type;&#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="setType">

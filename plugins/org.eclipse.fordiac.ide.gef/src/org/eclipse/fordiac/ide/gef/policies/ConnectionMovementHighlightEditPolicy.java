@@ -36,6 +36,7 @@ public class ConnectionMovementHighlightEditPolicy extends
 	 * org.eclipse.gef.editpolicies.AbstractEditPolicy#eraseTargetFeedback(org
 	 * .eclipse.gef.Request)
 	 */
+	@Override
 	public void eraseTargetFeedback(Request request) {
 		getHostFigure().setCursor(null);
 	}
@@ -47,6 +48,7 @@ public class ConnectionMovementHighlightEditPolicy extends
 	 * org.eclipse.gef.editpolicies.AbstractEditPolicy#getTargetEditPart(org
 	 * .eclipse.gef.Request)
 	 */
+	@Override
 	public EditPart getTargetEditPart(Request request) {
 		return request.getType().equals(RequestConstants.REQ_SELECTION_HOVER) ? getHost()
 				: null;
@@ -63,6 +65,7 @@ public class ConnectionMovementHighlightEditPolicy extends
 	 * org.eclipse.gef.editpolicies.AbstractEditPolicy#showTargetFeedback(org
 	 * .eclipse.gef.Request)
 	 */
+	@Override
 	public void showTargetFeedback(Request request) {
 		if (request instanceof SelectionRequest) {
 			Point pos = ((SelectionRequest) request).getLocation();

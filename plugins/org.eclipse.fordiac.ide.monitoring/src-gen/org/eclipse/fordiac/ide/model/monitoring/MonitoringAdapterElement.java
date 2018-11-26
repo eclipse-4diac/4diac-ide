@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.monitoring;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 
 

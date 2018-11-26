@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionHelpers;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -25,7 +26,7 @@ import org.eclipse.gef.commands.Command;
 public class ChangeConditionEventCommand extends Command {
 
 	private final ECTransition transition;
-	private final ArrayList<Event> eventList = new ArrayList<Event>();
+	private final List<Event> eventList = new ArrayList<>();
 	private String conditionEvent;
 	private String oldConditionEvent;
 	
@@ -51,7 +52,7 @@ public class ChangeConditionEventCommand extends Command {
 		return conditionEvent.equals("") || (eventList != null && ! eventList.isEmpty()); //$NON-NLS-1$
 	}
 	
-	public ArrayList<Event> getEvents(){
+	public final List<Event> getEvents(){
 		eventList.clear();
 		BasicFBType types = (BasicFBType) transition.eContainer().eContainer();
 		this.eventList.addAll(types.getInterfaceList().getEventInputs());

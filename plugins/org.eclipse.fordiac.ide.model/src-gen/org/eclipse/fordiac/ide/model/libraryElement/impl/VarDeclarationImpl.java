@@ -24,7 +24,6 @@ import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.VarInitialization;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -46,11 +45,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getArraySize <em>Array Size</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getVarInitialization <em>Var Initialization</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getWiths <em>Withs</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -147,16 +145,6 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	protected DataType type;
 
 	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected Value value;
-
-	/**
 	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -197,16 +185,6 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	protected int arraySize = ARRAY_SIZE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getVarInitialization() <em>Var Initialization</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVarInitialization()
-	 * @generated
-	 * @ordered
-	 */
-	protected VarInitialization varInitialization;
-
-	/**
 	 * The cached value of the '{@link #getWiths() <em>Withs</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -215,6 +193,16 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * @ordered
 	 */
 	protected EList<With> withs;
+
+	/**
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected Value value;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -240,6 +228,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getArraySize() {
 		return arraySize;
 	}
@@ -249,6 +238,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setArraySize(int newArraySize) {
 		int oldArraySize = arraySize;
 		arraySize = newArraySize;
@@ -261,6 +251,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getComment() {
 		return comment;
 	}
@@ -270,6 +261,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
 		comment = newComment;
@@ -282,6 +274,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -291,6 +284,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated not
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -304,6 +298,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isIsInput() {
 		return isInput;
 	}
@@ -313,6 +308,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIsInput(boolean newIsInput) {
 		boolean oldIsInput = isInput;
 		isInput = newIsInput;
@@ -325,6 +321,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DataType getType() {
 		if (type != null && type.eIsProxy()) {
 			InternalEObject oldType = (InternalEObject)type;
@@ -351,6 +348,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(DataType newType) {
 		DataType oldType = type;
 		type = newType;
@@ -363,72 +361,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VarInitialization getVarInitialization() {
-		if (varInitialization != null && varInitialization.eIsProxy()) {
-			InternalEObject oldVarInitialization = (InternalEObject)varInitialization;
-			varInitialization = (VarInitialization)eResolveProxy(oldVarInitialization);
-			if (varInitialization != oldVarInitialization) {
-				InternalEObject newVarInitialization = (InternalEObject)varInitialization;
-				NotificationChain msgs = oldVarInitialization.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, null, null);
-				if (newVarInitialization.eInternalContainer() == null) {
-					msgs = newVarInitialization.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, oldVarInitialization, varInitialization));
-			}
-		}
-		return varInitialization;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public VarInitialization basicGetVarInitialization() {
-		return varInitialization;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetVarInitialization(VarInitialization newVarInitialization, NotificationChain msgs) {
-		VarInitialization oldVarInitialization = varInitialization;
-		varInitialization = newVarInitialization;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, oldVarInitialization, newVarInitialization);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setVarInitialization(VarInitialization newVarInitialization) {
-		if (newVarInitialization != varInitialization) {
-			NotificationChain msgs = null;
-			if (varInitialization != null)
-				msgs = ((InternalEObject)varInitialization).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, null, msgs);
-			if (newVarInitialization != null)
-				msgs = ((InternalEObject)newVarInitialization).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, null, msgs);
-			msgs = basicSetVarInitialization(newVarInitialization, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION, newVarInitialization, newVarInitialization));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public String getTypeName() {
 		return typeName;
 	}
@@ -438,6 +371,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTypeName(String newTypeName) {
 		String oldTypeName = typeName;
 		typeName = newTypeName;
@@ -450,6 +384,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<With> getWiths() {
 		if (withs == null) {
 			withs = new EObjectWithInverseResolvingEList<With>(With.class, this, LibraryElementPackage.VAR_DECLARATION__WITHS, LibraryElementPackage.WITH__VARIABLES);
@@ -462,8 +397,9 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isArray() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.isArray(this);
+		return org.eclipse.fordiac.ide.model.Annotations.isArray(this);
 	}
 
 	/**
@@ -471,8 +407,9 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FBNetworkElement getFBNetworkElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.GEN.getFBNetworkElement(this);
+		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
 	}
 
 	/**
@@ -480,6 +417,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Value getValue() {
 		if (value != null && value.eIsProxy()) {
 			InternalEObject oldValue = (InternalEObject)value;
@@ -527,6 +465,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(Value newValue) {
 		if (newValue != value) {
 			NotificationChain msgs = null;
@@ -546,6 +485,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
 			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
@@ -558,6 +498,7 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
 			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
@@ -596,12 +537,10 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 				return ((InternalEList<?>)getInputConnections()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
 				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				return basicSetValue(null, msgs);
-			case LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION:
-				return basicSetVarInitialization(null, msgs);
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				return ((InternalEList<?>)getWiths()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.VAR_DECLARATION__VALUE:
+				return basicSetValue(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -627,18 +566,15 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				if (resolve) return getValue();
-				return basicGetValue();
 			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
 				return getTypeName();
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				return getArraySize();
-			case LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION:
-				if (resolve) return getVarInitialization();
-				return basicGetVarInitialization();
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				return getWiths();
+			case LibraryElementPackage.VAR_DECLARATION__VALUE:
+				if (resolve) return getValue();
+				return basicGetValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -672,21 +608,18 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				setType((DataType)newValue);
 				return;
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				setValue((Value)newValue);
-				return;
 			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
 				setTypeName((String)newValue);
 				return;
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				setArraySize((Integer)newValue);
 				return;
-			case LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION:
-				setVarInitialization((VarInitialization)newValue);
-				return;
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				getWiths().clear();
 				getWiths().addAll((Collection<? extends With>)newValue);
+				return;
+			case LibraryElementPackage.VAR_DECLARATION__VALUE:
+				setValue((Value)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -718,20 +651,17 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				setType((DataType)null);
 				return;
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				setValue((Value)null);
-				return;
 			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
 				setTypeName(TYPE_NAME_EDEFAULT);
 				return;
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				setArraySize(ARRAY_SIZE_EDEFAULT);
 				return;
-			case LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION:
-				setVarInitialization((VarInitialization)null);
-				return;
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				getWiths().clear();
+				return;
+			case LibraryElementPackage.VAR_DECLARATION__VALUE:
+				setValue((Value)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -757,16 +687,14 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 				return outputConnections != null && !outputConnections.isEmpty();
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				return type != null;
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				return value != null;
 			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
 				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				return arraySize != ARRAY_SIZE_EDEFAULT;
-			case LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION:
-				return varInitialization != null;
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				return withs != null && !withs.isEmpty();
+			case LibraryElementPackage.VAR_DECLARATION__VALUE:
+				return value != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -780,16 +708,16 @@ public class VarDeclarationImpl extends I4DIACElementImpl implements VarDeclarat
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", comment: ");
+		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
-		result.append(", isInput: ");
+		result.append(", isInput: "); //$NON-NLS-1$
 		result.append(isInput);
-		result.append(", typeName: ");
+		result.append(", typeName: "); //$NON-NLS-1$
 		result.append(typeName);
-		result.append(", arraySize: ");
+		result.append(", arraySize: "); //$NON-NLS-1$
 		result.append(arraySize);
 		result.append(')');
 		return result.toString();

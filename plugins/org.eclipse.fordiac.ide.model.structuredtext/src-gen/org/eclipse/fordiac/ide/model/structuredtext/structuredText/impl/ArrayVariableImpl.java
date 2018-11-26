@@ -85,7 +85,8 @@ public class ArrayVariableImpl extends VariableImpl implements ArrayVariable
    * <!-- end-user-doc -->
    * @generated
    */
-  public Variable getArray()
+  @Override
+public Variable getArray()
   {
     return array;
   }
@@ -112,7 +113,8 @@ public class ArrayVariableImpl extends VariableImpl implements ArrayVariable
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setArray(Variable newArray)
+  @Override
+public void setArray(Variable newArray)
   {
     if (newArray != array)
     {
@@ -133,7 +135,8 @@ public class ArrayVariableImpl extends VariableImpl implements ArrayVariable
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<Expression> getIndex()
+  @Override
+public EList<Expression> getIndex()
   {
     if (index == null)
     {

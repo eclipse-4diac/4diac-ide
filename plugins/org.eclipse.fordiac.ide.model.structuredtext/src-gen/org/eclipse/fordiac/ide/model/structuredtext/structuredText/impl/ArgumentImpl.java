@@ -74,7 +74,8 @@ public class ArgumentImpl extends MinimalEObjectImpl.Container implements Argume
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getVar()
+  @Override
+public String getVar()
   {
     return var;
   }
@@ -84,7 +85,8 @@ public class ArgumentImpl extends MinimalEObjectImpl.Container implements Argume
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setVar(String newVar)
+  @Override
+public void setVar(String newVar)
   {
     String oldVar = var;
     var = newVar;

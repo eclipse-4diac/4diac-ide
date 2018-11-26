@@ -35,14 +35,14 @@ public class OutputPrimitiveEditPart extends PrimitiveEditPart{
 	
 	@Override
 	public List<Object> getModelSourceConnections() {
-		ArrayList<Object> temp = new ArrayList<Object>();
+		ArrayList<Object> temp = new ArrayList<>();
 		temp.add(connection);
 		return temp;
 	}
 
 	@Override
 	public List<Object> getModelTargetConnections() {
-		ArrayList<Object> temp = new ArrayList<Object>();
+		ArrayList<Object> temp = new ArrayList<>();
 		InputPrimitive view = getCastedParent().getPossibleInputPrimitive(getCastedModel());
 		if (view != null) {
 			EditPart part = (EditPart) getViewer().getEditPartRegistry().get(view);
@@ -81,6 +81,7 @@ public class OutputPrimitiveEditPart extends PrimitiveEditPart{
 
 	}
 
+	@Override
 	public OutputPrimitive getCastedModel() {
 		return (OutputPrimitive) getModel();
 	}

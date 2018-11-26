@@ -90,7 +90,7 @@ public abstract class CreateFromNewAdapterAction extends WorkbenchPartAction {
 		return new StructuredSelection();
 	}
 
-	abstract protected Command getCreationCommand(AdapterTypePaletteEntry adpEntry);
+	protected abstract Command getCreationCommand(AdapterTypePaletteEntry adpEntry);
 
 	public void setPaletteEntry(PaletteEntry paletteEntry) {
 		this.paletteEntry = paletteEntry;

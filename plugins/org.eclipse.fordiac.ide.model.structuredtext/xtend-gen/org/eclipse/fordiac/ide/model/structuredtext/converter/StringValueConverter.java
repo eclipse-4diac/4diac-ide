@@ -29,7 +29,7 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
       String _xblockexpression = null;
       {
         final StringReader reader = new StringReader(value);
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         result.append(this.getQuote());
         for (int i = new Function0<Integer>() {
           public Integer apply() {
@@ -198,7 +198,7 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
         int _minus = (_length - 1);
         final String value = string.substring(1, _minus);
         final StringReader reader = new StringReader(value);
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         for (int i = new Function0<Integer>() {
           public Integer apply() {
             try {

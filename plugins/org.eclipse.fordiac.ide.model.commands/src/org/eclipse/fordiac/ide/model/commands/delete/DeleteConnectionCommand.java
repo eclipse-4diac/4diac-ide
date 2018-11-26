@@ -24,7 +24,7 @@ public class DeleteConnectionCommand extends Command {
 	private IInterfaceElement source;
 	private IInterfaceElement destination;
 	private Connection connection;
-	final private FBNetwork connectionParent;
+	private final FBNetwork connectionParent;
 	private boolean performMappingCheck;
 	private DeleteConnectionCommand deleteMapped = null;
 	private IEditorPart editor;

@@ -20,9 +20,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
-import org.eclipse.fordiac.ide.model.monitoring.PortElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -72,6 +73,7 @@ public class AdapterPortElementImpl extends PortElementImpl implements AdapterPo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<PortElement> getPorts() {
 		if (ports == null) {
 			ports = new EObjectContainmentEList<PortElement>(PortElement.class, this, MonitoringPackage.ADAPTER_PORT_ELEMENT__PORTS);

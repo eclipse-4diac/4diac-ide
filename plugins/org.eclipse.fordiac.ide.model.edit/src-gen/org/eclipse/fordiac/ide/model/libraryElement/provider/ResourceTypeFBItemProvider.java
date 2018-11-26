@@ -1,11 +1,15 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2007 - 2011 4DIAC - consortium.
+ *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *  *
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
  *  * http://www.eclipse.org/legal/epl-v10.html
  *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *  *     - initial API and implementation and/or initial documentation
  *  *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
@@ -60,7 +64,7 @@ public class ResourceTypeFBItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ResourceTypeFB"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ResourceTypeFB")); //$NON-NLS-1$
 	}
 
 	/**
@@ -73,8 +77,8 @@ public class ResourceTypeFBItemProvider
 	public String getText(Object object) {
 		String label = ((ResourceTypeFB)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_ResourceTypeFB_type") :
-			getString("_UI_ResourceTypeFB_type") + " " + label;
+			getString("_UI_ResourceTypeFB_type") : //$NON-NLS-1$
+			getString("_UI_ResourceTypeFB_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

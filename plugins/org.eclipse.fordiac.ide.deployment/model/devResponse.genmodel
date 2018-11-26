@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="******************************************************************************&#xA;* Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University&#xA;* &#xA;* All rights reserved. This program and the accompanying materials&#xA;* are made available under the terms of the Eclipse Public License v1.0&#xA;* which accompanies this distribution, and is available at&#xA;* http://www.eclipse.org/legal/epl-v10.html&#xA;*&#xA;* Contributors:&#xA;*   Gerhard Ebenhofer, Alois Zoitl&#xA;*     - initial API and implementation and/or initial documentation&#xA;*   Alois Zoitl - moved to deployment and reworked it to a device response model&#xA;******************************************************************************&#xA;"
+    modelDirectory="/org.eclipse.fordiac.ide.deployment/src-gen" editDirectory="/org.eclipse.fordiac.ide.deployment.edit/src-gen"
+    editorDirectory="/org.eclipse.fordiac.ide.deployment.editor/src-gen" modelPluginID="org.eclipse.fordiac.ide.deployment"
+    modelName="DevResponse" modelPluginClass="" editPluginClass="org.eclipse.fordiac.ide.deployment.devResponse.provider.devResponseEditPlugin"
+    nonNLSMarkers="true" importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0"
+    copyrightFields="false" editPluginID="org.eclipse.fordiac.deployment.edit" importOrganizing="true"
+    cleanup="true">
+  <foreignModel>devResponse.ecore</foreignModel>
+  <genPackages prefix="DevResponse" basePackage="org.eclipse.fordiac.ide.deployment"
+      disposableProviderFactory="true" contentTypeIdentifier="" ecorePackage="devResponse.ecore#/">
+    <genClasses ecoreClass="devResponse.ecore#//Resource">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Resource/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Resource/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Resource/fbs"/>
+    </genClasses>
+    <genClasses ecoreClass="devResponse.ecore#//FB">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//FB/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//FB/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//FB/ports"/>
+    </genClasses>
+    <genClasses ecoreClass="devResponse.ecore#//Port">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Port/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Port/dataValues"/>
+    </genClasses>
+    <genClasses ecoreClass="devResponse.ecore#//Data">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Data/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Data/time"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Data/forced"/>
+    </genClasses>
+    <genClasses ecoreClass="devResponse.ecore#//Response">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Response/ID"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Response/Watches"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Response/Reason"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference devResponse.ecore#//Response/fblist"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Response/endpointlist"/>
+    </genClasses>
+    <genClasses ecoreClass="devResponse.ecore#//Watches">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Watches/resources"/>
+    </genClasses>
+    <genClasses ecoreClass="devResponse.ecore#//FBList">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//FBList/fbs"/>
+    </genClasses>
+    <genClasses ecoreClass="devResponse.ecore#//EndpointList">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//EndpointList/connection"/>
+    </genClasses>
+    <genClasses ecoreClass="devResponse.ecore#//Connection">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Connection/source"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Connection/destination"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

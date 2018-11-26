@@ -131,6 +131,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ServiceTransaction> getServiceTransaction() {
 		if (serviceTransaction == null) {
 			serviceTransaction = new EObjectContainmentEList<ServiceTransaction>(ServiceTransaction.class, this, LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION);
@@ -143,6 +144,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public int getTestResult() {
 		return testResult;
 		// TODO: implement this method to return the 'Test Result' attribute
@@ -155,6 +157,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public void setTestResult(int newTestResult) {
 		int oldTestResult = testResult;
 		testResult=newTestResult;
@@ -171,6 +174,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public void unsetTestResult() {
 		testResult=TEST_RESULT_EDEFAULT;
 		// TODO: implement this method to unset the 'Test Result' attribute
@@ -183,6 +187,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public boolean isSetTestResult() {
 		return (testResult!=TEST_RESULT_EDEFAULT);
 		// TODO: implement this method to return whether the 'Test Result' attribute is set
@@ -195,6 +200,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getComment() {
 		return comment;
 	}
@@ -204,6 +210,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setComment(String newComment) {
 		String oldComment = comment;
 		comment = newComment;
@@ -216,6 +223,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -225,6 +233,7 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 	 * <!-- end-user-doc -->
 	 * @generated not
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -346,10 +355,10 @@ public class ServiceSequenceImpl extends I4DIACElementImpl implements ServiceSeq
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", comment: ");
+		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
 		result.append(')');
 		return result.toString();

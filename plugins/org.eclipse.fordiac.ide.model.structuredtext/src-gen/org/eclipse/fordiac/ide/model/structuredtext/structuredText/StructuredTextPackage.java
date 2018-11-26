@@ -1198,15 +1198,6 @@ public interface StructuredTextPackage extends EPackage
   int LOCAL_VARIABLE__ARRAY_SIZE = LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE;
 
   /**
-   * The feature id for the '<em><b>Var Initialization</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int LOCAL_VARIABLE__VAR_INITIALIZATION = LibraryElementPackage.VAR_DECLARATION__VAR_INITIALIZATION;
-
-  /**
    * The feature id for the '<em><b>Withs</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

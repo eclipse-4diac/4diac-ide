@@ -6,9 +6,10 @@
     <relativePath>../org.eclipse.fordiac.ide.master/pom.xml</relativePath>
     <groupId>org.eclipse.fordiac</groupId>
     <artifactId>parent</artifactId>
-    <version>1.9.0-SNAPSHOT</version>
+    <version>1.10.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>org.eclipse.fordiac.ide.fbtypeeditor.fbtester</artifactId>
   <packaging>eclipse-plugin</packaging>
+   <version>1.10.0-SNAPSHOT</version>
 </project> 

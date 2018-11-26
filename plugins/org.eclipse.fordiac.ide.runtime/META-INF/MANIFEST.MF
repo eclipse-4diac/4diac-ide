@@ -7,9 +7,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.ui.controls
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-Name: Runtime (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.runtime.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.runtime;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.eclipse.fordiac.ide.runtime

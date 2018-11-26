@@ -76,7 +76,7 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 	 * @param openApplication boolean flag indicating if the editor for this application should be opened after creation
 	 * @param shell the wizard's shell invoking this method
 	 */
-	public static void performApplicationCreation(AutomationSystem system, String appName, Boolean openApplication, Shell shell) {
+	public static void performApplicationCreation(AutomationSystem system, String appName, boolean openApplication, Shell shell) {
 		NewAppCommand cmd = new NewAppCommand(system, appName, Messages.NewApplicationWizard_Comment);
 		
 		//TODO check how to get the command stack here getCommandStack().execute(cmd);
@@ -118,6 +118,7 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
 	 * org.eclipse.jface.viewers.IStructuredSelection)
 	 */
+	@Override
 	public void init(final IWorkbench workbench,
 			final IStructuredSelection selection) {
 		if (selection != null) {

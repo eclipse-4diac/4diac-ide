@@ -6,12 +6,17 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui.controls,
  org.eclipse.ui,
  org.eclipse.fordiac.ide.export.forte_lua,
- org.eclipse.fordiac.ide.export
+ org.eclipse.fordiac.ide.export,
+ org.eclipse.emf.ecore.xmi;visibility:=reexport,
+ org.eclipse.e4.core.services,
+ org.apache.log4j,
+ org.eclipse.fordiac.ide.model.commands
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.9.0.qualifier
+Bundle-Version: 1.10.0.qualifier
 Bundle-Name: IEC 61499 Deployment (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.deployment.iec61499.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.iec61499;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.iec61499

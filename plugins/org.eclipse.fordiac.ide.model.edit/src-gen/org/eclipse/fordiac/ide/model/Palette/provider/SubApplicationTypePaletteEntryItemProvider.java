@@ -1,11 +1,15 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2007 - 2012 4DIAC - consortium.
+ *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *  *
  *  * All rights reserved. This program and the accompanying materials
  *  * are made available under the terms of the Eclipse Public License v1.0
  *  * which accompanies this distribution, and is available at
  *  * http://www.eclipse.org/legal/epl-v10.html
  *  *
+ *  * Contributors:
+ *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *  *     - initial API and implementation and/or initial documentation
  *  *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.Palette.provider;
@@ -60,7 +64,7 @@ public class SubApplicationTypePaletteEntryItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SubApplicationTypePaletteEntry"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/SubApplicationTypePaletteEntry")); //$NON-NLS-1$
 	}
 
 	/**
@@ -73,8 +77,8 @@ public class SubApplicationTypePaletteEntryItemProvider
 	public String getText(Object object) {
 		String label = ((SubApplicationTypePaletteEntry)object).getLabel();
 		return label == null || label.length() == 0 ?
-			getString("_UI_SubApplicationTypePaletteEntry_type") :
-			getString("_UI_SubApplicationTypePaletteEntry_type") + " " + label;
+			getString("_UI_SubApplicationTypePaletteEntry_type") : //$NON-NLS-1$
+			getString("_UI_SubApplicationTypePaletteEntry_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
