@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 TU Wien/ACIN
+ * Copyright (c) 2018 TU Wien/ACIN, Johannes Kepler University
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,13 +8,13 @@
  * Contributors:
  *   Peter Gsellmann 
  *   - initial implementation and/or initial documentation
+ *   Alois Zoitl - reworked algorithm edting to reduce duplicated code
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.simplefb;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB;
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
@@ -26,58 +26,55 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.EditorPart;
 
 public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 
-	protected AlgorithmEditingCompositeSimpleFB baseAlgorithm;
+	private final AlgorithmEditingCompositeSimpleFB baseAlgorithm = new AlgorithmEditingCompositeSimpleFB();
 	private SimpleFBType fbType;
-	protected CommandStack commandStack;
-	protected Algorithm alg;
+	private CommandStack commandStack;
 
-	public SimpleFBEditor(){
+	public SimpleFBEditor() {
+		// No initialization needed
 	}
-
 
 	@Override
 	public void createPartControl(Composite parent) {
-		baseAlgorithm = new AlgorithmEditingCompositeSimpleFB(parent);
-		baseAlgorithm.commandStack = commandStack;
-		baseAlgorithm.loadEditors(fbType);
+		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+		baseAlgorithm.createControls(parent, toolkit);
+		baseAlgorithm.initialize(fbType, commandStack);
 		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
 	}
-	
+
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-			setInput(input);
-			if (input instanceof FBTypeEditorInput) {
-				FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
-				if (untypedInput.getContent() instanceof SimpleFBType) {
-					fbType = (SimpleFBType) untypedInput.getContent();
-				}
+		setInput(input);
+		if (input instanceof FBTypeEditorInput) {
+			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+			if (untypedInput.getContent() instanceof SimpleFBType) {
+				fbType = (SimpleFBType) untypedInput.getContent();
 			}
-			setCommonCommandStack(commandStack);
-			setSite(site);
-			setPartName("Algorithm");
-			setTitleImage(FordiacImage.ICON_Algorithm.getImage());
-			getSite().getWorkbenchWindow().getSelectionService()
-					.addSelectionListener(this);
+		}
+		setCommonCommandStack(commandStack);
+		setSite(site);
+		setPartName("Algorithm");
+		setTitleImage(FordiacImage.ICON_Algorithm.getImage());
+		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 	}
-
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		commandStack.markSaveLocation();
 		firePropertyChange(IEditorPart.PROP_DIRTY);
-		
+
 	}
 
 	@Override
 	public void doSaveAs() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public boolean isDirty() {
@@ -85,27 +82,23 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 		return false;
 	}
 
-
 	@Override
 	public boolean isSaveAsAllowed() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
-
 	@Override
 	public void setFocus() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		baseAlgorithm.setAlgorithm(fbType.getAlgorithm());
-		
-	}
 
+	}
 
 	@Override
 	public boolean outlineSelectionChanged(Object selectedElement) {
@@ -113,17 +106,14 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 		return false;
 	}
 
-
 	@Override
 	public void setCommonCommandStack(CommandStack commandStack) {
-		this.commandStack = commandStack;	
+		this.commandStack = commandStack;
 	}
 
 	@Override
-	public void dispose()
-	{
-		getSite().getWorkbenchWindow().getSelectionService()
-		.removeSelectionListener(this);
+	public void dispose() {
+		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		super.dispose();
 	}
 }

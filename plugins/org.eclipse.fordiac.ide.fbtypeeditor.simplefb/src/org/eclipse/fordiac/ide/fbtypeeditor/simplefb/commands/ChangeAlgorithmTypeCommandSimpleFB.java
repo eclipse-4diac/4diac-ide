@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 22018 TU Wien/ACIN
+ * Copyright (c) 2018 TU Wien/ACIN, Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,89 +9,29 @@
  * Contributors:
  *   Peter Gsellmann
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - moved common parts with basicfb command to common base class  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.simplefb.commands;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.AbstractChangeAlgorithmTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
-import org.eclipse.gef.commands.Command;
 
-public class ChangeAlgorithmTypeCommandSimpleFB extends Command {
+public class ChangeAlgorithmTypeCommandSimpleFB extends AbstractChangeAlgorithmTypeCommand {
 
-	protected final BaseFBType fbType;
-	protected Algorithm oldAlgorithm;
-	protected Algorithm newAlgorithm;
-	private String algorithmType;
 
 	public ChangeAlgorithmTypeCommandSimpleFB(BaseFBType fbType, Algorithm oldAlgorithm, String algorithmType) {
-		this.fbType = fbType;
-		this.oldAlgorithm = oldAlgorithm;
-		this.algorithmType = algorithmType;
+		super(fbType, oldAlgorithm, algorithmType);
 	}
 
 	@Override
-	public boolean canExecute() {
-		if (algorithmType.equalsIgnoreCase("ST")) { //$NON-NLS-1$
-			if (oldAlgorithm instanceof STAlgorithm) {
-				return false;
-			} else if (!(oldAlgorithm instanceof TextAlgorithm || oldAlgorithm instanceof OtherAlgorithm)) {
-				return false;
-			}
-		} else if ((!(oldAlgorithm instanceof STAlgorithm))
-				&& (oldAlgorithm instanceof TextAlgorithm || oldAlgorithm instanceof OtherAlgorithm)) {
-			return false;
-		}
-		return true;
+	protected void changeAlgorithm(Algorithm oldAlg, Algorithm newAlg) {
+		getType().setAlgorithm(newAlg);
 	}
 
 	@Override
-	public void execute() {
-		// FIXME this only works if there are no more other algorithms
-		// supported!!!
-
-		if (algorithmType.equalsIgnoreCase("ST")) { //$NON-NLS-1$
-			newAlgorithm = createSTAlgorithm();
-		} else {
-			newAlgorithm = createOtherAlgorithm();
-		}
-
-		redo();
+	protected SimpleFBType getType() {
+		return (SimpleFBType) super.getType();
 	}
-
-	private Algorithm createSTAlgorithm() {
-		STAlgorithm algorithm = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-		algorithm.setText(((TextAlgorithm) oldAlgorithm).getText());
-		algorithm.setName(oldAlgorithm.getName());
-		algorithm.setComment(oldAlgorithm.getComment());
-		return algorithm;
-	}
-
-	private Algorithm createOtherAlgorithm() {
-		OtherAlgorithm algorithm = LibraryElementFactory.eINSTANCE.createOtherAlgorithm();
-		algorithm.setText(((TextAlgorithm) oldAlgorithm).getText());
-		algorithm.setName(oldAlgorithm.getName());
-		algorithm.setComment(oldAlgorithm.getComment());
-		algorithm.setLanguage("AnyText"); //$NON-NLS-1$
-		return algorithm;
-	}
-
-	@Override
-	public void undo() {
-		((SimpleFBType) fbType).setAlgorithm(oldAlgorithm);
-	}
-
-	@Override
-	public void redo() {
-		((SimpleFBType) fbType).setAlgorithm(newAlgorithm);
-	}
-
-	public Algorithm getNewAlgorithm() {
-		return newAlgorithm;
-	}
-
 }

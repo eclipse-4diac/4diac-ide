@@ -105,38 +105,42 @@ class FBNetworkImporter {
 		NamedNodeMap mapFbElement = fbNode.getAttributes();
 		CommonElementImporter.readNameCommentAttributes(fb, mapFbElement);
 		
-		Node typeFbElement = mapFbElement.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (typeFbElement != null) {
-			// FIXME this can lead to problems if typename exists several times!
-			PaletteEntry entry = palette.getTypeEntry(typeFbElement.getNodeValue());
+		PaletteEntry entry = getTypeEntry(mapFbElement);
 			
-			if (entry instanceof FBTypePaletteEntry) {
-				fb.setPaletteEntry(entry);
-				fb.setInterface(EcoreUtil.copy(fb.getType().getInterfaceList()));
-			} else {
+		if (entry instanceof FBTypePaletteEntry) {
+			fb.setPaletteEntry(entry);
+			fb.setInterface(EcoreUtil.copy(fb.getType().getInterfaceList()));
+		} else {
 //TODO model refactoring - think about where and if such markers should be created maybe move to validator
 //				createFBTypeProblemMarker(IMarker.SEVERITY_ERROR, Messages.FBTImporter_REQUIRED_FB_TYPE_EXCEPTION + typeFbElement.getNodeValue() + " not available");
-				// as we don't have type information we create an empty
-				// interface list
-				InterfaceList interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
-				fb.setInterface(interfaceList);
-				// TODO add attribute value for missing instance name and
-				// indicate that FB is missing for usage in outline views
-			}
-			
-			configureParameters(fb.getInterface(), fbNode.getChildNodes());
+			// as we don't have type information we create an empty
+			// interface list
+			InterfaceList interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
+			fb.setInterface(interfaceList);
+			// TODO add attribute value for missing instance name and
+			// indicate that FB is missing for usage in outline views
+		}
+		
+		configureParameters(fb.getInterface(), fbNode.getChildNodes());
 
-			for (VarDeclaration var : fb.getInterface().getInputVars()) {
-				if (var.getValue() == null) {
-					var.setValue(LibraryElementFactory.eINSTANCE.createValue());
-				}
+		for (VarDeclaration var : fb.getInterface().getInputVars()) {
+			if (var.getValue() == null) {
+				var.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			}
-
 		}
 		
 		CommonElementImporter.getXandY(mapFbElement, fb);
 		fbNetwork.getNetworkElements().add(fb);
 		fbNetworkElementMap.put(fb.getName(), fb);
+	}
+
+	private PaletteEntry getTypeEntry(NamedNodeMap mapFbElement) {
+		Node typeFbElement = mapFbElement.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE);
+		if (null != typeFbElement) {
+			// FIXME this can lead to problems if typename exists several times!
+			return palette.getTypeEntry(typeFbElement.getNodeValue());
+		}
+		return null;
 	}
 	
 //	private IMarker createFBTypeProblemMarker(int severity, String message) {

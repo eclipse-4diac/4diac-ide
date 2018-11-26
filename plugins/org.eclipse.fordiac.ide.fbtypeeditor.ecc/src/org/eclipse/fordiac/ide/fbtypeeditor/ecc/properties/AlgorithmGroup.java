@@ -7,68 +7,67 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *   Alois Zoitl 
- *   - initial API and implementation and/or initial documentation
- *   
- *   Peter Gsellmann
- *   - extraction to AlgorithmEditingComposite
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Peter Gsellmann - extraction to AlgorithmEditingComposite
+ *   Martin Melik-Merkumians - moved AlgorithmGroup specific methods from base 
+ *   						   class to this class
+ *   Alois Zoitl - moved more code into AlgorithmEditingComposite
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
+import java.text.MessageFormat;
+
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.AbstractChangeAlgorithmTypeCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTypeCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets.AlgorithmEditingComposite;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 class AlgorithmGroup extends AlgorithmEditingComposite {
-
-	AlgorithmGroup(final Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
-		algorithmGroup = widgetFactory.createGroup(parent, Messages.ECAlgorithmGroup_Title);
+	
+	private Group algorithmGroup;
+	
+	@Override
+	public void createControls(final Composite parent, final FormToolkit toolkit) {
+		algorithmGroup = ((TabbedPropertySheetWidgetFactory)toolkit).createGroup(parent, 
+				MessageFormat.format(Messages.ECAlgorithmGroup_Title, "")); //$NON-NLS-1$
 		GridData algorithmGroupLayoutData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		algorithmGroupLayoutData.horizontalSpan = 2;
 		algorithmGroup.setLayoutData(algorithmGroupLayoutData);
 		algorithmGroup.setLayout(new GridLayout(1, true));
-
-		Composite langAndComents = widgetFactory.createComposite(algorithmGroup);
-		langAndComents.setLayout(new GridLayout(4, false));
-		langAndComents.setLayoutData(new GridData(GridData.FILL, 0, true, false));
-
-		languageLabel = widgetFactory.createCLabel(langAndComents, "Langugage: ");
-		languageCombo = new Combo(langAndComents, SWT.SINGLE | SWT.READ_ONLY);
-		fillLanguageDropDown();
-		languageCombo.addListener(SWT.Selection, event -> executeCommand(getChangeAlgorithmTypeCommand(getBasicFBType(), getAlgorithm(), languageCombo.getText())));
-
-		commentLabel = widgetFactory.createCLabel(langAndComents, "Comment:");
-		commentText = widgetFactory.createText(langAndComents, ""); //$NON-NLS-1$
-		commentText.setEditable(true);
-		commentText.setEnabled(true);
-		commentText.setLayoutData(new GridData(GridData.FILL, 0, true, false));
-		commentText.addListener(SWT.Modify,
-				e -> executeCommand(new ChangeCommentCommand(getAlgorithm(), commentText.getText())));
-
-		GridData codeEditorsGridData = new GridData(GridData.FILL, GridData.FILL, true, true);
-		codeEditorsGridData.horizontalSpan = 1;
-		codeEditorsGridData.minimumHeight = 250;
-		codeEditors = widgetFactory.createGroup(algorithmGroup, ""); // widgetFactory.createComposite(algorithmGroup, //$NON-NLS-1$
-																		// SWT.BORDER);
-		codeEditors.setLayout(stack = new StackLayout());
-		codeEditors.setLayoutData(codeEditorsGridData);
-
-		disableAllFields();
+		
+		super.createControls(algorithmGroup, toolkit);
+	}
+	
+	@Override
+	protected void enableAllFields() {
+		algorithmGroup.setEnabled(true);
+		super.enableAllFields();
 	}
 
 	@Override
-	protected Command getChangeAlgorithmTypeCommand(BaseFBType fbType, Algorithm oldAlgorithm, String algorithmType) {
+	protected void disableAllFields() {
+		algorithmGroup.setEnabled(false);
+		super.disableAllFields();
+	}
+
+	@Override
+	protected void updateAlgFields() {
+		Algorithm alg = getAlgorithm();
+		algorithmGroup.setText(MessageFormat.format(Messages.ECAlgorithmGroup_Title, 
+				(null != alg) ? alg.getName() : "")); //$NON-NLS-1$
+		super.updateAlgFields();
+	}
+
+	@Override
+	protected AbstractChangeAlgorithmTypeCommand getChangeAlgorithmTypeCommand(BaseFBType fbType, Algorithm oldAlgorithm, String algorithmType) {
 		return new ChangeAlgorithmTypeCommand(fbType, oldAlgorithm, algorithmType);
 	}
 

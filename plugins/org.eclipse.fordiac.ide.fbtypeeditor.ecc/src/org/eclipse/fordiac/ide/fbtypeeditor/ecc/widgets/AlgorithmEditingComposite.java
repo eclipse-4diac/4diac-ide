@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2018 TU Wien/ACIN
+ * Copyright (c) 2018 TU Wien/ACIN, Johannes Kepler University
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,6 +10,10 @@
  *   Peter Gsellmann
  *   - extraction from
  *     org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.AlgorithmGroup
+ *   Martin Melik-Merkumians
+ *   	- made several methods abstract and moved implementation to respective
+ *   sub-classes, also removed non-shareable methods to specialized sub-classes
+ *   Alois Zoitl - harmonized code from algorithm group and simple alg editing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets;
 
@@ -24,80 +29,126 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditorCreator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.AbstractChangeAlgorithmTypeCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTextCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.AbstractECSection;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
-abstract public class AlgorithmEditingComposite {
+public abstract class AlgorithmEditingComposite {
 
-	public Group algorithmGroup;
-	public CLabel languageLabel;
-	public Combo languageCombo;
-	public CLabel commentLabel;
-	public Text commentText;
-	public Composite codeEditors;
-	public StackLayout stack;
-	public Map<String, IAlgorithmEditor> editors = new HashMap<>();
-	public IAlgorithmEditor currentAlgEditor;
+	protected CLabel languageLabel;
+	protected Combo languageCombo;
+	protected CLabel commentLabel;
+	protected Text commentText;
+	protected Composite codeEditors;
+	protected StackLayout stack;
+	private Map<String, IAlgorithmEditor> editors = new HashMap<>();
+	protected IAlgorithmEditor currentAlgEditor;
+	private CommandStack commandStack;
+	protected Algorithm currentAlgorithm;
 
 	protected boolean blockUpdates = false;
 
 	protected final IDocumentListener listener = new IDocumentListener() {
 		@Override
 		public void documentChanged(final DocumentEvent event) {
-			if ((getAlgorithm() != null) && (null != currentAlgEditor)) {
-				if (currentAlgEditor.isDocumentValid()) {
-					executeCommand(new ChangeAlgorithmTextCommand((TextAlgorithm) getAlgorithm(),
-							currentAlgEditor.getAlgorithmText()));
-				}
+			if ((getAlgorithm() != null) && (null != currentAlgEditor) && currentAlgEditor.isDocumentValid()) {
+				executeCommand(new ChangeAlgorithmTextCommand((TextAlgorithm) getAlgorithm(),
+						currentAlgEditor.getAlgorithmText()));
 			}
 		}
 
 		@Override
 		public void documentAboutToBeChanged(final DocumentEvent event) {
-			// nothing todo here
+			// no action required
 		}
 	};
 
-	public CommandStack commandStack;
-	protected Algorithm currentAlgorithm;
+	public AlgorithmEditingComposite() {
+		stack = new StackLayout();
+	}
+	
+	public void createControls(final Composite parent, final FormToolkit toolkit) {
+		Composite langAndComments = toolkit.createComposite(parent);
+		langAndComments.setLayout(new GridLayout(4, false));
+		langAndComments.setLayoutData(new GridData(GridData.FILL, 0, true, false));
+
+		languageLabel = new CLabel(langAndComments, SWT.NONE);
+		languageLabel.setBackground(parent.getBackground());
+		languageLabel.setText(Messages.AlgorithmComposite_Language);
+		languageCombo = new Combo(langAndComments, SWT.SINGLE | SWT.READ_ONLY);
+		fillLanguageDropDown();
+		languageCombo.addListener(SWT.Selection, event -> {
+			AbstractChangeAlgorithmTypeCommand changeAlgorithmTypeCommand = getChangeAlgorithmTypeCommand(getFBType(), getAlgorithm(),
+					languageCombo.getText());
+			executeCommand(changeAlgorithmTypeCommand);
+			setAlgorithm(changeAlgorithmTypeCommand.getNewAlgorithm());
+		});
+
+		commentLabel = new CLabel(langAndComments, SWT.NONE);
+		commentLabel.setBackground(parent.getBackground());
+		commentLabel.setText(Messages.AlgorithmComposite_Comment);
+		commentText = toolkit.createText(langAndComments, "", SWT.SINGLE | SWT.BORDER); //$NON-NLS-1$
+		commentText.setEditable(true);
+		commentText.setEnabled(true);
+		commentText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+		commentText.addListener(SWT.Modify,
+				e -> executeCommand(new ChangeCommentCommand(getAlgorithm(), commentText.getText())));
+
+		GridData codeEditorsGridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		codeEditorsGridData.horizontalSpan = 1;
+		codeEditorsGridData.minimumHeight = 250;
+		codeEditors = new Group(parent, SWT.SHADOW_NONE);
+		codeEditors.setBackground(toolkit.getColors().getBackground());
+		codeEditors.setForeground(toolkit.getColors().getForeground());
+		toolkit.adapt(codeEditors);
+        
+		codeEditors.setLayout(stack);
+		codeEditors.setLayoutData(codeEditorsGridData);
+
+		disableAllFields();
+	}
+
+	protected BaseFBType getFBType(){
+		return (BaseFBType) currentAlgorithm.eContainer();
+	}
 
 	protected Algorithm getAlgorithm() {
 		return currentAlgorithm;
 	}
 
-	protected BasicFBType getBasicFBType() {
-		return (BasicFBType) currentAlgorithm.eContainer();
-	}
-
 	protected void executeCommand(Command cmd) {
-		if (null != currentAlgorithm && commandStack != null) {
+		if (null != currentAlgorithm && getCommandStack() != null) {
 			blockUpdates = true;
-			commandStack.execute(cmd);
+			getCommandStack().execute(cmd);
 			blockUpdates = false;
 		}
 	}
 
-	public void initialize(BasicFBType basicFBType, CommandStack commandStack) {
-		this.commandStack = commandStack;
-		loadEditors(basicFBType);
+	public void initialize(BaseFBType fbType, CommandStack commandStack) {
+		this.setCommandStack(commandStack);
+		loadEditors(fbType);
 	}
 
-	public void loadEditors(BaseFBType basicFBType) {
+	private void loadEditors(BaseFBType basicFBType) {
 		editors.clear();
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.ecc.algorithmEditor"); //$NON-NLS-1$
@@ -124,33 +175,26 @@ abstract public class AlgorithmEditingComposite {
 	public void setAlgorithm(Algorithm algorithm) {
 		if (!blockUpdates) {
 			// set commandStack to null so that an update will not lead to a changed type
-			CommandStack commandStackBuffer = commandStack;
-			commandStack = null;
+			CommandStack commandStackBuffer = getCommandStack();
+			setCommandStack(null);
 			if (this.currentAlgorithm != algorithm) {
 				currentAlgorithm = algorithm;
 				if (null != currentAlgorithm) {
 					initializeEditor();
 					enableAllFields();
-					updateAlgFields();
 				} else {
-					algorithmGroup.setText(Messages.ECAlgorithmGroup_Title);
-					commentText.setText(""); //$NON-NLS-1$
-					languageCombo.select(0);
 					stack.topControl = null;
 					codeEditors.layout();
 					disableAllFields();
 				}
-			} else if (null != currentAlgorithm) {
-				// update the content of the algorithm only
-				updateAlgFields();
-			}
-			commandStack = commandStackBuffer;
+			} 
+			updateAlgFields();
+			setCommandStack(commandStackBuffer);
 		}
 	}
 
 	protected void enableAllFields() {
 		languageLabel.setEnabled(true);
-		algorithmGroup.setEnabled(true);
 		commentLabel.setEnabled(true);
 		commentText.setEnabled(true);
 		languageCombo.setEnabled(true);
@@ -158,19 +202,18 @@ abstract public class AlgorithmEditingComposite {
 
 	protected void disableAllFields() {
 		languageLabel.setEnabled(false);
-		algorithmGroup.setEnabled(false);
 		commentLabel.setEnabled(false);
 		commentText.setEnabled(false);
 		languageCombo.setEnabled(false);
 	}
 
-	protected void updateAlgFields() {
-		algorithmGroup.setText(Messages.ECAlgorithmGroup_Title + " " + currentAlgorithm.getName());
-		commentText.setText(getAlgorithm().getComment());
-		languageCombo.select(languageCombo.indexOf(getAlgorithmTypeString(getAlgorithm())));
-		if (null != currentAlgEditor) {
-			currentAlgEditor.setAlgorithmText(((TextAlgorithm) getAlgorithm()).getText());
-		}
+	protected void updateAlgFields(){
+		Algorithm alg = getAlgorithm();
+		commentText.setText((null != alg) ? alg.getComment() : ""); //$NON-NLS-1$
+		languageCombo.select((null != alg) ? languageCombo.indexOf(getAlgorithmTypeString(getAlgorithm())) : 0 );
+		if (alg instanceof TextAlgorithm) {
+			currentAlgEditor.setAlgorithmText(((TextAlgorithm) alg).getText());
+		} 
 	}
 
 	private void initializeEditor() {
@@ -203,6 +246,14 @@ abstract public class AlgorithmEditingComposite {
 		}
 	}
 
-	protected abstract Command getChangeAlgorithmTypeCommand(BaseFBType fbType, Algorithm oldAlgorithm,
+	protected abstract AbstractChangeAlgorithmTypeCommand getChangeAlgorithmTypeCommand(BaseFBType fbType, Algorithm oldAlgorithm,
 			String algorithmType);
+
+	private CommandStack getCommandStack() {
+		return commandStack;
+	}
+
+	private void setCommandStack(CommandStack commandStack) {
+		this.commandStack = commandStack;
+	}
 }

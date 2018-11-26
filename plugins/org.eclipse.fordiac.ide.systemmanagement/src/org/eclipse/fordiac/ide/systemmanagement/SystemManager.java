@@ -12,22 +12,18 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch, Filip Andren,
  *   Waldemar Eisenmenger, Martin Melik Merkumians
  *     - initial API and implementation and/or initial documentation
+ *  Alois Zoitl - Refactored class hierarchy of xml exporters  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.transform.Result;
-import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -274,15 +270,11 @@ public enum SystemManager {
 		if(systemFile.exists()){
 			AutomationSystem system = createAutomationSystem(project);
 			SystemImporter sysImporter = new SystemImporter();
-			try {
-				InputStream stream = systemFile.getContents();
+			try (InputStream stream = systemFile.getContents()){
 				sysImporter.importSystem(stream, system);
-				stream.close();
-			} catch (CoreException e) {
+			} catch (CoreException | IOException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
-			} catch (IOException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-			}
+			} 
 			return system;
 		}
 		return null;
@@ -397,23 +389,8 @@ public enum SystemManager {
 	 */
 	public void saveSystem(final org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem system) {
 		IProject project = system.getProject();
-		SystemExporter systemExporter = new SystemExporter();
-		StringWriter stringWriter = new StringWriter();
-		Result result = new StreamResult(stringWriter);
-		try {
-			systemExporter.generateSYSFileContent(system, result);
-
-			IFile iec61499SystemFile = project.getFile(system.getName() + SYSTEM_FILE_ENDING);
-			ByteArrayInputStream stream = new ByteArrayInputStream(stringWriter.toString().getBytes("UTF-8")); //$NON-NLS-1$
-			if (iec61499SystemFile.exists()) {
-				iec61499SystemFile.setContents(stream, IResource.KEEP_HISTORY | IResource.FORCE, null);
-			} else {
-				iec61499SystemFile.create(stream, IResource.KEEP_HISTORY | IResource.FORCE, null);
-			}
-		} catch (Exception e) {
-			// TODO Perform correct error handling
-			e.printStackTrace();
-		}
+		SystemExporter systemExporter = new SystemExporter(system);
+		systemExporter.saveSystem(project.getFile(system.getName() + SYSTEM_FILE_ENDING));
 	}
 
 	/**

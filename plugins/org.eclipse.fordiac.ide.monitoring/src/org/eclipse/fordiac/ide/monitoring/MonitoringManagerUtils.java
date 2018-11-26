@@ -75,13 +75,14 @@ public final class MonitoringManagerUtils {
 			p = MonitoringBaseFactory.eINSTANCE.createPortElement();
 		}
 
-		Resource res = findResourceForFB(fb, p);
+		Resource res = fb.getResource(); 
 		if (res == null) {
 			return null;
 		}
 		
 		p.setResource(res);
 		p.setFb(fb);
+		setupFBHierarchy(fb, p);
 		p.setInterfaceElement(ep.getModel());
 		return p;
 	}
@@ -116,19 +117,12 @@ public final class MonitoringManagerUtils {
 		return null;
 	}
 
-	private static Resource findResourceForFB(FBNetworkElement element, PortElement p) {
-		Resource retVal = element.getResource();
-		
-		if(null == retVal && element.getFbNetwork().eContainer() instanceof SubApp) {
-			//if we are in a subapp check if we can find it in the hierarchy we are in a resource
+	private static void setupFBHierarchy(FBNetworkElement element, PortElement p) {
+		if(!element.isMapped() && element.getFbNetwork().eContainer() instanceof SubApp) {
 			SubApp subApp = (SubApp)element.getFbNetwork().eContainer();
-			retVal = findResourceForFB(subApp, p);
-			if(null != retVal) {
-				//if we found a resource add the the name recursively to the hierarchy as prefix  
-				p.getHierarchy().add(subApp.getName());
-			}
+			setupFBHierarchy(subApp, p);
+			p.getHierarchy().add(subApp.getName());
 		}		
-		return retVal;
 	}
 
 	
