@@ -75,7 +75,7 @@ class FbtExporter extends AbstractTypeExporter{
 	 */
 	private void addBasicFB(final Element rootEle, final BasicFBType type) {
 		Element basicElement = createElement(LibraryElementTags.BASIC_F_B_ELEMENT);
-		addInternalVars(basicElement, type.getInternalVars());
+		addVarList(basicElement, type.getInternalVars(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
 		addECC(basicElement, type.getECC());
 		type.getAlgorithm().forEach(alg -> addAlgorithm(basicElement, alg));
 		rootEle.appendChild(basicElement);
@@ -255,24 +255,6 @@ class FbtExporter extends AbstractTypeExporter{
 			stateElement.appendChild(actionElement);
 		}
 	}
-
-	/**
-	 * Adds the internal vars.
-	 * 
-	 * @param dom
-	 *            the dom
-	 * @param basicElement
-	 *            the basic element
-	 * @param internalVars
-	 *            the internal vars
-	 */
-	private void addInternalVars(final Element basicElement, final List<VarDeclaration> internalVars) {
-		if(!internalVars.isEmpty()) {
-			Element internalVarsElement = createElement(LibraryElementTags.INTERNAL_VARS_ELEMENT);
-			internalVars.forEach(internalVar -> addVariable(internalVarsElement, internalVar));
-			basicElement.appendChild(internalVarsElement);
-		}
-	}
 	
 	/**
 	 * Adds the simple fb.
@@ -286,7 +268,7 @@ class FbtExporter extends AbstractTypeExporter{
 	 */
 	private void addSimpleFB(final Element rootEle, final SimpleFBType type) {
 		Element simpleElement = createElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
-		addInternalVars(simpleElement, type.getInternalVars());
+		addVarList(simpleElement, type.getInternalVars(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
 		addAlgorithm(simpleElement, type.getAlgorithm());
 		rootEle.appendChild(simpleElement);
 	}

@@ -158,9 +158,10 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	protected void addInterfaceList(final Element rootEle, final InterfaceList interfaceList) {
 		Element interfaceListElement = createElement(getInterfaceListElementName());
 
-		addEvents(interfaceListElement, interfaceList);
-		addVars(interfaceListElement, interfaceList);
-
+		addEventList(interfaceListElement, interfaceList.getEventInputs(), getEventInputsElementName());
+		addEventList(interfaceListElement, interfaceList.getEventOutputs(), getEventOutputsElementName());
+		addVarList(interfaceListElement, interfaceList.getInputVars(), LibraryElementTags.INPUT_VARS_ELEMENT);
+		addVarList(interfaceListElement, interfaceList.getOutputVars(), LibraryElementTags.OUTPUT_VARS_ELEMENT);
 		createAdapterList(interfaceListElement, interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT);
 		createAdapterList(interfaceListElement, interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT);
 		
@@ -193,31 +194,22 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	}
 
 	/**
-	 * Adds the vars.
+	 * Adds a var list (i.e., input or output data) to the dom. If the given var list is empty no element will be created. 
 	 * 
-	 * @param parentElement
-	 *            the parent element
-	 * @param fb
-	 *            the fb
+	 * @param parentElement the parent element to insert the varlist
+	 * @param varList	   the list of vars to create the entries for	
+	 * @param elementName the name of the xml element holding the event list
 	 */
-	private void addVars(final Element parentElement, final InterfaceList interfaceList) {
-		Element inputVars = createElement(LibraryElementTags.INPUT_VARS_ELEMENT);
-		Element outputVars = createElement(LibraryElementTags.OUTPUT_VARS_ELEMENT);
-
-		interfaceList.getInputVars().forEach( varDecl -> {
+	protected void addVarList(final Element parentElement, final List<VarDeclaration> varList, final String elementName) {		
+		if(!varList.isEmpty()) {		
+			Element varListElement = createElement(elementName);
+			varList.forEach( varDecl -> {
 				if (!(varDecl instanceof AdapterDeclaration)) {
-					addVariable(inputVars, varDecl);
+					addVariable(varListElement, varDecl);
 				}
 			});
-		
-		interfaceList.getOutputVars().forEach(varDecl -> {
-				if (!(varDecl instanceof AdapterDeclaration)) {
-					addVariable(outputVars, varDecl);
-				}
-			});
-		parentElement.appendChild(inputVars);
-		parentElement.appendChild(outputVars);
-
+			parentElement.appendChild(varListElement);
+		}
 	}
 
 	/**
@@ -243,22 +235,18 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	}
 
 	/**
-	 * Adds the events.
+	 * Adds the an event list (i.e., input or output) to the dom. If the given event list is empty no element will be created.
 	 * 
-	 * @param parentElement
-	 *            the parent element
-	 * @param interfaceList
-	 *            the interface list
+	 * @param parentElement the parent element to insert the event list
+	 * @param eventList		the list of events to create the entry for
+	 * @param elementName	the name of the xml element holding the event list
 	 */
-	private void addEvents(final Element parentElement, final InterfaceList interfaceList) {
-		Element eventInputs = createElement(getEventInputsElementName());
-		Element eventOutputs = createElement(getEventOutputsElementName());
-
-		interfaceList.getEventInputs().forEach(event -> addEvent(eventInputs, event));
-		interfaceList.getEventOutputs().forEach(event -> addEvent(eventOutputs, event));
-
-		parentElement.appendChild(eventInputs);
-		parentElement.appendChild(eventOutputs);
+	private void addEventList(final Element parentElement, final List<Event> eventList, final String elementName) {
+		if(!eventList.isEmpty()) {
+			Element eventListElement = createElement(elementName);
+			eventList.forEach(event -> addEvent(eventListElement, event));
+			parentElement.appendChild(eventListElement);
+		}
 	}
 
 
