@@ -136,4 +136,14 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 */
 	boolean isMapped();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//the base class of all types a FBNetworkElement can be (FB, Subapp, Adapter) is a FBType. Therefore we can have this here.\n\n//this cannot be moved to the annotation class because there we don\'t have the super access!!!\n\nreturn super.getType() instanceof FBType ? (FBType)super.getType() : null;'"
+	 * @generated
+	 */
+	@Override
+	FBType getType();
+
 } // FBNetworkElement

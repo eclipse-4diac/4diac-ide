@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -344,6 +345,20 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	@Override
 	public boolean isMapped() {
 		return org.eclipse.fordiac.ide.model.Annotations.isMapped(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public FBType getType() {
+		//the base class of all types a FBNetworkElement can be (FB, Subapp, Adapter) is a FBType. Therefore we can have this here.
+		
+		//this cannot be moved to the annotation class because there we don't have the super access!!!
+		
+		return super.getType() instanceof FBType ? (FBType)super.getType() : null;
 	}
 
 	/**

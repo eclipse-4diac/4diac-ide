@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
+import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -52,8 +53,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.events.MenuDetectEvent;
-import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
@@ -86,12 +85,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		this.palette = palette;
 		this.editor = editor;
 
-		getViewer().getControl().addMenuDetectListener(new MenuDetectListener() {
-			@Override
-			public void menuDetected(MenuDetectEvent e) {
-				pt = getViewer().getControl().toControl(e.x, e.y);			  
-			}
-		});
+		getViewer().getControl().addMenuDetectListener( e -> pt = getViewer().getControl().toControl(e.x, e.y));
 	}
 
 	public Point getPoint() {
@@ -180,8 +174,8 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		String text = "Insert FB";
 		List eps = editor.getViewer().getSelectedEditParts();			
 		for (Object ep : eps) {
-			if (ep instanceof FBEditPart) {
-				text = "Change FB Type";
+			if (ep instanceof FBEditPart || ep instanceof SubAppForFBNetworkEditPart) {
+				text = "Change Type";
 				useChangeFBType = true;
 				break;
 			}
@@ -206,7 +200,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 			for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
 
-				if(entry instanceof FBTypePaletteEntry){
+				if(entry instanceof FBTypePaletteEntry || entry instanceof SubApplicationTypePaletteEntry){
 					if (useChangeFBType) {
 						action = (Action) registry.getAction(entry.getFile()
 								.getFullPath().toString().concat("_") //$NON-NLS-1$
@@ -218,8 +212,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 						if (useChangeFBType) {
 							action = createChangeFBTypeAction(entry);
 						} else {
-							action = createFBInsertAction(entry);
-							((FBInsertAction) action).updateCreatePosition(pt);
+							action = createFBInsertAction(entry);							
 						}
 					}
 					submenu.add(action);
@@ -254,6 +247,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		if(cmd instanceof FBCreateCommand){
 			action = new FBInsertAction(editor, (FBCreateCommand)cmd);
 			registry.registerAction(action);
+			action.updateCreatePosition(pt);
 		}
 
 		return action;
@@ -314,7 +308,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		return submenu;
 	}
 
-	private boolean isFBorSubAppSelected(ISelection selection) {
+	private static boolean isFBorSubAppSelected(ISelection selection) {
 		if(selection instanceof StructuredSelection){
 			for(Object element : ((IStructuredSelection)selection).toArray()){
 				if (element instanceof FBEditPart || element instanceof SubAppForFBNetworkEditPart){
@@ -325,6 +319,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		return false;
 	}
 
+	@SuppressWarnings("static-method")  //currently needed to be overrideable by SubAppNetworkEditor
 	protected IAction getMapAction(IEditorPart activeEditor, Resource res) {
 		if (res != null) {
 			IAction action;
