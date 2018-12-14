@@ -217,6 +217,7 @@ public class UpdateFBTypeCommand extends Command {
 					dccc.setSource(source);
 					dccc.setDestination(dest);
 					if (dccc.canExecute()) {
+						dccc.setArrangementConstraints(oldConn.getDx1(), oldConn.getDx2(), oldConn.getDy());
 						dccc.execute();
 						connCreateCmds.add(dccc);
 					}
