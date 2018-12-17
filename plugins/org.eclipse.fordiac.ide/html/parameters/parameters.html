@@ -36,7 +36,7 @@
  
 	<p>The following picture shows an example application from the <a href = "../4diacIDE/use4diacLocally.html">Blinking tutorial</a> which is extended with IX and QX function blocks. The extended application periodically toggles on pin number 8. It can be started and stopped via pin number 2. You can connect an LED to obtain a blinking light.</p>
 	
-	<img src="./img/ixqx_fb_network.png" alt="Simple blinking application with an IX and QX function block."/>
+	<img src="../../html/parameters/img/ixqx_fb_network.png" alt="Simple blinking application with an IX and QX function block."/>
 	
 	<p>The <span class="specificText">PARAMS</span> data input in the IX and QX FB define which pin should be used. The application also contains E_CYCLE and E_SWITCH function blocks (which are not in the Blinking tutorial). The first one generates an event every 500 ms. This way the IX block will check the hardware input every half second if the signal has changed. E_SWITCH_0 starts or stops the action, depending on the <span class="specificText">IN</span> data output of the IX function block.</p>
 	
@@ -46,7 +46,7 @@
 
 	<h1 id="rpi-sps">Raspberry PI-SPS</h1>
 		<p>To use the digital and analog IOs of the Raspberry-SPS please use the IX and QX function blocks for one bit as well as the QW and IW function blocks for word which are provided in the io folder of the tool library. Configure your 4DIAC Device with the correct IP and mapp an application on it as it is illustrated within the following image.</p>
-		<img src="./img/raspberrySPS_example.png" alt="Raspberry-SPS example application"/>
+		<img src="../../html/parameters/img/raspberrySPS_example.png" alt="Raspberry-SPS example application"/>
 		<p>The structure of the PARAMS data input ports is <span class="specificText">busChannel.deviceNumber.portNumber</span>. The Raspberry-SPS has two I2C bus channels. The number of the different devices is listed in the following table. The port number always starts at 0.</p>
 		<table>
 			<tr><th>Device Type</th><th>Device Number</th></tr>
@@ -62,7 +62,7 @@
 
 		<p><a href="http://www.hardkernel.com/main/main.php" target="_blank">Odroid</a> is an embedded board that you can say it's a more powerful Rapsberry Pi, and it has analog inputs. In order to use the I/O of this board. It works similar to the Raspberry Pi, so you can use QX and IX with the number corresponding to the pin number, and to access the Analog Inputs, you should use IW. <span class="specificText">0</span> and <span class="specificText">1</span> should be set to PARAMS of IW in order to access the <span class="specificText">first</span> and <span class="specificText">second</span> analog inputs respectively. </p>
 
-		<img src="./img/odroidFBs.png" alt="FBs example for Odroid platform">
+		<img src="../../html/parameters/img/odroidFBs.png" alt="FBs example for Odroid platform">
 
 	<p><a href="#topOfPage">Go to top</a></p>
 
@@ -107,7 +107,7 @@
  		</li>
 	</ol>
  
-	<img src="./img/uMICFBs.png" alt="FBs example for uMIC platform">
+	<img src="../../html/parameters/img/uMICFBs.png" alt="FBs example for uMIC platform">
 
 	<p class="attention"><span class="inlineTitle">Attention</span>: To use the relay and led, in some cases you might have to change some header files in your uMIC200. You need to find the files <span class="fileLocation">/usr/include/umic_led.h</span> and <span class="fileLocation">/usr/include/umic_relay.h</span> and add two things:</p>
 
@@ -151,7 +151,7 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 	
 	<h1 id="ev3">Parameters for the ev3Dev interface</h1>
 
-	<p>This section is a reference of the parameters that can be used in FORTE to access the I/O of the LMSEV3. Reading this section carefully without using them could be quite boring and even useless,because the details will be forgotten if not used. We recommend to give a quick reading in order to know what can be accessed using FORTE. The <a href="../examples/pidMotor.html">example</a> presents the control a motor using a PID controller.</p>
+	<p>This section is a reference of the parameters that can be used in FORTE to access the I/O of the LMSEV3. Reading this section carefully without using them could be quite boring and even useless,because the details will be forgotten if not used. We recommend to give a quick reading in order to know what can be accessed using FORTE. The <a href="../../html/examples/pidMotor.html">example</a> presents the control a motor using a PID controller.</p>
 
 	<h2 id="ev3_standard_parameters">Standard access</h2>
 
@@ -544,15 +544,15 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 
 <p>You can see the supported protocols:</p>
 
-<p><a href="../communication/communicationIndex.html">Communication Index</a></p>
+<p><a href="../../html/communication/communicationIndex.html">Communication Index</a></p>
 
 <p>You can see the examples:</p>
 
-<p><a href="../examples/examplesIndex.html">Examples Index</a></p>
+<p><a href="../../html/examples/examplesIndex.html">Examples Index</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 

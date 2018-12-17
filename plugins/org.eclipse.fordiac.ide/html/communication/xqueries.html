@@ -42,7 +42,7 @@ Please consider that with the officially available C API from BaseX the authenti
 <div class="code">git clone https://github.com/BaseXdb/basex.git</div>
 
 <p>Then configure CMake to build the 4diac-rte.
-If you do not know how to build the 4diac-rte read the <a href="../installation/install.html#ownFORTE">build instructions first</a>. 
+If you do not know how to build the 4diac-rte read the <a href="../../html/installation/install.html#ownFORTE">build instructions first</a>. 
 Besides the usual configuration activate the Xquery Client.
 </p>
 
@@ -91,8 +91,8 @@ Server was started (port: 1984).
 <p>To send XQueries to your database, create a proper basic function block, which produces the desired XQueries.
 The following images show a possible interface and execution control chart for a basic function block whicht fetches values from your BaseX database during initialization.</p>
 
-<img src="img/xquery/testFB.png" alt="Test function block to send XQueries"/>
-<img src="img/xquery/testFB_ECC.png" alt="Test function block to send XQueries"/>
+<img src="../../html/communcation/img/xquery/testFB.png" alt="Test function block to send XQueries"/>
+<img src="../../html/communcation/img/xquery/testFB_ECC.png" alt="Test function block to send XQueries"/>
 
 <p>The algorithm <i>getVMax</i> contains an XQuery which is supposed to calculate the maximum speed of a roller conveyor from values of the database.
 Since the 4diac-ide currently does not provide support for an XQuery algorithm language, you have to use <i>AnyText</i> as algorithm language.
@@ -150,7 +150,7 @@ xSuccessor().append("' "
 <p>Please consider that your XQuery is dependent on the data structure of your database.
 In this case it is the structure of an AutomationML file for a <a href="img/xquery/BaSys_PalletSystem_Model.aml"><i>Pallet System</i></a>.
 After you have created your test function block, export it and build your 4diac-rte with it.
-Please have a look at the <a href="../installation/install.html#ownFORTE">build instructions</a> if you do not know how to build your own function block.
+Please have a look at the <a href="../../html/installation/install.html#ownFORTE">build instructions</a> if you do not know how to build your own function block.
 
 <p>Now you can use your test function block wihtin an application.
 To send the XQueries to your BaseX database, add a <span class="code">CLIENT_1</span> for each query you want to send.
@@ -160,7 +160,7 @@ A possible test application is shown in the following image.
 Within this application a roller conveyor is initialized by its maximum speed, and its neighbouring roller conveyors.
 </p>
 
-<img src="img/xquery/testApp.png" alt="Test function block to send XQueries"/>
+<img src="../../html/communcation/img/xquery/testApp.png" alt="Test function block to send XQueries"/>
 
 <p>The <span class="code">ID</span> input of the <span class="code">CLIENT_1</span> function block contains a variable <span class="code">%local%</span> which is replaced by a proper value during deployment.
 The <span class="code">ID</span> is configured with the protocol name, the IP address of the computer, where your BaseX database is running, the port where your BaseX server listens for requests, the name of your database, a user name and a password.
@@ -188,11 +188,11 @@ INFO: T#0101026ms: DB BaSys_PalletSystem_Model opend.
 
 <p>Go back to Protocols index:</p>
 
-<p><a href="./communicationIndex.html">Communication Index</a></p>
+<p><a href="../../html/communication/communicationIndex.html">Communication Index</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 

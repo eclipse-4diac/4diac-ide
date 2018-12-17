@@ -34,8 +34,8 @@
 	<li>Visual Studio Express do not include ATL (Active Template Library) which is necessary to compile OPCClientToolKit. This can be aquired by installing windows driver kit.</li>
 	<li>Unzip OPC Client and open the OPCClientToolKit project in Visual Studio.</li>
 	<li>Add ATL header files to the project: Configuration Properties &rarr; VC++ Directories &rarr; Include Directories
-		<div><img src="./img/opc_VSclientProperties.png" alt="VS Properties"/></div>
-		<div><img src="./img/opc_VSinclude.png" alt="VS Include Directories"/></div>
+		<div><img src="../../html/communication/img/opc_VSclientProperties.png" alt="VS Properties"/></div>
+		<div><img src="../../html/communication/img/opc_VSinclude.png" alt="VS Include Directories"/></div>
 		</li>
 	<li>Add the path of ATL header files which are in the windows driver kit installation path. (E.g. C:\WinDDK\7600.16385.1\inc\atl71)</li>
 	<li>Edit the function init() in OPCClient.cpp from:
@@ -86,7 +86,7 @@ void COPCClient::init()
 
 <h2>Compile FORTE with OPC DA Client Support</h2>
 <ol>
-	<li>Create a MS Visual Project of FORTE with CMake as described in <a href="../installation/visualStudio.html" target="_blank">Compiling and Debugging FORTE with MS Visual Studio Express</a> and add the following variables which are required for OPC Client support:
+	<li>Create a MS Visual Project of FORTE with CMake as described in <a href="../../html/installation/visualStudio.html" target="_blank">Compiling and Debugging FORTE with MS Visual Studio Express</a> and add the following variables which are required for OPC Client support:
 	<ul>
 		<li>Check FORTE_COM_OPC</li>
 		<li>FORTE_COM_OPC_BOOST_ROOT - choose [boostroot] </li>
@@ -98,7 +98,7 @@ void COPCClient::init()
 		<br>forte Properties &rarr; Configuration Properties &rarr; VC++ Directories &rarr; Include Directories &rarr; add ATL headers path ([windowstoolkitroot]/inc/atl71/)</li>
 	<li>Add ATL libraries to the forte project: 
 		<br>forte Properties &rarr; Configuration Properties &rarr; VC++ Directories &rarr; Library Directories &rarr; add ATL library path ([windowstoolkitroot]/lib/ATL/i386/)</li>
-	<li><a href="../installation/visualStudio.html">compile or debug</a> FORTE</li>
+	<li><a href="../../html/installation/visualStudio.html">compile or debug</a> FORTE</li>
 	<li>When running in debug-mode, it is maybe necessary to exclude some native libraries 
 		<br>Forte Properties/Configuration Properties/Linker/Input/Ignore Specific Default libraries/Edit/LIBCMTD</li>
 </ol>
@@ -124,29 +124,29 @@ void COPCClient::init()
 	<li><span class="inlineTitle">fbInputItems/fbOutputItems</span>: items to be added, items should be separated with a comma e.g. </li>
 </ul>
 
-<p>Change to the <span class="view4diac">Deployment perspective</span>, start Forte and download the Application. Switch the System into online mode and start watching the in- and outputs. For further information about <a href="../4diacIDE/use4diacLocally.html#monitoringApplication">Monitoring functionalities</a> follow the link.</p>
+<p>Change to the <span class="view4diac">Deployment perspective</span>, start Forte and download the Application. Switch the System into online mode and start watching the in- and outputs. For further information about <a href="../../html/4diacIDE/use4diacLocally.html#monitoringApplication">Monitoring functionalities</a> follow the link.</p>
 
 <p>After triggering the INIT event, the OPC-client tries to connect with the OPC-server. In this example the OPC-server is "FestoDidactic.EzOPC.2". It is a tool from Festo and can be downloaded <a href="http://www.festo-didactic.com/de-de/service/software/vollversion-demos/ezopc.htm" target="_blank">here</a>.</p>
 
-<img src="./img/opc_fordiacTrigger.png" alt="4DIAC Trigger"/>
+<img src="../../html/communication/img/opc_fordiacTrigger.png" alt="4DIAC Trigger"/>
 
 <p>When the connection is established, a window of the server pops up.</p>
 
-<img src="./img/opc_festoOPCserver.png" alt="Festo OPC Server"/>
+<img src="../../html/communication/img/opc_festoOPCserver.png" alt="Festo OPC Server"/>
 
 <p>Now trigger the REQ event to send the data from client to server. "BYTE#210" should be send to the server's port "VirtualPLC.EB0". Click to "Virtual Controller" tab to check if the OPC server has received the information.</p>
 
-<img src="./img/opc_festoOPCserverIO.png" alt="Festo OPC Server IO"/>
+<img src="../../html/communication/img/opc_festoOPCserverIO.png" alt="Festo OPC Server IO"/>
 
 <h1>Where to go from here?</h1>
 
 <p>Go back to Protocols index:</p>
 
-<p><a href="./communicationIndex.html">Communication Index</a></p>
+<p><a href="../../html/communication/communicationIndex.html">Communication Index</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 

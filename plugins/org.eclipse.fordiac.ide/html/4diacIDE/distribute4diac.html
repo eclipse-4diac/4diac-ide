@@ -27,28 +27,26 @@
     <p>This page is part of a guide that gives a walkthrough over the major 4DIAC features.</p>
 
     <ol start="0">
-      <li><a href="./overview.html">Overview</a></li>
-      <li><a href="./use4diacLocally.html">Use 4diac IDE locally</a></li>
+      <li><a href="../../html/4diacIDE/overview.html">Overview</a></li>
+      <li><a href="../../html/4diacIDE/use4diacLocally.html">Use 4diac IDE locally</a></li>
       <li>Create a distributed application (YOU ARE HERE!)</li>
-      <li><a href="./use4diacRemotely.html">Deploy remotely</a></li>
-      <li><a href="./createOwnTypes.html">Create your own Function Blocks</a></li>
-      <li><a href="./otherUseful.html">Other basic features</a></li>
-      <li><a href="./advancedFeatures.html">Advanced Features [optional]</a></li>
+      <li><a href="../../html/4diacIDE/use4diacRemotely.html">Deploy remotely</a></li>
+      <li><a href="../../html/4diacIDE/createOwnTypes.html">Create your own Function Blocks</a></li>
+      <li><a href="../../html/4diacIDE/otherUseful.html">Other basic features</a></li>
+      <li><a href="../../html/4diacIDE/advancedFeatures.html">Advanced Features [optional]</a></li>
     </ol>
 
-<!----------------------------------------------------------------------------------------------------------------->
-
-  <p>This guide extends the blinking application of <a href="./use4diacLocally.html" target="_blank">Step 1</a>. 
+<!--********************************************************************************************-->
+  <p>This guide extends the blinking application of <a href="../../html/4diacIDE/use4diacLocally.html" target="_blank">Step 1</a>. 
   We want to count how many times the light has turned on. 
   You will learn how to distribute a IEC 61499 Application to several devices and set up the communication between them.
   The example continues to run on the local computer. 
   The Application will run on 2 devices. 
   The blinking part of the application will run on a 4diac FORTE and the count on another 4diac FORTE, see the architecture below.
   The two different programs running on the local machine emulate two PLCs.
-  <br><img src="./img/distributedArchitecture.png" alt="architecture for the current step"/></p>
+  <br><img src="../../html/4diacIDE/img/distributedArchitecture.png" alt="architecture for the current step"/></p>
 
-<!----------------------------------------------------------------------------------------------------------------->
-
+<!--********************************************************************************************-->
     <h2 id="extendApplication">Extend the Application</h2>
     
     <p>To count the blinking, we need to add 2 new Function Blocks (FBs) to the existing Application in the <i>BlinkTestApp</i> Application Editor.</p> 
@@ -65,9 +63,9 @@
     
     <p>Remember, Event and Data connections can not be mixed.</p>
     
-    <img src="./img/Step2/counterFBs.png" alt="architecture for the current step" />
- <!-----------------------------------------------------------------------------------------------------------------> 
-    
+    <img src="../../html/4diacIDE/img/Step2/counterFBs.png" alt="architecture for the current step" />
+
+ <!--********************************************************************************************-->
     <h2 id="AddAnotherDevice">Add Another Device</h2>
     
     <p>Change to the <i>BlinkTest</i> System Configuration Editor an add a second device from the Palette. 
@@ -80,16 +78,15 @@
       <li>Rename the resource to <b>Counter_RES</b>.</li>
     </ol>
     
-    <img src="./img/Step2/addAnotherDevice.png" alt="Add another device to the system" />
+    <img src="../../html/4diacIDE/img/Step2/addAnotherDevice.png" alt="Add another device to the system" />
     
     <p>Change back to the <i>BlinkTestApp</i> Application Editor and map the two new FBs to the Resource <i>Counter_RES</i>.
     You can see the dashed connections between the two devices.</p>
           
-    <img src="./img/Step2/mapToCounter.png" alt="Mapping of Function Block Instances within the Application Editor" /> 
+    <img src="../../html/4diacIDE/img/Step2/mapToCounter.png" alt="Mapping of Function Block Instances within the Application Editor" /> 
          
- <!-----------------------------------------------------------------------------------------------------------------> 
-  
-    <h2 id="SetUpCommunication">Set up the Communication Between Both Devices</h2>
+ <!--********************************************************************************************-->
+   <h2 id="SetUpCommunication">Set up the Communication Between Both Devices</h2>
 
         
     <p>Change to the <i>Testee.Blinky_RES</i> or <i>Counter.Counter_RES</i> Resource Editor. 
@@ -97,11 +94,11 @@
     It symbolizes the broken connections between the two devices.
     Currently they have no opportunity to communicate with each other. 
     We fix it by adding special Communications FBs.
-    You can find more information about broken connections <a href="../before4DIAC/iec61499.html#brokenConnection">here on our Homepage</a>.</p> 
+    You can find more information about broken connections <a href="../../html/before4DIAC/iec61499.html#brokenConnection">here on our Homepage</a>.</p> 
     
-    <img src="./img/Step2/incompleteFBs.png" alt="incomplete FBs show die broken connection beween two devices" />
+    <img src="../../html/4diacIDE/img/Step2/incompleteFBs.png" alt="incomplete FBs show die broken connection beween two devices" />
     
-    <!---------------------->
+<!--********************************************************************************************-->
      <h3 id="SetUpBlinking">Set up the Blinking Part of the Application </h3>
      
      <p>Change to the <i>Testee.Blinky_RES</i> Resource Editor.</p> 
@@ -109,9 +106,9 @@
      <p>Drag and Drop a <b>PUBLISH_1</b> FB from the folder net of the Palette and set up the connections.
      The PUBLISH FB must be initialized, so it is best to connect its INIT event directly to the START.</p>
      
-     <img src="./img/Step2/blinkyResourceComplete.png" alt="Blinky_RES completely connected" />
+     <img src="../../html/4diacIDE/img/Step2/blinkyResourceComplete.png" alt="Blinky_RES completely connected" />
      
-    <!---------------------->
+<!--********************************************************************************************-->
      <h3 id="SetUpCounting">Set up the Counting Part of the Application</h3>
      
      <p>Change to the <i>Counter.Counter_RES</i> Resource Editor.</p>
@@ -119,10 +116,9 @@
      <p>Drag and Drop a <b>SUBSCRIBE_1</b> FB from the folder net of the Palette and set up the connections.
      The SUBSCRIBE FB must also be initialized.</p>
      
-     <img src="./img/Step2/counterResourceComplete.png" alt="Counter_RES completely connected" />
+     <img src="../../html/4diacIDE/img/Step2/counterResourceComplete.png" alt="Counter_RES completely connected" />
         
- <!-----------------------------------------------------------------------------------------------------------------> 
-  
+<!--********************************************************************************************-->
     <h2 id="startDevices">Start both devices</h2>
     
     <p>Change to the Deployment Perspective.</p> 
@@ -141,38 +137,28 @@
           If you get something red, something went wrong.</li>
     </ol>
     
-    <img src="./img/Step2/deployCounter.png" alt="deploying of the application" />
+    <img src="../../html/4diacIDE/img/Step2/deployCounter.png" alt="deploying of the application" />
        
- <!-----------------------------------------------------------------------------------------------------------------> 
+<!--********************************************************************************************-->
   
     <h2 id="testApplication">Test it! </h2>
     
-    <img src="./img/Step2/monitoringApp.png" alt="monitoring of the application" />
+    <img src="../../html/4diacIDE/img/Step2/monitoringApp.png" alt="monitoring of the application" />
        
- <!-----------------------------------------------------------------------------------------------------------------> 
-  
-
-
-
-
-
-
-
-<!----------------------------------------------------------------------------------------------------------------->
-
+<!--********************************************************************************************-->
 <h1>Where to go from here?</h1>
 
 <p>In the next step you will see how FORTE runs in another machine.</p>
 
-<p><a href="./use4diacRemotely.html">Step 3 - Deploy remotely</a></p>
+<p><a href="../../html/4diacIDE/use4diacRemotely.html">Step 3 - Deploy remotely</a></p>
 
 <p>If you want to go back to the original Blinking application without buttons, here's a link</p>
 
-<p><a href="./use4diacLocally.html">Step 1 - Use 4DIAC-IDE locally</a></p>
+<p><a href="../../html/4diacIDE/use4diacLocally.html">Step 1 - Use 4DIAC-IDE locally</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 

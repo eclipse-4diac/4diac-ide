@@ -27,16 +27,16 @@
 <p>This page is part of a guide that gives a walkthrough over the major 4DIAC features.</p>
 
     <ol start="0">
-      <li><a href="./overview.html">Overview</a></li>
-      <li><a href="./use4diacLocally.html">Use 4DIAC locally</a></li>
-      <li><a href="./distribute4diac.html">Create a distributed application</a></li>
-      <li><a href="./use4diacRemotely.html">Deploy remotely</a></li>
+      <li><a href="../../html/4diacIDE/overview.html">Overview</a></li>
+      <li><a href="../../html/4diacIDE/use4diacLocally.html">Use 4DIAC locally</a></li>
+      <li><a href="../../html/4diacIDE/distribute4diac.html">Create a distributed application</a></li>
+      <li><a href="../../html/4diacIDE/use4diacRemotely.html">Deploy remotely</a></li>
       <li>Create your own Function Blocks (YOU ARE HERE!)</li>
-      <li><a href="./otherUseful.html">Other basic features</a></li>
-      <li><a href="./advancedFeatures.html">Advanced Features [optional]</a></li>
+      <li><a href="../../html/4diacIDE/otherUseful.html">Other basic features</a></li>
+      <li><a href="../../html/4diacIDE/advancedFeatures.html">Advanced Features [optional]</a></li>
     </ol>
 
-<!------------------------------------------------------------------------------------------------>  
+<!--********************************************************************************************-->  
 
 <p>In this tutorial, you will learn how to create your own Function Block.
 There are several different types of function blocks, we will show how to create a Basic, a Simple, a Composite and a Service Function Block. 
@@ -52,7 +52,7 @@ At an event input, the boolean data output will be toggled and the event output 
 <p>Create new Function Block by selecting: 
    <br><b><span class="button4diac">File &rarr; New &rarr; New Type</span></b></p>
 
-<!------------------------------------------------------------------------------------------------>
+<!--********************************************************************************************-->
 
 <h2 id="createBasic">Create a Basic Function Block</h2>
 
@@ -61,7 +61,7 @@ For this tutorial select BlinkTest as the parent folder. Choose a name for the n
 Afterwards select the type of FB you want to create, in this case we choose <i>Basic</i>.
 The <b>Function Block Type Editor (FBT Editor)</b> is opening after clicking Finish.</p>
 
-<img src="./img/Step4/newTypeWizardBasic.png" alt="New Type Wizard - Create a Basic Function Block" />
+<img src="../../html/4diacIDE/img/Step4/newTypeWizardBasic.png" alt="New Type Wizard - Create a Basic Function Block" />
 
 <ol>
 	<li>Your new created type appears in your System's Type Library.</li>
@@ -73,10 +73,9 @@ The <b>Function Block Type Editor (FBT Editor)</b> is opening after clicking Fin
 	<li>The properties below show the information about the Function Block.</li>
 </ol>
 
-<img src="./img/Step4/typeBasicGeneral.png" alt="General View after Creating a Basic Function Block" />
+<img src="../../html/4diacIDE/img/Step4/typeBasicGeneral.png" alt="General View after Creating a Basic Function Block" />
 
-<!---------------------->
-
+<!--********************************************************************************************-->
 <h3 id="changeInterface">Change the interface</h3>
 
 <p>The Basic FB already has some inputs and outputs which are mostly used.
@@ -101,10 +100,9 @@ This should have then one input event that triggers the change, one output event
 	    Then leave it again as the image.</li>
 </ol>
 
-<img src="./img/Step4/createBasicInterface.png" alt="Create Basic Type - Interface"/>
+<img src="../../html/4diacIDE/img/Step4/createBasicInterface.png" alt="Create Basic Type - Interface"/>
 
-<!---------------------->
-
+<!--********************************************************************************************-->
 <h3>Change the ECC</h3>
 
 <p>Select the <b>ECC (Execution Control Chart) tab</b> of the bottom of the central editing area, and you will see a state-machine picture. 
@@ -133,7 +131,7 @@ Don't try to understand everything at once. With a little practice the terms and
 	    As the name implies in the <i>turnOn</i> algorithm we set you STATE variable to TRUE.
 	    Using the name of the Data Output (or input or internal variable), you access its value for reading and writing.</p>
 	    <div class="code">STATE := TRUE;</div> 
-	    <br><img src="./img/Step4/addAlgorithm.png" alt="Add an Algorithm to the Action"/></li>	
+	    <br><img src="../../html/4diacIDE/img/Step4/addAlgorithm.png" alt="Add an Algorithm to the Action"/></li>	
 	<li>Double-click on the yellow box of the action of the <i>On</i> state and select the <i>turnOn</i> algorithm. 
 	    Alternatively, you can also select this in the Property view.</li>
 	<li>Double-click on the green box of the action of the <i>On</i> state and select the <i>CNF</i> output event. 
@@ -143,7 +141,7 @@ Don't try to understand everything at once. With a little practice the terms and
 	    <div class="code">STATE := FALSE;</div></li>
 	<li>Double-click on the yellow box of the action of the <i>Off</i> state and select the <i>turnOff</i> algorithm.</li>
 	<li>Double-click on the green box of the action of the <i>Off</i> state and select the <i>CNF</i> output event.
-	    <br><img src="./img/Step4/stateAndActions.png" alt="Current score of the States And Actions"/></li>
+	    <br><img src="../../html/4diacIDE/img/Step4/stateAndActions.png" alt="Current score of the States And Actions"/></li>
 	<li>Draw a transition by drag and drop from the <i>START</i> to the state <i>On</i>. 
 	Select it, and in the transition tab of the Properties view select the condition <i>REQ</i>.
 	Next to it, you have the possibility to add a condition (for example, if STATE == TRUE or similar). 
@@ -154,7 +152,7 @@ Don't try to understand everything at once. With a little practice the terms and
 	Select it, and in the transition tab of the Properties view select the condition <i>REQ</i>.</li>
 </ol>
 
-<img src="./img/Step4/createBasicECC.png" alt="Basic ECC example">
+<img src="../../html/4diacIDE/img/Step4/createBasicECC.png" alt="Basic ECC example">
 
 <p>At the beginning, the FB is on the START state. 
 When a REQ event arrives, it jumps to the <i>On</i> state, execute algorithm <i>turnOn</i> and triggers the <i>CNF</i> output event.
@@ -166,7 +164,7 @@ When the next event arrives, it jumps to <i>Off</i> state, execute algorithm <i>
 
 <p><a href="#exportTypes">Exporting</a> the Function Block and <a href="#testFunctionBlock">testing</a> are presented after the chapter Create a <a href="#createComposite">Composite</a> and <a href="#createService">Service</a> Function Block.</p>
 
-<!------------------------------------------------------------------------------------------------>
+<!--********************************************************************************************-->
 
 <h2 id="createSimple">Create a Simple Function Block</h2>
 
@@ -177,18 +175,18 @@ For this tutorial select BlinkTest as the parent folder. Choose a name for the n
 Afterwards select the type of FB you want to create, in this case we choose <i>Simple</i>.
 The <i>Function Block Type Editor (FBT Editor)</i> is opening after clicking Finish.</p>
 
-<img src="./img/Step4/newTypeWizardSimple.png" alt="New Type Wizard - Create a Simple Function Block" />
+<img src="../../html/4diacIDE/img/Step4/newTypeWizardSimple.png" alt="New Type Wizard - Create a Simple Function Block" />
 
 <ol>
 	<li>Change the interface as <a href="#changeInterface">before</a>.
-	<br><img src="./img/Step4/createSimpleInterface.png" alt="Create Simple Type - Interface"/></li>
+	<br><img src="../../html/4diacIDE/img/Step4/createSimpleInterface.png" alt="Create Simple Type - Interface"/></li>
 	<li>Select the <b>Algorithm tab</b> of the bottom of the central editing area. In this view you can define a algorithm of the Simple FB. 
-		<div><img src="./img/Step4/createSimpleFBAlgorithm.png" alt="Simple FB Algorithm example"></div></li>
+		<div><img src="../../html/4diacIDE/img/Step4/createSimpleFBAlgorithm.png" alt="Simple FB Algorithm example"></div></li>
 </ol>
 
 <p>That's all you need to do for the Simple function block.</p>
 
-<!------------------------------------------------------------------------------------------------>
+<!--********************************************************************************************-->
 
 <h2 id="createComposite">Create a Composite Function Block</h2>
 
@@ -197,22 +195,22 @@ For this tutorial select BlinkTest as the parent folder. Choose a name for the n
 Afterwards select the type of FB you want to create, in this case we choose <i>Composite</i>.
 The <i>Function Block Type Editor (FBT Editor)</i> is opening after clicking Finish.</p>
 
-<img src="./img/Step4/newTypeWizardComposite.png" alt="New Type Wizard - Create a Composite Function Block" />
+<img src="../../html/4diacIDE/img/Step4/newTypeWizardComposite.png" alt="New Type Wizard - Create a Composite Function Block" />
 
 <ol>
 	<li>Change the interface as <a href="#changeInterface">before</a>.
-	<br><img src="./img/Step4/createCompositeInterface.png" alt="Create Composite Type - Interface"/></li>
+	<br><img src="../../html/4diacIDE/img/Step4/createCompositeInterface.png" alt="Create Composite Type - Interface"/></li>
 	<li>Select the <b>Composite Network tab</b> of the bottom of the central editing area. 
 	    In this view you can create your own network of FBs inside the Function Block. 
 	    For this example, use the E_SWITCH and E_SR and connect them as the original Blink example.</li>
 	<li>On the edges of the central editing area, you can see events and data that correspond to the interface of the Composite. 
 	    Connect them as the image below.
-		<div><img src="./img/Step4/createCompositeNetwork.png" alt="Composite Network example"></div></li>
+		<div><img src="../../html/4diacIDE/img/Step4/createCompositeNetwork.png" alt="Composite Network example"></div></li>
 </ol>
 
 <p>That's all you need to do for the Composite function block.</p>
 
-<!------------------------------------------------------------------------------------------------>
+<!--********************************************************************************************-->
 
 <h2 id="createService">Create a Service Function Block</h2>
 
@@ -221,15 +219,15 @@ For this tutorial select BlinkTest as the parent folder. Choose a name for the n
 Afterwards select the type of FB you want to create, in this case we choose <i>Service Interface</i>.
 The <i>Function Block Type Editor (FBT Editor)</i> is opening after clicking Finish.</p>
    
-   <img src="./img/Step4/newTypeWizardServiceInterface.png" alt="New Type Wizard - Create a Service Interface Function Block" />
+   <img src="../../html/4diacIDE/img/Step4/newTypeWizardServiceInterface.png" alt="New Type Wizard - Create a Service Interface Function Block" />
 
 <p>Change the interface as <a href="#changeInterface">before</a></p>
-<br><img src="./img/Step4/createServiceInterfaceInterface.png" alt="Create Service Interface Type - Interface"/>
+<br><img src="../../html/4diacIDE/img/Step4/createServiceInterfaceInterface.png" alt="Create Service Interface Type - Interface"/>
 
 <p>That's it. The behavior of the Service Function Block must be implemented directly in the code that's generated from it. 
 You will need to implement the functionality for each incomming event, manage the internal variables and send output events by yourself after exporting. <a href="#finishService">Below</a> you find the code for this example.</p>
 
-<!------------------------------------------------------------------------------------------------>
+<!--********************************************************************************************-->
 
 <h2 id="exportTypes">Export Function Block types</h2>
 
@@ -241,7 +239,7 @@ In order to export a Function Block Type, select either</p>
 	<li>Right click on the function block to export and select Export &rarr; 4diac IDE &rarr; 4diac Type Export</li>
 </ul>
 
-<img src="./img/Step4/selectExportType.png" alt="Select Export Type" />
+<img src="../../html/4diacIDE/img/Step4/selectExportType.png" alt="Select Export Type" />
 
 <p>Select the FBs to be exported on the right side of the wizard. 
 It makes sense to use your own folder, we choose <i>ExportedFBs</i>.
@@ -249,17 +247,16 @@ Before exporting one or more Function Block Types, the Export Destination and th
 Furthermore the version of the 4diac FORTE C++ format have to be selected. We'll export the three just created.</p>
 <p class="attention"><span class="inlineTitle">Attention:</span> Make sure that not all FBs are checked, otherwise all existing FBs will be exported!</p>
 
-<img src="./img/Step4/export4DIACTypeWizard.png" alt="Export Type Wizard" />
+<img src="../../html/4diacIDE/img/Step4/export4DIACTypeWizard.png" alt="Export Type Wizard" />
 
 <p>After pressing the Finish-Button and no warning pop up everything went fine. Your exported FBs are in the folder you choose before.
 <br>If a dialog window will pop up, something went wrong and it will inform you that the export to the 4diac FORTE C++ format was not successful.</p> 
 
 <p>If the output directory already contains an older version of the exported Function Block Type it is possible to overwrite the old file or to open a Merge Editor where manual merges can be performed.</p>
 
-<img src="./img/Step4/exportMergeWindow.png" width="1024" alt="Export Merge Window" />
+<img src="../../html/4diacIDE/img/Step4/exportMergeWindow.png" width="1024" alt="Export Merge Window" />
 
-<!--------------->
-
+<!--********************************************************************************************-->
 <h3 id="finishService">Finish the Service Interface Test</h3>
 
 <p>Now that you have exported the Service Interface Function Block, you need to edit it in order to get the desired behavior. 
@@ -291,13 +288,13 @@ Open the ServiceTest.cpp file that was recently exported, and take a look at the
 <p>To get or set an internal variable or data input, in the 4diac FORTE template, you use the name and the parenthesis. 
 The sendOutputEvent is the specific function to send output events.</p>
 
-<!------------------------------------------------------------------------------------------------>
+<!--********************************************************************************************-->
 
 <h2 id="OtherEditors">Other Type Editors</h2>
 <p>Currently only the management (i.e. creation, deletion and modification) of the Basic, Simple, Composite, Service Interface and Sub Application (SubApp) Function Block types as well as Adapter types are supported. 
 The management of Device and Resource Types is currently not supported.</p>
 
-<!------------------------------------------------------------------------------------------------>
+<!--********************************************************************************************-->
 
 <h2 id="testFunctionBlock">Test Function Block</h2>
 
@@ -305,7 +302,7 @@ The management of Device and Resource Types is currently not supported.</p>
 It allows to test the functionality of a Function Block by executing it on a target device. 
 But first, 4diac FORTE must know about these FBs. 
 So, you need to compile 4diac FORTE using these Function Block just created. 
-The guide to compile 4diac FORTE is <a href="../installation/install.html#ownFORTE">here</a>. 
+The guide to compile 4diac FORTE is <a href="../../html/installation/install.html#ownFORTE">here</a>. 
 See the External Module section to add the files for compilation. 
 Also, the CMake option FORTE_SUPPORT_MONITORING must be marked, which is the default value.</p>
 
@@ -315,23 +312,23 @@ The default is locally, but you can test them on any reachable FORTE.</p>
 <p>Press Start Testing FB, and the FB will be load in 4diac FORTE, and you can manually set input values of your FB, trigger input events and inspect the resulting output events and output data. 
 Furthermore you can store input/output sequences and execute them to automatically test a certain functionality of your FB.</p>
 
-<img src="./img/Step4/functionBlockTester.png" width="1024" alt="Functionblock Tester" />
+<img src="../../html/4diacIDE/img/Step4/functionBlockTester.png" width="1024" alt="Functionblock Tester" />
 
-<!------------------------------------------------------------------------------------------------>
+<!--********************************************************************************************-->
 
 <h1>Where to go from here?</h1>
 
 <p>In the next step you will see other basic features</p>
 
-<p><a href="./otherUseful.html">Step 5 - Other basic features</a></p>
+<p><a href="../../html/4diacIDE/otherUseful.html">Step 5 - Other basic features</a></p>
 
 <p>If you want to go back to the distributed application running remotely, here's a link</p>
 
-<p><a href="./use4diacRemotely.html">Step 3 - Deploy remotely</a></p>
+<p><a href="../../html/4diacIDE/use4diacRemotely.html">Step 3 - Deploy remotely</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 

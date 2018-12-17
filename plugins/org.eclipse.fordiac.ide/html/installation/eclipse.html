@@ -25,7 +25,7 @@
 <h2>Get C/C++ support for Eclipse</h2>
 <ol>
 	<li>If you do not already use Eclipse to run 4DIAC-IDE from source, download the <a href="http://www.eclipse.org/downloads/" target="_blank">Eclipse for C/C++ Developers</a> and unzip the file to a suitable location (e.g., <span class="folderLocation">c:\eclipse</span>). Otherwise you can integrate C/C++ functionality into your existing Eclipse by <span class="menu4diac">Help &rarr; Install New Software</span>, choosing your Eclipse version (1) and checking <span class="menu4diac">Programming Languages &rarr; C/C++ Development Tools</span> (2).
-	<div><img src="./img/eclipseInstallNewSoftware.png" alt="Install new software in Eclipse"/></div></li>
+	<div><img src="../../html/installation/img/eclipseInstallNewSoftware.png" alt="Install new software in Eclipse"/></div></li>
 		
 	
 	<li>Restart <span class="fileLocation">eclipse.exe</span></li>
@@ -33,12 +33,12 @@
 </ol>
 
 <h2>Compile FORTE with Eclipse</h2>
-<p>For using Eclipse you must have chosen the rigth project in step 2 in <a href="./install.html#generateFilesForCompiling">Generate files for compiling</a>.</p>
+<p>For using Eclipse you must have chosen the rigth project in step 2 in <a href="../../html/installation/install.html#generateFilesForCompiling">Generate files for compiling</a>.</p>
 
 <ol>
 	<li>Import FORTE by <span class="menu4diac">File &rarr; Import... &rarr; General &rarr; Existing Project into Workspace</span>. In case your Workspace is one folder above your source code folder you only have to click on <span class="button4diac">Browse...</span> and <span class="button4diac">OK</span> afterwards to import FORTE into Eclipse. Otherwise select the directory where you have extracted your FORTE and check <span class="menu4diac">Copy into workspace</span> (otherwise the source will stay at the original place).</li>
 	<li>Start Make Targets View by <span class="menu4diac">Window &rarr; Show View &rarr; Build Targets</span> if it is not open already. Double click the makefile: <span class="fileLocation">bin/[YOUR_SYSTEM]/all</span> to compile FORTE to a executable application. If you don't see the targets (all or clean), you can create them in the same window. Make sure that you create them in the right folder.
-	<div><img src="./img/eclipseMakefiles.png" alt="Eclipse C++ with FORTE imported and marked makefiles"></div></li>
+	<div><img src="../../html/installation/img/eclipseMakefiles.png" alt="Eclipse C++ with FORTE imported and marked makefiles"></div></li>
 	
 </ol>
 
@@ -48,12 +48,12 @@
 	<li>Set a breakpoint in the source code file of the desired Function Block.</li>
 	<li>Go to <span class="menu4diac">Run &rarr; Debug Configurations...</span></li>
 	<li>Right click on <span class="menu4diac">C/C++ Application &rarr; New</span>. In the <span class="tab4diac">Main</span> tab, you should fill the <span class="specificText">C/C++ Application:</span> with the binary file you generated (normally <span class="folderLocation">FORTE_FOLDER_ROOT/bin/[YOUR_SYSTEM]/src/forte[.exe]</span>). In the <span class="tab4diac">Debugger</span> tab, choose your desired debugger. In Windows you normally use Cygwin or MinGW (you have to install them in order for them to appear in the selection box).
-	<div><img src="./img/eclipseLaunchDebug.png" alt="Eclipse Launch Debug Configuration Selection"></div></li>
+	<div><img src="../../html/installation/img/eclipseLaunchDebug.png" alt="Eclipse Launch Debug Configuration Selection"></div></li>
 		
 	<li>Click <span class="button4diac">Debug</span></li>
 	<li>Confirm for changing into the Debug view</li>
 	<li>In case you don't see the file where the debugger stopped at the beggining, press the <span class="button4diac">Locate File</span> button (1) and navigate to the Eclipse workspace which contains the extracted FORTE, type <span class="specificText">main</span> into the search field of the Windows Explorer and select the offered <span class="fileLocation">main.cpp</span>. FORTE is now stopped at the <span class="specificText">main()</span> function.
-	<div><img src="./img/eclipseDebug.png" alt="Eclipse C++ Debug View"></div></li>
+	<div><img src="../../html/installation/img/eclipseDebug.png" alt="Eclipse C++ Debug View"></div></li>
 		
 
 	<li>Press the <span class="button4diac">Resume</span> button (2) to run FORTE and observe the behavior of our application.</li>
@@ -64,15 +64,15 @@
 
 <p>Now that you installed the required tools, it's time to start using them. Take a look at the following page:</p>
 
-<p><a href="../4diacIDE/overview.html">Step by step tutorial</a></p>
+<p><a href="../../html/4diacIDE/overview.html">Step by step tutorial</a></p>
 
 <p>If you want to compile FORTE for another platform or want to know more about that, here's a quick link back:</p>
 
-<p><a href="./install.html">Install 4DIAC</a></p>
+<p><a href="../../html/installation/install.html">Install 4DIAC</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 

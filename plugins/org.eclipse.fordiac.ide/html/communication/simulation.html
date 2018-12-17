@@ -35,7 +35,7 @@
 <h3>How to export and FMU in 4DIAC?</h3>
 
 <ol>
-  <li>First, a special 4diac-rte has to be compiled. Follow the <a href="../installation/install.html#ownFORTE" target="_blank">steps to build your own FBs</a>. In the step 3 where the features to be compiled are selected, select also FORTE_ENABLE_FMU. The FORTE_FMU_INCLUDE variable should be set to the path where the headers files from the fmi standard are located. This will generate a dynamic library, whose name will depend on the operative system forte was compiled. This library must be renamed to one of the following supported ones: win32Forte.dll, win64Forte.dll, linux32Forte.so or linux64Forte.so (for windows 32 bits, windows 64 bits, linux 32 bits and linux 64 bits operative systems respectively). An FMU can have many different libraries, wich will allow the FMU to be simulated in these Operative Systems. </li>
+  <li>First, a special 4diac-rte has to be compiled. Follow the <a href="../../html/installation/install.html#ownFORTE" target="_blank">steps to build your own FBs</a>. In the step 3 where the features to be compiled are selected, select also FORTE_ENABLE_FMU. The FORTE_FMU_INCLUDE variable should be set to the path where the headers files from the fmi standard are located. This will generate a dynamic library, whose name will depend on the operative system forte was compiled. This library must be renamed to one of the following supported ones: win32Forte.dll, win64Forte.dll, linux32Forte.so or linux64Forte.so (for windows 32 bits, windows 64 bits, linux 32 bits and linux 64 bits operative systems respectively). An FMU can have many different libraries, wich will allow the FMU to be simulated in these Operative Systems. </li>
 
   <li>In the 4DIAC-IDE, go to Windows &rarr; Preferences &rarr; 4DIAC &rarr; FMU Preferences and in the "Binaries Location" field, select the path where the compiled forte (with the right new name) is located. Many libraries from the different OS can be placed in the same folder, wich will be detected by the preference, enabling the OS to be possibly included in the FMUs. Apply the changes and close.</li>
 
@@ -75,27 +75,27 @@
 
 <p>A simple tank system was modelled in OpenModelica as in the picture below. it has a "firstValve" which is to be controlled, which fills the tank. The "secondValve" is always open, so the tank tends to be empty.</p>
 
-<img src="./img/fmi/tankModel.png" alt="Model of a tank in openModelica">
+<img src="../../html/communication/img/fmi/tankModel.png" alt="Model of a tank in openModelica">
 
 <p>DA and DS stand for "dummy actuator" (for controlling the first valve) and "dummy sensor" (which measures the current level of the tank) respectively, which just transform the physical measurement into a 16bits integer, which are the input and output of the tank system. </p>
 
 <p>In 4diac, the following PID controller was implemented. The main PID function block is a basic function block, which keeps the level of the tank to the desired position (ERROR_CALC.IN2). The tank is always loosing water (remember, just an example). TANK_LEVEL_IN (IW) and FILL_VALVE (QW) are the FBs that are the input and output of the exported FMU. </p>
 
-<img src="./img/fmi/application.png" alt="controller implemented in 4DIAC">
+<img src="../../html/communication/img/fmi/application.png" alt="controller implemented in 4DIAC">
 
 <p>Once both system are exported as FMUs, they can be co-simulated using the <a href="https://github.com/into-cps/intocps-ui" target="_blank">INTO-CPS</a> tool. Inputs and outputs of both model are connected properly (sensor of the level of the tank to the input of the controller, and the output of the controller to the actuator of the valve of the tank). Since the Kp, Ki and Kd of the PID controller are literals, they're treated as parameters, which can be set in every co-simulation, making it easier to tune it.</p>
 
 <p>Below the first tries to tune the PID using the Ziegler-Nichols method</p>
 
-<img src="./img/fmi/kp1500.png" alt="Simulation with kp 1500">
+<img src="../../html/communication/img/fmi/kp1500.png" alt="Simulation with kp 1500">
 
-<img src="./img/fmi/kp2000.png" alt="Simulation with kp 2000">
+<img src="../../html/communication/img/fmi/kp2000.png" alt="Simulation with kp 2000">
 
-<img src="./img/fmi/kp2500.png" alt="Simulation with kp 2500">
+<img src="../../html/communication/img/fmi/kp2500.png" alt="Simulation with kp 2500">
 
 <p>And the final result of the tunning is seen below</p>
 
-<img src="./img/fmi/classicPID.png" alt="Final tunning of the controller">
+<img src="../../html/communication/img/fmi/classicPID.png" alt="Final tunning of the controller">
 
 <p>This shows how two system from different areas can be easily coupled. The 4diac FMU also help finding bugs in your application to see if it behaves are expected.</p>
 
@@ -107,11 +107,11 @@
 
 <p>Go back to Protocols index:</p>
 
-<p><a href="./communicationIndex.html">Communication Index</a></p>
+<p><a href="../../html/communication/communicationIndex.html">Communication Index</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 
