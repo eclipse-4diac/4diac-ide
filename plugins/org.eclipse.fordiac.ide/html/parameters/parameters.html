@@ -23,16 +23,16 @@
  <p id="topOfPage">Using QX, IX and similar allows you to access the inputs and outputs of a supported hardware. Of course, in the case of a normal computer, this doesn't apply since it doesn't have I/O that you can control direcly like you do on a PLC (normally boolean). In order to access the I/O of a hardware, you need to set the PARAMS data input to a corresponding value to select which I/O to access. FORTE should be compiled with the corresponding module, that can be selected in CMake. You find here the values to be set to PARAMS for the following supported platforms:</p>
 
  <ol>
- 	<li><a href="#sysfs">SysFs (Raspberry Pi, Beagle Bone Black and similar boards)</a></li>
- 	<li><a href="#rpi-sps">Raspberry PI-SPS</a></li>
- 	<li><a href="#odroid">Odroid</a></li>
- 	<li><a href="#piface">PiFace 2</a></li>
- 	<li><a href="#umic">uMIC 200</a></li>
- 	<li><a href="#mlpi">MLPI (for bosch rexroth PLC)</a></li>
- 	<li><a href="#ev3">Lego Mindstorm EV3</a></li>
+	<li><a href="#sysfs">SysFs (Raspberry Pi, Beagle Bone Black and similar boards)</a></li>
+	<li><a href="#rpi-sps">Raspberry PI-SPS</a></li>
+	<li><a href="#odroid">Odroid</a></li>
+	<li><a href="#piface">PiFace 2</a></li>
+	<li><a href="#umic">uMIC 200</a></li>
+	<li><a href="#mlpi">MLPI (for bosch rexroth PLC)</a></li>
+	<li><a href="#ev3">Lego Mindstorm EV3</a></li>
  </ol>
 
- 	<h1 id="sysfs">SysFs (Raspberry Pi, Beagle Bone Black and similar boards)</h1>
+	<h1 id="sysfs">SysFs (Raspberry Pi, Beagle Bone Black and similar boards)</h1>
  
 	<p>The following picture shows an example application from the <a href = "../4diacIDE/use4diacLocally.html">Blinking tutorial</a> which is extended with IX and QX function blocks. The extended application periodically toggles on pin number 8. It can be started and stopped via pin number 2. You can connect an LED to obtain a blinking light.</p>
 	
@@ -60,7 +60,7 @@
 
 	<h1 id="odroid">Odroid</h1>
 
-		<p><a href="http://www.hardkernel.com/main/main.php" target="_blank">Odroid</a> is an embedded board that you can say it's a more powerful Rapsberry Pi, and it has analog inputs. In order to use the I/O of this board. It works similar to the Raspberry Pi, so you can use QX and IX with the number corresponding to the pin number, and to access the Analog Inputs, you should use IW. <span class="specificText">0</span> and <span class="specificText">1</span> should be set to PARAMS of IW in order to access the <span class="specificText">first</span> and <span class="specificText">second</span> analog inputs respectively. </p>
+		<p><a href="https://wiki.odroid.com/" target="_blank">Odroid</a> is an embedded board that you can say it's a more powerful Rapsberry Pi, and it has analog inputs. In order to use the I/O of this board. It works similar to the Raspberry Pi, so you can use QX and IX with the number corresponding to the pin number, and to access the Analog Inputs, you should use IW. <span class="specificText">0</span> and <span class="specificText">1</span> should be set to PARAMS of IW in order to access the <span class="specificText">first</span> and <span class="specificText">second</span> analog inputs respectively. </p>
 
 		<img src="../../html/parameters/img/odroidFBs.png" alt="FBs example for Odroid platform">
 
@@ -95,16 +95,16 @@
 				<li>7 &rarr; LED4_RED<br></li>
 			</ul>
 		<p>Example:<br>
-  			led.4 &rarr; controls the LED1 color red</p>
+			led.4 &rarr; controls the LED1 color red</p>
 		</li>
-  		<li><span class="inlineTitle">dio</span>: controls the 8 digital I/O at pins 5-12. Number can be from 1 to 8. Use IX to make it input, and QX to make it output.<br>
-  		<p>Example:<br>
-  			dio.3 &rarr; will access Digital I/O 3 at pin 7 of the uMIC200</p>
-  		</li>
-  		<li><span class="inlineTitle">relay</span>: controls the relays. The possible numbers are 1 and 2. The 1 controls the NO relay and 2 the NC. Only QX can be used with <span class="specificText">relay</span>.<br>
-  		<p>Example:<br>
-  			relay.1 &rarr; will control the NC relay at pins 14- 15
- 		</li>
+		<li><span class="inlineTitle">dio</span>: controls the 8 digital I/O at pins 5-12. Number can be from 1 to 8. Use IX to make it input, and QX to make it output.<br>
+		<p>Example:<br>
+			dio.3 &rarr; will access Digital I/O 3 at pin 7 of the uMIC200</p>
+		</li>
+		<li><span class="inlineTitle">relay</span>: controls the relays. The possible numbers are 1 and 2. The 1 controls the NO relay and 2 the NC. Only QX can be used with <span class="specificText">relay</span>.<br>
+		<p>Example:<br>
+			relay.1 &rarr; will control the NC relay at pins 14- 15
+		</li>
 	</ol>
  
 	<img src="../../html/parameters/img/uMICFBs.png" alt="FBs example for uMIC platform">
@@ -221,7 +221,7 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 				<li>left.green</li>
 			</ul>
 			<p>Each specific is used to control each one of the four leds available. The orange led doesn't exist, but is the sum of red + green, so in order to turn on an orange light of the left for example, both the green and red of the left must be turned on.</p>
- 	<p>Limitation: 'led' must be used with QX and with the 'emb' port.</p>
+	<p>Limitation: 'led' must be used with QX and with the 'emb' port.</p>
 			<p>Example:</p>
 			<ul>
 				<li><p>emb.led.right.red</p></li>
@@ -333,11 +333,11 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 
 			<p>The 'reset' zeroes the position, pwm and speed values, and turn off the motor with a TRUE value in OUT. A FALSE value in OUT has no effect. It must be used with QX</p>
 
-			<p>The 'stop' specific must not be confused with stoping the motor, because it specifies the way the motor behaves when PWM is zero according to the value written to OUT. It must be used with QW 	</p>
+			<p>The 'stop' specific must not be confused with stoping the motor, because it specifies the way the motor behaves when PWM is zero according to the value written to OUT. It must be used with QW </p>
 
 			<ul>
 				<li>0: [coast]: Removes power from the motor. The motor will freely coast to a stop.</li>
-				<li>1: [brake]: Removes power from the motor and creates a passive electrical load. This is usually done by shorting the motor terminals together. This load will absorb the energy from the 	rotation of the motors and cause the motor to stop more quickly than coasting.</li>
+				<li>1: [brake]: Removes power from the motor and creates a passive electrical load. This is usually done by shorting the motor terminals together. This load will absorb the energy from the rotation of the motors and cause the motor to stop more quickly than coasting.</li>
 
 				<li>3: [hold]: Causes the motor to actively try to hold the current position. If an external force tries to turn the motor, the motor will "push back" to maintain its position.</li>
 			</ul>

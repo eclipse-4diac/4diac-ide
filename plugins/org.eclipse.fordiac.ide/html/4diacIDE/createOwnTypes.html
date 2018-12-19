@@ -36,7 +36,7 @@
       <li><a href="../../html/4diacIDE/advancedFeatures.html">Advanced Features [optional]</a></li>
     </ol>
 
-<!--********************************************************************************************-->  
+<!--********************************************************************************************-->
 
 <p>In this tutorial, you will learn how to create your own Function Block.
 There are several different types of function blocks, we will show how to create a Basic, a Simple, a Composite and a Service Function Block. 
@@ -50,7 +50,7 @@ All 4 types do the same thing in different ways.
 At an event input, the boolean data output will be toggled and the event output will send the message that the value has changed.</p>
 
 <p>Create new Function Block by selecting: 
-   <br><b><span class="button4diac">File &rarr; New &rarr; New Type</span></b></p>
+	<br><b><span class="button4diac">File &rarr; New &rarr; New Type</span></b></p>
 
 <!--********************************************************************************************-->
 
@@ -90,7 +90,7 @@ This should have then one input event that triggers the change, one output event
 <ol>
 	<li>Select the INIT event, and delete it. Do the same for QI and INITO.</li>
 	<li>Select the QO output, and change its name to STATE by either double clicking on it, or in the Properties below. 
-    	You can change the Comment for each event and data also in the Properties.</li>
+		You can change the Comment for each event and data also in the Properties.</li>
 	<li>Check that the Type of STATE is BOOL in Properties.</li>
 	<li>Check the lines between events and data which represent the WITH. 
 	    They indicate which data outputs are refreshed when an Event occurs. 
@@ -126,12 +126,12 @@ Don't try to understand everything at once. With a little practice the terms and
 	    <br>Depending on the selected algorithm type, different algorithm editors are provided. 
 	    Currently the most used algorithm language is IEC 61131-3 Structured Text (ST). The ST Editor provides syntax highlighting and code completion. 
 	    We'll see later that this code is converted to FORTE code. 
-	    If you select AnyText, no conversion is done, so you should know the syntax for FORTE (or other Runtime).    
+		If you select AnyText, no conversion is done, so you should know the syntax for FORTE (or other Runtime).
 		<p>On the right side, you can write your code.
 	    As the name implies in the <i>turnOn</i> algorithm we set you STATE variable to TRUE.
 	    Using the name of the Data Output (or input or internal variable), you access its value for reading and writing.</p>
 	    <div class="code">STATE := TRUE;</div> 
-	    <br><img src="../../html/4diacIDE/img/Step4/addAlgorithm.png" alt="Add an Algorithm to the Action"/></li>	
+	    <br><img src="../../html/4diacIDE/img/Step4/addAlgorithm.png" alt="Add an Algorithm to the Action"/></li>
 	<li>Double-click on the yellow box of the action of the <i>On</i> state and select the <i>turnOn</i> algorithm. 
 	    Alternatively, you can also select this in the Property view.</li>
 	<li>Double-click on the green box of the action of the <i>On</i> state and select the <i>CNF</i> output event. 
@@ -146,9 +146,9 @@ Don't try to understand everything at once. With a little practice the terms and
 	Select it, and in the transition tab of the Properties view select the condition <i>REQ</i>.
 	Next to it, you have the possibility to add a condition (for example, if STATE == TRUE or similar). 
 	In this example, no condition except the <i>REQ</i> event is needed.</li>
-    <li>Draw a transition by drag and drop from the state <i>On</i> to the state <i>Off</i>. 
+	<li>Draw a transition by drag and drop from the state <i>On</i> to the state <i>Off</i>. 
 	Select it, and in the transition tab of the Properties view select the condition <i>REQ</i>.</li>
-    <li>Draw a transition by drag and drop from the state <i>Off</i> to the state <i>On</i>. 
+	<li>Draw a transition by drag and drop from the state <i>Off</i> to the state <i>On</i>. 
 	Select it, and in the transition tab of the Properties view select the condition <i>REQ</i>.</li>
 </ol>
 

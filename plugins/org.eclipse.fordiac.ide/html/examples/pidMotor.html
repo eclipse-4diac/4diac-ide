@@ -160,7 +160,7 @@ ELSE
 END_IF; </code></div>
 
 	<p>
- The IF and ELSEIF are the limits of the value, and in the ELSE is where allowed values are processed. The output limitation is straightforward, but the windup solution can be confusing. What is done is to activate the integration part only when the desired output is inside the limits (in the ELSE), OR when it is outside the limits AND the error is forcing the way back inside the limits. The source of information about this can be found <a target="_blank" 	href="https://jagger.berkeley.edu/~pack/me132/Section15.pdf">here.</a>
+ The IF and ELSEIF are the limits of the value, and in the ELSE is where allowed values are processed. The output limitation is straightforward, but the windup solution can be confusing. What is done is to activate the integration part only when the desired output is inside the limits (in the ELSE), OR when it is outside the limits AND the error is forcing the way back inside the limits. The source of information about this can be found <a target="_blank" href="https://jagger.berkeley.edu/~pack/me132/Section15.pdf">here.</a>
 	</p>
 
 	<p>Whit the algorithms done, the FB is ready to be exported and compiled with FORTE.</p>
@@ -174,7 +174,7 @@ END_IF; </code></div>
 	<div class="code">forte_add_sourcefile_hcpp(PID)</div>
 
 	<p>
- The next thing to do is to compile FORTE for the EV3. The easiest way to do it is to copy all the code to the EV3, get the compiling tools inside the EV3 and compile it. The process is really slow compared if it is done in a normal computer, but for one time is much faster than setting all the cross-compiling environment explained <a 	target="_blank" 	href="http://www.ev3dev.org/docs/tutorials/using-brickstrap-to-cross-compile/">here.</a> More details are presented in the <a href="../../html/installation/legoMindstormEv3.html#ev3_introduction">section</a> above.
+ The next thing to do is to compile FORTE for the EV3. The easiest way to do it is to copy all the code to the EV3, get the compiling tools inside the EV3 and compile it. The process is really slow compared if it is done in a normal computer, but for one time is much faster than setting all the cross-compiling environment explained <a target="_blank" href="http://www.ev3dev.org/docs/tutorials/using-brickstrap-to-cross-compile/">here.</a> More details are presented in the <a href="../../html/installation/legoMindstormEv3.html#ev3_introduction">section</a> above.
 	</p>
 
 	<h3>Creating the PID Application in 4DIAC</h3>

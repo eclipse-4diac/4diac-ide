@@ -39,7 +39,7 @@ FBs according to your needs. Publish and Subscribe blocks are currently not supp
   <ul>
     <li>On the PARAMETERS in the PARAM data input (see below)</li>
     <li>In a RD (exactly 1) of the client FB</li>
-   </ul>     
+   </ul>
    If both cases are present, the RD takes precedence and the PARAMETER is ignored.
    </li>
 </ul>
@@ -60,7 +60,7 @@ FBs according to your needs. Publish and Subscribe blocks are currently not supp
 
 <ul>
   <li><span class="inlineTitle">PARAMETERS:</span> parameters to be sent</li>
-  <li><span class="inlineTitle">content-type:</span> HTTP content-type of the packet to be sent. If parameters are used with PUT or POST (SD or PARAMETERS), content-type will be ignored and application/x-www-form-urlencoded will be used instead. If  not defined, "text/html" will be used as default</li>
+  <li><span class="inlineTitle">content-type:</span> HTTP content-type of the packet to be sent. If parameters are used with PUT or POST (SD or PARAMETERS), content-type will be ignored and application/x-www-form-urlencoded will be used instead. If not defined, "text/html" will be used as default</li>
   <li><span class="inlineTitle">response-code:</span> the response that's expected. If not defined, "HTTP/1.1 200 OK" will be used. If the response-code of a packet is not as defined, the packet is ignored. If "*" is set, the packet is never ignored, no matter what the response code is</li>
 </ul>
 

@@ -23,7 +23,7 @@
 <h1 id="topOfPage">Access BaseX Database with XQueries</h1>
 <p>This section will show you how to make applications communicate with a <a href="http://basex.org/" target="_blank">BaseX</a> database through XQueries. 
 This allows a component, to initialize itself by accessing its asset administration shell, in terms of an XML database.
-The component is controlled by a specific function block, which produces XQueries to initialize its inputs with values received or calculated from a BaseX database.  
+The component is controlled by a specific function block, which produces XQueries to initialize its inputs with values received or calculated from a BaseX database.
 </p>
 
 <p>The section is devided into three parts. 
@@ -78,7 +78,7 @@ For further explanation or in case of any problems please have a look at the <a 
 
 <p>Now change to the <i>bin</i> directory of your BaseX installation.
 Start the BaseX server there.
-The output should be the BaseX version and the port where you can reach to your database.</p>	
+The output should be the BaseX version and the port where you can reach to your database.</p>
 
 <div class="code">> ./basexserver
 
@@ -91,8 +91,8 @@ Server was started (port: 1984).
 <p>To send XQueries to your database, create a proper basic function block, which produces the desired XQueries.
 The following images show a possible interface and execution control chart for a basic function block whicht fetches values from your BaseX database during initialization.</p>
 
-<img src="../../html/communcation/img/xquery/testFB.png" alt="Test function block to send XQueries"/>
-<img src="../../html/communcation/img/xquery/testFB_ECC.png" alt="Test function block to send XQueries"/>
+<img src="../../html/communication/img/xquery/testFB.png" alt="Test function block to send XQueries"/>
+<img src="../../html/communication/img/xquery/testFB_ECC.png" alt="Test function block to send XQueries"/>
 
 <p>The algorithm <i>getVMax</i> contains an XQuery which is supposed to calculate the maximum speed of a roller conveyor from values of the database.
 Since the 4diac-ide currently does not provide support for an XQuery algorithm language, you have to use <i>AnyText</i> as algorithm language.
@@ -153,18 +153,18 @@ After you have created your test function block, export it and build your 4diac-
 Please have a look at the <a href="../../html/installation/install.html#ownFORTE">build instructions</a> if you do not know how to build your own function block.
 
 <p>Now you can use your test function block wihtin an application.
-To send the XQueries to your BaseX database, add a <span class="code">CLIENT_1</span> for each query you want to send.
-Please consider that currently only a <span class="code">CLIENT_1</span> is supported, where you connect the <span class="code">SD_1</span> input with the xquery producing output of your test function block.
-The result of the XQuery is received by the <span class="code">RD_1</span> output.
+To send the XQueries to your BaseX database, add a <span class="inlineCode">CLIENT_1</span> for each query you want to send.
+Please consider that currently only a <span class="inlineCode">CLIENT_1</span> is supported, where you connect the <span class="inlineCode">SD_1</span> input with the xquery producing output of your test function block.
+The result of the XQuery is received by the <span class="inlineCode">RD_1</span> output.
 A possible test application is shown in the following image.
 Within this application a roller conveyor is initialized by its maximum speed, and its neighbouring roller conveyors.
 </p>
 
-<img src="../../html/communcation/img/xquery/testApp.png" alt="Test function block to send XQueries"/>
+<img src="../../html/communication/img/xquery/testApp.png" alt="Test function block to send XQueries"/>
 
-<p>The <span class="code">ID</span> input of the <span class="code">CLIENT_1</span> function block contains a variable <span class="code">%local%</span> which is replaced by a proper value during deployment.
-The <span class="code">ID</span> is configured with the protocol name, the IP address of the computer, where your BaseX database is running, the port where your BaseX server listens for requests, the name of your database, a user name and a password.
-For the example database running on your local machine, the <span class="code">ID</span> can be as follows:
+<p>The <span class="inlineCode">ID</span> input of the <span class="inlineCode">CLIENT_1</span> function block contains a variable <span class="inlineCode">%local%</span> which is replaced by a proper value during deployment.
+The <span class="inlineCode">ID</span> is configured with the protocol name, the IP address of the computer, where your BaseX database is running, the port where your BaseX server listens for requests, the name of your database, a user name and a password.
+For the example database running on your local machine, the <span class="inlineCode">ID</span> can be as follows:
 </p>
 
 <div class="code">xquery[127.0.0.1:1984; BaSys_PalletSystem_Model; admin; admin]</div>
@@ -181,7 +181,7 @@ INFO: T#0100737ms: Connected to DB.
 INFO: T#0101026ms: DB BaSys_PalletSystem_Model opend.
 </div>
 
-<p>If you monitor your application you should get the results from the XQuery requests at the corresponding inputs of your test function block.</p>	
+<p>If you monitor your application you should get the results from the XQuery requests at the corresponding inputs of your test function block.</p>
 
 <!-- ********************************************************************** -->
 <h1>Where to go from here?</h1>
