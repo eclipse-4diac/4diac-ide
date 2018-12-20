@@ -1,7 +1,7 @@
 <!DOCTYPE html> 
 <!--
  Copyright (c) 2010 - 2017 TU Wien ACIN, fortiss GmbH
-               2018 Andrea Zoitl
+               2018 Andrea Zoitl, Johannes Kepler University Linz
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -13,19 +13,20 @@
    Gerhard Ebenhofer, Gerd Kainz, Thomas Strasser, Jose Cabral
      - initial API and implementation and/or initial documentation
    Andrea Zoitl - cleaning up tutorials for 1.10 release
+   Bianca Wiesmayr - minor text corrections
 -->
 
 <html lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Step 1 - Use 4DIAC-IDE locally</title>
+    <title>Step 1 - Use 4diac locally</title>
     <link rel="stylesheet" type="text/css" href="../help.css" />
   </head>
   <body>
 
-    <h1 id="topOfPage">Step 1 - Use 4diac IDE locally (Blinking tutorial)</h1>
+    <h1 id="topOfPage">Step 1 - Use 4diac locally (Blinking tutorial)</h1>
 
-    <p>This page is part of a guide that gives a walkthrough over the major 4diac-IDE features.</p>
+    <p>This page is part of a guide that gives a walk-through over the major 4diac IDE features.</p>
 
     <ol start="0">
       <li><a href="../../html/4diacIDE/overview.html">Overview</a></li>
@@ -37,7 +38,7 @@
       <li><a href="../../html/4diacIDE/advancedFeatures.html">Advanced Features [optional]</a></li>
     </ol>
 
-    <p>In this tutorial you create a simple Blinking application. It's the "Hello World" of automation programs, so it will be enough to understand the key aspects and workflow of 4diac IDE. The application will run locally, so no connection to any PLC or external hardware is needed. The architecture is shown below.</p>
+    <p>In this tutorial you create a simple Blinking application. It's the "Hello World" of automation programs, so it teaches the key aspects and workflow of 4diac IDE. The application will run locally, so no connection to any PLC or external hardware is needed. The architecture is shown below.</p>
 
     <img src="../../html/4diacIDE/img/locallyArchitecture.png" alt="architecture for the current step" />
 
@@ -47,7 +48,7 @@
     <h2 id="createSystem">Create a new IEC 61499 System</h2>
 
      <ol>
-       <li>In the upper left corner of the system perspective there is the main menü. Create a new system by selecting
+       <li>In the upper left corner of the system perspective there is the main menu. Create a new system by selecting
        <br><span class="menu4diac">File &rarr; New &rarr; New System</span></li>
        <li>Follow the instructions in the creation wizard. For this tutorial we name our new system <i>BlinkTest</i>.
        <div><img src="../../html/4diacIDE/img/Step1/newSystemWizard.png" alt="Create a new IEC 61499 System" /></div></li>
@@ -63,27 +64,27 @@
       <li><b>Type Library</b>: You find here all the available Function Blocks for this System.</li>
     </ul>
 
-    <p>New systems per default contain a copy the types in the Type Library. 
-    If different types are need, for example from another project or another IEC 61499 engineering tool, these type files can be easily added by copying them into the project directory at the desired place. 
+    <p>By default, new systems contain a copy of the types in the Type Library. 
+    If different types are needed, for example from another project or another IEC 61499 engineering tool, these type files can be easily added by copying them into the project directory to the desired location. 
     Furthermore the <span class="view4diac">Type Navigator</span> allows to drag and drop types between projects as well as within a project to a different folder.</p>
 
 <!--********************************************************************************************-->
     <h2 id="createNetwork">Create a FB network for the Blink application</h2>
       <p>A double-click on an Application in the System Explorer tab on the left opens the Application Editor for this specific application in the editor area.</p>
       <ol>
-        <li>Drag and Drop the following Function Blocks (FBs) to the Editor. Open the Palette (if not already open) on the upper right of <b>editor area</b> by clicking on the left arrow or use the Type Library in the System Explorer. 
+        <li>Drag and Drop the following Function Blocks (FBs) to the Editor. Open the palette (if not already open) on the upper right of <b>editor area</b> by clicking on the left arrow or use the Type Library in the System Explorer. 
         The three FBs are in the <span class="folderLocation">event</span> folder:
           <ul>
             <li>E_CYCLE </li>
-            <li>E_SWTICH</li>
+            <li>E_SWITCH</li>
             <li>E_SR</li>
           </ul>
           <img src="../../html/4diacIDE/img/Step1/blinkFBs.png" alt="Function Blocks for the blink example" />
-          <p>The name in the middle of the FB is the type of it. If you CTRL + click on it, you can access the definition of the type of the FB. 
-          There you can see the interface and how it works. Check E_SWITCH and E_SR and go to the ECC tab to see how it behaves.</p>
+          <p>The name in the middle of the FB is its type. If you CTRL + click on it, you can access the definition of the type of the FB. 
+          There you can see the interface and how it works. Check E_SWITCH and E_SR and go to the ECC tab to see how they behave.</p>
 
           <p>The name on top of the FB is the instance name. Two FBs cannot have the same instance name. 
-          You can double click on it to change it for a better organized application.</p>
+          You can double-click on it to change it for a better organized application.</p>
         </li>
         <li>Create the connections between the FBs
           <p><b>Event</b> (red, on top part of FBs) and <b>Data</b> (blue, on lower part of FBs) <b>connections</b> can be generated by connecting the Event-/Data in- and outputs. 
@@ -92,10 +93,10 @@
 
           <img src="../../html/4diacIDE/img/Step1/blinkWithConnections.png" alt="Function Blocks for the blink example" />
 
-          <p>Here are some tips about editing the application:</p>
+          <p>Here are some tips for editing the application:</p>
           <ul>
               <li>If you hover the mouse over a FB or Data or Event connection end, you'll get information about it.</li>
-              <li>If you try to connect Data connections that have incompatible types, you will a red error in the status bar at the lowest part of 4DIAC.</li>
+              <li>If you try to connect Data connections that have incompatible types, you will a red error in the status bar at the lowest part of 4diac-IDE.</li>
               <li>Selected function blocks in the <span class="view4diac">Application Editor</span> can be parameterized using the <span class="view4diac">Properties View</span> typically located below.</li>
           </ul>
         </li>
@@ -110,11 +111,11 @@
         </li>
       </ol>
     <p>Now the application is done. You should try to understand how the application works. Something missing is the starting event. 
-    This would be done later when the hardware is configured. For now, imagine an event arrives to E_CYCLE.START. Every 1 second, and event output will be triggered in E_CYCLE.EO. The E_SWITCH will trigger an event output EO0 when G is zero, and EO1 when G is one. The value Q of E_SR will be 1 when an event at S arrive and 0 when an event at R arrive. Try to follow the flow of events and understand why this application makes Q toogle, considering it starts at 0.</p>
+    This would be done later when the hardware is configured. For now, imagine an event arrives to E_CYCLE.START. Every 1 second, and event output will be triggered in E_CYCLE.EO. The E_SWITCH will trigger an event output EO0 when G is zero, and EO1 when G is one. The value Q of E_SR will be 1 when an event at S arrive and 0 when an event at R arrive. Try to follow the flow of events and understand why this application makes Q toggle, considering it starts at 0.</p>
 
 <!--********************************************************************************************-->
     <h2 id="configureHardware">Configuration of the Automation Hardware</h2>
-      <p>First, let's define the devices that are present in out system. The automation hardware can be modelled with the <span class="view4diac">System Configuration Editor</span>. 
+      <p>First, let's define the devices that are present in our system. The automation hardware can be modelled with the <span class="view4diac">System Configuration Editor</span>. 
       It can be opened by double clicking on the <span class="view4diac">System Configuration</span> tree node in the <span class="view4diac">System Explorer</span> on the left. 
       By using Drag and Drop, Device, Resource and Segment types can be added from the palette. 
       On an IEC 61499 Device several IEC 61499 Resources can be configured. Resources can be directly added to Devices.</p>
@@ -125,7 +126,7 @@
         </ol>
     <p>from the Palette. 
     <p>Connect them by clicking on one and dragging to the other. The segment is divided in two areas, the left is for moving, the right for connections. 
-    The device can be connecting by clicking on the device type (second row). 
+    The device can be connected by clicking on the device type (second row). 
     One EMB_RES resource is already present in the device. The MGR_ID <span class="address">localhost:61499</span> specifies the IP:PORT where the device will run. 
     In this case it'll run locally and will listen at the port 61499.</p>
       <img src="../../html/4diacIDE/img/Step1/systemConfigurationEditor.png" alt="System Configuration Editor" />
@@ -151,7 +152,7 @@
     
     <h3 id="deviceProfileConfiguration">Configuration of the Device's Configuration Profile</h3>
     <p>In order to support different device vendors' download mechanism you need to specify the device profile to be used for your device.
-    currently 4DIAC-IDE supports the following two device profiles:
+    currently 4diac-IDE supports the following two device profiles:
     </p>
     <ul>
       <li><span class="specificText">HOLOBLOC</span> Device conforming to the <span class="specificText">"IEC 61499 Compliance Profile for Feasibility Demonstrations"</span>. 
@@ -302,11 +303,11 @@
 
 <p>Now that you know how to do a centralized solution, let's try and distribute things:</p>
 
-<p><a href="../../html/4diacIDE/distribute4diac.html">Step 2 - Distribute 4DIAC applications</a></p>
+<p><a href="../../html/4diacIDE/distribute4diac.html">Step 2 - Distribute 4diac applications</a></p>
 
-<p>If you want to go the back to see an overall overview of 4DIAC, here's a link</p>
+<p>If you want to go the back to see an overall overview of 4diac IDE, here's a link</p>
 
-<p><a href="../../html/4diacIDE/overview.html">Step 0 - 4DIAC-IDE - General View</a></p>
+<p><a href="../../html/4diacIDE/overview.html">Step 0 - 4diac IDE - General View</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 

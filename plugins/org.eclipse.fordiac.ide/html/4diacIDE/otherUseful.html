@@ -1,6 +1,6 @@
 <!DOCTYPE html> 
 <!--
- Copyright (c) 2016 fortiss GmbH
+ Copyright (c) 2016-2018 fortiss GmbH, Johannes Kepler University Linz
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +10,8 @@
  Contributors:
    Milan Vathoopan, Carolyn Oates, Alois Zoitl, Monika Wenger, Jose Cabral
      - initial API and implementation and/or initial documentation
+   Bianca Wiesmayr 
+     - minor text corrections
 -->
 
 <html lang="en">
@@ -23,11 +25,11 @@
 
 <h1 id="CreateTypes">Step 5 - Other basic features</h1>
 
-<p id="topOfPage">This page is part of a guide that gives a walkthrough over the major 4DIAC features.</p>
+<p id="topOfPage">This page is part of a guide that gives a walk-through over the major 4diac IDE features.</p>
 
     <ol start="0">
       <li><a href="../../html/4diacIDE/overview.html">Overview</a></li>
-      <li><a href="../../html/4diacIDE/use4diacLocally.html">Use 4DIAC locally</a></li>
+      <li><a href="../../html/4diacIDE/use4diacLocally.html">Use 4diac locally</a></li>
       <li><a href="../../html/4diacIDE/distribute4diac.html">Create a distributed application</a></li>
       <li><a href="../../html/4diacIDE/use4diacRemotely.html">Deploy remotely</a></li>
       <li><a href="../../html/4diacIDE/createOwnTypes.html">Create your own Function Blocks</a></li>
@@ -35,7 +37,7 @@
       <li><a href="../../html/4diacIDE/advancedFeatures.html">Advanced Features [optional]</a></li>
     </ol>
 
-<p>This page shows the following interesting features in 4DIAC that might improve your work:</p>
+<p>This page shows the following interesting features in 4diac IDE that might improve your work:</p>
 <ol>
   <li><a href="#ImportSystem">Import Systems and Types</a></li>
   <li><a href="#VirtualDNS">Virtual DNS Functionality</a></li>
@@ -47,59 +49,59 @@
     <p>Existing Systems can be imported as follows: </p>
 
 	<ol>
-		<li>Start 4DIAC-IDE with the desired Workspace</li>
+		<li>Start 4diac IDE with the desired Workspace</li>
 		<li>Select File/Import/Existing Projects into Workspace and press Next</li>
 		<li>Choose the folder that contains the folder with the System you want to import</li>
 		<li>Mark the desired System within the project field below</li>
-		<li>if your project is not already within your workspace and if you do not want to modify the original version of your projekt mark Copy Projects into workspace and press Finish. Consider that if you did not check Copy Projects into workspace and you delete your System within 4DIAC then your System will be deleted permanently.</li>
-		<li>Check the System is completely there, like the System Configuration with the Devices and Resources as well as the Application with FBs and both event and data connects.</li>
+		<li>If your project is not yet within your workspace and if you do not want to modify the original version of your project, mark Copy Projects into workspace and press Finish. Consider that if you did not check Copy Projects into workspace and you delete your System within 4diac IDE, your System will be deleted permanently.</li>
+		<li>Verify that the System is completely there, that is the System Configuration with the Devices and Resources as well as the Application with FBs and both event and data connections.</li>
 	</ol>
 
 	<h2 id= "ImportType">Import existing IEC 61499 Types</h2>
-	  <p>New systems per default contain a copy the IEC 61499 types in the tool-library. If different types are need, for example from another project or another IEC 61499 engineering tool, these type files can be easily added by copying them into the project directory at the desired place. Furthermore the Type Navigator allows to drag and drop types between projects as well as within a project to a different folder.</p>
+	  <p>By default, new systems contain a copy of the IEC 61499 types in the tool-library. If different types are needed, for example from another project or another IEC 61499 engineering tool, these type files can be easily added by copying them into the project directory to the desired location. Furthermore, the Type Navigator allows to drag and drop types between projects as well as within a project to a different folder.</p>
 	    
 	<h1 id= "VirtualDNS">Virtual DNS Functionality</h1>
 
-	  <p>The Properties View provides a Virtual DNS editor. This functionality allows defining a set of variables which are replaced by a specified value. The variable names can be used for parameters of Function Blocks and Devices. During the deployment, all variables which are available in the VirtualDNS are replaced with the specified value. For using a variable, the variable name has to be written between %. In the example below, two Configurations were created: local and rasbpi. The configuration rasbpi has the ip variable set to a value of 192.168.0.7, and the local to 127.0.0.1. In the main view, the variable ip is used as the ip address of the FORTE device. When you want to use a local FORTE, just change the configuration and check Active Configuration instead of changing each time the value.</p> 
+	  <p>The Properties View provides a Virtual DNS editor. This functionality allows defining a set of variables, which are replaced by a specified value. The variable names can be used for parameters of Function Blocks and Devices. During the deployment, all variables which are available in the VirtualDNS are replaced with the specified value. For using a variable, the variable name has to be written between %. In the example below, two Configurations were created: local and rasbpi. The configuration rasbpi has the ip variable set to a value of 192.168.0.7, and the local to 127.0.0.1. In the main view, the variable ip is used as the ip address of the FORTE device. When you want to use a local FORTE, just change the configuration and check Active Configuration instead of changing each time the value.</p> 
 	 
 	<img src="../../html/4diacIDE/img/virtualDNS.png" alt="Virtual DNS"/>
 
     <h1 id="CreateBootfiles">Creating Boot-files</h1>
     <p>When the option 
     <span class="specificText">FORTE_SUPPORT_BOOTFILE</span> is enabled for the FORTE you are using, on startup FORTE tries to load a so called boot-file. This boot-file has to be located in the same directory as your FORTE binary and needs to be named <span class="fileLocation">forte.fboot.</span> This file contains the FB network configuration for the device and will be automatically instantiated during startup of FORTE.</p>
-    <p>In order to create such boot-files you need to select one or more devices or resources in the <span class="view4diac">Download Selection View</span> and select <span class="menu4diac">Create FORTE boot-files...</span> from the context menu</p>
+    <p>In order to create such boot-files, you need to select one or more devices or resources in the <span class="view4diac">Download Selection View</span> and select <span class="menu4diac">Create FORTE boot-files...</span> from the context menu.</p>
     <p>
       <img src="../../html/4diacIDE/img/createBootFileContextMenu.png" alt="Create Boot-file context menu" />
     </p>
-    <p>In the wizard you can then select the devices and resources for which you like to create boot-files as well as the directory where to place them.</p>
+    <p>In the wizard, you can then select the devices and resources for which you wish to create boot-files as well as the directory where to place them.</p>
     <p>
       <img src="../../html/4diacIDE/img/createBootFileWizard.png" alt="Create Boot-file Wizard" />
     </p>
-    <p>On pressing <span class="button4diac">Finish</span> one boot-file will be created per device. This boot-file will contain the selected resources and the FB networks contained in the resources. As only the resources selected are included in the boot-file you can have a larger set of resources during development (e.g., for test-code) and use only the main resources for the boot-file. The name of the boot-file will be a combination of system and device name dot fboot. Before using it you need to rename it to forte.fboot.</p>
+    <p>On pressing <span class="button4diac">Finish</span> one boot-file will be created per device. This boot-file will contain the selected resources and the FB networks contained in the resources. As only the resources selected are included in the boot-file, you can have a larger set of resources during development (e.g., for test-code) and use only the main resources for the boot-file. The name of the boot-file will be a combination of system and device name dot fboot. Before using it you need to rename it to forte.fboot.</p>
 	
 <h1>Where to go from here?</h1>
 
-<p>The last step is optional, and shows some advanced features of 4DIAC that you might use in more complicated applications.</p>
+<p>The last step is optional, and shows some advanced features of 4diac IDE that you might use in more complicated applications.</p>
 
 <p><a href="../../html/4diacIDE/advancedFeatures.html">Step 6 (optional) - Advanced Features</a></p>
 
 <p>If you want to see some examples, the following link is an index of the available examples in the documentation:</p>
 
-<p><a href="../../html/examples/examplesIndex.html">4DIAC Examples</a></p>
+<p><a href="../../html/examples/examplesIndex.html">4diac Examples</a></p>
 
 <p>If you have a specific platform that has input and outputs that is supported by FORTE, for example a Raspberry Pi or a PLC, and you want to use them, go to following page:</p>
 
 <p><a href="../../html/parameters/parameters.html">Parameters for different platforms</a></p>
 
-<p>If you want to use a specific communication protocol supported by FORTE, for example MQTT, OPC UA, Modbus and so on, go this page:</p>
+<p>If you want to use a specific communication protocol supported by FORTE, for example MQTT, OPC UA, Modbus and so on, go to this page:</p>
 
 <p><a href="../../html/communication/communicationIndex.html">Communication Protocols</a></p>
 
-<p>If you want to go back to see again how to create your own Function Blocks, here's a link</p>
+<p>If you want to go back to see again how to create your own Function Blocks, here's a link:</p>
 
 <p><a href="../../html/4diacIDE/createOwnTypes.html">Step 4 - Create your own Function Blocks</a></p>
 
-<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+<p>If you want to go back to the Start Here page, we leave you here a fast access:</p>
 
 <p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 

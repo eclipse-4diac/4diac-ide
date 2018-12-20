@@ -1,7 +1,7 @@
 <!DOCTYPE html> 
 <!--
- Copyright (c) 2017 fortiss GmbH
-               2018 Andrea Zoitl
+ Copyright (c) 2017-2018 fortiss GmbH
+               2018 Andrea Zoitl, Johannes Kepler University Linz
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -12,19 +12,20 @@
     Jose Cabral 
      - initial API and implementation and/or initial documentation
     Andrea Zoitl - cleaning up tutorials for 1.10 release
+    Bianca Wiesmayr - minor text corrections
 -->
 
 <html lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Step 2 - Distribute 4DIAC applications</title>
+    <title>Step 2 - Distribute 4diac applications</title>
     <link rel="stylesheet" type="text/css" href="../help.css" />
   </head>
   <body>
 
-    <h1 id="topOfPage">Step 2 - Distribute 4DIAC applications</h1>
+    <h1 id="topOfPage">Step 2 - Distribute 4diac applications</h1>
 
-    <p>This page is part of a guide that gives a walkthrough over the major 4DIAC features.</p>
+    <p>This page is part of a guide that gives a walk-through over the major 4diac IDE features.</p>
 
     <ol start="0">
       <li><a href="../../html/4diacIDE/overview.html">Overview</a></li>
@@ -41,7 +42,7 @@
   We want to count how many times the light has turned on. 
   You will learn how to distribute a IEC 61499 Application to several devices and set up the communication between them.
   The example continues to run on the local computer. 
-  The Application will run on 2 devices. 
+  The application will run on 2 devices. 
   The blinking part of the application will run on a 4diac FORTE and the count on another 4diac FORTE, see the architecture below.
   The two different programs running on the local machine emulate two PLCs.
   <br><img src="../../html/4diacIDE/img/distributedArchitecture.png" alt="architecture for the current step"/></p>
@@ -58,7 +59,7 @@
             <li>E_CTU</li>
           </ul>
       </li>
-      <li>Create the connections between them the FBs.</li>
+      <li>Create the connections between the FBs.</li>
     </ol>
     
     <p>Remember, Event and Data connections can not be mixed.</p>
@@ -68,13 +69,13 @@
  <!--********************************************************************************************-->
     <h2 id="AddAnotherDevice">Add Another Device</h2>
     
-	<p>Change to the <i>BlinkTest</i> System Configuration Editor an add a second device from the Palette. 
-    The counter will run on the new device</p> 
+	<p>Change to the <i>BlinkTest</i> System Configuration Editor and add a second device from the Palette. 
+    The counter will run on the new device.</p> 
 
     <ol>
 	  <li>Drag and Drop a <b>FORTE_PC</b> device next to the existing one.</li>
 	  <li>Rename the device to <b>Counter</b>.</li>
-      <li>Set the localhost to 61500. The devices need to have different localhosts, they can not have the same.</li>
+      <li>Set the localhost to 61500. The devices need to have different localhosts, they can not have the same one.</li>
 	  <li>Rename the resource to <b>Counter_RES</b>.</li>
     </ol>
     
@@ -91,7 +92,7 @@
         
     <p>Change to the <i>Testee.Blinky_RES</i> or <i>Counter.Counter_RES</i> Resource Editor. 
     There you can see 2 incomplete FBs at the E_SR FB or E_PERMIT. 
-    It symbolizes the broken connections between the two devices.
+    They symbolize the broken connections between the two devices.
     Currently they have no opportunity to communicate with each other. 
     We fix it by adding special Communications FBs.
     You can find more information about broken connections <a href="../../html/before4DIAC/iec61499.html#brokenConnection">here on our Homepage</a>.</p> 
@@ -119,20 +120,20 @@
      <img src="../../html/4diacIDE/img/Step2/counterResourceComplete.png" alt="Counter_RES completely connected" />
         
 <!--********************************************************************************************-->
-    <h2 id="startDevices">Start both devices</h2>
+    <h2 id="startDevices">Start both Devices</h2>
     
     <p>Change to the Deployment Perspective.</p> 
     
     <ol>
-      <li>Set the Port to 61499 (the same define before, remember localhost:61499 in the System Configuration Editor?)</li>
-      <li>Launch Local FORTE</li>
-      <li>You should see the the location of your 4diac FORTE and the Terminate button enabled in the Console.</li>
+      <li>Set the Port to 61499 (the same as defined before, remember localhost:61499 in the System Configuration Editor?).</li>
+      <li>Launch Local 4diac FORTE.</li>
+      <li>You should see the location of your 4diac FORTE and the Terminate button enabled in the Console.</li>
       <li>Set the Port to 61500 (the same define before, remember localhost:61500 in the System Configuration?)</li>
-      <li>Launch Local FORTE</li>
+      <li>Launch Local 4diac FORTE</li>
       <li>You should see the the location of your 4diac FORTE and the Terminate button enabled in the Console.</li>
       <li>Select the elements to deploy. 
           For this tutorial select our devices <i>Counter</i> and <i>Testee</i>.</li>
-      <li>Click the <span class="button4diac">Deploy</span> button</li>
+      <li>Click the <span class="button4diac">Deploy</span> button.</li>
       <li>Check that the <i>Deployment Console</i> shows some output, and that no red warning appears on the right nor left of it. 
           If you get something red, something went wrong.</li>
     </ol>

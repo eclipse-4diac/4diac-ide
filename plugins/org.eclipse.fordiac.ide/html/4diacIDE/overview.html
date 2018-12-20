@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
  Copyright (c) 2010 - 2015 Profactor GmbH, TU Wien ACIN, fortiss GmbH
-               2018 Andrea Zoitl
+               2018 Andrea Zoitl, Johannes Kepler University Linz
                  
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -13,12 +13,13 @@
    Gerd Kainz, Carolyn Oates, Jose Cabral 
      - initial API and implementation and/or initial documentation
    Andrea Zoitl - cleaning up tutorials for 1.10 release
+   Bianca Wiesmayr - minor text corrections
 -->
 
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Step 0 - 4DIAC IDE - Overview</title>
+	<title>Step 0 - 4diac IDE - Overview</title>
 	<link rel="stylesheet" type="text/css" href="../help.css">
 </head>
 <body>
@@ -27,7 +28,7 @@
 
 <h1 id="topOfPage">Step 0 - 4diac IDE Overview</h1>
 
-<p>This page is part of a guide that gives a walkthrough over the major 4diac IDE features.</p>
+<p>This page is part of a guide that gives a walk-through over the major 4diac IDE features.</p>
 
     <ol start="0">
       <li>Overview (YOU ARE HERE!)</li>
@@ -39,7 +40,7 @@
       <li><a href="../../html/4diacIDE/advancedFeatures.html">Advanced Features [optional]</a></li>
     </ol>
 
-<p>In this Step 0, it's presented an overview about Elements, Perspectives and Properties of 4diac IDE that you need to know for a smoother use of it.</p>
+<p>In this Step 0, an overview is presented - about Elements, Perspectives and Properties of 4diac IDE that you need to know to use it smoothly.</p>
 
 <!--********************************************************************************************-->
 
@@ -48,7 +49,7 @@
 <p>To start the tutorial open 4diac IDE. 
 You will be prompted to select or create your workspace. 
 For this tutorial we name our workspace "Tutorial".
-A workspace is a folder on your computer to store one or more 4diac projects.</p>
+A workspace is a folder on your computer to stores one or more 4diac IDE projects.</p>
 
 <p><img src="../../html/4diacIDE/img/Step0/workspaceSelection.png" alt="workspace selection"/></p>
 
@@ -57,7 +58,7 @@ Here you can get an overview about 4diac, create a new project, import an existi
 
 <p><img src="../../html/4diacIDE/img/Step0/welcomeScreen.png" alt="welcome screen of 4diac IDE"/></p>
 
-<p>At first it's best to unselect the checkbox so you can start up 4diac faster the next time.</p>
+<p>At first it's best to unselect the checkbox so you can start up 4diac IDE faster the next time.</p>
 
 <p>Next you click at the <i>workbench</i> button. This brings you to the main screen of 4diac IDE.</p>
 
@@ -94,7 +95,7 @@ Here you can get an overview about 4diac, create a new project, import an existi
 		<li><span class="inlineTitle">Applications</span> according to the IEC 61499 <span class="element61499">Application</span> Model and found under 4diac IDE System Model</li>
 		</ul>
 	<li><span class="inlineTitle"> <img src="../../html/4diacIDE/img/perspective/deploymentButton.gif" alt="Deployment Perspective Button" class="inlineImg"/> Deployment </span> perspective where the <span class="element61499">Applications</span> are launched and tested</li>
-	<li><span class="inlineTitle"> <img src="../../html/4diacIDE/img/perspective/debugButton.gif" alt="Debug Perspective Button" class="inlineImg"/> 4diac Debug </span> perspective where <span class="element61499">Applications</span> can be monitored</li>
+	<li><span class="inlineTitle"> <img src="../../html/4diacIDE/img/perspective/debugButton.gif" alt="Debug Perspective Button" class="inlineImg"/> 4diac IDE Debug </span> perspective where <span class="element61499">Applications</span> can be monitored</li>
 </ol>
 
 <!--********************************************************************************************-->
@@ -133,9 +134,9 @@ Here you can get an overview about 4diac, create a new project, import an existi
 <!--********************************************************************************************-->
 
 <h2 id="preferences">4diac IDE Preferences</h2>
-<p>Before starting with the engineering process of IEC 61499 <span class="element61499">Applications</span>, you should set the preferences for the 4diac IDE under <span class="menu4diac">Window &rarr; Preferences &rarr; 4DIAC</span>.</p> 
+<p>Before starting the engineering process of IEC 61499 <span class="element61499">Applications</span>, you should set the preferences for the 4diac IDE under <span class="menu4diac">Window &rarr; Preferences &rarr; 4diac</span>.</p> 
 <p>Later in <i>Step 1 - Use 4diac IDE locally</i> you learn more about the preferences. For now it’s good to know there are different preference pages where various parameter settings for the 4diac IDE can be made, like different colors or connection routers.
-   In order to use the Runtime Launcher of the <a href="#deploymentPerspective">deployment perspective</a> the location of the run executable files must be set in the properties. Currently 2 runtime envirements are supported.</p>
+   In order to use the Runtime Launcher of the <a href="#deploymentPerspective">deployment perspective</a> the location of the run executable files must be set in the properties. Currently two runtime environments are supported.</p>
 <ol>
 	<li><a href="http://www.eclipse.org/4diac/en_rte.php" >4diac Forte</a>: <span class="fileLocation">path/forte.exe</span></li>
     <li><a href="https://www.holobloc.com/">Holobloc’s FBRT</a>: <span class="fileLocation">path/fbrt.jar</span></li>
@@ -155,8 +156,8 @@ Here you can get an overview about 4diac, create a new project, import an existi
 	<li><img src="../../html/4diacIDE/img/properties/icon_save.png" alt="Save Icon" class="inlineImg"/> allows to save changes from the toolbar or the file (Save or Save All is used) but also by the key <span class="inlineCode">Ctrl + s</span></li>
 	<li><img src="../../html/4diacIDE/img/properties/undoredo.png" alt="Undo/Redo Icon" class="inlineImg"/> provides undo and/or redo of last changes</li>
 	<li><img src="../../html/4diacIDE/img/properties/zoom.png" alt="Zoom Functionality" class="inlineImg"/> provides zoom functionality in the toolbar or the menu entries in the context menu of an editor but also by pressing <span class="button4diac">Ctrl</span> and scrolling the mouse wheel</li>
-	<li>Function Block instances and <span class="element61499">Devices</span> respectively can be deleted using the <span class="button4diac">Del</span> key or the context menu entry Delete.</li>
-	<li>Instance names of Function Blocks, <span class="element61499">Resources</span> or <span class="element61499">Devices</span> can be changed by double click that enables the instance name field to be editable. It is also possible to change the instance name in the Properties View at the bottom of the window.<br/>
+	<li>Function Block instances or <span class="element61499">Devices</span> can be deleted using the <span class="button4diac">Del</span> key or the context menu entry Delete.</li>
+	<li>Instance names of Function Blocks, <span class="element61499">Resources</span> or <span class="element61499">Devices</span> can be changed by a double click that enables the instance name field to be editable. It is also possible to change the instance name in the Properties View at the bottom of the window.<br/>
 	<img src="../../html/4diacIDE/img/properties/instanceName.png" alt="change instance name by double click or property view"/></li> 
 </ul>
 
