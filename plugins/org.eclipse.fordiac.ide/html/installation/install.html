@@ -31,10 +31,10 @@ If you only want to use available Function Blocks you are ready to go.</p>
 		
 <h3>Building your own 4DIAC-IDE from source</h3>
 
-<p>Running 4DIAC-IDE from source has the great advantage that you can easily keep up with the developments performed in the Mercurial repository. In case you want to run 4DIAC-IDE from source follow the Installation steps under <a href="../development/building4diac.html#buildFromSource" target="_blank">4DIAC-IDE Installation from Source</a></p>
+<p>Running 4DIAC-IDE from source has the great advantage that you can easily keep up with the developments performed in the Mercurial repository. In case you want to run 4DIAC-IDE from source follow the Installation steps under <a href="../../html/development/building4diac.html#buildFromSource" target="_blank">4DIAC-IDE Installation from Source</a></p>
 
 <h2 id="precompiledFORTE">Precompiled FORTE</h2>
-<p>For conducting first experiments with 4DIAC you can use the pre-build version of FORTE which comes along in the runtime directory of the 4DIAC-IDE package. <a href="../4diacIDE/overview.html" target="_blank">Step by step tutorial</a> will direct you making a simple application with 4DIAC-IDE and using built-in FORTE. However if you want to develop your own Function Blocks or you want to run FORTE on different control devices, then you have to download and set up FORTE for the specific platform you are using. This means that you will need to compile FORTE from the source code. In the following section a general explanation is given, followed by the cases of Windows and Unix-based system, since most user's first test is done in these platforms. For other platforms, links are provided <a href="#forteOtherPlatforms">here</a> below.</p>
+<p>For conducting first experiments with 4DIAC you can use the pre-build version of FORTE which comes along in the runtime directory of the 4DIAC-IDE package. <a href="../../html/4diacIDE/overview.html" target="_blank">Step by step tutorial</a> will direct you making a simple application with 4DIAC-IDE and using built-in FORTE. However if you want to develop your own Function Blocks or you want to run FORTE on different control devices, then you have to download and set up FORTE for the specific platform you are using. This means that you will need to compile FORTE from the source code. In the following section a general explanation is given, followed by the cases of Windows and Unix-based system, since most user's first test is done in these platforms. For other platforms, links are provided <a href="#forteOtherPlatforms">here</a> below.</p>
 
 <p>If you want to start using 4DIAC right away, you can skip the rest of the page and go directly to <a href="#whereToGoFromHere">end</a> where you can decide your next step.</p>
 
@@ -55,13 +55,13 @@ $ git clone https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte</div>
 <ol>
 
 <li><p>When starting the CMake-GUI you have to select the source directory (1), which is FORTE_FOLDER_ROOT and also the directory where to build the binaries (2) (e.g. <span class="folderLocation">FORTE_FOLDER_ROOT/bin/posix</span> or <span class="folderLocation">FORTE_FOLDER_ROOT/bin/win32</span>, and so on) which is the output directory (let's call it OUTPUT_FOLDER). In OUTPUT_FOLDER, CMake will put the build project files (e.g., the makefiles) as well as any configuration data which then are compiled creating the executable. Then you will need to press the <span class="button4diac">Configure</span> button (3) at the low part of CMake. If you asked to create a folder if it doesn't exist, say yes.</p>
-<div><img src="./img/CMakeFirstStep.png" alt="First step in CMake"></div></li>
+<div><img src="../../html/installation/img/CMakeFirstStep.png" alt="First step in CMake"></div></li>
 
 <li><p>A window will pop up that lets you select the kind of project you like to build. For the correct Project Setting please have a look at the settings for your corresponding platform in the links below, but making it short, in this first configuration you tell CMake if you would like to export the files as a project for Visual Studio, Eclipse or some other type of project, and the compiler you will use to compile the executable. In this step you would select the cross-compiler that you would use if you are compiling for a specific platform different from the one where you are compiling (for example, compiling for a Raspberry Pi or a PLC from a Windows or a Linux computer).</p>
-<div><img src="./img/CMakeSelectCompiler.png" alt="Select compiler in CMake"></div></li>
+<div><img src="../../html/installation/img/CMakeSelectCompiler.png" alt="Select compiler in CMake"></div></li>
 
 <li><p>After selecting the type of project and compiler, the CMake main window shows a list of red marked options. The color red doesn't mean that something is wrong, but that these rows were affected by the last configuration, so they need to be checked. These options allow you to configure your FORTE build. The minimal configuration you have to perform is to select the architecture you like to build for using the <span class="specificText">FORTE_ARCHITECTURE</span> option and the modules with the function block libraries you like to enable (a basic configuration uses <span class="specificText">FORTE_MODULE_CONVERT</span>, <span class="specificText">FORTE_MODULE_IEC61131</span> and <span class="specificText">FORTE_MODULE_UTILS</span>). The modules that you enable, represent the group of Function Blocks that the your FORTE executable will contain. You should also keep the option <span class="specificText">FORTE_SUPPORT_MONITORING</span> (which is found when ticking the Advanced box)enabled for Debugging and FB-Testing. Another important option is the <span class="specificText">CMAKE_BUILD_TYPE</span>, which determines if your building a <span class="specificText">Debug</span> or <span class="specificText">Release</span> version. Write the according word to the option to select.</p>
-<div><img src="./img/CMakeBasicConfig.png" alt="Basic Configuration in CMake"></div></li>
+<div><img src="../../html/installation/img/CMakeBasicConfig.png" alt="Basic Configuration in CMake"></div></li>
 
 <li><p>After you change some options in CMake, you must press again Configure, until no more red rows appear. Then, press the <span class="button4diac">Generate</span> button to create the project files in OUTPUT_FOLDER.</p></li>
 
@@ -89,7 +89,7 @@ $ git clone https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte</div>
 	<li>Create a folder inside of it called EXAMPLE_TEST (the name doesn't need to be exactly the name of the module, but this helps organizing) and access it.</li>
 	<li>Put in the subfolder all six files (a .cpp and .h file for each FB).</li>
 	<li>Create a file called <span class="fileLocation">CMakeLists.txt</span> (this cannot be different).
-	<div><img src="./img/modulesFiles.png" alt="File Structure to add modules"></div></li>
+	<div><img src="../../html/installation/img/modulesFiles.png" alt="File Structure to add modules"></div></li>
 	<li>Inside write:
 	<div class="code">forte_add_module(EXAMPLE_TEST "Example test module")
 
@@ -100,7 +100,7 @@ forte_add_sourcefile_hcpp(ServiceTest)</div>
 	and save. The first parameter of <span class="specificText">forte_add_module</span> is the name of the module; the second is a commentar. The <span class="specificText">forte_add_sourcefile_hcpp</span> command tells CMake which .cpp and .h files to compile. You can use <span class="specificText">forte_add_subdirectory</span> to include subdirectories which again have their own <span class="fileLocation">CMakeLists.txt</span> file</li>
 	<li>In CMake, there's a variable called <span class="specificText">FORTE_EXTERNAL_MODULES_DIRECTORY</span>. Set this to the <span class="folderLocation">forteModules</span> folder.</li>
 	<li>When pressing Configute in CMake, a variable called <span class="specificText">FORTE_MODULE_EXAMPLE_TEST</span> will appear. Checking the box will include the module for compilation.
-	<div><img src="./img/modulesCMake.png" alt="CMake configuration for external modules"></div></li>
+	<div><img src="../../html/installation/img/modulesCMake.png" alt="CMake configuration for external modules"></div></li>
 	<li>After setting all the desired variables, do the same as before: Generate and then compile</li>
 </ol>
 
@@ -128,22 +128,22 @@ $ make</div> </li>
 			
 <h2 id="forteOtherPlatforms">Build FORTE for other platforms</h2>
 	<ul>
-		<li><a href="./raspi.html">Setting up FORTE for RaspberryPi</a></li>
-		<li><a href="./raspberrySPS.html">Setting up FORTE for RaspberryPi SPS</a></li>
-		<li><a href="./wago.html">Setting up FORTE for Wago PFCs SPS</a></li>
-		<li><a href="./legoMindstormEv3.html">Setting up FORTE for Lego Mindstorms EV3</a></li>
-		<li><a href="./mindstorms.html">Setting up FORTE for Lego Mindstorms</a></li>
+		<li><a href="../../html/installation/raspi.html">Setting up FORTE for RaspberryPi</a></li>
+		<li><a href="../../html/installation/raspberrySPS.html">Setting up FORTE for RaspberryPi SPS</a></li>
+		<li><a href="../../html/installation/wago.html">Setting up FORTE for Wago PFCs SPS</a></li>
+		<li><a href="../../html/installation/legoMindstormEv3.html">Setting up FORTE for Lego Mindstorms EV3</a></li>
+		<li><a href="../../html/installation/mindstorms.html">Setting up FORTE for Lego Mindstorms</a></li>
 	</ul>
 
 <h1 id="whereToGoFromHere">Where to go from here?</h1>
 
 <p>Now that you installed the required tools, it's time to start using them. Take a look at the following page:</p>
 
-<p><a href="../4diacIDE/overview.html">Step by step tutorial</a></p>
+<p><a href="../../html/4diacIDE/overview.html">Step by step tutorial</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 

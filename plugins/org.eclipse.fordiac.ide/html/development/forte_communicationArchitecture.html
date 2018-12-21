@@ -62,7 +62,7 @@
   </ul>
 
   <figure class="center">
-    <img class="center" src="./img/Network_overview.png" alt="Overview of the Network Layer" />
+    <img class="center" src="../../html/development/img/Network_overview.png" alt="Overview of the Network Layer" />
     <figcaption>Figure 1: Overview of the Network Layer</figcaption>
   </figure>
   
@@ -70,17 +70,17 @@
   <p>The layer function openConnection is used to initialize the current layer. The layer gets two types of information, first the parameter for the initialization and a second parameter to create the bottom layer. A layer does not know anything about the layer beneath it, therefore a factory class has to create the beneath layer. The beneath layer is created with the second parameter of the openConnection function, if this is 0 no more layers below will be created. The openConnection function is called when the function block receives an INIT+ event. The function can also fail, for example, when the network device is not ready.</p>
   
   <figure class="center">
-    <img class="center" src="./img/OpenConnection.png" alt="Open connection successful"/>
+    <img class="center" src="../../html/development/img/OpenConnection.png" alt="Open connection successful"/>
     <figcaption>Figure 2: Open connection successful</figcaption>
   </figure>
   <figure class="center">
-    <img class="center" src="./img/OpenConnectionFailed.png" alt="Open connection failed" />
+    <img class="center" src="../../html/development/img/OpenConnectionFailed.png" alt="Open connection failed" />
     <figcaption>Figure 3: Open connection failed</figcaption>
   </figure>
   <h4 id="closeConnection">Close Connection</h4>
   <p>The closeConnection function is dependant to the openConnection function. The function closes all beneath layers and then closes the own connection.</p>
   <figure class="center">
-    <img class="center" src="./img/CloseConnection.png" alt="Sequence diagram of closing a connection" />
+    <img class="center" src="../../html/development/img/CloseConnection.png" alt="Sequence diagram of closing a connection" />
     <figcaption>Figure 4: Sequence diagram of closing a connection</figcaption>
   </figure>
   
@@ -94,7 +94,7 @@
   </ul>
   
   <figure class="center">
-    <img class="center" src="./img/SendData.png" alt="Send data on an established connection" />
+    <img class="center" src="../../html/development/img/SendData.png" alt="Send data on an established connection" />
     <figcaption>Figure 5: Send data on an established connection</figcaption>
   </figure>
   
@@ -110,7 +110,7 @@
   layer and starts an execution event chain. The bottom layer then invokes the function block thread by calling interruptCommFB(..). Once the Function Block receives the External Event it will call the processInterrupt function of the network layer. Process interrupt will be usually done at the bottom or middle layer depending on how the data is processed. Afterwards, the recvData(..) function will be called from lower to upper layer until the FunctionBlock receives the data and emits the CNF+/IND+ signal</p>
   
   <figure class="center">
-    <img class="center" src="./img/RecvData.png" alt="Receive data of an established connection" />
+    <img class="center" src="../../html/development/img/RecvData.png" alt="Receive data of an established connection" />
     <figcaption>Figure 6: Receive data of an established connection</figcaption>
   </figure>
   
@@ -119,7 +119,7 @@
   <p>Receiving data is a special case of a generic interrupt. The generic interrupt can also be used to receive errors of the network, like a lost connection. In the same way as in the example of receiving data, the external event handler informs the bottom network layer which invokes the function block interrupt (or in some cases an intermediate layer) and starts the event chain. Then, after receiving the External Event signal, the function block sends the processInterrupt() to the network layer, which returns an INIT- event indicating a lost connection.</p>
   
   <figure class="center">
-    <img class="center" src="./img/AsyncError.png" alt="Connection abort interrupt from network interface" />
+    <img class="center" src="../../html/development/img/AsyncError.png" alt="Connection abort interrupt from network interface" />
     <figcaption>Figure 7:Connection abort interrupt from network interface</figcaption>
   </figure>
   
@@ -323,11 +323,11 @@
 
 <p>Go back to Development index:</p>
 
-<p><a href="./developmentIndex.html">Development Index</a></p>
+<p><a href="../../html/development/developmentIndex.html">Development Index</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 

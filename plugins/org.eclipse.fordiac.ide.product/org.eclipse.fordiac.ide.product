@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="1.10.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="1.10.1.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.eclipse.fordiac.ide.images/images/dialog.png"/>
@@ -16,7 +16,7 @@
    <launcherArgs>
       <programArgs>-nl en
       </programArgs>
-      <vmArgs>-Declipse.buildId=1.10.0
+      <vmArgs>-Declipse.buildId=1.10.1
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
@@ -287,8 +287,6 @@
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="3" />
-      <property name="4diac.buildId" value="2018-03-19" />
-      <property name="4diac.versionId" value="1.10.0" />
    </configurations>
 
    <preferencesInfo>
