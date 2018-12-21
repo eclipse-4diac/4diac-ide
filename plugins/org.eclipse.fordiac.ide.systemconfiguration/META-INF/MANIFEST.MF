@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.ui.views.properties.tabbed,
  org.eclipse.fordiac.ide.deployment.iec61499
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.10.0.qualifier
+Bundle-Version: 1.10.1.qualifier
 Bundle-Name: System Configuration (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.systemconfiguration.Activator
 Bundle-ManifestVersion: 2

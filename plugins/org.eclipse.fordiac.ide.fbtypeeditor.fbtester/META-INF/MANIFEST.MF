@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FB tester (Incubation)
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.fbtester;singleton:=true
-Bundle-Version: 1.10.0.qualifier
+Bundle-Version: 1.10.1.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

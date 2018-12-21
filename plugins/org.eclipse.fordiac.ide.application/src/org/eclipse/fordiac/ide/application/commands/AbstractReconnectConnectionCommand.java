@@ -43,14 +43,6 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	}
 	
 	@Override
-	public boolean canRedo() {
-		//The default implementation of canRedo calls canExecute. The data need for canExecute is at this time not 
-		//valid any more. Therefore we need to have an own implementation. 
-		//TODO model refactoring - consider if this can always be true
-		return (null != deleteConnectionCmd) && (null != connectionCreateCmd);
-	}
-	
-	@Override
 	public boolean canExecute() {
 		EditPart source = null;
 		EditPart target = null;
@@ -72,30 +64,31 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	@Override
 	public void execute() {
 		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
+		Connection con = (Connection) request.getConnectionEditPart().getModel();
+		deleteConnectionCmd = new DeleteConnectionCommand(con);
+		connectionCreateCmd = createConnectionCreateCommand();
+
 		if (request.getType().equals(RequestConstants.REQ_RECONNECT_TARGET)) {
 			doReconnectTarget();
 		}
 		if (request.getType().equals(RequestConstants.REQ_RECONNECT_SOURCE)) {
 			doReconnectSource();
 		}	
+		
+		connectionCreateCmd.setArrangementConstraints(con.getDx1(), con.getDx2(), con.getDy());
+		
+		deleteConnectionCmd.execute();
+		connectionCreateCmd.execute();
 	}
 
 	protected void doReconnectSource() {
-		deleteConnectionCmd = new DeleteConnectionCommand((Connection) request.getConnectionEditPart().getModel());
-		connectionCreateCmd = createConnectionCreateCommand();
 		connectionCreateCmd.setSource(((InterfaceEditPart) request.getTarget()).getModel());
 		connectionCreateCmd.setDestination(((InterfaceEditPart) request.getConnectionEditPart().getTarget()).getModel());
-		deleteConnectionCmd.execute();
-		connectionCreateCmd.execute();
 	}
 	
 	protected void doReconnectTarget() {
-		deleteConnectionCmd = new DeleteConnectionCommand((Connection)request.getConnectionEditPart().getModel());
-		connectionCreateCmd = createConnectionCreateCommand();
 		connectionCreateCmd.setSource(((InterfaceEditPart) request.getConnectionEditPart().getSource()).getModel());
 		connectionCreateCmd.setDestination(((InterfaceEditPart) request.getTarget()).getModel());
-		deleteConnectionCmd.execute();
-		connectionCreateCmd.execute();
 	}
 
 	@Override

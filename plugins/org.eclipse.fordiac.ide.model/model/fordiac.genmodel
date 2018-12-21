@@ -185,7 +185,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FB">
-      <genOperations ecoreOperation="lib.ecore#//FB/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xD;&#xA;if(type instanceof FBType){&#xD;&#xA;&#x9;return (FBType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
       <genOperations ecoreOperation="lib.ecore#//FB/isResourceFB" body="return org.eclipse.fordiac.ide.model.Annotations.isResourceFB(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FB/isResourceTypeFB" body="return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB(this);"/>
     </genClasses>
@@ -202,6 +201,7 @@
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/checkConnections"
           body="org.eclipse.fordiac.ide.model.Annotations.checkConnections(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isMapped" body="return org.eclipse.fordiac.ide.model.Annotations.isMapped(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getType" body="//the base class of all types a FBNetworkElement can be (FB, Subapp, Adapter) is a FBType. Therefore we can have this here.&#xA;&#xA;//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;&#xA;return super.getType() instanceof FBType ? (FBType)super.getType() : null;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//SubApp">
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"

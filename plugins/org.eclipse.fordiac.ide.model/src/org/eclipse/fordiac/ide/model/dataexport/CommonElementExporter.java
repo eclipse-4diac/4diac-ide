@@ -136,7 +136,7 @@ abstract class CommonElementExporter {
 						IResource.KEEP_HISTORY | IResource.FORCE, null);
 			} else {
 				checkAndCreateFolderHierarchy(iFile);
-				iFile.create(new ByteArrayInputStream(result.toString().getBytes("UTF-8")), //$NON-NLS-1$ 
+				iFile.create(new ByteArrayInputStream(stringWriter.toString().getBytes("UTF-8")), //$NON-NLS-1$ 
 						IResource.KEEP_HISTORY | IResource.FORCE, null);
 			}
 

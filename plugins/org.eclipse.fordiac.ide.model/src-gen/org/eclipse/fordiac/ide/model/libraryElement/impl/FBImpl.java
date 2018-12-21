@@ -17,7 +17,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
@@ -42,21 +41,6 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.FB;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public FBType getType() {
-		//this cannot be moved to the annotation class because there we don't have the super access!!!
-		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
-		if(type instanceof FBType){
-			return (FBType) type; 
-		}
-		return null;
 	}
 
 	/**

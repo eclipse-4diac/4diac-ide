@@ -34,22 +34,22 @@
 
 			<p>With the BBB connected to the computer through the USB, the next step is to connect to it through SSH. In order to do that, a SSH client is needed. For Linux machines, it's already installed and the connection can be done through the terminal, but for Windows machines the simplest solution is to use <a target="_blank" href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">Putty</a>. To connect to the BBB using Putty, just enter the IP address of the BBB (192.168.7.2), port 22 and clicking on open should open a Terminal window.</p>
 
-			<img src="./img/bbbTrafficController/Putty_interface.png" alt="Putty Interface"/>
+			<img src="../../html/examples/img/bbbTrafficController/Putty_interface.png" alt="Putty Interface"/>
 						
 			<p>The username <span class="specificText">root</span> without password should work on a BBB that has not been accessed before.</p>
 			
-			<img src="./img/bbbTrafficController/BBB-ssh.png" alt="Login into the BBB through SSH"/>
+			<img src="../../html/examples/img/bbbTrafficController/BBB-ssh.png" alt="Login into the BBB through SSH"/>
 			
 			<h2>Configuring the network in the BBB</h2>
 			
 			<p>In case you are using the USB as an ethernet interface in the BBB, some changes must be done in it in order for the communication with the computer to work. The command <span class="inlineCode">ip route</span> will show the current routes stored in the BBB.</p>
 			
-			<img src="./img/bbbTrafficController/defaultVia.png" alt="Default route via Ethernet"/>
+			<img src="../../html/examples/img/bbbTrafficController/defaultVia.png" alt="Default route via Ethernet"/>
 			
 			<p>First we are going to delete de default route that goes through the eth0 interface. Use the command <span class="inlineCode">ip route del default via [ip] dev eth0</span> where <span class="address">[ip]</span> is the IP address shown in the default entry routing to ethernet(10.200.0.1 in this case). Next, we are going to add a default entry that routes to the USB using <span class="inlineCode">ip route add default via [ip] dev usb0</span> where <span class="address">[ip]</span> is the IP address of the machine on the other side of connection with the BBB, normally 192.168.7.1.
 			Some people have reported that the interface in the BBB is not allowing Multicast packets, and that would forbid the application to communicate. In order to overcome this, check if the interface you are using in your BBB supports Multicast by using the command <span class="inlineCode">ifconfig</span> and you should see the word <span class="specificText">MULTICAST</span> (all capitals) in your interface, like the image below. If not, run the command: <span class="inlineCode">ifconfig usb0 multicast</span></p> 
 			
-			<img src="./img/bbbTrafficController/multicast.png" alt="Multicast allowed in both ethernet and usb interfafces"/>
+			<img src="../../html/examples/img/bbbTrafficController/multicast.png" alt="Multicast allowed in both ethernet and usb interfafces"/>
 
 			<h2>Running FORTE in the BBB</h2>
 			
@@ -70,23 +70,23 @@
 		
 			<p>For building FORTE in the BBB, you need to navigate to the folder where you copied all the files, and run: <span class="inlineCode">./setup_posix.sh</span> which will run CMake and prepare all files. Next go to the folder <span class="fileLocation">bin/posix</span> inside your forte folder, and there execute the command: <span class="inlineCode">make</span> This will take a while because the BBB is not as fast as a normal computer. That's why a cross-compiler might be a good idea. When the compilation is finished, you will find the forte executable in the folder <span class="fileLocation">bin/posix/src</span> inside your forte folder.</p>
 
-			<p>If you have trouble with building FORTE, you can follow the steps as the <a target="_blank" href="../installation/raspi.html#building">Raspberry Pi</a>. If some softwares are missing in the BBB, find more information in the <a target="_blank" href="../installation/raspi.html#preparation">preparation</a> part of the Raspberry Pi.</p>
+			<p>If you have trouble with building FORTE, you can follow the steps as the <a target="_blank" href="../../html/installation/raspi.html#building">Raspberry Pi</a>. If some softwares are missing in the BBB, find more information in the <a target="_blank" href="../../html/installation/raspi.html#preparation">preparation</a> part of the Raspberry Pi.</p>
 		
 			<h2>Configure the system in 4DIAC-IDE</h2>
 
 			<p>Once FORTE can run on the BBB, we are going to use the 4DIAC-IDE to download part of the application on it, and the rest of the application will run in the computer. To do that, we open the Trafic Light application and configure the system where the two frame devices have the local IP address, and the Controller device has the IP address of the BBB. FORTE runs in the port 61499 by default, so be sure that the port of the controller device is set right. The ports of the two frame devices should be different from each other. Connect the devices with an Ethernet conection in the 4DIAC-IDE in case they are not connected. Save the application and you are ready to run it.</p>
 
-			<img src="./img/bbbTrafficController/Traffic-light-system.jpg" alt="Traffic light system"/>
+			<img src="../../html/examples/img/bbbTrafficController/Traffic-light-system.jpg" alt="Traffic light system"/>
 			
 			<h2>Running the example</h2>
 			
 			<p>With the application properly configured, go to the Deployment view (1) in the 4DIAC-IDE and select the Trafic Light (2) on the left tree. In the Runtime Launcher tab below it, launch the FBRT runtime two times (3), each with the proper port configured as before, and two java windows will open. Run FORTE on the BBB (4). Click Download (5) and each part of the application should be downloaded to the BBB and the two instances of FBRT. Check on the Depployment Console tab that no errors have ocurred.</p>
 			
-			<img src="./img/bbbTrafficController/Traffic-light-download.jpg" alt="Traffic light download"/>
+			<img src="../../html/examples/img/bbbTrafficController/Traffic-light-download.jpg" alt="Traffic light download"/>
 			
 			<p>One frame will contain the Enable and Disable buttons, and the other the Traffic Lights for cars and pedestrians, together with the request button. The yellow light of cars will start blinking and when clicking the Enable button, the information will be sent to the BBB which will process it, and then it will send the information to the frame with the lights, wich will start working normally.</p>
 			
-			<img src="./img/bbbTrafficController/Traffic-light-running.jpg" alt="Traffic light running"/>
+			<img src="../../html/examples/img/bbbTrafficController/Traffic-light-running.jpg" alt="Traffic light running"/>
 			
 			<p>This example should make clearer the idea behind of distributed automation and how easy it could be deployed using the 4DIAC-IDE.</p>
 			
@@ -94,12 +94,12 @@
 			
 			<p>In many cases the communication between the PC and the BBB fails, but mostly due to network configurations problems. Since multicast packets are used to communicate between devices, some adjustments may be needed, specially in windows machines. The first step is to add the multicast addresses used by the application to your route table. You will need admin rigts to do this. Run a command window (CTRL+R &rarr; cmd &rarr; enter), and type <span class="specificText">route PRINT</span> to see all the routes used by your PC. You should check that the multicast address used by the application appears there and uses your BBB Ip address as gateway. In the case of the traffic Light example it uses the address <span class="address">225.0.0.x</span>. In the picture belowe it can be seen that this address is missing.</p>
 			
-			<img src="./img/bbbTrafficController/routeMissing.png" alt="Route Missing"/>
+			<img src="../../html/examples/img/bbbTrafficController/routeMissing.png" alt="Route Missing"/>
 			
 			<p>So, the address should be added and directed towards the BBB's IP address (192.168.7.2). Use the command <span class="inlineCode">route ADD 225.0.0.0 MASK 255.255.0.0 192.168.7.2 METRIC 255</span>
 			in it should appear in the table if <span class="specificText">route PRINT</span> is executed again. After that, the packets sent to your BBB should arrive.</p>
 			
-			<img src="./img/bbbTrafficController/routeAdded.png" alt="Route Added"/>
+			<img src="../../html/examples/img/bbbTrafficController/routeAdded.png" alt="Route Added"/>
 			
 			<p>Another problem found is that even tought the BBB receives the packets and send the answer back, the application is not receiving them. Even tought the packet appears in <a target="_blank" href="https://www.wireshark.org/">Wireshark</a>, the application does not receive it. A solution is to disable the <span class="specificText">----&gt; FIREWALL &lt;---- </span>completely. After that everything should work fine.</p>
 
@@ -107,11 +107,11 @@
 
 <p>Go back to Examples index:</p>
 
-<p><a href="./examplesIndex.html">Examples Index</a></p>
+<p><a href="../../html/examples/examplesIndex.html">Examples Index</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 

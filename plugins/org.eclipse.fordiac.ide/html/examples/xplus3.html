@@ -35,7 +35,7 @@ The <span class="element61499">System</span> consists of two <span class="elemen
 <p>A IEC 61499 <span class="element61499">Application</span> is designed independent of <span class="element61499">Devices</span> and <span class="element61499">Resources</span>. The <span class="element61499">Application</span> FBs are mapped to the <span class="element61499">Resource</span> of a <span class="element61499">Device</span> they will run on after building the application. Click on the arrow beside the <span class="element4diac">Xplus3 System</span> and double-click to open the <span class="element4diac">Application</span> called <span class="element4diac">Xplus3Application</span> (note: depending on your operating system, a single click may be sufficient where double clicks are mentioned in this tutorial) 
 <p>
 
-<img src="./img/xplus3/x3_application.png" alt="X+3 TestApplication"/>
+<img src="../../html/examples/img/xplus3/x3_application.png" alt="X+3 TestApplication"/>
 
 <p>There are 3 groups of Function Blocks connected. The specific color of a Function Block shows that this block is mapped to a <span class="element61499">Device</span>. The two different colors of the FBs indicate that they are mapped to two different <span class="element61499">Devices</span>, so the <span class="element61499">Application</span> is distributed. The dashed line connections are just information. We will see how the data is passed between <span class="element61499">Devices</span> in <span class="element61499">Resources</span>.</p>
 
@@ -49,12 +49,12 @@ The <span class="element61499">System</span> consists of two <span class="elemen
 <h2 id="systemManagement">Explore Existing <span class="element4diac">System Configuration</span></h2>
 <p>Within the <span class="element61499">System</span> called <span class="specificText">Xplus3</span> there is the <span class="element4diac">System Configuration</span>. Click once on <span class="element4diac">System Configuration</span> (on left) and keep expanding the <span class="element4diac">System Configuration</span> by clicking the arrows on the left. This shows the <span class="element61499">Devices</span> and <span class="element61499">Resources</span> used.</p>
 
-<img src="./img/xplus3/x3_systemConfiguration.png" alt="System Configuration"/>
+<img src="../../html/examples/img/xplus3/x3_systemConfiguration.png" alt="System Configuration"/>
 
 <h3 id="devices">Explore Existing <span class="element61499">Devices</span></h3>
 <p>Double click on <span class="element4diac">System Configuration</span> to open the <span class="element4diac">System Configuration</span> model that shows the <span class="element61499">System</span>, the <span class="element61499">Devices</span>, their <span class="element61499">Resources</span> and the communication network the <span class="element61499">Devices</span> are connected to.</p>
 
-<img src="./img/xplus3/x3_system.png" alt="The X+3 System"/>
+<img src="../../html/examples/img/xplus3/x3_system.png" alt="The X+3 System"/>
 
 <p>There are two <span class="element4diac">Devices</span> connected via an Ethernet segment. You have to know what <span class="element4diac">Devices</span> you are using. Here it is:
 <ol>
@@ -67,11 +67,11 @@ The <span class="element61499">System</span> consists of two <span class="elemen
 <h3 id="resources">Explore Existing <span class="element61499">Resources</span></h3>
 <p>In this <span class="element61499">System</span> each <span class="element61499">Device</span> has a Manager and 1 <span class="element61499">Resource</span>, that <span class="element61499">Applications</span> can be mapped to. If you have not yet done so, click on the arrow at the left side of <span class="element4diac">System Configuration</span> to see the <span class="element61499">Devices</span> (<span class="element4diac">MICROCONTROLLER</span>; <span class="element4diac">PC</span>). In the same way, expand the <span class="element61499">Devices</span> (<span class="element4diac">MICROCONTROLLER</span>; <span class="element4diac">PC</span>) to see their <span class="element61499">Resource(s)</span>. Double-click on the <span class="element61499">Resource</span> names (<span class="element4diac">CALC</span>, <span class="element4diac">VIS</span>) to see what Function Blocks are mapped to the <span class="element61499">Resource</span>. For the <span class="element4diac">CALC Resource</span>, it looks like this: <span class="element4diac">System Configuration</span> &rarr; <span class="element4diac">MICROCONTROLLER</span> &rarr; <span class="element4diac">CALC</span></p>
 
-<img src="./img/xplus3/x3_microcontroller.png" alt="Resource on the Microcontroller"/>
+<img src="../../html/examples/img/xplus3/x3_microcontroller.png" alt="Resource on the Microcontroller"/>
 
 <p>And for the <span class="element4diac">VIS Resource</span>, like this: <span class="element4diac">System Configuration</span> &rarr; <span class="element4diac">PC</span> &rarr; <span class="element4diac">VIS</span></p>
 
-<img src="./img/xplus3/x3_pc.png" alt="Resource on the PC"/>
+<img src="../../html/examples/img/xplus3/x3_pc.png" alt="Resource on the PC"/>
 
 <p>Note the <span class="element4diac">PUBLISH_1</span> and <span class="element4diac">SUBSCRIBE_1</span> Function Blocks that are used to send data between <span class="element61499">Devices</span> or <span class="element61499">Resources</span>. The <span class="specificText">_1</span> is the number of data items being sent / received. <span class="element4diac">INT2INT</span> is used multiple times. You may ask yourself: Why convert an <span class="element4diac">INT</span> to an <span class="element4diac">INT</span> - isn't that the same thing!? </p>
 
@@ -85,7 +85,7 @@ The <span class="element61499">System</span> consists of two <span class="elemen
 
 
 <h2 id="deployment">Deploy Your Application</h2>
-<p>Switch to the <span class="view4diac">Deployment perspective</span> and set the runtime preferences. The following settings are under <span class="menu4diac">Window &rarr; Preferences &rarr; 4DIAC</span>. For further details on setting these locations see <a href="../4diacIDE/overview.html#properties">4diac-IDE Properties</a>. To run the test, the locations of the IEC 61499 executables for the <span class="element61499">Devices</span> used are required.</p> 
+<p>Switch to the <span class="view4diac">Deployment perspective</span> and set the runtime preferences. The following settings are under <span class="menu4diac">Window &rarr; Preferences &rarr; 4DIAC</span>. For further details on setting these locations see <a href="../../html/4diacIDE/overview.html#properties">4diac-IDE Properties</a>. To run the test, the locations of the IEC 61499 executables for the <span class="element61499">Devices</span> used are required.</p> 
 
 <ul>
 	<li><span class="element4diac">MICROCONTROLLER.CALC</span> uses FORTE. Therefore, the location of <span class="fileLocation">forte.exe</span> must be set within the FORTE preferences. Typically, this is somewhere below .<span class="folderLocation">/runtime/FORTE/</span>. Relative paths do not work in all setups, it is recommended to specify an absolute path here.</li>
@@ -94,7 +94,7 @@ The <span class="element61499">System</span> consists of two <span class="elemen
 
 <p>With the preferences set correctly for the IEC 61499 <span class="element61499">System</span> on the 2 <span class="element61499">Devices</span> you can now test. Click the Open perspective button on top of the title bar and add Deployment in the perspective window. The Open Perspective button of the Deployment perspective will be found besides the <span class="button4diac">System</span> perspective Button</p>
 
-<img src="./img/xplus3/x3_deployment.png" alt="Deployment of the X+3 Application"/>
+<img src="../../html/examples/img/xplus3/x3_deployment.png" alt="Deployment of the X+3 Application"/>
 
 <p>To download and test your IEC 61499 <span class="element61499">Application</span>:</p>
 
@@ -110,11 +110,11 @@ The <span class="element61499">System</span> consists of two <span class="elemen
 
 <p>Go back to Examples index:</p>
 
-<p><a href="./examplesIndex.html">Examples Index</a></p>
+<p><a href="../../html/examples/examplesIndex.html">Examples Index</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 

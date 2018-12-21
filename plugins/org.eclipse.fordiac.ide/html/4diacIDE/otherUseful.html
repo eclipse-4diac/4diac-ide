@@ -26,13 +26,13 @@
 <p id="topOfPage">This page is part of a guide that gives a walkthrough over the major 4DIAC features.</p>
 
     <ol start="0">
-      <li><a href="./overview.html">Overview</a></li>
-      <li><a href="./use4diacLocally.html">Use 4DIAC locally</a></li>
-      <li><a href="./distribute4diac.html">Create a distributed application</a></li>
-      <li><a href="./use4diacRemotely.html">Deploy remotely</a></li>
-      <li><a href="./createOwnTypes.html">Create your own Function Blocks</a></li>
+      <li><a href="../../html/4diacIDE/overview.html">Overview</a></li>
+      <li><a href="../../html/4diacIDE/use4diacLocally.html">Use 4DIAC locally</a></li>
+      <li><a href="../../html/4diacIDE/distribute4diac.html">Create a distributed application</a></li>
+      <li><a href="../../html/4diacIDE/use4diacRemotely.html">Deploy remotely</a></li>
+      <li><a href="../../html/4diacIDE/createOwnTypes.html">Create your own Function Blocks</a></li>
       <li>Other basic features (YOU ARE HERE!)</li>
-      <li><a href="./advancedFeatures.html">Advanced Features [optional]</a></li>
+      <li><a href="../../html/4diacIDE/advancedFeatures.html">Advanced Features [optional]</a></li>
     </ol>
 
 <p>This page shows the following interesting features in 4DIAC that might improve your work:</p>
@@ -62,18 +62,18 @@
 
 	  <p>The Properties View provides a Virtual DNS editor. This functionality allows defining a set of variables which are replaced by a specified value. The variable names can be used for parameters of Function Blocks and Devices. During the deployment, all variables which are available in the VirtualDNS are replaced with the specified value. For using a variable, the variable name has to be written between %. In the example below, two Configurations were created: local and rasbpi. The configuration rasbpi has the ip variable set to a value of 192.168.0.7, and the local to 127.0.0.1. In the main view, the variable ip is used as the ip address of the FORTE device. When you want to use a local FORTE, just change the configuration and check Active Configuration instead of changing each time the value.</p> 
 	 
-	<img src="./img/virtualDNS.png" alt="Virtual DNS"/>
+	<img src="../../html/4diacIDE/img/virtualDNS.png" alt="Virtual DNS"/>
 
     <h1 id="CreateBootfiles">Creating Boot-files</h1>
     <p>When the option 
     <span class="specificText">FORTE_SUPPORT_BOOTFILE</span> is enabled for the FORTE you are using, on startup FORTE tries to load a so called boot-file. This boot-file has to be located in the same directory as your FORTE binary and needs to be named <span class="fileLocation">forte.fboot.</span> This file contains the FB network configuration for the device and will be automatically instantiated during startup of FORTE.</p>
     <p>In order to create such boot-files you need to select one or more devices or resources in the <span class="view4diac">Download Selection View</span> and select <span class="menu4diac">Create FORTE boot-files...</span> from the context menu</p>
     <p>
-      <img src="./img/createBootFileContextMenu.png" alt="Create Boot-file context menu" />
+      <img src="../../html/4diacIDE/img/createBootFileContextMenu.png" alt="Create Boot-file context menu" />
     </p>
     <p>In the wizard you can then select the devices and resources for which you like to create boot-files as well as the directory where to place them.</p>
     <p>
-      <img src="./img/createBootFileWizard.png" alt="Create Boot-file Wizard" />
+      <img src="../../html/4diacIDE/img/createBootFileWizard.png" alt="Create Boot-file Wizard" />
     </p>
     <p>On pressing <span class="button4diac">Finish</span> one boot-file will be created per device. This boot-file will contain the selected resources and the FB networks contained in the resources. As only the resources selected are included in the boot-file you can have a larger set of resources during development (e.g., for test-code) and use only the main resources for the boot-file. The name of the boot-file will be a combination of system and device name dot fboot. Before using it you need to rename it to forte.fboot.</p>
 	
@@ -81,27 +81,27 @@
 
 <p>The last step is optional, and shows some advanced features of 4DIAC that you might use in more complicated applications.</p>
 
-<p><a href="./advancedFeatures.html">Step 6 (optional) - Advanced Features</a></p>
+<p><a href="../../html/4diacIDE/advancedFeatures.html">Step 6 (optional) - Advanced Features</a></p>
 
 <p>If you want to see some examples, the following link is an index of the available examples in the documentation:</p>
 
-<p><a href="../examples/examplesIndex.html">4DIAC Examples</a></p>
+<p><a href="../../html/examples/examplesIndex.html">4DIAC Examples</a></p>
 
 <p>If you have a specific platform that has input and outputs that is supported by FORTE, for example a Raspberry Pi or a PLC, and you want to use them, go to following page:</p>
 
-<p><a href="../parameters/parameters.html">Parameters for different platforms</a></p>
+<p><a href="../../html/parameters/parameters.html">Parameters for different platforms</a></p>
 
 <p>If you want to use a specific communication protocol supported by FORTE, for example MQTT, OPC UA, Modbus and so on, go this page:</p>
 
-<p><a href="../communication/communicationIndex.html">Communication Protocols</a></p>
+<p><a href="../../html/communication/communicationIndex.html">Communication Protocols</a></p>
 
 <p>If you want to go back to see again how to create your own Function Blocks, here's a link</p>
 
-<p><a href="./createOwnTypes.html">Step 4 - Create your own Function Blocks</a></p>
+<p><a href="../../html/4diacIDE/createOwnTypes.html">Step 4 - Create your own Function Blocks</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 

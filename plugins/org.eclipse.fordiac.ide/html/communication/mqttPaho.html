@@ -23,7 +23,7 @@
 <h1 id="topOfPage">MQTT with Eclipse Paho</h1>
 <p>This section will show you how to make applications communicate using <a href="http://www.eclipse.org/paho/" target="_blank">MQTT Paho</a>. 4DIAC uses a layered communication architecture. For MQTT Paho, a bottom layer has been realized, connecting MQTT Paho and the FBDK layer. <span class="specificText">Please consider that with the current implementation it is not possible to connect to more than one MQTT Paho broker on one Device</span>.</p>
 
-<p>Since you need MQTT Paho, you need to install the libraries in your computer. Therefore you need to download the code and compile it. You will need the same tools needed for FORTE (git, cmake, compilers). The process is based on the normal compilation of FORTE, but the MQTT feature is enabled. <a href="../installation/install.html#ownFORTE" target="_blank">Here's</a> a quick link to FORTE's compilation. For the installation please follow the next steps:</p>
+<p>Since you need MQTT Paho, you need to install the libraries in your computer. Therefore you need to download the code and compile it. You will need the same tools needed for FORTE (git, cmake, compilers). The process is based on the normal compilation of FORTE, but the MQTT feature is enabled. <a href="../../html/installation/install.html#ownFORTE" target="_blank">Here's</a> a quick link to FORTE's compilation. For the installation please follow the next steps:</p>
  
 <ol>
 	<li>Checkout and build MQTT Paho (if you are using Windows, some commands might change):
@@ -52,7 +52,7 @@ $ make</div></li>
 	<li>To communicate with MQTT Paho use the Publish/Subscribe Function Blocks of 4DIAC and configure its ID data input as follows:
 	<div class="code">raw[].mqtt[tcp://ip:port, cientID, topic]</div>
 
-	<img src="./img/mqttExample.png" alt="Example of MQTT" />
+	<img src="../../html/communication/img/mqttExample.png" alt="Example of MQTT" />
 
 	<p class="attention"><span class="inlineTitle">Attention</span>: When using the raw[] layer in your ID, the RD_1 of your subscriber and the SD_1 of your publishers must be connected to a STRING type data. Also, you can only use PUBLISHER_1 and SUSBCRIBER_1, not others function blocks wit more inputs or outputs.</p>
 
@@ -65,11 +65,11 @@ $ make</div></li>
 
 <p>Go back to Protocols index:</p>
 
-<p><a href="./communicationIndex.html">Communication Index</a></p>
+<p><a href="../../html/communication/communicationIndex.html">Communication Index</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 
