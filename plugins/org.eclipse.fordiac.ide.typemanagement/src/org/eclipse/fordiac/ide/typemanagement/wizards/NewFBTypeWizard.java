@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2010 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,24 +9,21 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch
  *     - initial API and implementation and/or initial documentation
+ *   Jose Cabral - Add preferences 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
@@ -45,7 +42,6 @@ import org.eclipse.ui.part.FileEditorInput;
 public class NewFBTypeWizard extends Wizard implements INewWizard {
 	private IStructuredSelection selection;
 	private NewFBTypeWizardPage page1;
-	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); //$NON-NLS-1$
 	private PaletteEntry entry;
 
 	public NewFBTypeWizard() {
@@ -110,7 +106,8 @@ public class NewFBTypeWizard extends Wizard implements INewWizard {
 		}
 		LibraryElement type = entry.getType();
 		type.setName(TypeLibrary.getTypeNameFromFile(targetTypeFile));
-		setupVersionInfo(type);
+		TypeManagementPreferencesHelper.setupIdentification(type);
+		TypeManagementPreferencesHelper.setupVersionInfo(type);
 		AbstractTypeExporter.saveType(entry);
 		entry.setType(type);
 		if (page1.getOpenType()) {
@@ -119,17 +116,7 @@ public class NewFBTypeWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	private void setupVersionInfo(LibraryElement type) {
-		VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
-		versionInfo.setAuthor(System.getProperty("user.name")); //$NON-NLS-1$
-		versionInfo.setDate(format.format(new Date(System.currentTimeMillis())));
-		versionInfo.setVersion("1.0"); //$NON-NLS-1$
-		if(type instanceof AdapterType) {
-			type = ((AdapterType)type).getAdapterFBType();
-		}		
-		type.getVersionInfo().clear();
-		type.getVersionInfo().add(versionInfo);
-	}
+	
 
 	private static void openTypeEditor(PaletteEntry entry) {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();

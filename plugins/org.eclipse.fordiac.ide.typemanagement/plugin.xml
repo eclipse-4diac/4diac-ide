@@ -484,4 +484,19 @@
              </triggerPoints>             
       </navigatorContent>
       </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencePage"
+            id="org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencePage"
+            name="Type Managament Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.typemanagement.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>
