@@ -26,6 +26,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.typemanagement;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.typemanagement.navigator,
+ org.eclipse.fordiac.ide.typemanagement.preferences,
  org.eclipse.fordiac.ide.typemanagement.util,
  org.eclipse.fordiac.ide.typemanagement.wizards
 Automatic-Module-Name: org.eclipse.fordiac.ide.typemanagement
