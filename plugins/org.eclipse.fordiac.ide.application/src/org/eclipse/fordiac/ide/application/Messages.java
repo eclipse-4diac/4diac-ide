@@ -33,8 +33,6 @@ public class Messages extends NLS {
 	/** The Create sub app command_ label create sub app command. */
 	public static String CreateSubAppCommand_LABELCreateSubAppCommand;
 	
-	public static String NewApplicationCommand_LABEL_NewApplication;
-	
 	/** The FB edit part_ erro r_ unsupported fb type. */
 	public static String FBEditPart_ERROR_UnsupportedFBType;
 		

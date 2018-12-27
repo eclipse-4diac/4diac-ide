@@ -10,19 +10,19 @@
  *   Alois Zoitl, Gerhard Ebenhofer 
  *   - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.commands;
+package org.eclipse.fordiac.ide.systemmanagement.ui.commands;
 
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 
 /**
  * The Class NewAppCommand.
@@ -86,8 +86,7 @@ public class NewAppCommand extends AbstractOperation {
 			application.setFBNetwork(network);
 
 			system.getApplication().add(application);
-			
-//TODO model refactoring - think if system should be saved here or if editor should be shown dirty
+
 			SystemManager.INSTANCE.saveSystem(system); 
 			return Status.OK_STATUS;
 		}
@@ -104,7 +103,6 @@ public class NewAppCommand extends AbstractOperation {
 	public IStatus redo(IProgressMonitor monitor, IAdaptable info) {
 		if (system != null) {
 			system.getApplication().add(application);
-//TODO model refactoring - think if system should be saved here or if editor should be shown dirty
 			SystemManager.INSTANCE.saveSystem(system); // to save the	
 			return Status.OK_STATUS;
 		}
@@ -118,8 +116,6 @@ public class NewAppCommand extends AbstractOperation {
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info) {
 		if (system != null) {
 			system.getApplication().remove(application);
-
-//TODO model refactoring - think if system should be saved here or if editor should be shown dirty
 			SystemManager.INSTANCE.saveSystem(system);			
 			return Status.OK_STATUS;
 		}
@@ -127,7 +123,7 @@ public class NewAppCommand extends AbstractOperation {
 
 	}
 	
-	protected Application creatApplicationElement() {
+	private static Application creatApplicationElement() {
 		return LibraryElementFactory.eINSTANCE.createApplication();
 	}
 }

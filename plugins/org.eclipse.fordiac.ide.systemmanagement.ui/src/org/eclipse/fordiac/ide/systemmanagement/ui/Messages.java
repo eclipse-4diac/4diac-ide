@@ -51,6 +51,9 @@ public class Messages extends NLS {
 	/** The New application wizard_ title. */
 	public static String NewApplicationWizard_Title;
 	
+	public static String NewApplicationCommand_LABEL_NewApplication;
+
+	
 	public static String NewSystemWizard_ShowAdvanced;
 	
 	public static String NewSystemWizard_HideAdvanced;
