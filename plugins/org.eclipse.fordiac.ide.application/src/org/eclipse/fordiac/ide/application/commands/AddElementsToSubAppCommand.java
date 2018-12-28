@@ -97,29 +97,53 @@ public class AddElementsToSubAppCommand extends Command {
 		for(IInterfaceElement ie : fbNetworkElement.getInterface().getAllInterfaceElements()){
 			if(ie.isIsInput()){
 				for(Connection con : ie.getInputConnections()){
-					if(elementsToAdd.contains(con.getSourceElement())){
-						moveConIntoSubApp(con);
-					}else{
-						handleModifyConnection(con, con.getDestination());
-					}
+					checkConnection(con, con.getSource(), ie);
 				}
 			}else{
 				for(Connection con : ie.getOutputConnections()){
-					if(elementsToAdd.contains(con.getDestinationElement())){
-						moveConIntoSubApp(con);
-					}else{
-						handleModifyConnection(con, con.getSource());
-					}
+					checkConnection(con, con.getDestination(), ie);
 				}
 			}
 		}
 		
 	}
 	
+	private void checkConnection(Connection con, IInterfaceElement opposite, IInterfaceElement ownIE) {
+		if(elementsToAdd.contains(opposite.getFBNetworkElement())){
+			moveConIntoSubApp(con);
+		}else if (targetSubApp.equals(opposite.getFBNetworkElement())){
+			//the connection's opposite target is within the subapp
+			moveInterfaceCrossingConIntoSubApp(con, opposite, ownIE);			
+		} else {
+			handleModifyConnection(con, ownIE);
+		}
+	}
+
 	private void moveConIntoSubApp(Connection con) {
 		targetSubApp.getSubAppNetwork().addConnection(con);
 		movedConns.add(con);
 	}
+	
+	private void moveInterfaceCrossingConIntoSubApp(Connection con, IInterfaceElement opposite, IInterfaceElement ownIE) {
+		List<Connection> internalCons = opposite.isIsInput() ? opposite.getOutputConnections() : opposite.getInputConnections();
+		List<Connection> outCons = opposite.isIsInput() ?  opposite.getInputConnections() : opposite.getOutputConnections();
+		
+		if(1 == outCons.size()) {
+			//our connection is the last one lets remove the interface element
+			modifiedConns.add(new DeleteSubAppInterfaceElementCommand(opposite));
+		} else {
+			modifiedConns.add(new DeleteConnectionCommand(con));
+		}
+		
+		internalCons.forEach(intConn -> {
+			AbstractConnectionCreateCommand cmd = getCreateConnectionCommand(targetSubApp.getSubAppNetwork(), opposite);
+			cmd.setSource(opposite.isIsInput() ? ownIE : intConn.getSource());
+			cmd.setDestination(opposite.isIsInput() ? intConn.getDestination() : ownIE);
+			modifiedConns.add(cmd); 
+		});
+		
+	}
+
 	
 	/** we have a connection that will cross the subapp interface. Check if an interface element needs to be created and 
 	 * modify the connections accordingly
