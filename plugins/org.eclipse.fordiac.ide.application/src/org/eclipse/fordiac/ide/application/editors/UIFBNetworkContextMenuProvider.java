@@ -215,7 +215,9 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 							action = createFBInsertAction(entry);							
 						}
 					}
-					submenu.add(action);
+					if(null != action) {
+						submenu.add(action);
+					}
 				}
 			}
 			if(!submenu.isEmpty()){
