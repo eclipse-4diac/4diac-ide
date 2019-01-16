@@ -1,6 +1,7 @@
 <!DOCTYPE html> 
 <!--
- Copyright (c) 2016 - 2017 fortiss GmbH, Herwig Eichler
+ Copyright (c) 2016 - 2018 fortiss GmbH, Herwig Eichler
+               2018 Johannes Kepler University Linz
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -10,12 +11,14 @@
  Contributors:
    Jose Cabral, Herwig Eichler, Alois Zoitl
      - initial API and implementation and/or initial documentation
+   Bianca Wiesmayr
+	 - text corrections and updates
 -->
 
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Contributing to Forte</title>
+	<title>Contributing to FORTE</title>
 	<link rel="stylesheet" type="text/css" href="../help.css">
 </head>
 
@@ -23,47 +26,93 @@
 
 	<h1 id="topOfPage">Contributing to FORTE</h1>
 	
-		<p>The Forte project is stored as a Git repository in the eclipse platform. It's open source, so you can download and you can even change things and improve it. But of course, it's not that simple, otherwise changes will be added without any control and could mess up with the code</p>
+		<p>The FORTE project is stored as a Git repository in the eclipse platform. 
+		It's open source, so you can download the project and you can even change things and improve it. 
+		But of course, it's not that simple, otherwise changes would be added without any control and could mess up the code.</p>
 		
 	<h2>Git repository</h2>
 
-		<p>If you don't know what Git is, don't worry, we have all been there. Basically Git is a distributed system that is used to control different versions of anything, but mostly of software code. The code is stored in what is called a repository which contains all the files related to the software. When a change is made, instead of saving new files (fileV1, fileV2, fileFinalVersion, fileThisIsReallyTheFinalVersion, fileThisIsReallyTheFinalVersion2) in a new folder, you just "commit" the change and the changes are saved in the repository. To go to older versions you go to the specific commit and see how the software was. The good thing about Git is the "distributed" word in its definition (I bet you didn't notice it). There's not only one repository, but anyone that wants to contribute to the repository, copies the whole content of the repository to his computer and works there, changes there and commits there. Then, he pushes to the repository where he copied from.</p>
+		<p>If you don't know what Git is, don't worry, we have all been there. 
+		Basically, Git is a distributed system that is used to control various versions of anything, but mostly of software code. 
+		The code is stored in a so-called repository which contains all files related to the software. 
+		After changing the code, instead of saving new files (fileV1, fileV2, fileFinalVersion, fileThisIsReallyTheFinalVersion, fileThisIsReallyTheFinalVersion2) in a new folder, you just "commit" the change and the changes are saved in the repository. 
+		To see older versions of the software, you go to the specific commit. 
+		The good thing about Git is the word "distributed" in its definition (I bet you didn't notice it). 
+		There's not only one repository, but anyone who wishes to contribute to the repository, copies the whole content of the repository to his/her computer and works there, changes there and commits there. 
+		Then, he pushes to the repository where he copied from.</p>
 		
-		<p>This is the basic of Git, but it should give an idea of how it works. In order to learn more about GIT, there are a lot of information on internet. But instead of starting from zero, I would recommend giving a look at <a target="_blank" href="https://git-scm.com/"> https://git-scm.com/</a> where you can download everything you need to start contributing to any git project. I'll make it even easier and put the link to the documentation <a target="_blank" href="https://progit2.s3.amazonaws.com/en/2016-03-22-f3531/progit-en.1084.pdf">book</a> of git, to start reading about it. Don't be afraid of the book, it's a big one, but you'll only need Chapters 1 and 2 to understand what's going on and play a little, and Chapter 3 to start contributing.</p>
+		<p>This is only the basic principle of Git, but it should give an idea of how it works. 
+		The step-by-step tutorial following below helps to set up Git for your first contributions.
+		Plenty of information online helps to learn more about Git.
+		Instead of starting from zero, I would recommend having a look at <a target="_blank" href="https://git-scm.com/"> https://git-scm.com/</a> where you can download everything necessary to start contributing to any Git project. 
+		The documentation <a target="_blank" href="https://progit2.s3.amazonaws.com/en/2016-03-22-f3531/progit-en.1084.pdf">book</a> about Git provides a good overview. 
+		Although the book is very long, you'll only need Chapters 1 and 2 to understand what's going on and play a little, and Chapter 3 to start contributing.</p>
 		
-		<p>But I should warn you, young padawan, learning git is hard. It's a very powerfull tool, but it takes time to understand it. Read the basics and play a little. Don't waste time trying to understand everyting before jumping to contributing to other projects. The best teacher is the practice. Use Forte as your practice. You won't break anything. Git is bullet-proof.</p>
+		<p>But I should warn you, young padawan, learning Git is hard. 
+		It's a very powerful tool, but it takes time to understand it. 
+		Read the basics and play a little. 
+		Don't waste time trying to understand everyting before jumping to contributing to other projects. 
+		The best teacher is practice. 
+		Use FORTE as your example for practicing. 
+		You can't break anything. 
+		Git is bullet-proof.</p>
 		
 	<h2>Gerrit</h2>
 	
-		<p>You know how Git works, and have already used it. But now, a new player is in the game: Gerrit. What is it? The information in <a target="_blank" href="https://en.wikipedia.org/wiki/Gerrit_%28software%29">Wikipedia</a> helps, but putting it simple, is the firewall of the contributions. It's used by many platforms, including the Eclipse Foundation where the Forte repository is. When someone, a programmer with the best of the intentions, wants to contribute to the Forte code, he clones the git repository, makes the changes, commits and then pushes to the repository in the Eclipse Foundation. But of course, the change doesn't go directly, but it has to be accepted by the responsibles of Forte. So, the contributors push to Gerrit. Gerrit makes some legal checks first, and then makes the Forte's responsible aware that some new change has arrived. They then go to Gerrit, see what's the new change, and accept or deny the change. Easy, right?</p>
+		<p>You know how Git works, and have already used it. But now, a new player is in the game: Gerrit. 
+		What is it? 
+		The information in <a target="_blank" href="https://en.wikipedia.org/wiki/Gerrit_%28software%29">Wikipedia</a> helps, but putting it simple, it is the firewall of contributions. 
+		It's used by many platforms, including the Eclipse Foundation where the FORTE repository is. 
+		When someone, a programmer with the best intentions, wants to contribute to FORTE code, he clones the Git repository, makes changes, commits and then pushes to the repository in the Eclipse Foundation. 
+		But of course, the change doesn't go directly to the repository. 
+		First, it has to be accepted by people in charge of FORTE. 
+		Therefore, the contributors push to Gerrit. 
+		Gerrit checks legal requirements, and then notifies the people responsible of FORTE that some new change has arrived. 
+		They then visit Gerrit, see the new change and can accept or deny it. Easy, right?</p>
 		
-		<p>But to better understand Gerrit, it's better to work with it. We'll go step by step to push something to Gerrit to contribute to Forte.</p>
+		<p>But to better understand Gerrit, it's better to work with it. We'll go step-by-step toward pushing code to Gerrit in order to contribute to FORTE.</p>
 		
-	<h2>Help Forte NOW!</h2>
+	<h2>Help FORTE - NOW!</h2>
 	
-		<p>As said, we'll go step by step to contribute to Forte. But let me tell you now. If you want to contribute you'll need to online-sign some legal documents. If you don't want to sign it, you can still get Forte's code and play with it.</p>
+		<p>As said before, we'll learn to contribute to FORTE step-by-step. However, if you want to contribute you'll need to sign some legal documents online. If you don't wish to sign them, you can still get the code of FORTE and play with it.</p>
 		
 	<ol>
 		
-		<li id="EclipseAccount">Creating an Eclipse account and signing the CLA.
+		<li id="EclipseAccount">Creating an Eclipse account and signing the ECA.
 				
 			<ol>
 			
 				<li>
-					<p>First of all, you should create an Eclipse account and sign the CLA (Contributors License Agreement). This is mandatory in order to contribute to Forte. All commits that are not from Eclipse Accounts with signed CLA will be rejected automatically. If you don't want to contribute, and just want to download the code and play around, skip to the next step.</p>
+					<p>First of all, you should create an Eclipse account and sign the ECA (Eclipse Contributor Agreement). 
+					This is mandatory in order to contribute to FORTE. 
+					All commits that are not from Eclipse Accounts with signed ECA will be rejected automatically. 
+					If you don't want to contribute, but just want to download the code and play around, skip to the next step.</p>
 								
-					<p>To create the Eclipse account, simply go to <a target="_blank" href="https://www.eclipse.org/">https://www.eclipse.org/</a> and click in "Create Account" on the top right section. Then, just fill the information to create an account. The email you use, will be the one that should be use in EGit.</p>
+					<p>To create the Eclipse account, simply go to <a target="_blank" href="https://www.eclipse.org/">https://www.eclipse.org/</a> and click "Create Account" on the top-right of the page. 
+					Then, just fill in the information to create an account. 
+					The email address indicated during account registration should also be used later in Git.</p>
 			
 				</li>
 				
 				<li>
-					<p>The next thing is sign the CLA. Go to the CLA <a target="_blank" href="https://eclipse.org/legal/CLA.php"> page</a> to read it and learn more about that. The CLA is to protect copyrights and other legal stuff. Basically, when you sign it, you say that every change you contribute, is completely yours, and this helps protecting intellectual property, yours included. If your contribution is part of your work at some company, you should talk first with your superior and the legal deparment to fully understand how to approach this. </p>
+					<p>The next step is to sign the ECA. 
+					Go to the ECA <a target="_blank" href="https://eclipse.org/legal/ECA.php"> page</a> to read it and learn more about it. 
+					The ECA protects for example copyrights. 
+					Basically, when you sign it, you declare that you have full rights of every contributed change, which helps protecting intellectual property, including your own. 
+					If your contribution is part of your work at some company, you should talk first with your superior and the legal department to fully understand how to approach this. </p>
 									
-					<p>The signing is done online. You check boxes, and complete a textbox with "I AGREE". There's no tangible outcome. Eclipse stores your information together with the version of the CLA that you signed. You can print the CLA, but you won't get a certificate to print that says that you signed. Your account will show that you have signed the CLA and there's a tool in Eclipse to validate if an account has signed.</p>
+					<p>The signing is done online after logging in to your account and selecting the "Eclipse Contributor Agreement".
+					You need to check boxes and complete a textbox with "I AGREE". 
+					There's no tangible outcome. 
+					Eclipse stores your information together with the version of the ECA that you signed. 
+					You can print the ECA, but you won't get a certificate to print that says that you signed it. 
+					Your account will show that you have signed the ECA and there's a tool in Eclipse validating whether an account has signed it.</p>
 				</li>
 			</ol>
 			
-			<p>The first example uses Eclipse and all the git work will be done using EGit, normally already installed. If you think GUI is for weaks and a real programmer should use command line, you can follow the instructions given <a href="#CommandLine">below</a>. Nevertheless users who don't have command line experience should stick to Eclipse.</p>
+			<p>The first example uses Eclipse and all the Git work will be done using EGit, normally installed automatically together with the Eclipse IDE. 
+			If you think GUI is for weaks and a real programmer should use command line, you can follow the instructions given <a href="#CommandLine">below</a>. 
+			Nevertheless, users without command line experience should stick to Eclipse.</p>
 		</li>
 	
 		<li id="EGit">Using EGit to contribute
@@ -75,37 +124,95 @@
 				<ol>
 					<li><p>Get all the software</p>
 					
-						<p>The first thing to do is to get all the software. Download Eclipse for C++ and install it. If you have already Eclipse but it's not configured for C++, you don't need to download another Eclipse, but you need to install the plugin for it. See a tutorial <a target="_blank" href="http://help.eclipse.org/mars/index.jsp?topic=%2Forg.eclipse.cdt.doc.user%2Fgetting_started%2Fcdt_w_install_cdt.htm">here</a>. EGit should be there, if not follow the steps <a target="_blank" href="http://www.vogella.com/tutorials/EclipseGit/article.html#eclipseinstallationgit">here</a> to install it.</p>
+						<p>The first thing to do is to get all the software. 
+						Download Eclipse for C++ and install it. 
+						If you already have Eclipse but it's not configured for C++, you don't need to download another Eclipse, but only the C++ plugin. 
+						See a tutorial <a target="_blank" href="http://help.eclipse.org/mars/index.jsp?topic=%2Forg.eclipse.cdt.doc.user%2Fgetting_started%2Fcdt_w_install_cdt.htm">here</a>. 
+						EGit should be installed automatically with your Eclipse, otherwise follow the steps <a target="_blank" href="http://www.vogella.com/tutorials/EclipseGit/article.html#eclipseinstallationgit">here</a> to install it.</p>
 					</li>
 					
 					<li>
 						<p>Configure EGit</p>
 					
-						<p>The first thing to do in EGit is to configure the user settings. The main things are the name and email address. This information is attached to the commits you do. To do that, just follow the simple steps in section 6.2 of the same <a target="_blank" href="http://www.vogella.com/tutorials/EclipseGit/article.html#eclipseinstallationgit">link</a> as above. If you created the Eclipse account and signed the CLA as stated in the <a href="#EclipseAccount">step</a> before, you must use the the same email.</p>
+						<p>The first thing to do in EGit is to configure the user settings.
+						The main things are the name and email address. 
+						This information is attached to your commits. 
+						To do that, just follow the simple steps in section 4.2 of the same <a target="_blank" href="http://www.vogella.com/tutorials/EclipseGit/article.html#eclipseinstallationgit">link</a> as above. 
+						If you created the Eclipse account and signed the CLA as stated in the previous <a href="#EclipseAccount">step</a>, you must use the same email.</p>
 					</li>
 					<li>
-						<p>Download Forte repository</p>
+						<p>Download FORTE repository</p>
 						
-						<p>In Eclipse, go to File &rarr; Import...&rarr; Git &rarr; Projects from Git. Click Next and then select Clone URI. Next. Paste https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte in the URI field and then Next. Eclipse will connect to the repository and retrieve all the branches of it. Select all and click Next. Select the destination folder of the repository in your local machine and click Next. Wait while the repository is beeing downloaded. Click Next until is finished.</p>
+						<p>In Eclipse, go to File &rarr; Import...&rarr; Git &rarr; Projects from Git. 
+						Click Next and then select Clone URI. 
+						Next. 
+						Paste https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte in the URI field and then Next. 
+						Eclipse will connect to the repository and retrieve all its branches. 
+						Select all and click Next. 
+						Select the destination folder of the repository in your local machine and click Next. 
+						Wait while the repository is being downloaded. 
+						Click Next until the assistant is finished.</p>
 					</li>
 					<li>
 						<p>Look around and move between branches</p>
 						
-						<p>Now, you have the newest code of Forte. The first thing to do when you download a project, is to look around. Check the folders, read the Documentation and readme files. Try to understand the folders and hierarchies. </p>
+						<p>Now you have the newest FORTE code. 
+						After downloading the code of a project, look around first. 
+						Check the folders, read the documentation and readme files. 
+						Try to understand the folders and hierarchies. </p>
 						
-						<p>Right Click on the project, and then Team and you find all the possible commands regarding EGit. Team &rarr; Show in History will show you all the commits in the current branch. Normally, master is the main branch. If Forte has another branch, and you want to work with it, you'll have to create a local branch that serves as reference of the original branch. That is, the Eclipse respository has a master branch (seen as origin/master), and for example a develop branch (seen as origin/develop). But you, locally, have only a master branch (seen as master). This local master is a reference to the origin/master and everything you change on it, will be then pushed to the origin/master. But if you want to work on the origin/develop branch, you'll need to create a local branch that references it. </p>
+						<p>Right-click on a project in the Eclipse package explorer and select Team.
+						There you find all possible commands for EGit. 
+						Team &rarr; Show in History will show you all the commits in the current branch. 
+						Normally, master is the main branch. 
+						If FORTE has another branch, and you want to work with it, you'll have to create a local branch that serves as reference of the original branch. 
+						That is, the Eclipse respository has a master branch (seen as origin/master), and for example a develop branch (seen as origin/develop). 
+						But you, locally, have only a master branch (seen as master). 
+						This local master is a reference to the origin/master and everything you change on it, will be then pushed to the origin/master. 
+						But if you want to work on the origin/develop branch, you'll need to create a local branch that references it. 
+						Details on branches can be found in the <a target="_blank" href="https://progit2.s3.amazonaws.com/en/2016-03-22-f3531/progit-en.1084.pdf">book</a> mentioned above (chapter 3).</p>
 						
-						<p>Right click on the project &rarr; Team &rarr; Switch To &rarr; Other.... There you see the local and remote branches. Select the remote branch you want to work on, let's say origin/develop, and click Checkout. you'll get a message saying that you can watch the remote branch, or you can create a new branch locally to work on it. Click on Checkout as New Local Branch and then select a name for the local branch. The usual thing is to name the same as the original, so we'll call it develop (wihtout the "origin/" part) and finish. Now you can switch between the branches, and the changes in each one will be reflected in the corresponding origin. </p>
+						<p>Right-click on the project &rarr; Team &rarr; Switch To &rarr; Other.... 
+						There you'll see the local and remote branches. 
+						Select the remote branch you want to work on, for example origin/develop, and click Checkout. 
+						You'll get a message saying that you can watch the remote branch, or you can create a new branch locally to work on it. 
+						Click on "Checkout as New Local Branch" and then select a name for the local branch. 
+						Usually, the name of the original branch is copied, therefore, we'll call it develop (without the part "origin/") and click finish. 
+						Now you can switch between the branches, and the changes in each one will be reflected in the corresponding origin. </p>
 						
-						<p>The Forte projects follows the workflow shown <a target="_blank" href="http://nvie.com/posts/a-successful-git-branching-model/">here</a>. Basically, the master branch is used to release versions and the develop for new stuff. You should always branch out from develop to work on something new.</p>
+						<p>The FORTE projects follows the workflow shown <a target="_blank" href="http://nvie.com/posts/a-successful-git-branching-model/">here</a>. 
+						Basically, the master branch is used to release versions and the development of new stuff. 
+						You should always branch out from develop to work on something new.</p>
 					
 					</li>
 					<li>
 						<p id="ConfigureGerrit">Configure Gerrit</p>
 						
-						<p>Access the <a target="_blank" href="https://git.eclipse.org/r"> Gerrit </a> page in Eclipse to manage everything about Gerrit regarding your account. Click Sign In in the upper right corner and use the same email and password of your Eclipse account created in <a href="#EclipseAccount">step 1.1</a>. Once logged in, click on your name on the upper right corner, and then Settings. There you can change you preferences of messages, follow projects, manage password, among others. When you push something to Gerrit you can do it using ssh or https. SSH requires that you create the public and private keys, which are stored in files that Eclipse use then to connect to Gerrit. To know more about creating the keys and configuring in Eclipse, visit <a target="_blank" href="http://www.vogella.com/tutorials/EclipseGit/article.html#github"> here</a>, and then add the key in the SSH Public Keys setting in Gerrit. In this example we'll show the usage of https. </p>
+						<p>Access the <a target="_blank" href="https://git.eclipse.org/r"> Gerrit </a> page in Eclipse to manage your account details regarding Gerrit.
+						Click Sign In in the upper-right corner.
+						The username is the email address registered with your Eclipse account created in <a href="#EclipseAccount">step 1.1</a>. 
+						Log in with the password of your Eclipse account.
+						Then, click on your name on the upper-right corner and choose Settings. 
+						There you can change your preferences concerning messages, follow projects, manage your password, ... 
+						You can push changes to Gerrit via SSH or https.
+						In this example, we'll use https. 
+						SSH requires you to create public and private keys, which are stored in files. 
+						Eclipse use these files to connect to Gerrit. 
+						To know more about creating keys and configuring Eclipse, visit <a target="_blank" href="http://www.vogella.com/tutorials/EclipseGit/article.html#github"> here</a>, and then add the key in the SSH Public Keys setting in Gerrit. 
+						</p>
 						
-						<p>Go to HTTP Password in the Settings page of Gerrit, copy the username that appears and click Generate Password. you'll get a random long password that you'll use every time you want to push something to Gerrit. Go to Eclipse, right-click on the project &rarr; Team &rarr; Show in Repositories View. Then, expand Remotes, and right-click on origin &rarr; Gerrit Configuration.... In this step you can choose ssh, https or other as communication protocol. Choose https and paste your username from Gerrit in the field User. This will change the Push URI. In the Destination branch field, you should set the branch to push to. You can't push to a branch that doesn't exist in the Gerrit repository. Note that the destination branch begins with refs/for/. Click finish and see in the Repositories View that the Origin remote has changed the push URI. This means that when you send something to Forte, it will send to Gerrit, but when you get something from it, you'll get it from the actual repository. </p>
+						<p>Go to HTTP Password in the Settings page of Gerrit, copy the username that appears and click Generate Password. 
+						You'll get a random long password that you'll use every time you want to push something to Gerrit. 
+						Go to Eclipse, right-click on the project &rarr; Team &rarr; Show in Repositories View. 
+						Then, expand Remotes, and right-click on origin &rarr; Gerrit Configuration.... 
+						In this step, you can choose ssh, https or another communication protocol. 
+						Choose https and paste your username from Gerrit to the field User. 
+						This will change the Push URI. 
+						In the Destination branch field, you should set the branch to push to.
+						You can't push to a branch that doesn't exist in the Gerrit repository. 
+						Note that the destination branch begins with refs/for/. 
+						Click finish and see in the Repositories View that the Origin remote has changed the push URI. 
+						This means that when you send something to FORTE, it will send to Gerrit, but when you get something from it, you'll get it from the actual repository. </p>
 					</li>
 				</ol>
 			</li>
@@ -116,37 +223,65 @@
 					<li> 
 						<p id="FindBug">Find a bug to work on</p>
 						
-						<p>The first thing to do to start contributing is to find a bug to work on. You can look into the code and find something wrong or you can go to the <a target="_blank" href="https://bugs.eclipse.org/bugs/buglist.cgi?list_id=14410991&product=4DIAC&query_format=advanced"> list of bugs</a> and see the ones that refer to the Forte project. Every change that you do, should be related to a bug. If you find an error, or even missing documentation, you should report the bug. The bug's fixing is a metric that helps seeing how forward has a software come. But be aware that when reporting a bug, it should have a clear way of fixing it. Reporting a bug as "Missing documentation" brings difficulties to know where the work on the bug is done. Let's say we are working on bug number 123456.</p>
+						<p>In order to contribute, you need to first find a bug to work on. 
+						You can look into the code and find something wrong or you can go to the <a target="_blank" href="https://bugs.eclipse.org/bugs/buglist.cgi?list_id=14410991&product=4DIAC&query_format=advanced"> list of bugs</a> and see the ones that refer to the FORTE project. 
+						All your changes should be related to a bug. 
+						If you find an error, or even missing documentation, you should report the bug. 
+						Bug fixes are a metric that shows how the software development progresses. 
+						But be aware that when reporting a bug, it should have a clear way of fixing it. 
+						For a reported bug such as "Missing documentation", it is unclear when the bugfix is complete. 
+						Let's say we are working on bug number 123456.</p>
 					</li>
 					<li>
 						<p>Make the changes and prepare to commit</p>
 						
-						<p>This is when you actually make the changes to the code. Open the files you want to change and simply make them. Try to make less than a 1000 changes for each commit in order to mantain the size of commits small.</p>
+						<p>Now you actually change the code. 
+						Open the files you want to change and edit them. 
+						Try to change less then 1000 lines in one commit in order to keep individual commits small.
+						Larger edits can be split to several commits.</p>
 						
 						<p>Open the Git Staging View in Eclipse by going to Window &rarr; Show View &rarr; Other... &rarr; Git &rarr; Git Staging. In the Unstaged Changes you see all the files that were changed. Right-click on them and then Add to index. The selected files will be moved to Staged Changes.</p>
 					</li>
 					<li>
 						<p id="CommitChanges">Commit the changes</p>
 						
-						<p>This is a very important step. The changes are going to be commited locally but the commit message is very important because Gerrit will check the commit first to see if everything is in order to accept it. The commit message will be written in the Git Staging View. The message has 3 parts: the subject, the body and the footer. The three parts are separated by an empty line.</p>
+						<p>Committing changes is a very important steps. 
+						The changes are committed locally.
+						The commit message is essential for pushing to Gerrit.
+						In Gerrit, the commit is first verified to ensure that everything is fine.
+						The changes are then accepted.
+						The commit message is created in the Git Staging View and consists of three parts: the subject, the body and the footer. 
+						The three parts are separated by an empty line.</p>
 						
 						<ul>
 							<li>
-								<p>The subject has to have the number of the bug you are working on between square brackets, followed by a short explanation of what was done in the commit. Try to keep it below 50 characters for better reading with the first letter capital. Don't use a period at the end of the subject.</p>
+								<p>The subject must contain the number of the bug you are working on, listed between square brackets and followed by a short explanation of what the commit contains.
+								Try to keep it shorter than 50 characters and, for better readability, start the message with a capital letter. 
+								Don't use a period at the end of the subject.</p>
 							</li>
 							<li>
-								<p>The body contains all the explanation of what was done. Use it to explain what and why, not the how.</p>
+								<p>The body contains all the explanation of what was done. Use it to explain what and why, but not how.</p>
 							</li>
 							<li>
 								<p>The footer must have 2 parts (3 if the Change-id is needed): </p>
 									<ol>
 										<li>[ALWAYS] the link to the bug (Bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=123456 )</li>
 										<li>[ONLY TO OVERWRITE A COMMIT] the Change-Id field is used when you are adding the second commit to a change already pushed before (for example: Change-Id: If0b359ad15268ed179194cf5ad4fb5b2d09b3290). See NOTE 2 to know more about when to use it.</li>
-										<li>[ALWAYS] the signing field (Signed-off-by: John Doe &lt;johndoe@gmail&gt;). The signature at the end is what Gerrit check if the one pushing has a CLA.</li>
+										<li>[ALWAYS] the signing field (Signed-off-by: John Doe &lt;johndoe@gmail&gt;). 
+										The signature at the end is checked by Gerrit to verify that the commiter has signed the ECA.</li>
 									</ol>
 
 									<p>NOTE: Empty lines are only allowed (and mandatory) between the subject, body and footer, not between the inner parts of the footer.</p>
-									<p>NOTE 2: The Change-Id should be avoided the first time a change is being pushed to Gerrit (let's call it CommitOne). Gerrite will generate the Change-Id. If CommitOne is not accepted (wrong code, missing information, etc.), you must make the new changes and ammend (overwrite) the CommitOne wich will generate CommitTwo (you could also completeley delete CommitOne, and create a new commit as CommitTwo). Remember that CommitTwo is a completely new commit. CommitTwo must have the Change-Id that Gerrit generated (Go to Gerrit, find the change of CommitOne and you'll see the Change-Id). When you push CommitTwo, it won't create another entry in Gerrit, but it will appear below in the same page as CommitOne. Now CommitTwo is waiting to be accepted.</p>
+									<p>NOTE 2: The Change-Id is not edited, when a commit is pushed to Gerrit for the first time (CommitOne).
+									Gerrit generates the Change-Id. 
+									If CommitOne is rejected (erroneous code, missing information, etc.), you must revise the commit and amend (overwrite) the CommitOne.
+									This generates CommitTwo.
+									(You could also delete CommitOne completely, and create a new commit as CommitTwo). 
+									Remember that CommitTwo is a completely new commit. 
+									CommitTwo must have the Change-Id that Gerrit generated for CommitOne (Go to the Gerrit webpage, find the change of CommitOne and you'll see its Change-Id). 
+									When you push CommitTwo, it won't create a new entry in Gerrit.
+									Instead, CommitTwo will appear below CommitOne on the same page. 
+									Now CommitTwo is waiting to be accepted.</p>
 							</li>
 						</ul>
 						
@@ -186,7 +321,19 @@
 					<li>
 						<p>Push the commit</p>
 						
-						<p>In the History View you can see the new commit you have just added. But the commit is locally, and no one else knows about it. It's time to push it to the repository in Eclipse. Right-click on your last commit &rarr; Push commit.... A dialog will open. With the showed configurations, you are trying to push to the develop branch of the Gerrit called refs/heads/develop. But according to the Gerrit documentation you should push to the magic refs/for/[branch] branch. So, in the Dialog, instead of the develop branch as it appear, you should change that to refs/for/develop (not reds/heads/develop). Click next, and you'll be asked to introduce your https Gerrit password generated in <a href="#ConfigureGerrit">step 1.5</a>. The push confirmation says that a new branch is beeing created. Don't worry about that, and click Finish. Put the password again, and the push should succeed. If something fails, the error appears in the log.</p>
+						<p>In the History View you can see the new commit you have just added. 
+						However, the commit is only stored locally, and noone else knows about it. 
+						It's time to push it to the repository in Eclipse. 
+						Right-click on your last commit &rarr; Push commit.... 
+						A dialog opens. 
+						With the configurations shown, you are trying to push to the develop branch of the Gerrit called refs/heads/develop. 
+						But, according to the Gerrit documentation, you should push to the magic refs/for/[branch] branch. 
+						So, in the Dialog, instead of the develop branch as it appears, you should change the branch to refs/for/develop (instead of reds/heads/develop). 
+						Click next, and you'll be asked to introduce your https Gerrit password generated in <a href="#ConfigureGerrit">step 1.5</a>. 
+						The push confirmation notifies that a new branch is being created. 
+						Don't worry about that, and click Finish. 
+						Enter the password again, and then the push should succeed. 
+						If anything fails, the error appears in the log.</p>
 					</li>
 				</ol>
 			</li>
@@ -195,17 +342,23 @@
 			
 		<li id="CommandLine">Command line
 		
-			<p>Use git on the command line instead of <a href="#EGit">EGit</a> (this one is for the reckless, the knights of the keyboard and especially those being afraid of mice)</p>
+			<p>Use Git on the command line instead of <a href="#EGit">EGit</a> (this one is for the reckless, the knights of the keyboard and especially those afraid of mice).</p>
 		
-			<p>The following instructions apply to Debian based Linux systems like LinuxMint or Ubuntu. It is asumed that you already created your Eclipse account and signed the CLA as described <a href="#EclipseAccount">above</a>. Also the same <a href="#FindBug">rules</a> for creating a bug report and working on the forte code apply. Of course you can make your own decision which editor you want to use for the coding. There are a lot of possibilities out there, like VI, Emacs and many more. For code compilation and linking on a Linux system the GNU compiler suite usually is the best choice. But this is a different story, which will not be addressed here.</p>
+			<p>The following instructions apply to Debian-based Linux systems such as LinuxMint or Ubuntu. 
+			It is assumed that you have already created your Eclipse account and signed the ECA as described <a href="#EclipseAccount">above</a>. 
+			Also the same <a href="#FindBug">rules</a> for creating a bug report and working on the FORTE code apply. 
+			Of course, you can decide yourself which editor you want to use for coding. 
+			There are a lot of possibilities out there: VI, Emacs and many more. 
+			For code compilation and linking on a Linux system, the GNU compiler suite usually is the best choice. 
+			But the details on that won't be addressed here.</p>
 			
 			 <ol>
 				<li>
-					<p>Check and install git command line tools</p>
+					<p>Check and install Git command line tools</p>
 					
-					<p>If you are not sure if the git command line tools are already installed on your Linux box, you can enter the following command on Debian based distributions (e.g. LinuxMint, Ubuntu).</p>
+					<p>If you are unsure whether the Git command line tools are already installed on your Linux box, you can enter the following command on Debian based distributions (e.g., LinuxMint, Ubuntu):</p>
 					  <code>johndoe@linuxmint ~/$ dpkg --get-selections | grep git</code>
-					  <p>If git tools are already installed you should get a reply like this:</p>
+					  <p>If Git tools are already installed, you should get a reply such as:</p>
 					  <code>git&emsp;&emsp;install<br>
 						  git-core&emsp;&emsp;install<br>
 						  git-gui&emsp;&emsp;install<br>
@@ -213,18 +366,17 @@
 						  git-review&emsp;&emsp;install<br>
 						  gitk&emsp;&emsp;install<br>
 					  </code>
-					  <p>If you don't see the output above, you'll need to install the git tools with the following command:</p> 
-					  
+					  <p>If you don't see the output above, you'll need to install the Git tools with the following command:</p> 
 					  <code>johndoe@linuxmint ~/$ sudo apt-get update &amp;&amp; sudo apt-get install git</code>
 				</li>
 				<li>
-					<p>Clone forte repository into a directory of your choice</p>
+					<p>Clone FORTE repository to a directory of your choice</p>
 					
-					<p>Create a directory in your own home directory first and change into it. In my example this is &frasl;home&frasl;johndoe&frasl;develop&frasl;repos but you can also choose a different one.</p>
+					<p>First, create a directory in your own home directory and change to it. In my example, this is &frasl;home&frasl;johndoe&frasl;develop&frasl;repos, but you can also choose another.</p>
 					<code>johndoe@linuxmint ~/$ mkdir -p develop/repos<br>
 					johndoe@linuxmint ~/$ cd develop/repos
 					</code>
-					<p>Now it's time to clone the forte sources.</p>
+					<p>Now it's time to clone the FORTE sources.</p>
 					<code>johndoe@linuxmint ~/develop/repos$ git clone https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte<br>
 						  Cloning into 'org.eclipse.4diac.forte'...<br>
 						  remote: Counting objects: 1, done<br>
@@ -234,7 +386,7 @@
 						  Resolving deltas: 100% (1445/1445), done.<br>
 						  Checking connectivity... done.<br>
 					</code>
-					<p>After the cloning is finished, you can have a look at the branches of the repository, but first you'll have to change into the new automatically created forte source directory.</p>
+					<p>After cloning, you can have a look at the branches of the repository, but first you'll have to change to the new FORTE source directory created automatically.</p>
 					<code>johndoe@linuxmint ~/develop/repos$ cd org.eclipse.4diac.forte<br>
 						johndoe@linuxmint ~/develop/repos/org.eclipse.4diac.forte $ git branch -a<br>
 						* master<br>
@@ -252,12 +404,13 @@
 					</code>
 				</li>
 				<li>
-					<p>Configure your git installation to work with Gerrit code review</p>
+					<p>Configure your Git installation to work with Gerrit code review</p>
 					<p>You should have already created your Eclipse account and Gerrit login, following the description above. Let's assume that your email account is john.doe@example.com and the login for Gerrit is jdoexy5. We'll set this in the git configuration first.</p>
 					<code>johndoe@linuxmint ~/develop/repos/org.eclipse.4diac.forte $ git config --global user.email "john.doe@example.com"<br>
 					  johndoe@linuxmint ~/develop/repos/org.eclipse.4diac.forte $ git config --global user.name "jdoexy5"
 					</code>
-					<p>Please note that git config –-global settings normally are stored within an user specific configuration file. This file is named .gitconfig and is stored in your own home directory and not in the forte repository. We'll now create an SSH public key, which you need to upload to your Gerrit account later on.</p>
+					<p>Please note that git config --global settings  are generally stored within a user-specific configuration file. This file is named .gitconfig and is stored in your own home directory and not in the FORTE repository. 
+					We'll now create an SSH public key which you need to upload to your Gerrit account later on.</p>
 					<code>johndoe@linuxmint ~/develop/repos/org.eclipse.4diac.forte $ cd ~/.ssh<br>
 						johndoe@linuxmint ~/.ssh $ ssh-keygen -t rsa -C "john.doe@example.com"<br>
 						Generating public/private rsa key pair.<br>
@@ -269,9 +422,18 @@
 						The key fingerprint is:<br>
 						4d:c7:4f:8f:71:07:89:cb:c9:dc:e5:ad:54:77:9a:64 john.doe@example.com<br>
 					</code>
-					<p>You can just accept the default key file location by hitting the return key.The Eclipse foundation strongly recommends to use a passphrase for additional security.Now copy the newly created public SSH key to your Gerrit account at eclipse.org. Display the contents of the public key file with the following command</p>
+					<p>You can just accept the default key file location by hitting the return key.
+					The Eclipse foundation strongly recommends to use a passphrase for additional security.
+					Now copy the newly created public SSH key to your Gerrit account at eclipse.org. 
+					Display the contents of the public key file with the following command:</p>
 					<code>johndoe@linuxmint ~/.ssh $ cat id_rsa.pub</code>
-					<p>Copy everything displayed into your clipboard from the start (including ssh-rsa) to the end (including john.doe@example.com). Now login to your Gerrit account at eclipse.org, click on the small arrow next to your user name displayed in the top right corner and choose &quot;Settings&quot;. In the menu on the left choose &quot;SSH Public Keys&quot; and click on &quot;Add key…&quot;. Now paste everything from the clipboard into the text field and click &quot;Add&quot;. Your public key should appear in the list now. We'll check now, if Gerrit is accepting your key properly. Let's do a little ssh login test.</p>
+					<p>Copy everything displayed into your clipboard from the start (including ssh-rsa) to the end (including john.doe@example.com). 
+					Now login to your Gerrit account at eclipse.org, click on the small arrow next to your user name displayed in the top-right corner and choose &quot;Settings&quot;. 
+					In the menu on the left, choose &quot;SSH Public Keys&quot; and click on &quot;Add key...&quot;. 
+					Now paste everything from the clipboard into the text field and click &quot;Add&quot;. 
+					Your public key should appear in the list now. 
+					We'll check now, whether Gerrit is accepting your key properly. 
+					Let's do a small ssh login test.</p>
 					<code>johndoe@linuxmint ~/.ssh $ ssh -p 29418 jdoexy5@git.eclipse.org<br>
 						The authenticity of host '[git.eclipse.org]:29418 ([198.41.30.196]:29418)' can't be established.<br>
 						RSA key fingerprint is 1a:b6:dc:be:0e:1f:ab:01:70:aa:43:82:4d:54:51:37.<br>
@@ -289,27 +451,37 @@
 						<br>
 						Connection to git.eclipse.org closed.<br>
 					</code>
-					<p>You'll have to configure the Gerrit Push URL within your git configuration. Change to the hidden git directory within the forte repository and edit the file named &quot;config&quot;</p>
+					<p>You'll have to configure the Gerrit Push URL within your Git configuration. 
+					Change to the hidden Git directory within the FORTE repository and edit the file named &quot;config&quot;</p>
 					<code>johndoe@linuxmint ~/.ssh $ cd ..<br>
 						johndoe@linuxmint ~/ $ cd develop/repos/org.eclipse.4diac.forte/.git<br>
 						johndoe@linuxmint ~/develop/repos/org.eclipse.4diac.forte/.git $ nano config<br> 
 					</code>
-					<p>The following screenshot indicates the parts you need to add or change. Save and exit afterwards.</p>
+					<p>The following screenshot indicates the parts you need to add or change. 
+					Save and exit afterwards.</p>
 					<img src="../../html/development/img/cmdPushUrlConfig.png" alt="Configure Gerrit Push URL"/>
 				</li>
 				<li>
 					<p>Create your own commit message template (optional)</p>
 					
-					<p>You can create a commit message template file, which will be used everytime you do a new commit. You can add helpful comments, that you don't forget important contents of the message or even add text, which should be part of every commit message. It's just up to you. Change to your home directory and create a new file called .git_commit_msg_template with your favorite text editor. Here I used nano for convenience.</p>
+					<p>You can create a commit message template file, which will be used everytime you do a new commit. 
+					You can add helpful comments, so that you don't forget important contents of the message or even add text, which should be part of every commit message. 
+					It's just up to you. 
+					Change to your home directory and create a new file called .git_commit_msg_template with your favorite text editor. 
+					Here I used nano for convenience.</p>
 					<code>johndoe@linuxmint ~/develop/repos/org.eclipse.4diac.forte/.git $ cd /home/johndoe<br>
 						johndoe@linuxmint ~/ $ nano .git_commit_msg_template<br>
 					</code>
-					<p>The following screenshot shows some example content. See <a href="#CommitChanges">above</a> for more details of the message guide</p>
+					<p>The following screenshot shows some example content. 
+					See <a href="#CommitChanges">above</a> for more details of the message guide</p>
 					<img src="../../html/development/img/cmdCreateCommitMsgTemplate.png" alt="Example of commit message template contents"/>
 				</li>
 				<li>
 					<p>Do your first command line commit</p>
-					<p>A new commit should always be in relation to a bug in Bugzilla as already mentioned <a href="#FindBug">above</a>. A bug can also add new functionality to forte as well. A single commit should not contain more than 1000 lines of code (yes, you are right, this was already mentioned above, but you can never overaddress this). A good approach to check if something was changed in your local forte sources and needs to be committed is the git status command. You should change into your local forte git repository first.</p>
+					<p>A new commit should always be in relation to a bug in Bugzilla as already mentioned <a href="#FindBug">above</a>. A bug can also add new functionality to FORTE. 
+					A single commit should not contain more than 1000 lines of code (yes, you are right, this was already mentioned above, but you can never emphasize this too often). 
+					A good approach to check whether something was changed in your local FORTE sources and needs to be committed is the git status command. 
+					You should change to your local FORTE Git repository first.</p>
 					<code>johndoe@linuxmint ~/develop/repos/org.eclipse.4diac.forte $ git status<br>
 						On branch develop<br>
 						Your branch is up-to-date with 'origin/develop'.<br>
@@ -320,7 +492,12 @@
 						src/modules/conmeleon_c1/<br>
 						<br>nothing added to commit but untracked files present (use "git add" to track)<br>
 					</code>
-					<p>In the example above I just added an empty directory, which is now recognised by git as untracked. If you want to add some new files, just copy them to your local forte repository or edit existing files. Git will recognise the changes and you'll see the files with the &quot;git status&quot; command. To be able to commit anything, the respective files need to be added first. In this way the files will be moved to the so called staging area. So felx your fingers and do a propper adding.</p>
+					<p>In the example above, I only added an empty directory, which is now recognized by Git as untracked. 
+					If you want to add some new files, just copy them to your local FORTE repository or edit existing files. 
+					Git will recognize the changes and you'll see the files with the &quot;git status&quot; command. 
+					To be able to commit anything, the respective files need to be added first. 
+					In this way, the files will be moved to the so called staging area. 
+					So flex your fingers and add properly.</p>
 					<code>johndoe@linuxmint ~/develop/repos/org.eclipse.4diac.forte $ git add src/modules/conmeleon_c1/util<br>
 						johndoe@linuxmint ~/develop/repos/org.eclipse.4diac.forte $ git status<br>
 						On branch develop<br>
@@ -342,7 +519,9 @@
 						src/modules/conmeleon_c1/processinterface.h<br>
 						src/modules/conmeleon_c1/spi/<br>
 					</code>
-					<p>Now we do the commit itself. Don't forget the -s option for automatic sign off which is required by the org.eclipse.4diac.forte project and to follow the <a href="#CommitChanges">message guide</a> if you didn't do it already as a template. After the git commit command the default editor will be opened with your commit message template and you have to enter the message information (Bugzilla ID, what was changed and why and the URL to the bugzilla entry).</p>
+					<p>Now we do the commit itself. 
+					Don't forget the -s option for automatic sign-off which is required by the org.eclipse.4diac.forte project and to follow the <a href="#CommitChanges">message guide</a> if you didn't do it already as a template. 
+					After the git commit command the default editor will be opened with your commit message template and you have to enter the message information (Bugzilla ID, what was changed and why and the URL to the bugzilla entry).</p>
 					<code>johndoe@linuxmint ~/develop/repos/org.eclipse.4diac.forte $ git commit -s<br>
 						[develop 3a8de79] [495477] Add conmeleon support to forte<br>
 						3 files changed, 272 insertions(+)<br>
@@ -350,11 +529,14 @@
 						create mode 100644 src/modules/conmeleon_c1/util/fileres.h<br>
 						create mode 100644 src/modules/conmeleon_c1/util/uncopyable.h<br>
 					</code>
-					<p>So far so good. This was not really a big deal, was it? The next step is pushing to Gerrit code review and then your new code will be scrutinised by the never sleeping eyes of the project code reviewer. </p>
+					<p>So far so good. 
+					This was not really a big deal, was it? 
+					The next step is pushing to Gerrit code review and then your new code will be scrutinized by the never sleeping eyes of the project code reviewer. </p>
 				</li>
 				<li>
 					<p>Push to Gerrit</p>
-					<p>This is not difficult, if you followed the steps above. You are just a single command away from finish.</p>
+					<p>This is not difficult, if you followed the steps above. 
+					You are just a single command away from finishing.</p>
 					<code>johndoe@linuxmint ~/develop/repos/org.eclipse.4diac.forte $ git push origin HEAD:refs/for/develop<br>
 						Password for 'https://jdoexy5@git.eclipse.org':<br> 
 						Counting objects: 38, done.<br>
@@ -380,17 +562,28 @@
 						To https://jdoexy5@git.eclipse.org/r/4diac/org.eclipse.4diac.forte<br>
 						* [new branch] HEAD &rarr; refs/for/develop<br>
 					</code>
-					<p>You have done it, good job! Now it's the reviewers turn and you'll see his or her comments in the Gerrit code review webpage.</p>
+					<p>You did it, good job! 
+					Now it's the reviewer's turn and you'll see his or her comments in the Gerrit code review webpage.</p>
 				</li>
 			</ol>
 		</li>
 	</ol>
 	
-	<h2>Things to have in mind when contributing.</h2>
+	<h2>Things to keep in mind for contributions:</h2>
 	
 		<ul>
 			<li>
-				<p>When creating new files to be added to the project, the copyright terms should be at the beggining. You should add the year of the modification to the file in the first line of the term, and at the end of the term, your name below Contributors, with a little explanation of your contribution to the file.</p>
+				<p>When creating new files for the project, add the copyright terms at the beginning. Following the year of modification, add the name. Additionally, add your name below "Contributors", together with a short description of your contribution. 
+				Example code:<br>
+				<code> Copyright (c) 20.. Name<br>
+				<br>
+				All rights reserved. This program and the accompanying materials<br>
+				are made available under the terms of the Eclipse Public License v1.0<br>
+				which accompanies this distribution, and is available at<br>
+				http://www.eclipse.org/legal/epl-v10.html<br>
+				<br>
+				Contributors:<br>
+			     - Name: Short description of the contribution</code></p>
 			</li>
 			<li>
 				<p>Always contribute to a bug.</p>
@@ -402,10 +595,10 @@
 				<p>Don't forget to sign the commit.</p>
 			</li>
 			<li>
-				<p>Use the Gerrit <a target="_blank" href="https://git.eclipse.org/r"> website </a> to see the commits you pushed and the status of them.</p>
+				<p>Use the Gerrit <a target="_blank" href="https://git.eclipse.org/r"> website </a> to see the commits you pushed and their status.</p>
 			</li>
 			<li>
-				<p>Don't be afraid to contribute things.</p>
+				<p>Don't be afraid of contributing code.</p>
 			</li>
 			<li>
 				<p>Use the forums in case of doubt.</p>
@@ -418,11 +611,11 @@
 
 <h1>Where to go from here?</h1>
 
-<p>Go back to Development index:</p>
+<p>Back to Development index:</p>
 
 <p><a href="../../html/development/developmentIndex.html">Development Index</a></p>
 
-<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+<p>If you want to go back to the Start Here page, we leave you here a fast access:</p>
 
 <p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
 
