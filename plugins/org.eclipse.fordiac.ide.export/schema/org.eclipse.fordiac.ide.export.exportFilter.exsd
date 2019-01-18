@@ -1,21 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!--
- Copyright (c) 2008, 2011 Profactor GmbH, TU Wien ACIN
-  
+ Copyright (c) 2009, 2016 Profactor GmbH, fortiss GmbH
+ 
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
  which accompanies this distribution, and is available at
  http://www.eclipse.org/legal/epl-v10.html
  
  Contributors:
-   Gerhard Ebenhofer, Alois Zoitl
+   Gerhard Ebenhofer, Martin Jobst
      - initial API and implementation and/or initial documentation
 -->
-<!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.fordiac.ide.export.ui">
+<schema targetNamespace="org.eclipse.fordiac.ide.export" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.eclipse.fordiac.ide.export.ui" id="ExportFilter" name="org.eclipse.fordiac.ide.export.exportFilter"/>
+         <meta.schema plugin="org.eclipse.fordiac.ide.export" id="org.eclipse.fordiac.ide.export.exportFilter" name="ExportFilter"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -23,6 +22,11 @@
    </annotation>
 
    <element name="extension">
+      <annotation>
+         <appInfo>
+            <meta.element />
+         </appInfo>
+      </annotation>
       <complexType>
          <sequence>
             <element ref="ExportFilter"/>
@@ -62,11 +66,25 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.export.ui.IExportFilter"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.export.IExportFilter"/>
                </appInfo>
             </annotation>
          </attribute>
-         <attribute name="sortIndex" type="string" use="required">
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="sortIndex" type="string">
             <annotation>
                <documentation>
                   An Integer value for sorting all the tabs.
@@ -96,7 +114,7 @@
 
    <annotation>
       <appInfo>
-         <meta.section type="apiInfo"/>
+         <meta.section type="apiinfo"/>
       </appInfo>
       <documentation>
          [Enter API information here.]
@@ -112,13 +130,5 @@
       </documentation>
    </annotation>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="copyright"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
 
 </schema>

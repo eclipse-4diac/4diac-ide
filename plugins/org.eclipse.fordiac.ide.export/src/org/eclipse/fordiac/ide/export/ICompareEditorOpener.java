@@ -10,7 +10,7 @@
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.export.utils;
+package org.eclipse.fordiac.ide.export;
 
 import java.io.File;
 

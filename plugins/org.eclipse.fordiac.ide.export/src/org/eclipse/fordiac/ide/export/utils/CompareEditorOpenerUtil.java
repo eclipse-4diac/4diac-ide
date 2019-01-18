@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.export.Activator;
+import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
 
 /**
  * The Class CompareEditorOpenerUtil is a helper class to get the
@@ -42,8 +43,8 @@ public final class CompareEditorOpenerUtil {
 	public static Map<String, ICompareEditorOpener> getCompareEditorOpeners() {
 		HashMap<String, ICompareEditorOpener> openers = new HashMap<>(2);
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
-				"ExportCompareOpener"); //$NON-NLS-1$
+		IConfigurationElement[] elems = registry
+				.getConfigurationElementsFor("org.eclipse.fordiac.ide.export.openCompareEditor"); //$NON-NLS-1$
 		for (IConfigurationElement element : elems) {
 			try {
 				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$

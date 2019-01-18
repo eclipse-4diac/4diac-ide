@@ -30,7 +30,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="CompareEditorOpener" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="openCompareEditor" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -59,7 +59,7 @@
       </complexType>
    </element>
 
-   <element name="CompareEditorOpener">
+   <element name="openCompareEditor">
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
@@ -67,7 +67,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.export.utils.ICompareEditorOpener"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.export.ICompareEditorOpener"/>
                </appinfo>
             </annotation>
          </attribute>

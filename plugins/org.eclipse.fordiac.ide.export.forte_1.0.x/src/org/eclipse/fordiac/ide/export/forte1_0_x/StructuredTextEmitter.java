@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.eclipse.fordiac.ide.export.ExportFilter.VarDefinition;
+import org.eclipse.fordiac.ide.export.forte1_0_x.CPPExportFilter.VarDefinition;
 import org.eclipse.fordiac.ide.export.forte1_0_x.ForteExportFilter1_0_x.AdapterInstance;
 import org.eclipse.fordiac.ide.util.STStringTokenHandling;
 

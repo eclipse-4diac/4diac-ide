@@ -10,7 +10,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.export.utils;
+package org.eclipse.fordiac.ide.export;
 
 import java.util.List;
 
@@ -58,20 +58,6 @@ public interface IExportFilter {
 	 */
 	void export(IFile typeFile, String destination, boolean forceOverwrite,
 			LibraryElement type) throws ExportException;
-
-	/**
-	 * Gets the export filter name.
-	 * 
-	 * @return the export filter name
-	 */
-	String getExportFilterName();
-
-	/**
-	 * Gets the export filter description.
-	 * 
-	 * @return the export filter description
-	 */
-	String getExportFilterDescription();
 
 	/**
 	 * Warnings occured during export.

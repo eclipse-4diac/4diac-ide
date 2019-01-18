@@ -16,8 +16,8 @@ import java.util.Collections
 import org.eclipse.core.resources.IFile
 import org.eclipse.fordiac.ide.export.forte_lua.filter.AdapterFilter
 import org.eclipse.fordiac.ide.export.forte_lua.filter.BasicFBFilter
-import org.eclipse.fordiac.ide.export.utils.ExportException
-import org.eclipse.fordiac.ide.export.utils.IExportFilter
+import org.eclipse.fordiac.ide.export.ExportException
+import org.eclipse.fordiac.ide.export.IExportFilter
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
@@ -50,14 +50,6 @@ class ForteLuaExportFilter implements IExportFilter {
 			AdapterType: return String.valueOf(type.lua)
 			default: throw new UnsupportedOperationException("Unknown library element type " + type.eClass.name)
 		}
-	}
-
-	override getExportFilterName() {
-		"FORTE Lua"
-	}
-
-	override getExportFilterDescription() {
-		"FORTE Lua Export"
 	}
 
 	override getWarnings() {

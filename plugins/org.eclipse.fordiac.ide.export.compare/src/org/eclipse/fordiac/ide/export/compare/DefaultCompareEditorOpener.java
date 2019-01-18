@@ -17,7 +17,7 @@ import java.io.File;
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareUI;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.fordiac.ide.export.utils.ICompareEditorOpener;
+import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
 
 /**
  * Implements the CompareEditorOpener extension point.

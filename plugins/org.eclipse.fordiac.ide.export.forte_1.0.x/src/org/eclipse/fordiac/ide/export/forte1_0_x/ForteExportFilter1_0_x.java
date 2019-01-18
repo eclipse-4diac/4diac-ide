@@ -29,9 +29,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.ExportFilter;
-import org.eclipse.fordiac.ide.export.utils.ExportException;
-import org.eclipse.fordiac.ide.export.utils.IExportFilter;
+import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
@@ -63,7 +63,7 @@ import org.w3c.dom.NodeList;
  * export functionality to create *.cpp and *.h files in the FORTE V1.0.x format
  * 
  */
-public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilter {
+public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFilter {
 
 	private static final String C_BASIC_FB = "CBasicFB";
 
@@ -1566,16 +1566,6 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 		}
 
 		return -1;
-	}
-
-	@Override
-	public String getExportFilterDescription() {
-		return "FORTE Export for FORTE 1.x"; //$NON-NLS-1$
-	}
-
-	@Override
-	public String getExportFilterName() {
-		return "FORTE 1.x"; //$NON-NLS-1$
 	}
 
 	private void exportInitialValues() {
