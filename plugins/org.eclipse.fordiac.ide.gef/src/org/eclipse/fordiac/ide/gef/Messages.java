@@ -58,6 +58,57 @@ public class Messages extends NLS {
 	public static String ConnectionSection_Comment;
 	public static String ConnectionSection_Source;
 	public static String ConnectionSection_Target;
+	
+	/** The Print preview_ erro r_ starting new page. */
+	public static String PrintPreview_ERROR_StartingNewPage;
+	
+	/** The Print preview_ erro r_ starting print job. */
+	public static String PrintPreview_ERROR_StartingPrintJob;
+	
+	/** The Print preview_ labe l_ close. */
+	public static String PrintPreview_LABEL_Close;
+	
+	/** The Print preview_ labe l_ fit page. */
+	public static String PrintPreview_LABEL_FitPage;
+	
+	public static String PrintPreview_LABEL_FitWidth;
+	
+	public static String PrintPreview_LABEL_FitHeight;
+	
+	/** The Print preview_ labe l_ margin. */
+	public static String PrintPreview_LABEL_Margin;
+	
+	public static String PrintPreview_LABEL_CM;
+	
+	/** The Print preview_ labe l_ next page. */
+	public static String PrintPreview_LABEL_NextPage;
+	
+	/** The Print preview_ labe l_ print. */
+	public static String PrintPreview_LABEL_Print;
+	
+	/** The Print preview_ labe l_ print border. */
+	public static String PrintPreview_LABEL_PrintBorder;
+	
+	/** The Print preview_ labe l_ printer settings. */
+	public static String PrintPreview_LABEL_PrinterSettings;
+	
+	/** The Print preview_ labe l_ print preview. */
+	public static String PrintPreview_LABEL_PrintPreview;
+	
+	public static String PrintPreview_LABEL_Scale;
+	
+	/** The Print preview_ labe l_ tile. */
+	public static String PrintPreview_LABEL_Tile;
+	
+	public static String PrintPreview_LABEL_Page;
+	
+	public static String PrintPreview_LABEL_Of;
+	
+	/** The Print preview action_ labe l_ print. */
+	public static String PrintPreviewAction_LABEL_Print;
+	
+	/** The Print preview action_ labe l_ print preview. */
+	public static String PrintPreviewAction_LABEL_PrintPreview;
 
 	
 	static {

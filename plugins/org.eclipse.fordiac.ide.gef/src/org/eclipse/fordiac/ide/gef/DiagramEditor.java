@@ -21,6 +21,7 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -404,6 +405,13 @@ public abstract class DiagramEditor extends GraphicalEditor
 		getSelectionActions().add(action.getId());
 
 		super.createActions();
+
+		//remove the default print action and register our own one
+		registry.removeAction(registry.getAction(ActionFactory.PRINT.getId()));
+		action = new PrintPreviewAction(getGraphicalViewer());
+		registry.registerAction(action);
+		getEditorSite().getActionBars().setGlobalActionHandler(
+				ActionFactory.PRINT.getId(), action);
 
 	}
 

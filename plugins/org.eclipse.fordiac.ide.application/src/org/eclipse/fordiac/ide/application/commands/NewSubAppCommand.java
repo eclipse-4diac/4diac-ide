@@ -34,9 +34,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	private IEditorInput input = null;
 	private final AddElementsToSubAppCommand addElements;
 	private MapToCommand mappSubappCmd = null;  //can not be in the compound command as it needs to be performed when subapp interface is finished
-	
-	boolean createConnection;
-		
+
 	public NewSubAppCommand(FBNetwork fbNetwork, List<?> selection, int x, int y) {
 		super(fbNetwork, x, y);
 		element = LibraryElementFactory.eINSTANCE.createSubApp();

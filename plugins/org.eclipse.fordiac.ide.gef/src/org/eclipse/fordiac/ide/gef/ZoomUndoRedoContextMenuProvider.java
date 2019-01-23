@@ -101,6 +101,11 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 		if (!submenu.isEmpty()){
 			menu.appendToGroup(GEFActionConstants.GROUP_REST, submenu);
 		}
+		
+		action = registry.getAction(ActionFactory.PRINT.getId());
+		if (action != null && action.isEnabled()) {
+			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
+		}
 	}
 
 	private final class GraphZoomInAction extends ZoomInAction {
