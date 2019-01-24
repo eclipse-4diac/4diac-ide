@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <!--
- Copyright (c) 2010 - 2014 TU Wien ACIN, fortiss GmbH
+ Copyright (c) 2010 - 2019 TU Wien ACIN, fortiss GmbH
+               2019 Johannes Kepler University Linz
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -10,22 +11,26 @@
  Contributors:
    Carolyn Oates, Alois Zoitl, Monika Wenger, Jose Cabral
      - initial API and implementation and/or initial documentation
+  Bianca Wiesmayr 
+     - adapting, restructuring and extending the installation tutorial
 -->
 
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Building FORTE for Lego Mindstorms</title>
+	<title>Building 4diac FORTE for Lego Mindstorms</title>
 	<link rel="stylesheet" type="text/css" href="../help.css">
 </head>
 
 <body>
 
-<h1 id="topOfPage">Building FORTE for Lego Mindstorms</h1>
-<p><a href="http://www.lego.com/" target="_blank">LEGO</a> is a trademark name and Mindstorms NXT is a registered trademark from the company LEGO. This tutorial uses <a href="http://ecos.sourceware.org/" target="_blank">eCos</a> realtime operating system (RTOS) and FORTE on the ARM7 processor of the LEGO Mindstorms NXT Brick. The System of the <a href="../../html/4diacIDE/use4diacLocally.html">Blink Tutorial</a> can used with Lego Mindstorms (LMS) as a first test example. If you do not already use Eclipse with Cygwin please consider to get it, as it is described <a href="../../html/installation/cygwin.html">here</a>.</p> 
+<h1 id="topOfPage">Building 4diac FORTE for Lego Mindstorms</h1>
+<p><a href="http://www.lego.com/" target="_blank">LEGO</a> is a trademark name and Mindstorms NXT is a registered trademark from the company LEGO. 
+This tutorial uses <a href="http://ecos.sourceware.org/" target="_blank">eCos</a> real time operating system (RTOS) and 4diac FORTE on the ARM7 processor of the LEGO Mindstorms NXT Brick. 
+The system of the <a href="../../html/4diacIDE/use4diacLocally.html">Blink Tutorial</a> can used with Lego Mindstorms (LMS) as a first test example. If you do not already use Eclipse with Cygwin please consider to get it, as it is described <a href="../../html/installation/cygwin.html">here</a>.</p> 
 
 <ol>
-	<li>For Cygwin consider the <a href="http://ecos.sourceware.org/cygwin.html" target="_blank">eCos installation instructions.</a></li>
+	<li>For Cygwin, consider the <a href="http://ecos.sourceware.org/cygwin.html" target="_blank">eCos installation instructions.</a></li>
 	<li>Install the <a href="http://ecos.sourceware.org/getstart.html" target="_blank">GNU ARM toolchain</a></li>
 	<li>Within the FORTE source create the directories <span class="folderLocation">bin/lego</span> and copy the eCos <span class="folderLocation">include</span> and <span class="folderLocation">lib</span> directories into it.</li>
 	<li>Open CMake-GUI, for source directory enter the FORTE project directory, for build directory, enter the previously created directory <span class="folderLocation">.../bin/lego</span> and press the <span class="button4diac">Configure</span> button.</li>
