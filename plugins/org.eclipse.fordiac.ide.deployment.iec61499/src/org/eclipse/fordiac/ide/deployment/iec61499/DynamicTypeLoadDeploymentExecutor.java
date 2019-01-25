@@ -14,8 +14,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +43,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
 import org.eclipse.fordiac.ide.model.Annotations;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -47,6 +53,7 @@ import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateComman
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -60,6 +67,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.swt.widgets.Display;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -69,7 +77,9 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private static final String CREATE_FB_TYPE = "<Request ID=\"{0}\" Action=\"CREATE\"><FBType Name=\"{1}\">{2}</FBType></Request>"; //$NON-NLS-1$
 	private static final String CREATE_ADAPTER_TYPE = "<Request ID=\"{0}\" Action=\"CREATE\"><AdapterType Name=\"{1}\">{2}</AdapterType></Request>"; //$NON-NLS-1$
 	private static final String QUERY_FB_TYPES = "<Request ID=\"{0}\" Action=\"QUERY\"><FBType Name=\"*\" /></Request>"; //$NON-NLS-1$
+	private static final String QUERY_FB_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><FBType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
 	private static final String QUERY_ADAPTER_TYPES = "<Request ID=\"{0}\" Action=\"QUERY\"><AdapterType Name=\"*\" /></Request>"; //$NON-NLS-1$
+	private static final String QUERY_ADAPTER_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><AdapterType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
 	private static final String QUERY_CONNECTIONS = "<Request ID=\"{0}\" Action=\"QUERY\"><Connection Source=\"{1}\" Destination=\"{2}\"/></Request>"; //$NON-NLS-1$
 
 
@@ -87,6 +97,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		Map<String, AdapterType> adapters = getAdapterTypes(fbData.fb.getType().getInterfaceList());
 		if (!adapters.isEmpty()) {
 			queryAdapterTypes(adapters, res);
+			createAdapterTypes(adapters, res);
 		}
 		queryFBTypes(fbData.fb, res);
 		super.createFBInstance(fbData, res);
@@ -132,7 +143,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			if(!getTypes().contains(netelem.getTypeName())) {
 				Map<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());						
 				if(!adapters.isEmpty()) {
-					loopAdapterTypes(adapters, res);
+					createAdapterTypes(adapters, res);
 				}
 				createFBType((FBType) netelem.getType(), res);
 			}
@@ -216,15 +227,17 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private static void createConnections(Resource res, Response response) {
-		for(org.eclipse.fordiac.ide.deployment.devResponse.Connection connection : response.getEndpointlist().getConnection()) {
-			//TODO currently no subapps supported
-			String[] src = connection.getSource().split("\\."); //$NON-NLS-1$
-			FB srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
-			IInterfaceElement srcIE = Annotations.getInterfaceElement(srcFB, src[src.length - 1]);
-			String[] dst = connection.getDestination().split("\\."); //$NON-NLS-1$
-			FB dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
-			IInterfaceElement dstIE = Annotations.getInterfaceElement(dstFB, dst[dst.length - 1]);
-			createConnectionCommand(res.getFBNetwork(), srcIE, dstIE);
+		if(null != response.getEndpointlist()) {			
+			for(org.eclipse.fordiac.ide.deployment.devResponse.Connection connection : response.getEndpointlist().getConnection()) {
+				//TODO currently no subapps supported
+				String[] src = connection.getSource().split("\\."); //$NON-NLS-1$
+				FB srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
+				IInterfaceElement srcIE = Annotations.getInterfaceElement(srcFB, src[src.length - 1]);
+				String[] dst = connection.getDestination().split("\\."); //$NON-NLS-1$
+				FB dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
+				IInterfaceElement dstIE = Annotations.getInterfaceElement(dstFB, dst[dst.length - 1]);
+				createConnectionCommand(res.getFBNetwork(), srcIE, dstIE);
+			}
 		}
 	}
 
@@ -261,13 +274,20 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private static void createFBNetwork(Resource res, XMLResource xmlResource) {
+	private void createFBNetwork(Resource res, XMLResource xmlResource) {
 		for (EObject object : xmlResource.getContents()) {
 			if(object instanceof Response) {
 				int i = 0;
-				for(org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : ((Response)object).getFblist().getFbs()) {								
-					//this version assumes that all fb types are available within the ide
+				if (null == adapterTypes || adapterTypes.isEmpty()) {
+					queryAdapterTypes(null, res);
+					createNotExistingAdapterTypes(res);
+				}
+				for(org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : ((Response)object).getFblist().getFbs()) {
 					FBTypePaletteEntry entry = (FBTypePaletteEntry) res.getDevice().getAutomationSystem().getPalette().getTypeEntry(fbresult.getType());
+					if(null == entry) {
+						addTypeToTypelib(res, fbresult.getType(), "fbt", QUERY_FB_TYPE);
+						entry = (FBTypePaletteEntry) res.getDevice().getAutomationSystem().getPalette().getTypeEntry(fbresult.getType());
+					}
 					FBCreateCommand fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
 					if(fbcmd.canExecute()) {
 						fbcmd.execute();
@@ -278,7 +298,44 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			}
 		}
 	}
+	
+	private void createNotExistingAdapterTypes(Resource res) {
+		for(String entryName : adapterTypes) {
+			if(null == res.getDevice().getAutomationSystem().getPalette().getTypeEntry(entryName)){
+				addTypeToTypelib(res, entryName, "adp", QUERY_ADAPTER_TYPE);
+			}
+		}
+	}
+	
+	@SuppressWarnings("nls")
+	private void addTypeToTypelib(Resource res, String typeName, String extension, String messageType) {
+		String request = MessageFormat.format(messageType, id++, typeName);
+		try {
+			String result = getDevMgmComHandler().sendREQ(res.getName(), request);		
+			if (result != null) {
+				result = result.replaceFirst("<Response ID=\"[0-9]+\">\n", "");
+				result = result.replaceFirst("</Response>", "");
+				if(!result.contains("Reason=\"UNSUPPORTED_TYPE\"")) {					
+					AutomationSystem system = res.getDevice().getAutomationSystem();
+					Path path = Paths.get(system.getProject().getLocation() + File.separator + "generated" + File.separator + typeName + "." + extension);
+					File file = new File(path.toString());
+					file.getParentFile().mkdirs();
+					Files.write(path, result.getBytes(), StandardOpenOption.CREATE);
+					Palette palette = system.getPalette();
+					TypeLibrary.refreshPalette(palette);
+				}
+			}
+		} catch (Exception e) {
+			if(messageType.equals(QUERY_ADAPTER_TYPE)) {
+				logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Adapter Type")); //$NON-NLS-1$
+			}else {
+				logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "FB Type")); //$NON-NLS-1$
+			}
+		}
+	}
 
+
+	
 	private static ResourceTypeEntry getResourceType(Device device, String resTypeName) {
 		List<PaletteEntry> typeEntries = device.getPaletteEntry().getGroup().getPallete().getTypeEntries(resTypeName);
 		if(!typeEntries.isEmpty() && typeEntries.get(0) instanceof ResourceTypeEntry) {
@@ -315,10 +372,9 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Adapter Types")); //$NON-NLS-1$
 			}
 		}
-		loopAdapterTypes(adapters, res);
 	}
 
-	private void loopAdapterTypes(Map<String, AdapterType> adapters, Resource res) {
+	private void createAdapterTypes(Map<String, AdapterType> adapters, Resource res) {
 		adapters.keySet().forEach(e -> {
 			try {
 				createAdapterType(e, adapters, res);

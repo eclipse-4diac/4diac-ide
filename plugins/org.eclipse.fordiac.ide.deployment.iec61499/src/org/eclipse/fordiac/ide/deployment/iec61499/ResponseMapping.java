@@ -42,6 +42,31 @@ public class ResponseMapping {
 </Response>	
 */
 
+/* query FB Interface
+<Response ID="0">
+  <FBType Comment="" Name="BOOL2BOOL">
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="IN"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Input event qualifier" Name="IN" Type="BOOL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Output event qualifier" Name="OUT" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+</FBType>
+</Response>	
+*/	
+	
 /* Monitoring
 <Response ID="43">
   <Watches>
