@@ -1,7 +1,7 @@
 <!DOCTYPE html> 
 <!--
  Copyright (c) 2010 - 2018 TU Wien ACIN, fortiss GmbH
-               2018 Andrea Zoitl, Johannes Kepler University Linz
+               2018 - 2019 Andrea Zoitl, Johannes Kepler University Linz
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -39,18 +39,19 @@
 
 <!--********************************************************************************************-->
 
-<p>In this tutorial, you will learn how to create your own Function Block.
+<p>In this tutorial, you will learn how to create your own Function Block (FB).
 There are several different types of function blocks, we will show how to create a Basic, a Simple, a Composite and a Service Function Block. 
-The new FBs are then available in the FB Palette for use in the Systems' Applications.
-<br>
-New function blocks need to be created when the needed functionality doesn't exist or multiple FBs should be combined into just one FB. 
-First you have to define the interface with its input and output events and data. 
-Afterwards define the FB internals, which are defined by the kind of FB. 
-<br>We implement the Blinking functionality inside all three different FB types to introduce their creation process.
-All 4 types do the same thing in different ways.
-At an event input, the boolean data output will be toggled and the event output will send the message that the value has changed.</p>
+The new FBs are then available in the FB Palette for use in the Applications of the System.</p>
 
-<p>Create new Function Block by selecting: 
+<p>New FBs need to be created when the desired functionality doesn't exist as a library FB or multiple FBs should be combined into just one FB. 
+First, you have to define the interface with its input and output events and data. 
+Afterwards, define the FB internals, which are defined by the kind of FB. </p>
+
+<p>We implement the Blinking functionality inside all three different FB types to introduce their creation process.
+All four types do the same thing in different ways.
+At an event input, the Boolean data output will be toggled and the event output will message that the value has changed.</p>
+
+<p>Create a new Function Block by selecting: 
 	<br><b><span class="button4diac">File &rarr; New &rarr; New Type</span></b></p>
 
 <!--********************************************************************************************-->
@@ -60,17 +61,17 @@ At an event input, the boolean data output will be toggled and the event output 
 <p>Follow the instructions in the creation wizard. 
 For this tutorial, select BlinkTest as the parent folder. Choose a name for the new FB, we name it <i>BasicTest</i>. 
 Afterwards select the type of FB you want to create, in this case we choose <i>Basic</i>.
-The <b>Function Block Type Editor (FBT Editor)</b> is opening after clicking Finish.</p>
+The <b>Function Block Type Editor (FBT Editor)</b> opens after clicking Finish.</p>
 
 <img src="../../html/4diacIDE/img/Step4/newTypeWizardBasic.png" alt="New Type Wizard - Create a Basic Function Block" />
 
 <ol>
-	<li>Your newly created type appears in your System's Type Library.</li>
+	<li>Your newly created type appears in the Type Library of your System BlinkTest.</li>
 	<li>The central editing area shows the FB part you are currently working on. 
 	Initially, it shows the interface of the Function Block.</li>
 	<li>The Palette shows all elements you can add to the FB interface.</li>
 	<li>The tabs below the central editing area identify the current part of the Function Block you're editing. 
-	The picture shows the selected Interface tab .</li>
+	The picture shows the selected Interface tab.</li>
 	<li>The properties below show the information about the Function Block.</li>
 </ol>
 
@@ -84,7 +85,7 @@ If you need another just drag and drop it from the Palette into the FB or right 
 Of course you can also delete them by pressing the Delete key or right click &rarr; Delete.</p>
 
 <p>In this example, we are doing a Blinking Function Block. 
-This should have then one input event that triggers the change, one output event as an indicator of a change, and a boolean data output for the state.
+This should have then one input event that triggers the change, one output event as an indicator of a change, and a Boolean data output for the state.
 <br>By default, the Boolean output is set to <i>false</i> and remembers the state until a new event comes in and converts the boolean to <i>true</i> until the next input arrives.
 <br>Right now, the Basic FB has more inputs and outputs then we need.</p>
 
