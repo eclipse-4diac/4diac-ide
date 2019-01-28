@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.structuredtext.scoping
 
 import java.util.ArrayList
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.xtext.naming.QualifiedName
 import org.eclipse.xtext.scoping.IScope
@@ -34,7 +35,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
  */
 class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvider {
 
-	def scope_VarDeclaration_type(VarDeclaration context, EReference ref) {
+	def scope_DataType(EObject context, EReference ref) {
 		val candidates = DataTypeLibrary.getInstance.dataTypes
 		// create scope explicitly since Scopes.scopedElementsFor passes ignoreCase as false
 		new SimpleScope(Scopes.scopedElementsFor(candidates, QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)), true)
