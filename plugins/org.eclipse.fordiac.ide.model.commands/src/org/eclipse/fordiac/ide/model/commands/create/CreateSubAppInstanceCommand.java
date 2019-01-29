@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -44,4 +45,9 @@ public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementC
 	public SubApp getSubApp() {
 		return (SubApp)element;
 	}
+	
+	public SubApplicationTypePaletteEntry getPaletteEntry() {
+		return paletteEntry;
+	}
+
 }

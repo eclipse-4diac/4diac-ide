@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * Copyright (c) 2019 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,18 +7,16 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *   Alois Zoitl, Monika Wenger
- *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - Extracted this class from the FBInsertAction  
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
- package org.eclipse.fordiac.ide.application.actions;
+package org.eclipse.fordiac.ide.application.actions;
 
-import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.ui.IWorkbenchPart;
 
-public class FBInsertAction extends FBNetworkElementInsertAction {
+public class SubAppInsertAction extends FBNetworkElementInsertAction {
 	
-	public FBInsertAction(IWorkbenchPart part, FBCreateCommand createCmd) {
+	public SubAppInsertAction(IWorkbenchPart part, CreateSubAppInstanceCommand createCmd) {
 		super(part, createCmd, createCmd.getPaletteEntry());
 	}
 }
