@@ -138,7 +138,6 @@ public class ActionSection extends AbstractECSection {
 		algorithmComposite.setLayout(new GridLayout(1, false));
 		algorithmComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		algorithmList = new AlgorithmList(algorithmComposite, getWidgetFactory());
-		algorithmList.getAlgorithmViewer().addSelectionChangedListener(event -> refresh());
 	}
 	
 	
