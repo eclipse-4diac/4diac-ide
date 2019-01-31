@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2016, 2017 fortiss GmbH
+ * Copyright (c) 2014, 2016, 2017, 2019 fortiss GmbH
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,13 +9,13 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Jose Cabral
+ *     - Set version and description using general function
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.wizards;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
@@ -40,12 +39,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -60,9 +58,6 @@ public class SaveAsSubappWizard extends Wizard {
 	private final SubApp subApp;
 	
 	private SaveAsSubappWizardPage newFilePage;
-	
-	/** The format. */
-	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); //$NON-NLS-1$
 	
 	public SaveAsSubappWizard(SubApp subApp) {
 		setWindowTitle(Messages.SaveAsSubApplicationTypeAction_WizardTitle);
@@ -94,7 +89,8 @@ public class SaveAsSubappWizard extends Wizard {
 				LibraryElement type = entry.getType();
 				type.setName(TypeLibrary.getTypeNameFromFile(entry.getFile()));
 				
-				setupVersionInfo(type);				
+				TypeManagementPreferencesHelper.setupIdentification(type);
+				TypeManagementPreferencesHelper.setupVersionInfo(type);
 				performTypeSetup((SubAppType)type);				
 				AbstractTypeExporter.saveType(entry);	
 				entry.setType(type);
@@ -217,18 +213,4 @@ public class SaveAsSubappWizard extends Wizard {
 		}
 		return element.getInterfaceElement(ie.getName());
 	}
-
-	private void setupVersionInfo(LibraryElement type) {
-		//copied from newFBTypeWizard  TODO consider if we can put this into a comon place
-		VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
-		versionInfo.setAuthor(System.getProperty("user.name")); //$NON-NLS-1$
-		versionInfo.setDate(format.format(new Date(System.currentTimeMillis())));
-		versionInfo.setVersion("1.0"); //$NON-NLS-1$
-		if(type instanceof AdapterType) {
-			type = ((AdapterType)type).getAdapterFBType();
-		}		
-		type.getVersionInfo().clear();
-		type.getVersionInfo().add(versionInfo);
-	}
-
 }
