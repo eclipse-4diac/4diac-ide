@@ -18,7 +18,6 @@ import java.util.List;
 import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
@@ -45,6 +44,8 @@ import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
+import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.figures.GradientLabel;
 import org.eclipse.fordiac.ide.gef.figures.HorizontalLineFigure;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -67,9 +68,6 @@ import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Pattern;
-import org.eclipse.swt.widgets.Display;
 
 public class ECStateEditPart extends AbstractDirectEditableEditPart implements NodeEditPart {
 	private List<Object> stateChildren;
@@ -201,25 +199,8 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 			layout.setHorizontal(true);
 			layout.setMinorAlignment(OrderedLayout.ALIGN_CENTER);
 			stateLabel.setLayoutManager(layout);
-			stateLabel.add(nameLabel = new Label() {
-				@Override
-				protected void paintFigure(Graphics graphics) {
-					Display display = Display.getCurrent();
-					Rectangle boundingRect = getBounds();
-					Point topLeft = boundingRect.getTopLeft();
-					Point bottomRight = boundingRect.getBottomRight();
-					Color first = FigureUtilities.lighter(nameLabel.getBackgroundColor());
-					Pattern pattern = new Pattern(display, topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, first, nameLabel.getBackgroundColor());
-					graphics.setBackgroundPattern(pattern);
-					graphics.fillRectangle(boundingRect);
-					graphics.setBackgroundPattern(null);
-					pattern.dispose();
-					first.dispose();
-					graphics.translate(bounds.x, bounds.y);
-					graphics.drawText(getSubStringText(), getTextLocation());
-					graphics.translate(-bounds.x, -bounds.y);
-				}
-			});
+			nameLabel = new GradientLabel(((ZoomScalableFreeformRootEditPart)getRoot()).getZoomManager());
+			stateLabel.add(nameLabel); 
 			nameLabel.setText(getCastedModel().getName());
 			nameLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
 			nameLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));

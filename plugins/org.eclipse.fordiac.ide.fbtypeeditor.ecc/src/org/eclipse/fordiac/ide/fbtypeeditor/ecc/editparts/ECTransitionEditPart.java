@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEdit
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -245,11 +246,12 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 
 			private Command getTransitionMoveCommand(ChangeBoundsRequest request) {
-
 				Point p = new Point(getCastedModel().getX(), getCastedModel().getY());
+				double scaleFactor = ((ZoomScalableFreeformRootEditPart)getRoot()).getZoomManager().getZoom();
+				p.scale(scaleFactor);
 				p.x += request.getMoveDelta().x;
 				p.y += request.getMoveDelta().y;
-
+				p.scale(1.0 / scaleFactor);
 				return new MoveBendpointCommand(getCastedModel(), p);
 			}
 
