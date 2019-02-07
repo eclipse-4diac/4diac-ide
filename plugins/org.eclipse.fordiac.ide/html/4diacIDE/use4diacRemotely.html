@@ -2,6 +2,7 @@
 <!--
  Copyright (c) 2017-2018 fortiss GmbH
                2018 Johannes Kepler University Linz 
+               2019 Andrea Zoitl
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +13,7 @@
    Jose Cabral 
      - initial API and implementation and/or initial documentation
    Bianca Wiesmayr  - minor text corrections
+   Andrea Zoitl - update of the tutorial
 -->
 <html lang="en">
 <head>
@@ -20,7 +22,9 @@
     <link rel="stylesheet" type="text/css" href="../help.css" />
   </head>
   <body>
-
+  
+<!--********************************************************************************************-->
+    
     <h1 id="topOfPage">Step 3 - Deploy applications remotely</h1>
     
     <p>This page is part of a guide that gives a walk-through over the major 4diac IDE features.</p>
@@ -35,21 +39,53 @@
       <li><a href="../../html/4diacIDE/advancedFeatures.html">Advanced Features [optional]</a></li>
     </ol>
 
-    <p>In this step, the Blink application will not run locally, but in another device. This has not too much to show, but it helps understand the workflow when using real PLCs. Since this page is more of an explanation than actually showing, it's up to the reader to actually implement it. The image below shows the architecture of this step.</p>
+    <p>In this step, the Blink application from <a href="../../html/4diacIDE/distribute4diac.html">Step 2</a> will not run locally, but in another device. 
+    This has not too much to show, but it helps understand the workflow when using real PLCs. 
+    Since this page is more of an explanation than actually showing, it's up to the reader to actually implement it. 
+    The image below shows the architecture of this step.</p>
 
-   <img src="../../html/4diacIDE/img/remote4diac.png" alt="architecture for the current step"/>
+   <img src="../../html/4diacIDE/img/Step3/remoteArchitecture.png" alt="architecture for the current step"/>
+
+<!--********************-->
 
    <h2 id="stepsToDeployRem">Follow these steps to deploy remotely</h2>
 
    <ol>
-     <li>Select the PLC hardware or other hardware that can run 4diac FORTE. You can check <a href="../../html/before4DIAC/4diacFramework.html#4diacFramework" target="_blank">here</a> the list of supported platforms. The cheap options are Raspberry Pi, BeagleBoneBlack or another small board that runs Linux. Another option would be to use another computer in your network.</li>
-     <li>Start FBRT locally as you did in step 3 when <a href="../../html/4diacIDE/distribute4diac.html#deployDevices" target="_blank">deploying devices</a></li>
-     <li>Compile 4diac FORTE for your PLC or other Hardware. Check <a href="../../html/installation/install.html#FORTEWindowsUnix">here</a> for more information.</li>
-     <li>Run 4diac FORTE on the device. This depends on the device you are using. Normally it has some type of Terminal or FTP that you can access and launch the executable. Attention! You cannot use the "Launch FORTE" similar as you did with FBRT, because this will launch a FORTE on your machine and not on the device. There's no way of launching 4diac FORTE in the device from 4diac IDE.</li>
-     <li>In the System Configuration of the project, change the IP:PORT of the FORTE_PC device to match the one that your device has. You should be able to know the IP of your device. The port is 61499 by default. Remember that you can change this port when launching 4diac FORTE.</li>
-     <li>In the Debugging Perspective, select both devices (FBRT_WINDOW and FORTE_PC) just as the step before and click Download.</li>
-     <li>Monitor the FORTE_PC the same way as before, and test the application using the buttons. Remember you cannot monitor FBRT.</li>
+     <li>Select the PLC hardware or other hardware that can run 4diac FORTE. 
+     You can check <a href="../../html/before4DIAC/4diacFramework.html#4diacFramework" >here</a> the list of supported platforms. 
+     The cheap options are Raspberry Pi, BeagleBoneBlack or another small board that runs Linux. 
+     Another option would be to use another computer in your network.</li>
+     <li>Compile 4diac FORTE for your PLC or other Hardware. 
+     Check <a href="../../html/installation/install.html#FORTEWindowsUnix">here</a> for more information.</li>
+     <li>Go to the System Configuration of the <i>BlinkTest</i> and change the address from localhost to the IP address of your device. 
+     This is the easiest way to interact with an external device.
+     <br>However, certain devices require a special device type. 
+     To do this, delete the <i>testee FORTE_PC</i> and pull in the new matching device from the Palette and connect it to the network (map, insert communication FB and connect)  
+     <br>In our example the device IP address is 192.168.0.8, you may have another one. The port is 61499 by default.
+     <br><img src="../../html/4diacIDE/img/Step3/deviceAddress.png" alt="changing the device address"/>
+     <li>Switch to Deployment Perspective set the port to 61500.</li>
+     <li>Launch Local Forte</li>
+     <li>Run 4diac FORTE on the device. 
+     This depends on the device you are using. 
+     Normally it has some type of Terminal or FTP that you can access and launch the executable.</li>
+     <li>Select both devices (i.e., Counter and Testee) in the Deployment Selection</li>
+     <li>Click the <span class="button4diac">Deploy</span> button</li>
+     <li>Check that the <i>Deployment Console</i> shows some output, and that no red warning appears on the right nor left of it. 
+     If you get something red, something went wrong.
+     <br>If an <i>download error message</i> pops up something went wrong too.
+     Here are the most common mistakes:     
+          <ul>
+            <li>wrong IP address</li>
+            <li>the firewall is blocking</li>
+            <li>4diac FORTE does not run on the external device</li>
+          </ul>
+     <br>Here is an example of an error message 
+     <br><img src="../../html/4diacIDE/img/Step3/downloadError.png" alt="Major Download Error pop-up"/></li>
+     <li>You can activate the monitor system and watch the project. 
+     Now you can see that <i>true</i> and <i>false</i>alternate as before.</li>
    </ol>
+
+<!--********************-->
 
    <h2 id="troubleshooting">Troubleshooting</h2>
 
@@ -73,6 +109,8 @@
         </li>
       <li>Another problem found in Windows is that even though the device receives the packets and replies, the application is not receiving them. Even though the packet appears in Wireshark the application does not receive it. A solution is to disable the FIREWALL completely. After that everything should work fine.</li>
    </ul>
+
+<!--********************************************************************************************-->
 
 <h1>Where to go from here?</h1>
 
