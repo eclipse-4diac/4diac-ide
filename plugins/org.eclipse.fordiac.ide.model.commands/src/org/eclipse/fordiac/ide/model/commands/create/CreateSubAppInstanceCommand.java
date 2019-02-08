@@ -28,7 +28,6 @@ public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementC
 		this.paletteEntry = paletteEntry;
 		setLabel("Create Subapplication Instance");
 		element = LibraryElementFactory.eINSTANCE.createSubApp();
-		getSubApp().setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
 		getSubApp().setPaletteEntry(paletteEntry);
 	}
 	
