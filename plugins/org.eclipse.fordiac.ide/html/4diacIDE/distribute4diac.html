@@ -1,7 +1,8 @@
 <!DOCTYPE html> 
 <!--
  Copyright (c) 2017-2018 fortiss GmbH
-               2018 Andrea Zoitl, Johannes Kepler University Linz
+               2018 Johannes Kepler University Linz
+               2018-2019 Andrea Zoitl 
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +12,7 @@
  Contributors:
     Jose Cabral 
      - initial API and implementation and/or initial documentation
-    Andrea Zoitl - cleaning up tutorials for 1.10 release
+    Andrea Zoitl - cleaning up tutorials for 1.10 release, fixing further issues
     Bianca Wiesmayr - minor text corrections
 -->
 
@@ -109,6 +110,8 @@
      
      <img src="../../html/4diacIDE/img/Step2/blinkyResourceComplete.png" alt="Blinky_RES completely connected" />
      
+     <p>Set the QI value to 1 and the set the ID input data of the PUBLISH_COUNT FB to 239.0.0.1:61000.</p>
+     
 <!--********************************************************************************************-->
      <h3 id="SetUpCounting">Set up the Counting Part of the Application</h3>
      
@@ -118,7 +121,26 @@
      The SUBSCRIBE FB must also be initialized.</p>
      
      <img src="../../html/4diacIDE/img/Step2/counterResourceComplete.png" alt="Counter_RES completely connected" />
-        
+     
+     <p>Set the QI value to 1 and the set the ID input data of the SUBSCRIBE_COUNT FB to 239.0.0.1:61000.</p>
+
+<!--********************************************************************************************-->
+     <h3 id="BackgroundCommunicationFBs">Background of the Communication FBs</h3>
+     
+     <p>Here‘s what the last steps mean. The PUBLISH_X FB is used to send messages over the network which are received by an according SUBSCRIBE_X FB. 
+	 Every time a REQ is triggered, a message is sent according to the ID input. 
+	 With the value of the ID input you can specify what specific network protocol you would like to use (e.g., MQTT, OPC UA). 
+	 If you don’t specify a dedicated protocol the default as defined in the <a href="https://www.holobloc.com/doc/ita/">"IEC 61499 Compliance Profile for Feasibility Demonstrations"</a> is used. 
+     The number X in PUBLISH_X is the number of data elements that you want to send in the message. 
+	 Since we are only sending one value we used PUBLISH_1.</p> 
+
+
+	 <p>The used ID value specifies an IP:PORT pair. 
+	 The used "IEC 61499 Compliance Profile for Feasibility Demonstrations" defines that this is an UDP multi-cast address in a certain address range. 
+	 The selected 239.0.0.1 and port 61000 have nothing to do with the localhost:61499 or localhost:61500 use for configuring the devices. 
+	 The first is a UDP multi-cast address use to send messages between devices, and the latter are TCP connections for deploying applications to devices and manage them.
+	 Take care of not using the same UDP socket for different PUBLISH_X/SUBSCRIBE_X pairs.</p>
+		   
 <!--********************************************************************************************-->
     <h2 id="startDevices">Start both Devices</h2>
     
