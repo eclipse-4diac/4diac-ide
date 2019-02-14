@@ -35,6 +35,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Response/Reason"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference devResponse.ecore#//Response/fblist"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Response/endpointlist"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Response/connection"/>
     </genClasses>
     <genClasses ecoreClass="devResponse.ecore#//Watches">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Watches/resources"/>
@@ -46,8 +47,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//EndpointList/connection"/>
     </genClasses>
     <genClasses ecoreClass="devResponse.ecore#//Connection">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Connection/source"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Connection/destination"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Connection/Source"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Connection/Destination"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

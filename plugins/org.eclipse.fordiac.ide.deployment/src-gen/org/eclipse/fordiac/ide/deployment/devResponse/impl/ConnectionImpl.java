@@ -221,9 +221,9 @@ public class ConnectionImpl extends EObjectImpl implements Connection {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (source: "); //$NON-NLS-1$
+		result.append(" (Source: "); //$NON-NLS-1$
 		result.append(source);
-		result.append(", destination: "); //$NON-NLS-1$
+		result.append(", Destination: "); //$NON-NLS-1$
 		result.append(destination);
 		result.append(')');
 		return result.toString();
