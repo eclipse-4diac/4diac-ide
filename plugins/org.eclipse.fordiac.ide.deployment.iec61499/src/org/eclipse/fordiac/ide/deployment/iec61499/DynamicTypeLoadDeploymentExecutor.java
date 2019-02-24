@@ -66,7 +66,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.CreateResourceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.swt.widgets.Display;
 import org.xml.sax.InputSource;
@@ -81,7 +83,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private static final String QUERY_ADAPTER_TYPES = "<Request ID=\"{0}\" Action=\"QUERY\"><AdapterType Name=\"*\" /></Request>"; //$NON-NLS-1$
 	private static final String QUERY_ADAPTER_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><AdapterType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
 	private static final String QUERY_CONNECTIONS = "<Request ID=\"{0}\" Action=\"QUERY\"><Connection Source=\"{1}\" Destination=\"{2}\"/></Request>"; //$NON-NLS-1$
-
+	private static final String QUERY_PARAMETER = "<Request ID=\"{0}\" Action=\"READ\"><Connection Source=\"{1}\" Destination=\"*\" /></Request>"; //$NON-NLS-1$
 
 	private static final Logger logger = Logger.getLogger(DynamicTypeLoadDeploymentExecutor.class);
 	private ResponseMapping respMapping = new ResponseMapping();
@@ -205,15 +207,48 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				res.setName(resource.getName());
 				res.setPaletteEntry(getResourceType(dev, resource.getType()));
 				res.setFBNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
+//				Resource res = new ResourceCreateCommand(getResourceType(dev, resource.getType()));
 				dev.getResource().add(res);
 				queryFBNetwork(res);
 				queryConnections(res);
+				queryParameters(res);
 			}
 		} catch (Exception e) {
 			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Resources")); //$NON-NLS-1$
 		}
 	}
 	
+	private void queryParameters(Resource res) {
+		for(FBNetworkElement fb : res.getFBNetwork().getNetworkElements()) {
+			for(VarDeclaration inVar : fb.getInterface().getInputVars()) {
+				if(inVar.getInputConnections().isEmpty()) {
+					queryParameter(res, fb, inVar);
+				}
+			}
+		}
+	}
+
+	private void queryParameter(Resource res, FBNetworkElement fb, VarDeclaration inVar) {
+		@SuppressWarnings("nls")
+		String request = MessageFormat.format(QUERY_PARAMETER, id++, fb.getName() + "." + inVar.getName());
+		try {
+			String result = getDevMgmComHandler().sendREQ(res.getName(), request);		
+			if (result != null) {
+				createParameter(res, inVar, parseResponse(result));
+			}
+		} catch (Exception e) {
+			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Parameter")); //$NON-NLS-1$
+		}
+	}
+
+	private static void createParameter(Resource res, VarDeclaration inVar, Response response) {
+		if(null != response.getConnection()) {			
+			Value value = LibraryElementFactory.eINSTANCE.createValue();
+			value.setValue(response.getConnection().getDestination());
+			inVar.setValue(value);
+		}
+	}
+
 	private void queryConnections(Resource res) {
 		String request = MessageFormat.format(QUERY_CONNECTIONS, id++, "*", "*"); //$NON-NLS-1$ //$NON-NLS-2$
 		try {
@@ -315,7 +350,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			if (result != null) {
 				result = result.replaceFirst("<Response ID=\"[0-9]+\">\n", "");
 				result = result.replaceFirst("</Response>", "");
-				if(!result.contains("Reason=\"UNSUPPORTED_TYPE\"")) {					
+				if(!result.contains("Reason=\"UNSUPPORTED_TYPE\"") && !result.contains("Reason=\"UNSUPPORTED_CMD\"") ) {					
 					AutomationSystem system = res.getDevice().getAutomationSystem();
 					Path path = Paths.get(system.getProject().getLocation() + File.separator + "generated" + File.separator + typeName + "." + extension);
 					File file = new File(path.toString());

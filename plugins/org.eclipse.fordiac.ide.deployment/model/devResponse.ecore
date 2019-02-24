@@ -29,6 +29,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Reason" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fblist" eType="#//FBList"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="endpointlist" eType="#//EndpointList"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" eType="#//Connection"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Watches">
     <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
@@ -42,7 +43,7 @@
         eType="#//Connection"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Connection">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="destination" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Destination" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>

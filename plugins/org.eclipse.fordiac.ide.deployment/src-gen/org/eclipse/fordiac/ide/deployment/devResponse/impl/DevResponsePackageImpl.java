@@ -16,8 +16,6 @@
  */
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
-import static org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage.RESOURCE;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -381,6 +379,16 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * @generated
 	 */
 	@Override
+	public EReference getResponse_Connection() {
+		return (EReference)responseEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getWatches() {
 		return watchesEClass;
 	}
@@ -519,6 +527,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		createEAttribute(responseEClass, RESPONSE__REASON);
 		createEReference(responseEClass, RESPONSE__FBLIST);
 		createEReference(responseEClass, RESPONSE__ENDPOINTLIST);
+		createEReference(responseEClass, RESPONSE__CONNECTION);
 
 		watchesEClass = createEClass(WATCHES);
 		createEReference(watchesEClass, WATCHES__RESOURCES);
@@ -589,6 +598,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		initEAttribute(getResponse_Reason(), ecorePackage.getEString(), "Reason", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getResponse_Fblist(), this.getFBList(), null, "fblist", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getResponse_Endpointlist(), this.getEndpointList(), null, "endpointlist", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getResponse_Connection(), this.getConnection(), null, "connection", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(watchesEClass, Watches.class, "Watches", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getWatches_Resources(), this.getResource(), null, "resources", null, 0, -1, Watches.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -600,8 +610,8 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		initEReference(getEndpointList_Connection(), this.getConnection(), null, "connection", null, 0, -1, EndpointList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(connectionEClass, Connection.class, "Connection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getConnection_Source(), ecorePackage.getEString(), "source", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getConnection_Destination(), ecorePackage.getEString(), "destination", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getConnection_Source(), ecorePackage.getEString(), "Source", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getConnection_Destination(), ecorePackage.getEString(), "Destination", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);
