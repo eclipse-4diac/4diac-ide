@@ -22,10 +22,12 @@
     <link rel="stylesheet" type="text/css" href="../help.css" />
   </head>
   <body>
+
+<!--********************************************************************************************-->
     
 <h1 id="topOfPage">Step 4 - Create Your own Function Block Types</h1>
 
-<p>This page is part of a guide that gives a walk-through of the major 4diac IDE features.</p>
+<p>This page is part of a guide that gives a walk-through of the major 4diac&nbsp;IDE features.</p>
 
     <ol start="0">
       <li><a href="../../html/4diacIDE/overview.html">4diac IDE Overview</a></li>
@@ -36,8 +38,6 @@
       <li><a href="../../html/4diacIDE/otherUseful.html">Other Basic Features</a></li>
       <li><a href="../../html/4diacIDE/advancedFeatures.html">Advanced Features</a></li>
     </ol>
-
-<!--********************************************************************************************-->
 
 <p>In this tutorial, you will learn how to create your own Function Block (FB).
 There are several different types of Function Blocks, we will show how to create a Basic, a Simple, a Composite and a Service Function Block. 
@@ -77,8 +77,8 @@ The <b>Function Block Type Editor (FBT Editor)</b> opens after clicking Finish.<
 
 <img src="../../html/4diacIDE/img/Step4/typeBasicGeneral.png" alt="General View after Creating a Basic Function Block" />
 
-<!--********************************************************************************************-->
-<h3 id="changeInterface">Change the interface</h3>
+<!--********************-->
+<h3 id="changeInterface">Change the Interface</h3>
 
 <p>The Basic FB already has some inputs and outputs which are commonly used.
 If you need another, just drag and drop it from the Palette into the FB or right-click at the FB to set another input or output.
@@ -104,8 +104,8 @@ This should have then one input event that triggers the change, one output event
 
 <img src="../../html/4diacIDE/img/Step4/createBasicInterface.png" alt="Create Basic Type - Interface"/>
 
-<!--********************************************************************************************-->
-<h3>Change the ECC</h3>
+<!--********************-->
+<h3 id="changeECC">Change the ECC</h3>
 
 <p>Select the <b>ECC (Execution Control Chart) tab</b> at the bottom of the central editing area, and you will see a state machine graph. 
 This is the default one, and here's where you actually code the behavior of the Function Block. 
@@ -233,14 +233,14 @@ You will need to implement the functionality for each incoming event, manage the
 
 <!--********************************************************************************************-->
 
-<h2 id="exportTypes">Export Function Block types</h2>
+<h2 id="exportTypes">Export Function Block Types</h2>
 
-<p>4diac IDE provides an export filter to generate C++ code which can be included in the 4diac FORTE development process. 
+<p>4diac IDE provides an export filter to generate C++ code which can be included in the 4diac&nbsp;FORTE development process. 
 In order to export a Function Block Type, either</p>
 
 <ul>
-	<li>select File &rarr; Export &rarr; 4diac IDE &rarr; 4diac IDE Type Export &rarr; Next</li>
-	<li>right-click on the Function Block to export and select Export &rarr; 4diac IDE &rarr; 4diac Type Export</li>
+	<li>select File &rarr; Export &rarr; 4diac&nbsp;IDE &rarr; 4diac&nbsp;IDE Type Export &rarr; Next</li>
+	<li>right-click on the Function Block to export and select Export &rarr; 4diac&nbsp;IDE &rarr; 4diac Type Export</li>
 </ul>
 
 <img src="../../html/4diacIDE/img/Step4/selectExportType.png" alt="Select Export Type" />
@@ -248,19 +248,19 @@ In order to export a Function Block Type, either</p>
 <p>Select the FBs to be exported on the right side of the wizard. 
 It makes sense to use your own folder, we choose <i>ext_modules/EXAMPLE_TEST</i>.
 Before exporting one or more Function Block Types, the Export Destination and the Exporter (FORTE 1.x) have to be chosen.
-Furthermore, the version of the 4diac FORTE C++ format has to be selected. We'll export the three we just created.</p>
+Furthermore, the version of the 4diac&nbsp;FORTE C++ format has to be selected. We'll export the three we just created.</p>
 <p class="attention"><span class="inlineTitle">Attention:</span> Make sure that not all FBs are checked, otherwise all existing FBs will be exported!</p>
 
 <img src="../../html/4diacIDE/img/Step4/export4DIACTypeWizard.png" alt="Export Type Wizard" />
 
 <p>After clicking the button Finish and no warning pop up everything went fine. Your exported FBs are in the folder you chose before.
-<br>If a dialog window pops up, something went wrong and it will inform you that the export to the 4diac FORTE C++ format was not successful.</p> 
+<br>If a dialog window pops up, something went wrong and it will inform you that the export to the 4diac&nbsp;FORTE C++ format was not successful.</p> 
 
 <p>If the output directory already contains an older version of the exported Function Block Type, it is possible to overwrite the old file or to open a Merge Editor, where manual merges can be performed.</p>
 
 <img src="../../html/4diacIDE/img/Step4/exportMergeWindow.png" width="1024" alt="Export Merge Window" />
 
-<!--********************************************************************************************-->
+<!--********************-->
 <h3 id="finishService">Finish the Service Interface Test</h3>
 
 <p>Now that you have exported the Service Interface Function Block, you need to edit it in order to get the desired behavior. 
@@ -289,7 +289,7 @@ Open the ServiceTest.cpp file that was recently exported, and take a look at the
   }
 }</div>
 
-<p>To get or set an internal variable or data input in the 4diac FORTE template, you use the name and the parentheses. 
+<p>To get or set an internal variable or data input in the 4diac&nbsp;FORTE template, you use the name and the parentheses. 
 The sendOutputEvent is the specific function to send output events.</p>
 
 <!--********************************************************************************************-->
@@ -304,15 +304,15 @@ The management of Device and Resource types is currently not supported.</p>
 
 <p>The <b>FBTester tab</b> of the bottom of the central editing area is available for all Function Blocks. 
 It allows testing the functionality of a Function Block by executing it on a target device. 
-But first, 4diac FORTE must know about these FBs. 
-So, you need to build 4diac FORTE using these Function Blocks just created. 
-A guide to build your own 4diac FORTE is <a href="../../html/installation/install.html#ownFORTE">here</a>. 
+But first, 4diac&nbsp;FORTE must know about these FBs. 
+So, you need to build 4diac&nbsp;FORTE using these Function Blocks just created. 
+A guide to build your own 4diac&nbsp;FORTE is <a href="../../html/installation/install.html#ownFORTE">here</a>. 
 See the section "Add external modules" on adding the files for compilation.</p>
 
-<p>Once compiled, you can go to the FBTester, select 4diac FORTE Remote Tester in Test Configuration, and then set the IP and PORT for the 4diac FORTE that was compiled with the Function Blocks to be tested. 
-The default is locally, but you can test them on any reachable 4diac FORTE.</p>
+<p>Once compiled, you can go to the FBTester, select 4diac&nbsp;FORTE Remote Tester in Test Configuration, and then set the IP and PORT for the 4diac&nbsp;FORTE that was compiled with the Function Blocks to be tested. 
+The default is locally, but you can test them on any reachable 4diac&nbsp;FORTE.</p>
 
-<p>Press Start Testing FB, and the FB will be loaded into 4diac FORTE, and you can manually set input values of your FB, trigger input events and inspect the resulting output events and output data. 
+<p>Press Start Testing FB, and the FB will be loaded into 4diac&nbsp;FORTE, and you can manually set input values of your FB, trigger input events and inspect the resulting output events and output data. 
 Furthermore. you can store input/output sequences and execute them to automatically test a certain functionality of your FB.</p>
 
 <img src="../../html/4diacIDE/img/Step4/functionBlockTester.png" width="1024" alt="Functionblock Tester" />
@@ -323,15 +323,15 @@ Furthermore. you can store input/output sequences and execute them to automatica
 
 <p>In the next step you will see other basic features</p>
 
-<p><a href="../../html/4diacIDE/otherUseful.html">Step 5 - Other basic features</a></p>
+<p><a href="../../html/4diacIDE/otherUseful.html">Step 5 - Other Basic Features</a></p>
 
 <p>If you want to go back to the distributed application running remotely, here's a link</p>
 
-<p><a href="../../html/4diacIDE/use4diacRemotely.html">Step 3 - Deploy remotely</a></p>
+<p><a href="../../html/4diacIDE/use4diacRemotely.html">Step 3 - Deploy Applications Remotely</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Where to Start</a></p>
 
 <p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 

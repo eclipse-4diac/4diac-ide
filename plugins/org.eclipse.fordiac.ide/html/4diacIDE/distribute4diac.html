@@ -24,12 +24,14 @@
   </head>
   <body>
 
+<!--********************************************************************************************-->
+
     <h1 id="topOfPage">Step 2 - Distribute 4diac Applications</h1>
 
-    <p>This page is part of a guide that gives a walk-through over the major 4diac IDE features.</p>
+    <p>This page is part of a guide that gives a walk-through over the major 4diac&nbsp;IDE features.</p>
 
     <ol start="0">
-      <li><a href="../../html/4diacIDE/overview.html">4diac IDE Overview</a></li>
+      <li><a href="../../html/4diacIDE/overview.html">4diac&nbsp;IDE Overview</a></li>
       <li><a href="../../html/4diacIDE/use4diacLocally.html">Use 4diac Locally (Blinking tutorial)</a></li>
       <li>Distribute 4diac Applications (YOU ARE HERE!)</li>
       <li><a href="../../html/4diacIDE/use4diacRemotely.html">Deploy Applications Remotely</a></li>
@@ -38,13 +40,12 @@
       <li><a href="../../html/4diacIDE/advancedFeatures.html">Advanced Features</a></li>
     </ol>
 
-<!--********************************************************************************************-->
   <p>This guide extends the blinking application of <a href="../../html/4diacIDE/use4diacLocally.html" target="_blank">Step 1</a>. 
   We want to count how many times the light has turned on. 
-  You will learn how to distribute a IEC 61499 Application to several devices and set up the communication between them.
+  You will learn how to distribute a IEC&nbsp;61499 Application to several devices and set up the communication between them.
   The example continues to run on the local computer. 
   The application will run on 2 devices. 
-  The blinking part of the application will run on a 4diac FORTE and the count on another 4diac FORTE, see the architecture below.
+  The blinking part of the application will run on a 4diac&nbsp;FORTE and the count on another 4diac&nbsp;FORTE, see the architecture below.
   The two different programs running on the local machine emulate two PLCs.
   <br><img src="../../html/4diacIDE/img/distributedArchitecture.png" alt="architecture for the current step"/></p>
 
@@ -85,11 +86,10 @@
     <p>Change back to the <i>BlinkTestApp</i> Application Editor and map the two new FBs to the Resource <i>Counter_RES</i>.
     You can see the dashed connections between the two devices.</p>
           
-    <img src="../../html/4diacIDE/img/Step2/mapToCounter.png" alt="Mapping of Function Block Instances within the Application Editor" /> 
-         
- <!--********************************************************************************************-->
+    <img src="../../html/4diacIDE/img/Step2/mapToCounter.png" alt="Mapping of Function Block Instances within the Application Editor" />        
+ 
+<!--********************************************************************************************-->
    <h2 id="SetUpCommunication">Set up the Communication Between Both Devices</h2>
-
         
     <p>Change to the <i>Testee.Blinky_RES</i> or <i>Counter.Counter_RES</i> Resource Editor. 
     There you can see 2 incomplete FBs at the E_SR FB or E_PERMIT. 
@@ -99,9 +99,8 @@
     You can find more information about broken connections <a href="../../html/before4DIAC/iec61499.html#brokenConnection">here on our Homepage</a>.</p> 
     
     <img src="../../html/4diacIDE/img/Step2/incompleteFBs.png" alt="incomplete FBs show die broken connection beween two devices" />
-    
-<!--********************************************************************************************-->
-     <h3 id="SetUpBlinking">Set up the Blinking Part of the Application </h3>
+ <!--*********************-->
+     <h3 id="SetUpBlinking">Set up the Blinking Part of the Application</h3>
      
      <p>Change to the <i>Testee.Blinky_RES</i> Resource Editor.</p> 
      
@@ -111,8 +110,7 @@
      <img src="../../html/4diacIDE/img/Step2/blinkyResourceComplete.png" alt="Blinky_RES completely connected" />
      
      <p>Set the QI value to 1 and the set the ID input data of the PUBLISH_COUNT FB to 239.0.0.1:61000.</p>
-     
-<!--********************************************************************************************-->
+<!--*********************-->
      <h3 id="SetUpCounting">Set up the Counting Part of the Application</h3>
      
      <p>Change to the <i>Counter.Counter_RES</i> Resource Editor.</p>
@@ -123,8 +121,7 @@
      <img src="../../html/4diacIDE/img/Step2/counterResourceComplete.png" alt="Counter_RES completely connected" />
      
      <p>Set the QI value to 1 and the set the ID input data of the SUBSCRIBE_COUNT FB to 239.0.0.1:61000.</p>
-
-<!--********************************************************************************************-->
+<!--*********************-->
      <h3 id="BackgroundCommunicationFBs">Background of the Communication FBs</h3>
      
      <p>Here‘s what the last steps mean. The PUBLISH_X FB is used to send messages over the network which are received by an according SUBSCRIBE_X FB. 
@@ -136,23 +133,23 @@
 
 
 	 <p>The used ID value specifies an IP:PORT pair. 
-	 The used "IEC 61499 Compliance Profile for Feasibility Demonstrations" defines that this is an UDP multi-cast address in a certain address range. 
+	 The used "IEC&nbsp;61499 Compliance Profile for Feasibility Demonstrations" defines that this is an UDP multi-cast address in a certain address range. 
 	 The selected 239.0.0.1 and port 61000 have nothing to do with the localhost:61499 or localhost:61500 use for configuring the devices. 
 	 The first is a UDP multi-cast address use to send messages between devices, and the latter are TCP connections for deploying applications to devices and manage them.
 	 Take care of not using the same UDP socket for different PUBLISH_X/SUBSCRIBE_X pairs.</p>
 		   
 <!--********************************************************************************************-->
-    <h2 id="startDevices">Start both Devices</h2>
+    <h2 id="startDevices">Start Both Devices</h2>
     
     <p>Change to the Deployment Perspective.</p> 
     
     <ol>
       <li>Set the Port to 61499 (the same as defined before, remember localhost:61499 in the System Configuration Editor?).</li>
-      <li>Launch Local 4diac FORTE.</li>
-      <li>You should see the location of your 4diac FORTE and the Terminate button enabled in the Console.</li>
+      <li>Launch Local 4diac&nbsp;FORTE.</li>
+      <li>You should see the location of your 4diac&nbsp;FORTE and the Terminate button enabled in the Console.</li>
       <li>Set the Port to 61500 (the same define before, remember localhost:61500 in the System Configuration?)</li>
-      <li>Launch Local 4diac FORTE</li>
-      <li>You should see the the location of your 4diac FORTE and the Terminate button enabled in the Console.</li>
+      <li>Launch Local 4diac&nbsp;FORTE</li>
+      <li>You should see the the location of your 4diac&nbsp;FORTE and the Terminate button enabled in the Console.</li>
       <li>Select the elements to deploy. 
           For this tutorial select our devices <i>Counter</i> and <i>Testee</i>.</li>
       <li>Click the <span class="button4diac">Deploy</span> button.</li>
@@ -163,25 +160,24 @@
     <img src="../../html/4diacIDE/img/Step2/deployCounter.png" alt="deploying of the application" />
        
 <!--********************************************************************************************-->
-  
-    <h2 id="testApplication">Test it! </h2>
+    <h2 id="testApplication">Test it!</h2>
     
     <img src="../../html/4diacIDE/img/Step2/monitoringApp.png" alt="monitoring of the application" />
        
 <!--********************************************************************************************-->
 <h1>Where to go from here?</h1>
 
-<p>In the next step you will see how FORTE runs in another machine.</p>
+<p>In the next step you will see how 4diac&nbsp;FORTE runs in another machine.</p>
 
-<p><a href="../../html/4diacIDE/use4diacRemotely.html">Step 3 - Deploy remotely</a></p>
+<p><a href="../../html/4diacIDE/use4diacRemotely.html">Step 3 - Deploy Applications Remotely</a></p>
 
 <p>If you want to go back to the original Blinking application without buttons, here's a link</p>
 
-<p><a href="../../html/4diacIDE/use4diacLocally.html">Step 1 - Use 4DIAC-IDE locally</a></p>
+<p><a href="../../html/4diacIDE/use4diacLocally.html">Step 1 - Use 4diac Locally (Blinking Tutorial)</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Where to Start</a></p>
 
 <p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 
