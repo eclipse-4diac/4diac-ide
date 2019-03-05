@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Get the IP:PORT/URI endpoint from an Orchestration Form" Name="GetEndpointFromOrchestrationForm">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2018-09-21" Organization="fortiss GmbH" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="Request endpoint" Name="REQ" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="Endpoint requested" Name="CNF" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Orchestration Form to look into" Name="orchestrationForm" Type="OrchestrationForm"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Resulting endpoint from input" Name="endpoint" Type="WSTRING"/>
+    </OutputVars>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="S2WS" Type="F_STRING_TO_WSTRING" x="10175.0" y="-205.0"/>
+    <FB Comment="" Name="WS2WS" Type="WSTRING2WSTRING" x="6100.0" y="-765.0"/>
+    <FB Comment="" Name="DI2S" Type="F_DINT_TO_STRING" x="6120.0" y="-160.0"/>
+    <FB Comment="" Name="GetAddress" Type="GET_STRUCT_VALUE" x="4655.0" y="-860.0">
+      <Parameter Name="member" Value="STRING#provider.address"/>
+    </FB>
+    <FB Comment="" Name="GetPort" Type="GET_STRUCT_VALUE" x="4655.0" y="-265.0">
+      <Parameter Name="member" Value="STRING#provider.port"/>
+    </FB>
+    <FB Comment="" Name="GetURI" Type="GET_STRUCT_VALUE" x="4655.0" y="360.0">
+      <Parameter Name="member" Value="STRING#serviceURI"/>
+    </FB>
+    <FB Comment="" Name="IpPort" Type="APPEND_STRING_3" x="7850.0" y="-600.0">
+      <Parameter Name="IN_2" Value="STRING#:"/>
+    </FB>
+    <FB Comment="" Name="OrchestrationForm2OrchestrationForm" Type="OrchestrationForm2OrchestrationForm" x="1160.0" y="-280.0"/>
+    <FB Comment="" Name="WS2WS_1" Type="WSTRING2WSTRING" x="6110.0" y="460.0"/>
+    <FB Comment="" Name="IpPortURI" Type="APPEND_STRING_2" x="9015.0" y="-200.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="IpPort.IN_3" Source="DI2S.OUT" dx1="245.0"/>
+      <Connection Comment="" Destination="IpPort.IN_1" Source="WS2WS.OUT" dx1="230.0"/>
+      <Connection Comment="" Destination="DI2S.IN" Source="GetPort.output" dx1="350.0"/>
+      <Connection Comment="" Destination="WS2WS.IN" Source="GetAddress.output" dx1="335.0"/>
+      <Connection Comment="" Destination="endpoint" Source="S2WS.OUT" dx1="375.0"/>
+      <Connection Comment="" Destination="GetAddress.in_struct" Source="OrchestrationForm2OrchestrationForm.OUT" dx1="450.0"/>
+      <Connection Comment="" Destination="GetPort.in_struct" Source="OrchestrationForm2OrchestrationForm.OUT" dx1="455.0"/>
+      <Connection Comment="" Destination="GetURI.in_struct" Source="OrchestrationForm2OrchestrationForm.OUT" dx1="440.0"/>
+      <Connection Comment="" Destination="OrchestrationForm2OrchestrationForm.IN" Source="orchestrationForm" dx1="260.0"/>
+      <Connection Comment="" Destination="WS2WS_1.IN" Source="GetURI.output"/>
+      <Connection Comment="" Destination="IpPortURI.IN_1" Source="IpPort.OUT" dx1="140.0"/>
+      <Connection Comment="" Destination="S2WS.IN" Source="IpPortURI.OUT" dx1="210.0"/>
+      <Connection Comment="" Destination="IpPortURI.IN_2" Source="WS2WS_1.OUT" dx1="1060.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="WS2WS.REQ" Source="DI2S.CNF" dx1="60.0" dx2="255.0" dy="-200.0"/>
+      <Connection Comment="" Destination="GetURI.REQ" Source="GetPort.CNF" dx1="60.0" dx2="60.0" dy="440.0"/>
+      <Connection Comment="" Destination="IpPort.REQ" Source="WS2WS.CNF" dx1="250.0"/>
+      <Connection Comment="" Destination="GetPort.REQ" Source="GetAddress.CNF" dx1="60.0" dx2="60.0" dy="440.0"/>
+      <Connection Comment="" Destination="CNF" Source="S2WS.CNF" dx1="375.0"/>
+      <Connection Comment="" Destination="GetAddress.REQ" Source="OrchestrationForm2OrchestrationForm.CNF" dx1="75.0"/>
+      <Connection Comment="" Destination="OrchestrationForm2OrchestrationForm.REQ" Source="REQ" dx1="255.0"/>
+      <Connection Comment="" Destination="WS2WS_1.REQ" Source="GetURI.CNF" dx1="560.0"/>
+      <Connection Comment="" Destination="DI2S.REQ" Source="WS2WS_1.CNF" dx1="60.0" dx2="225.0" dy="-190.0"/>
+      <Connection Comment="" Destination="IpPortURI.REQ" Source="IpPort.CNF" dx1="295.0"/>
+      <Connection Comment="" Destination="S2WS.REQ" Source="IpPortURI.CNF" dx1="210.0"/>
+    </EventConnections>
+  </SubAppNetwork>
+</SubAppType>

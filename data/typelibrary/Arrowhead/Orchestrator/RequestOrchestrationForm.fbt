@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Request Orchestration Function Block" Name="RequestOrchestrationForm">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2018-09-21" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Request form to orchestrator" Name="requestOrchestator" Type="Event">
+        <With Var="serviceRequestForm"/>
+        <With Var="endpoint"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="A response was received from the orchestrator" Name="responseReceived" Type="Event">
+        <With Var="orchestrationResponse"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Service request form to be sent to the orchestrator" Name="serviceRequestForm" Type="ServiceRequestForm"/>
+      <VarDeclaration Comment="Endpoint (IP:PORT/URI) of the orchestrator" Name="endpoint" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration ArraySize="10" Comment="Response from the orchestrator" Name="orchestrationResponse" Type="OrchestrationForm"/>
+    </OutputVars>
+    <Plugs>
+      <AdapterDeclaration Comment="Request Orchestration adapter" Name="requestOrchestration" Type="OrchestratorRequestAdp" x="3700.0" y="-100.0"/>
+    </Plugs>
+  </InterfaceList>
+  <FBNetwork>
+    <DataConnections>
+      <Connection Comment="" Destination="requestOrchestration.serviceRequestForm" Source="serviceRequestForm" dx1="1495.0"/>
+      <Connection Comment="" Destination="orchestrationResponse" Source="requestOrchestration.orchestrationResponse" dx1="60.0" dx2="60.0" dy="-70.0"/>
+      <Connection Comment="" Destination="requestOrchestration.endpoint" Source="endpoint" dx1="1495.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="requestOrchestration.requestOrchestator" Source="requestOrchestator" dx1="1495.0"/>
+      <Connection Comment="" Destination="responseReceived" Source="requestOrchestration.responseReceived" dx1="60.0" dx2="60.0" dy="-5.0"/>
+    </EventConnections>
+  </FBNetwork>
+</FBType>

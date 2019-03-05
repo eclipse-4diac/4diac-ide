@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DataType SYSTEM "http://www.holobloc.com/xml/DataType.dtd" >
+<DataType Name="ServiceRequestForm" Comment="A service request form to be sent to the ochestrator" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Jose Cabral" Date="2018-09-26" />
+  <ASN1Tag Class="APPLICATION" Number="1" />
+  <StructuredType >
+    <VarDeclaration Name="requesterSystem" Type="ArrowheadSystem" Comment="The ArrowheadSystem identifier that is requesting the orchestration" />
+	  <VarDeclaration Name="requesterCloud" Type="ArrowheadCloud" Comment="Not to be used by Application Systems. This field is only used when there is an inbound request from another Cloud. This can only be submitted by the Gatekeeper." />
+    <VarDeclaration Name="requestedService" Type="ArrowheadService" Comment="Not mandatory. When not filled out, the Orchestrator operate in the â€�default configurationâ€� mode. When filled out, other fields will affect how the orchestration will work â€“ but the Service will be specified by the Consumer in advance then. " />
+	  <VarDeclaration Name="orchestrationFlags" Type="WSTRING" ArraySize="10" Comment="These flags can be set to tailor the orchestration process." />
+    <VarDeclaration Name="preferredProviders" Type="PreferredProvider" ArraySize="10" Comment="There can be a list from the Consumer stating which other Application Systems (even from other Clouds) it wishes to connect. If this field is filled out, the Orchestrator will try to facilitate these preferences" />	
+	  <VarDeclaration Name="requestedQoS" Type="WSTRING" ArraySize="10" Comment="This object will be presenting the Consumer’s selected QoS level. Not implemented" />
+  </StructuredType>
+</DataType>

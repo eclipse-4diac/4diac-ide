@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Query Service Function Block" Name="QueryService">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2018-09-21" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Query for services" Name="query" Type="Event">
+        <With Var="serviceQueryForm"/>
+        <With Var="address"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Query finished" Name="queried" Type="Event">
+        <With Var="serviceEntries"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="The Arrowhead Service object that is looked for (SD and supported IDD-s)" Name="serviceQueryForm" Type="ServiceQueryForm"/>
+      <VarDeclaration Comment="Address of the Service Registry (not officially in the documentation, but it simplifies the FBs)" Name="address" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration ArraySize="10" Comment="Result of the query request" Name="serviceEntries" Type="ServiceRegistryEntry"/>
+    </OutputVars>
+    <Plugs>
+      <AdapterDeclaration Comment="Query Services adapter" Name="queryServices" Type="QueryServicesAdp" x="4325.0" y="-245.0"/>
+    </Plugs>
+  </InterfaceList>
+  <FBNetwork>
+    <DataConnections>
+      <Connection Comment="" Destination="queryServices.serviceQueryForm" Source="serviceQueryForm"/>
+      <Connection Comment="" Destination="serviceEntries" Source="queryServices.serviceEntries" dx1="60.0" dx2="60.0" dy="120.0"/>
+      <Connection Comment="" Destination="queryServices.endpoint" Source="address"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="queryServices.query" Source="query" dx1="1830.0"/>
+      <Connection Comment="" Destination="queried" Source="queryServices.queried" dx1="60.0" dx2="60.0" dy="65.0"/>
+    </EventConnections>
+  </FBNetwork>
+</FBType>

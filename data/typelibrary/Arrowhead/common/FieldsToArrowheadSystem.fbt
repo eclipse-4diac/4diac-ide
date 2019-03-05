@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Translate individual fields to an ArrowheadSystem type" Name="FieldsToArrowheadSystem">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2018-09-21" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Create arrowhead system" Name="REQ" Type="Event">
+        <With Var="authenticationInfo"/>
+        <With Var="port"/>
+        <With Var="address"/>
+        <With Var="systemName"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Arrowhead system created" Name="CNF" Type="Event">
+        <With Var="arrowheadSystem"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Identification of the system" Name="systemName" Type="WSTRING"/>
+      <VarDeclaration Comment="Address of the offered services" Name="address" Type="WSTRING"/>
+      <VarDeclaration Comment="Port of the of the offered services" Name="port" Type="DINT"/>
+      <VarDeclaration Comment="Authentication info of the system" Name="authenticationInfo" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Created Arrowhead system" Name="arrowheadSystem" Type="ArrowheadSystem"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="555.0" y="425.0"/>
+      <ECState Comment="Normal execution" Name="REQ" x="215.0" y="755.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECTransition Comment="" Condition="REQ" Destination="REQ" Source="START" x="555.0" y="600.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="215.0" y="425.0"/>
+    </ECC>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ">
+      <ST Text="arrowheadSystem.systemName := systemName;&#13;&#10;arrowheadSystem.address := address;&#13;&#10;arrowheadSystem.port := port;&#13;&#10;arrowheadSystem.authenticationInfo := authenticationInfo;&#13;&#10;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

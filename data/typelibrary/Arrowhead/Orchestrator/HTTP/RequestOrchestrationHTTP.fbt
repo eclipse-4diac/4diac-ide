@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Request Orchestration Function Block using HTTP" Name="RequestOrchestrationHTTP">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2018-09-21" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <Sockets>
+      <AdapterDeclaration Comment="Request orchestration adapter" Name="requestOrchestration" Type="OrchestratorRequestAdp" x="1000.0" y="1500.0"/>
+    </Sockets>
+  </InterfaceList>
+  <FBNetwork>
+    <FB Comment="" Name="APPEND_STRING_3" Type="APPEND_STRING_3" x="4975.0" y="1830.0">
+      <Parameter Name="IN_1" Value="STRING#http["/>
+      <Parameter Name="IN_3" Value="STRING#/orchestration; POST; application/json]"/>
+    </FB>
+    <FB Comment="" Name="Request" Type="CLIENT_1_2" x="9240.0" y="1905.0"/>
+    <FB Comment="" Name="InitFlag" Type="E_SR" x="7445.0" y="1665.0"/>
+    <FB Comment="" Name="E_PERMIT" Type="E_PERMIT" x="8065.0" y="1250.0"/>
+    <FB Comment="" Name="F_STRING_TO_WSTRING" Type="F_STRING_TO_WSTRING" x="6010.0" y="1875.0"/>
+    <FB Comment="" Name="ANYToJSON" Type="ANYToJSON" x="3755.0" y="1475.0"/>
+    <FB Comment="" Name="GetHTTPOrchestrationForm" Type="GetArrayResponseFromHTTP" x="-400.0" y="1500.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="F_STRING_TO_WSTRING.IN" Source="APPEND_STRING_3.OUT" dx1="155.0"/>
+      <Connection Comment="" Destination="Request.ID" Source="F_STRING_TO_WSTRING.OUT" dx1="1055.0"/>
+      <Connection Comment="" Destination="E_PERMIT.PERMIT" Source="InitFlag.Q" dx1="170.0"/>
+      <Connection Comment="" Destination="Request.QI" Source="InitFlag.Q" dx1="740.0"/>
+      <Connection Comment="" Destination="Request.SD_1" Source="ANYToJSON.output" dx1="325.0"/>
+      <Connection Comment="" Destination="ANYToJSON.input" Source="requestOrchestration.serviceRequestForm" dx1="1135.0"/>
+      <Connection Comment="" Destination="APPEND_STRING_3.IN_2" Source="requestOrchestration.endpoint" dx1="615.0"/>
+      <Connection Comment="" Destination="GetHTTPOrchestrationForm.response" Source="Request.RD_2" dx1="60.0" dx2="60.0" dy="310.0"/>
+      <Connection Comment="" Destination="requestOrchestration.orchestrationResponse" Source="GetHTTPOrchestrationForm.output"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="F_STRING_TO_WSTRING.REQ" Source="APPEND_STRING_3.CNF" dx1="155.0"/>
+      <Connection Comment="" Destination="InitFlag.S" Source="F_STRING_TO_WSTRING.CNF" dx1="305.0"/>
+      <Connection Comment="" Destination="Request.INIT" Source="InitFlag.EO" dx1="620.0"/>
+      <Connection Comment="" Destination="Request.REQ" Source="E_PERMIT.EO" dx1="240.0"/>
+      <Connection Comment="" Destination="APPEND_STRING_3.REQ" Source="ANYToJSON.CNF" dx1="245.0"/>
+      <Connection Comment="" Destination="InitFlag.R" Source="Request.CNF" dx1="240.0" dx2="60.0" dy="-1605.0"/>
+      <Connection Comment="" Destination="E_PERMIT.EI" Source="Request.INITO" dx1="60.0" dx2="60.0" dy="-1150.0"/>
+      <Connection Comment="" Destination="ANYToJSON.REQ" Source="requestOrchestration.requestOrchestator" dx1="1135.0"/>
+      <Connection Comment="" Destination="GetHTTPOrchestrationForm.REQ" Source="Request.CNF" dx1="445.0" dx2="60.0" dy="-1945.0"/>
+      <Connection Comment="" Destination="requestOrchestration.responseReceived" Source="GetHTTPOrchestrationForm.CNF"/>
+    </EventConnections>
+  </FBNetwork>
+</FBType>

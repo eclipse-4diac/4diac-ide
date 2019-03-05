@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Helper FB to set the connection to a Service Registry Entry type" Name="ServiceRegistryEntry2ServiceRegistryEntry">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH &#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: PL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-01-28" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Request" Name="REQ" Type="Event">
+        <With Var="IN"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Confirmation" Name="CNF" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Input" Name="IN" Type="ServiceRegistryEntry"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Output" Name="OUT" Type="ServiceRegistryEntry"/>
+    </OutputVars>
+  </InterfaceList>
+  <Service Comment="Helper FB to set the connection to a Service Registry Entry type" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+</FBType>

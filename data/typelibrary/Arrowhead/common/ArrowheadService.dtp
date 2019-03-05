@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DataType SYSTEM "http://www.holobloc.com/xml/DataType.dtd" >
+<DataType Name="ArrowheadService" Comment="A service representation for the Arrowhead framework 4.0" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Jose Cabral" Date="2018-09-26" />
+  <ASN1Tag Class="APPLICATION" Number="1" />
+  <StructuredType >
+    <VarDeclaration Name="serviceDefinition" Type="WSTRING" Comment="Identification of the service" />
+    <VarDeclaration Name="interfaces" Type="WSTRING" ArraySize="10" Comment="Interfaces implemented by the services" />
+    <VarDeclaration Name="serviceMetadata" Type="WSTRING" ArraySize="10" Comment="Metadata of the service in key=value format" />
+   </StructuredType>
+</DataType>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Register Service Function Block" Name="RegisterService">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2018-09-21" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Register the service" Name="register" Type="Event">
+        <With Var="serviceRegistryEntry"/>
+        <With Var="endpoint"/>
+      </Event>
+      <Event Comment="Unregister the service" Name="unregister" Type="Event">
+        <With Var="serviceRegistryEntry"/>
+        <With Var="endpoint"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Register finished" Name="doneRegister" Type="Event"/>
+      <Event Comment="Unregister finished" Name="doneUnregister" Type="Event"/>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Service Registry Entry for register or unregister" Name="serviceRegistryEntry" Type="ServiceRegistryEntry"/>
+      <VarDeclaration Comment="Endpoint (IP:PORT/URI) of the Service Registry (not officially in the documentation, but it simplifies the FBs)" Name="endpoint" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars/>
+    <Plugs>
+      <AdapterDeclaration Comment="Register service adapter" Name="registerService" Type="RegisterServiceAdp" x="4835.0" y="-140.0"/>
+    </Plugs>
+  </InterfaceList>
+  <FBNetwork>
+    <DataConnections>
+      <Connection Comment="" Destination="registerService.serviceRegistryEntry" Source="serviceRegistryEntry" dx1="2050.0"/>
+      <Connection Comment="" Destination="registerService.endpoint" Source="endpoint" dx1="2050.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="registerService.registerService" Source="register" dx1="2050.0"/>
+      <Connection Comment="" Destination="registerService.unregisterService" Source="unregister" dx1="2050.0"/>
+      <Connection Comment="" Destination="doneRegister" Source="registerService.doneRegister" dx1="1935.0"/>
+      <Connection Comment="" Destination="doneUnregister" Source="registerService.doneUnregister" dx1="1935.0"/>
+    </EventConnections>
+  </FBNetwork>
+</FBType>

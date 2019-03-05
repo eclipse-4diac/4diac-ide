@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Translate individual fields to a Service Registry type" Name="FieldsToServiceRegistryEntry">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2018-09-21" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Create service registry entry" Name="REQ" Type="Event">
+        <With Var="metadata"/>
+        <With Var="ttl"/>
+        <With Var="udp"/>
+        <With Var="version"/>
+        <With Var="serviceURI"/>
+        <With Var="provider"/>
+        <With Var="providedService"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Service registry entry created" Name="CNF" Type="Event">
+        <With Var="serviceRegistryEntry"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="The Arrowhead Service object that is provided (SD and supported IDD-s)" Name="providedService" Type="ArrowheadService"/>
+      <VarDeclaration Comment="ArrowheadSystem that is providing the Service" Name="provider" Type="ArrowheadSystem"/>
+      <VarDeclaration Comment="The URL subpath of the Service within the address:port of the Provider" Name="serviceURI" Type="WSTRING"/>
+      <VarDeclaration Comment="The version numbering of the Service provided" Name="version" Type="DINT"/>
+      <VarDeclaration Comment="True, if the service is provided via UDP. By default, it is false" Name="udp" Type="BOOL"/>
+      <VarDeclaration Comment="Service validity time period expressed in seconds. This gets converted to a date-time, and stored in the database" Name="ttl" Type="DINT"/>
+      <VarDeclaration Comment="Metadata belonging to a service/provider pair" Name="metadata" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Created Service Registry entry " Name="serviceRegistryEntry" Type="ServiceRegistryEntry"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="555.0" y="425.0"/>
+      <ECState Comment="Normal execution" Name="REQ" x="215.0" y="755.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECTransition Comment="" Condition="REQ" Destination="REQ" Source="START" x="555.0" y="600.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="215.0" y="425.0"/>
+    </ECC>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ">
+      <ST Text="serviceRegistryEntry.providedService := providedService;&#13;&#10;serviceRegistryEntry.provider := provider;&#13;&#10;serviceRegistryEntry.serviceURI := serviceURI;&#13;&#10;serviceRegistryEntry.version := version;&#13;&#10;serviceRegistryEntry.udp := udp;&#13;&#10;serviceRegistryEntry.ttl := ttl;&#13;&#10;serviceRegistryEntry.metadata := metadata;&#10;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

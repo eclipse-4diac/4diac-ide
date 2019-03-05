@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Transfor a HTTP response to an array" Name="GetArrayResponseFromJSON">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2018-09-21" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Request response from HTTP" Name="REQ" Type="Event">
+        <With Var="response"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Response requested" Name="CNF" Type="Event">
+        <With Var="output"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Reponse from HTTP" Name="response" Type="STRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Ouptut result" Name="output" Type="ANY"/>
+    </OutputVars>
+  </InterfaceList>
+  <Service Comment="Transfor a HTTP response to an array" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+</FBType>
