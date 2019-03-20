@@ -18,23 +18,28 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-      <title>Building 4diac FORTE on Raspberry-SPS</title>
+      <title>Building 4diac&nbsp;FORTE on Raspberry-SPS</title>
       <link rel="stylesheet" type="text/css" href="../help.css">
    </head>
 
    <body>
-      <h1 id="topOfPage">Building 4diac FORTE on Raspberry-SPS</h1>
-	  
+   
+<!--********************************************************************************************-->
+
+      <h1 id="topOfPage">Building 4diac&nbsp;FORTE on Raspberry-SPS</h1>
+<!--***************-->	  
       <h2>Introduction</h2>
       <p>The <a href="http://raspberry-sps.de/" target="_blank">Raspberry-SPS</a> consists of a Raspberry-PI which is a low-cost embedded system with an ARM processor @700Mhz and 512MB RAM and additional modules such as digital and analog modules. 
-      This tutorial shows how to cross-compile 4diac FORTE for the Raspberry-SPS.
-      For a general introduction to building 4diac FORTE, see the <a href="../../html/installation/install.html">installation tutorial</a>.</p>
-	  
+      This tutorial shows how to cross-compile 4diac&nbsp;FORTE for the Raspberry-SPS.
+      For a general introduction to building 4diac&nbsp;FORTE, see the <a href="../../html/installation/install.html">installation tutorial</a>.</p>
+<!--***************-->	  
 	  <h2 id="preparation">Preparation</h2>
 	  <ol>
-		 <li>Download the proper toolchain for your operating system where you plan to build FORTE 4diac <a href="https://releases.linaro.org/archive/15.06/components/toolchain/binaries/" target="_blank"> gcc-linaro-arm-linux-gnueabihf</a>. The <span class="specificText">path to your downloaded toolchain has to be short</span> e.g., <span class="inlineCode">C:/toolchain</span> for Windows.</li>
+		 <li>Download the proper toolchain for your operating system where you plan to build 4diac&nbsp;FORTE <a href="https://releases.linaro.org/archive/15.06/components/toolchain/binaries/" target="_blank"> gcc-linaro-arm-linux-gnueabihf</a>. 
+		 The <span class="specificText">path to your downloaded toolchain has to be short</span> e.g., <span class="inlineCode">C:/toolchain</span> for Windows.</li>
 		  
-		 <li>Start CMake-gui, choose the 4diac FORTE source code folder and build binaries, e.g. <span class="folderLocation">forte/bin/raspberrySPS</span> and press the configure button. A new window will be opened. As generator, choose <span class="specificText">Unix Makefiles</span> and check the <span class="specificText">Specify options for cross compiling</span> radio button.
+		 <li>Start CMake-gui, choose the 4diac&nbsp;FORTE source code folder and build binaries, e.g. <span class="folderLocation">forte/bin/raspberrySPS</span> and press the configure button. 
+		 A new window will be opened. As generator, choose <span class="specificText">Unix Makefiles</span> and check the <span class="specificText">Specify options for cross compiling</span> radio button.
 		 <img src="../../html/installation/img/raspberrySPS_configure.png" alt="configure cross compiling for Raspberry-SPS"/>
 		 </li>
 		 
@@ -47,28 +52,30 @@
 		 <li>Press the <span class="button4diac">Configure</span> button until nothing remains red. Afterwards press the <span class="button4diac">Generate</span> button.</li>
 		 
 		 <li>The desired make files have been generated. 
-		 Execute make within a console and find the 4diac FORTE executable in <span class="folderLocation">forte/bin/raspberrySPS/src</span>
+		 Execute make within a console and find the 4diac&nbsp;FORTE executable in <span class="folderLocation">forte/bin/raspberrySPS/src</span>
 		 <div class="code">$ cd forte/bin/raspberrySPS 
 $ make</div>
 		 </li>
 		 
-		 <li>Copy the 4diac FORTE executable to the Raspberry-SPS and start 4diac FORTE with:
+		 <li>Copy the 4diac&nbsp;FORTE executable to the Raspberry-SPS and start 4diac&nbsp;FORTE with:
  <div class="code">$ ./forte</div></li>
 		</ol>
+
+<!--********************************************************************************************-->
 	
 <h1 id="whereToGoFromHere">Where to go from here?</h1>
 
-<p>If you want to build a 4diac FORTE, here is a quick link back:</p>
+<p>If you want to build a 4diac&nbsp;FORTE, here is a quick link back:</p>
 
 <p><a href="../../html/installation/install.html">Install Eclipse 4diac</a></p>
 
-<p>After you installed all required tools, it's time to start using them. Take a look at the following page:</p>
+<p>After you installed all required tools, it's time to start using them. Take a look at the following tutorials:</p>
 
-<p><a href="../../html/4diacIDE/overview.html">Step by step tutorial</a></p>
+<p><a href="../../html/4diacIDE/overview.html">Step 0 - 4diac IDE Overview</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Where to Start</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 

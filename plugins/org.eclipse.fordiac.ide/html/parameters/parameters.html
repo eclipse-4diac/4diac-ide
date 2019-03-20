@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--
  Copyright (c) 2016 - 2017 fortiss GmbH
+ 			   2019 Andrea Zoitl
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -10,80 +11,195 @@
  Contributors:
    Jose Cabral, Monika Wenger
      - initial API and implementation and/or initial documentation
+   Andrea Zoitl
+     - fixed 4diac branding, corrected links, improved readability
 -->
 
 <html lang="en">
 <head>
- <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
- <title>Parameters for different platforms</title>
- <link rel="stylesheet" type="text/css" href="../help.css">
- </head>
- <body>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Parameters for different platforms</title>
+<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+<body>
 
- <p id="topOfPage">Using QX, IX and similar allows you to access the inputs and outputs of a supported hardware. Of course, in the case of a normal computer, this doesn't apply since it doesn't have I/O that you can control direcly like you do on a PLC (normally boolean). In order to access the I/O of a hardware, you need to set the PARAMS data input to a corresponding value to select which I/O to access. FORTE should be compiled with the corresponding module, that can be selected in CMake. You find here the values to be set to PARAMS for the following supported platforms:</p>
+	<p id="topOfPage">Using QX, IX and similar allows you to access the
+		inputs and outputs of a supported hardware. Of course, in the case of
+		a normal computer, this doesn't apply since it doesn't have I/O that
+		you can control directly like you do on a PLC (normally boolean). In
+		order to access the I/O of a hardware, you need to set the PARAMS data
+		input to a corresponding value to select which I/O to access. 4diac&nbsp;FORTE
+		should be compiled with the corresponding module, that can be selected
+		in CMake. You find here the values to be set to PARAMS for the
+		following supported platforms:</p>
 
- <ol>
-	<li><a href="#sysfs">SysFs (Raspberry Pi, Beagle Bone Black and similar boards)</a></li>
-	<li><a href="#rpi-sps">Raspberry PI-SPS</a></li>
-	<li><a href="#odroid">Odroid</a></li>
-	<li><a href="#piface">PiFace 2</a></li>
-	<li><a href="#umic">uMIC 200</a></li>
-	<li><a href="#mlpi">MLPI (for bosch rexroth PLC)</a></li>
-	<li><a href="#ev3">Lego Mindstorm EV3</a></li>
- </ol>
+	<ol>
+		<li><a href="#sysfs">SysFs (Raspberry Pi, Beagle Bone Black
+				and Similar Boards)</a></li>
+		<li><a href="#rpi-sps">Raspberry-SPS</a></li>
+		<li><a href="#odroid">Odroid</a></li>
+		<li><a href="#piface">PiFace Digital 2</a></li>
+		<li><a href="#umic">&micro;MIC.200</a></li>
+		<li><a href="#mlpi">Bosch Rexroth PLC (MLPI)</a></li>
+		<li><a href="#ev3">Lego Mindstorms EV3</a></li>
+	</ol>
 
-	<h1 id="sysfs">SysFs (Raspberry Pi, Beagle Bone Black and similar boards)</h1>
- 
-	<p>The following picture shows an example application from the <a href = "../4diacIDE/use4diacLocally.html">Blinking tutorial</a> which is extended with IX and QX function blocks. The extended application periodically toggles on pin number 8. It can be started and stopped via pin number 2. You can connect an LED to obtain a blinking light.</p>
-	
-	<img src="../../html/parameters/img/ixqx_fb_network.png" alt="Simple blinking application with an IX and QX function block."/>
-	
-	<p>The <span class="specificText">PARAMS</span> data input in the IX and QX FB define which pin should be used. The application also contains E_CYCLE and E_SWITCH function blocks (which are not in the Blinking tutorial). The first one generates an event every 500 ms. This way the IX block will check the hardware input every half second if the signal has changed. E_SWITCH_0 starts or stops the action, depending on the <span class="specificText">IN</span> data output of the IX function block.</p>
-	
-	<p>Remember that if you have any problem and cannot find the solution in the documentation, visit the <a href="https://www.eclipse.org/forums/index.php?t=thread&frm_id=308" target="_blank">forum</a>.</p>
+<!--********************************************************************************************-->
 
-	<p><a href="#topOfPage">Go to top</a></p>
+	<h1 id="sysfs">SysFs (Raspberry Pi, Beagle Bone Black and Similar
+		Boards)</h1>
 
-	<h1 id="rpi-sps">Raspberry PI-SPS</h1>
-		<p>To use the digital and analog IOs of the Raspberry-SPS please use the IX and QX function blocks for one bit as well as the QW and IW function blocks for word which are provided in the io folder of the tool library. Configure your 4DIAC Device with the correct IP and mapp an application on it as it is illustrated within the following image.</p>
-		<img src="../../html/parameters/img/raspberrySPS_example.png" alt="Raspberry-SPS example application"/>
-		<p>The structure of the PARAMS data input ports is <span class="specificText">busChannel.deviceNumber.portNumber</span>. The Raspberry-SPS has two I2C bus channels. The number of the different devices is listed in the following table. The port number always starts at 0.</p>
-		<table>
-			<tr><th>Device Type</th><th>Device Number</th></tr>
-			<tr><td>8 digital inputs</td><td>56</td></tr>
-			<tr><td>8 digital outputs</td><td>32</td></tr>
-			<tr><td>5 analog inputs</td><td>8</td></tr>
-			<tr><td>4 analog inputs</td><td>88</td></tr>
-		</table>
+	<p>
+		The following picture shows an example application from the <a
+			href="../4diacIDE/use4diacLocally.html">Blinking tutorial</a> which
+		is extended with IX and QX function blocks. The extended application
+		periodically toggles on pin number 8. It can be started and stopped
+		via pin number 2. You can connect an LED to obtain a blinking light.
+	</p>
 
-	<p><a href="#topOfPage">Go to top</a></p>
+	<img src="../../html/parameters/img/ixqx_fb_network.png"
+		alt="Simple blinking application with an IX and QX function block." />
+
+	<p>
+		The <span class="specificText">PARAMS</span> data input in the IX and
+		QX FB define which pin should be used. The application also contains
+		E_CYCLE and E_SWITCH function blocks (which are not in the Blinking
+		tutorial). The first one generates an event every 500 ms. This way the
+		IX block will check the hardware input every half second if the signal
+		has changed. E_SWITCH_0 starts or stops the action, depending on the <span
+			class="specificText">IN</span> data output of the IX function block.
+	</p>
+
+	<p>
+		Remember that if you have any problem and cannot find the solution in
+		the documentation, visit the <a
+			href="https://www.eclipse.org/forums/index.php?t=thread&frm_id=308"
+			target="_blank">forum</a>.
+	</p>
+
+	<p>
+		<a href="#topOfPage">Go to top</a>
+	</p>
+
+<!--********************************************************************************************-->
+
+	<h1 id="rpi-sps">Raspberry-SPS</h1>
+	<p>To use the digital and analog IOs of the Raspberry-SPS please
+		use the IX and QX function blocks for one bit as well as the QW and IW
+		function blocks for word which are provided in the io folder of the
+		tool library. Configure your 4diac Device with the correct IP and mapp
+		an application on it as it is illustrated within the following image.</p>
+	<img src="../../html/parameters/img/raspberrySPS_example.png"
+		alt="Raspberry-SPS example application" />
+	<p>
+		The structure of the PARAMS data input ports is <span
+			class="specificText">busChannel.deviceNumber.portNumber</span>. The
+		Raspberry-SPS has two I2C bus channels. The number of the different
+		devices is listed in the following table. The port number always
+		starts at 0.
+	</p>
+	<table>
+		<tr>
+			<th>Device Type</th>
+			<th>Device Number</th>
+		</tr>
+		<tr>
+			<td>8 digital inputs</td>
+			<td>56</td>
+		</tr>
+		<tr>
+			<td>8 digital outputs</td>
+			<td>32</td>
+		</tr>
+		<tr>
+			<td>5 analog inputs</td>
+			<td>8</td>
+		</tr>
+		<tr>
+			<td>4 analog inputs</td>
+			<td>88</td>
+		</tr>
+	</table>
+
+	<p>
+		<a href="#topOfPage">Go to top</a>
+	</p>
+
+<!--********************************************************************************************-->
 
 	<h1 id="odroid">Odroid</h1>
 
-		<p><a href="https://wiki.odroid.com/" target="_blank">Odroid</a> is an embedded board that you can say it's a more powerful Rapsberry Pi, and it has analog inputs. In order to use the I/O of this board. It works similar to the Raspberry Pi, so you can use QX and IX with the number corresponding to the pin number, and to access the Analog Inputs, you should use IW. <span class="specificText">0</span> and <span class="specificText">1</span> should be set to PARAMS of IW in order to access the <span class="specificText">first</span> and <span class="specificText">second</span> analog inputs respectively. </p>
+	<p>
+		<a href="https://wiki.odroid.com/" target="_blank">Odroid</a> is an
+		embedded board that you can say it's a more powerful Rapsberry Pi, and
+		it has analog inputs. In order to use the I/O of this board. It works
+		similar to the Raspberry Pi, so you can use QX and IX with the number
+		corresponding to the pin number, and to access the Analog Inputs, you
+		should use IW. <span class="specificText">0</span> and <span
+			class="specificText">1</span> should be set to PARAMS of IW in order
+		to access the <span class="specificText">first</span> and <span
+			class="specificText">second</span> analog inputs respectively.
+	</p>
 
-		<img src="../../html/parameters/img/odroidFBs.png" alt="FBs example for Odroid platform">
+	<img src="../../html/parameters/img/odroidFBs.png"
+		alt="FBs example for Odroid platform">
 
-	<p><a href="#topOfPage">Go to top</a></p>
+	<p>
+		<a href="#topOfPage">Go to top</a>
+	</p>
 
-	<h1 id="piface">PiFace 2</h1>
+<!--********************************************************************************************-->
 
-	<p>The <a href="http://www.piface.org.uk/products/piface_digital_2/" target="_blank">PiFace 2</a> is a hat for the Raspberry Pi with Digital I/Os. You can control the Inputs and Outputs from 0 to 7 just using the right number, similart to the Raspberry Pi.</p>
+	<h1 id="piface">PiFace Digital 2</h1>
 
-	<p class="attention"><span class="inlineTitle">Attention</span>: The PiFace was not tested, so if you find a problem or want to add support to the other features of the board, please file a <a href="https://bugs.eclipse.org/bugs/buglist.cgi?product=4DIAC&query_format=advanced&list_id=16476860" target="_blank">bug</a>.</p>
+	<p>
+		The <a href="http://www.piface.org.uk/products/piface_digital_2/"
+			target="_blank">PiFace 2</a> is a hat for the Raspberry Pi with
+		Digital I/Os. You can control the Inputs and Outputs from 0 to 7 just
+		using the right number, similart to the Raspberry Pi.
+	</p>
 
-	<p><a href="#topOfPage">Go to top</a></p>
+	<p class="attention">
+		<span class="inlineTitle">Attention</span>: The PiFace was not tested,
+		so if you find a problem or want to add support to the other features
+		of the board, please file a <a
+			href="https://bugs.eclipse.org/bugs/buglist.cgi?product=4DIAC&query_format=advanced&list_id=16476860"
+			target="_blank">bug</a>.
+	</p>
 
-	<h1 id="umic">uMIC 200</h1>
+	<p>
+		<a href="#topOfPage">Go to top</a>
+	</p>
 
-	<p>This module uses the library provided for the <a href="http://www.microcontrol.net/en/products/control-systems/umic200/" target="_blank">uMIC 200</a>. You need the <span class="fileLocation">umic_dio.h</span>, <span class="fileLocation">umic_relay.h</span> and <span class="fileLocation">umic_led.h</span> headers and also the <span class="fileLocation">umic.so</span> library to be present in your system and accessible by the compiler.</p>
+<!--********************************************************************************************-->
 
-	<p>The parameters should be the type and its number separated by a dot:</p>
-		<p><span class="specificText">TYPE.NUMBER</span></p>
+	<h1 id="umic">&micro;MIC.200</h1>
 
-	<p>NUMBER depends on TYPE, where TYPE can be (all are in lowercase):</p>
+	<p>
+		This module uses the library provided for the <a
+			href="http://www.microcontrol.net/en/products/control-systems/umic200/"
+			target="_blank">&micro;MIC.200</a>. 
+			You need the <span class="fileLocation">umic_dio.h</span>,
+		<span class="fileLocation">umic_relay.h</span> and <span
+			class="fileLocation">umic_led.h</span> headers and also the <span
+			class="fileLocation">umic.so</span> library to be present in your
+		system and accessible by the compiler.
+	</p>
+
+	<p>The parameters should be the type and its number separated by a
+		dot:</p>
+	<p>
+		<span class="specificText">TYPE.NUMBER</span>
+	</p>
+
+	<p>NUMBER depends on TYPE, where TYPE can be (all are in
+		lowercase):</p>
 	<ol>
-		<li><span class="inlineTitle">led</span>: controls the LED1-4 of the uMIC 200 (Only QX can be used with <span class="specificText">led</span>). The possible numbers for NUMBER are from 0 to 7 according to the table below:<p></p>
+		<li><span class="inlineTitle">led</span>: controls the LED1-4 of
+			the &micro;MIC.200 (Only QX can be used with <span class="specificText">led</span>).
+			The possible numbers for NUMBER are from 0 to 7 according to the
+			table below:
+			<p></p>
 			<ul>
 				<li>0 &rarr; LED1_GREEN<br></li>
 				<li>1 &rarr; LED2_GREEN<br></li>
@@ -94,52 +210,77 @@
 				<li>6 &rarr; LED3_RED<br></li>
 				<li>7 &rarr; LED4_RED<br></li>
 			</ul>
-		<p>Example:<br>
-			led.4 &rarr; controls the LED1 color red</p>
-		</li>
-		<li><span class="inlineTitle">dio</span>: controls the 8 digital I/O at pins 5-12. Number can be from 1 to 8. Use IX to make it input, and QX to make it output.<br>
-		<p>Example:<br>
-			dio.3 &rarr; will access Digital I/O 3 at pin 7 of the uMIC200</p>
-		</li>
-		<li><span class="inlineTitle">relay</span>: controls the relays. The possible numbers are 1 and 2. The 1 controls the NO relay and 2 the NC. Only QX can be used with <span class="specificText">relay</span>.<br>
-		<p>Example:<br>
-			relay.1 &rarr; will control the NC relay at pins 14- 15
-		</li>
+			<p>
+				Example:<br> led.4 &rarr; controls the LED1 color red
+			</p></li>
+		<li><span class="inlineTitle">dio</span>: controls the 8 digital
+			I/O at pins 5-12. Number can be from 1 to 8. Use IX to make it input,
+			and QX to make it output.<br>
+			<p>
+				Example:<br> dio.3 &rarr; will access Digital I/O 3 at pin 7 of
+				the &micro;MIC.200
+			</p></li>
+		<li><span class="inlineTitle">relay</span>: controls the relays.
+			The possible numbers are 1 and 2. The 1 controls the NO relay and 2
+			the NC. Only QX can be used with <span class="specificText">relay</span>.<br>
+			<p>
+				Example:<br> relay.1 &rarr; will control the NC relay at pins
+				14- 15</li>
 	</ol>
- 
-	<img src="../../html/parameters/img/uMICFBs.png" alt="FBs example for uMIC platform">
 
-	<p class="attention"><span class="inlineTitle">Attention</span>: To use the relay and led, in some cases you might have to change some header files in your uMIC200. You need to find the files <span class="fileLocation">/usr/include/umic_led.h</span> and <span class="fileLocation">/usr/include/umic_relay.h</span> and add two things:</p>
+	<img src="../../html/parameters/img/uMICFBs.png"
+		alt="FBs example for uMIC platform">
+
+	<p class="attention">
+		<span class="inlineTitle">Attention</span>: To use the relay and led,
+		in some cases you might have to change some header files in your
+		&micro;MIC.200. You need to find the files <span class="fileLocation">/usr/include/umic_led.h</span>
+		and <span class="fileLocation">/usr/include/umic_relay.h</span> and
+		add two things:
+	</p>
 
 	<ul>
 		<li>At the beginning, right after the first #define add:
-		<div class="code">//----------------------------------------------------------------------------//
-// take precautions if compiled with C++ compiler
-#ifdef __cplusplus
-extern "C" {
-#endif
-//----------------------------------------------------------------------------//</div>
+			<div class="code">//----------------------------------------------------------------------------//
+				// take precautions if compiled with C++ compiler #ifdef __cplusplus
+				extern "C" { #endif
+				//----------------------------------------------------------------------------//</div>
 		</li>
 		<li>And at the end, right before the last #endif, add
 			<div class="code">//----------------------------------------------------------------------------//
-#ifdef __cplusplus
-}
-#endif
-// end of C++ compiler wrapper
-//----------------------------------------------------------------------------//</div>
+				#ifdef __cplusplus } #endif // end of C++ compiler wrapper
+				//----------------------------------------------------------------------------//</div>
 		</li>
 	</ul>
 
-	<p>If you don't want to use the relay and led, or you don't want to change the header files, go to ~/org.eclipse.4diac.org/src/modules/umic/processinterface.h and 
-set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
+	<p>If you don't want to use the relay and led, or you don't want to
+		change the header files, go to
+		~/org.eclipse.4diac.org/src/modules/umic/processinterface.h and set
+		the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 
-	<p><a href="#topOfPage">Go to top</a></p>
+	<p>
+		<a href="#topOfPage">Go to top</a>
+	</p>
 
-	<h1 id="mlpi">MLPI (for bosch rexroth PLC)</h1>
+<!--********************************************************************************************-->
 
-	<p>The MLPI interface was tested on a <a href="http://www.boschrexroth.com/dcc/Vornavigation/VorNavi.cfm?PageID=p650746&Language=en" target="_blank">IndraControl XM22</a> PLC from Bosch Rexroth. In order for FORTE to access the I/O, a PLC program must be runing already in the PLC. FORTE will connect to this program and send/receive information to/from it.</p>
+	<h1 id="mlpi">Bosch Rexroth PLC (MLPI)</h1>
 
-	<p>The parameters that you need to use in PARAMS depend therefore from the names you gave to the I/Os in the PLC program. That means that you need to create your program and give them names. An example was tested where the Digital Inputs were called di01, di01, di02 and so on, and similarly with Digital Outputs (do00, do01, do02, etc). To access them from FORTE, the parameters were:</p>
+	<p>
+		The MLPI interface was tested on a <a
+			href="http://www.boschrexroth.com/dcc/Vornavigation/VorNavi.cfm?PageID=p650746&Language=en"
+			target="_blank">IndraControl XM22</a> PLC from Bosch Rexroth. In
+		order for 4diac&nbsp;FORTE to access the I/O, a PLC program must be running
+		already in the PLC. 4diac&nbsp;FORTE will connect to this program and
+		send/receive information to/from it.
+	</p>
+
+	<p>The parameters that you need to use in PARAMS depend therefore
+		from the names you gave to the I/Os in the PLC program. That means
+		that you need to create your program and give them names. An example
+		was tested where the Digital Inputs were called di01, di01, di02 and
+		so on, and similarly with Digital Outputs (do00, do01, do02, etc). To
+		access them from 4diac&nbsp;FORTE, the parameters were:</p>
 	<ul>
 		<li>Application.UserVarGlobal.di00 &rarr; Digital Input 00</li>
 		<li>Application.UserVarGlobal.di01 &rarr; Digital Input 01</li>
@@ -147,17 +288,35 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 		<li>... and so on</li>
 	</ul>
 
-	<p><a href="#topOfPage">Go to top</a></p>
-	
-	<h1 id="ev3">Parameters for the ev3Dev interface</h1>
+	<p>
+		<a href="#topOfPage">Go to top</a>
+	</p>
 
-	<p>This section is a reference of the parameters that can be used in FORTE to access the I/O of the LMSEV3. Reading this section carefully without using them could be quite boring and even useless,because the details will be forgotten if not used. We recommend to give a quick reading in order to know what can be accessed using FORTE. The <a href="../../html/examples/pidMotor.html">example</a> presents the control a motor using a PID controller.</p>
+<!--********************************************************************************************-->
 
-	<h2 id="ev3_standard_parameters">Standard access</h2>
+	<h1 id="ev3">Lego Mindstorms EV3</h1>
 
-	<h3>Transparent access</h3>
+	<p>
+		This section is a reference of the parameters that can be used in
+		4diac&nbsp;FORTE to access the I/O of the LMSEV3. Reading this section carefully
+		without using them could be quite boring and even useless,because the
+		details will be forgotten if not used. We recommend to give a quick
+		reading in order to know what can be accessed using 4diac&nbsp;FORTE. The <a
+			href="../../html/examples/pidMotor.html">example</a> presents the
+		control a motor using a PID controller.
+	</p>
 
-	<p>The standard access refers to the access through well defined IO blocks, that allow transparency in the access of I/O in different platforms. Each block supports different parameters in the PARAM input, which defines the I/O of the system that will be accessed. The blocks used to control the I/O are named with two capital letters.</p>
+<!--***************-->
+
+	<h2 id="ev3_standard_parameters">Standard Access</h2>
+<!--**********-->
+	<h3>Transparent Access</h3>
+
+	<p>The standard access refers to the access through well defined I/O
+		blocks, that allow transparency in the access of I/O in different
+		platforms. Each block supports different parameters in the PARAM
+		input, which defines the I/O of the system that will be accessed. The
+		blocks used to control the I/O are named with two capital letters.</p>
 
 	<ol>
 		<li>
@@ -177,40 +336,63 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 		</li>
 	</ol>
 
-	<p>So, for example a boolean input is read using the functional block IX. The output word, for example the PWM value of a motor is controlled with a QW block. Not all sizes are implemented in all platforms.</p>
+	<p>So, for example a boolean input is read using the functional
+		block IX. The output word, for example the PWM value of a motor is
+		controlled with a QW block. Not all sizes are implemented in all
+		platforms.</p>
+<!--**********-->
+	<h3>Parameters for the Lego Mindstorms EV3</h3>
 
-	<h3>Parameters for the EV3</h3>
-
-	<p>The parameters for the EV3 were designed for general use, and extension of them is easy to achieve. The format of the parameters follow 2 important rules:</p>
+	<p>The parameters for the Lego Mindstorms EV3 were designed for general use, and
+		extension of them is easy to achieve. The format of the parameters
+		follow 2 important rules:</p>
 
 	<ol>
 		<li>
-			<p>The only capital letters allowed are the A,B,C,D when used to define the output ports of the EV3 (outA, outB, outC, outD).</p>
+			<p>The only capital letters allowed are the A,B,C,D when used to
+				define the output ports of the EV3 (outA, outB, outC, outD).</p>
 		</li>
 
-		<li><p>The parameters are given in three parts separated by points:</p>
+		<li><p>The parameters are given in three parts separated by
+				points:</p>
 			<ul>
 				<li><p>port.typeOfIO.specific</p></li>
 			</ul>
 			<ol>
 				<li><p>port</p>
 					<p>The first part of the parameter specifies the port of the
-						Input or Output. For the EV3, the possible values are [in1 | in2 | in3 | in4 | outA | outB | outC | outD | emb]. The first eight are directly related to the actual ports of the EV3. The 'emb' port refers to anything that can be managed in the EV3 but not in the I/O ports, until now the leds and buttons, but in the future the screen and speaker would also be reference with the 'emb' port.</p>
-				</li>
+						Input or Output. For the EV3, the possible values are [in1 | in2 |
+						in3 | in4 | outA | outB | outC | outD | emb]. The first eight are
+						directly related to the actual ports of the EV3. The 'emb' port
+						refers to anything that can be managed in the EV3 but not in the
+						I/O ports, until now the leds and buttons, but in the future the
+						screen and speaker would also be reference with the 'emb' port.</p></li>
 				<li><p>typeOfIO</p>
-					<p>The second part, specifies what is actually connected to the specified port. The possible values are [sensor | sensorw | button | led | motor]. The difference between 'sensor' and 'sensorw' is that 'sensor' is used for boolean sensors, and 'sensorw' for sensors which values are words (16 bits). The 'led' and 'button' are used to control the embedded leds and buttons of the EV3. 'motor' is used for connected motors in any of the outputs.</p>
-					<p>It must be clear that not all of the types can be used with any port. For example a led is only an output, so if used with a input, for example IX it won't intialize. Also, if used to control as a word QW, it won't initialize either.</p>
-				</li>
+					<p>The second part, specifies what is actually connected to the
+						specified port. The possible values are [sensor | sensorw | button
+						| led | motor]. The difference between 'sensor' and 'sensorw' is
+						that 'sensor' is used for boolean sensors, and 'sensorw' for
+						sensors which values are words (16 bits). The 'led' and 'button'
+						are used to control the embedded leds and buttons of the EV3.
+						'motor' is used for connected motors in any of the outputs.</p>
+					<p>It must be clear that not all of the types can be used with
+						any port. For example a led is only an output, so if used with a
+						input, for example IX it won't intialize. Also, if used to control
+						as a word QW, it won't initialize either.</p></li>
 				<li><p>specific</p>
-					<p>As its name says, this third parameter has no general form, and can also be formed of other several parameters separated by points(as in case of the led). Depending of the second parameter, the allowed values for this one are different, and it will be seen in the follow section.</p>
-				</li>
-			</ol>
-		</li>
+					<p>As its name says, this third parameter has no general form,
+						and can also be formed of other several parameters separated by
+						points(as in case of the led). Depending of the second parameter,
+						the allowed values for this one are different, and it will be seen
+						in the follow section.</p></li>
+			</ol></li>
 	</ol>
+<!--**********-->
+	<h3>Specific Parameters</h3>
 
-	<h3>Specific parameters</h3>
-
-	<p>For each possible typeOfIO, the list of possible specific part of the parameters are presented, followed by the limitations and examples.</p>
+	<p>For each possible typeOfIO, the list of possible specific part
+		of the parameters are presented, followed by the limitations and
+		examples.</p>
 	<ol>
 		<li>
 			<p>led (output only):</p>
@@ -220,8 +402,12 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 				<li>left.red</li>
 				<li>left.green</li>
 			</ul>
-			<p>Each specific is used to control each one of the four leds available. The orange led doesn't exist, but is the sum of red + green, so in order to turn on an orange light of the left for example, both the green and red of the left must be turned on.</p>
-	<p>Limitation: 'led' must be used with QX and with the 'emb' port.</p>
+			<p>Each specific is used to control each one of the four leds
+				available. The orange led doesn't exist, but is the sum of red +
+				green, so in order to turn on an orange light of the left for
+				example, both the green and red of the left must be turned on.</p>
+			<p>Limitation: 'led' must be used with QX and with the 'emb'
+				port.</p>
 			<p>Example:</p>
 			<ul>
 				<li><p>emb.led.right.red</p></li>
@@ -238,7 +424,8 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 				<li>backspace</li>
 			</ul>
 			<p>Reads the buttons of the EV3.</p>
-			<p>Limitation: 'button' must be used with IX and with the 'emb' port.</p>
+			<p>Limitation: 'button' must be used with IX and with the 'emb'
+				port.</p>
 
 			<p>Example:</p>
 			<ul>
@@ -252,32 +439,62 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 				<li>[0-N] (input only)</li>
 				<li>mode (input or output)</li>
 			</ul>
-			<p> The sensorw is used with sensors that read a word value instead of a boolean and normally are more complex than regular touch sensors (boolean). Each sensor specifies how it retrieves the data, how many values and the format of it. Specifications of the supported sensors by the ev3dev are listed <a target="_blank" href="http://www.ev3dev.org/docs/sensors/">here</a>. </p>
+			<p>
+				The sensorw is used with sensors that read a word value instead of a
+				boolean and normally are more complex than regular touch sensors
+				(boolean). Each sensor specifies how it retrieves the data, how many
+				values and the format of it. Specifications of the supported sensors
+				by the ev3dev are listed <a target="_blank"
+					href="http://www.ev3dev.org/docs/sensors/">here</a>.
+			</p>
 
-			<p>Each one of the sensors' values is stored in a different file in the EV3. The specific [0-N] determines which file it is. For example the GYRO sensor can show the angle and the rotation speed. The values are store in value0 and value1 files, so to access just the rotation speed, the '1' specific must be used. The actual value must be checked in the link above.</p>
+			<p>Each one of the sensors' values is stored in a different file
+				in the EV3. The specific [0-N] determines which file it is. For
+				example the GYRO sensor can show the angle and the rotation speed.
+				The values are store in value0 and value1 files, so to access just
+				the rotation speed, the '1' specific must be used. The actual value
+				must be checked in the link above.</p>
 
-			<p>The 'mode' specific is used to change the mode of the sensor according to its specification. As an input, mode will retrieve the mode in which the sensor is working, and as output, the mode will be changed. The mode are mirrored using a 0 index according to the specification of the sensor.</p>
+			<p>The 'mode' specific is used to change the mode of the sensor
+				according to its specification. As an input, mode will retrieve the
+				mode in which the sensor is working, and as output, the mode will be
+				changed. The mode are mirrored using a 0 index according to the
+				specification of the sensor.</p>
 
-			<p>Limitation: sensorw cannot be used with boolean blocks (QX or IX). It must be used with an in[1-4] port, but is not restricted to input or output blocks when the specific "mode" is used.</p>
-			
-			<p>Limitation: the specific [0-N] can be used only as input, and the number shouldn't be greater than the allowed by the sensor in the mode that's working at the moment of initialization.</p>
+			<p>Limitation: sensorw cannot be used with boolean blocks (QX or
+				IX). It must be used with an in[1-4] port, but is not restricted to
+				input or output blocks when the specific "mode" is used.</p>
+
+			<p>Limitation: the specific [0-N] can be used only as input, and
+				the number shouldn't be greater than the allowed by the sensor in
+				the mode that's working at the moment of initialization.</p>
 			<p>Examples:</p>
 
-			<p> Let's see an example of using the GYRO sensor specified <a target="_blank" href="http://www.ev3dev.org/docs/sensors/lego-ev3-gyro-sensor/">here</a>. The GYRO works in GYRO-ANG by default, showing only one value, then the only possible parameter is: </p>
+			<p>
+				Let's see an example of using the GYRO sensor specified <a
+					target="_blank"
+					href="http://www.ev3dev.org/docs/sensors/lego-ev3-gyro-sensor/">here</a>.
+				The GYRO works in GYRO-ANG by default, showing only one value, then
+				the only possible parameter is:
+			</p>
 
 			<ul>
 				<li><p>in1.sensorw.0 (IW)</p></li>
 			</ul>
 
-			<p>If a 1 instead of a 0 were used, the initialization would have failed.</p> <p>If the mode of the sensor wants to be retrieve, the "mode"
+			<p>If a 1 instead of a 0 were used, the initialization would have
+				failed.</p>
+			<p>If the mode of the sensor wants to be retrieve, the "mode"
 				specific should be used with the input IW.</p>
 
 			<ul>
 				<li><p>in1.sensorw.mode (IW)</p></li>
 			</ul>
 
-			<p>Because the GYRO sensor by default is in GYRO-ANG and GYRO-ANG is the first of the list according to the link above, the FB will read a 0 (0-index from the list in the link).</p>
-			
+			<p>Because the GYRO sensor by default is in GYRO-ANG and GYRO-ANG
+				is the first of the list according to the link above, the FB will
+				read a 0 (0-index from the list in the link).</p>
+
 			<p>If then the sensor's mode is changed using a QW with "mode"
 				specific</p>
 
@@ -285,7 +502,9 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 				<li><p>in1.sensorw.mode (QW)</p></li>
 			</ul>
 
-			<p>and writing a value 3 (0-index mode), the sensor's mode will change to GYRO-G&amp;A wich shows 2 values, angle and rotation speed. After changing the mode, two IW blocks with parameters</p>
+			<p>and writing a value 3 (0-index mode), the sensor's mode will
+				change to GYRO-G&amp;A wich shows 2 values, angle and rotation
+				speed. After changing the mode, two IW blocks with parameters</p>
 
 			<ul>
 				<li>in1.sensorw.0 (IW)</li>
@@ -296,7 +515,10 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 
 			<p>will retrieve the both values.</p>
 
-			<p>ATTENTION!!! To get the rotation speed, the block with parameter "in1.sensorw.1" must be initialized AFTER the mode has been changed, because before changing the mode, the file for the rotation speed doesn't exist in the system and cannot be read.</p>
+			<p>ATTENTION!!! To get the rotation speed, the block with
+				parameter "in1.sensorw.1" must be initialized AFTER the mode has
+				been changed, because before changing the mode, the file for the
+				rotation speed doesn't exist in the system and cannot be read.</p>
 		</li>
 
 		<li>
@@ -306,9 +528,15 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 				<li>[0-N]</li>
 			</ul>
 
-			<p>Used to control touch sensor (binary). sensor' specific is a subset of sensorw' specific. It doesn't allow mode, and even though the value is always stored in '0', the '0' specific must be used for two mainly reasons: 1. To have a standarized way of showing the parameters, and 2. to avoid problems in the future where a new sensor is stored in '1' instead of '0'.</p>
+			<p>Used to control touch sensor (binary). sensor' specific is a
+				subset of sensorw' specific. It doesn't allow mode, and even though
+				the value is always stored in '0', the '0' specific must be used for
+				two mainly reasons: 1. To have a standarized way of showing the
+				parameters, and 2. to avoid problems in the future where a new
+				sensor is stored in '1' instead of '0'.</p>
 
-			<p>Limitations: 'sensor' must be used with QX and with an in[1-4] port.</p>
+			<p>Limitations: 'sensor' must be used with QX and with an in[1-4]
+				port.</p>
 
 			<p>Example:</p>
 
@@ -329,28 +557,52 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 				<li>rot (input word only)</li>
 			</ul>
 
-			<p>The 'enable' controls the state of the motor accroding to the OUT input of QX. A TRUE value turns ON the motor and a FALSE value turns it OFF. It must be used with QX.</p>
+			<p>The 'enable' controls the state of the motor accroding to the
+				OUT input of QX. A TRUE value turns ON the motor and a FALSE value
+				turns it OFF. It must be used with QX.</p>
 
-			<p>The 'reset' zeroes the position, pwm and speed values, and turn off the motor with a TRUE value in OUT. A FALSE value in OUT has no effect. It must be used with QX</p>
+			<p>The 'reset' zeroes the position, pwm and speed values, and
+				turn off the motor with a TRUE value in OUT. A FALSE value in OUT
+				has no effect. It must be used with QX</p>
 
-			<p>The 'stop' specific must not be confused with stoping the motor, because it specifies the way the motor behaves when PWM is zero according to the value written to OUT. It must be used with QW </p>
+			<p>The 'stop' specific must not be confused with stoping the
+				motor, because it specifies the way the motor behaves when PWM is
+				zero according to the value written to OUT. It must be used with QW
+			</p>
 
 			<ul>
-				<li>0: [coast]: Removes power from the motor. The motor will freely coast to a stop.</li>
-				<li>1: [brake]: Removes power from the motor and creates a passive electrical load. This is usually done by shorting the motor terminals together. This load will absorb the energy from the rotation of the motors and cause the motor to stop more quickly than coasting.</li>
+				<li>0: [coast]: Removes power from the motor. The motor will
+					freely coast to a stop.</li>
+				<li>1: [brake]: Removes power from the motor and creates a
+					passive electrical load. This is usually done by shorting the motor
+					terminals together. This load will absorb the energy from the
+					rotation of the motors and cause the motor to stop more quickly
+					than coasting.</li>
 
-				<li>3: [hold]: Causes the motor to actively try to hold the current position. If an external force tries to turn the motor, the motor will "push back" to maintain its position.</li>
+				<li>3: [hold]: Causes the motor to actively try to hold the
+					current position. If an external force tries to turn the motor, the
+					motor will "push back" to maintain its position.</li>
 			</ul>
 
-			<p>The 'pwm' reads the current pwm when using with IW of the motor or writes the desired pwm for the motor when using with QW.</p>
+			<p>The 'pwm' reads the current pwm when using with IW of the
+				motor or writes the desired pwm for the motor when using with QW.</p>
 
-			<p>The 'position' reads the current position of the motor. In how many steps a rotation is divided, can be read from using the 'rot' specific. It must be used with ID. The position can be written, wich sets the position to the desired value.</p>
+			<p>The 'position' reads the current position of the motor. In how
+				many steps a rotation is divided, can be read from using the 'rot'
+				specific. It must be used with ID. The position can be written, wich
+				sets the position to the desired value.</p>
 
-			<p>The 'speed' reads the current speed in positions by second. It must be used with IW.</p>
+			<p>The 'speed' reads the current speed in positions by second. It
+				must be used with IW.</p>
 
-			<p>The 'rot' reads the motor specication of how many steps are in one turn of the motor. This can be read from the specifications of the motor normally and it's not necessary to add the block in an application just to read this information. It must be used with IW.</p>
+			<p>The 'rot' reads the motor specication of how many steps are in
+				one turn of the motor. This can be read from the specifications of
+				the motor normally and it's not necessary to add the block in an
+				application just to read this information. It must be used with IW.</p>
 
-			<p>Limitations: Event though each specific has its limitation regarding the type of block to use with, the typeOfIO "motor" must be used with one of the outputs of the EV3 out[A-B]</p>
+			<p>Limitations: Event though each specific has its limitation
+				regarding the type of block to use with, the typeOfIO "motor" must
+				be used with one of the outputs of the EV3 out[A-B]</p>
 
 			<p>Examples:</p>
 
@@ -369,25 +621,33 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 		</li>
 	</ol>
 
-	<h2 id="ev3_cheatsheet">I/O cheatsheet</h2>
+<!--***************-->
 
-	<p>This section doesn't add any new information, but summarize which parameters and FB should be used with each I/O.</p>
+	<h2 id="ev3_cheatsheet">I/O Cheatsheet</h2>
+
+	<p>This section doesn't add any new information, but summarize
+		which parameters and FB should be used with each I/O.</p>
 
 	<ol>
 		<li>
-			<p>Touch sensor connected to an input port. It must be used with IX</p>
+			<p>Touch sensor connected to an input port. It must be used with
+				IX</p>
 
 			<ul>
 				<li><p>in[X].sensor.[Y]</p></li>
 			</ul>
 
-			<p>where X is the number of the input in the EV3 (1-4) and Y is the value number where to read from according to the sensor. Read the specification of the sensor to be sure. Start trying from 0 if no information is available.</p>
+			<p>where X is the number of the input in the EV3 (1-4) and Y is
+				the value number where to read from according to the sensor. Read
+				the specification of the sensor to be sure. Start trying from 0 if
+				no information is available.</p>
 		</li>
 		<li>
 			<p>One of the 6 buttons of the EV3. It must be used with IX</p>
 
 			<ul>
-				<li><p>emb.button.[up | down | left | right | enter | backspace]</p></li>
+				<li><p>emb.button.[up | down | left | right | enter |
+						backspace]</p></li>
 			</ul>
 
 			<p>Only one of the inputs can be selected for each IX.</p>
@@ -402,7 +662,8 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 			<p>The orange led does not exist, but is the sum of green + red.</p>
 		</li>
 		<li>
-			<p>Motor connected to an output port. The FB to use depends on the parameter of the motor that wants to be handled.</p>
+			<p>Motor connected to an output port. The FB to use depends on
+				the parameter of the motor that wants to be handled.</p>
 			<ul>
 				<li>
 					<p>Turn ON/OFF the motor. It must be used with QX.</p>
@@ -411,7 +672,9 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 						<li><p>out[X].motor.enable</p></li>
 					</ul>
 
-					<p>Where X is the output capital letter of the EV3 (A-D, in uppercase). A TRUE value in OUT input turns the motor ON, and a FALSE value turns the motor OFF.</p>
+					<p>Where X is the output capital letter of the EV3 (A-D, in
+						uppercase). A TRUE value in OUT input turns the motor ON, and a
+						FALSE value turns the motor OFF.</p>
 				</li>
 				<li>
 					<p>Reset the motor variables and stop. It must be used with QX.</p>
@@ -419,63 +682,95 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 					<ul>
 						<li><p>out[X].motor.reset</p></li>
 					</ul>
-					<p>Where X is the output capital letter of the EV3 (A-D, in uppercase). A TRUE value in OUT resets all of the motor parameter attributes to their default values. This will also have the effect of stopping the motor. A FALSE value doesn't have any effect.</p>
+					<p>Where X is the output capital letter of the EV3 (A-D, in
+						uppercase). A TRUE value in OUT resets all of the motor parameter
+						attributes to their default values. This will also have the effect
+						of stopping the motor. A FALSE value doesn't have any effect.</p>
 				</li>
 				<li>
-					<p>Read current duty cycle (pwm) from a motor. It must be used with IW.</p>
+					<p>Read current duty cycle (pwm) from a motor. It must be used
+						with IW.</p>
 
 					<ul>
 						<li><p>out[X].motor.pwm</p></li>
 					</ul>
 
-					<p>Where X is the output letter of the EV3 (A-D, in uppercase). The read value is between -100 and 100. It might seem confusing reading an input from an output but even though the signal is from an output, it is an input to the system.</p>
+					<p>Where X is the output letter of the EV3 (A-D, in uppercase).
+						The read value is between -100 and 100. It might seem confusing
+						reading an input from an output but even though the signal is from
+						an output, it is an input to the system.</p>
 				</li>
 				<li>
-					<p>Read the current speed of the motor. It must be used with IW.</p>
+					<p>Read the current speed of the motor. It must be used with
+						IW.</p>
 					<ul>
 						<li><p>out[X].motor.speed</p></li>
 					</ul>
-					<p>Where X is the output letter of the EV3 (A-D, in uppercase). It reads the velocity in steps per second. How many steps are in one turn of the motor can be read with the parameter "rot" (see next). If a motor has 360 steps in one turn and the speed is 720, then the speed is 2 rotations per second.</p>
+					<p>Where X is the output letter of the EV3 (A-D, in uppercase).
+						It reads the velocity in steps per second. How many steps are in
+						one turn of the motor can be read with the parameter "rot" (see
+						next). If a motor has 360 steps in one turn and the speed is 720,
+						then the speed is 2 rotations per second.</p>
 				</li>
 				<li>
-					<p>Read the number of steps in each turn. It must be used with IW.</p>
+					<p>Read the number of steps in each turn. It must be used with
+						IW.</p>
 					<ul>
 						<li><p>out[X].motor.rot</p></li>
 					</ul>
-					<p>Where X is the output letter of the EV3 (A-D, in uppercase). This value is fixed in the motor and can be found in the specifications of the motor and it normally shouldn't be used in an application.</p>
+					<p>Where X is the output letter of the EV3 (A-D, in uppercase).
+						This value is fixed in the motor and can be found in the
+						specifications of the motor and it normally shouldn't be used in
+						an application.</p>
 				</li>
 				<li>
-					<p>Read the current position of the motor. It must be used with ID.</p>
+					<p>Read the current position of the motor. It must be used with
+						ID.</p>
 					<ul>
 						<li><p>out[X].motor.position</p></li>
 					</ul>
-					<p>Where X is the output letter of the EV3 (A-D, in uppercase). If the motor was in position 0 and the "rot" parameter returns 360, then it makes 3 turns, the position will be 1080.</p>
+					<p>Where X is the output letter of the EV3 (A-D, in uppercase).
+						If the motor was in position 0 and the "rot" parameter returns
+						360, then it makes 3 turns, the position will be 1080.</p>
 				</li>
 				<li>
 					<p>Write the position of a motor. It must be used with QD.</p>
 					<ul>
 						<li><p>out[X].motor.position</p></li>
 					</ul>
-					<p>Where X is the output letter of the EV3 (A-D, in uppercase). Sets the current position to a specific value.</p>
+					<p>Where X is the output letter of the EV3 (A-D, in uppercase).
+						Sets the current position to a specific value.</p>
 				</li>
 				<li>
-					<p>Write a desired duty cycle (pwm) for a motor. It must be used with QW.</p>
+					<p>Write a desired duty cycle (pwm) for a motor. It must be
+						used with QW.</p>
 
 					<ul>
 						<li><p>out[X].motor.pwm</p></li>
 					</ul>
 
-					<p>Where X is the output letter of the EV3 (A-D, in uppercase). The value range should be between -100 and 100.</p>
+					<p>Where X is the output letter of the EV3 (A-D, in uppercase).
+						The value range should be between -100 and 100.</p>
 				</li>
 				<li>
-					<p>Specify a desired behaviour when the pwm is set to 0. It must be used with QW.</p>
+					<p>Specify a desired behaviour when the pwm is set to 0. It
+						must be used with QW.</p>
 					<ul>
 						<li><p>out[X].motor.stop</p></li>
 					</ul>
-					<p>Where X is the output letter of the EV3 (A-D, in uppercase). Possible values are 0, 1 and 2:</p>
+					<p>Where X is the output letter of the EV3 (A-D, in uppercase).
+						Possible values are 0, 1 and 2:</p>
 					<ul>
-						<li>0: [coast]: Removes power from the motor. The motor will freely coast to a stop.</li>
-						<li>1: [brake]: Removes power from the motor and creates a passive electrical load. This is usually done by shorting the motor terminals together. This load will absorb the energy from the rotation of the motors and cause the motor to stop more quickly than coasting.</li> <li>3: [hold]: Causes the motor to actively try to hold the current position. If an external force tries to turn the motor, the motor will push back to maintain its position.</li>
+						<li>0: [coast]: Removes power from the motor. The motor will
+							freely coast to a stop.</li>
+						<li>1: [brake]: Removes power from the motor and creates a
+							passive electrical load. This is usually done by shorting the
+							motor terminals together. This load will absorb the energy from
+							the rotation of the motors and cause the motor to stop more
+							quickly than coasting.</li>
+						<li>3: [hold]: Causes the motor to actively try to hold the
+							current position. If an external force tries to turn the motor,
+							the motor will push back to maintain its position.</li>
 					</ul>
 				</li>
 			</ul>
@@ -488,32 +783,45 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 					<ul>
 						<li><p>in[X].sensorw.[Y]</p></li>
 					</ul>
-					<p>where X is the number of the input in the EV3 (1-4) and Y is the value number where to read from according to the sensor. Read the specification of the sensor to be sure. Start trying from 0 if no information is available.</p>
+					<p>where X is the number of the input in the EV3 (1-4) and Y is
+						the value number where to read from according to the sensor. Read
+						the specification of the sensor to be sure. Start trying from 0 if
+						no information is available.</p>
 				</li>
 				<li>
 					<p>Read a sensor's mode. It must be used with IW.</p>
 					<ul>
 						<li><p>in[X].sensorw.mode</p></li>
 					</ul>
-					<p>where X is the number of the input in the EV3 (1-4). The read value is an index number according to the list of modes of the sensor.</p>
+					<p>where X is the number of the input in the EV3 (1-4). The
+						read value is an index number according to the list of modes of
+						the sensor.</p>
 				</li>
 				<li>
 					<p>Write a sensor's mode. It must be used with QW.</p>
 					<ul>
 						<li><p>in[X].sensorw.mode</p></li>
 					</ul>
-					<p>where X is the number of the input in the EV3 (1-4). The value to be written should be the index number according to the list of modes of the sensor.</p>
+					<p>where X is the number of the input in the EV3 (1-4). The
+						value to be written should be the index number according to the
+						list of modes of the sensor.</p>
 				</li>
 			</ul>
 		</li>
 	</ol>
 
-	<h2 id="ev3_custom_parameters">Custom access</h2>
+<!--***************-->
 
-	<p>The custom access allows the user to access part of the system that are not implemented in the standard access. Care must be taken, since critical part of the system might be accessed. For each block, the specification of the new inputs and outputs are given.</p>
+	<h2 id="ev3_custom_parameters">Custom Access</h2>
+
+	<p>The custom access allows the user to access part of the system
+		that are not implemented in the standard access. Care must be taken,
+		since critical part of the system might be accessed. For each block,
+		the specification of the new inputs and outputs are given.</p>
 	<ol>
 		<li>
-			<p>fileWriter: Block to write to any file in the system. The special inputs are:</p>
+			<p>fileWriter: Block to write to any file in the system. The
+				special inputs are:</p>
 			<ul>
 				<li>
 					<p>FILE_NAME: absolut path of the file.</p>
@@ -526,7 +834,8 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 			</ul>
 		</li>
 		<li>
-			<p>fileReader: Block to read from any file in the system. The special inputs and outpus are:</p>
+			<p>fileReader: Block to read from any file in the system. The
+				special inputs and outpus are:</p>
 			<ul>
 				<li>
 					<p>FILE_NAME [input]: absolut path of the file.</p>
@@ -539,22 +848,33 @@ set the definitions of UMIC_LED_ENABLED and UMIC_RELAY_ENABLED to zero.</p>
 			</ul>
 		</li>
 	</ol>
-	 
-<h1>Where to go from here?</h1>
 
-<p>You can see the supported protocols:</p>
+<!--********************************************************************************************-->
 
-<p><a href="../../html/communication/communicationIndex.html">Communication Index</a></p>
+	<h1>Where to go from here?</h1>
 
-<p>You can see the examples:</p>
+	<p>You can see the supported protocols:</p>
 
-<p><a href="../../html/examples/examplesIndex.html">Examples Index</a></p>
+	<p>
+		<a href="../../html/communication/communicationIndex.html">Supported Communication Protocols</a>
+	</p>
 
-<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+	<p>You can see the examples:</p>
 
-<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
+	<p>
+		<a href="../../html/examples/examplesIndex.html">4diac Examples</a>
+	</p>
 
-<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+	<p>If you want to go back to the Where to Start page, we leave you here
+		a fast access</p>
+
+	<p>
+		<a href="../../html/startHere/startHere.html">Where to Start</a>
+	</p>
+
+	<p class="goToTop">
+		Or <a href="#topOfPage">Go to top</a>
+	</p>
 
 </body>
 </html>

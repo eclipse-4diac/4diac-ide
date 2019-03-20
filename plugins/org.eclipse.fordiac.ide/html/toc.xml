@@ -21,9 +21,31 @@
 
 <!--********************************************************************************************-->
 
-   <topic label="Getting Started">
+   <topic label="Getting Started" href="html/startHere/startHere.html">
+<!--********************-->	
       <topic href="html/before4DIAC/iec61499.html" label="IEC 61499 101">
+      	<topic href="html/before4DIAC/iec61499.html#PLC" label="PLC Programming according to IEC 61131-3">
+      		<topic href="html/before4DIAC/iec61499.html#programmingPLC" label="Programming PLCs">
+      		</topic>
+      	</topic>
+		<topic href="html/before4DIAC/iec61499.html#IEC61499" label="IEC 61499">
+		</topic>
+		<topic href="html/before4DIAC/iec61499.html#MainPartsOfIEC61499" label="Main parts of IEC 61499">
+			<topic href="html/before4DIAC/iec61499.html#FBInterface" label="FB Interface">
+			</topic>
+			<topic href="html/before4DIAC/iec61499.html#FBInternalSequence" label="FB Internal Sequence">
+			</topic>
+			<topic href="html/before4DIAC/iec61499.html#DistributedApplicaton" label="Distributed Application">
+			</topic>
+			<topic href="html/before4DIAC/iec61499.html#brokenConnection" label="Broken Connections">
+			</topic>
+			<topic href="html/before4DIAC/iec61499.html#FBTypes" label="Types of Function Blocks">
+			</topic>
+			<topic href="html/before4DIAC/iec61499.html#iec61499ComplianceProfiles" label="Compliance Profiles">
+			</topic>
+		</topic>
       </topic>
+<!--********************-->	
       <topic href="html/before4DIAC/4diacFramework.html" label="4diac Framework">
       </topic>
    </topic>
@@ -31,29 +53,26 @@
 <!--********************************************************************************************-->   
 
    <topic label="Installation" href="html/installation/install.html"> 
-        <topic href="html/installation/install.html#4DIAC-IDE" label="Installing 4DIAC">
+        <topic href="html/installation/install.html#4DIAC-IDE" label="4diac IDE">
+        	<topic href="html/installation/install.html#ownIDE" label="Building Your own 4diac IDE From Source">
+        	</topic>
         </topic>
-        <topic href="html/installation/install.html#precompiledFORTE" label="Pre-compiled FORTE">
+        <topic href="html/installation/install.html#4DIAC-FORTE" label="4diac FORTE">
+        	<topic href="html/installation/install.html#ownFORTE" label="Building 4diac FORTE From Source">
+        	</topic>
         </topic>
-        <topic href="html/installation/install.html#ownFORTE" label="Build your FB in FORTE">
+        <topic href="html/installation/install.html#forteOtherPlatforms" label="Building 4diac FORTE for Other Platforms">
+	        <topic href="html/installation/legoMindstormEv3.html" label="4diac FORTE for Lego Mindstorms EV3"/>
+        	<topic href="html/installation/raspi.html" label="4diac FORTE for RaspberryPi"/>
+        	<topic href="html/installation/raspberrySPS.html" label="4diac FORTE for RaspberryPi-SPS"/>
+        	<topic href="html/installation/wago.html" label="4diac FORTE for WagoPFCs"/>
         </topic>
-        <topic href="html/installation/install.html#FORTEWindowsUnix" label="FORTE for Windows and Unix based systems">
-          <topic href="html/installation/visualStudio.html" label="Use Visual Studio">
-          </topic>
-          <topic href="html/installation/eclipse.html" label="Use Eclipse">
-          </topic>
-          <topic href="html/installation/cygwin.html" label="Windows - Cygwin compiler">
-          </topic>
-          <topic href="html/installation/minGW.html" label="Windows - MinGW-w64 compiler">
-          </topic>
+        <topic label="4diac FORTE for Windows and Unix based systems">
+          <topic href="html/installation/visualStudio.html" label="Use Visual Studio"/>
+          <topic href="html/installation/eclipse.html" label="Use Eclipse"/>
+          <topic href="html/installation/cygwin.html" label="Windows - Cygwin compiler"/>
+          <topic href="html/installation/minGW.html" label="Windows - MinGW-w64 compiler"/>
         </topic>
-        <topic label="FORTE for RaspberryPi" href="html/installation/raspi.html">
-        </topic>
-        <topic href="html/installation/raspberrySPS.html" label="FORTE for RaspberryPi-SPS">
-        </topic>
-        <topic label="FORTE for Lego Mindstorms EV3" href="html/installation/legoMindstormEv3.html"/>
-        <topic label="FORTE for Lego Mindstorms" href="html/installation/mindstorms.html"/>
-        <topic label="FORTE for WagoPFCs" href="html/installation/wago.html"/>
     </topic>
 
 <!--********************************************************************************************-->	
@@ -174,7 +193,7 @@
 
 <!--********************************************************************************************-->    
 
-    <topic href="html/examples/examplesIndex.html" label="Examples">
+    <topic href="html/examples/examplesIndex.html" label="4diac Examples">
       <topic href="html/examples/examplesIndex.html#noHardwareRequired" label="General Examples">
          <topic href="html/examples/xplus3.html" label="X+3">
          </topic>
@@ -189,26 +208,32 @@
 
 <!--********************************************************************************************-->
  
-    <topic href="html/parameters/parameters.html" label="Use IO from different platforms">
-      <topic href="html/parameters/parameters.html#sysfs" label="SysFs (Raspberry Pi)">
+    <topic href="html/parameters/parameters.html" label="Use I/O From Different Platforms">
+      <topic href="html/parameters/parameters.html#sysfs" label="SysFs">
       </topic>
-      <topic href="html/parameters/parameters.html#rpi-sps" label="Raspberry PI-SPS">
+      <topic href="html/parameters/parameters.html#rpi-sps" label="Raspberry-SPS">
       </topic>
       <topic href="html/parameters/parameters.html#odroid" label="Odroid">
       </topic>
-      <topic href="html/parameters/parameters.html#piface" label="PiFace 2">
+      <topic href="html/parameters/parameters.html#piface" label="PiFace Digital 2">
       </topic>
-      <topic href="html/parameters/parameters.html#umic" label="uMIC">
+      <topic href="html/parameters/parameters.html#umic" label="uMIC.200">
       </topic>
-      <topic href="html/parameters/parameters.html#mlpi" label="MLPI (Bosch Rexroth PLC)">
+      <topic href="html/parameters/parameters.html#mlpi" label="Bosch Rexroth PLC (MLPI)">
       </topic>
-      <topic href="html/parameters/parameters.html#ev3" label="Lego Mindstorm EV3">
+      <topic href="html/parameters/parameters.html#ev3" label="Lego Mindstorms EV3">
+		<topic href="html/parameters/parameters.html#ev3_standard_parameters" label="Standard Access">
+		</topic>
+		<topic href="html/parameters/parameters.html#ev3_cheatsheet" label="I/O Cheatsheet">
+		</topic>
+		<topic href="html/parameters/parameters.html#ev3_custom_parameters" label="Custom Access">
+		</topic>
       </topic>
     </topic>
    
 <!--********************************************************************************************-->
 	
-  <topic href="html/communication/communicationIndex.html" label="Using Communication Protocols">
+  <topic href="html/communication/communicationIndex.html" label="Supported Communication Protocols">
     <topic label="OPC UA"  href="html/communication/opc_ua.html">
       <topic label="Build FORTE with OPC UA" href="html/communication/opc_ua.html#build" />
       <topic label="OPC UA Variables" href="html/communication/opc_ua.html#variables" />

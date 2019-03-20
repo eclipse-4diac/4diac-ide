@@ -2,6 +2,7 @@
 <!--
  Copyright (c) 2016-2019 fortiss GmbH
                2019 Johannes Kepler University Linz
+               2019 Andrea Zoitl
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +14,8 @@
      - initial API and implementation and/or initial documentation
   Bianca Wiesmayr 
      - adapting, restructuring and extending the installation tutorial
+  Andrea Zoitl
+     - fixed 4diac branding, corrected links, improved readability
 -->
 
 <html lang="en">
@@ -23,27 +26,34 @@
 </head>
 <body>
 
+<!--********************************************************************************************-->
+
 <h1 id="topOfPage">Using Eclipse 4diac with a Lego Mindstorm EV3</h1>
 
-	<p>This page is for compiling 4diac FORTE for the Lego Mindstorm EV3. 
+	<p>This page is for compiling 4diac&nbsp;FORTE for the Lego Mindstorm EV3. 
 	For information about the parameters to be used, go to the <a href="../../html/parameters/parameters.html#ev3">Parameters</a> page</p>
+
+<!--********************************************************************************************-->
 
   <h2 id="ev3_introduction">About the Lego Mindstorm EV3 and ev3dev</h2>
   
 	<p>Lego Mindstorm is a series of kits from Lego, whose flexibility allows constructing different systems which can be controlled and sensed by the user, using the inputs and outputs. 
-	This document focuses on how to implement 4diac FORTE on the specific model Lego Mindstorm EV3(LMSEV3). To know more about the LMSEV3 you can visit its Wikipedia <a href="https://en.wikipedia.org/wiki/Lego_Mindstorms_EV3" target="_blank">page</a>.</p>
+	This document focuses on how to implement 4diac&nbsp;FORTE on the specific model Lego Mindstorm EV3(LMSEV3). 
+	To know more about the LMSEV3 you can visit its Wikipedia <a href="https://en.wikipedia.org/wiki/Lego_Mindstorms_EV3" target="_blank">page</a>.</p>
 
 	<p>The LMSEV3 comes with its own software, but work has been done to implement a Linux distribution that can run on it. 
 	The ev3dev is a Debian Linux-based operating system that can run on the LMSEV3. 
 	More information about capabilities of ev3dev can be found on its <a href="http://www.ev3dev.org/" target="_blank">website</a>. 
-	The procedure to make ev3dev run in a LMSEV3 is similar to running a Linux operating system on a Raspberry Pi. The best and faster way to implement ev3dev in a LMSEV3 is following the instruction on its <a href="http://www.ev3dev.org/docs/getting-started/" target="_blank">getting started page</a>. Basically what must be done is to download the ev3dev image and write it on a mini SD card (yes, without an mini SD card you won't be able to run it), insert it in the LMSEV3 and boot it. You'll have to set the network configuration to connect to it.</p>
+	The procedure to make ev3dev run in a LMSEV3 is similar to running a Linux operating system on a Raspberry Pi. 
+	The best and faster way to implement ev3dev in a LMSEV3 is following the instruction on its <a href="http://www.ev3dev.org/docs/getting-started/" target="_blank">getting started page</a>. 
+	Basically what must be done is to download the ev3dev image and write it on a mini SD card (yes, without an mini SD card you won't be able to run it), insert it in the LMSEV3 and boot it. You'll have to set the network configuration to connect to it.</p>
 
 	<p>So, what will you find in this special Linux version for LMSEV3? 
 	First, you'll find a menu in the screen of the LMSEV3 that can be accessed using the buttons. 
 	And secondly, you will be able to connect using SSH the same way you would do it on a Raspberry Pi, the BeagleBone Black or other Linux-based operating system and go through the folder system of the ev3dev that is prepared for the LMSEV3. 
-	To access all the I/O of the LMSEV3 (including the buttons, LED and the screen) there are specific explanations in <a href="http://www.ev3dev.org/docs/tutorials/" target="_blank">this</a> ev3dev webpage, but 4diac FORTE takes care of accessing them and you as user will only work with normal I/O Function Blocks as IX, QX, IW, QW and so on.</p>
+	To access all the I/O of the LMSEV3 (including the buttons, LED and the screen) there are specific explanations in <a href="http://www.ev3dev.org/docs/tutorials/" target="_blank">this</a> ev3dev webpage, but 4diac&nbsp;FORTE takes care of accessing them and you as user will only work with normal I/O Function Blocks as IX, QX, IW, QW and so on.</p>
 
-	<p> With the LMSEV3 running the ev3dev and it being accessible through SSH, the next thing to do is to install and run 4diac FORTE in it. 
+	<p> With the LMSEV3 running the ev3dev and it being accessible through SSH, the next thing to do is to install and run 4diac&nbsp;FORTE in it. 
 	    Similar to other platforms, you have two possibilities. 
 	    The first one is to transfer
 		the source code to the ev3dev (using <a href="https://winscp.net/eng/download.php" target="_blank">WinSCP</a> in Windows or the "scp" command in Linux), installing the compiler and other necessary tools (C++ compiler and CMake, mainly) and compiling it directly in the LMSEV3. 
@@ -62,30 +72,30 @@ sudo apt-get install build-essential
 sudo apt-get install cmake</div>
 
 	<p>This will install the necessary tools. Then, you just need to go to the
-	4diac FORTE folder you transferred, and execute: </p>
+	4diac&nbsp;FORTE folder you transferred, and execute: </p>
 	 
 	 <div class="code">. setup_posix.sh</div>
 
 	<p>which is going to setup everything in the bin/posix folder. 
 	Next, you should go into the bin/posix folder and simply execute "make" to start the compilation.</p>
 
-	<p> Remember, when you create your own FB, you should add these to the 4diac FORTE folder, adjust the CMakefiles.txt and compile again. 
+	<p> Remember, when you create your own FB, you should add these to the 4diac&nbsp;FORTE folder, adjust the CMakefiles.txt and compile again. 
 	In the <a href="../../html/installation/install.html#ownFORTE">example</a> section, it is explained how to do this.</p>
 
 	
 <h1 id="whereToGoFromHere">Where to go from here?</h1>
 
-<p>If you want to build a 4diac FORTE, here is a quick link back:</p>
+<p>If you want to build a 4diac&nbsp;FORTE, here is a quick link back:</p>
 
 <p><a href="../../html/installation/install.html">Install Eclipse 4diac</a></p>
 
-<p>After you installed all required tools, it's time to start using them. Take a look at the following page:</p>
+<p>After you installed all required tools, it's time to start using them. Take a look at the tutorials - a step by step guide:</p>
 
-<p><a href="../../html/4diacIDE/overview.html">Step by step tutorial</a></p>
+<p><a href="../../html/4diacIDE/overview.html">Step 0 - 4diac&nbsp;IDE Overview</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Where to Start</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 

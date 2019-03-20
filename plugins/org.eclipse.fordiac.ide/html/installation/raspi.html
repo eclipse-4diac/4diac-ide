@@ -2,6 +2,7 @@
 <!--
  Copyright (c) 2014-2019 fortiss GmbH
  			   2019 Johannes Kepler University Linz
+ 			   2019 Andrea Zoitl
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -13,19 +14,24 @@
      - initial API and implementation and/or initial documentation
    Bianca Wiesmayr
    	- adapting, restructuring and extending the installation tutorial
+   Andrea Zoitl
+    - fixed 4diac branding, corrected links, improved readability
+   
 -->
 
 <html lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-      <title>Building 4diac FORTE on Raspberry Pi</title>
+      <title>Building 4diac&nbsp;FORTE on Raspberry Pi</title>
       <link rel="stylesheet" type="text/css" href="../help.css">
    </head>
 
   <body>
 
+<!--********************************************************************************************-->
+
      <h1 id="topOfPage">Introduction</h1>
-      <p>This guide is for compiling FORTE for the Raspberry Pi. 
+      <p>This guide is for compiling&nbsp;FORTE for the Raspberry Pi. 
       For information about the parameters to be used, go to <a href="../../html/parameters/parameters.html#sysfs">Parameters</a>.</p>
 
       <p><a href="https://www.raspberrypi.org/" target="_blank">Raspberry Pi</a> (RPI) is one of the most famous low-cost embedded systems. 
@@ -33,10 +39,12 @@
       It has a 1.2GHz 64-bit quad-core ARMv8 CPU, 1 GB RAM and several I/O options, among them a 40 pin header. 
       The operating system is loaded from a SD card, so it can support many OS.
       The most popular one is the Debian-based Raspbian. 
-      4diac FORTE previously used the <span class="specificText">wiringPi</span> library, but it has changed to use the sysFs virtual file system.</p>
+      4diac&nbsp;FORTE previously used the <span class="specificText">wiringPi</span> library, but it has changed to use the sysFs virtual file system.</p>
     
-      <p>This tutorial explains first how to compile 4diac FORTE in the RPI, or even cross-compile, and how to easily use the I/O Function Blocks in 4diac FORTE to control the 40 pin
+      <p>This tutorial explains first how to compile 4diac&nbsp;FORTE in the RPI, or even cross-compile, and how to easily use the I/O Function Blocks in 4diac&nbsp;FORTE to control the 40 pin
       header.</p>
+
+<!--***************-->
      
       <h2>Getting the RPI ready</h2>
        
@@ -46,27 +54,33 @@
       meaning that you connect through ssh using the Ethernet or a usb-wifi connector. 
       There are plenty of tutorials on how to access the RPI, so this tutorial assumes that you have access
       to the command line of the RPI, through ssh or directly on it using the GUI, and that the RPI has Internet access.</p>
+
+<!--********************************************************************************************-->
    
-    <h1 id="onRPI">Building 4diac FORTE on the RPI</h1>
+    <h1 id="onRPI">Building 4diac&nbsp;FORTE on the RPI</h1>
+
+<!--***************-->
       
       <h2 id="preparation">Preparation</h2>
         <ol>
           <li>Install the additional software needed on your RPI. 
             <ul>
-              <li>Git: 4diac FORTE is stored as a Git repository on the Eclipse server.</li>
+              <li>Git: 4diac&nbsp;FORTE is stored as a Git repository on the Eclipse server.</li>
               <li>The building tools: cmake, make, gcc, g++</li>
             </ul>
             <div class="code">$ sudo apt-get install git cmake make gcc g++</div>
           </li>
         </ol> 
+
+<!--***************-->
           
       <h2 id="building">Building</h2> 
         <ol>
-          <li>Check out 4diac FORTE from the Git repository in your home directory.
+          <li>Check out 4diac&nbsp;FORTE from the Git repository in your home directory.
             <div class="code">$ cd ~
 $ git clone https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte</div>
           </li>
-          <li>Prepare the 4diac FORTE project structure for the Posix architecture.
+          <li>Prepare the 4diac&nbsp;FORTE project structure for the Posix architecture.
 				    <div class="code">$ cd org.eclipse.4diac.forte
 $ chmod +x setup_posix.sh</div>
               <p>You will need to add the SysFs module to the compilation. In order to that, you will need to change the <span class="fileLocation">setup_posix.sh</span> file, using your preferred text editor.
@@ -75,21 +89,25 @@ $ chmod +x setup_posix.sh</div>
               This will enable the interface to the 40 pin header of the RPI. 
               Save the file, exit the editor and execute:</p>
                <div class="code">$ ./setup_posix.sh</div>
-               <p>When no error occurs, the command creates a folder in bin/posix where all the files to compile FORTE are stored. 
+               <p>When no error occurs, the command creates a folder in bin/posix where all the files to compile 4diac&nbsp;FORTE are stored. 
                Access the folder if not already there.</p>
            </li>
 				<li>Execute "make", which will start the compilation.
             <div class="code">$ make</div>
           </li>
       </ol>
+
+<!--********************************************************************************************-->
       
     <h1 id="crossCompiling">Cross-compiling for the RPI</h1>
     
-	    <p>The RPI is a very powerful computer, but when developing a project, one sometimes has to compile FORTE many times.
+	    <p>The RPI is a very powerful computer, but when developing a project, one sometimes has to compile 4diac&nbsp;FORTE many times.
 	    As the RPI is slow compared to the power of a desktop computer, cross-compiling is useful. 
 	    It allows to compile on your desktop machine, and then send the executable to the RPI.</p>
 	    
-	    <p>You will need the 4diac FORTE source code, and the same additional tools used in the preparation, except CMake because CMake-GUI will be needed in this case.</p>
+	    <p>You will need the 4diac&nbsp;FORTE source code, and the same additional tools used in the preparation, except CMake because CMake-GUI will be needed in this case.</p>
+
+<!--***************-->
 	    
       <h2 id="crossCompilingLinux">Cross-compiling using Linux</h2>
         <ol>
@@ -108,7 +126,7 @@ $ chmod +x setup_posix.sh</div>
             </ul>
           <li>Open CMake-GUI and complete as shown in the image
             <ol>
-              <li>Set the FORTE source path where you cloned the Git repository.</li>
+              <li>Set the 4diac&nbsp;FORTE source path where you cloned the Git repository.</li>
               <li>Set path for binaries where you want to create the executable. 
               Normally, <span class="folderLocation">bin/raspPi is used.</span></li>
               <li>Press <span class="button4diac">Configure</span></li>
@@ -141,7 +159,7 @@ $ chmod +x setup_posix.sh</div>
             <p><img src="../../html/installation/img/raspiCrossLinux3.png" alt="Select cross-compiling tools."/></p>
           </li>
           <li>Configure the compilation
-             <p>A list with all variables of 4diac FORTE in red should be shown in CMake as the picture below.</p>
+             <p>A list with all variables of 4diac&nbsp;FORTE in red should be shown in CMake as the picture below.</p>
             <ol>
               <li>Choose your Eclipse version if you selected it in step 3.1. Otherwise, it can be left as it is.</li>
               <li>Set the FORTE_ARCHITECTURE variable to Posix</li>
@@ -149,7 +167,7 @@ $ chmod +x setup_posix.sh</div>
               <li>Click <span class="button4diac">Configure</span> and the variables that need revision will appear again in red and the rest in white. 
               Check these variables and press <span class="button4diac">Configure</span> until no variable is shown in red.</li>
             </ol>
-            <p><img src="../../html/installation/img/raspiCrossLinux4.png" alt="Configure FORTE compilation."/></p>
+            <p><img src="../../html/installation/img/raspiCrossLinux4.png" alt="Configure 4diac FORTE compilation."/></p>
           </li>
           <li>Generate files
             <ul>
@@ -157,7 +175,7 @@ $ chmod +x setup_posix.sh</div>
             </ul>
             <p><img src="../../html/installation/img/raspiCrossLinux5.png" alt="Generate the makefiles."/></p>
           </li>
-          <li>Build forte
+          <li>Build 4diac&nbsp;FORTE
             <ul>
               <li>Go to the recently generated folder and execute make (or build it as you normally do)
                <div class="code">$ cd bin/raspPi
@@ -166,6 +184,8 @@ $ make</div>
             </ul>
           </li>
         </ol>
+
+<!--***************-->
         
       <h2 id="crossCompilingWindows">Cross-compiling using Windows</h2>
         <ol>
@@ -181,19 +201,21 @@ $ make</div>
           </li>
          </ol>
 
+<!--********************************************************************************************-->
+
 <h1 id="whereToGoFromHere">Where to go from here?</h1>
 
-<p>Now that you installed the required tools, it's time to start using them. Take a look at the following page:</p>
+<p>Now that you installed the required tools, it's time to start using them. Take a look at the following tutorials:</p>
 
-<p><a href="../../html/4diacIDE/overview.html">Step by step tutorial</a></p>
+<p><a href="../../html/4diacIDE/overview.html">Step 0 - 4diac IDE Overview</a></p>
 
-<p>If you want to compile FORTE for another platform or want to know more about that, here's a quick link back:</p>
+<p>If you want to compile 4diac&nbsp;FORTE for another platform or want to know more about that, here's a quick link back:</p>
 
 <p><a href="../../html/installation/install.html">Install Eclipse 4diac</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
-<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Where to Start</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 

@@ -2,6 +2,7 @@
 <!--
  Copyright (c) 2010 - 2019 TU Wien ACIN, fortiss GmbH
  			   2019 Johannes Kepler University Linz
+ 			   2019 Andrea Zoitl
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +14,8 @@
      - initial API and implementation and/or initial documentation
    Bianca Wiesmayr
      - adapting, restructuring and extending the installation tutorial
+   Andrea Zoitl
+     - improved readability, updated Help ToC
 -->
 
 <html lang="en">
@@ -24,9 +27,9 @@
 
 <body>
 
-<!--********************************************************************************************-->
-
 <h1 id="topOfPage">Installation</h1>
+
+<!--********************************************************************************************-->
 
 <h2 id="4DIAC-IDE">4diac&nbsp;IDE</h2>
 <p>The installation of 4diac&nbsp;IDE is independent of the operating system. 
@@ -37,7 +40,9 @@ Unzip it to any desired folder and start the 4diac&nbsp;IDE.
 It already contains a Function Block library. 
 If you only want to use available Function Blocks, you are ready to go.</p>
 
-<h3>Building your own 4diac&nbsp;IDE from source</h3>
+<!--*********************-->
+
+<h3 id="ownIDE">Building Your own 4diac&nbsp;IDE From Source</h3>
 
 <p>Running 4diac&nbsp;IDE from source has the advantage that you can easily keep up with the developments performed in the Git repository. 
 If you want to run 4diac&nbsp;IDE from source, follow the <a href="../../html/development/building4diac.html#buildFromSource" target="_blank">installation steps</a>.
@@ -54,9 +59,9 @@ The step by step tutorial will direct you to making a simple application with 4d
 If you want to start using 4diac&nbsp;IDE right away, you can skip the rest of the page and go directly to the <a href="../../html/4diacIDE/overview.html">step by step tutorial</a> or the <a href="../../html/startHere/startHere.html">Start&nbsp;Here-page</a>.</p>
 If you want to develop your own Function Blocks or to run 4diac&nbsp;FORTE on control devices, you have to download and set up 4diac&nbsp;FORTE for the specific platform you are using as shown in the next sections.
 
-<!--********************************************************************************************-->
+<!--*********************-->
 
-<h3 id="ownFORTE">Building 4diac&nbsp;FORTE from source</h3>
+<h3 id="ownFORTE">Building 4diac&nbsp;FORTE From Source</h3>
 <p>In order to use own Function Blocks, you will need to build 4diac&nbsp;FORTE from the source code. 
 In this section, the details for Windows and Unix-based systems are explained, since most user's first test is done on these platforms. 
 For other platforms, links are provided <a href="#forteOtherPlatforms">here</a>.</p> 
@@ -74,9 +79,9 @@ For other platforms, links are provided <a href="#forteOtherPlatforms">here</a>.
 	<li> (optional) Install a development environment for C++ such as <a href="../../html/installation/eclipse.html">Eclipse</a> or <a href="../../html/installation/visualStudio.html">MS Visual Studio</a>
 </ol>
 
-<!--********************************************************************************************-->
+<!--*********************-->
 
-<h3 id="FORTEWindows">C++ compiler for Windows</h3>
+<h4 id="FORTEWindows">C++ Compiler for Windows</h4>
 <p>First of all, you need to install a C++ compiler. Download and installation are described here:</p>
 				<ul>
 					<li><a href="../../html/installation/minGW.html">Setting up MinGW-w64 (recommended) </a></li>
@@ -90,16 +95,16 @@ For other platforms, links are provided <a href="#forteOtherPlatforms">here</a>.
    
 <a href="#FORTEsteps">back</a>
 
-<!--********************************************************************************************-->
+<!--*********************-->
 
-<h3 id="FORTEUnix">C++ compiler for Unix-based systems</h3>
+<h4 id="FORTEUnix">C++ Compiler for Unix-based Systems</h4>
 <p>In Unix-like systems (Linux, Raspberry Pi, ...), you need to install the packages binutils, gcc, gdb and make. </p>
 
 <a href="#FORTEsteps">back</a>
 
-<!--********************************************************************************************-->
+<!--*********************-->
 
-<h3 id="FORTEcmake">Install CMake</h3>
+<h4 id="FORTEcmake">Install CMake</h4>
 <p>The open source software CMake allows generating a C++ project or makefile from the source code.
    We will use it to generate a project to compile. 
    It generates specific files from the general source code for your target platform and compiler. 
@@ -113,9 +118,9 @@ Follow the steps in the installation wizard and be sure to select adding CMake t
 
 <p><a href="#FORTEsteps">back</a></p>
 
-<!--********************************************************************************************-->
+<!--*********************-->
 
-<h3 id="FORTEfolders">Create a folder tree</h3>
+<h4 id="FORTEfolders">Create a Folder Tree</h4>
 <p>You need to create a folder where you save all files of your 4diac&nbsp;FORTE. 
 Again, the file path should not contain any spaces.
 We recommend using a main folder <span class="specificText">C:/FORTE_dev</span> (in this tutorial, we refer to it as FORTE_FOLDER_ROOT).
@@ -128,9 +133,9 @@ Extract the source code to your desired 4diac&nbsp;FORTE source folder, e.g. C:/
 
 <p><a href="#FORTEsteps">back</a></p>
 
-<!--********************************************************************************************-->
+<!--*********************-->
 
-<h3 id="generateFilesForCompiling">Generate 4diac FORTE Makefiles with CMake</h3>
+<h4 id="generateFilesForCompiling">Generate 4diac FORTE Makefiles with CMake</h4>
 
 <p>Once you have the 4diac&nbsp;FORTE code on your computer, you must generate Makefiles to be compiled. 
 Why? 
@@ -188,9 +193,9 @@ For beginners, we recommend using the GUI tool that comes with CMake.</p>
 <a href="#FORTEsteps">back</a>
 
 
-<!--********************************************************************************************-->
+<!--*********************-->
 
-<h3 id="FORTEcompile">Compile the project</h3>
+<h4 id="FORTEcompile">Compile the Project</h4>
 
 <p>The last step is compiling the generated project.
 It generates the 4diac FORTE executable.
@@ -216,9 +221,9 @@ Therefore, the essential parts as well as the Makefiles which are important for 
 
 <a href="#FORTEsteps">back</a>
 
-<!--********************************************************************************************-->
+<!--*********************-->
 
-<h3 id="externalModules">Add external modules</h3>
+<h4 id="externalModules">Add External Modules</h4>
 
 <p>Let's see how to add your own Function Blocks to 4diac&nbsp;FORTE.
 When you create and export your own types, you need to add them to your compilation. 
@@ -260,7 +265,7 @@ forte_add_sourcefile_hcpp(ServiceTest)</div>
 
 <!--********************************************************************************************-->
 	
-<h2 id="forteOtherPlatforms">Building 4diac&nbsp;FORTE for other platforms</h2>
+<h2 id="forteOtherPlatforms">Building 4diac&nbsp;FORTE for Other Platforms</h2>
 	<ul>
 		<li><a href="../../html/installation/raspi.html">Setting up 4diac&nbsp;FORTE for RaspberryPi</a></li>
 		<li><a href="../../html/installation/raspberrySPS.html">Setting up 4diac&nbsp;FORTE for RaspberryPi SPS</a></li>
@@ -274,13 +279,13 @@ forte_add_sourcefile_hcpp(ServiceTest)</div>
 <h1 id="whereToGoFromHere">Where to go from here?</h1>
 
 <p>Now that you installed the required tools, it's time to start using them. 
-Take a look at the following page:</p>
+Take a look at the tutorials - A step by step guide:</p>
 
-<p><a href="../../html/4diacIDE/overview.html">Step by step tutorial</a></p>
+<p><a href="../../html/4diacIDE/overview.html">Step 0 - 4diac IDE Overview</a></p>
 
-<p>If you want to go back to the Start Here page, we leave you here a fast access:</p>
+<p>If you want to go back to the Where to Start page, we leave you here a fast access:</p>
 
-<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Where to Start</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 

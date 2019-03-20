@@ -2,6 +2,7 @@
 <!--
  Copyright (c) 2017-2018 fortiss GmbH
                     2018 Johannes Kepler University Linz
+                    2019 Andrea Zoitl
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +14,8 @@
      - initial API and implementation and/or initial documentation
 	Bianca Wiesmayr
 	 - text improvements
+	Andrea Zoitl
+	 - improved readability, updated Help ToC
 -->
 
 <html lang="en">
@@ -25,7 +28,9 @@
 
 <h1 id="topOfPage">IEC 61499 101</h1>
 
-<h2 id="PLC">PLC Programming according to IEC 61131-3</h2>
+<!--********************************************************************************************-->
+
+<h2 id="PLC">PLC Programming according to IEC&nbsp;61131-3</h2>
 
 <p>A <a href="https://en.wikipedia.org/wiki/Programmable_logic_controller" target="_blank">PLC</a> is, basically, a small computer used in industry. 
 It has inputs and outputs for controlling various systems. 
@@ -60,7 +65,9 @@ Please note the different terms we are using to distinguish similar concepts:</p
 	<li>Now your application runs on the PLC whenever it is switched on.</li>
 </ol>
 
-<h3>Programming PLCs</h3>
+<!--*********************-->
+
+<h3 id="programmingPLC">Programming PLCs</h3>
 
 <p>Even though each PLC vendor offers a specific IDE, the programming languages for PLCs were standardized in <a href="https://en.wikipedia.org/wiki/IEC_61131" target="_blank">IEC 61131-3</a>. Five different programming languages are part of the standard:</p>
 
@@ -96,19 +103,21 @@ To see the behavior in the real system, the physical inputs and outputs of the P
 Each IDE has its own way of representing the physical inputs/outputs during programming.</p>
 
 <p>Alright! This is all you need to know about PLCs for now. 
-This section dealt with the standard IEC 61131. 
+This section dealt with the standard IEC&nbsp;61131. 
 We'll get closer to 4diac in the next section where we discuss a newer standard.</p>
 
-<h2 id="IEC61499">IEC 61499</h2>
+<!--********************************************************************************************-->
+
+<h2 id="IEC61499">IEC&nbsp;61499</h2>
 
 <p>The industry is moving from centralized systems towards a more distributed paradigm. 
 Large systems with a central intelligence controlling everything are transformed to distributed systems. 
 In the distributed system, individual parts have intelligence and can communicate with each other smoothly, so the system acts as one whole. 
 IEC 61499 defines a domain-specific modeling language for developing distributed industrial control solutions. 
-IEC 61499 extends IEC 61131-3 by improving the encapsulation of software components for increased re-usability, providing a vendor independent format, and simplifying support for controller-to-controller communication. 
+IEC 61499 extends IEC&nbsp;61131-3 by improving the encapsulation of software components for increased re-usability, providing a vendor independent format, and simplifying support for controller-to-controller communication. 
 Its distribution functionality and the inherent support for dynamic reconfiguration provide the required infrastructure for Industry 4.0 and industrial IoT applications.</p>
 
-<p>Two big problems arise with IEC 61131-3. 
+<p>Two big problems arise with IEC&nbsp;61131-3. 
 One is caused by feedback connections in the application.
 In a Function Block Diagram like the one illustrated above, but with added feedback, the behavior of the system depends on the implementation of the underlying software. 
 Secondly, in case of combining PLCs from different vendors, the communication between them is not standardized and is normally difficult to achieve.</p>
@@ -123,11 +132,15 @@ If the application is split to several devices, all FBs in the application can b
 
 <p>So, without going any further into the concepts, let's look at some images to understand the capabilities and new features introduced by IEC 61499.</p>
 
-<h2>Main parts of IEC 61499</h2>
+<!--********************************************************************************************-->
 
-<h3>FB Interface</h3>
+<h2 id="MainPartsOfIEC61499">Main parts of IEC&nbsp;61499</h2>
 
-<p>The image below shows the new appearance of the FB in IEC 61499. 
+<!--*********************-->
+
+<h3 id="FBInterface">FB Interface</h3>
+
+<p>The image below shows the new appearance of the FB in IEC&nbsp;61499. 
 The function block encapsulates the desired functionality. 
 Again, the inputs are on the left and the outputs on the right, but now the interface differentiates events and data. 
 The events on the top part of the FB are shown as red lines, and the data on the lower part as blue lines. 
@@ -151,6 +164,8 @@ Based on the current state, the ECC executes a certain part of the encapsulated 
 
 <img class="center" src="../../html/before4DIAC/img/functionBlockInterfaces.png" alt="Interfaces of a Function Block" />
 
+<!--*********************-->
+
 <h3 id="FBInternalSequence">FB Internal Sequence</h3>
 
 <p>The following image shows how a FB is triggered to execute its functionality. 
@@ -172,10 +187,12 @@ A sequence of steps is executed when an event arrives at the FB.</p>
 <p>Step 4 to 7 may be repeated several times. 
 Although an output event can be triggered, this need not be the case.</p>
 
-<h3>Distributed Application</h3>
+<!--*********************-->
+
+<h3 id="DistributedApplicaton">Distributed Application</h3>
 
 <p>We defined now FBs and their behavior. 
-In the next image, an example for an application created according to the IEC 61499 is shown. 
+In the next image, an example for an application created according to the IEC&nbsp;61499 is shown. 
 You can see that data and events are not connected to each other.</p>
 
 <img class="center" src="../../html/before4DIAC/img/genericApplication.png" alt="A generic application in IEC61499" />
@@ -194,6 +211,8 @@ To be precise, the FBs are actually loaded onto a resource, not the device itsel
 Additionally, a device can run many applications or many parts of applications at the same time.
 CAUTION: A FB cannot be split to several devices.</p>
 
+<!--*********************-->
+
 <h3 id="brokenConnection">Broken Connections</h3>
 
 <p>While it's nice that you can split the application over several devices, the data and events need to be sent to the next device in order to maintain their flow. 
@@ -211,7 +230,9 @@ We'll see about it later when we consider the different types of FBs.</p>
 
 <img class="center" src="../../html/before4DIAC/img/iec61499Disitribution.png" alt="Application deployment in real industry">
 
-<h3>Types of Function Blocks</h3>
+<!--*********************-->
+
+<h3 id="FBTypes">Types of Function Blocks</h3>
 
 <p>IEC 61499 defines three types of FBs that you can use when developing your application:</p>
 
@@ -264,6 +285,8 @@ We'll see about it later when we consider the different types of FBs.</p>
 
 </ol>
 
+<!--*********************-->
+
 <h3 id="iec61499ComplianceProfiles">Compliance Profiles</h3>
 
 <p>As the standard is intended to be abstract, many "things" needed for proper execution of a system, such as communication, are not included. 
@@ -271,22 +294,22 @@ But the standard does state how these "things" must be specified.
 The specifications are called Compliance Profiles. 
 An example of a Compliance Profile is the 
 <a href="http://www.holobloc.com/doc/ita/" target="_blank">
-IEC 61499 Compliance Profile for Feasibility Demonstrations</a> provided by 
+IEC&nbsp;61499 Compliance Profile for Feasibility Demonstrations</a> provided by 
 <a href="http://www.holobloc.com">Holobloc Inc.</a>
 You can see the Compliance Profile as a way of filling the gaps due to the abstraction of the standard.</p>
 
-
+<!--********************************************************************************************-->
 
 <h1>Where to go from here?</h1>
 
-<p>Now that you have a better understanding of the IEC 61499 standard, it's time to understand what 4diac is and which tools are related to it. 
+<p>Now that you have a better understanding of the IEC&nbsp;61499 standard, it's time to understand what 4diac is and which tools are related to it. 
 Take a look at the following page:</p>
 
-<p><a href="../../html/before4DIAC/4diacFramework.html">Understanding the 4diac framework</a></p>
+<p><a href="../../html/before4DIAC/4diacFramework.html">4diac Framework</a></p>
 
-<p>In case you'd like to return to the "Start Here"-page, we leave here a fast access for you:</p>
+<p>In case you'd like to return to the "Where to Start"-page, we leave here a fast access for you:</p>
 
-<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
+<p><a href="../../html/startHere/startHere.html">Where to Start</a></p>
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 
