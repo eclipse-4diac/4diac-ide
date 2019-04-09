@@ -85,11 +85,11 @@ import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class STAlgorithmFilter {
-  private final static URI SYNTHETIC_FB_URI = URI.createFileURI("__synthetic.xtextfbt");
+  private static final URI SYNTHETIC_FB_URI = URI.createFileURI("__synthetic.xtextfbt");
   
-  private final static URI SYNTHETIC_ST_URI = URI.createFileURI("__synthetic.st");
+  private static final URI SYNTHETIC_ST_URI = URI.createFileURI("__synthetic.st");
   
-  private final static IResourceServiceProvider SERVICE_PRIVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(STAlgorithmFilter.SYNTHETIC_ST_URI);
+  private static final IResourceServiceProvider SERVICE_PRIVIDER = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(STAlgorithmFilter.SYNTHETIC_ST_URI);
   
   @Accessors(AccessorType.PUBLIC_GETTER)
   private List<String> errors = new ArrayList<String>();

@@ -684,8 +684,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		   new String[] {
 			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 			   "name", "VarDeclaration", //$NON-NLS-1$ //$NON-NLS-2$
-			   "namespace", "http://www.fordiac.org/61499/lib", //$NON-NLS-1$ //$NON-NLS-2$
-			   "group", "#group:0" //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "http://www.fordiac.org/61499/lib" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
 		  (getSubrange_LowerLimit(),

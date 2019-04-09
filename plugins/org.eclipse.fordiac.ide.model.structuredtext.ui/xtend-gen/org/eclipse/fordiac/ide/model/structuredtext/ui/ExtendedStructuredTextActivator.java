@@ -20,7 +20,7 @@ import org.osgi.framework.BundleContext;
  */
 @SuppressWarnings("all")
 public class ExtendedStructuredTextActivator extends StructuredtextActivator {
-  public final static String ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION = "org.eclipse.fordiac.ide.model.structuredtext.Expression";
+  public static final String ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION = "org.eclipse.fordiac.ide.model.structuredtext.Expression";
   
   private static StructuredtextActivator INSTANCE;
   

@@ -39,7 +39,7 @@ public class CompositeFBFilter {
   @Accessors(AccessorType.PUBLIC_GETTER)
   private List<String> errors = new ArrayList<String>();
   
-  private final static int ADAPTER_MARKER = 0x10000;
+  private static final int ADAPTER_MARKER = 0x10000;
   
   public CharSequence lua(final CompositeFBType type) {
     StringConcatenation _builder = new StringConcatenation();

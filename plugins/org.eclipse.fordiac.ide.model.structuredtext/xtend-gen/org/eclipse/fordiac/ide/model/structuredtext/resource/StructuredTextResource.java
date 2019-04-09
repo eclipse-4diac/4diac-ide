@@ -23,7 +23,7 @@ import org.eclipse.xtext.resource.XtextResource;
 
 @SuppressWarnings("all")
 public class StructuredTextResource extends LazyLinkingResource {
-  public final static String OPTION_PARSER_RULE = "PARSER_RULE";
+  public static final String OPTION_PARSER_RULE = "PARSER_RULE";
   
   @Override
   protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {

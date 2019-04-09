@@ -40,15 +40,15 @@ import org.eclipse.xtext.xbase.lib.ListExtensions;
 
 @SuppressWarnings("all")
 public class LuaConstants {
-  private final static int FB_STATE = 0;
+  private static final int FB_STATE = 0;
   
-  private final static int FB_DI_FLAG = 33554432;
+  private static final int FB_DI_FLAG = 33554432;
   
-  private final static int FB_DO_FLAG = 67108864;
+  private static final int FB_DO_FLAG = 67108864;
   
-  private final static int FB_AD_FLAG = 134217728;
+  private static final int FB_AD_FLAG = 134217728;
   
-  private final static int FB_IN_FLAG = 268435456;
+  private static final int FB_IN_FLAG = 268435456;
   
   public static CharSequence luaTypeName(final FBType type) {
     StringConcatenation _builder = new StringConcatenation();

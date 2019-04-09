@@ -44,7 +44,7 @@ public interface StructuredType extends DataType {
 	 * @return the value of the '<em>Var Declaration</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getStructuredType_VarDeclaration()
 	 * @model containment="true" transient="true" volatile="true" derived="true"
-	 *        extendedMetaData="kind='element' name='VarDeclaration' namespace='http://www.fordiac.org/61499/lib' group='#group:0'"
+	 *        extendedMetaData="kind='element' name='VarDeclaration' namespace='http://www.fordiac.org/61499/lib'"
 	 * @generated
 	 */
 	EList<VarDeclaration> getVarDeclaration();
