@@ -16,8 +16,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -36,14 +34,11 @@ public abstract class AbstractDeviceInterfaceSection extends AbstractDevResInter
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, "Instance Name:"); 
 		nameText = createGroupText(composite, true);
-		nameText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
+		nameText.addModifyListener(event -> {
 				removeContentAdapter();
 				executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
 				addContentAdapter();
-			}
-		});
+			});
 		
 		getWidgetFactory().createCLabel(composite, "Profile:"); 
 		profile = new Combo(composite, SWT.SINGLE | SWT.READ_ONLY);
@@ -57,18 +52,19 @@ public abstract class AbstractDeviceInterfaceSection extends AbstractDevResInter
 		getWidgetFactory().createCLabel(composite, "Instance Comment:"); 
 		commentText = createGroupText(composite, true);
 		GridData gridData = new GridData(SWT.FILL, 0, true, false);
-		gridData.horizontalSpan = 2;
 		commentText.setLayoutData(gridData);
-		commentText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
+		commentText.addModifyListener(event -> {
 				removeContentAdapter();
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 				addContentAdapter();
-			}
-		});
-		getResources = getWidgetFactory().createButton(composite, "fetch resource", SWT.PUSH); //$NON-NLS-1$
-		getResources.setToolTipText("fetch resources");
+			});
+		
+		getResources = getWidgetFactory().createButton(composite, "Fetch Resource", SWT.PUSH);
+		getResources.setToolTipText("Fetch the resources currently running in the device.");
+		GridData getResGridData = new GridData(SWT.FILL, 0, false, false);
+		getResGridData.horizontalSpan = 2;
+		getResources.setLayoutData(getResGridData);
+		
 	}
 	
 	@Override
@@ -76,11 +72,7 @@ public abstract class AbstractDeviceInterfaceSection extends AbstractDevResInter
 		super.refresh();
 		if(null != type) {
 			setProfile();
-			if("DynamicTypeLoad".equals(((Device)getType()).getProfile())) {
-				getResources.setEnabled(true);
-			}else {
-				getResources.setEnabled(false);
-			}
+			getResources.setEnabled("DynamicTypeLoad".equals(((Device)getType()).getProfile()));
 		}
 	}
 	

@@ -213,36 +213,52 @@ public class MapToCommand extends Command {
 	private void checkConnections() {
 		for (IInterfaceElement interfaceElement : srcElement.getInterface().getAllInterfaceElements()) {
 			if(interfaceElement.isIsInput()){
-				for (Connection connection : interfaceElement.getInputConnections()) {
-					Resource res = connection.getSourceElement().getResource();
-					if(resource.equals(res)){
-						//we need to create a connection in the target resource
-						addConnectionCreateCommand(connection.getSourceElement().getOpposite().getInterfaceElement(connection.getSource().getName()),
-								targetElement.getInterfaceElement(interfaceElement.getName()));
-					}
-				}
+				checkInputConnections(interfaceElement);
 			}else{
-				for (Connection connection : interfaceElement.getOutputConnections()) {
-					Resource res = connection.getDestinationElement().getResource();
-					if(resource.equals(res)){
-						//we need to create a connection in the target resource
-						IInterfaceElement destination = connection.getDestinationElement().getOpposite().getInterfaceElement(connection.getDestination().getName()); 
-						addConnectionCreateCommand(targetElement.getInterfaceElement(interfaceElement.getName()),
-								destination);
-						if(destination instanceof AdapterDeclaration || destination instanceof VarDeclaration){
-							checkForDeleteConnections(destination);
-						}
+				checkOutputConnections(interfaceElement);
+			}
+		}
+	}
+	
+	private void checkInputConnections(IInterfaceElement interfaceElement) {
+		for (Connection connection : interfaceElement.getInputConnections()) {
+			Resource res = connection.getSourceElement().getResource();
+			if(resource.equals(res)){
+				//we need to create a connection in the target resource
+				addConnectionCreateCommand(connection.getSourceElement().getOpposite().getInterfaceElement(connection.getSource().getName()),
+						targetElement.getInterfaceElement(interfaceElement.getName()));
+			}
+		}
+	}
+	
+	private void checkOutputConnections(IInterfaceElement interfaceElement) {
+		for (Connection connection : interfaceElement.getOutputConnections()) {
+			if(!isSelfConnection(connection)) { //leave self-connection to be handled by the inputs
+				Resource res = connection.getDestinationElement().getResource();
+				if(resource.equals(res)){
+					//we need to create a connection in the target resource
+					IInterfaceElement destination = connection.getDestinationElement().getOpposite().getInterfaceElement(connection.getDestination().getName()); 
+					addConnectionCreateCommand(targetElement.getInterfaceElement(interfaceElement.getName()),
+							destination);
+					if(destination instanceof AdapterDeclaration || destination instanceof VarDeclaration){
+						checkForDeleteConnections(destination);
 					}
 				}
 			}
 		}
 	}
+	
+	private boolean isSelfConnection(Connection connection) {
+		return connection.getSourceElement() == connection.getDestinationElement();
+	}
 
 	private void addConnectionCreateCommand(IInterfaceElement source, IInterfaceElement destination) {
 		AbstractConnectionCreateCommand cmd = getConnectionCreatCMD(source);
-		cmd.setSource(source);
-		cmd.setDestination(destination);
-		createdConnections.add(cmd);
+		if(null != cmd) {
+			cmd.setSource(source);
+			cmd.setDestination(destination);
+			createdConnections.add(cmd);
+		}
 	}
 	
 	private void checkForDeleteConnections(IInterfaceElement destination) {

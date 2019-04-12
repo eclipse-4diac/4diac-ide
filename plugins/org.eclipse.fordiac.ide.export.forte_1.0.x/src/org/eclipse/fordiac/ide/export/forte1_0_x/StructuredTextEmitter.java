@@ -69,14 +69,17 @@ public class StructuredTextEmitter {
 		inExpression = true;
 		conditionalQueue.clear();
 		this.pwCPP = pwCPP;
-
+		
 		if (null != this.pwCPP) {
+			pwCPP.print("("); //$NON-NLS-1$ surround condition with an additional pair of brackets like it would be in an if
 			StringTokenizer t = new StringTokenizer(guard, STStringTokenHandling.stTokenDelimiters, true);
 			while (t.hasMoreElements()) {
 				String s = t.nextToken();
 				exportSTStatement(s, t);
 			}
+			pwCPP.print(")"); //$NON-NLS-1$
 		}
+		inExpression = false;
 	}
 
 	private void exportSTComment(final StringTokenizer tokens) {

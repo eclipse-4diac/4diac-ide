@@ -1370,7 +1370,7 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 						if (guard.length() != 0) {
 							pwCPP.print(") && (("); // add a second pair of parenthesis to ensure that the //$NON-NLS-1$
 													// guard condition is treated as whole
-							emitGuardCondition(guard);
+							structuredTextEmitter.exportGuardCondition(guard, pwCPP);
 							pwCPP.print("))"); //$NON-NLS-1$
 						}
 					} else {
@@ -1443,12 +1443,12 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 							pwCPP.print(alternativeEvent + " == pa_nEIID"); //$NON-NLS-1$
 							if (alternativeGuard.length() != 0) {
 								pwCPP.print(") && (("); //$NON-NLS-1$
-								emitGuardCondition(alternativeGuard.toString());
+								structuredTextEmitter.exportGuardCondition(alternativeGuard.toString(), pwCPP);
 								pwCPP.print("))"); //$NON-NLS-1$
 							}
 						} else {
 							// prohibit reuse of transition!
-							emitGuardCondition(guard);
+							structuredTextEmitter.exportGuardCondition(guard, pwCPP);
 						}
 					}
 					pwCPP.println(")"); //$NON-NLS-1$
@@ -1473,16 +1473,6 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 			}
 		}
 		return null;
-	}
-
-	private void emitGuardCondition(final String guard) {
-		if (guard.contains("&") || guard.toUpperCase().contains("AND")) { //$NON-NLS-1$ //$NON-NLS-2$
-			pwCPP.print("("); //$NON-NLS-1$
-		}
-		structuredTextEmitter.exportGuardCondition(guard, pwCPP);
-		if (guard.contains("&") || guard.toUpperCase().contains("AND")) { //$NON-NLS-1$ //$NON-NLS-2$
-			pwCPP.print(")"); //$NON-NLS-1$
-		}
 	}
 
 	@Override

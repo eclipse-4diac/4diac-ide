@@ -68,7 +68,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.CreateResourceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.swt.widgets.Display;
 import org.xml.sax.InputSource;
@@ -129,7 +128,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	private void sendCreateFBTypeREQ(final FBType fbType, String request) throws DeploymentException {
 		try {				
-			String result = getDevMgmComHandler().sendREQ("", request); //$NON-NLS-1$
+			String result = sendREQ("", request); //$NON-NLS-1$
 			if (result.contains("Reason")) { //$NON-NLS-1$
 				throw new DeploymentException("LUA skript for " + fbType.getName() + " FBType not executed");
 			} else {
@@ -190,7 +189,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	private void sendCreateAdapterTypeREQ(final String adapterKey, String request) throws DeploymentException {
 		try {
-			String result = getDevMgmComHandler().sendREQ("", request); //$NON-NLS-1$
+			String result = sendREQ("", request); //$NON-NLS-1$
 			if (result.contains("Reason")) { //$NON-NLS-1$
 				throw new DeploymentException("LUA skript for " + adapterKey + " AdapterType not executed");
 			} 
@@ -232,7 +231,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		@SuppressWarnings("nls")
 		String request = MessageFormat.format(QUERY_PARAMETER, id++, fb.getName() + "." + inVar.getName());
 		try {
-			String result = getDevMgmComHandler().sendREQ(res.getName(), request);		
+			String result = sendREQ(res.getName(), request);		
 			if (result != null) {
 				createParameter(res, inVar, parseResponse(result));
 			}
@@ -252,7 +251,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private void queryConnections(Resource res) {
 		String request = MessageFormat.format(QUERY_CONNECTIONS, id++, "*", "*"); //$NON-NLS-1$ //$NON-NLS-2$
 		try {
-			String result = getDevMgmComHandler().sendREQ(res.getName(), request);		
+			String result = sendREQ(res.getName(), request);		
 			if (result != null) {
 				createConnections(res, parseResponse(result));
 			}
@@ -297,7 +296,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private void queryFBNetwork(Resource res) {
 		String request = MessageFormat.format(QUERY_FB_INSTANCES, id++);
 		try {
-			String result = getDevMgmComHandler().sendREQ(res.getName(), request);		
+			String result = sendREQ(res.getName(), request);		
 			if (result != null) {
 				InputSource source = new InputSource(new StringReader(result));
 				XMLResource xmlResource = new XMLResourceImpl();
@@ -346,7 +345,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private void addTypeToTypelib(Resource res, String typeName, String extension, String messageType) {
 		String request = MessageFormat.format(messageType, id++, typeName);
 		try {
-			String result = getDevMgmComHandler().sendREQ(res.getName(), request);		
+			String result = sendREQ(res.getName(), request);		
 			if (result != null) {
 				result = result.replaceFirst("<Response ID=\"[0-9]+\">\n", "");
 				result = result.replaceFirst("</Response>", "");
@@ -423,7 +422,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 		SAXParser saxParser = saxParserFactory.newSAXParser();
 		QueryResponseHandler handler = new QueryResponseHandler();
-		String response = getDevMgmComHandler().sendREQ(destination, request);
+		String response = sendREQ(destination, request);
 		saxParser.parse(new InputSource(new StringReader(response)), handler);
 		return handler;
 	}

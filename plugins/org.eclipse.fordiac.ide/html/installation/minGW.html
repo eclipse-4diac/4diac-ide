@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--
- Copyright (c) 2010 - 2014 TU Wien ACIN, fortiss GmbH
+ Copyright (c) 2010 - 2019 TU Wien ACIN, fortiss GmbH
+ 			   2019 Johannes Kepler University Linz
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +11,8 @@
  Contributors:
    Carolyn Oates, Alois Zoitl, Monika Wenger, Jose Cabral
      - initial API and implementation and/or initial documentation
+   Bianca Wiesmayr
+     - adapting, restructuring and extending the installation tutorial
 -->
 
 <html lang="en">
@@ -20,39 +23,59 @@
 </head>
 
 <body>
-<h1 id="topOfPage">Setting up Mingw for FORTE Development</h1>
+<h1 id="topOfPage">Setting up MinGW-w64</h1>
 
-<h2>Install <a href="http://www.mingw-w64.org/" target="_blank">Mingw-w64</a></h2>
-<p>Download the <a href="https://sourceforge.net/projects/mingw-w64/files/" target="_blank">Mingw-w64 Installer</a>. Install the version you like and specify "win32" as thread if requested.</p>
+<h2>Install MinGW-w64</h2>
+<p><a href="http://www.mingw-w64.org/" target="_blank">MinGW-w64</a> comprises development tools for compiling and debugging. 
+Download the Mingw-w64 Installer from <a href="https://sourceforge.net/projects/mingw-w64/files/" target="_blank">here</a> and follow the steps in the wizard. 
+It is essential that the installation path does not contain any spaces.
+Therefore, you cannot install MinGW-w64 in Program Files.
+We recommend to create a folder mingw-w64 on your system drive (e.g., C:\mingw).
+Install a current version and specify <span class="button4diac">win32</span> as thread when requested.
+Additionally, choose the architecture <span class="button4diac">x86_64</span>.</p>
 
-<p>After installing, press <span class="button4diac">Windows Key + Pause</span>. In the System window, click <span class="button4diac">Advanced System Settings &rarr; Advanced (tab) &rarr; Environment Variables</span>. Change PATH variable (click on it), and add the path where your MinGW binaries have been installed in e.g., <span class="folderLocation">C:\MinGW\bin\</span>. Add <span class="folderLocation">C:\mingw-w64\XXXXX\ming[32-64]\bin</span> in the Windows PATH variable.</p> 
+<p>After installing, you need to edit the PATH variable. 
+You can access the System Control Center by pressing <span class="button4diac">Windows Key + Pause</span>. 
+In the System window, click <span class="button4diac">Advanced System Settings &rarr; Advanced (tab) &rarr; Environment Variables</span>. 
+For Windows 10, a quick access is to enter "Edit the system environment variables" in the Start Search of Windows and click the button "Environment Variables".
+Change the PATH variable (double-click on it or Select and <span class="button4diac">Edit</span>), and add the path where your MinGW-w64 has been installed to e.g., <span class="folderLocation">C:\mingw\mingw64\bin</span>. 
+This folder should contain a number of .exe-files that you can see in your Explorer.</p> 
 
-<h2>Test Mingw-w64</h2>
-<p>Open command prompt window by pressing <span class="button4diac">Windows</span> button and entering <span class="inlineCode">cmd</span>. Enter <span class="inlineCode">g++ --version</span>, and if you can see some information about the version of the compiler, it was susscesfull. If you get an error like "Command g++ not found", then you must have done something wrong.</p>
+<h2>Test MinGW-w64</h2>
+<p>Open the command prompt of Windows either via the Program Menu or type <span class="button4diac">cmd</span> in the Start Search of Windows. 
+Enter:
+<div class="code"><span class="inlineCode">g++ --version</div>
+If version information of the compiler is displayed, it was successful and you can continue with the next section. </p>
+
+<p>If you get an error such as "Command g++ not found", then something went wrong.
+In this case, verify that the PATH variable was successfully set and directs to the correct installation path.
+Additionally, open a new command prompt and try to execute the command again.
+If you try to reinstall, do not forget to restart the command prompt again (it does not update automatically).
+If this does not help, please ask for advice in the <a href="https://www.eclipse.org/forums/index.php?t=thread&frm_id=308">Forum</a>.
+</p>
 
 <h2>Change name of the make executable</h2>
 
-<p>In your installation folder, inside the <span class="folderLocation">bin</span> directory, you should find a file called <span class="fileLocation">mingw32-make.exe</span>. Copy this file in the same directory and change it to <span class="fileLocation">make.exe</span>. This is because this file is the one you will use to compile FORTE, and "make" is the command used throughout the documentation for it.</p>
+<p>In your installation folder, inside the <span class="folderLocation">bin</span> directory, you should find a file called <span class="fileLocation">mingw32-make.exe</span>. 
+Create a copy of the file in the same directory named <span class="fileLocation">make.exe</span>. 
+This is because this file is the one you will use to compile 4diac FORTE, and "make" is the command used for that throughout the documentation.</p>
 
-<h2>CMake and Compilation</h2>
-
-<p>In step 2 of <a href="../../html/installation/install.html#generateFilesForCompiling">Generate files for compiling</a>, 
-you have to select <span class="specificText">Unix Makefiles</span>, <span class="specificText">MinGW Makefiles</span> when working with MinGW. 
-The architecture option needs to be set to <span class="specificText">Win32</span>.</p>
-
-<p>After generating in CMake, to compile forte, you do</p>
-<div class="code">$ cd FORTE_FOLDER_ROOT/bin/[YOUR_SYSTEM]
-$ make</div>
+<h2>Next steps</h2>
+<p>Now that you successfully installed a compiler, you can continue with the next step of the <a href="../../html/installation/install.html#FORTEsteps">installation tutorial</a>.
+All information in the installation tutorial is based on a setup with MinGW-w64.
+For users with previous experience in building a 4diac FORTE, the details are listed:
+<ul>
+	<li>When generating files for compiling in CMake, the tool "Unix Makefiles" has to be selected.</li>
+	<li>Also the architecture option needs to be set in CMake: The correct FORTE_ARCHITECTURE is Win32</li>
+	<li>When compiling, open the Windows command line and go to the folder, where CMake built the binaries.
+	    Execute the command make to compile.</li>
+</ul>
 
 <h1 id="whereToGoFromHere">Where to go from here?</h1>
 
-<p>Now that you installed the required tools, it's time to start using them. Take a look at the following page:</p>
+<p>If you want to build a 4diac FORTE, here is a quick link back:</p>
 
-<p><a href="../../html/4diacIDE/overview.html">Step by step tutorial</a></p>
-
-<p>If you want to compile FORTE for another platform or want to know more about that, here's a quick link back:</p>
-
-<p><a href="../../html/installation/install.html">Install 4DIAC</a></p>
+<p><a href="../../html/installation/install.html">Install Eclipse 4diac</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
@@ -60,6 +83,5 @@ $ make</div>
 
 <p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 
-<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
 </body>
 </html>

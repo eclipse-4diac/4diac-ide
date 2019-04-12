@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -47,6 +48,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.tools.MarqueeDragTracker;
 import org.eclipse.gef.tools.MarqueeSelectionTool;
@@ -169,7 +171,9 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 
 		//set the control for the new state action so that it can get the correct postion for state creation
 		IAction action = getActionRegistry().getAction(NewStateAction.CREATE_STATE);
-		((NewStateAction)action).setViewerControl(viewer.getControl());
+		((NewStateAction)action).setViewerControl((FigureCanvas)viewer.getControl());
+		((NewStateAction)action).setZoomManager(getZoomManager());
+		
 		
 		// configure the context menu provider
 		ContextMenuProvider cmProvider = new ZoomUndoRedoContextMenuProvider(
@@ -431,5 +435,9 @@ public class ECCEditor extends GraphicalEditorWithFlyoutPalette implements
 	@Override
 	protected FlyoutPreferences getPalettePreferences() {
 		return ECCPaletteFactory.PALETTE_PREFERENCES;
+	}
+	
+	private ZoomManager getZoomManager(){		
+		return ((ScalableFreeformRootEditPart)(getGraphicalViewer().getRootEditPart())).getZoomManager();
 	}
 }

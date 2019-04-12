@@ -12,16 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions;
 
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.StateCreationFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECStateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
-import org.eclipse.swt.events.MenuDetectEvent;
-import org.eclipse.swt.events.MenuDetectListener;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class NewStateAction extends WorkbenchPartAction {
@@ -32,8 +31,9 @@ public class NewStateAction extends WorkbenchPartAction {
 	public static final String CREATE_STATE = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.CreateStateAction";//$NON-NLS-1$
 	
 	StateCreationFactory stateFactory = new StateCreationFactory();
-	Control viewerControl;
+	FigureCanvas viewerControl;
 	org.eclipse.swt.graphics.Point pos = new org.eclipse.swt.graphics.Point(0,0);
+	ZoomManager zoomManager;
 	
 	public NewStateAction(IWorkbenchPart part) {
 		super(part);
@@ -41,16 +41,15 @@ public class NewStateAction extends WorkbenchPartAction {
 		setText(Messages.ECCActions_NEW_STATE);
 	}
 	
-	public void setViewerControl(Control control){		
+	public void setViewerControl(FigureCanvas control){		
 		viewerControl = control;
 		if(null != viewerControl){
-			viewerControl.addMenuDetectListener(new MenuDetectListener() {
-				@Override
-				public void menuDetected(MenuDetectEvent e) {
-				  pos = viewerControl.toControl(e.x, e.y);			  
-				}
-			});
+			viewerControl.addMenuDetectListener(e ->  pos = viewerControl.toControl(e.x, e.y));
 		}
+	}
+	
+	public void setZoomManager(final ZoomManager zoomManager) {
+		this.zoomManager = zoomManager;		
 	}
 
 	@Override
@@ -63,8 +62,12 @@ public class NewStateAction extends WorkbenchPartAction {
 	public void run() {		
 		ECCEditor editor = (ECCEditor)getWorkbenchPart();
 		
+		Point location = viewerControl.getViewport().getViewLocation();
+		Point realPos = new Point(pos.x + location.x, pos.y + location.y);
+		realPos.scale(1.0 / zoomManager.getZoom());
+		
 		ECState model = (ECState) stateFactory.getNewObject();
-		execute(new CreateECStateCommand( model, new Point(pos.x, pos.y), editor.getFbType().getECC()));
+		execute(new CreateECStateCommand( model, realPos, editor.getFbType().getECC()));
 				
 		editor.outlineSelectionChanged(model);
 	}

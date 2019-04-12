@@ -53,7 +53,7 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 		}
 	}
 	
-	public String sendREQ(String destination, String request) throws IOException {
+	public synchronized String sendREQ(String destination, String request) throws IOException {
 		String response = commHandler.sendREQ(destination, request);
 		for (IDeploymentListener listener : listeners) {
 			listener.postCommandSent(commHandler.getInfo(destination), destination, request); //do something with info
@@ -84,10 +84,6 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 		this.device = dev;
 		resetTypes();
 		this.commHandler = (null != overrideHandler) ? overrideHandler : createCommunicationHandler(dev) ;
-	}
-	
-	public IDeviceManagementCommunicationHandler getDevMgmComHandler() {
-		return commHandler; 
 	}
 	
 	protected Device getDevice() {

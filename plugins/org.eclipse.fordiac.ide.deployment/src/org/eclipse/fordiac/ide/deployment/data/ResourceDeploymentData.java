@@ -34,9 +34,22 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public class ResourceDeploymentData {
 	
 	public class ParameterData{
-		public String value;
-		public VarDeclaration var;
-		public String prefix;
+		private String value;
+		private VarDeclaration var;
+		private String prefix;
+		
+		public String getValue() {
+			return value;
+		}
+
+		public VarDeclaration getVar() {
+			return var;
+		}
+
+		public String getPrefix() {
+			return prefix;
+		}
+		
 		public ParameterData(String value, String prefix, VarDeclaration var) {
 			super();
 			this.value = value;
@@ -47,12 +60,24 @@ public class ResourceDeploymentData {
 	
 	public final Resource res;
 
-	public List<FBDeploymentData> fbs = new ArrayList<>();
+	private List<FBDeploymentData> fbs = new ArrayList<>();
 	
-	public List<ConnectionDeploymentData> connections = new ArrayList<>();
+	private List<ConnectionDeploymentData> connections = new ArrayList<>();
 	
-	public List<ParameterData> params = new ArrayList<>();
+	private List<ParameterData> params = new ArrayList<>();
 		
+	public List<FBDeploymentData> getFbs() {
+		return fbs;
+	}
+
+	public List<ConnectionDeploymentData> getConnections() {
+		return connections;
+	}
+
+	public List<ParameterData> getParams() {
+		return params;
+	}
+
 	public ResourceDeploymentData(final Resource res){
 		this.res = res;
 		addFBNetworkElements(new ArrayDeque<SubApp>(), res.getFBNetwork(), ""); //$NON-NLS-1$
@@ -104,6 +129,7 @@ public class ResourceDeploymentData {
 				//we have a typed subapp
 				retVal = subApp.getType().getFBNetwork();
 			} else if(null != subApp.getOpposite()) {
+				//we should have a mapped subapp. Then the network is in the opposite subapp
 				retVal = ((SubApp)subApp.getOpposite()).getSubAppNetwork();
 			}
 		}		
