@@ -33,9 +33,16 @@
                             &lt;LI&gt;New platforms: PLCnext, pikeOS, freeRTOS, and ROS&lt;/LI&gt; 
                         &lt;/UL&gt;&lt;/LI&gt;
                    &lt;/UL&gt; 
-            </text>
-  	 	 		
+            </text>  	 	 		
        	</group>
+       	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.10.1">   
+            <text>The first maintenance release for 4DIAC 1.10 provides 3 usability bug fixes for 4diac IDE, and 1 for FORTE.
+            </text>                
+        </group>
+       	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.10.2">   
+            <text>The second maintenance release for 4DIAC 1.10 provides 11 bug fixes for 4diac IDE, and 6 for  4diac FORTE.
+            </text>                
+        </group>
    	</extensionContent>
    	
    	<extensionContent id="fordiac-news" style="css/style.css" name="Whats New Extension" path="whatsnew/@">
