@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.application.commands.NewAppCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
+import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -135,8 +137,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 			setupVersionInfo(system);
 			SystemManager.INSTANCE.addSystem(system);
 			
-			NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(), Messages.NewApplicationWizard_Comment);
-			cmd.execute(monitor, null);
+			createInitialApplication(monitor, system);
 			
 			SystemManager.INSTANCE.saveSystem(system);
 			
@@ -148,6 +149,16 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 			monitor.done();
 		}
 		return null;
+	}
+
+	private void createInitialApplication(final IProgressMonitor monitor, AutomationSystem system) {
+		NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(), Messages.NewApplicationWizard_Comment);
+		cmd.execute(monitor, null);
+		
+		Application app = cmd.getApplication();
+		if(page.getOpenApplication() && null != app){
+			OpenListenerManager.openEditor(app);
+		}
 	}
 
 	private static void setupVersionInfo(AutomationSystem system) {

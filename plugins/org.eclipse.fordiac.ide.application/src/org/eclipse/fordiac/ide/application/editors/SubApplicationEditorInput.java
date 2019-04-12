@@ -42,7 +42,7 @@ public class SubApplicationEditorInput extends PersistableUntypedEditorInput {
 	 * return the root application the sub app is contained in
 	 */
 	public Application getApplication(){		
-		return getSubApp().getSubAppNetwork().getApplication();
+		return getSubApp().getFbNetwork().getApplication();  //check with the FBNetwork we are contained in for the applicaiton
 	}
 
 }

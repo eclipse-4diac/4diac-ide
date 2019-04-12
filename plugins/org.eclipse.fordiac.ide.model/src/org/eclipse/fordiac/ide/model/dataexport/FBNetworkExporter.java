@@ -52,8 +52,8 @@ class FBNetworkExporter extends CommonElementExporter{
 		Element fbNetworkElement = createElement(elementName); 
 		
 		addFBNetworkElements(fbNetworkElement, fbNetwork);
-		addConnections(fbNetworkElement, fbNetwork.getDataConnections(), LibraryElementTags.DATA_CONNECTIONS_ELEMENT, fbNetwork);
 		addConnections(fbNetworkElement, fbNetwork.getEventConnections(), LibraryElementTags.EVENT_CONNECTIONS_ELEMENT, fbNetwork);
+		addConnections(fbNetworkElement, fbNetwork.getDataConnections(), LibraryElementTags.DATA_CONNECTIONS_ELEMENT, fbNetwork);
 		addConnections(fbNetworkElement, fbNetwork.getAdapterConnections(), LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT, fbNetwork);
 
 		

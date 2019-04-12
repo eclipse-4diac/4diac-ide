@@ -191,7 +191,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 			retVal += devData.getResData().size();
 			for (ResourceDeploymentData resDepData : devData.getResData()) {
 				retVal += countResourceParams(resDepData.res);
-				retVal += resDepData.fbs.size() + resDepData.connections.size() + resDepData.params.size();
+				retVal += resDepData.getFbs().size() + resDepData.getConnections().size() + resDepData.getParams().size();
 				// TODO count variables of Fbs
 			}
 		}
@@ -230,16 +230,16 @@ class DownloadRunnable implements IRunnableWithProgress {
 	}
 
 	private void deployParamters(ResourceDeploymentData resDepData, IDeviceManagementInteractor executor) throws DeploymentException {
-		for (ParameterData param : resDepData.params) {
-			executor.writeFBParameter(resDepData.res, param.value,
-					new FBDeploymentData(param.prefix, (FB) param.var.getFBNetworkElement()), param.var);
+		for (ParameterData param : resDepData.getParams()) {
+			executor.writeFBParameter(resDepData.res, param.getValue(),
+					new FBDeploymentData(param.getPrefix(), (FB) param.getVar().getFBNetworkElement()), param.getVar());
 			curMonitor.worked(1);
 		}
 	}
 
 	private void deployConnections(final ResourceDeploymentData resDepData,
 			final IDeviceManagementInteractor executor) throws DeploymentException {
-		for (ConnectionDeploymentData con : resDepData.connections) {
+		for (ConnectionDeploymentData con : resDepData.getConnections()) {
 			executor.createConnection(resDepData.res, con);
 			curMonitor.worked(1);
 			if (curMonitor.isCanceled()) {
@@ -250,7 +250,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 
 	private void createFBInstance(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor) throws DeploymentException {
 		Resource res = resDepData.res;
-		for (FBDeploymentData fbDepData : resDepData.fbs) {
+		for (FBDeploymentData fbDepData : resDepData.getFbs()) {
 			if (!fbDepData.fb.isResourceTypeFB()) {
 				executor.createFBInstance(fbDepData, res);
 				curMonitor.worked(1);

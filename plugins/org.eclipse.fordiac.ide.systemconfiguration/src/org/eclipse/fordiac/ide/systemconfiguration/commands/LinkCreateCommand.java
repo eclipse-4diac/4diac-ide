@@ -41,7 +41,19 @@ public class LinkCreateCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return source != null && destination != null;
+		if(null == source || null == destination) {
+			return false;
+		}
+		
+		
+		for (Link con : source.getOutConnections()) {
+			if(con.getDevice().equals(destination)) {
+				//the link is already existing
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	@Override

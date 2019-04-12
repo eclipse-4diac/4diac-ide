@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--
- Copyright (c) 2010 - 2016 TU Wien ACIN, fortiss GmbH
+ Copyright (c) 2010 - 2019 TU Wien ACIN, fortiss GmbH
+               2019 Johannes Kepler University Linz
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -10,63 +11,74 @@
  Contributors:
    Carolyn Oates, Alois Zoitl, Monika Wenger, Jose Cabral
      - initial API and implementation and/or initial documentation
+  Bianca Wiesmayr 
+     - adapting, restructuring and extending the installation tutorial
 -->
 
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Use MS Visual Studio</title>
+	<title>Using MS Visual Studio</title>
 	<link rel="stylesheet" type="text/css" href="../help.css">
 </head>
 
 <body>
-<h1 id="topOfPage">Compiling and Debugging FORTE with MS Visual Studio</h1>
-<p>The following describes how to compile FORTE with win32-architecture using Visual Studio. For other tools or platforms or to see general information about compiling FORTE, go <a href="../../html/installation/install.html#ownFORTE">back</a> to see more details about them.</p>
+<h1 id="topOfPage">Compiling and Debugging 4diac FORTE with MS Visual Studio</h1>
+<p>The following describes how to compile 4diac FORTE with win32-architecture using Visual Studio. 
+In the installation tutorial <a href="../../html/installation/install.html#ownFORTE">(back)</a> you find more details on building your own 4diac FORTE.
+Additionally, other tools are described there.</p>
 
 <p class="attention"><span class="inlineTitle">Attention</span>: If you are using a Visual Studio version older then 2010 you might need to extend it with a stdint.h file. See for example <a href="http://stackoverflow.com/questions/12970293/why-microsoft-visual-studio-cannot-find-stdint-h" target="_blank">here.</a></p>
 
-<h2>Create MS Visual Studio Project for FORTE with CMake</h2>
+<h2>Building a MS Visual Studio Project for 4diac FORTE with CMake</h2>
+In the <a href="../../html/installation/install.html#ownFORTE">installation tutorial</a>, the steps on building a project with CMake are described in detail.
+To use Visual Studio, you need to however select the tool MS Visual Studio.
+The correct architecture is Win32.
 <ol>
-	<li>Open CMake-GUI.</li>
-	<li>Choose source folder FORTE_FOLDER_ROOT.
-	<li>Choose desired destination folder. We recommend <span class="folder">FORTE_FOLDER_ROOT/bin/win32</span>.
-	<li>Press the <span class="button4diac">Configure</span> button and choose the version of Visual Studio that is used and native default compilers. Press the <span class="button4diac">Finish</span> button afterwards.</li>
-	<li>For the option <span class="specificText">FORTE_ARCHITECTURE</span>, select Win32. Other modules and configurations options can be set following the step 3 in <a href="../../html/installation/install.html#generateFilesForCompiling">Generate files for compiling</a>.</li>
-	<li>Press the <span class="button4diac">Configure</span> button, check red rows and repeat this untill now red row appears. Afterwards the <span class="button4diac">Generate</span> button.</li>
+	<li>Open the CMake-GUI.</li>
+	<li>Choose the source folder FORTE_FOLDER_ROOT.
+	<li>Choose desired destination folder. 
+	We recommend <span class="folder">FORTE_FOLDER_ROOT/bin/win32</span>.
+	<li>Press the <span class="button4diac">Configure</span> button and choose the version of Visual Studio that is used and native default compilers. 
+	Press the <span class="button4diac">Finish</span> button afterwards.</li>
+	<li>For the option <span class="specificText">FORTE_ARCHITECTURE</span>, select Win32. 
+	Other modules and configurations options can be set following the tutorial step <a href="../../html/installation/install.html#generateFilesForCompiling">Build a project with CMake</a>.</li>
+	<li>Press the <span class="button4diac">Configure</span> button, check red rows and repeat this until no row appears red. Afterwards, press the button <span class="button4diac">Generate</span>.</li>
 </ol>
 
-<h2>Compile Forte with Visual Studio</h2>
+<h2>Compile 4diac FORTE with Visual Studio</h2>
 <ol>
-<li>Open the generated FORTE project (.sln file) with Visual Studio in <span class="folderLocation">FORTE_FOLDER_ROOT/bin/win32</span>. You change from Debug to Release mode if you don't want to debug.
+<li>Open the generated 4diac FORTE project (.sln file) with Visual Studio in <span class="folderLocation">FORTE_FOLDER_ROOT/bin/win32</span>. 
+You can change from Debug to Release mode if you don't want to debug.
 <div><img src="../../html/installation/img/VSreleaseDebug.png" alt="Release Mode of Visual Studio "/></div></li>
 
 
 
-<li>Build FORTE afterwards by right-clicking on <span class="button4diac">forte</span> in the Solution Explorer window, and then click <span class="button4diac">Build</span>. A <span class="file">forte.exe</span> file should be generated in <span class="folderLocation">FORTE_FOLDER_ROOT/bin/win32/src/Release</span>.
-<div><img src="../../html/installation/img/VSCompile.png" alt="Compile by right-clicking on forte in the Soultion Explorer window, and then click Build"/></div></li>
+<li>Build 4diac FORTE afterwards by right-clicking on <span class="button4diac">forte</span> in the Solution Explorer window and then clicking <span class="button4diac">Build</span>. A file <span class="file">forte.exe</span> should be generated in <span class="folderLocation">FORTE_FOLDER_ROOT/bin/win32/src/Release</span>.
+<div><img src="../../html/installation/img/VSCompile.png" alt="Compile by right-clicking on forte in the Solution Explorer window, and then click Build"/></div></li>
 
 
 </ol>
 
-<h2>Debuggging</h2>
+<h2>Debugging</h2>
 <ol>
-<li>If you want to Debug using Visual Studio select the Debug mode and set FORTE as the main project.
+<li>If you want to Debug using Visual Studio, select the Debug mode and set 4diac FORTE as the main project.
 <div><img src="../../html/installation/img/VSstartProject.png" alt="Set FORTE as main project in Visual Studio "/></div></li>
 
 
 
-<li>And press <span class="button4diac">F5</span> or click <span class="button4diac">Debug &rarr; Start Debugging</span></li>
+<li>Finally, press <span class="button4diac">F5</span> or click <span class="button4diac">Debug &rarr; Start Debugging</span></li>
 </ol>
 
 <h1 id="whereToGoFromHere">Where to go from here?</h1>
 
-<p>Now that you installed the required tools, it's time to start using them. Take a look at the following page:</p>
+<p>If you want to build a 4diac FORTE, here is a quick link back:</p>
+
+<p><a href="../../html/installation/install.html">Install Eclipse 4diac</a></p>
+
+<p>After you installed all required tools, it's time to start using them. Take a look at the following page:</p>
 
 <p><a href="../../html/4diacIDE/overview.html">Step by step tutorial</a></p>
-
-<p>If you want to compile FORTE for another platform or want to know more about that, here's a quick link back:</p>
-
-<p><a href="../../html/installation/install.html">Install 4DIAC</a></p>
 
 <p>If you want to go back to the Start Here page, we leave you here a fast access</p>
 
@@ -74,6 +86,5 @@
 
 <p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
 
-<div class="lastModified"><script> document.write("This page was last modified on: " + document.lastModified +"");</script></div>
 </body>
 </html>

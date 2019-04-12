@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
+ * 				 2019 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,8 +9,8 @@
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Filip Andren, Waldemar Eisenmenger,
- *   Monika Wenger 
- *   - initial API and implementation and/or initial documentation
+ *   Monika Wenger - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - fixed issues in pop-up menu with sub-app types
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
@@ -18,9 +19,11 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.actions.FBInsertAction;
+import org.eclipse.fordiac.ide.application.actions.FBNetworkElementInsertAction;
 import org.eclipse.fordiac.ide.application.actions.MapAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.SaveAsSubApplicationTypeAction;
+import org.eclipse.fordiac.ide.application.actions.SubAppInsertAction;
 import org.eclipse.fordiac.ide.application.actions.UnmapAction;
 import org.eclipse.fordiac.ide.application.actions.UnmapAllAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
@@ -35,6 +38,7 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -215,7 +219,9 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 							action = createFBInsertAction(entry);							
 						}
 					}
-					submenu.add(action);
+					if(null != action) {
+						submenu.add(action);						
+					}
 				}
 			}
 			if(!submenu.isEmpty()){
@@ -233,8 +239,8 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		return action;
 	}
 
-	private FBInsertAction createFBInsertAction(PaletteEntry entry) {
-		FBInsertAction action = null;
+	private FBNetworkElementInsertAction createFBInsertAction(PaletteEntry entry) {
+		FBNetworkElementInsertAction action = null;
 		CreateRequest request = new CreateRequest();
 		request.setFactory(new FBTypeTemplateCreationFactory(entry));
 
@@ -246,10 +252,15 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 		if(cmd instanceof FBCreateCommand){
 			action = new FBInsertAction(editor, (FBCreateCommand)cmd);
-			registry.registerAction(action);
-			action.updateCreatePosition(pt);
+		} else if (cmd instanceof CreateSubAppInstanceCommand){
+			action = new SubAppInsertAction(editor, (CreateSubAppInstanceCommand)cmd);
 		}
-
+		
+		if(null != action) {
+			registry.registerAction(action);
+			action.updateCreatePosition(pt);			
+		}
+		
 		return action;
 	}
 

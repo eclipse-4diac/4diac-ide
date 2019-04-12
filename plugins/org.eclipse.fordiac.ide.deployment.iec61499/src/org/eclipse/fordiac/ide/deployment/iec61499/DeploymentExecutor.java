@@ -306,7 +306,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	public List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources()  throws DeploymentException {
 		String result;
 		try {
-			result = getDevMgmComHandler().sendREQ("", MessageFormat.format(QUERY_FB_INSTANCES, id++) ); //$NON-NLS-1$
+			result = sendREQ("", MessageFormat.format(QUERY_FB_INSTANCES, id++) ); //$NON-NLS-1$
 			Response resp = parseResponse(result);
 			if(null != resp.getFblist() && null != resp.getFblist().getFbs()) {
 				return resp.getFblist().getFbs().stream().map( fb -> {
@@ -340,7 +340,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	public Response readWatches() throws DeploymentException {
 		String request = MessageFormat.format(READ_WATCHES, id++);
 		try {
-			return parseResponse(getDevMgmComHandler().sendREQ("", request));  //$NON-NLS-1$
+			return parseResponse(sendREQ("", request));  //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_ReadWatchesFailed,
 					getDevice().getName()), e);
@@ -351,7 +351,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	public void addWatch(MonitoringBaseElement element) throws DeploymentException {
 		String request = MessageFormat.format(ADD_WATCH, this.id++, element.getQualifiedString(), "*"); //$NON-NLS-1$
 		try {
-			String response = getDevMgmComHandler().sendREQ(element.getResourceString(), request);
+			String response = sendREQ(element.getResourceString(), request);
 			
 			//TODO show somehow the feedback if the response contained a reason that it didn't work
 			element.setOffline("".equals(response)); //$NON-NLS-1$
@@ -365,7 +365,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor{
 	public void removeWatch(MonitoringBaseElement element) throws DeploymentException {
 		String request = MessageFormat.format(DELETE_WATCH, this.id++, element.getQualifiedString(), "*"); //$NON-NLS-1$
 		try {
-			String response = getDevMgmComHandler().sendREQ(element.getResourceString(), request);
+			String response = sendREQ(element.getResourceString(), request);
 			//TODO show somehow the feedback if the response contained a reason that it didn't work
 			element.setOffline("".equals(response)); //$NON-NLS-1$
 		} catch (IOException e) {

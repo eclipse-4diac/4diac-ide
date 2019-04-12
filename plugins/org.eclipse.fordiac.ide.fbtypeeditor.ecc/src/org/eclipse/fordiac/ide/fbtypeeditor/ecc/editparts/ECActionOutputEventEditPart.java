@@ -15,15 +15,11 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
 import java.util.List;
 
-import org.eclipse.draw2d.FigureUtilities;
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
@@ -34,6 +30,8 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
+import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.figures.GradientLabel;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -53,9 +51,6 @@ import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Pattern;
-import org.eclipse.swt.widgets.Display;
 
 public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart {
 	private final EContentAdapter adapter = new EContentAdapter() {
@@ -213,26 +208,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 
 	@Override
 	protected IFigure createFigure() {
-		Label eventLabel = new Label() {
-			@Override
-			protected void paintFigure(Graphics graphics) {
-				Display display = Display.getCurrent();
-				Rectangle boundingRect = getBounds();
-				Point topLeft = boundingRect.getTopLeft();
-				Point bottomRight = boundingRect.getBottomRight();
-				Color first = FigureUtilities.lighter(getBackgroundColor());
-				Pattern pattern = new Pattern(display, topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, first,
-						getBackgroundColor());
-				graphics.setBackgroundPattern(pattern);
-				graphics.fillRectangle(boundingRect);
-				graphics.setBackgroundPattern(null);
-				pattern.dispose();
-				first.dispose();
-				graphics.translate(bounds.x, bounds.y);
-				graphics.drawText(getSubStringText(), getTextLocation());
-				graphics.translate(-bounds.x, -bounds.y);
-			}
-		};
+		Label eventLabel  = new GradientLabel(((ZoomScalableFreeformRootEditPart)getRoot()).getZoomManager());
 		eventLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_COLOR));
 		eventLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_BORDER_COLOR));
 		eventLabel.setOpaque(true);

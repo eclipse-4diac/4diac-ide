@@ -38,7 +38,7 @@ import org.eclipse.xtext.util.SimpleAttributeResolver;
  */
 @SuppressWarnings("all")
 public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvider {
-  public SimpleScope scope_VarDeclaration_type(final VarDeclaration context, final EReference ref) {
+  public SimpleScope scope_DataType(final EObject context, final EReference ref) {
     SimpleScope _xblockexpression = null;
     {
       final Collection<DataType> candidates = DataTypeLibrary.getInstance().getDataTypes();
