@@ -1,0 +1,51 @@
+!DOCTYPE html> 
+<!--
+ Copyright (c) 2019 Johannes Kepler University 
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Alois Zoitl - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Updating the Target Platform used by 4diac IDE</title>
+    <link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+
+<body>
+<h1 id="topOfPage">Updating the Target Platform used by 4diac IDE</h1>
+
+<p>The target platform defines the dependencies of 4diac IDE to other eclipse projects. Currently the Eclipse 4diac requires the following:</p>
+<ul>
+    <li>Eclipse Java Development Tools, org.eclipse.jdt.feature.group</li>
+    <li>Eclipse Platform SDK, org.eclipse.platform.sdk</li>
+    <li>Eclipse Plug-in Development Environment, org.eclipse.pde.feature.group</li>
+    <li>Eclipse Automated Error Reporting, org.eclipse.epp.logging.aeri.feature.feature.group</li>
+    <li>EMF - Eclipse Modeling Framework SDK, org.eclipse.emf.sdk.feature.group</li>
+    <li>GEF (MVC) SDK, org.eclipse.gef.sdk.feature.group</li>
+    <li>Xtext Complete SDK, org.eclipse.xtext.sdk.feature.group</li>
+</ul>
+<p>For upgrading to new Eclipse platform versions the following steps need to be done:</p>
+<ul>
+    <li>Update org.eclipse.fordiac.ide.product.target in the org.eclipse.fordiac.ide.product plugin</li>
+    <li>Update pom.xml in the org.eclipse.fordiac.ide.master plugin. At least the following steps have to be done:
+        <ul> 
+            <li> Check tycho.version</li>
+            <li> Update tycho-repo.url to the new target platform version</li>
+            <li> Check org.eclipse.equinox.executable version range. Attention this has to be done on two places in the file.
+        </ul>
+    </li>
+    <li>Run product from Eclipse IDE using product editor, i.e., press the synchronize button and then the "Launch an Eclipse Application"</li>
+    <li>Run Maven install for pom.xml in the org.eclipse.fordiac.ide.master plugin locally</li>
+    <li>Test if the generated product can be executed. The generated products are in: /org.eclipse.4diac.ide/plugins/org.eclipse.fordiac.ide.product/target/products/org.eclipse.fordiac.ide.product 
+    <li>Push to Gerrit so that CI build can also check if it is working</li>
+</ul>
+
+</body>
+</html>
