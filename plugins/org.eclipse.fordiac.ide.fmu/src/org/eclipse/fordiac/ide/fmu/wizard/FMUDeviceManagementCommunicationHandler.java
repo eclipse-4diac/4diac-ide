@@ -662,12 +662,12 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 					initialValue = replaced;
 				}
 			}
-			if (-1 != initialValue.indexOf('#')) { //$NON-NLS-1$
+			if (-1 != initialValue.indexOf('#')) {
 				if(FMUInputOutput.variableType.UNKNOWN == type){
-					type = FMUInputOutput.getTypeFromString(initialValue.substring(0, initialValue.indexOf('#'))); //$NON-NLS-1$
+					type = FMUInputOutput.getTypeFromString(initialValue.substring(0, initialValue.indexOf('#'))); 
 				}
 				
-				initialValue = initialValue.substring(initialValue.indexOf('#') + 1); //$NON-NLS-1$
+				initialValue = initialValue.substring(initialValue.indexOf('#') + 1);
 			}
 			returnValue = new FMUInputOutput("", false, FMUInputOutput.variableScope.PARAM, type, initialValue); //$NON-NLS-1$
 		}

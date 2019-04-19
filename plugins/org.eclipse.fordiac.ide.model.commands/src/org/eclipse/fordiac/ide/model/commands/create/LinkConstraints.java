@@ -15,8 +15,8 @@ package org.eclipse.fordiac.ide.model.commands.create;
 import java.text.MessageFormat;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.commands.ModelCommandsPlugin;
 import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.commands.ModelCommandsPlugin;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;

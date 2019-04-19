@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.DeploymentExecutor;
-import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtest.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtest.util.FBTHelper;

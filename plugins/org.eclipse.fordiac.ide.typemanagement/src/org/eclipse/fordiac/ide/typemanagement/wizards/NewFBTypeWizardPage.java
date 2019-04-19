@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -154,7 +153,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
     public String getFileName() {
     	String retval = super.getFileName();	
     	if(null != getTemplate()){
-    		String splited[] = getTemplate().getName().split("\\."); //$NON-NLS-1$
+    		String[] splited = getTemplate().getName().split("\\."); //$NON-NLS-1$
     		if(splited.length == 2){
     			retval= retval + "." + splited[1]; //$NON-NLS-1$
     		}
@@ -223,14 +222,9 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	@SuppressWarnings("static-method")  //this method is need to allow sub-classes to override it with specific filters
 	protected FileFilter createTemplatesFileFilter() {
-		return new FileFilter() {
-			@Override
-			public boolean accept(File pathname) {
-				return pathname.getName().toUpperCase().endsWith(".FBT") //$NON-NLS-1$
+		return pathname -> pathname.getName().toUpperCase().endsWith(".FBT") //$NON-NLS-1$
 						|| pathname.getName().toUpperCase().endsWith(".ADP") //$NON-NLS-1$
 						|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
-			}
-		};
 	}
 	
 	private TemplateInfo createTemplateFileInfo(File f) {

@@ -25,15 +25,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.VarInitialization;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -101,12 +98,12 @@ public class ImportUtils {
 	 */
 	public static List<VarDeclaration> parseInputVariables(final Node node) throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
-		ArrayList<VarDeclaration> varDecl = new ArrayList<VarDeclaration>();
+		ArrayList<VarDeclaration> varDecl = new ArrayList<>();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
 			if (n.getNodeName().equals(LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
 				VarDeclaration var = parseVarDeclaration(n);
-				((IInterfaceElement) var).setIsInput(true);
+				var.setIsInput(true);
 				varDecl.add(var);
 			}
 		}
@@ -126,12 +123,12 @@ public class ImportUtils {
 	 */
 	public static List<VarDeclaration> parseOutputVariables(final Node node) throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
-		ArrayList<VarDeclaration> varDecl = new ArrayList<VarDeclaration>();
+		ArrayList<VarDeclaration> varDecl = new ArrayList<>();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
 			if (n.getNodeName().equals(LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
 				VarDeclaration var = parseVarDeclaration(n);
-				((IInterfaceElement) var).setIsInput(false);
+				var.setIsInput(false);
 				varDecl.add(var);
 			}
 		}

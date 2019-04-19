@@ -30,7 +30,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.export.ExportException;
-import org.eclipse.fordiac.ide.export.ExportFilter;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -378,7 +377,7 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 	protected void exportFBConstructor() {
 		pwH.println("\npublic:"); //$NON-NLS-1$
 
-		if (baseClass.equals(C_BASIC_FB) | baseClass.equals("CSimpleFB")) { // $NON-NLS-1$
+		if (baseClass.equals(C_BASIC_FB) || baseClass.equals("CSimpleFB")) { // $NON-NLS-1$
 			pwH.println("  FORTE_" //$NON-NLS-1$
 					+ name + "(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : "); //$NON-NLS-1$
 			pwH.print("       " //$NON-NLS-1$
@@ -564,9 +563,9 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 						Element childel = (Element) childnode;
 						pwCPP.println(MessageFormat.format(
 								"  m_roObjectHandler.getFB(g_nStringId{0})->getDataInput(g_nStringId{1})->fromString(\"{2}\");", //$NON-NLS-1$
-								new Object[] { el.getAttribute("Name"), //$NON-NLS-1$
+								el.getAttribute("Name"), //$NON-NLS-1$
 										childel.getAttribute("Name"), //$NON-NLS-1$
-										childel.getAttribute("Value") })); //$NON-NLS-1$
+										childel.getAttribute("Value"))); //$NON-NLS-1$
 					}
 				}
 			}
@@ -630,7 +629,7 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 		StringBuilder names = new StringBuilder();
 		StringBuilder withs = new StringBuilder();
 		StringBuilder withIndexes = new StringBuilder();
-		int withcount[] = new int[varNames.size()];
+		int[] withcount = new int[varNames.size()];
 		for (int i = 0; i < varNames.size(); ++i) {
 			withcount[i] = 0;
 		}

@@ -19,7 +19,6 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -109,8 +108,8 @@ public class ToolTipFigure extends Figure {
 					}
 				}
 			}
-		} else if(null != var.getFBNetworkElement() && var.getFBNetworkElement().getType() instanceof FBType){
-			return ((FBType)var.getFBNetworkElement().getType()).getInterfaceList().getVariable(var.getName());
+		} else if(null != var.getFBNetworkElement() && null != var.getFBNetworkElement().getType()){
+			return var.getFBNetworkElement().getType().getInterfaceList().getVariable(var.getName());
 		}
 		return null;
 	}

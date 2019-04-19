@@ -669,8 +669,8 @@ public abstract class CPPExportFilter implements IExportFilter {
 					NodeList parameterNodes = el.getChildNodes();
 					// FIX gebenh, 24th September 2008 -> dynamicaly create list
 					// to avoid a fixed size array where elements can be null
-					List<String> paramNames = new ArrayList<String>();
-					List<String> paramValues = new ArrayList<String>();
+					List<String> paramNames = new ArrayList<>();
+					List<String> paramValues = new ArrayList<>();
 
 					for (int j = 0; j < parameterNodes.getLength(); j++) {
 						org.w3c.dom.Node nodeParam = parameterNodes.item(j);

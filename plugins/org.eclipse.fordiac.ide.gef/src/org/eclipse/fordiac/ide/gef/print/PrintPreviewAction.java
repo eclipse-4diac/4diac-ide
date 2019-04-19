@@ -76,7 +76,7 @@ public class PrintPreviewAction extends Action {
 			}
 		}
 
-		if (viewer instanceof GraphicalViewer) {
+		if (null != viewer) {
 			Shell shell = viewer.getControl().getShell();
 			PrintPreview preview = new PrintPreview(shell, viewer,
 					Messages.PrintPreviewAction_LABEL_PrintPreview);
