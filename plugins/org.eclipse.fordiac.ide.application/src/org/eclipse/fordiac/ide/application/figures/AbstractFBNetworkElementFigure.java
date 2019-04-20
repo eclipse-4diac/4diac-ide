@@ -222,8 +222,8 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		setupTopIOs();
 
 		Figure middleContainer = new Figure();
-		BorderLayout borderLayout;
-		middleContainer.setLayoutManager(borderLayout = new BorderLayout());
+		BorderLayout borderLayout = new BorderLayout();
+		middleContainer.setLayoutManager(borderLayout);
 		borderLayout.setHorizontalSpacing(10);
 		middleContainer.setBorder(new MarginBorder(0, 7, 0, 7));
 
