@@ -158,6 +158,14 @@
             </input>
          </propertySection>
          <propertySection
+               class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+               id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+               tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
+            <input
+                  type="org.eclipse.fordiac.ide.gef.editparts.ValueEditPart">
+            </input>
+         </propertySection>
+         <propertySection
                class="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
                enablesFor="2"
                id="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"

@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
@@ -75,24 +76,18 @@ public class InterfaceElementSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, "Name:"); 
 		nameText = createGroupText(composite, true);	
 		nameText.addVerifyListener(new IdentifierVerifyListener());
-		nameText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
+		nameText.addModifyListener(e -> {
 				removeContentAdapter();
 				executeCommand(new ChangeSubAppIENameCommand(getType(), nameText.getText()));
 				addContentAdapter();
-			}
-		});
+			});
 		getWidgetFactory().createCLabel(composite, "Comment:"); 
 		commentText = createGroupText(composite, true);
-		commentText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
+		commentText.addModifyListener(e -> {
 				removeContentAdapter();
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 				addContentAdapter();
-			}
-		});
+			});
 		getWidgetFactory().createCLabel(composite, "Type: ");
 		typeCombo = new Combo(composite, SWT.SINGLE | SWT.READ_ONLY);
 		typeCombo.addSelectionListener(new SelectionListener() {
@@ -155,12 +150,12 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 		}
 		if(typeCombo.getItems().length > 0){
-		int i = typeCombo.getItems().length - 1;
-	    while (!text.equals(typeCombo.getItems()[i]) && i > 0){
+			int i = typeCombo.getItems().length - 1;
+		    while (!text.equals(typeCombo.getItems()[i]) && i > 0){
 	        	--i;
 	        } 
-		typeCombo.select(i);					
-	}
+		    typeCombo.select(i);					
+		}
 	}
 
 	private static List<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette){
@@ -251,6 +246,8 @@ public class InterfaceElementSection extends AbstractSection {
 	protected IInterfaceElement getInputType(Object input) {
 		if(input instanceof InterfaceEditPart){
 			return ((InterfaceEditPart) input).getModel();
+		} else if (input instanceof ValueEditPart) {
+			return ((ValueEditPart) input).getModel().getVarDeclaration();
 		}
 		return null;
 	}
