@@ -101,8 +101,6 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 		this.fb = fb;
 	}
 
-	/** The monitoring element as array. */
-	private String[] monitoringElementAsArray;
 
 	/**
 	 * Gets the monitoring element as string.
@@ -121,7 +119,6 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	 */
 	public void setMonitoringElement(String monitoringElement) {
 		this.monitoringElement = monitoringElement;
-		monitoringElementAsArray = this.monitoringElement.split("\\.");
 	}
 
 	/**
@@ -262,13 +259,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	 * @param color
 	 */
 	public void setColor(final Color color) {
-		Display.getDefault().asyncExec(new Runnable() {
-			
-			@Override
-			public void run() {
-				part.setBackgroundColor(color);
-			}
-		});
+		Display.getDefault().asyncExec(() -> part.setBackgroundColor(color));
 	}
 	
 }

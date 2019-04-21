@@ -31,8 +31,8 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -125,7 +125,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 	 * @return true, if is event
 	 */
 	public boolean isEvent() {
-		return getModel().getInterfaceElement() instanceof EventImpl;
+		return getModel().getInterfaceElement() instanceof Event;
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 	 * @return true, if is variable
 	 */
 	public boolean isVariable() {
-		return getModel().getInterfaceElement() instanceof VarDeclarationImpl;
+		return getModel().getInterfaceElement() instanceof VarDeclaration;
 	}
 
 	/** The oldx. */

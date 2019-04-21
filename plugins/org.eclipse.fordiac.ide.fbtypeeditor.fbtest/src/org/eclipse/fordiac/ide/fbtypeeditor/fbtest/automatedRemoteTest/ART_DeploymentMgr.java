@@ -64,7 +64,7 @@ public class ART_DeploymentMgr {
 			this.address = "localhost:61499"; //$NON-NLS-1$
 		}
 
-		LibraryElementFactory libFactory = org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementFactoryImpl.init();
+		LibraryElementFactory libFactory = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE;
 		DeviceType devType = libFactory.createDeviceType();
 		devType.setName("RMT_DEV"); //$NON-NLS-1$
 

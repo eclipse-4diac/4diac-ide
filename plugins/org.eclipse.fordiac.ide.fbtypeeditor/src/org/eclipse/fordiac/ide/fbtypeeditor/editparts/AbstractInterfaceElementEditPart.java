@@ -16,9 +16,9 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEditPart {
 	public abstract IInterfaceElement getCastedModel();	
@@ -50,14 +50,14 @@ abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEd
 	}
 
 	public boolean isEvent() {
-		return getCastedModel() instanceof EventImpl;
+		return getCastedModel() instanceof Event;
 	}
 
 	public boolean isVariable() {
-		return getCastedModel() instanceof VarDeclarationImpl;
+		return getCastedModel() instanceof VarDeclaration;
 	}
 	
 	public boolean isAdapter() {
-		return getCastedModel() instanceof AdapterDeclarationImpl;
+		return getCastedModel() instanceof AdapterDeclaration;
 	}
 }

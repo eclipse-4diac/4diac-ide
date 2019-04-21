@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
-import org.eclipse.draw2d.ActionEvent;
-import org.eclipse.draw2d.ActionListener;
 import org.eclipse.draw2d.Button;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -37,9 +35,7 @@ public class TestEventEditPart extends TestEditPart implements
 	 */
 
 	protected void registerTriggerElement() {
-		// if (isVariable()) {
 		TestingManager.getInstance().addTriggerElement(getModel());
-		// }
 	}
 	
 	@Override
@@ -74,14 +70,7 @@ public class TestEventEditPart extends TestEditPart implements
 	@Override
 	protected IFigure createFigureForModel() {
 		Button bt = new Button(getModel().getInterfaceElement().getName());
-		bt.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				getModel().sendEvent();
-				// TestingManager.getInstance().sendEvent(getCastedModel());
-			}
-		});
+		bt.addActionListener(e -> getModel().sendEvent());
 		return bt;
 	}
 
