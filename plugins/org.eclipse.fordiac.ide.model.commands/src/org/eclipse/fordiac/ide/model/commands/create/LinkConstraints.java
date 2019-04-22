@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT fortiss GmbH
+ * 				 2019 Johannes Kepler University	
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Filip Andren, Monika Wenger, Matthias Plasch
  *   - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Code cleanup, fixed adapter connection creation issue
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
@@ -83,18 +85,16 @@ public final class LinkConstraints {
 	 * 
 	 * @return true, if successful
 	 */
-	public static boolean canExistDataConnection(final VarDeclaration source,
-			final VarDeclaration target, Connection con) {
+	public static boolean canExistDataConnection(VarDeclaration source, VarDeclaration target, Connection con) {
 		if (source != null && target == null) {// connection just started
 			if (!isWithConstraintOK(source)) {
 				return false;
 			}
 			Abstract4DIACUIPlugin.statusLineErrorMessage(null);
-
 			return true;
 		}
 		
-		if (source != null && target != null && source != target) {
+		if (source != null && source != target) {
 			if (((source instanceof AdapterDeclaration) && (!(target instanceof AdapterDeclaration))) ||
 			     (!(source instanceof AdapterDeclaration) && (target instanceof AdapterDeclaration))) {
 				//don't check if we try to create a connection from data to adapter or vice versa
@@ -102,34 +102,33 @@ public final class LinkConstraints {
 				return false;
 			}
 			
+			if(checkIfSwapNeeded(target)) {
+				VarDeclaration temp = source;
+				source = target;
+				target = temp;
+			}
+			
 			if (!sourceAndDestCheck(source, target)) {
 				Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
 				return false;
 			}
 			
-			if (!hasAlreadyInputConnectionsCheck(target, source, con)) {
-				Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat
-										.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection,
-												new Object[] { target.getName() }));
+			if (!hasAlreadyInputConnectionsCheck(source, target, con)) {
+				Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection,
+						target.getName()));
 				return false;
 			}
 
 			if (!typeCheck(source, target)) {
-				Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat.format(
-						Messages.LinkConstraints_STATUSMessage_NotCompatible,
-						new Object[] { (null != source.getType()) ? source.getType().getName() : "N/A",
-								(null != target.getType()) ? target.getType().getName() : "N/A" }));
+				Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
+						(null != source.getType()) ? source.getType().getName() : "N/A",
+						(null != target.getType()) ? target.getType().getName() : "N/A"));
 				return false;
 			}
 
 			Abstract4DIACUIPlugin.statusLineErrorMessage(null);
 			
-			// FIX Input event can be connected to its own output event - ID: 3029433
-//			if (source.isIsInput() && target.isIsInput() && source.eContainer().equals(target.eContainer())) // connection from input to output within one fb 
-//				return false;
-//			
 			return isWithConstraintOK(source) && isWithConstraintOK(target);
-
 		}
 		return false;
 	}
@@ -287,32 +286,23 @@ public final class LinkConstraints {
 	 * 
 	 * @return true, if successful
 	 */
-	private static boolean hasAlreadyInputConnectionsCheck(
-			final VarDeclaration target, VarDeclaration src, Connection con) {
+	private static boolean hasAlreadyInputConnectionsCheck(final VarDeclaration src, final VarDeclaration target, final Connection con) {
 		boolean hasOnlyBrokenCons = true;
 		
-		VarDeclaration destination = target;
-		if ((destination.isIsInput() && destination.eContainer().eContainer() instanceof CompositeFBType) ||
-		     (!destination.isIsInput() && !(destination.eContainer().eContainer() instanceof CompositeFBType))) {
-			destination = src;
-			src = target;
-		}
-		
-		
-		if(!destination.getInputConnections().isEmpty()){
-			FBNetwork fbNetworkTarget = getContainingFBNetwork(destination);
+		if(!target.getInputConnections().isEmpty()){
+			FBNetwork fbNetworkTarget = getContainingFBNetwork(target);
 			FBNetwork fbNetworkSrc = getContainingFBNetwork(src);
 			if((null != fbNetworkTarget) && (fbNetworkTarget != fbNetworkSrc)){
 				//Broken connection check must only be performed of src and target are in different networks allowing to connect broken 
 				//connections in the same container would lead to broken fb networks, see [issues:#82] for details
-				for (Connection connection : destination.getInputConnections()) {
+				for (Connection connection : target.getInputConnections()) {
 					if ((!connection.isBrokenConnection()) && !(connection.equals(con))){
 						hasOnlyBrokenCons = false;
 						break;
 					}
 				}
 			}else{
-				for (Connection connection : destination.getInputConnections()) {
+				for (Connection connection : target.getInputConnections()) {
 					if(!connection.equals(con)){
 						hasOnlyBrokenCons = false;			
 						break;
@@ -321,6 +311,13 @@ public final class LinkConstraints {
 			}
 		}
 		return hasOnlyBrokenCons;
+	}
+	
+	private static boolean checkIfSwapNeeded(IInterfaceElement target) {
+		EObject container = target.eContainer().eContainer();
+		
+		return ((target.isIsInput() && (container instanceof CompositeFBType || container instanceof SubApp)) ||
+			     (!target.isIsInput() && !(container instanceof CompositeFBType || container instanceof SubApp)));
 	}
 
 	private static FBNetwork getContainingFBNetwork(VarDeclaration target) {
@@ -400,12 +397,18 @@ public final class LinkConstraints {
 
 	public static boolean canExistAdapterConnection(AdapterDeclaration source, AdapterDeclaration target, Connection con) {
 		if (source != null && target != null && source != target) {
+			if(checkIfSwapNeeded(target)) {
+				AdapterDeclaration temp = source;
+				source = target;
+				target = temp;
+			}
+			
 			if(!sourceAndDestCheck(source, target)){
 				Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
 				return false;
 			}
 
-			if(!hasAlreadyInputConnectionsCheck(target, source, con)) {
+			if(!hasAlreadyInputConnectionsCheck(source, target, con)) {
 				Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat
 										.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection,
 												target.getName()));
@@ -419,10 +422,9 @@ public final class LinkConstraints {
 			}
 
 			if(!adapaterTypeCompatibilityCheck(source, target)) {
-				Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat.format(
-						Messages.LinkConstraints_STATUSMessage_NotCompatible,
-						new Object[] { (null != source.getType()) ? source.getType().getName() : "N/D",
-								(null != target.getType()) ? target.getType().getName() : "N/D" }));
+				Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible, 
+						(null != source.getType()) ? source.getType().getName() : "N/D",
+						(null != target.getType()) ? target.getType().getName() : "N/D"));
 				return false;
 			}
 
@@ -600,18 +602,12 @@ public final class LinkConstraints {
 				|| name.equalsIgnoreCase("UDINT") || name.equalsIgnoreCase("ULINT"));//$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
-	public static boolean adapaterTypeCompatibilityCheck(final AdapterDeclaration source, final AdapterDeclaration target){
-		try {
-			if (((source.getType().getName().equals(ANY_ADAPTER)) && (!target.getType().getName().equals(ANY_ADAPTER))) || 
-					((!source.getType().getName().equals(ANY_ADAPTER)) && (target.getType().getName().equals(ANY_ADAPTER)))) { 
-				return true;
-			}
-			return source.getType().getName().equalsIgnoreCase(target.getType().getName());
-		} catch (NullPointerException e) {
-			System.out.println(e);
+	private static boolean adapaterTypeCompatibilityCheck(final AdapterDeclaration source, final AdapterDeclaration target){
+		if (((source.getType().getName().equals(ANY_ADAPTER)) && (!target.getType().getName().equals(ANY_ADAPTER))) || 
+				((!source.getType().getName().equals(ANY_ADAPTER)) && (target.getType().getName().equals(ANY_ADAPTER)))) { 
+			return true;
 		}
-
-		return false;
+		return source.getType().getName().equalsIgnoreCase(target.getType().getName());
 	}
 	
 	private LinkConstraints() {

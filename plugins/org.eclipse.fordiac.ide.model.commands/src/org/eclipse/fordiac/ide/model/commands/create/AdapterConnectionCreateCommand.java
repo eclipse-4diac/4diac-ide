@@ -38,9 +38,7 @@ public class AdapterConnectionCreateCommand extends AbstractConnectionCreateComm
 			return false;
 		}
 
-		boolean retVal = LinkConstraints.canCreateAdapterConnection(
-				(AdapterDeclaration) source, (AdapterDeclaration) destination);
-		return retVal;
+		return LinkConstraints.canCreateAdapterConnection((AdapterDeclaration) source, (AdapterDeclaration) destination);
 	}
 	
 	@Override
