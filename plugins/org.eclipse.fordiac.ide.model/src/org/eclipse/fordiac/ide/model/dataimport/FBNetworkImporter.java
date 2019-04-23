@@ -1,5 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2016 - 2017  fortiss GmbH
+ * 				 2019 Johannes Kepler University, Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,8 +8,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Alois Zoitl
+ *   Alois Zoitl
  *    - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -20,6 +22,7 @@ import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -180,9 +183,9 @@ class FBNetworkImporter {
 			if (LibraryElementTags.CONNECTION_ELEMENT.equals(connectionNode.getNodeName())) {
 				T connection = EcoreUtil.copy(conTemplate);
 				connection.setResTypeConnection(false);
-				NamedNodeMap mapEventConnectionElement = connectionNode.getAttributes();
+				NamedNodeMap connectionAttributeMap = connectionNode.getAttributes();
 
-				Node destinationElement = mapEventConnectionElement.getNamedItem(LibraryElementTags.DESTINATION_ATTRIBUTE);
+				Node destinationElement = connectionAttributeMap.getNamedItem(LibraryElementTags.DESTINATION_ATTRIBUTE);
 				if (destinationElement != null) {
 					IInterfaceElement destination = getConnectionEndPoint(destinationElement.getNodeValue()); 
 					if(null != destination){
@@ -194,7 +197,7 @@ class FBNetworkImporter {
 						continue;
 					}
 				}
-				Node sourceElement = mapEventConnectionElement.getNamedItem(LibraryElementTags.SOURCE_ATTRIBUTE);
+				Node sourceElement = connectionAttributeMap.getNamedItem(LibraryElementTags.SOURCE_ATTRIBUTE);
 				if (sourceElement != null) {
 					IInterfaceElement source = getConnectionEndPoint(sourceElement.getNodeValue()); 
 					if(null != source){
@@ -205,31 +208,35 @@ class FBNetworkImporter {
 						continue;
 					}
 				}
-				Node commentElement = mapEventConnectionElement.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
+				Node commentElement = connectionAttributeMap.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
 				if (commentElement != null) {
 					connection.setComment(commentElement.getNodeValue());
 				}
-				Node dx1Element = mapEventConnectionElement.getNamedItem(LibraryElementTags.DX1_ATTRIBUTE);
-				if (dx1Element != null) {
-					connection.setDx1(ImportUtils.parseConnectionValue(dx1Element.getNodeValue()));
-				}
-				Node dx2Element = mapEventConnectionElement.getNamedItem(LibraryElementTags.DX2_ATTRIBUTE);
-				if (dx2Element != null) {
-					connection.setDx2(ImportUtils.parseConnectionValue(dx2Element.getNodeValue()));
-				}
-				Node dyElement = mapEventConnectionElement.getNamedItem(LibraryElementTags.DY_ATTRIBUTE);
-				if (dyElement != null) {
-					connection.setDy(ImportUtils.parseConnectionValue(dyElement.getNodeValue()));
-				}
-
+				
+				parseConnectionRouting(connectionAttributeMap, connection);
+				
 				connectionlist.add(connection);
 			}
 		}
 	}
 	
+	private static void parseConnectionRouting(NamedNodeMap connectionAttributeMap, Connection connection) {
+		Node dx1Element = connectionAttributeMap.getNamedItem(LibraryElementTags.DX1_ATTRIBUTE);
+		if (dx1Element != null) {
+			connection.setDx1(parseConnectionValue(dx1Element.getNodeValue()));
+		}
+		Node dx2Element = connectionAttributeMap.getNamedItem(LibraryElementTags.DX2_ATTRIBUTE);
+		if (dx2Element != null) {
+			connection.setDx2(parseConnectionValue(dx2Element.getNodeValue()));
+		}
+		Node dyElement = connectionAttributeMap.getNamedItem(LibraryElementTags.DY_ATTRIBUTE);
+		if (dyElement != null) {
+			connection.setDy(parseConnectionValue(dyElement.getNodeValue()));
+		}
+	}
+	
 	/**In old 4diac project adapter connections are part of the data connections
-	 * this functions checks this and moves these to the adapter conneciton list.
-	 * 
+	 * this functions checks this and moves these to the adapter connection list.
 	 */
 	private void checkDataConnections() {
 		List<DataConnection> toDelete =  new ArrayList<>();
@@ -318,6 +325,20 @@ class FBNetworkImporter {
 			interfaceList.getOutputVars().add(var);
 		}
 		return var;
+	}
+	
+	/**
+	 * returns an valid dx, dy integer value
+	 * 
+	 * @param value
+	 * @return if value is valid the converted int of that otherwise 0
+	 */
+	private static int parseConnectionValue(String value) {
+		try {
+			return CoordinateConverter.INSTANCE.convertFrom1499XML(value);
+		} catch (NumberFormatException ex) {
+			return 0;
+		}
 	}
 	
 }

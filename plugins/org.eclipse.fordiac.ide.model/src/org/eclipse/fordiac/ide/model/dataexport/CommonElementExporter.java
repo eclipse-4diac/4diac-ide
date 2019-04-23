@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor Gmbh, TU Wien ACIN, fortiss GmbH
- * 				 2018 Johannes Kepler University
+ * 				 2018 - 2019 Johannes Kepler University, Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,9 +8,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
- *    - initial API and implementation and/or initial documentation
- *  Alois Zoitl - Refactored class hierarchy of xml exporters  
+ *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
+ *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Refactored class hierarchy of xml exporters  
+ *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
@@ -40,6 +41,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -315,29 +317,10 @@ abstract class CommonElementExporter {
 	static void exportXandY(PositionableElement fb, Element fbElement) {
 		setXYAttributes(fbElement, fb.getX(), fb.getY());
 	}
-	
-	
 
 	static void setXYAttributes(Element element, int x, int y) {
-		element.setAttribute(LibraryElementTags.X_ATTRIBUTE, reConvertCoordinate(x).toString());
-		element.setAttribute(LibraryElementTags.Y_ATTRIBUTE, reConvertCoordinate(y).toString());
+		element.setAttribute(LibraryElementTags.X_ATTRIBUTE, CoordinateConverter.INSTANCE.convertTo1499XML(x));
+		element.setAttribute(LibraryElementTags.Y_ATTRIBUTE, CoordinateConverter.INSTANCE.convertTo1499XML(y));
 	}
-
-
-	/**
-	 * Convert coordinate.
-	 * 
-	 * @param value
-	 *            the value
-	 * 
-	 * @return the double
-	 * @since 0.1
-	 */
-	public static Double reConvertCoordinate(final int value) {
-		double lineHeight = 20;
-		return (value * 100.0 / lineHeight);
-	}
-
-	
 
 }

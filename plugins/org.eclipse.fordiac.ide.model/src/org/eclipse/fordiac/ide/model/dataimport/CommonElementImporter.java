@@ -1,5 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2013 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Kepler University, Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,10 +10,11 @@
  * Contributors:
  *  Gerhard Ebenhofer, Monika Wenger, Alois Zoitl, Waldemar Eisenmenger
  *    - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export  
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
@@ -152,7 +154,7 @@ class CommonElementImporter {
 	 * @param map
 	 *            the map
 	 * 
-	 * @return the xand y
+	 * @param positionableElement  the positionable element where the parsed coordinates should be set to
 	 * 
 	 * @throws TypeImportException
 	 *             the FBT import exception
@@ -162,30 +164,11 @@ class CommonElementImporter {
 		try {
 			Node x = map.getNamedItem(LibraryElementTags.X_ATTRIBUTE);
 			if (x != null) {
-				String xValueString = x.getNodeValue();
-				double xValue = 0.0;
-				if ((null != xValueString) && (xValueString.length() != 0)){
-					xValue = ImportUtils.convertCoordinate(Double
-							.parseDouble(x.getNodeValue()));
-				
-				}
-				else{
-					Activator.getDefault().logWarning(Messages.FBTImporter_POSITION_X_WRONG);
-				}
-				positionableElement.setX((int) xValue);
+				positionableElement.setX(CoordinateConverter.INSTANCE.convertFrom1499XML(x.getNodeValue()));
 			}
 			Node y = map.getNamedItem(LibraryElementTags.Y_ATTRIBUTE);
 			if (y != null) {
-				String yValueString = y.getNodeValue();
-				double yValue = 0;
-				if ((null != yValueString) && (yValueString.length() != 0)){
-					yValue = ImportUtils.convertCoordinate(Double
-							.parseDouble(y.getNodeValue()));					
-				}
-				else{
-					Activator.getDefault().logWarning(Messages.FBTImporter_POSITION_Y_WRONG);
-				}
-				positionableElement.setY((int) yValue);
+				positionableElement.setY(CoordinateConverter.INSTANCE.convertFrom1499XML(y.getNodeValue()));
 			}
 		} catch (NumberFormatException nfe) {
 			throw new TypeImportException(
@@ -231,5 +214,9 @@ class CommonElementImporter {
 	static boolean isProfileAttribute(NamedNodeMap attributeMap) {
 		Node name = attributeMap.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE);
 		return (null != name) && LibraryElementTags.DEVICE_PROFILE.equals(name.getNodeValue());
+	}
+	
+	private CommonElementImporter() {
+		throw new UnsupportedOperationException("Class CommonElementImporter should not be created!");
 	}
 }

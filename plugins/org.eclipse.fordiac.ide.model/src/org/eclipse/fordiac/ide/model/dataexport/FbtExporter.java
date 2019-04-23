@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 Johannes Keppler University
+ * 				 2018 - 2019 Johannes Keppler University, Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,9 +8,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Gerhard Ebenhofer, Monika Wenger, Alois Zoitl, Matthias Plasch
- *    - initial API and implementation and/or initial documentation
- *  Alois Zoitl - Refactored class hierarchy of xml exporters  
+ *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl, Matthias Plasch
+ *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Refactored class hierarchy of xml exporters  
+ *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export 
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
@@ -163,13 +164,11 @@ class FbtExporter extends AbstractTypeExporter{
 	private Element createTransitionEntry(final ECTransition transition) {
 		Element transElement = createElement(LibraryElementTags.ECTRANSITION_ELEMENT);
 		transElement.setAttribute(LibraryElementTags.SOURCE_ATTRIBUTE, transition.getSource().getName());
-		transElement.setAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE, transition.getDestination()
-				.getName());
+		transElement.setAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE, transition.getDestination().getName());
 		transElement.setAttribute(LibraryElementTags.CONDITION_ATTRIBUTE, transition.getConditionText());
 		transElement.setAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, transition.getComment());
 		
-		transElement.setAttribute(LibraryElementTags.X_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(transition.getX()).toString());
-		transElement.setAttribute(LibraryElementTags.Y_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(transition.getY()).toString());
+		CommonElementExporter.exportXandY(transition, transElement);
 		
 		return transElement;
 	}
@@ -217,8 +216,7 @@ class FbtExporter extends AbstractTypeExporter{
 		setNameAttribute(stateElement, state.getName());
 		setCommentAttribute(stateElement, state);
 		
-		stateElement.setAttribute(LibraryElementTags.X_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(state.getX()).toString());
-		stateElement.setAttribute(LibraryElementTags.Y_ATTRIBUTE, CommonElementExporter.reConvertCoordinate(state.getY()).toString());
+		CommonElementExporter.exportXandY(state, stateElement);
 
 		addECActions(stateElement, state.getECAction());
 

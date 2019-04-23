@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c)  2008 - 2014, 2016, 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 Johannes Keppler University
+ * 				 2018 - 2019 Johannes Keppler University, Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,11 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
- *    - initial API and implementation and/or initial documentation
-  *  Alois Zoitl - Refactored class hierarchy of xml exporters  
-********************************************************************************/
+ *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
+ *      - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Refactored class hierarchy of xml exporters
+ *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export    
+ ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import java.util.ArrayDeque;
@@ -21,6 +22,7 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -92,9 +94,10 @@ public class SystemExporter extends CommonElementExporter{
 		for (Segment segment : segmentsList) {
 			Element segmentElement = createElement(LibraryElementTags.SEGMENT_ELEMENT);
 			setNameTypeCommentAttribute(segmentElement, segment, segment.getType());
-			segmentElement.setAttribute(LibraryElementTags.X_ATTRIBUTE, reConvertCoordinate(segment.getX()).toString());
-			segmentElement.setAttribute(LibraryElementTags.Y_ATTRIBUTE, reConvertCoordinate(segment.getY()).toString());
-			segmentElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE, reConvertCoordinate(segment.getWidth()).toString());
+			
+			CommonElementExporter.setXYAttributes(segmentElement, segment.getX(), segment.getY());
+			segmentElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE, 
+					CoordinateConverter.INSTANCE.convertTo1499XML(segment.getWidth()));
 			addColorAttributeElement(segmentElement, segment);
 			addAttributes(segmentElement, segment.getAttributes(), segment);
 			systemRootElement.appendChild(segmentElement);

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2016 - 2017 fortiss GmbH, 2018 Johannes Kepler University
+ * Copyright (c) 2016 - 2017 fortiss GmbH, 
+ * 				 2018 - 2019 Johannes Kepler University, Linz
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,11 +9,11 @@
  * Contributors:
  *   Waldemar Eisenmenger, Alois Zoitl, Monika Wenger 
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -97,8 +99,7 @@ public class SystemImporter {
 		}
 	}
 
-	private void parseAutomationSystem(final Element rootNode)
-			throws TypeImportException, ParseException {
+	private void parseAutomationSystem(final Element rootNode) throws TypeImportException {
 		if (rootNode.getNodeName().equals(LibraryElementTags.SYSTEM)) {
 			NamedNodeMap map = rootNode.getAttributes();
 			CommonElementImporter.readNameCommentAttributes(system, map);
@@ -136,12 +137,7 @@ public class SystemImporter {
 
 		Node dx1 = mapSegment.getNamedItem(LibraryElementTags.DX1_ATTRIBUTE);
 		if(dx1 != null){
-			String dx1String = dx1.getNodeValue();
-			double dx1double = 0.;
-			if ((null != dx1String) && dx1String.length() != 0) {
-				dx1double = ImportUtils.convertCoordinate(Double.parseDouble(dx1.getNodeValue()));
-			}
-			segment.setWidth(((int) dx1double));
+			segment.setWidth(CoordinateConverter.INSTANCE.convertFrom1499XML(dx1.getNodeValue()));
 		}
 		CommonElementImporter.getXandY(mapSegment, segment);
 		Node type = mapSegment.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE);
@@ -157,7 +153,7 @@ public class SystemImporter {
 		return segment;
 	}
 
-	private void parseSegmentNodeChildren(Segment segment, NodeList childNodes) {
+	private static void parseSegmentNodeChildren(Segment segment, NodeList childNodes) {
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node node = childNodes.item(i);
 			if (node.getNodeName().equals(LibraryElementTags.ATTRIBUTE_ELEMENT)) {
@@ -172,7 +168,7 @@ public class SystemImporter {
 	}
 
 
-	private void parseLink(Node linkNode, SystemConfiguration sysConf) {
+	private static void parseLink(Node linkNode, SystemConfiguration sysConf) {
 		NamedNodeMap attributeMap = linkNode.getAttributes();
 		String commResource = CommonElementImporter.getAttributeValue(attributeMap, LibraryElementTags.SEGMENT_COMM_RESOURCE);
 		String comment = CommonElementImporter.getAttributeValue(attributeMap, LibraryElementTags.COMMENT_ATTRIBUTE);
@@ -226,7 +222,7 @@ public class SystemImporter {
 		//TODO perform some notificatin to the user that the mapping has an issue
 	}
 	
-	private Mapping createMappingEntry(FBNetworkElement toElement, FBNetworkElement fromElement) {
+	private static Mapping createMappingEntry(FBNetworkElement toElement, FBNetworkElement fromElement) {
 		Mapping mapping = LibraryElementFactory.eINSTANCE.createMapping();
 		mapping.setFrom(fromElement);
 		mapping.setTo(toElement);
@@ -390,7 +386,7 @@ public class SystemImporter {
 		return null;
 	}
 
-	private VarDeclaration getDeviceParamter(Device device, String name) {
+	private static VarDeclaration getDeviceParamter(Device device, String name) {
 		for (VarDeclaration varDecl : device.getVarDeclarations()) {
 			if(varDecl.getName().equals(name)){
 				return varDecl;
@@ -422,7 +418,7 @@ public class SystemImporter {
 		return application;
 	}
 
-	public void parseAttributes(ConfigurableObject configurableObject, NodeList node) {
+	public static void parseAttributes(ConfigurableObject configurableObject, NodeList node) {
 		for (int i = 0; i < node.getLength(); i++) {
 			Node n = node.item(i);
 			if(n.getNodeName() == LibraryElementTags.ATTRIBUTE_ELEMENT){

@@ -1,5 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2018  Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Kepler University, Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,9 @@
  * Contributors:
  *  Martijn Rooker,Gerhard Ebenhofer, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - moved coordinate system resolution conversion to dedicated class,
+ *   			   moved connection value parsing to fbnetwork importer where it 
+ *                 belongs
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -215,33 +219,6 @@ public class ImportUtils {
 			e.setComment(comment.getNodeValue());
 		}
 		return e;
-	}
-
-	/**
-	 * Convert coordinate.
-	 * 
-	 * @param value
-	 *            the value
-	 * 
-	 * @return the int value
-	 */
-	public static int convertCoordinate(final double value) {
-		double lineHeight = 20;  //TODO make this resolution dependant and font size dependant
-		return (int)(lineHeight / 100.0 * value);
-	}
-
-	/**
-	 * returns an valid dx, dy integer value
-	 * 
-	 * @param value
-	 * @return if value is valid the converted int of that otherwise 0
-	 */
-	public static int parseConnectionValue(String value) {
-		try {
-			return ImportUtils.convertCoordinate(Double.parseDouble(value));
-		} catch (Exception ex) {
-			return 0;
-		}
 	}
 
 	public static AdapterEvent createAdapterEvent(Event event, AdapterDeclaration a) {
