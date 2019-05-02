@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 fortiss GmbH, Johannes Kepler University
+ * Copyright (c) 2017, 2018 fortiss GmbH 
+ * 				 2018, 2019 Johannes Kepler University Linz
  * 	
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,6 +8,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Monika Wenger, Alois Zoitl - initial implementation
+ * Alois Zoitl - moved group buttons to the top left, code clean-up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -31,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -41,9 +44,12 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -67,7 +73,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection extends AbstractSection {
-	private Group inputsGroup;
 	protected TableViewer inputsViewer;	
 	protected TableViewer outputsViewer;
 	protected Table inputsTable;
@@ -75,15 +80,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	private static final String NAME = "name"; //$NON-NLS-1$
 	private static final String TYPE = "type"; //$NON-NLS-1$
 	private static final String COMMENT = "comment"; //$NON-NLS-1$
-	private Button inputUp;
-	private Button inputDown;
-	private Group outputsGroup;
-	private Button outputUp;
-	private Button outputDown;
-	private Button createInput;
-	private Button createOutput;
-	private Button deleteInput;
-	private Button deleteOutput;
+
 	protected enum InterfaceContentProviderType{
 		EVENT, DATA, ADAPTER
 	}
@@ -129,9 +126,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	}
 	
 	private void createInputEdit(Composite parent){
-		inputsGroup = getWidgetFactory().createGroup(parent, "Inputs"); //$NON-NLS-1$
+		Group inputsGroup = getWidgetFactory().createGroup(parent, "Inputs"); //$NON-NLS-1$
 		inputsGroup.setLayout(new GridLayout(2, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		Composite buttonListContainer = new Composite(inputsGroup, SWT.NONE);  // this has to be done here so that it is in the first column
 		inputsViewer = new TableViewer(inputsGroup, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.FILL);
 		inputsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		inputsTable = inputsViewer.getTable();
@@ -139,59 +137,84 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		inputsViewer.setColumnProperties(new String[] {NAME, TYPE, COMMENT});
 		inputsViewer.setCellModifier(new InterfaceCellModifier(inputsViewer));
 		inputsViewer.setLabelProvider(new InterfaceLabelProvider());
-		Composite composite = new Composite(inputsGroup, SWT.NONE);
-		composite.setLayout(new FillLayout(SWT.VERTICAL));
-		createInput = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
-		createInput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-		createInput.setToolTipText("Create interface element"); //$NON-NLS-1$
-		createInput.addSelectionListener(new SelectionAdapter() {
+		createButtonList(buttonListContainer, inputsViewer, true);
+	}
+	
+	private void createButtonList(Composite container, TableViewer viewer, boolean inputs) {		
+		GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
+		container.setLayoutData(buttonCompLayoutData);
+		container.setLayout(new FillLayout(SWT.VERTICAL));
+		
+		Button createButton = getWidgetFactory().createButton(container, "", SWT.PUSH); //$NON-NLS-1$
+		createButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+		createButton.setToolTipText("Create interface element"); //$NON-NLS-1$
+		createButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				CreateInterfaceElementCommand cmd = newCreateCommand(true);
+				CreateInterfaceElementCommand cmd = newCreateCommand(inputs);
 				executeCommand(cmd);
-				inputsViewer.refresh();
+				viewer.refresh();
 			}
 		});
-		inputUp = getWidgetFactory().createButton(composite, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
-		inputUp.setToolTipText("Move interface element up"); //$NON-NLS-1$
-		inputUp.addSelectionListener(new SelectionAdapter() {
+		
+		Button upButton = getWidgetFactory().createButton(container, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
+		upButton.setToolTipText("Move interface element up"); //$NON-NLS-1$
+		upButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
+				Object selection = ((StructuredSelection)viewer.getSelection()).getFirstElement();
 				if(selection instanceof IInterfaceElement){
 					ChangeInterfaceOrderCommand cmd = newOrderCommand((IInterfaceElement) selection, true, true);
 					executeCommand(cmd);
-					inputsViewer.refresh();
+					viewer.refresh();
 				}
 			}
 		});
-		inputDown = getWidgetFactory().createButton(composite, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
-		inputDown.setToolTipText("Move interface element down"); //$NON-NLS-1$
-		inputDown.addSelectionListener(new SelectionAdapter() {
+		
+		Button downButton = getWidgetFactory().createButton(container, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
+		downButton.setToolTipText("Move interface element down"); //$NON-NLS-1$
+		downButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
+				Object selection = ((StructuredSelection)viewer.getSelection()).getFirstElement();
 				if(selection instanceof IInterfaceElement){
 					ChangeInterfaceOrderCommand cmd = newOrderCommand((IInterfaceElement) selection, true, false);
 					executeCommand(cmd);
-					inputsViewer.refresh();
+					viewer.refresh();
 				}
 			}
 		});
-		deleteInput = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
-		deleteInput.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
-		deleteInput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		deleteInput.addSelectionListener(new SelectionAdapter() {
+		
+		Button deleteButton = getWidgetFactory().createButton(container, "", SWT.PUSH); //$NON-NLS-1$
+		deleteButton.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
+		deleteButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
+		deleteButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((StructuredSelection)inputsViewer.getSelection()).getFirstElement();
+				Object selection = ((StructuredSelection)viewer.getSelection()).getFirstElement();
 				if(selection instanceof IInterfaceElement){
 					DeleteInterfaceCommand cmd = newDeleteCommand((IInterfaceElement) selection);
 					executeCommand(cmd);
-					inputsViewer.refresh();
+					viewer.refresh();
 				}
 			}
 		});
+		
+		viewer.addSelectionChangedListener( ev -> 
+			setButtonEnablement(upButton, downButton, deleteButton, !viewer.getSelection().isEmpty()) );
+		
+		//initially nothing should be selected therefore deactivate the buttons
+		setButtonEnablement(upButton, downButton, deleteButton, false);
+	}
+	
+	private static void setButtonEnablement(Button upButton, Button downButton, Button deleteButton,
+			boolean somethingSelected) {
+		upButton.setEnabled(somethingSelected);
+		downButton.setEnabled(somethingSelected);
+		deleteButton.setEnabled(somethingSelected);
+		deleteButton.setImage((somethingSelected) ? 
+				PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE) :
+					PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
 	
 	protected void setCellEditors(){
@@ -206,9 +229,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	}
 
 	private void createOutputEdit(Composite parent){
-		outputsGroup = getWidgetFactory().createGroup(parent, "Outputs"); //$NON-NLS-1$
+		Group outputsGroup = getWidgetFactory().createGroup(parent, "Outputs"); //$NON-NLS-1$
 		outputsGroup.setLayout(new GridLayout(2, false));
 		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		Composite buttonListContainer = new Composite(outputsGroup, SWT.NONE);  // this has to be done here so that it is in the first column
 		outputsViewer = new TableViewer(outputsGroup, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.FILL);
 		outputsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		outputsTable = outputsViewer.getTable();
@@ -216,59 +240,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		outputsViewer.setColumnProperties(new String[] {NAME, TYPE, COMMENT});
 		outputsViewer.setCellModifier(new InterfaceCellModifier(outputsViewer));
 		outputsViewer.setLabelProvider(new InterfaceLabelProvider());
-		Composite composite = new Composite(outputsGroup, SWT.NONE);
-		composite.setLayout(new FillLayout(SWT.VERTICAL));
-		createOutput = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
-		createOutput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-		createOutput.setToolTipText("Create interface element"); //$NON-NLS-1$
-		createOutput.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				CreateInterfaceElementCommand cmd = newCreateCommand(false);
-				executeCommand(cmd);
-				outputsViewer.refresh();
-			}
-		});
-		outputUp = getWidgetFactory().createButton(composite, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
-		outputUp.setToolTipText("Move interface element up"); //$NON-NLS-1$
-		outputUp.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
-				if(selection instanceof IInterfaceElement){
-					ChangeInterfaceOrderCommand cmd = newOrderCommand((IInterfaceElement) selection, false, true);
-					executeCommand(cmd);
-					outputsViewer.refresh();
-				}
-			}
-		});
-		outputDown = getWidgetFactory().createButton(composite, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
-		outputDown.setToolTipText("Move interface element down"); //$NON-NLS-1$
-		outputDown.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
-				if(selection instanceof IInterfaceElement){
-					ChangeInterfaceOrderCommand cmd = newOrderCommand((IInterfaceElement) selection, false, false);
-					executeCommand(cmd);
-					outputsViewer.refresh();
-				}
-			}
-		});
-		deleteOutput = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
-		deleteOutput.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
-		deleteOutput.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		deleteOutput.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((StructuredSelection)outputsViewer.getSelection()).getFirstElement();
-				if(selection instanceof IInterfaceElement){
-					DeleteInterfaceCommand cmd = newDeleteCommand((IInterfaceElement) selection);
-					executeCommand(cmd);
-					outputsViewer.refresh();
-				}
-			}
-		});
+		createButtonList(buttonListContainer, outputsViewer, false);
 	}
 
 	@Override
@@ -299,59 +271,39 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		}
 		
 		private Object[] getInputs(Object inputElement){
-			switch(type){
-			case EVENT:
-				if(inputElement instanceof SubApp) {
-					return ((SubApp)inputElement).getInterface().getEventInputs().toArray();
+			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+			
+			if(null != interfaceList) {
+				switch(type){
+				case EVENT:
+					return interfaceList.getEventInputs().toArray();
+				case ADAPTER:
+					return interfaceList.getSockets().toArray();
+				case DATA:
+					return interfaceList.getInputVars().toArray();
+				default:
+					break;	
 				}
-				if(inputElement instanceof FBType) {
-					return ((FBType)inputElement).getInterfaceList().getEventInputs().toArray();
-				}
-			case ADAPTER:
-				if(inputElement instanceof SubApp) {
-					return ((SubApp)inputElement).getInterface().getSockets().toArray();
-				}
-				if(inputElement instanceof FBType) {
-					return ((FBType)inputElement).getInterfaceList().getSockets().toArray();
-				}
-			case DATA:
-				if(inputElement instanceof SubApp) {
-					return ((SubApp)inputElement).getInterface().getInputVars().toArray();
-				}
-				if(inputElement instanceof FBType) {
-					return ((FBType)inputElement).getInterfaceList().getInputVars().toArray();
-				}
-			default:
-				return null;	
 			}
+			return new Object[0];
 		}
 		
 		private Object[] getOutputs(Object inputElement){
-			switch(type){
-			case EVENT:
-				if(inputElement instanceof SubApp) {
-					return ((SubApp)inputElement).getInterface().getEventOutputs().toArray();
+			InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
+			
+			if(null != interfaceList) {
+				switch(type){
+				case EVENT:
+					return interfaceList.getEventOutputs().toArray();
+				case ADAPTER:
+					return interfaceList.getPlugs().toArray();
+				case DATA:
+					return interfaceList.getOutputVars().toArray();
+				default:
+					break;
 				}
-				if(inputElement instanceof FBType) {
-					return ((FBType)inputElement).getInterfaceList().getEventOutputs().toArray();
-				}
-			case ADAPTER:
-				if(inputElement instanceof SubApp) {
-					return ((SubApp)inputElement).getInterface().getPlugs().toArray();
-				}
-				if(inputElement instanceof FBType) {
-					return ((FBType)inputElement).getInterfaceList().getPlugs().toArray();
-				}
-			case DATA:
-				if(inputElement instanceof SubApp) {
-					return ((SubApp)inputElement).getInterface().getOutputVars().toArray();
-				}
-				if(inputElement instanceof FBType) {
-					return ((FBType)inputElement).getInterfaceList().getOutputVars().toArray();
-				}
-			default:
-				return null;
-			}	
+			}
+			return new Object[0];
 		}
 		
 		@Override
@@ -363,7 +315,17 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 					return getOutputs(inputElement);
 				}
 			}
-			return new Object[] {};
+			return new Object[0];
+		}
+		
+		private InterfaceList getInterfaceListFromInput(Object inputElement) {
+			InterfaceList interfaceList = null;
+			if(inputElement instanceof SubApp) {
+				interfaceList = ((SubApp)inputElement).getInterface(); 
+			} else if (inputElement instanceof FBType) {
+				interfaceList = ((FBType)inputElement).getInterfaceList();			
+			}
+			return interfaceList;
 		}
 	}
 	
@@ -457,26 +419,30 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			TableItem tableItem = (TableItem) element;
 			Object data =  tableItem.getData();
 			Command cmd = null;
-			if(NAME.equals(property)){				
+			
+			switch(property) {
+			case NAME:
 				cmd = new ChangeSubAppIENameCommand((IInterfaceElement) data, value.toString());
-			}else{
-				if(COMMENT.equals(property)){
-					cmd = new ChangeCommentCommand((INamedElement) data, value.toString());
+				break;
+			case COMMENT:
+				cmd = new ChangeCommentCommand((INamedElement) data, value.toString());
+				break;
+			case TYPE: 
+				String dataTypeName = ((ComboBoxCellEditor)viewer.getCellEditors()[1]).getItems()[(int) value];
+				if(data instanceof AdapterDeclaration) {
+					DataType newType = getTypeForSelection(dataTypeName);			
+					cmd = new ChangeTypeCommand((VarDeclaration) data, newType);
 				}else {
-					if(TYPE.equals(property)) {
-						String dataTypeName = ((ComboBoxCellEditor)viewer.getCellEditors()[1]).getItems()[(int) value];
-						if(data instanceof AdapterDeclaration) {
-							DataType newType = getTypeForSelection(dataTypeName);			
-							cmd = new ChangeTypeCommand((VarDeclaration) data, newType);
-						}else {
-							if(data instanceof VarDeclaration) {
-								cmd = new ChangeTypeCommand((VarDeclaration) data, 
-										DataTypeLibrary.getInstance().getType(dataTypeName));
-							}							
-						}
-					}
+					if(data instanceof VarDeclaration) {
+						cmd = new ChangeTypeCommand((VarDeclaration) data, 
+								DataTypeLibrary.getInstance().getType(dataTypeName));
+					}							
 				}
+				break;
+			default:
+				break;
 			}
+			
 			if(null != cmd){
 				executeCommand(cmd);
 				viewer.refresh(data);
