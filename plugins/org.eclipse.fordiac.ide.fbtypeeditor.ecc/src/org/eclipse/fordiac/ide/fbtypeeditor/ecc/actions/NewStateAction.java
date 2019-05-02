@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.StateCreationFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECStateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
 import org.eclipse.ui.IWorkbenchPart;
@@ -30,15 +31,16 @@ public class NewStateAction extends WorkbenchPartAction {
 	 */
 	public static final String CREATE_STATE = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.CreateStateAction";//$NON-NLS-1$
 	
-	StateCreationFactory stateFactory = new StateCreationFactory();
-	FigureCanvas viewerControl;
-	org.eclipse.swt.graphics.Point pos = new org.eclipse.swt.graphics.Point(0,0);
-	ZoomManager zoomManager;
+	private static StateCreationFactory stateFactory = new StateCreationFactory();
+	private FigureCanvas viewerControl;
+	private org.eclipse.swt.graphics.Point pos = new org.eclipse.swt.graphics.Point(0,0);
+	private ZoomManager zoomManager;
 	
 	public NewStateAction(IWorkbenchPart part) {
 		super(part);
 		setId(CREATE_STATE);
-		setText(Messages.ECCActions_NEW_STATE);
+		setText(Messages.ECCActions_AddState);
+		setImageDescriptor(FordiacImage.ICON_ADD_STATE.getImageDescriptor());
 	}
 	
 	public void setViewerControl(FigureCanvas control){		

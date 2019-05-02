@@ -45,6 +45,7 @@ public enum FordiacImage {
 	ICON_4DIAC_16,
 	ICON_4DIAC_32,
 	ICON_Adapter,
+	ICON_ADD_STATE,
 	ICON_Algorithm,
 	ICON_Application,
 	ICON_BasicFB,

@@ -18,7 +18,7 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.messages"; //$NON-NLS-1$
 	public static String ECCActions_AddAction;
 	public static String ECCActions_InitialState;
-	public static String ECCActions_NEW_STATE;
+	public static String ECCActions_AddState;
 	public static String ECCEditor_LABEL_ECCEditorTabName;
 	public static String ECCPaletteFactory_LABEL_Action;
 	public static String ECCPaletteFactory_LABEL_STAlgorithm;

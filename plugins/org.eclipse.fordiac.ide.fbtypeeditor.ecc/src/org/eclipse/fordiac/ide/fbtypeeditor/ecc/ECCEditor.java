@@ -53,9 +53,11 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 
@@ -105,15 +107,14 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 			@Override
 			public void buildContextMenu(IMenuManager menu) {
 				super.buildContextMenu(menu);
-
-				IAction action = registry.getAction(ActionFactory.DELETE
-						.getId());
-				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);				
 								
-				action = registry.getAction(NewStateAction.CREATE_STATE);
+				IAction action = registry.getAction(NewStateAction.CREATE_STATE);
 				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 				
 				action = registry.getAction(AddECCActionAction.ADD_ECC_ACTION);
+				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);				
+
+				action = registry.getAction(ActionFactory.DELETE.getId());
 				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);				
 			}
 		};
@@ -131,6 +132,13 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 			}
 			
 		};
+	}
+	
+	@Override
+	public void selectionChanged(final IWorkbenchPart part,
+			final ISelection selection) {
+		super.selectionChanged(part, selection);
+		updateActions(getSelectionActions());
 	}
 
 
