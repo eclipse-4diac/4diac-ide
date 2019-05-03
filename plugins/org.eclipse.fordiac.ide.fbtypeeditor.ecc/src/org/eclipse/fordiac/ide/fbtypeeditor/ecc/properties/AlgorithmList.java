@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2018 fortiss GmbH, Johannes Kepler University Linz (JKU) 
+ * Copyright (c) 2015 - 2018 fortiss GmbH, 
+ * 				 2018 - 2019 Johannes Kepler University Linz (JKU) 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,6 +9,7 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl 
  *   - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - allowed multiline selection in algorithm list
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -23,14 +25,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -54,7 +55,10 @@ public class AlgorithmList {
 	private class AlgorithmViewerCellModifier implements ICellModifier {
 		@Override
 		public boolean canModify(final Object element, final String property) {
-			return true;
+			//only allow editing if only one element is selected and if the selected is also the 
+			//element to be requested for editing. This improves the usability of multi-line selection.
+			return 1 == algorithmViewer.getStructuredSelection().size() && 
+					element.equals(algorithmViewer.getStructuredSelection().getFirstElement());
 		}
 
 		@Override
@@ -81,7 +85,7 @@ public class AlgorithmList {
 			} else{
 				cmd = new ChangeCommentCommand(data, value.toString());
 			}
-			if((null != cmd) && (null != commandStack)){
+			if((null != commandStack)){
 				executeCommand(cmd);
 				algorithmViewer.refresh(data);
 				if(cmd instanceof ChangeAlgorithmTypeCommand){
@@ -130,6 +134,7 @@ public class AlgorithmList {
 	}
 
 	
+	@SuppressWarnings("unchecked")
 	private void createAddDelteButtons(final TabbedPropertySheetWidgetFactory widgetFactory) {
 		Composite buttonComp = new Composite(composite, SWT.NONE);
 		GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
@@ -150,13 +155,18 @@ public class AlgorithmList {
 		setAlgorithmDeleteState(false);
 		algorithmDelete.setToolTipText("Delete selected algorithm");
 		algorithmDelete.addListener(SWT.Selection, event -> {
-				executeCommand(new DeleteAlgorithmCommand(type, (Algorithm)((IStructuredSelection) algorithmViewer.getSelection()).getFirstElement()));
-				algorithmViewer.refresh();
+				if(!algorithmViewer.getStructuredSelection().isEmpty()) {
+					CompoundCommand cmd =  new CompoundCommand();
+					algorithmViewer.getStructuredSelection().toList().forEach(elem -> 
+						cmd.add(new DeleteAlgorithmCommand(type, (Algorithm) elem)));				
+					executeCommand(cmd);
+					algorithmViewer.refresh();
+				}
 			});
 	}
 	
 	private void createAlgorithmViewer() {
-		algorithmViewer = new TableViewer(composite, SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL);
+		algorithmViewer = new TableViewer(composite, SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		GridData gridDataVersionViewer = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gridDataVersionViewer.heightHint = 150;
 		gridDataVersionViewer.widthHint = 80;
@@ -180,12 +190,8 @@ public class AlgorithmList {
 		algorithmViewer.setContentProvider(new ArrayContentProvider());		
 		algorithmViewer.setLabelProvider(new AlgorithmsLabelProvider());
 		algorithmViewer.setCellModifier(new AlgorithmViewerCellModifier());
-		algorithmViewer.addSelectionChangedListener(new ISelectionChangedListener() {			
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				setAlgorithmDeleteState(null != ((IStructuredSelection) algorithmViewer.getSelection()).getFirstElement());
-			}
-		});
+		algorithmViewer.addSelectionChangedListener(event ->
+				setAlgorithmDeleteState(null != ((IStructuredSelection) algorithmViewer.getSelection()).getFirstElement()));
 	}
 	
 	private void executeCommand(Command cmd){
