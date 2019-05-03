@@ -39,6 +39,8 @@ import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
+import org.eclipse.gef.KeyHandler;
+import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
@@ -54,6 +56,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -85,7 +88,6 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 			}
 		}
 		super.init(site, input);
-		setEditDomain(new FBTypeEditDomain(this, commandStack));
 		setPartName(Messages.ECCEditor_LABEL_ECCEditorTabName);
 		setTitleImage(FordiacImage.ICON_ECC.getImage());
 	}
@@ -99,7 +101,23 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 		IAction action = getActionRegistry().getAction(NewStateAction.CREATE_STATE);
 		((NewStateAction)action).setViewerControl((FigureCanvas)viewer.getControl());
 		((NewStateAction)action).setZoomManager(getZoomManger()); 
+		
+		viewer.getKeyHandler().put(KeyStroke.getPressed(SWT.DEL, 127, 0),
+				getActionRegistry().getAction(
+						ActionFactory.DELETE.getId()));
 	}
+	
+	
+	@Override
+	protected KeyHandler getCommonKeyHandler() {
+		KeyHandler keyHandler = super.getCommonKeyHandler();
+		
+		// bind insert key press to add action action
+		keyHandler.put(KeyStroke.getPressed(SWT.INSERT, 0),
+				getActionRegistry().getAction(AddECCActionAction.ADD_ECC_ACTION));
+		return keyHandler;
+	}	
+	
 	
 	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer, ZoomManager zoomManager) {
 		return new ZoomUndoRedoContextMenuProvider(
@@ -226,8 +244,14 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 	private CommandStack commandStack;
 	
 	@Override
+	protected void setModel(IEditorInput input) {
+		super.setModel(input);
+		setEditDomain(new FBTypeEditDomain(this, commandStack));
+	}
+	
+	@Override
 	public void setCommonCommandStack(CommandStack commandStack) {
-		this.commandStack = commandStack;
+		this.commandStack = commandStack;		
 	}
 	
 	@Override
