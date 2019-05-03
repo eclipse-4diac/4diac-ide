@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -25,12 +26,11 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		super.createControls(parent, tabbedPropertySheetPage);
 		inputsViewer.setContentProvider(new InterfaceContentProvider(true, InterfaceContentProviderType.DATA));
 		outputsViewer.setContentProvider(new InterfaceContentProvider(false, InterfaceContentProviderType.DATA));
-		setCellEditors();
 	}
 
 	@Override
 	protected String[] fillTypeCombo() {
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		for(DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()){
 			list.add(dataType.getName());
 		}

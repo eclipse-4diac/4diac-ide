@@ -8,7 +8,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Monika Wenger, Alois Zoitl - initial implementation
- * Alois Zoitl - moved group buttons to the top left, code clean-up
+ * Alois Zoitl - moved group buttons to the top left, multi-line selection in lists,
+ *               code clean-up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -40,23 +41,18 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -73,13 +69,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection extends AbstractSection {
-	protected TableViewer inputsViewer;	
-	protected TableViewer outputsViewer;
-	protected Table inputsTable;
-	protected Table outputsTable;
 	private static final String NAME = "name"; //$NON-NLS-1$
 	private static final String TYPE = "type"; //$NON-NLS-1$
 	private static final String COMMENT = "comment"; //$NON-NLS-1$
+	
+	protected TableViewer inputsViewer;	
+	protected TableViewer outputsViewer;
 
 	protected enum InterfaceContentProviderType{
 		EVENT, DATA, ADAPTER
@@ -109,6 +104,13 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		createOutputEdit(parent);
 	}
 	
+	@Override
+	protected void setType(Object input) {
+		super.setType(input);
+		setCellEditors();  //only now the types are correctly set so that the type lists for the combo boxes can be crated correctly
+	}
+
+	
 	private static void createTableLayout(Table table){
 		TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText(NAME);
@@ -130,16 +132,21 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		inputsGroup.setLayout(new GridLayout(2, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		Composite buttonListContainer = new Composite(inputsGroup, SWT.NONE);  // this has to be done here so that it is in the first column
-		inputsViewer = new TableViewer(inputsGroup, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.FILL);
-		inputsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		inputsTable = inputsViewer.getTable();
-		createTableLayout(inputsTable);
-		inputsViewer.setColumnProperties(new String[] {NAME, TYPE, COMMENT});
-		inputsViewer.setCellModifier(new InterfaceCellModifier(inputsViewer));
-		inputsViewer.setLabelProvider(new InterfaceLabelProvider());
+		inputsViewer = createTypeTableView(inputsGroup);
 		createButtonList(buttonListContainer, inputsViewer, true);
 	}
 	
+	private TableViewer createTypeTableView(Group parent) {
+		TableViewer viewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL);
+		viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		createTableLayout(viewer.getTable());
+		viewer.setColumnProperties(new String[] {NAME, TYPE, COMMENT});
+		viewer.setCellModifier(new InterfaceCellModifier(viewer));
+		viewer.setLabelProvider(new InterfaceLabelProvider());
+		return viewer;
+	}
+	
+	@SuppressWarnings("unchecked")
 	private void createButtonList(Composite container, TableViewer viewer, boolean inputs) {		
 		GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
 		container.setLayoutData(buttonCompLayoutData);
@@ -148,55 +155,45 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		Button createButton = getWidgetFactory().createButton(container, "", SWT.PUSH); //$NON-NLS-1$
 		createButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createButton.setToolTipText("Create interface element"); //$NON-NLS-1$
-		createButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				CreateInterfaceElementCommand cmd = newCreateCommand(inputs);
+		createButton.addListener(SWT.Selection, event -> {
+				executeCommand(newCreateCommand(inputs));
+				viewer.refresh();
+		});
+		
+		Button upButton = getWidgetFactory().createButton(container, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
+		upButton.setToolTipText("Move interface element up"); //$NON-NLS-1$
+		upButton.addListener(SWT.Selection, event -> {
+			if(!viewer.getStructuredSelection().isEmpty()) {
+				CompoundCommand cmd =  new CompoundCommand();
+				viewer.getStructuredSelection().toList().stream().filter(elem -> elem instanceof IInterfaceElement).
+					forEach(elem -> cmd.add(newOrderCommand((IInterfaceElement) elem, inputs, true)));				
 				executeCommand(cmd);
 				viewer.refresh();
 			}
 		});
 		
-		Button upButton = getWidgetFactory().createButton(container, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
-		upButton.setToolTipText("Move interface element up"); //$NON-NLS-1$
-		upButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((StructuredSelection)viewer.getSelection()).getFirstElement();
-				if(selection instanceof IInterfaceElement){
-					ChangeInterfaceOrderCommand cmd = newOrderCommand((IInterfaceElement) selection, true, true);
-					executeCommand(cmd);
-					viewer.refresh();
-				}
-			}
-		});
-		
 		Button downButton = getWidgetFactory().createButton(container, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
 		downButton.setToolTipText("Move interface element down"); //$NON-NLS-1$
-		downButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((StructuredSelection)viewer.getSelection()).getFirstElement();
-				if(selection instanceof IInterfaceElement){
-					ChangeInterfaceOrderCommand cmd = newOrderCommand((IInterfaceElement) selection, true, false);
-					executeCommand(cmd);
-					viewer.refresh();
-				}
+		downButton.addListener(SWT.Selection, event -> {
+			if(!viewer.getStructuredSelection().isEmpty()) {
+				CompoundCommand cmd =  new CompoundCommand();
+				viewer.getStructuredSelection().toList().stream().filter(elm -> elm instanceof IInterfaceElement).
+					forEach(elem -> cmd.add(newOrderCommand((IInterfaceElement) elem, inputs, false)));				
+				executeCommand(cmd);
+				viewer.refresh();
 			}
 		});
 		
 		Button deleteButton = getWidgetFactory().createButton(container, "", SWT.PUSH); //$NON-NLS-1$
 		deleteButton.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
 		deleteButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		deleteButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object selection = ((StructuredSelection)viewer.getSelection()).getFirstElement();
-				if(selection instanceof IInterfaceElement){
-					DeleteInterfaceCommand cmd = newDeleteCommand((IInterfaceElement) selection);
-					executeCommand(cmd);
-					viewer.refresh();
-				}
+		deleteButton.addListener(SWT.Selection, event -> {
+			if(!viewer.getStructuredSelection().isEmpty()) {
+				CompoundCommand cmd =  new CompoundCommand();
+				viewer.getStructuredSelection().toList().stream().filter(elm -> elm instanceof IInterfaceElement).
+					forEach(elem -> cmd.add(newDeleteCommand((IInterfaceElement) elem)));				
+				executeCommand(cmd);
+				viewer.refresh();
 			}
 		});
 		
@@ -217,15 +214,15 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 					PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
 	
-	protected void setCellEditors(){
+	private void setCellEditors(){
 		inputsViewer.setCellEditors(new CellEditor[] {
-				new TextCellEditor(inputsTable), 
-				new ComboBoxCellEditor(inputsTable, fillTypeCombo(), SWT.READ_ONLY), 
-				new TextCellEditor(inputsTable)});
+				new TextCellEditor(inputsViewer.getTable()), 
+				new ComboBoxCellEditor(inputsViewer.getTable(), fillTypeCombo(), SWT.READ_ONLY), 
+				new TextCellEditor(inputsViewer.getTable())});
 		outputsViewer.setCellEditors(new CellEditor[] {
-				new TextCellEditor(outputsTable), 
-				new ComboBoxCellEditor(outputsTable, fillTypeCombo(), SWT.READ_ONLY), 
-				new TextCellEditor(outputsTable)});
+				new TextCellEditor(outputsViewer.getTable()), 
+				new ComboBoxCellEditor(outputsViewer.getTable(), fillTypeCombo(), SWT.READ_ONLY), 
+				new TextCellEditor(outputsViewer.getTable())});
 	}
 
 	private void createOutputEdit(Composite parent){
@@ -233,13 +230,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		outputsGroup.setLayout(new GridLayout(2, false));
 		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		Composite buttonListContainer = new Composite(outputsGroup, SWT.NONE);  // this has to be done here so that it is in the first column
-		outputsViewer = new TableViewer(outputsGroup, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.FILL);
-		outputsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		outputsTable = outputsViewer.getTable();
-		createTableLayout(outputsTable);
-		outputsViewer.setColumnProperties(new String[] {NAME, TYPE, COMMENT});
-		outputsViewer.setCellModifier(new InterfaceCellModifier(outputsViewer));
-		outputsViewer.setLabelProvider(new InterfaceLabelProvider());
+		outputsViewer = createTypeTableView(outputsGroup); 
 		createButtonList(buttonListContainer, outputsViewer, false);
 	}
 
@@ -362,6 +353,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	protected Palette getPalette() {
 		if(getType() instanceof SubApp) {
 			return ((SubApp)getType()).getFbNetwork().getApplication().getAutomationSystem().getPalette();
+		} else if(getType() instanceof FBType) {
+			return ((FBType)getType()).getPaletteEntry().getGroup().getPallete();
 		}
 		return null;
 	}
@@ -382,7 +375,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 					return false; 
 				}
 			}
-			return true;
+			//only allow editing if only one element is selected and if the selected is also the 
+			//element to be requested for editing. This improves the usability of multi-line selection.
+			return 1 == viewer.getStructuredSelection().size() && 
+					element.equals(viewer.getStructuredSelection().getFirstElement());
 		}
 		
 		@Override

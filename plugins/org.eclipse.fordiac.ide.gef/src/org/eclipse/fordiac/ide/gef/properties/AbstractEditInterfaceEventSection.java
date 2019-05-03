@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
@@ -25,12 +26,11 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		super.createControls(parent, tabbedPropertySheetPage);
 		inputsViewer.setContentProvider(new InterfaceContentProvider(true, InterfaceContentProviderType.EVENT));
 		outputsViewer.setContentProvider(new InterfaceContentProvider(false, InterfaceContentProviderType.EVENT));
-		setCellEditors();
 	}
 
 	@Override
 	protected String[] fillTypeCombo() {		
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		for(DataType dataType : EventTypeLibrary.getInstance().getEventTypes()){
 			list.add(dataType.getName());
 		}

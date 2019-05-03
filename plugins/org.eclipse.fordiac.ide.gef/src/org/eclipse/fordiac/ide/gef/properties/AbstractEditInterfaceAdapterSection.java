@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.util.List;
 import java.util.ArrayList;
 
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
@@ -24,14 +25,8 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	}
 
 	@Override
-	protected void setType(Object input) {
-		super.setType(input);
-		setCellEditors();  //only now the types are correctly set
-	}
-
-	@Override
 	protected String[] fillTypeCombo() {
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		if(null != getType()) {
 			for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getPalette())){
 				list.add(adaptertype.getLabel());
