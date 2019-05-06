@@ -58,16 +58,22 @@ public class TransitionSection extends AbstractECSection {
 	private static final String LINKING_FILE_EXTENSION = "xtextfbt";   //$NON-NLS-1$
 	private Text commentText;
 	private Combo eventCombo;
-	Composite conditionEditingContainer;
-	//the closing braket lable need for puting the xtext editor before it.
-	CLabel closingBraket;
+	private Composite conditionEditingContainer;
+	//the closing bracket label need for putting the xtext editor before it.
+	private CLabel closingBraket;
 	private EmbeddedEditor editor;
-	Composite composite;	
-	@Inject protected EmbeddedEditorFactory editorFactory;
-	@Inject private Provider<XtextResourceSet> resourceSetProvider;
+	private Composite composite;	
+	
+	@Inject 
+	private EmbeddedEditorFactory editorFactory;
+	
+	@Inject 
+	private Provider<XtextResourceSet> resourceSetProvider;
+	
 	@Inject @Named(Constants.FILE_EXTENSIONS)
-	public String fileExtension;
-	EmbeddedEditorModelAccess embeddedEditorModelAccess;
+	private String fileExtension;
+	
+	private EmbeddedEditorModelAccess embeddedEditorModelAccess;
 	
 	private final IDocumentListener listener = new IDocumentListener() {
 		@Override
@@ -77,7 +83,7 @@ public class TransitionSection extends AbstractECSection {
 
 		@Override
 		public void documentAboutToBeChanged(final DocumentEvent event) {
-			//nothing todo here
+			//nothing to do here
 		}
 	};
 	

@@ -41,7 +41,7 @@ public class UDPChannel extends CChannel {
 	/**
 	 * DataInputStream receiving the data from the network stack
 	 */
-	public DataInputStream in;
+	private DataInputStream in;
 	
 	/**
 	 * maximum packet lenght of UDP packets 

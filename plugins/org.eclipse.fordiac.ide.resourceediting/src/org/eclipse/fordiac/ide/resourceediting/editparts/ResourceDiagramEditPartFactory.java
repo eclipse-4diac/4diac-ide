@@ -17,9 +17,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 /**
  * A factory for creating new EditParts.
@@ -28,7 +28,7 @@ import org.eclipse.gef.editparts.ZoomManager;
  */
 public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 	
-	public ResourceDiagramEditPartFactory(final ResourceDiagramEditor editor, ZoomManager zoomManager) {
+	public ResourceDiagramEditPartFactory(final GraphicalEditor editor, ZoomManager zoomManager) {
 		super(editor, zoomManager);
 	}
 
@@ -40,7 +40,7 @@ public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 			return new FBNetworkContainerEditPart();
 		}
 		if (modelElement instanceof FB) {
-			return new ResFBEditPart(zoomManager);
+			return new ResFBEditPart(getZoomManager());
 		}
 		if (modelElement instanceof IInterfaceElement) {
 			IInterfaceElement element = (IInterfaceElement)modelElement;

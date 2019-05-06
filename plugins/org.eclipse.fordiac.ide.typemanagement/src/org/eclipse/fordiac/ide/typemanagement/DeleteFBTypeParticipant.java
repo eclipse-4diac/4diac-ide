@@ -39,7 +39,7 @@ import org.eclipse.ltk.core.refactoring.participants.ResourceChangeChecker;
 
 public class DeleteFBTypeParticipant extends DeleteParticipant {
 
-	List<String> typeNames = new ArrayList<>();
+	private List<String> typeNames = new ArrayList<>();
 	
 	@Override
 	protected boolean initialize(Object element) {

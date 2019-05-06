@@ -25,7 +25,7 @@ import org.eclipse.gef.GraphicalEditPart;
 public class FixedAnchor extends ChopboxAnchor {
 
 	/** The is input. */
-	protected boolean isInput = false;
+	private boolean isInput = false;
 
 	private GraphicalEditPart editPart;
 
@@ -93,6 +93,10 @@ public class FixedAnchor extends ChopboxAnchor {
 	 */
 	public GraphicalEditPart getEditPart() {
 		return editPart;
+	}
+	
+	public boolean isInput() {
+		return isInput;
 	}
 
 }

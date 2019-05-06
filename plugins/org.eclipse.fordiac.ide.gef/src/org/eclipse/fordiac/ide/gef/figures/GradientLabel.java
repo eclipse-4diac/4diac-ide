@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class GradientLabel extends Label {
 	
-	final ZoomManager zoomManger;
+	final private ZoomManager zoomManger;
 	
 	public GradientLabel(ZoomManager zoomManger) {
 		super();

@@ -38,7 +38,7 @@ public class ChangeStandardCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void execute() {
-		oldStandard = identification.getStandard();
+		oldStandard = getIdentification().getStandard();
 		redo();
 	}
 
@@ -49,7 +49,7 @@ public class ChangeStandardCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void undo() {
-		identification.setStandard(oldStandard);
+		getIdentification().setStandard(oldStandard);
 	}
 
 	/*
@@ -59,7 +59,7 @@ public class ChangeStandardCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void redo() {
-		identification.setStandard(newStandard);
+		getIdentification().setStandard(newStandard);
 	}
 
 }

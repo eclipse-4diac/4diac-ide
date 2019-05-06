@@ -16,7 +16,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 
 public class ECActionAlgorithm {
 
-	ECAction action;
+	private ECAction action;
 	
 	public ECAction getAction(){
 		return action;

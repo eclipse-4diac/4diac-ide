@@ -41,13 +41,13 @@ public class ReconnectDataConnectionCommand extends AbstractReconnectConnectionC
 	protected boolean checkSourceAndTarget(IInterfaceElement sourceIE, IInterfaceElement targetIE) {
 		if((sourceIE instanceof VarDeclaration) && (targetIE instanceof VarDeclaration)){
 			return LinkConstraints.canExistDataConnection((VarDeclaration)sourceIE, (VarDeclaration)targetIE,
-					(Connection)request.getConnectionEditPart().getModel());
+					(Connection)getRequest().getConnectionEditPart().getModel());
 		}
 		return false;
 	}
 	
 	@Override
-	protected AbstractConnectionCreateCommand createConnectionCreateCommand() {
+	protected AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent) {
 		return new DataConnectionCreateCommand(parent);
 	}
 }

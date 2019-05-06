@@ -45,8 +45,8 @@ import org.w3c.dom.NodeList;
 
 class FBNetworkImporter {
 
-	protected final Palette palette;	
-	protected final FBNetwork fbNetwork;
+	private final Palette palette;	
+	private final FBNetwork fbNetwork;
 	//this is the interface list needed for checking connection to the containg types interface
 	private final InterfaceList interfaceList; 
 	
@@ -69,6 +69,14 @@ class FBNetworkImporter {
 	
 	protected FBNetworkImporter(Palette palette, FBNetwork fbNetwork) {
 		this(palette, fbNetwork, LibraryElementFactory.eINSTANCE.createInterfaceList());
+	}
+	
+	public Palette getPalette() {
+		return palette;
+	}
+	
+	public FBNetwork getFbNetwork() {
+		return fbNetwork;
 	}
 	
 	FBNetwork parseFBNetwork(Node fbNetworkNode) throws TypeImportException {

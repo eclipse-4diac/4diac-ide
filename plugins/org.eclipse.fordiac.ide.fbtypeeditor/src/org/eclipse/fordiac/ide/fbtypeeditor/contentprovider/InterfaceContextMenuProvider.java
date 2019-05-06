@@ -60,11 +60,11 @@ public class InterfaceContextMenuProvider extends
 	public void buildContextMenu(IMenuManager menu) {
 		super.buildContextMenu(menu);
 
-		IAction action = registry.getAction(ActionFactory.DELETE
+		IAction action = getRegistry().getAction(ActionFactory.DELETE
 				.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 		
-		buildInterfaceEditEntries(menu, registry);
+		buildInterfaceEditEntries(menu, getRegistry());
 	}
 	
 	public static void buildInterfaceEditEntries(IMenuManager menu, ActionRegistry registry) {

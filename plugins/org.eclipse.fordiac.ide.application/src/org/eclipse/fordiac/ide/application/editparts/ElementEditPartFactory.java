@@ -29,11 +29,15 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
  */
 public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 
-	protected final ZoomManager zoomManager;
+	private final ZoomManager zoomManager;
 
 	public ElementEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {
 		super(editor);
 		this.zoomManager = zoomManager;
+	}
+	
+	protected ZoomManager getZoomManager() {
+		return zoomManager;
 	}
 	
 	/**

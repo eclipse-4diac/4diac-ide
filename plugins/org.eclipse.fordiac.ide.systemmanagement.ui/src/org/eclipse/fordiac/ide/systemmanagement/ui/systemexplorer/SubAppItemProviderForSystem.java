@@ -31,7 +31,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.provider.SubAppItemProvider;
  *
  */
 public class SubAppItemProviderForSystem extends SubAppItemProvider {
-	FBNetworkItemProvider subAppNetworkItemProvider = null;
+	
+	private FBNetworkItemProvider subAppNetworkItemProvider = null;
 
 	public SubAppItemProviderForSystem(AdapterFactory adapterFactory) {
 		super(adapterFactory);

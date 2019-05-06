@@ -24,10 +24,10 @@ public abstract class AbstractDeviceDeploymentCommand extends AbstractDeployment
 	@Override
 	protected boolean prepareParametersToExecute(Object element) {
 		if (element instanceof Device){
-			device =  (Device) element;
+			setDevice((Device) element);
 			return true;
 		}else if(element instanceof DeviceEditPart){
-			device =  ((DeviceEditPart) element).getModel();
+			setDevice(((DeviceEditPart) element).getModel());
 			return true;
 		}
 		return false;
@@ -35,7 +35,7 @@ public abstract class AbstractDeviceDeploymentCommand extends AbstractDeployment
 
 	@Override
 	protected String getCurrentElementName() {
-		return "Device: " + device.getName();
+		return "Device: " + getDevice().getName();
 	}
 
 }

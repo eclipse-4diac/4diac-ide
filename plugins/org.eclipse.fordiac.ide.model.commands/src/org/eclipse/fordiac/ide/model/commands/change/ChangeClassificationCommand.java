@@ -38,7 +38,7 @@ public class ChangeClassificationCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void execute() {
-		oldClassification = identification.getClassification();
+		oldClassification = getIdentification().getClassification();
 		redo();
 	}
 
@@ -49,7 +49,7 @@ public class ChangeClassificationCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void undo() {
-		identification.setClassification(oldClassification);
+		getIdentification().setClassification(oldClassification);
 	}
 
 	/*
@@ -59,7 +59,7 @@ public class ChangeClassificationCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void redo() {
-		identification.setClassification(newClassification);
+		getIdentification().setClassification(newClassification);
 	}
 
 }

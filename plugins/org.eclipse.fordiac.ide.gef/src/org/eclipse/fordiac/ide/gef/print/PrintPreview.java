@@ -20,6 +20,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PrintFigureOperation;
 import org.eclipse.draw2d.PrinterGraphics;
 import org.eclipse.draw2d.SWTGraphics;
+import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.LayerConstants;
@@ -199,8 +200,8 @@ public class PrintPreview extends Dialog {
 					(int) (viewScaleFactor * printerBounds.width),
 					(int) (viewScaleFactor * printerBounds.height));
 
-			int marginOffsetX = offsetX + (int) (viewScaleFactor * margin.left);
-			int marginOffsetY = offsetY + (int) (viewScaleFactor * margin.top);
+			int marginOffsetX = offsetX + (int) (viewScaleFactor * margin.getLeft());
+			int marginOffsetY = offsetY + (int) (viewScaleFactor * margin.getTop());
 
 			double scale = getScale();
 			double previewScaleFactor = viewScaleFactor * scale;
@@ -415,7 +416,7 @@ public class PrintPreview extends Dialog {
 	void print(final Printer printer) {
 		
 		if (!printer.startJob(printName)) {
-			System.err.println(Messages.PrintPreview_ERROR_StartingPrintJob);
+			Activator.getDefault().logError(Messages.PrintPreview_ERROR_StartingPrintJob);
 			return;
 		}
 
@@ -430,11 +431,11 @@ public class PrintPreview extends Dialog {
 		double scale = getScale();
 
 		graphics.scale(scale);
-		graphics.translate((int) (margin.left / scale), (int) (margin.top / scale));
+		graphics.translate((int) (margin.getLeft() / scale), (int) (margin.getTop() / scale));
 		
 		for(int i = 1; i <= numberOfPages; i++) {
 			if (!printer.startPage()) {
-				System.err.println(Messages.PrintPreview_ERROR_StartingNewPage);
+				Activator.getDefault().logError(Messages.PrintPreview_ERROR_StartingNewPage);
 				return;
 			}		
 			graphics.pushState();
@@ -495,16 +496,16 @@ public class PrintPreview extends Dialog {
  */
 class PrintMargin {
 	// Margin to the left side, in pixels
-	public int left;
+	private int left;
 
 	// Margins to the right side, in pixels
-	public int right;
+	private int right;
 
 	// Margins to the top side, in pixels
-	public int top;
+	private int top;
 
 	// Margins to the bottom side, in pixels
-	public int bottom;
+	private int bottom;
 
 	private PrintMargin(final int left, final int right, final int top,
 			final int bottom) {
@@ -514,6 +515,24 @@ class PrintMargin {
 		this.bottom = bottom;
 	}
 	
+	
+	
+	public int getLeft() {
+		return left;
+	}
+
+	public int getRight() {
+		return right;
+	}
+
+	public int getTop() {
+		return top;
+	}
+
+	public int getBottom() {
+		return bottom;
+	}
+
 	int getWidth() {
 		return right - left;
 	}

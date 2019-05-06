@@ -140,8 +140,7 @@ public class RuntimeLauncherView extends ViewPart {
 
 							@Override
 							public void modifyText(ModifyEvent e) {
-								launcher.setParam(name, ((Combo) e.getSource())
-										.getText());
+								getLauncher().setParam(getName(), ((Combo) e.getSource()).getText());
 							}
 
 						});

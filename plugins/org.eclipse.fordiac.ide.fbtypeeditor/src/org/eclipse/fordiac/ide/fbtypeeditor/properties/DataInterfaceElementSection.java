@@ -60,8 +60,8 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
-		createDataSection(leftComposite);	
-		createEventSection(rightComposite);
+		createDataSection(getLeftComposite());	
+		createEventSection(getRightComposite());
 	}
 	
 	private void createDataSection(Composite parent) {

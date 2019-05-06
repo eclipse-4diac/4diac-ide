@@ -24,7 +24,7 @@ import org.eclipse.swt.dnd.DND;
 public abstract class FbTypeTemplateTransferDropTargetListener extends
 		TemplateTransferDropTargetListener {
 
-	AutomationSystem system;
+	private AutomationSystem system;
 
 	/**
 	 * Constructs a listener on the specified viewer.

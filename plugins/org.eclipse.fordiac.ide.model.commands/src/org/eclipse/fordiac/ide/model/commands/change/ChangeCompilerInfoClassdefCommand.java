@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 /**
  * The Class ChangeCompilerInfoClassdef.
  */
-public class ChangeCompilerInfoClassdefCommand extends ChangeComplierInfoCommand {
+public class ChangeCompilerInfoClassdefCommand extends ChangeCompilerInfoCommand {
 	
 	/** The new ApplicationDomain value. */
 	private String newClassdef;
@@ -37,7 +37,7 @@ public class ChangeCompilerInfoClassdefCommand extends ChangeComplierInfoCommand
 	 */
 	@Override
 	public void execute() {
-		oldClassdef = compilerInfo.getClassdef();
+		oldClassdef = getCompilerInfo().getClassdef();
 		redo();
 	}
 
@@ -48,7 +48,7 @@ public class ChangeCompilerInfoClassdefCommand extends ChangeComplierInfoCommand
 	 */
 	@Override
 	public void undo() {
-		compilerInfo.setClassdef(oldClassdef);
+		getCompilerInfo().setClassdef(oldClassdef);
 	}
 
 	/*
@@ -58,7 +58,7 @@ public class ChangeCompilerInfoClassdefCommand extends ChangeComplierInfoCommand
 	 */
 	@Override
 	public void redo() {
-		compilerInfo.setClassdef(newClassdef);
+		getCompilerInfo().setClassdef(newClassdef);
 	}
 
 }

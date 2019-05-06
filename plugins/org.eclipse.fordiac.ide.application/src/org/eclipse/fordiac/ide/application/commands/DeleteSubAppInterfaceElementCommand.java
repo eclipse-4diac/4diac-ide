@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public class DeleteSubAppInterfaceElementCommand extends DeleteInterfaceCommand {
 	
-	DeleteInterfaceCommand opposite = null;
+	private DeleteInterfaceCommand opposite = null;
 
 	public DeleteSubAppInterfaceElementCommand(IInterfaceElement interfaceElement) {
 		super(interfaceElement);

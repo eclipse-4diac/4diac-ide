@@ -33,7 +33,7 @@ import org.eclipse.ui.actions.ActionFactory;
 public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 
 	private final ZoomManager zoomManager;
-	protected ActionRegistry registry;
+	private final ActionRegistry registry;
 
 	/**
 	 * Instantiates a new zoom undo redo context menu provider.
@@ -47,6 +47,10 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 		super(viewer);
 		this.zoomManager = zoomManager;
 		this.registry = registry;
+	}
+	
+	public ActionRegistry getRegistry() {
+		return registry;
 	}
 
 	/*

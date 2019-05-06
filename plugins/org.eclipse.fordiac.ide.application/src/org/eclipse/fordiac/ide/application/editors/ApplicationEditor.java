@@ -20,7 +20,7 @@ import org.eclipse.ui.IEditorInput;
 public class ApplicationEditor extends FBNetworkEditor {
 	
 	/** The adapter. */
-	EContentAdapter adapter = new EContentAdapter() {
+	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(
 				final Notification notification) {

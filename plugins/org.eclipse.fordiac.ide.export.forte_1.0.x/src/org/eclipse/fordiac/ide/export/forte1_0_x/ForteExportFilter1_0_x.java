@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -64,9 +63,9 @@ import org.w3c.dom.NodeList;
  */
 public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFilter {
 
-	private static final String C_BASIC_FB = "CBasicFB";
+	private static final String C_BASIC_FB = "CBasicFB"; //$NON-NLS-1$
 
-	protected class AdapterInstance {
+	protected static class AdapterInstance {
 		public AdapterInstance(String name, String adapterType, boolean isPlug,
 				org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType adapterFBType) {
 			this.name = name;
@@ -105,15 +104,15 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 
 	private int numCompFBParams = 0;
 
-	protected int eventInCount;
+	private int eventInCount;
 
-	protected int eventOutCount;
+	private int eventOutCount;
 
-	protected int adapterCount;
+	private int adapterCount;
 
-	protected List<AdapterInstance> adapters = new ArrayList<>();
+	private List<AdapterInstance> adapters = new ArrayList<>();
 
-	protected List<String> eventInputs = new ArrayList<>();
+	private List<String> eventInputs = new ArrayList<>();
 
 	private StructuredTextEmitter structuredTextEmitter = new StructuredTextEmitter(this);
 
@@ -144,10 +143,6 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 
 	public void addInfoMsg(final String msg) {
 		forteEmitterInfos.add(" - " + libraryType.getName() + ": " + msg); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
-	public Map<String, VarDefinition> getVars() {
-		return vars;
 	}
 
 	public List<AdapterInstance> getAdapters() {
@@ -1381,7 +1376,7 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 						String myTestString = ""; //$NON-NLS-1$
 
 						// retrieve first element (adapter-events are
-						// given as first element of guarding condition;
+						// given as first element of guarding condition
 						// should be in events finally)
 						if (mySTok.hasMoreTokens()) {
 							myTestString = mySTok.nextToken();

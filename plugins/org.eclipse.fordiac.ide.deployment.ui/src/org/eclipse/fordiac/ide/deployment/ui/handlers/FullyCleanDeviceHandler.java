@@ -41,7 +41,7 @@ public class FullyCleanDeviceHandler extends AbstractDeviceDeploymentCommand {
 	}
 
 	private int runDeleteQuestionDialog(List<String> resNames) {
-		StringBuilder message = new StringBuilder(MessageFormat.format("Delete the following resources from device \"{0}\":", device.getName()));
+		StringBuilder message = new StringBuilder(MessageFormat.format("Delete the following resources from device \"{0}\":", getDevice().getName()));
 		
 		for (String name : resNames) {
 			message.append("\n\t");  //$NON-NLS-1$

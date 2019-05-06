@@ -35,16 +35,16 @@ public class EventConnectionCreateCommand extends AbstractConnectionCreateComman
 
 	@Override
 	public boolean canExecute() {
-		if (source == null || destination == null) {
+		if (getSource() == null || getDestination() == null) {
 			return false;
 		}
-		if(source == destination){
+		if(getSource() == getDestination()){
 			return false;
 		}
-		if (!(source instanceof Event)) {
+		if (!(getSource() instanceof Event)) {
 			return false;
 		}
-		if (!(destination instanceof Event)) {
+		if (!(getDestination() instanceof Event)) {
 			return false;
 		}
 		
@@ -52,19 +52,19 @@ public class EventConnectionCreateCommand extends AbstractConnectionCreateComman
 			return false;
 		}
 		
-		return LinkConstraints.canExistEventConnection((Event) source, (Event)destination);
+		return LinkConstraints.canExistEventConnection((Event) getSource(), (Event)getDestination());
 	}
 	
 	private boolean duplicateConnection() {
-		for (Connection con : source.getInputConnections()) {
+		for (Connection con : getSource().getInputConnections()) {
 			//as we are maybe creating a reverse connection we need to check both 
-			if((con.getSource() == destination) || (con.getDestination() == destination)){
+			if((con.getSource() == getDestination()) || (con.getDestination() == getDestination())){
 				return true;
 			}
 		}
-		for (Connection con : source.getOutputConnections()) {
+		for (Connection con : getSource().getOutputConnections()) {
 			//as we are maybe creating a reverse connection we need to check both
-			if((con.getSource() == destination) || (con.getDestination() == destination)){
+			if((con.getSource() == getDestination()) || (con.getDestination() == getDestination())){
 				return true;
 			}
 		}

@@ -31,7 +31,7 @@ public class CFBNetworkcontextMenuProvider extends
 	@Override
 	public void buildContextMenu(IMenuManager menu) {		
 		super.buildContextMenu(menu);		
-		InterfaceContextMenuProvider.buildInterfaceEditEntries(menu, registry);
+		InterfaceContextMenuProvider.buildInterfaceEditEntries(menu, getRegistry());
 	}
 	
 	

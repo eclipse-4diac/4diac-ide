@@ -406,12 +406,9 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	}
 
 	@Override
-	public DirectEditManager getManager() {
-		if (manager == null) {
-			Label l = getNameLabel();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
-					new IdentifierVerifyListener());
-		}
-		return manager;
+	protected DirectEditManager createDirectEditManager() {		 
+		Label l = getNameLabel();
+		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
+				new IdentifierVerifyListener());
 	}
 }

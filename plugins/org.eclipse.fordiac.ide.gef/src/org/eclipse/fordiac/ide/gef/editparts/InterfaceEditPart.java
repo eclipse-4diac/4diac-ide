@@ -55,7 +55,7 @@ import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart implements
 		NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private ValueEditPart referencedPart;
-	protected int mouseState;
+	private int mouseState;
 	
 	private EContentAdapter contentAdapter = new EContentAdapter() {
 		@Override

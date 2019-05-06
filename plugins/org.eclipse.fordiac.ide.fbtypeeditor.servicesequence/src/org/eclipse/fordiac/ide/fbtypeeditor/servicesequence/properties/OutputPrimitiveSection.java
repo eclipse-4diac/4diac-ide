@@ -33,7 +33,7 @@ public class OutputPrimitiveSection extends PrimitiveSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
-		createOutputPrimitiveSection(leftComposite);	
+		createOutputPrimitiveSection(getLeftComposite());	
 	}
 	
 	private void createOutputPrimitiveSection(Composite parent){

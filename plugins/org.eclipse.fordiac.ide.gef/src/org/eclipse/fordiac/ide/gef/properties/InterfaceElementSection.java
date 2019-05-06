@@ -54,11 +54,11 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InterfaceElementSection extends AbstractSection {
-	protected Text nameText;
-	protected Text commentText;
-	protected Combo typeCombo;
-	protected Text parameterText;
-	protected CLabel valueCLabel;
+	private Text nameText;
+	private Text commentText;
+	private Combo typeCombo;
+	private Text parameterText;
+	private CLabel valueCLabel;
 	
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {

@@ -32,7 +32,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvid
  */
 public class ApplicationItemProviderForSystem extends
 		ApplicationItemProvider implements INotifyChangedListener {
-	FBNetworkItemProvider fbNetworkItemProvider = null;
+	
+	private FBNetworkItemProvider fbNetworkItemProvider = null;
 
 	public ApplicationItemProviderForSystem(AdapterFactory adapterFactory) {
 		super(adapterFactory);

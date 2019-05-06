@@ -60,7 +60,11 @@ public class AutomatedRemoteTest {
 	private ART_TCPClient TCPTestInterface;
 	
 	private ART_DeploymentMgr DMgr;
-	public String DMgr_response=""; //$NON-NLS-1$
+	private String DMgr_response=""; //$NON-NLS-1$
+	
+	public String getResponse() {
+		return DMgr_response;
+	}
 	
 	public boolean prepareART (FBType fbType, List<TestSequence> paTestSequences) {
 		this.fbType = fbType;
@@ -162,7 +166,7 @@ public class AutomatedRemoteTest {
 		DMgr = new ART_DeploymentMgr(fbType,MgrID,paID);
 		boolean isOK = DMgr.deploy(TestChanID);
 		if (!isOK) {
-			DMgr_response = DMgr.MgmtCommands;
+			DMgr_response = DMgr.getMgmtCommands();
 		}
 		return isOK;
 	}

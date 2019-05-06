@@ -34,10 +34,10 @@ public class SystemConfigurationContextMenueProvider extends
 		super.buildContextMenu(menu);
 		IAction action;
 
-		action = registry.getAction(ActionFactory.DELETE.getId());
+		action = getRegistry().getAction(ActionFactory.DELETE.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 		
-		action = registry.getAction(GEFActionConstants.DIRECT_EDIT);
+		action = getRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
 		if (action != null && action.isEnabled()) {
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 		}

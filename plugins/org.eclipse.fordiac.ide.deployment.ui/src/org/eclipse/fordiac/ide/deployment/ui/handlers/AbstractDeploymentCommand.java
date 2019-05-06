@@ -41,7 +41,15 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public abstract class AbstractDeploymentCommand extends AbstractHandler {
 
-	protected Device device = null;
+	private Device device = null;
+	
+	protected void setDevice(Device device) {
+		this.device = device;
+	}
+	
+	protected Device getDevice() {
+		return device;
+	}
 	
 	
 	private static class OnlineDeploymentErrorCheckListener implements IDeploymentListener{

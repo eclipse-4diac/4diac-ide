@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart{
 
 	/** The child providers. */
-	List<IChildrenProvider> childProviders = null;
+	private List<IChildrenProvider> childProviders = null;
 
 	
 	@Override

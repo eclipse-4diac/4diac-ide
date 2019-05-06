@@ -48,8 +48,12 @@ public class ART_DeploymentMgr {
 
 	private boolean deploymentError;
 	private int deploymentResponseCounter=0;
-	public String MgmtResponse=""; //$NON-NLS-1$
-	public String MgmtCommands=""; //$NON-NLS-1$
+	private String MgmtResponse=""; //$NON-NLS-1$
+	private String MgmtCommands=""; //$NON-NLS-1$
+	
+	public String getMgmtCommands() {
+		return MgmtCommands;
+	}
 
 	public ART_DeploymentMgr(FBType fbType, String address, int paUID) {
 

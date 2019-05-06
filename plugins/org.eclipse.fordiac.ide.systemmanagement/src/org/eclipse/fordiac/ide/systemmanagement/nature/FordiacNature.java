@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.CoreException;
 public class FordiacNature implements IProjectNature {
 
 	/** The project. */
-	IProject project;
+	private IProject project;
 
 	/*
 	 * (non-Javadoc)

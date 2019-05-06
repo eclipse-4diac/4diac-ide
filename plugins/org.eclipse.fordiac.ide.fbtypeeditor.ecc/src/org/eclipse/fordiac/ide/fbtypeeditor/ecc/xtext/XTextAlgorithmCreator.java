@@ -39,14 +39,14 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 	private static final String LINKING_FILE_EXTENSION = "xtextfbt";   //$NON-NLS-1$
 	
 	@Inject
-	protected EmbeddedEditorFactory editorFactory;
+	private EmbeddedEditorFactory editorFactory;
 
 	@Inject
 	private Provider<XtextResourceSet> resourceSetProvider;
 
 	@Inject
 	@Named(Constants.FILE_EXTENSIONS)
-	public String fileExtension;
+	private String fileExtension;
 		
 
 	@Override

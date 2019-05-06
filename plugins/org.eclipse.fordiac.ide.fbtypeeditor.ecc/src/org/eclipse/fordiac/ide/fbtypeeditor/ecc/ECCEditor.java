@@ -126,13 +126,13 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 			public void buildContextMenu(IMenuManager menu) {
 				super.buildContextMenu(menu);
 								
-				IAction action = registry.getAction(NewStateAction.CREATE_STATE);
+				IAction action = getRegistry().getAction(NewStateAction.CREATE_STATE);
 				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 				
-				action = registry.getAction(AddECCActionAction.ADD_ECC_ACTION);
+				action = getRegistry().getAction(AddECCActionAction.ADD_ECC_ACTION);
 				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);				
 
-				action = registry.getAction(ActionFactory.DELETE.getId());
+				action = getRegistry().getAction(ActionFactory.DELETE.getId());
 				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);				
 			}
 		};

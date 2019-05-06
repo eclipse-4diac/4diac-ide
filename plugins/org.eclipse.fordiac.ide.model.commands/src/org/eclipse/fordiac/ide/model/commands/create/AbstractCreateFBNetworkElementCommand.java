@@ -25,14 +25,15 @@ import org.eclipse.ui.IEditorPart;
 
 public abstract class AbstractCreateFBNetworkElementCommand extends Command {
 	
-	protected IEditorPart editor;
-	protected FBNetworkElement element;
-	protected FBNetwork fbNetwork;
+	private final IEditorPart editor;
+	private final FBNetworkElement element;
+	private final FBNetwork fbNetwork;
 	private int x;
 	private int y;
 	
-	public AbstractCreateFBNetworkElementCommand(FBNetwork fbNetwork, int x, int y) {
+	public AbstractCreateFBNetworkElementCommand(FBNetwork fbNetwork, FBNetworkElement element, int x, int y) {
 		this.fbNetwork = fbNetwork;
+		this.element = element;
 		this.x = x;
 		this.y = y;
 		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
@@ -72,6 +73,10 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command {
 	public void updateCreatePosition(int x, int y) {
 		this.x = x;
 		this.y = y;		
+	}
+	
+	public FBNetworkElement getElement() {
+		return element;
 	}
 
 	protected String getInitalInstanceName() {

@@ -48,9 +48,8 @@ public class AppearancePropertySection extends AbstractPropertySection {
 	private ColorizableElement colorizableElement;
 	private final List<ColorizableElement> selectedViews = new ArrayList<>();
 	private Color color;
-	protected Label colorLabel;
-	protected Button chooseColorBtn;
-	protected Group colorsGroup;
+	private Label colorLabel;
+	private Group colorsGroup;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -120,7 +119,7 @@ public class AppearancePropertySection extends AbstractPropertySection {
 		GridData gd = new GridData();
 		gd.grabExcessHorizontalSpace = true;
 		colorLabel.setLayoutData(gd);
-		chooseColorBtn = new Button(colorsGroup, SWT.PUSH);
+		Button chooseColorBtn = new Button(colorsGroup, SWT.PUSH);
 		chooseColorBtn.setText(Messages.AppearancePropertySection_LABEL_BackgroundColor);
 		chooseColorBtn.addSelectionListener(new SelectionAdapter() {
 			@Override

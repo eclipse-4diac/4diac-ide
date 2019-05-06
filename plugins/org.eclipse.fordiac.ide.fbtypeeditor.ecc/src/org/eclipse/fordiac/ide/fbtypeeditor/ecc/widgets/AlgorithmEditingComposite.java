@@ -54,20 +54,20 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public abstract class AlgorithmEditingComposite {
 
-	protected CLabel languageLabel;
-	protected Combo languageCombo;
-	protected CLabel commentLabel;
-	protected Text commentText;
-	protected Composite codeEditors;
-	protected StackLayout stack;
+	private CLabel languageLabel;
+	private Combo languageCombo;
+	private CLabel commentLabel;
+	private Text commentText;
+	private Composite codeEditors;
+	private StackLayout stack;
 	private Map<String, IAlgorithmEditor> editors = new HashMap<>();
-	protected IAlgorithmEditor currentAlgEditor;
+	private IAlgorithmEditor currentAlgEditor;
 	private CommandStack commandStack;
-	protected Algorithm currentAlgorithm;
+	private Algorithm currentAlgorithm;
 
-	protected boolean blockUpdates = false;
+	private boolean blockUpdates = false;
 
-	protected final IDocumentListener listener = new IDocumentListener() {
+	private final IDocumentListener listener = new IDocumentListener() {
 		@Override
 		public void documentChanged(final DocumentEvent event) {
 			if ((getAlgorithm() != null) && (null != currentAlgEditor) && currentAlgEditor.isDocumentValid()) {

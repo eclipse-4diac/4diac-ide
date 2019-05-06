@@ -15,12 +15,15 @@ package org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 
 public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGenerator {
-	protected Palette palette;
+	private final Palette palette;
 	
 	public AbstractMediaSpecificGenerator(Palette palette) {
 		super();
 		this.palette = palette;
 	}
 	
-
+	public Palette getPalette() {
+		return palette;
+	}
+	
 }

@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  */
 public class ToolTipFigure extends Figure {
 	
-	protected VerticalLineCompartmentFigure line;
+	private final VerticalLineCompartmentFigure line;
 
 	/**
 	 * Instantiates a new tool tip figure.
@@ -63,6 +63,10 @@ public class ToolTipFigure extends Figure {
 		} else if (element instanceof VarDeclaration) {
 			addVarDefaultValue((VarDeclaration)element);
 		}
+	}
+	
+	public final VerticalLineCompartmentFigure getLine() {
+		return line;
 	}
 	
 	private void addWiths(Event element) {

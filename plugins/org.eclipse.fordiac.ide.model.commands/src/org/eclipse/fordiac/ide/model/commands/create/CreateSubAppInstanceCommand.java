@@ -20,13 +20,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementCommand {
 	
-	protected SubApplicationTypePaletteEntry paletteEntry;
+	private SubApplicationTypePaletteEntry paletteEntry;
 	
 	public CreateSubAppInstanceCommand(final SubApplicationTypePaletteEntry paletteEntry, final FBNetwork fbNetwork, int x, int y) {
-		super(fbNetwork, x, y);
+		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
 		this.paletteEntry = paletteEntry;
 		setLabel("Create Subapplication Instance");
-		element = LibraryElementFactory.eINSTANCE.createSubApp();
 		getSubApp().setPaletteEntry(paletteEntry);
 	}
 	
@@ -41,7 +40,7 @@ public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementC
 	}
 	
 	public SubApp getSubApp() {
-		return (SubApp)element;
+		return (SubApp)getElement();
 	}
 	
 	public SubApplicationTypePaletteEntry getPaletteEntry() {

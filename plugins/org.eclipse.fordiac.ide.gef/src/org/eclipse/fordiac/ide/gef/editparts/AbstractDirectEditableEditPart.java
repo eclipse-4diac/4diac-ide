@@ -34,7 +34,7 @@ public abstract class AbstractDirectEditableEditPart extends
 		AbstractConnectableEditPart {
 
 	/** The manager. */
-	protected DirectEditManager manager;
+	private DirectEditManager manager;
 
 	private final EContentAdapter adapter = new EContentAdapter() {
 
@@ -115,10 +115,14 @@ public abstract class AbstractDirectEditableEditPart extends
 	 */
 	public DirectEditManager getManager() {
 		if (manager == null) {
-			Label l = getNameLabel();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
+			manager =createDirectEditManager();
 		}
 		return manager;
+	}
+
+	protected DirectEditManager createDirectEditManager() {
+		Label l = getNameLabel();
+		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
 	}
 
 	/**

@@ -65,8 +65,8 @@ import org.eclipse.ui.part.FileEditorInput;
  */
 public abstract class AbstractFBNetworkElementFigure extends Shape implements ITransparencyFigure {
 
-	private final class OpenTypeListener implements MouseListener {
-		final AbstractFBNElementEditPart editPart;
+	private static final class OpenTypeListener implements MouseListener {
+		private final AbstractFBNElementEditPart editPart;
 		
 		public OpenTypeListener(AbstractFBNElementEditPart editPart) {
 			this.editPart = editPart;
@@ -80,11 +80,13 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent me) {					
+		public void mouseReleased(MouseEvent me) {	
+			//nothing to be done here
 		}
 
 		@Override
-		public void mouseDoubleClicked(MouseEvent me) {					
+		public void mouseDoubleClicked(MouseEvent me) {
+			//nothing to be done here
 		}
 		
 	}
@@ -106,41 +108,39 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		}
 	}
 
-	/** The Constant MIN_DIMENSION. */
-	protected static final Dimension MIN_DIMENSION = new Dimension(50, 50);
 
 	/** The model. */
-	protected FBNetworkElement model = null;
+	private FBNetworkElement model = null;
 
 	/** The instance name label. */
-	protected SetableAlphaLabel instanceNameLabel = null;
+	private SetableAlphaLabel instanceNameLabel = null;
 
 	/** The top. */
-	protected RoundedRectangle top;	
+	private  RoundedRectangle top;	
 
 	/** The middle. */
-	protected AdvancedRoundedRectangle middle; 
+	private  AdvancedRoundedRectangle middle; 
 
 	/** The bottom. */
-	protected AdvancedRoundedRectangle bottom;
+	private  AdvancedRoundedRectangle bottom;
 
 	/** The event inputs. */
-	protected final Figure eventInputs = new Figure();
+	private  final Figure eventInputs = new Figure();
 
 	/** The event outputs. */
-	protected final Figure eventOutputs = new Figure();
+	private  final Figure eventOutputs = new Figure();
 
 	/** The data inputs. */
-	protected final Figure dataInputs = new Figure();
+	private  final Figure dataInputs = new Figure();
 	
 	/** The sockets. */
-	protected final Figure sockets = new Figure();
+	private  final Figure sockets = new Figure();
 
 	/** The data outputs. */
-	protected final Figure dataOutputs = new Figure();
+	private  final Figure dataOutputs = new Figure();
 	
 	/** The plugs. */
-	protected final Figure plugs = new Figure();
+	private  final Figure plugs = new Figure();
 
 	protected UnderlineAlphaLabel typeLabel;
 
@@ -148,6 +148,10 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 	
 	protected AbstractFBNetworkElementFigure() {
 		configureRectangles();
+	}
+	
+	public FBNetworkElement getModel() {
+		return model;
 	}
 
 	public ZoomManager getZoomManager() {
@@ -287,12 +291,10 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		sockets.setLayoutManager(new ToolbarLayout(false));
 		bottomInputArea.add(sockets);
 		
-		//
 		Figure bottomOutputArea = new Figure();
 		bottomOutputArea.setLayoutManager(new ToolbarLayout(false));
 		((ToolbarLayout)bottomOutputArea.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		
-		// bottomOutputsLayout.setStretchMinorAxis(true);		
 		GridData bottomOutputsLayoutData = new GridData(
 				GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL
 						| GridData.VERTICAL_ALIGN_FILL);
@@ -353,6 +355,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 			@Override
 			public void mouseDragged(MouseEvent me) {
+				//nothing to bo done here
 			}
 
 			@Override

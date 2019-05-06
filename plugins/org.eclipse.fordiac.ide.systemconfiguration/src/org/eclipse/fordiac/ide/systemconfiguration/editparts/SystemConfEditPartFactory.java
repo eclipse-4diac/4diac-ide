@@ -28,7 +28,7 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 public class SystemConfEditPartFactory  extends Abstract4diacEditPartFactory {
 
 	/**Editparts that have gradient fill require a zoom manger to correctly scale the pattern when zoomed*/
-	protected ZoomManager zoomManager;
+	private ZoomManager zoomManager;
 	
 	
 	public SystemConfEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {

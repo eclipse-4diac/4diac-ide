@@ -35,7 +35,7 @@ public class AddECCActionAction extends SelectionAction {
 	 */
 	public static final String ADD_ECC_ACTION = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.AddECCActionAction";//$NON-NLS-1$
 
-	ActionCreationFactory actionFactory = new ActionCreationFactory();
+	private ActionCreationFactory actionFactory = new ActionCreationFactory();
 	
 	public AddECCActionAction(IWorkbenchPart part) {
 		super(part);

@@ -41,13 +41,13 @@ public class LabelDirectEditManager extends DirectEditManager {
 	private IAction copy, cut, paste, undo, redo, find, selectAll, delete;
 
 	/** The label. */
-	protected Label label;
+	private Label label;
 
 	/** The scaled font. */
-	protected Font scaledFont;
+	private Font scaledFont;
 
 	/** The initial string. */
-	protected String initialString = null;
+	private String initialString = null;
 	private VerifyListener aditionalVerify = null;
 
 	/**
@@ -154,7 +154,7 @@ public class LabelDirectEditManager extends DirectEditManager {
 			initialLabelText = label.getText();
 			getCellEditor().setValue(initialLabelText);
 		} else {
-			initialLabelText = initialString.toString();
+			initialLabelText = initialString;
 			getCellEditor().setValue(initialLabelText);
 		}
 		IFigure figure = getEditPart().getFigure();

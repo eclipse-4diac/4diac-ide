@@ -35,24 +35,21 @@ public class SubAppTypeNetworkEditPartFactory extends
 	protected EditPart getPartForElement(EditPart context,
 			Object modelElement) {
 		if (modelElement instanceof FBNetwork) {
-			CompositeNetworkEditPart compositeNetEP = new CompositeNetworkEditPart(){
+			return new CompositeNetworkEditPart(){
 
 				@Override
 				protected void createEditPolicies() {
-					installEditPolicy(EditPolicy.COMPONENT_ROLE,
-							new RootComponentEditPolicy());
+					installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 					// handles constraint changes of model elements and creation of new
 					// model elements
-					installEditPolicy(EditPolicy.LAYOUT_ROLE,
-							new SubAppTypeFBNetworkLayoutEditPolicy());
+					installEditPolicy(EditPolicy.LAYOUT_ROLE, new SubAppTypeFBNetworkLayoutEditPolicy());
 				}
 				
 			};
-			return compositeNetEP;
 		}
 		
 		if (modelElement instanceof SubApp) {
-			return new SubAppForFBNetworkEditPart(zoomManager);
+			return new SubAppForFBNetworkEditPart(getZoomManager());
 		}		
 		return super.getPartForElement(context, modelElement);
 	}

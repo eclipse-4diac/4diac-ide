@@ -30,13 +30,13 @@ import org.eclipse.gef.Request;
 public class OutputPrimitiveEditPart extends PrimitiveEditPart{
 
 	OutputPrimitiveEditPart(){
-		connection = new PrimitiveConnection(false);
+		super(new PrimitiveConnection(false));
 	}
 	
 	@Override
 	public List<Object> getModelSourceConnections() {
 		ArrayList<Object> temp = new ArrayList<>();
-		temp.add(connection);
+		temp.add(getPrimitiveConnection());
 		return temp;
 	}
 
@@ -50,7 +50,7 @@ public class OutputPrimitiveEditPart extends PrimitiveEditPart{
 				temp.add(((InputPrimitiveEditPart) part).getConnectingConnection());
 			}
 		}
-		temp.add(connection);
+		temp.add(getPrimitiveConnection());
 		return temp;
 	}
 

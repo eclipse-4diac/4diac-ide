@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
-import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
@@ -22,9 +21,6 @@ import org.eclipse.fordiac.ide.util.OpenListener;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * The Class OpenSubApplicationEditorAction.
@@ -57,22 +53,7 @@ public class OpenSubApplicationEditorAction extends OpenListener {
 	 * already opened.
 	 */
 	public void run() {
-		
-		SubApplicationEditorInput input = new SubApplicationEditorInput(subApp);
-
-		IWorkbenchPage activePage = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage();
-		try {
-			editor = activePage.openEditor(input, SubAppNetworkEditor.class.getName());
-		} catch (PartInitException e) {
-			editor = null;
-			ApplicationPlugin
-					.getDefault()
-					.logError(
-							Messages.OpenSubApplicationEditorAction_ERROR_OpenSubapplicationEditor,
-							e);
-		}
-
+		openEditor(new SubApplicationEditorInput(subApp), SubAppNetworkEditor.class.getName());
 	}
 
 	@Override

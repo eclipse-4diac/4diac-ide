@@ -38,7 +38,7 @@ public class ChangeApplicationDomainCommand extends ChangeIdentificationCommand 
 	 */
 	@Override
 	public void execute() {
-		oldApplicationDomain = identification.getApplicationDomain();
+		oldApplicationDomain = getIdentification().getApplicationDomain();
 		redo();
 	}
 
@@ -49,7 +49,7 @@ public class ChangeApplicationDomainCommand extends ChangeIdentificationCommand 
 	 */
 	@Override
 	public void undo() {
-		identification.setApplicationDomain(oldApplicationDomain);
+		getIdentification().setApplicationDomain(oldApplicationDomain);
 	}
 
 	/*
@@ -59,7 +59,7 @@ public class ChangeApplicationDomainCommand extends ChangeIdentificationCommand 
 	 */
 	@Override
 	public void redo() {
-		identification.setApplicationDomain(newApplicationDomain);
+		getIdentification().setApplicationDomain(newApplicationDomain);
 	}
 
 }

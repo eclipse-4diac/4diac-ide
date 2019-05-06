@@ -146,12 +146,8 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	}
 
 	@Override
-	public DirectEditManager getManager() {
-		if (manager == null) {
-			manager = new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(comment),
-					comment);
-		}
-		return manager;
+	protected DirectEditManager createDirectEditManager() {
+		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(comment), comment);
 	}
 
 	@Override

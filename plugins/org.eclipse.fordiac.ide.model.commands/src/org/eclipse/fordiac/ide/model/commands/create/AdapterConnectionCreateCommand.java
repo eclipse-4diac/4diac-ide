@@ -28,17 +28,17 @@ public class AdapterConnectionCreateCommand extends AbstractConnectionCreateComm
 	
 	@Override
 	public boolean canExecute() {
-		if (source == null || destination == null) {
+		if (getSource() == null || getDestination() == null) {
 			return false;
 		}
-		if (!(source instanceof AdapterDeclaration)) {
+		if (!(getSource() instanceof AdapterDeclaration)) {
 			return false;
 		}
-		if (!(destination instanceof AdapterDeclaration)) {
+		if (!(getDestination() instanceof AdapterDeclaration)) {
 			return false;
 		}
 
-		return LinkConstraints.canCreateAdapterConnection((AdapterDeclaration) source, (AdapterDeclaration) destination);
+		return LinkConstraints.canCreateAdapterConnection((AdapterDeclaration) getSource(), (AdapterDeclaration) getDestination());
 	}
 	
 	@Override

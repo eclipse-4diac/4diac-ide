@@ -106,8 +106,6 @@ public final class ECActionHelpers {
 		return null;
 	}
 	
-	static boolean setOutputEventRunning = false;
-	
 	private ECActionHelpers() {
 		throw new UnsupportedOperationException("ECActionHelpers should not be instantiated!");
 	}

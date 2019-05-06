@@ -130,7 +130,7 @@ public class TransactionSection extends AbstractServiceSection {
 		leftOutputPrimitivesViewer.getTree().setLayoutData(gridData);
 		leftOutputPrimitivesViewer.setContentProvider(new TransactionContentProvider(ServiceInterfacePaletteFactory.LEFT_OUTPUT_PRIMITIVE));
 		leftOutputPrimitivesViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
-		new AdapterFactoryTreeEditor(leftOutputPrimitivesViewer.getTree(), adapterFactory);
+		new AdapterFactoryTreeEditor(leftOutputPrimitivesViewer.getTree(), getAdapterFactory());
 		leftOutputPrimitivesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
@@ -181,7 +181,7 @@ public class TransactionSection extends AbstractServiceSection {
 		rightOutputPrimitivesViewer.getTree().setLayoutData(gridData);
 		rightOutputPrimitivesViewer.setContentProvider(new TransactionContentProvider(ServiceInterfacePaletteFactory.RIGHT_OUTPUT_PRIMITIVE));
 		rightOutputPrimitivesViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
-		new AdapterFactoryTreeEditor(rightOutputPrimitivesViewer.getTree(), adapterFactory);
+		new AdapterFactoryTreeEditor(rightOutputPrimitivesViewer.getTree(), getAdapterFactory());
 		rightOutputPrimitivesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {

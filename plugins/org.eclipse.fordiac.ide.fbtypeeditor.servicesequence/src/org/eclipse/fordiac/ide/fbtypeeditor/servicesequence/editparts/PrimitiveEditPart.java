@@ -32,9 +32,9 @@ import org.eclipse.gef.Request;
 
 public abstract class PrimitiveEditPart extends AbstractDirectEditableEditPart implements NodeEditPart, IChangeStringEditPart {
 
-	protected PrimitiveConnection connection;
+	private final PrimitiveConnection connection;
 
-	protected EContentAdapter adapter = new EContentAdapter() {
+	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);	
@@ -49,6 +49,13 @@ public abstract class PrimitiveEditPart extends AbstractDirectEditableEditPart i
 		}
 	};
 	
+	
+	
+	public PrimitiveEditPart(PrimitiveConnection connection) {
+		super();
+		this.connection = connection;
+	}
+
 	@Override
 	public void activate() {
 		if (!isActive()) {

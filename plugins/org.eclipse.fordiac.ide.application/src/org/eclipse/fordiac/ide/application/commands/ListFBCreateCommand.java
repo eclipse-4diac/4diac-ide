@@ -105,11 +105,11 @@ public class ListFBCreateCommand extends FBCreateCommand {
 							List<PaletteEntry> fbTypes = system.getPalette().getTypeEntries(element.getFbTypeName());
 							if (!fbTypes.isEmpty() && fbTypes.get(0) instanceof FBTypePaletteEntry) {
 								element.setTypePaletteEntry(((FBTypePaletteEntry) fbTypes.get(0)));
-								ListFBCreateCommand.this.paletteEntry = element.getTypePaletteEntry();
+								ListFBCreateCommand.this.setPaletteEntry(element.getTypePaletteEntry());
 								ListFBCreateCommand.super.execute();
 
 								for (TransferDataSelectionFBParameter fbParametert : element.getFbParameters()) {
-									IInterfaceElement fbInterfaceElement = ListFBCreateCommand.this.element.getInterfaceElement(fbParametert.getName());
+									IInterfaceElement fbInterfaceElement = ListFBCreateCommand.this.getElement().getInterfaceElement(fbParametert.getName());
 									if (fbInterfaceElement instanceof VarDeclaration){
 										Value val = ((VarDeclaration)fbInterfaceElement).getValue();
 										val.setValue(fbParametert.getValue());
@@ -155,7 +155,7 @@ public class ListFBCreateCommand extends FBCreateCommand {
 					@Override
 					public void execute(Object res) {
 						if (res instanceof FBTypePaletteEntry) {
-							ListFBCreateCommand.this.paletteEntry = ((FBTypePaletteEntry) res);
+							ListFBCreateCommand.this.setPaletteEntry((FBTypePaletteEntry) res);
 							ListFBCreateCommand.super.execute();
 						}
 					}
@@ -178,11 +178,4 @@ public class ListFBCreateCommand extends FBCreateCommand {
 
 	}
 
-	@Override
-	public boolean canUndo() {
-		if (editor != null) {
-			return super.canUndo();
-		}
-		return false;
-	}
 }

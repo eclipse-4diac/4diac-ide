@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class AdvancedRoundedRectangle extends RoundedRectangle {
 
-	protected int side = PositionConstants.NONE;
+	private int side = PositionConstants.NONE;
 	private ZoomManager zoomManager;
 	private Figure parent;
 	private boolean useGradient = false;

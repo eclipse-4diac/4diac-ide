@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Display;
 public class ColorManager {
 
 	/** The color table. */
-	protected static Map<RGB, Color> fColorTable = new HashMap<>(10);
+	private static final Map<RGB, Color> fColorTable = new HashMap<>(10);
 
 	/**
 	 * Dispose.
@@ -58,5 +58,9 @@ public class ColorManager {
 	
 	public static Color getColor(final org.eclipse.fordiac.ide.model.libraryElement.Color color) {		
 		return getColor(new RGB(color.getRed(), color.getGreen(), color.getBlue()));		 
+	}
+	
+	private ColorManager() {
+		//class should not be created
 	}
 }

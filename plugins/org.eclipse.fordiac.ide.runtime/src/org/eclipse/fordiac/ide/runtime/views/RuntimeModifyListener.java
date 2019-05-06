@@ -30,8 +30,8 @@ import org.eclipse.swt.events.ModifyListener;
  */
 public class RuntimeModifyListener implements ModifyListener {
 
-	protected IRuntimeLauncher launcher;
-	protected String name;
+	private IRuntimeLauncher launcher;
+	private String name;
 	
 	/**
 	 * Instantiates a new runtime modify listener.
@@ -49,6 +49,14 @@ public class RuntimeModifyListener implements ModifyListener {
 	 */
 	@Override
 	public void modifyText(ModifyEvent e) {		
+	}
+	
+	public IRuntimeLauncher getLauncher() {
+		return launcher;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 }

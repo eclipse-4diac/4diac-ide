@@ -22,16 +22,23 @@ import org.eclipse.fordiac.ide.util.comm.exceptions.CommException;
 
 public abstract class IIecNetCommRcv implements IIecReceivable {
 
-	protected ChannelManager m_oManager;
-	protected List<IEC_ANY> m_loReceiveData;
+	private ChannelManager m_oManager;
+	private List<IEC_ANY> m_loReceiveData;
 
-	protected String m_sID;
+	private String id;
 	
 	public IIecNetCommRcv() {
 		m_oManager = ChannelManager.getInstance();
-		m_loReceiveData=new ArrayList<IEC_ANY>();
+		m_loReceiveData=new ArrayList<>();
 	}
-
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public String getId() {
+		return id;
+	}
 	
 	protected boolean initialize(String sID, int nChannelType) {
 		try {
@@ -44,9 +51,9 @@ public abstract class IIecNetCommRcv implements IIecReceivable {
 	}
 
 	@Override
-	public boolean deInitialize(String pa_sID) {
+	public boolean deInitialize(String id) {
 		try {
-			m_oManager.deregister(pa_sID);
+			m_oManager.deregister(id);
 		} catch (CommException e) {
 			//deregistration failed
 			return false;
@@ -82,9 +89,9 @@ public abstract class IIecNetCommRcv implements IIecReceivable {
 		}
 
 	@Override
-	public void setMyReceiveData(List<IEC_ANY> pa_loReceiveData) {
-		this.m_loReceiveData = pa_loReceiveData;
-		System.out.println(pa_loReceiveData.toString());
+	public void setMyReceiveData(List<IEC_ANY> receiveData) {
+		this.m_loReceiveData = receiveData;
+		System.out.println(receiveData.toString());
 	}
 
 }

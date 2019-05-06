@@ -26,8 +26,8 @@ import org.eclipse.swt.SWT;
  */
 public class AdvancedLineBorder extends LineBorder {
 
-	protected int side = PositionConstants.NONE;
-	protected int style = SWT.LINE_SOLID;
+	private int side = PositionConstants.NONE;
+	private int style = SWT.LINE_SOLID;
 	
 	private int alpha = 255;
 

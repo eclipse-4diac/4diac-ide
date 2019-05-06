@@ -27,8 +27,8 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 	
 	private final IDeviceManagementCommunicationHandler commHandler;
 	private final Device device;
-	private Set<String> fbTypes = null;
-	protected Set<String> adapterTypes = null;
+	private Set<String> fbTypes = Collections.emptySet();
+	private Set<String> adapterTypes = Collections.emptySet();
 	
 	private final List<IDeploymentListener> listeners = new ArrayList<>();
 	
@@ -106,9 +106,9 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 		adapterTypes = (null != types) ? types : Collections.emptySet();
 	}
 	
-	protected void resetTypes() {
-		fbTypes = null;
-		adapterTypes = null;
+	protected final void resetTypes() {
+		fbTypes = Collections.emptySet();
+		adapterTypes = Collections.emptySet();
 	}
 	
 	/** create a device managment communication handler suitable for the given device

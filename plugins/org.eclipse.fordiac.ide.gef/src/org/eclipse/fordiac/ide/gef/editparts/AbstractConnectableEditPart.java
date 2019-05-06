@@ -21,7 +21,7 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public abstract class AbstractConnectableEditPart extends AbstractGraphicalEditPart {
 
-	boolean connectable = false;
+	private boolean connectable = false;
 
 	public boolean isConnectable() {
 		return connectable;
@@ -31,7 +31,7 @@ public abstract class AbstractConnectableEditPart extends AbstractGraphicalEditP
 		this.connectable = connectable;
 	}
 
-	protected ConnectionMovementHighlightEditPolicy cmPolicy;
+	private ConnectionMovementHighlightEditPolicy cmPolicy;
 
 	@Override
 	protected void createEditPolicies() {

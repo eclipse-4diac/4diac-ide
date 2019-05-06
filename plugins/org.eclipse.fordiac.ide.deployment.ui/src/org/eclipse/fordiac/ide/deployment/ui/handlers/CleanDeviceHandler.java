@@ -25,7 +25,7 @@ public class CleanDeviceHandler extends AbstractDeviceDeploymentCommand {
 
 	@Override
 	protected void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
-		for (Resource res : device.getResource()) {
+		for (Resource res : getDevice().getResource()) {
 			if (!res.isDeviceTypeResource()) {
 				executor.deleteResource(res.getName());
 			}

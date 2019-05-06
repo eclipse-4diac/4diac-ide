@@ -25,8 +25,8 @@ import org.eclipse.gef.ConnectionEditPart;
 
 public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand{
 
-	Connection conn = null;
-	Resource res = null;
+	private Connection conn = null;
+	private Resource res = null;
 	
 	@Override
 	protected boolean prepareParametersToExecute(Object element) {
@@ -36,8 +36,8 @@ public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand{
 			if (null != resCon){
 				res = (Resource) resCon.getFBNetwork().eContainer();
 				if (null != res){
-					device = res.getDevice();
-					return (null != device);
+					setDevice(res.getDevice());
+					return (null != getDevice());
 				}
 			}
 		}

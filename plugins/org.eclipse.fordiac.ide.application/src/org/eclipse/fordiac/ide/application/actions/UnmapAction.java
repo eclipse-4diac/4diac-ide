@@ -105,7 +105,11 @@ public class UnmapAction extends SelectionAction implements
 	}
 
 	/** The selected f bs. */
-	protected final List<FBNetworkElement> selectedNetworkElements = new ArrayList<>();
+	private final List<FBNetworkElement> selectedNetworkElements = new ArrayList<>();
+	
+	public List<FBNetworkElement> getSelectedNetworkElements() {
+		return selectedNetworkElements;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -122,7 +126,7 @@ public class UnmapAction extends SelectionAction implements
 				checkSelectedModelElement(ep.getModel());
 			}
 		}
-		return (selectedNetworkElements.size() > 0);
+		return (!selectedNetworkElements.isEmpty());
 	}
 
 	protected void checkSelectedModelElement(FBNetworkElement model) {

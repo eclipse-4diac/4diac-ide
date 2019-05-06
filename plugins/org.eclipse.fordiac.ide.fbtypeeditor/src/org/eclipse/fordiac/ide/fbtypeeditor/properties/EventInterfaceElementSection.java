@@ -51,7 +51,7 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
-		createEventSection(rightComposite);
+		createEventSection(getRightComposite());
 	}
 	
 	private void createEventSection(Composite parent) {

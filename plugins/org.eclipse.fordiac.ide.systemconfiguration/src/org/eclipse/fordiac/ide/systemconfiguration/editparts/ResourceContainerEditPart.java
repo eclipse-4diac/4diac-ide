@@ -25,7 +25,7 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public class ResourceContainerEditPart extends AbstractGraphicalEditPart {
 
-	EContentAdapter contentAdapter = new EContentAdapter() {
+	private EContentAdapter contentAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);

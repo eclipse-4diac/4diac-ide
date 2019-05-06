@@ -26,7 +26,7 @@ public class FBFigure extends AbstractFBNetworkElementFigure {
 
 	@Override
 	protected boolean isResoruceTypeFBNElement() {
-		return ((FB)model).isResourceTypeFB();
+		return ((FB)getModel()).isResourceTypeFB();
 	}
 
 }

@@ -323,20 +323,17 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	}
 
 	@Override
-	public DirectEditManager getManager() {
-		if (manager == null) {
-			Label l = getNameLabel();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
-					new IdentifierVerifyListener()) {
-				@Override
-				protected void bringDown() {
-					if (getEditPart() instanceof InterfaceEditPart) {
-						((InterfaceEditPart) getEditPart()).refreshName();
-					}
-					super.bringDown();
+	protected DirectEditManager createDirectEditManager() {		  
+		Label l = getNameLabel();
+		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
+				new IdentifierVerifyListener()) {
+			@Override
+			protected void bringDown() {
+				if (getEditPart() instanceof InterfaceEditPart) {
+					((InterfaceEditPart) getEditPart()).refreshName();
 				}
-			}; // ensures that interface elements are only valid identifiers
-		}
-		return manager;
+				super.bringDown();
+			}
+		}; // ensures that interface elements are only valid identifiers
 	}
 }

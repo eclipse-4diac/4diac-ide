@@ -44,8 +44,8 @@ public class TestEventEditPart extends TestEditPart implements
 
 	@Override
 	protected void updatePos() {
-		if(null != parentPart){
-			Rectangle bounds = parentPart.getFigure().getBounds();
+		if(null != getParentPart()){
+			Rectangle bounds = getParentPart().getFigure().getBounds();
 			int x = 0;
 			if (isInput()) {
 	

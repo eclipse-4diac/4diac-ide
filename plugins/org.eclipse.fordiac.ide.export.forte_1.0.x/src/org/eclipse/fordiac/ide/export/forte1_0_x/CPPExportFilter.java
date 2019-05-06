@@ -47,7 +47,7 @@ import org.w3c.dom.NodeList;
  */
 public abstract class CPPExportFilter implements IExportFilter {
 
-	protected Document document;
+	private Document document;
 
 	protected Element docel;
 
@@ -59,7 +59,7 @@ public abstract class CPPExportFilter implements IExportFilter {
 
 	protected String name;
 
-	protected Map<String, VarDefinition> vars = new HashMap<>();
+	private Map<String, VarDefinition> vars = new HashMap<>();
 
 	protected int dataInCount;
 
@@ -94,11 +94,16 @@ public abstract class CPPExportFilter implements IExportFilter {
 	protected List<String> forteEmitterInfos = new ArrayList<>();
 
 	protected LibraryElement libraryType;
+	
+	public Map<String, VarDefinition> getVars() {
+		return vars;
+	}
+
 
 	/**
 	 * The Class VarDefinition.
 	 */
-	public class VarDefinition {
+	public static class VarDefinition {
 
 		/** The name. */
 		private String name;
@@ -187,7 +192,7 @@ public abstract class CPPExportFilter implements IExportFilter {
 
 	}
 
-	protected class FBDefinition {
+	protected static class FBDefinition {
 		private String name;
 
 		private String type;

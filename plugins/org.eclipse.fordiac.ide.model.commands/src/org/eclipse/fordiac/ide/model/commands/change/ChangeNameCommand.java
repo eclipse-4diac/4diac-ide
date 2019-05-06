@@ -21,8 +21,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeNameCommand extends Command {
-	protected INamedElement element;
-	protected String name;
+	private INamedElement element;
+	private String name;
 	private String oldName;
 	private FBNetworkElement fbNetworkElement;
 	private AdapterDeclaration adapterDeclaration;

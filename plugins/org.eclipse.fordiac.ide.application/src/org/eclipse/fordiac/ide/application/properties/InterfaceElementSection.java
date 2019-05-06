@@ -58,7 +58,7 @@ public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.propert
 		connectionsTree.setContentProvider(new ConnectionContentProvider());
 		connectionsTree.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
 		connectionsTree.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
-		new AdapterFactoryTreeEditor(connectionsTree.getTree(), adapterFactory);
+		new AdapterFactoryTreeEditor(connectionsTree.getTree(), getAdapterFactory());
 				
 		delConnection = getWidgetFactory().createButton(group, "", SWT.PUSH); //$NON-NLS-1$
 		delConnection.setLayoutData(new  GridData(SWT.RIGHT, SWT.BOTTOM, false, true));

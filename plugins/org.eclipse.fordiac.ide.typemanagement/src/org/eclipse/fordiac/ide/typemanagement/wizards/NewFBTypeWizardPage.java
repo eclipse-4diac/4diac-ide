@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -53,10 +54,10 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private boolean openType = true;
 	private TableViewer templateTable;
 	
-	private class TemplateInfo{
-		File  templateFile;
-		String templateName;
-		String templateDescription;
+	private static class TemplateInfo{
+		private File  templateFile;
+		private String templateName;
+		private String templateDescription;
 		
 		public TemplateInfo(File templateFile, String templateName, String templateDescription) {
 			this.templateFile = templateFile;
@@ -68,7 +69,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private TemplateInfo[] templateList;
 
 	
-	private class TypeTemplatesLabelProvider extends LabelProvider implements ITableLabelProvider{
+	private static class TypeTemplatesLabelProvider extends LabelProvider implements ITableLabelProvider{
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -204,7 +205,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	    templateTable.addSelectionChangedListener(ev -> handleEvent(null));	
 	}
 
-	private void loadTypeTemplates() {
+	private final void loadTypeTemplates() {
 		String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
 		File templateFolder = new File(templateFolderPath + File.separatorChar + "template");
 		FileFilter ff = createTemplatesFileFilter();
@@ -242,7 +243,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			description = scanner.findWithinHorizon(COMMENT_PATTERN, 0); 
 			description = description.substring(9, description.length() - 1);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			Activator.getDefault().logError("Could not find template files", e);
 		} 		
 		return new TemplateInfo(f, name, description);
 	}
@@ -272,7 +273,8 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private Button createOpenTypeGroup(Composite parent) {
 		openTypeCheckbox = new Button(parent, SWT.CHECK);
         openTypeCheckbox.setText("Open type for editing when done");
-        openTypeCheckbox.setSelection(true);setPageComplete(validatePage());
+        openTypeCheckbox.setSelection(true);
+        setPageComplete(validatePage());
         openTypeCheckbox.addListener( SWT.Selection, ev -> openType = openTypeCheckbox.getSelection() );
         return openTypeCheckbox;
 	}

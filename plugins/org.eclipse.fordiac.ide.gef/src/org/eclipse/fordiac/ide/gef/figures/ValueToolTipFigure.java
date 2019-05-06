@@ -32,7 +32,7 @@ public class ValueToolTipFigure extends ToolTipFigure {
 		super(element);
 		Label l = new Label();
 		l.setText(value.getValue());
-		line.add(l);
+		getLine().add(l);
 	}
 
 }

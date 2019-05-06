@@ -87,7 +87,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 			@Override
 			public void buildContextMenu(IMenuManager menu) {
 				super.buildContextMenu(menu);
-				IAction action = registry.getAction(ActionFactory.DELETE.getId());
+				IAction action = getRegistry().getAction(ActionFactory.DELETE.getId());
 				menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 			}
 		};

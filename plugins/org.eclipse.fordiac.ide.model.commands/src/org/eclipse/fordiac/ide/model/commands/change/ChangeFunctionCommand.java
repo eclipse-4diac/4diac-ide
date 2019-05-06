@@ -38,7 +38,7 @@ public class ChangeFunctionCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void execute() {
-		oldFunction = identification.getFunction();
+		oldFunction = getIdentification().getFunction();
 		redo();
 	}
 
@@ -49,7 +49,7 @@ public class ChangeFunctionCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void undo() {
-		identification.setFunction(oldFunction);
+		getIdentification().setFunction(oldFunction);
 	}
 
 	/*
@@ -59,7 +59,7 @@ public class ChangeFunctionCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void redo() {
-		identification.setFunction(newFunction);
+		getIdentification().setFunction(newFunction);
 	}
 
 }

@@ -35,17 +35,17 @@ public class DataConnectionCreateCommand extends AbstractConnectionCreateCommand
 	
 	@Override
 	public boolean canExecute() {
-		if (source == null || destination == null) {
+		if (getSource() == null || getDestination() == null) {
 			return false;
 		}
-		if (!(source instanceof VarDeclaration)) {
+		if (!(getSource() instanceof VarDeclaration)) {
 			return false;
 		}
-		if (!(destination instanceof VarDeclaration)) {
+		if (!(getDestination() instanceof VarDeclaration)) {
 			return false;
 		}
 
-		return LinkConstraints.canCreateDataConnection((VarDeclaration) source, (VarDeclaration) destination);
+		return LinkConstraints.canCreateDataConnection((VarDeclaration) getSource(), (VarDeclaration) getDestination());
 	}
 
 	@Override

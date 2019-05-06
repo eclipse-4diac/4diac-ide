@@ -46,9 +46,9 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class PrimitiveSection extends AbstractServiceSection {
 
-	protected Text eventText;	
-	protected Text parametersText;
-	protected Combo serviceInterfaceCombo;
+	private Text eventText;	
+	private Text parametersText;
+	private Combo serviceInterfaceCombo;
 	private Button buttonNone;
 	private Button buttonTrue;
 	private Button buttonFalse;
@@ -59,9 +59,9 @@ public class PrimitiveSection extends AbstractServiceSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
-		createEventSection(leftComposite);
-		createPrimitiveSection(leftComposite);
-		createQISection(rightComposite);
+		createEventSection(getLeftComposite());
+		createPrimitiveSection(getLeftComposite());
+		createQISection(getRightComposite());
 	}
 
 	protected void createEventSection(Composite parent) {

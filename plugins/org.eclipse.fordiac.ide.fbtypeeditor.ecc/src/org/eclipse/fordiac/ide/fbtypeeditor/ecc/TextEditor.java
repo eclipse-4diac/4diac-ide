@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Composite;
  */
 public class TextEditor extends SourceViewer implements IAlgorithmEditor {
 
-	Document document = new Document();
+	private Document document = new Document();
 	
 	/**
 	 * Instantiates a new text editor.

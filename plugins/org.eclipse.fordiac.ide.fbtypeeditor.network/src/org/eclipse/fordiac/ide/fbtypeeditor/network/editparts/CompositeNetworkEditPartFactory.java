@@ -43,7 +43,7 @@ public class CompositeNetworkEditPartFactory extends ElementEditPartFactory {
 			}
 		}
 		if (modelElement instanceof AdapterFB) {
-			return new AdapterFBEditPart(zoomManager);
+			return new AdapterFBEditPart(getZoomManager());
 		}
 		return super.getPartForElement(context, modelElement);
 	}

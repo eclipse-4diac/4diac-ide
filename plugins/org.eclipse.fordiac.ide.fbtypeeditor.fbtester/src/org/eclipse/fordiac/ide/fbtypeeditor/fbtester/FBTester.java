@@ -122,7 +122,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	private final Map<String, TableColumn> dataColumns = new HashMap<>();
 	private final List<TestData> testDataCollection = new ArrayList<>();
 	
-	EContentAdapter eContentAdapter = new EContentAdapter() {
+	private EContentAdapter eContentAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
@@ -432,7 +432,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 			public void buildContextMenu(IMenuManager menu) {
 				super.buildContextMenu(menu);
 
-				IAction action = registry.getAction(ActionFactory.DELETE.getId());
+				IAction action = getRegistry().getAction(ActionFactory.DELETE.getId());
 				menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 			}
 		};

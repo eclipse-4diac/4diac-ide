@@ -38,7 +38,7 @@ public class ChangeIdentifcationTypeCommand extends ChangeIdentificationCommand 
 	 */
 	@Override
 	public void execute() {
-		oldType = identification.getType();
+		oldType = getIdentification().getType();
 		redo();
 	}
 
@@ -49,7 +49,7 @@ public class ChangeIdentifcationTypeCommand extends ChangeIdentificationCommand 
 	 */
 	@Override
 	public void undo() {
-		identification.setType(oldType);
+		getIdentification().setType(oldType);
 	}
 
 	/*
@@ -59,7 +59,7 @@ public class ChangeIdentifcationTypeCommand extends ChangeIdentificationCommand 
 	 */
 	@Override
 	public void redo() {
-		identification.setType(newType);
+		getIdentification().setType(newType);
 	}
 
 }

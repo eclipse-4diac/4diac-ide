@@ -244,7 +244,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 			this.socket = socket;
 		}
 
-		int i = 0;
+		private int i = 0;
 
 		@Override
 		public void run() {

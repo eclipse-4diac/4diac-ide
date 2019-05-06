@@ -42,8 +42,8 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public class MapToCommand extends Command {
-	protected final FBNetworkElement srcElement;
-	protected final Resource resource;
+	private final FBNetworkElement srcElement;
+	private final Resource resource;
 	private UnmapCommand unmappFromExistingTarget;
 	private FBNetworkElement targetElement;
 	private Mapping mapping = LibraryElementFactory.eINSTANCE.createMapping();

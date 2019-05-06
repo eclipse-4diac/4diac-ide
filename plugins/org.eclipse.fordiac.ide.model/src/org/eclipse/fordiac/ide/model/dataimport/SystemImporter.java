@@ -68,8 +68,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class SystemImporter {
-	Palette palette = null;
-	AutomationSystem system;
+	private Palette palette = null;
+	private AutomationSystem system;
 
 	/**
 	 * This method populates the AutomationSystem with all elements from the system file.
@@ -95,7 +95,7 @@ public class SystemImporter {
 			parseAutomationSystem(rootNode);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			Activator.getDefault().logError("System import error", e);
 		}
 	}
 

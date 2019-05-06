@@ -25,16 +25,20 @@ import org.eclipse.gef.requests.ReconnectRequest;
 import org.eclipse.ui.IEditorPart;
 
 public abstract class AbstractReconnectConnectionCommand extends Command {
-	protected final FBNetwork parent;
-	protected final ReconnectRequest request;
+	private final FBNetwork parent;
+	private final ReconnectRequest request;
 	private IEditorPart editor;
-	protected DeleteConnectionCommand deleteConnectionCmd;
-	protected AbstractConnectionCreateCommand connectionCreateCmd;
+	private DeleteConnectionCommand deleteConnectionCmd;
+	private AbstractConnectionCreateCommand connectionCreateCmd;
 
 	public AbstractReconnectConnectionCommand(String label, final ReconnectRequest request, final FBNetwork parent) {
 		super(label);
 		this.request = request;
 		this.parent = parent;
+	}
+	
+	public ReconnectRequest getRequest() {
+		return request;
 	}
 
 	@Override
@@ -66,7 +70,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
 		Connection con = (Connection) request.getConnectionEditPart().getModel();
 		deleteConnectionCmd = new DeleteConnectionCommand(con);
-		connectionCreateCmd = createConnectionCreateCommand();
+		connectionCreateCmd = createConnectionCreateCommand(parent);
 
 		if (request.getType().equals(RequestConstants.REQ_RECONNECT_TARGET)) {
 			doReconnectTarget();
@@ -103,7 +107,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 		deleteConnectionCmd.undo();
 	}
 	
-	protected abstract AbstractConnectionCreateCommand createConnectionCreateCommand();
+	protected abstract AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent);
 	
 	protected abstract boolean checkSourceAndTarget(IInterfaceElement sourceIE, IInterfaceElement targetIE);	
 }

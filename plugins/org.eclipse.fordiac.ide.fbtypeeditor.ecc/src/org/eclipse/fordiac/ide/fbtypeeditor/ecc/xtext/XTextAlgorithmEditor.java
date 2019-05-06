@@ -22,8 +22,6 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.source.AbstractRulerColumn;
 import org.eclipse.jface.text.source.LineNumberRulerColumn;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xtext.ui.editor.XtextSourceViewer;
@@ -74,9 +72,7 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 		LineNumberRulerColumn lnrc = new LineNumberRulerColumn(){
 			@Override
 			protected String createDisplayString(int line) {
-				//if(line >= prefixeLineCount){
 					line -= prefixeLineCount;					
-				//}				
 				return super.createDisplayString(line);
 			}			
 		};
@@ -88,13 +84,7 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 		getViewer().addVerticalRulerColumn(column); //Place holder for folding, also adds distance between line numbers and alg text
 
 		this.fbType.eAdapters().add(adapter);
-		editor.getViewer().getControl().addDisposeListener(new DisposeListener() {
-			
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				getFBType().eAdapters().remove(adapter);	
-			}
-		});
+		editor.getViewer().getControl().addDisposeListener(e -> getFBType().eAdapters().remove(adapter) );
 		
 		updatePrefix();
 	}
@@ -133,9 +123,9 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 	}
 
 	
-	int prefixeLineCount = 0;
+	private int prefixeLineCount = 0;
 	
-	private void updatePrefix() {
+	private final void updatePrefix() {
 		documentValid = false;
 		embeddedEditorModelAccess.updatePrefix(regeneratePrefix());
 		

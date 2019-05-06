@@ -32,13 +32,13 @@ public class ReconnectAdapterConnectionCommand extends AbstractReconnectConnecti
 	protected boolean checkSourceAndTarget(IInterfaceElement sourceIE, IInterfaceElement targetIE) {
 		if((sourceIE instanceof AdapterDeclaration) && (targetIE instanceof AdapterDeclaration)){
 			return LinkConstraints.canExistAdapterConnection((AdapterDeclaration)sourceIE, (AdapterDeclaration)targetIE,
-					(Connection)request.getConnectionEditPart().getModel());
+					(Connection)getRequest().getConnectionEditPart().getModel());
 		}
 		return false;
 	}
 	
 	@Override
-	protected AbstractConnectionCreateCommand createConnectionCreateCommand() {
+	protected AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent) {
 		return new AdapterConnectionCreateCommand(parent);
 	}
 }

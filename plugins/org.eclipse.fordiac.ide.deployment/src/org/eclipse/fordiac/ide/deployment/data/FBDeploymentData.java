@@ -15,11 +15,19 @@ package org.eclipse.fordiac.ide.deployment.data;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 
 public class FBDeploymentData {
-	public final String prefix;
-	public final FB fb;
+	private final String prefix;
+	private final FB fb;
 	
 	public FBDeploymentData(final String prefix, final FB fb) {
 		this.prefix = prefix;
 		this.fb = fb;
+	}
+	
+	public String getPrefix() {
+		return prefix;
+	}
+	
+	public FB getFb() {
+		return fb;
 	}
 }

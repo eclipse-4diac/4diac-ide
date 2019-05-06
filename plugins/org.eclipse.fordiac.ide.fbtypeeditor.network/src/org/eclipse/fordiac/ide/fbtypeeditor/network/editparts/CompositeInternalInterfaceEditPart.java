@@ -39,7 +39,7 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 		setConnectable(true);
 	}
 
-	protected DirectEditManager manager;
+	private DirectEditManager manager;
 
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
@@ -62,9 +62,7 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof CompositeInternalInterfaceEditPart) {
-					ChangeNameCommand cmd = new ChangeNameCommand(getModel(),
-							(String) request.getCellEditor().getValue());
-					return cmd;
+					return new ChangeNameCommand(getModel(), (String) request.getCellEditor().getValue());
 				}
 				return null;
 			}

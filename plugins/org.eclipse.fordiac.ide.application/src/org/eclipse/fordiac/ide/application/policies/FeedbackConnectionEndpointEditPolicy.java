@@ -25,8 +25,8 @@ public class FeedbackConnectionEndpointEditPolicy extends
 		ConnectionEndpointEditPolicy {
 
 	
-	int selectedLineWidth = 3;
-	int unselectedLineWidth = 0;
+	private int selectedLineWidth = 3;
+	private int unselectedLineWidth = 0;
 	
 	
 	

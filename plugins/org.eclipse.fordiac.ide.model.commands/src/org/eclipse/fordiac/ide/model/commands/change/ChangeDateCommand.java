@@ -20,7 +20,7 @@ import org.eclipse.gef.commands.Command;
  */
 public class ChangeDateCommand extends Command {
 	
-	VersionInfo versionInfo;
+	private VersionInfo versionInfo;
 	
 	/** The new ApplicationDomain value. */
 	private String newDate;
@@ -28,9 +28,9 @@ public class ChangeDateCommand extends Command {
 	/** The old ApplicationDomain value. */
 	private String oldDate;
 
-	public ChangeDateCommand(final VersionInfo VersionInfo, final String newDate) {
+	public ChangeDateCommand(final VersionInfo versionInfo, final String newDate) {
 		super();
-		this.versionInfo = VersionInfo;
+		this.versionInfo = versionInfo;
 		this.newDate = newDate;
 	}
 

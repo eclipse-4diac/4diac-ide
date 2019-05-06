@@ -36,8 +36,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	private MapToCommand mappSubappCmd = null;  //can not be in the compound command as it needs to be performed when subapp interface is finished
 
 	public NewSubAppCommand(FBNetwork fbNetwork, List<?> selection, int x, int y) {
-		super(fbNetwork, x, y);
-		element = LibraryElementFactory.eINSTANCE.createSubApp();
+		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
 		getSubApp().setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
 		addElements = new AddElementsToSubAppCommand(getSubApp(), selection); 
 		checkMapping(selection);
@@ -111,7 +110,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	private SubApp getSubApp() {
-		return (SubApp)element;
+		return (SubApp)getElement();
 	}
 
 	private void openClosedEditor() {

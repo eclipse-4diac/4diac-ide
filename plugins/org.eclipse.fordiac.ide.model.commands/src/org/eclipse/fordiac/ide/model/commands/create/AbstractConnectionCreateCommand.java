@@ -45,10 +45,10 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	private Connection connection;
 	
 	/** The source view. */
-	protected IInterfaceElement source;
+	private IInterfaceElement source;
 
 	/** The destination view. */
-	protected IInterfaceElement destination;
+	private IInterfaceElement destination;
 	
 	/** flag to indicate if during execution of this command a mirrored connection in the opposite
 	 *  element (e.g., resrouce for app) should be created.
@@ -96,6 +96,10 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	
 	public void setDestination(final IInterfaceElement target) {
 		this.destination = target;
+	}
+	
+	public IInterfaceElement getDestination() {
+		return destination;
 	}
 	
 	@Override

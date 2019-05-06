@@ -20,7 +20,7 @@ import org.eclipse.gef.commands.Command;
  */
 public class ChangeAuthorCommand extends Command {
 	
-	VersionInfo versionInfo;
+	private VersionInfo versionInfo;
 	
 	/** The new ApplicationDomain value. */
 	private String newAuthor;
@@ -28,9 +28,9 @@ public class ChangeAuthorCommand extends Command {
 	/** The old ApplicationDomain value. */
 	private String oldAuthor;
 
-	public ChangeAuthorCommand(final VersionInfo VersionInfo, final String newAuthor) {
+	public ChangeAuthorCommand(final VersionInfo versionInfo, final String newAuthor) {
 		super();
-		this.versionInfo = VersionInfo;
+		this.versionInfo = versionInfo;
 		this.newAuthor = newAuthor;
 	}
 

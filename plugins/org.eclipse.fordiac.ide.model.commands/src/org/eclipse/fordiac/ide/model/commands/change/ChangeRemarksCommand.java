@@ -20,7 +20,7 @@ import org.eclipse.gef.commands.Command;
  */
 public class ChangeRemarksCommand extends Command {
 	
-	VersionInfo versionInfo;
+	private VersionInfo versionInfo;
 	
 	/** The new ApplicationDomain value. */
 	private String newRemarks;
@@ -28,9 +28,9 @@ public class ChangeRemarksCommand extends Command {
 	/** The old ApplicationDomain value. */
 	private String oldRemarks;
 
-	public ChangeRemarksCommand(final VersionInfo VersionInfo, final String newRemarks) {
+	public ChangeRemarksCommand(final VersionInfo versionInfo, final String newRemarks) {
 		super();
-		this.versionInfo = VersionInfo;
+		this.versionInfo = versionInfo;
 		this.newRemarks = newRemarks;
 	}
 

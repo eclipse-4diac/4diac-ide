@@ -200,19 +200,10 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		super.performRequest(request);
 	}
 
-	/**
-	 * Gets the manager.
-	 * 
-	 * @return the manager
-	 */
 	@Override
-	public DirectEditManager getManager() {
-		if (manager == null) {
-			manager = new ComboDirectEditManager(this, ComboBoxCellEditor.class,
+	protected DirectEditManager createDirectEditManager() {
+		return new ComboDirectEditManager(this, ComboBoxCellEditor.class,
 					new ComboCellEditorLocator(getNameLabel()), getNameLabel());
-		}
-
-		return manager;
 	}
 
 	/**

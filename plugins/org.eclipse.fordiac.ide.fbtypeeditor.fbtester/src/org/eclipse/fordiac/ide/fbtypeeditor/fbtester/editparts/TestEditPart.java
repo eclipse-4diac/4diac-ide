@@ -50,7 +50,11 @@ public class TestEditPart extends AbstractViewEditPart implements
 		SpecificLayerEditPart {
 
 	/** The parent part. */
-	protected org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart parentPart;
+	private org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart parentPart;
+	
+	public org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart getParentPart() {
+		return parentPart;
+	}
 
 	@SuppressWarnings("rawtypes")
 	@Override

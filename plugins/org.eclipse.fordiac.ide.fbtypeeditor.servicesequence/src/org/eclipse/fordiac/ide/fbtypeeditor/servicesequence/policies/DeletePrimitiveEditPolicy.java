@@ -14,8 +14,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteInputPrimitiveCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteOutputPrimitiveCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
@@ -29,15 +29,11 @@ public class DeletePrimitiveEditPolicy extends ComponentEditPolicy {
 
 	@Override
 	protected Command getDeleteCommand(GroupRequest request) {
-		if (getHost() instanceof InputPrimitiveEditPart) {
-			DeleteInputPrimitiveCommand c = new DeleteInputPrimitiveCommand(
-					((InputPrimitiveEditPart) getHost()).getCastedModel());
-			return c;
+		if (getHost().getModel() instanceof InputPrimitive) {
+			return new DeleteInputPrimitiveCommand((InputPrimitive) getHost().getModel());
 		}
-		if (getHost() instanceof OutputPrimitiveEditPart) {
-			DeleteOutputPrimitiveCommand c = new DeleteOutputPrimitiveCommand(
-					((OutputPrimitiveEditPart) getHost()).getCastedModel());
-			return c;
+		if (getHost().getModel() instanceof OutputPrimitive) {
+			return new DeleteOutputPrimitiveCommand((OutputPrimitive) getHost().getModel());
 		}
 		return null;
 	}

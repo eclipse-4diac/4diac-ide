@@ -31,7 +31,7 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart{
 	private ConnectingConnection connectingConnection;
 	
 	InputPrimitiveEditPart(){
-		connection = new PrimitiveConnection(true);	
+		super(new PrimitiveConnection(true));	
 		connectingConnection = new ConnectingConnection();
 	}
 	
@@ -51,14 +51,14 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart{
 		if (view != null) {
 			temp.add(connectingConnection);
 		}
-		temp.add(connection);
+		temp.add(getPrimitiveConnection());
 		return temp;
 	}
 
 	@Override
 	public List<Object> getModelTargetConnections() {
 		ArrayList<Object> temp = new ArrayList<>();
-		temp.add(connection);
+		temp.add(getPrimitiveConnection());
 		return temp;
 	}
 

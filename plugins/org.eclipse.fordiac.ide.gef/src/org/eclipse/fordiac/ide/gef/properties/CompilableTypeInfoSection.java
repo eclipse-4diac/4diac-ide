@@ -85,7 +85,7 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createCompilerInfoGroup(rightComposite);
+		createCompilerInfoGroup(getRightComposite());
 	}
 
 	private void createCompilerInfoGroup(Composite parent) {	

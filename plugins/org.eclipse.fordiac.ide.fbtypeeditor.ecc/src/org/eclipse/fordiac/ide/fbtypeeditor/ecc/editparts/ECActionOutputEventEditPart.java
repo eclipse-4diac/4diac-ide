@@ -170,12 +170,9 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 	}
 
 	@Override
-	public DirectEditManager getManager() {
-		if (manager == null) {
-			manager = new ComboDirectEditManager(this, ComboBoxCellEditor.class,
+	protected DirectEditManager createDirectEditManager() {
+		return new ComboDirectEditManager(this, ComboBoxCellEditor.class,
 					new ComboCellEditorLocator(getNameLabel()), getNameLabel());
-		}
-		return manager;
 	}
 
 	@Override

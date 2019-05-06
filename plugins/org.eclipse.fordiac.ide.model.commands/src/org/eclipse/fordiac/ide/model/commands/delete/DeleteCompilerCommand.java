@@ -22,7 +22,7 @@ import org.eclipse.gef.commands.Command;
 public class DeleteCompilerCommand extends Command {
 	
 	/** The identification of the type. */
-	protected CompilerInfo compilerInfo;
+	private CompilerInfo compilerInfo;
 	
 	/** The new Compiler value. */
 	private Compiler compiler;

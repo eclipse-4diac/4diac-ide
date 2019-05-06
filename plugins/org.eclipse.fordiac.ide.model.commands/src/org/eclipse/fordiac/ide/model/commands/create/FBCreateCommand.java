@@ -16,26 +16,38 @@ import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
-	protected FBTypePaletteEntry paletteEntry;	
+	private FBTypePaletteEntry paletteEntry;	
 
 	public FBCreateCommand(final FBTypePaletteEntry paletteEntry, final FBNetwork fbNetwork, int x, int y) {
-		super(fbNetwork, x, y);
+		super(fbNetwork, LibraryElementFactory.eINSTANCE.createFB(), x, y);
 		this.paletteEntry = paletteEntry;
 		setLabel(Messages.FBCreateCommand_LABLE_CreateFunctionBlock);
-		element = LibraryElementFactory.eINSTANCE.createFB();
+		getFB().setPaletteEntry(paletteEntry);
+	}
+	
+	//constructor to reuse this command for adapter creation
+	protected FBCreateCommand(final FBNetwork fbNetwork, FBNetworkElement adapter, int x, int y) {
+		super(fbNetwork, adapter, x, y);
+		this.paletteEntry = null;
+		setLabel(Messages.FBCreateCommand_LABLE_CreateFunctionBlock);
 		getFB().setPaletteEntry(paletteEntry);
 	}
 
 	public FB getFB() {
-		return (FB)element;
+		return (FB)getElement();
 	}
 
 	public FBTypePaletteEntry getPaletteEntry() {
 		return paletteEntry;
+	}
+	
+	public void setPaletteEntry(FBTypePaletteEntry paletteEntry) {
+		this.paletteEntry = paletteEntry;
 	}
 	
 	@Override

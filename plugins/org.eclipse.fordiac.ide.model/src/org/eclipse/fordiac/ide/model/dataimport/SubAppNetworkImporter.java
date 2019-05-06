@@ -74,12 +74,12 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		
 		configureParameters(subApp.getInterface(), node.getChildNodes());
 		
-		fbNetwork.getNetworkElements().add(subApp);
+		getFbNetwork().getNetworkElements().add(subApp);
 		fbNetworkElementMap.put(subApp.getName(), subApp);
 	}
 	
 	private void configureSubAppInterface(SubApp subApp, Node node, String typeName) throws TypeImportException {
-		PaletteEntry entry = palette.getTypeEntry(typeName);
+		PaletteEntry entry = getPalette().getTypeEntry(typeName);
 		
 		if(entry instanceof SubApplicationTypePaletteEntry){
 			subApp.setPaletteEntry(entry);
@@ -95,11 +95,11 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			switch (n.getNodeName()) {			
 			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT:
 				SubAppTImporter interfaceImporter = new SubAppTImporter();				
-				interfaceImporter.setPalette(palette);
+				interfaceImporter.setPalette(getPalette());
 				subApp.setInterface(interfaceImporter.parseInterfaceList(n));				
 				break;
 			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
-				subApp.setSubAppNetwork(new SubAppNetworkImporter(palette, subApp.getInterface()).parseFBNetwork(n));				
+				subApp.setSubAppNetwork(new SubAppNetworkImporter(getPalette(), subApp.getInterface()).parseFBNetwork(n));				
 				break;
 			default:
 				//TODO consider if more elements of a subapp should be parseable				

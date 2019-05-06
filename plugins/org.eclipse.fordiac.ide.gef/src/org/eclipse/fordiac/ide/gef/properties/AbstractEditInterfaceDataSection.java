@@ -17,15 +17,18 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.jface.viewers.IContentProvider;
 
 public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection {
+	
 	@Override
-	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);
-		inputsViewer.setContentProvider(new InterfaceContentProvider(true, InterfaceContentProviderType.DATA));
-		outputsViewer.setContentProvider(new InterfaceContentProvider(false, InterfaceContentProviderType.DATA));
+	protected IContentProvider getOutputsContentProvider() {
+		return new InterfaceContentProvider(true, InterfaceContentProviderType.DATA);
+	}
+	
+	@Override
+	protected IContentProvider getInputsContentProvider() {
+		return new InterfaceContentProvider(false, InterfaceContentProviderType.DATA);
 	}
 
 	@Override

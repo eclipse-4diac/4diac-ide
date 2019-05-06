@@ -77,10 +77,10 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 			}
 		}
 		if (modelElement instanceof FB) {
-			return new FBEditPartRO(zoomManager);
+			return new FBEditPartRO(getZoomManager());
 		}
 		if (modelElement instanceof AdapterFB) {
-			return new AdapterFBEditPart(zoomManager) {
+			return new AdapterFBEditPart(getZoomManager()) {
 				@Override
 				protected void createEditPolicies() {
 					// Highlight In and Outconnections of the selected fb, allow alignment of FBs

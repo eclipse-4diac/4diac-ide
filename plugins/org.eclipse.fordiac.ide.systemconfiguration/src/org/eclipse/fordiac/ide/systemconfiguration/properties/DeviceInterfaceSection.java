@@ -65,7 +65,7 @@ public class DeviceInterfaceSection extends AbstractDeviceInterfaceSection {
 		});
 	}
 	
-	private static String[] getAvailableProfileNames() {
+	protected static String[] getAvailableProfileNames() {
 		if (null == profileNames) {
 			List<String> newProfileNames = DeviceManagementInteractorFactory.INSTANCE.getAvailableProfileNames();
 			profileNames = newProfileNames.toArray(new String[newProfileNames.size()]);

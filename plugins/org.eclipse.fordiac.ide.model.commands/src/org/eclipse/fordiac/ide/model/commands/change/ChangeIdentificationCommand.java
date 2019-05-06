@@ -23,7 +23,11 @@ import org.eclipse.gef.commands.Command;
 public abstract class ChangeIdentificationCommand extends Command {
 
 	/** The identification of the type. */
-	protected Identification identification;
+	private final Identification identification;
+	
+	protected Identification getIdentification() {
+		return identification;
+	}
 
 	/**
 	 * Instantiates a new change comment command.
@@ -34,8 +38,7 @@ public abstract class ChangeIdentificationCommand extends Command {
 	public ChangeIdentificationCommand(LibraryElement type) {
 		super();
 		if (null == type.getIdentification()) {
-			type.setIdentification(LibraryElementFactory.eINSTANCE
-					.createIdentification());
+			type.setIdentification(LibraryElementFactory.eINSTANCE.createIdentification());
 		}
 		identification = type.getIdentification();
 	}

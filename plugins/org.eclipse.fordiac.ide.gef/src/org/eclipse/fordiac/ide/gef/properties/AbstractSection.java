@@ -40,10 +40,10 @@ public abstract class AbstractSection extends AbstractPropertySection {
 	
 	protected Object type;
 	protected CommandStack commandStack;
-	protected Composite rightComposite;
-	protected Composite leftComposite;
+	private Composite rightComposite;
+	private Composite leftComposite;
 	protected boolean createSuperControls = true;
-	protected ComposedAdapterFactory adapterFactory;
+	private ComposedAdapterFactory adapterFactory;
 	
 	//block updates triggered by any command
 	protected boolean blockRefresh = false;
@@ -75,13 +75,11 @@ public abstract class AbstractSection extends AbstractPropertySection {
 		@Override
 		public void notifyChanged(Notification notification) {
 			if(null != getType() && getType().eAdapters().contains(contentAdapter) && !blockRefresh){	
-				leftComposite.getDisplay().asyncExec(new Runnable() {					
-					@Override
-					public void run() {
-						if(!leftComposite.isDisposed())
-						refresh();
-					}
-				});
+				leftComposite.getDisplay().asyncExec(() -> {
+						if(!leftComposite.isDisposed()) {
+							refresh();
+						}
+					});
 			}
 		}
 	};
@@ -150,5 +148,21 @@ public abstract class AbstractSection extends AbstractPropertySection {
 			adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		}		
 		return adapterFactory;	
+	}
+	
+	protected Composite getLeftComposite() {
+		return leftComposite;
+	}
+	
+	protected void setLeftComposite(Composite leftComposite) {
+		this.leftComposite = leftComposite;
+	}
+	
+	protected Composite getRightComposite() {
+		return rightComposite;
+	}
+	
+	protected void setRightComposite(Composite rightComposite) {
+		this.rightComposite = rightComposite;
 	}
 }

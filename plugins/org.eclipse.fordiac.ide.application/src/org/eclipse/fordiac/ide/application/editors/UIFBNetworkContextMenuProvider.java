@@ -69,9 +69,9 @@ import org.eclipse.ui.actions.ActionFactory;
  */
 public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvider {
 
-	Palette palette;
-	DiagramEditorWithFlyoutPalette editor;
-	Point pt;
+	private Palette palette;
+	private DiagramEditorWithFlyoutPalette editor;
+	private Point pt;
 
 	/**
 	 * Instantiates a new uIFB network context menu provider.
@@ -129,27 +129,27 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		super.buildContextMenu(menu);
 		IAction action;
 
-		action = registry.getAction(ActionFactory.SELECT_ALL.getId());
+		action = getRegistry().getAction(ActionFactory.SELECT_ALL.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
-		action = registry.getAction(ActionFactory.DELETE.getId());
+		action = getRegistry().getAction(ActionFactory.DELETE.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
-		action = registry.getAction(ActionFactory.COPY.getId());
+		action = getRegistry().getAction(ActionFactory.COPY.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
-		action = registry.getAction(ActionFactory.PASTE.getId());
+		action = getRegistry().getAction(ActionFactory.PASTE.getId());
 		if(action instanceof PasteEditPartsAction){
 			((PasteEditPartsAction)action).setPastRefPosition(pt);
 		}
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
-		action = registry.getAction(GEFActionConstants.DIRECT_EDIT);
+		action = getRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
 		if (action != null && action.isEnabled()) {
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 		}
 
-		action = registry.getAction(SaveAsSubApplicationTypeAction.ID);
+		action = getRegistry().getAction(SaveAsSubApplicationTypeAction.ID);
 		if ((action != null) && (action.isEnabled())) {
 			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 		}
@@ -159,7 +159,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, new Separator()); 
 				
-		action = registry.getAction(UpdateFBTypeAction.ID);
+		action = getRegistry().getAction(UpdateFBTypeAction.ID);
 		if (action != null && action.isEnabled()) {
 			menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, action);
 		}
@@ -206,11 +206,11 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 				if(entry instanceof FBTypePaletteEntry || entry instanceof SubApplicationTypePaletteEntry){
 					if (useChangeFBType) {
-						action = (Action) registry.getAction(entry.getFile()
+						action = (Action) getRegistry().getAction(entry.getFile()
 								.getFullPath().toString().concat("_") //$NON-NLS-1$
 								.concat(UpdateFBTypeAction.ID));
 					} else {
-						action = (Action) registry.getAction(entry.getFile().getFullPath().toString());
+						action = (Action) getRegistry().getAction(entry.getFile().getFullPath().toString());
 					}
 					if(null == action){
 						if (useChangeFBType) {
@@ -233,7 +233,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 	@SuppressWarnings("unchecked")
 	private UpdateFBTypeAction createChangeFBTypeAction(PaletteEntry entry) {
 		UpdateFBTypeAction action = new UpdateFBTypeAction(editor, entry);
-		registry.registerAction(action);
+		getRegistry().registerAction(action);
 		editor.getSelActions().add(action.getId());
 		action.update();
 		return action;
@@ -257,7 +257,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		}
 		
 		if(null != action) {
-			registry.registerAction(action);
+			getRegistry().registerAction(action);
 			action.updateCreatePosition(pt);			
 		}
 		
@@ -273,12 +273,12 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 			menu.appendToGroup(GEFActionConstants.GROUP_REST, mappingMenuEntry);
 		}
 		
-		action = registry.getAction(UnmapAction.ID);
+		action = getRegistry().getAction(UnmapAction.ID);
 		if (action != null) {
 			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 		}
 		
-		action = registry.getAction(UnmapAllAction.ID);
+		action = getRegistry().getAction(UnmapAllAction.ID);
 		if (action != null) {
 			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 		}

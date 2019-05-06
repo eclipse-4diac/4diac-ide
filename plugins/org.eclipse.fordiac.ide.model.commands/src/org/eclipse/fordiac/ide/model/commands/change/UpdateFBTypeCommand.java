@@ -47,14 +47,15 @@ import org.eclipse.gef.commands.CompoundCommand;
 public class UpdateFBTypeCommand extends Command {
 	
 	//hleper data class for stroing connectiond ata of resoruce connection as the connections are lost during the unmapping process
-	class ConnData{
-		public IInterfaceElement source;
-		public IInterfaceElement dest;
+	private class ConnData{
+		private IInterfaceElement source;
+		private IInterfaceElement dest;
 		
 		public ConnData(IInterfaceElement source, IInterfaceElement dest) {
 			this.source = source;
 			this.dest = dest;
-		}			
+		}		
+		
 	}
 	
 	/** The FBNetworkElement which should be updated*/

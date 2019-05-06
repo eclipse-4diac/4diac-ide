@@ -85,7 +85,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
-		createTypeAndCommentSection(leftComposite);	
+		createTypeAndCommentSection(getLeftComposite());	
 	}
 	
 	private void createTypeAndCommentSection(Composite parent) {

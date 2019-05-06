@@ -24,10 +24,10 @@ public class HideableConnection extends PolylineConnection {
 	
 	public static final int BEND_POINT_BEVEL_SIZE = 5;
 	
-	boolean hidden = false;
-	String label = ""; //$NON-NLS-1$
-	Rectangle moveRect = new Rectangle();
-	org.eclipse.fordiac.ide.model.libraryElement.Connection model;
+	private boolean hidden = false;
+	private String label = ""; //$NON-NLS-1$
+	private Rectangle moveRect = new Rectangle();
+	private org.eclipse.fordiac.ide.model.libraryElement.Connection model;
 	
 	public void setModel(org.eclipse.fordiac.ide.model.libraryElement.Connection newModel){
 		model = newModel;
@@ -68,10 +68,8 @@ public class HideableConnection extends PolylineConnection {
 			g.drawText(label, new Point(getEnd().x - dim.width - 25, getEnd().y-dim.height/2));
 			moveRect.x = getEnd().x - dim.width - 25; 
 			moveRect.y = getEnd().y-dim.height/2; 
-			moveRect.width =5; 
-			moveRect.height =5; 
-			//g.drawOval(moveRect);
-			
+			moveRect.width = 5; 
+			moveRect.height = 5; 			
 		} else {
 			drawBeveledPolyline(g);
 		}

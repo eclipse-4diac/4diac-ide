@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 
 public class ECActionOutputEvent {
-	ECAction action;
+	private ECAction action;
 	
 	public ECAction getAction(){
 		return action;

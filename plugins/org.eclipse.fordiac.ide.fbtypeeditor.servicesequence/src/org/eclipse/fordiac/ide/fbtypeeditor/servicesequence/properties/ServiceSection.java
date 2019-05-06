@@ -83,8 +83,8 @@ public class ServiceSection extends AbstractServiceSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
-		createServiceSection(leftComposite);
-		createSequencesSection(rightComposite);
+		createServiceSection(getLeftComposite());
+		createSequencesSection(getRightComposite());
 	}
 	
 	private void createServiceSection(Composite parent){
@@ -149,7 +149,7 @@ public class ServiceSection extends AbstractServiceSection {
 		sequencesViewer.getTree().setLayoutData(gridData);	
 		sequencesViewer.setContentProvider(new AdapterFactoryContentProvider(getAdapterFactory()));
 		sequencesViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
-		new AdapterFactoryTreeEditor(sequencesViewer.getTree(), adapterFactory);
+		new AdapterFactoryTreeEditor(sequencesViewer.getTree(), getAdapterFactory());
 		sequencesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {

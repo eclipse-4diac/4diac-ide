@@ -41,28 +41,27 @@ public class TCPChannel extends CChannel {
 	/**
 	 * DataInputStream receiving the data from the network stack
 	 */
-	public DataInputStream in;
+	private DataInputStream in;
 
 	/**
 	 * DataOutputStream sending the data to the network stack
 	 */
-	public DataOutputStream out;
+	private DataOutputStream out;
 
 	/**
 	 * maximum packet lenght of UDP packets
 	 */
 	public static final int TCP_PACKET_LENGTH = 1024;
 	private Socket socket;
-	public TCPCommThread commThread;
-	private InetAddress inetAddress;
+	private  TCPCommThread commThread;
 
-	private TCPChannel(int packet_length, String TCP_ID, IIecReceivable receiver)
+	private TCPChannel(int packetLength, String tcpId, IIecReceivable receiver)
 			throws CommException {
 		super();
-		inetAddress = getInetAddress(TCP_ID);
+		InetAddress inetAddress = getInetAddress(tcpId);
 		try {
 			if (!inetAddress.isMulticastAddress()) {
-				socket = new Socket(inetAddress, getPort(TCP_ID));
+				socket = new Socket(inetAddress, getPort(tcpId));
 				in = new DataInputStream(new BufferedInputStream(socket
 						.getInputStream()));
 				out = new DataOutputStream(new BufferedOutputStream(socket
@@ -73,7 +72,8 @@ public class TCPChannel extends CChannel {
 		} catch (IOException e) {
 			throw new CommException("Socket Error");
 		}
-		(commThread = new TCPCommThread(this, receiver)).start();
+		commThread = new TCPCommThread(this, receiver);
+		commThread.start();
 	}
 
 	/**

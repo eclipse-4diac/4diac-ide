@@ -38,7 +38,7 @@ import org.w3c.dom.Element;
 
 public abstract class AbstractTypeExporter extends CommonElementExporter {
 	
-	final FBType type;
+	private final FBType type;
 	
 	AbstractTypeExporter(FBType type) {
 		this.type = type;

@@ -38,7 +38,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
  */
 public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 
-	Figure moveHandle;
+	private Figure moveHandle;
 
 	@SuppressWarnings("rawtypes")
 	@Override

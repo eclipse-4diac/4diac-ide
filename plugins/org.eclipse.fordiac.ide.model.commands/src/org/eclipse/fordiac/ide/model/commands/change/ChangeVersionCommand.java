@@ -20,7 +20,7 @@ import org.eclipse.gef.commands.Command;
  */
 public class ChangeVersionCommand extends Command {
 	
-	VersionInfo versionInfo;
+	private VersionInfo versionInfo;
 	
 	/** The new ApplicationDomain value. */
 	private String newVersion;

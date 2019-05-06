@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.systemconfiguration.editparts.SegmentEditPart;
 public class LinkConnectionRouter extends AbstractRouter {
 	
 	// the link editpart of the link associated with this connection to route
-	LinkEditPart linkEditPart;
+	private LinkEditPart linkEditPart;
 
 	public LinkConnectionRouter(LinkEditPart linkEditPart) {
 		super();
@@ -65,7 +65,6 @@ public class LinkConnectionRouter extends AbstractRouter {
 		
 		points.addPoint(startPoint);
 		if(null != bendPoint){
-			//connection.translateToRelative(bendPoint);
 			points.addPoint(bendPoint);	
 		}
 		points.addPoint(endPoint);

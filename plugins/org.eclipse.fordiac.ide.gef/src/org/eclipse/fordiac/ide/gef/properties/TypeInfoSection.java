@@ -99,9 +99,9 @@ public abstract class TypeInfoSection extends AbstractSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);		
-		createTypeAndCommentSection(leftComposite);		
-		createIdentificationGroup(leftComposite);
-		createVersionInfoGroup(rightComposite);
+		createTypeAndCommentSection(getLeftComposite());		
+		createIdentificationGroup(getLeftComposite());
+		createVersionInfoGroup(getRightComposite());
 	}
 	
 	private void createTypeAndCommentSection(Composite parent) {

@@ -20,7 +20,7 @@ import org.eclipse.gef.commands.Command;
  */
 public class ChangeOrganizationCommand extends Command {
 	
-	VersionInfo versionInfo;
+	private VersionInfo versionInfo;
 	
 	/** The new ApplicationDomain value. */
 	private String newOrganization;
@@ -28,9 +28,9 @@ public class ChangeOrganizationCommand extends Command {
 	/** The old ApplicationDomain value. */
 	private String oldOrganization;
 
-	public ChangeOrganizationCommand(final VersionInfo VersionInfo, final String newOrganization) {
+	public ChangeOrganizationCommand(final VersionInfo versionInfo, final String newOrganization) {
 		super();
-		this.versionInfo = VersionInfo;
+		this.versionInfo = versionInfo;
 		this.newOrganization = newOrganization;
 	}
 

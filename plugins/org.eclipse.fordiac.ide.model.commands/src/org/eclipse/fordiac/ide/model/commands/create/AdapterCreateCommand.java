@@ -20,18 +20,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 public class AdapterCreateCommand extends FBCreateCommand {
 
-	AdapterDeclaration adapterDecl;
-		
 	public AdapterCreateCommand(int x, int y, AdapterDeclaration adapterDecl, CompositeFBType parentComposite) {
-		super(null, parentComposite.getFBNetwork(), x, y);		
-		this.adapterDecl = adapterDecl;
-		element = LibraryElementFactory.eINSTANCE.createAdapterFB();
+		super(parentComposite.getFBNetwork(), LibraryElementFactory.eINSTANCE.createAdapterFB(), x, y);
 		getAdapterFB().setPaletteEntry(adapterDecl.getType().getPaletteEntry());
 		getAdapterFB().setAdapterDecl(adapterDecl);
 	}
 	
 	private AdapterFB getAdapterFB(){
-		return (AdapterFB)element;
+		return (AdapterFB)getElement();
 	}
 	
 	@Override

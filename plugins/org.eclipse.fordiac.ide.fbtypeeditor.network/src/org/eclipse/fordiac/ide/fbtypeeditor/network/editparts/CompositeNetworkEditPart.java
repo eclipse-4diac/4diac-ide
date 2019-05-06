@@ -40,7 +40,7 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	/** The adapter. */
-	protected EContentAdapter adapter;
+	private EContentAdapter adapter;
 	
 	/*
 	 * (non-Javadoc)

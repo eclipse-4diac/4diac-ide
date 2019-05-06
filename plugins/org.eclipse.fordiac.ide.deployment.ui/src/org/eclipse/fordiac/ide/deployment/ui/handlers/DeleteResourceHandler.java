@@ -28,17 +28,18 @@ public class DeleteResourceHandler extends AbstractDeploymentCommand {
 	
 	@Override
 	protected boolean prepareParametersToExecute(Object element) {
-		device = null;
+		setDevice(null);
+		
 		if (element instanceof Resource){
 			resource = (Resource) element;
-			device =  resource.getDevice();
-			if (null != device ){
+			setDevice(resource.getDevice());
+			if (null != getDevice() ){
 				return true;	
 			}
 		}else if (element instanceof ResourceEditPart){
 			resource = ((ResourceEditPart) element).getModel();
-			device =  resource.getDevice();
-			if (null != device ){
+			setDevice(resource.getDevice());
+			if (null != getDevice() ){
 				return true;	
 			}
 		}
@@ -53,7 +54,7 @@ public class DeleteResourceHandler extends AbstractDeploymentCommand {
 	
 	@Override
 	protected void manageExecutorError() {
-		DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(device, resource);		
+		DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(getDevice(), resource);		
 	}
 	
 	@Override

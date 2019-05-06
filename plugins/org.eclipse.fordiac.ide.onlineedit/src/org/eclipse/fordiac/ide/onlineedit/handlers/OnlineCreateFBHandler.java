@@ -20,7 +20,7 @@ public class OnlineCreateFBHandler extends AbstractOnlineFBHandler {
 
 	@Override
 	protected void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
-		executor.createFBInstance(new FBDeploymentData("", resFB), resource); //$NON-NLS-1$  //TODO correctly determine prefix
+		executor.createFBInstance(new FBDeploymentData("", getResFB()), getResource()); //$NON-NLS-1$  //TODO correctly determine prefix
 	}
 	
 	@Override	

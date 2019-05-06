@@ -356,21 +356,10 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		return getInstanceNameLabel();
 	}
 
-	/**
-	 * Gets the manager.
-	 * 
-	 * @return the manager
-	 */
 	@Override
-	public DirectEditManager getManager() {
-		if (manager == null) {
-			Label l = getNameLabel();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class,
-					new NameCellEditorLocator(l), l,
-					new IdentifierVerifyListener());
-		}
-
-		return manager;
+	protected DirectEditManager createDirectEditManager() {
+		Label l = getNameLabel();
+		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l, new IdentifierVerifyListener());
 	}
 
 	@Override

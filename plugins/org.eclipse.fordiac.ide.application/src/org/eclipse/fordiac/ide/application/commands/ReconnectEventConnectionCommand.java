@@ -44,7 +44,7 @@ public class ReconnectEventConnectionCommand extends AbstractReconnectConnection
 	}	
 
 	@Override
-	protected AbstractConnectionCreateCommand createConnectionCreateCommand() {
+	protected AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent) {
 		return new EventConnectionCreateCommand(parent);
 	}
 

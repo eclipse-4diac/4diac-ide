@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 /**
  * The Class ChangeCompilerInfoHeader.
  */
-public class ChangeCompilerInfoHeaderCommand extends ChangeComplierInfoCommand {
+public class ChangeCompilerInfoHeaderCommand extends ChangeCompilerInfoCommand {
 	
 	/** The new ApplicationDomain value. */
 	private String newHeader;
@@ -37,7 +37,7 @@ public class ChangeCompilerInfoHeaderCommand extends ChangeComplierInfoCommand {
 	 */
 	@Override
 	public void execute() {
-		oldHeader = compilerInfo.getHeader();
+		oldHeader = getCompilerInfo().getHeader();
 		redo();
 	}
 
@@ -48,7 +48,7 @@ public class ChangeCompilerInfoHeaderCommand extends ChangeComplierInfoCommand {
 	 */
 	@Override
 	public void undo() {
-		compilerInfo.setHeader(oldHeader);
+		getCompilerInfo().setHeader(oldHeader);
 	}
 
 	/*
@@ -58,7 +58,7 @@ public class ChangeCompilerInfoHeaderCommand extends ChangeComplierInfoCommand {
 	 */
 	@Override
 	public void redo() {
-		compilerInfo.setHeader(newHeader);
+		getCompilerInfo().setHeader(newHeader);
 	}
 
 }

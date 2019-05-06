@@ -58,13 +58,17 @@ public class ResourceDeploymentData {
 		}			
 	}
 	
-	public final Resource res;
+	private final Resource res;
 
 	private List<FBDeploymentData> fbs = new ArrayList<>();
 	
 	private List<ConnectionDeploymentData> connections = new ArrayList<>();
 	
 	private List<ParameterData> params = new ArrayList<>();
+	
+	public Resource getRes() {
+		return res;
+	}
 		
 	public List<FBDeploymentData> getFbs() {
 		return fbs;
@@ -137,8 +141,8 @@ public class ResourceDeploymentData {
 	}
 		
 	private class ConDeploymentDest{
-		final String prefix;
-		final IInterfaceElement destination;
+		private final String prefix;
+		private final IInterfaceElement destination;
 		
 		public ConDeploymentDest(String prefix, IInterfaceElement destination) {
 			super();

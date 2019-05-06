@@ -41,7 +41,7 @@ public class UnmapAllAction extends UnmapAction {
 			for(FBNetworkElement element : fbNetwork.getNetworkElements()){
 				checkSelectedModelElement(element);
 			}
-			return (selectedNetworkElements.size() > 0);
+			return (!getSelectedNetworkElements().isEmpty());
 		}
 		return false;
 	}

@@ -25,7 +25,7 @@ public class KillDeviceHandler extends AbstractDeviceDeploymentCommand {
 
 	@Override
 	public void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
-		executor.killDevice(device);
+		executor.killDevice(getDevice());
 	}
 	
 	@Override

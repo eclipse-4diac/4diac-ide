@@ -41,7 +41,7 @@ import org.eclipse.swt.SWT;
  */
 public class TransactionEditPart extends AbstractGraphicalEditPart {
 
-	protected EContentAdapter adapter = new EContentAdapter() {
+	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);

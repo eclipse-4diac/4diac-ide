@@ -48,10 +48,10 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEditorPart {
 
-	protected CompositeFBType fbType;
-	protected CommandStack commandStack;
-	protected Palette palette;
-	protected EContentAdapter adapter = new EContentAdapter() {
+	private CompositeFBType fbType;
+	private CommandStack commandStack;
+	private Palette palette;
+	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);

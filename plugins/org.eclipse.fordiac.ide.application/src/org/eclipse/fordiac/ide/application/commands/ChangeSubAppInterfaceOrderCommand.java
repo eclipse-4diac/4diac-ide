@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public class ChangeSubAppInterfaceOrderCommand extends ChangeInterfaceOrderCommand {
 
-	ChangeInterfaceOrderCommand mirroredElement = null;
+	private ChangeInterfaceOrderCommand mirroredElement = null;
 	
 	public ChangeSubAppInterfaceOrderCommand(IInterfaceElement selection, boolean isInput, boolean moveUp) {
 		super(selection, isInput, moveUp);

@@ -94,7 +94,7 @@ public class StartAutomaticRemoteTest extends Command {
 					}
 					art.cleanRes();
 				} else {
-					document.set(art.DMgr_response);
+					document.set(art.getResponse());
 				}
 			}
 			isRunning=false;

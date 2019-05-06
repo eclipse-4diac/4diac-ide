@@ -27,7 +27,7 @@ import org.eclipse.ui.IEditorPart;
 public class SegmentCreateCommand extends Command {
 	private IEditorPart editor;
 	private final SegmentTypePaletteEntry type;
-	protected final SystemConfiguration parent;
+	private final SystemConfiguration parent;
 	private final Rectangle bounds;
 	private Segment segment;
 

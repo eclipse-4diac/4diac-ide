@@ -343,7 +343,7 @@ public class StateSection extends AbstractECSection {
 		transitionsOutViewer.getTree().setLayoutData(gridData);
 		transitionsOutViewer.setContentProvider(new StateContentProvider());
 		transitionsOutViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
-		new AdapterFactoryTreeEditor(transitionsOutViewer.getTree(), adapterFactory);
+		new AdapterFactoryTreeEditor(transitionsOutViewer.getTree(), getAdapterFactory());
 	}
 
 	@SuppressWarnings("unchecked")

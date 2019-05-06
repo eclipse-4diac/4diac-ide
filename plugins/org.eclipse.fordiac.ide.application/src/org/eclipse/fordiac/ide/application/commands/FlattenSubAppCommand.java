@@ -39,15 +39,15 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public class FlattenSubAppCommand extends Command {
-	final SubApp subapp;
-	final FBNetwork parent;
-	List<FBNetworkElement> elements = new ArrayList<>();
-	List<EventConnection> transferEventConnections = new ArrayList<>();
-	List<DataConnection> transferDataConnections = new ArrayList<>();
-	List<AdapterConnection> transferAdapterConnections = new ArrayList<>();
-	CompoundCommand deleteCommands = new CompoundCommand();
-	CompoundCommand createCommands = new CompoundCommand();
-	CompoundCommand mappCommands = new CompoundCommand();
+	private final SubApp subapp;
+	private final FBNetwork parent;
+	private List<FBNetworkElement> elements = new ArrayList<>();
+	private List<EventConnection> transferEventConnections = new ArrayList<>();
+	private List<DataConnection> transferDataConnections = new ArrayList<>();
+	private List<AdapterConnection> transferAdapterConnections = new ArrayList<>();
+	private CompoundCommand deleteCommands = new CompoundCommand();
+	private CompoundCommand createCommands = new CompoundCommand();
+	private CompoundCommand mappCommands = new CompoundCommand();
 
 	public FlattenSubAppCommand(SubApp subapp) {
 		super(Messages.FlattenSubAppCommand_LABEL_FlattenSubAppCommand);

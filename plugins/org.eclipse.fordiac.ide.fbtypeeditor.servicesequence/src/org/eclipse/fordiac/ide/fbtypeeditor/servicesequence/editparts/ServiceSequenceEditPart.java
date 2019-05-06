@@ -40,7 +40,7 @@ import org.eclipse.gef.requests.GroupRequest;
 
 public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*ResizableCompartmentEditPart*/ {
 
-	protected EContentAdapter adapter = new EContentAdapter() {
+	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -140,7 +140,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected List getModelChildren() {
-		ArrayList<Object> children = new ArrayList<Object>();
+		List<Object> children = new ArrayList<>();
 		children.addAll(getCastedModel().getServiceTransaction());
 		return children;
 	}

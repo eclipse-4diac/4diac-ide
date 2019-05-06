@@ -37,19 +37,19 @@ public class AlgorithmsSection extends ECCSection {
 		SashForm view = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
 		view.setLayout(new FillLayout());
 		algorithmList = new AlgorithmList(view, getWidgetFactory());
-		leftComposite = algorithmList.getComposite();
+		setLeftComposite(algorithmList.getComposite());
 		
 		getAlgorithmList().getAlgorithmViewer().addSelectionChangedListener(event -> {
 				Object selection = ((IStructuredSelection) getAlgorithmList().getAlgorithmViewer().getSelection()).getFirstElement();
 				algorithmGroup.setAlgorithm((selection instanceof Algorithm) ? (Algorithm) selection : null);
 			});
 		
-		rightComposite = getWidgetFactory().createComposite(view);
-		rightComposite.setLayout(new GridLayout());	
+		setRightComposite(getWidgetFactory().createComposite(view));
+		getRightComposite().setLayout(new GridLayout());	
 		view.setWeights(new int[] {1, 1});
 		view.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));	
 						
-		algorithmGroup.createControls(rightComposite, getWidgetFactory());
+		algorithmGroup.createControls(getRightComposite(), getWidgetFactory());
 	}
 
 	@Override

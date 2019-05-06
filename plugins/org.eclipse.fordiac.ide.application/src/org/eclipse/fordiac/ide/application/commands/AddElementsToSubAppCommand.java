@@ -167,8 +167,8 @@ public class AddElementsToSubAppCommand extends Command {
 		CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(ie.getType(), targetSubApp.getInterface(), ie.isIsInput(), -1);
 		cmd.execute();
 		cmd.getInterfaceElement().setName(subAppIEName);
-		if(null != cmd.mirroredElement) {
-			cmd.mirroredElement.getInterfaceElement().setName(subAppIEName);
+		if(null != cmd.getMirroredElement()) {
+			cmd.getMirroredElement().getInterfaceElement().setName(subAppIEName);
 		}
 		changedSubAppIEs.add(cmd);
 		return cmd.getInterfaceElement();

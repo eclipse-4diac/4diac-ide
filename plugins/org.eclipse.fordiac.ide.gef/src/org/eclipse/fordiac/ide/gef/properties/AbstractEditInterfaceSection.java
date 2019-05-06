@@ -46,6 +46,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -73,8 +74,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	private static final String TYPE = "type"; //$NON-NLS-1$
 	private static final String COMMENT = "comment"; //$NON-NLS-1$
 	
-	protected TableViewer inputsViewer;	
-	protected TableViewer outputsViewer;
+	private TableViewer inputsViewer;	
+	private TableViewer outputsViewer;
 
 	protected enum InterfaceContentProviderType{
 		EVENT, DATA, ADAPTER
@@ -85,6 +86,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	protected abstract ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput, boolean moveUp);
 	protected abstract String[] fillTypeCombo();
 	protected abstract INamedElement getInputType(Object input);	
+	
+	public TableViewer getInputsViewer() {
+		return inputsViewer;
+	}
 
 	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
@@ -102,7 +107,15 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		createInputEdit(parent);
 		createOutputEdit(parent);
+		
+		inputsViewer.setContentProvider(getInputsContentProvider());
+		outputsViewer.setContentProvider(getOutputsContentProvider());
 	}
+	
+	protected abstract IContentProvider getOutputsContentProvider();
+	
+	protected abstract IContentProvider getInputsContentProvider();
+	
 	
 	@Override
 	protected void setType(Object input) {
@@ -252,7 +265,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		commandStack = commandStackBuffer;
 	}
 	
-	public class InterfaceContentProvider implements IStructuredContentProvider {
+	protected static class InterfaceContentProvider implements IStructuredContentProvider {
 		private boolean inputs;
 		private InterfaceContentProviderType type;
 		
@@ -320,7 +333,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		}
 	}
 	
-	public class InterfaceLabelProvider extends LabelProvider implements ITableLabelProvider {
+	protected static class InterfaceLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(final Object element, final int columnIndex) {
@@ -476,4 +489,5 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		}
 		return retVal;
 	}
+	
 }

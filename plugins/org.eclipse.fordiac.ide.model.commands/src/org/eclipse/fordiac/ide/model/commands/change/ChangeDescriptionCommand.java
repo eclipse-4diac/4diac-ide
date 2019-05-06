@@ -38,7 +38,7 @@ public class ChangeDescriptionCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void execute() {
-		oldDescription = identification.getDescription();
+		oldDescription = getIdentification().getDescription();
 		redo();
 	}
 
@@ -49,7 +49,7 @@ public class ChangeDescriptionCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void undo() {
-		identification.setDescription(oldDescription);
+		getIdentification().setDescription(oldDescription);
 	}
 
 	/*
@@ -59,7 +59,7 @@ public class ChangeDescriptionCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void redo() {
-		identification.setDescription(newDescription);
+		getIdentification().setDescription(newDescription);
 	}
 
 }

@@ -124,6 +124,6 @@ public final class ProtocolSelector {
 	}
 	
 	private ProtocolSelector() {
-		throw new UnsupportedOperationException("ProtocolSelector utilioty class should not be instantiated!");
+		throw new UnsupportedOperationException("ProtocolSelector utility class should not be instantiated!");
 	}
 }

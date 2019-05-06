@@ -26,12 +26,16 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 
     private Palette systemPalette;
-    protected ZoomManager zoomManager;
+    private ZoomManager zoomManager;
     
 	public FBInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette, ZoomManager zoomManager) {
 		super(editor);
 		this.systemPalette = systemPalette;
 		this.zoomManager = zoomManager;
+	}
+	
+	public ZoomManager getZoomManager() {
+		return zoomManager;
 	}
 	
 	@Override

@@ -32,12 +32,12 @@ public class NonRuleBasedDamagerRepairer implements IPresentationDamager,
 		IPresentationRepairer {
 
 	/** The document this object works on */
-	protected IDocument fDocument;
+	private IDocument fDocument;
 	/**
 	 * The default text attribute if non is returned as data by the current
 	 * token
 	 */
-	protected TextAttribute fDefaultTextAttribute;
+	private TextAttribute fDefaultTextAttribute;
 
 	/**
 	 * Constructor for NonRuleBasedDamagerRepairer.

@@ -26,16 +26,16 @@ import org.eclipse.ui.PlatformUI;
 public class ErrorAnnotation extends Annotation {
 
 	/** The marker. */
-	IMarker marker;
+	private IMarker marker;
 
 	/** The text. */
-	String text;
+	private String text;
 
 	/** The line. */
-	int line;
+	private int line;
 
 	/** The position. */
-	Position position;
+	private Position position;
 
 	/**
 	 * Instantiates a new error annotation.

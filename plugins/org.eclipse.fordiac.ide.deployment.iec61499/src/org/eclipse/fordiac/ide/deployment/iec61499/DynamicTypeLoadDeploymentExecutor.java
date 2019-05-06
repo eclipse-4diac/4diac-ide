@@ -95,12 +95,12 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	@Override
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws DeploymentException {
 		// check first if FBType exists
-		Map<String, AdapterType> adapters = getAdapterTypes(fbData.fb.getType().getInterfaceList());
+		Map<String, AdapterType> adapters = getAdapterTypes(fbData.getFb().getType().getInterfaceList());
 		if (!adapters.isEmpty()) {
 			queryAdapterTypes(adapters, res);
 			createAdapterTypes(adapters, res);
 		}
-		queryFBTypes(fbData.fb, res);
+		queryFBTypes(fbData.getFb(), res);
 		super.createFBInstance(fbData, res);
 	}
 
@@ -154,7 +154,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private String createLuaRequestMessage(final FBType fbType) {
 		ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 		String luaSkript = luaFilter.createLUA(fbType);
-		return MessageFormat.format(CREATE_FB_TYPE, id++, fbType.getName(), luaSkript);
+		return MessageFormat.format(CREATE_FB_TYPE, getNextId(), fbType.getName(), luaSkript);
 	}
 
 	private static boolean isAttribute(Device device, String fbTypeName, String attributeType) {
@@ -176,13 +176,13 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	
 	public void createAdapterType(final String adapterKey, Map<String, AdapterType> adapters, final Resource res) throws DeploymentException {
 		if(null != getAdapterTypes()) {
-			setAttribute(res.getDevice(), "AdapterType", getAdapterTypes());
+			setAttribute(res.getDevice(), "AdapterType", getAdapterTypes()); //$NON-NLS-1$
 		}
 		if ( (null != getAdapterTypes()) && (!getAdapterTypes().contains(adapterKey) || 
-				!isAttribute(res.getDevice(), adapterKey, "AdapterType")) ) {			
+				!isAttribute(res.getDevice(), adapterKey, "AdapterType")) ) {			 //$NON-NLS-1$
 			ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 			String luaSkript = luaFilter.createLUA(adapters.get(adapterKey));
-			String request = MessageFormat.format(CREATE_ADAPTER_TYPE, id++, adapterKey, luaSkript);
+			String request = MessageFormat.format(CREATE_ADAPTER_TYPE, getNextId(), adapterKey, luaSkript);
 			sendCreateAdapterTypeREQ(adapterKey, request);
 		}
 	}
@@ -229,7 +229,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	private void queryParameter(Resource res, FBNetworkElement fb, VarDeclaration inVar) {
 		@SuppressWarnings("nls")
-		String request = MessageFormat.format(QUERY_PARAMETER, id++, fb.getName() + "." + inVar.getName());
+		String request = MessageFormat.format(QUERY_PARAMETER, getNextId(), fb.getName() + "." + inVar.getName());
 		try {
 			String result = sendREQ(res.getName(), request);		
 			if (result != null) {
@@ -249,7 +249,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private void queryConnections(Resource res) {
-		String request = MessageFormat.format(QUERY_CONNECTIONS, id++, "*", "*"); //$NON-NLS-1$ //$NON-NLS-2$
+		String request = MessageFormat.format(QUERY_CONNECTIONS, getNextId(), "*", "*"); //$NON-NLS-1$ //$NON-NLS-2$
 		try {
 			String result = sendREQ(res.getName(), request);		
 			if (result != null) {
@@ -294,7 +294,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private void queryFBNetwork(Resource res) {
-		String request = MessageFormat.format(QUERY_FB_INSTANCES, id++);
+		String request = MessageFormat.format(QUERY_FB_INSTANCES, getNextId());
 		try {
 			String result = sendREQ(res.getName(), request);		
 			if (result != null) {
@@ -312,14 +312,14 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		for (EObject object : xmlResource.getContents()) {
 			if(object instanceof Response) {
 				int i = 0;
-				if (null == adapterTypes || adapterTypes.isEmpty()) {
+				if (getAdapterTypes().isEmpty()) {
 					queryAdapterTypes(null, res);
 					createNotExistingAdapterTypes(res);
 				}
 				for(org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : ((Response)object).getFblist().getFbs()) {
 					FBTypePaletteEntry entry = (FBTypePaletteEntry) res.getDevice().getAutomationSystem().getPalette().getTypeEntry(fbresult.getType());
 					if(null == entry) {
-						addTypeToTypelib(res, fbresult.getType(), "fbt", QUERY_FB_TYPE);
+						addTypeToTypelib(res, fbresult.getType(), "fbt", QUERY_FB_TYPE); //$NON-NLS-1$
 						entry = (FBTypePaletteEntry) res.getDevice().getAutomationSystem().getPalette().getTypeEntry(fbresult.getType());
 					}
 					FBCreateCommand fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
@@ -334,7 +334,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 	
 	private void createNotExistingAdapterTypes(Resource res) {
-		for(String entryName : adapterTypes) {
+		for(String entryName : getAdapterTypes()) {
 			if(null == res.getDevice().getAutomationSystem().getPalette().getTypeEntry(entryName)){
 				addTypeToTypelib(res, entryName, "adp", QUERY_ADAPTER_TYPE);
 			}
@@ -343,7 +343,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	
 	@SuppressWarnings("nls")
 	private void addTypeToTypelib(Resource res, String typeName, String extension, String messageType) {
-		String request = MessageFormat.format(messageType, id++, typeName);
+		String request = MessageFormat.format(messageType, getNextId(), typeName);
 		try {
 			String result = sendREQ(res.getName(), request);		
 			if (result != null) {
@@ -380,7 +380,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	
 	private void queryFBTypes(FB fb, Resource res) {
 		if (null == getTypes()) {
-			String request = MessageFormat.format(QUERY_FB_TYPES, id++);
+			String request = MessageFormat.format(QUERY_FB_TYPES, getNextId());
 			try {
 				QueryResponseHandler queryResp = sendQUERY(res.getName(), request);
 				setTypes(queryResp.getQueryResult());
@@ -398,7 +398,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	private void queryAdapterTypes(Map<String, AdapterType> adapters, Resource res) {
 		if (null == getAdapterTypes()) {
-			String request = MessageFormat.format(QUERY_ADAPTER_TYPES, id++);
+			String request = MessageFormat.format(QUERY_ADAPTER_TYPES, getNextId());
 			try {
 				QueryResponseHandler queryResp = sendQUERY(res.getName(), request);
 				setAdapterTypes(queryResp.getQueryResult());

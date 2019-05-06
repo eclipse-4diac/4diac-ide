@@ -40,7 +40,7 @@ import org.eclipse.ui.IWorkbench;
 public class SystemImport extends Wizard implements IImportWizard {
 	private static final String FORDIAC_SYSTEM_IMPORT_SECTION = "4DIAC_SYSTEM_IMPORT_SECTION"; //$NON-NLS-1$
 	
-	AutomationSystem system = null;
+	private AutomationSystem system = null;
 
 	/**
 	 * Instantiates a new system import.

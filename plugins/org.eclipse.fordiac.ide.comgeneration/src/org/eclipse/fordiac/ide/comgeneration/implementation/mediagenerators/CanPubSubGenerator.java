@@ -64,7 +64,7 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 		
 		String[] paletteEntryPath = palletEntries[numDataPorts].split("/"); //$NON-NLS-1$
 		
-		PaletteGroup group = palette.getRootGroup();
+		PaletteGroup group = getPalette().getRootGroup();
 		
 		for (int i = 0; i < paletteEntryPath.length; i++) {
 			String currentPath = paletteEntryPath[i];

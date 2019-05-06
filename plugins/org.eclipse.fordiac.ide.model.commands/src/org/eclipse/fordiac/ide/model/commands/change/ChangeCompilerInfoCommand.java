@@ -20,10 +20,14 @@ import org.eclipse.gef.commands.Command;
 /**
  * The Class ChangeComplierInfoCommand.
  */
-public abstract class ChangeComplierInfoCommand extends Command {
+public abstract class ChangeCompilerInfoCommand extends Command {
 
 	/** The identification of the type. */
-	protected CompilerInfo compilerInfo;
+	private CompilerInfo compilerInfo;
+	
+	public CompilerInfo getCompilerInfo() {
+		return compilerInfo;
+	}
 
 	/**
 	 * Instantiates a new change comment command.
@@ -31,13 +35,11 @@ public abstract class ChangeComplierInfoCommand extends Command {
 	 * @param type which identification information is about to change
 	 * @param comment the comment
 	 */
-	public ChangeComplierInfoCommand(final CompilableType type) {
+	public ChangeCompilerInfoCommand(final CompilableType type) {
 		super();
 		
 		if (type.getCompilerInfo() == null) {
-			CompilerInfo compilerInfo = LibraryElementFactory.eINSTANCE
-					.createCompilerInfo();
-			type.setCompilerInfo(compilerInfo);
+			type.setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());
 		}	
 		
 		this.compilerInfo = type.getCompilerInfo();

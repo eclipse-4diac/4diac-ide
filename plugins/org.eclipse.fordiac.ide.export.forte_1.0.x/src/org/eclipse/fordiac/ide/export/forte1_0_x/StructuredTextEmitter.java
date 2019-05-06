@@ -45,7 +45,7 @@ public class StructuredTextEmitter {
 		private String forControlVal;
 	}
 
-	List<ForValBuffer> forValBuf = new ArrayList<>();
+	private List<ForValBuffer> forValBuf = new ArrayList<>();
 
 	public StructuredTextEmitter(ForteExportFilter1_0_x exportFilter) {
 		this.exportFilter = exportFilter;

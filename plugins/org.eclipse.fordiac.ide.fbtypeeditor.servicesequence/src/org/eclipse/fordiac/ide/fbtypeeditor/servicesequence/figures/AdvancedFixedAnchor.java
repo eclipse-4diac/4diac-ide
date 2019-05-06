@@ -47,7 +47,7 @@ public class AdvancedFixedAnchor extends FixedAnchor {
 	@Override
 	public Point getLocation(final Point reference) {
 		Point location = new Point();
-		if (isInput) {
+		if (isInput()) {
 			Point p1 = getBox().getLeft();
 			location.x = p1.x + moveX;
 			location.y = p1.y + moveY;

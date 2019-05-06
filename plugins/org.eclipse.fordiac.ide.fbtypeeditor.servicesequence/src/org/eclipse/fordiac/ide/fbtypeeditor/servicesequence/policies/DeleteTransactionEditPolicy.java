@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteTransactionCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.TransactionEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
@@ -28,8 +28,8 @@ public class DeleteTransactionEditPolicy extends ComponentEditPolicy {
 
 	@Override
 	protected Command getDeleteCommand(GroupRequest request) {
-		if (getHost() instanceof TransactionEditPart) {
-			return new DeleteTransactionCommand(((TransactionEditPart) getHost()).getCastedModel());
+		if (getHost().getModel() instanceof ServiceTransaction) {
+			return new DeleteTransactionCommand((ServiceTransaction) getHost().getModel());
 		}
 		return super.getDeleteCommand(request);
 	}

@@ -47,7 +47,7 @@ public class XMLFormatter {
 			char c;
 			StringBuilder node = new StringBuilder();
 
-			while (!complete && (intChar = reader.read()) != -1) {
+			while (!complete && (intChar = getReader().read()) != -1) {
 				c = (char) intChar;
 
 				node.append(c);
@@ -80,7 +80,7 @@ public class XMLFormatter {
 			char c;
 			StringBuilder node = new StringBuilder();
 
-			while (!complete && (intChar = reader.read()) != -1) {
+			while (!complete && (intChar = getReader().read()) != -1) {
 				c = (char) intChar;
 
 				node.append(c);
@@ -114,7 +114,7 @@ public class XMLFormatter {
 			char c;
 			StringBuilder node = new StringBuilder();
 
-			while (!complete && (intChar = reader.read()) != -1) {
+			while (!complete && (intChar = getReader().read()) != -1) {
 				c = (char) intChar;
 
 				node.append(c);
@@ -129,11 +129,15 @@ public class XMLFormatter {
 
 	private abstract static class TagReader {
 
-		protected Reader reader;
+		private Reader reader;
 
 		private String tagText;
 
 		protected abstract void clear();
+		
+		public Reader getReader() {
+			return reader;
+		}
 
 		public int getPostTagDepthModifier() {
 			return 0;
@@ -239,15 +243,15 @@ public class XMLFormatter {
 
 			while (!complete) {
 
-				reader.mark(1);
-				int intChar = reader.read();
+				getReader().mark(1);
+				int intChar = getReader().read();
 				if (intChar == -1) {
 					break;
 				}
 
 				char c = (char) intChar;
 				if (c == '<') {
-					reader.reset();
+					getReader().reset();
 					complete = true;
 				} else {
 					node.append(c);
@@ -339,7 +343,7 @@ public class XMLFormatter {
 			boolean insideQuote = false;
 			int intChar;
 
-			while (!complete && (intChar = reader.read()) != -1) {
+			while (!complete && (intChar = getReader().read()) != -1) {
 				char c = (char) intChar;
 
 				node.append(c);

@@ -26,7 +26,7 @@ import org.eclipse.ui.PlatformUI;
  */
 public abstract class OpenListener implements IOpenListener {
 
-	protected IEditorPart editor = null;
+	private IEditorPart editor = null;
 	
 	@Override
 	public void setActivePart(final IAction action,

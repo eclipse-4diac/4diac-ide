@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.systemconfiguration.Activator;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
@@ -28,7 +29,7 @@ import org.eclipse.swt.dnd.DND;
 public class SysConfTemplateTransferDropTargetListener extends
 		TemplateTransferDropTargetListener {
 
-	AutomationSystem system;
+	private AutomationSystem system;
 	
 	private class SysConfTemplateCreationFactory implements CreationFactory {
 
@@ -109,12 +110,12 @@ public class SysConfTemplateTransferDropTargetListener extends
 		}else if(template instanceof TemplateCreationFactory){
 			return super.getFactory(template);
 		}else {
-			System.out.println("Type not in list: " + template.getClass().getName()); //$NON-NLS-1$
+			Activator.getDefault().logError("Type not in list: " + template.getClass().getName()); //$NON-NLS-1$
 		}
 		return null;
 	}
 	
-	private boolean isSysConfEditorType(Object template) {
+	private static boolean isSysConfEditorType(Object template) {
 		return (template instanceof DeviceTypePaletteEntry) 
 				|| (template instanceof ResourceTypeEntry)
 				|| (template instanceof SegmentTypePaletteEntry);
