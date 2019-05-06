@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 /**
  * The Class RouterUtil.
  */
-public class RouterUtil {
+public final class RouterUtil {
 
 	/**
 	 * Gets the connection router.
@@ -79,6 +79,8 @@ public class RouterUtil {
 		return factory;
 	}
 	
-	
+	private RouterUtil() {
+		throw new UnsupportedOperationException("RouterUtil utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 	
 }

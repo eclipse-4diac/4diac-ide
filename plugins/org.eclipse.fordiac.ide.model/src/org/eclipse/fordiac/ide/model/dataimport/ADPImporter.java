@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 
-public class ADPImporter {
+public final class ADPImporter {
 
 	/**
 	 * Import Adapter types.
@@ -240,5 +240,9 @@ public class ADPImporter {
 			}
 		}
 		new FBTImporter().parseWithConstructs(childNodes, inputEvents, outputEvents, variables);
+	}
+	
+	private ADPImporter() {
+		throw new UnsupportedOperationException("ADPImporter utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 }

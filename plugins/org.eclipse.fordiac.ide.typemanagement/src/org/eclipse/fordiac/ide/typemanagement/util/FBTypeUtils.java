@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
-public class FBTypeUtils {
+public final class FBTypeUtils {
 
 	public static Palette getPalletteForFBTypeFile(IFile element) {
 		Palette palette = null;
@@ -37,5 +37,7 @@ public class FBTypeUtils {
 		return palette;
 	}
 	
-	
+	private FBTypeUtils() {
+		throw new UnsupportedOperationException("FBTypeUtils utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 }

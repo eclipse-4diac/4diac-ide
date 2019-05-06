@@ -30,10 +30,10 @@ import org.eclipse.swt.graphics.RGB;
  * @version $Id: PreferenceGetter.java 21624 2007-06-22 11:18:13Z gebenh $
  */
 
-public class PreferenceGetter {
+public final class PreferenceGetter {
 
 	/** The used colors. */
-	static private final Map<RGB, Color> usedColors = new HashMap<>();
+	private static final Map<RGB, Color> usedColors = new HashMap<>();
 
 	/**
 	 * Returns the color for the specified preference.
@@ -73,6 +73,6 @@ public class PreferenceGetter {
 
 	
 	private PreferenceGetter() {
-		throw new UnsupportedOperationException("PreferenceGetter utility class should not be instantiated!");
+		throw new UnsupportedOperationException("PreferenceGetter utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 }

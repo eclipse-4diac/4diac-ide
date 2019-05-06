@@ -37,7 +37,7 @@ import org.w3c.dom.NodeList;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 
-public class SEGImporter {
+public final class SEGImporter {
 		
 	/**
 	 * Import seg type.
@@ -126,5 +126,10 @@ public class SEGImporter {
 		} 
 		throw new ParseException(Messages.FBTImporter_PARSE_FBTYPE_PARSEEXCEPTION, 0);
 	}
+	
+	private SEGImporter() {
+		throw new UnsupportedOperationException("SEGImporter utility class should not be instantiated!"); //$NON-NLS-1$
+	}
+
 
 }

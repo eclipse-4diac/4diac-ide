@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.systemmanagement.Activator;
 /**
  * The Class SystemPaletteManagement.
  */
-public class SystemPaletteManagement {
+public final class SystemPaletteManagement {
 
 	/**
 	 * Copy tool type lib to project.
@@ -72,6 +72,10 @@ public class SystemPaletteManagement {
 			}
 		}
 		targetLocation.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+	}
+	
+	private SystemPaletteManagement() {
+		throw new UnsupportedOperationException("SystemPaletteManagement utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 
 }

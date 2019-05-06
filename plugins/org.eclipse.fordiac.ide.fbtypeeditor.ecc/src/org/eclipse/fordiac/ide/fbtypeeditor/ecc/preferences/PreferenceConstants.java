@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences;
 /**
  * Constant definitions for plug-in preferences
  */
-public class PreferenceConstants {
+public final class PreferenceConstants {
 
 	/** The Constant P_ECC_STATE_COLOR. */                                                          
 	public static final String P_ECC_STATE_COLOR = "ECCEditorStateColor";                            //$NON-NLS-1$
@@ -38,4 +38,7 @@ public class PreferenceConstants {
 	/** The Constant P_ECC_EVENT_BORDER_COLOR. */                                                   
 	public static final String P_ECC_EVENT_BORDER_COLOR = "ECCEditorEventBorderColor";     //$NON-NLS-1$
 	
+	private PreferenceConstants() {
+		throw new UnsupportedOperationException("PreferenceConstants utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 }

@@ -15,9 +15,12 @@ package org.eclipse.fordiac.ide.application.preferences;
 /**
  * Constant definitions for plug-in preferences.
  */
-public class PreferenceConstants {
+public final class PreferenceConstants {
 
 	/** The Constant P_BOOLEAN. */
 	public static final String P_BOOLEAN = "enableCastPreference"; //$NON-NLS-1$
 
+	private PreferenceConstants() {
+		throw new UnsupportedOperationException("PreferenceConstants utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 }

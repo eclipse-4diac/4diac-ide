@@ -17,7 +17,7 @@ package org.eclipse.fordiac.ide.util.preferences;
  * 
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
-public class PreferenceConstants {
+public final class PreferenceConstants {
 
 	/** The Constant P_EVENT_CONNECTOR_COLOR. */
 	public static final String P_EVENT_CONNECTOR_COLOR = "EventConnectionConnectorColor"; //$NON-NLS-1$
@@ -37,4 +37,9 @@ public class PreferenceConstants {
 	/** The Constant P_HIDE_DATA_CON. */
 	public static final String P_HIDE_DATA_CON = "hideDataConnections";//$NON-NLS-1$
 
+	private PreferenceConstants() {
+		throw new UnsupportedOperationException("PreferenceConstants utility class should not be instantiated!"); //$NON-NLS-1$
+	}
+
+	
 }

@@ -45,7 +45,7 @@ import org.w3c.dom.NodeList;
  * Managing class for importing *.dev files
  */
 
-public class DEVImporter {
+public final class DEVImporter {
 
 	/**
 	 * Import dev type.
@@ -294,5 +294,10 @@ public class DEVImporter {
 			device.setProfile(value.getNodeValue());
 		}
 	}
+	
+	private DEVImporter() {
+		throw new UnsupportedOperationException("DEVImporter utility class should not be instantiated!"); //$NON-NLS-1$
+	}
+
 
 }

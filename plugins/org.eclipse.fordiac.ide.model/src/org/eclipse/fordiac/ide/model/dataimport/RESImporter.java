@@ -39,7 +39,7 @@ import org.w3c.dom.NodeList;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 
-public class RESImporter {
+public final class RESImporter {
 
 	/**
 	 * Import res type.
@@ -137,4 +137,9 @@ public class RESImporter {
 		throw new ParseException(Messages.FBTImporter_PARSE_FBTYPE_PARSEEXCEPTION, 0);
 	}
 
+	private RESImporter() {
+		throw new UnsupportedOperationException("RESImporter utility class should not be instantiated!"); //$NON-NLS-1$
+	}
+
+	
 }

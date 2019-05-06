@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.util.comm.exceptions.CommException;
 /**
  * Factory for low level communication channels 
  */
-class ChannelFactory {
+final class  ChannelFactory {
 
 	/**
 	 * provide channels to remote communication partners
@@ -44,5 +44,8 @@ class ChannelFactory {
 			throw new CommException("Unsupported Channel Type: " + channelType);
 		}
 	}
-
+	
+	private ChannelFactory() {
+		throw new UnsupportedOperationException("ChannelFactory utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 }

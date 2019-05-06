@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Display;
  * 
  * TODO model refactoring - consider replacing it with jface resoruce 
  */
-public class ColorManager {
+public final class ColorManager {
 
 	/** The color table. */
 	private static final Map<RGB, Color> fColorTable = new HashMap<>(10);
@@ -61,6 +61,6 @@ public class ColorManager {
 	}
 	
 	private ColorManager() {
-		//class should not be created
+		throw new UnsupportedOperationException("LaunchRuntimeUtils utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 }

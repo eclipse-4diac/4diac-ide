@@ -29,7 +29,7 @@ import org.eclipse.ui.PlatformUI;
 /**
  * The Class CommandUtil.
  */
-public class CommandUtil {
+public final class CommandUtil {
 
 	/**
 	 * Close opened subApp.
@@ -39,10 +39,10 @@ public class CommandUtil {
 	 * @return the i editor input
 	 */
 	public static IEditorInput closeOpenedSubApp(final FBNetwork network) {
-		EditorFilter filter = ((IEditorPart editor) -> {
-									return (editor instanceof DiagramEditorWithFlyoutPalette) && 
-											(network.equals(((DiagramEditorWithFlyoutPalette)editor).getModel()));
-								});
+		EditorFilter filter = ((IEditorPart editor) ->
+			(editor instanceof DiagramEditorWithFlyoutPalette) &&
+				(network.equals(((DiagramEditorWithFlyoutPalette)editor).getModel()))								
+		);
 		
 		IEditorPart editor = EditorUtils.findEditor(filter);
 
@@ -65,11 +65,13 @@ public class CommandUtil {
 		try {
 			activePage.openEditor(input, SubAppNetworkEditor.class.getName());
 		} catch (PartInitException e) {
-			// TODO log error
-			ApplicationPlugin.getDefault().logError(
-					Messages.CommandUtil_ERROR_ReopenSubApp, e);
+			ApplicationPlugin.getDefault().logError(Messages.CommandUtil_ERROR_ReopenSubApp, e);
 		}
 		activePage.activate(part);
+	}
+	
+	private CommandUtil() {
+		throw new UnsupportedOperationException("CommandUtil utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 
 }

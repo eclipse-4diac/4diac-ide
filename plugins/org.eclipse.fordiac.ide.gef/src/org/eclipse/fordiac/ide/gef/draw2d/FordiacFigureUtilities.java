@@ -18,7 +18,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.swt.graphics.Color;
 
-public class FordiacFigureUtilities {
+public final class FordiacFigureUtilities {
 	
 	public static void paintEtchedBorder(Graphics g, Rectangle r) {
 		Color rgb = g.getBackgroundColor();
@@ -29,4 +29,7 @@ public class FordiacFigureUtilities {
 		highlight.dispose();
 	}
 
+	private FordiacFigureUtilities() {
+		throw new UnsupportedOperationException("FordiacFigureUtilities utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 }

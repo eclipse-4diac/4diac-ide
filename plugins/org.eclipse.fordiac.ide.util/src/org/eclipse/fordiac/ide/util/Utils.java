@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
  * 
  * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
  */
-public class Utils {
+public final class Utils {
 
 	/**
 	 * Creats a backup file of the specified file.
@@ -48,4 +48,7 @@ public class Utils {
 		return f;
 	}
 
+	private Utils() {
+		throw new UnsupportedOperationException("Utils utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 }

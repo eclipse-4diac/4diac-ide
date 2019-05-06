@@ -99,4 +99,8 @@ public final class ServiceInterfacePaletteFactory {
 		drawer.add(entry5);
 		palette.add(drawer);
 	}
+	
+	private ServiceInterfacePaletteFactory() {
+		throw new UnsupportedOperationException("ServiceInterfacePaletteFactory utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 }
