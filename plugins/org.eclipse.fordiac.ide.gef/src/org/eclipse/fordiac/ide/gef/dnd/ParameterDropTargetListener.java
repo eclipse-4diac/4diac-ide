@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.dnd;
 
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.gef.EditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
@@ -46,11 +46,12 @@ public class ParameterDropTargetListener extends
 
 	@Override
 	protected void handleDragOver() {
-		EditPart ep = getTargetEditPart();
-		if (ep instanceof InterfaceEditPart) {
-			if (((InterfaceEditPart) ep).isInput()
-					&& !((InterfaceEditPart) ep).isEvent())
+		Object model = getTargetEditPart().getModel();
+		if (model instanceof IInterfaceElement) {
+			if (((IInterfaceElement) model).isIsInput()					
+					&& !(model instanceof Event)) {
 				getCurrentEvent().detail = DND.DROP_COPY;
+			}
 		} else {
 			getCurrentEvent().detail = DND.DROP_NONE;
 		}

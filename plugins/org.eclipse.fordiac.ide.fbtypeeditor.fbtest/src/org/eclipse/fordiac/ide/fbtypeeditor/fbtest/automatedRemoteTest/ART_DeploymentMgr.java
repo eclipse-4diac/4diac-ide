@@ -48,18 +48,18 @@ public class ART_DeploymentMgr {
 
 	private boolean deploymentError;
 	private int deploymentResponseCounter=0;
-	private String MgmtResponse=""; //$NON-NLS-1$
-	private String MgmtCommands=""; //$NON-NLS-1$
+	private String mgmtResponse=""; //$NON-NLS-1$
+	private String mgmtCommands=""; //$NON-NLS-1$
 	
 	public String getMgmtCommands() {
-		return MgmtCommands;
+		return mgmtCommands;
 	}
 
 	public ART_DeploymentMgr(FBType fbType, String address, int paUID) {
 
 		deploymentError=false;
-		MgmtResponse=""; //$NON-NLS-1$
-		MgmtCommands=""; //$NON-NLS-1$
+		mgmtResponse=""; //$NON-NLS-1$
+		mgmtCommands=""; //$NON-NLS-1$
 		uID=paUID;
 		this.fbType=fbType;
 		if (null!= address) {
@@ -101,15 +101,15 @@ public class ART_DeploymentMgr {
 			
 			@Override
 			public void postCommandSent(String info, String destination, String command) {
-				MgmtCommands+=(destination+command+"\n"); //$NON-NLS-1$
+				mgmtCommands+=(destination+command+"\n"); //$NON-NLS-1$
 			}
 			
 			@Override
 			public void postResponseReceived(String response, String source) {
 				if (response.toLowerCase().indexOf("reason")>-1) { //$NON-NLS-1$
 					deploymentError=true;
-					MgmtCommands+=(response+"\n\n"); //$NON-NLS-1$
-					MgmtResponse+=response;
+					mgmtCommands+=(response+"\n\n"); //$NON-NLS-1$
+					mgmtResponse+=response;
 				}
 				deploymentResponseCounter--;
 				
@@ -142,9 +142,9 @@ public class ART_DeploymentMgr {
 		
 	}
 	
-	public boolean deploy(String TestChannelID) {
-		MgmtResponse=""; //$NON-NLS-1$
-		MgmtCommands=""; //$NON-NLS-1$
+	public boolean deploy(String testChannelID) {
+		mgmtResponse=""; //$NON-NLS-1$
+		mgmtCommands=""; //$NON-NLS-1$
 		boolean errorOcurred = false;
 		int numEI=FBTHelper.getEISize(fbType);
 		int numEO=FBTHelper.getEOSize(fbType);
@@ -155,7 +155,7 @@ public class ART_DeploymentMgr {
 		try {
 			executor.connect();
 		} catch (Exception e1) {
-			MgmtCommands="Error during connection to device: "+address+"\n"; //$NON-NLS-2$
+			mgmtCommands="Error during connection to device: "+address+"\n"; //$NON-NLS-2$
 			errorOcurred = true;
 		} 
 
@@ -216,7 +216,7 @@ public class ART_DeploymentMgr {
 
 			}
 
-			sendREQ(destination, writeFBParameterRequest("Server.ID", TestChannelID)); //$NON-NLS-1$
+			sendREQ(destination, writeFBParameterRequest("Server.ID", testChannelID)); //$NON-NLS-1$
 			sendREQ(destination, writeFBParameterRequest("Server.QI", "1")); //$NON-NLS-1$ //$NON-NLS-2$
 
 			//DataConns

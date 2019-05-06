@@ -31,18 +31,16 @@ public class FBTypeDragAssistant extends CommonDragAdapterAssistant {
 	}
 
 	@Override
-	public void dragStart(DragSourceEvent anEvent,
-			IStructuredSelection aSelection) {
-		// TemplateTransfer.getInstance().setTemplate(null);
+	public void dragStart(DragSourceEvent anEvent, IStructuredSelection aSelection) {
 		if (aSelection.getFirstElement() instanceof IFile) {
 			IFile fbTypeFile = (IFile) aSelection.getFirstElement();
 			Palette fbPalette = FBTypeUtils
 					.getPalletteForFBTypeFile(fbTypeFile);
 			if (fbPalette != null) {
-				PaletteEntry entry = TypeLibrary.getPaletteEntry(
-						fbPalette, fbTypeFile);
-				if (entry != null)
+				PaletteEntry entry = TypeLibrary.getPaletteEntry(fbPalette, fbTypeFile);
+				if (entry != null) {
 					TemplateTransfer.getInstance().setTemplate(entry);
+				}
 
 			} else {
 				anEvent.doit = false;
@@ -52,15 +50,12 @@ public class FBTypeDragAssistant extends CommonDragAdapterAssistant {
 	}
 
 	@Override
-	public boolean setDragData(DragSourceEvent anEvent,
-			IStructuredSelection aSelection) {
+	public boolean setDragData(DragSourceEvent anEvent, IStructuredSelection aSelection) {
 		if (aSelection.getFirstElement() instanceof IFile) {
 			IFile fbTypeFile = (IFile) aSelection.getFirstElement();
-			Palette fbPalette = FBTypeUtils
-					.getPalletteForFBTypeFile(fbTypeFile);
+			Palette fbPalette = FBTypeUtils.getPalletteForFBTypeFile(fbTypeFile);
 			if (fbPalette != null) {
-				PaletteEntry entry = TypeLibrary.getPaletteEntry(
-						fbPalette, fbTypeFile);
+				PaletteEntry entry = TypeLibrary.getPaletteEntry(fbPalette, fbTypeFile);
 
 				if (null != entry) {
 					anEvent.data = entry;

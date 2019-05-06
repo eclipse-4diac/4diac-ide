@@ -82,8 +82,9 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 				String name = "__synthetic"; //$NON-NLS-1$
 				for (int i = 0; i < Integer.MAX_VALUE; i++) {
 					URI syntheticUri = URI.createURI(name + i + "." + fileExtension); //$NON-NLS-1$
-					if (resourceSet.getResource(syntheticUri, false) == null)
+					if (resourceSet.getResource(syntheticUri, false) == null) {
 						return syntheticUri;
+					}
 				}
 				throw new IllegalStateException();
 			}

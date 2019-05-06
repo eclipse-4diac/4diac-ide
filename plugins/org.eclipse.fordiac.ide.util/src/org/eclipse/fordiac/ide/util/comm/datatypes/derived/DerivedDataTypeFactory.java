@@ -42,7 +42,9 @@ public final class DerivedDataTypeFactory {
 				} catch (IOException e) {
 					throw new IllegalEncodingException("Illegal encoding of tag number.");
 				}
-				if((buf&0x80)==0) finished=true;
+				if((buf&0x80)==0) { 
+					finished=true;
+				}
 				asn1typeID=(asn1typeID<<7)+buf;
 				
 			}
@@ -75,10 +77,10 @@ public final class DerivedDataTypeFactory {
 	private static IEC_ANY getAPPLICATIONType(int asn1TypeID,
 			boolean constructed, DataInputStream in) {
 		// IEC 61499-1 E binds ASN1TypeIDs 0 to 22 for Class APPLICATION
-		if (asn1TypeID <= ASN1.ARRAY)
+		if (asn1TypeID <= ASN1.ARRAY) {
 			throw new DataTypeValueOutOfBoundsException(
 					"TypeIDs <23 are reserved for elementary datatypes in Class \"Application\"");
-
+		}
 		// Our own compliance profile: derived datatypes of class PRIVATE only!
 		throw new DataTypeValueOutOfBoundsException(
 				"Derived Types are supposed to be of class ASN1.PRIVATE!");

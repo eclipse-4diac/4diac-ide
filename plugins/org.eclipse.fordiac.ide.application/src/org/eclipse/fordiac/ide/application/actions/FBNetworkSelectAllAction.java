@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -37,50 +36,31 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 	public void run() {
 		GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
-			viewer.setSelection(new StructuredSelection(
-					getSelectableEditParts(viewer)));
+			viewer.setSelection(new StructuredSelection(getSelectableEditParts(viewer)));
 		}
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private List getSelectableEditParts(GraphicalViewer viewer) {
+	private static List getSelectableEditParts(GraphicalViewer viewer) {
 		List selectableChildren = new ArrayList();
 		List children = viewer.getContents().getChildren();
 		for (Iterator iter = children.iterator(); iter.hasNext();) {
 			Object child = iter.next();
-			if (child instanceof FBEditPart) {
+			if (child instanceof AbstractFBNElementEditPart) {
 				EditPart childPart = (EditPart) child;
-				if (childPart.isSelectable() == true) {
+				if (childPart.isSelectable()) {
 					selectableChildren.add(childPart);
 					//the editparts are in charge of managing the connections if we take all source connections
 					//from one edit part we should get all connections in the end.
-					List FBChildren = ((FBEditPart)childPart).getChildren();
-					for (Iterator fbIter = FBChildren.iterator(); fbIter.hasNext();) {
-						Object fbChild = fbIter.next();
-						if (fbChild instanceof AbstractGraphicalEditPart) {	
-							selectableChildren.addAll(((AbstractGraphicalEditPart)fbChild).getSourceConnections());
-							
+					List elementChildren = childPart.getChildren();
+					for (Object elementChild : elementChildren) {
+						if (elementChild instanceof AbstractGraphicalEditPart) {	
+							selectableChildren.addAll(((AbstractGraphicalEditPart)elementChild).getSourceConnections());							
 						}
 					}
 				}
-			} else if (child instanceof SubAppForFBNetworkEditPart) {
-				EditPart childPart = (EditPart) child;
-				if (childPart.isSelectable() == true) {
-					selectableChildren.add(childPart);
-					//the editparts are in charge of managing the connections if we take all source connections
-					//from one edit part we should get all connections in the end.
-					List FBChildren = ((SubAppForFBNetworkEditPart)childPart).getChildren();
-					for (Iterator fbIter = FBChildren.iterator(); fbIter.hasNext();) {
-						Object fbChild = fbIter.next();
-						if (fbChild instanceof AbstractGraphicalEditPart) {	
-							selectableChildren.addAll(((AbstractGraphicalEditPart)fbChild).getSourceConnections());
-							
-						}
-					}
-				}				
 			}
-		}
-		
+		}		
 		return selectableChildren;
 	}
 

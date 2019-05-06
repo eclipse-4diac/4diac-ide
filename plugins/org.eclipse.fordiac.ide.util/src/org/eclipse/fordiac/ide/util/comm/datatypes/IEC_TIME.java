@@ -125,8 +125,9 @@ public class IEC_TIME extends IEC_ANY {
 	
 	@Override
 	public boolean equals(Object data) {
-		if (data instanceof IEC_TIME)
+		if (data instanceof IEC_TIME) {
 			return ((IEC_TIME) data).value == value;
+		}
 		return false;
 	}
 	

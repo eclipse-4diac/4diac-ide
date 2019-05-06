@@ -92,8 +92,9 @@ public class IEC_REAL extends IEC_ANY {
 	
 	@Override
 	public boolean equals(Object data) {
-		if (data instanceof IEC_REAL)
+		if (data instanceof IEC_REAL) {
 			return ((IEC_REAL) data).value == value;
+		}
 		if (data instanceof IEC_LREAL) {
 			return ((IEC_LREAL) data).value == value;
 		}

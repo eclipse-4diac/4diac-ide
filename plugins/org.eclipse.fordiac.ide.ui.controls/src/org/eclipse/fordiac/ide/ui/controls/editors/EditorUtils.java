@@ -14,11 +14,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PlatformUI;
 
-public class EditorUtils {
+public final class EditorUtils {
 	
-	public static final EditorAction CloseEditor = (IEditorPart part) -> { 
+	public static final EditorAction CloseEditor = (IEditorPart part) ->  
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor(part, false);
-	};
 	
 	private EditorUtils(){
 		throw new AssertionError();
@@ -44,10 +43,8 @@ public class EditorUtils {
 		
 		for (IEditorReference editorReference : editorReferences) {
 			IEditorPart editor = editorReference.getEditor(false);
-			if(null != editor){
-				if(filter.filter(editor)){
-					action.run(editor);					
-				}
+			if(null != editor && filter.filter(editor)){
+				action.run(editor);					
 			}
 		}
 	}

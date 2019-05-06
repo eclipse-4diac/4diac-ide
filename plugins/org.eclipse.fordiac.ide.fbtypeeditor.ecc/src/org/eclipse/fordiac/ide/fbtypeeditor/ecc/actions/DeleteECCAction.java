@@ -34,12 +34,14 @@ public class DeleteECCAction extends DeleteAction {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Command createDeleteCommand(List objects) {
-		if (objects.isEmpty())
+		if (objects.isEmpty()) {
 			return null;
-		if (!(objects.get(0) instanceof EditPart))
+		}
+		if (!(objects.get(0) instanceof EditPart)) {
 			return null;
+		}
 
-		ArrayList<EditPart> list = new ArrayList<EditPart>();
+		List<EditPart> list = new ArrayList<>();
 
 		//before anything else add the transitions 
 		for (Object object : objects) {
@@ -47,8 +49,6 @@ public class DeleteECCAction extends DeleteAction {
 				list.add((ECTransitionEditPart)object);
 			}
 		}
-				
-		
 		
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart object = (EditPart) objects.get(i);
@@ -73,14 +73,12 @@ public class DeleteECCAction extends DeleteAction {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private boolean stateContainedInDeleteList(List objects, ECState eState) {
+	private static boolean stateContainedInDeleteList(List objects, ECState eState) {
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart object = (EditPart) objects.get(i);
-			if(object instanceof ECStateEditPart){
-				if(((ECStateEditPart)object).getCastedModel().equals(eState)){
-					return true;
-				}				
-			}
+			if(object instanceof ECStateEditPart && ((ECStateEditPart)object).getCastedModel().equals(eState)){
+				return true;
+			}				
 		}
 		return false;
 	}

@@ -131,8 +131,9 @@ public class StructuredTextEmitter {
 			return;
 		}
 		if (statement.equals(":")) { //$NON-NLS-1$
-			if (!tokens.hasMoreElements())
+			if (!tokens.hasMoreElements()) {
 				return;
+			}
 			statement = tokens.nextToken();
 			if (statement.equals("=")) { //$NON-NLS-1$
 				pwCPP.print(" = "); //$NON-NLS-1$
@@ -382,8 +383,9 @@ public class StructuredTextEmitter {
 				// print till end of line
 				while (!statement.equals("\n") && !statement.equals("\r")) { //$NON-NLS-1$ //$NON-NLS-2$
 					pwCPP.print(statement);
-					if (!tokens.hasMoreElements())
+					if (!tokens.hasMoreElements()) {
 						return;
+					}
 					statement = tokens.nextToken();
 				}
 				pwCPP.println(""); // issue a new line //$NON-NLS-1$
@@ -406,8 +408,9 @@ public class StructuredTextEmitter {
 							var = tokens.nextToken();
 							pwCPP.print(var);
 						} while (!var.equals("*")); //$NON-NLS-1$
-						if (!tokens.hasMoreElements())
+						if (!tokens.hasMoreElements()) {
 							return;
+						}
 						var = tokens.nextToken();
 						if (var.equals("/")) { //$NON-NLS-1$
 							endTag = true;

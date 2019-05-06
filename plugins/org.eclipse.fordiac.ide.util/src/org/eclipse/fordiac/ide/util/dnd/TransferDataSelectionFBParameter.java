@@ -33,17 +33,15 @@ public class TransferDataSelectionFBParameter {
 	}
 
 	public TransferDataSelectionFBParameter(){
-		name = null;
-		value = null;
+		this(null, null);
 	}
 	
-	public TransferDataSelectionFBParameter(String _name){
-		name = _name;
-		value = null;
+	public TransferDataSelectionFBParameter(String name){
+		this(name, null);
 	}
 	
-	public TransferDataSelectionFBParameter(String _name, String _value){
-		name = _name;
-		value = _value;
+	public TransferDataSelectionFBParameter(String name, String value){
+		this.name = name;
+		this.value = value;
 	}
 }

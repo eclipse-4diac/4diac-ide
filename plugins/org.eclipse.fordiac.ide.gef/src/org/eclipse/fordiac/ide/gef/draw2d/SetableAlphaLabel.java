@@ -81,8 +81,9 @@ public class SetableAlphaLabel extends Label implements ITransparencyFigure {
 
 		Rectangle bounds = getBounds();
 		graphics.translate(bounds.x, bounds.y);
-		if (getIcon() != null)
+		if (getIcon() != null) {
 			graphics.drawImage(getIcon(), getIconLocation());
+		}
 		if (!isEnabled()) {
 			graphics.translate(1, 1);
 			graphics.setForegroundColor(ColorConstants.buttonLightest);

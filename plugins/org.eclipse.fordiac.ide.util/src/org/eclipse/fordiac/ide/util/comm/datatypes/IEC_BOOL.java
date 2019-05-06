@@ -56,10 +56,11 @@ public class IEC_BOOL extends IEC_ANY {
 	@Override
 	public byte[] encodeTag() {
 		byte[] retval = new byte[1];
-		if (value)
+		if (value) {
 			retval[0]=(0xff & (ASN1.APPLICATION+ASN1.BOOL));
-		else
+		} else {
 			retval[0]=(0xff & (ASN1.APPLICATION+0));
+		}
 		return retval;
 	}
 

@@ -37,14 +37,14 @@ public abstract class IEC_ANY_BIT extends IEC_ANY {
 	 * Helper method for conversion of the value to a hexadecimal string representation according to IEC 61131-3.
 	 * @return hexadecimal representation of value as string 
 	 */
-	protected abstract String ConvertHexString();
+	protected abstract String convertHexString();
 
 	
 	/**
 	 * Helper method for conversion of the value to a binary string representation according to IEC 61131-3.
 	 * @return binary representation of value as string 
 	 */
-	protected abstract String ConvertBinString();
+	protected abstract String convertBinString();
 	
 	
 	/**
@@ -55,14 +55,17 @@ public abstract class IEC_ANY_BIT extends IEC_ANY {
 	 */
 	protected String toHexString(int octets) {
 		int nibbles=octets*NIBBLES_PER_OCTET;
-		String myTempString=ConvertHexString();
+		String myTempString=convertHexString();
 		int length=myTempString.length();
 		
-		if (length>nibbles)
+		if (length>nibbles) {
 			myTempString=myTempString.substring(length-nibbles, length);
-		if (length<nibbles)
-			for (int i=0; i<nibbles-length;i++)
+		}
+		if (length<nibbles) {
+			for (int i=0; i<nibbles-length;i++) {
 				myTempString="0"+myTempString; //$NON-NLS-1$
+			}
+		}
 		return "16#"+myTempString; //$NON-NLS-1$
 	}
 
@@ -74,14 +77,17 @@ public abstract class IEC_ANY_BIT extends IEC_ANY {
 	 */
 	protected String toBinString(int octets) {
 		int bits=octets*BITS_PER_OCTET;
-		String myTempString = ConvertBinString();
+		String myTempString = convertBinString();
 		int length=myTempString.length();
 		
-		if (length>bits)
+		if (length>bits) {
 			myTempString=myTempString.substring(length-bits, length);
-		if (length<bits)
-			for (int i=0; i<bits-length;i++)
+		}
+		if (length<bits) {
+			for (int i=0; i<bits-length;i++) {
 				myTempString="0"+myTempString; //$NON-NLS-1$
+			}
+		}
 		
 		return "2#"+myTempString; //$NON-NLS-1$
 	}

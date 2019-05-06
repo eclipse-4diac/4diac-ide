@@ -61,24 +61,20 @@ public class Activator extends AbstractUIPlugin {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm"); //$NON-NLS-1$
 			Date d = sdf.parse(qualifier);
-			SimpleDateFormat sdf_visu = new SimpleDateFormat("yyyy-MM-dd_HHmm"); //$NON-NLS-1$
-			qualifier = sdf_visu.format(d);
+			SimpleDateFormat sdfVisu = new SimpleDateFormat("yyyy-MM-dd_HHmm"); //$NON-NLS-1$
+			qualifier = sdfVisu.format(d);
 		} catch (Exception ex) {
 			// can be ignored
 		}
 
 		System.setProperty("org.eclipse.fordiac.ide.buildid", qualifier); //$NON-NLS-1$
-		System.out.println(version);
-		System.out.println(v.getQualifier());
-		
-		System.out.println("eclipse.buildId: " + System.getProperty("eclipse.buildId")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		plugin = this;
 		
 		disableJFaceErrorMessages();
 	}
 
-	private void disableJFaceErrorMessages() {
+	private static void disableJFaceErrorMessages() {
 		//set a special status handler which will do nothing here.
 		//this should then be correctly handled by automatic error reporting.
 		Policy.setStatusHandler(new StatusHandler() {

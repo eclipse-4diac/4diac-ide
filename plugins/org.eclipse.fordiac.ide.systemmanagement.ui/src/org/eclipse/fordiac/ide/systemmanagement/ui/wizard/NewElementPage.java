@@ -121,8 +121,7 @@ public abstract class NewElementPage extends WizardPage {
 		l.setText(Messages.NewElementPage_ParentSystemLabel);
 		l.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		treeViewer = new TreeViewer(parent); // , SWT.MULTI | SWT.H_SCROLL |
-		// SWT.V_SCROLL);
+		treeViewer = new TreeViewer(parent); 
 		treeViewer.setContentProvider(new SystemContentProvider());
 		treeViewer.setLabelProvider(new SystemLabelProvider());
 
@@ -178,8 +177,9 @@ public abstract class NewElementPage extends WizardPage {
 	 * @param template
 	 */
 	public void setFileName(String template) {
-		if (this.text != null)
+		if (this.text != null) {
 			this.text.setText(template);
+		}
 	}
 
 	/**

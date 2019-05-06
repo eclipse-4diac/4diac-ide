@@ -57,10 +57,10 @@ public class IEC_WORD extends IEC_ANY_BIT {
 	@Override
 	public byte[] encodeValue() {
 		ByteArrayOutputStream myOut=new ByteArrayOutputStream();
-		DataOutputStream DOS=new DataOutputStream(myOut);
+		DataOutputStream dos=new DataOutputStream(myOut);
 		
 		try {
-			DOS.writeShort(value);
+			dos.writeShort(value);
 		} catch (IOException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
@@ -90,10 +90,7 @@ public class IEC_WORD extends IEC_ANY_BIT {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof IEC_WORD)
-			if (this.value == ((IEC_WORD) obj).value)
-				return true;
-		return false;
+		return (obj instanceof IEC_WORD && this.value == ((IEC_WORD) obj).value);
 	}
 	
 	@Override
@@ -112,12 +109,12 @@ public class IEC_WORD extends IEC_ANY_BIT {
 	}
 
 	@Override
-	protected String ConvertHexString() {
+	protected String convertHexString() {
 		return Integer.toHexString(value);
 	}
 
 	@Override
-	protected String ConvertBinString() {
+	protected String convertBinString() {
 		return Integer.toBinaryString(value);
 	}
 

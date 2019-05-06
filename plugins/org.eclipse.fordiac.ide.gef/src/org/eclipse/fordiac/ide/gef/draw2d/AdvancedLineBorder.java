@@ -92,14 +92,18 @@ public class AdvancedLineBorder extends LineBorder {
 		int east = 0;
 		int south = 0;
 		int west = 0;
-		if ((side & PositionConstants.NORTH) != 0)
+		if ((side & PositionConstants.NORTH) != 0) {
 			north = getWidth();
-		if ((side & PositionConstants.EAST) != 0)
+		}
+		if ((side & PositionConstants.EAST) != 0) {
 			east = getWidth();
-		if ((side & PositionConstants.SOUTH) != 0)
+		}
+		if ((side & PositionConstants.SOUTH) != 0) {
 			south = getWidth();
-		if ((side & PositionConstants.WEST) != 0)
+		}
+		if ((side & PositionConstants.WEST) != 0) {
 			west = getWidth();
+		}
 
 		return new Insets(north, west, south, east);
 	}
@@ -111,31 +115,32 @@ public class AdvancedLineBorder extends LineBorder {
 	public void paint(IFigure figure, Graphics graphics, Insets insets) {
 		graphics.setAlpha(alpha);
 		tempRect.setBounds(getPaintRectangle(figure, insets));
-		// if (getWidth() % 2 == 1) {
-		// tempRect.width--;
-		// tempRect.height--;
-		// }
-		// tempRect.shrink(getWidth() / 2, getWidth() / 2);
+
 		graphics.setLineWidth(getWidth());
-		if (getColor() != null)
+		if (getColor() != null) {
 			graphics.setForegroundColor(getColor());
+		}
 
 		graphics.setLineStyle(style);
 		
-		if ((side & PositionConstants.NORTH) != 0)
+		if ((side & PositionConstants.NORTH) != 0) {
 			graphics.drawLine(tempRect.x, tempRect.y, tempRect.x
 					+ tempRect.width - getWidth(), tempRect.y);
-		if ((side & PositionConstants.EAST) != 0)
+		}
+		if ((side & PositionConstants.EAST) != 0) {
 			graphics.drawLine(tempRect.x + tempRect.width - getWidth(),
 					tempRect.y, tempRect.x + tempRect.width - getWidth(),
 					tempRect.y + tempRect.height - getWidth());
-		if ((side & PositionConstants.SOUTH) != 0)
+		}
+		if ((side & PositionConstants.SOUTH) != 0) {
 			graphics.drawLine(tempRect.x, tempRect.y + tempRect.height
 					- getWidth(), tempRect.x + tempRect.width, tempRect.y
 					+ tempRect.height - getWidth());
-		if ((side & PositionConstants.WEST) != 0)
+		}
+		if ((side & PositionConstants.WEST) != 0) {
 			graphics.drawLine(tempRect.x, tempRect.y, tempRect.x, tempRect.y
 					+ tempRect.height - getWidth());
+		}
 		if ((side & PositionConstants.NONE) != 0) {
 			// nothing to do!
 		}
@@ -153,7 +158,6 @@ public class AdvancedLineBorder extends LineBorder {
 	public void setAlpha(int alpha) {
 		if (this.alpha != alpha) {
 			this.alpha = alpha;
-
 		}
 	}
 	

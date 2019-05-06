@@ -130,9 +130,9 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 			else{	
 				this.system = null;
 			}
-		} else
+		} else {
 			this.system = null;
-
+		}
 	}
 
 }

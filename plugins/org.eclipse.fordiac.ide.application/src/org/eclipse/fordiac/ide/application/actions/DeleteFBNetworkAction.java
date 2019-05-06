@@ -34,12 +34,14 @@ public class DeleteFBNetworkAction extends DeleteAction {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Command createDeleteCommand(List objects) {
-		if (objects.isEmpty())
+		if (objects.isEmpty()) {
 			return null;
-		if (!(objects.get(0) instanceof EditPart))
+		}
+		if (!(objects.get(0) instanceof EditPart)) {
 			return null;
+		}
 
-		ArrayList<EditPart> list = new ArrayList<EditPart>();
+		List<EditPart> list = new ArrayList<>();
 
 		//Resort list such that the connects are before any other edit parts
 		for (Object object : objects) {

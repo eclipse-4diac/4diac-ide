@@ -1050,8 +1050,9 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 							+ "::scm_astAdapterInstances[] = {"); //$NON-NLS-1$
 					for (int i = 0; i < adapters.size(); i++) {
 						AdapterInstance myAdapter = adapters.get(i);
-						if (i > 0)
+						if (i > 0) {
 							pwCPP.println(","); //$NON-NLS-1$
+						}
 						pwCPP.print("{g_nStringId" + myAdapter.getAdapterType() //$NON-NLS-1$
 								+ ", " + "g_nStringId" + myAdapter.getName() //$NON-NLS-1$ //$NON-NLS-2$
 								+ ", "); //$NON-NLS-1$
@@ -1371,7 +1372,7 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 						// if we are here the guard length is definitely
 						// not zero
 						// TODO: Check for adapter-event!
-						boolean AdapterEvent = false;
+						boolean adapterEvent = false;
 						StringTokenizer mySTok = new StringTokenizer(guard, "&", true); //$NON-NLS-1$
 						String myTestString = ""; //$NON-NLS-1$
 
@@ -1415,7 +1416,7 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 									}
 									if (null != myEv) {
 										alternativeEvent.append(myTest4Event).append("()"); //$NON-NLS-1$
-										AdapterEvent = true;
+										adapterEvent = true;
 										// remove separator "&" from
 										// token-list...
 										if (mySTok.hasMoreTokens()) {
@@ -1430,7 +1431,7 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 							}
 
 						}
-						if (AdapterEvent) {
+						if (adapterEvent) {
 							if (alternativeGuard.length() != 0) {
 								pwCPP.print("("); //$NON-NLS-1$
 							}
@@ -1456,13 +1457,13 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 		}
 	}
 
-	private AdapterFBType checkIfAdapter(final String Name) {
+	private AdapterFBType checkIfAdapter(final String name) {
 
 		Iterator<AdapterInstance> myIter = adapters.iterator();
 		AdapterInstance myAdapterInfo;
 		while (myIter.hasNext()) {
 			myAdapterInfo = myIter.next();
-			if (myAdapterInfo.getName().equals(Name)) {
+			if (myAdapterInfo.getName().equals(name)) {
 				return myAdapterInfo.getAdapterFBType();
 			}
 		}

@@ -566,9 +566,9 @@ public abstract class CPPExportFilter implements IExportFilter {
 		NodeList l1 = docel.getElementsByTagName("EventConnections"); //$NON-NLS-1$
 		if (l1.getLength() > 0) {
 			org.w3c.dom.Node node = l1.item(0);
-			NodeList Conns = node.getChildNodes();
-			for (int i = 0; i < Conns.getLength(); ++i) {
-				node = Conns.item(i);
+			NodeList conns = node.getChildNodes();
+			for (int i = 0; i < conns.getLength(); ++i) {
+				node = conns.item(i);
 				if (node instanceof Element) {
 					Element el = (Element) node;
 					if (el.getNodeName().equals("Connection")) { //$NON-NLS-1$
@@ -587,9 +587,9 @@ public abstract class CPPExportFilter implements IExportFilter {
 		l1 = docel.getElementsByTagName("DataConnections"); //$NON-NLS-1$
 		if (l1.getLength() > 0) {
 			Node node = l1.item(0);
-			NodeList Conns = node.getChildNodes();
-			for (int i = 0; i < Conns.getLength(); ++i) {
-				node = Conns.item(i);
+			NodeList conns = node.getChildNodes();
+			for (int i = 0; i < conns.getLength(); ++i) {
+				node = conns.item(i);
 				if (node instanceof Element) {
 					Element el = (Element) node;
 					if (el.getNodeName().equals("Connection")) { //$NON-NLS-1$

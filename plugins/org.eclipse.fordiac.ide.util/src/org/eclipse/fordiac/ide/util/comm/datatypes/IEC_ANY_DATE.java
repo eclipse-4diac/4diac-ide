@@ -71,8 +71,9 @@ public abstract class IEC_ANY_DATE extends IEC_ANY {
 	
 	@Override
 	public boolean equals(Object data) {
-		if (data instanceof IEC_ANY_DATE)
+		if (data instanceof IEC_ANY_DATE) {
 			return ((IEC_ANY_DATE) data).value == value;
+		}
 		return false;
 	}
 	

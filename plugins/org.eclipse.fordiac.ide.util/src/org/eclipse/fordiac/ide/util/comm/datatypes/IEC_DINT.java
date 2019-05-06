@@ -69,9 +69,9 @@ public class IEC_DINT extends IEC_ANY {
 	
 	@Override
 	public boolean equals(Object data) {
-		if (data instanceof IEC_INT)
+		if (data instanceof IEC_INT) {
 			return ((IEC_INT) data).value == value;
-		else if (data instanceof IEC_LINT) {
+		} else if (data instanceof IEC_LINT) {
 			return ((IEC_LINT) data).value == value;
 		}
 		return false;

@@ -52,35 +52,36 @@ public class UDPChannel extends CChannel {
 	private UDPCommThread commThread;
 	private InetAddress inetAddress;
 
-	private UDPChannel(int packet_length, String UDP_ID, IIecReceivable receiver)
+	private UDPChannel(int packetLength, String udpID, IIecReceivable receiver)
 			throws CommException {
 		super();
-		inetAddress = getInetAddress(UDP_ID);
+		inetAddress = getInetAddress(udpID);
 		try {
 			if (inetAddress.isMulticastAddress()) {
-				socket = new MulticastSocket(getPort(UDP_ID));
+				socket = new MulticastSocket(getPort(udpID));
 				((MulticastSocket) socket).joinGroup(inetAddress);
 			} else {
-				socket = new DatagramSocket(getPort(UDP_ID));
+				socket = new DatagramSocket(getPort(udpID));
 			}
 		} catch (IOException e) {
 			throw new CommException("Invalid ID");
 		}
-		bytes = new byte[packet_length];
+		bytes = new byte[packetLength];
 		in = new DataInputStream(new ByteArrayInputStream(bytes));
-		(commThread = new UDPCommThread(this, receiver)).start();
+		commThread = new UDPCommThread(this, receiver);
+		commThread.start();
 	}
 
 	/**
 	 * method for creating a new udp channel
-	 * @param UDP_ID String holding Internet Address and port, e.g., "localhost:61500" or "127.0.0.1:61500".
+	 * @param udpID String holding Internet Address and port, e.g., "localhost:61500" or "127.0.0.1:61500".
 	 * @param receiver type of communication {@link IChannel}
 	 * @return Channel
 	 * @throws CommException
 	 */
-	public static CChannel register(String UDP_ID, IIecReceivable receiver)
+	public static CChannel register(String udpID, IIecReceivable receiver)
 			throws CommException {
-		return new UDPChannel(UDP_PACKET_LENGTH, UDP_ID, receiver);
+		return new UDPChannel(UDP_PACKET_LENGTH, udpID, receiver);
 	}
 
 	@Override
@@ -99,21 +100,23 @@ public class UDPChannel extends CChannel {
 
 	@Override
 	public List<IEC_ANY> receiveFrom() throws IOException {
-		if (socket == null)
+		if (socket == null) {
 			return null;
+		}
 		DatagramPacket packet = new DatagramPacket(bytes, UDP_PACKET_LENGTH);
 		packet.setLength(bytes.length);
 		socket.receive(packet);
 
 		in.reset();
-		List<IEC_ANY> list = new ArrayList<IEC_ANY>();
+		List<IEC_ANY> list = new ArrayList<>();
 
 		while (in.available() > 0) {
 			IEC_ANY decode = ASN1.decodeFrom(in);
-			if (decode != null)
+			if (decode != null) {
 				list.add(decode);
-			else
+			} else {
 				break;
+			}
 		}
 		return list;
 	}
@@ -135,22 +138,24 @@ public class UDPChannel extends CChannel {
 		try {
 			DatagramSocket myDataGramSocket = new DatagramSocket();
 			InetAddress inetAddress = CChannel.getInetAddress(ID);
-			int Port = CChannel.getPort(ID);
+			int port = CChannel.getPort(ID);
 
-			ByteArrayOutputStream Output = new ByteArrayOutputStream();
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			for (IEC_ANY elem : Data) {
-				if (elem != null)
-					Output.write(elem.encode());
-				else
-					Output.write(ASN1.NULL);
+				if (elem != null) {
+					output.write(elem.encode());					
+				} else {
+					output.write(ASN1.NULL);
+				}
 			}
 
-			int length = Output.size();
-			if (length > UDPChannel.UDP_PACKET_LENGTH)
+			int length = output.size();
+			if (length > UDPChannel.UDP_PACKET_LENGTH) {
 				length = UDPChannel.UDP_PACKET_LENGTH;
+			}
 
-			DatagramPacket myDGP = new DatagramPacket(Output.toByteArray(),
-					length, inetAddress, Port);
+			DatagramPacket myDGP = new DatagramPacket(output.toByteArray(),
+					length, inetAddress, port);
 			myDataGramSocket.send(myDGP);
 			myDataGramSocket.close();
 
