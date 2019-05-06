@@ -67,7 +67,7 @@ public class TransactionEditPart extends AbstractGraphicalEditPart {
 		super.deactivate();
 	}
 		
-	public class TransactionFigure extends Figure{
+	public static class TransactionFigure extends Figure{
 		public TransactionFigure(){
 			GridLayout layout = new GridLayout();
 			layout.marginWidth = 0;

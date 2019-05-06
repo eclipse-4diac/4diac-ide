@@ -77,7 +77,7 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 		super.deactivate();
 	}
 	
-	public class ServiceFigure extends FreeformLayeredPane {
+	public static class ServiceFigure extends FreeformLayeredPane {
 		private Figure leftFigure;
 		private Figure middleFigure;
 		private Figure rightFigure;

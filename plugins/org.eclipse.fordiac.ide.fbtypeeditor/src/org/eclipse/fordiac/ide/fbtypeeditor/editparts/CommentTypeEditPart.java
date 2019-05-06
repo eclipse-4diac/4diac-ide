@@ -27,7 +27,7 @@ EditPart {
 	 * The Class CommentTypeContainerFigure for handling the layout of one comment and type
 	 * label of an fb interface.
 	 */
-	private class CommentTypeContainerFigure extends Figure {
+	private static class CommentTypeContainerFigure extends Figure {
 
 		/**
 		 * Instantiates a new variable output container figure.
@@ -54,7 +54,7 @@ EditPart {
 
 	@Override
 	protected void createEditPolicies() {
-
+		// we currently don't have any editpolices for this edit part
 	}
 
 	@SuppressWarnings("rawtypes")

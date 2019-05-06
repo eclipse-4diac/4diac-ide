@@ -227,7 +227,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 		return new ChangeNameCommand(getType(), nameText.getText());
 	}
 
-	public class InputContentProvider implements IStructuredContentProvider {
+	public static class InputContentProvider implements IStructuredContentProvider {
 		@Override
 		public Object[] getElements(final Object inputElement) {
 			if(inputElement instanceof FBNetworkElement){
@@ -243,7 +243,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 		}
 	}
 	
-	public class InputLabelProvider extends LabelProvider implements ITableLabelProvider {
+	public static class InputLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(final Object element, final int columnIndex) {

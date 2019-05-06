@@ -77,30 +77,36 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 		MenuManager submenu = new MenuManager("&Align");
 
 		action = registry.getAction(GEFActionConstants.ALIGN_LEFT);
-		if (action != null && action.isEnabled())
+		if (action != null && action.isEnabled()) {
 			submenu.add(action);
+		}
 
 		action = registry.getAction(GEFActionConstants.ALIGN_CENTER);
-		if (action != null && action.isEnabled())
+		if (action != null && action.isEnabled()) {
 			submenu.add(action);
+		}
 
 		action = registry.getAction(GEFActionConstants.ALIGN_RIGHT);
-		if (action != null && action.isEnabled())
+		if (action != null && action.isEnabled()) {
 			submenu.add(action);
+		}
 
 		submenu.add(new Separator());
 
 		action = registry.getAction(GEFActionConstants.ALIGN_TOP);
-		if (action != null && action.isEnabled())
+		if (action != null && action.isEnabled()) {
 			submenu.add(action);
+		}
 
 		action = registry.getAction(GEFActionConstants.ALIGN_MIDDLE);
-		if (action != null && action.isEnabled())
+		if (action != null && action.isEnabled()) {
 			submenu.add(action);
+		}
 
 		action = registry.getAction(GEFActionConstants.ALIGN_BOTTOM);
-		if (action != null && action.isEnabled())
+		if (action != null && action.isEnabled()) {
 			submenu.add(action);
+		}
 
 		if (!submenu.isEmpty()){
 			menu.appendToGroup(GEFActionConstants.GROUP_REST, submenu);
@@ -112,7 +118,7 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 		}
 	}
 
-	private final class GraphZoomInAction extends ZoomInAction {
+	private static final class GraphZoomInAction extends ZoomInAction {
 		public GraphZoomInAction(final ZoomManager zoomManager) {
 			super(zoomManager);
 		}
@@ -123,7 +129,7 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 		}
 	}
 
-	private final class GraphZoomOutAction extends ZoomOutAction {
+	private static final class GraphZoomOutAction extends ZoomOutAction {
 		public GraphZoomOutAction(final ZoomManager zoomManager) {
 			super(zoomManager);
 		}

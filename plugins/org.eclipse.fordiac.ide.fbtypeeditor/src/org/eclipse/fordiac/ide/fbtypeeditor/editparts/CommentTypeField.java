@@ -23,7 +23,7 @@ public class CommentTypeField {
 	private final CommentTypeSeparator separator;
 	private final TypeField typeField;
 	
-	class CommentTypeSeparator{
+	static class CommentTypeSeparator{
 		String getLabel(){
 			return "    -    "; //$NON-NLS-1$
 		}		
@@ -55,7 +55,7 @@ public class CommentTypeField {
 	
 	@SuppressWarnings("rawtypes")
 	public List getChildren() {		
-		ArrayList<Object> children = new ArrayList<Object>();
+		List<Object> children = new ArrayList<>();
 		if (getReferencedElement().isIsInput()) {
 			children.add(commentField);	
 			children.add(separator);

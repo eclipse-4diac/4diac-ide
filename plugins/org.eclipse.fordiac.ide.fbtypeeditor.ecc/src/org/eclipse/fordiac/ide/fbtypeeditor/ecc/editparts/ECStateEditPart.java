@@ -123,9 +123,8 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		}
 	}
 
-	public class StateBorder extends LineBorder {
+	public static class StateBorder extends LineBorder {
 		private boolean initialState;
-		private Rectangle tempRect2;
 
 		public boolean isInitialState() {
 			return initialState;
@@ -165,7 +164,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 			graphics.drawRectangle(tempRect);
 			if (initialState) {
-				tempRect2 = new Rectangle(tempRect);
+				Rectangle tempRect2 = new Rectangle(tempRect);
 				tempRect2.shrink(3, 3);
 				graphics.drawRectangle(tempRect2);
 			}
@@ -290,9 +289,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	@Override
 	protected IFigure createFigure() {
-		ECStateFigure figure = new ECStateFigure();
-		// updateBorder();
-		return figure;
+		return new ECStateFigure();
 	}
 
 	@Override

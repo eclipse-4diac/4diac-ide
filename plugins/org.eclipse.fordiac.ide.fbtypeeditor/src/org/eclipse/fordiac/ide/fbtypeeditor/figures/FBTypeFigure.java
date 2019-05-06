@@ -315,14 +315,13 @@ public class FBTypeFigure extends Shape {
 	
 	public final void updateVersionInfoLabel(){
 		VersionInfo versionInfo = null;
-		if (type.getVersionInfo().size() > 0) {
+		if (!type.getVersionInfo().isEmpty()) {
 			versionInfo = type.getVersionInfo().get(type.getVersionInfo().size() - 1);
 		}	
-		versionInfoLabel.setText(versionInfo != null ? versionInfo.getVersion()
-				: "N/D");
+		versionInfoLabel.setText(versionInfo != null ? versionInfo.getVersion() : "N/D");
 	}
 
-	private class TopBorder extends LineBorder {
+	private static final class TopBorder extends LineBorder {
 		private int cornerDimensions = 0;
 
 		private TopBorder(final Color color, final int cornerDimensions) {

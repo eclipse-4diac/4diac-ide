@@ -31,7 +31,7 @@ public class SysConfTemplateTransferDropTargetListener extends
 
 	private AutomationSystem system;
 	
-	private class SysConfTemplateCreationFactory implements CreationFactory {
+	private static class SysConfTemplateCreationFactory implements CreationFactory {
 
 		/** The type template. */
 		private final Object typeTemplate;

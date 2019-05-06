@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  */
 public class ResourceDeploymentData {
 	
-	public class ParameterData{
+	public static class ParameterData{
 		private String value;
 		private VarDeclaration var;
 		private String prefix;
@@ -140,7 +140,7 @@ public class ResourceDeploymentData {
 		return retVal;
 	}
 		
-	private class ConDeploymentDest{
+	private static class ConDeploymentDest{
 		private final String prefix;
 		private final IInterfaceElement destination;
 		

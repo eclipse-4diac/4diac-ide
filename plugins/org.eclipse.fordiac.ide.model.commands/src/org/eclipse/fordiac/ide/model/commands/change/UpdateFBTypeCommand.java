@@ -47,7 +47,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 public class UpdateFBTypeCommand extends Command {
 	
 	//hleper data class for stroing connectiond ata of resoruce connection as the connections are lost during the unmapping process
-	private class ConnData{
+	private static class ConnData{
 		private IInterfaceElement source;
 		private IInterfaceElement dest;
 		

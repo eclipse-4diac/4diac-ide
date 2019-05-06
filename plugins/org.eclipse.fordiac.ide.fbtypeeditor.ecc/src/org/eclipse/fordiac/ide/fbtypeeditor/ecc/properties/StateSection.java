@@ -82,7 +82,7 @@ public class StateSection extends AbstractECSection {
 	private Button actionUp;
 	private Button actionDelete;
 	
-	private class ActionListLabelProvider extends LabelProvider implements ITableLabelProvider{
+	private static class ActionListLabelProvider extends LabelProvider implements ITableLabelProvider{
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
