@@ -158,7 +158,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		return (null != editPart) ? editPart.getZoomManager() : null;
 	}
 	
-	private final void configureRectangles() {
+	private void configureRectangles() {
 		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
 		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);	
 		Color borderColor = getBorderColor(model.getType()); 
@@ -253,7 +253,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		updateResourceTypeFigure();		
 	}
 
-	private final void setupTopIOs() {
+	private void setupTopIOs() {
 		ToolbarLayout topInputsLayout = new ToolbarLayout(false);
 		GridData topInputsLayoutData = new GridData(
 				GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
@@ -274,7 +274,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		top.setConstraint(eventOutputs, topOutputsLayoutData);
 	}
 
-	private final void setBottomIOs() {
+	private void setBottomIOs() {
 		Figure bottomInputArea = new Figure();
 		bottomInputArea.setLayoutManager(new ToolbarLayout(false));
 				
@@ -311,7 +311,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		bottomOutputArea.add(plugs);
 	}
 
-	private final void createInstanceNameLabel(final String instanceName) {
+	private void createInstanceNameLabel(final String instanceName) {
 		GridData instanceNameLayout = new GridData();
 		instanceNameLayout.grabExcessHorizontalSpace = true;
 		instanceNameLayout.horizontalAlignment = SWT.CENTER;

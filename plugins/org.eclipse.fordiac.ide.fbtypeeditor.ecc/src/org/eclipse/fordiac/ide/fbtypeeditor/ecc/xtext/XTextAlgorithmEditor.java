@@ -125,7 +125,7 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 	
 	private int prefixeLineCount = 0;
 	
-	private final void updatePrefix() {
+	private void updatePrefix() {
 		documentValid = false;
 		embeddedEditorModelAccess.updatePrefix(regeneratePrefix());
 		

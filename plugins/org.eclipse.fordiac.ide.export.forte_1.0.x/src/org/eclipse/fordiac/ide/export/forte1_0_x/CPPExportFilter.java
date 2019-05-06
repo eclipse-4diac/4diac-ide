@@ -47,8 +47,6 @@ import org.w3c.dom.NodeList;
  */
 public abstract class CPPExportFilter implements IExportFilter {
 
-	private Document document;
-
 	protected Element docel;
 
 	protected String destDir;
@@ -311,7 +309,7 @@ public abstract class CPPExportFilter implements IExportFilter {
 	 * @param destDir the dest dir
 	 */
 	public CPPExportFilter(final Document doc, final String destDir) {
-		document = doc;
+		Document document = doc;
 		docel = document.getDocumentElement();
 		convertToLibraryElement2(docel);
 		this.destDir = destDir;

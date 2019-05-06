@@ -205,7 +205,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	    templateTable.addSelectionChangedListener(ev -> handleEvent(null));	
 	}
 
-	private final void loadTypeTemplates() {
+	private void loadTypeTemplates() {
 		String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
 		File templateFolder = new File(templateFolderPath + File.separatorChar + "template");
 		FileFilter ff = createTemplatesFileFilter();
