@@ -16,9 +16,6 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -27,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.gef.EditPart;
 import org.eclipse.ui.IEditorInput;
 
 public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
@@ -76,8 +74,8 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	private void checkMapping(List<?> selection) {
 		Resource res = null;
 		for(Object ne : selection){
-			if(ne instanceof FBEditPart || ne instanceof SubAppForFBNetworkEditPart){
-				FBNetworkElement element = ((AbstractFBNElementEditPart) ne).getModel();
+			if(ne instanceof EditPart && ((EditPart)ne).getModel() instanceof FBNetworkElement){
+				FBNetworkElement element = (FBNetworkElement)((EditPart) ne).getModel();
 				if(element.isMapped()) {
 					if(null == res) {
 						//this is the first element

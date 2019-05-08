@@ -54,6 +54,8 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -61,6 +63,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -70,6 +73,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection extends AbstractSection {
+	private static final int TYPE_AND_COMMENT_COLUMN_WIDHT = 100;
+	private static final int NAME_COLUMNWIDHT = 200;
 	private static final String NAME = "name"; //$NON-NLS-1$
 	private static final String TYPE = "type"; //$NON-NLS-1$
 	private static final String COMMENT = "comment"; //$NON-NLS-1$
@@ -134,9 +139,9 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		table.setLinesVisible(true);		
 		table.setHeaderVisible(true);
 		TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(200));
-		layout.addColumnData(new ColumnPixelData(100));
-		layout.addColumnData(new ColumnPixelData(100));
+		layout.addColumnData(new ColumnPixelData(NAME_COLUMNWIDHT));
+		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDHT));
+		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDHT));
 		table.setLayout(layout);
 	}
 	
@@ -165,13 +170,15 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		container.setLayoutData(buttonCompLayoutData);
 		container.setLayout(new FillLayout(SWT.VERTICAL));
 		
+		Listener createListener = e -> {
+			executeCommand(newCreateCommand(inputs));
+			viewer.refresh();			
+		};
+		
 		Button createButton = getWidgetFactory().createButton(container, "", SWT.PUSH); //$NON-NLS-1$
 		createButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createButton.setToolTipText("Create interface element"); //$NON-NLS-1$
-		createButton.addListener(SWT.Selection, event -> {
-				executeCommand(newCreateCommand(inputs));
-				viewer.refresh();
-		});
+		createButton.addListener(SWT.Selection, createListener);
 		
 		Button upButton = getWidgetFactory().createButton(container, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
 		upButton.setToolTipText("Move interface element up"); //$NON-NLS-1$
@@ -197,10 +204,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 			}
 		});
 		
-		Button deleteButton = getWidgetFactory().createButton(container, "", SWT.PUSH); //$NON-NLS-1$
-		deleteButton.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
-		deleteButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		deleteButton.addListener(SWT.Selection, event -> {
+		Listener deleteListener = e -> {
 			if(!viewer.getStructuredSelection().isEmpty()) {
 				CompoundCommand cmd =  new CompoundCommand();
 				viewer.getStructuredSelection().toList().stream().filter(elm -> elm instanceof IInterfaceElement).
@@ -208,10 +212,32 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 				executeCommand(cmd);
 				viewer.refresh();
 			}
-		});
+		};
+		
+		Button deleteButton = getWidgetFactory().createButton(container, "", SWT.PUSH); //$NON-NLS-1$
+		deleteButton.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
+		deleteButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
+		deleteButton.addListener(SWT.Selection, deleteListener);
 		
 		viewer.addSelectionChangedListener( ev -> 
 			setButtonEnablement(upButton, downButton, deleteButton, !viewer.getSelection().isEmpty()) );
+		
+		viewer.getTable().addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// Nothing to do here
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.keyCode == SWT.INSERT && e.stateMask == 0) {
+					createListener.handleEvent(null);
+				} else  if (e.character == SWT.DEL && e.stateMask == 0) {
+					deleteListener.handleEvent(null);
+				}
+			}
+		});
 		
 		//initially nothing should be selected therefore deactivate the buttons
 		setButtonEnablement(upButton, downButton, deleteButton, false);

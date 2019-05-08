@@ -23,12 +23,12 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	
 	@Override
 	protected IContentProvider getOutputsContentProvider() {
-		return new InterfaceContentProvider(true, InterfaceContentProviderType.DATA);
+		return new InterfaceContentProvider(false, InterfaceContentProviderType.DATA);
 	}
 	
 	@Override
 	protected IContentProvider getInputsContentProvider() {
-		return new InterfaceContentProvider(false, InterfaceContentProviderType.DATA);
+		return new InterfaceContentProvider(true, InterfaceContentProviderType.DATA);
 	}
 
 	@Override

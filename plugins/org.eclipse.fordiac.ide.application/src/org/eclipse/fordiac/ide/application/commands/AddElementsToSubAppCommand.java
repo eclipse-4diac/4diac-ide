@@ -14,9 +14,6 @@ package org.eclipse.fordiac.ide.application.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -30,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -83,8 +81,8 @@ public class AddElementsToSubAppCommand extends Command {
 	
 	private void fillElementList(List<?> selection) {
 		for(Object ne : selection){
-			if(ne instanceof FBEditPart || ne instanceof SubAppForFBNetworkEditPart){
-				FBNetworkElement element = ((AbstractFBNElementEditPart) ne).getModel();
+			if(ne instanceof EditPart && ((EditPart)ne).getModel() instanceof FBNetworkElement){
+				FBNetworkElement element = (FBNetworkElement)((EditPart) ne).getModel();
 				elementsToAdd.add(element);
 				if(element.isMapped()) {
 					unmappingCmds.add(new UnmapCommand(element));					

@@ -51,6 +51,8 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -58,6 +60,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -189,6 +192,7 @@ public class StateSection extends AbstractECSection {
 		}
 		return null;
 	}
+	
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
@@ -221,32 +225,6 @@ public class StateSection extends AbstractECSection {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();
-		});
-	}
-	
-	public void createActionCreateButton(Composite actionButtonComp) {
-		Button actionNew = getWidgetFactory().createButton(actionButtonComp, "", SWT.FLAT); //$NON-NLS-1$
-		actionNew.setToolTipText("Create new action");
-		actionNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
-		actionNew.addListener(SWT.Selection, e -> {
-			executeCommand(new CreateECActionCommand(LibraryElementFactory.eINSTANCE.createECAction(), getType()));
-			actionViewer.refresh();
-		});
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void createActionDeleteButton(Composite actionButtonComp) {
-		actionDelete = getWidgetFactory().createButton(actionButtonComp, "", SWT.PUSH); //$NON-NLS-1$
-		actionDelete.setToolTipText("Delete selected actions");
-		actionDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));	
-		actionDelete.addListener(SWT.Selection, e -> {
-			if(!actionViewer.getStructuredSelection().isEmpty()) {
-				CompoundCommand cmd =  new CompoundCommand();
-				actionViewer.getStructuredSelection().toList().forEach(elem -> 
-					cmd.add(new DeleteECActionCommand((ECAction) elem)));				
-				executeCommand(cmd);
-				actionViewer.refresh();
-			}
 		});
 	}
 	
@@ -285,18 +263,59 @@ public class StateSection extends AbstractECSection {
 		transitionDown.setEnabled(somethingSelected);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void createActionButtons(Composite parent) {
 		parent.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false));
 		parent.setLayout(new FillLayout(SWT.VERTICAL));
-		createActionCreateButton(parent);
+		Button actionNew = getWidgetFactory().createButton(parent, "", SWT.FLAT); //$NON-NLS-1$
+		actionNew.setToolTipText("Create new action");
+		actionNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
+		
+		Listener createListener = e -> {
+			executeCommand(new CreateECActionCommand(LibraryElementFactory.eINSTANCE.createECAction(), getType()));
+			actionViewer.refresh();			
+		};
+		actionNew.addListener(SWT.Selection, createListener);
 		createActionUpButton(parent);
 		createActionDownButton(parent);
-		createActionDeleteButton(parent);
+		
+			actionDelete = getWidgetFactory().createButton(parent, "", SWT.PUSH); //$NON-NLS-1$
+		actionDelete.setToolTipText("Delete selected actions");
+		actionDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));	
+
+		Listener deleteListener = e -> { 
+			if(!actionViewer.getStructuredSelection().isEmpty()) {
+				CompoundCommand cmd =  new CompoundCommand();
+				actionViewer.getStructuredSelection().toList().forEach(elem -> 
+				cmd.add(new DeleteECActionCommand((ECAction) elem)));				
+				executeCommand(cmd);
+				actionViewer.refresh();
+			}
+		};
+		actionDelete.addListener(SWT.Selection, deleteListener);
+		
 		actionViewer.addSelectionChangedListener( ev -> 
 			setActionButtonEnablement(!actionViewer.getSelection().isEmpty()) );
 	
 		//initially nothing should be selected therefore deactivate the buttons
 		setActionButtonEnablement(false);
+		
+		actionViewer.getTable().addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// Nothing to do here
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.keyCode == SWT.INSERT && e.stateMask == 0) {
+					createListener.handleEvent(null);
+				} else  if (e.character == SWT.DEL && e.stateMask == 0) {
+					deleteListener.handleEvent(null);
+				}
+			}
+		});
 	}
 
 	private void setActionButtonEnablement(boolean somethingSelected) {

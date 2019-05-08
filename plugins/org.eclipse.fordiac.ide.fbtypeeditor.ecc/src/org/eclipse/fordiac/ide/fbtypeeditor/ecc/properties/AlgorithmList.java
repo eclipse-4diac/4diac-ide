@@ -37,11 +37,14 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -119,9 +122,10 @@ public class AlgorithmList {
 		composite = widgetFactory.createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		GridData gridDataVersionViewer = new GridData(GridData.FILL, GridData.FILL, true, true);
-		composite.setLayoutData(gridDataVersionViewer);		
-		createAddDelteButtons(widgetFactory);		
-		createAlgorithmViewer();
+		composite.setLayoutData(gridDataVersionViewer);
+		Composite buttonComp = new Composite(composite, SWT.NONE);
+		createAlgorithmViewer(composite);
+		createAddDelteButtons(widgetFactory, buttonComp);		
 	}
 	
 	Composite getComposite() {
@@ -135,38 +139,59 @@ public class AlgorithmList {
 
 	
 	@SuppressWarnings("unchecked")
-	private void createAddDelteButtons(final TabbedPropertySheetWidgetFactory widgetFactory) {
-		Composite buttonComp = new Composite(composite, SWT.NONE);
+	private void createAddDelteButtons(final TabbedPropertySheetWidgetFactory widgetFactory, Composite buttonComp) {
+		
 		GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
 		buttonComp.setLayoutData(buttonCompLayoutData);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
 		Button algorithmNew = widgetFactory.createButton(buttonComp, "", SWT.FLAT); //$NON-NLS-1$
 		algorithmNew.setToolTipText("Create new algorithm");
 		algorithmNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
-		algorithmNew.addListener(SWT.Selection, event -> {
-				CreateAlgorithmCommand cmd = new CreateAlgorithmCommand(type);
-				executeCommand(cmd);
-				algorithmViewer.refresh();
-				if(null != cmd.getNewAlgorithm()){
-					algorithmViewer.setSelection(new StructuredSelection(cmd.getNewAlgorithm()), true);
-				}
-			});
+		Listener createListener = e -> {
+			CreateAlgorithmCommand cmd = new CreateAlgorithmCommand(type);
+			executeCommand(cmd);
+			algorithmViewer.refresh();
+			if(null != cmd.getNewAlgorithm()){
+				algorithmViewer.setSelection(new StructuredSelection(cmd.getNewAlgorithm()), true);
+			}
+		};
+		
+		algorithmNew.addListener(SWT.Selection, createListener);
 		algorithmDelete = widgetFactory.createButton(buttonComp, "", SWT.PUSH); //$NON-NLS-1$
 		setAlgorithmDeleteState(false);
 		algorithmDelete.setToolTipText("Delete selected algorithm");
-		algorithmDelete.addListener(SWT.Selection, event -> {
-				if(!algorithmViewer.getStructuredSelection().isEmpty()) {
-					CompoundCommand cmd =  new CompoundCommand();
-					algorithmViewer.getStructuredSelection().toList().forEach(elem -> 
-						cmd.add(new DeleteAlgorithmCommand(type, (Algorithm) elem)));				
-					executeCommand(cmd);
-					algorithmViewer.refresh();
+		
+		Listener deleteListener = e -> { 
+			if(!algorithmViewer.getStructuredSelection().isEmpty()) {
+				CompoundCommand cmd =  new CompoundCommand();
+				algorithmViewer.getStructuredSelection().toList().forEach(elem -> 
+				cmd.add(new DeleteAlgorithmCommand(type, (Algorithm) elem)));				
+				executeCommand(cmd);
+				algorithmViewer.refresh();
+			}
+		};
+		algorithmDelete.addListener(SWT.Selection,  deleteListener);
+		
+		algorithmViewer.getTable().addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// Nothing to do here
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.keyCode == SWT.INSERT && e.stateMask == 0) {
+					createListener.handleEvent(null);
+				} else  if (e.character == SWT.DEL && e.stateMask == 0) {
+					deleteListener.handleEvent(null);
 				}
-			});
+			}
+		});
 	}
 	
-	private void createAlgorithmViewer() {
-		algorithmViewer = new TableViewer(composite, SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+	private void createAlgorithmViewer(Composite parent) {
+		algorithmViewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		GridData gridDataVersionViewer = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gridDataVersionViewer.heightHint = 150;
 		gridDataVersionViewer.widthHint = 80;

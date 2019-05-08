@@ -19,12 +19,12 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	
 	@Override
 	protected IContentProvider getOutputsContentProvider() {
-		return new InterfaceContentProvider(true, InterfaceContentProviderType.ADAPTER);
+		return new InterfaceContentProvider(false, InterfaceContentProviderType.ADAPTER);
 	}
 	
 	@Override
 	protected IContentProvider getInputsContentProvider() {
-		return new InterfaceContentProvider(false, InterfaceContentProviderType.ADAPTER);
+		return new InterfaceContentProvider(true, InterfaceContentProviderType.ADAPTER);
 	}
 
 	@Override

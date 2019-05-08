@@ -50,11 +50,14 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -86,8 +89,7 @@ public class InternalVarsSection extends ECCSection {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));	
 
-		createAddDelteButtons(composite);
-
+		Composite buttonComp = new Composite(composite, SWT.NONE);
 		internalVarsViewer = new TableViewer(composite, SWT.FULL_SELECTION | SWT.MULTI | SWT.BORDER | SWT.V_SCROLL);
 		GridData gridDataVersionViewer = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gridDataVersionViewer.heightHint = 150;
@@ -126,29 +128,52 @@ public class InternalVarsSection extends ECCSection {
 
 		internalVarsViewer.addSelectionChangedListener(event ->
 				setInternalVarsDeleteState(null != event.getStructuredSelection().getFirstElement()));
+		
+		createAddDelteButtons(buttonComp);  //create the add and delete buttons here so that we have access to the internalVarsViewer
 	}
 
 	@SuppressWarnings("unchecked")
-	private void createAddDelteButtons(Composite composite) {
-		Composite buttonComp = new Composite(composite, SWT.NONE);
+	private void createAddDelteButtons(Composite buttonComp) {
+		
 		GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
 		buttonComp.setLayoutData(buttonCompLayoutData);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
 		Button internalVarsNew = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH); //$NON-NLS-1$
-		internalVarsNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
-		internalVarsNew.addListener( SWT.Selection, event -> {
-				executeCommand(new CreateInternalVariableCommand(getType()));
-				internalVarsViewer.refresh();
-		});
+		internalVarsNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+		
+		Listener createListener = e -> {
+			executeCommand(new CreateInternalVariableCommand(getType()));
+			internalVarsViewer.refresh();			
+		};
+		internalVarsNew.addListener( SWT.Selection, createListener);
 		internalVarsDelete = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH); //$NON-NLS-1$
 		setInternalVarsDeleteState(false);
-		internalVarsDelete.addListener( SWT.Selection, event -> {
+		
+		Listener deleteListener = e -> { 
 			if(!internalVarsViewer.getStructuredSelection().isEmpty()) {
 				CompoundCommand cmd =  new CompoundCommand();
 				internalVarsViewer.getStructuredSelection().toList().
-					forEach(elem -> cmd.add(new DeleteInternalVariableCommand(getType(), (VarDeclaration) elem)));				
+				forEach(elem -> cmd.add(new DeleteInternalVariableCommand(getType(), (VarDeclaration) elem)));				
 				executeCommand(cmd);
 				internalVarsViewer.refresh();
+			}			
+		};
+		internalVarsDelete.addListener( SWT.Selection, deleteListener);
+		
+		internalVarsViewer.getTable().addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// Nothing to do here
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.keyCode == SWT.INSERT && e.stateMask == 0) {
+					createListener.handleEvent(null);
+				} else  if (e.character == SWT.DEL && e.stateMask == 0) {
+					deleteListener.handleEvent(null);
+				}
 			}
 		});
 	}

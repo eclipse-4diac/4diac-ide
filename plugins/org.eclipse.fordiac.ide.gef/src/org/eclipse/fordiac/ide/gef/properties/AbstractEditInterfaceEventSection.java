@@ -23,12 +23,12 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 
 	@Override
 	protected IContentProvider getOutputsContentProvider() {
-		return new InterfaceContentProvider(true, InterfaceContentProviderType.EVENT);
+		return new InterfaceContentProvider(false, InterfaceContentProviderType.EVENT);
 	}
 	
 	@Override
 	protected IContentProvider getInputsContentProvider() {
-		return new InterfaceContentProvider(false, InterfaceContentProviderType.EVENT);
+		return new InterfaceContentProvider(true, InterfaceContentProviderType.EVENT);
 	}
 
 	@Override
