@@ -134,21 +134,42 @@ class DownloadRunnable implements IRunnableWithProgress {
 			if (curMonitor.isCanceled()) {
 				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 			}
-			if(resources.contains(resData.res.getName())) {
-				//the resource is in the device
-				if(overrideAll) {
-					executor.deleteResource(resData.res.getName());
-				}else {
-					if(askOverrideForResource(resData.res)){
-						executor.deleteResource(resData.res.getName());
-					}else {
-						//the user has canceled to override this resource
-						continue;
-					}
+			if(checkResource(resData.res, resources, executor)) {
+				deployResource(resData, executor);
+				if(!devData.isFullDevice()) {
+					//start each resource individually
+					executor.startResource(resData.res);
 				}
-			} 			
-			deployResource(resData, executor);
+			}
 		}
+	}
+	
+	
+	/** Check if the resource exists already in the device and if yes ask the user how to behave (i.e., abort, override, or override all).
+	 * 
+	 * @param res				the resource that should be deployed
+	 * @param resourceNames		the names of all resources currently in the device
+	 * @param executor			the deployment executor	
+	 * @return 					true if the resource can and should be deployed. 
+	 * @throws DeploymentException
+	 * @throws InterruptedException
+	 */
+	private boolean checkResource(Resource res, Set<String> resourceNames, IDeviceManagementInteractor executor) throws DeploymentException, InterruptedException{
+		if(resourceNames.contains(res.getName())) {
+			//the resource is in the device
+			if(overrideAll) {
+				executor.deleteResource(res.getName());
+			}else {
+				if(askOverrideForResource(res)){
+					executor.deleteResource(res.getName());
+				}else {
+					//the user has canceled to override this resource
+					return false;
+				}
+			}
+		} 			
+		
+		return true;
 	}
 
 	private void deployDeviceData(DeviceDeploymentData devData, IDeviceManagementInteractor executor) throws DeploymentException {
@@ -160,7 +181,11 @@ class DownloadRunnable implements IRunnableWithProgress {
 				executor.writeDeviceParameter(device, var.getName(), value);
 			}				
 			curMonitor.worked(1);
-		}						
+		}		
+		
+		if(devData.isFullDevice()) {
+			executor.startDevice(device);
+		}
 	}
 
 	private static void showDeploymentErrorDialog(Device device, DeploymentException e) {
@@ -224,8 +249,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 			}
 			createFBInstance(resDepData, executor);
 			deployParamters(resDepData, executor); // this needs to be done before the connections are created
-			deployConnections(resDepData, executor);
-			executor.startResource(resDepData.res);
+			deployConnections(resDepData, executor);			
 		}
 	}
 

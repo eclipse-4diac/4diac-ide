@@ -20,6 +20,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public class DeviceDeploymentData {
 	
 	private final Device dev;
+	
+	/** indication if the full device is selected and the full device should be started
+	 */
+	private boolean fullDevice = false; 
 
 	private List<ResourceDeploymentData> resData = new ArrayList<>();
 	
@@ -31,6 +35,14 @@ public class DeviceDeploymentData {
 	
 	public Device getDevice() {
 		return dev;
+	}
+	
+	public boolean isFullDevice() {
+		return fullDevice;
+	}
+	
+	public void setFullDevice(boolean fullDevice) {
+		this.fullDevice = fullDevice;
 	}
 
 	public void addResourceData(ResourceDeploymentData data) {

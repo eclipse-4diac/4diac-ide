@@ -199,6 +199,7 @@ public enum DeploymentCoordinator {
 			} else if (object instanceof Device) {
 				Device dev = (Device) object;
 				DeviceDeploymentData devData = getDevData(data, dev);
+				devData.setFullDevice(true);  //indicate that the device is selected in the deployment selection
 				devData.setSeltectedDevParams(getSelectedDeviceProperties((Device) object));
 			}
 		}		
