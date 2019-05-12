@@ -70,11 +70,10 @@ public class FixedAnchor extends ChopboxAnchor {
 	public Point getLocation(final Point reference) {
 		Point location;
 		if (isInput) {
-			Point p1 = getBox().getLeft();
-			location = p1;
+			location = getBox().getLeft();
 		} else {
-			Point p1 = getBox().getRight();
-			location = p1;
+			location = getBox().getRight();
+			location.x -= 1; //the right seems to be exactly the pixel after the box. With this -1 we get the border of the box.
 		}
 		
 		getOwner().translateToAbsolute(location);
