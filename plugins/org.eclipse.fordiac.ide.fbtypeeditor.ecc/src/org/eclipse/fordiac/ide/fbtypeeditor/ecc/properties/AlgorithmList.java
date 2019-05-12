@@ -22,38 +22,31 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.ui.controls.widget.AddDeleteWidget;
+import org.eclipse.fordiac.ide.ui.controls.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class AlgorithmList {
+public class AlgorithmList implements CommandExecutor  {
 	
 	private class AlgorithmViewerCellModifier implements ICellModifier {
 		@Override
@@ -106,7 +99,6 @@ public class AlgorithmList {
 	private static final String A_LANGUAGE = "Language"; //$NON-NLS-1$
 	private static final String A_COMMENT = "Comment"; //$NON-NLS-1$
 	
-	private Button algorithmDelete;
 	private TableViewer algorithmViewer;
 	private Composite composite;
 	
@@ -123,9 +115,21 @@ public class AlgorithmList {
 		composite.setLayout(new GridLayout(2, false));
 		GridData gridDataVersionViewer = new GridData(GridData.FILL, GridData.FILL, true, true);
 		composite.setLayoutData(gridDataVersionViewer);
-		Composite buttonComp = new Composite(composite, SWT.NONE);
+		AddDeleteWidget buttons = new AddDeleteWidget();
+		buttons.createControls(composite, widgetFactory);
+
 		createAlgorithmViewer(composite);
-		createAddDelteButtons(widgetFactory, buttonComp);		
+		
+		buttons.bindToTableViewer(algorithmViewer, 
+				ev-> {
+					CreateAlgorithmCommand cmd = new CreateAlgorithmCommand(type);
+					executeCommand(cmd);
+					algorithmViewer.refresh();
+					if(null != cmd.getNewAlgorithm()){
+						algorithmViewer.setSelection(new StructuredSelection(cmd.getNewAlgorithm()), true);
+					}
+				}, 				
+				AddDeleteWidget.getSelectionListener(algorithmViewer, this, ref -> new DeleteAlgorithmCommand(type, (Algorithm) ref))); 
 	}
 	
 	Composite getComposite() {
@@ -135,59 +139,6 @@ public class AlgorithmList {
 	public void initialize(BasicFBType type, CommandStack commandStack) {
 		this.type = type;
 		this.commandStack = commandStack;		
-	}
-
-	
-	@SuppressWarnings("unchecked")
-	private void createAddDelteButtons(final TabbedPropertySheetWidgetFactory widgetFactory, Composite buttonComp) {
-		
-		GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
-		buttonComp.setLayoutData(buttonCompLayoutData);
-		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		Button algorithmNew = widgetFactory.createButton(buttonComp, "", SWT.FLAT); //$NON-NLS-1$
-		algorithmNew.setToolTipText("Create new algorithm");
-		algorithmNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
-		Listener createListener = e -> {
-			CreateAlgorithmCommand cmd = new CreateAlgorithmCommand(type);
-			executeCommand(cmd);
-			algorithmViewer.refresh();
-			if(null != cmd.getNewAlgorithm()){
-				algorithmViewer.setSelection(new StructuredSelection(cmd.getNewAlgorithm()), true);
-			}
-		};
-		
-		algorithmNew.addListener(SWT.Selection, createListener);
-		algorithmDelete = widgetFactory.createButton(buttonComp, "", SWT.PUSH); //$NON-NLS-1$
-		setAlgorithmDeleteState(false);
-		algorithmDelete.setToolTipText("Delete selected algorithm");
-		
-		Listener deleteListener = e -> { 
-			if(!algorithmViewer.getStructuredSelection().isEmpty()) {
-				CompoundCommand cmd =  new CompoundCommand();
-				algorithmViewer.getStructuredSelection().toList().forEach(elem -> 
-				cmd.add(new DeleteAlgorithmCommand(type, (Algorithm) elem)));				
-				executeCommand(cmd);
-				algorithmViewer.refresh();
-			}
-		};
-		algorithmDelete.addListener(SWT.Selection,  deleteListener);
-		
-		algorithmViewer.getTable().addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// Nothing to do here
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.keyCode == SWT.INSERT && e.stateMask == 0) {
-					createListener.handleEvent(null);
-				} else  if (e.character == SWT.DEL && e.stateMask == 0) {
-					deleteListener.handleEvent(null);
-				}
-			}
-		});
 	}
 	
 	private void createAlgorithmViewer(Composite parent) {
@@ -215,23 +166,15 @@ public class AlgorithmList {
 		algorithmViewer.setContentProvider(new ArrayContentProvider());		
 		algorithmViewer.setLabelProvider(new AlgorithmsLabelProvider());
 		algorithmViewer.setCellModifier(new AlgorithmViewerCellModifier());
-		algorithmViewer.addSelectionChangedListener(event ->
-				setAlgorithmDeleteState(null != ((IStructuredSelection) algorithmViewer.getSelection()).getFirstElement()));
 	}
 	
-	private void executeCommand(Command cmd){
+	@Override
+	public void executeCommand(Command cmd){
 		if (null != type && commandStack != null) {
 			commandStack.execute(cmd);
 		}
 	}
 	
-	private void setAlgorithmDeleteState(boolean enabled) {
-		algorithmDelete.setEnabled(enabled);
-		algorithmDelete.setImage((enabled) ? 
-				PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE) :
-				PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
-	}
-
 	private static CellEditor[] createAlgorithmCellEditors(final Table table) {
 		TextCellEditor algorithmNameEditor = new TextCellEditor(table); 
 		((Text)algorithmNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());

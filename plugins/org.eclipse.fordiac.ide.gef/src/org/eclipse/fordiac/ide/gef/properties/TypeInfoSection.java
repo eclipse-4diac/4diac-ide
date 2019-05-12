@@ -31,12 +31,12 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteVersionInfoCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.ui.controls.widget.AddDeleteWidget;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -44,20 +44,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 /**
@@ -77,9 +71,6 @@ public abstract class TypeInfoSection extends AbstractSection {
 	private Text descriptionText;	
 	
 	private TableViewer versionViewer;
-	private Group versionInfoGroup;
-	private Button versionInfoNew;
-	private Button versionInfoDelete;
 	private static final String VERSION_PROPERTY = "version"; //$NON-NLS-1$
 	private static final String ORGANIZATION_PROPERTY = "organization"; //$NON-NLS-1$
 	private static final String AUTHOR_PROPERTY = "author"; //$NON-NLS-1$
@@ -93,7 +84,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 	
 	@Override
 	protected void setInputInit(){
-		//nothing todo here
+		//nothing to do here
 	}
 	
 	@Override
@@ -179,7 +170,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 	}
 	
 	private void createVersionInfoGroup(Composite parent) {		
-		versionInfoGroup = getWidgetFactory().createGroup(parent, "Version Info");
+		Group versionInfoGroup = getWidgetFactory().createGroup(parent, "Version Info");
 		versionInfoGroup.setLayout(new GridLayout(2, false));	
 		versionInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 		
@@ -213,28 +204,12 @@ public abstract class TypeInfoSection extends AbstractSection {
 		versionViewer.setCellEditors(new CellEditor[] { new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) });
 		versionViewer.setColumnProperties(new String[] { VERSION_PROPERTY, ORGANIZATION_PROPERTY, AUTHOR_PROPERTY, DATE_PROPERTY, REMARKS_PROPERTY });
 		
-		Composite buttonComp = new Composite(versionInfoGroup, SWT.NONE);
-		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		versionInfoNew = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH);
-		versionInfoNew.setToolTipText("New info element");
-		versionInfoNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
-		versionInfoNew.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				executeCommand(new AddNewVersionInfoCommand(getType()));
-				versionViewer.refresh();
-			}
-		});
-		versionInfoDelete = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH);
-		versionInfoDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		versionInfoDelete.setToolTipText("Delete selected info element");
-		versionInfoDelete.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				executeCommand(new DeleteVersionInfoCommand(getType(), (VersionInfo)((IStructuredSelection) versionViewer.getSelection()).getFirstElement()));
-				versionViewer.refresh();
-			}
-		});
+		AddDeleteWidget buttons = new AddDeleteWidget();
+		buttons.createControls(versionInfoGroup, getWidgetFactory());
+		buttons.bindToTableViewer(versionViewer, this,
+				ref -> new AddNewVersionInfoCommand(getType()),
+				ref -> new DeleteVersionInfoCommand(getType(), (VersionInfo)ref)); 
+		
 		versionViewer.setCellModifier(new ICellModifier() {
 			@Override
 			public boolean canModify(final Object element, final String property) {
@@ -289,8 +264,6 @@ public abstract class TypeInfoSection extends AbstractSection {
 		typeText.setEnabled(false);
 		descriptionText.setEnabled(false);
 		versionViewer.setCellModifier(null);
-		versionInfoNew.setEnabled(false);
-		versionInfoDelete.setEnabled(false);
 	}	
 
 	@Override

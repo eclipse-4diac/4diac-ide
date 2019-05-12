@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteCompilerCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
+import org.eclipse.fordiac.ide.ui.controls.widget.AddDeleteWidget;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
@@ -40,21 +41,15 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 /**
@@ -68,11 +63,9 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	private static final String LANGUAGE_CPP = "Cpp"; //$NON-NLS-1$
 	private static final String LANGUAGE_JAVA = "Java"; //$NON-NLS-1$
 	private TableViewer compilerViewer;	
-	private Group compilerInfoGroup;	
 	private Text headerText;
 	private Text classdefText;
-	private Button compilerInfoNew;
-	private Button compilerInfoDelete;
+
 	private static final String COMPILER_VERSION = "compiler_version"; //$NON-NLS-1$
 	private static final String COMPILER_LANGUAGE = "language"; //$NON-NLS-1$
 	private static final String COMPILER_VENDOR = "vendor"; //$NON-NLS-1$
@@ -89,7 +82,7 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	}
 
 	private void createCompilerInfoGroup(Composite parent) {	
-		compilerInfoGroup = getWidgetFactory().createGroup(parent, "Compiler Info");
+		Group compilerInfoGroup = getWidgetFactory().createGroup(parent, "Compiler Info");
 		compilerInfoGroup.setLayout(new GridLayout(1, false));
 		compilerInfoGroup.setLayoutData(new GridData(SWT.FILL, 0, false, false));	
 		
@@ -143,26 +136,12 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		compilerViewer.setCellEditors(new CellEditor[] {new ComboBoxCellEditor(table, VALUE_SET), new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) });
 		compilerViewer.setColumnProperties(new String[] { COMPILER_LANGUAGE, COMPILER_VENDOR, COMPILER_PRODUCT, COMPILER_VERSION });
 		
-		Composite buttonComp = new Composite(compositeBottom, SWT.NONE);
-		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
-		compilerInfoNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
-		compilerInfoNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-		compilerInfoNew.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				executeCommand(new AddNewCompilerCommand((FBType)type));
-				compilerViewer.refresh();
-			}
-		});
-		compilerInfoDelete = getWidgetFactory().createButton(buttonComp, "Delete", SWT.PUSH);
-		compilerInfoDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		compilerInfoDelete.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				executeCommand(new DeleteCompilerCommand(((FBType)type).getCompilerInfo(), (Compiler)((IStructuredSelection) compilerViewer.getSelection()).getFirstElement()));
-				compilerViewer.refresh();
-			}
-		});
+		AddDeleteWidget buttons = new AddDeleteWidget();
+		buttons.createControls(compositeBottom, getWidgetFactory());
+		buttons.bindToTableViewer(compilerViewer, this,
+				ref -> new AddNewCompilerCommand((FBType)type),
+				ref -> new DeleteCompilerCommand(((FBType)type).getCompilerInfo(), (Compiler)ref)); 
+		
 		compilerViewer.setCellModifier(new ICellModifier() {
 			@Override
 			public boolean canModify(final Object element, final String property) {
@@ -232,8 +211,6 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		if(null == commandStack){ //disable all field
 			headerText.setEnabled(false);
 			classdefText.setEnabled(false);
-			compilerInfoNew.setEnabled(false);
-			compilerInfoDelete.setEnabled(false);
 			compilerViewer.setCellModifier(null);
 		}
 	}

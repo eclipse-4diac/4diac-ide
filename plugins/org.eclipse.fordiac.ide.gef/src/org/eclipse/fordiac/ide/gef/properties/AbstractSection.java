@@ -23,6 +23,7 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory
 import org.eclipse.fordiac.ide.model.Palette.provider.PaletteItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
+import org.eclipse.fordiac.ide.ui.controls.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
@@ -36,7 +37,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class AbstractSection extends AbstractPropertySection {
+public abstract class AbstractSection extends AbstractPropertySection implements CommandExecutor {
 	
 	protected Object type;
 	protected CommandStack commandStack;
@@ -121,7 +122,8 @@ public abstract class AbstractSection extends AbstractPropertySection {
 		}
 	}
 	
-	protected void executeCommand(Command cmd){
+	@Override
+	public void executeCommand(Command cmd){
 		if (type != null && commandStack != null && cmd.canExecute()) {
 			blockRefresh = true;
 			commandStack.execute(cmd);

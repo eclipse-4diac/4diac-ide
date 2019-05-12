@@ -39,9 +39,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.controls.widget.AddDeleteReorderListWidget;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -54,22 +54,15 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection extends AbstractSection {
@@ -149,9 +142,11 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		Group inputsGroup = getWidgetFactory().createGroup(parent, "Inputs"); //$NON-NLS-1$
 		inputsGroup.setLayout(new GridLayout(2, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		Composite buttonListContainer = new Composite(inputsGroup, SWT.NONE);  // this has to be done here so that it is in the first column
+		
+		AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+		buttons.createControls(inputsGroup, getWidgetFactory()); 
 		inputsViewer = createTypeTableView(inputsGroup);
-		createButtonList(buttonListContainer, inputsViewer, true);
+		configureButtonList(buttons, inputsViewer, true);
 	}
 	
 	private TableViewer createTypeTableView(Group parent) {
@@ -164,95 +159,14 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		return viewer;
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void createButtonList(Composite container, TableViewer viewer, boolean inputs) {		
-		GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
-		container.setLayoutData(buttonCompLayoutData);
-		container.setLayout(new FillLayout(SWT.VERTICAL));
-		
-		Listener createListener = e -> {
-			executeCommand(newCreateCommand(inputs));
-			viewer.refresh();			
-		};
-		
-		Button createButton = getWidgetFactory().createButton(container, "", SWT.PUSH); //$NON-NLS-1$
-		createButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-		createButton.setToolTipText("Create interface element"); //$NON-NLS-1$
-		createButton.addListener(SWT.Selection, createListener);
-		
-		Button upButton = getWidgetFactory().createButton(container, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
-		upButton.setToolTipText("Move interface element up"); //$NON-NLS-1$
-		upButton.addListener(SWT.Selection, event -> {
-			if(!viewer.getStructuredSelection().isEmpty()) {
-				CompoundCommand cmd =  new CompoundCommand();
-				viewer.getStructuredSelection().toList().stream().filter(elem -> elem instanceof IInterfaceElement).
-					forEach(elem -> cmd.add(newOrderCommand((IInterfaceElement) elem, inputs, true)));				
-				executeCommand(cmd);
-				viewer.refresh();
-			}
-		});
-		
-		Button downButton = getWidgetFactory().createButton(container, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
-		downButton.setToolTipText("Move interface element down"); //$NON-NLS-1$
-		downButton.addListener(SWT.Selection, event -> {
-			if(!viewer.getStructuredSelection().isEmpty()) {
-				CompoundCommand cmd =  new CompoundCommand();
-				viewer.getStructuredSelection().toList().stream().filter(elm -> elm instanceof IInterfaceElement).
-					forEach(elem -> cmd.add(newOrderCommand((IInterfaceElement) elem, inputs, false)));				
-				executeCommand(cmd);
-				viewer.refresh();
-			}
-		});
-		
-		Listener deleteListener = e -> {
-			if(!viewer.getStructuredSelection().isEmpty()) {
-				CompoundCommand cmd =  new CompoundCommand();
-				viewer.getStructuredSelection().toList().stream().filter(elm -> elm instanceof IInterfaceElement).
-					forEach(elem -> cmd.add(newDeleteCommand((IInterfaceElement) elem)));				
-				executeCommand(cmd);
-				viewer.refresh();
-			}
-		};
-		
-		Button deleteButton = getWidgetFactory().createButton(container, "", SWT.PUSH); //$NON-NLS-1$
-		deleteButton.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
-		deleteButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		deleteButton.addListener(SWT.Selection, deleteListener);
-		
-		viewer.addSelectionChangedListener( ev -> 
-			setButtonEnablement(upButton, downButton, deleteButton, !viewer.getSelection().isEmpty()) );
-		
-		viewer.getTable().addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// Nothing to do here
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.keyCode == SWT.INSERT && e.stateMask == 0) {
-					createListener.handleEvent(null);
-				} else  if (e.character == SWT.DEL && e.stateMask == 0) {
-					deleteListener.handleEvent(null);
-				}
-			}
-		});
-		
-		//initially nothing should be selected therefore deactivate the buttons
-		setButtonEnablement(upButton, downButton, deleteButton, false);
+	private void configureButtonList(AddDeleteReorderListWidget buttons, TableViewer viewer, boolean inputs) {
+		buttons.bindToTableViewer(viewer, this, 
+				ref -> newCreateCommand(inputs), 
+				ref -> newDeleteCommand((IInterfaceElement) ref),
+				ref -> newOrderCommand((IInterfaceElement) ref, inputs, true), 
+				ref -> newOrderCommand((IInterfaceElement) ref, inputs, false)); 
 	}
-	
-	private static void setButtonEnablement(Button upButton, Button downButton, Button deleteButton,
-			boolean somethingSelected) {
-		upButton.setEnabled(somethingSelected);
-		downButton.setEnabled(somethingSelected);
-		deleteButton.setEnabled(somethingSelected);
-		deleteButton.setImage((somethingSelected) ? 
-				PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE) :
-					PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
-	}
-	
+		
 	private void setCellEditors(){
 		inputsViewer.setCellEditors(new CellEditor[] {
 				new TextCellEditor(inputsViewer.getTable()), 
@@ -268,9 +182,11 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		Group outputsGroup = getWidgetFactory().createGroup(parent, "Outputs"); //$NON-NLS-1$
 		outputsGroup.setLayout(new GridLayout(2, false));
 		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		Composite buttonListContainer = new Composite(outputsGroup, SWT.NONE);  // this has to be done here so that it is in the first column
+		
+		AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+		buttons.createControls(outputsGroup, getWidgetFactory()); 	
 		outputsViewer = createTypeTableView(outputsGroup); 
-		createButtonList(buttonListContainer, outputsViewer, false);
+		configureButtonList(buttons, outputsViewer, false);
 	}
 
 	@Override

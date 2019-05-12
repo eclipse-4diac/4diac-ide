@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.ui.controls.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -51,8 +52,6 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -60,13 +59,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class StateSection extends AbstractECSection {
@@ -81,9 +77,6 @@ public class StateSection extends AbstractECSection {
 	
 	private Button transitionDown;
 	private Button transitionUp;
-	private Button actionDown;
-	private Button actionUp;
-	private Button actionDelete;
 	
 	private static class ActionListLabelProvider extends LabelProvider implements ITableLabelProvider{
 
@@ -233,9 +226,14 @@ public class StateSection extends AbstractECSection {
 		actionGroup.setLayout(new GridLayout(2, false));
 		actionGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
-		Composite actionButtonComp = new Composite(actionGroup, SWT.NONE);
-		createActionViewer(actionGroup);
-		createActionButtons(actionButtonComp);	//buttons have to be created after the action viewer so that selection handlers can be bound to it
+		AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+		buttons.createControls(actionGroup, getWidgetFactory());
+		createActionViewer(actionGroup);		
+		buttons.bindToTableViewer(actionViewer, this, 
+				ref -> new CreateECActionCommand(LibraryElementFactory.eINSTANCE.createECAction(), getType()), 
+				ref -> new DeleteECActionCommand((ECAction) ref),
+				ref -> new ChangeActionOrderCommand(getType(), (ECAction) ref, true), 
+				ref -> new ChangeActionOrderCommand(getType(), (ECAction) ref, false)); 
 		
 		Group transitionGroup = getWidgetFactory().createGroup(parent, "Outgoing Transitions");
 		transitionGroup.setLayout(new GridLayout(2, false));	
@@ -261,70 +259,6 @@ public class StateSection extends AbstractECSection {
 	private void setTransitionButtonEnablement(boolean somethingSelected) {
 		transitionUp.setEnabled(somethingSelected);
 		transitionDown.setEnabled(somethingSelected);
-	}
-
-	@SuppressWarnings("unchecked")
-	private void createActionButtons(Composite parent) {
-		parent.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false));
-		parent.setLayout(new FillLayout(SWT.VERTICAL));
-		Button actionNew = getWidgetFactory().createButton(parent, "", SWT.FLAT); //$NON-NLS-1$
-		actionNew.setToolTipText("Create new action");
-		actionNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
-		
-		Listener createListener = e -> {
-			executeCommand(new CreateECActionCommand(LibraryElementFactory.eINSTANCE.createECAction(), getType()));
-			actionViewer.refresh();			
-		};
-		actionNew.addListener(SWT.Selection, createListener);
-		createActionUpButton(parent);
-		createActionDownButton(parent);
-		
-			actionDelete = getWidgetFactory().createButton(parent, "", SWT.PUSH); //$NON-NLS-1$
-		actionDelete.setToolTipText("Delete selected actions");
-		actionDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));	
-
-		Listener deleteListener = e -> { 
-			if(!actionViewer.getStructuredSelection().isEmpty()) {
-				CompoundCommand cmd =  new CompoundCommand();
-				actionViewer.getStructuredSelection().toList().forEach(elem -> 
-				cmd.add(new DeleteECActionCommand((ECAction) elem)));				
-				executeCommand(cmd);
-				actionViewer.refresh();
-			}
-		};
-		actionDelete.addListener(SWT.Selection, deleteListener);
-		
-		actionViewer.addSelectionChangedListener( ev -> 
-			setActionButtonEnablement(!actionViewer.getSelection().isEmpty()) );
-	
-		//initially nothing should be selected therefore deactivate the buttons
-		setActionButtonEnablement(false);
-		
-		actionViewer.getTable().addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// Nothing to do here
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.keyCode == SWT.INSERT && e.stateMask == 0) {
-					createListener.handleEvent(null);
-				} else  if (e.character == SWT.DEL && e.stateMask == 0) {
-					deleteListener.handleEvent(null);
-				}
-			}
-		});
-	}
-
-	private void setActionButtonEnablement(boolean somethingSelected) {
-		actionUp.setEnabled(somethingSelected);
-		actionDown.setEnabled(somethingSelected);
-		actionDelete.setEnabled(somethingSelected);
-		actionDelete.setImage((somethingSelected) ? 
-				PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE) :
-					PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
 
 	private void createActionViewer(Group actionGroup) {
@@ -391,36 +325,6 @@ public class StateSection extends AbstractECSection {
 					cmd.add(new ChangeTransitionPriorityCommand(getType(), (ECTransition) elem, true)));				
 				executeCommand(cmd);
 				transitionsOutViewer.refresh();
-			}
-		});
-	}
-
-	@SuppressWarnings("unchecked")
-	private void createActionDownButton(Composite actionButtonComp) {
-		actionDown = getWidgetFactory().createButton(actionButtonComp, "Down", SWT.ARROW |SWT.DOWN);
-		actionDown.setToolTipText("Move action down");
-		actionDown.addListener(SWT.Selection, e -> {
-			if(!actionViewer.getStructuredSelection().isEmpty()) {
-				CompoundCommand cmd =  new CompoundCommand();
-				actionViewer.getStructuredSelection().toList().forEach(elem -> 
-					cmd.add(new ChangeActionOrderCommand(getType(), (ECAction) elem, false)));				
-				executeCommand(cmd);
-				actionViewer.refresh();
-			}
-		});
-	}
-
-	@SuppressWarnings("unchecked")
-	private void createActionUpButton(Composite actionButtonComp) {
-		actionUp = getWidgetFactory().createButton(actionButtonComp, "", SWT.ARROW |SWT.UP); //$NON-NLS-1$
-		actionUp.setToolTipText("Move action up");	
-		actionUp.addListener(SWT.Selection, e -> {
-			if(!actionViewer.getStructuredSelection().isEmpty()) {
-				CompoundCommand cmd =  new CompoundCommand();
-				actionViewer.getStructuredSelection().toList().forEach(elem -> 
-					cmd.add(new ChangeActionOrderCommand(getType(), (ECAction) elem, true)));				
-				executeCommand(cmd);
-				actionViewer.refresh();
 			}
 		});
 	}

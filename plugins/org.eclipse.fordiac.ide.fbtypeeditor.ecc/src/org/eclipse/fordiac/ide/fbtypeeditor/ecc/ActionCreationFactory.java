@@ -28,9 +28,7 @@ public class ActionCreationFactory implements CreationFactory {
 	 */
 	@Override
 	public Object getNewObject() {
-		ECAction action = LibraryElementFactory.eINSTANCE.createECAction();
-
-		return action;
+		return LibraryElementFactory.eINSTANCE.createECAction();	
 	}
 
 	/*

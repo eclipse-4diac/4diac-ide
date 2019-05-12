@@ -1,10 +1,13 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.ui.controls,
- org.eclipse.fordiac.ide.ui.controls.editors
+ org.eclipse.fordiac.ide.ui.controls.editors,
+ org.eclipse.fordiac.ide.ui.controls.providers,
+ org.eclipse.fordiac.ide.ui.controls.widget
 Require-Bundle: org.eclipse.gef,
  org.eclipse.core.runtime,
  org.eclipse.jface,
- org.eclipse.ui.workbench
+ org.eclipse.ui.workbench,
+ org.eclipse.ui.views.properties.tabbed
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.10.2.qualifier
