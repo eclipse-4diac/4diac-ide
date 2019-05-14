@@ -1,6 +1,7 @@
 <!DOCTYPE html> 
 <!--
  Copyright (c) 2017 fortiss GmbH
+               2019 Johannes Kepler University Linz
   
  All rights reserved. This program and the accompanying materials
  are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +11,8 @@
  Contributors:
    Jose Cabral
      - initial API and implementation and/or initial documentation
+   Bianca Wiesmayr
+   	 - updated documentation
 -->
 
 <html lang="en">
@@ -21,29 +24,45 @@
 
 <body>
 
-<h2 id="topOfPage">Implement a PID controller for the position of a motor of the EV3</h2>
+<h2 id="topOfPage">Implement a PID controller for the position of an EV3 motor</h2>
 
-	<p>In this tutorial, an implementation of a PID controller for a motor of the EV3 is presented. The position of the motor will be controlled using PWM. The implementation shows all the steps from creating a PID Functional Block in 4DIAC, up to tuning the PID controller and printing the values in a graph.</p>
+	<p>In this tutorial, an implementation of a PID controller for an EV3 motor is presented. 
+	The position of the motor will be controlled using PWM. 
+	The implementation shows all the steps from creating a PID Functional Block in 4diac IDE, up to tuning the PID controller and printing the values in a graph.</p>
 
-	<p>A basic usage knowledge of 4DIAC is necessary to follow through the steps.</p>
+	<p>A basic usage knowledge of Eclipse 4diac is necessary to follow through the steps.</p>
 
 	<h3>Creating the PID FB</h3>
 
-	<p>The first thing to do is to create the PID functional block. Go to File &rarr; New &rarr; New type. In the pop-up menu, choose the parent folder to store the new FB, choose PID as the Type name, and select Basic.fbt as Type. Click Finish, and the view to edit the new FB will open. First, the interface must be configured. Use the image below to complete it</p>
+	<p>The first thing to do is to create the PID Function Block.
+	Go to File &rarr; New &rarr; New type. 
+	In the pop-up menu, choose the parent folder to store the new FB, choose PID as the Type name, and select Basic as Type. 
+	Click Finish, and the view to edit the new FB opens. 
+	First, the interface must be configured. 
+	Use the image below to complete it:</p>
 
 	<img src="../../html/examples/img/pidMotor/PIDInterface.png" alt="Interface of the PID FB" />
 
-	<p>The interfaces uses Kp, Ki and Kd as constants to be tuned instead of the times Ti and Td. This allow easily to zero the integral part. The interval is the time between requests to the FB and is expected to be constant.</p>
+	<p>The interface uses Kp, Ki and Kd as constants to be tuned instead of the times Ti and Td. 
+	This allow to easily zero the integral part. 
+	The interval is the time between requests to the FB and is expected to be constant.</p>
 
-	<p>With the interface set, the next step is to define the ECC and the algorithm. The ECC graphic is really simple, and it looks like the image below. You may have to create the new algorithms with the names shown before filling the graph.</p>
+	<p>With the interface set, the next step is to define the ECC and the algorithm. 
+	The ECC graph is really simple, and it should look like the image below. 
+	You may have to create the new algorithms with the names shown before filling the graph.</p>
 
 	<img src="../../html/examples/img/pidMotor/PIDECC.png" alt="Interface of the PID FB" />
 
-	<p>With the ECC graph ready, it is time to write the code that will rule the behavior of the FB. In the Properties tab below the ECC graph, in one of the sides-tabs called "All InternalVars" add two variables of type REAL, called LAST_ERROR and INTEGRATION_ACCUM. These variables are part of the FB and retain their values between events.</p>
+	<p>With the ECC graph ready, it is time to write the code that will rule the behavior of the FB. 
+	In the Properties tab below the ECC graph, in one of the sides-tabs called "All InternalVars" add two variables of type REAL, called LAST_ERROR and INTEGRATION_ACCUM. 
+	These variables are part of the FB and retain their values between events.</p>
 
-	<p>Next, we will edit the algorithms specified in the ECC graph. The simple RESET algorithm just initialize the internal variables. The code for RESET is as following:</p>
+	<p>Next, we will edit the algorithms specified in the ECC graph. 
+	The simple RESET algorithm just initialize the internal variables. 
+	The code for RESET is as following:</p>
 	<div class="code">
- <code>LAST_ERROR := 0.0; INTEGRATION_ACCUM := 0.0;</code>
+ <code>LAST_ERROR := 0.0; 
+ INTEGRATION_ACCUM := 0.0;</code>
 	</div>
 
 	<p>The REQ algorithm is the following, but since is more complex, it will be explained in parts.</p>
@@ -103,18 +122,21 @@ END_VAR;
     LIM := FALSE;
   END_IF; 
 </code></div>
-      <p>The part between VAR and END_VAR is the declaration of the local variables that will be used inside this algorithm. The values are not retained between events.</p>
+      <p>The part between VAR and END_VAR is the declaration of the local variables that will be used inside this algorithm. 
+      The values are not retained between events.</p>
       
-      <p>The first IF statement </p>
+      <p>The first IF-statement </p>
       <div class="code"><code>IF ABS(InError) &lt;= Noise THEN
   errorFiltered := 0;
 ELSE
   errorFiltered := InError;
 END_IF;</code></div>
       
-      <p>is to turn off the PID when the value of the error is below the Noise specified in the input. Only when the error is bigger than the Noise threshold, the computation of the PID will be done.</p>
+      <p>turns off the PID when the value of the error is below the Noise specified in the input. 
+      Only when the error is bigger than the Noise threshold, the computation of the PID will be done.</p>
       
-      <p>The next part is the core of the PID computation. All the values are stored in local variables before mirroring then to the actual outputs and internal variables.</p>
+      <p>The next part is the core of the PID computation. 
+      All the values are stored in local variables before mirroring them to the actual outputs and internal variables.</p>
       
       <div class="code"><code>(* calculate proportional part *)
 proportionalPart := Kp * errorFiltered;
@@ -130,7 +152,9 @@ LAST_ERROR := errorFiltered;
 (* calculate output Y *)
 Ydesired := proportionalPart + integralPart + derivativePart;</code></div>
       
-      <p>The last part is really important, because it limits the output and eliminates the integral windup. Because the motor PWM can havae values between -100 and 100, if the output is outside this range, the PID should limit this value. More information about integration windup can be found in the internet, but basically, when the error is too big, the integration part doesn't work as ideally suppossed and insert unexpected behavior to the controller. </p>
+      <p>The last part is really important, because it limits the output and eliminates the integral windup. 
+      Because the motor PWM can have values between -100 and 100, if the output is outside this range, the PID should limit this value. 
+      More information about integration windup can be found in the internet, but basically, when the error is too big, the integration part doesn't work as supposed to and inserts unexpected behavior to the controller. </p>
       
       <div class="code"><code>(* check output for limits *)
 IF Ydesired &gt;= LIM_H THEN
@@ -160,30 +184,42 @@ ELSE
 END_IF; </code></div>
 
 	<p>
- The IF and ELSEIF are the limits of the value, and in the ELSE is where allowed values are processed. The output limitation is straightforward, but the windup solution can be confusing. What is done is to activate the integration part only when the desired output is inside the limits (in the ELSE), OR when it is outside the limits AND the error is forcing the way back inside the limits. The source of information about this can be found <a target="_blank" href="https://jagger.berkeley.edu/~pack/me132/Section15.pdf">here.</a>
+ The IF and ELSEIF are the limits of the value, and in the ELSE allowed values are processed. 
+ The output limitation is straightforward, but the windup solution can be confusing. 
+ What is done is to activate the integration part only when the desired output is inside the limits (in the ELSE), OR when it is outside the limits AND the error is forcing the way back inside the limits. 
+ Information about this can be found <a target="_blank" href="https://jagger.berkeley.edu/~pack/me132/Section15.pdf">here.</a>
 	</p>
 
-	<p>Whit the algorithms done, the FB is ready to be exported and compiled with FORTE.</p>
+	<p>With the algorithms done, the FB is ready to be exported and compiled with 4diac FORTE.</p>
 
-	<h3>Exporting and compiling with FORTE for the Ev3</h3>
+	<h3>Exporting and compiling with FORTE for the EV3</h3>
 
-	<p>Once the FB is ready, go to File &rarr; Export... and select 4DIAC &rarr; 4DIAC Type Export. Then explore the folder tree on the left and select the PID FB created on the right. Choose where to export and then click Finish.</p>
+	<p>Once the FB is ready, go to File &rarr; Export... and select 4diac IDE &rarr; 4diac IDE Type Export. 
+	Then explore the folder tree on the left and select the PID FB created on the right. 
+	Choose where to export and then click Finish.</p>
 
-	<p>To get the source code ready to compile FORTE with the created FB, the generated .cpp and .h files have to be added to the CMAKE configuration. The easiest way to do it is to put both files in the folder src/modules/lms_ev3 and add to the CMakeLists.txt file in that folder, the following line at the end.</p>
+	<p>To get the source code ready for compiling your FORTE with the created FB, the generated .cpp and .h files have to be added to the CMake configuration. 
+	The easiest way to do that is to put both files into the folder src/modules/lms_ev3 and add a file CMakeLists.txt in that folder, with the following line at the end:</p>
 
 	<div class="code">forte_add_sourcefile_hcpp(PID)</div>
 
 	<p>
- The next thing to do is to compile FORTE for the EV3. The easiest way to do it is to copy all the code to the EV3, get the compiling tools inside the EV3 and compile it. The process is really slow compared if it is done in a normal computer, but for one time is much faster than setting all the cross-compiling environment explained <a target="_blank" href="http://www.ev3dev.org/docs/tutorials/using-brickstrap-to-cross-compile/">here.</a> More details are presented in the <a href="../../html/installation/legoMindstormEv3.html#ev3_introduction">section</a> above.
+ The next thing to do is to compile FORTE for the EV3. 
+ The easiest way to do it is to copy all the code to the EV3, get the compiling tools inside the EV3 and compile it. 
+ The process is really slow compared if it is done in a normal computer, but for compiling once it is much faster than setting all the cross-compiling environment explained <a target="_blank" href="http://www.ev3dev.org/docs/tutorials/using-brickstrap-to-cross-compile/">here.</a> 
+ More details are presented in the <a href="../../html/installation/legoMindstormEv3.html#ev3_introduction">section</a> above.
 	</p>
 
-	<h3>Creating the PID Application in 4DIAC</h3>
+	<h3>Creating the PID Application in 4diac IDE</h3>
 
-	<p>After FORTE with the PID can run in the EV3, is time to create the application that will run on it to contorl the motor's position, and store the values. The application will be shown in parts, for a better understanding.</p>
+	<p>After FORTE with the PID runs in the EV3, is time to create the application that will run on it to control the motor position, and store the values. 
+	The application will be shown in parts, for a better understanding.</p>
 
 	<h4>ON/OFF the controller</h4>
 
-	<p>The first part of the application can be made in different ways, which allows a better control of the tests. In this example, it consists of two push buttons connected to in2 and in4, one for starting the motor and PID and the other one to reset all parameters (which also stops the motor). It has a cycle to read both buttons waiting for a rising trigger on them which sends the event to the enable or reset of the motor.</p>
+	<p>The first part of the application can be made in different ways, which allows a better control of the tests. 
+	In this example, it consists of two push buttons connected to in2 and in4, one for starting the motor and PID, and the other one to reset all parameters (which also stops the motor). 
+	It has a cycle to read both buttons waiting for a rising trigger on them which sends the event to the enable or reset of the motor.</p>
 
 	<p>The initialization of the StartButton FB is done from the COLD START FB when configuring the system.</p>
 
@@ -191,7 +227,11 @@ END_IF; </code></div>
 
 	<h4>Reading the system</h4>
 
-	<p>This part begins with a cycle block that outputs an event every 100ms, that will triger the PID computation. The cycle starts when the motor is enabled, and stops when the motor is reset. This cycle, triggers the reading of the system, in this case the position of the motor. This position is read as WORD (it should be a double, actually, but for now, it can be limited to a WORD) and then is converted to an INT that allows negative values (the WORD_TO_INT block was updated to allow negative values), and then to REAL in order to compute the difference to the set point stablished by the user (INT#1000 in the example). The F_SUB block expect REAL values, and in the input IN1, the set point is given. Take a look that at the output of the WORD_TO_INT block, there is another conversion to a STRING, this conversion is sent to the PC to store the values of the position to plot it. In the last part, it will be shown how is it done.</p>
+	<p>This part begins with a cycle block that outputs an event every 100ms, that will trigger the PID computation. 
+	The cycle starts when the motor is enabled, and stops when the motor is reset. 
+	The cycle triggers the reading of the system, in this case the position of the motor. 
+	This position is read as WORD (it should be a double, actually, but for now, it can be limited to a WORD) and is then converted to an INT that allows negative values (the WORD_TO_INT block was updated to allow negative values), and then to REAL in order to compute the difference to the set point established by the user (INT#1000 in the example). 
+	The F_SUB block expects REAL values, and in the input IN1, the set point is given. Take a look that at the output of the WORD_TO_INT block, there is another conversion to a STRING, this conversion is sent to the PC to store the values of the position to plot it. In the last part, it will be shown how is it done.</p>
 
 	<img src="../../html/examples/img/pidMotor/PIDReadingPart.png" alt="Reading part of the PID application" />
 
@@ -209,7 +249,9 @@ END_IF; </code></div>
 
 	<h4>Configuring the system</h4>
 
-	<p>Now that the application is done, some other configurations are needed in the system. The first thing is to create both devices and connect them using the Ethernet segment. In the EV3 resource, the first thing to do is to connect the COLD START to the initialization of the StartButton as said before.</p>
+	<p>Now that the application is done, some other configurations are needed in the system. 
+	The first thing is to create both devices and connect them using the Ethernet segment. 
+	In the EV3 resource, first connect the COLD START to the initialization of the StartButton as mentioned before.</p>
 
   <p>The other configuration in the EV3 resource is the publishing of the conversions of the position and output of the PID. Using a PUBLISH_2_0 with both input and the multicast UDP ID (in this case, 239.192.0.2:65000), and the REQ triggerred by the E_REND FB from the application. With this, the EV3 will send the position and output of the PID to the ID address everytime both conversion are done.</p>
 
@@ -219,17 +261,31 @@ END_IF; </code></div>
 
 	<img src="../../html/examples/img/pidMotor/PIDSubscribe.png" alt="Subscribe to data from EV3" />
 
-	<p> NOTE: In windows machines, the used multicast address is not always detected and the packets from the EV3 don't arrive to the FORTE application in the PC. This happens often if the PC is connected to the EV3 through an ad-hoc connection. To overcome this, try adding the address route with gateway to your own machine in the as presented in the Troubleshooting part at the bottom of the <a target="_blank" href="../../html/examples/bbbTraficControl.html#troubleshooting">Traffic Control with BBB example</a></p>
+	<p> NOTE: In Windows machines, the used Multicast address is not always detected and the packets from the EV3 don't arrive to the FORTE application in the PC. 
+	This happens often if the PC is connected to the EV3 through an ad-hoc connection. 
+	To overcome this, try adding the address route with gateway to your own machine in the as presented in the Troubleshooting part at the bottom of the <a href="../../html/examples/bbbTraficControl.html#troubleshooting">Traffic Control with BBB example</a></p>
 
 	<h3>Tuning the PID</h3>
 
-	<p> With the application ready and working, it is presented now the <a target="_blank" href="https://en.wikipedia.org/wiki/Ziegler%E2%80%93Nichols_method">Ziegler-Nichols method</a> to tune the PID. The basic idea is to turn off the integral and derivative parts, and increase Kp until the output has stable and constant oscillations. The value of Kp that produces this output is called Ku and the oscillation's period at this Ku is called Tu. With these two values, the values of the Kp, Ki, and Kd are chosen according to the table of the link before. Remember that Kd = Kp/Ti and Ki = Kp*Td.</p>
+	<p> With the application ready and working, the <a target="_blank" href="https://en.wikipedia.org/wiki/Ziegler%E2%80%93Nichols_method">Ziegler-Nichols method</a> is presented for tuning the PID. 
+	The basic idea is to turn off the integral and derivative parts, and increase Kp until the output has stable and constant oscillations. 
+	The value of Kp that produces this output is called Ku and the oscillation period at this Ku is called Tu. 
+	With these two values, the values of the Kp, Ki, and Kd are chosen according to the table of the link before. 
+	Remember that Kd = Kp/Ti and Ki = Kp*Td.</p>
 
-	<p>The set point is the position 1000. The first value of Kp is 1 and produces a non oscillating result. With Kp = 2, it takes longer, but still without stable oscillations. With Kp = 3, the results show a stable oscillation. So, the critical Ku value must be between 2 and 3. After a binary search between 2 and 3, it is found that Ku = 2.18 and its graph is shown also below. From the data, it can be seen that the oscillations have a period of 600ms (0.6s).</p>
+	<p>The set point is the position 1000. 
+	The first value of Kp is 1 and produces a non oscillating result. 
+	With Kp = 2, it takes longer, but still without stable oscillations. 
+	With Kp = 3, the results show a stable oscillation. 
+	So, the critical Ku value must be between 2 and 3. 
+	After a binary search between 2 and 3, it is found that Ku = 2.18 and its graph is shown also below. 
+	From the data, it can be seen that the oscillations have a period of 600ms (0.6s).</p>
 
 	<img src="../../html/examples/img/pidMotor/PIDKp.png" alt="Graphs of testing Kp" />
 
-	<p>With the values of Ku and Tu, it is computed the values of Kp, Ki and Kd for the PID controller from the table. The values are Kp = 1.308, Ki = 4.36 and Kd = 0.0981. With this values, the PID controller is again tested and the result is as follow:</p>
+	<p>With the values of Ku and Tu, the values of Kp, Ki and Kd for the PID controller are computed from the table. 
+	The values are Kp = 1.308, Ki = 4.36 and Kd = 0.0981. 
+	With these values, the PID controller is again tested and the result is as follows:</p>
 
 	<img src="../../html/examples/img/pidMotor/PIDTuned.png" alt="Final tun of the PID controller" />
 
