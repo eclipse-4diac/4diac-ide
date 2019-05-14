@@ -135,11 +135,8 @@ class DownloadRunnable implements IRunnableWithProgress {
 				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 			}
 			if(checkResource(resData.res, resources, executor)) {
+				//the resource is ready for deployment
 				deployResource(resData, executor);
-				if(!devData.isFullDevice()) {
-					//start each resource individually
-					executor.startResource(resData.res);
-				}
 			}
 		}
 	}
@@ -172,18 +169,17 @@ class DownloadRunnable implements IRunnableWithProgress {
 		return true;
 	}
 
-	private void deployDeviceData(DeviceDeploymentData devData, IDeviceManagementInteractor executor) throws DeploymentException {
-		Device device = devData.getDevice();
-		
-		for(VarDeclaration var : devData.getSelectedDevParams()) {
-			String value = DeploymentHelper.getVariableValue(var, device.getAutomationSystem());
-			if (null != value) {
-				executor.writeDeviceParameter(device, var.getName(), value);
-			}				
-			curMonitor.worked(1);
-		}		
-		
-		if(devData.isFullDevice()) {
+	private void deployDeviceData(DeviceDeploymentData devData, IDeviceManagementInteractor executor) throws DeploymentException {		
+		if(!devData.getSelectedDevParams().isEmpty()) {
+			Device device = devData.getDevice();
+			for(VarDeclaration var : devData.getSelectedDevParams()) {
+				String value = DeploymentHelper.getVariableValue(var, device.getAutomationSystem());
+				if (null != value) {
+					executor.writeDeviceParameter(device, var.getName(), value);
+				}				
+				curMonitor.worked(1);
+			}		
+			//we have device parameters send start to the device so that 
 			executor.startDevice(device);
 		}
 	}
@@ -249,7 +245,8 @@ class DownloadRunnable implements IRunnableWithProgress {
 			}
 			createFBInstance(resDepData, executor);
 			deployParamters(resDepData, executor); // this needs to be done before the connections are created
-			deployConnections(resDepData, executor);			
+			deployConnections(resDepData, executor);
+			executor.startResource(res);
 		}
 	}
 

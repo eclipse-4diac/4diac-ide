@@ -21,10 +21,6 @@ public class DeviceDeploymentData {
 	
 	private final Device dev;
 	
-	/** indication if the full device is selected and the full device should be started
-	 */
-	private boolean fullDevice = false; 
-
 	private List<ResourceDeploymentData> resData = new ArrayList<>();
 	
 	private List<VarDeclaration> selectedDevParams =  Collections.emptyList();
@@ -37,14 +33,6 @@ public class DeviceDeploymentData {
 		return dev;
 	}
 	
-	public boolean isFullDevice() {
-		return fullDevice;
-	}
-	
-	public void setFullDevice(boolean fullDevice) {
-		this.fullDevice = fullDevice;
-	}
-
 	public void addResourceData(ResourceDeploymentData data) {
 		resData.add(data);
 	}
