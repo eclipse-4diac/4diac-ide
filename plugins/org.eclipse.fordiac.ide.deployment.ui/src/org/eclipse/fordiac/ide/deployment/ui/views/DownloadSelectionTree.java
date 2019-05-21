@@ -61,14 +61,13 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 	
 	static void initSelectedProperties(Device device) {
-		ArrayList<VarDeclaration> selectedProperties = new ArrayList<VarDeclaration>();
+		List<VarDeclaration> selectedProperties = new ArrayList<>();
 		for (VarDeclaration varDecl : device.getVarDeclarations()) {
 			if (!varDecl.getName().equalsIgnoreCase("mgr_id")) { //$NON-NLS-1$
 				selectedProperties.add(varDecl);
 			}
 		}
-		DeploymentCoordinator.INSTANCE.setDeviceProperties(device,
-				selectedProperties);
+		DeploymentCoordinator.INSTANCE.setDeviceProperties(device, selectedProperties);
 	}
 	
 		
@@ -290,16 +289,21 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
-			if (columnIndex == 0) {
+			switch (columnIndex) {
+			case 0:
 				return getText(element);
-			} else if (columnIndex == 1) {
+			case 1:
 				if (element instanceof Device) {
 					return DeploymentHelper.getMgrID((Device)element);
 				}
-			} else if (columnIndex == 2) {
+				break;
+			case 2:
 				if (element instanceof Device) {
 					return getSelectedString(element);
 				}
+				break;
+			default:
+				break;
 			}
 			return ""; //$NON-NLS-1$
 		}
@@ -330,13 +334,9 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 		setLabelProvider(new DownloadDecoratingLabelProvider(lp ,decorator));
 		
 		setCellModifier(new ICellModifier() {
-
 			@Override
 			public boolean canModify(final Object element, final String property) {
-				if (property.equals(DOWNLOAD_DEV_PROPERTIES) && element instanceof Device) {
-					return true;
-				}
-				return false;
+				return (property.equals(DOWNLOAD_DEV_PROPERTIES) && element instanceof Device);
 			}
 
 			@Override

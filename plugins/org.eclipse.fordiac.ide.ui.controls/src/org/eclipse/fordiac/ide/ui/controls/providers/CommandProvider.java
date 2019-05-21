@@ -21,6 +21,6 @@ public interface CommandProvider {
 	 * @param refElement reference element for the command
 	 * @return the command 
 	 */
-	public Command getCommand(Object refElement);
+	Command getCommand(Object refElement);
 
 }

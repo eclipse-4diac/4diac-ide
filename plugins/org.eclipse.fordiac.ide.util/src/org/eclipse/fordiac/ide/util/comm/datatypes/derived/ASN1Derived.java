@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.util.comm.datatypes.derived;
 public interface ASN1Derived {
 
 	/** IEC 61131-3 datatypes of Class PRIVATE */
-	static final class PRIVATE {
+	final class PRIVATE {
 		/** IEC 61131-3 primitive data type tag ids */
 		public static final class PRIMITIVE {
 			/* ITA DirectlyDerivedType REAL */

@@ -36,7 +36,7 @@ public interface IDeviceManagementInteractor {
 	/** simple interface that allows to easily use an IDeviceMangemetnInteractor in a
 	 *  try with resources setup. 
 	 */
-	public interface IDeviceManagementInteractorCloser extends AutoCloseable {
+	interface IDeviceManagementInteractorCloser extends AutoCloseable {
 		@Override
 		void close() throws DeploymentException;
 	}
@@ -47,11 +47,11 @@ public interface IDeviceManagementInteractor {
 	 * 
 	 * @return true if a connection is open.
 	 */
-	public abstract boolean isConnected();
+	boolean isConnected();
 
-	public abstract void connect() throws DeploymentException;
+	void connect() throws DeploymentException;
 
-	public abstract void disconnect() throws DeploymentException;
+	void disconnect() throws DeploymentException;
 
 	/**** Listener commands ***/
 
