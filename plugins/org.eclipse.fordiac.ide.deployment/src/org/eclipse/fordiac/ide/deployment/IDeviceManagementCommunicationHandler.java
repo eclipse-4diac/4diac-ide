@@ -46,7 +46,7 @@ public interface IDeviceManagementCommunicationHandler {
 	 */
 	String sendREQ(final String destination, final String request) throws IOException;
 	
-	public static void showErrorMessage(String message, Shell shell) {
+	static void showErrorMessage(String message, Shell shell) {
 		MessageBox msgBox = new MessageBox(shell, SWT.OK | SWT.ICON_ERROR);
 		msgBox.setMessage(message);
 		msgBox.open();
