@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
-import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.AddECCActionAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.DeleteECCAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.ECCSelectAllAction;
@@ -245,8 +244,8 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 	
 	@Override
 	protected void setModel(IEditorInput input) {
-		super.setModel(input);
-		setEditDomain(new FBTypeEditDomain(this, commandStack));
+		super.setModel(input);				
+		setEditDomain(new ECCEditorEditDomain(this, commandStack));
 	}
 	
 	@Override
