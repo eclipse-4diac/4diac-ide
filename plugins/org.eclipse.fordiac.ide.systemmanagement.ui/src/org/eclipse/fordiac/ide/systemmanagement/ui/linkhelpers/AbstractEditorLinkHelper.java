@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers;
 
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
@@ -25,31 +25,32 @@ import org.eclipse.ui.navigator.ILinkHelper;
 
 public abstract class AbstractEditorLinkHelper implements ILinkHelper {
 
-	protected IEditorPart activateEditor(IWorkbenchPage aPage, IEditorInput editorInput) {
+	protected static IEditorPart activateEditor(IWorkbenchPage aPage, IEditorInput editorInput) {
 		IEditorPart editor = aPage.findEditor(editorInput);
-		if (null != editor){
+		if (null != editor) {
 			aPage.bringToTop(editor);
 		}
 		return editor;
 	}
-	
-	/**helper method for selecting objects inside the main editors 
+
+	/**
+	 * helper method for selecting objects inside the main editors
 	 * 
-	 * This can be when they are single clicked in the system explorer and link with editor 
-	 * is activated, or double clicked when opening an elemetns base editor.
+	 * This can be when they are single clicked in the system explorer and link with
+	 * editor is activated, or double clicked when opening an elemetns base editor.
 	 *
 	 * 
 	 * @param editor    the editor that was chosen for the element, may be null
 	 * @param selObject the object to be selected, may be null
 	 */
 	public static void selectObject(IEditorPart editor, Object selObject) {
-		if ((editor instanceof FBNetworkEditor) && (selObject instanceof FB)){
-			((FBNetworkEditor)editor).selectFB((FB)selObject);
+		if ((editor instanceof FBNetworkEditor) && (selObject instanceof FBNetworkElement)) {
+			((FBNetworkEditor) editor).selectFBNetworkElement((FBNetworkElement) selObject);
 			return;
 		}
-		if((editor instanceof SystemConfigurationEditor) && 
-				((selObject instanceof Device) || selObject instanceof Segment)){
-			((SystemConfigurationEditor)editor).selectElement((TypedConfigureableObject)selObject);
+		if ((editor instanceof SystemConfigurationEditor)
+				&& ((selObject instanceof Device) || selObject instanceof Segment)) {
+			((SystemConfigurationEditor) editor).selectElement((TypedConfigureableObject) selObject);
 			return;
 		}
 	}
