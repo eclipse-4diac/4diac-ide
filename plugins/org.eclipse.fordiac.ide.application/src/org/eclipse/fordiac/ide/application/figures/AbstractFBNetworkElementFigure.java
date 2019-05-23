@@ -19,6 +19,7 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
@@ -168,9 +169,10 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 		
 		GridLayout topLayout = new GridLayout(2, false);
-		topLayout.marginHeight = 4;
-		topLayout.marginWidth = 1;
-		topLayout.horizontalSpacing = 2;
+		topLayout.marginHeight = 0;
+		topLayout.marginWidth = 0;
+		topLayout.horizontalSpacing = 0;
+		topLayout.verticalSpacing = 0;
 		top.setLayoutManager(topLayout);
 		
 		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, getZoomManager(), this, true, borderColor);
@@ -179,10 +181,11 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 				| PositionConstants.WEST, getZoomManager(), this,  true, borderColor);
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 		GridLayout bottomLayout = new GridLayout(2, false);
-		bottomLayout.marginHeight = 4;
-		bottomLayout.marginWidth = 1;
+		bottomLayout.marginHeight = 0;
+		bottomLayout.marginWidth = 0;
 		bottomLayout.horizontalSpacing = 0;
-		bottom.setLayoutManager(bottomLayout);
+		bottomLayout.verticalSpacing = 0;
+		bottom.setLayoutManager(bottomLayout);		
 	}
 	
 	//TODO consider moving this into a subclass for adapter fbs and return here only the default color
@@ -223,7 +226,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 				| GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
 		setConstraint(top, topLayoutData);
 
-		setupTopIOs();
+		setupTopIOs(top);
 
 		Figure middleContainer = new Figure();
 		BorderLayout borderLayout = new BorderLayout();
@@ -246,22 +249,22 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		add(bottom);
 		setConstraint(bottom, bottomLayoutData);
 		
-		setBottomIOs();		
+		setBottomIOs(bottom);		
 		
 		refreshToolTips();
 
 		updateResourceTypeFigure();		
 	}
 
-	private void setupTopIOs() {
+	private void setupTopIOs(IFigure parent) {
 		ToolbarLayout topInputsLayout = new ToolbarLayout(false);
 		GridData topInputsLayoutData = new GridData(
 				GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 						| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		eventInputs.setLayoutManager(topInputsLayout);
 		//
-		top.add(eventInputs);
-		top.setConstraint(eventInputs, topInputsLayoutData);
+		parent.add(eventInputs);
+		parent.setConstraint(eventInputs, topInputsLayoutData);
 
 		//
 		ToolbarLayout topOutputsLayout = new ToolbarLayout(false);
@@ -270,11 +273,11 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 						| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		topOutputsLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		eventOutputs.setLayoutManager(topOutputsLayout);
-		top.add(eventOutputs);
-		top.setConstraint(eventOutputs, topOutputsLayoutData);
+		parent.add(eventOutputs);
+		parent.setConstraint(eventOutputs, topOutputsLayoutData);
 	}
 
-	private void setBottomIOs() {
+	private void setBottomIOs(IFigure parent) {		
 		Figure bottomInputArea = new Figure();
 		bottomInputArea.setLayoutManager(new ToolbarLayout(false));
 				
@@ -282,8 +285,8 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 				GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 						| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		bottomInputsLayoutData.verticalAlignment = SWT.TOP;
-		bottom.add(bottomInputArea);
-		bottom.setConstraint(bottomInputArea, bottomInputsLayoutData);
+		parent.add(bottomInputArea);
+		parent.setConstraint(bottomInputArea, bottomInputsLayoutData);
 		
 		dataInputs.setLayoutManager(new ToolbarLayout(false));
 		bottomInputArea.add(dataInputs);
@@ -298,8 +301,8 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		GridData bottomOutputsLayoutData = new GridData(
 				GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL
 						| GridData.VERTICAL_ALIGN_FILL);
-		bottom.add(bottomOutputArea);
-		bottom.setConstraint(bottomOutputArea, bottomOutputsLayoutData);
+		parent.add(bottomOutputArea);
+		parent.setConstraint(bottomOutputArea, bottomOutputsLayoutData);
 		
 		
 		dataOutputs.setLayoutManager(new ToolbarLayout(false));

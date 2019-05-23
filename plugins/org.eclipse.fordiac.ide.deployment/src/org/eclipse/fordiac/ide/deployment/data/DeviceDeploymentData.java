@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public class DeviceDeploymentData {
 	
 	private final Device dev;
-
+	
 	private List<ResourceDeploymentData> resData = new ArrayList<>();
 	
 	private List<VarDeclaration> selectedDevParams =  Collections.emptyList();
@@ -32,7 +32,7 @@ public class DeviceDeploymentData {
 	public Device getDevice() {
 		return dev;
 	}
-
+	
 	public void addResourceData(ResourceDeploymentData data) {
 		resData.add(data);
 	}
