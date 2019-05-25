@@ -165,7 +165,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 		
 		GridLayout topLayout = new GridLayout(2, false);
-		topLayout.marginHeight = 0;
+		topLayout.marginHeight = 4;
 		topLayout.marginWidth = 0;
 		topLayout.horizontalSpacing = 0;
 		topLayout.verticalSpacing = 0;
@@ -177,11 +177,11 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 				| PositionConstants.WEST, getZoomManager(), this,  true, borderColor);
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 		GridLayout bottomLayout = new GridLayout(2, false);
-		bottomLayout.marginHeight = 0;
+		bottomLayout.marginHeight = 4;
 		bottomLayout.marginWidth = 0;
 		bottomLayout.horizontalSpacing = 0;
 		bottomLayout.verticalSpacing = 0;
-		bottom.setLayoutManager(bottomLayout);		
+		bottom.setLayoutManager(bottomLayout);
 	}
 	
 	//TODO consider moving this into a subclass for adapter fbs and return here only the default color
@@ -249,7 +249,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		
 		refreshToolTips();
 
-		updateResourceTypeFigure();		
+		updateResourceTypeFigure();
 	}
 
 	protected void setupTopIOs(IFigure parent) {
@@ -281,6 +281,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 				GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 						| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		bottomInputsLayoutData.verticalAlignment = SWT.TOP;
+		
 		parent.add(bottomInputArea);
 		parent.setConstraint(bottomInputArea, bottomInputsLayoutData);
 		
