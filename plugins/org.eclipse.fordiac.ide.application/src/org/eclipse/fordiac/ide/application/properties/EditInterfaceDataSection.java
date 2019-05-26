@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.application.commands.ChangeSubAppIETypeCommand;
 import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
@@ -19,26 +20,30 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 
 public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
 	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
-		return new CreateSubAppInterfaceElementCommand(DataTypeLibrary.getInstance().getType(fillTypeCombo()[2]), getType().getInterface(), isInput, -1);
+		return new CreateSubAppInterfaceElementCommand(DataTypeLibrary.getInstance().getType(fillTypeCombo()[2]),
+				getType().getInterface(), isInput, -1);
 	}
 
 	@Override
 	protected INamedElement getInputType(Object input) {
-		if(input instanceof SubAppForFBNetworkEditPart){
+		if (input instanceof SubAppForFBNetworkEditPart) {
 			return ((SubAppForFBNetworkEditPart) input).getModel();
 		}
-		if(input instanceof UISubAppNetworkEditPart){
-			return ((UISubAppNetworkEditPart)input).getSubApp();
+		if (input instanceof UISubAppNetworkEditPart) {
+			return ((UISubAppNetworkEditPart) input).getSubApp();
 		}
 		return null;
 	}
@@ -47,15 +52,20 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	protected DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection) {
 		return new DeleteSubAppInterfaceElementCommand(selection);
 	}
-	
+
 	@Override
 	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput,
 			boolean moveUp) {
 		return new ChangeSubAppInterfaceOrderCommand(selection, isInput, moveUp);
 	}
-	
+
+	@Override
+	protected ChangeTypeCommand newChangeTypeCommand(VarDeclaration data, DataType newType) {
+		return new ChangeSubAppIETypeCommand(data, newType);
+	}
+
 	@Override
 	protected SubApp getType() {
-		return (SubApp)type;
+		return (SubApp) type;
 	}
 }

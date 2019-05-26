@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.application.commands.ChangeSubAppIETypeCommand;
 import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
@@ -16,12 +17,15 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceAdapterSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
@@ -51,9 +55,14 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 			boolean moveUp) {
 		return new ChangeSubAppInterfaceOrderCommand(selection, isInput, moveUp);
 	}
-	
+
+	@Override
+	protected ChangeTypeCommand newChangeTypeCommand(VarDeclaration data, DataType newType) {
+		return new ChangeSubAppIETypeCommand(data, newType);
+	}
+
 	@Override
 	protected SubApp getType() {
-		return (SubApp)type;
+		return (SubApp) type;
 	}
 }
