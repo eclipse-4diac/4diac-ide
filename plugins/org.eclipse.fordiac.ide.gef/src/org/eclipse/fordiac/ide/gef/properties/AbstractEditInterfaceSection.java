@@ -90,6 +90,12 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 	protected abstract INamedElement getInputType(Object input);
 
+	@SuppressWarnings("static-method") // this method allows sub-classes to provide own change type commands, e.g.,
+	// subapps
+	protected ChangeTypeCommand newChangeTypeCommand(VarDeclaration data, DataType newType) {
+		return new ChangeTypeCommand(data, newType);
+	}
+	
 	public TableViewer getInputsViewer() {
 		return inputsViewer;
 	}
@@ -118,13 +124,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	protected abstract IContentProvider getOutputsContentProvider();
 
 	protected abstract IContentProvider getInputsContentProvider();
-
-	@Override
-	protected void setType(Object input) {
-		super.setType(input);
-		setCellEditors(); // only now the types are correctly set so that the type lists for the combo
-							// boxes can be crated correctly
-	}
 
 	private static void createTableLayout(Table table) {
 		TableColumn column1 = new TableColumn(table, SWT.LEFT);
@@ -196,6 +195,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
+		setCellEditors(); // only now the types are correctly set so that the type lists for the combo
+		// boxes can be created correctly
 	}
 
 	@Override
@@ -387,10 +388,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 				String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[(int) value];
 				if (data instanceof AdapterDeclaration) {
 					DataType newType = getTypeForSelection(dataTypeName);
-					cmd = new ChangeTypeCommand((VarDeclaration) data, newType);
+					cmd = newChangeTypeCommand((VarDeclaration) data, newType);
 				} else {
 					if (data instanceof VarDeclaration) {
-						cmd = new ChangeTypeCommand((VarDeclaration) data,
+						cmd = newChangeTypeCommand((VarDeclaration) data,
 								DataTypeLibrary.getInstance().getType(dataTypeName));
 					}
 				}
@@ -403,7 +404,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 				executeCommand(cmd);
 				viewer.refresh(data);
 			}
-
 		}
 	}
 

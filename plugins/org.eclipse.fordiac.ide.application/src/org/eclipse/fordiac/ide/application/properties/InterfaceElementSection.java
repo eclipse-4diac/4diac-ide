@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2017 fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz	
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,14 +10,19 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - fixed issues in type changes for subapp interface elements  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.application.commands.ChangeSubAppIETypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -145,5 +151,10 @@ public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.propert
 			}
 			return false;
 		}
+	}
+
+	@Override
+	protected ChangeTypeCommand newChangeTypeCommand(VarDeclaration data, DataType newType) {
+		return new ChangeSubAppIETypeCommand(data, newType);
 	}
 }

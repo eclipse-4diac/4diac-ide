@@ -168,7 +168,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 
 		GridLayout topLayout = new GridLayout(2, false);
-		topLayout.marginHeight = 0;
+		topLayout.marginHeight = 4;
 		topLayout.marginWidth = 0;
 		topLayout.horizontalSpacing = 0;
 		topLayout.verticalSpacing = 0;
@@ -181,7 +181,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 				getZoomManager(), this, true, borderColor);
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 		GridLayout bottomLayout = new GridLayout(2, false);
-		bottomLayout.marginHeight = 0;
+		bottomLayout.marginHeight = 4;
 		bottomLayout.marginWidth = 0;
 		bottomLayout.horizontalSpacing = 0;
 		bottomLayout.verticalSpacing = 0;
@@ -278,6 +278,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		GridData bottomInputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		bottomInputsLayoutData.verticalAlignment = SWT.TOP;
+		
 		parent.add(bottomInputArea);
 		parent.setConstraint(bottomInputArea, bottomInputsLayoutData);
 
