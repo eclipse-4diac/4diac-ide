@@ -51,9 +51,9 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 			boolean moveUp) {
 		return new ChangeSubAppInterfaceOrderCommand(selection, isInput, moveUp);
 	}
-	
+
 	@Override
 	protected SubApp getType() {
-		return (SubApp)type;
+		return (SubApp) type;
 	}
 }

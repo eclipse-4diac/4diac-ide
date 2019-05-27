@@ -68,39 +68,39 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 	private static final class OpenTypeListener implements MouseListener {
 		private final AbstractFBNElementEditPart editPart;
-		
+
 		public OpenTypeListener(AbstractFBNElementEditPart editPart) {
 			this.editPart = editPart;
 		}
 
 		@Override
 		public void mousePressed(MouseEvent me) {
-			if( 0 != (me.getState() & SWT.CONTROL) && editPart.isOnlyThisOrNothingSelected()){
+			if (0 != (me.getState() & SWT.CONTROL) && editPart.isOnlyThisOrNothingSelected()) {
 				openTypeInEditor(editPart.getModel());
-			}					
+			}
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent me) {	
-			//nothing to be done here
+		public void mouseReleased(MouseEvent me) {
+			// nothing to be done here
 		}
 
 		@Override
 		public void mouseDoubleClicked(MouseEvent me) {
-			//nothing to be done here
+			// nothing to be done here
 		}
-		
+
 	}
 
-	//TODO model refactoring - look for a better place for this function
-	public static void openTypeInEditor(FBNetworkElement element){
-		//open the default editor for the adapter file
+	// TODO model refactoring - look for a better place for this function
+	public static void openTypeInEditor(FBNetworkElement element) {
+		// open the default editor for the adapter file
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		
+
 		PaletteEntry entry = element.getPaletteEntry();
-		if(null != entry)	{			
-			IEditorDescriptor desc = PlatformUI.getWorkbench().
-					getEditorRegistry().getDefaultEditor(entry.getFile().getName());
+		if (null != entry) {
+			IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
+					.getDefaultEditor(entry.getFile().getName());
 			try {
 				page.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
 			} catch (PartInitException e) {
@@ -109,7 +109,6 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		}
 	}
 
-
 	/** The model. */
 	private FBNetworkElement model = null;
 
@@ -117,40 +116,40 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 	private SetableAlphaLabel instanceNameLabel = null;
 
 	/** The top. */
-	private  RoundedRectangle top;	
+	private RoundedRectangle top;
 
 	/** The middle. */
-	private  AdvancedRoundedRectangle middle; 
+	private AdvancedRoundedRectangle middle;
 
 	/** The bottom. */
-	private  AdvancedRoundedRectangle bottom;
+	private AdvancedRoundedRectangle bottom;
 
 	/** The event inputs. */
-	private  final Figure eventInputs = new Figure();
+	private final Figure eventInputs = new Figure();
 
 	/** The event outputs. */
-	private  final Figure eventOutputs = new Figure();
+	private final Figure eventOutputs = new Figure();
 
 	/** The data inputs. */
-	private  final Figure dataInputs = new Figure();
-	
+	private final Figure dataInputs = new Figure();
+
 	/** The sockets. */
-	private  final Figure sockets = new Figure();
+	private final Figure sockets = new Figure();
 
 	/** The data outputs. */
-	private  final Figure dataOutputs = new Figure();
-	
+	private final Figure dataOutputs = new Figure();
+
 	/** The plugs. */
-	private  final Figure plugs = new Figure();
+	private final Figure plugs = new Figure();
 
 	protected UnderlineAlphaLabel typeLabel;
 
-	protected AbstractFBNElementEditPart editPart; 
-	
+	protected AbstractFBNElementEditPart editPart;
+
 	protected AbstractFBNetworkElementFigure() {
 		configureRectangles();
 	}
-	
+
 	public FBNetworkElement getModel() {
 		return model;
 	}
@@ -158,50 +157,50 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 	public ZoomManager getZoomManager() {
 		return (null != editPart) ? editPart.getZoomManager() : null;
 	}
-	
+
 	private void configureRectangles() {
 		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);	
-		Color borderColor = getBorderColor(model.getType()); 
-		
-		top = new AdvancedRoundedRectangle(PositionConstants.NORTH | PositionConstants.EAST
-				| PositionConstants.WEST, getZoomManager(), this, true, borderColor);
+		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
+		Color borderColor = getBorderColor(model.getType());
+
+		top = new AdvancedRoundedRectangle(PositionConstants.NORTH | PositionConstants.EAST | PositionConstants.WEST,
+				getZoomManager(), this, true, borderColor);
 		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
-		
+
 		GridLayout topLayout = new GridLayout(2, false);
 		topLayout.marginHeight = 0;
 		topLayout.marginWidth = 0;
 		topLayout.horizontalSpacing = 0;
 		topLayout.verticalSpacing = 0;
 		top.setLayoutManager(topLayout);
-		
-		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, getZoomManager(), this, true, borderColor);
-		
-		bottom = new AdvancedRoundedRectangle(PositionConstants.SOUTH | PositionConstants.EAST
-				| PositionConstants.WEST, getZoomManager(), this,  true, borderColor);
+
+		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, getZoomManager(), this,
+				true, borderColor);
+
+		bottom = new AdvancedRoundedRectangle(PositionConstants.SOUTH | PositionConstants.EAST | PositionConstants.WEST,
+				getZoomManager(), this, true, borderColor);
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 		GridLayout bottomLayout = new GridLayout(2, false);
 		bottomLayout.marginHeight = 0;
 		bottomLayout.marginWidth = 0;
 		bottomLayout.horizontalSpacing = 0;
 		bottomLayout.verticalSpacing = 0;
-		bottom.setLayoutManager(bottomLayout);		
+		bottom.setLayoutManager(bottomLayout);
 	}
-	
-	//TODO consider moving this into a subclass for adapter fbs and return here only the default color
-	protected Color getBorderColor(LibraryElement type){
-		if(type instanceof AdapterFBType){
+
+	// TODO consider moving this into a subclass for adapter fbs and return here
+	// only the default color
+	protected Color getBorderColor(LibraryElement type) {
+		if (type instanceof AdapterFBType) {
 			return PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
 		}
 		return ColorConstants.gray;
 	}
-	
-	
+
 	/**
 	 * Instantiates a new fB figure.
 	 * 
-	 * @param model
-	 *            the model
+	 * @param model the model
 	 */
 	public AbstractFBNetworkElementFigure(final FBNetworkElement model, AbstractFBNElementEditPart editPart) {
 		this.model = model;
@@ -217,13 +216,12 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		gridLayout.horizontalSpacing = 0;
 		gridLayout.verticalSpacing = -1;
 		setLayoutManager(gridLayout);
-		
+
 		createInstanceNameLabel(model.getName());
-		
-		
+
 		add(top);
-		GridData topLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL
-				| GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
+		GridData topLayoutData = new GridData(
+				GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
 		setConstraint(top, topLayoutData);
 
 		setupTopIOs(top);
@@ -235,32 +233,29 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		middleContainer.setBorder(new MarginBorder(0, 7, 0, 7));
 
 		add(middleContainer);
-		GridData middleLayouData = new GridData(GridData.HORIZONTAL_ALIGN_FILL
-				| GridData.GRAB_HORIZONTAL);
+		GridData middleLayouData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		setConstraint(middleContainer, middleLayouData);
-		
+
 		setupTypeNameAndVersion(model, middleContainer);
-		
-		GridData bottomLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL
-				| GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL
-				| GridData.GRAB_VERTICAL);
+
+		GridData bottomLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		bottomLayoutData.verticalAlignment = SWT.TOP;
 
 		add(bottom);
 		setConstraint(bottom, bottomLayoutData);
-		
-		setBottomIOs(bottom);		
-		
+
+		setBottomIOs(bottom);
+
 		refreshToolTips();
 
-		updateResourceTypeFigure();		
+		updateResourceTypeFigure();
 	}
 
 	private void setupTopIOs(IFigure parent) {
 		ToolbarLayout topInputsLayout = new ToolbarLayout(false);
-		GridData topInputsLayoutData = new GridData(
-				GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
-						| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
+		GridData topInputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		eventInputs.setLayoutManager(topInputsLayout);
 		//
 		parent.add(eventInputs);
@@ -268,49 +263,45 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 		//
 		ToolbarLayout topOutputsLayout = new ToolbarLayout(false);
-		GridData topOutputsLayoutData = new GridData(
-				GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL
-						| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
+		GridData topOutputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		topOutputsLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		eventOutputs.setLayoutManager(topOutputsLayout);
 		parent.add(eventOutputs);
 		parent.setConstraint(eventOutputs, topOutputsLayoutData);
 	}
 
-	private void setBottomIOs(IFigure parent) {		
+	private void setBottomIOs(IFigure parent) {
 		Figure bottomInputArea = new Figure();
 		bottomInputArea.setLayoutManager(new ToolbarLayout(false));
-				
-		GridData bottomInputsLayoutData = new GridData(
-				GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
-						| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
+
+		GridData bottomInputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		bottomInputsLayoutData.verticalAlignment = SWT.TOP;
 		parent.add(bottomInputArea);
 		parent.setConstraint(bottomInputArea, bottomInputsLayoutData);
-		
+
 		dataInputs.setLayoutManager(new ToolbarLayout(false));
 		bottomInputArea.add(dataInputs);
-		
+
 		sockets.setLayoutManager(new ToolbarLayout(false));
 		bottomInputArea.add(sockets);
-		
+
 		Figure bottomOutputArea = new Figure();
 		bottomOutputArea.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout)bottomOutputArea.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		
+		((ToolbarLayout) bottomOutputArea.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+
 		GridData bottomOutputsLayoutData = new GridData(
-				GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL
-						| GridData.VERTICAL_ALIGN_FILL);
+				GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
 		parent.add(bottomOutputArea);
 		parent.setConstraint(bottomOutputArea, bottomOutputsLayoutData);
-		
-		
+
 		dataOutputs.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout)dataOutputs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		((ToolbarLayout) dataOutputs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomOutputArea.add(dataOutputs);
-		
+
 		plugs.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout)plugs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		((ToolbarLayout) plugs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		bottomOutputArea.add(plugs);
 	}
 
@@ -332,38 +323,38 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 	protected void setupTypeNameAndVersion(final FBNetworkElement model, Figure container) {
 		container.add(middle, BorderLayout.CENTER);
 		middle.setCornerDimensions(new Dimension());
-		
+
 		GridLayout middleLayout = new GridLayout(1, true);
 		middleLayout.marginHeight = 0;
 		middleLayout.verticalSpacing = 1;
 
 		middle.setLayoutManager(middleLayout);
-		
+
 		LibraryElement type = model.getType();
 		String typeName = (null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET;
-			
+
 		typeLabel = new UnderlineAlphaLabel(typeName != null ? typeName : Messages.FBFigure_NOT_DEFINED_Text);
 		middle.add(typeLabel);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 		typeLabel.setOpaque(false);
 		typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
-		
+
 		setupMouseListener(editPart);
 	}
 
 	private void setupMouseListener(final AbstractFBNElementEditPart editPart) {
-		
-		middle.addMouseMotionListener(new MouseMotionListener(){
+
+		middle.addMouseMotionListener(new MouseMotionListener() {
 
 			@Override
 			public void mouseDragged(MouseEvent me) {
-				//nothing to bo done here
+				// nothing to bo done here
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent me) {
-				if( 0 != (me.getState() & SWT.CONTROL) && editPart.isOnlyThisOrNothingSelected()){
+				if (0 != (me.getState() & SWT.CONTROL) && editPart.isOnlyThisOrNothingSelected()) {
 					typeLabel.setDrawUnderline(true);
 				}
 			}
@@ -375,28 +366,27 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 			@Override
 			public void mouseHover(MouseEvent me) {
-				//currently mouseHover should be the same as mouse moved
+				// currently mouseHover should be the same as mouse moved
 				mouseMoved(me);
 			}
 
 			@Override
 			public void mouseMoved(MouseEvent me) {
-				if( 0 != (me.getState() & SWT.CONTROL) && editPart.isOnlyThisOrNothingSelected()){
-					if(!typeLabel.isDrawUnderline()){
+				if (0 != (me.getState() & SWT.CONTROL) && editPart.isOnlyThisOrNothingSelected()) {
+					if (!typeLabel.isDrawUnderline()) {
 						typeLabel.setDrawUnderline(true);
 					}
-				}
-				else{
-					if(typeLabel.isDrawUnderline()){
+				} else {
+					if (typeLabel.isDrawUnderline()) {
 						typeLabel.setDrawUnderline(false);
 					}
 				}
 			}
-			
+
 		});
-		
+
 		middle.addMouseListener(createOpenTypeMouseListener(editPart));
-		
+
 	}
 
 	protected OpenTypeListener createOpenTypeMouseListener(final AbstractFBNElementEditPart editPart) {
@@ -417,12 +407,14 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 				break;
 			}
 		}
-		if(null == model.getPaletteEntry() && !(model instanceof SubApp)){  // TODO model refactoring - consider to move this to something specific for untyped subapps
+		if (null == model.getPaletteEntry() && !(model instanceof SubApp)) { // TODO model refactoring - consider to
+																				// move this to something specific for
+																				// untyped subapps
 			image = FordiacImage.getErrorOverlayImage(image);
 		}
 		getInstanceNameLabel().setIcon(image);
 	}
-	
+
 	public void refreshIcon() {
 		if (isResoruceTypeFBNElement()) {
 			updateResourceTypeFigure();
@@ -485,7 +477,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 	public Figure getDataInputs() {
 		return dataInputs;
 	}
-	
+
 	public Figure getSockets() {
 		return sockets;
 	}
@@ -498,11 +490,10 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 	public Figure getDataOutputs() {
 		return dataOutputs;
 	}
-	
+
 	public Figure getPlugs() {
 		return plugs;
 	}
-
 
 	/*
 	 * (non-Javadoc)
@@ -553,11 +544,11 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 	public Image getIcon() {
 		return getInstanceNameLabel().getIcon();
 	}
-	
+
 	public void setIcon(Image image) {
 		getInstanceNameLabel().setIcon(image);
 	}
-	
+
 	protected abstract boolean isResoruceTypeFBNElement();
 
 }

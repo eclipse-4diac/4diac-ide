@@ -29,16 +29,17 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
 	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
-		return new CreateSubAppInterfaceElementCommand(DataTypeLibrary.getInstance().getType(fillTypeCombo()[2]), getType().getInterface(), isInput, -1);
+		return new CreateSubAppInterfaceElementCommand(DataTypeLibrary.getInstance().getType(fillTypeCombo()[2]),
+				getType().getInterface(), isInput, -1);
 	}
 
 	@Override
 	protected INamedElement getInputType(Object input) {
-		if(input instanceof SubAppForFBNetworkEditPart){
+		if (input instanceof SubAppForFBNetworkEditPart) {
 			return ((SubAppForFBNetworkEditPart) input).getModel();
 		}
-		if(input instanceof UISubAppNetworkEditPart){
-			return ((UISubAppNetworkEditPart)input).getSubApp();
+		if (input instanceof UISubAppNetworkEditPart) {
+			return ((UISubAppNetworkEditPart) input).getSubApp();
 		}
 		return null;
 	}
@@ -47,15 +48,15 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	protected DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection) {
 		return new DeleteSubAppInterfaceElementCommand(selection);
 	}
-	
+
 	@Override
 	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput,
 			boolean moveUp) {
 		return new ChangeSubAppInterfaceOrderCommand(selection, isInput, moveUp);
 	}
-	
+
 	@Override
 	protected SubApp getType() {
-		return (SubApp)type;
+		return (SubApp) type;
 	}
 }

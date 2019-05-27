@@ -59,7 +59,7 @@ public class InterfaceElementSection extends AbstractSection {
 	private Combo typeCombo;
 	private Text parameterText;
 	private CLabel valueCLabel;
-	
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
@@ -68,55 +68,59 @@ public class InterfaceElementSection extends AbstractSection {
 		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		createTypeAndCommentSection(parent);
 	}
-	
+
 	protected void createTypeAndCommentSection(Composite parent) {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Name:"); 
-		nameText = createGroupText(composite, true);	
+		getWidgetFactory().createCLabel(composite, "Name:");
+		nameText = createGroupText(composite, true);
 		nameText.addVerifyListener(new IdentifierVerifyListener());
 		nameText.addModifyListener(e -> {
-				removeContentAdapter();
-				executeCommand(new ChangeSubAppIENameCommand(getType(), nameText.getText()));
-				addContentAdapter();
-			});
-		getWidgetFactory().createCLabel(composite, "Comment:"); 
+			removeContentAdapter();
+			executeCommand(new ChangeSubAppIENameCommand(getType(), nameText.getText()));
+			addContentAdapter();
+		});
+		getWidgetFactory().createCLabel(composite, "Comment:");
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(e -> {
-				removeContentAdapter();
-				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
-				addContentAdapter();
-			});
+			removeContentAdapter();
+			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+			addContentAdapter();
+		});
 		getWidgetFactory().createCLabel(composite, "Type: ");
 		typeCombo = new Combo(composite, SWT.SINGLE | SWT.READ_ONLY);
 		typeCombo.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				Command cmd = null;
-				if(getType() instanceof AdapterDeclaration) {
-					DataType newType = getTypeForSelection(typeCombo.getText());			
+				if (getType() instanceof AdapterDeclaration) {
+					DataType newType = getTypeForSelection(typeCombo.getText());
 					cmd = new ChangeTypeCommand((VarDeclaration) getType(), newType);
-				}else {
-					if(getType() instanceof VarDeclaration) {
-						cmd = new ChangeTypeCommand((VarDeclaration) getType(), DataTypeLibrary.getInstance().getType(typeCombo.getText()));
-					}					
+				} else {
+					if (getType() instanceof VarDeclaration) {
+						cmd = new ChangeTypeCommand((VarDeclaration) getType(),
+								DataTypeLibrary.getInstance().getType(typeCombo.getText()));
+					}
 				}
 				executeCommand(cmd);
 			}
+
 			private DataType getTypeForSelection(String text) {
-				for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette())){
-					if(adaptertype.getType().getName().equals(text)) {
+				for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFBNetworkElement()
+						.getFbNetwork().getApplication().getAutomationSystem().getPalette())) {
+					if (adaptertype.getType().getName().equals(text)) {
 						return adaptertype.getType();
 					}
 				}
 				return null;
 			}
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		valueCLabel = getWidgetFactory().createCLabel(composite, "Value:"); 
+		valueCLabel = getWidgetFactory().createCLabel(composite, "Value:");
 		parameterText = createGroupText(composite, true);
 		parameterText.addModifyListener(new ModifyListener() {
 			@Override
@@ -127,83 +131,86 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 		});
 	}
-	
+
 	protected void fillTypeCombo(String text) {
 		typeCombo.removeAll();
-		if(getType() instanceof Event) {
-			for(DataType dataType : EventTypeLibrary.getInstance().getEventTypes()){
+		if (getType() instanceof Event) {
+			for (DataType dataType : EventTypeLibrary.getInstance().getEventTypes()) {
 				typeCombo.add(dataType.getName());
-			}			
-		}else {
-			if(getType() instanceof AdapterDeclaration) {
-				if(null != getType() && null != getType().getFBNetworkElement().getFbNetwork().getApplication()) {
-					for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette())){
+			}
+		} else {
+			if (getType() instanceof AdapterDeclaration) {
+				if (null != getType() && null != getType().getFBNetworkElement().getFbNetwork().getApplication()) {
+					for (AdapterTypePaletteEntry adaptertype : getAdapterTypes(getType().getFBNetworkElement()
+							.getFbNetwork().getApplication().getAutomationSystem().getPalette())) {
 						typeCombo.add(adaptertype.getType().getName());
 					}
 				}
-			}else {
-				if(getType() instanceof VarDeclaration) {
-					for(DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()){
+			} else {
+				if (getType() instanceof VarDeclaration) {
+					for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
 						typeCombo.add(dataType.getName());
 					}
 				}
 			}
 		}
-		if(typeCombo.getItems().length > 0){
+		if (typeCombo.getItems().length > 0) {
 			int i = typeCombo.getItems().length - 1;
-		    while (!text.equals(typeCombo.getItems()[i]) && i > 0){
-	        	--i;
-	        } 
-		    typeCombo.select(i);					
+			while (!text.equals(typeCombo.getItems()[i]) && i > 0) {
+				--i;
+			}
+			typeCombo.select(i);
 		}
 	}
 
-	private static List<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette){
-		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();		
+	private static List<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette) {
+		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();
 		Palette pal = systemPalette;
-		if(null == pal){
+		if (null == pal) {
 			pal = TypeLibrary.getInstance().getPalette();
-		}			
-		retVal.addAll(getAdapterGroup(pal.getRootGroup()));		
+		}
+		retVal.addAll(getAdapterGroup(pal.getRootGroup()));
 		return retVal;
 	}
-	
-	private static List<AdapterTypePaletteEntry> getAdapterGroup(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
-		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();	
+
+	private static List<AdapterTypePaletteEntry> getAdapterGroup(
+			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
+		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();
 		for (Iterator<PaletteGroup> iterator = group.getSubGroups().iterator(); iterator.hasNext();) {
 			PaletteGroup paletteGroup = iterator.next();
-			retVal.addAll(getAdapterGroup(paletteGroup));		
-		}		
-		retVal.addAll(getAdapterGroupEntries(group));		
+			retVal.addAll(getAdapterGroup(paletteGroup));
+		}
+		retVal.addAll(getAdapterGroupEntries(group));
 		return retVal;
 	}
-	
-	private static List<AdapterTypePaletteEntry> getAdapterGroupEntries(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group){
-		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();	
+
+	private static List<AdapterTypePaletteEntry> getAdapterGroupEntries(
+			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
+		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();
 		for (PaletteEntry entry : group.getEntries()) {
-			if(entry instanceof AdapterTypePaletteEntry){
-				retVal.add((AdapterTypePaletteEntry) entry);				
+			if (entry instanceof AdapterTypePaletteEntry) {
+				retVal.add((AdapterTypePaletteEntry) entry);
 			}
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public void refresh() {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if(null != type) {
-			if(getType().getFBNetworkElement() instanceof SubApp){
+		if (null != type) {
+			if (getType().getFBNetworkElement() instanceof SubApp) {
 				nameText.setEditable(true);
 				nameText.setEnabled(true);
 				commentText.setEditable(true);
 				commentText.setEnabled(true);
-				if(getType().getInputConnections().isEmpty() && getType().getOutputConnections().isEmpty()){
+				if (getType().getInputConnections().isEmpty() && getType().getOutputConnections().isEmpty()) {
 					typeCombo.setEnabled(true);
-				}else {
+				} else {
 					typeCombo.setEnabled(false);
 				}
-			}else{
+			} else {
 				nameText.setEditable(false);
 				nameText.setEnabled(false);
 				commentText.setEditable(false);
@@ -211,20 +218,22 @@ public class InterfaceElementSection extends AbstractSection {
 				typeCombo.setEnabled(false);
 			}
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-			commentText.setText(getType().getComment() != null ? getType().getComment() : "");			 //$NON-NLS-1$
+			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			String itype = ""; //$NON-NLS-1$
-			if(getType() instanceof VarDeclaration){
-				VarDeclaration var = (VarDeclaration)getType(); 
+			if (getType() instanceof VarDeclaration) {
+				VarDeclaration var = (VarDeclaration) getType();
 				itype = var.getType() != null ? var.getType().getName() : ""; //$NON-NLS-1$
-				if(getType().isIsInput()){
+				if (getType().isIsInput()) {
 					parameterText.setVisible(true);
 					valueCLabel.setVisible(true);
-					parameterText.setText(var.getValue() != null && var.getValue().getValue() != null ? var.getValue().getValue() : ""); //$NON-NLS-1$
-				}else{
+					parameterText.setText(
+							var.getValue() != null && var.getValue().getValue() != null ? var.getValue().getValue()
+									: ""); //$NON-NLS-1$
+				} else {
 					valueCLabel.setVisible(false);
 					parameterText.setVisible(false);
 				}
-			}else{
+			} else {
 				itype = "Event";
 				valueCLabel.setVisible(false);
 				parameterText.setVisible(false);
@@ -233,18 +242,18 @@ public class InterfaceElementSection extends AbstractSection {
 		}
 		commandStack = commandStackBuffer;
 	}
-	
+
 	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if(part instanceof DiagramEditorWithFlyoutPalette){
-			return ((DiagramEditorWithFlyoutPalette)part).getCommandStack();
+		if (part instanceof DiagramEditorWithFlyoutPalette) {
+			return ((DiagramEditorWithFlyoutPalette) part).getCommandStack();
 		}
 		return null;
 	}
 
 	@Override
 	protected IInterfaceElement getInputType(Object input) {
-		if(input instanceof InterfaceEditPart){
+		if (input instanceof InterfaceEditPart) {
 			return ((InterfaceEditPart) input).getModel();
 		} else if (input instanceof ValueEditPart) {
 			return ((ValueEditPart) input).getModel().getVarDeclaration();
@@ -254,7 +263,7 @@ public class InterfaceElementSection extends AbstractSection {
 
 	@Override
 	protected IInterfaceElement getType() {
-		return (IInterfaceElement)type;
+		return (IInterfaceElement) type;
 	}
 
 	@Override
@@ -263,5 +272,5 @@ public class InterfaceElementSection extends AbstractSection {
 
 	@Override
 	protected void setInputCode() {
-	}	
+	}
 }
