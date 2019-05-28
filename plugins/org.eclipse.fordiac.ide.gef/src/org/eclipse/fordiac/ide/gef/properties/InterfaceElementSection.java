@@ -14,17 +14,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
@@ -37,7 +30,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -92,7 +84,7 @@ public class InterfaceElementSection extends AbstractSection {
 		typeCombo.addListener(SWT.Selection, event -> {
 			Command cmd = null;
 			if (getType() instanceof AdapterDeclaration) {
-				DataType newType = getTypeForSelection(typeCombo.getText());
+				DataType newType = getPalette().getAdapterTypeEntry(typeCombo.getText()).getType();
 				cmd = newChangeTypeCommand((VarDeclaration) getType(), newType);
 			} else {
 				if (getType() instanceof VarDeclaration) {
@@ -110,15 +102,6 @@ public class InterfaceElementSection extends AbstractSection {
 			addContentAdapter();
 		});
 	}
-	
-	private DataType getTypeForSelection(String text) {
-		for (AdapterTypePaletteEntry adaptertype : getAdapterTypes()) {
-			if (adaptertype.getType().getName().equals(text)) {
-				return adaptertype.getType();
-			}
-		}
-		return null;
-	}
 
 	private void fillTypeCombo(String text) {
 		typeCombo.removeAll();
@@ -126,7 +109,7 @@ public class InterfaceElementSection extends AbstractSection {
 			EventTypeLibrary.getInstance().getEventTypes().forEach(eType -> typeCombo.add(eType.getName()));
 		} else if (getType() instanceof AdapterDeclaration) {
 			if (null != getType().getFBNetworkElement().getFbNetwork().getApplication()) {
-				getAdapterTypes().forEach(adp -> typeCombo.add(adp.getType().getName()));
+				getPalette().getAdapterTypes().forEach(adp -> typeCombo.add(adp.getType().getName()));
 			}
 		} else if (getType() instanceof VarDeclaration) {
 			DataTypeLibrary.getInstance().getDataTypesSorted().forEach(dataType -> typeCombo.add(dataType.getName()));
@@ -141,38 +124,8 @@ public class InterfaceElementSection extends AbstractSection {
 		}
 	}
 
-	private List<AdapterTypePaletteEntry> getAdapterTypes() {
-		Palette pal = getPalette();
-		if (null == pal) {
-			pal = TypeLibrary.getInstance().getPalette();
-		}
-		return getAdapterGroup(pal.getRootGroup());
-	}
-
 	private Palette getPalette() {
 		return getType().getFBNetworkElement().getFbNetwork().getApplication().getAutomationSystem().getPalette();
-	}
-
-	private static List<AdapterTypePaletteEntry> getAdapterGroup(
-			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();
-		for (Iterator<PaletteGroup> iterator = group.getSubGroups().iterator(); iterator.hasNext();) {
-			PaletteGroup paletteGroup = iterator.next();
-			retVal.addAll(getAdapterGroup(paletteGroup));
-		}
-		retVal.addAll(getAdapterGroupEntries(group));
-		return retVal;
-	}
-
-	private static List<AdapterTypePaletteEntry> getAdapterGroupEntries(
-			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<AdapterTypePaletteEntry> retVal = new ArrayList<>();
-		for (PaletteEntry entry : group.getEntries()) {
-			if (entry instanceof AdapterTypePaletteEntry) {
-				retVal.add((AdapterTypePaletteEntry) entry);
-			}
-		}
-		return retVal;
 	}
 
 	@Override

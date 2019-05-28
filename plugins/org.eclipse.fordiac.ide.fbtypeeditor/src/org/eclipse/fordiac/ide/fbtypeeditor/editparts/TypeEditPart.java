@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,13 +10,11 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - moved adapter search code to palette  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -23,10 +22,7 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -34,7 +30,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -114,7 +109,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 						if (getCastedModel() instanceof AdapterDeclaration) {
 							// TODO change to own command in order to update cfb internals
 							cmd = new ChangeTypeCommand((VarDeclaration) getCastedModel(),
-									getAdapterTypeEntry(systemPalette, typeName).getType());
+									systemPalette.getAdapterTypeEntry(typeName).getType());
 						} else {
 							cmd = new ChangeTypeCommand((VarDeclaration) getCastedModel(),
 									DataTypeLibrary.getInstance().getType(typeName));
@@ -155,10 +150,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 		// First update the list of available types
 		ArrayList<String> dataTypeNames = new ArrayList<>();
 		if (getCastedModel() instanceof AdapterDeclaration) {
-			for (AdapterTypePaletteEntry adapterType : getAdapterTypes(systemPalette)) {
-				dataTypeNames.add(adapterType.getLabel());
-			}
-			Collections.sort(dataTypeNames);
+			systemPalette.getAdapterTypesSorted().forEach(adapterType -> dataTypeNames.add(adapterType.getLabel()));
 		} else {
 			for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
 				dataTypeNames.add(dataType.getName());
@@ -167,43 +159,6 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 		((ComboDirectEditManager) getManager()).updateComboData(dataTypeNames);
 		((ComboDirectEditManager) getManager()).setSelectedItem(dataTypeNames.indexOf(getTypeName()));
 		getManager().show();
-	}
-
-	public static AdapterTypePaletteEntry getAdapterTypeEntry(final Palette systemPalette, final String typeName) {
-		PaletteEntry entry = systemPalette.getTypeEntry(typeName);
-		return (entry instanceof AdapterTypePaletteEntry) ? (AdapterTypePaletteEntry) entry : null;
-	}
-
-	public static List<AdapterTypePaletteEntry> getAdapterTypes(final Palette systemPalette) {
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<>();
-		Palette pal = systemPalette;
-		if (null == pal) {
-			pal = TypeLibrary.getInstance().getPalette();
-		}
-		retVal.addAll(getAdapterGroup(pal.getRootGroup()));
-		return retVal;
-	}
-
-	private static List<AdapterTypePaletteEntry> getAdapterGroup(
-			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<>();
-		for (Iterator<PaletteGroup> iterator = group.getSubGroups().iterator(); iterator.hasNext();) {
-			PaletteGroup paletteGroup = iterator.next();
-			retVal.addAll(getAdapterGroup(paletteGroup));
-		}
-		retVal.addAll(getAdapterGroupEntries(group));
-		return retVal;
-	}
-
-	private static List<AdapterTypePaletteEntry> getAdapterGroupEntries(
-			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		ArrayList<AdapterTypePaletteEntry> retVal = new ArrayList<>();
-		for (PaletteEntry entry : group.getEntries()) {
-			if (entry instanceof AdapterTypePaletteEntry) {
-				retVal.add((AdapterTypePaletteEntry) entry);
-			}
-		}
-		return retVal;
 	}
 
 	@Override

@@ -516,6 +516,13 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		EOperation op = addEOperation(paletteEClass, this.getPaletteEntry(), "getTypeEntry", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, ecorePackage.getEString(), "typeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		op = addEOperation(paletteEClass, this.getAdapterTypePaletteEntry(), "getAdapterTypeEntry", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEString(), "adapterTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(paletteEClass, this.getAdapterTypePaletteEntry(), "getAdapterTypes", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(paletteEClass, this.getAdapterTypePaletteEntry(), "getAdapterTypesSorted", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(paletteGroupEClass, PaletteGroup.class, "PaletteGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getPaletteGroup_Entries(), this.getPaletteEntry(), null, "entries", null, 0, -1, PaletteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPaletteGroup_SubGroups(), this.getPaletteGroup(), null, "subGroups", null, 0, -1, PaletteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

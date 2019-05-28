@@ -316,6 +316,36 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * @generated
 	 */
 	@Override
+	public AdapterTypePaletteEntry getAdapterTypeEntry(final String adapterTypeName) {
+		return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypeEntry(this, adapterTypeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<AdapterTypePaletteEntry> getAdapterTypes() {
+		return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypes(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<AdapterTypePaletteEntry> getAdapterTypesSorted() {
+		return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypesSorted(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:

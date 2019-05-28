@@ -18,6 +18,13 @@
       <genOperations ecoreOperation="palette.ecore#//Palette/getTypeEntry" body="PaletteEntry entry = null;&#xA;//TODO reconsider when namespaces are coming how to retrieve the type&#xA;List&lt;PaletteEntry> entries = getTypeEntries(typeName);&#xA;if (!entries.isEmpty()) {&#xA;&#x9;entry = entries.get(0);&#xA;} &#xA;return entry;">
         <genParameters ecoreParameter="palette.ecore#//Palette/getTypeEntry/typeName"/>
       </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//Palette/getAdapterTypeEntry"
+          body="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypeEntry(this, adapterTypeName);">
+        <genParameters ecoreParameter="palette.ecore#//Palette/getAdapterTypeEntry/adapterTypeName"/>
+      </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//Palette/getAdapterTypes" body="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypes(this);"/>
+      <genOperations ecoreOperation="palette.ecore#//Palette/getAdapterTypesSorted"
+          body="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypesSorted(this);"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//PaletteGroup">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference palette.ecore#//PaletteGroup/entries"/>

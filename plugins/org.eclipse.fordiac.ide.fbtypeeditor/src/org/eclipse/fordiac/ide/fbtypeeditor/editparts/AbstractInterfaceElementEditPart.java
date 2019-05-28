@@ -15,13 +15,14 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEditPart {
-	public abstract IInterfaceElement getCastedModel();	
+	public abstract IInterfaceElement getCastedModel();
+
 	protected abstract void update();
 
 	private final EContentAdapter adapter = new EContentAdapter() {
@@ -44,7 +45,7 @@ abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEd
 		super.deactivate();
 		getCastedModel().eAdapters().remove(adapter);
 	}
-	
+
 	public boolean isInput() {
 		return getCastedModel().isIsInput();
 	}
@@ -56,7 +57,7 @@ abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEd
 	public boolean isVariable() {
 		return getCastedModel() instanceof VarDeclaration;
 	}
-	
+
 	public boolean isAdapter() {
 		return getCastedModel() instanceof AdapterDeclaration;
 	}

@@ -1,11 +1,14 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
+ * 				 2019 Johannes Kepler University
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Monika Wenger - initial implementation
+ *   Monika Wenger - initial implementation
+ *   Alois Zoitl - moved adapter search code to palette
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -30,7 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
 	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
-		AdapterType type = getAdapterTypes(getPalette()).get(0).getType();
+		AdapterType type = getPalette().getAdapterTypes().get(0).getType();
 		return new CreateSubAppInterfaceElementCommand(type, getType().getInterface(), isInput, -1);
 	}
 

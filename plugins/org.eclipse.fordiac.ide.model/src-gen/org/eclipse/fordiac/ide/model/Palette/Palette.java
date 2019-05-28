@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -127,6 +128,33 @@ public interface Palette extends EObject {
 	 * @generated
 	 */
 	PaletteEntry getTypeEntry(String typeName);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" adapterTypeNameRequired="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypeEntry(this, adapterTypeName);'"
+	 * @generated
+	 */
+	AdapterTypePaletteEntry getAdapterTypeEntry(String adapterTypeName);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypes(this);'"
+	 * @generated
+	 */
+	EList<AdapterTypePaletteEntry> getAdapterTypes();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypesSorted(this);'"
+	 * @generated
+	 */
+	EList<AdapterTypePaletteEntry> getAdapterTypesSorted();
 
 	public PaletteEntry createFBTypeEntry(IFile file, PaletteGroup parent);
 	public PaletteEntry createDeviceEntry(IFile file, PaletteGroup parent);
