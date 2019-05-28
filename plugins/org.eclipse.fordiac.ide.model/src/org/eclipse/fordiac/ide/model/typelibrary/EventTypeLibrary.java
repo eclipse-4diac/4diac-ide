@@ -25,7 +25,7 @@ public final class EventTypeLibrary {
 	private static EventTypeLibrary instance;
 
 	private EventTypeLibrary() {
-		typeMap = new HashMap<String, DataType>();
+		typeMap = new HashMap<>();
 		initElementaryTypes();
 	}
 
@@ -38,7 +38,7 @@ public final class EventTypeLibrary {
 
 	private void initElementaryTypes() {
 		if (typeMap == null) {
-			typeMap = new HashMap<String, DataType>();
+			typeMap = new HashMap<>();
 		}
 		EventType type = DataFactory.eINSTANCE.createEventType();
 		type.setName("Event"); //$NON-NLS-1$
@@ -50,8 +50,8 @@ public final class EventTypeLibrary {
 	}
 
 	/**
-	 * FIXME only return type if it really exists! --> after parsing/importing
-	 * of types is implemented --> planned for V0.3
+	 * FIXME only return type if it really exists! --> after parsing/importing of
+	 * types is implemented --> planned for V0.3
 	 * 
 	 * @param name the name
 	 * 

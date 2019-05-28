@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +42,7 @@ public final class DataTypeLibrary {
 	 * Instantiates a new data type library.
 	 */
 	private DataTypeLibrary() {
-		typeMap = new HashMap<String, DataType>();
+		typeMap = new HashMap<>();
 		initElementaryTypes();
 	}
 
@@ -68,19 +67,14 @@ public final class DataTypeLibrary {
 	 */
 	private void initElementaryTypes() {
 		if (typeMap == null) {
-			typeMap = new HashMap<String, DataType>();
+			typeMap = new HashMap<>();
 		}
 
-		// List<> BaseType1.VALUES;
-		List<BaseType1> elementaryTypes = BaseType1.VALUES;
-
-		for (Iterator<BaseType1> iterator = elementaryTypes.iterator(); iterator
-				.hasNext();) {
-			BaseType1 baseType = iterator.next();
+		BaseType1.VALUES.forEach(baseType -> {
 			ElementaryType type = DataFactory.eINSTANCE.createElementaryType();
 			type.setName(baseType.getLiteral());
 			typeMap.put(baseType.getLiteral(), type);
-		}
+		});
 	}
 
 	/**
@@ -91,22 +85,21 @@ public final class DataTypeLibrary {
 	public Collection<DataType> getDataTypes() {
 		return typeMap.values();
 	}
-	
+
 	/**
 	 * Gets the data types sorted alphabetically from a to z.
 	 * 
 	 * @return the sorted data types list
 	 */
 	public Collection<DataType> getDataTypesSorted() {
-		ArrayList<DataType> dataTypes = new ArrayList<DataType>(getDataTypes());
+		List<DataType> dataTypes = new ArrayList<>(getDataTypes());
 		Collections.sort(dataTypes, NamedElementComparator.INSTANCE);
-		
 		return dataTypes;
 	}
 
 	/**
-	 * FIXME only return type if it really exists! --> after parsing/importing
-	 * of types is implemented --> planned for V0.2
+	 * FIXME only return type if it really exists! --> after parsing/importing of
+	 * types is implemented --> planned for V0.2
 	 * 
 	 * @param name the name
 	 * 
@@ -126,35 +119,28 @@ public final class DataTypeLibrary {
 		return type;
 	}
 
-	
-	public static void loadReferencedDataTypes(File srcFile, Shell shell) throws TypeImportException{		
+	public static void loadReferencedDataTypes(File srcFile, Shell shell) throws TypeImportException {
 		List<String> referencedDataTypes = FBTImporter.getReferencedDataTypes(srcFile);
-		
-		for (Iterator<String> iterator = referencedDataTypes.iterator(); iterator.hasNext();) {
-			String dataType = iterator.next();
-			DataType type = DataTypeLibrary.getInstance().getType(
-					dataType);
+
+		for (String dataType : referencedDataTypes) {
+			DataType type = DataTypeLibrary.getInstance().getType(dataType);
 			if (type == null) {
 				if (shell == null) {
 					shell = Display.getCurrent().getActiveShell();
 				}
 				FileDialog fd = new FileDialog(shell);
-				String msg = MessageFormat
-						.format(
-								Messages.TypeLibrary_ImportDataTypeFileDialogTitle,
-								new Object[] { dataType });
+				String msg = MessageFormat.format(Messages.TypeLibrary_ImportDataTypeFileDialogTitle, dataType);
 				fd.setText(msg);
 				fd.setFilterExtensions(new String[] { "*.dtp" }); //$NON-NLS-1$
 				String typeFile = fd.open();
 				if (typeFile != null) {
 					// TODO import datatype
 				} else {
-					throw new TypeImportException(
-							Messages.TypeLibrary_ERROR_ReferencedDataTypeNotFound);
+					throw new TypeImportException(Messages.TypeLibrary_ERROR_ReferencedDataTypeNotFound);
 				}
-	
+
 			}
 		}
 	}
-	
+
 }

@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.monitoring.editparts;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.draw2d.AncestorListener;
 import org.eclipse.draw2d.IFigure;
@@ -27,7 +28,6 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -83,8 +83,8 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 				}
 				else if (interfaceElement instanceof AdapterDeclaration) {
 					IInterfaceElement subInterfaceElement = null;
-					InterfaceList interfaceList = ((AdapterType)((AdapterDeclaration)interfaceElement).getType()).getInterfaceList();
-					ArrayList<IInterfaceElement> list = new ArrayList<IInterfaceElement>();
+					InterfaceList interfaceList = ((AdapterDeclaration)interfaceElement).getType().getInterfaceList();
+					List<IInterfaceElement> list = new ArrayList<>();
 					list.addAll(interfaceList.getEventInputs());
 					list.addAll(interfaceList.getEventOutputs());
 					list.addAll(interfaceList.getInputVars());

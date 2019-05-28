@@ -89,4 +89,14 @@ public interface AdapterDeclaration extends VarDeclaration {
 	 */
 	void setPaletteEntry(AdapterTypePaletteEntry value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//this code can not be moved to a model annotations class\nreturn (AdapterType)super.getType();'"
+	 * @generated
+	 */
+	@Override
+	AdapterType getType();
+
 } // AdapterDeclaration

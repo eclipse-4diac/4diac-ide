@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 
 
 /**
@@ -38,6 +38,6 @@ public interface IPaletteEntryCreator {
 	 * 
 	 * @return the created palette entry
 	 */
-	PaletteEntryImpl createPaletteEntry();
+	PaletteEntry createPaletteEntry();
 
 }

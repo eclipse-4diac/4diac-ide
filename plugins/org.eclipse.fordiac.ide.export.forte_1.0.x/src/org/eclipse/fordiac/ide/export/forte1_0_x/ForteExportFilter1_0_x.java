@@ -30,7 +30,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportFilter;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -555,12 +554,12 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 				for (int j = 0; j < childs.getLength(); j++) {
 					org.w3c.dom.Node childnode = childs.item(j);
 					if (childnode instanceof Element) {
-						Element childel = (Element) childnode;
+						Element childElem = (Element) childnode;
 						pwCPP.println(MessageFormat.format(
 								"  m_roObjectHandler.getFB(g_nStringId{0})->getDataInput(g_nStringId{1})->fromString(\"{2}\");", //$NON-NLS-1$
 								el.getAttribute("Name"), //$NON-NLS-1$
-										childel.getAttribute("Name"), //$NON-NLS-1$
-										childel.getAttribute("Value"))); //$NON-NLS-1$
+								childElem.getAttribute("Name"), //$NON-NLS-1$
+								childElem.getAttribute("Value"))); //$NON-NLS-1$
 					}
 				}
 			}
@@ -1003,15 +1002,8 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 	protected void exportDC() {
 	}
 
-	private AdapterFBType findAdapterType(final AdapterDeclaration paAdapter) {
-		DataType myDT = paAdapter.getType();
-		AdapterType myAT = null;
-		if (myDT instanceof AdapterType) {
-			myAT = (AdapterType) myDT;
-			return myAT.getAdapterFBType();
-		}
-
-		return null;
+	private static AdapterFBType findAdapterType(final AdapterDeclaration paAdapter) {
+		return paAdapter.getType().getAdapterFBType();
 	}
 
 	@Override

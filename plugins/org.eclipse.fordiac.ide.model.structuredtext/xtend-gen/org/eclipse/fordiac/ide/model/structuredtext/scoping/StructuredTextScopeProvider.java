@@ -52,7 +52,7 @@ public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvide
     SimpleScope _xblockexpression = null;
     {
       AdapterDeclaration _adapter = context.getAdapter();
-      DataType _type = null;
+      AdapterType _type = null;
       if (_adapter!=null) {
         _type=_adapter.getType();
       }

@@ -19,7 +19,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.export.forte_lua.filter.LuaUtils;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -305,7 +304,7 @@ public class LuaConstants {
   
   public static CharSequence luaFBAdapterInterfaceConstants(final AdapterDeclaration adapter, final EList<?> ifl) {
     StringConcatenation _builder = new StringConcatenation();
-    DataType _type = adapter.getType();
+    AdapterType _type = adapter.getType();
     InterfaceList aifl = ((AdapterType) _type).getAdapterFBType().getInterfaceList();
     _builder.newLineIfNotEmpty();
     {

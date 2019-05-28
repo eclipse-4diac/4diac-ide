@@ -19,7 +19,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditorCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xtext.Constants;
@@ -71,11 +70,9 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 
 			private void createAdapterResource(XtextResourceSet resourceSet, EcoreUtil.Copier copier,
 					AdapterDeclaration adapter) {
-				if(adapter.getType() instanceof AdapterType){
-					Resource adapterResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
-					copier.copy(adapter.getType());
-					adapterResource.getContents().add(copier.copy(EcoreUtil.getRootContainer(((AdapterType)adapter.getType()).getAdapterFBType())));
-				}
+				Resource adapterResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
+				copier.copy(adapter.getType());
+				adapterResource.getContents().add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
 			}
 
 			protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
