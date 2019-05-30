@@ -23,22 +23,25 @@ public class InterfaceSection extends AbstractInterfaceSection {
 
 	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if(part instanceof DiagramEditorWithFlyoutPalette){
-			return ((DiagramEditorWithFlyoutPalette)part).getCommandStack();
+		if (part instanceof DiagramEditorWithFlyoutPalette) {
+			return ((DiagramEditorWithFlyoutPalette) part).getCommandStack();
 		}
 		return null;
 	}
 
 	@Override
 	protected FBNetworkElement getInputType(Object input) {
-		if(input instanceof AbstractFBNElementEditPart){
+		if (input instanceof AbstractFBNElementEditPart) {
 			return ((AbstractFBNElementEditPart) input).getModel();
+		} else if (input instanceof FBNetworkElement) {
+			return (FBNetworkElement) input;
 		}
 		return null;
 	}
 
 	@Override
-	protected void setInputCode() {}
+	protected void setInputCode() {
+	}
 
 	@Override
 	protected void setInputInit() {

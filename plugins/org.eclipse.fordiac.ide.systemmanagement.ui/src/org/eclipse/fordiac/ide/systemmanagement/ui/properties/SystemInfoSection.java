@@ -16,6 +16,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.fordiac.ide.gef.properties.TypeInfoSection;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.navigator.CommonNavigator;
 
@@ -23,16 +24,16 @@ public class SystemInfoSection extends TypeInfoSection {
 
 	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if((part instanceof CommonNavigator) && (input instanceof AutomationSystem)){
-			return  SystemManager.INSTANCE.getCommandStack((AutomationSystem)input);
+		if ((part instanceof CommonNavigator) && (input instanceof AutomationSystem)) {
+			return SystemManager.INSTANCE.getCommandStack((AutomationSystem) input);
 		}
 		return null;
 	}
 
 	@Override
 	protected LibraryElement getInputType(Object input) {
-		if(input instanceof AutomationSystem){
-			return (AutomationSystem) input;	
+		if (input instanceof AutomationSystem) {
+			return (AutomationSystem) input;
 		}
 		return null;
 	}

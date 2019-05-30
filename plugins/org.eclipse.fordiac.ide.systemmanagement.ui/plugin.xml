@@ -302,15 +302,7 @@
       <extension
             point="org.eclipse.ui.views.properties.tabbed.propertySections">
          <propertySections
-               contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
-            <propertySection
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.TypeInfoSection"
-                  id="property.section.system.fBTypeInfo"
-                  tab="property.tab.system.fbtypeinfo">
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.FB">
-               </input>
-            </propertySection>
+               contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">           
             <propertySection
                   class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.SystemInfoSection"
                   id="property.section.systemInfo"

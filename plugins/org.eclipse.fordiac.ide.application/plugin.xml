@@ -130,6 +130,9 @@
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
+            </input>
          </propertySection>
          <propertySection
                enablesFor="1"
@@ -138,6 +141,9 @@
                tab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab">
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+            </input>
+            <input
+                  type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
             </input>
          </propertySection>
          <propertySection
@@ -184,6 +190,9 @@
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.model.libraryElement.SubApp">
+            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.EditInterfaceDataSection"
@@ -195,6 +204,9 @@
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.model.libraryElement.SubApp">
+            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.EditInterfaceAdapterSection"
@@ -205,6 +217,9 @@
             </input>
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
+            </input>
+            <input
+                  type="org.eclipse.fordiac.ide.model.libraryElement.SubApp">
             </input>
          </propertySection>
          <propertySection

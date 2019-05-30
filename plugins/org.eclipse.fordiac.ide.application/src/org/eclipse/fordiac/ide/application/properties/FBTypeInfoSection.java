@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.gef.properties.TypeInfoSection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IWorkbenchPart;
@@ -29,6 +30,8 @@ public class FBTypeInfoSection extends TypeInfoSection {
 	protected LibraryElement getInputType(Object input) {
 		if(input instanceof FBEditPart){
 			return ((FBEditPart) input).getModel().getType();	
+		} else if (input instanceof FBNetworkElement){
+			return ((FBNetworkElement) input).getType();				
 		}
 		return null;
 	}
