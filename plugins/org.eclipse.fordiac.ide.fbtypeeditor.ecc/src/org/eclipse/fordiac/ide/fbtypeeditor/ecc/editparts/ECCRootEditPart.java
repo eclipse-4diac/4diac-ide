@@ -52,15 +52,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 		f.setBorder(new MarginBorder(10));
 		f.setLayoutManager(new FreeformLayout());
 		f.setOpaque(false);
-		// Create the static router for the connection layer
-		// ConnectionLayer connLayer = (ConnectionLayer)
-		// getLayer(LayerConstants.CONNECTION_LAYER);
-		// connLayer.setConnectionRouter(new
-		// WestEastManhattanConnectionRouter());
-		
 		getLayer(LayerConstants.CONNECTION_LAYER).setLayoutManager(new FreeformLayout());
-
-		
 		return f;
 	}
 
@@ -74,7 +66,6 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 		if (!isActive()) {
 			super.activate();
 			((Notifier) getModel()).eAdapters().add(getContentAdapter());
-
 		}
 	}
 
@@ -88,7 +79,6 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 		if (isActive()) {
 			super.deactivate();
 			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
-
 		}
 	}
 
@@ -110,7 +100,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 					case Notification.REMOVE_MANY:
 						refreshChildren();
 						break;
-					case Notification.SET:
+					default:
 						break;
 					}
 				}
@@ -126,8 +116,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 	 */
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE,
-				new RootComponentEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		// handles constraint changes of model elements and creation of new
 		// model elements
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ECCXYLayoutEditPolicy());
@@ -152,7 +141,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 	 */
 	@Override
 	protected List<?> getModelChildren() {
-		ArrayList<ECState> temp = new ArrayList<ECState>();
+		List<ECState> temp = new ArrayList<>();
 		temp.addAll(getCastedECCModel().getECState());
 		return temp;
 	}

@@ -59,7 +59,6 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 	private KeyHandler sharedKeyHandler;
 	private CommandStack commandStack;
 
-
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInputWithNotify(input);
@@ -136,18 +135,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 				Object ob = null;
 				if (sel.getFirstElement() instanceof SequenceRootEditPart) {
 					ob = ((FBType) ((SequenceRootEditPart) sel.getFirstElement()).getModel()).getService();
-				}
-				// if (sel.getFirstElement() instanceof ConnectionEditPart) {
-				// ob =
-				// ((ConnectionEditPart)sel.getFirstElement()).getSource().getModel();
-				// if(ob instanceof InputPrimitiveEditPart){
-				// ob = ((InputPrimitiveEditPart)ob).getModel();
-				// }
-				// else if(ob instanceof OutputPrimitiveEditPart){
-				// ob = ((OutputPrimitiveEditPart)ob).getModel();
-				// }
-				// }
-				else if (sel.getFirstElement() instanceof OutputPrimitiveEditPart) {
+				} else if (sel.getFirstElement() instanceof OutputPrimitiveEditPart) {
 					ob = ((OutputPrimitiveEditPart) sel.getFirstElement()).getModel();
 				} else if (sel.getFirstElement() instanceof InputPrimitiveEditPart) {
 					ob = ((InputPrimitiveEditPart) sel.getFirstElement()).getModel();
@@ -171,7 +159,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 		if (null != selectedElement) {
 			Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
 			getGraphicalViewer().flush();
-			if (editpart != null && editpart instanceof EditPart && ((EditPart) editpart).isSelectable()) {
+			if (editpart instanceof EditPart && ((EditPart) editpart).isSelectable()) {
 				getGraphicalViewer().select((EditPart) editpart);
 				return true;
 			}

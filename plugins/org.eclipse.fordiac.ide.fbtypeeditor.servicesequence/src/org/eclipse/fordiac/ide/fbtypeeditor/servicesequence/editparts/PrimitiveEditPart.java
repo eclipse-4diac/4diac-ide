@@ -30,27 +30,21 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 
-public abstract class PrimitiveEditPart extends AbstractDirectEditableEditPart implements NodeEditPart, IChangeStringEditPart {
+public abstract class PrimitiveEditPart extends AbstractDirectEditableEditPart
+		implements NodeEditPart, IChangeStringEditPart {
 
 	private final PrimitiveConnection connection;
 
 	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);	
-			if(getCastedModel().eAdapters().contains(adapter)){
-				refresh();	
-//				IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-//				GraphicalViewer view = (GraphicalViewer) editor.getAdapter(GraphicalViewer.class);
-//				if(null != view){
-//					((PrimitiveConnectionEditPart) view.getEditPartRegistry().get(connection)).refresh();
-//				}
+			super.notifyChanged(notification);
+			if (getCastedModel().eAdapters().contains(adapter)) {
+				refresh();
 			}
 		}
 	};
-	
-	
-	
+
 	public PrimitiveEditPart(PrimitiveConnection connection) {
 		super();
 		this.connection = connection;
@@ -71,34 +65,34 @@ public abstract class PrimitiveEditPart extends AbstractDirectEditableEditPart i
 		}
 		super.deactivate();
 	}
-	
+
 	public PrimitiveConnection getPrimitiveConnection() {
 		return connection;
 	}
-	
+
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		PrimitiveFigure figure = (PrimitiveFigure) getFigure();
-		if(null != getCastedModel()){
+		if (null != getCastedModel()) {
 			figure.setLabelText(getCastedModel().getEvent());
 			figure.setInterfaceDirection(isLeftInterface());
 		}
 	}
-	
+
 	public Primitive getCastedModel() {
 		return (Primitive) getModel();
 	}
-	
+
 	protected TransactionEditPart getCastedParent() {
 		return (TransactionEditPart) getParent();
 	}
-	
-	
-	protected boolean isLeftInterface(){
-		return getCastedModel().getInterface().getName().equals(((Service)getCastedModel().eContainer().eContainer().eContainer()).getLeftInterface().getName());
+
+	protected boolean isLeftInterface() {
+		return getCastedModel().getInterface().getName().equals(
+				((Service) getCastedModel().eContainer().eContainer().eContainer()).getLeftInterface().getName());
 	}
-	
+
 	@Override
 	protected IFigure createFigure() {
 		return new PrimitiveFigure(isLeftInterface(), getCastedModel().getEvent());
@@ -106,18 +100,18 @@ public abstract class PrimitiveEditPart extends AbstractDirectEditableEditPart i
 
 	@Override
 	public Label getNameLabel() {
-		return ((PrimitiveFigure)getFigure()).getLabel();
+		return ((PrimitiveFigure) getFigure()).getLabel();
 	}
 
 	public Figure getCenterFigure() {
-		return ((PrimitiveFigure)getFigure()).getCenterFigure();
+		return ((PrimitiveFigure) getFigure()).getCenterFigure();
 	}
-	
+
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
 		return null;
 	}
-	
+
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeletePrimitiveEditPolicy());

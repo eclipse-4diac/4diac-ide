@@ -34,11 +34,9 @@ public class ChangeCommentCommand extends Command {
 	 * Instantiates a new change comment command.
 	 * 
 	 * @param interfaceElement the interface element
-	 * @param comment the comment
+	 * @param comment          the comment
 	 */
-	public ChangeCommentCommand(final INamedElement interfaceElement,
-			final String comment) {
-//		super();
+	public ChangeCommentCommand(final INamedElement interfaceElement, final String comment) {
 		this.interfaceElement = interfaceElement;
 		this.comment = comment;
 	}

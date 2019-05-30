@@ -207,7 +207,6 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				res.setName(resource.getName());
 				res.setPaletteEntry(getResourceType(dev, resource.getType()));
 				res.setFBNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
-//				Resource res = new ResourceCreateCommand(getResourceType(dev, resource.getType()));
 				dev.getResource().add(res);
 				queryFBNetwork(res);
 				queryConnections(res);
@@ -265,7 +264,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		if (null != response.getEndpointlist()) {
 			for (org.eclipse.fordiac.ide.deployment.devResponse.Connection connection : response.getEndpointlist()
 					.getConnection()) {
-				// TODO currently no subapps supported - bug 538333 
+				// TODO currently no subapps supported - bug 538333
 				String[] src = connection.getSource().split("\\."); //$NON-NLS-1$
 				FB srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
 				IInterfaceElement srcIE = Annotations.getInterfaceElement(srcFB, src[src.length - 1]);

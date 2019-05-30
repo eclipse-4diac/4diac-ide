@@ -32,9 +32,9 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 	@Override
 	public void reveal(EditPart part) {
 		// do not correct viewport for connections
-		// FIXME -> make it setable in e.g. preferences;
+		// FIXME -> make it setable in e.g. preferences
 		if (!(part instanceof ConnectionEditPart)) {
-			 super.reveal(part);
+			super.reveal(part);
 		}
 	}
 

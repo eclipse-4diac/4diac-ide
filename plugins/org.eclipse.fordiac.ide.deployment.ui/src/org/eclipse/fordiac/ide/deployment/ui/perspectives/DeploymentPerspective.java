@@ -32,15 +32,6 @@ public class DeploymentPerspective implements IPerspectiveFactory {
 		// empty constructor
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * 
-	 * 
-	 * 
-	 * @seeorg.eclipse.ui.IPerspectiveFactory#createInitialLayout(org.eclipse.ui.
-	 * IPageLayout)
-	 */
 	@Override
 	public void createInitialLayout(final IPageLayout factory) {
 		this.factory = factory;
@@ -56,11 +47,6 @@ public class DeploymentPerspective implements IPerspectiveFactory {
 	 * Adds the views.
 	 */
 	private void addViews() {
-
-		// IFolderLayout bottom = factory.createFolder("bottomLeft",
-		// //$NON-NLS-1$
-		// IPageLayout.BOTTOM, 0.75f, factory.getEditorArea());
-		// bottom.addView(IPageLayout.ID_PROP_SHEET); // NON-NLS-1
 		IFolderLayout topRight = factory.createFolder("topRight", //$NON-NLS-1$
 				IPageLayout.RIGHT, 0.5f, factory.getEditorArea());
 		topRight.addView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
@@ -77,7 +63,6 @@ public class DeploymentPerspective implements IPerspectiveFactory {
 				IPageLayout.BOTTOM, 0.75f, "topLeft"); //$NON-NLS-1$
 		bottomLeft.addView("org.eclipse.fordiac.ide.runtime.views.RuntimeLauncherView"); //$NON-NLS-1$
 	}
-	
 
 	/**
 	 * Adds the action sets.

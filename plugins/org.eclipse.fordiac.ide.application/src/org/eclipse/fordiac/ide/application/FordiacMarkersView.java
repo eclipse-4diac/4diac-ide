@@ -32,18 +32,16 @@ public class FordiacMarkersView extends MarkerSupportView {
 	@Override
 	public void createPartControl(Composite parent) {
 		// TODO find a better way, as super.createPartControl normally is
-		// restricted for access;
+		// restricted for access
 		super.createPartControl(parent);
 		Object provider = getSite().getSelectionProvider();
 		if (provider instanceof StructuredViewer) {
 
-			new OpenAndLinkWithEditorHelper(
-					(StructuredViewer)provider) {
+			new OpenAndLinkWithEditorHelper((StructuredViewer) provider) {
 				/*
 				 * (non-Javadoc)
 				 * 
-				 * @see
-				 * org.eclipse.ui.OpenAndLinkWithEditorHelper#activate(org.eclipse
+				 * @see org.eclipse.ui.OpenAndLinkWithEditorHelper#activate(org.eclipse
 				 * .jface.viewers.ISelection )
 				 */
 				@Override
@@ -60,9 +58,8 @@ public class FordiacMarkersView extends MarkerSupportView {
 				/*
 				 * (non-Javadoc)
 				 * 
-				 * @see
-				 * org.eclipse.ui.OpenAndLinkWithEditorHelper#linkToEditor(org
-				 * .eclipse .jface.viewers .ISelection)
+				 * @see org.eclipse.ui.OpenAndLinkWithEditorHelper#linkToEditor(org .eclipse
+				 * .jface.viewers .ISelection)
 				 */
 				@Override
 				protected void linkToEditor(ISelection selection) {
@@ -72,9 +69,8 @@ public class FordiacMarkersView extends MarkerSupportView {
 				/*
 				 * (non-Javadoc)
 				 * 
-				 * @see
-				 * org.eclipse.ui.OpenAndLinkWithEditorHelper#open(org.eclipse
-				 * .jface .viewers.ISelection, boolean)
+				 * @see org.eclipse.ui.OpenAndLinkWithEditorHelper#open(org.eclipse .jface
+				 * .viewers.ISelection, boolean)
 				 */
 				@Override
 				protected void open(ISelection selection, boolean activate) {
@@ -84,7 +80,6 @@ public class FordiacMarkersView extends MarkerSupportView {
 		}
 	}
 
-	
 	/**
 	 * Open the selected markers
 	 */

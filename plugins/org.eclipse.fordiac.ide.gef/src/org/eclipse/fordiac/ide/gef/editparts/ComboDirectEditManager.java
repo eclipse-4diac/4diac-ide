@@ -34,32 +34,15 @@ public class ComboDirectEditManager extends DirectEditManager {
 
 	/** The label. */
 	private final Label label;
-	
+
 	private CCombo combo;
 
 	/** The scaled font. */
 	private Font scaledFont;
-	
-	private List<String> comboData;
-	
-	private int selectedItem = -1;
 
-	/** The verify listener. */
-	// protected VerifyListener verifyListener = new VerifyListener() {
-	// public void verifyText(VerifyEvent event) {
-	// Text text = (Text) getCellEditor().getControl();
-	// String oldText = text.getText();
-	// String leftText = oldText.substring(0, event.start);
-	// String rightText = oldText.substring(event.end, oldText.length());
-	// GC gc = new GC(text);
-	// Point size = gc.textExtent(leftText + event.text + rightText);
-	// gc.dispose();
-	// if (size.x != 0) {
-	// size = text.computeSize(size.x, SWT.DEFAULT);
-	// }
-	// getCellEditor().getControl().setSize(size.x, size.y);
-	// }
-	// };
+	private List<String> comboData;
+
+	private int selectedItem = -1;
 
 	@SuppressWarnings("rawtypes")
 	private final Class editorType;
@@ -67,14 +50,14 @@ public class ComboDirectEditManager extends DirectEditManager {
 	/**
 	 * The Constructor.
 	 * 
-	 * @param source the source
+	 * @param source     the source
 	 * @param editorType the editor type
-	 * @param locator the locator
-	 * @param label the label
+	 * @param locator    the locator
+	 * @param label      the label
 	 */
 	@SuppressWarnings("rawtypes")
-	public ComboDirectEditManager(final GraphicalEditPart source,
-			final Class editorType, final CellEditorLocator locator, final Label label) {
+	public ComboDirectEditManager(final GraphicalEditPart source, final Class editorType,
+			final CellEditorLocator locator, final Label label) {
 		super(source, editorType, locator);
 		this.label = label;
 		this.editorType = editorType;
@@ -84,10 +67,8 @@ public class ComboDirectEditManager extends DirectEditManager {
 	@Override
 	protected CellEditor createCellEditorOn(final Composite composite) {
 		try {
-			Constructor constructor = editorType.getConstructor(new Class[] {
-					Composite.class, String[].class });
-			return (CellEditor) constructor.newInstance(new Object[] { composite,
-					new String[] {} });
+			Constructor constructor = editorType.getConstructor(new Class[] { Composite.class, String[].class });
+			return (CellEditor) constructor.newInstance(composite, new String[] {});
 		} catch (Exception e) {
 			return null;
 		}
@@ -119,7 +100,6 @@ public class ComboDirectEditManager extends DirectEditManager {
 		}
 		Font disposeFont = scaledFont;
 		scaledFont = null;
-		//initialString = null;
 		super.bringDown();
 		if (disposeFont != null) {
 			disposeFont.dispose();
@@ -135,28 +115,13 @@ public class ComboDirectEditManager extends DirectEditManager {
 	protected void initCellEditor() {
 		combo = (CCombo) getCellEditor().getControl();
 		combo.setEditable(false);
-		
-		combo.addModifyListener(new ModifyListener() {			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				setDirty(true);
-			}
-		});
-		// combo.addVerifyListener(verifyListener);
-		// String initialLabelText = ""; //$NON-NLS-1$
-		// if (initialString == null) {
-		// initialLabelText = label.getText();
-		// getCellEditor().setValue(initialLabelText);
-		// } else {
-		// initialLabelText = initialString.toString();
-		// getCellEditor().setValue(initialLabelText);
-		// }
+		combo.addModifyListener(e -> setDirty(true));
 
-		if(null != comboData){
+		if (null != comboData) {
 			updateComboData(comboData);
 			setSelectedItem(selectedItem);
 		}
-		
+
 		IFigure figure = getEditPart().getFigure();
 		scaledFont = figure.getFont();
 		FontData data = scaledFont.getFontData()[0];
@@ -165,44 +130,26 @@ public class ComboDirectEditManager extends DirectEditManager {
 		data.setHeight(fontSize.height);
 		scaledFont = new Font(null, data);
 		combo.setFont(scaledFont);
-
-		// combo.selectAll();
 	}
-	
-	public void updateComboData(List<String> comboData){
+
+	public void updateComboData(List<String> comboData) {
 		this.comboData = comboData;
-		if((null != combo) && (!combo.isDisposed())){
+		if ((null != combo) && (!combo.isDisposed())) {
 			combo.removeAll();
 			for (String string : comboData) {
 				combo.add(string);
 			}
 		}
 	}
-	
-	public void setSelectedItem(int newVal){
+
+	public void setSelectedItem(int newVal) {
 		selectedItem = newVal;
-		if((null != combo) && (!combo.isDisposed())){
+		if ((null != combo) && (!combo.isDisposed())) {
 			combo.select(newVal);
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.tools.DirectEditManager#unhookListeners()
-	 */
-	@Override
-	protected void unhookListeners() {
-		try {
-			super.unhookListeners();
-			// Text text = (Text) getCellEditor().getControl();
-			// text.removeVerifyListener(verifyListener);
-		} catch (Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-		}
-	}
-	
-	public CCombo getComboBox(){
+	public CCombo getComboBox() {
 		return combo;
 	}
 }

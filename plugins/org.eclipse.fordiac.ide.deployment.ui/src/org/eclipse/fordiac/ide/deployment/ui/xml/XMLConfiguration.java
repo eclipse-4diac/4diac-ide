@@ -31,8 +31,6 @@ public class XMLConfiguration extends SourceViewerConfiguration {
 	private XMLTagScanner tagScanner;
 	private XMLScanner scanner;
 
-	// private ColorManager colorManager;
-
 	/**
 	 * Instantiates a new xML configuration.
 	 */
@@ -40,21 +38,27 @@ public class XMLConfiguration extends SourceViewerConfiguration {
 		// empty constructor
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getConfiguredContentTypes(org.eclipse.jface.text.source.ISourceViewer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#
+	 * getConfiguredContentTypes(org.eclipse.jface.text.source.ISourceViewer)
 	 */
 	@Override
 	public String[] getConfiguredContentTypes(final ISourceViewer sourceViewer) {
-		return new String[] { IDocument.DEFAULT_CONTENT_TYPE,
-				XMLPartitionScanner.XML_COMMENT, XMLPartitionScanner.XML_TAG };
+		return new String[] { IDocument.DEFAULT_CONTENT_TYPE, XMLPartitionScanner.XML_COMMENT,
+				XMLPartitionScanner.XML_TAG };
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getDoubleClickStrategy(org.eclipse.jface.text.source.ISourceViewer, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#
+	 * getDoubleClickStrategy(org.eclipse.jface.text.source.ISourceViewer,
+	 * java.lang.String)
 	 */
 	@Override
-	public ITextDoubleClickStrategy getDoubleClickStrategy(
-			final ISourceViewer sourceViewer, final String contentType) {
+	public ITextDoubleClickStrategy getDoubleClickStrategy(final ISourceViewer sourceViewer, final String contentType) {
 		if (doubleClickStrategy == null) {
 			doubleClickStrategy = new XMLDoubleClickStrategy();
 		}
@@ -64,8 +68,8 @@ public class XMLConfiguration extends SourceViewerConfiguration {
 	protected XMLScanner getXMLScanner() {
 		if (scanner == null) {
 			scanner = new XMLScanner();
-			scanner.setDefaultReturnToken(new Token(new TextAttribute(
-					ColorManager.getColor(IXMLColorConstants.DEFAULT))));
+			scanner.setDefaultReturnToken(
+					new Token(new TextAttribute(ColorManager.getColor(IXMLColorConstants.DEFAULT))));
 		}
 		return scanner;
 	}
@@ -73,22 +77,23 @@ public class XMLConfiguration extends SourceViewerConfiguration {
 	protected XMLTagScanner getXMLTagScanner() {
 		if (tagScanner == null) {
 			tagScanner = new XMLTagScanner();
-			tagScanner.setDefaultReturnToken(new Token(new TextAttribute(
-					ColorManager.getColor(IXMLColorConstants.TAG))));
+			tagScanner
+					.setDefaultReturnToken(new Token(new TextAttribute(ColorManager.getColor(IXMLColorConstants.TAG))));
 		}
 		return tagScanner;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getPresentationReconciler(org.eclipse.jface.text.source.ISourceViewer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#
+	 * getPresentationReconciler(org.eclipse.jface.text.source.ISourceViewer)
 	 */
 	@Override
-	public IPresentationReconciler getPresentationReconciler(
-			final ISourceViewer sourceViewer) {
+	public IPresentationReconciler getPresentationReconciler(final ISourceViewer sourceViewer) {
 		PresentationReconciler reconciler = new PresentationReconciler();
 
-		DefaultDamagerRepairer dr = new DefaultDamagerRepairer(
-				getXMLTagScanner());
+		DefaultDamagerRepairer dr = new DefaultDamagerRepairer(getXMLTagScanner());
 		reconciler.setDamager(dr, XMLPartitionScanner.XML_TAG);
 		reconciler.setRepairer(dr, XMLPartitionScanner.XML_TAG);
 
@@ -97,8 +102,7 @@ public class XMLConfiguration extends SourceViewerConfiguration {
 		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 
 		NonRuleBasedDamagerRepairer ndr = new NonRuleBasedDamagerRepairer(
-				new TextAttribute(ColorManager
-						.getColor(IXMLColorConstants.XML_COMMENT)));
+				new TextAttribute(ColorManager.getColor(IXMLColorConstants.XML_COMMENT)));
 		reconciler.setDamager(ndr, XMLPartitionScanner.XML_COMMENT);
 		reconciler.setRepairer(ndr, XMLPartitionScanner.XML_COMMENT);
 

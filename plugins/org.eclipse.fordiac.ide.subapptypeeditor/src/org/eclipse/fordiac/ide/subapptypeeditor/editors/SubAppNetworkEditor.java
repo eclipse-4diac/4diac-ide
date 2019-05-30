@@ -33,8 +33,8 @@ public class SubAppNetworkEditor extends CompositeNetworkEditor{
 	
 	@Override
 	protected String getPalletNavigatorID() {
-		//for subapp types we want to show the same as for applications. If we wouldn't provide this here
+		// for subapp types we want to show the same as for applications. If we wouldn't provide this here
 		//we would get the palette of the composite FB type editor
-		return "org.eclipse.fordiac.ide.fbpaletteviewer"; //$NON-NLS-1$;
+		return "org.eclipse.fordiac.ide.fbpaletteviewer"; //$NON-NLS-1$
 	}
 }

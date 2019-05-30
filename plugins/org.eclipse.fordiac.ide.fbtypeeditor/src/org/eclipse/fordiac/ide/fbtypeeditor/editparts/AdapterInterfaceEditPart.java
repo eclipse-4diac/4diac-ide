@@ -128,14 +128,11 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 
 	@Override
 	protected void createEditPolicies() {
-		// super.createEditPolicies();
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					ChangeNameCommand cmd = new ChangeNameCommand(getCastedModel(),
-							(String) request.getCellEditor().getValue());
-					return cmd;
+					return new ChangeNameCommand(getCastedModel(), (String) request.getCellEditor().getValue());
 				}
 				return null;
 			}
@@ -143,8 +140,6 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 		// allow delete of a FB
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WithNodeEditPolicy());
-		// installEditPolicy("ConnectionHandlesPolicy",
-		// new WithConnectionHandleEditPolicy());
 	}
 
 	@Override

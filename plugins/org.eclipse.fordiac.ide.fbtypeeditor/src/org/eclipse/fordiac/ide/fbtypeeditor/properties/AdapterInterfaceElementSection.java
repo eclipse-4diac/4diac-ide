@@ -122,7 +122,6 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 			DataType newType = getTypeForSelection(typeCombo.getText());
 			if (null != newType) {
 				executeCommand(new ChangeTypeCommand((VarDeclaration) type, newType));
-				// refresh();
 			}
 		});
 	}

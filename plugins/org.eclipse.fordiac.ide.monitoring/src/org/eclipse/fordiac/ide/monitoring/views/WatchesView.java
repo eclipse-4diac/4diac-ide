@@ -31,34 +31,29 @@ import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.part.ViewPart;
 
-
 public class WatchesView extends ViewPart {
 
 	private FilteredTree filteredTree;
 
-	
 	private IMonitoringListener listener = new IMonitoringListener() {
-		
+
 		@Override
-		public void notifyTriggerEvent(PortElement port) {	
-			//currently nothing to do
+		public void notifyTriggerEvent(PortElement port) {
+			// currently nothing to do
 		}
-		
+
 		@Override
 		public void notifyRemovePort(PortElement port) {
 			filteredTree.getViewer().refresh();
 		}
-			
+
 		@Override
 		public void notifyAddPort(PortElement port) {
-			if(!filteredTree.isDisposed()){
+			if (!filteredTree.isDisposed()) {
 				filteredTree.getViewer().refresh();
 			}
 		}
 	};
-
-	public WatchesView() {
-	}
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -66,8 +61,7 @@ public class WatchesView extends ViewPart {
 		root.setLayout(new GridLayout());
 		PatternFilter patternFilter = new PatternFilter();
 
-		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL,
-				patternFilter, true);
+		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL, patternFilter, true);
 
 		GridData treeGridData = new GridData();
 		treeGridData.grabExcessHorizontalSpace = true;
@@ -77,21 +71,19 @@ public class WatchesView extends ViewPart {
 
 		filteredTree.setLayoutData(treeGridData);
 
-		TreeViewerColumn column1 = new TreeViewerColumn(filteredTree.getViewer(),
-				SWT.None);
+		TreeViewerColumn column1 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
 		column1.getColumn().setText("Watched Element");
 		column1.getColumn().setWidth(340);
-		TreeViewerColumn column2 = new TreeViewerColumn(filteredTree.getViewer(),
-				SWT.None);
+		TreeViewerColumn column2 = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
 		column2.getColumn().setText("Value");
 		column2.getColumn().setWidth(100);
 		column2.setEditingSupport(new EditingSupport(column2.getViewer()) {
 
 			@Override
 			protected void setValue(Object element, Object value) {
-				if ((element instanceof MonitoringElement) &&
-						(((MonitoringElement) element).getPort().getInterfaceElement() instanceof VarDeclaration)){
-					MonitoringManager.getInstance().writeValue((MonitoringElement)element, (String)value);
+				if ((element instanceof MonitoringElement)
+						&& (((MonitoringElement) element).getPort().getInterfaceElement() instanceof VarDeclaration)) {
+					MonitoringManager.getInstance().writeValue((MonitoringElement) element, (String) value);
 				}
 			}
 
@@ -121,8 +113,6 @@ public class WatchesView extends ViewPart {
 		filteredTree.getViewer().setLabelProvider(new WatchesLabelProvider());
 		filteredTree.getViewer().setInput(new Object());
 
-		//MonitoringManager.getInstance().addWatchesAdapter(adapter);
-		
 		addWatchesAdapters();
 	}
 
@@ -132,7 +122,7 @@ public class WatchesView extends ViewPart {
 
 	@Override
 	public void setFocus() {
-		//currently nothing to do
+		// currently nothing to do
 	}
 
 }

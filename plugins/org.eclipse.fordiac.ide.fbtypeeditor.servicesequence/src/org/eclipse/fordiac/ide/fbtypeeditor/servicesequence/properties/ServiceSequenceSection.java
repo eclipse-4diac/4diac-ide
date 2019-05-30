@@ -49,41 +49,41 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class ServiceSequenceSection extends AbstractServiceSection {
-	
+
 	private Text nameText;
 	private Text commentText;
-	private TreeViewer transactionViewer;	
+	private TreeViewer transactionViewer;
 	private Button transactionNew;
-	private Button transactionDelete;	
+	private Button transactionDelete;
 
 	@Override
-	protected ServiceSequence getType(){
-		return (ServiceSequence)type;
+	protected ServiceSequence getType() {
+		return (ServiceSequence) type;
 	}
 
 	@Override
 	protected ServiceSequence getInputType(Object input) {
-		if(input instanceof ServiceSequenceEditPart){
-			return ((ServiceSequenceEditPart) input).getCastedModel();	
+		if (input instanceof ServiceSequenceEditPart) {
+			return ((ServiceSequenceEditPart) input).getCastedModel();
 		}
-		if(input instanceof ServiceSequence){
-			return (ServiceSequence) input;	
+		if (input instanceof ServiceSequence) {
+			return (ServiceSequence) input;
 		}
 		return null;
 	}
-	
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);	
+		super.createControls(parent, tabbedPropertySheetPage);
 		createTypeAndCommentSection(getLeftComposite());
 		createTransactionSection(getRightComposite());
 	}
-	
+
 	private void createTypeAndCommentSection(Composite parent) {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Name:"); 
+		getWidgetFactory().createCLabel(composite, "Name:");
 		nameText = createGroupText(composite, true);
 		nameText.addModifyListener(new ModifyListener() {
 			@Override
@@ -93,7 +93,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 				addContentAdapter();
 			}
 		});
-		getWidgetFactory().createCLabel(composite, "Comment:"); 
+		getWidgetFactory().createCLabel(composite, "Comment:");
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(new ModifyListener() {
 			@Override
@@ -104,12 +104,12 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 			}
 		});
 	}
-	
-	private void createTransactionSection(Composite parent){
+
+	private void createTransactionSection(Composite parent) {
 		Group transactionGroup = getWidgetFactory().createGroup(parent, "Transaction");
-		transactionGroup.setLayout(new GridLayout(2, false));	
+		transactionGroup.setLayout(new GridLayout(2, false));
 		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		
+
 		transactionViewer = new TreeViewer(transactionGroup, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gridData.heightHint = 150;
@@ -133,11 +133,11 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 //				}
 			}
 		});
-		
+
 		Composite buttonComp = new Composite(transactionGroup, SWT.NONE);
 		buttonComp.setLayout(new FillLayout(SWT.VERTICAL));
 		transactionNew = getWidgetFactory().createButton(buttonComp, "New", SWT.PUSH);
-		transactionNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));	
+		transactionNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		transactionNew.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
@@ -150,36 +150,32 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		transactionDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				Object selection = ((TreeSelection)transactionViewer.getSelection()).getFirstElement();					
-				if( selection instanceof ServiceTransaction){
-					executeCommand(new DeleteTransactionCommand((ServiceTransaction)selection));
-				}else if(selection instanceof InputPrimitive){
-					executeCommand(new DeleteInputPrimitiveCommand((InputPrimitive)selection));
-				}else if(selection instanceof OutputPrimitive){
-					executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive)selection));
+				Object selection = ((TreeSelection) transactionViewer.getSelection()).getFirstElement();
+				if (selection instanceof ServiceTransaction) {
+					executeCommand(new DeleteTransactionCommand((ServiceTransaction) selection));
+				} else if (selection instanceof InputPrimitive) {
+					executeCommand(new DeleteInputPrimitiveCommand((InputPrimitive) selection));
+				} else if (selection instanceof OutputPrimitive) {
+					executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive) selection));
 				}
 				transactionViewer.refresh();
 			}
+
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
 			}
 		});
-	}	
-	
-	//
-	//	private void selectNewSequence(ServiceSequence selectedSequence) {
-	//		sequenceRootEditPart.setSelectedSequence(selectedSequence);
-	//	}	
+	}
 
 	@Override
 	public void refresh() {
 		CommandStack commandStackBuffer = commandStack;
-		commandStack = null;		
-		if(null != type) {
+		commandStack = null;
+		if (null != type) {
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-			commentText.setText(getType().getComment() != null ? getType().getComment() : "");	 //$NON-NLS-1$
+			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			transactionViewer.setInput(getType());
-		} 
+		}
 		commandStack = commandStackBuffer;
 	}
 

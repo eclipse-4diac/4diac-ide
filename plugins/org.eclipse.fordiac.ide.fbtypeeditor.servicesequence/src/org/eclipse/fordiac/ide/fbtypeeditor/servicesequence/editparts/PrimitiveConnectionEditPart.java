@@ -21,35 +21,35 @@ import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 
 	private PolylineConnection connection;
-	
+
 	public PrimitiveConnection getCastedModel() {
 		return (PrimitiveConnection) getModel();
 	}
 
 	@Override
 	protected void createEditPolicies() {
-//		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new ConnectionEndpointEditPolicy());
+		// currently we don't have special edit polices
 	}
-	
+
 	@Override
 	protected IFigure createFigure() {
 		connection = (PolylineConnection) super.createFigure();
 		setConnection(getCastedModel().isLeft(), getCastedModel().isInputPrimitive());
 		return connection;
 	}
-	
-	public void setConnection(boolean isLeft, boolean isInput){
+
+	public void setConnection(boolean isLeft, boolean isInput) {
 		PointList pl = new PointList();
-		if(isInput) {
+		if (isInput) {
 			connection.setSourceDecoration(null);
 			connection.setTargetDecoration(createArrowRectangle(pl));
-		}else{
+		} else {
 			connection.setSourceDecoration(createSquare(pl));
-			connection.setTargetDecoration(createArrow(pl));		
+			connection.setTargetDecoration(createArrow(pl));
 		}
 	}
-	
-	private PolygonDecoration createArrow(PointList pl){
+
+	private PolygonDecoration createArrow(PointList pl) {
 		PolygonDecoration arrow = new PolygonDecoration();
 		pl = new PointList();
 		pl.addPoint(0, 0);
@@ -61,7 +61,7 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 		return arrow;
 	}
 
-	private PolygonDecoration createSquare(PointList pl){
+	private PolygonDecoration createSquare(PointList pl) {
 		PolygonDecoration square = new PolygonDecoration();
 		pl = new PointList();
 		pl.addPoint(-4, -4);
@@ -73,9 +73,9 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 		square.setScale(1, 1);
 		return square;
 	}
-	
-	private PolygonDecoration createArrowRectangle(PointList pl){
-		PolygonDecoration arrowRectangle = new PolygonDecoration();	
+
+	private PolygonDecoration createArrowRectangle(PointList pl) {
+		PolygonDecoration arrowRectangle = new PolygonDecoration();
 		pl.addPoint(-4, -4);
 		pl.addPoint(-4, 4);
 		pl.addPoint(4, 4);
@@ -88,5 +88,5 @@ public class PrimitiveConnectionEditPart extends AbstractConnectionEditPart {
 		arrowRectangle.setTemplate(pl);
 		arrowRectangle.setScale(1, 1);
 		return arrowRectangle;
-	}	
+	}
 }

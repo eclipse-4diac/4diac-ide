@@ -83,15 +83,15 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 				bounds.width = 5;
 				if (bounds.intersects(new Rectangle(location, new Dimension(1, 1)))) {
 					return InteractionStyleFigure.REGION_CONNECTION;
-				} 
+				}
 				return InteractionStyleFigure.REGION_DRAG;
-			} 
+			}
 			Rectangle bounds = getBounds().getCopy();
 			bounds.x = bounds.x + (bounds.width - 5);
 			bounds.width = 5;
 			if (bounds.intersects(new Rectangle(location, new Dimension(1, 1)))) {
 				return InteractionStyleFigure.REGION_CONNECTION;
-			} 
+			}
 			return InteractionStyleFigure.REGION_DRAG;
 		}
 	}
@@ -185,9 +185,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					ChangeNameCommand cmd = new ChangeNameCommand(getCastedModel(),
-							(String) request.getCellEditor().getValue());
-					return cmd;
+					return new ChangeNameCommand(getCastedModel(), (String) request.getCellEditor().getValue());
 				}
 				return null;
 			}
@@ -198,28 +196,6 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
 
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WithNodeEditPolicy());
-
-		// installEditPolicy("AdvancedSelectionRole", new SelectionEditPolicy()
-		// {
-		//
-		// @Override
-		// protected void showSelection() {
-		//
-		// ConnectorBorder cb = new ConnectorBorder(getCastedModel(),
-		// false);
-		// getFigure().setBorder(cb);
-		// setInOutConnectionsWith(2);
-		// }
-		//
-		// @Override
-		// protected void hideSelection() {
-		// ConnectorBorder cb = new ConnectorBorder(getCastedModel(),
-		// false);
-		// getFigure().setBorder(cb);
-		// setInOutConnectionsWith(0);
-		// }
-		// });
-
 	}
 
 	@Override
@@ -256,7 +232,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 			pos = calculateInputWithPos(connection);
 			return new InputWithAnchor(getFigure(), pos, this);
 
-		} 
+		}
 		pos = calculateOutputWithPos(connection);
 		return new OutputWithAnchor(getFigure(), pos, this);
 	}
@@ -291,7 +267,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		if (isInput()) {
 			pos = calculateInputWithPos(connection);
 			return new InputWithAnchor(getFigure(), pos, this);
-		} 
+		}
 		pos = calculateOutputWithPos(connection);
 		return new OutputWithAnchor(getFigure(), pos, this);
 	}
@@ -312,18 +288,16 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	}
 
 	private void updateWiths() {
-		if (getCastedModel() instanceof Event) {
-			if (null != sourceConnections) {
-				for (Object con : sourceConnections) {
-					WithEditPart with = (WithEditPart) con;
-					with.updateWithPos();
-				}
+		if (getCastedModel() instanceof Event && null != sourceConnections) {
+			for (Object con : sourceConnections) {
+				WithEditPart with = (WithEditPart) con;
+				with.updateWithPos();
 			}
 		}
 	}
 
 	@Override
-	protected DirectEditManager createDirectEditManager() {		  
+	protected DirectEditManager createDirectEditManager() {
 		Label l = getNameLabel();
 		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
 				new IdentifierVerifyListener()) {

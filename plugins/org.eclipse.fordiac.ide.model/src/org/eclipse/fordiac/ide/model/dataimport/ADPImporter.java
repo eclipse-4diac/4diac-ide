@@ -48,8 +48,7 @@ public final class ADPImporter {
 	/**
 	 * Import Adapter types.
 	 * 
-	 * @param iFile
-	 *            the adaptertype file
+	 * @param iFile the adaptertype file
 	 * 
 	 * @return the segment type
 	 */
@@ -63,7 +62,7 @@ public final class ADPImporter {
 			try {
 				// TODO: set local dtd for validating!
 				dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
-								Boolean.FALSE);
+						Boolean.FALSE);
 				db = dbf.newDocumentBuilder();
 				Document document = db.parse(iFile.getContents());
 				Element rootNode = document.getDocumentElement();
@@ -80,16 +79,13 @@ public final class ADPImporter {
 	/**
 	 * Parses the seg type.
 	 * 
-	 * @param type
-	 *            the type
-	 * @param rootNode
-	 *            the root node
+	 * @param type     the type
+	 * @param rootNode the root node
 	 * 
 	 * @return the segment type
 	 * 
-	 * @throws TypeImportException
-	 *             the FBT import exception
-	 * @throws ParseException 
+	 * @throws TypeImportException the FBT import exception
+	 * @throws ParseException
 	 */
 	private static AdapterType parseAdapterType(final Node rootNode) throws TypeImportException, ParseException {
 		AdapterType type = LibraryElementFactory.eINSTANCE.createAdapterType();
@@ -117,9 +113,7 @@ public final class ADPImporter {
 					adapterFBType.getVersionInfo().add(CommonElementImporter.parseVersionInfo(adapterFBType, n));
 					break;
 				case LibraryElementTags.COMPILER_INFO_ELEMENT:
-					// TODO compiler info for Adapter
-					// type.setCompilerInfo(CompilableElementImporter
-					// .parseCompilerInfo(type, n));
+					adapterFBType.setCompilerInfo(CompilableElementImporter.parseCompilerInfo(adapterFBType, n));
 					break;
 				case LibraryElementTags.INTERFACE_LIST_ELEMENT:
 					adapterFBType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
@@ -141,17 +135,13 @@ public final class ADPImporter {
 	/**
 	 * This method parses EventOutputs of FBTypes.
 	 * 
-	 * @param fBtype
-	 *            - the FBType containing the EventOutputs being parsed
-	 * @param node
-	 *            - the node in the DTD of the EventOutputs being parsed
+	 * @param fBtype - the FBType containing the EventOutputs being parsed
+	 * @param node   - the node in the DTD of the EventOutputs being parsed
 	 * @throws TypeImportException
 	 * 
-	 * @throws TypeImportException
-	 *             the FBT import exception
+	 * @throws TypeImportException the FBT import exception
 	 */
-	private static void parseEventOutputs(List<Event> eventOutputs,
-			final Node node, Map<String, Event> events)
+	private static void parseEventOutputs(List<Event> eventOutputs, final Node node, Map<String, Event> events)
 			throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
@@ -168,17 +158,13 @@ public final class ADPImporter {
 	/**
 	 * This method parses EventInputs of FBTypes.
 	 * 
-	 * @param fBtype
-	 *            - the FBType containing the EventInputs being parsed
-	 * @param node
-	 *            - the node in the DTD of the EventInputs being parsed
+	 * @param fBtype - the FBType containing the EventInputs being parsed
+	 * @param node   - the node in the DTD of the EventInputs being parsed
 	 * @throws TypeImportException
 	 * 
-	 * @throws TypeImportException
-	 *             the FBT import exception
+	 * @throws TypeImportException the FBT import exception
 	 */
-	private static void parseEventInputs(List<Event> eventInputs,
-			final Node node, Map<String, Event> events)
+	private static void parseEventInputs(List<Event> eventInputs, final Node node, Map<String, Event> events)
 			throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
@@ -195,24 +181,18 @@ public final class ADPImporter {
 	/**
 	 * This method parses the InterfaceList of a FBType.
 	 * 
-	 * @param node
-	 *            - the node in the DTD of the interfaceList being parsed
-	 * @param interfaceList
-	 *            the interface list
-	 * @param events
-	 *            the events
-	 * @param variables
-	 *            the variables
+	 * @param node          - the node in the DTD of the interfaceList being parsed
+	 * @param interfaceList the interface list
+	 * @param events        the events
+	 * @param variables     the variables
 	 * 
-	 * @throws TypeImportException
-	 *             the FBT import exception
+	 * @throws TypeImportException the FBT import exception
 	 */
-	private static void parseInterfaceList(InterfaceList interfaceList, final Node node)
-			throws TypeImportException {
+	private static void parseInterfaceList(InterfaceList interfaceList, final Node node) throws TypeImportException {
 		Map<String, VarDeclaration> variables = new HashMap<>();
 		Map<String, Event> inputEvents = new HashMap<>();
 		Map<String, Event> outputEvents = new HashMap<>();
-		
+
 		NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
@@ -230,7 +210,7 @@ public final class ADPImporter {
 				}
 				break;
 			case LibraryElementTags.OUTPUT_VARS_ELEMENT:
-				for (VarDeclaration v : ImportUtils.parseOutputVariables(n)){
+				for (VarDeclaration v : ImportUtils.parseOutputVariables(n)) {
 					interfaceList.getOutputVars().add(v);
 					variables.put(v.getName(), v);
 				}
@@ -241,7 +221,7 @@ public final class ADPImporter {
 		}
 		new FBTImporter().parseWithConstructs(childNodes, inputEvents, outputEvents, variables);
 	}
-	
+
 	private ADPImporter() {
 		throw new UnsupportedOperationException("ADPImporter utility class should not be instantiated!"); //$NON-NLS-1$
 	}

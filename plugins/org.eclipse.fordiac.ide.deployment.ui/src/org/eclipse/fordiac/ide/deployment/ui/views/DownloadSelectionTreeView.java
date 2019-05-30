@@ -24,13 +24,10 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.util.ISelectedElementsChangedListener;
 import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -72,11 +69,10 @@ public class DownloadSelectionTreeView extends ViewPart {
 	 */
 	public DownloadSelectionTreeView() {
 		SystemManager.INSTANCE.addWorkspaceListener(() -> Display.getDefault().asyncExec(() -> {
-				if (!viewer.getTree().isDisposed()) {
-					viewer.refresh(true);
-				}
-			})
-		);
+			if (!viewer.getTree().isDisposed()) {
+				viewer.refresh(true);
+			}
+		}));
 	}
 
 	private void initializeDeviceProperties() {
@@ -92,8 +88,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 	}
 
 	/**
-	 * This is a callback that will allow us to create the viewer and initialize
-	 * it.
+	 * This is a callback that will allow us to create the viewer and initialize it.
 	 * 
 	 * @param parent the parent
 	 */
@@ -104,8 +99,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 
 		initializeDeviceProperties();
 
-		viewer = new DownloadSelectionTree(composite, SWT.FULL_SELECTION
-				| SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		viewer = new DownloadSelectionTree(composite, SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 
 		drillDownAdapter = new DrillDownAdapter(viewer);
 
@@ -116,14 +110,14 @@ public class DownloadSelectionTreeView extends ViewPart {
 		fillBoth.grabExcessVerticalSpace = true;
 		viewer.getTree().setLayoutData(fillBoth);
 
-		
 		viewer.setInput(getViewSite());
-		
+
 		viewer.addCheckStateListener(event -> notifyListeners());
 
 		getSite().setSelectionProvider(viewer);
 
-		getSite().getPage().addSelectionListener("org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView", //$NON-NLS-1$
+		getSite().getPage().addSelectionListener(
+				"org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView", //$NON-NLS-1$
 				(final IWorkbenchPart part, final ISelection selection) -> {
 					if ((part instanceof DownloadSelectionTreeView) && (treeView != part)) {
 						treeView = (DownloadSelectionTreeView) part;
@@ -137,40 +131,36 @@ public class DownloadSelectionTreeView extends ViewPart {
 		downloadButton.setImage(FordiacImage.ICON_Download.getImage());
 		downloadButton.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false));
 		downloadButton.setEnabled(false);
-		downloadButton.addListener( SWT.Selection, e ->{
+		downloadButton.addListener(SWT.Selection, e -> {
 			Object[] selected = treeView.getSelectedElements();
 			clearDownloadConsole();
 			DeploymentCoordinator.INSTANCE.performDeployment(selected);
 		});
 
-		makeActions();
 		createToolbarbuttons();
 		hookContextMenu();
-		hookDoubleClickAction();
 		contributeToActionBars();
 	}
-
 
 	private static void clearDownloadConsole() {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IViewPart view = page.findView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
-		
-		if (view instanceof Output){
-			Output output = (Output)view;
+
+		if (view instanceof Output) {
+			Output output = (Output) view;
 			output.clearOutput();
-		}				
+		}
 	}
 
 	/** The tree view. */
 	private DownloadSelectionTreeView treeView = null;
 	private ISelectedElementsChangedListener changeListener = null;
-	
 
 	private ISelectedElementsChangedListener getChangeListener() {
-		if(null == changeListener){
+		if (null == changeListener) {
 			changeListener = () -> {
-				if((null != treeView) && (!downloadButton.isDisposed())){						
-					downloadButton.setEnabled((treeView.getSelectedElements().length > 0));						
+				if ((null != treeView) && (!downloadButton.isDisposed())) {
+					downloadButton.setEnabled((treeView.getSelectedElements().length > 0));
 				}
 			};
 		}
@@ -178,27 +168,20 @@ public class DownloadSelectionTreeView extends ViewPart {
 	}
 
 	@Override
-	public void dispose() {		
+	public void dispose() {
 		super.dispose();
-		if(null != treeView){
+		if (null != treeView) {
 			treeView.removeSelectedElementsChangedListener(getChangeListener());
 		}
 	}
-	
-	
+
 	/**
 	 * Hook context menu.
 	 */
 	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager(
-				Messages.DownloadSelectionTreeView_LABEL_PopupMenu);
+		MenuManager menuMgr = new MenuManager(Messages.DownloadSelectionTreeView_LABEL_PopupMenu);
 		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			@Override
-			public void menuAboutToShow(final IMenuManager manager) {
-				DownloadSelectionTreeView.this.fillContextMenu(manager);
-			}
-		});
+		menuMgr.addMenuListener(this::fillContextMenu);
 		Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
@@ -209,25 +192,13 @@ public class DownloadSelectionTreeView extends ViewPart {
 	 */
 	private void contributeToActionBars() {
 		IActionBars bars = getViewSite().getActionBars();
-		fillLocalPullDown(bars.getMenuManager());
 		fillLocalToolBar(bars.getToolBarManager());
-	}
-
-	/**
-	 * Fill local pull down.
-	 * 
-	 * @param manager
-	 *          the manager
-	 */
-	private void fillLocalPullDown(final IMenuManager manager) {
-		// not used
 	}
 
 	/**
 	 * Fill context menu.
 	 * 
-	 * @param manager
-	 *          the manager
+	 * @param manager the manager
 	 */
 	private void fillContextMenu(final IMenuManager manager) {
 		manager.add(new Separator());
@@ -239,8 +210,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 	/**
 	 * Fill local tool bar.
 	 * 
-	 * @param manager
-	 *          the manager
+	 * @param manager the manager
 	 */
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(new Separator());
@@ -251,8 +221,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 	 * Creates the toolbarbuttons.
 	 */
 	private void createToolbarbuttons() {
-		IToolBarManager toolBarManager = getViewSite().getActionBars()
-				.getToolBarManager();
+		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		Action collapseAllAction = new Action() {
 			@Override
 			public void run() {
@@ -261,9 +230,9 @@ public class DownloadSelectionTreeView extends ViewPart {
 		};
 		collapseAllAction
 				.setText(org.eclipse.fordiac.ide.deployment.ui.Messages.DownloadSelectionTreeView_COLLAPSE_ALL);
-		collapseAllAction
-				.setToolTipText(Messages.DownloadSelectionTreeView_COLLAPSE_ALL);
-		collapseAllAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ELCL_COLLAPSEALL));
+		collapseAllAction.setToolTipText(Messages.DownloadSelectionTreeView_COLLAPSE_ALL);
+		collapseAllAction.setImageDescriptor(
+				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ELCL_COLLAPSEALL));
 		toolBarManager.add(collapseAllAction);
 
 		Action expandAllAction = new Action() {
@@ -273,8 +242,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 			}
 		};
 		expandAllAction.setText(Messages.DownloadSelectionTreeView_EXPAND_ALL);
-		expandAllAction
-				.setToolTipText(Messages.DownloadSelectionTreeView_EXPAND_ALL);
+		expandAllAction.setToolTipText(Messages.DownloadSelectionTreeView_EXPAND_ALL);
 		expandAllAction.setImageDescriptor(FordiacImage.ICON_ExpandAll.getImageDescriptor());
 		toolBarManager.add(expandAllAction);
 
@@ -288,25 +256,6 @@ public class DownloadSelectionTreeView extends ViewPart {
 		refresh.setToolTipText(Messages.DownloadSelectionTreeView_Refresh);
 		refresh.setImageDescriptor(FordiacImage.ICON_Refresh.getImageDescriptor());
 		toolBarManager.add(refresh);
-	}
-
-	/**
-	 * Make actions.
-	 */
-	private void makeActions() {
-		// not used
-	}
-
-	/**
-	 * Hook double click action.
-	 */
-	private void hookDoubleClickAction() {
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
-			@Override
-			public void doubleClick(final DoubleClickEvent event) {
-				// doubleClickAction.run();
-			}
-		});
 	}
 
 	/**
@@ -328,20 +277,18 @@ public class DownloadSelectionTreeView extends ViewPart {
 	 * 
 	 * @param listener the listener
 	 */
-	public void addSelectedElementsChangedListener(
-			final ISelectedElementsChangedListener listener) {
+	public void addSelectedElementsChangedListener(final ISelectedElementsChangedListener listener) {
 		if ((!listeners.contains(listener)) && (null != listener)) {
 			listeners.add(listener);
 		}
 	}
-	
+
 	/**
 	 * Adds the selected elements changed listener.
 	 * 
 	 * @param listener the listener
 	 */
-	public void removeSelectedElementsChangedListener(
-			final ISelectedElementsChangedListener listener) {
+	public void removeSelectedElementsChangedListener(final ISelectedElementsChangedListener listener) {
 		listeners.remove(listener);
 	}
 
@@ -349,8 +296,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 	 * Notify listeners.
 	 */
 	private void notifyListeners() {
-		for (Iterator<ISelectedElementsChangedListener> iterator = listeners
-				.iterator(); iterator.hasNext();) {
+		for (Iterator<ISelectedElementsChangedListener> iterator = listeners.iterator(); iterator.hasNext();) {
 			ISelectedElementsChangedListener listener = iterator.next();
 			listener.selectionChanged();
 		}

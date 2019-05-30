@@ -77,8 +77,6 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	protected IFigure createFigure() {
 		comment = new TypeFigure();
 		update();
-		// comment.setSize(-1, -1);
-		// comment.set
 		return comment;
 	}
 

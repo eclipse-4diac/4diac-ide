@@ -26,11 +26,10 @@ public class TypeField {
 	public TypeField(IInterfaceElement referencedElement) {
 		this.referencedElement = referencedElement;
 	}
-	
+
 	public String getLabel() {
 		String type = ""; //$NON-NLS-1$
 		if (getReferencedElement() instanceof Event) {
-//			Event event = (Event) getReferencedElement();
 			type = "Event"; //$NON-NLS-1$
 		} else if (getReferencedElement() instanceof VarDeclaration) {
 			VarDeclaration varDecl = (VarDeclaration) getReferencedElement();
@@ -38,13 +37,13 @@ public class TypeField {
 		}
 		return type;
 	}
-	
-	public String getArrayLabel(){
+
+	public String getArrayLabel() {
 		String typeLabel = getLabel();
-		if (referencedElement instanceof VarDeclaration){
-			//if is array append array size
-			VarDeclaration varDec =  (VarDeclaration)referencedElement;
-			if(varDec.isArray()){
+		if (referencedElement instanceof VarDeclaration) {
+			// if is array append array size
+			VarDeclaration varDec = (VarDeclaration) referencedElement;
+			if (varDec.isArray()) {
 				typeLabel = typeLabel + "[" + varDec.getArraySize() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
