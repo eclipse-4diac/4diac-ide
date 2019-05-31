@@ -15,23 +15,17 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl;
 
 public class CreateSegmentTypePaletteEntry implements IPaletteEntryCreator, TypeLibraryTags {
 
 	@Override
 	public boolean canHandle(IFile file) {
-		if (SEGMENT_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension())){
-			return true;
-		} 
-		return false;
+		return (SEGMENT_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
 	}
 
 	@Override
-	public PaletteEntryImpl createPaletteEntry() {
-		SegmentTypePaletteEntry entry = PaletteFactory.eINSTANCE.createSegmentTypePaletteEntry();
-
-		return (PaletteEntryImpl) entry;
+	public SegmentTypePaletteEntry createPaletteEntry() {
+		return PaletteFactory.eINSTANCE.createSegmentTypePaletteEntry();
 	}
 
 }

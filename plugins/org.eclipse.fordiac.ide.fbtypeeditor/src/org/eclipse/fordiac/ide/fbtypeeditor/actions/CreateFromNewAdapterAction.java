@@ -74,9 +74,8 @@ public abstract class CreateFromNewAdapterAction extends WorkbenchPartAction {
 		if(Window.OK == dialog.open()){
 			//the type could be created new execute the command
 			PaletteEntry entry = wizard.getPaletteEntry();
-			if((null != entry) && (entry instanceof AdapterTypePaletteEntry)){
-				AdapterTypePaletteEntry adpEntry = (AdapterTypePaletteEntry)entry;
-				execute(getCreationCommand(adpEntry));
+			if(entry instanceof AdapterTypePaletteEntry){
+				execute(getCreationCommand((AdapterTypePaletteEntry)entry));
 			}
 		}
 	}

@@ -99,6 +99,7 @@
     <genClasses ecoreClass="lib.ecore#//AdapterDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/paletteEntry"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/getType" body="//this code can not be moved to a model annotations class&#xA;return (AdapterType)super.getType();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterType">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterType/adapterFBType"/>

@@ -15,23 +15,17 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
-import org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl;
 
 public class CreateAdapterTypePaletteEntry implements IPaletteEntryCreator, TypeLibraryTags {
 	
 	@Override
 	public boolean canHandle(IFile file) {
-		 if (ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension())){
-			 return true;
-		 } 
-		 return false;
+		 return (ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
 	}
 
 	@Override
-	public PaletteEntryImpl createPaletteEntry() {
-		AdapterTypePaletteEntry entry = PaletteFactory.eINSTANCE.createAdapterTypePaletteEntry();
-			
-		return (PaletteEntryImpl) entry;
+	public AdapterTypePaletteEntry createPaletteEntry() {
+		return PaletteFactory.eINSTANCE.createAdapterTypePaletteEntry();
 	}
 
 }

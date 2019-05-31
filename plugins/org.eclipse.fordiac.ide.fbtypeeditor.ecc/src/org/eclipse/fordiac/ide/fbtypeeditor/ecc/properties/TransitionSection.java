@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressi
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeECTransitionCommentCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECTransitionEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -55,54 +54,56 @@ import com.google.inject.name.Named;
 @SuppressWarnings("restriction")
 public class TransitionSection extends AbstractECSection {
 	private static final String ONE_CONDITION = "1"; //$NON-NLS-1$
-	private static final String LINKING_FILE_EXTENSION = "xtextfbt";   //$NON-NLS-1$
+	private static final String LINKING_FILE_EXTENSION = "xtextfbt"; //$NON-NLS-1$
 	private Text commentText;
 	private Combo eventCombo;
 	private Composite conditionEditingContainer;
-	//the closing bracket label need for putting the xtext editor before it.
+	// the closing bracket label need for putting the xtext editor before it.
 	private CLabel closingBraket;
 	private EmbeddedEditor editor;
-	private Composite composite;	
-	
-	@Inject 
+	private Composite composite;
+
+	@Inject
 	private EmbeddedEditorFactory editorFactory;
-	
-	@Inject 
+
+	@Inject
 	private Provider<XtextResourceSet> resourceSetProvider;
-	
-	@Inject @Named(Constants.FILE_EXTENSIONS)
+
+	@Inject
+	@Named(Constants.FILE_EXTENSIONS)
 	private String fileExtension;
-	
+
 	private EmbeddedEditorModelAccess embeddedEditorModelAccess;
-	
+
 	private final IDocumentListener listener = new IDocumentListener() {
 		@Override
 		public void documentChanged(final DocumentEvent event) {
-			executeCommand(new ChangeConditionExpressionCommand(getType(), embeddedEditorModelAccess.getEditablePart()));	
+			executeCommand(
+					new ChangeConditionExpressionCommand(getType(), embeddedEditorModelAccess.getEditablePart()));
 		}
 
 		@Override
 		public void documentAboutToBeChanged(final DocumentEvent event) {
-			//nothing to do here
+			// nothing to do here
 		}
 	};
-	
+
 	@Override
 	protected ECTransition getType() {
 		return (ECTransition) type;
 	}
-	
+
 	protected BasicFBType getBasicFBType() {
 		return (null != getType().eContainer()) ? (BasicFBType) getType().eContainer().eContainer() : null;
 	}
-	
+
 	@Override
 	protected Object getInputType(Object input) {
-		if(input instanceof ECTransitionEditPart){
-			return ((ECTransitionEditPart) input).getCastedModel();	
+		if (input instanceof ECTransitionEditPart) {
+			return ((ECTransitionEditPart) input).getCastedModel();
 		}
-		if(input instanceof ECTransition){
-			return input;	
+		if (input instanceof ECTransition) {
+			return input;
 		}
 		return null;
 	}
@@ -110,16 +111,16 @@ public class TransitionSection extends AbstractECSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
-		super.createControls(parent, tabbedPropertySheetPage);		
+		super.createControls(parent, tabbedPropertySheetPage);
 		composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Condition:"); 
-		
+		getWidgetFactory().createCLabel(composite, "Condition:");
+
 		createConditionEditingPlaceHolder(composite);
-		
-		getWidgetFactory().createCLabel(composite, "Comment:"); 
-		commentText = createGroupText(composite, true);	
+
+		getWidgetFactory().createCLabel(composite, "Comment:");
+		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
@@ -129,38 +130,41 @@ public class TransitionSection extends AbstractECSection {
 			}
 		});
 	}
-	
-	/** creates a composite where the transition condition editing widgets can be placed later on.
+
+	/**
+	 * creates a composite where the transition condition editing widgets can be
+	 * placed later on.
 	 * 
-	 * The reason for having this is that the condition expression editor needs the FB Type for 
-	 * context resolution (e.g., allow resolving of data inputs outputs and internal variables).
-	 * The type is only available later therefore these widgets will be created when the input is set.
+	 * The reason for having this is that the condition expression editor needs the
+	 * FB Type for context resolution (e.g., allow resolving of data inputs outputs
+	 * and internal variables). The type is only available later therefore these
+	 * widgets will be created when the input is set.
 	 * 
 	 * @param parent
 	 */
-	private void createConditionEditingPlaceHolder(Composite parent){
+	private void createConditionEditingPlaceHolder(Composite parent) {
 		conditionEditingContainer = getWidgetFactory().createComposite(parent);
-		conditionEditingContainer.setLayout(new GridLayout(4,false));
+		conditionEditingContainer.setLayout(new GridLayout(4, false));
 		GridData compositeLayoutData = new GridData(SWT.FILL, 0, true, false);
 		compositeLayoutData.verticalIndent = 0;
 		conditionEditingContainer.setLayoutData(compositeLayoutData);
-		
+
 		eventCombo = new Combo(conditionEditingContainer, SWT.SINGLE | SWT.READ_ONLY | SWT.BORDER);
-		eventCombo.addListener( SWT.Selection, event -> {
-				removeContentAdapter();
-				executeCommand(new ChangeConditionEventCommand(getType(), eventCombo.getText()));
-				checkEnablement();
-				addContentAdapter();
-			});
-		
+		eventCombo.addListener(SWT.Selection, event -> {
+			removeContentAdapter();
+			executeCommand(new ChangeConditionEventCommand(getType(), eventCombo.getText()));
+			checkEnablement();
+			addContentAdapter();
+		});
+
 		getWidgetFactory().createCLabel(conditionEditingContainer, "["); //$NON-NLS-1$
-		
+
 		closingBraket = getWidgetFactory().createCLabel(conditionEditingContainer, "]"); //$NON-NLS-1$
 	}
 
 	@Override
 	protected void setInputInit() {
-		if(null == editor){
+		if (null == editor) {
 			createTransitionEditor(conditionEditingContainer);
 		}
 	}
@@ -170,23 +174,23 @@ public class TransitionSection extends AbstractECSection {
 		commentText.setEnabled(false);
 		eventCombo.removeAll();
 		eventCombo.setEnabled(false);
-	}	
-		
+	}
+
 	private void createTransitionEditor(Composite parent) {
-		FBType fbType = getBasicFBType();	
+		FBType fbType = getBasicFBType();
 
 		IEditedResourceProvider resourceProvider = new IEditedResourceProvider() {
-			
+
 			@Override
 			public XtextResource createResource() {
 				XtextResourceSet resourceSet = resourceSetProvider.get();
 				EcoreUtil.Copier copier = new EcoreUtil.Copier();
 				Resource fbResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
 				fbResource.getContents().add(copier.copy(EcoreUtil.getRootContainer(fbType)));
-				for(AdapterDeclaration adapter : fbType.getInterfaceList().getSockets()) {
+				for (AdapterDeclaration adapter : fbType.getInterfaceList().getSockets()) {
 					createAdapterResource(resourceSet, copier, adapter);
 				}
-				for(AdapterDeclaration adapter : fbType.getInterfaceList().getPlugs()) {
+				for (AdapterDeclaration adapter : fbType.getInterfaceList().getPlugs()) {
 					createAdapterResource(resourceSet, copier, adapter);
 				}
 				copier.copyReferences();
@@ -196,11 +200,11 @@ public class TransitionSection extends AbstractECSection {
 
 			private void createAdapterResource(XtextResourceSet resourceSet, EcoreUtil.Copier copier,
 					AdapterDeclaration adapter) {
-				if(adapter.getType() instanceof AdapterType){
-					Resource adapterResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
-					copier.copy(adapter.getType());
-					adapterResource.getContents().add(copier.copy(EcoreUtil.getRootContainer(((AdapterType)adapter.getType()).getAdapterFBType())));
-				}
+				Resource adapterResource = resourceSet
+						.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
+				copier.copy(adapter.getType());
+				adapterResource.getContents()
+						.add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
 			}
 
 			protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
@@ -216,12 +220,8 @@ public class TransitionSection extends AbstractECSection {
 		};
 
 		editor = editorFactory.newEditor(resourceProvider).withParent(parent);
-		StyledText conditionText = (StyledText)editor.getViewer().getControl(); 
-		conditionText.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		conditionText.setBottomMargin(5);
-		conditionText.setTopMargin(5);
-		conditionText.setLeftMargin(5);
-		conditionText.setRightMargin(5);
+		StyledText conditionText = (StyledText) editor.getViewer().getControl();
+		conditionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		conditionText.moveAbove(closingBraket);
 
 		embeddedEditorModelAccess = editor.createPartialEditor();
@@ -232,24 +232,26 @@ public class TransitionSection extends AbstractECSection {
 	@Override
 	public void refresh() {
 		CommandStack commandStackBuffer = commandStack;
-		commandStack = null;		
-		if(null != type && null != getBasicFBType()) {
-			setEventConditionDropdown();	
+		commandStack = null;
+		if (null != type && null != getBasicFBType()) {
+			setEventConditionDropdown();
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			updateConditionExpressionText(getType().getConditionExpression());
-			if(getType().getConditionExpression() != null && getType().getConditionExpression().equals(ONE_CONDITION)){
+			if (getType().getConditionExpression() != null
+					&& getType().getConditionExpression().equals(ONE_CONDITION)) {
 				eventCombo.select(1);
-			}else{
-				eventCombo.select(getType().getConditionEvent() != null ? 
-					eventCombo.indexOf(getType().getConditionEvent().getName()) : 0);
+			} else {
+				eventCombo.select(getType().getConditionEvent() != null
+						? eventCombo.indexOf(getType().getConditionEvent().getName())
+						: 0);
 			}
 			checkEnablement();
-		} 
+		}
 		commandStack = commandStackBuffer;
 	}
 
 	private void updateConditionExpressionText(String conditionExpression) {
-		if(null != embeddedEditorModelAccess){
+		if (null != embeddedEditorModelAccess) {
 			embeddedEditorModelAccess.updateModel((null != conditionExpression) ? conditionExpression : ""); //$NON-NLS-1$
 		}
 	}
@@ -257,35 +259,27 @@ public class TransitionSection extends AbstractECSection {
 	private void checkEnablement() {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if(getType().getConditionExpression() != null && getType().getConditionExpression().equals(ONE_CONDITION)){
+		if (getType().getConditionExpression() != null && getType().getConditionExpression().equals(ONE_CONDITION)) {
 			updateConditionExpressionText(""); //$NON-NLS-1$
 			editor.getViewer().getControl().setEnabled(false);
-		}else{
+		} else {
 			editor.getViewer().getControl().setEnabled(true);
 		}
 		commandStack = commandStackBuffer;
 	}
-	
-	public void setEventConditionDropdown(){
+
+	public void setEventConditionDropdown() {
 		eventCombo.removeAll();
 		eventCombo.add(""); //$NON-NLS-1$
 		eventCombo.add(ONE_CONDITION);
-		for(Event event : getBasicFBType().getInterfaceList().getEventInputs()){
+		for (Event event : getBasicFBType().getInterfaceList().getEventInputs()) {
 			eventCombo.add(event.getName());
 		}
-		for(AdapterDeclaration adapter : getBasicFBType().getInterfaceList().getPlugs()){
-			if(adapter.getType() instanceof AdapterType){
-				for(Event event : ((AdapterType) adapter.getType()).getInterfaceList().getEventInputs()){
-					eventCombo.add(adapter.getName() + "." + event.getName()); //$NON-NLS-1$
-				}
-			}
-		}
-		for(AdapterDeclaration adapter : getBasicFBType().getInterfaceList().getSockets()){
-			if(adapter.getType() instanceof AdapterType){
-				for(Event event : ((AdapterType) adapter.getType()).getInterfaceList().getEventOutputs()){
-					eventCombo.add(adapter.getName() + "." + event.getName()); //$NON-NLS-1$
-				}
-			}
-		}
+
+		getBasicFBType().getInterfaceList().getPlugs().forEach(adapter -> adapter.getType().getInterfaceList()
+				.getEventInputs().forEach(event -> eventCombo.add(adapter.getName() + "." + event.getName()))); //$NON-NLS-1$
+
+		getBasicFBType().getInterfaceList().getSockets().forEach(adapter -> adapter.getType().getInterfaceList()
+				.getEventOutputs().forEach(event -> eventCombo.add(adapter.getName() + "." + event.getName()))); // $NON-NLS-1$
 	}
 }

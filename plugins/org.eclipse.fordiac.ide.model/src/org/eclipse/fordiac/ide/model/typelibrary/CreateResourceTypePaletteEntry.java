@@ -15,24 +15,17 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl;
 
 public class CreateResourceTypePaletteEntry implements IPaletteEntryCreator, TypeLibraryTags {
 
 	@Override
 	public boolean canHandle(IFile file) {
-		 if (RESOURCE_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension())){
-			 return true;
-		 } 
-		 return false;
+		 return (RESOURCE_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
 	}
 
 	@Override
-	public PaletteEntryImpl createPaletteEntry() {
-		
-		ResourceTypeEntry entry = PaletteFactory.eINSTANCE.createResourceTypeEntry();
-		
-		return (PaletteEntryImpl) entry;
+	public ResourceTypeEntry createPaletteEntry() {
+		return PaletteFactory.eINSTANCE.createResourceTypeEntry();
 	}
 
 }
