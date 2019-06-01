@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.ui.views.properties.tabbed,
- org.eclipse.fordiac.ide.ui.controls
+ org.eclipse.fordiac.ide.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.10.2.qualifier

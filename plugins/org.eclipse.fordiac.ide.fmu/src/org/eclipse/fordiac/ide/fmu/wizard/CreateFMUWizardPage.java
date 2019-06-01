@@ -32,7 +32,7 @@ import org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTree;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.ui.controls.DirectoryChooserControl;
+import org.eclipse.fordiac.ide.ui.DirectoryChooserControl;
 
 public class CreateFMUWizardPage extends WizardPage {
 

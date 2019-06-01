@@ -8,9 +8,9 @@
  *
  * Alois Zoitl - initial implementation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.controls.widget;
+package org.eclipse.fordiac.ide.ui.widget;
 
-import org.eclipse.fordiac.ide.ui.controls.providers.CommandProvider;
+import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;

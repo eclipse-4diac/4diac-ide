@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IEditorPart;

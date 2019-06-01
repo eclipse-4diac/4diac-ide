@@ -12,7 +12,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IEditorPart;
 

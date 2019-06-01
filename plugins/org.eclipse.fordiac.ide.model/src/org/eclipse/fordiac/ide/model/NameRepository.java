@@ -38,7 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 
 public final class NameRepository {
 

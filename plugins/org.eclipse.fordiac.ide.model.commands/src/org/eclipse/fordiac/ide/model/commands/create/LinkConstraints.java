@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 
 /**
  * The Class LinkConstraints.

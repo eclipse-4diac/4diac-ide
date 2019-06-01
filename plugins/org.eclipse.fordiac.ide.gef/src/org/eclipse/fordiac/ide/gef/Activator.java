@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.gef;
 
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**

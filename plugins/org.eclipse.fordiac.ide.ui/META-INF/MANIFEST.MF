@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Export-Package: org.eclipse.fordiac.ide.ui,
+ org.eclipse.fordiac.ide.ui.editors,
+ org.eclipse.fordiac.ide.ui.providers,
+ org.eclipse.fordiac.ide.ui.widget
+Require-Bundle: org.eclipse.gef,
+ org.eclipse.core.runtime,
+ org.eclipse.jface,
+ org.eclipse.ui.workbench,
+ org.eclipse.ui.views.properties.tabbed
+Bundle-Vendor: Eclipse 4diac
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 1.10.2.qualifier
+Bundle-Name: Common UI Controls (Incubation)
+Bundle-Activator: org.eclipse.fordiac.ide.ui.UIPlugin
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.eclipse.fordiac.ide.ui;singleton:=true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.eclipse.fordiac.ide.ui

@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionFBParameter;
 import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionOfFb;
 import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;

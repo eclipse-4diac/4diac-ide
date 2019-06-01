@@ -54,7 +54,7 @@ import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.ui.controls.ReferenceChooserDialog;
+import org.eclipse.fordiac.ide.ui.ReferenceChooserDialog;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;

@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.fordiac.ide.model;visibility:=reexport,
  org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.gef
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin

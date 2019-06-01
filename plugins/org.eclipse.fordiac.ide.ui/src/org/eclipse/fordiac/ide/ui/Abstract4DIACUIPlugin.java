@@ -10,7 +10,7 @@
  *   Alois Zoitl, Martin Melik Merkumians, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.controls;
+package org.eclipse.fordiac.ide.ui;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;

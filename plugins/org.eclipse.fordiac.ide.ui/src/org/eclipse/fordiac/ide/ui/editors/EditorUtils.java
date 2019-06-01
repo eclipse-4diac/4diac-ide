@@ -8,7 +8,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.controls.editors;
+package org.eclipse.fordiac.ide.ui.editors;
 
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;

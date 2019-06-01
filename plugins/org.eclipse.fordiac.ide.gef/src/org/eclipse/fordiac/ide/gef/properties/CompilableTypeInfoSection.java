@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteCompilerCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
-import org.eclipse.fordiac.ide.ui.controls.widget.AddDeleteWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;

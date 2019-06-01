@@ -9,7 +9,7 @@
     <version>1.10.2-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.eclipse.fordiac.ide.ui.controls</artifactId>
+  <artifactId>org.eclipse.fordiac.ide.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
   <version>1.10.2-SNAPSHOT</version>
 </project> 

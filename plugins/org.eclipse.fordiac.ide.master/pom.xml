@@ -42,7 +42,7 @@
 		<module>../org.eclipse.fordiac.ide.subapptypeeditor</module>
 		<module>../org.eclipse.fordiac.ide.systemimport</module>
 		<module>../org.eclipse.fordiac.ide.systemconfiguration</module>
-		<module>../org.eclipse.fordiac.ide.ui.controls</module>
+		<module>../org.eclipse.fordiac.ide.ui</module>
 		<module>../org.eclipse.fordiac.ide.util</module>
 		<module>../../tests/org.eclipse.fordiac.ide.test.util</module>
 		<module>../org.eclipse.fordiac.ide.monitoring</module>

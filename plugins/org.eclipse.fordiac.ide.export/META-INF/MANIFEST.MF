@@ -5,7 +5,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.util,
- org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.fordiac.ide.ui,
  org.eclipse.core.resources
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy

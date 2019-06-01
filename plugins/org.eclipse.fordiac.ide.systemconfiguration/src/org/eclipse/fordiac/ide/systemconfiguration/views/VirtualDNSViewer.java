@@ -36,7 +36,7 @@ import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEdi
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.VirtualDNSTagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;

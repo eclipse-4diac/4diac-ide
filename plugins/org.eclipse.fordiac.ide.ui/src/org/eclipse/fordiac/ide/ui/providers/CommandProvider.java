@@ -8,7 +8,7 @@
  *
  * Alois Zoitl - initial implementation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.controls.providers;
+package org.eclipse.fordiac.ide.ui.providers;
 
 import org.eclipse.gef.commands.Command;
 

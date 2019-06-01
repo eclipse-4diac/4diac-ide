@@ -15,10 +15,10 @@ package org.eclipse.fordiac.ide.systemimport;
 
 import java.io.File;
 
-import org.eclipse.fordiac.ide.ui.controls.DirectoryChooserControl;
-import org.eclipse.fordiac.ide.ui.controls.FileChooserControl;
-import org.eclipse.fordiac.ide.ui.controls.IDirectoryChanged;
-import org.eclipse.fordiac.ide.ui.controls.IFileChanged;
+import org.eclipse.fordiac.ide.ui.DirectoryChooserControl;
+import org.eclipse.fordiac.ide.ui.FileChooserControl;
+import org.eclipse.fordiac.ide.ui.IDirectoryChanged;
+import org.eclipse.fordiac.ide.ui.IFileChanged;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

@@ -10,22 +10,22 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.controls;
+package org.eclipse.fordiac.ide.ui;
 
 import org.osgi.framework.BundleContext;
 
 /**
  * The main plugin class to be used in the desktop.
  */
-public class ControlsPlugin extends Abstract4DIACUIPlugin {
+public class UIPlugin extends Abstract4DIACUIPlugin {
 
 	// The shared instance.
-	private static ControlsPlugin plugin;
+	private static UIPlugin plugin;
 
 	/**
 	 * The constructor.
 	 */
-	public ControlsPlugin() {
+	public UIPlugin() {
 		//empty constructor
 	}
 
@@ -60,7 +60,7 @@ public class ControlsPlugin extends Abstract4DIACUIPlugin {
 	 * 
 	 * @return the default
 	 */
-	public static ControlsPlugin getDefault() {
+	public static UIPlugin getDefault() {
 		return plugin;
 	}
 

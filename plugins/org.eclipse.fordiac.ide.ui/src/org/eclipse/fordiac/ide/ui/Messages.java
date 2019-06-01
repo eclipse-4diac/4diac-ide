@@ -10,7 +10,7 @@
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.controls;
+package org.eclipse.fordiac.ide.ui;
 
 import org.eclipse.osgi.util.NLS;
 
@@ -18,7 +18,7 @@ import org.eclipse.osgi.util.NLS;
  * The Class Messages.
  */
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.ui.controls.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.ui.messages"; //$NON-NLS-1$
 	
 	/** The Directory chooser control_ labe l_ browse. */
 	public static String DirectoryChooserControl_LABEL_Browse;

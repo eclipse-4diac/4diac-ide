@@ -10,7 +10,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.controls;
+package org.eclipse.fordiac.ide.ui;
 
 import java.util.ArrayList;
 import java.util.Iterator;

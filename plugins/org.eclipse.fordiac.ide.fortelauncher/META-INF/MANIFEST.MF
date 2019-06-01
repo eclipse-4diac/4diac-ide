@@ -3,7 +3,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.runtime,
  org.eclipse.debug.core,
- org.eclipse.fordiac.ide.ui.controls
+ org.eclipse.fordiac.ide.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.10.2.qualifier

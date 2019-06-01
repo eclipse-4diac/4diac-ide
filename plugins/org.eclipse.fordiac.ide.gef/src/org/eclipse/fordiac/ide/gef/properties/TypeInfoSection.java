@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteVersionInfoCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
-import org.eclipse.fordiac.ide.ui.controls.widget.AddDeleteWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
