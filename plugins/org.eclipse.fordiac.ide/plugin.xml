@@ -6,7 +6,7 @@
       <perspective
             class="org.eclipse.fordiac.ide.Perspective"
             fixed="false"
-            icon="fordiacimage://ICON_SystemPerspective"
+            icon="fordiacimage://ICON_SYSTEM_PERSPECTIVE"
             id="org.eclipse.fordiac.ide.SystemPerspective"
             name="%perspective.name">
       </perspective>

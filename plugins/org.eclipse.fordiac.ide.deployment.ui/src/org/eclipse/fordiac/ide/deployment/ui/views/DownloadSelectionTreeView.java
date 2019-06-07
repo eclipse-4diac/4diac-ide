@@ -21,8 +21,8 @@ import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.ISelectedElementsChangedListener;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -128,7 +128,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 
 		downloadButton = new Button(composite, SWT.NONE);
 		downloadButton.setText(Messages.Mode_DownloadButtonLabel);
-		downloadButton.setImage(FordiacImage.ICON_Download.getImage());
+		downloadButton.setImage(FordiacImage.ICON_DOWNLOAD.getImage());
 		downloadButton.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false));
 		downloadButton.setEnabled(false);
 		downloadButton.addListener(SWT.Selection, e -> {
@@ -243,7 +243,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 		};
 		expandAllAction.setText(Messages.DownloadSelectionTreeView_EXPAND_ALL);
 		expandAllAction.setToolTipText(Messages.DownloadSelectionTreeView_EXPAND_ALL);
-		expandAllAction.setImageDescriptor(FordiacImage.ICON_ExpandAll.getImageDescriptor());
+		expandAllAction.setImageDescriptor(FordiacImage.ICON_EXPAND_ALL.getImageDescriptor());
 		toolBarManager.add(expandAllAction);
 
 		Action refresh = new Action() {
@@ -254,7 +254,7 @@ public class DownloadSelectionTreeView extends ViewPart {
 		};
 		refresh.setText(Messages.DownloadSelectionTreeView_Refresh);
 		refresh.setToolTipText(Messages.DownloadSelectionTreeView_Refresh);
-		refresh.setImageDescriptor(FordiacImage.ICON_Refresh.getImageDescriptor());
+		refresh.setImageDescriptor(FordiacImage.ICON_REFRESH.getImageDescriptor());
 		toolBarManager.add(refresh);
 	}
 

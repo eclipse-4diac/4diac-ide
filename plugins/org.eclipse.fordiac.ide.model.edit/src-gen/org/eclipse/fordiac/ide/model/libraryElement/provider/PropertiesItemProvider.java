@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 public class PropertiesItemProvider extends TransientLibraryElementItemProvider{
 
@@ -51,7 +51,7 @@ public class PropertiesItemProvider extends TransientLibraryElementItemProvider{
     
     @Override
     public Object getImage(Object object) {
-      return overlayImage(object, FordiacImage.ICON_Properties.getImage());      
+      return overlayImage(object, FordiacImage.ICON_PROPERTIES.getImage());      
     }
 
     @Override

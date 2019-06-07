@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
 import org.eclipse.fordiac.ide.systemconfiguration.Activator;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteResourceEditPolicy;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -63,7 +63,7 @@ public class ResourceEditPart extends AbstractViewEditPart {
 				instanceName = new Label(getINamedElement().getName());
 			}
 			if (getModel().isDeviceTypeResource()) {
-				instanceName.setIcon(FordiacImage.ICON_FirmwareResource.getImage());
+				instanceName.setIcon(FordiacImage.ICON_FIRMWARE_RESOURCE.getImage());
 			}
 			add(instanceName);
 			String type = "N/D";

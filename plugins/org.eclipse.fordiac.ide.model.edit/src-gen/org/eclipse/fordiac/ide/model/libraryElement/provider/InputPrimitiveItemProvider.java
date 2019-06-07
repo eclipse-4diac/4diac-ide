@@ -23,7 +23,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive} object.
@@ -68,9 +68,9 @@ public class InputPrimitiveItemProvider
 	public Object getImage(Object object) {
 		if(((Service)((InputPrimitive)object).eContainer().eContainer().eContainer()).getLeftInterface().equals( 
 		    		((InputPrimitive)object).getInterface())){
-			return overlayImage(object, FordiacImage.ICON_LeftInputPrimitive.getImage());
+			return overlayImage(object, FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage());
 		}
-		return overlayImage(object, FordiacImage.ICON_RigthInputPrimitive.getImage());
+		return overlayImage(object, FordiacImage.ICON_RIGHT_INPUT_PRIMITIVE.getImage());
 	}
 
 	/**

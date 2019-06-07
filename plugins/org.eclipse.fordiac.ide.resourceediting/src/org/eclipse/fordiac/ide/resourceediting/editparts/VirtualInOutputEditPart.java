@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -170,11 +170,11 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 			super();
 			setOpaque(false);
 			if (!isInput()) {
-				setIcon(FordiacImage.ICON_LinkOutput.getImage());
+				setIcon(FordiacImage.ICON_LINK_OUTPUT.getImage());
 				setLabelAlignment(PositionConstants.LEFT);
 				setTextAlignment(PositionConstants.LEFT);
 			} else {
-				setIcon(FordiacImage.ICON_LinkInput.getImage());
+				setIcon(FordiacImage.ICON_LINK_INPUT.getImage());
 				setLabelAlignment(PositionConstants.RIGHT);
 				setTextAlignment(PositionConstants.RIGHT);
 			}

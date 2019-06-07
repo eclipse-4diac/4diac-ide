@@ -6,7 +6,7 @@
       <wizard
             category="org.eclipse.fordiac.ide.export.ui"
             class="org.eclipse.fordiac.ide.export.ui.wizard.FordiacExportWizard"
-            icon="fordiacimage://ICON_Export"
+            icon="fordiacimage://ICON_EXPORT"
             id="org.eclipse.fordiac.ide.export.ui.wizard.FordiacExportWizard"
             name="4diac IDE Type Export">
       </wizard>

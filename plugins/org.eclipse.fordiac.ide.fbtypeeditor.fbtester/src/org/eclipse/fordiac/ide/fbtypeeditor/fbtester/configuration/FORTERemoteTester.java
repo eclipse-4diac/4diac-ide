@@ -47,7 +47,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -95,10 +95,10 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 		this.running = running;
 		if(running){
 			run.setText("Stop Testing FB");
-			run.setImage(FordiacImage.ICON_Stop.getImage());
+			run.setImage(FordiacImage.ICON_STOP.getImage());
 		}else{
 			run.setText("Start Testing FB");
-			run.setImage(FordiacImage.ICON_Start.getImage());
+			run.setImage(FordiacImage.ICON_START.getImage());
 		}
 	}
 

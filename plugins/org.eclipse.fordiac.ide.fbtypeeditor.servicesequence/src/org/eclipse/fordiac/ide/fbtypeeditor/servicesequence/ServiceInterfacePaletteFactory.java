@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
 import org.eclipse.fordiac.ide.gef.utilities.TemplateCreationFactory;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -73,27 +73,27 @@ public final class ServiceInterfacePaletteFactory {
 
 	private static void fillPalette(final PaletteRoot palette) {
 		PaletteDrawer drawer = new PaletteDrawer("Left Interface");
-		ImageDescriptor desc = FordiacImage.ICON_LeftInputPrimitive.getImageDescriptor();
+		ImageDescriptor desc = FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImageDescriptor();
 		CombinedTemplateCreationEntry entry = new CombinedTemplateCreationEntry("Input Primitive", "Input Primitive",
 				new TemplateCreationFactory(LEFT_INPUT_PRIMITIVE), desc, desc);
 		drawer.add(entry);
-		desc = FordiacImage.ICON_LeftOutputPrimitive.getImageDescriptor();
+		desc = FordiacImage.ICON_LEFT_OUTPUT_PRIMITIVE.getImageDescriptor();
 		CombinedTemplateCreationEntry entry2 = new CombinedTemplateCreationEntry("Output Primitive", "Output Primitive",
 				new TemplateCreationFactory(LEFT_OUTPUT_PRIMITIVE), desc, desc);
 		drawer.add(entry2);
 		palette.add(drawer);
 		drawer = new PaletteDrawer("Right Interface");
-		desc = FordiacImage.ICON_RigthInputPrimitive.getImageDescriptor();
+		desc = FordiacImage.ICON_RIGHT_INPUT_PRIMITIVE.getImageDescriptor();
 		CombinedTemplateCreationEntry entry3 = new CombinedTemplateCreationEntry("Input Primitive", "Input Primitive",
 				new TemplateCreationFactory(RIGHT_INPUT_PRIMITIVE), desc, desc);
 		drawer.add(entry3);
-		desc = FordiacImage.ICON_RigthOutputPrimitive.getImageDescriptor();
+		desc = FordiacImage.ICON_RIGHT_OUTPUT_PRIMITIVE.getImageDescriptor();
 		CombinedTemplateCreationEntry entry4 = new CombinedTemplateCreationEntry("Output Primitive", "Output Primitive",
 				new TemplateCreationFactory(RIGHT_OUTPUT_PRIMITIVE), desc, desc);
 		drawer.add(entry4);
 		palette.add(drawer);
 		drawer = new PaletteDrawer("Service Transaction");
-		desc = FordiacImage.ICON_Transaction.getImageDescriptor();
+		desc = FordiacImage.ICON_TRANSACTION.getImageDescriptor();
 		CombinedTemplateCreationEntry entry5 = new CombinedTemplateCreationEntry("Service Transaction",
 				"Service Transaction", new TemplateCreationFactory(SERVICE_TRANSACTION), desc, desc);
 		drawer.add(entry5);

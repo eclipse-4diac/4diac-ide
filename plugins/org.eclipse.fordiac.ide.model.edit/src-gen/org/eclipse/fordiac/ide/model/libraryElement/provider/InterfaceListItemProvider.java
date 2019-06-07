@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList} object.
@@ -112,7 +112,7 @@ public class InterfaceListItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, FordiacImage.ICON_InterfaceList.getImage());
+		return overlayImage(object, FordiacImage.ICON_INTERFACE_LIST.getImage());
 	}
 
 	/**

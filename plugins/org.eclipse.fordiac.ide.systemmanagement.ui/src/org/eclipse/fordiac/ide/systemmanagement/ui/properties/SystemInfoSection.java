@@ -12,11 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.properties;
 
+import org.eclipse.fordiac.ide.gef.properties.TypeInfoSection;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.fordiac.ide.gef.properties.TypeInfoSection;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.navigator.CommonNavigator;
 

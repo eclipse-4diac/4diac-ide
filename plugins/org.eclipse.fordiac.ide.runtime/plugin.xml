@@ -7,7 +7,7 @@
       <view
             category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.runtime.views.RuntimeLauncherView"
-            icon="fordiacimage://ICON_RuntimeLauncher"
+            icon="fordiacimage://ICON_RUNTIME_LAUNCHER"
             id="org.eclipse.fordiac.ide.runtime.views.RuntimeLauncherView"
             name="Runtime Launcher">
       </view>

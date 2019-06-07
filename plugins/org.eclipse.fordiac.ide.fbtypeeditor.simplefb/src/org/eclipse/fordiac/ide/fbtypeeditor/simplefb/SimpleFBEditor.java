@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.simplefb.widgets.AlgorithmEditingCompositeSimpleFB;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
@@ -59,7 +59,7 @@ public class SimpleFBEditor extends EditorPart implements IFBTEditorPart {
 		setCommonCommandStack(commandStack);
 		setSite(site);
 		setPartName("Algorithm");
-		setTitleImage(FordiacImage.ICON_Algorithm.getImage());
+		setTitleImage(FordiacImage.ICON_ALGORITHM.getImage());
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 	}
 

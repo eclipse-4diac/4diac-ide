@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
@@ -136,7 +136,7 @@ public class FBTestEditor extends GraphicalEditorWithFlyoutPalette implements IF
 		Composite buttonContainer = new Composite(seqContainer, SWT.NONE);
 		buttonContainer.setLayout(new FillLayout());
 		Button addButton = new Button(buttonContainer, SWT.NONE);
-		addButton.setImage(FordiacImage.ICON_Download.getImage());
+		addButton.setImage(FordiacImage.ICON_DOWNLOAD.getImage());
 		addButton.setText("Start Test");
 		addButton.addSelectionListener(new SelectionListener() {
 			@Override

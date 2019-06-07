@@ -7,7 +7,7 @@ import com.google.inject.Inject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider;
@@ -38,14 +38,14 @@ public class StructuredTextLabelProvider extends DefaultEObjectLabelProvider {
   public ImageDescriptor image(final VarDeclaration decl) {
     ImageDescriptor _xifexpression = null;
     if (((decl.eContainer() instanceof BasicFBType) && ((BasicFBType) decl.eContainer()).getInternalVars().contains(decl))) {
-      _xifexpression = FordiacImage.ICON_Data.getImageDescriptor();
+      _xifexpression = FordiacImage.ICON_DATA.getImageDescriptor();
     } else {
       ImageDescriptor _xifexpression_1 = null;
       boolean _isIsInput = decl.isIsInput();
       if (_isIsInput) {
-        _xifexpression_1 = FordiacImage.ICON_DataInput.getImageDescriptor();
+        _xifexpression_1 = FordiacImage.ICON_DATA_INPUT.getImageDescriptor();
       } else {
-        _xifexpression_1 = FordiacImage.ICON_DataOutput.getImageDescriptor();
+        _xifexpression_1 = FordiacImage.ICON_DATA_OUTPUT.getImageDescriptor();
       }
       _xifexpression = _xifexpression_1;
     }

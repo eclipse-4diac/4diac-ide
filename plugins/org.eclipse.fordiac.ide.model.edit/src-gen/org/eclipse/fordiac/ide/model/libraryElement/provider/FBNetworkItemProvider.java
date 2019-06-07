@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork} object.
@@ -107,7 +107,7 @@ public class FBNetworkItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, FordiacImage.ICON_FBNetwork.getImage());
+		return overlayImage(object, FordiacImage.ICON_FB_NETWORK.getImage());
 	}
 
 	/**

@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 
 public class AlgorithmsItemProvider  extends TransientBasicFBTypeListItemProvider{
@@ -48,7 +48,7 @@ public class AlgorithmsItemProvider  extends TransientBasicFBTypeListItemProvide
     
     @Override
     public Object getImage(Object object) {
-      return overlayImage(object, FordiacImage.ICON_Algorithm.getImage());      
+      return overlayImage(object, FordiacImage.ICON_ALGORITHM.getImage());      
     }
 
     @Override

@@ -6,7 +6,7 @@
       <wizard
             category="org.eclipse.fordiac.ide.import"
             class="org.eclipse.fordiac.ide.systemimport.SystemImport"
-            icon="fordiacimage://ICON_System"
+            icon="fordiacimage://ICON_SYSTEM"
             id="org.eclipse.fordiac.ide.systemimport.SystemImport"
             name="System Import">
       </wizard>

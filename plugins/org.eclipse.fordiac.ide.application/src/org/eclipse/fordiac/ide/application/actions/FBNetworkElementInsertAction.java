@@ -14,10 +14,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class FBNetworkElementInsertAction extends WorkbenchPartAction {

@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.contentprovider.Tran
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.TransactionEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -256,8 +256,8 @@ public class TransactionSection extends AbstractServiceSection {
 							: getType().getInputPrimitive().getEvent() + "(" //$NON-NLS-1$
 									+ getType().getInputPrimitive().getParameters() + ")"); //$NON-NLS-1$
 			label.setImage(
-					isLeftInterface(getType().getInputPrimitive()) ? FordiacImage.ICON_LeftInputPrimitive.getImage()
-							: FordiacImage.ICON_RigthInputPrimitive.getImage());
+					isLeftInterface(getType().getInputPrimitive()) ? FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage()
+							: FordiacImage.ICON_RIGHT_INPUT_PRIMITIVE.getImage());
 		} else {
 			inputPrimitive.setText(""); //$NON-NLS-1$
 		}

@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -69,7 +69,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 		setSite(site);
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
 		setPartName("Service");
-		setTitleImage(FordiacImage.ICON_ServiceSequence.getImage());
+		setTitleImage(FordiacImage.ICON_SERVICE_SEQUENCE.getImage());
 		super.init(site, input);
 	}
 

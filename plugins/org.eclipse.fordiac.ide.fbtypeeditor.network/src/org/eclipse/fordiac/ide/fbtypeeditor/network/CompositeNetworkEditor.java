@@ -32,7 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
@@ -175,7 +175,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 		}
 
 		setPartName(Messages.CompositeNetworkEditor_LABEL_CompositeEditor);
-		setTitleImage(FordiacImage.ICON_FBNetwork.getImage());
+		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
 
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
 	}

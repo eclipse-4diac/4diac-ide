@@ -27,7 +27,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive} object.
@@ -96,9 +96,9 @@ public class OutputPrimitiveItemProvider
 		
 	    if(((Service)((OutputPrimitive)object).eContainer().eContainer().eContainer()).getLeftInterface().equals( 
 	    		((OutputPrimitive)object).getInterface())){
-	    	return overlayImage(object, FordiacImage.ICON_LeftOutputPrimitive.getImage());
+	    	return overlayImage(object, FordiacImage.ICON_LEFT_OUTPUT_PRIMITIVE.getImage());
 	    }
-		return overlayImage(object, FordiacImage.ICON_RigthOutputPrimitive.getImage());
+		return overlayImage(object, FordiacImage.ICON_RIGHT_OUTPUT_PRIMITIVE.getImage());
 	}
 
 	/**

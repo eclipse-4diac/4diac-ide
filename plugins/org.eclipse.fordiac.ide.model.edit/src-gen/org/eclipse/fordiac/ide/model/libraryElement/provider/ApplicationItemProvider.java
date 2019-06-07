@@ -25,7 +25,7 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.Application} object.
@@ -121,7 +121,7 @@ public class ApplicationItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, FordiacImage.ICON_Application.getImage());
+		return overlayImage(object, FordiacImage.ICON_APPLICATION.getImage());
 	}
 
 	/**

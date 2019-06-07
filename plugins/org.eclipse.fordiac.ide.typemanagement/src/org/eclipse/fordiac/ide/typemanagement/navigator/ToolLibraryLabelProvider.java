@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.typemanagement.navigator;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
@@ -43,10 +43,10 @@ public class ToolLibraryLabelProvider implements ILabelProvider {
 	@Override
 	public Image getImage(Object element) {
 		if (element instanceof IProject) {
-			return FordiacImage.ICON_TypeNavigator.getImage();
+			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
 		}
 		else if (element instanceof IFolder && ((IFolder)element).isLinked()) {
-			return FordiacImage.ICON_TypeNavigator.getImage();
+			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
 		}
 		else {
 			return null;

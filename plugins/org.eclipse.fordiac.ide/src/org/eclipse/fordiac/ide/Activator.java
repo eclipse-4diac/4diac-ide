@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImageURLStreamHandlerService;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImageURLStreamHandlerService;
 import org.eclipse.jface.util.Policy;
 import org.eclipse.jface.util.StatusHandler;
 import org.eclipse.ui.plugin.AbstractUIPlugin;

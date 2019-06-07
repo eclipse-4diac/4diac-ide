@@ -402,7 +402,7 @@
         point="org.eclipse.fordiac.ide.fbtypeeditor.ecc.algorithmEditor">
      <algorithmEditor
            class="org.eclipse.fordiac.ide.model.structuredtext.ui.StructuredTextFactory:org.eclipse.fordiac.ide.fbtypeeditor.ecc.xtext.XTextAlgorithmCreator"
-           icon="fordiacimage://ICON_StructuredText"
+           icon="fordiacimage://ICON_STRUCTURED_TEXT"
            language="ST">
      </algorithmEditor>
   </extension>

@@ -45,7 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.preferences.PreferenceGetter;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -396,7 +396,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 	protected void updateResourceTypeFigure() {
 		if (isResoruceTypeFBNElement()) {
-			getInstanceNameLabel().setIcon(FordiacImage.ICON_LockedState.getImage());
+			getInstanceNameLabel().setIcon(FordiacImage.ICON_LOCKED_STATE.getImage());
 		}
 	}
 

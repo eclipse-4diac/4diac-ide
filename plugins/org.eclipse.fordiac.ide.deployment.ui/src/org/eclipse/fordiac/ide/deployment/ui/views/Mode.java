@@ -14,8 +14,8 @@ package org.eclipse.fordiac.ide.deployment.ui.views;
 
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.ISelectedElementsChangedListener;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -54,7 +54,7 @@ public class Mode extends ViewPart implements ISelectionListener {
 
 		downloadButton = new Button(root, SWT.NONE);
 		downloadButton.setText(Messages.Mode_DownloadButtonLabel);
-		downloadButton.setImage(FordiacImage.ICON_Download.getImage());
+		downloadButton.setImage(FordiacImage.ICON_DOWNLOAD.getImage());
 		downloadButton.setEnabled(false);
 		downloadButton.addSelectionListener(new SelectionListener() {
 

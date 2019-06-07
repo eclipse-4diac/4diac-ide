@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -117,7 +117,7 @@ public class ServiceTransactionItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {		
-		return overlayImage(object, FordiacImage.ICON_Transaction.getImage());
+		return overlayImage(object, FordiacImage.ICON_TRANSACTION.getImage());
 	}
 
 	/**

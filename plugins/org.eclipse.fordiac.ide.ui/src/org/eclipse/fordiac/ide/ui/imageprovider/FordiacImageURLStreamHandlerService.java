@@ -10,7 +10,7 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util.imageprovider;
+package org.eclipse.fordiac.ide.ui.imageprovider;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,7 +18,7 @@ import java.net.URLConnection;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import org.eclipse.fordiac.ide.util.Activator;
+import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -50,9 +50,9 @@ public class FordiacImageURLStreamHandlerService extends
 			properties.put(URLConstants.URL_HANDLER_PROTOCOL, new String[] { FORDIAC_IMAGE_PROTOCOL });
 			iconUrlHandler = bundleContext.registerService(URLStreamHandlerService.class, this, properties);
 		} catch (Exception e) {
-			Activator.getDefault().logError("Could not register icon URL handler.", e);
+			UIPlugin.getDefault().logError("Could not register icon URL handler.", e);
 		}
-		Activator.getDefault().logError("Icon URL handler registered.");
+		UIPlugin.getDefault().logError("Icon URL handler registered.");
 	}
 
 	public void unregister() {
@@ -62,7 +62,7 @@ public class FordiacImageURLStreamHandlerService extends
 				iconUrlHandler = null;
 			}
 		} catch (Exception e) {
-			Activator.getDefault().logError("Could not register icon URL handler.", e);
+			UIPlugin.getDefault().logError("Could not register icon URL handler.", e);
 		}
 	}
 

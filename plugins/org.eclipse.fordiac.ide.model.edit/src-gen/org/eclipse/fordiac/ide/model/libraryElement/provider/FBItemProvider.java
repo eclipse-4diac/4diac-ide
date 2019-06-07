@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.FB} object.
@@ -71,10 +71,10 @@ public class FBItemProvider
 	public Object getImage(Object object) {
 		FBType type = ((FB)object).getType();
 		if(type instanceof BasicFBType){
-			return overlayImage(object, FordiacImage.ICON_BasicFB.getImage());
+			return overlayImage(object, FordiacImage.ICON_BASIC_FB.getImage());
 		}
 		else if(type instanceof CompositeFBType){
-			return overlayImage(object, FordiacImage.ICON_CompositeFB.getImage());
+			return overlayImage(object, FordiacImage.ICON_COMPOSITE_FB.getImage());
 		}
 		else if(type instanceof ServiceInterfaceFBType){
 			return overlayImage(object, FordiacImage.ICON_SIFB.getImage());			

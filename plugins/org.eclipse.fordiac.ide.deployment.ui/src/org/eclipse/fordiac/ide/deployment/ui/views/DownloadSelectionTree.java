@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.DialogCellEditor;
@@ -255,17 +255,17 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 		public Image getImage(final Object obj) {
 			String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
 			if (obj instanceof AutomationSystem) {
-				return FordiacImage.ICON_SystemConfiguration.getImage();
+				return FordiacImage.ICON_SYSTEM_CONFIGURATION.getImage();
 			}
 			if (obj instanceof Device) {
-				return FordiacImage.ICON_Device.getImage();
+				return FordiacImage.ICON_DEVICE.getImage();
 			}
 			if (obj instanceof Resource) {
 				Resource res = (Resource) obj;
 				if (res.isDeviceTypeResource()) {
-					return FordiacImage.ICON_FirmwareResource.getImage();
+					return FordiacImage.ICON_FIRMWARE_RESOURCE.getImage();
 				}
-				return FordiacImage.ICON_Resource.getImage();
+				return FordiacImage.ICON_RESOURCE.getImage();
 			}
 			return PlatformUI.getWorkbench().getSharedImages().getImage(imageKey);
 		}

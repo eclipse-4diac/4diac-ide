@@ -52,7 +52,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
@@ -163,7 +163,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		setSite(site);
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
 		setPartName("FBTester");
-		setTitleImage(FordiacImage.ICON_FBTester.getImage());
+		setTitleImage(FordiacImage.ICON_FB_TESTER.getImage());
 		super.init(site, input);
 
 	}
@@ -215,10 +215,10 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		ToolBar tb = new ToolBar(parent, SWT.FLAT | SWT.HORIZONTAL);
 		ToolItem runItem = new ToolItem(tb, SWT.NONE);
 		runItem.setToolTipText("Run selected Tests");
-		runItem.setImage(FordiacImage.ICON_RundDebug.getImage());
+		runItem.setImage(FordiacImage.ICON_RUN_DEBUG.getImage());
 		ToolItem stopItem = new ToolItem(tb, SWT.NONE);
 		stopItem.setToolTipText("Stop");
-		stopItem.setImage(FordiacImage.ICON_Stop.getImage());
+		stopItem.setImage(FordiacImage.ICON_STOP.getImage());
 		ToolItem saveItem = new ToolItem(tb, SWT.NONE);
 		saveItem.setToolTipText("Save Test Data");
 		saveItem.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_SAVE_EDIT));

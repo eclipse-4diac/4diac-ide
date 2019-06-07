@@ -11,7 +11,7 @@
  *   Alois Zoitl, Monika Wenger, Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util.imageprovider;
+package org.eclipse.fordiac.ide.ui.imageprovider;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.fordiac.ide.util.Activator;
+import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
@@ -35,101 +35,97 @@ import org.eclipse.ui.PlatformUI;
 
 public enum FordiacImage {
 	// @formatter:off
-	Missing,          //Image used for missing images in input streams
-	
-	Image_4DIACAbout,
+	MISSING,          //Image used for missing images in input streams
 	
 	// Part Images
 
 	// Icon Images
 	ICON_4DIAC_16,
 	ICON_4DIAC_32,
-	ICON_Adapter,
+	ICON_ADAPTER,
 	ICON_ADD_STATE,
-	ICON_Algorithm,
-	ICON_Application,
-	ICON_BasicFB,
-	ICON_ClearDevice,
-	ICON_ClearForce,
-	ICON_CompositeFB,
-	ICON_Data,
-	ICON_DataInput,
-	ICON_DataType,
-	ICON_DataOutput,
-	ICON_DeleteResource,
-	ICON_DeploymentConsole,
-	ICON_DeploymentPerspective,
-	ICON_Device,
-	ICON_Download,
-	ICON_DownloadSelectionTreeView,
-	ICON_ECAction,
+	ICON_ALGORITHM,
+	ICON_APPLICATION,
+	ICON_BASIC_FB,
+	ICON_CLEAR_DEVICE,
+	ICON_CLEAR_FORCE,
+	ICON_COMPOSITE_FB,
+	ICON_DATA,
+	ICON_DATA_INPUT,
+	ICON_DATA_TYPE,
+	ICON_DATA_OUTPUT,
+	ICON_DELETE_RESOURCE,
+	ICON_DEPLOYMENT_CONSOLE,
+	ICON_DEPLOYMENT_PERSPECTIVE,
+	ICON_DEVICE,
+	ICON_DOWNLOAD,
+	ICON_DOWNLOAD_SELECTION_TREE_VIEW,
+	ICON_EC_ACTION,
 	ICON_ECC,
-	ICON_ECState,
-	ICON_Event,
-	ICON_EventInput,
-	ICON_EventOutput,
-	ICON_ExpandAll,
-	ICON_Export,
+	ICON_EC_STATE,
+	ICON_EVENT,
+	ICON_EVENT_INPUT,
+	ICON_EVENT_OUTPUT,
+	ICON_EXPAND_ALL,
+	ICON_EXPORT,
 	ICON_FB, 
-	ICON_FBNetwork, 
-	ICON_FBTest,
-	ICON_FBTester,
-	ICON_FirmwareResource,
+	ICON_FB_NETWORK, 
+	ICON_FB_TESTER,
+	ICON_FIRMWARE_RESOURCE,
 	ICON_FMU,
-	ICON_ForceValue,
-	ICON_HideData,
-	ICON_HideEvent,
-	ICON_InterfaceEditor,
-	ICON_InterfaceList,
-	ICON_KillDevice,
-	ICON_RuntimeLauncher,
-	ICON_LeftInputPrimitive,
-	ICON_LeftOutputPrimitive,
-	ICON_LinkOutput,
-	ICON_LinkInput,
-	ICON_LockedState,
-	ICON_MonitoringDecorator,
-	ICON_MonitoringPerspective,
-	ICON_NoTest,
+	ICON_FORCE_VALUE,
+	ICON_HIDE_DATA,
+	ICON_HIDE_EVENT,
+	ICON_INTERFACE_EDITOR,
+	ICON_INTERFACE_LIST,
+	ICON_KILL_DEVICE,
+	ICON_RUNTIME_LAUNCHER,
+	ICON_LEFT_INPUT_PRIMITIVE,
+	ICON_LEFT_OUTPUT_PRIMITIVE,
+	ICON_LINK_OUTPUT,
+	ICON_LINK_INPUT,
+	ICON_LOCKED_STATE,
+	ICON_MONITORING_DECORATOR,
+	ICON_MONITORING_PERSPECTIVE,
 	ICON_OK,
-	ICON_Plugs,
-	ICON_Properties,
-	ICON_Refresh,
-	ICON_RemoveWatch,
-	ICON_Resource,
-	ICON_Resume,
-	ICON_RigthInputPrimitive,
-	ICON_RigthOutputPrimitive,
-	ICON_RundDebug,
-	ICON_SaveImage,
-	ICON_SaveImageDisabled,
-	ICON_Segment,
-	ICON_Service,
-	ICON_ServiceSequence,
+	ICON_PLUGS,
+	ICON_PROPERTIES,
+	ICON_REFRESH,
+	ICON_REMOVE_WATCH,
+	ICON_RESOURCE,
+	ICON_RIGHT_INPUT_PRIMITIVE,
+	ICON_RIGHT_OUTPUT_PRIMITIVE,
+	ICON_RUN_DEBUG,
+	ICON_SEGMENT,
+	ICON_SERVICE,
+	ICON_SERVICE_SEQUENCE,
 	ICON_SIFB, 
-	ICON_SubApp,
-	ICON_Sockets,
-	ICON_Start,
-	ICON_StartMonitoring,
-	ICON_Stop,
-	ICON_StructuredText,
-	ICON_System,
-	ICON_SystemConfiguration,
-	ICON_SystemExplorer,
-	ICON_SystemPerspective,
-	ICON_TesterTemplate,
+	ICON_SUB_APP,
+	ICON_SOCKETS,
+	ICON_START,
+	ICON_START_MONITORING,
+	ICON_STOP,
+	ICON_STRUCTURED_TEXT,
+	ICON_SYSTEM,
+	ICON_SYSTEM_CONFIGURATION,
+	ICON_SYSTEM_EXPLORER,
+	ICON_SYSTEM_PERSPECTIVE,
+	ICON_TYPE_NAVIGATOR,
+	ICON_TRANSACTION,
+	ICON_TRIGGER_EVENT,
+	ICON_WATCHES_VIEW,
+	ICON_WATCH_INTERFACE_ELEMENTS,
+
+	// to be deleted with removing the tester
+	ICON_FBTest,
 	ICON_TestFailed,
 	ICON_TestOK,
-	ICON_Tools,
-	ICON_TypeNavigator,
-	ICON_Transaction,
-	ICON_TriggerEvent,
-	ICON_Variables,
-	ICON_WatchesView,
-	ICON_WatchInterfaceElements,
-
+	ICON_NoTest,
+	ICON_TesterTemplate,
+	
+	
 	// Overlay Images
-	OVERLAY_DistributedNature;
+	OVERLAY_DISTRIBUTED_NATURE;
 	
 	
 	// @formatter:on
@@ -191,7 +187,7 @@ public enum FordiacImage {
 		if(null != fileLocation){
 			ret = fileLocation.openConnection().getInputStream();
 		} else {
-			ret = Missing.getImageAsInputStream();
+			ret = MISSING.getImageAsInputStream();
 		}
 		return ret;
 	}
@@ -209,7 +205,7 @@ public enum FordiacImage {
 
 	private static URL getImageURL(String name) {
 		String fileName = foridacImageProperties.getString(name);
-		return FileLocator.find(Activator.getDefault().getBundle(), 
+		return FileLocator.find(UIPlugin.getDefault().getBundle(), 
 				new Path(IMAGES_DIRECTORY + IPath.SEPARATOR + fileName), null);
 	}
 

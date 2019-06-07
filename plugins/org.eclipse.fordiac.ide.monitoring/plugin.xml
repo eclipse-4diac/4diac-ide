@@ -9,7 +9,7 @@
             visible="true">
          <action
                class="org.eclipse.fordiac.ide.monitoring.actions.SwitchMonitoringModeAction"
-               icon="fordiacimage://ICON_StartMonitoring"
+               icon="fordiacimage://ICON_START_MONITORING"
                id="org.eclipse.fordiac.ide.monitoring.actions.SwitchMonitoringModeAction"
                label="Online"
                style="pulldown"
@@ -37,7 +37,7 @@
        <view
        		category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.monitoring.views.WatchesView"
-            icon="fordiacimage://ICON_WatchesView"
+            icon="fordiacimage://ICON_WATCHES_VIEW"
             id="org.eclipse.fordiac.ide.monitoring.views.WatchesView"
             name="Watches"
             restorable="true">
@@ -47,7 +47,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="org.eclipse.fordiac.ide.monitoring.MonitoringPerspective"
-            icon="fordiacimage://ICON_MonitoringPerspective"
+            icon="fordiacimage://ICON_MONITORING_PERSPECTIVE"
             id="org.eclipse.fordiac.ide.monitoring.MonitoringPerspective"
             name="4diac IDE Debug">
       </perspective>
@@ -108,7 +108,7 @@
          point="org.eclipse.ui.decorators">
       <decorator
             class="org.eclipse.fordiac.ide.monitoring.decorators.SystemMonitoringDecorator"
-            icon="fordiacimage://ICON_MonitoringDecorator"
+            icon="fordiacimage://ICON_MONITORING_DECORATOR"
             id="org.eclipse.fordiac.ide.monitoring.decorator"
             label="Monitored System"
             lightweight="false"
@@ -185,31 +185,31 @@
          </separator>
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.triggerEvent"
-               icon="fordiacimage://ICON_TriggerEvent"
+               icon="fordiacimage://ICON_TRIGGER_EVENT"
                label="%contributions.menus.debug.triggerEvent"
                tooltip="%contributions.menus.debug.triggerEventToolTip">
          </command>
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.addWatch"
-               icon="fordiacimage://ICON_WatchInterfaceElements"
+               icon="fordiacimage://ICON_WATCH_INTERFACE_ELEMENTS"
                label="%contributions.menus.debug.watch"
                tooltip="%contributions.menus.debug.watchToolTip">
          </command>
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.removeAllWatches"
-               icon="fordiacimage://ICON_RemoveWatch"
+               icon="fordiacimage://ICON_REMOVE_WATCH"
                label="%contributions.menus.debug.removeAllWatches"
                tooltip="%contributions.menus.debug.removeAllWatchesToolTip">
          </command>
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.force"
-               icon="fordiacimage://ICON_ForceValue"
+               icon="fordiacimage://ICON_FORCE_VALUE"
                label="%contributions.menus.debug.force"
                tooltip="%contributions.menus.debug.forceToolTip">
          </command>
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.clearForce"
-               icon="fordiacimage://ICON_ClearForce"
+               icon="fordiacimage://ICON_CLEAR_FORCE"
                label="%contributions.menus.debug.clearForce"
                tooltip="%contributions.menus.debug.clearForceToolTop">
          </command>
@@ -220,7 +220,7 @@
             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.triggerEvent"
-               icon="fordiacimage://ICON_TriggerEvent"
+               icon="fordiacimage://ICON_TRIGGER_EVENT"
                label="%contributions.menus.debug.triggerEvent"
                tooltip="%contributions.menus.debug.triggerEventToolTip">
            <visibleWhen checkEnabled="false">
@@ -238,7 +238,7 @@
          </command>
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.addWatch"
-               icon="fordiacimage://ICON_WatchInterfaceElements"
+               icon="fordiacimage://ICON_WATCH_INTERFACE_ELEMENTS"
                label="%contributions.menus.debug.watch"
                tooltip="%contributions.menus.debug.watchToolTip">
             <visibleWhen checkEnabled="false">
@@ -262,7 +262,7 @@
          </command>
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.removeAllWatches"
-               icon="fordiacimage://ICON_RemoveWatch"
+               icon="fordiacimage://ICON_REMOVE_WATCH"
                label="%contributions.menus.debug.removeAllWatches"
                tooltip="%contributions.menus.debug.removeAllWatchesToolTip">
             <visibleWhen checkEnabled="false">
@@ -296,7 +296,7 @@
             </visibleWhen></command>
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.force"
-               icon="fordiacimage://ICON_ForceValue"
+               icon="fordiacimage://ICON_FORCE_VALUE"
                label="%contributions.menus.debug.force"
                tooltip="%contributions.menus.debug.forceToolTip">
             <visibleWhen checkEnabled="false">
@@ -314,7 +314,7 @@
          </command>
          <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.clearForce"
-               icon="fordiacimage://ICON_ClearForce"
+               icon="fordiacimage://ICON_CLEAR_FORCE"
                label="%contributions.menus.debug.clearForce"
                tooltip="%contributions.menus.debug.clearForceToolTop">
             <visibleWhen checkEnabled="false">

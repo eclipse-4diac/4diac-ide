@@ -10,7 +10,7 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util.imageprovider;
+package org.eclipse.fordiac.ide.ui.imageprovider;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +39,7 @@ public class FordiacImageURLConnection extends URLConnection {
 			FordiacImage selectedIcon = FordiacImage.valueOf(imageName);
 			is = selectedIcon.getImageAsInputStream();
 		} catch (Exception e) {
-			is = FordiacImage.Missing.getImageAsInputStream();			
+			is = FordiacImage.MISSING.getImageAsInputStream();			
 		}
 		return is;
 	}
