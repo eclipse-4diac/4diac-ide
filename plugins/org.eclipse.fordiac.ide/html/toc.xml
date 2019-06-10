@@ -260,7 +260,8 @@
     </topic>
     <topic label="Modbus" href="html/communication/modbus.html"/>
     <topic label="OPC DA" href="html/communication/opc.html"/>
-    <topic label="openPOWERLINK" href="html/communication/openPOWERLINK.html"/>
+    <topic href="html/communication/openPOWERLINK.html" label="openPOWERLINK">
+    </topic>
     <topic href="html/communication/xqueries.html" label="Access BaseX Database with XQuery">
        <topic href="html/communication/xqueries.html#build" label="Build 4diac-rte to run an Application which sends XQueries">
        </topic>
@@ -268,6 +269,8 @@
        </topic>
        <topic href="html/communication/xqueries.html#application" label="Create an Application to send XQueries to BaseX">
        </topic>
+    </topic>
+    <topic href="html/communication/arrowhead.html" label="Arrowhead">
     </topic>
   </topic>  
 		

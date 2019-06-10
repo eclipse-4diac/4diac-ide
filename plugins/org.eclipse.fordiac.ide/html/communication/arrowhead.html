@@ -1,0 +1,153 @@
+<!DOCTYPE html> 
+<!--
+ Copyright (c) 2019 fortiss GmbH
+  
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+ 
+ Contributors:
+   Jose Cabral
+     - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Arrowhead Library</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+
+<body>
+<h1 id="topOfPage">How to use 4DIAC's Arrowhead library</h1>
+
+<h2 id="intro">Introduction</h2>
+
+<p>The <a href="https://github.com/arrowhead-f/core-java" target="_blank"> Arrowhead Framework (AF)</a> is a framework that provides interoperability between services in a Service Oriented Architectue (SOA) systems. The actual scope and its definition are not easy to understand at first and its documentation does not always help, so the following paragraph will try explain the basics of the AF.</p>
+
+<p>The AF is a set of interfaces, rules and documentation system that allow devices to provide and consume services. The AF defines types in an abstract way for Services, Cloud, System and others concepts.</p>
+
+<p>The AF also stablish that there should be at least 3 main systems (also called core systems) in a local cloud: ServiceRegistry system (allows to register, unregister and query for services), Orchestrator system (allows to find provided services that were designated to devices to consume) and the Authorization System (manages all authorization needed between devices and services). These systems, together with others that aren't mandatory, provide a set of defined services, which of course are defined using the interfaces and types of the AF. The documentation of each system can be found in the folder for it in the <a href="https://github.com/arrowhead-f/core-java/tree/master/documentation" target="_blank"> github repository</a>. It's important to nothe at this point that all services defined for the core systems are implementation-independent, but HTTP/JSON is the first and the de-facto official implementation, but the services could use other communication and modeling protocols.</p> 
+
+<p>The service that your system will produce or consume is not defined in the AF, but how you should document it, it is.</p>
+
+<p>The basic sequence for having a service being produced and consumed in the AF is the following:</p>
+
+<ol>
+  <li>Configure your local cloud: First, you need to tell the Authorization System which services are allowed to be consumed by which system and to the Orchestrator System where are the sevice providers for the consumers (IP and Port).</li>
+  <li>When the service provider is connected to the local cloud, it should register to the Service Registry.</li>
+  <li>The service consumer will do the same. In addition, it will contact the Orchestrator asking for the endpoint of the service provider.</li>
+  <li>The Orchestrator will look in its private database (configured in point 1) for the endoint of the service provider, and check with the Authorization System if the consumer is allowed to consume from the provider.</li>
+  <li>If yes, the Orchestrator answers the consumer (point 3) with the endpoint of the service provider.</li>
+  <li>The service consumer connects to the service provider using the endpoint given in point 5, and consumes the services.</li>
+</ol>
+
+<p>As seen before, the service interface between the consumer and provider is not fixed and the AF has nothing to do with it. The AF provides the support to register services, and look for them.</p>
+
+<p>The developed 4DIAC's Arrowhead library provides the FBs and AF types to communicate to the official <a href="https://github.com/arrowhead-f/core-java" target="_blank"> Arrowhead Framework</a> using HTTP/JSON.</p>
+
+<h2>Enabling the Arrowhead Module in 4diac FORTE</h2>
+
+<p>The first thing that's needed is to have a version of 4diac FORTE with the Arrowhead Module enabled. For that, you'll need to compile your own 4diac FORTE. To do that, follow these <a href="../../html/installation/install.html#ownFORTE"> steps</a> and in CMake set the variable <span class="specificText">FORTE_MODULE_Arrowhead</span> and <span class="specificText">FORTE_COM_HTTP</span> to TRUE.</p>
+
+<p>After 4diac FORTE compiles, you'll be ready to use the FBs library in 4diac IDE.</p>
+
+<h2>FBs in 4diac IDE</h2>
+
+<p>The 4diac IDE is where the library of Function Blocks were defined, and it was done in three levels. In the lowest level, helper Function Blocks allow the user to create the Arrowhead Framework types using standard types from IEC 61499. The following figure shows the Function Block to create an Arrowhead Cloud type, which can later be connected to the upper levels.</p> 
+
+<div><img src="../../html/communication/img/arrowhead/typeHelper.png" alt="Type helper for an Arrowhead Cloud"></div>
+
+<p>On the second level, the actual Arrowhead services were implemented. These Function Blocks offer an adapter following the IEC 61499 standard, in order to decouple the abstract definition of services from the actual implementation. As an example, the following figure shows the Function Block to register and unregister a service in the Service Registry. The data inputs are a Service Registry Entry type (protocol independent) and the endpoint to connect to. The “registerService” adapter on the below right side, offers a plug to the actual implementation of the communication, passing all needed data.</p>
+
+<div><img src="../../html/communication/img/arrowhead/abstractRegisterService.png" alt="Abstract definition of the Register Service offered by the Service Registry core system"></div>
+
+<p>The socket for this adapter is given by each implementation. The next figure shows the Function Block that implements the actual HTTP communication to the Service Registry. Its only input is the socket adapter, the counter part of the plug adapter from the previous figure. By connecting them, the information is passed to this Function Block that handles the communication.</p>
+
+<div><img src="../../html/communication/img/arrowhead/httpRegisterService.png" alt="Register Service implementation in HTTP Rest"></div>
+
+<p>This decoupled architecture allows to quickly implement another type of communication. For example, if the Service Registry offers an OPC UA interface, only the Function Block in the last figure must be re-implemented with the specifics of OPC UA.</p>
+
+<p>On the top most level, sub-applications were implemented in order to facilitate the user using the library. For example, for registering a service, instead of building from the lowest level, which requires many Function Blocks and connections, an encapsulated sub-application is provided that offers all parameters for it. The following figure shows the sub-application with all parameters to register and unregister a service.</p>
+
+<div><img src="../../html/communication/img/arrowhead/httpRegisterServiceFull.png" alt="Sub-application for registering a service using HTTP"></div>
+
+<h2>Purpose of available FBs in the Arrowhead Library</h2>
+
+<p>The following gives informatoin about the purposse of all FBs and SubApps in the library. The parameters of each one of them is documented in the FBs and SubApps itself.</p> 
+
+<p>The ones marked in bold are the top level, and usually, the only ones that you need in order to quickly use the library.</p>
+
+<ul>
+	<li>Common
+		<ul>
+		  <li>FieldsToArrowheadCloud: Translate individual fields to an ArrowheadCloud type</li>
+		  <li>FieldsToArrowheadService: Translate individual fields to an ArrowheadService type</li>
+		  <li>FieldsToArrowheadSystem: Translate individual fields to an ArrowheadSystem type</li>
+		  <li>JSON
+		  	<ul>
+		  		<li>ANYToJSON: Transform 61499 types to JSON format</li>
+		  		<li>GetArrayResponseFromJSON: Transform a HTTP response to an array</li>
+		  	</ul>
+		  </li>
+		</ul>
+	</li>
+    <li>Service Registry
+    	<ul>
+    		<li>FieldsToServiceQueryForm: Translate individual fields to a Service Query Form type</li>
+    		<li>FieldsToServiceRegistryEntry: Translate individual fields to a Service Registry type</li>
+    		<li>GetEndpointFromServiceRegistry: Get the IP:PORT/URI endpoint from a Service Registry Entry</li>
+    		<li>QueryService: Query Service Function Block</li>
+    		<li>QueryServicesAdp: Query services adapter</li>
+    		<li>RegisterService: Register Service Function Block</li>
+    		<li>RegisterServiceAdp: Register Service Adapter</li>
+    		<li>ServiceRegistryEntry2ServiceRegistryEntry: Helper FB to set the connection to a Service Registry Entry type</li>
+    		<li>HTTP
+    			<ul>
+    				<li>QueryServiceHTTP: Query for Services using HTTP</li>
+    				<li><span class="specificText">QueryServiceHTTPSub: Query services using HTTP with the service defined</span></li>
+    				<li><span class="specificText">QueryServiceHTTPSubFull: Query services using HTTP with all service's fields to be defined</span></li>
+    				<li><span class="specificText">RegisterMultipleServicesHTTP: Register many services with different serviceDefinition and serviceURI </span></li>
+    				<li><span class="specificText">RegisterServiceFullHTTP: Register a Service using HTTP. All possible parameters are available to be set</span></li>
+    				<li>RegisterServiceHTTP: Register Service using HTTP</li>
+    				<li><span class="specificText">RegisterServicePartialHTTP: Register a Service using HTTP. The system information is encapsulated</span></li>
+    			</ul>
+    		</li>
+     	</ul>
+    </li>
+    <li>Orchestrator
+    	<ul>
+    		<li>FieldsPreferredProvider: Translate individual fields to a PreferredProvider type</li>
+    		<li>FieldsToServiceRequestForm: Translate individual fields to a ServiceRequestForm type</li>
+    		<li><span class="specificText">GetEndpointFromOrchestration: Get the IP:PORT/URI endpoint from an Orchestration Form</span></li>
+    		<li>OrchestrationForm2OrchestrationForm: Helper FB to set the connection to a Orchestration Form type</li>
+    		<li>OrchestratorRequestAdp: Request orchestration adapter</li>
+    		<li>RequestOrchestrationForm: Request Orchestration Function Block</li>
+    		<li>HTTP
+    			<ul>
+    				<li><span class="specificText">GetEndpointFromOrchestrationHTTPPartial: Get the endpoint at INDEX from a request orchestration response</span></li>
+    				<li><span class="specificText">GetEndpointFromOrchestrationHTTPFull: Get the endpoint at INDEX from a request orchestration response</span></li>
+    				<li>RequestOrchestrationHTTP: Request Orchestration Function Block using HTTP</li>
+    				<li><span class="specificText">RequestOrchestrationHTTPPartial: Request Orchestration using HTTP with all fields from services to be set</span></li>
+    				<li><span class="specificText">RequestOrchestrationHTTPFull: Request Orchestration using HTTP with all fields from services, system and cloud to be set</span></li>
+    			</ul>
+    		</li>
+    	</ul>
+    </li>
+</ul>
+
+<h1>Where to go from here?</h1>
+
+<p>Go back to Protocols index:</p>
+
+<p><a href="../../html/communication/communicationIndex.html">Communication Index</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+</body>
+</html>
