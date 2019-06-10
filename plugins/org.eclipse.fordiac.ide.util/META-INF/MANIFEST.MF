@@ -1,9 +1,6 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.util.action,
- org.eclipse.fordiac.ide.util.comm.channels,
- org.eclipse.fordiac.ide.util.comm.datatypes,
- org.eclipse.fordiac.ide.util.comm.exceptions,
  org.eclipse.fordiac.ide.util.dnd,
  org.eclipse.fordiac.ide.util.preferences
 Require-Bundle: org.eclipse.core.runtime,
