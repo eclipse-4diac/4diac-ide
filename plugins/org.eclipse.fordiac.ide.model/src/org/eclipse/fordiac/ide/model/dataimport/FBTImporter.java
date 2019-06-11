@@ -492,7 +492,9 @@ public class FBTImporter implements LibraryElementTags {
 			aFB.setX(position.getX());
 			aFB.setY(position.getY());
 		}
-		aFB.setInterface(EcoreUtil.copy(aFB.getType().getInterfaceList()));
+		if (null != aFB.getType() && null != aFB.getType().getInterfaceList()) {
+			aFB.setInterface(EcoreUtil.copy(aFB.getType().getInterfaceList()));
+		}
 		fbNetwork.getNetworkElements().add(aFB);
 	}
 
@@ -942,8 +944,10 @@ public class FBTImporter implements LibraryElementTags {
 				a.setIsInput(false);
 				adapters.put(a.getName(), a);
 				interfaceList.getPlugs().add(a);
-				addAdapterEventInputs(a.getType().getInterfaceList().getEventInputs(), a);
-				addAdapterEventOutputs(a.getType().getInterfaceList().getEventOutputs(), a);
+				if (null != a.getType() && null != a.getType().getInterfaceList()) {
+					addAdapterEventInputs(a.getType().getInterfaceList().getEventInputs(), a);
+					addAdapterEventOutputs(a.getType().getInterfaceList().getEventOutputs(), a);
+				}
 			}
 		}
 	}
@@ -982,10 +986,8 @@ public class FBTImporter implements LibraryElementTags {
 				a.setIsInput(true);
 				adapters.put(a.getName(), a);
 				interfaceList.getSockets().add(a);
-				if (a.getType() != null && a.getType().getInterfaceList() != null) {
+				if (null != a.getType() && null != a.getType().getInterfaceList()) {
 					addAdapterEventInputs(a.getType().getInterfaceList().getEventOutputs(), a);
-				}
-				if (a.getType() != null && a.getType().getInterfaceList() != null) {
 					addAdapterEventOutputs(a.getType().getInterfaceList().getEventInputs(), a);
 				}
 
