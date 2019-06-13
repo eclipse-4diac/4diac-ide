@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.gef.commands.Command;
 
 public class CreateInterfaceElementCommand extends Command {
@@ -34,7 +35,7 @@ public class CreateInterfaceElementCommand extends Command {
 	private InterfaceList interfaceList;
 	private AdapterCreateCommand cmd;
 
-	public CreateInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput, int index){
+	public CreateInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput, int index) {
 		this.isInput = isInput;
 		this.dataType = dataType;
 		this.index = index;
@@ -64,40 +65,40 @@ public class CreateInterfaceElementCommand extends Command {
 	@Override
 	public boolean canExecute() {
 		return null != dataType && (null != interfaceList);
-	}	
-	
-	private void setInterfaces(InterfaceList interfaceList){
-		if(isInput){
-			if(dataType instanceof EventType){
-				this.interfaces = interfaceList.getEventInputs();				
-			}else{
-				if(dataType instanceof AdapterType){
+	}
+
+	private void setInterfaces(InterfaceList interfaceList) {
+		if (isInput) {
+			if (dataType instanceof EventType) {
+				this.interfaces = interfaceList.getEventInputs();
+			} else {
+				if (dataType instanceof AdapterType) {
 					this.interfaces = interfaceList.getSockets();
-				}else{
+				} else {
 					this.interfaces = interfaceList.getInputVars();
 				}
 			}
-		}else{
-			if(dataType instanceof EventType){
+		} else {
+			if (dataType instanceof EventType) {
 				this.interfaces = interfaceList.getEventOutputs();
-			}else{
-				if(dataType instanceof AdapterType){
+			} else {
+				if (dataType instanceof AdapterType) {
 					this.interfaces = interfaceList.getPlugs();
-				}else{
+				} else {
 					this.interfaces = interfaceList.getOutputVars();
 				}
 			}
 		}
 	}
-	
+
 	@Override
 	public void execute() {
-		if(dataType instanceof EventType){
+		if (dataType instanceof EventType) {
 			interfaceElement = LibraryElementFactory.eINSTANCE.createEvent();
-		}else{
-			if(dataType instanceof AdapterType){
+		} else {
+			if (dataType instanceof AdapterType) {
 				interfaceElement = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
-			}else{
+			} else {
 				interfaceElement = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			}
 		}
@@ -105,29 +106,32 @@ public class CreateInterfaceElementCommand extends Command {
 		interfaceElement.setIsInput(isInput);
 		interfaceElement.setType(dataType);
 		interfaceElement.setTypeName(dataType.getName());
-		if(dataType instanceof AdapterType && interfaceList.eContainer() instanceof CompositeFBType){
-			cmd = new AdapterCreateCommand(10, 10, (AdapterDeclaration) interfaceElement, (CompositeFBType)interfaceList.eContainer());
+		if (dataType instanceof AdapterType && interfaceList.eContainer() instanceof CompositeFBType
+				&& !(interfaceList.eContainer() instanceof SubAppType)) { // only show the internal adapter FBs for
+																			// composite and not subapp types
+			cmd = new AdapterCreateCommand(10, 10, (AdapterDeclaration) interfaceElement,
+					(CompositeFBType) interfaceList.eContainer());
 		}
 		redo();
 		interfaceElement.setName(NameRepository.createUniqueName(interfaceElement, dataType.getName()));
 	}
-	
+
 	@Override
 	public void redo() {
 		@SuppressWarnings("unchecked")
 		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
 		temp.add(index == -1 ? temp.size() : index, interfaceElement);
-		if(null != cmd){
+		if (null != cmd) {
 			cmd.execute();
 		}
 	}
-	
+
 	@Override
 	public void undo() {
 		@SuppressWarnings("unchecked")
 		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
 		temp.remove(interfaceElement);
-		if(null != cmd && cmd.canExecute()){
+		if (null != cmd && cmd.canExecute()) {
 			cmd.undo();
 		}
 	}
