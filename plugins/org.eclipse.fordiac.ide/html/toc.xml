@@ -188,6 +188,16 @@
          </topic>
          <topic href="html/4diacIDE/advancedFeatures.html" label="Subapplications (NOT READY YET)">
          </topic>
+      </topic>
+      <topic href="html/4diacIDE/dynamicTypeLoader.html" label="Step 7 - Deploying new FBs with the Dynamic Type Loader">
+         <topic href="html/4diacIDE/dynamicTypeLoader.html#getCCompiler" label="Downloading the Compiler">
+         </topic>
+         <topic href="html/4diacIDE/dynamicTypeLoader.html#getLua" label="Downloading Lua">
+         </topic>
+         <topic href="html/4diacIDE/dynamicTypeLoader.html#CompileForte" label="Compiling FORTE with the LuaJit">
+         </topic>
+         <topic href="html/4diacIDE/dynamicTypeLoader.html#enableDTL" label="Enabling the Dynmic Type Loader">
+         </topic>
       </topic>  
     </topic>
 
