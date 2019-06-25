@@ -1,17 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="4diac-ide Target" sequenceNumber="20">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?>
+<target name="4diac-ide Target" sequenceNumber="20">
 	<locations>
     	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-        	<unit id="org.eclipse.emf.sdk.feature.group" version="2.17.0.v20190301-1325"/>
-        	<unit id="org.eclipse.epp.logging.aeri.feature.feature.group" version="2.0.7.v20180504-0806"/>
+        	<unit id="org.eclipse.emf.sdk.feature.group" version="2.18.0.v20190528-0845"/>
         	<unit id="org.eclipse.gef.sdk.feature.group" version="3.11.0.201606061308"/>
-        	<unit id="org.eclipse.xtext.sdk.feature.group" version="2.17.0.v20190304-1445"/>
-        	<repository location="http://download.eclipse.org/releases/2019-03"/>
+        	<unit id="org.eclipse.xtext.sdk.feature.group" version="2.18.0.v20190528-0716"/>
+        	<unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
+        	<repository location="http://download.eclipse.org/releases/2019-06"/>
     	</location>
     	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-        	<unit id="org.eclipse.jdt.feature.group" version="3.17.0.v20190307-0500"/>
-        	<unit id="org.eclipse.pde.feature.group" version="3.13.400.v20190307-0943"/>
-        	<unit id="org.eclipse.platform.sdk" version="4.11.0.I20190307-0500"/>
-        	<repository location="http://download.eclipse.org/eclipse/updates/4.11"/>
+        	<unit id="org.eclipse.jdt.feature.group" version="3.18.0.v20190605-1800"/>
+        	<unit id="org.eclipse.pde.feature.group" version="3.14.0.v20190605-1800"/>
+        	<unit id="org.eclipse.platform.sdk" version="4.12.0.I20190605-1800"/>
+        	<repository location="http://download.eclipse.org/eclipse/updates/4.12"/>
+    	</location>
+    	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+        	<repository location="https://ci.eclipse.org/packaging/job/epp-logging.head/ws/releng/repositories/head/target/repository/"/>
+        	<unit id="org.eclipse.epp.logging.aeri.feature.feature.group" version="2.0.8.v20190502-1125"/>
     	</location>
 	</locations>
 </target>
