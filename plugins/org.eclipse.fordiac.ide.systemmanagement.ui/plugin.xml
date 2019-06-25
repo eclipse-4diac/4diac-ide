@@ -59,42 +59,20 @@
          </activeWhen>
       </handler>
       <handler 
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.DeleteApplicationHandler"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.DeleteHandler"
             commandId="org.eclipse.ui.edit.delete">
          <activeWhen>
          	<with variable="selection">
-		    <count value="1" />
-		    <iterate operator="and">
-		     <adapt type="org.eclipse.fordiac.ide.model.libraryElement.Application" />
+		    <iterate operator="and" ifEmpty="false">
+		     <or>
+		     	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Application" />
+		     	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Resource" />
+		     	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Device" />
+		     </or>
 		    </iterate>
 		   </with>           
          </activeWhen>
-      </handler>
-      <handler 
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.DeleteResourceHandler"
-            commandId="org.eclipse.ui.edit.delete">
-         <activeWhen>
-         	<with variable="selection">
-		    <count value="1" />
-		    <iterate operator="and">
-		     <adapt type="org.eclipse.fordiac.ide.model.libraryElement.Resource" />
-		    </iterate>
-		   </with>           
-         </activeWhen>
-      </handler>
-      <handler 
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.DeleteDeviceHandler"
-            commandId="org.eclipse.ui.edit.delete">
-         <activeWhen>
-         	<with variable="selection">
-		    <count value="1" />
-		    <iterate operator="and">
-		     <adapt type="org.eclipse.fordiac.ide.model.libraryElement.Device" />
-		    </iterate>
-		   </with>           
-         </activeWhen>
-      </handler>
-      
+      </handler>      
       <handler 
             class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.RenameSystem"
             commandId="org.eclipse.ui.edit.rename">
