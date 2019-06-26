@@ -11,5 +11,5 @@
 
   <artifactId>org.eclipse.fordiac.ide.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <version>1.10.2-SNAPSHOT</version>
+  <version>1.11.0-SNAPSHOT</version>
 </project> 

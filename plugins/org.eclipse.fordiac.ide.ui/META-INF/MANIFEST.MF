@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.ui.views.properties.tabbed
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.10.2.qualifier
+Bundle-Version: 1.11.0.qualifier
 Bundle-Name: Common UI Controls (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.ui.UIPlugin
 Bundle-ManifestVersion: 2

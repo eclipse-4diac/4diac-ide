@@ -6,7 +6,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.gef,
  org.eclipse.fordiac.ide.deployment,
- org.eclipse.fordiac.ide.ui,
+ org.eclipse.fordiac.ide.ui;bundle-version="[1.11.0,2.0.0)",
  org.eclipse.fordiac.ide.deployment.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy

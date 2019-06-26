@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.fordiac.ide.ui
+ org.eclipse.fordiac.ide.ui;bundle-version="[1.11.0,2.0.0)"
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.10.2.qualifier
