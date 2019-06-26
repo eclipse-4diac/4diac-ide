@@ -15,6 +15,7 @@
 		<module>../org.eclipse.fordiac.ide.export.compare</module>
 		<module>../org.eclipse.fordiac.ide.export.forte_1.0.x</module>
 		<module>../org.eclipse.fordiac.ide.export.forte_lua</module>
+		<module>../org.eclipse.fordiac.ide.export.forte_ng</module>
 		<module>../org.eclipse.fordiac.ide.export.ui</module>
 		<module>../org.eclipse.fordiac.ide.fbrtlauncher</module>
 		<module>../org.eclipse.fordiac.ide.fbtypeeditor.fbtester</module>
