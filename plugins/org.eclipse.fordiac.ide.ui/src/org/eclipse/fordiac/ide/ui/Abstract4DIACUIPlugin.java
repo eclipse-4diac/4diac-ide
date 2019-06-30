@@ -25,13 +25,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public abstract class Abstract4DIACUIPlugin extends AbstractUIPlugin {
-	public static IEditorPart getCurrentActiveEditor() {
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		if (window != null && window.getActivePage() != null) {
-			return window.getActivePage().getActiveEditor();
-		}
-		return null;
-	}
 
 	public String getID() {
 		return getBundle().getSymbolicName();
@@ -61,13 +54,7 @@ public abstract class Abstract4DIACUIPlugin extends AbstractUIPlugin {
 		final IStatusLineManager manager = getStatusLineManager(part);
 		if (null != manager) {
 			final Display display = getDisplay();
-			display.asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					manager.setErrorMessage(msg);
-				}
-			});
+			display.asyncExec(() -> manager.setErrorMessage(msg));
 		}
 	}
 
@@ -76,13 +63,7 @@ public abstract class Abstract4DIACUIPlugin extends AbstractUIPlugin {
 
 		if (null != manager) {
 			final Display display = getDisplay();
-			display.asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					manager.setErrorMessage(errorMsg);
-				}
-			});
+			display.asyncExec(() -> manager.setErrorMessage(errorMsg));
 		}
 	}
 
@@ -91,15 +72,9 @@ public abstract class Abstract4DIACUIPlugin extends AbstractUIPlugin {
 		if (null != workbenchWindow) {
 			statusLineErrorMessage(workbenchWindow.getActivePage().getActivePart(), errorMsg);
 		} else {
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					statusLineErrorMessage(
-							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart(),
-							errorMsg);
-				}
-			});
+			final Display display = Display.getDefault();
+			display.asyncExec(() -> statusLineErrorMessage(
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart(), errorMsg));
 		}
 	}
 

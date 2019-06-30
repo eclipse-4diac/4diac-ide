@@ -16,7 +16,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.gef.Activator;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.gef.tools.DirectEditManager;
@@ -35,7 +35,7 @@ import org.eclipse.ui.part.CellEditorActionHandler;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class LabelDirectEditManager extends DirectEditManager {
-	
+
 	private IActionBars actionBars;
 	private CellEditorActionHandler actionHandler;
 	private IAction copy, cut, paste, undo, redo, find, selectAll, delete;
@@ -53,14 +53,14 @@ public class LabelDirectEditManager extends DirectEditManager {
 	/**
 	 * The Constructor.
 	 * 
-	 * @param source the source
+	 * @param source     the source
 	 * @param editorType the editor type
-	 * @param locator the locator
-	 * @param label the label
+	 * @param locator    the locator
+	 * @param label      the label
 	 */
 	@SuppressWarnings("rawtypes")
-	public LabelDirectEditManager(final GraphicalEditPart source,
-			final Class editorType, final CellEditorLocator locator, final Label label) {
+	public LabelDirectEditManager(final GraphicalEditPart source, final Class editorType,
+			final CellEditorLocator locator, final Label label) {
 		super(source, editorType, locator);
 		this.label = label;
 	}
@@ -68,16 +68,15 @@ public class LabelDirectEditManager extends DirectEditManager {
 	/**
 	 * The Constructor.
 	 * 
-	 * @param source the source
-	 * @param editorType the editor type
-	 * @param locator the locator
-	 * @param label the label
+	 * @param source                  the source
+	 * @param editorType              the editor type
+	 * @param locator                 the locator
+	 * @param label                   the label
 	 * @param aditionalVerifyListener the aditional verify listener
 	 */
 	@SuppressWarnings("rawtypes")
-	public LabelDirectEditManager(final GraphicalEditPart source,
-			final Class editorType, final CellEditorLocator locator,
-			final Label label, VerifyListener aditionalVerifyListener) {
+	public LabelDirectEditManager(final GraphicalEditPart source, final Class editorType,
+			final CellEditorLocator locator, final Label label, VerifyListener aditionalVerifyListener) {
 		super(source, editorType, locator);
 		this.label = label;
 		this.aditionalVerify = aditionalVerifyListener;
@@ -112,8 +111,8 @@ public class LabelDirectEditManager extends DirectEditManager {
 		if (getEditPart() instanceof AbstractViewEditPart) {
 			((AbstractViewEditPart) getEditPart()).refreshName();
 		}
-		if(getEditPart() instanceof AbstractDirectEditableEditPart) {
-			((AbstractDirectEditableEditPart)getEditPart()).refreshName();
+		if (getEditPart() instanceof AbstractDirectEditableEditPart) {
+			((AbstractDirectEditableEditPart) getEditPart()).refreshName();
 		}
 		Font disposeFont = scaledFont;
 		scaledFont = null;
@@ -128,7 +127,7 @@ public class LabelDirectEditManager extends DirectEditManager {
 			actionBars.updateActionBars();
 			actionBars = null;
 		}
-		
+
 		getLocator().relocate(getCellEditor());
 		super.bringDown();
 		if (disposeFont != null) {
@@ -166,24 +165,22 @@ public class LabelDirectEditManager extends DirectEditManager {
 		scaledFont = new Font(null, data);
 		text.setFont(scaledFont);
 		text.selectAll();
-		
+
 		// Hook the cell editor's copy/paste actions to the actionBars so that
 		// they can
 		// be invoked via keyboard shortcuts.
-		actionBars = Abstract4DIACUIPlugin.getCurrentActiveEditor().getEditorSite()
-				.getActionBars();
+		actionBars = EditorUtils.getCurrentActiveEditor().getEditorSite().getActionBars();
 		saveCurrentActions(actionBars);
 		actionHandler = new CellEditorActionHandler(actionBars);
 		actionHandler.addCellEditor(getCellEditor());
 		actionBars.updateActionBars();
 	}
-	
+
 	private void restoreSavedActions(IActionBars actionBars) {
 		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), copy);
 		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), paste);
 		actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), delete);
-		actionBars.setGlobalActionHandler(ActionFactory.SELECT_ALL.getId(),
-				selectAll);
+		actionBars.setGlobalActionHandler(ActionFactory.SELECT_ALL.getId(), selectAll);
 		actionBars.setGlobalActionHandler(ActionFactory.CUT.getId(), cut);
 		actionBars.setGlobalActionHandler(ActionFactory.FIND.getId(), find);
 		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), undo);
@@ -193,19 +190,17 @@ public class LabelDirectEditManager extends DirectEditManager {
 	private void saveCurrentActions(IActionBars actionBars) {
 		copy = actionBars.getGlobalActionHandler(ActionFactory.COPY.getId());
 		paste = actionBars.getGlobalActionHandler(ActionFactory.PASTE.getId());
-		delete = actionBars
-				.getGlobalActionHandler(ActionFactory.DELETE.getId());
-		selectAll = actionBars.getGlobalActionHandler(ActionFactory.SELECT_ALL
-				.getId());
+		delete = actionBars.getGlobalActionHandler(ActionFactory.DELETE.getId());
+		selectAll = actionBars.getGlobalActionHandler(ActionFactory.SELECT_ALL.getId());
 		cut = actionBars.getGlobalActionHandler(ActionFactory.CUT.getId());
 		find = actionBars.getGlobalActionHandler(ActionFactory.FIND.getId());
 		undo = actionBars.getGlobalActionHandler(ActionFactory.UNDO.getId());
 		redo = actionBars.getGlobalActionHandler(ActionFactory.REDO.getId());
 	}
-	
-	public void setInitialString(String val){
+
+	public void setInitialString(String val) {
 		initialString = val;
-		if(null != getCellEditor()){
+		if (null != getCellEditor()) {
 			getCellEditor().setValue(initialString);
 		}
 	}
@@ -224,7 +219,7 @@ public class LabelDirectEditManager extends DirectEditManager {
 				text.removeVerifyListener(aditionalVerify);
 			}
 		} catch (Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);			
+			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}
 }

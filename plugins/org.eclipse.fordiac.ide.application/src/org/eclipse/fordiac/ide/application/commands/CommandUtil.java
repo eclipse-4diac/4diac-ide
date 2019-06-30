@@ -17,7 +17,6 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.fordiac.ide.ui.editors.EditorFilter;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.ui.IEditorInput;
@@ -39,18 +38,16 @@ public final class CommandUtil {
 	 * @return the i editor input
 	 */
 	public static IEditorInput closeOpenedSubApp(final FBNetwork network) {
-		EditorFilter filter = ((IEditorPart editor) ->
-			(editor instanceof DiagramEditorWithFlyoutPalette) &&
-				(network.equals(((DiagramEditorWithFlyoutPalette)editor).getModel()))								
-		);
-		
+		EditorFilter filter = ((IEditorPart editor) -> (editor instanceof DiagramEditorWithFlyoutPalette)
+				&& (network.equals(((DiagramEditorWithFlyoutPalette) editor).getModel())));
+
 		IEditorPart editor = EditorUtils.findEditor(filter);
 
-		if(null != editor){
-			IEditorInput input = editor.getEditorInput();			
+		if (null != editor) {
+			IEditorInput input = editor.getEditorInput();
 			EditorUtils.CloseEditor.run(editor);
 			return input;
-		}		
+		}
 		return null;
 	}
 
@@ -61,7 +58,7 @@ public final class CommandUtil {
 	 */
 	public static void openSubAppEditor(final IEditorInput input) {
 		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IEditorPart part = Abstract4DIACUIPlugin.getCurrentActiveEditor();
+		IEditorPart part = EditorUtils.getCurrentActiveEditor();
 		try {
 			activePage.openEditor(input, SubAppNetworkEditor.class.getName());
 		} catch (PartInitException e) {
@@ -69,7 +66,7 @@ public final class CommandUtil {
 		}
 		activePage.activate(part);
 	}
-	
+
 	private CommandUtil() {
 		throw new UnsupportedOperationException("CommandUtil utility class should not be instantiated!"); //$NON-NLS-1$
 	}

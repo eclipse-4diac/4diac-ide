@@ -18,7 +18,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
@@ -30,8 +30,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 /**
  * The Class AbstractDirectEditableEditPart.
  */
-public abstract class AbstractDirectEditableEditPart extends
-		AbstractConnectableEditPart {
+public abstract class AbstractDirectEditableEditPart extends AbstractConnectableEditPart {
 
 	/** The manager. */
 	private DirectEditManager manager;
@@ -41,15 +40,14 @@ public abstract class AbstractDirectEditableEditPart extends
 		@Override
 		public void notifyChanged(Notification notification) {
 			Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(
-					feature)) {
-						refreshName();				
+			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
+				refreshName();
 			}
 			super.notifyChanged(notification);
 		}
 
 	};
-	
+
 	protected EContentAdapter getNameAdapter() {
 		return adapter;
 	}
@@ -65,7 +63,9 @@ public abstract class AbstractDirectEditableEditPart extends
 	 */
 	public abstract INamedElement getINamedElement();
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
 	 */
 	@Override
@@ -77,7 +77,9 @@ public abstract class AbstractDirectEditableEditPart extends
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
 	 */
 	@Override
@@ -96,8 +98,12 @@ public abstract class AbstractDirectEditableEditPart extends
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef.Request)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef.
+	 * Request)
 	 */
 	@Override
 	public void performRequest(final Request request) {
@@ -115,7 +121,7 @@ public abstract class AbstractDirectEditableEditPart extends
 	 */
 	public DirectEditManager getManager() {
 		if (manager == null) {
-			manager =createDirectEditManager();
+			manager = createDirectEditManager();
 		}
 		return manager;
 	}
@@ -138,10 +144,10 @@ public abstract class AbstractDirectEditableEditPart extends
 	public void performDirectEdit() {
 		getManager().show();
 	}
-	
-	//TODO already duplicated on several places put it into a util class
-	public static void executeCommand(Command cmd){
-		Object viewer = Abstract4DIACUIPlugin.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
+
+	// TODO already duplicated on several places put it into a util class
+	public static void executeCommand(Command cmd) {
+		Object viewer = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
 		if (viewer instanceof GraphicalViewer) {
 			((GraphicalViewer) viewer).getEditDomain().getCommandStack().execute(cmd);
 		} else {
