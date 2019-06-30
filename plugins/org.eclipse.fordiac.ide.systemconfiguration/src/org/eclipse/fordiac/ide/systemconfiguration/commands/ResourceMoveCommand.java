@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
+ * 				 2019 Johannes Keppler University Linz
  * 
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -19,7 +20,6 @@ import org.eclipse.ui.IEditorPart;
 
 public class ResourceMoveCommand extends Command {
 	private Resource resource;
-	private IEditorPart editor;
 	private Device device;
 	private Device targetDevice;
 	private int indexNew;
@@ -32,13 +32,7 @@ public class ResourceMoveCommand extends Command {
 	}
 	
 	@Override
-	public boolean canUndo() {
-		return editor.equals(Abstract4DIACUIPlugin.getCurrentActiveEditor());
-	}
-
-	@Override
 	public void execute() {
-		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
 		device = resource.getDevice();
 		indexOld = device.getResource().indexOf(resource);
 		redo();

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Keppler University Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - removed editor check from canUndo 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
@@ -20,36 +22,30 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.ui.IEditorPart;
 
 public class ChangeValueCommand extends Command {
 
 	private static final String CHANGE = Messages.ChangeValueCommand_LABEL_ChangeValue;
 	private VarDeclaration var;
-	private VarDeclaration mirroredVar;  //the variable of the mapped entity
-	private String newValue, oldValue;
-	private IEditorPart editor;
+	private VarDeclaration mirroredVar; // the variable of the mapped entity
+	private String newValue;
+	private String oldValue;
 
-	public ChangeValueCommand(VarDeclaration var, String value){
+	public ChangeValueCommand(VarDeclaration var, String value) {
 		this.var = var;
 		newValue = value;
 	}
-	
+
 	@Override
-	public boolean canExecute(){
-		if (var != null && var.getType() != null && var.getType().equals(DataTypeLibrary.getInstance().getType("ANY")) && null != newValue) { //$NON-NLS-1$
-			if ((!newValue.equals("")) && (!newValue.contains("#"))){ //$NON-NLS-1$ //$NON-NLS-2$
+	public boolean canExecute() {
+		if (var != null && var.getType() != null && var.getType().equals(DataTypeLibrary.getInstance().getType("ANY")) //$NON-NLS-1$
+				&& null != newValue) {
+			if ((!newValue.equals("")) && (!newValue.contains("#"))) { //$NON-NLS-1$ //$NON-NLS-2$
 				Abstract4DIACUIPlugin.statusLineErrorMessage("Constant Values are not allowed on ANY Input!"); //$NON-NLS-1$
 				return false;
 			}
 		}
 		return super.canExecute();
-	}
-
-	@Override
-	public boolean canUndo() {
-		return editor.equals(Abstract4DIACUIPlugin.getCurrentActiveEditor());
-
 	}
 
 	public ChangeValueCommand() {
@@ -58,17 +54,16 @@ public class ChangeValueCommand extends Command {
 
 	@Override
 	public void execute() {
-		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
 		mirroredVar = getMirroredVariable();
-		if(var.getValue() == null){
+		if (var.getValue() == null) {
 			var.setValue(LibraryElementFactory.eINSTANCE.createValue());
-			if(null != mirroredVar){
+			if (null != mirroredVar) {
 				mirroredVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			}
 			oldValue = ""; //$NON-NLS-1$
-		}else{
+		} else {
 			oldValue = var.getValue().getValue() != null ? var.getValue().getValue() : ""; //$NON-NLS-1$
-		}		
+		}
 		if ("".equals(newValue)) { //$NON-NLS-1$
 			newValue = null;
 		}
@@ -87,22 +82,22 @@ public class ChangeValueCommand extends Command {
 		var.getValue().setValue(newValue);
 		setMirroredVar(newValue);
 	}
-	
+
 	private VarDeclaration getMirroredVariable() {
-		if(null != var.getFBNetworkElement() && var.getFBNetworkElement().isMapped()){
-			FBNetworkElement opposite =  var.getFBNetworkElement().getOpposite();
-			if(null != opposite){
+		if (null != var.getFBNetworkElement() && var.getFBNetworkElement().isMapped()) {
+			FBNetworkElement opposite = var.getFBNetworkElement().getOpposite();
+			if (null != opposite) {
 				IInterfaceElement element = opposite.getInterfaceElement(var.getName());
-				if(element instanceof VarDeclaration){
-					return (VarDeclaration)element;
+				if (element instanceof VarDeclaration) {
+					return (VarDeclaration) element;
 				}
 			}
 		}
 		return null;
 	}
-	
+
 	private void setMirroredVar(String val) {
-		if(null != mirroredVar){
+		if (null != mirroredVar) {
 			mirroredVar.getValue().setValue(val);
 		}
 	}

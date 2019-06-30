@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2015 - 2017 TU Wien ACIN, Profactor GmbH, fortiss GmbH
+ * 				 2019 Johannes Keppler University Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Alois Zoitl, Gerhard Ebenhofer 
  *   - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - removed editor check from canUndo 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.commands;
 
@@ -19,6 +21,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -29,26 +32,13 @@ import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
  */
 public class NewAppCommand extends AbstractOperation {
 
-	private org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem system;
+	private AutomationSystem system;
 	private String appName;
 
 	private String comment;
 	private Application application;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#canUndo()
-	 */
-	@Override
-	public boolean canUndo() {
-		return true;
-
-	}
-
-	public NewAppCommand(
-			org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem system,
-			String appName, String comment) {
+	public NewAppCommand(AutomationSystem system, String appName, String comment) {
 		super(Messages.NewApplicationCommand_LABEL_NewApplication);
 		this.system = system;
 		this.appName = appName;
@@ -80,14 +70,13 @@ public class NewAppCommand extends AbstractOperation {
 			application = creatApplicationElement();
 			application.setName(appName);
 			application.setComment(comment);
-			
-			FBNetwork network = LibraryElementFactory.eINSTANCE
-					.createFBNetwork();
+
+			FBNetwork network = LibraryElementFactory.eINSTANCE.createFBNetwork();
 			application.setFBNetwork(network);
 
 			system.getApplication().add(application);
 
-			SystemManager.INSTANCE.saveSystem(system); 
+			SystemManager.INSTANCE.saveSystem(system);
 			return Status.OK_STATUS;
 		}
 		return new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, "", null); //$NON-NLS-1$
@@ -103,7 +92,7 @@ public class NewAppCommand extends AbstractOperation {
 	public IStatus redo(IProgressMonitor monitor, IAdaptable info) {
 		if (system != null) {
 			system.getApplication().add(application);
-			SystemManager.INSTANCE.saveSystem(system); // to save the	
+			SystemManager.INSTANCE.saveSystem(system); // to save the
 			return Status.OK_STATUS;
 		}
 		return new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, "", null); //$NON-NLS-1$
@@ -116,13 +105,13 @@ public class NewAppCommand extends AbstractOperation {
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info) {
 		if (system != null) {
 			system.getApplication().remove(application);
-			SystemManager.INSTANCE.saveSystem(system);			
+			SystemManager.INSTANCE.saveSystem(system);
 			return Status.OK_STATUS;
 		}
 		return new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, "", null); //$NON-NLS-1$
 
 	}
-	
+
 	private static Application creatApplicationElement() {
 		return LibraryElementFactory.eINSTANCE.createApplication();
 	}

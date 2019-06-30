@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 				 2018 Johannes Kepler University
+ * 				 2018 - 2019 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - removed editor check from canUndo 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
@@ -33,14 +34,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.ui.IEditorPart;
 
 public class ResourceCreateCommand extends Command {
 	private final ResourceTypeEntry entry;
 	private Resource resource;
-	private IEditorPart editor;
 	private final Device device;
 	private final boolean deviceTypeRes;
 	private int index = -1;
@@ -59,13 +57,7 @@ public class ResourceCreateCommand extends Command {
 	}
 
 	@Override
-	public boolean canUndo() {
-		return editor.equals(Abstract4DIACUIPlugin.getCurrentActiveEditor());
-	}
-
-	@Override
 	public void execute() {
-		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
 		resource = LibraryElementFactory.eINSTANCE.createResource();
 		resource.setDeviceTypeResource(deviceTypeRes);
 		resource.setPaletteEntry(entry);
@@ -75,7 +67,7 @@ public class ResourceCreateCommand extends Command {
 			element.setValue(value);
 		}
 		FBNetwork resourceFBNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
-		if(entry.getResourceType().getFBNetwork() != null) {
+		if (entry.getResourceType().getFBNetwork() != null) {
 			resource.setFBNetwork(resourceFBNetwork);
 			createResourceTypeNetwork(resource, entry.getResourceType(), resourceFBNetwork);
 		} else {
@@ -85,13 +77,15 @@ public class ResourceCreateCommand extends Command {
 			index = device.getResource().size();
 		}
 		device.getResource().add(index, resource);
-		// resource name needs to be added after it is inserted in the device so that name checking works
+		// resource name needs to be added after it is inserted in the device so that
+		// name checking works
 		resource.setName(NameRepository.createUniqueName(resource, entry.getLabel()));
 		SystemManager.INSTANCE.notifyListeners();
 	}
 
-	//TODO model refactoring - Can this also be used for the resoruce parsing?
-	public void createResourceTypeNetwork(final Resource resource,  final ResourceType type, final FBNetwork resourceFBNetwork) {
+	// TODO model refactoring - Can this also be used for the resoruce parsing?
+	public void createResourceTypeNetwork(final Resource resource, final ResourceType type,
+			final FBNetwork resourceFBNetwork) {
 		Map<String, Event> events = new HashMap<>();
 		Map<String, VarDeclaration> varDecls = new HashMap<>();
 		for (FBNetworkElement element : type.getFBNetwork().getNetworkElements()) {
@@ -99,7 +93,7 @@ public class ResourceCreateCommand extends Command {
 			resource.getFBNetwork().getNetworkElements().add(copy);
 			copy.setPaletteEntry(element.getPaletteEntry());
 			copy.setName(element.getName()); // name should be last so that checks
-										// are working correctly
+			// are working correctly
 			InterfaceList interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
 			for (VarDeclaration varDecl : element.getInterface().getOutputVars()) {
 				VarDeclaration varDeclCopy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
@@ -114,7 +108,7 @@ public class ResourceCreateCommand extends Command {
 						varDeclCopy);
 				interfaceList.getOutputVars().add(varDeclCopy);
 			}
-			for(VarDeclaration varDecl : element.getInterface().getInputVars()) {
+			for (VarDeclaration varDecl : element.getInterface().getInputVars()) {
 				VarDeclaration varDeclCopy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 				varDeclCopy.setType(varDecl.getType());
 				varDeclCopy.setName(varDecl.getName());
@@ -167,18 +161,18 @@ public class ResourceCreateCommand extends Command {
 		for (DataConnection dataCon : type.getFBNetwork().getDataConnections()) {
 			if (dataCon.getSource() != null && dataCon.getDestination() != null) {
 				FB sourceFB = (FB) dataCon.getSource().eContainer().eContainer();
-				FB destFB = (FB) dataCon.getDestination().eContainer().eContainer();	
-				if(null != sourceFB){
+				FB destFB = (FB) dataCon.getDestination().eContainer().eContainer();
+				if (null != sourceFB) {
 					VarDeclaration source = varDecls.get(sourceFB.getName() + "." //$NON-NLS-1$
 							+ dataCon.getSource().getName());
 					VarDeclaration dest = varDecls.get(destFB.getName() + "." //$NON-NLS-1$
 							+ dataCon.getDestination().getName());
-					DataConnection copyDataCon = LibraryElementFactory.eINSTANCE.createDataConnection();					
+					DataConnection copyDataCon = LibraryElementFactory.eINSTANCE.createDataConnection();
 					copyDataCon.setSource(source);
 					copyDataCon.setDestination(dest);
 					copyDataCon.setResTypeConnection(true);
 					resourceFBNetwork.getDataConnections().add(copyDataCon);
-				}else{	
+				} else {
 					VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 					var.setName(dataCon.getSource().getName());
 					var.setIsInput(true);
