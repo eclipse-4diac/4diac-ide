@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2011 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - moved openEditor helper function to EditorUtils  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 
@@ -24,26 +26,22 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
-import org.eclipse.fordiac.ide.systemconfiguration.Activator;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteResourceEditPolicy;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 
 public class ResourceEditPart extends AbstractViewEditPart {
-	private ResourceFigure figure;
 
 	@Override
 	protected void refreshVisuals() {
 		// nothing to do
 	}
-	
+
 	@Override
 	public void refreshName() {
 		getNameLabel().setText(getINamedElement().getName());
@@ -84,15 +82,12 @@ public class ResourceEditPart extends AbstractViewEditPart {
 
 	@Override
 	protected IFigure createFigureForModel() {
-		if (figure == null) {
-			figure = new ResourceFigure();
-		}
-		return figure;
+		return new ResourceFigure();
 	}
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteResourceEditPolicy());		
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteResourceEditPolicy());
 		// EditPolicy which allows the direct edit of the Instance Name
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy());
 	}
@@ -139,20 +134,14 @@ public class ResourceEditPart extends AbstractViewEditPart {
 	@Override
 	protected void backgroundColorChanged(IFigure figure) {
 	}
-	
+
 	@Override
 	public void performRequest(final Request request) {
-		if (request.getType() == RequestConstants.REQ_OPEN) {		
+		if (request.getType() == RequestConstants.REQ_OPEN) {
 			ResourceEditorInput input = new ResourceEditorInput(getModel());
-			
-			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			try {
-				activePage.openEditor(input,ResourceDiagramEditor.class.getName());
-			} catch (PartInitException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-			}
-		}else{
+			EditorUtils.openEditor(input, ResourceDiagramEditor.class.getName());
+		} else {
 			super.performRequest(request);
-		}		
+		}
 	}
 }

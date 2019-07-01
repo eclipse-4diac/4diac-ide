@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2016, 2017, 2019 fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,10 +8,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
- *   Jose Cabral
- *     - Set version and description using general function
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Jose Cabral - Set version and description using general function
+ *   Alois Zoitl - moved openEditor helper function to EditorUtils  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.wizards;
 
@@ -44,82 +44,81 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class SaveAsSubappWizard extends Wizard {
 
 	private final SubApp subApp;
-	
+
 	private SaveAsSubappWizardPage newFilePage;
-	
+
 	public SaveAsSubappWizard(SubApp subApp) {
 		setWindowTitle(Messages.SaveAsSubApplicationTypeAction_WizardTitle);
 		this.subApp = subApp;
 	}
-	
+
 	@Override
 	public void addPages() {
 		IProject project = subApp.getSubAppNetwork().getAutomationSystem().getProject();
-		StructuredSelection selection = new StructuredSelection(project);     //select the current project
-		newFilePage = new SaveAsSubappWizardPage(Messages.SaveAsSubApplicationTypeAction_WizardPageName, selection);	
-		newFilePage.setFileName(subApp.getName());		
+		StructuredSelection selection = new StructuredSelection(project); // select the current project
+		newFilePage = new SaveAsSubappWizardPage(Messages.SaveAsSubApplicationTypeAction_WizardPageName, selection);
+		newFilePage.setFileName(subApp.getName());
 		addPage(newFilePage);
 	}
-	
+
 	@Override
 	public boolean performFinish() {
 		boolean perform = true;
-		
+
 		IFile targetFile = getTargetTypeFile();
-		if(targetFile.exists()){
+		if (targetFile.exists()) {
 			perform = askOverwrite();
 		}
-		
-		
-		if(perform){		
-			if(createSubAppTemplateCopy()){  		// copy the subapp template so that we don't need to write code for any basic type information stuff (e.g., version, coments etc.)
+
+		if (perform) {
+			if (createSubAppTemplateCopy()) { // copy the subapp template so that we don't need to write code for any
+												// basic type information stuff (e.g., version, coments etc.)
 				PaletteEntry entry = getPalletEntry();
 				LibraryElement type = entry.getType();
 				type.setName(TypeLibrary.getTypeNameFromFile(entry.getFile()));
-				
+
 				TypeManagementPreferencesHelper.setupIdentification(type);
 				TypeManagementPreferencesHelper.setupVersionInfo(type);
-				performTypeSetup((SubAppType)type);				
-				AbstractTypeExporter.saveType(entry);	
+				performTypeSetup((SubAppType) type);
+				AbstractTypeExporter.saveType(entry);
 				entry.setType(type);
-				
-				if(newFilePage.getOpenType()){
+
+				if (newFilePage.getOpenType()) {
 					openTypeEditor(entry);
 				}
-				
+
 				return true;
-			}		
+			}
 			return false;
 		}
-		
+
 		return true;
 	}
 
-	private boolean askOverwrite() {	
-		return MessageDialog.openConfirm(getShell(), Messages.SaveAsSubApplicationTypeAction_WizardOverrideTitle, 
+	private boolean askOverwrite() {
+		return MessageDialog.openConfirm(getShell(), Messages.SaveAsSubApplicationTypeAction_WizardOverrideTitle,
 				Messages.SaveAsSubApplicationTypeAction_WizardOverrideMessage);
 	}
 
-	private boolean createSubAppTemplateCopy(){
+	private boolean createSubAppTemplateCopy() {
 		String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
 		File templateFolder = new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
-		File [] fileList = templateFolder.listFiles();
-		if(null != fileList) {
+		File[] fileList = templateFolder.listFiles();
+		if (null != fileList) {
 			for (File file : fileList) {
-				String fileName = file.getName().toUpperCase(); 			
-				if(fileName.endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING)){
+				String fileName = file.getName().toUpperCase();
+				if (fileName.endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING)) {
 					IFile targetTypeFile = getTargetTypeFile();
 					try {
 						ImportUtils.copyFile(file, targetTypeFile);
@@ -134,66 +133,60 @@ public class SaveAsSubappWizard extends Wizard {
 	}
 
 	private IFile getTargetTypeFile() {
-		return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(newFilePage.getContainerFullPath() + 
-				File.separator + newFilePage.getFileName() + TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT));
+		return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(newFilePage.getContainerFullPath()
+				+ File.separator + newFilePage.getFileName() + TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT));
 	}
-	
+
 	private PaletteEntry getPalletEntry() {
 		Palette palette = subApp.getSubAppNetwork().getAutomationSystem().getPalette();
 		IFile targetTypeFile = getTargetTypeFile();
 		PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, targetTypeFile);
-		
-		if(null == entry){
-			//refresh the palette and retry to fetch the entry
+
+		if (null == entry) {
+			// refresh the palette and retry to fetch the entry
 			TypeLibrary.refreshPalette(palette);
 			entry = TypeLibrary.getPaletteEntry(palette, targetTypeFile);
 		}
-		
+
 		return entry;
 	}
-	
-	private static void openTypeEditor(PaletteEntry entry) {		
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			
-		IEditorDescriptor desc = PlatformUI.getWorkbench().
-		        getEditorRegistry().getDefaultEditor(entry.getFile().getName());
-		try {
-			page.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
-		} catch (PartInitException e) {
-			ApplicationPlugin.getDefault().logError(e.getMessage(), e);
-		}				
+
+	private static void openTypeEditor(PaletteEntry entry) {
+		IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
+				.getDefaultEditor(entry.getFile().getName());
+		EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
 	}
-	
+
 	private void performTypeSetup(SubAppType type) {
 		performInterfaceSetup(type);
-		performSubappNetworkSetup(type);		
+		performSubappNetworkSetup(type);
 	}
 
 	private void performInterfaceSetup(SubAppType type) {
-		//replace interface list with newly generated
+		// replace interface list with newly generated
 		InterfaceList interfaceList = EcoreUtil.copy(subApp.getInterface());
-		type.setInterfaceList(interfaceList);		
+		type.setInterfaceList(interfaceList);
 	}
 
 	private void performSubappNetworkSetup(SubAppType type) {
 		FBNetwork dstNetwork = EcoreUtil.copy(subApp.getSubAppNetwork());
-		
+
 		dstNetwork.getEventConnections().clear();
 		for (Connection connection : subApp.getSubAppNetwork().getEventConnections()) {
-			dstNetwork.getEventConnections().add((EventConnection)createConnection(type, dstNetwork, connection));
+			dstNetwork.getEventConnections().add((EventConnection) createConnection(type, dstNetwork, connection));
 		}
-		
+
 		dstNetwork.getDataConnections().clear();
 		for (Connection connection : subApp.getSubAppNetwork().getDataConnections()) {
-			dstNetwork.getDataConnections().add((DataConnection)createConnection(type, dstNetwork, connection));
+			dstNetwork.getDataConnections().add((DataConnection) createConnection(type, dstNetwork, connection));
 		}
-		
+
 		dstNetwork.getAdapterConnections().clear();
 		for (Connection connection : subApp.getSubAppNetwork().getAdapterConnections()) {
-			dstNetwork.getAdapterConnections().add((AdapterConnection)createConnection(type, dstNetwork, connection));
+			dstNetwork.getAdapterConnections().add((AdapterConnection) createConnection(type, dstNetwork, connection));
 		}
-		
-		type.setFBNetwork(dstNetwork);		
+
+		type.setFBNetwork(dstNetwork);
 	}
 
 	private Connection createConnection(SubAppType type, FBNetwork dstNetwork, Connection connection) {
@@ -203,12 +196,13 @@ public class SaveAsSubappWizard extends Wizard {
 		return newConn;
 	}
 
-	private IInterfaceElement getInterfaceElement(IInterfaceElement ie, InterfaceList typeInterface, FBNetwork dstNetwork) {
-		if(subApp.equals(ie.getFBNetworkElement())) {
+	private IInterfaceElement getInterfaceElement(IInterfaceElement ie, InterfaceList typeInterface,
+			FBNetwork dstNetwork) {
+		if (subApp.equals(ie.getFBNetworkElement())) {
 			return typeInterface.getInterfaceElement(ie.getName());
-		}		
-		FBNetworkElement element = dstNetwork.getElementNamed(ie.getFBNetworkElement().getName());	
-		if(null == element) {
+		}
+		FBNetworkElement element = dstNetwork.getElementNamed(ie.getFBNetworkElement().getName());
+		if (null == element) {
 			return null;
 		}
 		return element.getInterfaceElement(ie.getName());

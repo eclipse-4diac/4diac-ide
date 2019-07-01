@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2017 Profactor GbmH, fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,51 +10,42 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - moved openEditor helper function to EditorUtils  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.util;
 
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.util.action.OpenListenerAction;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 
-/** Helperclass for reducing the effort to implement open listeners
+/**
+ * Helper class for reducing the effort to implement open listeners
  */
 public abstract class OpenListener implements IOpenListener {
 
 	private IEditorPart editor = null;
-	
+
 	@Override
-	public void setActivePart(final IAction action,
-			final IWorkbenchPart targetPart) {
+	public void setActivePart(final IAction action, final IWorkbenchPart targetPart) {
 		// nothing to do
-	}	
-	
+	}
+
 	@Override
 	public IEditorPart getOpenedEditor() {
 		return editor;
 	}
-	
+
 	@Override
 	public final Action getOpenListenerAction() {
 		return new OpenListenerAction(this);
 	}
-	
+
 	protected void openEditor(IEditorInput input, String editorId) {
-		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		try {
-			editor = activePage.openEditor(input, editorId);
-		} catch (PartInitException e) {
-			editor = null;
-			Activator.getDefault().logError(e.getMessage(), e);
-		}
+		editor = EditorUtils.openEditor(input, editorId);
 	}
 
-
-	
 }

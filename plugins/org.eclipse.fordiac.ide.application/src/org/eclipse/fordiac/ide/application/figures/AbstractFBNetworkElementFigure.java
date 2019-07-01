@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - moved openEditor helper function to EditorUtils  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
@@ -30,7 +32,6 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.gef.Activator;
@@ -45,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.preferences.PreferenceGetter;
@@ -55,8 +57,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -95,17 +95,11 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 	// TODO model refactoring - look for a better place for this function
 	public static void openTypeInEditor(FBNetworkElement element) {
 		// open the default editor for the adapter file
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-
 		PaletteEntry entry = element.getPaletteEntry();
 		if (null != entry) {
 			IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 					.getDefaultEditor(entry.getFile().getName());
-			try {
-				page.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
-			} catch (PartInitException e) {
-				ApplicationPlugin.getDefault().logError(e.getMessage(), e);
-			}
+			EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
 		}
 	}
 
@@ -278,7 +272,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		GridData bottomInputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		bottomInputsLayoutData.verticalAlignment = SWT.TOP;
-		
+
 		parent.add(bottomInputArea);
 		parent.setConstraint(bottomInputArea, bottomInputsLayoutData);
 

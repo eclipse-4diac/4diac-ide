@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2010 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +11,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch
  *     - initial API and implementation and/or initial documentation
  *   Jose Cabral - Add preferences 
+ *   Alois Zoitl - moved openEditor helper function to EditorUtils  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
@@ -27,6 +29,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
@@ -34,8 +37,6 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -116,17 +117,10 @@ public class NewFBTypeWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	
-
 	private static void openTypeEditor(PaletteEntry entry) {
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 				.getDefaultEditor(entry.getFile().getName());
-		try {
-			page.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
-		} catch (PartInitException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-		}
+		EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
 	}
 
 	public PaletteEntry getPaletteEntry() {

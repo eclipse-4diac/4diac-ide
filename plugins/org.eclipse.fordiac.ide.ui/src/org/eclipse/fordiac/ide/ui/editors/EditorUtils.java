@@ -1,5 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2016 fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,12 +9,18 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - moved getCurrentActiveEditor and openEditor helper functions 
+ *   			   to EditorUtils  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.editors;
 
+import org.eclipse.fordiac.ide.ui.UIPlugin;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 public final class EditorUtils {
@@ -30,6 +38,18 @@ public final class EditorUtils {
 			return window.getActivePage().getActiveEditor();
 		}
 		return null;
+	}
+
+	public static IEditorPart openEditor(IEditorInput input, String editorId) {
+		IEditorPart editor = null;
+		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		try {
+			editor = activePage.openEditor(input, editorId);
+		} catch (PartInitException e) {
+			editor = null;
+			UIPlugin.getDefault().logError(e.getMessage(), e);
+		}
+		return editor;
 	}
 
 	public static IEditorPart findEditor(final EditorFilter filter) {
