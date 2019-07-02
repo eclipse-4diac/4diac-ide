@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 - 2018 fortiss GmbH, Johannes Kepler University
+ * 				 2019		Jan Holzweber
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - reworked this class for the new device managment interaction 
  *                 interface  
+ *   Jan Holzweber - reworked deploying mechanism
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499;
 
@@ -93,15 +95,28 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	@Override
+	public void connect() throws DeploymentException {
+		super.connect();
+
+		// querying all FBTypes before trying to deploy any resources or FBs
+		queryFBTypes();
+
+	}
+
+	@Override
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws DeploymentException {
 		// check first if FBType exists
 		Map<String, AdapterType> adapters = getAdapterTypes(fbData.getFb().getType().getInterfaceList());
 		if (!adapters.isEmpty()) {
 			queryAdapterTypes(adapters, res);
-			createAdapterTypes(adapters, res);
+			createAdapterTypes(adapters);
 		}
-		queryFBTypes(fbData.getFb(), res);
+
+		// check if we have to create the FBType first
+		checkCreateFBType(fbData.getFb().getType());
+
 		super.createFBInstance(fbData, res);
+
 	}
 
 	private static Map<String, AdapterType> getAdapterTypes(InterfaceList interfaceList) {
@@ -111,15 +126,24 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		return list;
 	}
 
-	public void createFBType(final FBType fbType, final Resource res) throws DeploymentException {
-		if (null != getTypes()) {
-			setAttribute(res.getDevice(), "FBType", getTypes()); //$NON-NLS-1$
+	private void checkCreateFBType(FBType fbType) {
+		// if the FPType does not exist create it
+		if (!getTypes().contains(fbType.getName())) {
+			try {
+				createFBType(fbType);
+			} catch (DeploymentException ce) {
+				logger.error(MessageFormat.format(Messages.DTL_CreateTypeFailed, fbType.getName()));
+			}
 		}
-		if ((fbType instanceof BasicFBType || fbType instanceof CompositeFBType)
-				&& ((null != getTypes() && !getTypes().contains(fbType.getName()))
-						|| (null == getTypes() && !isAttribute(res.getDevice(), fbType.getName(), "FBType")))) { //$NON-NLS-1$
+
+	}
+
+	public void createFBType(final FBType fbType) throws DeploymentException {
+		setAttribute(getDevice(), "FBType", getTypes()); //$NON-NLS-1$
+
+		if (fbType instanceof BasicFBType || fbType instanceof CompositeFBType) {
 			if (fbType instanceof CompositeFBType) {
-				createFBTypesOfCFB(fbType, res);
+				createFBTypesOfCFB(fbType);
 			}
 			String request = createLuaRequestMessage(fbType);
 			sendCreateFBTypeREQ(fbType, request);
@@ -139,14 +163,14 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private void createFBTypesOfCFB(final FBType fbType, final Resource res) throws DeploymentException {
+	private void createFBTypesOfCFB(final FBType fbType) throws DeploymentException {
 		for (FBNetworkElement netelem : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
 			if (!getTypes().contains(netelem.getTypeName())) {
 				Map<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());
 				if (!adapters.isEmpty()) {
-					createAdapterTypes(adapters, res);
+					createAdapterTypes(adapters);
 				}
-				createFBType((FBType) netelem.getType(), res);
+				createFBType((FBType) netelem.getType());
 			}
 		}
 	}
@@ -174,13 +198,13 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		);
 	}
 
-	public void createAdapterType(final String adapterKey, Map<String, AdapterType> adapters, final Resource res)
+	public void createAdapterType(final String adapterKey, Map<String, AdapterType> adapters)
 			throws DeploymentException {
 		if (null != getAdapterTypes()) {
-			setAttribute(res.getDevice(), "AdapterType", getAdapterTypes()); //$NON-NLS-1$
+			setAttribute(getDevice(), "AdapterType", getAdapterTypes()); //$NON-NLS-1$
 		}
 		if ((null != getAdapterTypes()) && (!getAdapterTypes().contains(adapterKey)
-				|| !isAttribute(res.getDevice(), adapterKey, "AdapterType"))) { //$NON-NLS-1$
+				|| !isAttribute(getDevice(), adapterKey, "AdapterType"))) { //$NON-NLS-1$
 			ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 			String luaSkript = luaFilter.createLUA(adapters.get(adapterKey));
 			String request = MessageFormat.format(CREATE_ADAPTER_TYPE, getNextId(), adapterKey, luaSkript);
@@ -381,22 +405,15 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		return null;
 	}
 
-	private void queryFBTypes(FB fb, Resource res) {
-		if (null == getTypes()) {
-			String request = MessageFormat.format(QUERY_FB_TYPES, getNextId());
-			try {
-				QueryResponseHandler queryResp = sendQUERY(res.getName(), request);
-				setTypes(queryResp.getQueryResult());
-			} catch (Exception e) {
-				logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "FB Types")); //$NON-NLS-1$
-			}
-		}
-		FBType fbType = fb.getType();
+	private void queryFBTypes() {
+		String request = MessageFormat.format(QUERY_FB_TYPES, getNextId());
 		try {
-			createFBType(fbType, res);
-		} catch (DeploymentException ce) {
-			logger.error(MessageFormat.format(Messages.DTL_CreateTypeFailed, fbType.getName()));
+			QueryResponseHandler queryResp = sendQUERY("", request);
+			setTypes(queryResp.getQueryResult());
+		} catch (Exception e) {
+			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "FB Types")); //$NON-NLS-1$
 		}
+
 	}
 
 	private void queryAdapterTypes(Map<String, AdapterType> adapters, Resource res) {
@@ -411,10 +428,10 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private void createAdapterTypes(Map<String, AdapterType> adapters, Resource res) {
+	private void createAdapterTypes(Map<String, AdapterType> adapters) {
 		adapters.keySet().forEach(e -> {
 			try {
-				createAdapterType(e, adapters, res);
+				createAdapterType(e, adapters);
 			} catch (DeploymentException ce) {
 				logger.error(MessageFormat.format(Messages.DTL_CreateTypeFailed, e));
 			}
