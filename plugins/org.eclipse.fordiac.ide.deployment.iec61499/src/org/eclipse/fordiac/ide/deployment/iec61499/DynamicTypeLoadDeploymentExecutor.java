@@ -98,17 +98,18 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	public void connect() throws DeploymentException {
 		super.connect();
 
-		// querying all FBTypes before trying to deploy any resources or FBs
+		// querying all FBTypes and AdapterTypes before trying to deploy any resources
+		// or FBs
 		queryFBTypes();
+		queryAdapterTypes();
 
 	}
 
 	@Override
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws DeploymentException {
-		// check first if FBType exists
+		// check for the adapters of the FB first
 		Map<String, AdapterType> adapters = getAdapterTypes(fbData.getFb().getType().getInterfaceList());
 		if (!adapters.isEmpty()) {
-			queryAdapterTypes(adapters, res);
 			createAdapterTypes(adapters);
 		}
 
@@ -200,11 +201,10 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	public void createAdapterType(final String adapterKey, Map<String, AdapterType> adapters)
 			throws DeploymentException {
-		if (null != getAdapterTypes()) {
-			setAttribute(getDevice(), "AdapterType", getAdapterTypes()); //$NON-NLS-1$
-		}
-		if ((null != getAdapterTypes()) && (!getAdapterTypes().contains(adapterKey)
-				|| !isAttribute(getDevice(), adapterKey, "AdapterType"))) { //$NON-NLS-1$
+
+		setAttribute(getDevice(), "AdapterType", getAdapterTypes()); //$NON-NLS-1$
+
+		if (!getAdapterTypes().contains(adapterKey) || !isAttribute(getDevice(), adapterKey, "AdapterType")) { //$NON-NLS-1$
 			ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 			String luaSkript = luaFilter.createLUA(adapters.get(adapterKey));
 			String request = MessageFormat.format(CREATE_ADAPTER_TYPE, getNextId(), adapterKey, luaSkript);
@@ -338,7 +338,6 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			if (object instanceof Response) {
 				int i = 0;
 				if (getAdapterTypes().isEmpty()) {
-					queryAdapterTypes(null, res);
 					createNotExistingAdapterTypes(res);
 				}
 				for (org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : ((Response) object).getFblist()
@@ -416,16 +415,15 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	}
 
-	private void queryAdapterTypes(Map<String, AdapterType> adapters, Resource res) {
-		if (null == getAdapterTypes()) {
-			String request = MessageFormat.format(QUERY_ADAPTER_TYPES, getNextId());
-			try {
-				QueryResponseHandler queryResp = sendQUERY(res.getName(), request);
-				setAdapterTypes(queryResp.getQueryResult());
-			} catch (Exception e1) {
-				logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Adapter Types")); //$NON-NLS-1$
-			}
+	private void queryAdapterTypes() {
+		String request = MessageFormat.format(QUERY_ADAPTER_TYPES, getNextId());
+		try {
+			QueryResponseHandler queryResp = sendQUERY("", request);
+			setAdapterTypes(queryResp.getQueryResult());
+		} catch (Exception e1) {
+			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Adapter Types")); //$NON-NLS-1$
 		}
+
 	}
 
 	private void createAdapterTypes(Map<String, AdapterType> adapters) {
