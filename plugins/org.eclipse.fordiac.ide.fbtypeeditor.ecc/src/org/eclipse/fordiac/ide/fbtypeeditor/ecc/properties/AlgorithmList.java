@@ -10,6 +10,9 @@
  *   Monika Wenger, Alois Zoitl 
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - allowed multiline selection in algorithm list
+ *   Bianca Wiesmayr, Virendra Ashiwal - 
+ *   	- Created tableViewer as new WidgetFactory
+ *   	- Shifted Grid heightHint and Width Hint to WidgetFactory.java
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -24,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
+import org.eclipse.fordiac.ide.ui.widget.WidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -142,30 +146,28 @@ public class AlgorithmList implements CommandExecutor  {
 	}
 	
 	private void createAlgorithmViewer(Composite parent) {
-		algorithmViewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
-		GridData gridDataVersionViewer = new GridData(GridData.FILL, GridData.FILL, true, true);
-		gridDataVersionViewer.heightHint = 150;
-		gridDataVersionViewer.widthHint = 80;
-		algorithmViewer.getControl().setLayoutData(gridDataVersionViewer);
-		final Table table = algorithmViewer.getTable();		
-		table.setLinesVisible(true);		
-		table.setHeaderVisible(true);
-		TableColumn column1 = new TableColumn(algorithmViewer.getTable(), SWT.LEFT);
+		algorithmViewer = WidgetFactory.createTableViewer(parent);
+		configureTableLayout(algorithmViewer);
+		algorithmViewer.setCellEditors(createAlgorithmCellEditors(algorithmViewer.getTable()));
+		algorithmViewer.setColumnProperties(new String[] { A_NAME, A_LANGUAGE, A_COMMENT});
+		algorithmViewer.setContentProvider(new ArrayContentProvider());		
+		algorithmViewer.setLabelProvider(new AlgorithmsLabelProvider());
+		algorithmViewer.setCellModifier(new AlgorithmViewerCellModifier());
+	}
+
+	private static void configureTableLayout(TableViewer tableViewer) {
+		Table table = tableViewer.getTable();
+		TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText("Name");
-		TableColumn column2 = new TableColumn(algorithmViewer.getTable(), SWT.CENTER);
+		TableColumn column2 = new TableColumn(table, SWT.CENTER);
 		column2.setText("Language"); 
-		TableColumn column3 = new TableColumn(algorithmViewer.getTable(), SWT.LEFT);
+		TableColumn column3 = new TableColumn(table, SWT.LEFT);
 		column3.setText("Comment");
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(2, 50));
 		layout.addColumnData(new ColumnWeightData(1, 20));
 		layout.addColumnData(new ColumnWeightData(3, 50));
 		table.setLayout(layout);
-		algorithmViewer.setCellEditors(createAlgorithmCellEditors(table));
-		algorithmViewer.setColumnProperties(new String[] { A_NAME, A_LANGUAGE, A_COMMENT});
-		algorithmViewer.setContentProvider(new ArrayContentProvider());		
-		algorithmViewer.setLabelProvider(new AlgorithmsLabelProvider());
-		algorithmViewer.setCellModifier(new AlgorithmViewerCellModifier());
 	}
 	
 	@Override
