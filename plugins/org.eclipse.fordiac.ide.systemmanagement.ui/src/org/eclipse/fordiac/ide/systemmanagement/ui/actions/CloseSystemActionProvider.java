@@ -76,6 +76,8 @@ public class CloseSystemActionProvider extends CommonActionProvider {
 		for (Object element : selection.toList()) {
 			if (element instanceof AutomationSystem) {
 				projectSelection.add(((AutomationSystem) element).getProject());
+			} else if (element instanceof IProject) {
+				projectSelection.add((IProject) element);
 			}
 		}
 
