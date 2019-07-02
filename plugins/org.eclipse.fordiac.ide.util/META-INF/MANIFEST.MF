@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui.controls
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.10.2.qualifier
+Bundle-Version: 1.10.3.qualifier
 Bundle-Name: Utils (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.util.Activator
 Bundle-ManifestVersion: 2
