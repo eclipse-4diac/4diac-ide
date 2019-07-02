@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 fortiss GmbH
+ *               2019 Johannes Kepler University Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,8 +10,13 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl, Bianca Wiesmayr, Virendra Ashiwal
+ *     - close multiple systems at once fix
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.actions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -27,13 +33,13 @@ import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 
 public class CloseSystemActionProvider extends CommonActionProvider {
-	
+
 	private CloseResourceAction closeProjectAction;
-	
+
 	@Override
 	public void init(ICommonActionExtensionSite aSite) {
 		super.init(aSite);
-		
+
 		IShellProvider sp = new IShellProvider() {
 			@Override
 			public Shell getShell() {
@@ -42,36 +48,37 @@ public class CloseSystemActionProvider extends CommonActionProvider {
 		};
 		closeProjectAction = new CloseResourceAction(sp);
 	}
-	
+
 	@Override
 	public void fillActionBars(IActionBars actionBars) {
 		actionBars.setGlobalActionHandler(IDEActionFactory.CLOSE_PROJECT.getId(), closeProjectAction);
 		updateActionBars();
 	}
-	
+
 	@Override
 	public void fillContextMenu(IMenuManager menu) {
-		IProject project = getSelectedProject();
-		if(null != project){
-			closeProjectAction.selectionChanged(new StructuredSelection(project));
+		IStructuredSelection selection = getSelectedProjects();
+		if (!selection.isEmpty()) {
+			closeProjectAction.selectionChanged(selection);
 			menu.appendToGroup(ICommonMenuConstants.GROUP_BUILD, closeProjectAction);
 		}
 	}
-	
+
 	@Override
 	public void updateActionBars() {
-		IProject project = getSelectedProject();
-		if(null != project){		
-			closeProjectAction.selectionChanged(new StructuredSelection(project));
-		}
+		closeProjectAction.selectionChanged(getSelectedProjects());
 	}
-	
-	private IProject getSelectedProject(){
-		IProject project = null;
+
+	private IStructuredSelection getSelectedProjects() {
 		IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
-		if(selection.getFirstElement() instanceof AutomationSystem){
-			project = ((AutomationSystem)selection.getFirstElement()).getProject();
+		List<IProject> projectSelection = new ArrayList<>();
+
+		for (Object element : selection.toList()) {
+			if (element instanceof AutomationSystem) {
+				projectSelection.add(((AutomationSystem) element).getProject());
+			}
 		}
-		return project;
+
+		return new StructuredSelection(projectSelection);
 	}
 }
