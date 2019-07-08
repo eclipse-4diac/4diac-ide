@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Convert TIME to LINT in seconds" Name="F_TIME_IN_S_TO_LINT">
+  <Identification Description="Copyright (c) 2019 TU Wien/ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1"/>
+  <VersionInfo Author="Martin Melik Merkumians" Date="2019-07-08" Organization="TU Wien/ACIN" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="IN"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="" Name="IN" Type="TIME"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="" Name="OUT" Type="LINT"/>
+    </OutputVars>
+  </InterfaceList>
+  <SimpleFB>
+    <Algorithm Comment="" Name="REQ">
+      <ST Text="OUT := TIME_IN_S_TO_LINT(IN);"/>
+    </Algorithm>
+  </SimpleFB>
+</FBType>
