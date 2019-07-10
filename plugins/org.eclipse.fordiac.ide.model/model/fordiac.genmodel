@@ -179,6 +179,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECState/outTransitions"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECState/inTransitions"/>
       <genOperations ecoreOperation="lib.ecore#//ECState/isStartState" body="return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//ECState/getECC" body="return org.eclipse.fordiac.ide.model.Annotations.getECC(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ECTransition">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ECTransition/comment"/>

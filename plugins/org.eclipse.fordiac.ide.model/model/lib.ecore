@@ -274,6 +274,11 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getECC" lowerBound="1" eType="#//ECC">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getECC(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCAction" upperBound="-1"
         eType="#//ECAction" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">

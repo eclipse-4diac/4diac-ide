@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -317,6 +318,16 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	@Override
 	public boolean isStartState() {
 		return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ECC getECC() {
+		return org.eclipse.fordiac.ide.model.Annotations.getECC(this);
 	}
 
 	/**
