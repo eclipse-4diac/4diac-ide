@@ -35,17 +35,6 @@ public class DeleteApplicationCommand extends Command {
 	//compound command to store all unmapp commands for FBNetwork elements to be unmapped
 	private CompoundCommand unmappApplicationElements = new CompoundCommand();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#canUndo()
-	 */
-	@Override
-	public boolean canUndo() {
-		return true;
-
-	}
-
 	public DeleteApplicationCommand(Application application) {
 		super("Delete Application");
 		this.application = application;
@@ -93,10 +82,7 @@ public class DeleteApplicationCommand extends Command {
 	}
 	
 	private void closeApplicationEditor() {
-		EditorUtils.closeEditorsFiltered((IEditorPart editor) -> {
-			return ((editor instanceof FBNetworkEditor) && 
-					(application.getFBNetwork().equals(((FBNetworkEditor)editor).getModel())) );
-		});
+		EditorUtils.closeEditorsFiltered( editor -> ((editor instanceof FBNetworkEditor)
+				&& (application.getFBNetwork().equals(((FBNetworkEditor) editor).getModel()))));
 	}
-	
 }

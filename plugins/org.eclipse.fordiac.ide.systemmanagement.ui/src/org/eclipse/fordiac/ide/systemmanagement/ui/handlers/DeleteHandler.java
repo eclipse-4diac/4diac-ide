@@ -1,0 +1,93 @@
+/*******************************************************************************
+ * Copyright (c) 2008 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *   Gerhard Ebenhofer, Alois Zoitl
+ *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr, Muddasir Shakil, Virendra Ashiwal, Alois Zoitl -
+ *   	 migrated this code to handle the deletion of Applications, Resources 
+ *       and Devices	   
+ *******************************************************************************/
+package org.eclipse.fordiac.ide.systemmanagement.ui.handlers;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.systemconfiguration.commands.DeviceDeleteCommand;
+import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceDeleteCommand;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.ui.commands.DeleteApplicationCommand;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.handlers.HandlerUtil;
+
+public class DeleteHandler extends AbstractHandler {
+	private Map<AutomationSystem, CompoundCommand> commandMap = new HashMap<>();
+
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		ISelection selection = HandlerUtil.getCurrentSelection(event);
+		if (selection instanceof StructuredSelection) {
+			for (Object element : ((StructuredSelection) selection).toList()) {
+				createDeleteCommand(element);
+			}
+			executeDeleteCommands();
+		}
+		return null;
+	}
+
+	// for each Automation System in the Map, we get the CompoundCommand of items to
+	// delete and the CommandStack of the Automation System, and ask the
+	// CommandStack to execute the command
+	private void executeDeleteCommands() {
+		commandMap.entrySet()
+				.forEach(entry -> SystemManager.INSTANCE.getCommandStack(entry.getKey()).execute(entry.getValue()));
+		
+		//we have executed all commands, clear the map
+		commandMap.clear();
+	}
+
+	// check if the selected object is an Application, Resource or Device
+	// and create a corresponding DeleteCommand for it, which is added to the Map
+	private void createDeleteCommand(Object element) {
+		if (element instanceof Application) {
+			enlistCommand(((Application) element).getAutomationSystem(),
+					new DeleteApplicationCommand((Application) element));
+		} else if (element instanceof Device) {
+			enlistCommand(((Device) element).getAutomationSystem(), new DeviceDeleteCommand((Device) element));
+		} else if (element instanceof Resource) {
+			enlistCommand(((Resource) element).getAutomationSystem(), new ResourceDeleteCommand((Resource) element));
+		}
+	}
+
+	private void enlistCommand(AutomationSystem automationSystem, Command cmd) {
+		if (cmd.canExecute()) {
+			getCommandList(automationSystem).add(cmd);
+		}
+	}
+
+	private CompoundCommand getCommandList(AutomationSystem automationSystem) {
+		CompoundCommand commandList = commandMap.get(automationSystem);
+		if (null == commandList) {
+			commandList = new CompoundCommand();
+			commandMap.put(automationSystem, commandList);
+		}
+		return commandList;
+	}
+
+}

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Communication Generation (Incubation)
 Bundle-SymbolicName: org.eclipse.fordiac.ide.comgeneration;singleton:=true
-Bundle-Version: 1.10.2.qualifier
+Bundle-Version: 1.10.3.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.comgeneration.plugin.Activator
 Bundle-Vendor: Eclipse 4diac
 Require-Bundle: org.eclipse.ui,
