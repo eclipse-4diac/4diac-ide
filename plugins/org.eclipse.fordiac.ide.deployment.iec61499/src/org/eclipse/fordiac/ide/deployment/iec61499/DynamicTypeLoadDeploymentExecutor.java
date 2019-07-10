@@ -146,7 +146,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			if (fbType instanceof CompositeFBType) {
 				createFBTypesOfCFB(fbType);
 			}
-			String request = createLuaRequestMessage(fbType);
+			String request = createLuaXmlRequestMessage(fbType);
 			sendCreateFBTypeREQ(fbType, request);
 		}
 	}
@@ -176,10 +176,20 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private String createLuaRequestMessage(final FBType fbType) {
-		ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
-		String luaSkript = luaFilter.createLUA(fbType);
-		return MessageFormat.format(CREATE_FB_TYPE, getNextId(), fbType.getName(), luaSkript);
+	private String createLuaXmlRequestMessage(final FBType fbType) {
+		ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();		
+
+		String escapedLuaScript = escapeXmlCharacters(luaFilter.createLUA(fbType));
+		
+		return MessageFormat.format(CREATE_FB_TYPE, getNextId(), fbType.getName(), escapedLuaScript);
+	}
+
+	private String escapeXmlCharacters(String luaScript) {
+		luaScript = luaScript.replace("&", "&amp;");
+		luaScript = luaScript.replace("<", "&lt;");
+		luaScript = luaScript.replace(">", "&gt;");
+		luaScript = luaScript.replace("\"", "&quot;");
+		return luaScript.replace("\'", "&apos;");
 	}
 
 	private static boolean isAttribute(Device device, String fbTypeName, String attributeType) {
