@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- * 							 Johannes Kepler University
+ * 				 2018 - 2019 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch, Filip Andren,
  *   Monika Wenger 
  *   - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - fixed copy/paste handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
@@ -60,6 +61,8 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionFactory;
 
@@ -175,6 +178,9 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 				.getAction(ActionFactory.COPY.getId());
 
 		getGraphicalViewer().addSelectionChangedListener(copy);
+
+		getGraphicalControl().addListener(SWT.Activate, this::handleActivationChanged);
+		getGraphicalControl().addListener(SWT.Deactivate, this::handleActivationChanged);
 	}
 
 	@Override
@@ -210,12 +216,10 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 		action = new CopyEditPartsAction(this);
 		registry.registerAction(action);
-		getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), action);
 
 		action = new PasteEditPartsAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-		getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.PASTE.getId(), action);
 
 		action = new UpdateFBTypeAction(this);
 		registry.registerAction(action);
@@ -290,6 +294,22 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	@Override
 	public void doSaveAs() {
 		// empty
+	}
+
+	private void handleActivationChanged(Event event) {
+		IAction copy = null;
+		IAction paste = null;
+		if (event.type == SWT.Activate) {
+			copy = getActionRegistry().getAction(ActionFactory.COPY.getId());
+			paste = getActionRegistry().getAction(ActionFactory.PASTE.getId());
+		}
+		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.COPY.getId()) != copy) {
+			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copy);
+		}
+		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.PASTE.getId()) != paste) {
+			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.PASTE.getId(), paste);
+		}
+		getEditorSite().getActionBars().updateActionBars();
 	}
 
 }

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * 				 2018 - 2019 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - fixed copy/paste handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
@@ -57,6 +59,7 @@ import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -230,6 +233,15 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		if (input.getName() != null) {
 			setPartName(input.getName());
 		}
+		ActionRegistry registry = getActionRegistry();
+		IActionBars bars = site.getActionBars();
+		String id = ActionFactory.UNDO.getId();
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+		id = ActionFactory.REDO.getId();
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+		id = ActionFactory.DELETE.getId();
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+		bars.updateActionBars();
 	}
 
 	protected void updateEditorTitle(String newTitel) {
@@ -377,10 +389,6 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.MIDDLE);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-
-		action = new PrintPreviewAction(getGraphicalViewer());
-		registry.registerAction(action);
-		getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.PRINT.getId(), action);
 
 		super.createActions();
 
