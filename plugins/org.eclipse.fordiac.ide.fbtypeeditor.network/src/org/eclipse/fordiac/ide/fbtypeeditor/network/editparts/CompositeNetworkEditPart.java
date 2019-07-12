@@ -41,7 +41,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	/** The adapter. */
 	protected EContentAdapter adapter;
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -96,7 +96,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 						refreshChildren();
 						break;
 					case Notification.SET:
-						//refreshVisuals();
+						// refreshVisuals();
 						break;
 					}
 				}
@@ -112,12 +112,10 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	 */
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE,
-				new RootComponentEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		// // handles constraint changes of model elements and creation of new
 		// // model elements
-		installEditPolicy(EditPolicy.LAYOUT_ROLE,
-				new CompositeFBNetworkLayoutEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new CompositeFBNetworkLayoutEditPolicy());
 
 	}
 
@@ -136,74 +134,41 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 			children.addAll(fbType.getInterfaceList().getEventOutputs());
 			children.addAll(fbType.getInterfaceList().getInputVars());
 			children.addAll(fbType.getInterfaceList().getOutputVars());
-			if(fbType instanceof SubAppType){
+			if (fbType instanceof SubAppType) {
 				children.addAll(fbType.getInterfaceList().getPlugs());
 				children.addAll(fbType.getInterfaceList().getSockets());
 			}
 			children.addAll(super.getModelChildren());
-		} 
-		 return children;
+		}
+		return children;
 	}
 
 	/**
 	 * Adds the childEditParts figure to the corresponding container.
 	 * 
-	 * @param childEditPart
-	 *            the child edit part
-	 * @param index
-	 *            the index
+	 * @param childEditPart the child edit part
+	 * @param index         the index
 	 */
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		boolean visible = true;
-		if (childEditPart instanceof InterfaceEditPart) {
-			IInterfaceElement iElement = ((InterfaceEditPart) childEditPart).getModel();
-			if (iElement instanceof AdapterDeclaration){
-					//if we are in a subapptype we want to show the adapter as type interface element
-					visible = iElement.eContainer().eContainer() instanceof SubAppType;
-			}
-		}
-		
 		EditPart refEditPart = null;
-		if(index < getChildren().size()){
-			refEditPart = (EditPart)getChildren().get(index);
+		if (index < getChildren().size()) {
+			refEditPart = (EditPart) getChildren().get(index);
 		}
-		
 		if (childEditPart instanceof InterfaceEditPart) {
 			IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-			if (((InterfaceEditPart) childEditPart).getModel().isIsInput()) {			
-				if (((InterfaceEditPart) childEditPart).isEvent()) {
-					insertChild(getLeftEventInterfaceContainer(), refEditPart, child);
-				} else {
-					if (visible) { // add adapter interface elemetns directly to the container and set them to visible = false
-						insertChild(getLeftVarInterfaceContainer(), refEditPart, child);
-					} else {
-						insertChild(getLeftInterfaceContainer(), refEditPart, child);
-					}
-				}
-			} else {
-				if (((InterfaceEditPart) childEditPart).isEvent()) {
-					insertChild(getRightEventInterfaceContainer(), refEditPart, child);
-				} else {
-					if (visible) { // add adapter interface elemetns directly to the container and set them to visible = false
-						insertChild(getRightVarInterfaceContainer(), refEditPart, child);
-					} else {
-						insertChild(getRightInterfaceContainer(), refEditPart, child);
-					}
-				}
-			}
-			child.setVisible(visible);
+			insertChild(getChildVisualContainer(childEditPart), refEditPart, child);
+			child.setVisible(isVarVisible(childEditPart));
 		} else {
 			super.addChildVisual(childEditPart, -1);
 		}
 	}
 
-	private static void insertChild(Figure container,
-			EditPart refEditPart, IFigure child) {
-		if(null != refEditPart){
+	private static void insertChild(Figure container, EditPart refEditPart, IFigure child) {
+		if (null != refEditPart) {
 			int index = container.getChildren().indexOf(((GraphicalEditPart) refEditPart).getFigure());
 			container.add(child, index);
-		}else{
+		} else {
 			container.add(child);
 		}
 	}
@@ -211,46 +176,41 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	/**
 	 * Removes the childEditParts figures from the correct container.
 	 * 
-	 * @param childEditPart
-	 *            the child edit part
+	 * @param childEditPart the child edit part
 	 */
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		boolean visible = true;
-		if (childEditPart.getModel() instanceof AdapterDeclaration) {
-			visible = false;
-		}
-
-		if (childEditPart instanceof InterfaceEditPart){
-			if (((InterfaceEditPart) childEditPart).getModel().isIsInput()) {
-				IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-				if (((InterfaceEditPart) childEditPart).isEvent()) {
-					getLeftEventInterfaceContainer().remove(child);
-				} else {
-					if (visible) {
-						getLeftVarInterfaceContainer().remove(child);
-					} else{
-						getLeftInterfaceContainer().remove(child);
-					}
-				}
-			} else {
-				IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-				if (((InterfaceEditPart) childEditPart).isEvent()) {
-					getRightEventInterfaceContainer().remove(child);
-				} else {
-					if (visible) {
-						getRightVarInterfaceContainer().remove(child);
-					} else {
-						getRightInterfaceContainer().remove(child);
-					}
-				}
-			}
+		if (childEditPart instanceof InterfaceEditPart) {
+			IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+			getChildVisualContainer(childEditPart).remove(child);
 		} else {
 			super.removeChildVisual(childEditPart);
 		}
 	}
-	
-	
+
+	private Figure getChildVisualContainer(final EditPart childEditPart) {
+		if (((InterfaceEditPart) childEditPart).getModel().isIsInput()) {
+			if (((InterfaceEditPart) childEditPart).isEvent()) {
+				return getLeftEventInterfaceContainer();
+			} else {
+				if (isVarVisible(childEditPart)) {
+					return getLeftVarInterfaceContainer();
+				} else {
+					return getLeftInterfaceContainer();
+				}
+			}
+		} else {
+			if (((InterfaceEditPart) childEditPart).isEvent()) {
+				return getRightEventInterfaceContainer();
+			} else {
+				if (isVarVisible(childEditPart)) {
+					return getRightVarInterfaceContainer();
+				} else {
+					return getRightInterfaceContainer();
+				}
+			}
+		}
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -263,17 +223,18 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 		if (layout != null) {
 			constraint = layout.getConstraint(childFigure);
 		}
-		
+
 		removeChildVisual(editpart);
-		//addChildvisual needs to be done before the children list is updated in order to allow add child visual to determine the place to put the part
-		addChildVisual(editpart, index);  
+		// addChildvisual needs to be done before the children list is updated in order
+		// to allow add child visual to determine the place to put the part
+		addChildVisual(editpart, index);
 		List children = getChildren();
 		children.remove(editpart);
 		children.add(index, editpart);
-		
+
 		setLayoutConstraint(editpart, childFigure, constraint);
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected void addChild(EditPart child, int index) {
@@ -285,7 +246,8 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 			children = new ArrayList(2);
 		}
 
-		//addChildvisual needs to be done before the children list is updated in order to allow add child visual to determine the place to put the part
+		// addChildvisual needs to be done before the children list is updated in order
+		// to allow add child visual to determine the place to put the part
 		addChildVisual(child, index);
 		children.add(index, child);
 		child.setParent(this);
@@ -297,8 +259,11 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 		fireChildAdded(child, index);
 	}
 
-	
 	private CompositeFBType getFbType() {
-		return (CompositeFBType)getModel().eContainer();
+		return (CompositeFBType) getModel().eContainer();
+	}
+
+	protected Boolean isVarVisible(final EditPart childEditPart) {
+		return childEditPart.getModel() instanceof AdapterDeclaration ? false : true;
 	}
 }

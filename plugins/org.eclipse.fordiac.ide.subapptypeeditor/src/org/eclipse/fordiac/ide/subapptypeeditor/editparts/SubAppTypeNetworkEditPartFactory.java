@@ -24,39 +24,23 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
-public class SubAppTypeNetworkEditPartFactory extends
-		CompositeNetworkEditPartFactory {
+public class SubAppTypeNetworkEditPartFactory extends CompositeNetworkEditPartFactory {
 
 	public SubAppTypeNetworkEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {
 		super(editor, zoomManager);
 	}
-	
-	@Override
-	protected EditPart getPartForElement(EditPart context,
-			Object modelElement) {
-		if (modelElement instanceof FBNetwork) {
-			CompositeNetworkEditPart compositeNetEP = new CompositeNetworkEditPart(){
 
-				@Override
-				protected void createEditPolicies() {
-					installEditPolicy(EditPolicy.COMPONENT_ROLE,
-							new RootComponentEditPolicy());
-					// handles constraint changes of model elements and creation of new
-					// model elements
-					installEditPolicy(EditPolicy.LAYOUT_ROLE,
-							new SubAppTypeFBNetworkLayoutEditPolicy());
-				}
-				
-			};
+	@Override
+	protected EditPart getPartForElement(EditPart context, Object modelElement) {
+		if (modelElement instanceof FBNetwork) {
+			TypedSubAppNetworkEditPart compositeNetEP = new TypedSubAppNetworkEditPart();
 			return compositeNetEP;
 		}
-		
+
 		if (modelElement instanceof SubApp) {
 			return new SubAppForFBNetworkEditPart(zoomManager);
-		}		
+		}
 		return super.getPartForElement(context, modelElement);
 	}
-	
-	
 
 }
