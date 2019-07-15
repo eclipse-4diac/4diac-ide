@@ -22,27 +22,29 @@ public class SubApplicationEditorInput extends PersistableUntypedEditorInput {
 	public SubApplicationEditorInput(SubApp subApp) {
 		super(subApp, subApp.getName());
 	}
-	
+
 	@Override
 	public void saveState(IMemento memento) {
 		SubApplicationEditorInputFactory.saveState(memento, this);
-		
+
 	}
 
 	@Override
 	public String getFactoryId() {
 		return SubApplicationEditorInputFactory.getFactoryId();
 	}
-	
-	public SubApp getSubApp(){
-		return (SubApp)getContent();
+
+	public SubApp getSubApp() {
+		return (SubApp) getContent();
 	}
-	
+
 	/*
 	 * return the root application the sub app is contained in
 	 */
-	public Application getApplication(){		
-		return getSubApp().getFbNetwork().getApplication();  //check with the FBNetwork we are contained in for the applicaiton
+	public Application getApplication() {
+		// check with the FBNetwork we are contained in for the application
+		return (null != getSubApp() && null != getSubApp().getFbNetwork()) ? getSubApp().getFbNetwork().getApplication()
+				: null;
 	}
 
 }
