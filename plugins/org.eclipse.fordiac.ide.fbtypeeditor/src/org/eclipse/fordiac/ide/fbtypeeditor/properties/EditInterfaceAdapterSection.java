@@ -29,7 +29,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
-	
+
 	@Override
 	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
 		AdapterType type = getPalette().getAdapterTypes().get(0).getType();
@@ -42,7 +42,7 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 			return ((FBTypeEditPart) input).getModel();
 		}
 		if (input instanceof FBTypeRootEditPart) {
-			return ((FBTypeRootEditPart) input).getCastedFBTypeModel();
+			return ((FBTypeRootEditPart) input).getModel();
 		}
 		return null;
 	}

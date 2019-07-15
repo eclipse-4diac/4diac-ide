@@ -27,24 +27,24 @@ public class FBTypeInfoSection extends CompilableTypeInfoSection {
 
 	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if(part instanceof FBTypeEditor){
-			return ((FBTypeEditor)part).getCommandStack();
+		if (part instanceof FBTypeEditor) {
+			return ((FBTypeEditor) part).getCommandStack();
 		}
-		if(part instanceof ContentOutline){
-			return ((FBTypeContentOutline) ((ContentOutline)part).getCurrentPage()).getCommandStack();
+		if (part instanceof ContentOutline) {
+			return ((FBTypeContentOutline) ((ContentOutline) part).getCurrentPage()).getCommandStack();
 		}
 		return null;
 	}
 
 	@Override
 	protected LibraryElement getInputType(Object input) {
-		if(input instanceof FBTypeEditPart){
-			return ((FBTypeEditPart) input).getModel();	
+		if (input instanceof FBTypeEditPart) {
+			return ((FBTypeEditPart) input).getModel();
 		}
-		if(input instanceof FBTypeRootEditPart){
-				return ((FBTypeRootEditPart) input).getCastedFBTypeModel();
+		if (input instanceof FBTypeRootEditPart) {
+			return ((FBTypeRootEditPart) input).getModel();
 		}
-		if(input instanceof PropertiesItemProvider){
+		if (input instanceof PropertiesItemProvider) {
 			return (LibraryElement) ((PropertiesItemProvider) input).getTarget();
 		}
 		return null;
