@@ -13,47 +13,29 @@
 package org.eclipse.fordiac.ide.subapptypeeditor.editparts;
 
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.subapptypeeditor.policies.SubAppTypeFBNetworkLayoutEditPolicy;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
-public class SubAppTypeNetworkEditPartFactory extends
-		CompositeNetworkEditPartFactory {
+public class SubAppTypeNetworkEditPartFactory extends CompositeNetworkEditPartFactory {
 
 	public SubAppTypeNetworkEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {
 		super(editor, zoomManager);
 	}
-	
-	@Override
-	protected EditPart getPartForElement(EditPart context,
-			Object modelElement) {
-		if (modelElement instanceof FBNetwork) {
-			return new CompositeNetworkEditPart(){
 
-				@Override
-				protected void createEditPolicies() {
-					installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
-					// handles constraint changes of model elements and creation of new
-					// model elements
-					installEditPolicy(EditPolicy.LAYOUT_ROLE, new SubAppTypeFBNetworkLayoutEditPolicy());
-				}
-				
-			};
+	@Override
+	protected EditPart getPartForElement(EditPart context, Object modelElement) {
+		if (modelElement instanceof FBNetwork) {
+			return new TypedSubAppNetworkEditPart();
 		}
-		
+
 		if (modelElement instanceof SubApp) {
 			return new SubAppForFBNetworkEditPart(getZoomManager());
-		}		
+		}
 		return super.getPartForElement(context, modelElement);
 	}
-	
-	
 
 }

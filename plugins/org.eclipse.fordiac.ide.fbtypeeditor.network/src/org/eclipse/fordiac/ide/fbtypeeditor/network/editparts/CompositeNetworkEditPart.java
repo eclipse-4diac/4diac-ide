@@ -149,47 +149,14 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	 */
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		boolean visible = true;
-		if (childEditPart instanceof InterfaceEditPart) {
-			IInterfaceElement iElement = ((InterfaceEditPart) childEditPart).getModel();
-			if (iElement instanceof AdapterDeclaration) {
-				// if we are in a subapptype we want to show the adapter as type interface
-				// element
-				visible = iElement.eContainer().eContainer() instanceof SubAppType;
-			}
-		}
-
 		EditPart refEditPart = null;
 		if (index < getChildren().size()) {
 			refEditPart = (EditPart) getChildren().get(index);
 		}
-
 		if (childEditPart instanceof InterfaceEditPart) {
 			IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-			if (((InterfaceEditPart) childEditPart).getModel().isIsInput()) {
-				if (((InterfaceEditPart) childEditPart).isEvent()) {
-					insertChild(getLeftEventInterfaceContainer(), refEditPart, child);
-				} else {
-					if (visible) { // add adapter interface elemetns directly to the container and set them to
-									// visible = false
-						insertChild(getLeftVarInterfaceContainer(), refEditPart, child);
-					} else {
-						insertChild(getLeftInterfaceContainer(), refEditPart, child);
-					}
-				}
-			} else {
-				if (((InterfaceEditPart) childEditPart).isEvent()) {
-					insertChild(getRightEventInterfaceContainer(), refEditPart, child);
-				} else {
-					if (visible) { // add adapter interface elemetns directly to the container and set them to
-									// visible = false
-						insertChild(getRightVarInterfaceContainer(), refEditPart, child);
-					} else {
-						insertChild(getRightInterfaceContainer(), refEditPart, child);
-					}
-				}
-			}
-			child.setVisible(visible);
+			insertChild(getChildVisualContainer(childEditPart), refEditPart, child);
+			child.setVisible(isVarVisible(childEditPart));
 		} else {
 			super.addChildVisual(childEditPart, -1);
 		}
@@ -211,37 +178,35 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	 */
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		boolean visible = true;
-		if (childEditPart.getModel() instanceof AdapterDeclaration) {
-			visible = false;
-		}
-
 		if (childEditPart instanceof InterfaceEditPart) {
-			if (((InterfaceEditPart) childEditPart).getModel().isIsInput()) {
-				IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-				if (((InterfaceEditPart) childEditPart).isEvent()) {
-					getLeftEventInterfaceContainer().remove(child);
-				} else {
-					if (visible) {
-						getLeftVarInterfaceContainer().remove(child);
-					} else {
-						getLeftInterfaceContainer().remove(child);
-					}
-				}
+			IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+			getChildVisualContainer(childEditPart).remove(child);
+		} else {
+			super.removeChildVisual(childEditPart);
+		}
+	}
+
+	private Figure getChildVisualContainer(final EditPart childEditPart) {
+		if (((InterfaceEditPart) childEditPart).getModel().isIsInput()) {
+			if (((InterfaceEditPart) childEditPart).isEvent()) {
+				return getLeftEventInterfaceContainer();
 			} else {
-				IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-				if (((InterfaceEditPart) childEditPart).isEvent()) {
-					getRightEventInterfaceContainer().remove(child);
+				if (isVarVisible(childEditPart)) {
+					return getLeftVarInterfaceContainer();
 				} else {
-					if (visible) {
-						getRightVarInterfaceContainer().remove(child);
-					} else {
-						getRightInterfaceContainer().remove(child);
-					}
+					return getLeftInterfaceContainer();
 				}
 			}
 		} else {
-			super.removeChildVisual(childEditPart);
+			if (((InterfaceEditPart) childEditPart).isEvent()) {
+				return getRightEventInterfaceContainer();
+			} else {
+				if (isVarVisible(childEditPart)) {
+					return getRightVarInterfaceContainer();
+				} else {
+					return getRightInterfaceContainer();
+				}
+			}
 		}
 	}
 
@@ -294,5 +259,9 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	private CompositeFBType getFbType() {
 		return (CompositeFBType) getModel().eContainer();
+	}
+
+	protected Boolean isVarVisible(final EditPart childEditPart) {
+		return !(childEditPart.getModel() instanceof AdapterDeclaration);
 	}
 }
