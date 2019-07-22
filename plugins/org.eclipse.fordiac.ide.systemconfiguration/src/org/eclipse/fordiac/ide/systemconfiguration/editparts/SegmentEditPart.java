@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2011 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH, 
- * 				 2018 Johannes Kepler University
+ * 				 2018 - 2019 Johannes Kepler University
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - added diagram font preference 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 
@@ -36,6 +37,8 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
+import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
+import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -43,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteSegmentEditPolicy;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.SegmentNodeEditPolicy;
 import org.eclipse.fordiac.ide.util.ColorHelper;
+import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -62,11 +66,31 @@ import org.eclipse.swt.widgets.Display;
 public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPart {
 	/** necessary that the gradient pattern can be scaled accordingly */
 	private ZoomManager zoomManager;
-	
+	private DiagramFontChangeListener fontChangeListener;
+
 	public SegmentEditPart(ZoomManager zoomManager) {
 		super();
 		setConnectable(true);
 		this.zoomManager = zoomManager;
+	}
+
+	@Override
+	public void activate() {
+		super.activate();
+		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
+	}
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
+	}
+
+	private IPropertyChangeListener getFontChangeListener() {
+		if (null == fontChangeListener) {
+			fontChangeListener = new DiagramFontChangeListener(getFigure());
+		}
+		return fontChangeListener;
 	}
 
 	@Override
@@ -75,17 +99,22 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	}
 
 	@Override
+	public SegmentFigure getFigure() {
+		return (SegmentFigure) super.getFigure();
+	}
+
+	@Override
 	protected EContentAdapter createContentAdapter() {
 		return new EContentAdapter() {
 			@Override
 			public void notifyChanged(Notification notification) {
 				Object feature = notification.getFeature();
-				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)){
+				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)) {
 					backgroundColorChanged(getFigure());
-				} 
-				if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature) ||
-						LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature) ||
-						LibraryElementPackage.eINSTANCE.getSegment_Width().equals(feature)) {
+				}
+				if (LibraryElementPackage.eINSTANCE.getPositionableElement_X().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getPositionableElement_Y().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getSegment_Width().equals(feature)) {
 					refreshVisuals();
 				}
 				super.notifyChanged(notification);
@@ -159,26 +188,27 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new SegmentNodeEditPolicy());
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteSegmentEditPolicy());
 	}
-	
+
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		refreshPosition();
 	}
-	
+
 	protected void refreshPosition() {
 		Rectangle bounds = new Rectangle(getModel().getX(), getModel().getY(), getModel().getWidth(), -1);
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 	}
 
-	public class SegmentFigure extends Shape implements InteractionStyleFigure {
+	public class SegmentFigure extends Shape implements InteractionStyleFigure, IFontUpdateListener {
 		private final Label instanceNameLabel;
+		private final Label typeLabel;
 		private final Figure main = new Figure();
 
 		private final RoundedRectangle rect = new RoundedRectangle() {
 			@Override
 			protected void outlineShape(Graphics graphics) {
-				//nothing to do here right now
+				// nothing to do here right now
 			}
 
 			@Override
@@ -242,7 +272,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			instanceNameLabel.setText(getINamedElement().getName());
 			instanceNameLabel.setTextAlignment(PositionConstants.RIGHT);
 			instanceNameLabel.setLabelAlignment(PositionConstants.RIGHT);
-			instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DEFAULT_FONT));
+
 			GridLayout gridLayout = new GridLayout(1, true);
 			gridLayout.verticalSpacing = 2;
 			gridLayout.marginHeight = 0;
@@ -271,17 +301,19 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			rectLayout.marginWidth = 0;
 			rect.setLayoutManager(rectLayout);
 			rect.setConstraint(instanceNameLabel, instanceNameLayout);
-			rect.add(new Label(":"));  //$NON-NLS-1$
+			rect.add(new Label(":")); //$NON-NLS-1$
 			LibraryElement type = getModel().getType();
 			String typeName = (null != type) ? type.getName() : "Type not set!";
-			Label typeLabel =  new Label(typeName);
+			typeLabel = new Label(typeName);
 			rect.add(typeLabel);
-			typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
+
 			rect.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL));
 			typeLabel.setTextAlignment(PositionConstants.LEFT);
 			typeLabel.setLabelAlignment(PositionConstants.LEFT);
 			typeLabel.setBackgroundColor(ColorConstants.blue);
 			typeLabel.setOpaque(false);
+
+			setInstanceAndTypeLabelFonts();
 		}
 
 		public Label getName() {
@@ -290,20 +322,32 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 
 		@Override
 		protected void fillShape(final Graphics graphics) {
-			//nothing to do here right now			
+			// nothing to do here right now
 		}
 
 		@Override
 		protected void outlineShape(final Graphics graphics) {
-			//nothing to do here right now			
+			// nothing to do here right now
 		}
 
 		@Override
 		public int getIntersectionStyle(Point location) {
 			if (instanceNameLabel.intersects(new Rectangle(location, new Dimension(1, 1)))) {
 				return InteractionStyleFigure.REGION_DRAG; // move/drag
-			} 
+			}
 			return InteractionStyleFigure.REGION_CONNECTION; // connection
+		}
+
+		@Override
+		public void updateFonts() {
+			setInstanceAndTypeLabelFonts();
+			invalidateTree();
+			revalidate();
+		}
+
+		public void setInstanceAndTypeLabelFonts() {
+			instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(PreferenceConstants.DIAGRAM_FONT));
+			typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
 		}
 	}
 

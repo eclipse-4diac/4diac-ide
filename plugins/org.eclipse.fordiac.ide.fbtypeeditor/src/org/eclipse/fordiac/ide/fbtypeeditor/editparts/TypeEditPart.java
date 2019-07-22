@@ -11,6 +11,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - moved adapter search code to palette  
+ *   Alois Zoitl - added diagram font preference 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
@@ -21,6 +22,8 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
+import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
+import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
@@ -30,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -37,6 +41,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
 public class TypeEditPart extends AbstractInterfaceElementEditPart {
@@ -44,15 +49,36 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	private Palette systemPalette;
 	private Label comment;
 
+	private DiagramFontChangeListener fontChangeListener;
+
 	public TypeEditPart(Palette systemPalette) {
 		super();
 		this.systemPalette = systemPalette;
 	}
 
-	public class TypeFigure extends Label {
+	@Override
+	public void activate() {
+		super.activate();
+		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
+	}
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
+	}
+
+	private IPropertyChangeListener getFontChangeListener() {
+		if (null == fontChangeListener) {
+			fontChangeListener = new DiagramFontChangeListener(getFigure());
+		}
+		return fontChangeListener;
+	}
+
+	public class TypeFigure extends Label implements IFontUpdateListener {
 		public TypeFigure() {
 			super();
-			this.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
+			setTypeLabelFonts();
 		}
 
 		@Override
@@ -66,6 +92,17 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 			}
 			super.setText(s);
 		}
+
+		@Override
+		public void updateFonts() {
+			setTypeLabelFonts();
+			invalidateTree();
+			revalidate();
+		}
+
+		private void setTypeLabelFonts() {
+			setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
+		}
 	}
 
 	@Override
@@ -78,6 +115,11 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 		comment = new TypeFigure();
 		update();
 		return comment;
+	}
+
+	@Override
+	public TypeFigure getFigure() {
+		return (TypeFigure) super.getFigure();
 	}
 
 	@Override

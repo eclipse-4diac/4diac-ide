@@ -11,6 +11,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - moved openEditor helper function to EditorUtils  
+ *   Alois Zoitl - added diagram font preference 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
@@ -39,6 +40,7 @@ import org.eclipse.fordiac.ide.gef.draw2d.AdvancedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
+import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
@@ -64,7 +66,7 @@ import org.eclipse.ui.part.FileEditorInput;
  * The visualization of an FB. It Provides several containers for its interface.
  * 
  */
-public abstract class AbstractFBNetworkElementFigure extends Shape implements ITransparencyFigure {
+public abstract class AbstractFBNetworkElementFigure extends Shape implements ITransparencyFigure, IFontUpdateListener {
 
 	private static final class OpenTypeListener implements MouseListener {
 		private final AbstractFBNElementEditPart editPart;
@@ -244,6 +246,8 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		refreshToolTips();
 
 		updateResourceTypeFigure();
+
+		setInstanceAndTypeLabelFonts();
 	}
 
 	private void setupTopIOs(IFigure parent) {
@@ -309,7 +313,6 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		instanceNameLabel.setText(instanceName);
 		instanceNameLabel.setTextAlignment(PositionConstants.CENTER);
 		instanceNameLabel.setLabelAlignment(PositionConstants.CENTER);
-		instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DEFAULT_FONT));
 
 		add(instanceNameLabel);
 		setConstraint(instanceNameLabel, instanceNameLayout);
@@ -320,7 +323,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		middle.setCornerDimensions(new Dimension());
 
 		GridLayout middleLayout = new GridLayout(1, true);
-		middleLayout.marginHeight = 0;
+		middleLayout.marginHeight = 2;
 		middleLayout.verticalSpacing = 1;
 
 		middle.setLayoutManager(middleLayout);
@@ -328,13 +331,11 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		LibraryElement type = model.getType();
 		String typeName = (null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET;
 
-		typeLabel = new UnderlineAlphaLabel(typeName != null ? typeName : Messages.FBFigure_NOT_DEFINED_Text);
-		middle.add(typeLabel);
+		typeLabel = new UnderlineAlphaLabel(null != typeName ? typeName : Messages.FBFigure_NOT_DEFINED_Text);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
-		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 		typeLabel.setOpaque(false);
-		typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
-
+		middle.add(typeLabel);
+		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 		setupMouseListener(editPart);
 	}
 
@@ -384,7 +385,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 	}
 
-	protected OpenTypeListener createOpenTypeMouseListener(final AbstractFBNElementEditPart editPart) {
+	private static OpenTypeListener createOpenTypeMouseListener(final AbstractFBNElementEditPart editPart) {
 		return new OpenTypeListener(editPart);
 	}
 
@@ -542,6 +543,18 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 	public void setIcon(Image image) {
 		getInstanceNameLabel().setIcon(image);
+	}
+
+	@Override
+	public void updateFonts() {
+		setInstanceAndTypeLabelFonts();
+		invalidateTree();
+		revalidate();
+	}
+
+	public void setInstanceAndTypeLabelFonts() {
+		instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(PreferenceConstants.DIAGRAM_FONT));
+		typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
 	}
 
 	protected abstract boolean isResoruceTypeFBNElement();

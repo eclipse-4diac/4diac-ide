@@ -11,6 +11,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - moved openEditor helper function to EditorUtils  
+ *   Alois Zoitl - added diagram font preference 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 
@@ -21,6 +22,8 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
+import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
+import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -29,6 +32,7 @@ import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteResourceEditPolicy;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -36,6 +40,26 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class ResourceEditPart extends AbstractViewEditPart {
+	private DiagramFontChangeListener fontChangeListener;
+
+	@Override
+	public void activate() {
+		super.activate();
+		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
+	}
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
+	}
+
+	private IPropertyChangeListener getFontChangeListener() {
+		if (null == fontChangeListener) {
+			fontChangeListener = new DiagramFontChangeListener(getFigure());
+		}
+		return fontChangeListener;
+	}
 
 	@Override
 	protected void refreshVisuals() {
@@ -47,12 +71,12 @@ public class ResourceEditPart extends AbstractViewEditPart {
 		getNameLabel().setText(getINamedElement().getName());
 	}
 
-	public class ResourceFigure extends Figure {
+	public class ResourceFigure extends Figure implements IFontUpdateListener {
 		private final Label instanceName;
 		private final Label typeInfo;
 
 		public ResourceFigure() {
-			GridLayout mainLayout = new GridLayout(2, false);
+			GridLayout mainLayout = new GridLayout(3, false);
 			mainLayout.marginHeight = 2;
 			setLayoutManager(mainLayout);
 			if (getINamedElement() == null) {
@@ -68,9 +92,11 @@ public class ResourceEditPart extends AbstractViewEditPart {
 			if (getModel() != null) {
 				type = getModel().getTypeName();
 			}
-			typeInfo = new Label("(" //$NON-NLS-1$
-					+ type + ")"); //$NON-NLS-1$
-			typeInfo.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
+
+			add(new Label(":")); //$NON-NLS-1$
+
+			typeInfo = new Label(type);
+			setTypeLabelFonts();
 			add(typeInfo);
 			setOpaque(false);
 		}
@@ -78,11 +104,27 @@ public class ResourceEditPart extends AbstractViewEditPart {
 		public Label getInstanceName() {
 			return instanceName;
 		}
+
+		@Override
+		public void updateFonts() {
+			setTypeLabelFonts();
+			invalidateTree();
+			revalidate();
+		}
+
+		public void setTypeLabelFonts() {
+			typeInfo.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
+		}
 	}
 
 	@Override
 	protected IFigure createFigureForModel() {
 		return new ResourceFigure();
+	}
+
+	@Override
+	public ResourceFigure getFigure() {
+		return (ResourceFigure) super.getFigure();
 	}
 
 	@Override

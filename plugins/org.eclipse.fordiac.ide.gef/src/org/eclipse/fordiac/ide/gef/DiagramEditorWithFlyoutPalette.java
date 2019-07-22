@@ -11,6 +11,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed copy/paste handling
+ *   Alois Zoitl - added diagram font preference 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
@@ -23,6 +24,8 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
+import org.eclipse.fordiac.ide.gef.listeners.FigureFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -30,6 +33,7 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.util.UntypedEditorInput;
+import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
@@ -55,6 +59,8 @@ import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -131,6 +137,17 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		configureGraphicalViewer();
 		hookGraphicalViewer();
 		initializeGraphicalViewer();
+
+		viewer.getControl().setFont(JFaceResources.getFont(PreferenceConstants.DIAGRAM_FONT));
+
+		final IPropertyChangeListener fontChangeListener = new DiagramFontChangeListener(
+				new FigureFontUpdateListener(((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getFigure(),
+						PreferenceConstants.DIAGRAM_FONT));
+
+		JFaceResources.getFontRegistry().addListener(fontChangeListener);
+		viewer.getControl().addDisposeListener(e -> {
+			JFaceResources.getFontRegistry().removeListener(fontChangeListener);
+		});
 
 		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
 	}
@@ -213,7 +230,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		// listen for dropped parts
 		TransferDropTargetListener listener = createTransferDropTargetListener();
 		if (listener != null) {
-			viewer.addDropTargetListener(createTransferDropTargetListener());
+			viewer.addDropTargetListener(listener);
 		}
 		// enable drag from palette
 		getGraphicalViewer().addDropTargetListener(new TemplateTransferDropTargetListener(getGraphicalViewer()));
