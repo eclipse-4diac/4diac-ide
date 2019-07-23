@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2017 fortiss GmbH
+ *               2019 Johannes Kepler University Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,8 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr
+ *    - consistent dropdown menu edit
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -19,11 +22,11 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeECTransitionCommentCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECTransitionEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.text.DocumentEvent;
@@ -31,8 +34,6 @@ import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -51,6 +52,11 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
 
+/**
+ * Section that appears in the Properties view, when a Transition is selected in
+ * the ECC
+ *
+ */
 @SuppressWarnings("restriction")
 public class TransitionSection extends AbstractECSection {
 	private static final String ONE_CONDITION = "1"; //$NON-NLS-1$
@@ -58,8 +64,8 @@ public class TransitionSection extends AbstractECSection {
 	private Text commentText;
 	private Combo eventCombo;
 	private Composite conditionEditingContainer;
-	// the closing bracket label need for putting the xtext editor before it.
-	private CLabel closingBraket;
+	// the closing bracket label needed for putting the xtext editor before it.
+	private CLabel closingBracket;
 	private EmbeddedEditor editor;
 	private Composite composite;
 
@@ -121,13 +127,10 @@ public class TransitionSection extends AbstractECSection {
 
 		getWidgetFactory().createCLabel(composite, "Comment:");
 		commentText = createGroupText(composite, true);
-		commentText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeECTransitionCommentCommand(getType(), commentText.getText()));
-				addContentAdapter();
-			}
+		commentText.addModifyListener(event -> {
+			removeContentAdapter();
+			executeCommand(new ChangeECTransitionCommentCommand(getType(), commentText.getText()));
+			addContentAdapter();
 		});
 	}
 
@@ -159,7 +162,7 @@ public class TransitionSection extends AbstractECSection {
 
 		getWidgetFactory().createCLabel(conditionEditingContainer, "["); //$NON-NLS-1$
 
-		closingBraket = getWidgetFactory().createCLabel(conditionEditingContainer, "]"); //$NON-NLS-1$
+		closingBracket = getWidgetFactory().createCLabel(conditionEditingContainer, "]"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -222,7 +225,7 @@ public class TransitionSection extends AbstractECSection {
 		editor = editorFactory.newEditor(resourceProvider).withParent(parent);
 		StyledText conditionText = (StyledText) editor.getViewer().getControl();
 		conditionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		conditionText.moveAbove(closingBraket);
+		conditionText.moveAbove(closingBracket);
 
 		embeddedEditorModelAccess = editor.createPartialEditor();
 		editor.getDocument().addDocumentListener(listener);
@@ -239,7 +242,7 @@ public class TransitionSection extends AbstractECSection {
 			updateConditionExpressionText(getType().getConditionExpression());
 			if (getType().getConditionExpression() != null
 					&& getType().getConditionExpression().equals(ONE_CONDITION)) {
-				eventCombo.select(1);
+				eventCombo.select(eventCombo.indexOf(ONE_CONDITION));
 			} else {
 				eventCombo.select(getType().getConditionEvent() != null
 						? eventCombo.indexOf(getType().getConditionEvent().getName())
@@ -270,16 +273,9 @@ public class TransitionSection extends AbstractECSection {
 
 	public void setEventConditionDropdown() {
 		eventCombo.removeAll();
-		eventCombo.add(""); //$NON-NLS-1$
 		eventCombo.add(ONE_CONDITION);
-		for (Event event : getBasicFBType().getInterfaceList().getEventInputs()) {
-			eventCombo.add(event.getName());
+		for (String name : ECCContentAndLabelProvider.getInputEventNames(getBasicFBType())) {
+			eventCombo.add(name);
 		}
-
-		getBasicFBType().getInterfaceList().getPlugs().forEach(adapter -> adapter.getType().getInterfaceList()
-				.getEventInputs().forEach(event -> eventCombo.add(adapter.getName() + "." + event.getName()))); //$NON-NLS-1$
-
-		getBasicFBType().getInterfaceList().getSockets().forEach(adapter -> adapter.getType().getInterfaceList()
-				.getEventOutputs().forEach(event -> eventCombo.add(adapter.getName() + "." + event.getName()))); // $NON-NLS-1$
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2018 TU Wien ACIN, Profactor GmbH, fortiss GmbH, 
+ * Copyright (c) 2011 - 2019 TU Wien ACIN, Profactor GmbH, fortiss GmbH, 
  * 								Johannes Kepler University Linz (JKU) 
  * 
  * All rights reserved. This program and the accompanying materials
@@ -10,6 +10,8 @@
  * Contributors:
  *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr
+ *     -  consistent dropdown menu edit
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -25,6 +27,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeOutputCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECActionCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
@@ -105,7 +108,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 			super.activate();
 			getAction().eAdapters().add(adapter);
 			// Adapt to the fbtype so that we get informed on interface changes
-			ECActionHelpers.getFBType(getAction()).getInterfaceList().eAdapters().add(interfaceAdapter);
+			ECCContentAndLabelProvider.getFBType(getAction()).getInterfaceList().eAdapters().add(interfaceAdapter);
 
 			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		}
@@ -116,7 +119,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		if (isActive()) {
 			super.deactivate();
 			getAction().eAdapters().remove(adapter);
-			FBType fbType = ECActionHelpers.getFBType(getAction());
+			FBType fbType = ECCContentAndLabelProvider.getFBType(getAction());
 			if (fbType != null) {
 				fbType.getInterfaceList().eAdapters().remove(interfaceAdapter);
 			}
@@ -139,7 +142,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 					Integer value = (Integer) request.getCellEditor().getValue();
 					if (null != value) {
 						int selected = value.intValue();
-						List<Event> events = ECActionHelpers.getOutputEvents(ECActionHelpers.getFBType(getAction()));
+						List<Event> events = ECCContentAndLabelProvider.getOutputEvents(ECCContentAndLabelProvider.getFBType(getAction()));
 						Event ev = null;
 						if (0 <= selected && selected < events.size()) {
 							ev = events.get(selected);
@@ -149,6 +152,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 				}
 				return null;
 			}
+
 			@Override
 			protected void showCurrentEditValue(final DirectEditRequest request) {
 				// handled by the direct edit manager
@@ -171,13 +175,13 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 
 	@Override
 	protected DirectEditManager createDirectEditManager() {
-		return new ComboDirectEditManager(this, ComboBoxCellEditor.class,
-					new ComboCellEditorLocator(getNameLabel()), getNameLabel());
+		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(getNameLabel()),
+				getNameLabel());
 	}
 
 	@Override
 	public void performDirectEdit() {
-		List<String> eventNames = ECActionHelpers.getOutputEventNames(ECActionHelpers.getFBType(getAction()));
+		List<String> eventNames = ECCContentAndLabelProvider.getOutputEventNames(ECCContentAndLabelProvider.getFBType(getAction()));
 		int selected = (getAction().getOutput() != null) ? eventNames.indexOf(getAction().getOutput().getName())
 				: eventNames.size() - 1;
 		((ComboDirectEditManager) getManager()).updateComboData(eventNames);
@@ -205,7 +209,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 
 	@Override
 	protected IFigure createFigure() {
-		Label eventLabel  = new GradientLabel(((ZoomScalableFreeformRootEditPart)getRoot()).getZoomManager());
+		Label eventLabel = new GradientLabel(((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager());
 		eventLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_COLOR));
 		eventLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_BORDER_COLOR));
 		eventLabel.setOpaque(true);

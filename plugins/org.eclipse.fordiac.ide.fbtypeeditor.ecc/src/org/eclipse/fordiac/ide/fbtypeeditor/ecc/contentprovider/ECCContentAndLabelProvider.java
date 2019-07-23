@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2013, 2017 fortiss GmbH
+ *               2019 Johannes Kepler University Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,8 +10,10 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr
+ *     - expanded for input events
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
+package org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,14 +28,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.swt.widgets.Combo;
 
 /**
- * Helper functions need by the action edit parts.
+ * Helper functions need by the action and transition edit parts.
  * 
  *
  */
-public final class ECActionHelpers {
+public final class ECCContentAndLabelProvider {
+
+	public static final String EMPTY_FIELD = "[none]"; // drop-down menu entry for selecting nothing
 
 	public static List<Event> getOutputEvents(BasicFBType type) {
 		List<Event> events = new ArrayList<>();
@@ -50,8 +57,28 @@ public final class ECActionHelpers {
 
 	public static List<String> getOutputEventNames(BasicFBType type) {
 		List<String> eventNames = getOutputEvents(type).stream().map(ev -> ev.getName()).collect(Collectors.toList());
-		eventNames.add(" "); //$NON-NLS-1$
+		eventNames.add(EMPTY_FIELD);
 		return eventNames;
+	}
+	
+	public static List<Event> getInputEvents(BasicFBType type) {
+		List<Event> transitionConditions = new ArrayList<>();
+		if (null != type) {
+			transitionConditions.addAll(type.getInterfaceList().getEventInputs());
+			type.getInterfaceList().getSockets().forEach(socket -> transitionConditions
+					.addAll(createAdapterEventList(socket.getType().getInterfaceList().getEventOutputs(), socket)));
+			type.getInterfaceList().getPlugs().forEach(plug -> transitionConditions
+					.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventInputs(), plug)));
+			Collections.sort(transitionConditions, NamedElementComparator.INSTANCE);
+		}
+		return transitionConditions;
+	}
+
+	public static List<String> getInputEventNames(BasicFBType type) {
+		List<String> transitionConditionNames = getInputEvents(type).stream().map(tc -> tc.getName())
+				.collect(Collectors.toList());
+		transitionConditionNames.add(EMPTY_FIELD);
+		return transitionConditionNames;
 	}
 
 	// TODO move to a utility class as same function is used in
@@ -79,19 +106,19 @@ public final class ECActionHelpers {
 
 	public static List<String> getAlgorithmNames(BasicFBType type) {
 		List<String> algNames = getAlgorithms(type).stream().map(alg -> alg.getName()).collect(Collectors.toList());
-		algNames.add(" "); //$NON-NLS-1$
+		algNames.add(EMPTY_FIELD);
 		return algNames;
 	}
 
 	public static BasicFBType getFBType(ECAction action) {
-		if (action.eContainer() != null && action.eContainer().eContainer() != null
-				&& action.eContainer().eContainer().eContainer() != null) {
+		if (null != action.eContainer() && null != action.eContainer().eContainer()
+				&& null != action.eContainer().eContainer().eContainer()) {
 			return (BasicFBType) action.eContainer().eContainer().eContainer();
 		}
 		return null;
 	}
 
-	private ECActionHelpers() {
+	private ECCContentAndLabelProvider() {
 		throw new UnsupportedOperationException("ECActionHelpers should not be instantiated!");
 	}
 }
