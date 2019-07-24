@@ -25,8 +25,8 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeTransitionPriorit
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ActionContentProvider;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.StateContentProvider;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionHelpers;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -124,11 +124,11 @@ public class StateSection extends AbstractECSection {
 			ECAction selectedAction = (ECAction) element;
 			switch (property) {
 			case ACTION_ALGORITHM:
-				List<Algorithm> algorithms = ECActionHelpers.getAlgorithms(getBasicFBType());
+				List<Algorithm> algorithms = ECCContentAndLabelProvider.getAlgorithms(getBasicFBType());
 				return (null != selectedAction.getAlgorithm()) ? algorithms.indexOf(selectedAction.getAlgorithm())
 						: algorithms.size();
 			case ACTION_EVENT:
-				List<String> events = ECActionHelpers.getOutputEventNames(getBasicFBType());
+				List<String> events = ECCContentAndLabelProvider.getOutputEventNames(getBasicFBType());
 				return (null != selectedAction.getOutput()) ? events.indexOf(selectedAction.getOutput().getName())
 						: events.size();
 			default:
@@ -145,7 +145,7 @@ public class StateSection extends AbstractECSection {
 
 			switch (property) {
 			case ACTION_ALGORITHM:
-				List<Algorithm> algorithms = ECActionHelpers.getAlgorithms(getBasicFBType());
+				List<Algorithm> algorithms = ECCContentAndLabelProvider.getAlgorithms(getBasicFBType());
 				Algorithm alg = null;
 				if (selected < algorithms.size()) {
 					alg = algorithms.get(selected);
@@ -153,7 +153,7 @@ public class StateSection extends AbstractECSection {
 				cmd = new ChangeAlgorithmCommand(selectedAction, alg);
 				break;
 			case ACTION_EVENT:
-				List<Event> events = ECActionHelpers.getOutputEvents(getBasicFBType());
+				List<Event> events = ECCContentAndLabelProvider.getOutputEvents(getBasicFBType());
 				Event ev = null;
 				if (0 <= selected && selected < events.size()) {
 					ev = events.get(selected);
@@ -369,9 +369,9 @@ public class StateSection extends AbstractECSection {
 	private CellEditor[] createActionViewerCellEditors(Table table) {
 		BasicFBType fbType = getBasicFBType();
 		return new CellEditor[] {
-				new ComboBoxCellEditor(table, ECActionHelpers.getAlgorithmNames(fbType).toArray(new String[0]),
+				new ComboBoxCellEditor(table, ECCContentAndLabelProvider.getAlgorithmNames(fbType).toArray(new String[0]),
 						SWT.READ_ONLY),
-				new ComboBoxCellEditor(table, ECActionHelpers.getOutputEventNames(fbType).toArray(new String[0]),
+				new ComboBoxCellEditor(table, ECCContentAndLabelProvider.getOutputEventNames(fbType).toArray(new String[0]),
 						SWT.READ_ONLY) };
 	}
 

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2015, 2016 TU Wien ACIN, fortiss GmbH
+ *               2019 Johannes Kepler University Linz
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,13 +10,15 @@
  * Contributors:
  *   Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+*   Bianca Wiesmayr
+ *    - consistent dropdown menu edit
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionHelpers;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -36,31 +39,21 @@ public class ChangeConditionEventCommand extends Command {
 	 * @param conditonEvent name of the new event for the transition condition, in
 	 *                      addition to an event name the values may also be an
 	 *                      empty string for setting the no event on the transition
-	 *                      condition or 1 for setting the transition condtiion to
+	 *                      condition or 1 for setting the transition condition to
 	 *                      always true.
 	 */
 	public ChangeConditionEventCommand(final ECTransition transition, final String conditionEvent) {
 		super();
 		this.transition = transition;
 		this.conditionEvent = conditionEvent;
-		getEvents();
+		
+		BasicFBType fb = (null != transition) ? (BasicFBType) transition.eContainer().eContainer() : null;
+		eventList.addAll(ECCContentAndLabelProvider.getInputEvents(fb));
 	}
 
 	@Override
 	public boolean canExecute() {
-		return conditionEvent.equals("") || (eventList != null && !eventList.isEmpty()); //$NON-NLS-1$
-	}
-
-	public final List<Event> getEvents() {
-		eventList.clear();
-		BasicFBType types = (BasicFBType) transition.eContainer().eContainer();
-		this.eventList.addAll(types.getInterfaceList().getEventInputs());
-		types.getInterfaceList().getSockets().forEach(socket -> eventList.addAll(
-				ECActionHelpers.createAdapterEventList(socket.getType().getInterfaceList().getEventOutputs(), socket)));
-
-		types.getInterfaceList().getPlugs().forEach(plug -> eventList.addAll(
-				ECActionHelpers.createAdapterEventList(plug.getType().getInterfaceList().getEventInputs(), plug)));
-		return eventList;
+		return conditionEvent.equals("") || !eventList.isEmpty(); //$NON-NLS-1$
 	}
 
 	@Override
