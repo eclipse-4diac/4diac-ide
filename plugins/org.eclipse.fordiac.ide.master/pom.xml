@@ -63,6 +63,7 @@
 		<tycho.version>1.4.0</tycho.version>
 		<tycho-repo.url>http://download.eclipse.org/releases/2019-06</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
+		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 	</properties>
 
 	<repositories>
