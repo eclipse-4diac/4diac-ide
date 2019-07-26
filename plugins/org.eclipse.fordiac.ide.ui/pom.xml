@@ -5,7 +5,7 @@
   <parent>
     <relativePath>../org.eclipse.fordiac.ide.master/pom.xml</relativePath>
     <groupId>org.eclipse.fordiac</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>org.eclipse.fordiac.ideparent</artifactId>
     <version>1.10.3-SNAPSHOT</version>
   </parent>
 
