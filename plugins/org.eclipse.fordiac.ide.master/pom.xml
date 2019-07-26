@@ -2,7 +2,7 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.fordiac</groupId>
-	<artifactId>fordiac.ideparent</artifactId>
+	<artifactId>parent</artifactId>
 	<version>1.10.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Eclipse 4diac IDE Parent Project</name>
