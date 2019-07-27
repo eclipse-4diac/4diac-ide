@@ -24,43 +24,44 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 abstract class ECCSection extends AbstractECSection {
-	
+
 	@Override
 	protected BasicFBType getType() {
-		if(type instanceof ECC){
-			return (BasicFBType) ((ECC)type).eContainer();
+		if (type instanceof ECC) {
+			return (BasicFBType) ((ECC) type).eContainer();
 		}
 		return null;
 	}
 
 	@Override
 	protected Object getInputType(Object input) {
-		if(input instanceof ECCRootEditPart){
-			return ((ECCRootEditPart) input).getCastedECCModel();	
+		if (input instanceof ECCRootEditPart) {
+			return ((ECCRootEditPart) input).getCastedECCModel();
 		}
-		if(input instanceof ECC){
+		if (input instanceof ECC) {
 			return input;
 		}
-		if(input instanceof ECActionAlgorithmEditPart){
-			return ((ECActionAlgorithmEditPart) input).getAction().eContainer().eContainer();	
+		if (input instanceof ECActionAlgorithmEditPart) {
+			return ((ECActionAlgorithmEditPart) input).getAction().eContainer().eContainer();
 		}
-		if(input instanceof ECActionOutputEventEditPart){
+		if (input instanceof ECActionOutputEventEditPart) {
 			ECAction action = ((ECActionOutputEventEditPart) input).getAction();
-			if(null != action && null != action.eContainer() && null != action.eContainer()){
+			if (null != action && null != action.eContainer()) {
 				return action.eContainer().eContainer();
 			}
 		}
-		if(input instanceof ECTransitionEditPart){
-			return ((ECTransitionEditPart) input).getCastedModel().eContainer();	
+		if (input instanceof ECTransitionEditPart) {
+			return ((ECTransitionEditPart) input).getModel().eContainer();
 		}
-		if(input instanceof ECStateEditPart){
-			return ((ECStateEditPart) input).getCastedModel().eContainer();	
+		if (input instanceof ECStateEditPart) {
+			return ((ECStateEditPart) input).getCastedModel().eContainer();
 		}
 		return null;
 	}
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
-		super.createControls(parent, tabbedPropertySheetPage);	
+		super.createControls(parent, tabbedPropertySheetPage);
 	}
 }
