@@ -7,7 +7,9 @@ Export-Package: org.eclipse.fordiac.ide.ui,
 Require-Bundle: org.eclipse.gef,
  org.eclipse.core.runtime,
  org.eclipse.jface,
+ org.eclipse.jface.text,
  org.eclipse.ui.workbench,
+ org.eclipse.ui.editors,
  org.eclipse.ui.views.properties.tabbed
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy

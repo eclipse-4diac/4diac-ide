@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.ui.xml.XMLConfiguration;
 import org.eclipse.fordiac.ide.deployment.ui.xml.XMLPartitionScanner;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
+import org.eclipse.fordiac.ide.ui.providers.SourceViewerColorProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.text.DefaultInformationControl;
@@ -76,6 +77,28 @@ import org.xml.sax.InputSource;
  * The Class Output.
  */
 public class Output extends ViewPart implements IDeploymentListener {
+	
+	private Color fForegroundColor;
+	/**
+	 * The editor's background color.
+	 * @since 2.0
+	 */
+	private Color fBackgroundColor;
+	/**
+	 * The editor's selection foreground color.
+	 * @since 3.0
+	 */
+	private Color fSelectionForegroundColor;
+	/**
+	 * The editor's selection background color.
+	 * @since 3.0
+	 */
+	private Color fSelectionBackgroundColor;
+	/**
+	 * The find scope's highlight color.
+	 * @since 2.0
+	 */
+	private Color fFindScopeHighlightColor;
 
 	/** The sourceViewer. */
 	private SourceViewer sv;
@@ -240,7 +263,10 @@ public class Output extends ViewPart implements IDeploymentListener {
 				0, 0)));
 		// this will draw the squigglies under the text
 		sv.addPainter(ap);
+		
+		SourceViewerColorProvider.initializeSourceViewerColors(sv);
 	}
+	
 
 	/**
 	 * The Class AnnotationHover.
