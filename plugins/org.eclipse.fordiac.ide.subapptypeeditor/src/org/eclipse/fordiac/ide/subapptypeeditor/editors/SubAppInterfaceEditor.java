@@ -16,10 +16,10 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBInterfaceEditor;
 import org.eclipse.fordiac.ide.subapptypeeditor.editparts.SubAppInterfaceEditPartFactory;
 import org.eclipse.gef.EditPartFactory;
 
-public class SubAppInterfaceEditor extends FBInterfaceEditor{
+public class SubAppInterfaceEditor extends FBInterfaceEditor {
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		return new SubAppInterfaceEditPartFactory(this, palette, getZoomManger());
+		return new SubAppInterfaceEditPartFactory(this, getPalette(), getZoomManger());
 	}
 }

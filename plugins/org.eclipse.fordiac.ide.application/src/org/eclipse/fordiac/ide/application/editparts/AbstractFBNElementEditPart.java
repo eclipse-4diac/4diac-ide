@@ -172,7 +172,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	protected void refreshToolTip() {
-		getCastedFigure().refreshToolTips();
+		getFigure().refreshToolTips();
 	}
 
 	@Override
@@ -183,7 +183,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	@Override
 	protected void refreshName() {
 		super.refreshName();
-		getCastedFigure().refreshIcon();
+		getFigure().refreshIcon();
 	}
 
 	@Override
@@ -221,17 +221,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	 * @return the label
 	 */
 	public Label getInstanceNameLabel() {
-		if (getCastedFigure() != null) {
-			return getCastedFigure().getInstanceNameLabel();
-		}
-		return null;
-	}
-
-	private AbstractFBNetworkElementFigure getCastedFigure() {
-		if (getFigure() instanceof AbstractFBNetworkElementFigure) {
-			return (AbstractFBNetworkElementFigure) getFigure();
-		}
-		return null;
+		return getFigure().getInstanceNameLabel();
 	}
 
 	/** The listener. */
@@ -291,27 +281,27 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
 			if (interfaceEditPart.isInput()) {
 				if (interfaceEditPart.isEvent()) {
-					getCastedFigure().getEventInputs().add(child,
+					getFigure().getEventInputs().add(child,
 							getModel().getInterface().getEventInputs().indexOf(interfaceEditPart.getModel()));
 				} else {
 					if (interfaceEditPart.isAdapter()) {
-						getCastedFigure().getSockets().add(child,
+						getFigure().getSockets().add(child,
 								getModel().getInterface().getSockets().indexOf(interfaceEditPart.getModel()));
 					} else if (interfaceEditPart.isVariable()) {
-						getCastedFigure().getDataInputs().add(child,
+						getFigure().getDataInputs().add(child,
 								getModel().getInterface().getInputVars().indexOf(interfaceEditPart.getModel()));
 					}
 				}
 			} else {
 				if (interfaceEditPart.isEvent()) {
-					getCastedFigure().getEventOutputs().add(child,
+					getFigure().getEventOutputs().add(child,
 							getModel().getInterface().getEventOutputs().indexOf(interfaceEditPart.getModel()));
 				} else {
 					if (interfaceEditPart.isAdapter()) {
-						getCastedFigure().getPlugs().add(child,
+						getFigure().getPlugs().add(child,
 								getModel().getInterface().getPlugs().indexOf(interfaceEditPart.getModel()));
 					} else if (interfaceEditPart.isVariable()) {
-						getCastedFigure().getDataOutputs().add(child,
+						getFigure().getDataOutputs().add(child,
 								getModel().getInterface().getOutputVars().indexOf(interfaceEditPart.getModel()));
 					}
 				}
@@ -329,22 +319,22 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
 			if (interfaceEditPart.isInput()) {
 				if (interfaceEditPart.isEvent()) {
-					getCastedFigure().getEventInputs().remove(child);
+					getFigure().getEventInputs().remove(child);
 				} else {
 					if (interfaceEditPart.isAdapter()) {
-						getCastedFigure().getSockets().remove(child);
+						getFigure().getSockets().remove(child);
 					} else if (interfaceEditPart.isVariable()) {
-						getCastedFigure().getDataInputs().remove(child);
+						getFigure().getDataInputs().remove(child);
 					}
 				}
 			} else {
 				if (interfaceEditPart.isEvent()) {
-					getCastedFigure().getEventOutputs().remove(child);
+					getFigure().getEventOutputs().remove(child);
 				} else {
 					if (interfaceEditPart.isAdapter()) {
-						getCastedFigure().getPlugs().remove(child);
+						getFigure().getPlugs().remove(child);
 					} else if (interfaceEditPart.isVariable()) {
-						getCastedFigure().getDataOutputs().remove(child);
+						getFigure().getDataOutputs().remove(child);
 					}
 				}
 

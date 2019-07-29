@@ -17,7 +17,7 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 
 public class DiagramFontChangeListener implements IPropertyChangeListener {
 
-	final IFontUpdateListener updateListener;
+	private final IFontUpdateListener updateListener;
 
 	public DiagramFontChangeListener(IFontUpdateListener updateListner) {
 		this.updateListener = updateListner;

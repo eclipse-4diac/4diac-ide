@@ -15,8 +15,6 @@ package org.eclipse.fordiac.ide.ui;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -33,7 +31,6 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class ReferenceChooserDialog extends Dialog {
 
-	private TableViewer tableViewer;
 	private Object selected;
 
 	private final IContentProvider contentProvider;
@@ -44,11 +41,11 @@ public class ReferenceChooserDialog extends Dialog {
 	 * Instantiates a new reference chooser dialog.
 	 * 
 	 * @param contentProvider the content provider
-	 * @param labelProvider the label provider
-	 * @param shell the shell
+	 * @param labelProvider   the label provider
+	 * @param shell           the shell
 	 */
-	public ReferenceChooserDialog(final IContentProvider contentProvider,
-			final IBaseLabelProvider labelProvider, final Shell shell) {
+	public ReferenceChooserDialog(final IContentProvider contentProvider, final IBaseLabelProvider labelProvider,
+			final Shell shell) {
 		super(shell);
 		this.contentProvider = contentProvider;
 		this.labelProvider = labelProvider;
@@ -57,8 +54,7 @@ public class ReferenceChooserDialog extends Dialog {
 	/**
 	 * Creates the main window's contents
 	 * 
-	 * @param parent
-	 *            the main window
+	 * @param parent the main window
 	 * @return Control
 	 */
 	@Override
@@ -71,23 +67,14 @@ public class ReferenceChooserDialog extends Dialog {
 		fill.verticalAlignment = SWT.FILL;
 		fill.heightHint = 150;
 
-		tableViewer = new TableViewer(composite, SWT.SINGLE);
+		TableViewer tableViewer = new TableViewer(composite, SWT.SINGLE);
 		tableViewer.getTable().setLayoutData(fill);
 		// TableViewer
 		tableViewer.setContentProvider(contentProvider);
 		tableViewer.setLabelProvider(labelProvider);
 		tableViewer.setInput(new Object());
-		tableViewer
-				.addSelectionChangedListener(new ISelectionChangedListener() {
-
-					@Override
-					public void selectionChanged(
-							final SelectionChangedEvent event) {
-						selected = ((StructuredSelection) event.getSelection())
-								.getFirstElement();
-					}
-
-				});
+		tableViewer.addSelectionChangedListener(
+				event -> selected = ((StructuredSelection) event.getSelection()).getFirstElement());
 
 		return super.createContents(parent);
 	}

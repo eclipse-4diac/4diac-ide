@@ -43,33 +43,33 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class EventInterfaceElementSection extends AdapterInterfaceElementSection {
-	
+
 	private CheckboxTableViewer withEventsViewer;
-	private Table tableWith;
 	private Group eventComposite;
-	
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);	
+		super.createControls(parent, tabbedPropertySheetPage);
 		createEventSection(getRightComposite());
 	}
-	
+
 	private void createEventSection(Composite parent) {
 		eventComposite = getWidgetFactory().createGroup(parent, "With");
-		eventComposite.setLayout(new GridLayout(1, false));	
-		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));		
-		withEventsViewer = CheckboxTableViewer.newCheckList(eventComposite, SWT.FULL_SELECTION | SWT.BORDER | SWT.H_SCROLL | SWT.FILL);
+		eventComposite.setLayout(new GridLayout(1, false));
+		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		withEventsViewer = CheckboxTableViewer.newCheckList(eventComposite,
+				SWT.FULL_SELECTION | SWT.BORDER | SWT.H_SCROLL | SWT.FILL);
 		GridData gridDataVersionViewer = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridDataVersionViewer.minimumHeight = 80;
 		gridDataVersionViewer.widthHint = 400;
 		withEventsViewer.getControl().setLayoutData(gridDataVersionViewer);
-		tableWith = withEventsViewer.getTable();		
-		tableWith.setLinesVisible(false);		
+		Table tableWith = withEventsViewer.getTable();
+		tableWith.setLinesVisible(false);
 		tableWith.setHeaderVisible(true);
 		TableColumn column1 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
 		column1.setText("Variable");
 		TableColumn column2 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
-		column2.setText("DataType"); 
+		column2.setText("DataType");
 		TableColumn column3 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
 		column3.setText("Comment");
 		TableLayout layout = new TableLayout();
@@ -92,7 +92,7 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 							}
 						}
 						WithCreateCommand cmd = new WithCreateCommand();
-						cmd.setEvent((Event)type);
+						cmd.setEvent((Event) type);
 						cmd.setVarDeclaration(variable);
 						executeCommand(cmd);
 					} else {
@@ -108,27 +108,27 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 			}
 		});
 	}
-	
+
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
 		Assert.isTrue(selection instanceof IStructuredSelection);
-		//hide with part for sub app type events
+		// hide with part for sub app type events
 		eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
-		if(null == commandStack){ //disable all field
+		if (null == commandStack) { // disable all field
 			withEventsViewer.setInput(null);
 			withEventsViewer.setAllGrayed(true);
 		}
 	}
-	
+
 	@Override
 	public void refresh() {
 		super.refresh();
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if(null != type) {			
+		if (null != type) {
 			withEventsViewer.setAllChecked(false);
-			for(Iterator<With> iterator = ((Event)getType()).getWith().iterator(); iterator.hasNext();){
+			for (Iterator<With> iterator = ((Event) getType()).getWith().iterator(); iterator.hasNext();) {
 				With with = iterator.next();
 				if (with.getVariables() != null) {
 					withEventsViewer.setChecked(with.getVariables(), true);
@@ -138,17 +138,18 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 		}
 		commandStack = commandStackBuffer;
 	}
-	
+
 	@Override
-	public void setTypeDropdown(){
+	public void setTypeDropdown() {
 		typeCombo.removeAll();
 		typeCombo.add("Event");
 		typeCombo.select(0);
 	}
-	
+
 	@Override
 	protected DataType getTypeForSelection(String text) {
-		// currently we only have one kind of data type therefore we will return null here so that it is not changed
+		// currently we only have one kind of data type therefore we will return null
+		// here so that it is not changed
 		return null;
 	}
 }

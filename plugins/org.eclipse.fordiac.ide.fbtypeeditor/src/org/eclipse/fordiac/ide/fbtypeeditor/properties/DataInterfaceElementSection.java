@@ -54,61 +54,61 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	private Text arraySizeText;
 	private Text initValueText;
 	private CheckboxTableViewer withEventsViewer;
-	private Table tableWith;
 	private Group eventComposite;
-	
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);	
-		createDataSection(getLeftComposite());	
+		super.createControls(parent, tabbedPropertySheetPage);
+		createDataSection(getLeftComposite());
 		createEventSection(getRightComposite());
 	}
-	
+
 	private void createDataSection(Composite parent) {
-		getWidgetFactory().createCLabel(parent, "Array Size:"); 
-		arraySizeText = createGroupText(parent, true);		
+		getWidgetFactory().createCLabel(parent, "Array Size:");
+		arraySizeText = createGroupText(parent, true);
 		arraySizeText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
-				executeCommand(new ChangeArraySizeCommand((VarDeclaration)type, arraySizeText.getText()));
+				executeCommand(new ChangeArraySizeCommand((VarDeclaration) type, arraySizeText.getText()));
 				addContentAdapter();
 			}
 		});
-		getWidgetFactory().createCLabel(parent, "Initial Value:"); 
+		getWidgetFactory().createCLabel(parent, "Initial Value:");
 		initValueText = createGroupText(parent, true);
 		initValueText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
 				removeContentAdapter();
-				executeCommand(new ChangeInitialValueCommand((VarDeclaration)type, initValueText.getText()));
+				executeCommand(new ChangeInitialValueCommand((VarDeclaration) type, initValueText.getText()));
 				addContentAdapter();
 			}
 		});
 	}
-		
+
 	private void createEventSection(Composite parent) {
 		eventComposite = getWidgetFactory().createGroup(parent, "With");
-		eventComposite.setLayout(new GridLayout(1, false));	
-		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));		
-		withEventsViewer = CheckboxTableViewer.newCheckList(eventComposite, SWT.FULL_SELECTION | SWT.BORDER | SWT.H_SCROLL | SWT.FILL);
+		eventComposite.setLayout(new GridLayout(1, false));
+		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		withEventsViewer = CheckboxTableViewer.newCheckList(eventComposite,
+				SWT.FULL_SELECTION | SWT.BORDER | SWT.H_SCROLL | SWT.FILL);
 		GridData gridDataVersionViewer = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridDataVersionViewer.minimumHeight = 80;
 		gridDataVersionViewer.widthHint = 400;
 		withEventsViewer.getControl().setLayoutData(gridDataVersionViewer);
-		tableWith = withEventsViewer.getTable();		
-		tableWith.setLinesVisible(false);		
+		Table tableWith = withEventsViewer.getTable();
+		tableWith.setLinesVisible(false);
 		tableWith.setHeaderVisible(true);
 		TableColumn column1 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
 		column1.setText("Event");
 		TableColumn column2 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
-		column2.setText("DataType"); 
+		column2.setText("DataType");
 		TableColumn column3 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
 		column3.setText("Comment");
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 100));
 		layout.addColumnData(new ColumnWeightData(20, 70));
-		layout.addColumnData(new ColumnWeightData(20, 100));		
+		layout.addColumnData(new ColumnWeightData(20, 100));
 		tableWith.setLayout(layout);
 		withEventsViewer.setContentProvider(new EventContentProvider());
 		withEventsViewer.setLabelProvider(new EventLabelProvider());
@@ -126,7 +126,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 						}
 						WithCreateCommand cmd = new WithCreateCommand();
 						cmd.setEvent(e);
-						cmd.setVarDeclaration((VarDeclaration)type);
+						cmd.setVarDeclaration((VarDeclaration) type);
 						executeCommand(cmd);
 					} else {
 						for (With with : e.getWith()) {
@@ -140,51 +140,51 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 			}
 		});
 	}
-	
+
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
-		Assert.isTrue(selection instanceof IStructuredSelection);	
-		//hide with part for sub app type events
+		Assert.isTrue(selection instanceof IStructuredSelection);
+		// hide with part for sub app type events
 		eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
-		if(null == commandStack){ //disable all field
+		if (null == commandStack) { // disable all field
 			arraySizeText.setEnabled(false);
 			initValueText.setEnabled(false);
 			withEventsViewer.setInput(null);
 			withEventsViewer.setAllGrayed(true);
 		}
 	}
-	
+
 	@Override
 	protected VarDeclaration getType() {
-		return (VarDeclaration)type;
+		return (VarDeclaration) type;
 	}
-	
+
 	@Override
 	public void refresh() {
 		super.refresh();
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if(null != type) {
+		if (null != type) {
 			arraySizeText.setText(0 >= getType().getArraySize() ? "" : (Integer.toString((getType()).getArraySize()))); //$NON-NLS-1$
 			initValueText.setText(null == getType().getValue() ? "" : getType().getValue().getValue()); //$NON-NLS-1$
-			if(getType().eContainer().eContainer() instanceof FBType){
+			if (getType().eContainer().eContainer() instanceof FBType) {
 				eventComposite.setVisible(true);
 				withEventsViewer.setAllChecked(false);
-				for(Iterator<With> iterator = getType().getWiths().iterator(); iterator.hasNext();){
+				for (Iterator<With> iterator = getType().getWiths().iterator(); iterator.hasNext();) {
 					With with = iterator.next();
 					if (with.getVariables() != null) {
 						withEventsViewer.setChecked(with.eContainer(), true);
 					}
 				}
-				withEventsViewer.setInput(getType());		
-			}else{
+				withEventsViewer.setInput(getType());
+			} else {
 				eventComposite.setVisible(false);
 			}
 		}
 		commandStack = commandStackBuffer;
 	}
-	
+
 	@Override
 	protected Collection<DataType> getTypes() {
 		return DataTypeLibrary.getInstance().getDataTypesSorted();

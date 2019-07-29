@@ -58,8 +58,8 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	private CommandStack commandStack;
 	private FBType fbType;
 
-	protected PaletteRoot paletteRoot;
-	protected Palette palette;
+	private PaletteRoot paletteRoot;
+	private Palette palette;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -126,6 +126,10 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 			paletteRoot = FBInterfacePaletteFactory.createPalette(palette);
 		}
 		return paletteRoot;
+	}
+
+	protected Palette getPalette() {
+		return palette;
 	}
 
 	@Override
