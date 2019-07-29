@@ -55,6 +55,7 @@ public class AlgorithmsLabelProvider extends LabelProvider implements
 				} else if (element instanceof OtherAlgorithm) {
 					return ((OtherAlgorithm) element).getLanguage();
 				}
+				break;
 			case 2:
 				return ((Algorithm) element).getComment();
 			default:
