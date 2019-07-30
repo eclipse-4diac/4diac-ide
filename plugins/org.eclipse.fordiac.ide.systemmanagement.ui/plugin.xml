@@ -298,14 +298,6 @@
                </input>
             </propertySection>
             <propertySection
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.DeviceInterfaceSection"
-                  id="org.eclipse.fordiac.ide.systemmanagement.properties.DeviceInterfaceSection"
-                  tab="property.tab.system.deviceInfo">
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Device">
-               </input>
-            </propertySection>
-            <propertySection
                   class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.AttributeSection"
                   id="org.eclipse.fordiac.ide.systemmanagement.properties.AttributeSection"
                   tab="property.tab.system.attributeInfo">

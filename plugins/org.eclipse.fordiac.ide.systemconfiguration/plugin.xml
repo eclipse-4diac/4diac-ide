@@ -45,12 +45,15 @@
       <propertySections
             contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
          <propertySection
-               class="org.eclipse.fordiac.ide.systemconfiguration.properties.DeviceInterfaceSection"
+               class="org.eclipse.fordiac.ide.systemconfiguration.properties.DeviceSection"
                id="org.eclipse.fordiac.ide.systemconfiguration.properties.InterfaceSection"
                tab="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab">
             <input
                   type="org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.model.libraryElement.Device">
+             </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.systemconfiguration.properties.AttributeSection"
