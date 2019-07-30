@@ -23,11 +23,11 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCom
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeECTransitionCommentCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECTransitionEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
@@ -105,8 +105,8 @@ public class TransitionSection extends AbstractECSection {
 
 	@Override
 	protected Object getInputType(Object input) {
-		if (input instanceof ECTransitionEditPart) {
-			return ((ECTransitionEditPart) input).getCastedModel();
+		if (input instanceof EditPart) {
+			input = ((EditPart) input).getModel();
 		}
 		if (input instanceof ECTransition) {
 			return input;
