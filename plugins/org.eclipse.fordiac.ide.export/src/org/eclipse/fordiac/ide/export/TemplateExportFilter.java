@@ -47,15 +47,15 @@ public abstract class TemplateExportFilter extends ExportFilter {
 					getInfos().addAll(template.getInfos());
 					final Path templatePath = destinationPath.resolve(template.getPath());
 					Files.write(templatePath, data);
-				} catch (final Throwable t) {
+				} catch (final Exception t) {
 					Activator.getDefault().getLog().log(
 							new Status(IStatus.ERROR, Activator.PLUGIN_ID, 1, "Error during template generation", t));
 					this.getErrors().add(t.getMessage() != null ? t.getMessage() : "Error during template generation");
 				}
 			}
-		} catch (final Throwable t) {
+		} catch (final Exception t) {
 			Activator.getDefault().getLog()
-			.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, 1, "Error during template generation", t));
+					.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, 1, "Error during template generation", t));
 			this.getErrors().add(t.getMessage() != null ? t.getMessage() : "Error during template generation");
 		}
 	}

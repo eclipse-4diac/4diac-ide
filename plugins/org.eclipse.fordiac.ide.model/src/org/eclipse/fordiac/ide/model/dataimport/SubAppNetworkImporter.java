@@ -34,7 +34,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 	public SubAppNetworkImporter(Palette palette, InterfaceList interfaceList) {
 		super(palette, LibraryElementFactory.eINSTANCE.createFBNetwork(), interfaceList);
 	}
-	
+
 	protected SubAppNetworkImporter(Palette palette, FBNetwork fbNetwork) {
 		super(palette, fbNetwork);
 	}
@@ -43,70 +43,69 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 	protected void parseFBNetworkEntryNode(Node n) throws TypeImportException {
 		if (n.getNodeName().equals(LibraryElementTags.SUBAPP_ELEMENT)) {
 			parseSubApp(n);
-		}else{
+		} else {
 			super.parseFBNetworkEntryNode(n);
 		}
 	}
 
 	private void parseSubApp(Node node) throws TypeImportException {
 		SubApp subApp = LibraryElementFactory.eINSTANCE.createSubApp();
-		
+
 		NamedNodeMap map = node.getAttributes();
 		Node name = map.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE);
-		if (name != null) {
+		if (null != name) {
 			subApp.setName(name.getNodeValue());
 		} else {
-			throw new TypeImportException(
-					Messages.SubAppTImporter_ERROR_SubAppName);
+			throw new TypeImportException(Messages.SubAppTImporter_ERROR_SubAppName);
 		}
 		Node type = map.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (type != null) {
-			configureSubAppInterface(subApp, node, type.getNodeValue());					
+		if (null != type) {
+			configureSubAppInterface(subApp, node, type.getNodeValue());
 		} else {
-			parseUntypedSubapp(subApp, node.getChildNodes()); 
+			parseUntypedSubapp(subApp, node.getChildNodes());
 		}
 		Node comment = map.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if (comment != null) {
+		if (null != comment) {
 			subApp.setComment(comment.getNodeValue());
 		}
-		
+
 		CommonElementImporter.getXandY(map, subApp);
-		
+
 		configureParameters(subApp.getInterface(), node.getChildNodes());
-		
+
 		getFbNetwork().getNetworkElements().add(subApp);
 		fbNetworkElementMap.put(subApp.getName(), subApp);
 	}
-	
+
 	private void configureSubAppInterface(SubApp subApp, Node node, String typeName) throws TypeImportException {
 		PaletteEntry entry = getPalette().getTypeEntry(typeName);
-		
-		if(entry instanceof SubApplicationTypePaletteEntry){
+
+		if (entry instanceof SubApplicationTypePaletteEntry) {
 			subApp.setPaletteEntry(entry);
-			SubApplicationTypePaletteEntry subEntry = (SubApplicationTypePaletteEntry)entry;			
+			SubApplicationTypePaletteEntry subEntry = (SubApplicationTypePaletteEntry) entry;
 			subApp.setInterface(EcoreUtil.copy(subEntry.getSubApplicationType().getInterfaceList()));
 			configureParameters(subApp.getInterface(), node.getChildNodes());
-		} 		
+		}
 	}
 
 	private void parseUntypedSubapp(SubApp subApp, NodeList subAppChildNodes) throws TypeImportException {
 		for (int i = 0; i < subAppChildNodes.getLength(); i++) {
 			Node n = subAppChildNodes.item(i);
-			switch (n.getNodeName()) {			
+			switch (n.getNodeName()) {
 			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT:
-				SubAppTImporter interfaceImporter = new SubAppTImporter();				
+				SubAppTImporter interfaceImporter = new SubAppTImporter();
 				interfaceImporter.setPalette(getPalette());
-				subApp.setInterface(interfaceImporter.parseInterfaceList(n));				
+				subApp.setInterface(interfaceImporter.parseInterfaceList(n));
 				break;
 			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
-				subApp.setSubAppNetwork(new SubAppNetworkImporter(getPalette(), subApp.getInterface()).parseFBNetwork(n));				
+				subApp.setSubAppNetwork(
+						new SubAppNetworkImporter(getPalette(), subApp.getInterface()).parseFBNetwork(n));
 				break;
 			default:
-				//TODO consider if more elements of a subapp should be parseable				
+				// TODO consider if more elements of a subapp should be parseable
 				break;
 			}
 		}
 	}
-
 
 }

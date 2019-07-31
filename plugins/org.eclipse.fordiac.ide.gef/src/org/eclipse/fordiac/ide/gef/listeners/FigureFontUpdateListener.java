@@ -16,8 +16,8 @@ import org.eclipse.jface.resource.JFaceResources;
 
 public class FigureFontUpdateListener implements IFontUpdateListener {
 
-	final IFigure figure;
-	final String fontName;
+	private final IFigure figure;
+	private final String fontName;
 
 	public FigureFontUpdateListener(IFigure figure, String fontname) {
 		this.figure = figure;

@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class ChangeSubAppIETypeCommand extends ChangeTypeCommand {
-	ChangeTypeCommand mirroredElement = null;
+	private ChangeTypeCommand mirroredElement = null;
 
 	public ChangeSubAppIETypeCommand(VarDeclaration interfaceElement, DataType dataType) {
 		super(interfaceElement, dataType);

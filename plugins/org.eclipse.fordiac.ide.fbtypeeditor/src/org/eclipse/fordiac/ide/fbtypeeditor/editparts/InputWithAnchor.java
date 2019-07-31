@@ -18,7 +18,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 
 public class InputWithAnchor extends WithAnchor {
-	
+
 	public InputWithAnchor(IFigure figure, int pos, EditPart editPart) {
 		super(figure, pos, editPart);
 	}
@@ -30,8 +30,8 @@ public class InputWithAnchor extends WithAnchor {
 		r.translate(-1, -1);
 		r.resize(1, 1);
 		getOwner().translateToAbsolute(r);
-		int leftX = (int)(r.x - (float)((10.0 * getZoomFactor()) * pos));
-		int centerY = (int)(r.y + 0.5f * r.height);
+		int leftX = (int) (r.x - (float) ((10.0 * getZoomFactor()) * getPos()));
+		int centerY = (int) (r.y + 0.5f * r.height);
 		return new Point(leftX, centerY);
 	}
 }

@@ -28,9 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.swt.widgets.Combo;
 
 /**
  * Helper functions need by the action and transition edit parts.
@@ -60,7 +58,7 @@ public final class ECCContentAndLabelProvider {
 		eventNames.add(EMPTY_FIELD);
 		return eventNames;
 	}
-	
+
 	public static List<Event> getInputEvents(BasicFBType type) {
 		List<Event> transitionConditions = new ArrayList<>();
 		if (null != type) {

@@ -18,8 +18,8 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 
 public class WithAnchor extends ChopboxAnchor {
-	protected final int pos;
-	protected final EditPart editPart;
+	private final int pos;
+	private final EditPart editPart;
 
 	public WithAnchor(final IFigure figure, final int pos, final EditPart editPart) {
 		super(figure);
@@ -27,11 +27,15 @@ public class WithAnchor extends ChopboxAnchor {
 		this.editPart = editPart;
 	}
 
-	protected double getZoomFactor(){
+	protected double getZoomFactor() {
 		double zoom = 1.0;
-		if(editPart.getRoot() instanceof ScalableFreeformRootEditPart){
-			zoom = ((ScalableFreeformRootEditPart)editPart.getRoot()).getZoomManager().getZoom();
+		if (editPart.getRoot() instanceof ScalableFreeformRootEditPart) {
+			zoom = ((ScalableFreeformRootEditPart) editPart.getRoot()).getZoomManager().getZoom();
 		}
 		return zoom;
+	}
+
+	protected int getPos() {
+		return pos;
 	}
 }

@@ -77,28 +77,6 @@ import org.xml.sax.InputSource;
  * The Class Output.
  */
 public class Output extends ViewPart implements IDeploymentListener {
-	
-	private Color fForegroundColor;
-	/**
-	 * The editor's background color.
-	 * @since 2.0
-	 */
-	private Color fBackgroundColor;
-	/**
-	 * The editor's selection foreground color.
-	 * @since 3.0
-	 */
-	private Color fSelectionForegroundColor;
-	/**
-	 * The editor's selection background color.
-	 * @since 3.0
-	 */
-	private Color fSelectionBackgroundColor;
-	/**
-	 * The find scope's highlight color.
-	 * @since 2.0
-	 */
-	private Color fFindScopeHighlightColor;
 
 	/** The sourceViewer. */
 	private SourceViewer sv;

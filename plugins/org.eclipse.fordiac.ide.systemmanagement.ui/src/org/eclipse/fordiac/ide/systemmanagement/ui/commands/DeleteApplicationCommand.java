@@ -21,24 +21,23 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.ui.IEditorPart;
 
 /**
  * The Class NewAppCommand.
  */
 public class DeleteApplicationCommand extends Command {
 
-	
 	private Application application;
 	private AutomationSystem system;
-	
-	//compound command to store all unmapp commands for FBNetwork elements to be unmapped
+
+	// compound command to store all unmapp commands for FBNetwork elements to be
+	// unmapped
 	private CompoundCommand unmappApplicationElements = new CompoundCommand();
 
 	public DeleteApplicationCommand(Application application) {
 		super("Delete Application");
 		this.application = application;
-		if(null != application){
+		if (null != application) {
 			this.system = application.getAutomationSystem();
 		}
 	}
@@ -53,7 +52,7 @@ public class DeleteApplicationCommand extends Command {
 		getUnmappCommands();
 		unmappApplicationElements.execute();
 		closeApplicationEditor();
-		system.getApplication().remove(application);		
+		system.getApplication().remove(application);
 		SystemManager.INSTANCE.saveSystem(system);
 	}
 
@@ -70,19 +69,20 @@ public class DeleteApplicationCommand extends Command {
 		unmappApplicationElements.undo();
 		SystemManager.INSTANCE.saveSystem(system);
 	}
-	
+
 	private void getUnmappCommands() {
-		application.getFBNetwork().getNetworkElements().stream().forEach(element -> { 
+		application.getFBNetwork().getNetworkElements().stream().forEach(element -> {
 			Mapping mapping = element.getMapping();
-			if(null != mapping){
+			if (null != mapping) {
 				unmappApplicationElements.add(new UnmapCommand(element));
 			}
-			//TODO model refactoring -if not mapped and subapp check if the internals are mapped and perform this recursivle on the elements 
+			// TODO model refactoring -if not mapped and subapp check if the internals are
+			// mapped and perform this recursivle on the elements
 		});
 	}
-	
+
 	private void closeApplicationEditor() {
-		EditorUtils.closeEditorsFiltered( editor -> ((editor instanceof FBNetworkEditor)
+		EditorUtils.closeEditorsFiltered(editor -> ((editor instanceof FBNetworkEditor)
 				&& (application.getFBNetwork().equals(((FBNetworkEditor) editor).getModel()))));
 	}
 }
