@@ -28,6 +28,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration} object.
@@ -302,25 +303,26 @@ public class VarDeclarationItemProvider extends I4DIACElementItemProvider {
 	 * This returns VarDeclaration.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/VarDeclaration")); //$NON-NLS-1$
+		return overlayImage(object, ((VarDeclaration)object).isIsInput() ?
+				FordiacImage.ICON_DATA_INPUT.getImage() : FordiacImage.ICON_DATA_OUTPUT.getImage());
 	}
 
 	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((VarDeclaration)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_VarDeclaration_type") : //$NON-NLS-1$
-			getString("_UI_VarDeclaration_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+				label + " : " + ((VarDeclaration)object).getTypeName(); //$NON-NLS-1$
 	}
 
 

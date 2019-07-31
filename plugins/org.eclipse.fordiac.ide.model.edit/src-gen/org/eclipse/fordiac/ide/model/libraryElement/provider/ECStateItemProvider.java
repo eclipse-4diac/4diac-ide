@@ -28,6 +28,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ECState} object.
@@ -235,25 +236,25 @@ public class ECStateItemProvider
 	 * This returns ECState.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ECState")); //$NON-NLS-1$
+		return overlayImage(object, FordiacImage.ICON_EC_STATE.getImage()); //$NON-NLS-1$
 	}
 
 	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((ECState)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_ECState_type") : //$NON-NLS-1$
-			getString("_UI_ECState_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
