@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
-import org.eclipse.fordiac.ide.ui.widget.WidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -146,7 +146,7 @@ public class AlgorithmList implements CommandExecutor  {
 	}
 	
 	private void createAlgorithmViewer(Composite parent) {
-		algorithmViewer = WidgetFactory.createTableViewer(parent);
+		algorithmViewer = TableWidgetFactory.createTableViewer(parent);
 		configureTableLayout(algorithmViewer);
 		algorithmViewer.setCellEditors(createAlgorithmCellEditors(algorithmViewer.getTable()));
 		algorithmViewer.setColumnProperties(new String[] { A_NAME, A_LANGUAGE, A_COMMENT});

@@ -18,26 +18,45 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
-public final class WidgetFactory {
+public final class TableWidgetFactory {
 
 	public static TableViewer createTableViewer(final Composite parent) {
 		return createTableViewer(parent, 0);
 	}
 
 	public static TableViewer createTableViewer(final Composite parent, int style) {
+		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		TableViewer tableViewer = createGenericTableViewer(gridData, parent, style);
+		
+		gridData.heightHint = 150;
+		gridData.widthHint = 80;
+		
+		return tableViewer;
+	}
+
+	public static TableViewer createPropertyTableViewer(final Composite parent, int style) {
+		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		TableViewer tableViewer = createGenericTableViewer(gridData, parent, style);
+		
+		gridData.minimumHeight = 80;
+		gridData.heightHint = 4;
+		gridData.widthHint = 400;
+		
+		return tableViewer;
+	}
+
+	private static TableViewer createGenericTableViewer(GridData gridData,
+			final Composite parent, int style) {
 		TableViewer tableViewer = new TableViewer(parent,
 				SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | style);
-		GridData gridDataVersionViewer = new GridData(GridData.FILL, GridData.FILL, true, true);
-		gridDataVersionViewer.heightHint = 150;
-		gridDataVersionViewer.widthHint = 80;
-		tableViewer.getControl().setLayoutData(gridDataVersionViewer);
+		tableViewer.getControl().setLayoutData(gridData);
 		final Table table = tableViewer.getTable();
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		return tableViewer;
 	}
 
-	private WidgetFactory() {
+	private TableWidgetFactory() {
 		throw new UnsupportedOperationException("Widget Factory should not be instantiated"); //$NON-NLS-1$
 	}
 }
