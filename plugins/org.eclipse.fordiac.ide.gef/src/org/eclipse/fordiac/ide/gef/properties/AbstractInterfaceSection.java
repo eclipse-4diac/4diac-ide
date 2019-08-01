@@ -115,14 +115,14 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 		inputGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		inputViewer = TableWidgetFactory.createPropertyTableViewer(inputGroup, 0);
-		createTableLayout(inputViewer.getTable());
+		configureTableLayout(inputViewer.getTable());
 
 		inputViewer.setContentProvider(new InputContentProvider());
 		inputViewer.setLabelProvider(new InputLabelProvider());
 		inputViewer.setCellModifier(new ValueCommentCellModifier());
 	}
 
-	private void createTableLayout(final Table table) {
+	private void configureTableLayout(final Table table) {
 		TableColumn column1 = new TableColumn(inputViewer.getTable(), SWT.LEFT);
 		column1.setText(NAME_PROPERTY);
 		TableColumn column2 = new TableColumn(inputViewer.getTable(), SWT.LEFT);

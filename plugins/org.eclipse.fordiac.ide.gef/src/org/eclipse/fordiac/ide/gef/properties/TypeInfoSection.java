@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
+import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
@@ -174,32 +175,14 @@ public abstract class TypeInfoSection extends AbstractSection {
 		versionInfoGroup.setLayout(new GridLayout(2, false));
 		versionInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
-		versionViewer = new TableViewer(versionInfoGroup,
-				SWT.FULL_SELECTION | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		GridData gridDataVersionViewer = new GridData(GridData.FILL_BOTH);
-		gridDataVersionViewer.heightHint = 80;
-		gridDataVersionViewer.widthHint = 400;
-		versionViewer.getControl().setLayoutData(gridDataVersionViewer);
-		final Table table = versionViewer.getTable();
-		table.setLinesVisible(true);
-		table.setHeaderVisible(true);
-		TableColumn column1 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
-		column1.setText("Version");
-		TableColumn column2 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
-		column2.setText("Organization");
-		TableColumn column3 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
-		column3.setText("Author");
-		TableColumn column4 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
-		column4.setText("Date");
-		TableColumn column5 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
-		column5.setText("Remarks");
-		TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnWeightData(20, 70));
-		layout.addColumnData(new ColumnWeightData(20, 90));
-		layout.addColumnData(new ColumnWeightData(20, 90));
-		layout.addColumnData(new ColumnWeightData(10, 70));
-		layout.addColumnData(new ColumnWeightData(30, 100));
-		table.setLayout(layout);
+		AddDeleteWidget buttons = new AddDeleteWidget();
+		buttons.createControls(versionInfoGroup, getWidgetFactory());
+		
+		versionViewer = TableWidgetFactory.createPropertyTableViewer(versionInfoGroup);
+		configureTableLayout(versionViewer.getTable());
+		
+		Table table = versionViewer.getTable();
+
 		versionViewer.setContentProvider(new VersionContentProvider());
 		versionViewer.setLabelProvider(new VersionLabelProvider());
 		versionViewer.setCellEditors(new CellEditor[] { new TextCellEditor(table), new TextCellEditor(table),
@@ -207,8 +190,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 		versionViewer.setColumnProperties(new String[] { VERSION_PROPERTY, ORGANIZATION_PROPERTY, AUTHOR_PROPERTY,
 				DATE_PROPERTY, REMARKS_PROPERTY });
 
-		AddDeleteWidget buttons = new AddDeleteWidget();
-		buttons.createControls(versionInfoGroup, getWidgetFactory());
+
 		buttons.bindToTableViewer(versionViewer, this, ref -> new AddNewVersionInfoCommand(getType()),
 				ref -> new DeleteVersionInfoCommand(getType(), (VersionInfo) ref));
 
@@ -260,6 +242,26 @@ public abstract class TypeInfoSection extends AbstractSection {
 				versionViewer.refresh(data);
 			}
 		});
+	}
+
+	private void configureTableLayout(Table table) {
+		TableColumn column1 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
+		column1.setText("Version");
+		TableColumn column2 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
+		column2.setText("Organization");
+		TableColumn column3 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
+		column3.setText("Author");
+		TableColumn column4 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
+		column4.setText("Date");
+		TableColumn column5 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
+		column5.setText("Remarks");
+		TableLayout layout = new TableLayout();
+		layout.addColumnData(new ColumnWeightData(20, 70));
+		layout.addColumnData(new ColumnWeightData(20, 90));
+		layout.addColumnData(new ColumnWeightData(20, 90));
+		layout.addColumnData(new ColumnWeightData(10, 70));
+		layout.addColumnData(new ColumnWeightData(30, 100));
+		table.setLayout(layout);
 	}
 
 	@Override

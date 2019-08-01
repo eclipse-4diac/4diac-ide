@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
 import java.util.List;
 
-import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeActionOrderCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmCommand;
@@ -38,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -267,19 +267,14 @@ public class StateSection extends AbstractECSection {
 	}
 
 	private void createActionViewer(Group actionGroup) {
-		actionViewer = new TableViewer(actionGroup,
-				SWT.FULL_SELECTION | SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
-		gridData.heightHint = 150;
-		gridData.widthHint = 80;
-		actionViewer.getControl().setLayoutData(gridData);
+		actionViewer = TableWidgetFactory.createTableViewer(actionGroup);
+		configureTableLayout(actionViewer.getTable());
+
 		actionViewer.setContentProvider(new ActionContentProvider());
 		actionViewer.setLabelProvider(new ActionListLabelProvider());
+	}
 
-		Table table = actionViewer.getTable();
-		table.setLinesVisible(true);
-		table.setHeaderVisible(true);
-
+	private void configureTableLayout(final Table table) {
 		TableColumn tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Algorithm");
 
@@ -302,7 +297,6 @@ public class StateSection extends AbstractECSection {
 		transitionsOutViewer.getTree().setLayoutData(gridData);
 		transitionsOutViewer.setContentProvider(new StateContentProvider());
 		transitionsOutViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
-		new AdapterFactoryTreeEditor(transitionsOutViewer.getTree(), getAdapterFactory());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -369,10 +363,10 @@ public class StateSection extends AbstractECSection {
 	private CellEditor[] createActionViewerCellEditors(Table table) {
 		BasicFBType fbType = getBasicFBType();
 		return new CellEditor[] {
-				new ComboBoxCellEditor(table, ECCContentAndLabelProvider.getAlgorithmNames(fbType).toArray(new String[0]),
-						SWT.READ_ONLY),
-				new ComboBoxCellEditor(table, ECCContentAndLabelProvider.getOutputEventNames(fbType).toArray(new String[0]),
-						SWT.READ_ONLY) };
+				new ComboBoxCellEditor(table,
+						ECCContentAndLabelProvider.getAlgorithmNames(fbType).toArray(new String[0]), SWT.READ_ONLY),
+				new ComboBoxCellEditor(table,
+						ECCContentAndLabelProvider.getOutputEventNames(fbType).toArray(new String[0]), SWT.READ_ONLY) };
 	}
 
 }
