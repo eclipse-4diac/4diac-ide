@@ -47,7 +47,7 @@ public class ChangeConditionEventCommand extends Command {
 		this.transition = transition;
 		this.conditionEvent = conditionEvent;
 		
-		BasicFBType fb = (null != transition) ? (BasicFBType) transition.eContainer().eContainer() : null;
+		BasicFBType fb = (null != transition) ? transition.getECC().getBasicFBType() : null;
 		eventList.addAll(ECCContentAndLabelProvider.getInputEvents(fb));
 	}
 

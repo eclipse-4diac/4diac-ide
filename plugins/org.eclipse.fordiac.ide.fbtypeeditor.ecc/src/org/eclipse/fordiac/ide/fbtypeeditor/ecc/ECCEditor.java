@@ -66,8 +66,7 @@ import org.eclipse.ui.actions.ActionFactory;
 /**
  * The Class ECCEditor.
  */
-public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
-		IFBTEditorPart {
+public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
 
 	/** The fb type. */
 	private BasicFBType fbType;
@@ -77,8 +76,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	public void init(final IEditorSite site, final IEditorInput input)
-			throws PartInitException {
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInput(input);
 		if (input instanceof FBTypeEditorInput) {
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
@@ -96,50 +94,47 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 		super.configureGraphicalViewer();
 		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
 
-		//set the control for the new state action so that it can get the correct position for state creation
+		// set the control for the new state action so that it can get the correct
+		// position for state creation
 		IAction action = getActionRegistry().getAction(NewStateAction.CREATE_STATE);
-		((NewStateAction)action).setViewerControl((FigureCanvas)viewer.getControl());
-		((NewStateAction)action).setZoomManager(getZoomManger()); 
-		
+		((NewStateAction) action).setViewerControl((FigureCanvas) viewer.getControl());
+		((NewStateAction) action).setZoomManager(getZoomManger());
+
 		viewer.getKeyHandler().put(KeyStroke.getPressed(SWT.DEL, 127, 0),
-				getActionRegistry().getAction(
-						ActionFactory.DELETE.getId()));
+				getActionRegistry().getAction(ActionFactory.DELETE.getId()));
 	}
-	
-	
+
 	@Override
 	protected KeyHandler getCommonKeyHandler() {
 		KeyHandler keyHandler = super.getCommonKeyHandler();
-		
+
 		// bind insert key press to add action action
 		keyHandler.put(KeyStroke.getPressed(SWT.INSERT, 0),
 				getActionRegistry().getAction(AddECCActionAction.ADD_ECC_ACTION));
 		return keyHandler;
-	}	
-	
-	
+	}
+
 	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer, ZoomManager zoomManager) {
-		return new ZoomUndoRedoContextMenuProvider(
-				viewer, zoomManager, getActionRegistry()) {
+		return new ZoomUndoRedoContextMenuProvider(viewer, zoomManager, getActionRegistry()) {
 			@Override
 			public void buildContextMenu(IMenuManager menu) {
 				super.buildContextMenu(menu);
-								
+
 				IAction action = getRegistry().getAction(NewStateAction.CREATE_STATE);
 				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-				
+
 				action = getRegistry().getAction(AddECCActionAction.ADD_ECC_ACTION);
-				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);				
+				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
 				action = getRegistry().getAction(ActionFactory.DELETE.getId());
-				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);				
+				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 			}
 		};
 	}
-	
+
 	@Override
 	protected ScalableFreeformRootEditPart createRootEditPart() {
-		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()){
+		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()) {
 
 			@Override
 			public DragTracker getDragTracker(Request req) {
@@ -147,24 +142,22 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 				dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 				return dragTracker;
 			}
-			
+
 		};
 	}
-	
+
 	@Override
-	public void selectionChanged(final IWorkbenchPart part,
-			final ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		super.selectionChanged(part, selection);
 		updateActions(getSelectionActions());
 	}
-
 
 	/** The palette root. */
 	private PaletteRoot paletteRoot;
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-		if(null == paletteRoot) {
+		if (null == paletteRoot) {
 			paletteRoot = ECCPaletteFactory.createPalette();
 		}
 		return paletteRoot;
@@ -181,30 +174,32 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 	protected void createActions() {
 		ActionRegistry registry = getActionRegistry();
 		IAction action;
-		
+
 		action = new NewStateAction(this);
 		registry.registerAction(action);
-	
+
 		action = new AddECCActionAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-		
+
 		super.createActions();
-		
-		//we need a special delete action that will remove ecc_actions from the list if it contains also the according state		
+
+		// we need a special delete action that will remove ecc_actions from the list if
+		// it contains also the according state
 		action = registry.getAction(ActionFactory.DELETE.getId());
 		registry.removeAction(action);
 		getSelectionActions().remove(action.getId());
-		
+
 		action = new DeleteECCAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-		
-		//remove the select all action added in the graphical editor and replace it with our
+
+		// remove the select all action added in the graphical editor and replace it
+		// with our
 		action = registry.getAction(ActionFactory.SELECT_ALL.getId());
 		registry.removeAction(action);
 		getSelectionActions().remove(action.getId());
-		
+
 		action = new ECCSelectAllAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
@@ -213,46 +208,45 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 	@Override
 	public boolean outlineSelectionChanged(Object selectedElement) {
 		Object obj = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
-		if(obj instanceof EditPart){
-			getGraphicalViewer().select((EditPart)obj);
+		if (obj instanceof EditPart) {
+			getGraphicalViewer().select((EditPart) obj);
 			return true;
 		}
-		if(selectedElement instanceof ECCItemProvider){
+		if (selectedElement instanceof ECCItemProvider) {
 			return true;
 		}
-		if(selectedElement instanceof ECAction){
-			obj = getGraphicalViewer().getEditPartRegistry().get(
-					((ECAction)selectedElement).eContainer());
-			if(null != obj){
-				for (Object element : ((ECStateEditPart)obj).getCurrentChildren()) {
-					if((element instanceof ECActionAlgorithm) && (selectedElement.equals(
-							((ECActionAlgorithm)element).getAction()))){
+		if (selectedElement instanceof ECAction) {
+			obj = getGraphicalViewer().getEditPartRegistry().get(((ECAction) selectedElement).getECState());
+			if (null != obj) {
+				for (Object element : ((ECStateEditPart) obj).getCurrentChildren()) {
+					if ((element instanceof ECActionAlgorithm)
+							&& (selectedElement.equals(((ECActionAlgorithm) element).getAction()))) {
 						obj = getGraphicalViewer().getEditPartRegistry().get(element);
-						if(null != obj){
-							getGraphicalViewer().select((EditPart)obj);
+						if (null != obj) {
+							getGraphicalViewer().select((EditPart) obj);
 						}
 					}
 				}
 			}
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	private CommandStack commandStack;
-	
+
 	@Override
 	protected void setModel(IEditorInput input) {
-		super.setModel(input);				
+		super.setModel(input);
 		setEditDomain(new ECCEditorEditDomain(this, commandStack));
 	}
-	
+
 	@Override
 	public void setCommonCommandStack(CommandStack commandStack) {
-		this.commandStack = commandStack;		
+		this.commandStack = commandStack;
 	}
-	
+
 	@Override
 	protected FlyoutPreferences getPalettePreferences() {
 		return ECCPaletteFactory.PALETTE_PREFERENCES;
@@ -276,12 +270,12 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	public AutomationSystem getSystem() {
-		return null;   //this is currently needed as the base class is targeted for system editors
+		return null; // this is currently needed as the base class is targeted for system editors
 	}
 
 	@Override
 	public void doSaveAs() {
-		// nothing to do here		
+		// nothing to do here
 	}
-	
+
 }

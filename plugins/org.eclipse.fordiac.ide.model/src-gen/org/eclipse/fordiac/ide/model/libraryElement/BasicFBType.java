@@ -34,6 +34,7 @@ import org.eclipse.emf.common.util.EList;
 public interface BasicFBType extends BaseFBType {
 	/**
 	 * Returns the value of the '<em><b>ECC</b></em>' containment reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType <em>Basic FB Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>ECC</em>' containment reference isn't clear,
@@ -43,7 +44,8 @@ public interface BasicFBType extends BaseFBType {
 	 * @return the value of the '<em>ECC</em>' containment reference.
 	 * @see #setECC(ECC)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getBasicFBType_ECC()
-	 * @model containment="true"
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType
+	 * @model opposite="basicFBType" containment="true"
 	 *        extendedMetaData="kind='element' name='ECC' namespace='##targetNamespace'"
 	 * @generated
 	 */

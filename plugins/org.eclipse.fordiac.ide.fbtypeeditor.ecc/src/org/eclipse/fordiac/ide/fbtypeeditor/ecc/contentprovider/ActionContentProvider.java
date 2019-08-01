@@ -21,33 +21,33 @@ public class ActionContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
 		if (inputElement instanceof ECState) {
-			return ((ECState)inputElement).getECAction().toArray();
+			return ((ECState) inputElement).getECAction().toArray();
 		}
-		if(inputElement instanceof ECAction){
-			return ((BasicFBType)((ECAction)inputElement).eContainer().eContainer().eContainer()).getAlgorithm().toArray();
+		if (inputElement instanceof ECAction) {
+			return ((ECAction) inputElement).getECState().getECC().getBasicFBType().getAlgorithm().toArray();
 		}
 		return new Object[] {};
 	}
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if(parentElement instanceof ECState && null != ((ECState)parentElement).getECAction()){
-			return ((ECState)parentElement).getECAction().toArray();
+		if (parentElement instanceof ECState && null != ((ECState) parentElement).getECAction()) {
+			return ((ECState) parentElement).getECAction().toArray();
 		}
-		if(parentElement instanceof BasicFBType){
-			return ((BasicFBType)parentElement).getAlgorithm().toArray();
+		if (parentElement instanceof BasicFBType) {
+			return ((BasicFBType) parentElement).getAlgorithm().toArray();
 		}
 		return null;
 	}
 
 	@Override
 	public Object getParent(Object element) {
-		if(element instanceof ECState){
-			return ((ECState)element).eContainer();
+		if (element instanceof ECState) {
+			return ((ECState) element).getECC();
 		}
-		if(element instanceof ECAction){
-			if(null != ((ECAction)element).eContainer()){
-				return ((ECAction)element).eContainer().eContainer().eContainer();
+		if (element instanceof ECAction) {
+			if (null != ((ECAction) element).getECState()) {
+				return ((ECAction) element).getECState().getECC().getBasicFBType();
 			}
 		}
 		return null;
@@ -55,11 +55,11 @@ public class ActionContentProvider implements ITreeContentProvider {
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if(element instanceof ECState){
-			return ! ((ECState)element).getECAction().isEmpty();
+		if (element instanceof ECState) {
+			return !((ECState) element).getECAction().isEmpty();
 		}
-		if(element instanceof ECAction){
-			return ! ((BasicFBType)((ECAction)element).eContainer().eContainer().eContainer()).getAlgorithm().isEmpty();
+		if (element instanceof ECAction) {
+			return !((ECAction) element).getECState().getECC().getBasicFBType().getAlgorithm().isEmpty();
 		}
 		return false;
 	}

@@ -26,7 +26,7 @@ public class DeleteECActionCommand extends Command {
 
 	@Override
 	public void execute() {
-		parent = (ECState) ecAction.eContainer();
+		parent = ecAction.getECState();
 		redo();
 	}
 

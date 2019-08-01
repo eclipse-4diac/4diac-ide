@@ -100,7 +100,7 @@ public class TransitionSection extends AbstractECSection {
 	}
 
 	protected BasicFBType getBasicFBType() {
-		return (null != getType().eContainer()) ? (BasicFBType) getType().eContainer().eContainer() : null;
+		return (null != getType().getECC()) ? getType().getECC().getBasicFBType() : null;
 	}
 
 	@Override

@@ -20,8 +20,9 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -45,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getECAction <em>EC Action</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getOutTransitions <em>Out Transitions</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getInTransitions <em>In Transitions</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl#getECC <em>ECC</em>}</li>
  * </ul>
  *
  * @generated
@@ -181,7 +183,7 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	@Override
 	public EList<ECAction> getECAction() {
 		if (eCAction == null) {
-			eCAction = new EObjectContainmentEList<ECAction>(ECAction.class, this, LibraryElementPackage.EC_STATE__EC_ACTION);
+			eCAction = new EObjectContainmentWithInverseEList<ECAction>(ECAction.class, this, LibraryElementPackage.EC_STATE__EC_ACTION, LibraryElementPackage.EC_ACTION__EC_STATE);
 		}
 		return eCAction;
 	}
@@ -327,7 +329,50 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	 */
 	@Override
 	public ECC getECC() {
-		return org.eclipse.fordiac.ide.model.Annotations.getECC(this);
+		if (eContainerFeatureID() != LibraryElementPackage.EC_STATE__ECC) return null;
+		return (ECC)eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ECC basicGetECC() {
+		if (eContainerFeatureID() != LibraryElementPackage.EC_STATE__ECC) return null;
+		return (ECC)eInternalContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetECC(ECC newECC, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newECC, LibraryElementPackage.EC_STATE__ECC, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setECC(ECC newECC) {
+		if (newECC != eInternalContainer() || (eContainerFeatureID() != LibraryElementPackage.EC_STATE__ECC && newECC != null)) {
+			if (EcoreUtil.isAncestor(this, newECC))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newECC != null)
+				msgs = ((InternalEObject)newECC).eInverseAdd(this, LibraryElementPackage.ECC__EC_STATE, ECC.class, msgs);
+			msgs = basicSetECC(newECC, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_STATE__ECC, newECC, newECC));
 	}
 
 	/**
@@ -339,10 +384,16 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID,
 			NotificationChain msgs) {
 		switch (featureID) {
+			case LibraryElementPackage.EC_STATE__EC_ACTION:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getECAction()).basicAdd(otherEnd, msgs);
 			case LibraryElementPackage.EC_STATE__OUT_TRANSITIONS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutTransitions()).basicAdd(otherEnd, msgs);
 			case LibraryElementPackage.EC_STATE__IN_TRANSITIONS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInTransitions()).basicAdd(otherEnd, msgs);
+			case LibraryElementPackage.EC_STATE__ECC:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetECC((ECC)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -361,8 +412,24 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 				return ((InternalEList<?>)getOutTransitions()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.EC_STATE__IN_TRANSITIONS:
 				return ((InternalEList<?>)getInTransitions()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.EC_STATE__ECC:
+				return basicSetECC(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case LibraryElementPackage.EC_STATE__ECC:
+				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.ECC__EC_STATE, ECC.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -386,6 +453,9 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 				return getOutTransitions();
 			case LibraryElementPackage.EC_STATE__IN_TRANSITIONS:
 				return getInTransitions();
+			case LibraryElementPackage.EC_STATE__ECC:
+				if (resolve) return getECC();
+				return basicGetECC();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -422,6 +492,9 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 				getInTransitions().clear();
 				getInTransitions().addAll((Collection<? extends ECTransition>)newValue);
 				return;
+			case LibraryElementPackage.EC_STATE__ECC:
+				setECC((ECC)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -454,6 +527,9 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 			case LibraryElementPackage.EC_STATE__IN_TRANSITIONS:
 				getInTransitions().clear();
 				return;
+			case LibraryElementPackage.EC_STATE__ECC:
+				setECC((ECC)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -479,6 +555,8 @@ public class ECStateImpl extends I4DIACElementImpl implements ECState {
 				return outTransitions != null && !outTransitions.isEmpty();
 			case LibraryElementPackage.EC_STATE__IN_TRANSITIONS:
 				return inTransitions != null && !inTransitions.isEmpty();
+			case LibraryElementPackage.EC_STATE__ECC:
+				return basicGetECC() != null;
 		}
 		return super.eIsSet(featureID);
 	}

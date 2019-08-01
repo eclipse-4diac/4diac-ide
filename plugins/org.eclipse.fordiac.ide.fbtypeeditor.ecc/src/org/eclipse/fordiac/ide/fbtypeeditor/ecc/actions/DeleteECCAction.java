@@ -40,49 +40,40 @@ public class DeleteECCAction extends DeleteAction {
 		if (!(objects.get(0) instanceof EditPart)) {
 			return null;
 		}
+		return super.createDeleteCommand(getDeleteList(objects));
+	}
 
+	@SuppressWarnings("rawtypes")
+	private static List<EditPart> getDeleteList(List objects) {
 		List<EditPart> list = new ArrayList<>();
 
-		//before anything else add the transitions 
 		for (Object object : objects) {
-			if(object instanceof ECTransitionEditPart){
-				list.add((ECTransitionEditPart)object);
-			}
-		}
-		
-		for (int i = 0; i < objects.size(); i++) {
-			EditPart object = (EditPart) objects.get(i);
-			if(object instanceof ECActionAlgorithmEditPart){
-				if(!stateContainedInDeleteList(objects, (ECState)((ECActionAlgorithmEditPart)object).getCastedModel().getAction().eContainer())){
-					list.add(object);
+			if (object instanceof ECTransitionEditPart) {
+				list.add(0, (EditPart) object); // add the transitions before anything else
+			} else if (object instanceof ECActionAlgorithmEditPart) {
+				if (!stateContainedInDeleteList(objects,
+						((ECActionAlgorithmEditPart) object).getCastedModel().getAction().getECState())) {
+					list.add((EditPart) object);
 				}
-			}else if (object instanceof ECActionOutputEventEditPart){
-				if(!stateContainedInDeleteList(objects, (ECState)((ECActionOutputEventEditPart)object).getCastedModel().getAction().eContainer())){
-					list.add(object);
+			} else if (object instanceof ECActionOutputEventEditPart) {
+				if (!stateContainedInDeleteList(objects,
+						((ECActionOutputEventEditPart) object).getCastedModel().getAction().getECState())) {
+					list.add((EditPart) object);
 				}
 			}
-			else{
-				if(!(object instanceof ECTransitionEditPart)){
-					list.add(object);
-				}
-			}
-		}
-		
-		
-		return super.createDeleteCommand(list);
+		}		
+		return list;
 	}
 
 	@SuppressWarnings("rawtypes")
 	private static boolean stateContainedInDeleteList(List objects, ECState eState) {
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart object = (EditPart) objects.get(i);
-			if(object instanceof ECStateEditPart && ((ECStateEditPart)object).getCastedModel().equals(eState)){
+			if (object instanceof ECStateEditPart && ((ECStateEditPart) object).getCastedModel().equals(eState)) {
 				return true;
-			}				
+			}
 		}
 		return false;
 	}
-	
-	
 
 }

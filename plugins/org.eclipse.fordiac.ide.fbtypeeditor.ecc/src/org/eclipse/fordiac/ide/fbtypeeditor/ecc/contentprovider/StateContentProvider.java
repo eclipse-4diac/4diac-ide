@@ -44,7 +44,7 @@ public class StateContentProvider implements ITreeContentProvider {
 	@Override
 	public Object getParent(Object element) {
 		if (element instanceof ECState) {
-			return ((ECState) element).eContainer();
+			return ((ECState) element).getECC();
 		}
 		return null;
 	}

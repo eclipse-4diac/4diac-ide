@@ -116,9 +116,9 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 		if (newECC != eCC) {
 			NotificationChain msgs = null;
 			if (eCC != null)
-				msgs = ((InternalEObject)eCC).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.BASIC_FB_TYPE__ECC, null, msgs);
+				msgs = ((InternalEObject)eCC).eInverseRemove(this, LibraryElementPackage.ECC__BASIC_FB_TYPE, ECC.class, msgs);
 			if (newECC != null)
-				msgs = ((InternalEObject)newECC).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.BASIC_FB_TYPE__ECC, null, msgs);
+				msgs = ((InternalEObject)newECC).eInverseAdd(this, LibraryElementPackage.ECC__BASIC_FB_TYPE, ECC.class, msgs);
 			msgs = basicSetECC(newECC, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
@@ -147,6 +147,22 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 	@Override
 	public Algorithm getAlgorithmNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.BASIC_FB_TYPE__ECC:
+				if (eCC != null)
+					msgs = ((InternalEObject)eCC).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.BASIC_FB_TYPE__ECC, null, msgs);
+				return basicSetECC((ECC)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**

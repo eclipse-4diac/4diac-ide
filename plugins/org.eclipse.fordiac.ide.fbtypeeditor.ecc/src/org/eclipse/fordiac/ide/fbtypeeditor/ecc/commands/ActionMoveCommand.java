@@ -34,7 +34,7 @@ public class ActionMoveCommand extends Command {
 
 	@Override
 	public void execute() {
-		state = (ECState) action.eContainer();
+		state = action.getECState();
 		indexOld = state.getECAction().indexOf(action);
 		redo();
 	}

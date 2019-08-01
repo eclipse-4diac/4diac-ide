@@ -239,7 +239,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	}
 
 	public BasicFBType getBFB() {
-		return (BasicFBType) getAction().eContainer().eContainer().eContainer();
+		return getAction().getECState().getECC().getBasicFBType();
 	}
 
 	@Override

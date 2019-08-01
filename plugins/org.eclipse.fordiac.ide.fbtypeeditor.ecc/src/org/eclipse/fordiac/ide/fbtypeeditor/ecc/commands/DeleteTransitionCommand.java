@@ -54,7 +54,7 @@ public class DeleteTransitionCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		parent = (ECC) transition.eContainer();
+		parent = transition.getECC();
 		oldTransitionPos = parent.getECTransition().indexOf(transition);
 
 		source = transition.getSource();

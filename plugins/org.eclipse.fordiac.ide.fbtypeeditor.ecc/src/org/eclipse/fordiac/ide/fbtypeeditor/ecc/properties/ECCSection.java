@@ -28,7 +28,7 @@ abstract class ECCSection extends AbstractECSection {
 	@Override
 	protected BasicFBType getType() {
 		if (type instanceof ECC) {
-			return (BasicFBType) ((ECC) type).eContainer();
+			return ((ECC) type).getBasicFBType();
 		}
 		return null;
 	}
@@ -42,19 +42,19 @@ abstract class ECCSection extends AbstractECSection {
 			return input;
 		}
 		if (input instanceof ECActionAlgorithmEditPart) {
-			return ((ECActionAlgorithmEditPart) input).getAction().eContainer().eContainer();
+			return ((ECActionAlgorithmEditPart) input).getAction().getECState().getECC();
 		}
 		if (input instanceof ECActionOutputEventEditPart) {
 			ECAction action = ((ECActionOutputEventEditPart) input).getAction();
-			if (null != action && null != action.eContainer()) {
-				return action.eContainer().eContainer();
+			if (null != action && null != action.getECState()) {
+				return action.getECState().getECC();
 			}
 		}
 		if (input instanceof ECTransitionEditPart) {
-			return ((ECTransitionEditPart) input).getModel().eContainer();
+			return ((ECTransitionEditPart) input).getModel().getECC();
 		}
 		if (input instanceof ECStateEditPart) {
-			return ((ECStateEditPart) input).getCastedModel().eContainer();
+			return ((ECStateEditPart) input).getCastedModel().getECC();
 		}
 		return null;
 	}

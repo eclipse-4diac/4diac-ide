@@ -109,9 +109,8 @@ public final class ECCContentAndLabelProvider {
 	}
 
 	public static BasicFBType getFBType(ECAction action) {
-		if (null != action.eContainer() && null != action.eContainer().eContainer()
-				&& null != action.eContainer().eContainer().eContainer()) {
-			return (BasicFBType) action.eContainer().eContainer().eContainer();
+		if (null != action.getECState() && null != action.getECState().getECC()){
+			return action.getECState().getECC().getBasicFBType();
 		}
 		return null;
 	}

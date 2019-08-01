@@ -49,7 +49,7 @@ public class DeleteECStateCommand extends Command {
 	public DeleteECStateCommand(final ECState state) {
 		super();
 		this.state = state;
-		parent = (ECC) state.eContainer();
+		parent = state.getECC();
 	}
 	
 	@Override

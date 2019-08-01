@@ -42,7 +42,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -167,16 +166,9 @@ public final class Annotations {
 	// *** ECState ***//
 	public static boolean isStartState(ECState ecs) {
 		if (null != ecs.eContainer()) {
-			return ecs.equals(getECC(ecs).getStart());
+			return ecs.equals(ecs.getECC().getStart());
 		}
 		return false;
-	}
-
-	public static ECC getECC(ECState ecs) {
-		if (null != ecs.eContainer()) {
-			return (ECC) ecs.eContainer();
-		}
-		return null;
 	}
 
 	// *** ECTransition ***//
@@ -195,10 +187,6 @@ public final class Annotations {
 			}
 		}
 		return retVal;
-	}
-
-	public static ECC getECC(ECTransition ecTransition) {
-		return (ECC) ecTransition.eContainer();
 	}
 
 	// *** FB ***//

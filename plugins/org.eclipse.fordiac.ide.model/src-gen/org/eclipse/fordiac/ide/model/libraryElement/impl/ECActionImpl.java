@@ -13,12 +13,15 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -32,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getAlgorithm <em>Algorithm</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getOutput <em>Output</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECActionImpl#getECState <em>EC State</em>}</li>
  * </ul>
  *
  * @generated
@@ -162,6 +166,103 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 	 * @generated
 	 */
 	@Override
+	public ECState getECState() {
+		if (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE) return null;
+		return (ECState)eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ECState basicGetECState() {
+		if (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE) return null;
+		return (ECState)eInternalContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetECState(ECState newECState, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newECState, LibraryElementPackage.EC_ACTION__EC_STATE, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setECState(ECState newECState) {
+		if (newECState != eInternalContainer() || (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE && newECState != null)) {
+			if (EcoreUtil.isAncestor(this, newECState))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newECState != null)
+				msgs = ((InternalEObject)newECState).eInverseAdd(this, LibraryElementPackage.EC_STATE__EC_ACTION, ECState.class, msgs);
+			msgs = basicSetECState(newECState, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_ACTION__EC_STATE, newECState, newECState));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.EC_ACTION__EC_STATE:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetECState((ECState)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.EC_ACTION__EC_STATE:
+				return basicSetECState(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case LibraryElementPackage.EC_ACTION__EC_STATE:
+				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.EC_STATE__EC_ACTION, ECState.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.EC_ACTION__ALGORITHM:
@@ -170,6 +271,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 			case LibraryElementPackage.EC_ACTION__OUTPUT:
 				if (resolve) return getOutput();
 				return basicGetOutput();
+			case LibraryElementPackage.EC_ACTION__EC_STATE:
+				if (resolve) return getECState();
+				return basicGetECState();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -187,6 +291,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 				return;
 			case LibraryElementPackage.EC_ACTION__OUTPUT:
 				setOutput((Event)newValue);
+				return;
+			case LibraryElementPackage.EC_ACTION__EC_STATE:
+				setECState((ECState)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -206,6 +313,9 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 			case LibraryElementPackage.EC_ACTION__OUTPUT:
 				setOutput((Event)null);
 				return;
+			case LibraryElementPackage.EC_ACTION__EC_STATE:
+				setECState((ECState)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -222,6 +332,8 @@ public class ECActionImpl extends EObjectImpl implements ECAction {
 				return algorithm != null;
 			case LibraryElementPackage.EC_ACTION__OUTPUT:
 				return output != null;
+			case LibraryElementPackage.EC_ACTION__EC_STATE:
+				return basicGetECState() != null;
 		}
 		return super.eIsSet(featureID);
 	}

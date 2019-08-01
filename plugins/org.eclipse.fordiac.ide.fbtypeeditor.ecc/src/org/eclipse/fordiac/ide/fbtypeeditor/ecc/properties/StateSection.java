@@ -176,7 +176,7 @@ public class StateSection extends AbstractECSection {
 	}
 
 	private BasicFBType getBasicFBType() {
-		return (BasicFBType) getType().eContainer().eContainer();
+		return getType().getECC().getBasicFBType();
 	}
 
 	@Override

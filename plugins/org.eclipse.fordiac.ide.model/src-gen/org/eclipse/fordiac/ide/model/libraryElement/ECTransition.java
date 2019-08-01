@@ -26,6 +26,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource <em>Source</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getDestination <em>Destination</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getConditionEvent <em>Condition Event</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getECC <em>ECC</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition()
@@ -150,12 +151,28 @@ public interface ECTransition extends PositionableElement {
 	String getConditionText();
 
 	/**
+	 * Returns the value of the '<em><b>ECC</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECTransition <em>EC Transition</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
+	 * @return the value of the '<em>ECC</em>' container reference.
+	 * @see #setECC(ECC)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition_ECC()
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC#getECTransition
+	 * @model opposite="eCTransition" required="true" transient="false"
 	 * @generated
 	 */
 	ECC getECC();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getECC <em>ECC</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>ECC</em>' container reference.
+	 * @see #getECC()
+	 * @generated
+	 */
+	void setECC(ECC value);
 
 	/**
 	 * Returns the value of the '<em><b>Source</b></em>' reference.

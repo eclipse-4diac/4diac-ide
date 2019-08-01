@@ -61,7 +61,7 @@
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCC" eType="#//ECC" containment="true"
-        resolveProxies="false">
+        resolveProxies="false" eOpposite="#//ECC/basicFBType">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="ECC"/>
@@ -254,10 +254,13 @@
   <eClassifiers xsi:type="ecore:EClass" name="ECAction">
     <eStructuralFeatures xsi:type="ecore:EReference" name="algorithm" eType="#//Algorithm"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eCState" lowerBound="1"
+        eType="#//ECState" eOpposite="#//ECState/eCAction"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ECC">
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCState" lowerBound="1"
-        upperBound="-1" eType="#//ECState" containment="true" resolveProxies="false">
+        upperBound="-1" eType="#//ECState" containment="true" resolveProxies="false"
+        eOpposite="#//ECState/eCC">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="ECState"/>
@@ -265,7 +268,8 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCTransition" lowerBound="1"
-        upperBound="-1" eType="#//ECTransition" containment="true" resolveProxies="false">
+        upperBound="-1" eType="#//ECTransition" containment="true" resolveProxies="false"
+        eOpposite="#//ECTransition/eCC">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="ECTransition"/>
@@ -273,6 +277,8 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//ECState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="basicFBType" lowerBound="1"
+        eType="#//BasicFBType" eOpposite="#//BasicFBType/eCC"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ECState" eSuperTypes="#//INamedElement #//PositionableElement">
     <eOperations name="isStartState" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
@@ -280,13 +286,8 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getECC" lowerBound="1" eType="#//ECC">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getECC(this);"/>
-      </eAnnotations>
-    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCAction" upperBound="-1"
-        eType="#//ECAction" containment="true" resolveProxies="false">
+        eType="#//ECAction" containment="true" resolveProxies="false" eOpposite="#//ECAction/eCState">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="ECAction"/>
@@ -297,16 +298,12 @@
         eType="#//ECTransition" eOpposite="#//ECTransition/source"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inTransitions" upperBound="-1"
         eType="#//ECTransition" eOpposite="#//ECTransition/destination"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eCC" eType="#//ECC" eOpposite="#//ECC/eCState"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ECTransition" eSuperTypes="#//PositionableElement">
     <eOperations name="getConditionText" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getConditionText(this);"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="getECC" lowerBound="1" eType="#//ECC">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getECC(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
@@ -327,6 +324,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="destination" lowerBound="1"
         eType="#//ECState" eOpposite="#//ECState/inTransitions"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="conditionEvent" eType="#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eCC" lowerBound="1" eType="#//ECC"
+        eOpposite="#//ECC/eCTransition"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//IInterfaceElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="with" upperBound="-1" eType="#//With"

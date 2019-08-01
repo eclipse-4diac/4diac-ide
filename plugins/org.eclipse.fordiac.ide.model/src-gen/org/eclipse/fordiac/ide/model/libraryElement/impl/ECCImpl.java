@@ -21,8 +21,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
@@ -39,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl#getECState <em>EC State</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl#getECTransition <em>EC Transition</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl#getStart <em>Start</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl#getBasicFBType <em>Basic FB Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -101,7 +104,7 @@ public class ECCImpl extends EObjectImpl implements ECC {
 	@Override
 	public EList<ECState> getECState() {
 		if (eCState == null) {
-			eCState = new EObjectContainmentEList<ECState>(ECState.class, this, LibraryElementPackage.ECC__EC_STATE);
+			eCState = new EObjectContainmentWithInverseEList<ECState>(ECState.class, this, LibraryElementPackage.ECC__EC_STATE, LibraryElementPackage.EC_STATE__ECC);
 		}
 		return eCState;
 	}
@@ -114,7 +117,7 @@ public class ECCImpl extends EObjectImpl implements ECC {
 	@Override
 	public EList<ECTransition> getECTransition() {
 		if (eCTransition == null) {
-			eCTransition = new EObjectContainmentEList<ECTransition>(ECTransition.class, this, LibraryElementPackage.ECC__EC_TRANSITION);
+			eCTransition = new EObjectContainmentWithInverseEList<ECTransition>(ECTransition.class, this, LibraryElementPackage.ECC__EC_TRANSITION, LibraryElementPackage.EC_TRANSITION__ECC);
 		}
 		return eCTransition;
 	}
@@ -165,14 +168,104 @@ public class ECCImpl extends EObjectImpl implements ECC {
 	 * @generated
 	 */
 	@Override
+	public BasicFBType getBasicFBType() {
+		if (eContainerFeatureID() != LibraryElementPackage.ECC__BASIC_FB_TYPE) return null;
+		return (BasicFBType)eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BasicFBType basicGetBasicFBType() {
+		if (eContainerFeatureID() != LibraryElementPackage.ECC__BASIC_FB_TYPE) return null;
+		return (BasicFBType)eInternalContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetBasicFBType(BasicFBType newBasicFBType, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newBasicFBType, LibraryElementPackage.ECC__BASIC_FB_TYPE, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBasicFBType(BasicFBType newBasicFBType) {
+		if (newBasicFBType != eInternalContainer() || (eContainerFeatureID() != LibraryElementPackage.ECC__BASIC_FB_TYPE && newBasicFBType != null)) {
+			if (EcoreUtil.isAncestor(this, newBasicFBType))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newBasicFBType != null)
+				msgs = ((InternalEObject)newBasicFBType).eInverseAdd(this, LibraryElementPackage.BASIC_FB_TYPE__ECC, BasicFBType.class, msgs);
+			msgs = basicSetBasicFBType(newBasicFBType, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ECC__BASIC_FB_TYPE, newBasicFBType, newBasicFBType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.ECC__EC_STATE:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getECState()).basicAdd(otherEnd, msgs);
+			case LibraryElementPackage.ECC__EC_TRANSITION:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getECTransition()).basicAdd(otherEnd, msgs);
+			case LibraryElementPackage.ECC__BASIC_FB_TYPE:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetBasicFBType((BasicFBType)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.ECC__EC_STATE:
 				return ((InternalEList<?>)getECState()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.ECC__EC_TRANSITION:
 				return ((InternalEList<?>)getECTransition()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.ECC__BASIC_FB_TYPE:
+				return basicSetBasicFBType(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case LibraryElementPackage.ECC__BASIC_FB_TYPE:
+				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.BASIC_FB_TYPE__ECC, BasicFBType.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -190,6 +283,9 @@ public class ECCImpl extends EObjectImpl implements ECC {
 			case LibraryElementPackage.ECC__START:
 				if (resolve) return getStart();
 				return basicGetStart();
+			case LibraryElementPackage.ECC__BASIC_FB_TYPE:
+				if (resolve) return getBasicFBType();
+				return basicGetBasicFBType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -214,6 +310,9 @@ public class ECCImpl extends EObjectImpl implements ECC {
 			case LibraryElementPackage.ECC__START:
 				setStart((ECState)newValue);
 				return;
+			case LibraryElementPackage.ECC__BASIC_FB_TYPE:
+				setBasicFBType((BasicFBType)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -235,6 +334,9 @@ public class ECCImpl extends EObjectImpl implements ECC {
 			case LibraryElementPackage.ECC__START:
 				setStart((ECState)null);
 				return;
+			case LibraryElementPackage.ECC__BASIC_FB_TYPE:
+				setBasicFBType((BasicFBType)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -253,6 +355,8 @@ public class ECCImpl extends EObjectImpl implements ECC {
 				return eCTransition != null && !eCTransition.isEmpty();
 			case LibraryElementPackage.ECC__START:
 				return start != null;
+			case LibraryElementPackage.ECC__BASIC_FB_TYPE:
+				return basicGetBasicFBType() != null;
 		}
 		return super.eIsSet(featureID);
 	}

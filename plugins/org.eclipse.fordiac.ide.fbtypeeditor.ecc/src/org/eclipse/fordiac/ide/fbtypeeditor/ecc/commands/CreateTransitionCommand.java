@@ -138,7 +138,7 @@ public class CreateTransitionCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return (null != source && null != destination && null != source.eContainer());
+		return (null != source && null != destination && null != source.getECC());
 	}
 
 	/*
@@ -148,7 +148,7 @@ public class CreateTransitionCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		parent = (ECC) source.eContainer();
+		parent = source.getECC();
 
 		transition = LibraryElementFactory.eINSTANCE.createECTransition();
 

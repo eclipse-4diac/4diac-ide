@@ -17,6 +17,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getSource <em>Source</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getDestination <em>Destination</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getConditionEvent <em>Condition Event</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl#getECC <em>ECC</em>}</li>
  * </ul>
  *
  * @generated
@@ -295,7 +297,50 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 */
 	@Override
 	public ECC getECC() {
-		return org.eclipse.fordiac.ide.model.Annotations.getECC(this);
+		if (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC) return null;
+		return (ECC)eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ECC basicGetECC() {
+		if (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC) return null;
+		return (ECC)eInternalContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetECC(ECC newECC, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newECC, LibraryElementPackage.EC_TRANSITION__ECC, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setECC(ECC newECC) {
+		if (newECC != eInternalContainer() || (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC && newECC != null)) {
+			if (EcoreUtil.isAncestor(this, newECC))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newECC != null)
+				msgs = ((InternalEObject)newECC).eInverseAdd(this, LibraryElementPackage.ECC__EC_TRANSITION, ECC.class, msgs);
+			msgs = basicSetECC(newECC, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_TRANSITION__ECC, newECC, newECC));
 	}
 
 	/**
@@ -314,6 +359,10 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 				if (destination != null)
 					msgs = ((InternalEObject)destination).eInverseRemove(this, LibraryElementPackage.EC_STATE__IN_TRANSITIONS, ECState.class, msgs);
 				return basicSetDestination((ECState)otherEnd, msgs);
+			case LibraryElementPackage.EC_TRANSITION__ECC:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetECC((ECC)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -330,8 +379,24 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 				return basicSetSource(null, msgs);
 			case LibraryElementPackage.EC_TRANSITION__DESTINATION:
 				return basicSetDestination(null, msgs);
+			case LibraryElementPackage.EC_TRANSITION__ECC:
+				return basicSetECC(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case LibraryElementPackage.EC_TRANSITION__ECC:
+				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.ECC__EC_TRANSITION, ECC.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -417,6 +482,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 			case LibraryElementPackage.EC_TRANSITION__CONDITION_EVENT:
 				if (resolve) return getConditionEvent();
 				return basicGetConditionEvent();
+			case LibraryElementPackage.EC_TRANSITION__ECC:
+				if (resolve) return getECC();
+				return basicGetECC();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -443,6 +511,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 				return;
 			case LibraryElementPackage.EC_TRANSITION__CONDITION_EVENT:
 				setConditionEvent((Event)newValue);
+				return;
+			case LibraryElementPackage.EC_TRANSITION__ECC:
+				setECC((ECC)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -471,6 +542,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 			case LibraryElementPackage.EC_TRANSITION__CONDITION_EVENT:
 				setConditionEvent((Event)null);
 				return;
+			case LibraryElementPackage.EC_TRANSITION__ECC:
+				setECC((ECC)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -493,6 +567,8 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 				return destination != null;
 			case LibraryElementPackage.EC_TRANSITION__CONDITION_EVENT:
 				return conditionEvent != null;
+			case LibraryElementPackage.EC_TRANSITION__ECC:
+				return basicGetECC() != null;
 		}
 		return super.eIsSet(featureID);
 	}

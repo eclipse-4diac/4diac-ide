@@ -49,7 +49,6 @@ import org.eclipse.fordiac.ide.gef.figures.GradientLabel;
 import org.eclipse.fordiac.ide.gef.figures.HorizontalLineFigure;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
-import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -105,7 +104,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (!isActive()) {
 			super.activate();
 			getCastedModel().eAdapters().add(adapter);
-			((ECC) getCastedModel().eContainer()).eAdapters().add(eccAdapter);
+			getCastedModel().getECC().eAdapters().add(eccAdapter);
 			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		}
 	}
@@ -116,8 +115,8 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 			super.deactivate();
 			getCastedModel().eAdapters().remove(adapter);
 
-			if (getCastedModel().eContainer() != null) {
-				((ECC) getCastedModel().eContainer()).eAdapters().remove(eccAdapter);
+			if (getCastedModel().getECC() != null) {
+				getCastedModel().getECC().eAdapters().remove(eccAdapter);
 			}
 			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		}

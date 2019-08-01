@@ -31,12 +31,13 @@ import org.eclipse.ui.PlatformUI;
 public class AddECCActionAction extends SelectionAction {
 
 	/**
-	 * Add ECC Action action id. Value: <code>"org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.CreateStateAction"</code>
+	 * Add ECC Action action id. Value:
+	 * <code>"org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.CreateStateAction"</code>
 	 */
 	public static final String ADD_ECC_ACTION = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.AddECCActionAction";//$NON-NLS-1$
 
 	private ActionCreationFactory actionFactory = new ActionCreationFactory();
-	
+
 	public AddECCActionAction(IWorkbenchPart part) {
 		super(part);
 		setId(ADD_ECC_ACTION);
@@ -46,10 +47,10 @@ public class AddECCActionAction extends SelectionAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		if(1 == getSelectedObjects().size()){
+		if (1 == getSelectedObjects().size()) {
 			ECState state = getState(getSelectedObjects());
-			if(null != state){
-				//only allow to add actions if we are not the the initial state 
+			if (null != state) {
+				// only allow to add actions if we are not the the initial state
 				return !state.isStartState();
 			}
 			return false;
@@ -57,27 +58,25 @@ public class AddECCActionAction extends SelectionAction {
 		return false;
 	}
 
-
 	@Override
-	public void run() {		
-		ECCEditor editor = (ECCEditor)getWorkbenchPart();
-		ECAction action = (ECAction)actionFactory.getNewObject();
-		execute(new CreateECActionCommand(action, getState(getSelectedObjects())));		
+	public void run() {
+		ECCEditor editor = (ECCEditor) getWorkbenchPart();
+		ECAction action = (ECAction) actionFactory.getNewObject();
+		execute(new CreateECActionCommand(action, getState(getSelectedObjects())));
 		editor.outlineSelectionChanged(action);
 	}
-	
-	
+
 	@SuppressWarnings("rawtypes")
 	private static ECState getState(List selectedObjects) {
 		ECState state = null;
-		if(selectedObjects.get(0) instanceof ECStateEditPart){
-			state = ((ECStateEditPart)selectedObjects.get(0)).getCastedModel();
-		}else if(selectedObjects.get(0) instanceof ECActionAlgorithmEditPart){
-			ECActionAlgorithmEditPart part = (ECActionAlgorithmEditPart)selectedObjects.get(0);
-			state = (ECState)part.getAction().eContainer();			
-		}else if(selectedObjects.get(0) instanceof ECActionOutputEventEditPart){
-			ECActionOutputEventEditPart part = (ECActionOutputEventEditPart)selectedObjects.get(0);
-			state = (ECState)part.getAction().eContainer();
+		if (selectedObjects.get(0) instanceof ECStateEditPart) {
+			state = ((ECStateEditPart) selectedObjects.get(0)).getCastedModel();
+		} else if (selectedObjects.get(0) instanceof ECActionAlgorithmEditPart) {
+			ECActionAlgorithmEditPart part = (ECActionAlgorithmEditPart) selectedObjects.get(0);
+			state = part.getAction().getECState();
+		} else if (selectedObjects.get(0) instanceof ECActionOutputEventEditPart) {
+			ECActionOutputEventEditPart part = (ECActionOutputEventEditPart) selectedObjects.get(0);
+			state = part.getAction().getECState();
 		}
 		return state;
 	}

@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -212,10 +211,10 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		if (!isActive()) {
 			super.activate();
 			getModel().eAdapters().add(adapter);
-			getModel().eContainer().eAdapters().add(adapter);
+			getModel().getECC().eAdapters().add(adapter);
 
 			// Adapt to the fbtype so that we get informed on interface changes
-			((BasicFBType) getModel().eContainer().eContainer()).getInterfaceList().eAdapters().add(interfaceAdapter);
+			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().add(interfaceAdapter);
 		}
 	}
 
@@ -224,10 +223,9 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		if (isActive()) {
 			super.deactivate();
 			getModel().eAdapters().remove(adapter);
-			getModel().eContainer().eAdapters().remove(adapter);
+			getModel().getECC().eAdapters().remove(adapter);
 
-			((BasicFBType) getModel().eContainer().eContainer()).getInterfaceList().eAdapters()
-					.remove(interfaceAdapter);
+			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().remove(interfaceAdapter);
 		}
 	}
 
