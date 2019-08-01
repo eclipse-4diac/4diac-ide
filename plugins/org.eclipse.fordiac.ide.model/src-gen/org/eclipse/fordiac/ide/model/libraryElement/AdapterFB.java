@@ -66,7 +66,6 @@ public interface AdapterFB extends FB {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.isPlug(this);'"
 	 * @generated
 	 */
 	boolean isPlug();
@@ -75,7 +74,6 @@ public interface AdapterFB extends FB {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.isSocket(this);'"
 	 * @generated
 	 */
 	boolean isSocket();
@@ -84,7 +82,6 @@ public interface AdapterFB extends FB {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getType(this);'"
 	 * @generated
 	 */
 	@Override

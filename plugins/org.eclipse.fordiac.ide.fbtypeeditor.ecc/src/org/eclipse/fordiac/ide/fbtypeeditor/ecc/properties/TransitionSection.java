@@ -246,7 +246,7 @@ public class TransitionSection extends AbstractECSection {
 			} else {
 				eventCombo.select(getType().getConditionEvent() != null
 						? eventCombo.indexOf(getType().getConditionEvent().getName())
-						: 0);
+						: eventCombo.getItemCount() - 1);
 			}
 			checkEnablement();
 		}

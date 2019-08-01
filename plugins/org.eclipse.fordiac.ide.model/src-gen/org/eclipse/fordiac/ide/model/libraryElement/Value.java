@@ -61,7 +61,6 @@ public interface Value extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getVarDeclaration(this);'"
 	 * @generated
 	 */
 	VarDeclaration getVarDeclaration();

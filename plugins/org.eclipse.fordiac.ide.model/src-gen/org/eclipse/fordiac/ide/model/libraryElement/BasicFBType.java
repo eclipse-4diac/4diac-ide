@@ -76,4 +76,12 @@ public interface BasicFBType extends BaseFBType {
 	 */
 	EList<Algorithm> getAlgorithm();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" nameRequired="true"
+	 * @generated
+	 */
+	Algorithm getAlgorithmNamed(String name);
+
 } // BasicFBType

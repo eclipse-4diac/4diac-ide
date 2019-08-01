@@ -117,6 +117,9 @@
     <genClasses ecoreClass="lib.ecore#//BasicFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BasicFBType/eCC"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BasicFBType/algorithm"/>
+      <genOperations ecoreOperation="lib.ecore#//BasicFBType/getAlgorithmNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//BasicFBType/getAlgorithmNamed/name"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CompilerInfo">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilerInfo/compiler"/>

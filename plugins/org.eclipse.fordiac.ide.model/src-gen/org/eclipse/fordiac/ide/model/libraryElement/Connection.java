@@ -150,7 +150,6 @@ public interface Connection extends ConfigurableObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.isResourceConnection(this);'"
 	 * @generated
 	 */
 	boolean isResourceConnection();
@@ -159,7 +158,6 @@ public interface Connection extends ConfigurableObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getFBNetwork(this);'"
 	 * @generated
 	 */
 	FBNetwork getFBNetwork();
@@ -167,7 +165,7 @@ public interface Connection extends ConfigurableObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);'"
+	 * @model
 	 * @generated
 	 */
 	void checkIfConnectionBroken();
@@ -250,7 +248,6 @@ public interface Connection extends ConfigurableObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);'"
 	 * @generated
 	 */
 	FBNetworkElement getSourceElement();
@@ -259,7 +256,6 @@ public interface Connection extends ConfigurableObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getDestinationElement(this);'"
 	 * @generated
 	 */
 	FBNetworkElement getDestinationElement();

@@ -145,6 +145,16 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 	 * @generated
 	 */
 	@Override
+	public Algorithm getAlgorithmNamed(final String name) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.BASIC_FB_TYPE__ECC:
