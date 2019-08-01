@@ -12,11 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui;
 
+import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -62,14 +64,7 @@ public class ReferenceChooserDialog extends Dialog {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 
-		GridData fill = new GridData();
-		fill.horizontalAlignment = SWT.FILL;
-		fill.verticalAlignment = SWT.FILL;
-		fill.heightHint = 150;
-
-		TableViewer tableViewer = new TableViewer(composite, SWT.SINGLE);
-		tableViewer.getTable().setLayoutData(fill);
-		// TableViewer
+		TableViewer tableViewer = TableWidgetFactory.createTableViewer(composite, SWT.SINGLE);
 		tableViewer.setContentProvider(contentProvider);
 		tableViewer.setLabelProvider(labelProvider);
 		tableViewer.setInput(new Object());

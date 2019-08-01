@@ -27,26 +27,29 @@ public final class TableWidgetFactory {
 	public static TableViewer createTableViewer(final Composite parent, int style) {
 		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		TableViewer tableViewer = createGenericTableViewer(gridData, parent, style);
-		
+
 		gridData.heightHint = 150;
 		gridData.widthHint = 80;
-		
+
 		return tableViewer;
 	}
-
+	
+	public static TableViewer createPropertyTableViewer(final Composite parent) {
+		return createPropertyTableViewer(parent, 0);
+	}
+	
 	public static TableViewer createPropertyTableViewer(final Composite parent, int style) {
 		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		TableViewer tableViewer = createGenericTableViewer(gridData, parent, style);
-		
+
 		gridData.minimumHeight = 80;
 		gridData.heightHint = 4;
 		gridData.widthHint = 400;
-		
+
 		return tableViewer;
 	}
-
-	private static TableViewer createGenericTableViewer(GridData gridData,
-			final Composite parent, int style) {
+	
+	private static TableViewer createGenericTableViewer(GridData gridData, final Composite parent, int style) {
 		TableViewer tableViewer = new TableViewer(parent,
 				SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | style);
 		tableViewer.getControl().setLayoutData(gridData);
