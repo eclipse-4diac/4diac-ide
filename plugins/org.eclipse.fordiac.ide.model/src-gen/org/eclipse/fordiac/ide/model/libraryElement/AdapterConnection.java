@@ -28,7 +28,6 @@ public interface AdapterConnection extends Connection {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getAdapterSource(this);'"
 	 * @generated
 	 */
 	AdapterDeclaration getAdapterSource();
@@ -37,7 +36,6 @@ public interface AdapterConnection extends Connection {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getAdapterDestination(this);'"
 	 * @generated
 	 */
 	AdapterDeclaration getAdapterDestination();

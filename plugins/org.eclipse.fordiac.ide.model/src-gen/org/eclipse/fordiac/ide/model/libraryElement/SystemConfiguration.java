@@ -92,7 +92,6 @@ public interface SystemConfiguration extends I4DIACElement {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);'"
 	 * @generated
 	 */
 	AutomationSystem getAutomationSystem();
@@ -101,7 +100,6 @@ public interface SystemConfiguration extends I4DIACElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getSegmentNamed(this, name);'"
 	 * @generated
 	 */
 	Segment getSegmentNamed(String name);
@@ -110,7 +108,6 @@ public interface SystemConfiguration extends I4DIACElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);'"
 	 * @generated
 	 */
 	Device getDeviceNamed(String name);

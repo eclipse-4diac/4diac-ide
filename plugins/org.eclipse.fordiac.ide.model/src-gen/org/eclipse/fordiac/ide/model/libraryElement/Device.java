@@ -99,7 +99,6 @@ public interface Device extends TypedConfigureableObject, PositionableElement, C
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);'"
 	 * @generated
 	 */
 	AutomationSystem getAutomationSystem();
@@ -108,7 +107,6 @@ public interface Device extends TypedConfigureableObject, PositionableElement, C
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getSystemConfiguration(this);'"
 	 * @generated
 	 */
 	SystemConfiguration getSystemConfiguration();
@@ -117,7 +115,6 @@ public interface Device extends TypedConfigureableObject, PositionableElement, C
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//this cannot be moved to the annotation class because there we don\'t have the super access!!!\r\norg.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();\r\nif(type instanceof DeviceType){\r\n\treturn (DeviceType) type; \r\n}\r\nreturn null;'"
 	 * @generated
 	 */
 	@Override
@@ -127,7 +124,6 @@ public interface Device extends TypedConfigureableObject, PositionableElement, C
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getResourceNamed(this, name);'"
 	 * @generated
 	 */
 	Resource getResourceNamed(String name);

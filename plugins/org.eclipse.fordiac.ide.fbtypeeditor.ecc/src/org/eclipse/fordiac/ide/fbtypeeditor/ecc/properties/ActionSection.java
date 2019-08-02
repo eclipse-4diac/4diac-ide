@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEdi
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
@@ -41,9 +42,9 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-
-/** Section that appears in the Properties view, when an Action is selected
- * in the ECC
+/**
+ * Section that appears in the Properties view, when an Action is selected in
+ * the ECC
  *
  */
 public class ActionSection extends AbstractECSection {
@@ -110,15 +111,8 @@ public class ActionSection extends AbstractECSection {
 		algorithmCombo = new Combo(actionComposite, SWT.SINGLE | SWT.READ_ONLY);
 		algorithmCombo.addListener(SWT.Selection, event -> {
 			removeContentAdapter();
-			if (ECCContentAndLabelProvider.EMPTY_FIELD.equals(algorithmCombo.getText())) {
-				executeCommand(new ChangeAlgorithmCommand(getType(), null));
-			} else {
-				BasicFBType fb = getFBType();
-				if (null != fb) {
-					executeCommand(new ChangeAlgorithmCommand(getType(),
-							fb.getAlgorithm().get(algorithmCombo.indexOf(algorithmCombo.getText()))));
-				}
-			}
+			executeCommand(
+					new ChangeAlgorithmCommand(getType(), getFBType().getAlgorithmNamed(algorithmCombo.getText())));
 			algorithmGroup.setAlgorithm(getAlgorithm());
 			algorithmList.refresh();
 			addContentAdapter();
@@ -128,8 +122,10 @@ public class ActionSection extends AbstractECSection {
 		outputEventCombo = new Combo(actionComposite, SWT.SINGLE | SWT.READ_ONLY);
 		outputEventCombo.addListener(SWT.Selection, event -> {
 			removeContentAdapter();
+			List<Event> outputEvents = ECCContentAndLabelProvider.getOutputEvents(getFBType());
+			int selItem = outputEventCombo.getSelectionIndex();
 			executeCommand(new ChangeOutputCommand(getType(),
-					ECCContentAndLabelProvider.getOutputEvents(getFBType()).get(outputEventCombo.indexOf(outputEventCombo.getText()))));
+					(selItem < outputEvents.size()) ? outputEvents.get(selItem) : null));
 			addContentAdapter();
 		});
 
@@ -163,8 +159,9 @@ public class ActionSection extends AbstractECSection {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
-			setDropdown(outputEventCombo,getType().getOutput(), ECCContentAndLabelProvider.getOutputEventNames(getFBType()));
-			setDropdown(algorithmCombo,  getAlgorithm(), ECCContentAndLabelProvider.getAlgorithmNames(getFBType()));
+			setDropdown(outputEventCombo, getType().getOutput(),
+					ECCContentAndLabelProvider.getOutputEventNames(getFBType()));
+			setDropdown(algorithmCombo, getAlgorithm(), ECCContentAndLabelProvider.getAlgorithmNames(getFBType()));
 			actionComposite.layout();
 
 			algorithmGroup.setAlgorithm(getAlgorithm());
@@ -173,13 +170,11 @@ public class ActionSection extends AbstractECSection {
 		commandStack = commandStackBuffer;
 	}
 
-	private void setDropdown(Combo comboBox, INamedElement el, List<String> names) {
+	private static void setDropdown(Combo comboBox, INamedElement el, List<String> names) {
 		comboBox.removeAll();
-		for (String name : names) {
-			comboBox.add(name);
-		}
-		//pre-selects the elements that are now in the action:
-		comboBox.select((null == el) ? 0 : comboBox.indexOf(el.getName()));
+		names.forEach(comboBox::add);
+		// pre-selects the elements that are now in the action:
+		comboBox.select((null == el) ? names.size() - 1 : comboBox.indexOf(el.getName()));
 	}
 
 	@Override

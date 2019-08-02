@@ -61,7 +61,6 @@ public interface TypedConfigureableObject extends ConfigurableObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getTypeName(this);'"
 	 * @generated
 	 */
 	String getTypeName();
@@ -70,7 +69,6 @@ public interface TypedConfigureableObject extends ConfigurableObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getType(this);'"
 	 * @generated
 	 */
 	LibraryElement getType();

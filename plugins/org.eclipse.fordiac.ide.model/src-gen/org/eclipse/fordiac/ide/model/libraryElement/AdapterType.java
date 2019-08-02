@@ -40,7 +40,6 @@ public interface AdapterType extends DataType {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getInterfaceList(this);'"
 	 * @generated
 	 */
 	InterfaceList getInterfaceList();
@@ -80,7 +79,6 @@ public interface AdapterType extends DataType {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getPlugType(this);'"
 	 * @generated
 	 */
 	AdapterFBType getPlugType();
@@ -93,7 +91,6 @@ public interface AdapterType extends DataType {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getSocketType(this);'"
 	 * @generated
 	 */
 	AdapterFBType getSocketType();
