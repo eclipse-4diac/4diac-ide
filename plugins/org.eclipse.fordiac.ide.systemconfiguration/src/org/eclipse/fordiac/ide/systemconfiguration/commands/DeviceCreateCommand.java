@@ -32,10 +32,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.fordiac.ide.util.YUV;
-import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.RGB;
 

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.listeners;
 
-import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 

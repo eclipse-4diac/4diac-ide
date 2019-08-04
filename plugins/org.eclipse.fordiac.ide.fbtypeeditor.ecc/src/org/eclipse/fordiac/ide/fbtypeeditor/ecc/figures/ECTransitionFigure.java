@@ -70,7 +70,7 @@ public class ECTransitionFigure extends PolylineConnection {
 
 		private Font getOrderLabelFont() {
 			FontData[] fontData = JFaceResources.getFontRegistry()
-					.getFontData(org.eclipse.fordiac.ide.util.preferences.PreferenceConstants.DIAGRAM_FONT).clone();
+					.getFontData(org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants.DIAGRAM_FONT).clone();
 			Arrays.stream(fontData).forEach(fd -> fd.setHeight(TRANSITON_ORDER_LABEL_FONT_SIZE));
 			JFaceResources.getFontRegistry().put(TRANSITION_ORDER_LABEL_FONT, fontData);
 			return JFaceResources.getFont(TRANSITION_ORDER_LABEL_FONT);

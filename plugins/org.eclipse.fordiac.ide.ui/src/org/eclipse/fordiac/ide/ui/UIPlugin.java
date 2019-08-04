@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui;
 
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -39,7 +40,13 @@ public class UIPlugin extends Abstract4DIACUIPlugin {
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		setPlugin(this);
+		getPreferenceStore().setValue(PreferenceConstants.P_HIDE_EVENT_CON, false);
+		getPreferenceStore().setValue(PreferenceConstants.P_HIDE_DATA_CON, false);
+	}
+
+	private static synchronized void setPlugin(UIPlugin uiPlugin) {
+		plugin = uiPlugin;
 	}
 
 	/**
@@ -52,7 +59,7 @@ public class UIPlugin extends Abstract4DIACUIPlugin {
 	@Override
 	public void stop(final BundleContext context) throws Exception {
 		super.stop(context);
-		plugin = null;
+		setPlugin(null);
 	}
 
 	/**

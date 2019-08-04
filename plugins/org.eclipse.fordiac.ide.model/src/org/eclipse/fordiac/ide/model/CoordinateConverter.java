@@ -13,6 +13,9 @@
 package org.eclipse.fordiac.ide.model;
 
 import org.eclipse.draw2d.FigureUtilities;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -39,8 +42,8 @@ public enum CoordinateConverter {
 
 		@Override
 		public void run() {
-			// null means to use the default font, needs update when we get setable fonts
-			lineHeight = FigureUtilities.getFontMetrics(null).getHeight();
+			Font diagramFont = JFaceResources.getFont(PreferenceConstants.DIAGRAM_FONT);			
+			lineHeight = FigureUtilities.getFontMetrics(diagramFont).getHeight();
 		}
 	}
 

@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.util;
 
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
-import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -46,8 +45,6 @@ public class Activator extends Abstract4DIACUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		getPreferenceStore().setValue(PreferenceConstants.P_HIDE_EVENT_CON, false);
-		getPreferenceStore().setValue(PreferenceConstants.P_HIDE_DATA_CON, false);
 	}
 
 	/*

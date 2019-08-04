@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.ui.editors,
  org.eclipse.fordiac.ide.ui.imageprovider,
+ org.eclipse.fordiac.ide.ui.preferences,
  org.eclipse.fordiac.ide.ui.providers, 
  org.eclipse.fordiac.ide.ui.widget
 Require-Bundle: org.eclipse.gef,

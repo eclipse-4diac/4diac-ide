@@ -18,7 +18,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.fbtypeeditor,
  org.eclipse.fordiac.ide.model,
- org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc,
  org.eclipse.fordiac.ide.model.commands
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

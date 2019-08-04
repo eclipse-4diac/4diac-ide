@@ -1,8 +1,7 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.util.action,
- org.eclipse.fordiac.ide.util.dnd,
- org.eclipse.fordiac.ide.util.preferences
+ org.eclipse.fordiac.ide.util.dnd
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.gef,
  org.eclipse.fordiac.ide.model,

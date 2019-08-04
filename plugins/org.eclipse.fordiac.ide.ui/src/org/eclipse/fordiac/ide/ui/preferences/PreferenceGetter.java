@@ -11,12 +11,12 @@
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util.preferences;
+package org.eclipse.fordiac.ide.ui.preferences;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.util.Activator;
+import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.swt.graphics.Color;
@@ -43,7 +43,7 @@ public final class PreferenceGetter {
 	 * @return the color
 	 */
 	public static Color getColor(final String pref) {
-		RGB rgb = PreferenceConverter.getColor(Activator.getDefault()
+		RGB rgb = PreferenceConverter.getColor(UIPlugin.getDefault()
 		.getPreferenceStore(), pref);
 
 		if (!usedColors.containsKey(rgb)) {

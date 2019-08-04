@@ -22,9 +22,9 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.util.preferences.PreferenceGetter;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class ConnectorBorder extends AbstractBorder {

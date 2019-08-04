@@ -12,7 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added diagram font preference 
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util.preferences;
+package org.eclipse.fordiac.ide.ui.preferences;
 
 /**
  * Constant definitions for plug-in preferences.
