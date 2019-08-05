@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2015 fortiss GmbH
+ * 				 2019 Jan Holzweber
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *   Jan Holzweber - fixed adapter socket variable bug
  */
 package org.eclipse.fordiac.ide.export.forte_lua.filter;
 
@@ -519,13 +521,6 @@ public class LuaConstants {
   
   public static CharSequence luaFBVariablesPrefix(final Iterable<VarDeclaration> variables) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("local ");
-    CharSequence _luaStateVariable = LuaConstants.luaStateVariable();
-    _builder.append(_luaStateVariable);
-    _builder.append(" = ");
-    CharSequence _luaFBStateVariable = LuaConstants.luaFBStateVariable();
-    _builder.append(_luaFBStateVariable);
-    _builder.newLineIfNotEmpty();
     {
       for(final VarDeclaration variable : variables) {
         _builder.append("local ");
@@ -621,6 +616,31 @@ public class LuaConstants {
                 _builder.append("] = ");
                 CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(variable.getVar().getName(), variable.getAdapter().getName());
                 _builder.append(_luaAdapterVariable);
+                _builder.newLineIfNotEmpty();
+              }
+            }
+          }
+        }
+        {
+          boolean _isIsInput_1 = variable.getAdapter().isIsInput();
+          if (_isIsInput_1) {
+            int index_1 = IterableExtensions.<AdapterVariable>toList(variables).indexOf(variable);
+            _builder.newLineIfNotEmpty();
+            List<AdapterVariable> sublist_1 = IterableExtensions.<AdapterVariable>toList(variables).subList(0, index_1);
+            _builder.newLineIfNotEmpty();
+            {
+              boolean _not_2 = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist_1, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
+                return it.getVar();
+              })).contains(variable.getVar()) && ListExtensions.<AdapterVariable, AdapterDeclaration>map(sublist_1, ((Function1<AdapterVariable, AdapterDeclaration>) (AdapterVariable it) -> {
+                return it.getAdapter();
+              })).contains(variable.getAdapter())));
+              if (_not_2) {
+                _builder.append("fb[");
+                CharSequence _luaFBAdapterInputVarName = LuaConstants.luaFBAdapterInputVarName(variable.getVar(), variable.getAdapter().getName());
+                _builder.append(_luaFBAdapterInputVarName);
+                _builder.append("] = ");
+                CharSequence _luaAdapterVariable_1 = LuaConstants.luaAdapterVariable(variable.getVar().getName(), variable.getAdapter().getName());
+                _builder.append(_luaAdapterVariable_1);
                 _builder.newLineIfNotEmpty();
               }
             }
