@@ -17,7 +17,6 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECTransitionEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.EditPart;
@@ -60,6 +59,8 @@ public class DeleteECCAction extends DeleteAction {
 						((ECActionOutputEventEditPart) object).getCastedModel().getAction().getECState())) {
 					list.add((EditPart) object);
 				}
+			} else if (object instanceof EditPart) {
+				list.add((EditPart)object);
 			}
 		}		
 		return list;
@@ -67,9 +68,8 @@ public class DeleteECCAction extends DeleteAction {
 
 	@SuppressWarnings("rawtypes")
 	private static boolean stateContainedInDeleteList(List objects, ECState eState) {
-		for (int i = 0; i < objects.size(); i++) {
-			EditPart object = (EditPart) objects.get(i);
-			if (object instanceof ECStateEditPart && ((ECStateEditPart) object).getCastedModel().equals(eState)) {
+		for(Object object : objects) {
+			if (object instanceof EditPart && ((EditPart) object).getModel().equals(eState)) {
 				return true;
 			}
 		}
