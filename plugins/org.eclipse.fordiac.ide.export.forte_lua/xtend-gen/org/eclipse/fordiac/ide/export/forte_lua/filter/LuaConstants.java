@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
- *   Jan Holzweber - fixed adapter socket variable bug
+ *   Jan Holzweber  - fixed adapter socket variable bug
  */
 package org.eclipse.fordiac.ide.export.forte_lua.filter;
 
@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.export.forte_lua.filter.LuaUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
@@ -288,7 +287,7 @@ public class LuaConstants {
     {
       EList<AdapterDeclaration> _sockets = ifl.getSockets();
       for(final AdapterDeclaration socket : _sockets) {
-        CharSequence _luaFBAdapterInterfaceConstants = LuaConstants.luaFBAdapterInterfaceConstants(socket, ifl.getSockets());
+        CharSequence _luaFBAdapterInterfaceConstants = LuaConstants.luaFBAdapterInterfaceConstants(socket, ifl.getSockets(), ifl.getPlugs().size());
         _builder.append(_luaFBAdapterInterfaceConstants);
         _builder.newLineIfNotEmpty();
       }
@@ -296,7 +295,7 @@ public class LuaConstants {
     {
       EList<AdapterDeclaration> _plugs = ifl.getPlugs();
       for(final AdapterDeclaration plug : _plugs) {
-        CharSequence _luaFBAdapterInterfaceConstants_1 = LuaConstants.luaFBAdapterInterfaceConstants(plug, ifl.getPlugs());
+        CharSequence _luaFBAdapterInterfaceConstants_1 = LuaConstants.luaFBAdapterInterfaceConstants(plug, ifl.getPlugs(), 0);
         _builder.append(_luaFBAdapterInterfaceConstants_1);
         _builder.newLineIfNotEmpty();
       }
@@ -304,119 +303,62 @@ public class LuaConstants {
     return _builder;
   }
   
-  public static CharSequence luaFBAdapterInterfaceConstants(final AdapterDeclaration adapter, final EList<?> ifl) {
+  public static CharSequence luaFBAdapterInterfaceConstants(final AdapterDeclaration adapter, final EList<?> ifl, final int offset) {
     StringConcatenation _builder = new StringConcatenation();
-    AdapterType _type = adapter.getType();
-    InterfaceList aifl = ((AdapterType) _type).getAdapterFBType().getInterfaceList();
+    InterfaceList aifl = adapter.getType().getSocketType().getInterfaceList();
     _builder.newLineIfNotEmpty();
     {
       boolean _isIsInput = adapter.isIsInput();
       if (_isIsInput) {
-        {
-          EList<Event> _eventOutputs = aifl.getEventOutputs();
-          for(final Event decl : _eventOutputs) {
-            _builder.append("local ");
-            CharSequence _luaAdapterInputEventName = LuaConstants.luaAdapterInputEventName(decl, adapter.getName());
-            _builder.append(_luaAdapterInputEventName);
-            _builder.append(" = ");
-            int _indexOf = ifl.indexOf(adapter);
-            int _doubleLessThan = (_indexOf << 16);
-            _builder.append(((LuaConstants.FB_AD_FLAG | _doubleLessThan) | aifl.getEventOutputs().indexOf(decl)));
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        {
-          EList<Event> _eventInputs = aifl.getEventInputs();
-          for(final Event decl_1 : _eventInputs) {
-            _builder.append("local ");
-            CharSequence _luaAdapterOutputEventName = LuaConstants.luaAdapterOutputEventName(decl_1, adapter.getName());
-            _builder.append(_luaAdapterOutputEventName);
-            _builder.append(" = ");
-            int _indexOf_1 = ifl.indexOf(adapter);
-            int _doubleLessThan_1 = (_indexOf_1 << 16);
-            _builder.append(((LuaConstants.FB_AD_FLAG | _doubleLessThan_1) | aifl.getEventInputs().indexOf(decl_1)));
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        {
-          EList<VarDeclaration> _outputVars = aifl.getOutputVars();
-          for(final VarDeclaration decl_2 : _outputVars) {
-            _builder.append("local ");
-            CharSequence _luaFBAdapterInputVarName = LuaConstants.luaFBAdapterInputVarName(decl_2, adapter.getName());
-            _builder.append(_luaFBAdapterInputVarName);
-            _builder.append(" = ");
-            int _indexOf_2 = ifl.indexOf(adapter);
-            int _doubleLessThan_2 = (_indexOf_2 << 16);
-            _builder.append((((LuaConstants.FB_AD_FLAG | LuaConstants.FB_DI_FLAG) | _doubleLessThan_2) | aifl.getOutputVars().indexOf(decl_2)));
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        {
-          EList<VarDeclaration> _inputVars = aifl.getInputVars();
-          for(final VarDeclaration decl_3 : _inputVars) {
-            _builder.append("local ");
-            CharSequence _luaFBAdapterOutputVarName = LuaConstants.luaFBAdapterOutputVarName(decl_3, adapter.getName());
-            _builder.append(_luaFBAdapterOutputVarName);
-            _builder.append(" = ");
-            int _indexOf_3 = ifl.indexOf(adapter);
-            int _doubleLessThan_3 = (_indexOf_3 << 16);
-            _builder.append((((LuaConstants.FB_AD_FLAG | LuaConstants.FB_DO_FLAG) | _doubleLessThan_3) | aifl.getInputVars().indexOf(decl_3)));
-            _builder.newLineIfNotEmpty();
-          }
-        }
-      } else {
-        {
-          EList<Event> _eventInputs_1 = aifl.getEventInputs();
-          for(final Event decl_4 : _eventInputs_1) {
-            _builder.append("local ");
-            CharSequence _luaAdapterInputEventName_1 = LuaConstants.luaAdapterInputEventName(decl_4, adapter.getName());
-            _builder.append(_luaAdapterInputEventName_1);
-            _builder.append(" = ");
-            int _indexOf_4 = ifl.indexOf(adapter);
-            int _doubleLessThan_4 = (_indexOf_4 << 16);
-            _builder.append(((LuaConstants.FB_AD_FLAG | _doubleLessThan_4) | aifl.getEventInputs().indexOf(decl_4)));
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        {
-          EList<Event> _eventOutputs_1 = aifl.getEventOutputs();
-          for(final Event decl_5 : _eventOutputs_1) {
-            _builder.append("local ");
-            CharSequence _luaAdapterOutputEventName_1 = LuaConstants.luaAdapterOutputEventName(decl_5, adapter.getName());
-            _builder.append(_luaAdapterOutputEventName_1);
-            _builder.append(" = ");
-            int _indexOf_5 = ifl.indexOf(adapter);
-            int _doubleLessThan_5 = (_indexOf_5 << 16);
-            _builder.append(((LuaConstants.FB_AD_FLAG | _doubleLessThan_5) | aifl.getEventOutputs().indexOf(decl_5)));
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        {
-          EList<VarDeclaration> _inputVars_1 = aifl.getInputVars();
-          for(final VarDeclaration decl_6 : _inputVars_1) {
-            _builder.append("local ");
-            CharSequence _luaFBAdapterInputVarName_1 = LuaConstants.luaFBAdapterInputVarName(decl_6, adapter.getName());
-            _builder.append(_luaFBAdapterInputVarName_1);
-            _builder.append(" = ");
-            int _indexOf_6 = ifl.indexOf(adapter);
-            int _doubleLessThan_6 = (_indexOf_6 << 16);
-            _builder.append((((LuaConstants.FB_AD_FLAG | LuaConstants.FB_DI_FLAG) | _doubleLessThan_6) | aifl.getInputVars().indexOf(decl_6)));
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        {
-          EList<VarDeclaration> _outputVars_1 = aifl.getOutputVars();
-          for(final VarDeclaration decl_7 : _outputVars_1) {
-            _builder.append("local ");
-            CharSequence _luaFBAdapterOutputVarName_1 = LuaConstants.luaFBAdapterOutputVarName(decl_7, adapter.getName());
-            _builder.append(_luaFBAdapterOutputVarName_1);
-            _builder.append(" = ");
-            int _indexOf_7 = ifl.indexOf(adapter);
-            int _doubleLessThan_7 = (_indexOf_7 << 16);
-            _builder.append((((LuaConstants.FB_AD_FLAG | LuaConstants.FB_DO_FLAG) | _doubleLessThan_7) | aifl.getOutputVars().indexOf(decl_7)));
-            _builder.newLineIfNotEmpty();
-          }
-        }
+        _builder.append(aifl = adapter.getType().getPlugType().getInterfaceList());
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    int _indexOf = ifl.indexOf(adapter);
+    int adapterID = (_indexOf + offset);
+    _builder.newLineIfNotEmpty();
+    {
+      EList<Event> _eventOutputs = aifl.getEventOutputs();
+      for(final Event decl : _eventOutputs) {
+        _builder.append("local ");
+        CharSequence _luaAdapterOutputEventName = LuaConstants.luaAdapterOutputEventName(decl, adapter.getName());
+        _builder.append(_luaAdapterOutputEventName);
+        _builder.append(" = ");
+        _builder.append(((LuaConstants.FB_AD_FLAG | (adapterID << 16)) | aifl.getEventOutputs().indexOf(decl)));
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    {
+      EList<Event> _eventInputs = aifl.getEventInputs();
+      for(final Event decl_1 : _eventInputs) {
+        _builder.append("local ");
+        CharSequence _luaAdapterInputEventName = LuaConstants.luaAdapterInputEventName(decl_1, adapter.getName());
+        _builder.append(_luaAdapterInputEventName);
+        _builder.append(" = ");
+        _builder.append(((LuaConstants.FB_AD_FLAG | (adapterID << 16)) | aifl.getEventInputs().indexOf(decl_1)));
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    {
+      EList<VarDeclaration> _outputVars = aifl.getOutputVars();
+      for(final VarDeclaration decl_2 : _outputVars) {
+        _builder.append("local ");
+        CharSequence _luaFBAdapterOutputVarName = LuaConstants.luaFBAdapterOutputVarName(decl_2, adapter.getName());
+        _builder.append(_luaFBAdapterOutputVarName);
+        _builder.append(" = ");
+        _builder.append((((LuaConstants.FB_AD_FLAG | LuaConstants.FB_DO_FLAG) | (adapterID << 16)) | aifl.getOutputVars().indexOf(decl_2)));
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    {
+      EList<VarDeclaration> _inputVars = aifl.getInputVars();
+      for(final VarDeclaration decl_3 : _inputVars) {
+        _builder.append("local ");
+        CharSequence _luaFBAdapterInputVarName = LuaConstants.luaFBAdapterInputVarName(decl_3, adapter.getName());
+        _builder.append(_luaFBAdapterInputVarName);
+        _builder.append(" = ");
+        _builder.append((((LuaConstants.FB_AD_FLAG | LuaConstants.FB_DI_FLAG) | (adapterID << 16)) | aifl.getInputVars().indexOf(decl_3)));
+        _builder.newLineIfNotEmpty();
       }
     }
     return _builder;

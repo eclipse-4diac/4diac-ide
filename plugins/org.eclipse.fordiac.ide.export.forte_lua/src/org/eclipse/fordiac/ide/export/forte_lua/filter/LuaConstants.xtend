@@ -107,42 +107,31 @@ class LuaConstants {
 
 	def static luaFBAdapterConstants(InterfaceList ifl) '''
 		«FOR socket : ifl.sockets»
-			«socket.luaFBAdapterInterfaceConstants(ifl.sockets)»
+			«socket.luaFBAdapterInterfaceConstants(ifl.sockets,ifl.plugs.size)»
 		«ENDFOR»
 		«FOR plug : ifl.plugs»
-			«plug.luaFBAdapterInterfaceConstants(ifl.plugs)»
+			«plug.luaFBAdapterInterfaceConstants(ifl.plugs,0)»
 		«ENDFOR»
 	'''
 
-	def static luaFBAdapterInterfaceConstants(AdapterDeclaration adapter, EList<?> ifl) '''
-		«var aifl = (adapter.type as AdapterType).adapterFBType.interfaceList»
-		«IF adapter.isInput»
-			«FOR decl : aifl.eventOutputs»
-				local «decl.luaAdapterInputEventName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(ifl.indexOf(adapter) << 16).bitwiseOr(aifl.eventOutputs.indexOf(decl))»
-			«ENDFOR»
-			«FOR decl : aifl.eventInputs»
-				local «decl.luaAdapterOutputEventName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(ifl.indexOf(adapter) << 16).bitwiseOr(aifl.eventInputs.indexOf(decl))»
-			«ENDFOR»
-			«FOR decl : aifl.outputVars»
-				local «decl.luaFBAdapterInputVarName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(FB_DI_FLAG).bitwiseOr(ifl.indexOf(adapter) << 16).bitwiseOr(aifl.outputVars.indexOf(decl))»
-			«ENDFOR»
-			«FOR decl : aifl.inputVars»
-				local «decl.luaFBAdapterOutputVarName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(FB_DO_FLAG).bitwiseOr(ifl.indexOf(adapter) << 16).bitwiseOr(aifl.inputVars.indexOf(decl))»
-			«ENDFOR»
-		«ELSE»
-			«FOR decl : aifl.eventInputs»
-				local «decl.luaAdapterInputEventName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(ifl.indexOf(adapter) << 16).bitwiseOr(aifl.eventInputs.indexOf(decl))»
-			«ENDFOR»
-			«FOR decl : aifl.eventOutputs»
-				local «decl.luaAdapterOutputEventName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(ifl.indexOf(adapter) << 16).bitwiseOr(aifl.eventOutputs.indexOf(decl))»
-			«ENDFOR»
-			«FOR decl : aifl.inputVars»
-				local «decl.luaFBAdapterInputVarName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(FB_DI_FLAG).bitwiseOr(ifl.indexOf(adapter) << 16).bitwiseOr(aifl.inputVars.indexOf(decl))»
-			«ENDFOR»
-			«FOR decl : aifl.outputVars»
-				local «decl.luaFBAdapterOutputVarName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(FB_DO_FLAG).bitwiseOr(ifl.indexOf(adapter) << 16).bitwiseOr(aifl.outputVars.indexOf(decl))»
-			«ENDFOR»
+	def static luaFBAdapterInterfaceConstants(AdapterDeclaration adapter, EList<?> ifl, int offset) '''
+		«var aifl = adapter.type.socketType.interfaceList»
+		«IF adapter.isIsInput»
+			«aifl = adapter.type.plugType.interfaceList»
 		«ENDIF»
+		«var adapterID = ifl.indexOf(adapter)+offset»
+		«FOR decl : aifl.eventOutputs»
+			local «decl.luaAdapterOutputEventName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(adapterID << 16).bitwiseOr(aifl.eventOutputs.indexOf(decl))»
+		«ENDFOR»
+		«FOR decl : aifl.eventInputs»
+			local «decl.luaAdapterInputEventName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(adapterID << 16).bitwiseOr(aifl.eventInputs.indexOf(decl))»
+		«ENDFOR»
+		«FOR decl : aifl.outputVars»
+			local «decl.luaFBAdapterOutputVarName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(FB_DO_FLAG).bitwiseOr(adapterID << 16).bitwiseOr(aifl.outputVars.indexOf(decl))»
+		«ENDFOR»
+		«FOR decl : aifl.inputVars»
+			local «decl.luaFBAdapterInputVarName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(FB_DI_FLAG).bitwiseOr(adapterID << 16).bitwiseOr(aifl.inputVars.indexOf(decl))»
+		«ENDFOR»    
 	'''
 
 	def static luaInternalConstants(BasicFBType type) '''
