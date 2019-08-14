@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH
- * 
+ *               2019 Johannes Kepler University Linz
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,6 +10,8 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr
+ *     - extract table viewer creation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
@@ -29,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -36,13 +40,10 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -66,23 +67,17 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	private void createDataSection(Composite parent) {
 		getWidgetFactory().createCLabel(parent, "Array Size:");
 		arraySizeText = createGroupText(parent, true);
-		arraySizeText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeArraySizeCommand((VarDeclaration) type, arraySizeText.getText()));
-				addContentAdapter();
-			}
+		arraySizeText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeArraySizeCommand((VarDeclaration) type, arraySizeText.getText()));
+			addContentAdapter();
 		});
 		getWidgetFactory().createCLabel(parent, "Initial Value:");
 		initValueText = createGroupText(parent, true);
-		initValueText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				removeContentAdapter();
-				executeCommand(new ChangeInitialValueCommand((VarDeclaration) type, initValueText.getText()));
-				addContentAdapter();
-			}
+		initValueText.addModifyListener(e -> {
+			removeContentAdapter();
+			executeCommand(new ChangeInitialValueCommand((VarDeclaration) type, initValueText.getText()));
+			addContentAdapter();
 		});
 	}
 
@@ -90,55 +85,50 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		eventComposite = getWidgetFactory().createGroup(parent, "With");
 		eventComposite.setLayout(new GridLayout(1, false));
 		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		withEventsViewer = CheckboxTableViewer.newCheckList(eventComposite,
-				SWT.FULL_SELECTION | SWT.BORDER | SWT.H_SCROLL | SWT.FILL);
-		GridData gridDataVersionViewer = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridDataVersionViewer.minimumHeight = 80;
-		gridDataVersionViewer.widthHint = 400;
-		withEventsViewer.getControl().setLayoutData(gridDataVersionViewer);
+		withEventsViewer = (CheckboxTableViewer) TableWidgetFactory.createPropertyTableViewer(parent, SWT.CHECK);
 		Table tableWith = withEventsViewer.getTable();
 		tableWith.setLinesVisible(false);
-		tableWith.setHeaderVisible(true);
-		TableColumn column1 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
+		configureTableLayout(tableWith);
+		withEventsViewer.setContentProvider(new EventContentProvider());
+		withEventsViewer.setLabelProvider(new EventLabelProvider());
+		tableWith.addListener(SWT.Selection, event -> {
+			if (event.detail == SWT.CHECK) {
+				TableItem checkedItem = (TableItem) event.item;
+				Event e = (Event) checkedItem.getData();
+				if (checkedItem.getChecked()) {
+					for (With with1 : e.getWith()) {
+						if (with1.getVariables().equals(type)) {
+							return;
+						}
+					}
+					WithCreateCommand cmd = new WithCreateCommand();
+					cmd.setEvent(e);
+					cmd.setVarDeclaration((VarDeclaration) type);
+					executeCommand(cmd);
+				} else {
+					for (With with2 : e.getWith()) {
+						if (with2.getVariables().equals(type)) {
+							executeCommand(new DeleteWithCommand(with2));
+							break;
+						}
+					}
+				}
+			}
+		});
+	}
+
+	private static void configureTableLayout(Table tableWith) {
+		TableColumn column1 = new TableColumn(tableWith, SWT.LEFT);
 		column1.setText("Event");
-		TableColumn column2 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
+		TableColumn column2 = new TableColumn(tableWith, SWT.LEFT);
 		column2.setText("DataType");
-		TableColumn column3 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
+		TableColumn column3 = new TableColumn(tableWith, SWT.LEFT);
 		column3.setText("Comment");
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 100));
 		layout.addColumnData(new ColumnWeightData(20, 70));
 		layout.addColumnData(new ColumnWeightData(20, 100));
 		tableWith.setLayout(layout);
-		withEventsViewer.setContentProvider(new EventContentProvider());
-		withEventsViewer.setLabelProvider(new EventLabelProvider());
-		tableWith.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(final org.eclipse.swt.widgets.Event event) {
-				if (event.detail == SWT.CHECK) {
-					TableItem checkedItem = (TableItem) event.item;
-					Event e = (Event) checkedItem.getData();
-					if (checkedItem.getChecked()) {
-						for (With with : e.getWith()) {
-							if (with.getVariables().equals(type)) {
-								return;
-							}
-						}
-						WithCreateCommand cmd = new WithCreateCommand();
-						cmd.setEvent(e);
-						cmd.setVarDeclaration((VarDeclaration) type);
-						executeCommand(cmd);
-					} else {
-						for (With with : e.getWith()) {
-							if (with.getVariables().equals(type)) {
-								executeCommand(new DeleteWithCommand(with));
-								break;
-							}
-						}
-					}
-				}
-			}
-		});
 	}
 
 	@Override

@@ -10,6 +10,7 @@
  * Monika Wenger, Alois Zoitl - initial implementation
  * Alois Zoitl - moved group buttons to the top left, multi-line selection in lists,
  *               code clean-up
+ * Bianca Wiesmayr - extract table creation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
@@ -58,8 +60,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection extends AbstractSection {
-	private static final int TYPE_AND_COMMENT_COLUMN_WIDHT = 100;
-	private static final int NAME_COLUMNWIDHT = 200;
+	private static final int TYPE_AND_COMMENT_COLUMN_WIDTH = 100;
+	private static final int NAME_COLUMN_WIDTH = 200;
 	private static final String NAME = "name"; //$NON-NLS-1$
 	private static final String TYPE = "type"; //$NON-NLS-1$
 	private static final String COMMENT = "comment"; //$NON-NLS-1$
@@ -127,9 +129,9 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(NAME_COLUMNWIDHT));
-		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDHT));
-		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDHT));
+		layout.addColumnData(new ColumnPixelData(NAME_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
 		table.setLayout(layout);
 	}
 
@@ -145,8 +147,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	}
 
 	private TableViewer createTypeTableView(Group parent) {
-		TableViewer viewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL);
-		viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		TableViewer viewer = TableWidgetFactory.createTableViewer(parent);
 		createTableLayout(viewer.getTable());
 		viewer.setColumnProperties(new String[] { NAME, TYPE, COMMENT });
 		viewer.setCellModifier(new InterfaceCellModifier(viewer));
