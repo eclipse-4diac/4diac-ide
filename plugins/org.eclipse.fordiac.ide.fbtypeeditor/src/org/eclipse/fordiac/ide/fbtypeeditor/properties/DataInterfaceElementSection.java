@@ -15,8 +15,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventContentProvider;
@@ -34,11 +34,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -54,7 +54,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class DataInterfaceElementSection extends AdapterInterfaceElementSection {
 	private Text arraySizeText;
 	private Text initValueText;
-	private CheckboxTableViewer withEventsViewer;
+	private TableViewer withEventsViewer;
 	private Group eventComposite;
 
 	@Override
@@ -85,33 +85,24 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		eventComposite = getWidgetFactory().createGroup(parent, "With");
 		eventComposite.setLayout(new GridLayout(1, false));
 		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		withEventsViewer = (CheckboxTableViewer) TableWidgetFactory.createPropertyTableViewer(parent, SWT.CHECK);
-		Table tableWith = withEventsViewer.getTable();
-		tableWith.setLinesVisible(false);
-		configureTableLayout(tableWith);
+		withEventsViewer = TableWidgetFactory.createPropertyTableViewer(eventComposite, SWT.CHECK);
 		withEventsViewer.setContentProvider(new EventContentProvider());
 		withEventsViewer.setLabelProvider(new EventLabelProvider());
+
+		Table tableWith = withEventsViewer.getTable();
+		configureTableLayout(tableWith);
 		tableWith.addListener(SWT.Selection, event -> {
 			if (event.detail == SWT.CHECK) {
 				TableItem checkedItem = (TableItem) event.item;
 				Event e = (Event) checkedItem.getData();
+				With with = e.getWith().stream().filter(w -> w.getVariables().equals(getType())).findFirst()
+						.orElse(null);
 				if (checkedItem.getChecked()) {
-					for (With with1 : e.getWith()) {
-						if (with1.getVariables().equals(type)) {
-							return;
-						}
+					if (null == with) {
+						executeCommand(new WithCreateCommand(e, getType()));
 					}
-					WithCreateCommand cmd = new WithCreateCommand();
-					cmd.setEvent(e);
-					cmd.setVarDeclaration((VarDeclaration) type);
-					executeCommand(cmd);
-				} else {
-					for (With with2 : e.getWith()) {
-						if (with2.getVariables().equals(type)) {
-							executeCommand(new DeleteWithCommand(with2));
-							break;
-						}
-					}
+				} else if (null != with) {
+					executeCommand(new DeleteWithCommand(with));
 				}
 			}
 		});
@@ -141,13 +132,13 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 			arraySizeText.setEnabled(false);
 			initValueText.setEnabled(false);
 			withEventsViewer.setInput(null);
-			withEventsViewer.setAllGrayed(true);
+			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
 		}
 	}
 
 	@Override
 	protected VarDeclaration getType() {
-		return (VarDeclaration) type;
+		return (VarDeclaration) super.getType();
 	}
 
 	@Override
@@ -160,14 +151,12 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 			initValueText.setText(null == getType().getValue() ? "" : getType().getValue().getValue()); //$NON-NLS-1$
 			if (getType().eContainer().eContainer() instanceof FBType) {
 				eventComposite.setVisible(true);
-				withEventsViewer.setAllChecked(false);
-				for (Iterator<With> iterator = getType().getWiths().iterator(); iterator.hasNext();) {
-					With with = iterator.next();
-					if (with.getVariables() != null) {
-						withEventsViewer.setChecked(with.eContainer(), true);
-					}
-				}
 				withEventsViewer.setInput(getType());
+				Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
+				getType().getWiths().stream().filter(with -> (null != with.getVariables()))
+						.map(with -> withEventsViewer.testFindItem(with.getVariables()))
+						.filter(item -> (item instanceof TableItem))
+						.forEach(item -> ((TableItem) item).setChecked(true));
 			} else {
 				eventComposite.setVisible(false);
 			}

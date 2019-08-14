@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import java.util.Iterator;
-
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -28,14 +26,13 @@ public class WithCreateCommand extends Command {
 	private VarDeclaration varDeclaration;
 	private boolean forwardCreation;
 	private With with;
-	
-	public WithCreateCommand() {		
+
+	public WithCreateCommand() {
 	}
-	
-	public WithCreateCommand(Event event, VarDeclaration varDeclaration, boolean forwardCreation) {
+
+	public WithCreateCommand(Event event, VarDeclaration varDeclaration) {
 		this.event = event;
 		this.varDeclaration = varDeclaration;
-		this.forwardCreation = forwardCreation;
 	}
 
 	public Event getEvent() {
@@ -63,16 +60,13 @@ public class WithCreateCommand extends Command {
 			Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.AdapterConnectionNotAllowed);
 			return false;
 		}
-		for (Iterator<With> iterator = varDeclaration.getWiths().iterator(); iterator
-				.hasNext();) {
-			With with = iterator.next();
-			if (with.eContainer().equals(event)) {
+		for(With w : varDeclaration.getWiths()) {
+			if (w.eContainer().equals(event)) {
 				Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.WithExists);
 				return false;
 			}
 		}
-		if ((varDeclaration.isIsInput() && event.isIsInput())
-				|| (!varDeclaration.isIsInput() && !event.isIsInput())) {
+		if ((varDeclaration.isIsInput() && event.isIsInput()) || (!varDeclaration.isIsInput() && !event.isIsInput())) {
 			Abstract4DIACUIPlugin.statusLineErrorMessage(null);
 			return true;
 		}
