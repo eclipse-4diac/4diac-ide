@@ -11,6 +11,8 @@
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized look and feel, added multi line selection  
+ *   Virendra Ashiwal - added "[none]" as showing text in ECC->State->Property when no
+ *   					algorithm is selected
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -104,7 +106,7 @@ public class StateSection extends AbstractECSection {
 					break;
 				}
 			}
-			return ""; //$NON-NLS-1$
+			return ECCContentAndLabelProvider.EMPTY_FIELD;
 		}
 	}
 
@@ -268,13 +270,13 @@ public class StateSection extends AbstractECSection {
 
 	private void createActionViewer(Group actionGroup) {
 		actionViewer = TableWidgetFactory.createTableViewer(actionGroup);
-		configureTableLayout(actionViewer.getTable());
+		configureActionTableLayout(actionViewer.getTable());
 
 		actionViewer.setContentProvider(new ActionContentProvider());
 		actionViewer.setLabelProvider(new ActionListLabelProvider());
 	}
 
-	private void configureTableLayout(final Table table) {
+	private void configureActionTableLayout(final Table table) {
 		TableColumn tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Algorithm");
 
