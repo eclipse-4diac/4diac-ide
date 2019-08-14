@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz	
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - reworked selection check code to handle more cases correctly  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
@@ -17,10 +19,14 @@ import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.commands.NewAppCommand;
+import org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootElement;
 import org.eclipse.fordiac.ide.util.OpenListenerManager;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
@@ -64,23 +70,25 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 		performApplicationCreation(page.getSelectedSystem(), page.getFileName(), page.getOpenApplication(), getShell());
 		return true;
 	}
-	
-	
-	/** This method performs the creation process and opens the editor if necessary
+
+	/**
+	 * This method performs the creation process and opens the editor if necessary
 	 * 
-	 * This method has been extracted as static method so that other wizards like the system creation wizard can 
-	 * utilize this code as well.
+	 * This method has been extracted as static method so that other wizards like
+	 * the system creation wizard can utilize this code as well.
 	 * 
-	 * @param system the system where the application should be created
-	 * @param appName  the application name for the new application
-	 * @param openApplication boolean flag indicating if the editor for this application should be opened after creation
-	 * @param shell the wizard's shell invoking this method
+	 * @param system          the system where the application should be created
+	 * @param appName         the application name for the new application
+	 * @param openApplication boolean flag indicating if the editor for this
+	 *                        application should be opened after creation
+	 * @param shell           the wizard's shell invoking this method
 	 */
-	public static void performApplicationCreation(AutomationSystem system, String appName, boolean openApplication, Shell shell) {
+	public static void performApplicationCreation(AutomationSystem system, String appName, boolean openApplication,
+			Shell shell) {
 		NewAppCommand cmd = new NewAppCommand(system, appName, Messages.NewApplicationWizard_Comment);
-		
-		//TODO check how to get the command stack here getCommandStack().execute(cmd);
-		
+
+		// TODO check how to get the command stack here getCommandStack().execute(cmd);
+
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		IOperationHistory operationHistory = workbench.getOperationSupport().getOperationHistory();
 		IUndoContext undoContext = workbench.getOperationSupport().getUndoContext();
@@ -89,10 +97,10 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 		try {
 			operationHistory.execute(cmd, null, WorkspaceUndoUtil.getUIInfoAdapter(shell));
 			Application app = cmd.getApplication();
-			if(openApplication && (null != app)){
+			if (openApplication && (null != app)) {
 				OpenListenerManager.openEditor(app);
 			}
-			
+
 		} catch (ExecutionException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
@@ -112,27 +120,36 @@ public class NewApplicationWizard extends Wizard implements INewWizard {
 		page.setSystem(system);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
-	 * org.eclipse.jface.viewers.IStructuredSelection)
-	 */
 	@Override
-	public void init(final IWorkbench workbench,
-			final IStructuredSelection selection) {
-		if (selection != null) {
-			if (selection.getFirstElement() instanceof AutomationSystem) {
-				this.system = (AutomationSystem) selection.getFirstElement();
-			} else if(selection.getFirstElement() instanceof Application){
-				this.system = ((Application) selection.getFirstElement()).getAutomationSystem();
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
+		system = null;
+		if (null != selection) {
+			Object selObj = selection.getFirstElement();
+			if (selObj instanceof EditPart) {
+				selObj = ((EditPart) selObj).getModel();
 			}
-			else{	
-				this.system = null;
-			}
-		} else {
-			this.system = null;
+
+			system = getSystemFromSelectedObject(selObj);
 		}
+	}
+
+	private static AutomationSystem getSystemFromSelectedObject(Object selObj) {
+		if (selObj instanceof FBNetwork) {
+			return ((FBNetwork) selObj).getAutomationSystem();
+		}
+		if (selObj instanceof AutomationSystem) {
+			return (AutomationSystem) selObj;
+		}
+		if (selObj instanceof Application) {
+			return ((Application) selObj).getAutomationSystem();
+		}
+		if (selObj instanceof SystemConfiguration) {
+			return ((SystemConfiguration) selObj).getAutomationSystem();
+		}
+		if (selObj instanceof TypeLibRootElement) {
+			return ((TypeLibRootElement) selObj).getSystem();
+		}
+		return null;
 	}
 
 }
