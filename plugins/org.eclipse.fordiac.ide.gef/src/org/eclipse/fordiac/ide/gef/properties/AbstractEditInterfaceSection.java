@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 fortiss GmbH 
+ * Copyright (c) 2017, 2018 fortiss GmbH
  * 				 2018, 2019 Johannes Kepler University Linz
- * 	
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,6 +13,9 @@
  * Bianca Wiesmayr - extract table creation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -82,6 +85,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 	protected abstract String[] fillTypeCombo();
 
+	@Override
 	protected abstract INamedElement getInputType(Object input);
 
 	@SuppressWarnings("static-method") // this method allows sub-classes to provide own change type commands, e.g.,
@@ -312,6 +316,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	}
 
 	private class InterfaceCellModifier implements ICellModifier {
+		private static final int TYPE_COLUMN_INDEX = 1;
 		private TableViewer viewer;
 
 		public InterfaceCellModifier(TableViewer viewer) {
@@ -320,39 +325,26 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 		@Override
 		public boolean canModify(final Object element, final String property) {
-			if (TYPE.equals(property)) {
-				if (element instanceof IInterfaceElement
-						&& (!((IInterfaceElement) element).getInputConnections().isEmpty()
-								|| !((IInterfaceElement) element).getOutputConnections().isEmpty())) {
-					return false;
-				}
-			}
-			// only allow editing if only one element is selected and if the selected is
-			// also the
-			// element to be requested for editing. This improves the usability of
-			// multi-line selection.
-			return 1 == viewer.getStructuredSelection().size()
-					&& element.equals(viewer.getStructuredSelection().getFirstElement());
+			return !(TYPE.equals(property) && element instanceof IInterfaceElement
+					&& (!((IInterfaceElement) element).getInputConnections().isEmpty()
+							|| !((IInterfaceElement) element).getOutputConnections().isEmpty()));
 		}
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			if (NAME.equals(property)) {
+			switch (property) {
+			case NAME:
 				return ((INamedElement) element).getName();
-			}
-			if (TYPE.equals(property)) {
+			case TYPE:
 				String type = ((IInterfaceElement) element).getTypeName();
-				String[] items = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems();
-				int i = items.length - 1;
-				while (i > 0 && !type.equals(items[i])) {
-					--i;
-				}
-				return i;
-			}
-			if (COMMENT.equals(property)) {
+				List<String> items = Arrays
+						.asList(((ComboBoxCellEditor) viewer.getCellEditors()[TYPE_COLUMN_INDEX]).getItems());
+				return items.indexOf(type);
+			case COMMENT:
 				return ((INamedElement) element).getComment() != null ? ((INamedElement) element).getComment() : ""; //$NON-NLS-1$
+			default:
+				return null;
 			}
-			return null;
 		}
 
 		@Override

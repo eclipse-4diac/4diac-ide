@@ -113,12 +113,7 @@ public class StateSection extends AbstractECSection {
 	private class ActionViewerCellModifier implements ICellModifier {
 		@Override
 		public boolean canModify(final Object element, final String property) {
-			// only allow editing if only one element is selected and if the selected is
-			// also the
-			// element to be requested for editing. This improves the usability of
-			// multi-line selection.
-			return 1 == actionViewer.getStructuredSelection().size()
-					&& element.equals(actionViewer.getStructuredSelection().getFirstElement());
+			return true;
 		}
 
 		@Override

@@ -107,7 +107,7 @@ public class InternalVarsSection extends ECCSection {
 				ref -> new DeleteInternalVariableCommand(getType(), (VarDeclaration) ref));
 	}
 
-	private void configureTableLayout(final Table table) {
+	private static void configureTableLayout(final Table table) {
 		TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText("Name");
 		TableColumn column2 = new TableColumn(table, SWT.LEFT);
@@ -158,11 +158,7 @@ public class InternalVarsSection extends ECCSection {
 	private final class InternalVarsCellModifier implements ICellModifier {
 		@Override
 		public boolean canModify(final Object element, final String property) {
-			// only allow editing if only one element is selected and if the selected is
-			// also the element to be requested for editing. This improves the usability of
-			// multi-line selection.
-			return 1 == internalVarsViewer.getStructuredSelection().size()
-					&& element.equals(internalVarsViewer.getStructuredSelection().getFirstElement());
+			return true;
 		}
 
 		@Override
