@@ -305,15 +305,9 @@ public class LuaConstants {
   
   public static CharSequence luaFBAdapterInterfaceConstants(final AdapterDeclaration adapter, final EList<?> ifl, final int offset) {
     StringConcatenation _builder = new StringConcatenation();
-    InterfaceList aifl = adapter.getType().getSocketType().getInterfaceList();
+    InterfaceList aifl = LuaConstants.getAdapterInterfaceList(adapter);
+    _builder.append("\t\t");
     _builder.newLineIfNotEmpty();
-    {
-      boolean _isIsInput = adapter.isIsInput();
-      if (_isIsInput) {
-        _builder.append(aifl = adapter.getType().getPlugType().getInterfaceList());
-        _builder.newLineIfNotEmpty();
-      }
-    }
     int _indexOf = ifl.indexOf(adapter);
     int adapterID = (_indexOf + offset);
     _builder.newLineIfNotEmpty();
@@ -362,6 +356,14 @@ public class LuaConstants {
       }
     }
     return _builder;
+  }
+  
+  public static InterfaceList getAdapterInterfaceList(final AdapterDeclaration adapter) {
+    boolean _isIsInput = adapter.isIsInput();
+    if (_isIsInput) {
+      return adapter.getType().getPlugType().getInterfaceList();
+    }
+    return adapter.getType().getSocketType().getInterfaceList();
   }
   
   public static CharSequence luaInternalConstants(final BasicFBType type) {

@@ -114,11 +114,10 @@ class LuaConstants {
 		«ENDFOR»
 	'''
 
-	def static luaFBAdapterInterfaceConstants(AdapterDeclaration adapter, EList<?> ifl, int offset) '''
-		«var aifl = adapter.type.socketType.interfaceList»
-		«IF adapter.isIsInput»
-			«aifl = adapter.type.plugType.interfaceList»
-		«ENDIF»
+	def static luaFBAdapterInterfaceConstants(AdapterDeclaration adapter, EList<?> ifl, int offset) 
+	
+	'''
+		«var aifl = getAdapterInterfaceList(adapter)»		
 		«var adapterID = ifl.indexOf(adapter)+offset»
 		«FOR decl : aifl.eventOutputs»
 			local «decl.luaAdapterOutputEventName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(adapterID << 16).bitwiseOr(aifl.eventOutputs.indexOf(decl))»
@@ -133,6 +132,12 @@ class LuaConstants {
 			local «decl.luaFBAdapterInputVarName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(FB_DI_FLAG).bitwiseOr(adapterID << 16).bitwiseOr(aifl.inputVars.indexOf(decl))»
 		«ENDFOR»    
 	'''
+	
+	def static getAdapterInterfaceList(AdapterDeclaration adapter){
+		if(adapter.isIsInput)
+			return adapter.type.plugType.interfaceList;
+		return adapter.type.socketType.interfaceList;
+	}
 
 	def static luaInternalConstants(BasicFBType type) '''
 		«FOR decl : type.internalVars»
