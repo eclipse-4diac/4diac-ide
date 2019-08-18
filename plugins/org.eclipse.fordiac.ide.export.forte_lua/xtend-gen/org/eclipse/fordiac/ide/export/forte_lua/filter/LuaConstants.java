@@ -499,7 +499,7 @@ public class LuaConstants {
             _builder.append(_luaAdapterVariable);
             _builder.append(" = fb[");
             CharSequence _xifexpression = null;
-            boolean _isIsInput = av.getAdapter().isIsInput();
+            boolean _isIsInput = av.getVar().isIsInput();
             if (_isIsInput) {
               _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), av.getAdapter().getName());
             } else {
@@ -538,60 +538,36 @@ public class LuaConstants {
   public static CharSequence luaFBAdapterVariablesSuffix(final Iterable<AdapterVariable> variables) {
     StringConcatenation _builder = new StringConcatenation();
     {
-      for(final AdapterVariable variable : variables) {
+      for(final AdapterVariable av : variables) {
+        int index = IterableExtensions.<AdapterVariable>toList(variables).indexOf(av);
+        _builder.newLineIfNotEmpty();
+        List<AdapterVariable> sublist = IterableExtensions.<AdapterVariable>toList(variables).subList(0, index);
+        _builder.newLineIfNotEmpty();
         {
-          boolean _isIsInput = variable.getAdapter().isIsInput();
-          boolean _not = (!_isIsInput);
+          boolean _not = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
+            return it.getVar();
+          })).contains(av.getVar()) && ListExtensions.<AdapterVariable, AdapterDeclaration>map(sublist, ((Function1<AdapterVariable, AdapterDeclaration>) (AdapterVariable it) -> {
+            return it.getAdapter();
+          })).contains(av.getAdapter())));
           if (_not) {
-            int index = IterableExtensions.<AdapterVariable>toList(variables).indexOf(variable);
-            _builder.newLineIfNotEmpty();
-            List<AdapterVariable> sublist = IterableExtensions.<AdapterVariable>toList(variables).subList(0, index);
-            _builder.newLineIfNotEmpty();
-            {
-              boolean _not_1 = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
-                return it.getVar();
-              })).contains(variable.getVar()) && ListExtensions.<AdapterVariable, AdapterDeclaration>map(sublist, ((Function1<AdapterVariable, AdapterDeclaration>) (AdapterVariable it) -> {
-                return it.getAdapter();
-              })).contains(variable.getAdapter())));
-              if (_not_1) {
-                _builder.append("fb[");
-                CharSequence _luaFBAdapterOutputVarName = LuaConstants.luaFBAdapterOutputVarName(variable.getVar(), variable.getAdapter().getName());
-                _builder.append(_luaFBAdapterOutputVarName);
-                _builder.append("] = ");
-                CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(variable.getVar().getName(), variable.getAdapter().getName());
-                _builder.append(_luaAdapterVariable);
-                _builder.newLineIfNotEmpty();
-              }
+            _builder.append("fb[");
+            CharSequence _xifexpression = null;
+            boolean _isIsInput = av.getVar().isIsInput();
+            if (_isIsInput) {
+              _xifexpression = LuaConstants.luaFBAdapterInputVarName(av.getVar(), av.getAdapter().getName());
+            } else {
+              _xifexpression = LuaConstants.luaFBAdapterOutputVarName(av.getVar(), av.getAdapter().getName());
             }
-          }
-        }
-        {
-          boolean _isIsInput_1 = variable.getAdapter().isIsInput();
-          if (_isIsInput_1) {
-            int index_1 = IterableExtensions.<AdapterVariable>toList(variables).indexOf(variable);
+            _builder.append(_xifexpression);
+            _builder.append("] = ");
+            CharSequence _luaAdapterVariable = LuaConstants.luaAdapterVariable(av.getVar().getName(), av.getAdapter().getName());
+            _builder.append(_luaAdapterVariable);
             _builder.newLineIfNotEmpty();
-            List<AdapterVariable> sublist_1 = IterableExtensions.<AdapterVariable>toList(variables).subList(0, index_1);
-            _builder.newLineIfNotEmpty();
-            {
-              boolean _not_2 = (!(ListExtensions.<AdapterVariable, VarDeclaration>map(sublist_1, ((Function1<AdapterVariable, VarDeclaration>) (AdapterVariable it) -> {
-                return it.getVar();
-              })).contains(variable.getVar()) && ListExtensions.<AdapterVariable, AdapterDeclaration>map(sublist_1, ((Function1<AdapterVariable, AdapterDeclaration>) (AdapterVariable it) -> {
-                return it.getAdapter();
-              })).contains(variable.getAdapter())));
-              if (_not_2) {
-                _builder.append("fb[");
-                CharSequence _luaFBAdapterInputVarName = LuaConstants.luaFBAdapterInputVarName(variable.getVar(), variable.getAdapter().getName());
-                _builder.append(_luaFBAdapterInputVarName);
-                _builder.append("] = ");
-                CharSequence _luaAdapterVariable_1 = LuaConstants.luaAdapterVariable(variable.getVar().getName(), variable.getAdapter().getName());
-                _builder.append(_luaAdapterVariable_1);
-                _builder.newLineIfNotEmpty();
-              }
-            }
           }
         }
       }
     }
+    _builder.newLine();
     return _builder;
   }
   

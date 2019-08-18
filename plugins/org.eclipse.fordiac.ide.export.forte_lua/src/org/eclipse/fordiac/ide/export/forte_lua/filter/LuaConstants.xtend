@@ -114,9 +114,7 @@ class LuaConstants {
 		«ENDFOR»
 	'''
 
-	def static luaFBAdapterInterfaceConstants(AdapterDeclaration adapter, EList<?> ifl, int offset) 
-	
-	'''
+	def static luaFBAdapterInterfaceConstants(AdapterDeclaration adapter, EList<?> ifl, int offset) '''
 		«var aifl = getAdapterInterfaceList(adapter)»		
 		«var adapterID = ifl.indexOf(adapter)+offset»
 		«FOR decl : aifl.eventOutputs»
@@ -132,9 +130,9 @@ class LuaConstants {
 			local «decl.luaFBAdapterInputVarName(adapter.name)» = «FB_AD_FLAG.bitwiseOr(FB_DI_FLAG).bitwiseOr(adapterID << 16).bitwiseOr(aifl.inputVars.indexOf(decl))»
 		«ENDFOR»    
 	'''
-	
-	def static getAdapterInterfaceList(AdapterDeclaration adapter){
-		if(adapter.isIsInput)
+
+	def static getAdapterInterfaceList(AdapterDeclaration adapter) {
+		if (adapter.isIsInput)
 			return adapter.type.plugType.interfaceList;
 		return adapter.type.socketType.interfaceList;
 	}
@@ -180,7 +178,7 @@ class LuaConstants {
 			«var index = variables.toList.indexOf(av)»
 			«var sublist = variables.toList.subList(0, index)»
 			«IF !(sublist.map[it.^var].contains(av.^var) && sublist.map[it.adapter].contains(av.adapter))»
-				local «av.^var.name.luaAdapterVariable(av.adapter.name)» = fb[«if(av.adapter.isInput) av.^var.luaFBAdapterInputVarName(av.adapter.name) else av.^var.luaFBAdapterOutputVarName(av.adapter.name)»]
+				local «av.^var.name.luaAdapterVariable(av.adapter.name)» = fb[«if(av.^var.isInput) av.^var.luaFBAdapterInputVarName(av.adapter.name) else av.^var.luaFBAdapterOutputVarName(av.adapter.name)»]
 			«ENDIF»
 		«ENDFOR»
 	'''
@@ -191,23 +189,15 @@ class LuaConstants {
 		«ENDFOR»
 	'''
 
-	def static luaFBAdapterVariablesSuffix(Iterable<AdapterVariable> variables) '''
-		«FOR variable : variables»
-			«IF !variable.adapter.isInput»
-				«var index = variables.toList.indexOf(variable)»
-				«var sublist = variables.toList.subList(0, index)»
-				«IF !(sublist.map[it.^var].contains(variable.^var) && sublist.map[it.adapter].contains(variable.adapter))»					
-					fb[«variable.^var.luaFBAdapterOutputVarName(variable.adapter.name)»] = «variable.^var.name.luaAdapterVariable(variable.adapter.name)»
-				«ENDIF»
-			«ENDIF»
-			«IF variable.adapter.isInput»
-				«var index = variables.toList.indexOf(variable)»
-				«var sublist = variables.toList.subList(0, index)»
-				«IF !(sublist.map[it.^var].contains(variable.^var) && sublist.map[it.adapter].contains(variable.adapter))»					
-					fb[«variable.^var.luaFBAdapterInputVarName(variable.adapter.name)»] = «variable.^var.name.luaAdapterVariable(variable.adapter.name)»
-				«ENDIF»
+	def static luaFBAdapterVariablesSuffix(Iterable<AdapterVariable> variables) '''	
+		«FOR av : variables»
+			«var index = variables.toList.indexOf(av)»
+			«var sublist = variables.toList.subList(0, index)»
+			«IF !(sublist.map[it.^var].contains(av.^var) && sublist.map[it.adapter].contains(av.adapter))»
+				fb[«if(av.^var.isInput) av.^var.luaFBAdapterInputVarName(av.adapter.name) else av.^var.luaFBAdapterOutputVarName(av.adapter.name)»] = «av.^var.name.luaAdapterVariable(av.adapter.name)»
 			«ENDIF»
 		«ENDFOR»
+		
 	'''
 
 	def static luaSendOutputEvent(Event event) '''fb(«event.luaOutputEventName»)'''
