@@ -96,6 +96,12 @@
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho.version}</version>
 				<extensions>true</extensions>
+				<configuration>
+					<generateDownloadStatsProperty>true</generateDownloadStatsProperty>
+					<extraArtifactRepositoryProperties>
+						<p2.statsURI>http://download.eclipse.org/stats/</p2.statsURI>
+					</extraArtifactRepositoryProperties>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
