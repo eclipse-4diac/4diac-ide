@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.policies;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.commands.ListFBCreateCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
@@ -31,11 +32,21 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 
 public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
+	
+	ZoomManager zoomManager;
+	
+	@Override
+	public void setHost(EditPart host) {
+		super.setHost(host);
+		zoomManager = ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();
+	}
 
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
@@ -44,32 +55,12 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	@Override
-	protected Command createAddCommand(final EditPart child,
-			final Object constraint) {
-		return null;
-	}
-
-	@Override
-	protected Command getDeleteDependantCommand(final Request request) {
-		return null;
-	}
-
-	@Override
-	protected Command createChangeConstraintCommand(
-			final ChangeBoundsRequest request, final EditPart child,
+	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
 		// return a command that can move a "ViewEditPart"
-		if (child.getModel() instanceof PositionableElement
-				&& constraint instanceof Rectangle) {
-			return new SetPositionCommand((PositionableElement)child.getModel(), request, (Rectangle) constraint);
+		if (child.getModel() instanceof PositionableElement && constraint instanceof Rectangle) {
+			return new SetPositionCommand((PositionableElement) child.getModel(), request, (Rectangle) constraint);
 		}
-		return null;
-	}
-
-	@Override
-	protected Command createChangeConstraintCommand(final EditPart child,
-			final Object constraint) {
-		// not used
 		return null;
 	}
 
@@ -79,25 +70,28 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			Object childClass = request.getNewObjectType();
 			Rectangle constraint = (Rectangle) getConstraintFor(request);
 			if (getHost().getModel() instanceof FBNetwork) {
-				FBNetwork fbNetwork = (FBNetwork)getHost().getModel(); 
+				FBNetwork fbNetwork = (FBNetwork) getHost().getModel();
 				if (childClass instanceof FBTypePaletteEntry) {
 					FBTypePaletteEntry type = (FBTypePaletteEntry) childClass;
-					return new FBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);	
+					return new FBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
 				}
 				if (childClass instanceof FBTypePaletteEntry[]) {
 					FBTypePaletteEntry[] type = (FBTypePaletteEntry[]) childClass;
-					return new ListFBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
-				}			
+					return new ListFBCreateCommand(type, fbNetwork, constraint.getLocation().x,
+							constraint.getLocation().y);
+				}
 				if (childClass instanceof SubApplicationTypePaletteEntry) {
-					SubApplicationTypePaletteEntry type = (SubApplicationTypePaletteEntry) request .getNewObjectType();
-					return new CreateSubAppInstanceCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
-				}			
+					SubApplicationTypePaletteEntry type = (SubApplicationTypePaletteEntry) request.getNewObjectType();
+					return new CreateSubAppInstanceCommand(type, fbNetwork, constraint.getLocation().x,
+							constraint.getLocation().y);
+				}
 				if (childClass instanceof TransferDataSelectionOfFb[]) {
 					TransferDataSelectionOfFb[] type = (TransferDataSelectionOfFb[]) childClass;
-					return new ListFBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
+					return new ListFBCreateCommand(type, fbNetwork, constraint.getLocation().x,
+							constraint.getLocation().y);
 				}
 			}
-		}		
+		}
 		return null;
 	}
 
@@ -105,10 +99,13 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	protected Command getAddCommand(final Request generic) {
 		return null;
 	}
-	
+
 	@Override
 	protected Command getCloneCommand(ChangeBoundsRequest request) {
-		List elements = (List)request.getEditParts().stream().map(n-> ((EditPart)n).getModel()).collect(Collectors.toList());
-		return new PasteCommand(elements, (FBNetwork)getHost().getModel(), request.getMoveDelta().x, request.getMoveDelta().y); 
+		List elements = (List) request.getEditParts().stream().map(n -> ((EditPart) n).getModel())
+				.collect(Collectors.toList());
+		Point scaledPoint = request.getMoveDelta().getScaled(1.0/zoomManager.getZoom());
+		return new PasteCommand(elements, (FBNetwork) getHost().getModel(), scaledPoint.x, scaledPoint.y);
 	}
+
 }

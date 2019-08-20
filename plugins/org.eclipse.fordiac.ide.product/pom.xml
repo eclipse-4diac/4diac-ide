@@ -6,7 +6,7 @@
     <relativePath>../org.eclipse.fordiac.ide.master/pom.xml</relativePath>
     <groupId>org.eclipse.fordiac</groupId>
     <artifactId>parent</artifactId>
-    <version>1.10.2-SNAPSHOT</version>
+    <version>1.10.3-SNAPSHOT</version>
   </parent>
 
 
@@ -34,7 +34,7 @@
             <artifact>
               <groupId>org.eclipse.fordiac</groupId>
               <artifactId>org.eclipse.fordiac.ide.product</artifactId>
-              <version>1.10.2-SNAPSHOT</version>
+              <version>1.10.3-SNAPSHOT</version>
             </artifact>
           </target>
         </configuration>
@@ -67,14 +67,15 @@
           </execution>
         </executions>
         <configuration>
-        	<formats>
-		  		<linux>tar.gz</linux>
-		  		<macosx>tar.gz</macosx>
-			</formats>
+          <formats>
+            <linux>tar.gz</linux>
+            <macosx>tar.gz</macosx>
+          </formats>
           <products>
             <product>
-              <id>org.eclipse.fordiac.ide.product</id>
-              <rootFolder>4diac-ide</rootFolder>
+                <id>org.eclipse.fordiac.ide.product</id>
+                <rootFolder>4diac-ide</rootFolder>
+                <archiveFileName>4diac-ide-incubation_${unqualifiedVersion}</archiveFileName>
             </product>
           </products>
         </configuration>

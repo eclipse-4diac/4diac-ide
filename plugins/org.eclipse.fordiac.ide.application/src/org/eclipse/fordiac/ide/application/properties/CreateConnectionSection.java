@@ -10,24 +10,28 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -48,8 +52,10 @@ public class CreateConnectionSection extends AbstractSection {
 	private Text commentText;
 	private Text sourceText;
 	private Text targetText;
-	private Button createConnectionButton;
-	private EList<InterfaceEditPart> editParts = new BasicEList<InterfaceEditPart>();
+	
+	private List<IInterfaceElement> getSelectionList(){
+		return (type instanceof List<?>) ? (List<IInterfaceElement>) type : Collections.emptyList();
+	}
 
 	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
@@ -59,27 +65,46 @@ public class CreateConnectionSection extends AbstractSection {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	protected EList<IInterfaceElement> getInputType(Object input) {
+	protected List<IInterfaceElement> getInputType(Object input) {
+		List<IInterfaceElement> editParts = new ArrayList<>();			
 		if(input instanceof IStructuredSelection 
-				&&  ((IStructuredSelection)input).getFirstElement() instanceof InterfaceEditPart){
-			EList<IInterfaceElement> list = new BasicEList<IInterfaceElement>();
-			editParts.clear();
-			editParts.add(((InterfaceEditPart)((IStructuredSelection) input).toList().get(0)));
-			list.add(editParts.get(0).getModel());
-			Object object = ((InterfaceEditPart)((IStructuredSelection) input).toList().get(1)).getModel();		
-			if(((IInterfaceElement)object).isIsInput()){
-				list.add((IInterfaceElement) object);
-				editParts.add((InterfaceEditPart)((IStructuredSelection) input).toList().get(1));
+				&& ((IStructuredSelection)input).getFirstElement() instanceof EditPart 
+				&& ((EditPart)((IStructuredSelection)input).getFirstElement()).getModel() instanceof IInterfaceElement){
+			
+			List<Object> selectionList = ((IStructuredSelection) input).toList();
+			
+			IInterfaceElement first = (IInterfaceElement) ((EditPart)selectionList.get(0)).getModel();
+			IInterfaceElement second = (IInterfaceElement) ((EditPart)selectionList.get(1)).getModel(); 
+			if(!needsFlip(first, second)){
+				editParts.add(first);
+				editParts.add(second);
 			}else{				
-				list.add(0, (IInterfaceElement) object);
-				editParts.add(0, (InterfaceEditPart)((IStructuredSelection) input).toList().get(1));
-			}
-			return list;
+				editParts.add(second);
+				editParts.add(first);
+			}			
 		}
-		return null;
+		return editParts;
 	}
 	
+	private static boolean needsFlip(IInterfaceElement first, IInterfaceElement second) {
+		boolean needsChange = first.isIsInput();
+
+		if(first.eContainer().eContainer() instanceof CompositeFBType) {
+			needsChange = !first.isIsInput();
+		} else if(first.getFBNetworkElement().getFbNetwork() != 
+				second.getFBNetworkElement().getFbNetwork()){
+			//one of the both is a untyped subapp interface element
+			if(first.getFBNetworkElement() instanceof SubApp && 
+					((SubApp)first.getFBNetworkElement()).getSubAppNetwork() == 
+					second.getFBNetworkElement().getFbNetwork()) {
+				needsChange = !first.isIsInput();
+			}			
+		}		
+		return needsChange;
+	}
+
 	@Override
 	protected EObject getType(){
 		return null;
@@ -100,30 +125,50 @@ public class CreateConnectionSection extends AbstractSection {
 		targetText = createGroupText(composite, false);	
 		getWidgetFactory().createCLabel(composite, org.eclipse.fordiac.ide.gef.Messages.ConnectionSection_Comment); 
 		commentText = createGroupText(composite, true);
-		createConnectionButton = getWidgetFactory().createButton(parent, Messages.CreateConnectionSection_CreateConnection, SWT.PUSH);
+		
+		Button createConnectionButton = getWidgetFactory().createButton(parent, Messages.CreateConnectionSection_CreateConnection, SWT.PUSH);
 		createConnectionButton.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
 		createConnectionButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createConnectionButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				AbstractConnectionCreateCommand cmd = null;
-				FBNetwork nw = editParts.get(0).getModel().getFBNetworkElement().getFbNetwork();
-				if(getInterfaceElement(true) instanceof Event){
+				IInterfaceElement source = getSelectionList().get(0);
+				IInterfaceElement dest = getSelectionList().get(1);
+				FBNetwork nw = getFBNetwork(source, dest);
+				if(source instanceof Event){
 					cmd = new EventConnectionCreateCommand(nw);
-				}else if(getInterfaceElement(true) instanceof AdapterDeclaration){
+				}else if(source instanceof AdapterDeclaration){
 					cmd = new AdapterConnectionCreateCommand(nw);
 				}else{
 					cmd = new DataConnectionCreateCommand(nw);
 				}
-				if(null != cmd){
-					cmd.setSource(editParts.get(0).getModel());
-					cmd.setDestination(editParts.get(1).getModel());
-					executeCommand(cmd);
-				}
+				cmd.setSource(source);
+				cmd.setDestination(dest);
+				executeCommand(cmd);
 			}
+
 		});
 	}
 	
+	private static FBNetwork getFBNetwork(IInterfaceElement source, IInterfaceElement dest) {		
+		if(source.eContainer().eContainer() instanceof CompositeFBType) {
+			return ((CompositeFBType)source.eContainer().eContainer()).getFBNetwork();
+		} else if(source.getFBNetworkElement().getFbNetwork() != 
+				dest.getFBNetworkElement().getFbNetwork()){
+			//one of the both is a untyped subapp interface element
+			if(source.getFBNetworkElement() instanceof SubApp) {
+				if(((SubApp)source.getFBNetworkElement()).getSubAppNetwork() == 
+					dest.getFBNetworkElement().getFbNetwork()) {
+					return dest.getFBNetworkElement().getFbNetwork();
+				} else {
+					return source.getFBNetworkElement().getFbNetwork();
+				}
+			}
+		} 
+		return source.getFBNetworkElement().getFbNetwork();
+	}
+
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
@@ -149,9 +194,9 @@ public class CreateConnectionSection extends AbstractSection {
 	
 	private IInterfaceElement getInterfaceElement(boolean source){
 		if(source){
-			return (IInterfaceElement) ((EList<?>)type).get(0);
+			return (IInterfaceElement) ((List<?>)type).get(0);
 		}
-		return (IInterfaceElement) ((EList<?>)type).get(1);
+		return (IInterfaceElement) ((List<?>)type).get(1);
 	}
 	
 	private String getInterfaceName(boolean source){
@@ -164,9 +209,12 @@ public class CreateConnectionSection extends AbstractSection {
 	}
 	
 	@Override
-	protected void setInputCode() {}
+	protected void setInputCode() {
+		//nothing to do here
+	}
 
 	@Override
 	protected void setInputInit() {
+		//nothing to do here
 	}
 }

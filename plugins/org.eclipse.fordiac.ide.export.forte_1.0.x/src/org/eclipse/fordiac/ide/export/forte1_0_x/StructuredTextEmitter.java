@@ -870,34 +870,35 @@ public class StructuredTextEmitter {
 	private void emitCASEStatement(final StringTokenizer tokens) {
 		conditionalQueue.add(Conditionals.CASE);
 		boolean caseElementEnded = false;
-		String statement = tokens.nextToken().toUpperCase(), buf = ""; //$NON-NLS-1$
+		String statement = tokens.nextToken();
+		String buf = ""; //$NON-NLS-1$
 
 		pwCPP.print("switch("); //$NON-NLS-1$
-		while (!statement.equals("OF")) { //$NON-NLS-1$
+		while (!statement.equalsIgnoreCase("OF")) { //$NON-NLS-1$
 			exportSTStatement(statement, tokens);
-			statement = tokens.nextToken().toUpperCase();
+			statement = tokens.nextToken();
 		}
 		pwCPP.print(" ){"); //$NON-NLS-1$
 		boolean first = true;
 
-		statement = tokens.nextToken().toUpperCase();
+		statement = tokens.nextToken();
 		while (true) {
-			while ((!caseElementEnded) && (!statement.equals("END_CASE"))) { //$NON-NLS-1$
+			while ((!caseElementEnded) && (!statement.equalsIgnoreCase("END_CASE"))) { //$NON-NLS-1$
 				buf += statement;
 				if (statement.equalsIgnoreCase("CASE")) { //$NON-NLS-1$
 					exportSTStatement(statement, tokens);
-					statement = tokens.nextToken().toUpperCase();
+					statement = tokens.nextToken();
 					buf = statement;
 				}
 				if (statement.equals(":")) { //$NON-NLS-1$
 					do {
-						statement = tokens.nextToken().toUpperCase();
+						statement = tokens.nextToken();
 					} while (statement.equals(" ")); //$NON-NLS-1$
 					if (!statement.equals("=")) { //$NON-NLS-1$
 						caseElementEnded = true;
 					}
 				} else {
-					statement = tokens.nextToken().toUpperCase();
+					statement = tokens.nextToken();
 				}
 			}
 			int pos = buf.lastIndexOf(';');
