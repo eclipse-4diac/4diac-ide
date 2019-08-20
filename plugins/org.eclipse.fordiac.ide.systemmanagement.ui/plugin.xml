@@ -290,28 +290,6 @@
                </input>
             </propertySection>
             <propertySection
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.ResourceInterfaceSection"
-                  id="org.eclipse.fordiac.ide.systemmanagement.properties.ResourceInterfaceSection"
-                  tab="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab">
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Resource">
-               </input>
-            </propertySection>
-            <propertySection
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.AttributeSection"
-                  id="org.eclipse.fordiac.ide.systemmanagement.properties.AttributeSection"
-                  tab="property.tab.system.attributeInfo">
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Device">
-               </input>
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Segment">
-               </input>
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Application">
-               </input>
-            </propertySection>
-            <propertySection
                   class="org.eclipse.fordiac.ide.gef.properties.AppearancePropertySection"
                   id="org.eclipse.fordiac.ide.systemmanagement.properties.AppearancePropertySection"
                   tab="property.tab.system.appearance">

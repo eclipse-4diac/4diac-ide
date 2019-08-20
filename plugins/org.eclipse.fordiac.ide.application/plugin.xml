@@ -223,7 +223,7 @@
             </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.AttributeSection"
+               class="org.eclipse.fordiac.ide.application.properties.ApplicationAttributeSection"
                id="org.eclipse.fordiac.ide.application.properties.AttributeSection"
                tab="org.eclipse.fordiac.ide.application.propertyAttributeTab">
             <input
