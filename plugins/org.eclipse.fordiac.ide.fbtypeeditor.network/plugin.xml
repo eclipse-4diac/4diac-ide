@@ -70,7 +70,7 @@
             </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.network.properties.ConnectionSection"
+               class="org.eclipse.fordiac.ide.gef.properties.ConnectionSection"
                id="org.eclipse.fordiac.ide.fbnet.properties.ConnectionSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyConnectionTab">
             <input

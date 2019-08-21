@@ -147,7 +147,7 @@
             </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.ConnectionSection"
+               class="org.eclipse.fordiac.ide.gef.properties.ConnectionSection"
                enablesFor="1"
                id="org.eclipse.fordiac.ide.application.properties.ConnectionSection"
                tab="org.eclipse.fordiac.ide.application.propertyConnectionTab">
