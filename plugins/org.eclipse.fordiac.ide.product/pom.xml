@@ -142,7 +142,7 @@
 			            <configuration>
 							<volumeName>4diac-ide</volumeName>
 							<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>
-							<source>${project.build.directory}/products/org.eclipse.fordiac.ide.product-macosx.cocoa.x86_64.tar.gz</source>
+							<source>${project.build.directory}/products/4diac-ide-incubation_${unqualifiedVersion}-macosx.cocoa.x86_64.tar.gz</source>
 							<dmgFilename>4diac-ide.dmg</dmgFilename>
 							<sign>true</sign>
 						</configuration>
