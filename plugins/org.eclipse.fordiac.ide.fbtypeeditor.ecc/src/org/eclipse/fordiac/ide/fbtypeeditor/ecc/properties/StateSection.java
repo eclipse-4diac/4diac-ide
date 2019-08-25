@@ -12,9 +12,11 @@
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized look and feel, added multi line selection
- *   Virendra Ashiwal, Bianca Wiesmayr - added "[none]" as showing text in
- *   				ECC->State->Property when no algorithm is selected
- *   Virendra Ashiwal, Bianca Wiesmayr - change TransitionViewer to table
+ *   Virendra Ashiwal, Bianca Wiesmayr
+ *     - added "[none]" as showing text in ECC->State->Property when no
+ *       algorithm is selected
+ *     - change TransitionViewer to table
+ *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -47,7 +49,6 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -85,7 +86,6 @@ public class StateSection extends AbstractECSection {
 	private TableViewer actionViewer;
 	private AddDeleteReorderListWidget actionMgmButtons;
 	private TableViewer transitionsOutViewer;
-	private Group transitionGroup;
 
 	private Button transitionDown;
 	private Button transitionUp;
@@ -253,7 +253,7 @@ public class StateSection extends AbstractECSection {
 				ref -> new ChangeActionOrderCommand(getType(), (ECAction) ref, true),
 				ref -> new ChangeActionOrderCommand(getType(), (ECAction) ref, false));
 
-		transitionGroup = getWidgetFactory().createGroup(parent, "Transitions from selected state");
+		Group transitionGroup = getWidgetFactory().createGroup(parent, "Transitions from selected state");
 		transitionGroup.setLayout(new GridLayout(2, false));
 		transitionGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		Composite buttonComp = new Composite(transitionGroup, SWT.NONE);
@@ -375,9 +375,9 @@ public class StateSection extends AbstractECSection {
 	}
 
 	private void configureTransitionTableLayout(final Table table) {
-		TableColumn tc = new TableColumn(table, SWT.LEFT);
+		new TableColumn(table, SWT.LEFT); // creates a table column without headline for the order numbering
 
-		tc = new TableColumn(table, SWT.LEFT);
+		TableColumn tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Destination");
 
 		tc = new TableColumn(table, SWT.LEFT);
@@ -449,9 +449,9 @@ public class StateSection extends AbstractECSection {
 	private CellEditor[] createActionViewerCellEditors(Table table) {
 		BasicFBType fbType = getBasicFBType();
 		return new CellEditor[] {
-				new ComboBoxCellEditor(table,
+				TableWidgetFactory.createComboBoxCellEditor(table,
 						ECCContentAndLabelProvider.getAlgorithmNames(fbType).toArray(new String[0]), SWT.READ_ONLY),
-				new ComboBoxCellEditor(table,
+				TableWidgetFactory.createComboBoxCellEditor(table,
 						ECCContentAndLabelProvider.getOutputEventNames(fbType).toArray(new String[0]), SWT.READ_ONLY) };
 	}
 

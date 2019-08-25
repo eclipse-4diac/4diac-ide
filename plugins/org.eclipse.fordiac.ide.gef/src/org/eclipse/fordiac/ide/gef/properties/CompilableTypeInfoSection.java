@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2016 fortiss GmbH
- * 
+ * 				 2019 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,8 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on
+ *   	activation, code clean-up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -33,7 +36,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -41,9 +43,6 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -57,7 +56,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 /**
  * Properties tab which shows the FB type information of the selected FB
- * 
+ *
  */
 public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 
@@ -75,6 +74,91 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	private static final String COMPILER_PRODUCT = "product"; //$NON-NLS-1$
 	private static final String[] VALUE_SET = new String[] { LANGUAGE_JAVA, LANGUAGE_CPP, LANGUAGE_C, LANGUAGE_OTHER };
 
+	private class CompilerCellModifier implements ICellModifier {
+
+		private static final int LANGUAGE_JAVA_INDEX = 0;
+		private static final int LANGUAGE_CPP_INDEX = 1;
+		private static final int LANGUAGE_C_INDEX = 2;
+		private static final int LANGUAGE_OTHER_INDEX = 3;
+
+		@Override
+		public boolean canModify(final Object element, final String property) {
+			return true;
+		}
+
+		@Override
+		public Object getValue(final Object element, final String property) {
+			switch (property) {
+			case COMPILER_LANGUAGE:
+				return getLanguageIndex(((Compiler) element).getLanguage().getName());
+			case COMPILER_PRODUCT:
+				return ((Compiler) element).getProduct();
+			case COMPILER_VENDOR:
+				return ((Compiler) element).getVendor();
+			default:
+				return ((Compiler) element).getVersion();
+			}
+		}
+
+		private Object getLanguageIndex(String language) {
+			switch (language) {
+			case LANGUAGE_JAVA:
+				return LANGUAGE_JAVA_INDEX;
+			case LANGUAGE_CPP:
+				return LANGUAGE_CPP_INDEX;
+			case LANGUAGE_C:
+				return LANGUAGE_C_INDEX;
+			default:
+				return LANGUAGE_OTHER_INDEX;
+			}
+		}
+
+		@Override
+		public void modify(final Object element, final String property, final Object value) {
+			TableItem tableItem = (TableItem) element;
+			Compiler data = (Compiler) tableItem.getData();
+			Command cmd = getModificationCommand(property, value, data);
+			if (null != cmd) {
+				executeCommand(cmd);
+				compilerViewer.refresh(data);
+			}
+		}
+
+		private Command getModificationCommand(final String property, final Object value, Compiler data) {
+			Command cmd = null;
+			switch (property) {
+			case COMPILER_LANGUAGE:
+				switch ((Integer) value) {
+				case LANGUAGE_JAVA_INDEX:
+					cmd = new ChangeCompilerLanguageCommand(data, Language.get(LANGUAGE_JAVA));
+					break;
+				case LANGUAGE_CPP_INDEX:
+					cmd = new ChangeCompilerLanguageCommand(data, Language.get(LANGUAGE_CPP));
+					break;
+				case LANGUAGE_C_INDEX:
+					cmd = new ChangeCompilerLanguageCommand(data, Language.get(LANGUAGE_C));
+					break;
+				case LANGUAGE_OTHER_INDEX:
+					cmd = new ChangeCompilerLanguageCommand(data, Language.get(LANGUAGE_OTHER));
+					break;
+				default:
+					break;
+				}
+				break;
+			case COMPILER_PRODUCT:
+				cmd = new ChangeCompilerProductCommand(data, value.toString());
+				break;
+			case COMPILER_VENDOR:
+				cmd = new ChangeCompilerVendorCommand(data, value.toString());
+				break;
+			default:
+				cmd = new ChangeCompilerVersionCommand(data, value.toString());
+				break;
+			}
+			return cmd;
+		}
+	}
+
 	public CompilableTypeInfoSection() {
 	}
 
@@ -88,26 +172,18 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		Group compilerInfoGroup = getWidgetFactory().createGroup(parent, "Compiler Info");
 		compilerInfoGroup.setLayout(new GridLayout(1, false));
 		compilerInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		
+
 		Composite composite = getWidgetFactory().createComposite(compilerInfoGroup, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false));
 		getWidgetFactory().createCLabel(composite, "Header:");
 		headerText = createGroupText(composite, true);
-		headerText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				executeCommand(new ChangeCompilerInfoHeaderCommand((FBType) type, headerText.getText()));
-			}
-		});
+		headerText.addModifyListener(
+				e -> executeCommand(new ChangeCompilerInfoHeaderCommand((FBType) type, headerText.getText())));
 		getWidgetFactory().createCLabel(composite, "Classdef:");
 		classdefText = createGroupText(composite, true);
-		classdefText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				executeCommand(new ChangeCompilerInfoClassdefCommand((FBType) type, classdefText.getText()));
-			}
-		});
+		classdefText.addModifyListener(
+				e -> executeCommand(new ChangeCompilerInfoClassdefCommand((FBType) type, classdefText.getText())));
 		Composite compositeBottom = getWidgetFactory().createComposite(compilerInfoGroup);
 		compositeBottom.setLayout(new GridLayout(2, false));
 		compositeBottom.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
@@ -120,7 +196,7 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		configureTableLayout(table);
 		compilerViewer.setContentProvider(new CompilerContentProvider());
 		compilerViewer.setLabelProvider(new CompilerLabelProvider());
-		compilerViewer.setCellEditors(new CellEditor[] { new ComboBoxCellEditor(table, VALUE_SET),
+		compilerViewer.setCellEditors(new CellEditor[] { TableWidgetFactory.createComboBoxCellEditor(table, VALUE_SET),
 				new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) });
 		compilerViewer.setColumnProperties(
 				new String[] { COMPILER_LANGUAGE, COMPILER_VENDOR, COMPILER_PRODUCT, COMPILER_VERSION });
@@ -128,77 +204,17 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		buttons.bindToTableViewer(compilerViewer, this, ref -> new AddNewCompilerCommand((FBType) type),
 				ref -> new DeleteCompilerCommand(((FBType) type).getCompilerInfo(), (Compiler) ref));
 
-		compilerViewer.setCellModifier(new ICellModifier() {
-			@Override
-			public boolean canModify(final Object element, final String property) {
-				return true;
-			}
-
-			@Override
-			public Object getValue(final Object element, final String property) {
-				if (COMPILER_LANGUAGE.equals(property)) {
-					String language = ((Compiler) element).getLanguage().getName();
-					if (language.equals(LANGUAGE_JAVA)) {
-						return 0;
-					} else if (language.equals(LANGUAGE_CPP)) {
-						return 1;
-					} else if (language.equals(LANGUAGE_C)) {
-						return 2;
-					} else {
-						return 3;
-					}
-				} else if (COMPILER_PRODUCT.equals(property)) {
-					return ((Compiler) element).getProduct();
-				} else if (COMPILER_VENDOR.equals(property)) {
-					return ((Compiler) element).getVendor();
-				} else {
-					return ((Compiler) element).getVersion();
-				}
-			}
-
-			@Override
-			public void modify(final Object element, final String property, final Object value) {
-				TableItem tableItem = (TableItem) element;
-				Compiler data = (Compiler) tableItem.getData();
-				Command cmd = null;
-				if (COMPILER_LANGUAGE.equals(property)) {
-					switch ((Integer) value) {
-					case 0:
-						cmd = new ChangeCompilerLanguageCommand(data, Language.get(LANGUAGE_JAVA));
-						break;
-					case 1:
-						cmd = new ChangeCompilerLanguageCommand(data, Language.get(LANGUAGE_CPP));
-						break;
-					case 2:
-						cmd = new ChangeCompilerLanguageCommand(data, Language.get(LANGUAGE_C));
-						break;
-					case 3:
-						cmd = new ChangeCompilerLanguageCommand(data, Language.get(LANGUAGE_OTHER));
-						break;
-					}
-				} else if (COMPILER_PRODUCT.equals(property)) {
-					cmd = new ChangeCompilerProductCommand(data, value.toString());
-				} else if (COMPILER_VENDOR.equals(property)) {
-					cmd = new ChangeCompilerVendorCommand(data, value.toString());
-				} else {
-					cmd = new ChangeCompilerVersionCommand(data, value.toString());
-				}
-				if (null != cmd) {
-					executeCommand(cmd);
-					compilerViewer.refresh(data);
-				}
-			}
-		});
+		compilerViewer.setCellModifier(new CompilerCellModifier());
 	}
 
-	private void configureTableLayout(final Table table) {
-		TableColumn column1 = new TableColumn(compilerViewer.getTable(), SWT.LEFT);
+	private static void configureTableLayout(final Table table) {
+		TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText("Language");
-		TableColumn column2 = new TableColumn(compilerViewer.getTable(), SWT.LEFT);
+		TableColumn column2 = new TableColumn(table, SWT.LEFT);
 		column2.setText("Vendor");
-		TableColumn column3 = new TableColumn(compilerViewer.getTable(), SWT.LEFT);
+		TableColumn column3 = new TableColumn(table, SWT.LEFT);
 		column3.setText("Product");
-		TableColumn column4 = new TableColumn(compilerViewer.getTable(), SWT.LEFT);
+		TableColumn column4 = new TableColumn(table, SWT.LEFT);
 		column4.setText("Version");
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(25, 80));
@@ -225,16 +241,14 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		super.refresh();
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if (null != type && type instanceof FBType) {
-			if (null != ((FBType) type).getCompilerInfo()) {
-				headerText.setText(null != ((FBType) type).getCompilerInfo().getHeader()
-						? ((FBType) type).getCompilerInfo().getHeader()
-						: ""); //$NON-NLS-1$
-				classdefText.setText(null != ((FBType) type).getCompilerInfo().getClassdef()
-						? ((FBType) type).getCompilerInfo().getClassdef()
-						: ""); //$NON-NLS-1$
-				compilerViewer.setInput(type);
-			}
+		if ((type instanceof FBType) && (null != ((FBType) type).getCompilerInfo())) {
+			headerText.setText(null != ((FBType) type).getCompilerInfo().getHeader()
+					? ((FBType) type).getCompilerInfo().getHeader()
+					: ""); //$NON-NLS-1$
+			classdefText.setText(null != ((FBType) type).getCompilerInfo().getClassdef()
+					? ((FBType) type).getCompilerInfo().getClassdef()
+					: ""); //$NON-NLS-1$
+			compilerViewer.setInput(type);
 		}
 		commandStack = commandStackBuffer;
 	}

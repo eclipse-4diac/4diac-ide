@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011 2012 Profactor GbmH, TU Wien ACIN 
- * 
+ * Copyright (c) 2008, 2009, 2011 2012 Profactor GbmH, TU Wien ACIN
+ * 				 2019 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - changed activation behavior to immediately show the combo list
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -33,8 +35,6 @@ public class ComboDirectEditManager extends DirectEditManager {
 	/** The label. */
 	private final Label label;
 
-	private CCombo combo;
-
 	/** The scaled font. */
 	private Font scaledFont;
 
@@ -47,7 +47,7 @@ public class ComboDirectEditManager extends DirectEditManager {
 
 	/**
 	 * The Constructor.
-	 * 
+	 *
 	 * @param source     the source
 	 * @param editorType the editor type
 	 * @param locator    the locator
@@ -72,22 +72,24 @@ public class ComboDirectEditManager extends DirectEditManager {
 		}
 	}
 
+	@Override
+	public void show() {
+		super.show();
+		getComboBox().setListVisible(true);
+	}
+
 	/**
 	 * Show.
-	 * 
+	 *
 	 * @param initialChar the initial char
 	 */
 	public void show(final char initialChar) {
 		this.show();
 		setDirty(true);
 		getLocator().relocate(getCellEditor());
+		getComboBox().setListVisible(true);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.tools.DirectEditManager#bringDown()
-	 */
 	@Override
 	protected void bringDown() {
 		if (getEditPart() instanceof ValueEditPart) {
@@ -104,14 +106,9 @@ public class ComboDirectEditManager extends DirectEditManager {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.tools.DirectEditManager#initCellEditor()
-	 */
 	@Override
 	protected void initCellEditor() {
-		combo = (CCombo) getCellEditor().getControl();
+		CCombo combo = getComboBox();
 		combo.setEditable(false);
 		combo.addModifyListener(e -> setDirty(true));
 
@@ -132,6 +129,7 @@ public class ComboDirectEditManager extends DirectEditManager {
 
 	public void updateComboData(List<String> comboData) {
 		this.comboData = comboData;
+		CCombo combo = getComboBox();
 		if ((null != combo) && (!combo.isDisposed())) {
 			combo.removeAll();
 			for (String string : comboData) {
@@ -142,12 +140,16 @@ public class ComboDirectEditManager extends DirectEditManager {
 
 	public void setSelectedItem(int newVal) {
 		selectedItem = newVal;
+		CCombo combo = getComboBox();
 		if ((null != combo) && (!combo.isDisposed())) {
 			combo.select(newVal);
 		}
 	}
 
 	public CCombo getComboBox() {
-		return combo;
+		if (null != getCellEditor() && getCellEditor().getControl() instanceof CCombo) {
+			return (CCombo) getCellEditor().getControl();
+		}
+		return null;
 	}
 }

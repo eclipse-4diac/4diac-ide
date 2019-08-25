@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2016 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -58,7 +58,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 /**
  * Properties tab which shows the FB type information of the selected FB
- * 
+ *
  */
 public abstract class TypeInfoSection extends AbstractSection {
 	private Text fbTypeNameText;
@@ -178,10 +178,10 @@ public abstract class TypeInfoSection extends AbstractSection {
 
 		AddDeleteWidget buttons = new AddDeleteWidget();
 		buttons.createControls(versionInfoGroup, getWidgetFactory());
-		
+
 		versionViewer = TableWidgetFactory.createPropertyTableViewer(versionInfoGroup);
 		configureTableLayout(versionViewer.getTable());
-		
+
 		Table table = versionViewer.getTable();
 
 		versionViewer.setContentProvider(new VersionContentProvider());
@@ -190,7 +190,6 @@ public abstract class TypeInfoSection extends AbstractSection {
 				new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) });
 		versionViewer.setColumnProperties(new String[] { VERSION_PROPERTY, ORGANIZATION_PROPERTY, AUTHOR_PROPERTY,
 				DATE_PROPERTY, REMARKS_PROPERTY });
-
 
 		buttons.bindToTableViewer(versionViewer, this, ref -> new AddNewVersionInfoCommand(getType()),
 				ref -> new DeleteVersionInfoCommand(getType(), (VersionInfo) ref));
@@ -203,7 +202,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 
 			@Override
 			public Object getValue(final Object element, final String property) {
-				switch(property) {
+				switch (property) {
 				case VERSION_PROPERTY:
 					return ((VersionInfo) element).getVersion();
 				case ORGANIZATION_PROPERTY:
@@ -222,7 +221,7 @@ public abstract class TypeInfoSection extends AbstractSection {
 				TableItem tableItem = (TableItem) element;
 				VersionInfo data = (VersionInfo) tableItem.getData();
 				Command cmd = null;
-				switch(property) {
+				switch (property) {
 				case VERSION_PROPERTY:
 					cmd = new ChangeVersionCommand(data, value.toString());
 					break;
@@ -245,16 +244,16 @@ public abstract class TypeInfoSection extends AbstractSection {
 		});
 	}
 
-	private void configureTableLayout(Table table) {
-		TableColumn column1 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
+	private static void configureTableLayout(Table table) {
+		TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText("Version");
-		TableColumn column2 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
+		TableColumn column2 = new TableColumn(table, SWT.LEFT);
 		column2.setText("Organization");
-		TableColumn column3 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
+		TableColumn column3 = new TableColumn(table, SWT.LEFT);
 		column3.setText("Author");
-		TableColumn column4 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
+		TableColumn column4 = new TableColumn(table, SWT.LEFT);
 		column4.setText("Date");
-		TableColumn column5 = new TableColumn(versionViewer.getTable(), SWT.LEFT);
+		TableColumn column5 = new TableColumn(table, SWT.LEFT);
 		column5.setText("Remarks");
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 70));

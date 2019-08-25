@@ -1,29 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2015 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
- * 
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License 2.0 which is available at
- * http://www.eclipse.org/legal/epl-2.0.
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Contributors:
- *   Monika Wenger
- *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - added mulitline selection and code cleanup.  
- *   Bianca Wiesmayr - extract Table creation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
-
-import java.util.Arrays;
-
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateInternalVariableCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteInternalVariableCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.InternalVarsLabelProvider;
-/*******************************************************************************
  * Copyright (c) 2015 - 2017 fortiss GmbH
- * 
+ * 				 2019 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -33,9 +11,17 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.InternalVarsLabe
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr
- *     - extracted Table generation
+ *   Alois Zoitl - added mulitline selection and code cleanup.
+ *   Bianca Wiesmayr - extract Table creation
+ *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *******************************************************************************/
+package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
+
+import java.util.Arrays;
+
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateInternalVariableCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteInternalVariableCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.InternalVarsLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInitialValueCommand;
@@ -132,7 +118,7 @@ public class InternalVarsSection extends ECCSection {
 	private CellEditor[] createCellEditors(final Table table) {
 		TextCellEditor varNameEditor = new TextCellEditor(table);
 		((Text) varNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		typeDropDown = new ComboBoxCellEditor(table, dataTypes, SWT.READ_ONLY);
+		typeDropDown = TableWidgetFactory.createComboBoxCellEditor(table, dataTypes, SWT.READ_ONLY);
 		return new CellEditor[] { varNameEditor, typeDropDown, new TextCellEditor(table), new TextCellEditor(table),
 				new TextCellEditor(table) };
 	}

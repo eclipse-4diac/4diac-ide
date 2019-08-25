@@ -1,11 +1,16 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 
- * This program and the accompanying materials are made available under the 
+ * 				 2019 Johannes Kepler University Linz
+ *
+ * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  *
- * SPDX-License-Identifier: EPL-2.0 3
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Monika Wenger - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -28,7 +33,6 @@ import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -107,7 +111,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		});
 	}
 
-	private String[] getDataTypes() {
+	private static String[] getDataTypes() {
 		List<BaseType1> list = Arrays.asList(BaseType1.values());
 		// collects names of all base data types into a String array
 		return list.stream().map(BaseType1::getName).collect(Collectors.toList()).toArray(new String[0]);
@@ -122,7 +126,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		attributeViewer.setContentProvider(new InputContentProvider());
 		attributeViewer.setLabelProvider(new InputLabelProvider());
 		attributeViewer.setCellEditors(new CellEditor[] { new TextCellEditor(table),
-				new ComboBoxCellEditor(table, getDataTypes(), SWT.READ_ONLY),
+				TableWidgetFactory.createComboBoxCellEditor(table, getDataTypes(), SWT.READ_ONLY),
 				new TextCellEditor(table, SWT.MULTI | SWT.V_SCROLL), new TextCellEditor(table) });
 		attributeViewer.setColumnProperties(new String[] { NAME, TYPE, VALUE, COMMENT });
 		attributeViewer.setCellModifier(new AttributeCellModifier());

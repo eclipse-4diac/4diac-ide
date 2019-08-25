@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2018 fortiss GmbH, 
- * 				 2018 - 2019 Johannes Kepler University Linz (JKU) 
+ * Copyright (c) 2015 - 2018 fortiss GmbH,
+ * 				 2018 - 2019 Johannes Kepler University Linz (JKU)
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,12 +8,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Monika Wenger, Alois Zoitl 
+ *   Monika Wenger, Alois Zoitl
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - allowed multiline selection in algorithm list
- *   Bianca Wiesmayr, Virendra Ashiwal - 
+ *   Bianca Wiesmayr, Virendra Ashiwal -
  *   	- Created tableViewer as new WidgetFactory
  *   	- Shifted Grid heightHint and Width Hint to WidgetFactory.java
+ *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -35,7 +36,6 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
@@ -178,7 +178,8 @@ public class AlgorithmList implements CommandExecutor {
 		TextCellEditor algorithmNameEditor = new TextCellEditor(table);
 		((Text) algorithmNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
 		return new CellEditor[] { algorithmNameEditor,
-				new ComboBoxCellEditor(table, AbstractECSection.getLanguages().toArray(new String[0]), SWT.READ_ONLY),
+				TableWidgetFactory.createComboBoxCellEditor(table,
+						AbstractECSection.getLanguages().toArray(new String[0]), SWT.READ_ONLY),
 				new TextCellEditor(table) };
 	}
 

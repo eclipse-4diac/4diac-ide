@@ -8,10 +8,12 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Monika Wenger, Alois Zoitl - initial implementation
- * Alois Zoitl - moved group buttons to the top left, multi-line selection in lists,
+ * Contributors:
+ *   Monika Wenger, Alois Zoitl - initial implementation
+ *   Alois Zoitl - moved group buttons to the top left, multi-line selection in lists,
  *               code clean-up
- * Bianca Wiesmayr - extract table creation
+ *   Bianca Wiesmayr - extract table creation
+ *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -167,13 +169,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 				ref -> newOrderCommand((IInterfaceElement) ref, inputs, false));
 	}
 
-	private void setCellEditors() {
-		inputsViewer.setCellEditors(new CellEditor[] { new TextCellEditor(inputsViewer.getTable()),
-				new ComboBoxCellEditor(inputsViewer.getTable(), fillTypeCombo(), SWT.READ_ONLY),
-				new TextCellEditor(inputsViewer.getTable()) });
-		outputsViewer.setCellEditors(new CellEditor[] { new TextCellEditor(outputsViewer.getTable()),
-				new ComboBoxCellEditor(outputsViewer.getTable(), fillTypeCombo(), SWT.READ_ONLY),
-				new TextCellEditor(outputsViewer.getTable()) });
+	private void setCellEditors(TableViewer viewer) {
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(viewer.getTable()),
+				TableWidgetFactory.createComboBoxCellEditor(viewer.getTable(), fillTypeCombo(), SWT.READ_ONLY),
+				new TextCellEditor(viewer.getTable()) });
 	}
 
 	private void createOutputEdit(Composite parent) {
@@ -193,8 +192,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
-		setCellEditors(); // only now the types are correctly set so that the type lists for the combo
+		// only now the types are correctly set so that the type lists for the combo
 		// boxes can be created correctly
+		setCellEditors(inputsViewer);
+		setCellEditors(outputsViewer);
 	}
 
 	@Override
