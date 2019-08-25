@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -124,7 +125,6 @@ public interface Palette extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" typeNameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='PaletteEntry entry = null;\n//TODO reconsider when namespaces are coming how to retrieve the type\nList&lt;PaletteEntry&gt; entries = getTypeEntries(typeName);\nif (!entries.isEmpty()) {\n\tentry = entries.get(0);\n} \nreturn entry;'"
 	 * @generated
 	 */
 	PaletteEntry getTypeEntry(String typeName);
@@ -133,7 +133,6 @@ public interface Palette extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" adapterTypeNameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypeEntry(this, adapterTypeName);'"
 	 * @generated
 	 */
 	AdapterTypePaletteEntry getAdapterTypeEntry(String adapterTypeName);
@@ -142,7 +141,6 @@ public interface Palette extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypes(this);'"
 	 * @generated
 	 */
 	EList<AdapterTypePaletteEntry> getAdapterTypes();
@@ -151,7 +149,6 @@ public interface Palette extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypesSorted(this);'"
 	 * @generated
 	 */
 	EList<AdapterTypePaletteEntry> getAdapterTypesSorted();

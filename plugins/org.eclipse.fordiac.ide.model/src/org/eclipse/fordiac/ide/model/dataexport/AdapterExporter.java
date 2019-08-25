@@ -2,10 +2,11 @@
  * Copyright (c) 2010 - 2014, 2017 Profactor Gmbh, TU Wien ACIN, fortiss GmbH
  * 				 2018 Johannes Keppler University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Monika Wenger, Alois Zoitl

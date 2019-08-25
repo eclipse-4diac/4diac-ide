@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -32,7 +33,7 @@ public interface ResourceTypeEntry extends PaletteEntry {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='if((null != type) &amp;&amp; (type instanceof ResourceType)){\r\n\tsuper.setType(type);\r\n}else{\r\n\tsuper.setType(null);\r\n\tif(null != type){\r\n\t\t&lt;%org.eclipse.core.runtime.Status%&gt; exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%&gt;.ERROR, Activator.PLUGIN_ID, \"tried to set no ResourceType as type entry for ResourceTypeEntry\");\r\n\t\tActivator.getDefault().getLog().log(exception);\r\n\t}\r\n}'"
+	 * @model
 	 * @generated
 	 */
 	@Override

@@ -1,16 +1,17 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *  *
- *  * All rights reserved. This program and the accompanying materials
- *  * are made available under the terms of the Eclipse Public License v1.0
- *  * which accompanies this distribution, and is available at
- *  * http://www.eclipse.org/legal/epl-v10.html
- *  *
- *  * Contributors:
- *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
- *  *     - initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ *  Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
@@ -81,12 +82,12 @@ public class InterfaceListItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
+			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS);
+			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__SOCKETS);
 			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS);
 			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_OUTPUTS);
 			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS);
 			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS);
-			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__SOCKETS);
-			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS);
 		}
 		return childrenFeatures;
 	}
@@ -138,12 +139,12 @@ public class InterfaceListItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(InterfaceList.class)) {
+			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
+			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
 			case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
 			case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
-			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
-			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -163,42 +164,7 @@ public class InterfaceListItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS,
-				 LibraryElementFactory.eINSTANCE.createEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS,
-				 LibraryElementFactory.eINSTANCE.createAdapterEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_OUTPUTS,
-				 LibraryElementFactory.eINSTANCE.createEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_OUTPUTS,
-				 LibraryElementFactory.eINSTANCE.createAdapterEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
-				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
-				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
-				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
+				(LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS,
 				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 
 		newChildDescriptors.add
@@ -208,7 +174,42 @@ public class InterfaceListItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS,
+				(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS,
+				 LibraryElementFactory.eINSTANCE.createEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS,
+				 LibraryElementFactory.eINSTANCE.createAdapterEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_OUTPUTS,
+				 LibraryElementFactory.eINSTANCE.createEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_OUTPUTS,
+				 LibraryElementFactory.eINSTANCE.createAdapterEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
+				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
+				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
+				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
 				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 	}
 
@@ -224,12 +225,12 @@ public class InterfaceListItemProvider
 		Object childObject = child;
 
 		boolean qualify =
-			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS ||
-			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_OUTPUTS ||
+			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS ||
+			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__SOCKETS ||
 			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS ||
 			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS ||
-			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__SOCKETS ||
-			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS;
+			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS ||
+			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_OUTPUTS;
 
 		if (qualify) {
 			return getString
