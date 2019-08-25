@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -26,9 +26,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -37,7 +39,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
@@ -49,7 +50,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 
 	private Text eventText;
 	private Text parametersText;
-	private Combo serviceInterfaceCombo;
+	private CCombo serviceInterfaceCombo;
 	private Button buttonNone;
 	private Button buttonTrue;
 	private Button buttonFalse;
@@ -138,7 +139,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, "Interface: ");
-		serviceInterfaceCombo = new Combo(composite, SWT.SINGLE | SWT.READ_ONLY | SWT.BORDER);
+		serviceInterfaceCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
 		serviceInterfaceCombo.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		serviceInterfaceCombo.addListener(SWT.Selection, event -> {
 			executeCommand(

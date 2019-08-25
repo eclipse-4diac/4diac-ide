@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 TU Wien/ACIN, Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -38,16 +38,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
@@ -56,7 +57,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 public abstract class AlgorithmEditingComposite {
 
 	private CLabel languageLabel;
-	private Combo languageCombo;
+	private CCombo languageCombo;
 	private CLabel commentLabel;
 	private Text commentText;
 	private Composite codeEditors;
@@ -86,7 +87,7 @@ public abstract class AlgorithmEditingComposite {
 	public AlgorithmEditingComposite() {
 		stack = new StackLayout();
 	}
-	
+
 	public void createControls(final Composite parent, final FormToolkit toolkit) {
 		Composite langAndComments = toolkit.createComposite(parent);
 		langAndComments.setLayout(new GridLayout(4, false));
@@ -95,11 +96,11 @@ public abstract class AlgorithmEditingComposite {
 		languageLabel = new CLabel(langAndComments, SWT.NONE);
 		languageLabel.setBackground(parent.getBackground());
 		languageLabel.setText(Messages.AlgorithmComposite_Language);
-		languageCombo = new Combo(langAndComments, SWT.SINGLE | SWT.READ_ONLY);
+		languageCombo = ComboBoxWidgetFactory.createCombo(langAndComments);
 		fillLanguageDropDown();
 		languageCombo.addListener(SWT.Selection, event -> {
-			AbstractChangeAlgorithmTypeCommand changeAlgorithmTypeCommand = getChangeAlgorithmTypeCommand(getFBType(), getAlgorithm(),
-					languageCombo.getText());
+			AbstractChangeAlgorithmTypeCommand changeAlgorithmTypeCommand = getChangeAlgorithmTypeCommand(getFBType(),
+					getAlgorithm(), languageCombo.getText());
 			executeCommand(changeAlgorithmTypeCommand);
 			setAlgorithm(changeAlgorithmTypeCommand.getNewAlgorithm());
 		});
@@ -121,14 +122,14 @@ public abstract class AlgorithmEditingComposite {
 		codeEditors.setBackground(toolkit.getColors().getBackground());
 		codeEditors.setForeground(toolkit.getColors().getForeground());
 		toolkit.adapt(codeEditors);
-        
+
 		codeEditors.setLayout(stack);
 		codeEditors.setLayoutData(codeEditorsGridData);
 
 		disableAllFields();
 	}
 
-	protected BaseFBType getFBType(){
+	protected BaseFBType getFBType() {
 		return (BaseFBType) currentAlgorithm.eContainer();
 	}
 
@@ -188,7 +189,7 @@ public abstract class AlgorithmEditingComposite {
 					codeEditors.layout();
 					disableAllFields();
 				}
-			} 
+			}
 			updateAlgFields();
 			setCommandStack(commandStackBuffer);
 		}
@@ -208,13 +209,13 @@ public abstract class AlgorithmEditingComposite {
 		languageCombo.setEnabled(false);
 	}
 
-	protected void updateAlgFields(){
+	protected void updateAlgFields() {
 		Algorithm alg = getAlgorithm();
 		commentText.setText((null != alg) ? alg.getComment() : ""); //$NON-NLS-1$
-		languageCombo.select((null != alg) ? languageCombo.indexOf(getAlgorithmTypeString(getAlgorithm())) : 0 );
+		languageCombo.select((null != alg) ? languageCombo.indexOf(getAlgorithmTypeString(getAlgorithm())) : 0);
 		if (alg instanceof TextAlgorithm) {
 			currentAlgEditor.setAlgorithmText(((TextAlgorithm) alg).getText());
-		} 
+		}
 	}
 
 	private void initializeEditor() {
@@ -247,8 +248,8 @@ public abstract class AlgorithmEditingComposite {
 		}
 	}
 
-	protected abstract AbstractChangeAlgorithmTypeCommand getChangeAlgorithmTypeCommand(BaseFBType fbType, Algorithm oldAlgorithm,
-			String algorithmType);
+	protected abstract AbstractChangeAlgorithmTypeCommand getChangeAlgorithmTypeCommand(BaseFBType fbType,
+			Algorithm oldAlgorithm, String algorithmType);
 
 	private CommandStack getCommandStack() {
 		return commandStack;

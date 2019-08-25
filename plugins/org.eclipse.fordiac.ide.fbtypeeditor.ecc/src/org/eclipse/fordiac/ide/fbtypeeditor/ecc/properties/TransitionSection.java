@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2017 fortiss GmbH
  *               2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -28,16 +28,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -63,7 +64,7 @@ public class TransitionSection extends AbstractECSection {
 	private static final String ONE_CONDITION = "1"; //$NON-NLS-1$
 	private static final String LINKING_FILE_EXTENSION = "xtextfbt"; //$NON-NLS-1$
 	private Text commentText;
-	private Combo eventCombo;
+	private CCombo eventCombo;
 	private Composite conditionEditingContainer;
 	// the closing bracket label needed for putting the xtext editor before it.
 	private CLabel closingBracket;
@@ -138,12 +139,12 @@ public class TransitionSection extends AbstractECSection {
 	/**
 	 * creates a composite where the transition condition editing widgets can be
 	 * placed later on.
-	 * 
+	 *
 	 * The reason for having this is that the condition expression editor needs the
 	 * FB Type for context resolution (e.g., allow resolving of data inputs outputs
 	 * and internal variables). The type is only available later therefore these
 	 * widgets will be created when the input is set.
-	 * 
+	 *
 	 * @param parent
 	 */
 	private void createConditionEditingPlaceHolder(Composite parent) {
@@ -153,7 +154,7 @@ public class TransitionSection extends AbstractECSection {
 		compositeLayoutData.verticalIndent = 0;
 		conditionEditingContainer.setLayoutData(compositeLayoutData);
 
-		eventCombo = new Combo(conditionEditingContainer, SWT.SINGLE | SWT.READ_ONLY | SWT.BORDER);
+		eventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), conditionEditingContainer);
 		eventCombo.addListener(SWT.Selection, event -> {
 			removeContentAdapter();
 			executeCommand(new ChangeConditionEventCommand(getType(), eventCombo.getText()));

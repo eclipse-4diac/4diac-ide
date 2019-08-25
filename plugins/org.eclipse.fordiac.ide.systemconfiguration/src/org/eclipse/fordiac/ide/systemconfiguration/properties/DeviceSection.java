@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *    Monika Wenger, Alois Zoitl 
+ *    Monika Wenger, Alois Zoitl
  *      - initial API and implementation and/or initial documentation
  *    Bianca Wiesmayr
  *      - merged two DeviceInterfaceSection plus Abstract Class into DeviceSection
@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.systemconfiguration.properties;
 
 import java.util.List;
+
 import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
@@ -26,20 +27,20 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractDevResInterfaceSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-
 
 public class DeviceSection extends AbstractDevResInterfaceSection {
 	protected static String[] profileNames;
-	protected Combo profile;
+	protected CCombo profile;
 	protected Button getResources;
 
 	@Override
@@ -118,7 +119,7 @@ public class DeviceSection extends AbstractDevResInterfaceSection {
 		});
 
 		getWidgetFactory().createCLabel(composite, "Profile:");
-		profile = new Combo(composite, SWT.SINGLE | SWT.READ_ONLY);
+		profile = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
 		profile.addListener(SWT.Selection, event -> {
 			removeContentAdapter();
 			executeCommand(new ChangeProfileCommand((Device) getType(), profile.getText()));

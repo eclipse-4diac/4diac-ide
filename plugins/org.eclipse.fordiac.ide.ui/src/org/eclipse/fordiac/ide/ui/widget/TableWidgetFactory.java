@@ -21,7 +21,6 @@ package org.eclipse.fordiac.ide.ui.widget;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.SWT;
@@ -58,30 +57,6 @@ public final class TableWidgetFactory {
 		gridData.widthHint = 400;
 
 		return tableViewer;
-	}
-
-	/**
-	 * Create a Combobox Cell editor for a table
-	 *
-	 * This helper method will apply certain style options so that on activation the
-	 * combo box is always unfolded making the usage more intuitive and quicker.
-	 *
-	 * @param table the table this cell editor will be used in
-	 * @param items the items shown in the combo box
-	 * @param style the style of the combobox cell editor
-	 * @return the newly created combobox cell editor
-	 */
-	public static ComboBoxCellEditor createComboBoxCellEditor(Table table, String[] items, int style) {
-		ComboBoxCellEditor cellEditor = new ComboBoxCellEditor(table, items, style);
-		cellEditor.setActivationStyle(
-				ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION | ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION
-						| ComboBoxCellEditor.DROP_DOWN_ON_PROGRAMMATIC_ACTIVATION
-						| ComboBoxCellEditor.DROP_DOWN_ON_TRAVERSE_ACTIVATION);
-		return cellEditor;
-	}
-
-	public static ComboBoxCellEditor createComboBoxCellEditor(Table table, String[] items) {
-		return createComboBoxCellEditor(table, items, SWT.NONE);
 	}
 
 	private static TableViewer createGenericTableViewer(GridData gridData, final Composite parent, int style) {

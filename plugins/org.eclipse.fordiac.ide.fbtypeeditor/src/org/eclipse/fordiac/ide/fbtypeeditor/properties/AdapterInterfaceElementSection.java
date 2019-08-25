@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University	
- * 
+ * 				 2019 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - moved adapter search code to palette     
+ *   Alois Zoitl - moved adapter search code to palette
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
@@ -35,14 +35,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
@@ -52,7 +53,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class AdapterInterfaceElementSection extends AbstractSection {
 	private Text nameText;
 	private Text commentText;
-	protected Combo typeCombo;
+	protected CCombo typeCombo;
 
 	@Override
 	protected IInterfaceElement getInputType(Object input) {
@@ -116,7 +117,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 			}
 		});
 		getWidgetFactory().createCLabel(parent, "Type: ");
-		typeCombo = new Combo(parent, SWT.SINGLE | SWT.READ_ONLY | SWT.BORDER);
+		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), parent);
 		GridData languageComboGridData = new GridData(SWT.FILL, 0, true, false);
 		typeCombo.setLayoutData(languageComboGridData);
 		typeCombo.addListener(SWT.Selection, event -> {

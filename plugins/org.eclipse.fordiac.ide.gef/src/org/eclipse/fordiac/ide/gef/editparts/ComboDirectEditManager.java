@@ -21,6 +21,7 @@ import java.util.List;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.gef.tools.DirectEditManager;
@@ -111,6 +112,7 @@ public class ComboDirectEditManager extends DirectEditManager {
 		CCombo combo = getComboBox();
 		combo.setEditable(false);
 		combo.addModifyListener(e -> setDirty(true));
+		ComboBoxWidgetFactory.configureTypeaheadHandling(combo);
 
 		if (null != comboData) {
 			updateComboData(comboData);

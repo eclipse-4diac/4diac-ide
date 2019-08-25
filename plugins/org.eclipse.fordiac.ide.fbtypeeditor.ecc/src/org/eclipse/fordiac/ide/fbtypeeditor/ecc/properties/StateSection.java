@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
@@ -449,9 +450,9 @@ public class StateSection extends AbstractECSection {
 	private CellEditor[] createActionViewerCellEditors(Table table) {
 		BasicFBType fbType = getBasicFBType();
 		return new CellEditor[] {
-				TableWidgetFactory.createComboBoxCellEditor(table,
+				ComboBoxWidgetFactory.createComboBoxCellEditor(table,
 						ECCContentAndLabelProvider.getAlgorithmNames(fbType).toArray(new String[0]), SWT.READ_ONLY),
-				TableWidgetFactory.createComboBoxCellEditor(table,
+				ComboBoxWidgetFactory.createComboBoxCellEditor(table,
 						ECCContentAndLabelProvider.getOutputEventNames(fbType).toArray(new String[0]), SWT.READ_ONLY) };
 	}
 

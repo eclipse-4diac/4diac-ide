@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH 
+ * Copyright (c) 2017 fortiss GmbH
  * 				 2019 Johannes Kepler Unviersity
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - fixed sub-app type update, code clean-up  
+ *   Alois Zoitl - fixed sub-app type update, code clean-up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -31,14 +31,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
@@ -47,7 +48,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class InterfaceElementSection extends AbstractSection {
 	private Text nameText;
 	private Text commentText;
-	private Combo typeCombo;
+	private CCombo typeCombo;
 	private Text parameterText;
 	private CLabel valueCLabel;
 
@@ -81,7 +82,7 @@ public class InterfaceElementSection extends AbstractSection {
 			addContentAdapter();
 		});
 		getWidgetFactory().createCLabel(composite, "Type: ");
-		typeCombo = new Combo(composite, SWT.SINGLE | SWT.READ_ONLY);
+		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
 		typeCombo.addListener(SWT.Selection, event -> {
 			Command cmd = null;
 			if (getType() instanceof AdapterDeclaration) {
@@ -163,7 +164,7 @@ public class InterfaceElementSection extends AbstractSection {
 
 	/**
 	 * Set the input fields edit able or not
-	 * 
+	 *
 	 * @param editAble flag indicating if the fields should be editable
 	 */
 	private void setEditabelFields(boolean editAble) {

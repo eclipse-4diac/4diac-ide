@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -196,8 +197,9 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		configureTableLayout(table);
 		compilerViewer.setContentProvider(new CompilerContentProvider());
 		compilerViewer.setLabelProvider(new CompilerLabelProvider());
-		compilerViewer.setCellEditors(new CellEditor[] { TableWidgetFactory.createComboBoxCellEditor(table, VALUE_SET),
-				new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) });
+		compilerViewer
+				.setCellEditors(new CellEditor[] { ComboBoxWidgetFactory.createComboBoxCellEditor(table, VALUE_SET),
+						new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) });
 		compilerViewer.setColumnProperties(
 				new String[] { COMPILER_LANGUAGE, COMPILER_VENDOR, COMPILER_PRODUCT, COMPILER_VERSION });
 

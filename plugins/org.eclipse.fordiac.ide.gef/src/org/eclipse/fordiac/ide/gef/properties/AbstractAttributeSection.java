@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
@@ -126,7 +127,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		attributeViewer.setContentProvider(new InputContentProvider());
 		attributeViewer.setLabelProvider(new InputLabelProvider());
 		attributeViewer.setCellEditors(new CellEditor[] { new TextCellEditor(table),
-				TableWidgetFactory.createComboBoxCellEditor(table, getDataTypes(), SWT.READ_ONLY),
+				ComboBoxWidgetFactory.createComboBoxCellEditor(table, getDataTypes(), SWT.READ_ONLY),
 				new TextCellEditor(table, SWT.MULTI | SWT.V_SCROLL), new TextCellEditor(table) });
 		attributeViewer.setColumnProperties(new String[] { NAME, TYPE, VALUE, COMMENT });
 		attributeViewer.setCellModifier(new AttributeCellModifier());

@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
@@ -178,7 +179,7 @@ public class AlgorithmList implements CommandExecutor {
 		TextCellEditor algorithmNameEditor = new TextCellEditor(table);
 		((Text) algorithmNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
 		return new CellEditor[] { algorithmNameEditor,
-				TableWidgetFactory.createComboBoxCellEditor(table,
+				ComboBoxWidgetFactory.createComboBoxCellEditor(table,
 						AbstractECSection.getLanguages().toArray(new String[0]), SWT.READ_ONLY),
 				new TextCellEditor(table) };
 	}

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2019 fortiss GmbH, Johannes Kepler University Linz (JKU)
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *	Bianca Wiesmayr
- *     - consistent dropdown menu edit     
+ *     - consistent dropdown menu edit
  ********************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -30,14 +30,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbenchPart;
@@ -50,8 +51,8 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  */
 public class ActionSection extends AbstractECSection {
 	private Composite actionComposite;
-	private Combo algorithmCombo;
-	private Combo outputEventCombo;
+	private CCombo algorithmCombo;
+	private CCombo outputEventCombo;
 	private final AlgorithmGroup algorithmGroup = new AlgorithmGroup();
 	private AlgorithmList algorithmList;
 
@@ -109,7 +110,7 @@ public class ActionSection extends AbstractECSection {
 		actionComposite.setLayout(layout);
 
 		getWidgetFactory().createCLabel(actionComposite, "Algorithm: ");
-		algorithmCombo = new Combo(actionComposite, SWT.SINGLE | SWT.READ_ONLY);
+		algorithmCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), actionComposite);
 		algorithmCombo.addListener(SWT.Selection, event -> {
 			removeContentAdapter();
 			executeCommand(
@@ -120,7 +121,7 @@ public class ActionSection extends AbstractECSection {
 		});
 
 		getWidgetFactory().createCLabel(actionComposite, "Output Event: ");
-		outputEventCombo = new Combo(actionComposite, SWT.SINGLE | SWT.READ_ONLY);
+		outputEventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), actionComposite);
 		outputEventCombo.addListener(SWT.Selection, event -> {
 			removeContentAdapter();
 			List<Event> outputEvents = ECCContentAndLabelProvider.getOutputEvents(getFBType());
@@ -171,7 +172,7 @@ public class ActionSection extends AbstractECSection {
 		commandStack = commandStackBuffer;
 	}
 
-	private static void setDropdown(Combo comboBox, INamedElement el, List<String> names) {
+	private static void setDropdown(CCombo comboBox, INamedElement el, List<String> names) {
 		comboBox.removeAll();
 		names.forEach(comboBox::add);
 		// pre-selects the elements that are now in the action:
