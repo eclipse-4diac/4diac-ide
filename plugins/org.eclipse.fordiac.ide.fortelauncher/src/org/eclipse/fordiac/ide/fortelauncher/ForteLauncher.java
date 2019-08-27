@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2012, 2014 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2019 Johannes Kepler University Linz
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Martijn Rooker, Gerhard Ebenhofer, Thomas Strasser, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+  *   Bianca Wiesmayr
+ *     - add access to path setting and configured runtime path
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fortelauncher;
 
@@ -51,19 +54,22 @@ public class ForteLauncher implements IRuntimeLauncher {
 			if ((port < 1024) || (port > 65535)) {
 				throw new NumberFormatException();
 			}
-			String runtime = Activator.getDefault().getPreferenceStore()
-					.getString(PreferenceConstants.P_PATH);
-			LaunchRuntimeUtils
-					.startRuntime("FORTE", runtime, new File(runtime) //$NON-NLS-1$
-							.getParentFile().getAbsolutePath(), "-c " //$NON-NLS-1$
-							+  "localhost:" //$NON-NLS-1$
+			String runtimePath = getRuntimePath();
+			LaunchRuntimeUtils.startRuntime("FORTE", runtimePath, new File(runtimePath) //$NON-NLS-1$
+					.getParentFile().getAbsolutePath(),
+					"-c " //$NON-NLS-1$
+							+ "localhost:" //$NON-NLS-1$
 							+ params.get(0).getValue());
 		} catch (NumberFormatException num) {
-			throw new LaunchRuntimeException(
-					Messages.ForteLauncher_ERROR_WrongPort);
+			throw new LaunchRuntimeException(Messages.ForteLauncher_ERROR_WrongPort);
 		} catch (Exception ex) {
 			Activator.getDefault().logError("Could not launch FORTE", ex);
 		}
+	}
+
+	@Override
+	public String getRuntimePath() {
+		return Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH);
 	}
 
 	@Override
@@ -77,15 +83,11 @@ public class ForteLauncher implements IRuntimeLauncher {
 	}
 
 	@Override
-	public LaunchParameter setParam(final String name, final String value) {
-		boolean found = false;
+	public final LaunchParameter setParam(final String name, final String value) {
 		for (int i = 0; i < params.size(); i++) {
 			if (params.get(i).getName().equals(name)) {
 				params.get(i).setValue(value);
-				found = true;
-				if (found) {
-					return params.get(i);
-				}
+				return params.get(i);
 			}
 		}
 		LaunchParameter param = new LaunchParameter();
@@ -93,5 +95,10 @@ public class ForteLauncher implements IRuntimeLauncher {
 		param.setValue(value);
 		params.add(param);
 		return param;
+	}
+
+	@Override
+	public String getPathPreferenceSettingPageID() {
+		return "org.eclipse.fordiac.ide.fortelauncher.preferences.FortePreferencePage"; //$NON-NLS-1$
 	}
 }
