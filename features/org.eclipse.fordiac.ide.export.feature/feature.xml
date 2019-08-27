@@ -174,12 +174,7 @@ United States, other countries, or both.\n
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.compare"/>
       <import feature="org.eclipse.fordiac.ide.workbench.feature"/>
-      <import plugin="org.eclipse.fordiac.ide.ui.controls"/>
-      <import plugin="org.eclipse.fordiac.ide.model"/>
-      <import plugin="org.eclipse.fordiac.ide.systemmanagement"/>
-      <import plugin="org.eclipse.fordiac.ide.util"/>
       <import plugin="org.eclipse.xtend.lib"/>
-      <import plugin="org.eclipse.fordiac.ide.model.structuredtext"/>
       <import plugin="org.eclipse.ui.workbench"/>
       <import plugin="org.eclipse.xtext"/>
       <import plugin="com.google.guava"/>
