@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2013, 2017 fortiss GmbH
  *               2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,6 +13,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
  *     - expanded for input events
+ *   Virendra Ashiwal, Bianca Wiesmayr
+ *   	- expanded for Transitions
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider;
 
@@ -33,12 +35,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 /**
  * Helper functions need by the action and transition edit parts.
- * 
+ *
  *
  */
 public final class ECCContentAndLabelProvider {
 
 	public static final String EMPTY_FIELD = "[none]"; // drop-down menu entry for selecting nothing
+	public static final String ONE_CONDITION = "1"; //$NON-NLS-1$
 
 	public static List<Event> getOutputEvents(BasicFBType type) {
 		List<Event> events = new ArrayList<>();
@@ -74,10 +77,17 @@ public final class ECCContentAndLabelProvider {
 	}
 
 	public static List<String> getInputEventNames(BasicFBType type) {
-		List<String> transitionConditionNames = getInputEvents(type).stream().map(tc -> tc.getName())
+		List<String> inputEventNames = getInputEvents(type).stream().map(tc -> tc.getName())
 				.collect(Collectors.toList());
-		transitionConditionNames.add(EMPTY_FIELD);
-		return transitionConditionNames;
+		inputEventNames.add(EMPTY_FIELD);
+		return inputEventNames;
+	}
+
+	public static List<String> getTransitionConditionEventNames(BasicFBType type) {
+		List<String> transitionConditionEvents = new ArrayList<>();
+		transitionConditionEvents.add(ONE_CONDITION);
+		transitionConditionEvents.addAll(getInputEventNames(type));
+		return transitionConditionEvents;
 	}
 
 	// TODO move to a utility class as same function is used in
@@ -110,7 +120,7 @@ public final class ECCContentAndLabelProvider {
 	}
 
 	public static BasicFBType getFBType(ECAction action) {
-		if (null != action.getECState() && null != action.getECState().getECC()){
+		if (null != action.getECState() && null != action.getECState().getECC()) {
 			return action.getECState().getECC().getBasicFBType();
 		}
 		return null;

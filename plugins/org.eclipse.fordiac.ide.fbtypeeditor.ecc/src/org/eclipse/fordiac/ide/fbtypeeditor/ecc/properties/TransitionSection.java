@@ -13,6 +13,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
  *    - consistent dropdown menu edit
+ *   Virendra Ashiwal, Bianca Wiesmayr
+ *   - Used extracted method from ECCContentAndLabelProvider
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -61,7 +63,6 @@ import com.google.inject.name.Named;
  */
 @SuppressWarnings("restriction")
 public class TransitionSection extends AbstractECSection {
-	private static final String ONE_CONDITION = "1"; //$NON-NLS-1$
 	private static final String LINKING_FILE_EXTENSION = "xtextfbt"; //$NON-NLS-1$
 	private Text commentText;
 	private CCombo eventCombo;
@@ -243,8 +244,8 @@ public class TransitionSection extends AbstractECSection {
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			updateConditionExpressionText(getType().getConditionExpression());
 			if (getType().getConditionExpression() != null
-					&& getType().getConditionExpression().equals(ONE_CONDITION)) {
-				eventCombo.select(eventCombo.indexOf(ONE_CONDITION));
+					&& getType().getConditionExpression().equals(ECCContentAndLabelProvider.ONE_CONDITION)) {
+				eventCombo.select(eventCombo.indexOf(ECCContentAndLabelProvider.ONE_CONDITION));
 			} else {
 				eventCombo.select(getType().getConditionEvent() != null
 						? eventCombo.indexOf(getType().getConditionEvent().getName())
@@ -264,7 +265,8 @@ public class TransitionSection extends AbstractECSection {
 	private void checkEnablement() {
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if (getType().getConditionExpression() != null && getType().getConditionExpression().equals(ONE_CONDITION)) {
+		if (getType().getConditionExpression() != null
+				&& getType().getConditionExpression().equals(ECCContentAndLabelProvider.ONE_CONDITION)) {
 			updateConditionExpressionText(""); //$NON-NLS-1$
 			editor.getViewer().getControl().setEnabled(false);
 		} else {
@@ -275,9 +277,7 @@ public class TransitionSection extends AbstractECSection {
 
 	public void setEventConditionDropdown() {
 		eventCombo.removeAll();
-		eventCombo.add(ONE_CONDITION);
-		for (String name : ECCContentAndLabelProvider.getInputEventNames(getBasicFBType())) {
-			eventCombo.add(name);
-		}
+		ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType()).stream()
+				.forEach(name -> eventCombo.add(name));
 	}
 }

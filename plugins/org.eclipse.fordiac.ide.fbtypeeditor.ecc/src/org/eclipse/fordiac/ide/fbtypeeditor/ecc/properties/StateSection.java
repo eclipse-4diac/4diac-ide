@@ -15,8 +15,9 @@
  *   Virendra Ashiwal, Bianca Wiesmayr
  *     - added "[none]" as showing text in ECC->State->Property when no
  *       algorithm is selected
- *     - change TransitionViewer to table
+ *     - change TransitionViewer to table and make it editable
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
+ *
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -24,6 +25,9 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeActionOrderCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressionCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeECTransitionCommentCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeOutputCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeTransitionPriorityCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECActionCommand;
@@ -55,6 +59,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
@@ -73,12 +78,17 @@ public class StateSection extends AbstractECSection {
 
 	private static final String ACTION_ALGORITHM = "Algorithm"; //$NON-NLS-1$
 	private static final String ACTION_EVENT = "Event"; //$NON-NLS-1$
+	private static final String TRANSITION_EVENT = "TransitionEvent"; //$NON-NLS-1$
+	private static final String TRANSITION_CONDITION = "TransitionCondition"; //$NON-NLS-1$
+	private static final String TRANSITION_COMMENT = "TransitionComment"; //$NON-NLS-1$
+	private static final String TRANSITION_DESTINATION = "TransitionDestination"; //$NON-NLS-1$
+	private static final String TRANSITION_PRIORITY = "TransitionPriority"; //$NON-NLS-1$
+
 	private static final int TRANSITION_COLUMN_COMMENT = 4;
 	private static final int TRANSITION_COLUMN_CONDITION = 3;
 	private static final int TRANSITION_COLUMN_EVENT = 2;
 	private static final int TRANSITION_COLUMN_DESTINATION = 1;
 	private static final int TRANSITION_COLUMN_PRIORITY = 0;
-	private static final int ACTION_COLUMN_COMMENT = 2;
 	private static final int ACTION_COLUMN_EVENT = 1;
 	private static final int ACTION_COLUMN_ALGORITHM = 0;
 
@@ -110,12 +120,6 @@ public class StateSection extends AbstractECSection {
 				case ACTION_COLUMN_EVENT:
 					if (null != ((ECAction) element).getOutput()) {
 						return ((ECAction) element).getOutput().getName();
-					}
-					break;
-
-				case ACTION_COLUMN_COMMENT:
-					if (null != ((ECAction) element).getAlgorithm().getComment()) {
-						return ((ECAction) element).getAlgorithm().getComment();
 					}
 					break;
 				default:
@@ -295,13 +299,9 @@ public class StateSection extends AbstractECSection {
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Event");
 
-		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Comment");
-
 		TableLayout tabLayout = new TableLayout();
-		tabLayout.addColumnData(new ColumnWeightData(1, 40));
-		tabLayout.addColumnData(new ColumnWeightData(2, 20));
-		tabLayout.addColumnData(new ColumnWeightData(3, 40));
+		tabLayout.addColumnData(new ColumnWeightData(1, 50));
+		tabLayout.addColumnData(new ColumnWeightData(2, 50));
 
 		table.setLayout(tabLayout);
 
@@ -352,11 +352,88 @@ public class StateSection extends AbstractECSection {
 		}
 	}
 
+	private class TransitionViewerCellModifier implements ICellModifier {
+		@Override
+		public boolean canModify(final Object element, final String property) {
+			switch (property) {
+			case TRANSITION_EVENT:
+			case TRANSITION_CONDITION:
+			case TRANSITION_COMMENT:
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		@Override
+		public Object getValue(final Object element, final String property) {
+			ECTransition selectedTransition = (ECTransition) element;
+			switch (property) {
+			case TRANSITION_EVENT:
+				List<String> events = ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType());
+				return Integer.valueOf((null != selectedTransition.getConditionEvent())
+						? events.indexOf(selectedTransition.getConditionEvent().getName())
+						: events.size());
+			case TRANSITION_COMMENT:
+				return selectedTransition.getComment();
+			case TRANSITION_CONDITION:
+				return selectedTransition.getConditionExpression();
+			default:
+				return ""; //$NON-NLS-1$
+			}
+		}
+
+		@Override
+		public void modify(final Object element, final String property, final Object value) {
+			TableItem tableItem = (TableItem) element;
+			ECTransition selectedTransition = (ECTransition) tableItem.getData();
+
+			Command cmd = null;
+
+			switch (property) {
+
+			case TRANSITION_EVENT:
+				int selected = ((Integer) value).intValue();
+				List<String> events = ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType());
+				String ev = null;
+				if (0 <= selected && selected < events.size()) {
+					ev = events.get(selected);
+				}
+				cmd = new ChangeConditionEventCommand(selectedTransition, ev);
+				break;
+
+			case TRANSITION_COMMENT:
+				cmd = new ChangeECTransitionCommentCommand(selectedTransition, (String) value);
+				break;
+
+			case TRANSITION_CONDITION:
+				cmd = new ChangeConditionExpressionCommand(selectedTransition, (String) value);
+				break;
+
+			default:
+				break;
+			}
+			if ((null != cmd) && (null != commandStack)) {
+				executeCommand(cmd);
+				refresh();
+			}
+		}
+	}
+
 	private void createTransitionViewer(Group transactionGroup) {
 		transitionsOutViewer = TableWidgetFactory.createTableViewer(transactionGroup);
 		configureTransitionTableLayout(transitionsOutViewer.getTable());
 		transitionsOutViewer.setContentProvider(new StateContentProvider());
 		transitionsOutViewer.setLabelProvider(new TransitionListLabelProvider());
+	}
+
+	private CellEditor[] createTransitionViewerCellEditors(Table table) {
+		BasicFBType fbType = getBasicFBType();
+		return new CellEditor[] { null, null,
+				ComboBoxWidgetFactory.createComboBoxCellEditor(table,
+						ECCContentAndLabelProvider.getTransitionConditionEventNames(fbType).toArray(new String[0]),
+						SWT.READ_ONLY),
+				new TextCellEditor(table), new TextCellEditor(table) };
 	}
 
 	@SuppressWarnings("unchecked")
@@ -399,7 +476,8 @@ public class StateSection extends AbstractECSection {
 
 		table.setLayout(tabLayout);
 
-		actionViewer.setColumnProperties(new String[] { ACTION_ALGORITHM, ACTION_EVENT });
+		transitionsOutViewer.setColumnProperties(new String[] { TRANSITION_PRIORITY, TRANSITION_DESTINATION,
+				TRANSITION_EVENT, TRANSITION_CONDITION, TRANSITION_COMMENT });
 	}
 
 	@SuppressWarnings("unchecked")
@@ -443,6 +521,8 @@ public class StateSection extends AbstractECSection {
 		// we have to do this here because at this point in time we have a valid type
 		actionViewer.setCellEditors(createActionViewerCellEditors(actionViewer.getTable()));
 		actionViewer.setCellModifier(new ActionViewerCellModifier());
+		transitionsOutViewer.setCellEditors(createTransitionViewerCellEditors(transitionsOutViewer.getTable()));
+		transitionsOutViewer.setCellModifier(new TransitionViewerCellModifier());
 		// if the selected state is the start state disable adding actions
 		actionMgmButtons.setCreateButtonEnablement(!getType().isStartState());
 	}
