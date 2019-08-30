@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
@@ -120,10 +121,18 @@ public final class ECCContentAndLabelProvider {
 	}
 
 	public static BasicFBType getFBType(ECAction action) {
-		if (null != action.getECState() && null != action.getECState().getECC()) {
+		if ((null != action.getECState()) && (null != action.getECState().getECC())) {
 			return action.getECState().getECC().getBasicFBType();
 		}
 		return null;
+	}
+
+	public static List<ECState> getStates(BasicFBType type) {
+		return type.getECC().getECState();
+	}
+
+	public static List<String> getStateNames(BasicFBType type) {
+		return getStates(type).stream().map(ECState::getName).collect(Collectors.toList());
 	}
 
 	private ECCContentAndLabelProvider() {
