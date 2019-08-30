@@ -1,0 +1,428 @@
+<!DOCTYPE html> 
+<!--
+ Copyright (c) 2017, 2019 fortiss GmbH
+  
+ This program and the accompanying materials are made available under the
+ terms of the Eclipse Public License 2.0 which is available at
+ http://www.eclipse.org/legal/epl-2.0.
+ 
+ SPDX-License-Identifier: EPL-2.0
+ 
+ Contributors:
+   Stefan Profanter, Jose Cabral, Kirill Dorofeev
+     - initial API and implementation and/or initial documentation
+-->
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>OPC UA with IEC 61499 Tutorial</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+<body>
+<h1 id="topOfPage">OPC UA with IEC 61499 Tutorial</h1>
+<p>This tutorial shows how you can use <a href="https://en.wikipedia.org/wiki/OPC_Unified_Architecture" target="_blank">OPC UA</a> in an IEC 61499 Application using available FBs. You should first complete the <a href="../../html/4diacIDE/use4diacLocally.html" target="_blank">First Steps in 4DIAC Tutorial</a> to get familiar with the 4diac IDE. FORTE uses the <a href="http://open62541.org/" target="_blank">open62541</a> OPC UA stack which is open source and can also be used in commercial projects free of charge.</p>
+
+<p>After version 1.11.0 of 4diac, the OPC UA module has changed its API, so applications developed before this version won't be compatible. The changes give more stability to 4diac FORTE and also brings new features. The OPC UA module can be used with v0.3.0 or v1.0 of open62541.</p>
+
+<p>Tasks in this tutorial:</p>
+<ol>
+	<li><a href="#build">Build FORTE with open62541 (Release: v0.3.0)</a></li>
+	<li><a href="#variables">Provide OPC UA variables to clients</a></li>
+	<li><a href="#methods">Offer an OPC UA method to be called by clients</a></li>
+	<li><a href="#client">Call a remote method from a IEC 61499 Application</a></li>
+	<li><a href="#subscriptions">Create an OPC UA subscription in an IEC 61499 Application</a></li>
+</ol>
+
+<h2 id="build">Build FORTE with open62541</h2>
+<p>OPC UA is not enabled by default in FORTE. To enable it, you need to build FORTE with the open62541 source code yourself.</p>
+
+<p class="attention"><span class="inlineTitle">Attention</span>: You need <a href="https://www.python.org/" target="_blank">python</a> installed on your computer in order to compile the OPCUA library.</p>
+
+<h3>Linux</h3>
+<ol>
+	<li>Download the FORTE source from <a href="http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git" target="_blank">http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git</a>:
+		<div class="code">$ mkdir ~/4diac &amp;&amp; cd "$_"
+$ git clone -b develop https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte forte
+$ cd forte &amp;&amp; mkdir build</div>
+	</li>
+	<li>Download the source for open62541 from <a href="https://github.com/open62541/open62541" target="_blank">https://github.com/open62541/open62541</a>. The last command depends on the version of open62541 you want to use. You either can have --branch=v0.3.0  or --branch=v1.0: 
+		<div class="code">$ cd ~/4diac
+$ git clone https://github.com/open62541/open62541.git --branch=v0.3.0  open62541</div>
+	</li>
+	<li>Build open62541. If you are running the code on production devices we suggest setting the build type to <span class="specificText">Release</span>.
+		<div class="code">$ cd ~/4diac/open62541 &amp;&amp; mkdir build &amp;&amp; cd $_
+$ cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Debug -DUA_ENABLE_AMALGAMATION=ON ..
+$ make -j</div>
+	</li>
+	<li>Set FORTE to include open62541. If you are running the code on production devices we suggesst setting the build type to <span class="specificText">Release</span>.
+	    If you are using the v1.0 branch of open62541 make sure that you set the correct value for <span class="specificText">FORTE_COM_OPC_UA_MASTER_BRANCH=ON</span>
+		<div class="code">$ cd ~/4diac/forte/build
+$ cmake -DCMAKE_BUILD_TYPE=Debug \
+-DFORTE_ARCHITECTURE=Posix \
+-DFORTE_MODULE_CONVERT=ON \
+-DFORTE_COM_ETH=ON \
+-DFORTE_MODULE_IEC61131=ON \
+-DFORTE_COM_OPC_UA=ON \
+-DFORTE_COM_OPC_UA_INCLUDE_DIR=$HOME/4diac/open62541/build \
+-DFORTE_COM_OPC_UA_LIB_DIR=$HOME/4diac/open62541/build/bin \
+-DFORTE_COM_OPC_UA_LIB=libopen62541.so
+$ make -j</div>
+	</li>
+</ol>
+
+<h3>Windows with Visual Studio</h3>
+<ol>
+	<li>Use a Git tool under Windows and download the FORTE source from <a href="http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git" target="_blank">http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git</a> and use the develop branch. The following steps show the commands for <a href="https://git-for-windows.github.io/" target="_blank">Git Bash</a>. The second command depends on the version of open62541 you want to use. You either can have --branch=v0.3.0  or --branch=v1.0:
+		<div class="code">$ mkdir "$HOME/4diac" &amp;&amp; cd "$HOME/4diac"
+$ git clone https://github.com/open62541/open62541.git --branch=v0.3.0 open62541
+$ mkdir build &amp;&amp; cd "build"</div>
+	</li>
+	<li>Use CMake to generate all the build files. Download and install: <a href="https://cmake.org/download/" target="_blank">https://cmake.org/download/</a>
+	</li>
+	<li>Open the <span class="folderLocation">$HOME/4diac/forte</span> folder in CMake, and set the output for the build binaries to the <span class="folderLocation">forte/build</span>
+		folder.
+	</li>
+	<li>Press <span class="button4diac">Configure</span> and select your Visual Studio Version. (Make sure you select your installed VS version. Otherwise CMake does not find the C/C++ compiler. Activate <span class="specificText">Use default native compilers</span></li>
+	<li>Set <span class="specificText">FORTE_ARCHITECTURE</span> to <span class="specificText">Win32</span>, <span class="specificText">FORTE_MODULE_CONVERT=ON</span>, <span class="specificText">FORTE_MODULE_IEC61131=ON</span>, and press two times on cofigure. All red entries should now be gone.
+	</li>
+	<li>Build open62541. If you are running the code on production devices we suggest setting the build type to <span class="specificText">Release</span>. Open a new CMake window and open the <span class="folderLocation">$HOME/4diac/open62541</span> folder as source code directory, <span class="folderLocation">$HOME/4diac/open62541/build</span> as the binaries directory.
+	</li>
+	<li>Press <span class="button4diac">Configure</span> and select your Visual Studio Version. (Make sure you select your installed VS version. Otherwise CMake does not find the C/C++ compiler. Activate <span class="specificText">Use default native compilers</span></li>
+	<li>Activate <span class="specificText">BUILD_SHARED_LIBS</span> and <span class="specificText">UA_ENABLE_AMALGAMATION</span></li>
+	<li>Press <span class="button4diac">Configure</span>, then <span class="button4diac">Generate</span> and then <span class="button4diac">Open Project</span></li>
+	<li>Go to <span class="menu4diac">Build &rarr; Build Solution</span>. You may need to execute the command multiple times until all projects are build successfully. This will create the open62541 library under <span class="folderLocation">$HOME/4diac/open62541/build/bin/Release</span> and the amalgamated header file <span class="fileLocation">open62541.h</span> in <span class="folderLocation">$HOME/4diac/open62541/build/</span>
+	</li>
+	<li>Switch to the FORTE CMake window to include open62541. If you want to use v1.0 of the open62541 library, you should also add FORTE_COM_OPC_UA_MASTER_BRANCH=ON:
+		<ul>
+			<li>FORTE_COM_OPC_UA=ON</li>
+			<li>FORTE_COM_OPC_UA_INCLUDE_DIR=C:\Users\USER\4diac\open62541\build</li>
+			<li>FORTE_COM_OPC_UA_LIB_DIR=C:\Users\USER\4diac\open62541\build\bin\Release</li>
+		</ul>
+	</li>
+	<li>Press <span class="button4diac">Configure</span> and make sure that <span class="specificText">FORTE_COM_OPC_UA_LIB</span> is set to <span class="fileLocation">open62541.dll</span></li>
+	<li>Press <span class="button4diac">Configure</span>, then <span class="button4diac">Generate</span> and then <span class="button4diac">Open Project</span></li>
+	<li>Go to <span class="menu4diac">Build &rarr; Build Solution</span>. You may need to execute the command multiple times until all projects are built successfully. This will create <span class="folderLocation">$HOME/4diac/forte/build/Debug/forte.exe</span></li>
+	<li>In the forte VS Project, Set the PATH variable to include the path to the open62541.dll. Go to properties of <span class="specificText">forte</span>, <span class="specificText">Configuration Properties | Debugging | Environment</span> and add <span class="specificText">PATH=C:\Users\USER\4diac\open62541\build\bin\Release;%PATH%</span> (Set the correct user path!)
+	</li>
+</ol>
+
+<h2 id="general">General overview of how to use the module</h2>
+
+<p>The parameters for the communication FBs (ID data input) is divided in two (three for remote actions) parts, separated by a semicolon ';'</p>
+
+<p>opc_ua[ACTION;ENDPOINT;PAIR1;PAIR2;...]</p>
+
+<ul>
+	<li>ACTION: Mandatory field and can have the following values (all in upper case):
+		<ul>
+		  <li>READ</li>
+		  <li>WRITE</li>
+		  <li>CREATE_METHOD</li>
+		  <li>CALL_METHOD</li>
+		  <li>SUBSCRIBE</li>
+		  <li>CREATE_OBJECT</li>
+		  <li>DELETE_OBJECT</li> 
+		</ul>
+	</li>
+
+	<li><p>ENDPOINT: Mandatory and restricted part when using for remote actions. It must end with a '#' character.</p>
+		<ul>
+			<li>Example: opc.tcp://192.168.0.100:4840#</li>
+		</ul>
+	</li>
+
+	<li><P>PAIR: In the format BROWSENAME,NODE_ID (separated by a comma ','). When possible, NODE_ID can be omited, in which case the comma ',' must also be omitted. If the BROWSENAME is to be omited (when possible) the ',' must be present.</P>
+
+		<ul>
+			<li><p>BROWSENAME: Browsepath to the node and must always start with a slash '/'. A colon before the name allows defining the namespace of the browsename of the current element. The default namespace of browsename is 1, except for the first part which defaults to zero. This is because in most cases the first part to access is in namespace 0. If you want to create something directly under /Root, you should then specify your namespace, for example /1:directUnderRoot. This is valid for local and remote access</p>
+		  		<ul> 
+			       <li>Example:  /Objects/myFolder/myNode</li>
+			       <li>Example:  /Objects/2:myFolder/myNode -> In objects, it will look for a folder with name myFolder and namespace 2 and inside, the node with name myNode and namespace 1</li>
+			   </ul>
+		    </li>
+
+		    <li><p>NODE_ID: In the format  NAMESPACE_INDEX:IDENTIFIER_TYPE=IDENTIFIER</p>
+		    	<ul>
+		    	   <li><p>NAMESPACE_INDEX: Number of the namepsace. If ignored, it defaults to 0. When ignored, the ':' must also be omitted</p></li>
+		    	   
+		    	    <li><p>IDENTIFIER_TYPE: Can have the following values:</p>
+		    	        <ul>
+			    	        <li>i: The nodeId is numeric</li>
+			    	        <li>s: the nodeId is a string</li>
+			    	        <li>b: the nodeId is a bytestring</li>
+			    	        <li>g: the nodeId is GUID (NOT IMPLEMENTED)</li>
+		    	        </ul>
+	    	        </li>
+		    	       
+		    	    <li><p>IDENTIFIER: identifier according to the IDENTIFIER_TYPE</p>
+		    	    	<ul>    	       
+		    	    		<li>1:i=12345 -> namespace 1, numeric identifier 12345</li>
+							<li>3:s=hello -> namespace 3, string identifier "hello"</li>
+		    	    		<li>2:b=hello2 -> namespace 2, bytestring identifier hello2</li>
+		    	    		<li>s=hello5 -> namespace 0,  string identifier "hello5"</li>
+		    	    	</ul>
+		    	   	</li>
+		    	    
+		    	</ul>
+			</li>
+
+		</ul>
+
+	<p>PAIR Examples:</p>
+    <ul>
+    	<li>/Objects/myFolder/myNode,1:i=12345 -> Both browsepath and nodeId are provided</li>
+        <li>/Objects/myFolder/myNode1 -> browsepath is provided, the nodeId is omitted</li>
+        <li>,1:i=12345 -> browsepath is omitted, but nodeId is provided</li>
+    </ul>
+    
+	<p>PAIR Note: To decide if a node exists, the following rules apply:</p>
+        <ul>
+		   <li>If only the browsepath is present, a node exists if there's a node in that browsepath </li>
+		   <li>If both browsepath and nodeId are given, a node exist if an existing node in the browsepath has the same nodeId as the provided one</li>
+		   <li>If only nodeId is given, a node with the provided nodeId must exist in the address space</li>
+		   <li>When creating  a node (only locally) browsepath should be present.</li>
+   		</ul>
+   </li>
+
+</ul>
+
+<p>ID Examples:</p>
+	<ul>
+		<li>opc_ua[READ;/Objects/test1] -> read the local node /Objects/test1. Create the node if it doesn't exist with a random nodeId</li>
+		<li>opc_ua[READ;/Objects/test1,i=1] -> read the local node /Objects/test1. Create the node if it doesn't exits with a numeric node id 1 and namespace 0. If the node already exist and it has other nodeId, it will fail.</li>
+		<li>opc_ua[WRITE;/Objects/test1;/Objects/test1] -> Write nodes /Objects/test1 and /Objects/test1 from values in SD_1 and SD_2. Will create the nodes if they don't exist with random nodeIds. If they exist, it will write to them when triggered.</li>
+	 	<li>opc_ua[WRITE;opc.tcp://192.168.0.100:4840#;/Objects/test1;/Objects/test1] -> Write nodes /Objects/test1 and /Objects/test1 on remote from values in SD_1 and SD_2. If nodes aren't found, 4diac FORTE will look for them after some seconds until it finds them. Remote creation is not supported</li>
+ 	</ul>
+
+
+
+<p>* NOTE: depending on the action being performed, browsepath and/or nodeId are mandatory/optional. See the table below:</p>
+
+
+<table>
+	<tr>
+		 <th>Remote/Local</th>  
+		 <th>Desired Action</th>
+		 <th>Function Block to use</th>
+		 <th>Restrictions</th>
+	</tr>
+	<tr>
+		<td>Local</td>
+		<td>READ</td>
+		<td>SUBSCRIBE</td>
+		<td>Number of Pairs should match the number of RDs. NodeId is optional. If browsename is omitted, it will look for the node using the nodeId and won't create any (because it doesn't know where to create it)</td>
+	</tr>
+	<tr>
+		<td>Local</td>
+		<td>WRITE</td>
+		<td>PUBLISH</td>
+		<td>Number of Pairs should match the number of SDs .NodeId is optional. If browsename is omitted, it will look for the node using the nodeId and won't create any (because it doesn't know where to create it)</td>
+	</tr>
+	<tr>
+		<td>Local</td>
+		<td>CREATE_METHOD</td>
+		<td>SERVER</td>
+		<td>Number of Pairs should be 1. Browsepath MUST be provided. NodeId is optional</td>
+	</tr>
+	<tr>
+		<td>Local</td>
+		<td>CALL_METHOD</td>
+		<td>X</td>
+		<td>Not allowed to call local methods</td>
+	</tr>	
+	 <tr>
+	 	<td>Local</td>
+		<td>SUBSCRIBE</td>
+		<td>X</td>
+		<td>Not allowed to subscribe to local variables</td>
+	</tr>
+	 <tr>
+	 	<td>Local</td>
+		<td>CREATE_OBJECT</td>
+		<td>PUBLISH_0</td>
+		<td>Number of Pairs should be 2. The first one is for the type (Browsename and/or NodeId must be provided. If both are provided they should match). The second one is for the instance to create (Browsepath MUST be provided. NodeId is optional)</td>
+	</tr>
+	<tr>
+		<td>Local</td>
+		<td>DELETE_OBJECT</td>
+		<td>PUBLISH_0</td>
+		<td>Number of Pairs should be 1. Browsepath MUST be provided. NodeId is optional</td>
+	</tr>
+	<tr>	
+		<td>Remote</td>
+		<td>READ</td>
+		<td>CLIENT</td>
+		<td>Number of Pairs should match the number of RDs and no SDs must be present. Browsename and/or NodeId must be provided. If both are provided they should match</td>
+	</tr>
+	<tr>
+		<td>Remote</td>
+		<td>WRITE</td>
+		<td>CLIENT</td>
+		<td>Number of Pairs should match the number of SDs and no RDs must be present. Browsename and/or NodeId must be provided. If both are provided they should match</td>
+	</tr>
+	<tr>
+		<td>Remote</td>
+		<td>CREATE_METHOD</td>
+		<td>CLIENT</td>
+		<td>Not allowed to create methods remotely</td>
+	</tr>
+	<tr>
+		<td>Remote</td>
+		<td>CALL_METHOD</td>
+		<td>CLIENT</td>
+		<td>Number of Pairs should be 1. Browsepath MUST be provided. NodeId is optional. If both are provided they should match</td>
+	</tr>
+	<tr>
+		<td>Remote</td>
+		<td>SUBSCRIBE</td>
+		<td>SUBSCRIBE</td>
+		<td>Number of Pairs should match the number of RDs. Browsename and/or NodeId must be provided. If both are provided they should match</td>
+	</tr>
+	<tr>
+		<td>Remote</td>
+		<td>CREATE_OBJECT</td>
+		<td>X</td>
+		<td>Not allowed to create objects remotely</td>
+	</tr>
+	<tr>
+		<td>Remote</td>
+		<td>DELETE_OBJECT</td>
+		<td>X</td>
+		<td>Not allowed to delete objects remotely</td>
+	</tr>
+</table>
+
+<h2 id="variables">OPC UA variables</h2>
+
+<h3 id="variables_flipflop">Flip-Flop Application using Variables</h3>
+
+<p>In this step you will create a simple Flip-Flop <span class="element61499">Application</span>, which uses PUBLISH and SUBSCRIBE function blocks to create Variables in the address space of the OPC UA Server. Clients can then read from those variables or write new values.</p>
+
+<p> Follow the steps in the <a href="../../html/4diacIDE/use4diacLocally.html" target="_blank">Blinking Tutorial</a> to create a new <span class="element61499">System</span>, <span class="element61499">Application</span>, and <span class="element61499">Device</span>. When you have created the empty Application, continue with the following steps.</p>
+
+<p> In the following steps we create a Flip-Flop application where a boolean value is read from an OPC UA Variable and then its negated value published as another variable. To achieve this, we make use of SUBSCRIBE and PUBLISH function blocks. The SUBSCRIBE function block is used for subscribing to one or multiple OPC UA Variables, i.e., the value of the variable will be available in the Application. The PUBLISH function block is used to publish a value from within the Application so that it can be read by clients. </p>
+
+<p> When the INIT event of those function blocks is triggered, the OPC UA server is initialized and started on the default endpoint URL: <span class="address">opc.tcp://localhost:4840</span>. Note that only one OPC UA server will be created and the address model is shared between all the function blocks.</p>
+ 
+
+<ol>
+	<li>Drag the following function blocks from the Type Library into the Application Editor:
+		<ul>
+			<li>events/E_SWITCH</li>
+			<li>events/E_SR</li>
+			<li>net/SUBSCRIBE_1</li>
+			<li>net/PUBLISH_1</li>
+		</ul>
+	</li>
+	<li>Connect the function blocks in the following way:
+		<div><img src="../../html/communication/img/opc_ua_flipFlop_FB_2.png" alt="OPC UA Flip-Flop Application"/></div>
+	</li>
+	<li>Map the function blocks to the device</li>
+	<li>To configure where the variable nodes are created in the address space, you have use the ID fields of the SUBSCRIBE/PUBLISH function blocks. We want to create the variables under <span class="specificText">/Objects/</span>, whereas the nodes <span class="specificText">Flip</span> and <span class="specificText">Flop</span> should be created in namespace 1. Therefore we set the IDs to <span class="address">opc_ua[READ;/Objects/1:Flip]</span> and 
+	<span class="address">opc_ua[WRITE;/Objects/1:Flop]</span>. If you don't indicate the namespace explicitly (the <span class="specificText">1:</span>), then it will take the namespace <span class="specificText">1</span> as default. QI has to be set to 1 to enable the function block.</li>
+	<li>Open the System Editor and connect the COLD and WARM ports to the INIT port of SUBSCRIBE_1. So finally it should look like this:
+		<div><img src="../../html/communication/img/opc_ua_flipFlop_FB_full_2.png" alt="OPC UA Flip-Flop Application connected"/></div>
+	</li>
+	<li>Deploy the Application to FORTE</li>
+	<li>Open UaExpert (you can get it from <a href="https://www.unified-automation.com/de/downloads/opc-ua-clients.html" target="_blank">here</a>) and connect to the OPC UA server running on FORTE: <span class="address">opc.tcp://localhost:4840</span></li>
+	<li>You should see the two variables which have been created by the SUBSCRIBE and PUBLISH function blocks:
+		<div><img src="../../html/communication/img/opc_ua_flipFlop_uaExpert_2.png" alt="OPC UA Flip-Flop in UaExpert"/></div>
+		The two <span class="specificText">VariableNode</span>s <span class="specificText">Flip</span> and <span class="specificText">Flop</span> are created out of the SUBSCRIBE and PUBLISH function blcok. The data type of the variables is derived from the type of the connected FB's port datatype (E_SWITCH.G and E_SR.Q)<br/>
+	</li>
+	<li>Optionally you can now monitor the Application in FORTE, e.g., watch the values of SUBSCRIBE and PUBLISH FB. See <a href="../../html/4diacIDE/use4diacLocally.html#monitoringApplication" target="_blank">Use 4DIAC locally Tutorial - Monitor</a> on how to do that.
+	</li>
+	<li>In UaExpert drag the two variables <span class="specificText">Flip</span> and <span class="specificText">Flop</span> into the Data Access View. Here you can now change the value of
+		<span class="specificText">Flip</span>. This will cause the IND port of SUBSCRIBE to fire an event and FORTE will read the new variable value, negate it and set <span class="specificText">Q</span> to the negated value. The REQ event of the PUBLISH FB has to be triggered to set the new value from SD_1 in the address model of OPC UA (<span class="specificText">Flop</span> variable). Note that in the beginning both values will be <span class="specificText">false</span> since no event has been triggered yet.
+	</li>
+	<li>In FORTE check the monitored application to see what happens there if you change a variable.</li>
+</ol>
+
+<h3 id="variables_adder">Adder Application using Variables</h3>
+
+<p>Here you can see another example how to use SUBSCRIBE and PUBLISH to create an IEC 61499 application which adds two values, by reading the values from an OPC UA variable and providing the result.</p>
+<p>If you followed the steps before you should be able to create a new Application which looks like this:</p>
+	<img src="../../html/communication/img/opc_ua_adder_full_2.png" alt="OPC UA Adder Application"/>
+
+	<p>The F_ADD function block is a generic type which can have any supported data type for the IN1, IN2 and OUT ports. On the other hand the SUBSCRIBE and PUBLISH FBs need to now which datatype the created variables should have. To introduce this information into the application model, you can use the INT2INT converter function block. This will create the following nodes in the OPC UA Server:</p>
+	
+	<img src="../../html/communication/img/opc_ua_adder_uaExpert_2.png" alt="OPC UA Adder in UA Expert"/>
+	
+	<p>Try to understand from where the names for <span class="specificText">Num1</span>, <span class="specificText">Num2</span>, and <span class="specificText">Result</span> come from.</p>
+ 
+	<p>You can then drag the variables into UaExpert's Data Access View and change the values of <span class="specificText">Num1</span> and <span class="specificText">Num2</span>. The value of <span class="specificText">Result</span> should then be the sum of those two values.</p>
+
+<h3 id="variables_remote">Read and Write OPC UA variables on a remote server</h3>
+
+	<p>This example shows you how you can use a <span class="element4diac">CLIENT</span> function block to write and read an OPC UA variable on a remote server</p>
+	
+	<p>Create a new System which includes two devices: One for the remote server and one for the local variable read/write. By running two FORTE instances on your local PC, it is possible to simulate the use-case where the server and client are in separate FORTE instances. The server could for example run on a device offering the variables, the client is then another device which requests information of the previous one.<br/>To start two FORTE instances on the same PC, you can pass the port on the command line, e.g., <span class="specificText">./forte -c localhost:61500</span></p>
+	<p>The system configuration should then look like this:</p>
+
+	<img src="../../html/communication/img/opc_ua_variable_read_write_system_2.png" alt="OPC UA Variable Read/Write System"/>
+
+<p>Then we create the following application. On the server side we create an OPC UA variable <span class="specificText">/Objects/Increment</span> (<span class="element4diac">SUBSCRIBE_1</span>). When a client writes to this variable, it will be incremented (F_ADD) and then written to another OPC UA variable at <span class="specificText">/Objects/Incremented</span> (<span class="element4diac">PUBLISH_1</span>).</p>
+<p>On the client side we create a <span class="element4diac">CLIENT_1_0</span> FB which should write a number to the variable on the remote server. To read the incremented value from the server, we use a <span class="element4diac">CLIENT_0_1</span> FB, which reads the variable's value as soon as the REQ event is triggered.</p>
+<p>Do not forget to connect the <span class="element4diac">COLD/WARM</span> events in the ressource view to the <span class="element4diac">INIT</span> event ports of the corresponding function blocks.</p>
+
+	<img src="../../html/communication/img/opc_ua_variable_read_write_app_2.png" alt="OPC UA Variable Read/Write Application"/>
+
+<p>Deploy the application to two forte. You can access the server variables using UaExpert. For the client, you can monitor the system. When you trigger the InputValue.REQ event, the client will write the number 42, and will then read the Incremented value where the new value will be present. The changes will be seen also in UaExpert</p>
+
+<h2 id="methods">OPC UA Methods</h2>
+
+<p>In this step you will see how you can create OPC UA methods in an IEC 61499 application. It uses the SERVER function block which creates the corresponding OPC UA method automatically in the address model.</p>
+<p> Follow the steps in the <a href="../../html/4diacIDE/use4diacLocally.html" target="_blank">First Steps in 4DIAC Tutorial</a> to create a new System, Application, and Device. When you have created the empty Application, continue with the following steps.</p>
+
+<ol>
+	<li>Create the following application:
+		<div><img src="../../html/communication/img/opc_ua_method_full_2.png" alt="OPC UA Method Application"/></div>
+	</li>
+		
+	<li>Deploy the Application to FORTE</li>
+	<li>Open UaExpert and you should see the following address model:
+		<div><img src="../../html/communication/img/opc_ua_method_uaExpert_2.png" alt="OPC UA Method in UaExpert"/></div>
+	</li>
+	<li>Optionally you can again monitor the application in 4diac</li>
+	<li>In UaExpert Right-Click on the Method Node <span class="specificText">AddValues</span> and select Call.</li>
+	<li>You can see that the name of the input and output arguments are the names of data outputs of the server FB. Enter values for <span class="specificText">RD_1</span> and <span class="specificText">RD_2</span> and press Call. FORTE will trigger the IND event of the SERVER FB, which causes the F_ADD FB to calculate the sum of the two numbers. When the sum is ready, the RSP event on SERVER is triggered and the result is returned to the calling OPC UA Client, which is in this case UaExpert.<br/>
+	<span class="inlineTitle">Note:</span> After the IND event is triggered, the result has to be ready (i.e., the RSP event has to be triggered) within 4 seconds. This is the default timeout for a method call. Otherwise the call will fail with a timeout error code.</li>
+</ol>
+
+
+<h2 id="methodCall">OPC UA Method call</h2>
+
+<p>To call the method from the example before, the application would look like this (in this case, it will send 43 and 10 as inputs to the method):</p>
+
+<div><img src="../../html/communication/img/opc_ua_method_call_2.png" alt="OPC UA method call in 4diac"/></div>
+
+<p>Try to deploy both applications and trigger the method call from the client and get the result from the method in the Result FB.</p>
+
+<h2 id="subscription">OPC UA Client Subscriptions</h2>
+
+<p>In this step you will see how you can create an OPC UA data subscription in an IEC 61499 application. It is used to set up a data subscription to variables on an OPC UA server to get the value changes as they appear on the server. It uses the <span class="element4diac">SUBSCRIBE</span> function block which is able to remotely subscribe to the variable value changes.</p>
+<p>We will create a function block which subscribes to the <span class="element4diac">/Objects/Incremented</span> value from the <a href="#variables_remote">example</a> described above. Therefore we extend the OPC UA variables example by adding subscription function block to monitor the value change.</p>
+
+<ol>
+	<li>We add the <span class="element4diac">SUBSCRIBE</span> function block called SUBCRIPTION. The SUBSCRIBE function block gets the updated value automatically without a need to actively trigger the RSP event.</li>
+	<li>The application now looks like this:
+		<div><img src="../../html/communication/img/opc_ua_subscriptions_2.PNG" alt="OPC UA Subscription Application"/></div>
+	</li>
+	<li>Note, that the <span class="element4diac">RD_1</span> port of the <span class="element4diac">SUBSCRIBE</span> is the current value of the subscribed node. Additionaly, you need to make sure that the data type of the <span class="element4diac">RD</span> port matches the types from the OPC UA variable you want to subscribe to. Use the corresponding <span class="element4diac">conv</span> FBs for that, as shown in this example.</li>
+	<li>Deploy the Application to FORTE</li>
+	<li>If the value you subscribed for has changed on the server, an updated value will appear at <span class="element4diac">RD_1</span> port</li>
+</ol>
+
+<h1>Where to go from here?</h1>
+
+<p>Go back to Protocols index:</p>
+
+<p><a href="../../html/communication/communicationIndex.html">Communication Index</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../../html/startHere/startHere.html">Start Here page</a></p>
+
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+</body>
+</html>
