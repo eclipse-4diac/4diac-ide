@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT fortiss GmbH
- * 				 2019 Johannes Kepler University	
- * 
+ * 				 2019 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Filip Andren, Monika Wenger, Matthias Plasch
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Code cleanup, fixed adapter connection creation issue
+ *               - reworked and harmonized source/target checking 551042
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
@@ -49,7 +50,7 @@ public final class LinkConstraints {
 	private static final String ANY = "ANY"; //$NON-NLS-1$
 	/**
 	 * Property ID for the enable CASTS preferences
-	 * 
+	 *
 	 * This constant is duplicated from the application plugin to avoid dependency
 	 * cycles.
 	 */
@@ -57,37 +58,33 @@ public final class LinkConstraints {
 
 	/**
 	 * Can create data connection.
-	 * 
+	 *
 	 * @param source             the source
 	 * @param target             the target
+	 * @param parent             the fbnetwork the connection should be created in
 	 * @param internalConnection the internal connection
-	 * 
+	 *
 	 * @return true, if a data connection can be created (the source and target type
 	 *         are compatible
 	 */
-	public static boolean canCreateDataConnection(final VarDeclaration source, final VarDeclaration target) {
-		return canExistDataConnection(source, target, null);
+	public static boolean canCreateDataConnection(final VarDeclaration source, final VarDeclaration target,
+			final FBNetwork parent) {
+		return canExistDataConnection(source, target, parent, null);
 	}
 
 	/**
 	 * Can exist data connection.
-	 * 
+	 *
 	 * @param source             the source
 	 * @param target             the target
+	 * @param parent             the fbnetwork the connection should be created in
 	 * @param internalConnection the internal connection
 	 * @param reConnect          is it a reconnection or not
-	 * 
+	 *
 	 * @return true, if successful
 	 */
-	public static boolean canExistDataConnection(VarDeclaration source, VarDeclaration target, Connection con) {
-		if (source != null && target == null) {// connection just started
-			if (!isWithConstraintOK(source)) {
-				return false;
-			}
-			Abstract4DIACUIPlugin.statusLineErrorMessage(null);
-			return true;
-		}
-
+	public static boolean canExistDataConnection(VarDeclaration source, VarDeclaration target, FBNetwork parent,
+			Connection con) {
 		if (source != null && source != target) {
 			if (((source instanceof AdapterDeclaration) && (!(target instanceof AdapterDeclaration)))
 					|| (!(source instanceof AdapterDeclaration) && (target instanceof AdapterDeclaration))) {
@@ -98,7 +95,7 @@ public final class LinkConstraints {
 				return false;
 			}
 
-			if (checkIfSwapNeeded(target)) {
+			if (isSwapNeeded(source, parent)) {
 				VarDeclaration temp = source;
 				source = target;
 				target = temp;
@@ -134,7 +131,7 @@ public final class LinkConstraints {
 	/**
 	 * Elements which are not linked by a with construct are not allowed to be
 	 * connected
-	 * 
+	 *
 	 * @param varDecl
 	 * @return
 	 */
@@ -224,10 +221,10 @@ public final class LinkConstraints {
 
 	/**
 	 * Type check.
-	 * 
+	 *
 	 * @param source the source
 	 * @param target the target
-	 * 
+	 *
 	 * @return true, if successful
 	 */
 	private static boolean typeCheck(final VarDeclaration source, final VarDeclaration target) {
@@ -250,10 +247,10 @@ public final class LinkConstraints {
 
 	/**
 	 * Checks for already input connections check.
-	 * 
+	 *
 	 * @param target the target
 	 * @param con
-	 * 
+	 *
 	 * @return true, if successful
 	 */
 	private static boolean hasAlreadyInputConnectionsCheck(final VarDeclaration src, final VarDeclaration target,
@@ -286,11 +283,14 @@ public final class LinkConstraints {
 		return hasOnlyBrokenCons;
 	}
 
-	private static boolean checkIfSwapNeeded(IInterfaceElement target) {
-		EObject container = target.eContainer().eContainer();
-
-		return ((target.isIsInput() && (container instanceof CompositeFBType || container instanceof SubApp))
-				|| (!target.isIsInput() && !(container instanceof CompositeFBType || container instanceof SubApp)));
+	public static boolean isSwapNeeded(IInterfaceElement source, FBNetwork parent) {
+		if ((source.eContainer().eContainer() instanceof CompositeFBType)
+				|| (source.getFBNetworkElement().getFbNetwork() != parent)) {
+			// the FBNetwork elements are not in the same resource this means one of both is
+			// a subapp interface element of the containing subapp
+			return !source.isIsInput();
+		}
+		return source.isIsInput();
 	}
 
 	private static FBNetwork getContainingFBNetwork(VarDeclaration target) {
@@ -310,10 +310,10 @@ public final class LinkConstraints {
 
 	/**
 	 * Source and dest check.
-	 * 
+	 *
 	 * @param source the source
 	 * @param target the target
-	 * 
+	 *
 	 * @return true, if successful
 	 */
 	private static boolean sourceAndDestCheck(final IInterfaceElement source, final IInterfaceElement target) {
@@ -340,18 +340,14 @@ public final class LinkConstraints {
 
 	/**
 	 * Can exist event connection.
-	 * 
+	 *
 	 * @param source             the source
 	 * @param target             the target
 	 * @param internalConnection the internal connection
-	 * 
+	 *
 	 * @return true, if successful
 	 */
 	public static boolean canExistEventConnection(final Event source, final Event target) {
-		if (source != null && target == null) {
-			return true;
-		}
-
 		if (source != null && target != null) {
 			return sourceAndDestCheck(source, target);
 		}
@@ -359,9 +355,9 @@ public final class LinkConstraints {
 	}
 
 	public static boolean canExistAdapterConnection(AdapterDeclaration source, AdapterDeclaration target,
-			Connection con) {
+			FBNetwork parent, Connection con) {
 		if (source != null && target != null && source != target) {
-			if (checkIfSwapNeeded(target)) {
+			if (isSwapNeeded(source, parent)) {
 				AdapterDeclaration temp = source;
 				source = target;
 				target = temp;
@@ -399,16 +395,17 @@ public final class LinkConstraints {
 		return false;
 	}
 
-	public static boolean canCreateAdapterConnection(AdapterDeclaration source, AdapterDeclaration target) {
-		return canExistAdapterConnection(source, target, null);
+	public static boolean canCreateAdapterConnection(AdapterDeclaration source, AdapterDeclaration target,
+			FBNetwork parent) {
+		return canExistAdapterConnection(source, target, parent, null);
 	}
 
 	/**
 	 * Default type compatibility check.
-	 * 
+	 *
 	 * @param source the source
 	 * @param target the target
-	 * 
+	 *
 	 * @return true, if default type compatibility check
 	 */
 	private static boolean defaultTypeCompatibilityCheck(final VarDeclaration source, final VarDeclaration target) {

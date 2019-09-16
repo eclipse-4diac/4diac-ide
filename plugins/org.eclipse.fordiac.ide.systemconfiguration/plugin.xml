@@ -56,7 +56,7 @@
              </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.systemconfiguration.properties.AttributeSection2"
+               class="org.eclipse.fordiac.ide.systemconfiguration.properties.AttributeSection"
                id="org.eclipse.fordiac.ide.systemconfiguration.properties.AttributeSection"
                tab="org.eclipse.fordiac.ide.device.propertyAttributeTab">
             <input

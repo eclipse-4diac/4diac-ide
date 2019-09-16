@@ -10,7 +10,7 @@
  * Contributors:
  *   Alois Zoitl, Monika Wenger
  *    - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo 
+ *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
@@ -39,6 +39,10 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 
 	public ReconnectRequest getRequest() {
 		return request;
+	}
+
+	protected FBNetwork getParent() {
+		return parent;
 	}
 
 	@Override

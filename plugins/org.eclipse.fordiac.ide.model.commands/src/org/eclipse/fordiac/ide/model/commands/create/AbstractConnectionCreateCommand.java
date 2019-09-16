@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
  * 				 2019 Johannes Keppler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,11 +11,11 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch, Filip Anderen, Monika Wenger
  *   - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo 
+ *   Alois Zoitl - removed editor check from canUndo
+ *               - reworked and harmonized source/target checking 551042
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -45,7 +45,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	/**
 	 * flag to indicate if during execution of this command a mirrored connection in
 	 * the opposite element (e.g., resrouce for app) should be created.
-	 * 
+	 *
 	 * This flag is here so that the command can be reused also for creating the
 	 * mirrored connection.
 	 */
@@ -69,9 +69,6 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		this.connDy = dy;
 	}
 
-	@Override
-	public abstract boolean canExecute();
-
 	public void setSource(final IInterfaceElement source) {
 		this.source = source;
 	}
@@ -86,6 +83,28 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 
 	public IInterfaceElement getDestination() {
 		return destination;
+	}
+
+	protected FBNetwork getParent() {
+		return parent;
+	}
+
+	@Override
+	public boolean canExecute() {
+		if (getSource() == null || getDestination() == null) {
+			return false;
+		}
+		if (getSource() == getDestination()) {
+			return false;
+		}
+		if (!getInterfaceType().isInstance(getSource())) {
+			return false;
+		}
+		if (!getInterfaceType().isInstance(getDestination())) {
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
@@ -132,20 +151,8 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		}
 	}
 
-	protected void checkSourceAndTarget() {
-		boolean needsChange;
-
-		if ((source.eContainer().eContainer() instanceof CompositeFBType)
-				|| (source.getFBNetworkElement().getFbNetwork() != parent)) { // the FBNetwork elements are not in the
-																				// same resource this means one of both
-																				// is a subapp interface element of the
-																				// containing subapp
-			needsChange = !source.isIsInput();
-		} else {
-			needsChange = source.isIsInput();
-		}
-
-		if (needsChange) {
+	private void checkSourceAndTarget() {
+		if (LinkConstraints.isSwapNeeded(source, parent)) {
 			// our src is an input we have to swap source and target
 			IInterfaceElement buf = destination;
 			destination = source;
@@ -159,7 +166,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	 * Check if the mapping of source and target require mirrored connection to be
 	 * created and setup a connection create command accordingly. The execute, undo,
 	 * and redo will be invoked by AbstractCreateCommand when required.
-	 * 
+	 *
 	 * @return a connectioncreatecommand if a mirrord connection should be created,
 	 *         null otherwise
 	 */
@@ -180,13 +187,19 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	}
 
 	/**
-	 * Create a conneciton command for creating a mirrored connection for the
+	 * Create a connection command for creating a mirrored connection for the
 	 * connection type
-	 * 
+	 *
 	 * @param fbNetwork the fbn network for the mirrord connection
 	 * @return the command for the connection must not be null
 	 */
 	protected abstract AbstractConnectionCreateCommand createMirroredConnectionCommand(FBNetwork fbNetwork);
+
+	/**
+	 * Get the class this connection type should be allowed to be connectable
+	 */
+	@SuppressWarnings("rawtypes")
+	protected abstract Class getInterfaceType();
 
 	private void setPerformMappingCheck(boolean performMappingCheck) {
 		this.performMappingCheck = performMappingCheck;
