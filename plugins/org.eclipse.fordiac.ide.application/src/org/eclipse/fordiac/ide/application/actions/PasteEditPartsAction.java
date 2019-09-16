@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.application.actions;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -35,8 +36,6 @@ import org.eclipse.ui.actions.ActionFactory;
  * The Class PasteEditPartsAction.
  */
 public class PasteEditPartsAction extends SelectionAction {
-
-	private static final String PASTE_TEXT = "Paste";
 
 	private Point pasteRefPosition;
 
@@ -76,7 +75,7 @@ public class PasteEditPartsAction extends SelectionAction {
 	@Override
 	protected void init() {
 		setId(ActionFactory.PASTE.getId());
-		setText(PASTE_TEXT);
+		setText(Messages.PasteEditPartsAction_Text);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE_DISABLED));

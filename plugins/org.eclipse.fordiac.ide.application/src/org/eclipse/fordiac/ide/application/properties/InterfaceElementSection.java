@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ChangeSubAppIETypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
@@ -53,7 +54,7 @@ public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.propert
 	}
 
 	private void createConnectionDisplaySection(Composite parent) {
-		group = getWidgetFactory().createGroup(parent, "Connections");
+		group = getWidgetFactory().createGroup(parent, Messages.InterfaceElementSection_ConnectionGroup);
 		group.setLayout(new GridLayout(2, false));
 		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		connectionsTree = new TreeViewer(group, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -69,7 +70,7 @@ public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.propert
 		Button delConnection = getWidgetFactory().createButton(group, "", SWT.PUSH); //$NON-NLS-1$
 		delConnection.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, false, true));
 		delConnection.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		delConnection.setToolTipText("delete Connection");
+		delConnection.setToolTipText(Messages.InterfaceElementSection_DeleteConnectionToolTip);
 		delConnection.addListener(SWT.Selection, event -> {
 			Object selection = ((TreeSelection) connectionsTree.getSelection()).getFirstElement();
 			if (selection instanceof Connection) {
@@ -86,9 +87,9 @@ public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.propert
 		commandStack = null;
 		if (null != type) {
 			if (getType().isIsInput()) {
-				group.setText("In-Connections");
+				group.setText(Messages.InterfaceElementSection_InConnections);
 			} else {
-				group.setText("Out-Connections");
+				group.setText(Messages.InterfaceElementSection_OutConnections);
 			}
 			connectionsTree.setInput(getType());
 		}

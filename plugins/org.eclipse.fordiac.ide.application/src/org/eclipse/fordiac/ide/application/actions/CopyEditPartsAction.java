@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.EditPart;
@@ -35,10 +36,7 @@ import org.eclipse.ui.actions.ActionFactory;
 /**
  * The Class CopyEditPartsAction.
  */
-public class CopyEditPartsAction extends WorkbenchPartAction implements
-		ISelectionChangedListener {
-
-	private static final String COPY = "Copy";
+public class CopyEditPartsAction extends WorkbenchPartAction implements ISelectionChangedListener {
 
 	/** The templates. */
 	private List<EObject> templates = null;
@@ -51,10 +49,10 @@ public class CopyEditPartsAction extends WorkbenchPartAction implements
 	public CopyEditPartsAction(IEditorPart editor) {
 		super(editor);
 		setId(ActionFactory.COPY.getId());
-		setText(COPY);		
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages(); 
+		setText(Messages.CopyEditPartsAction_Text);
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
-	    setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY_DISABLED));
+		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY_DISABLED));
 	}
 
 	/*
@@ -70,8 +68,7 @@ public class CopyEditPartsAction extends WorkbenchPartAction implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org
+	 * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org
 	 * .eclipse.jface.viewers.SelectionChangedEvent)
 	 */
 	@Override
@@ -89,15 +86,17 @@ public class CopyEditPartsAction extends WorkbenchPartAction implements
 			Object obj = iter.next();
 			if (obj instanceof EditPart) {
 				Object model = ((EditPart) obj).getModel();
-				if ((model instanceof FBNetworkElement)|| (model instanceof Connection)){
+				if ((model instanceof FBNetworkElement) || (model instanceof Connection)) {
 					templates.add((EObject) model);
-				} 
+				}
 			}
 		}
 		refresh();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.action.Action#run()
 	 */
 	@Override
@@ -105,7 +104,9 @@ public class CopyEditPartsAction extends WorkbenchPartAction implements
 		Clipboard.getDefault().setContents(templates);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#dispose()
 	 */
 	@Override

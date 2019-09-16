@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.utilities.CreationPopupDialog;
 import org.eclipse.fordiac.ide.application.utilities.ICreationExecutor;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -42,25 +43,20 @@ public class ListFBCreateCommand extends FBCreateCommand {
 	/**
 	 * Instantiates a new fB create command.
 	 * 
-	 * @param type
-	 *            the type
-	 * @param parent
-	 *            the parent
-	 * @param bounds
-	 *            the bounds
+	 * @param type   the type
+	 * @param parent the parent
+	 * @param bounds the bounds
 	 */
-	public ListFBCreateCommand(final FBTypePaletteEntry[] type,
-			final FBNetwork parent, int x, int y) {
+	public ListFBCreateCommand(final FBTypePaletteEntry[] type, final FBNetwork parent, int x, int y) {
 		super(null, parent, x, y); // values will be set in execute()
 		typeList = type.clone();
 		selectionList = null;
 		system = parent.getAutomationSystem();
 	}
 
-	public ListFBCreateCommand(final TransferDataSelectionOfFb[] fbList,
-			final FBNetwork parent, int x, int y) {
+	public ListFBCreateCommand(final TransferDataSelectionOfFb[] fbList, final FBNetwork parent, int x, int y) {
 		super(null, parent, x, y); // values will be set in execute()
-		typeList = null; 
+		typeList = null;
 		selectionList = fbList.clone();
 		this.system = parent.getAutomationSystem();
 	}
@@ -70,16 +66,15 @@ public class ListFBCreateCommand extends FBCreateCommand {
 		if (typeList != null) {
 			return typeList.length != 0;
 		} else if (selectionList != null) {
-			return selectionList.length != 0 ;
+			return selectionList.length != 0;
 		}
 		return false;
 	}
 
 	private void executeTransferData() {
 
-		CreationPopupDialog pd = new CreationPopupDialog(Display.getCurrent()
-				.getActiveShell(), PopupDialog.HOVER_SHELLSTYLE, true,
-				false, false, false, false, null, null, typeList,
+		CreationPopupDialog pd = new CreationPopupDialog(Display.getCurrent().getActiveShell(),
+				PopupDialog.HOVER_SHELLSTYLE, true, false, false, false, false, null, null, typeList,
 				new LabelProvider() {
 					@Override
 					public String getText(Object element) {
@@ -97,7 +92,7 @@ public class ListFBCreateCommand extends FBCreateCommand {
 						return super.getImage(element);
 					}
 				}, new ICreationExecutor() {
-					
+
 					@Override
 					public void execute(Object res) {
 						if (res instanceof TransferDataSelectionOfFb) {
@@ -110,15 +105,17 @@ public class ListFBCreateCommand extends FBCreateCommand {
 								ListFBCreateCommand.super.execute();
 
 								for (TransferDataSelectionFBParameter fbParametert : element.getFbParameters()) {
-									IInterfaceElement fbInterfaceElement = ListFBCreateCommand.this.getElement().getInterfaceElement(fbParametert.getName());
-									if (fbInterfaceElement instanceof VarDeclaration){
-										Value val = ((VarDeclaration)fbInterfaceElement).getValue();
+									IInterfaceElement fbInterfaceElement = ListFBCreateCommand.this.getElement()
+											.getInterfaceElement(fbParametert.getName());
+									if (fbInterfaceElement instanceof VarDeclaration) {
+										Value val = ((VarDeclaration) fbInterfaceElement).getValue();
 										val.setValue(fbParametert.getValue());
 									}
 								}
 							} else {
 								// warning/info in statusline that fbtype can not be found
-								Abstract4DIACUIPlugin.statusLineErrorMessage("FBType not found!");
+								Abstract4DIACUIPlugin
+										.statusLineErrorMessage(Messages.ListFBCreateCommand_FBTypeNotFound);
 							}
 						}
 
@@ -132,9 +129,8 @@ public class ListFBCreateCommand extends FBCreateCommand {
 
 	private void executeFBTypePalette() {
 
-		CreationPopupDialog pd = new CreationPopupDialog(Display.getCurrent()
-				.getActiveShell(), PopupDialog.HOVER_SHELLSTYLE, true,
-				false, false, false, false, null, null, typeList,
+		CreationPopupDialog pd = new CreationPopupDialog(Display.getCurrent().getActiveShell(),
+				PopupDialog.HOVER_SHELLSTYLE, true, false, false, false, false, null, null, typeList,
 				new LabelProvider() {
 					@Override
 					public String getText(Object element) {
@@ -152,7 +148,7 @@ public class ListFBCreateCommand extends FBCreateCommand {
 						return super.getImage(element);
 					}
 				}, new ICreationExecutor() {
-					
+
 					@Override
 					public void execute(Object res) {
 						if (res instanceof FBTypePaletteEntry) {
@@ -164,7 +160,6 @@ public class ListFBCreateCommand extends FBCreateCommand {
 
 		};
 		pd.open();
-
 
 	}
 

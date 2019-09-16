@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
@@ -31,14 +32,14 @@ public class UpdateFBTypeAction extends SelectionAction {
 
 	/** The Constant ID. */
 	public static final String ID = "UpdateFBTypeAction"; //$NON-NLS-1$
-	
+
 	/** FB type */
 	private PaletteEntry entry;
 
 	public UpdateFBTypeAction(IWorkbenchPart part) {
 		super(part);
 		setId(ID);
-		setText("Update Type");
+		setText(Messages.UpdateFBTypeAction_Text);
 		entry = null;
 	}
 
@@ -55,8 +56,8 @@ public class UpdateFBTypeAction extends SelectionAction {
 	 * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#calculateEnabled()
 	 */
 	@Override
-	protected boolean calculateEnabled() {	
-		for(Object selected : getSelectedObjects()){		
+	protected boolean calculateEnabled() {
+		for (Object selected : getSelectedObjects()) {
 			if (selected instanceof AbstractFBNElementEditPart) {
 				return null != ((AbstractFBNElementEditPart) selected).getModel().getType();
 			}
@@ -72,7 +73,7 @@ public class UpdateFBTypeAction extends SelectionAction {
 	@Override
 	public void run() {
 		CompoundCommand updateCmd = new CompoundCommand();
-		for(Object obj : getSelectedObjects()){
+		for (Object obj : getSelectedObjects()) {
 			if (obj instanceof AbstractFBNElementEditPart) {
 				UpdateFBTypeCommand cmd = new UpdateFBTypeCommand(((AbstractFBNElementEditPart) obj).getModel(), entry);
 				if (cmd.canExecute()) {
