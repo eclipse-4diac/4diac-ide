@@ -62,7 +62,7 @@
 
 	<properties>
 		<tycho.version>1.4.0</tycho.version>
-		<tycho-repo.url>http://download.eclipse.org/releases/2019-06</tycho-repo.url>
+		<tycho-repo.url>http://download.eclipse.org/releases/2019-09</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 	</properties>
@@ -121,12 +121,12 @@
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.equinox.executable</id>
-								<versionRange>3.8.4</versionRange>
+								<versionRange>3.8.500</versionRange>
 							</requirement>
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.platform</id>
-								<versionRange>4.12.0</versionRange>
+								<versionRange>4.13.0</versionRange>
 							</requirement>
 						</extraRequirements>
 					</dependency-resolution>
@@ -166,7 +166,7 @@
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.equinox.executable</id>
-								<versionRange>3.8.0</versionRange>
+								<versionRange>3.8.500</versionRange>
 							</requirement>
 							<requirement>
 								<type>eclipse-feature</type>

@@ -33,6 +33,7 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
         final StringBuilder result = new StringBuilder();
         result.append(this.getQuote());
         for (int i = new Function0<Integer>() {
+          @Override
           public Integer apply() {
             try {
               return reader.read();
@@ -201,6 +202,7 @@ public abstract class StringValueConverter extends AbstractNullSafeConverter<Str
         final StringReader reader = new StringReader(value);
         final StringBuilder result = new StringBuilder();
         for (int i = new Function0<Integer>() {
+          @Override
           public Integer apply() {
             try {
               return reader.read();
