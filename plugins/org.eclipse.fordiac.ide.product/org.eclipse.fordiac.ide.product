@@ -257,7 +257,6 @@
       <feature id="org.eclipse.ecf.filetransfer.httpclient45.feature"/>
       <feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
       <feature id="org.eclipse.xtext.ui"/>
-      <feature id="org.eclipse.epp.logging.aeri.feature"/>
       <feature id="org.eclipse.emf.databinding"/>
       <feature id="org.eclipse.xtext.redist"/>
       <feature id="org.eclipse.fordiac.ide.deployment.feature"/>
@@ -274,9 +273,9 @@
    </features>
 
    <configurations>
+      <plugin id="org.apache.felix.scr" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
-      <plugin id="org.apache.felix.scr" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />

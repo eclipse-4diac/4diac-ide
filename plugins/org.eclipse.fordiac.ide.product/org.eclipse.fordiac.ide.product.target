@@ -15,9 +15,5 @@
         	<unit id="org.eclipse.platform.sdk" version="4.12.0.I20190605-1800"/>
         	<repository location="http://download.eclipse.org/eclipse/updates/4.12"/>
     	</location>
-    	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-        	<repository location="https://ci.eclipse.org/packaging/job/epp-logging.head/ws/releng/repositories/head/target/repository/"/>
-        	<unit id="org.eclipse.epp.logging.aeri.feature.feature.group" version="2.0.8.v20190502-1125"/>
-    	</location>
 	</locations>
 </target>
