@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  * 				 2018 - 2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,9 +9,11 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - added diagram font preference 
+ *   Alois Zoitl - added diagram font preference
+ *     - changed section border to a simple line removing issues on Linux and
+ *       modernizing the look
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 
@@ -25,20 +27,18 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.Activator;
-import org.eclipse.fordiac.ide.gef.draw2d.FordiacFigureUtilities;
+import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
@@ -285,6 +285,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			bottomInputsLayout.setStretchMinorAxis(true);
 			dataInputs.setLayoutManager(bottomInputsLayout);
 			dataInputs.setOpaque(false);
+			dataInputs.setBorder(new AdvancedLineBorder(PositionConstants.SOUTH));
 			bottom.add(dataInputs);
 			createContentPane(bottom);
 			setInstanceAndTypeLabelFonts();
@@ -311,40 +312,13 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 
 			parent.add(deviceInfo);
 
-			deviceInfo.setBorder(new LineBorder() {
-				@Override
-				public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
-					tempRect.setBounds(getPaintRectangle(figure, insets));
-					if (1 == (getWidth() & 1)) {
-						tempRect.height--;
-					}
-					tempRect.shrink(getWidth() / 2, getWidth() / 2);
-					graphics.setLineWidth(getWidth());
-					graphics.setBackgroundColor(bottom.getBackgroundColor());
-					FordiacFigureUtilities.paintEtchedBorder(graphics,
-							new Rectangle(tempRect.x - 3, tempRect.y + tempRect.height - 3, tempRect.width + 5, 3));
-				}
-			});
+			deviceInfo.setBorder(new AdvancedLineBorder(PositionConstants.SOUTH));
 		}
 
 		private void createContentPane(RoundedRectangle container) {
 			contentPane = new Figure();
 			contentPane.setLayoutManager(new ToolbarLayout());
 			container.add(contentPane);
-			contentPane.setBorder(new LineBorder() {
-				@Override
-				public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
-					tempRect.setBounds(getPaintRectangle(figure, insets));
-					if (1 == (getWidth() & 1)) {
-						tempRect.height--;
-					}
-					tempRect.shrink(getWidth() / 2, getWidth() / 2);
-					graphics.setLineWidth(getWidth());
-					graphics.setBackgroundColor(bottom.getBackgroundColor());
-					FordiacFigureUtilities.paintEtchedBorder(graphics,
-							new Rectangle(tempRect.x - 3, tempRect.y, tempRect.width + 5, 3));
-				}
-			});
 		}
 
 		public Label getName() {

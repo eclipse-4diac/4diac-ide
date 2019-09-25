@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2012 Profactor GbmH, TU Wien ACIN, 
- * 				 2018 Johannes Kepler University 
- * 
+ * Copyright (c) 2008, 2009, 2012 Profactor GbmH, TU Wien ACIN,
+ * 				 2018, 2019 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,15 +11,15 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - changed color handling to not create colors during painting,
+ *                 cleaned-up painting code
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.policies;
 
+import org.eclipse.draw2d.AbstractBorder;
 import org.eclipse.draw2d.Cursors;
-import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.SchemeBorder;
-import org.eclipse.draw2d.SimpleEtchedBorder;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.Activator;
@@ -36,15 +36,27 @@ import org.eclipse.swt.graphics.RGB;
  * The Class ModifiedMoveHandle.
  */
 public class ModifiedMoveHandle extends MoveHandle {
+
+	private static Color borderColor = null;
+
+	private static Color getBorderColor() {
+		if (null == borderColor) {
+			IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
+			RGB color = PreferenceConverter.getColor(pf, DiagramPreferences.SELECTION_COLOR);
+			borderColor = new Color(null, color);
+		}
+		return borderColor;
+	}
+
 	private Insets insets = new Insets(2);
 	private int arc = 20;
 
 	/**
 	 * Instantiates a new modified move handle.
-	 * 
-	 * @param owner the owner
+	 *
+	 * @param owner  the owner
 	 * @param insets the insets
-	 * @param arc the arc
+	 * @param arc    the arc
 	 */
 	public ModifiedMoveHandle(GraphicalEditPart owner, Insets insets, int arc) {
 		super(owner);
@@ -54,7 +66,7 @@ public class ModifiedMoveHandle extends MoveHandle {
 
 	/**
 	 * Instantiates a new modified move handle.
-	 * 
+	 *
 	 * @param owner the owner
 	 */
 	public ModifiedMoveHandle(GraphicalEditPart owner) {
@@ -68,61 +80,21 @@ public class ModifiedMoveHandle extends MoveHandle {
 	@Override
 	protected void initialize() {
 		setOpaque(false);
-		setBorder(SimpleEtchedBorder.singleton);
-		setBorder(new SchemeBorder() {
-
+		setBorder(new AbstractBorder() {
 			@Override
 			public void paint(IFigure figure, Graphics g, Insets insets) {
 				Rectangle rect = getPaintRectangle(figure, insets);
-
-				IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-				RGB color = PreferenceConverter.getColor(pf,
-						DiagramPreferences.SELECTION_COLOR);
-				Color rgb = new Color(null, color);
-				Color highlight = FigureUtilities.lighter(rgb);
-
-				paintEtchedBorder(g, rect, rgb, highlight);
-				highlight.dispose();
-				rgb.dispose();
-				
+				g.setLineStyle(Graphics.LINE_SOLID);
+				g.setLineWidth(1);
+				g.setXORMode(false);
+				g.setForegroundColor(getBorderColor());
+				g.drawRoundRectangle(rect.getResized(-1, -1), arc, arc);
 			}
 
 			@Override
 			public Insets getInsets(IFigure figure) {
 				return insets;
 			}
-
-			/**
-			 * Paints a border with an etching effect, having a shadow of Color
-			 * <i>shadow</i> and highlight of Color <i>highlight</i>.
-			 * 
-			 * @param g
-			 *          the graphics object
-			 * @param r
-			 *          the bounds of the border
-			 * @param shadow
-			 *          the shadow color
-			 * @param highlight
-			 *          the highlight color
-			 * @since 2.0
-			 */
-			private void paintEtchedBorder(Graphics g, Rectangle r, Color shadow,
-					Color highlight) {
-				int x = r.x, y = r.y, w = r.width, h = r.height;
-
-				g.setLineStyle(Graphics.LINE_SOLID);
-				g.setLineWidth(1);
-				g.setXORMode(false);
-
-				w -= 2;
-				h -= 2;
-
-				Rectangle rect = new Rectangle(x, y, w, h);
-				g.setForegroundColor(shadow);
-
-				g.drawRoundRectangle(rect, arc, arc);
-			}
-
 		});
 		setCursor(Cursors.SIZEALL);
 	}
