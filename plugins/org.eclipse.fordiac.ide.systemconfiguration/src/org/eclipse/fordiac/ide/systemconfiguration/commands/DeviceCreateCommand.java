@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
  * 				 2019 Johannes Keppler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz, Monika Wenger, Kiril Dorofeev
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo 
+ *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
@@ -33,8 +33,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.fordiac.ide.util.YUV;
 import org.eclipse.gef.commands.Command;
@@ -97,7 +97,7 @@ public class DeviceCreateCommand extends Command {
 		if (null != device.getType().getProfile() && !"".equals(device.getType().getProfile())) { //$NON-NLS-1$
 			profile = device.getType().getProfile();
 		} else {
-			profile = Activator.getDefault().getPreferenceStore()
+			profile = UIPlugin.getDefault().getPreferenceStore()
 					.getString(PreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE);
 		}
 		device.setProfile(profile);
