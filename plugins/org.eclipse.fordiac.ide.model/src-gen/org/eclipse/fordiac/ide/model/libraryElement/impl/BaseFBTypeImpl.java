@@ -34,17 +34,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getInternalVars
- * <em>Internal Vars</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getInternalVars <em>Internal Vars</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 	/**
-	 * The cached value of the '{@link #getInternalVars() <em>Internal Vars</em>}'
-	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getInternalVars() <em>Internal Vars</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getInternalVars()
 	 * @generated
 	 * @ordered
@@ -53,7 +51,6 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected BaseFBTypeImpl() {
@@ -62,7 +59,6 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -72,88 +68,81 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<VarDeclaration> getInternalVars() {
 		if (internalVars == null) {
-			internalVars = new EObjectContainmentEList<>(VarDeclaration.class, this,
-					LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS);
+			internalVars = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS);
 		}
 		return internalVars;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
-			return ((InternalEList<?>) getInternalVars()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
+				return ((InternalEList<?>)getInternalVars()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
-			return getInternalVars();
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
+				return getInternalVars();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
-			getInternalVars().clear();
-			getInternalVars().addAll((Collection<? extends VarDeclaration>) newValue);
-			return;
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
+				getInternalVars().clear();
+				getInternalVars().addAll((Collection<? extends VarDeclaration>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
-			getInternalVars().clear();
-			return;
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
+				getInternalVars().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
-			return internalVars != null && !internalVars.isEmpty();
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
+				return internalVars != null && !internalVars.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

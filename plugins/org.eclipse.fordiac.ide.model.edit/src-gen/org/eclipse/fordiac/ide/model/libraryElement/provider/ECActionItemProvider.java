@@ -128,7 +128,7 @@ public class ECActionItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, FordiacImage.ICON_EC_ACTION.getImage()); //$NON-NLS-1$
+		return overlayImage(object, FordiacImage.ICON_EC_ACTION.getImage()); 
 	}
 
 	/**
@@ -166,6 +166,7 @@ public class ECActionItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+		super.notifyChanged(notification);
 	}
 
 	/**

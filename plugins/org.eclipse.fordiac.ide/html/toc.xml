@@ -303,6 +303,7 @@
       <topic label="Building and Running 4DIAC-IDE from Source" href="html/development/building4diac.html#buildFromSource"> 
       </topic>
       <topic label="Building a Binary 4DIAC-IDE Package from Source" href="html/development/building4diac.html#buildBinary" /> 
+      <topic label="Updating 4diac IDE Target Platform" href="html/development/ideUpdateTargetPlatform.html" />
     </topic>
     <topic label="FORTE">
       <topic label="Structured Datatypes" href="html/development/forte_struct.html"/>

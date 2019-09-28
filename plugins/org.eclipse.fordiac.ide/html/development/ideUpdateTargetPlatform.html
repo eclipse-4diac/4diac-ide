@@ -50,9 +50,11 @@
             <li> Check org.eclipse.equinox.executable version range. Attention this has to be done on two places in the file.
         </ul>
     </li>
+    <li>Regenerate all model and model edit code from the models plugin.</li>
     <li>Run product from Eclipse IDE using product editor, i.e., press the synchronize button and then the "Launch an Eclipse Application"</li>
     <li>Run Maven install for pom.xml in the org.eclipse.fordiac.ide.master plugin locally</li>
-    <li>Test if the generated product can be executed. The generated products are in: /org.eclipse.4diac.ide/plugins/org.eclipse.fordiac.ide.product/target/products/org.eclipse.fordiac.ide.product 
+    <li>Test if the generated product can be executed. The generated products are in: <br> 
+        /org.eclipse.4diac.ide/plugins/org.eclipse.fordiac.ide.product/target/products/org.eclipse.fordiac.ide.product 
     <li>Push to Gerrit so that CI build can also check if it is working</li>
 </ul>
 
