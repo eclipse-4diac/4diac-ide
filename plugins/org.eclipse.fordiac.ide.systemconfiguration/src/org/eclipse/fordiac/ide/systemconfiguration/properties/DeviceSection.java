@@ -23,12 +23,14 @@ import org.eclipse.fordiac.ide.deployment.iec61499.DynamicTypeLoadDeploymentExec
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.gef.commands.ChangeProfileCommand;
-import org.eclipse.fordiac.ide.gef.properties.AbstractDevResInterfaceSection;
+import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -37,11 +39,21 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbenchPart;
 
-public class DeviceSection extends AbstractDevResInterfaceSection {
+public class DeviceSection extends AbstractInterfaceSection {
 	protected static String[] profileNames;
 	protected CCombo profile;
 	protected Button getResources;
+
+	@Override
+	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
+		Device helper = getInputType(input);
+		if (null != helper) {
+			return SystemManager.INSTANCE.getCommandStack(helper.getAutomationSystem());
+		}
+		return null;
+	}
 
 	@Override
 	public void refresh() {

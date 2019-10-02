@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH, Profactor GmbH 
+ * Copyright (c) 2015 - 2017 fortiss GmbH, Profactor GmbH
  *               2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -141,7 +141,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 	}
 
 	private static String getVarDeclarationValue(VarDeclaration v) {
-		return v.getValue() != null && v.getValue().getValue() != null ? v.getValue().getValue() : ""; //$NON-NLS-1$
+		return (v.getValue() != null) && (v.getValue().getValue() != null) ? v.getValue().getValue() : ""; //$NON-NLS-1$
 	}
 
 	@Override
@@ -264,5 +264,15 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 			}
 			return element.toString();
 		}
+	}
+
+	@Override
+	protected void setInputInit() {
+		// currently nothing to do here
+	}
+
+	@Override
+	protected void setInputCode() {
+		// currently nothing to do here
 	}
 }

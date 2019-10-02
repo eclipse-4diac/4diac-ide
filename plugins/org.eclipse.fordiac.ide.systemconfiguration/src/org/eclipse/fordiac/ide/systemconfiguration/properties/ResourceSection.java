@@ -13,22 +13,34 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.properties;
 
-import org.eclipse.fordiac.ide.gef.properties.AbstractDevResInterfaceSection;
+import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbenchPart;
 
-public class ResourceSection extends AbstractDevResInterfaceSection {
+public class ResourceSection extends AbstractInterfaceSection {
+	@Override
+	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
+		Resource helper = getInputType(input);
+		if (null != helper) {
+			return SystemManager.INSTANCE.getCommandStack(helper.getAutomationSystem());
+		}
+		return null;
+	}
+
 	@Override
 	protected Resource getInputType(Object input) {
 		Object inputHelper = (input instanceof EditPart) ? ((EditPart) input).getModel() : input;
 		if (inputHelper instanceof Resource) {
-			return (Resource) input;
+			return (Resource) inputHelper;
 		}
 		return null;
 	}
