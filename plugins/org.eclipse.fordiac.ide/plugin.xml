@@ -136,6 +136,13 @@
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/new-project.png"
             theme="org.eclipse.ui.intro.universal.solstice">
       </override>
+       <url
+            location="http://org.eclipse.ui.intro/close"
+            label="Continue to 4diac IDE"
+            description="Close welcome page and work on your system"
+            icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/workbench.png"
+            importance="medium">
+       </url>  
    </extension>      
    
    <!-- If these activties should be needed in the future remove the respective line below -->
