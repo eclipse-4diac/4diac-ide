@@ -87,7 +87,7 @@ public class InternalVarsSection extends ECCSection {
 		}
 
 		internalVarsViewer.setCellEditors(createCellEditors(internalVarsViewer.getTable()));
-		internalVarsViewer.setColumnProperties(new String[] { IV_NAME, IV_TYPE, IV_COMMENT, IV_ARRAY, IV_INIT });
+		internalVarsViewer.setColumnProperties(new String[] { IV_NAME, IV_TYPE, IV_ARRAY, IV_INIT, IV_COMMENT });
 		internalVarsViewer.setContentProvider(new ArrayContentProvider());
 		internalVarsViewer.setLabelProvider(new InternalVarsLabelProvider());
 		internalVarsViewer.setCellModifier(new InternalVarsCellModifier());
@@ -110,9 +110,9 @@ public class InternalVarsSection extends ECCSection {
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(2, 30));
 		layout.addColumnData(new ColumnWeightData(2, 30));
+		layout.addColumnData(new ColumnWeightData(1, 20));
+		layout.addColumnData(new ColumnWeightData(1, 20));
 		layout.addColumnData(new ColumnWeightData(3, 50));
-		layout.addColumnData(new ColumnWeightData(1, 20));
-		layout.addColumnData(new ColumnWeightData(1, 20));
 		table.setLayout(layout);
 	}
 
