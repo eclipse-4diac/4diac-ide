@@ -14,36 +14,50 @@
 -->
 <introContent>
 	<extensionContent id="whatsnew-top-left" name="Whats New Current Version" path="whatsnew/@">
-  	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.10.0">   
-  	 		<text> With 4diac 1.10.0 we continued to improve performance, stability, and useability of our two main components. The main changes are:
-                    &lt;UL&gt;
-                            &lt;LI&gt;&lt;I&gt;&lt;b&gt;4diac IDE&lt;/b&gt;&lt;/I&gt; 
-                        &lt;UL&gt;
-                                &lt;LI&gt;Finally you can develop Simple FBs&lt;/LI&gt;
-                                &lt;LI&gt;We reworked the deployment and monitoring infrastructure removing many usability issues we had there&lt;/LI&gt;
-                            &lt;LI&gt;Stabilized Subapp support (e.g., monitoring inside of subapps)&lt;/LI&gt;
-                            &lt;LI&gt;Update to Eclipse 2018-09 as base platform giving you higher performance&lt;/LI&gt;
-                            &lt;LI&gt;Export device configurations as FMUs&lt;/LI&gt;
-                            &lt;LI&gt;Many smaller usability improvements&lt;/LI&gt;
-                        &lt;/UL&gt;&lt;/LI&gt; 
-                        &lt;LI&gt;&lt;I&gt;&lt;b&gt;4diac FORTE&lt;/b&gt;&lt;/I&gt; 
-                        &lt;UL&gt;
-                            &lt;LI&gt;4diac FORTE got more then 10% faster&lt;/LI&gt; 
-                            &lt;LI&gt;HTTP communication layer&lt;/LI&gt; 
-                            &lt;LI&gt;FMI/FMU support for connecting 4diac FORTE to different simulation tools&lt;/LI&gt; 
-                            &lt;LI&gt;New platforms: PLCnext, pikeOS, freeRTOS, and ROS&lt;/LI&gt; 
-                        &lt;/UL&gt;&lt;/LI&gt;
-                   &lt;/UL&gt; 
-            </text>  	 	 		
+  	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.11.0">   
+  	 		<text>
+   With this release we officially updates to &lt;a href="https://www.eclipse.org/legal/epl-2.0/faq.php"&gt;Eclipse Public License, Version 2.0!&lt;/a&gt;
+   Apart from many bug fixes and improvements the main changes and new features in 4diac 1.11.0 are:
+	&lt;ul&gt;
+	    &lt;li&gt;&lt;b&gt;4diac IDE:&lt;/b&gt;
+	        &lt;ul&gt;
+	            &lt;li&gt;Improved Lua code generation&lt;/li&gt;
+	            &lt;li&gt;Fixes in the dark theme in the console and the algorithm editors&lt;/li&gt;
+	            &lt;li&gt;Allow setting the font used in the graphical editors and better handling of IEC 61499-2 coordinate systems
+	            &lt;li&gt;Changed the default font to a mono-space font, where certain characters can be better distinguished (e.g., I &amp;l)&lt;/li&gt;
+	            &lt;li&gt;Printing of diagrams&lt;/li&gt;
+	            &lt;li&gt;Many usability improvements:
+	                &lt;ul&gt;
+	                    &lt;li&gt;Several problems with copy/paste&lt;/li&gt;
+	                    &lt;li&gt;Simpler creation of states and actions with (ctrl+left mouse click) in the ECC editor&lt;/li&gt;
+	                    &lt;li&gt;Improved transition presentation and editing in the state property sheet&lt;/li&gt;
+	                    &lt;li&gt;Harmonized look and feel and improved handling of tables (e.g., tabbing through fields, look ahead search in selection boxes)&lt;/li&gt;
+	                    &lt;li&gt;Transition lines pass through the middle control point&lt;/li&gt;
+	                    &lt;li&gt;Provide mouse cursors feedback for indicating connection sources and destinations&lt;/li&gt;
+	                    &lt;li&gt;...&lt;/li&gt;
+	                &lt;/ul&gt;
+	            &lt;/li&gt;
+	        &lt;/ul&gt;
+	    &lt;/li&gt;
+	    &lt;li&gt;&lt;b&gt;4diac FORTE:&lt;/b&gt;
+	        &lt;ul&gt;
+	            &lt;li&gt;Support for the &lt;a href="https://www.arrowhead.eu/arrowheadframework/this-is-it"&gt;Arrowhead framework&lt;/a&gt;&lt;/li&gt;
+	            &lt;li&gt;Completely reworked and improved OPC UA integration, update to &lt;a href="https://open62541.org/"&gt;open62541 V1.0&lt;/a&gt;&lt;/li&gt;
+	            &lt;li&gt;Migrated TIME function to NOW and NOW_MONOTONIC function and improved time conversion functions&lt;/li&gt;
+	            &lt;li&gt;Several fixes in the dynamic type loading code&lt;/li&gt;
+	            &lt;li&gt;Deprecate Eclipse Neo SCADA SFP support&lt;/li&gt;
+	        &lt;/ul&gt;
+	        &lt;/li&gt;
+	    &lt;li&gt;&lt;b&gt;4diac LIB:&lt;/b&gt;
+	        &lt;ul&gt;
+	            &lt;li&gt;Set of test FBs and applications for testing the different code generators&lt;/li&gt;
+	        &lt;/ul&gt;
+	    &lt;/li&gt;
+	&lt;/ul&gt;
+
+    A full list of all bugs addressed in this release can be found on the &lt;a href="https://projects.eclipse.org/projects/iot.4diac/releases/1.11.0/bugs"&gt;1.10.0 release page&lt;/a&gt;
+             </text>  	 	 		
        	</group>
-       	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.10.1">   
-            <text>The first maintenance release for 4DIAC 1.10 provides 3 usability bug fixes for 4diac IDE, and 1 for FORTE.
-            </text>                
-        </group>
-       	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.10.2">   
-            <text>The second maintenance release for 4DIAC 1.10 provides 11 bug fixes for 4diac IDE, and 6 for  4diac FORTE.
-            </text>                
-        </group>
    	</extensionContent>
    	
    	<extensionContent id="fordiac-news" style="css/style.css" name="Whats New Extension" path="whatsnew/@">
@@ -58,6 +72,24 @@
   	<extensionContent id="fordiac-older-releases" style="css/style.css" name="Prior Versions" path="whatsnew/@">   			 
 		<group style-id="content-group" id="orgfordiacide-introLink-group"
 		           label="Previous Releases">
+            <link label="1.10.3" url="https://www.eclipse.org/4diac/en_news.php#en_news_20190821" id="orgfordiacide-webLink" style-id="content-link">
+                <text>The second maintenance release for 4DIAC 1.10 provides 11 bug fixes for 4diac IDE, and 6 for  4diac FORTE.
+                </text>                
+            </link> 
+
+            <link label="1.10.2" url="http://www.eclipse.org/4diac/en_news.php#en_news_20190414" id="orgfordiacide-webLink" style-id="content-link">
+                <text>The second maintenance release for 4DIAC 1.10 provides 11 bug fixes for 4diac IDE, and 6 for  4diac FORTE.
+                </text>                
+            </link> 
+            <link label="1.10.1" url="http://www.eclipse.org/4diac/en_news.php#en_news_20181221" id="orgfordiacide-webLink" style-id="content-link">
+                <text>The first maintenance release for 4DIAC 1.10 provides 3 usability bug fixes for 4diac IDE, and 1 for FORTE.
+                </text>                
+            </link> 
+            
+            <link label="1.10.0" url="http://www.eclipse.org/4diac/en_news.php#en_news_20181129" id="orgfordiacide-webLink" style-id="content-link">
+                <text> With 4diac 1.10.0 we continued to improve performance, stability, and useability of our two main components 
+                </text>                 
+            </link> 
 		    <link label="1.9.1" url="http://www.eclipse.org/4diac/en_news.php#en_news_20180527" id="orgfordiacide-webLink" style-id="content-link">
                 <text>The first maintenance release for 4diac 1.9 providing a set 14 bugfixes for 4diac IDE, and 2 for 4diac forte. 
                 </text>

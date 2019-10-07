@@ -92,6 +92,7 @@ public class SubApplicationTypePaletteEntryItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+		super.notifyChanged(notification);
 	}
 
 	/**

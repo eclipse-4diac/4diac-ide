@@ -31,6 +31,8 @@ public class Messages extends NLS {
 
 	public static String OpenSystemConfEditorAction_Name;
 	
+	public static String SystemConfigurationEditorInput_SysConfTitleName;
+
 	/** The System conf palette factory_ labe l_ tools. */
 	public static String SystemConfPaletteFactory_LABEL_Tools;
 	

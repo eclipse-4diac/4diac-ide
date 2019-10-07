@@ -24,13 +24,21 @@
 
 <p>The target platform defines the dependencies of 4diac IDE to other eclipse projects. Currently the Eclipse 4diac requires the following:</p>
 <ul>
-    <li>Eclipse Java Development Tools, org.eclipse.jdt.feature.group</li>
-    <li>Eclipse Platform SDK, org.eclipse.platform.sdk</li>
-    <li>Eclipse Plug-in Development Environment, org.eclipse.pde.feature.group</li>
-    <li>Eclipse Automated Error Reporting, org.eclipse.epp.logging.aeri.feature.feature.group</li>
-    <li>EMF - Eclipse Modeling Framework SDK, org.eclipse.emf.sdk.feature.group</li>
-    <li>GEF (MVC) SDK, org.eclipse.gef.sdk.feature.group</li>
-    <li>Xtext Complete SDK, org.eclipse.xtext.sdk.feature.group</li>
+    <li>http://download.eclipse.org/eclipse/updates/4.xx
+    <ul>
+        <li>Eclipse Java Development Tools, org.eclipse.jdt.feature.group</li>
+        <li>Eclipse Platform SDK, org.eclipse.platform.sdk</li>
+        <li>Eclipse Plug-in Development Environment, org.eclipse.pde.feature.group</li>
+    </ul>
+    </li>
+    <li>http://download.eclipse.org/releases/20xx-xx
+    <ul>
+        <li>EMF - Eclipse Modeling Framework SDK, org.eclipse.emf.sdk.feature.group</li>
+        <li>GEF (MVC) SDK, org.eclipse.gef.sdk.feature.group</li>
+        <li>Xtext Complete SDK, org.eclipse.xtext.sdk.feature.group</li>
+        <li>Eclipse Platform Launcher Executables</li>
+    </ul>
+    </li>
 </ul>
 <p>For upgrading to new Eclipse platform versions the following steps need to be done:</p>
 <ul>
@@ -42,9 +50,11 @@
             <li> Check org.eclipse.equinox.executable version range. Attention this has to be done on two places in the file.
         </ul>
     </li>
+    <li>Regenerate all model and model edit code from the models plugin.</li>
     <li>Run product from Eclipse IDE using product editor, i.e., press the synchronize button and then the "Launch an Eclipse Application"</li>
     <li>Run Maven install for pom.xml in the org.eclipse.fordiac.ide.master plugin locally</li>
-    <li>Test if the generated product can be executed. The generated products are in: /org.eclipse.4diac.ide/plugins/org.eclipse.fordiac.ide.product/target/products/org.eclipse.fordiac.ide.product 
+    <li>Test if the generated product can be executed. The generated products are in: <br> 
+        /org.eclipse.4diac.ide/plugins/org.eclipse.fordiac.ide.product/target/products/org.eclipse.fordiac.ide.product 
     <li>Push to Gerrit so that CI build can also check if it is working</li>
 </ul>
 
