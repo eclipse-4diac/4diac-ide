@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2016 TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl 
@@ -34,10 +35,10 @@ public class SystemConfigurationContextMenueProvider extends
 		super.buildContextMenu(menu);
 		IAction action;
 
-		action = registry.getAction(ActionFactory.DELETE.getId());
+		action = getRegistry().getAction(ActionFactory.DELETE.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 		
-		action = registry.getAction(GEFActionConstants.DIRECT_EDIT);
+		action = getRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
 		if (action != null && action.isEnabled()) {
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 		}

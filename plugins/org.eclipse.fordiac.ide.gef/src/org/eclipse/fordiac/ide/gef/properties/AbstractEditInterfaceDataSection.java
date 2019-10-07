@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Monika Wenger
@@ -13,24 +14,27 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.jface.viewers.IContentProvider;
 
 public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection {
+	
 	@Override
-	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);
-		inputsViewer.setContentProvider(new InterfaceContentProvider(true, InterfaceContentProviderType.DATA));
-		outputsViewer.setContentProvider(new InterfaceContentProvider(false, InterfaceContentProviderType.DATA));
-		setCellEditors();
+	protected IContentProvider getOutputsContentProvider() {
+		return new InterfaceContentProvider(false, InterfaceContentProviderType.DATA);
+	}
+	
+	@Override
+	protected IContentProvider getInputsContentProvider() {
+		return new InterfaceContentProvider(true, InterfaceContentProviderType.DATA);
 	}
 
 	@Override
 	protected String[] fillTypeCombo() {
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		for(DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()){
 			list.add(dataType.getName());
 		}

@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH, Profactor GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl, Gerhard Ebenhofer
@@ -19,7 +20,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
-public class FBTypeUtils {
+public final class FBTypeUtils {
 
 	public static Palette getPalletteForFBTypeFile(IFile element) {
 		Palette palette = null;
@@ -37,5 +38,7 @@ public class FBTypeUtils {
 		return palette;
 	}
 	
-	
+	private FBTypeUtils() {
+		throw new UnsupportedOperationException("FBTypeUtils utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 }

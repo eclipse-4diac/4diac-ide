@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017  Profactor GbmH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -18,7 +19,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
@@ -30,26 +31,24 @@ import org.eclipse.jface.viewers.TextCellEditor;
 /**
  * The Class AbstractDirectEditableEditPart.
  */
-public abstract class AbstractDirectEditableEditPart extends
-		AbstractConnectableEditPart {
+public abstract class AbstractDirectEditableEditPart extends AbstractConnectableEditPart {
 
 	/** The manager. */
-	protected DirectEditManager manager;
+	private DirectEditManager manager;
 
 	private final EContentAdapter adapter = new EContentAdapter() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
 			Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(
-					feature)) {
-						refreshName();				
+			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
+				refreshName();
 			}
 			super.notifyChanged(notification);
 		}
 
 	};
-	
+
 	protected EContentAdapter getNameAdapter() {
 		return adapter;
 	}
@@ -65,7 +64,9 @@ public abstract class AbstractDirectEditableEditPart extends
 	 */
 	public abstract INamedElement getINamedElement();
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
 	 */
 	@Override
@@ -77,7 +78,9 @@ public abstract class AbstractDirectEditableEditPart extends
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
 	 */
 	@Override
@@ -96,8 +99,12 @@ public abstract class AbstractDirectEditableEditPart extends
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef.Request)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef.
+	 * Request)
 	 */
 	@Override
 	public void performRequest(final Request request) {
@@ -115,10 +122,14 @@ public abstract class AbstractDirectEditableEditPart extends
 	 */
 	public DirectEditManager getManager() {
 		if (manager == null) {
-			Label l = getNameLabel();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
+			manager = createDirectEditManager();
 		}
 		return manager;
+	}
+
+	protected DirectEditManager createDirectEditManager() {
+		Label l = getNameLabel();
+		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
 	}
 
 	/**
@@ -134,10 +145,10 @@ public abstract class AbstractDirectEditableEditPart extends
 	public void performDirectEdit() {
 		getManager().show();
 	}
-	
-	//TODO already duplicated on several places put it into a util class
-	public static void executeCommand(Command cmd){
-		Object viewer = Abstract4DIACUIPlugin.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
+
+	// TODO already duplicated on several places put it into a util class
+	public static void executeCommand(Command cmd) {
+		Object viewer = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
 		if (viewer instanceof GraphicalViewer) {
 			((GraphicalViewer) viewer).getEditDomain().getCommandStack().execute(cmd);
 		} else {

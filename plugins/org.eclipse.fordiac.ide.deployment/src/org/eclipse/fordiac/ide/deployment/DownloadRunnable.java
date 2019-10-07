@@ -2,10 +2,11 @@
  * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH, 
  * 							 Johannes Kepler University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -134,7 +135,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 			if (curMonitor.isCanceled()) {
 				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 			}
-			if(checkResource(resData.res, resources, executor)) {
+			if(checkResource(resData.getRes(), resources, executor)) {
 				//the resource is ready for deployment
 				deployResource(resData, executor);
 			}
@@ -211,7 +212,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 			retVal += devData.getSelectedDevParams().size();
 			retVal += devData.getResData().size();
 			for (ResourceDeploymentData resDepData : devData.getResData()) {
-				retVal += countResourceParams(resDepData.res);
+				retVal += countResourceParams(resDepData.getRes());
 				retVal += resDepData.getFbs().size() + resDepData.getConnections().size() + resDepData.getParams().size();
 				// TODO count variables of Fbs
 			}
@@ -232,7 +233,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 
 	protected void deployResource(final ResourceDeploymentData resDepData,
 			IDeviceManagementInteractor executor) throws DeploymentException {
-		Resource res = resDepData.res;
+		Resource res = resDepData.getRes();
 		if (!res.isDeviceTypeResource()) {
 			executor.createResource(res);
 			curMonitor.worked(1);
@@ -252,7 +253,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 
 	private void deployParamters(ResourceDeploymentData resDepData, IDeviceManagementInteractor executor) throws DeploymentException {
 		for (ParameterData param : resDepData.getParams()) {
-			executor.writeFBParameter(resDepData.res, param.getValue(),
+			executor.writeFBParameter(resDepData.getRes(), param.getValue(),
 					new FBDeploymentData(param.getPrefix(), (FB) param.getVar().getFBNetworkElement()), param.getVar());
 			curMonitor.worked(1);
 		}
@@ -261,7 +262,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 	private void deployConnections(final ResourceDeploymentData resDepData,
 			final IDeviceManagementInteractor executor) throws DeploymentException {
 		for (ConnectionDeploymentData con : resDepData.getConnections()) {
-			executor.createConnection(resDepData.res, con);
+			executor.createConnection(resDepData.getRes(), con);
 			curMonitor.worked(1);
 			if (curMonitor.isCanceled()) {
 				break;
@@ -270,12 +271,12 @@ class DownloadRunnable implements IRunnableWithProgress {
 	}
 
 	private void createFBInstance(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor) throws DeploymentException {
-		Resource res = resDepData.res;
+		Resource res = resDepData.getRes();
 		for (FBDeploymentData fbDepData : resDepData.getFbs()) {
-			if (!fbDepData.fb.isResourceTypeFB()) {
+			if (!fbDepData.getFb().isResourceTypeFB()) {
 				executor.createFBInstance(fbDepData, res);
 				curMonitor.worked(1);
-				InterfaceList interfaceList = fbDepData.fb.getInterface();
+				InterfaceList interfaceList = fbDepData.getFb().getInterface();
 				if (interfaceList != null) {
 					for (VarDeclaration varDecl : interfaceList.getInputVars()) {
 						String val = DeploymentHelper.getVariableValue(varDecl, res.getAutomationSystem());
@@ -342,7 +343,7 @@ class DownloadRunnable implements IRunnableWithProgress {
 			message.append(":"); //$NON-NLS-1$
 			for(ResourceDeploymentData resData: data.getResData()) {
 				message.append("\n\t\t- ");  //$NON-NLS-1$
-				message.append(resData.res.getName());
+				message.append(resData.getRes().getName());
 			}
 		}
 		

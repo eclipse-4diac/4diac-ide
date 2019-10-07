@@ -1,14 +1,18 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Kepler University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - inherited FBInterface editor from the common diagram editor to
+ *   				to reduce code duplication and more common look and feel  
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
@@ -18,25 +22,21 @@ import org.eclipse.fordiac.ide.fbtypeeditor.FBInterfacePaletteFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
-import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
+import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
-import org.eclipse.gef.MouseWheelHandler;
-import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
-import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -44,29 +44,23 @@ import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
-import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
-import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
-import org.eclipse.gef.ui.rulers.RulerComposite;
+import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 
-public class FBInterfaceEditor extends GraphicalEditorWithFlyoutPalette implements IFBTEditorPart{
+public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
 
-	private RulerComposite rulerComp;
 	private CommandStack commandStack;
 	private FBType fbType;
-	private KeyHandler sharedKeyHandler;
-	protected PaletteRoot paletteRoot;
-	protected Palette palette;
+
+	private PaletteRoot paletteRoot;
+	private Palette palette;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -85,93 +79,40 @@ public class FBInterfaceEditor extends GraphicalEditorWithFlyoutPalette implemen
 				palette = TypeLibrary.getInstance().getPalette();
 			}
 		}
-		setSite(site);
-		setEditDomain(new FBTypeEditDomain(this, commandStack));
-		setPartName("Interface");
-		setTitleImage(FordiacImage.ICON_InterfaceEditor.getImage());
 		super.init(site, input);
+		setPartName("Interface");
+		setTitleImage(FordiacImage.ICON_INTERFACE_EDITOR.getImage());
 	}
 
 	@Override
-	protected void createGraphicalViewer(final Composite parent) {
-		rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
-		super.createGraphicalViewer(rulerComp);
-		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
+	protected void setModel(IEditorInput input) {
+		super.setModel(input);
+		setEditDomain(new FBTypeEditDomain(this, commandStack));
 	}
 
-	@Override
-	protected Control getGraphicalControl() {
-		return rulerComp;
-	}
-
-	@Override
-	protected void configureGraphicalViewer() {
-		super.configureGraphicalViewer();
-		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
-
-		ScalableFreeformRootEditPart root = new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry());
-		
-		viewer.setRootEditPart(root);
-		viewer.setEditPartFactory(getEditPartFactory());
-
-		viewer.setContextMenu(new InterfaceContextMenuProvider(
-				viewer, root.getZoomManager(), getActionRegistry()));
-		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1),
-				MouseWheelZoomHandler.SINGLETON);
-
-		KeyHandler viewerKeyHandler = new GraphicalViewerKeyHandler(viewer)
-				.setParent(getCommonKeyHandler());
-
-		viewer.setKeyHandler(viewerKeyHandler);
-	}
-	
 	@Override
 	protected void createActions() {
-		ActionRegistry registry = getActionRegistry();	
-		InterfaceContextMenuProvider.createInterfaceEditingActions(this, registry, fbType);
+		ActionRegistry registry = getActionRegistry();
+		InterfaceContextMenuProvider.createInterfaceEditingActions(this, registry, getModel());
 		super.createActions();
 	}
 
+	@Override
 	protected EditPartFactory getEditPartFactory() {
 		return new FBInterfaceEditPartFactory(this, palette, getZoomManger());
 	}
-	
-	protected ZoomManager getZoomManger(){		
-		return ((ScalableFreeformRootEditPart)(getGraphicalViewer().getRootEditPart())).getZoomManager();
-	}
 
 	@Override
-	public void createPartControl(final Composite parent) {
-		Composite graphicaEditor = new Composite(parent, SWT.NONE);
-		graphicaEditor.setLayout(new FillLayout());
-		super.createPartControl(graphicaEditor);
-	}
-
-	@Override
-	protected void initializeGraphicalViewer() {
-		GraphicalViewer viewer = getGraphicalViewer();
-		// enable drag from palette
-		viewer.addDropTargetListener(new TemplateTransferDropTargetListener(viewer));
-		viewer.setContents(fbType);
-	}
-
 	protected KeyHandler getCommonKeyHandler() {
-		if (sharedKeyHandler == null) {
-			sharedKeyHandler = new KeyHandler();
-			sharedKeyHandler
-					.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
-							getActionRegistry().getAction(
-									ActionFactory.DELETE.getId()));
-			sharedKeyHandler.put(
-					KeyStroke.getPressed(SWT.F2, 0),
-					getActionRegistry().getAction(
-							GEFActionConstants.DIRECT_EDIT));
-			sharedKeyHandler.put(/* CTRL + '=' */
-			KeyStroke.getPressed('+', 0x3d, SWT.CTRL), getActionRegistry()
-					.getAction(GEFActionConstants.ZOOM_IN));
+		KeyHandler keyHandler = super.getCommonKeyHandler();
+		keyHandler.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
+				getActionRegistry().getAction(ActionFactory.DELETE.getId()));
+		keyHandler.put(KeyStroke.getPressed(SWT.F2, 0), getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
+		/* CTRL + '=' */
+		keyHandler.put(KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
+				getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
 
-		}
-		return sharedKeyHandler;
+		return keyHandler;
 	}
 
 	@Override
@@ -182,40 +123,45 @@ public class FBInterfaceEditor extends GraphicalEditorWithFlyoutPalette implemen
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-		paletteRoot = FBInterfacePaletteFactory.createPalette(palette);
+		if (null == paletteRoot) {
+			paletteRoot = FBInterfacePaletteFactory.createPalette(palette);
+		}
 		return paletteRoot;
+	}
+
+	protected Palette getPalette() {
+		return palette;
 	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		//currently nothing needs to be done here
+		// currently nothing needs to be done here
 	}
 
 	@Override
-	public boolean outlineSelectionChanged(Object selectedElement) {	
+	public boolean outlineSelectionChanged(Object selectedElement) {
 		Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
 		getGraphicalViewer().flush();
 		if (editpart instanceof EditPart && ((EditPart) editpart).isSelectable()) {
 			getGraphicalViewer().select((EditPart) editpart);
 			return true;
 		}
-		if (selectedElement instanceof InterfaceList) {
-			return true;
-		}
-		return false;
+		return (selectedElement instanceof InterfaceList);
 	}
-	
+
 	@Override
 	public void setCommonCommandStack(CommandStack commandStack) {
 		this.commandStack = commandStack;
 	}
-	
+
 	@Override
 	protected FlyoutPreferences getPalettePreferences() {
 		return FBInterfacePaletteFactory.PALETTE_PREFERENCES;
 	}
-	
-	/** Override so that we can add a template transferdragsourcelistener for drag and drop
+
+	/**
+	 * Override so that we can add a template transferdragsourcelistener for drag
+	 * and drop
 	 */
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
@@ -223,10 +169,35 @@ public class FBInterfaceEditor extends GraphicalEditorWithFlyoutPalette implemen
 			@Override
 			protected void configurePaletteViewer(final PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
-				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(
-						viewer));
+				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
 			}
 		};
+	}
+
+	@Override
+	public FBType getModel() {
+		return fbType;
+	}
+
+	@Override
+	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer, ZoomManager zoomManager) {
+		return new InterfaceContextMenuProvider(viewer, zoomManager, getActionRegistry());
+	}
+
+	@Override
+	protected TransferDropTargetListener createTransferDropTargetListener() {
+		// we don't need an additional transferdroptarget listener
+		return null;
+	}
+
+	@Override
+	public AutomationSystem getSystem() {
+		return null; // this is currently needed as the base class is targeted for system editors
+	}
+
+	@Override
+	public void doSaveAs() {
+		// nothing to do here
 	}
 
 }

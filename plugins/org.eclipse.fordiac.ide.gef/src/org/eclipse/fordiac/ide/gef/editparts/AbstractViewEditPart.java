@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017  Profactor GbmH, TU Wien ACIN, AIT, fortiss GmbH 
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Filip Andren, Monika Wenger
@@ -37,7 +38,7 @@ import org.eclipse.swt.graphics.RGB;
 
 public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
 	private static final String ERROR_IN_CREATE_FIGURE = Messages.AbstractViewEditPart_ERROR_createFigure;
-	protected DirectEditManager manager;
+	private DirectEditManager manager;
 	
 	private EContentAdapter adapter;
 
@@ -208,11 +209,14 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
 
 	public DirectEditManager getManager() {
 		if (manager == null) {
-			Label l = getNameLabel();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class,
-					new NameCellEditorLocator(l), l);
+			manager = createDirectEditManager();
 		}
 		return manager;
+	}
+
+	protected DirectEditManager createDirectEditManager() {
+		Label l = getNameLabel();
+		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
 	}
 
 	public void performDirectEdit() {

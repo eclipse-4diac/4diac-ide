@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.gef,
- org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.fordiac.ide.ui;bundle-version="[1.11.0,2.0.0)",
  org.eclipse.ui.navigator,
  org.eclipse.core.runtime,
  org.eclipse.gef,
@@ -24,7 +24,7 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.model.commands
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.10.3.qualifier
+Bundle-Version: 1.11.0.qualifier
 Bundle-Name: Application modeling (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.application.ApplicationPlugin
 Bundle-ManifestVersion: 2

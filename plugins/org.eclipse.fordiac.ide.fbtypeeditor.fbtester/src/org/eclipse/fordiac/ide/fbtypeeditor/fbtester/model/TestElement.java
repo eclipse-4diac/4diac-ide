@@ -1,9 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -101,8 +102,6 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 		this.fb = fb;
 	}
 
-	/** The monitoring element as array. */
-	private String[] monitoringElementAsArray;
 
 	/**
 	 * Gets the monitoring element as string.
@@ -121,7 +120,6 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	 */
 	public void setMonitoringElement(String monitoringElement) {
 		this.monitoringElement = monitoringElement;
-		monitoringElementAsArray = this.monitoringElement.split("\\.");
 	}
 
 	/**
@@ -262,13 +260,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	 * @param color
 	 */
 	public void setColor(final Color color) {
-		Display.getDefault().asyncExec(new Runnable() {
-			
-			@Override
-			public void run() {
-				part.setBackgroundColor(color);
-			}
-		});
+		Display.getDefault().asyncExec(() -> part.setBackgroundColor(color));
 	}
 	
 }

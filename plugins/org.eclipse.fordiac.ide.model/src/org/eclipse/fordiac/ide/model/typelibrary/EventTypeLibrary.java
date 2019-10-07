@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008, 2009, 2017 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Monika Wenger
@@ -25,7 +26,7 @@ public final class EventTypeLibrary {
 	private static EventTypeLibrary instance;
 
 	private EventTypeLibrary() {
-		typeMap = new HashMap<String, DataType>();
+		typeMap = new HashMap<>();
 		initElementaryTypes();
 	}
 
@@ -38,7 +39,7 @@ public final class EventTypeLibrary {
 
 	private void initElementaryTypes() {
 		if (typeMap == null) {
-			typeMap = new HashMap<String, DataType>();
+			typeMap = new HashMap<>();
 		}
 		EventType type = DataFactory.eINSTANCE.createEventType();
 		type.setName("Event"); //$NON-NLS-1$
@@ -50,8 +51,8 @@ public final class EventTypeLibrary {
 	}
 
 	/**
-	 * FIXME only return type if it really exists! --> after parsing/importing
-	 * of types is implemented --> planned for V0.3
+	 * FIXME only return type if it really exists! --> after parsing/importing of
+	 * types is implemented --> planned for V0.3
 	 * 
 	 * @param name the name
 	 * 

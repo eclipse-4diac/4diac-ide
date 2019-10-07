@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="openListener" name="openListener" schema="schema/openListener.exsd"/>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            class="org.eclipse.fordiac.ide.util.preferences.FordiacPreferencePage"
-            id="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
-            name="4diac IDE">
-      </page>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.fordiac.ide.util.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
+   <extension-point id="openListener" name="openListener" schema="schema/openListener.exsd"/> 
    <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
@@ -24,7 +10,7 @@
             visible="true">
          <action
                class="org.eclipse.fordiac.ide.util.action.HideDataConnectionsAction"
-               icon="fordiacimage://ICON_HideData"
+               icon="fordiacimage://ICON_HIDE_DATA"
                id="org.eclipse.fordiac.ide.util.action.HideDataConnectionsAction"
                label="Hide Data Connections"
                style="toggle"
@@ -32,7 +18,7 @@
          </action>
          <action
                class="org.eclipse.fordiac.ide.util.action.HideEventConnectionsAction"
-               icon="fordiacimage://ICON_HideEvent"
+               icon="fordiacimage://ICON_HIDE_EVENT"
                id="org.eclipse.fordiac.ide.util.action.HideEventConnectionsAction"
                label="Hide Event Connections"
                style="toggle"

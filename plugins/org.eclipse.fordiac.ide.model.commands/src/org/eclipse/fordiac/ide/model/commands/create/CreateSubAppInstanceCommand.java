@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2016, 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl, Monika Wenger
@@ -12,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -21,13 +21,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementCommand {
 	
-	protected SubApplicationTypePaletteEntry paletteEntry;
+	private SubApplicationTypePaletteEntry paletteEntry;
 	
 	public CreateSubAppInstanceCommand(final SubApplicationTypePaletteEntry paletteEntry, final FBNetwork fbNetwork, int x, int y) {
-		super(fbNetwork, x, y);
+		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
 		this.paletteEntry = paletteEntry;
 		setLabel("Create Subapplication Instance");
-		element = LibraryElementFactory.eINSTANCE.createSubApp();
 		getSubApp().setPaletteEntry(paletteEntry);
 	}
 	
@@ -42,7 +41,7 @@ public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementC
 	}
 	
 	public SubApp getSubApp() {
-		return (SubApp)element;
+		return (SubApp)getElement();
 	}
 	
 	public SubApplicationTypePaletteEntry getPaletteEntry() {

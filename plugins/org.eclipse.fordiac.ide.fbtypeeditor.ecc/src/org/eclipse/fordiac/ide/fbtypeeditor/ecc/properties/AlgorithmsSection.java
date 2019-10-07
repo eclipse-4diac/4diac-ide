@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2018 fortiss GmbH, Johannes Kepler University Linz (JKU)
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Monika Wenger, Alois Zoitl
@@ -25,31 +26,31 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class AlgorithmsSection extends ECCSection {
 	private final AlgorithmGroup algorithmGroup = new AlgorithmGroup();
 	private AlgorithmList algorithmList;
-	
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);	
+		super.createControls(parent, tabbedPropertySheetPage);
 		createAlgorithmControls(parent);
 	}
-		
-	public void createAlgorithmControls(final Composite parent) {	
+
+	public void createAlgorithmControls(final Composite parent) {
 		SashForm view = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
 		view.setLayout(new FillLayout());
 		algorithmList = new AlgorithmList(view, getWidgetFactory());
-		leftComposite = algorithmList.getComposite();
-		
+		setLeftComposite(algorithmList.getComposite());
+
 		getAlgorithmList().getAlgorithmViewer().addSelectionChangedListener(event -> {
-				Object selection = ((IStructuredSelection) getAlgorithmList().getAlgorithmViewer().getSelection()).getFirstElement();
-				algorithmGroup.setAlgorithm((selection instanceof Algorithm) ? (Algorithm) selection : null);
-			});
-		
-		rightComposite = getWidgetFactory().createComposite(view);
-		rightComposite.setLayout(new GridLayout());	
-		view.setWeights(new int[] {1, 1});
-		view.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));	
-						
-		algorithmGroup.createControls(rightComposite, getWidgetFactory());
+			Object selection = ((IStructuredSelection) getAlgorithmList().getAlgorithmViewer().getSelection())
+					.getFirstElement();
+			algorithmGroup.setAlgorithm((selection instanceof Algorithm) ? (Algorithm) selection : null);
+		});
+
+		setRightComposite(getWidgetFactory().createComposite(view));
+		getRightComposite().setLayout(new GridLayout());
+		view.setWeights(new int[] { 1, 1 });
+		view.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		algorithmGroup.createControls(getRightComposite(), getWidgetFactory());
 	}
 
 	@Override
@@ -62,11 +63,11 @@ public class AlgorithmsSection extends ECCSection {
 		algorithmGroup.initialize(getType(), commandStack);
 		getAlgorithmList().initialize(getType(), commandStack);
 	}
-	
+
 	private AlgorithmList getAlgorithmList() {
 		return algorithmList;
 	}
-	
+
 	@Override
 	public void refresh() {
 		getAlgorithmList().refresh();

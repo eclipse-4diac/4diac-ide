@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Jose Cabral, Alois Zoitl
@@ -25,8 +26,8 @@ import org.eclipse.gef.ConnectionEditPart;
 
 public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand{
 
-	Connection conn = null;
-	Resource res = null;
+	private Connection conn = null;
+	private Resource res = null;
 	
 	@Override
 	protected boolean prepareParametersToExecute(Object element) {
@@ -36,8 +37,8 @@ public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand{
 			if (null != resCon){
 				res = (Resource) resCon.getFBNetwork().eContainer();
 				if (null != res){
-					device = res.getDevice();
-					return (null != device);
+					setDevice(res.getDevice());
+					return (null != getDevice());
 				}
 			}
 		}

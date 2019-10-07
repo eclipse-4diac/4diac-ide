@@ -1,14 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2015 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2008, 2009, 2015, 2019 Profactor GbmH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Thomas Strasser, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Jose Cabral
+ *     - Add strings for the virtualDNS view
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration;
 
@@ -28,8 +31,26 @@ public class Messages extends NLS {
 
 	public static String OpenSystemConfEditorAction_Name;
 	
+	public static String SystemConfigurationEditorInput_SysConfTitleName;
+
 	/** The System conf palette factory_ labe l_ tools. */
 	public static String SystemConfPaletteFactory_LABEL_Tools;
+	
+	
+	public static String virtualDNSConfigurationTitle;
+	public static String virtualDNSNewConfiguration;
+	public static String virtualDNSDeleteConfiguration;
+	public static String virtualDNSNewConfigTitle;
+	public static String virtualDNSNewConfigMessage;
+	public static String virtualDNSNewConfigDefaultName;
+	public static String virtualDNSValueNotSet;
+	public static String virtualDNSNewEntryButtonText;
+	public static String virtualDNSDeleteEntryButtonText;
+	public static String virtualDNSActiveConfigurationText;
+	public static String virtualDNSFirstColumnTitle;
+	public static String virtualDNSSecondColumnTitle;
+	public static String virtualDNSSameVariableNameError;
+	public static String virtualDNSEmptyNameError;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

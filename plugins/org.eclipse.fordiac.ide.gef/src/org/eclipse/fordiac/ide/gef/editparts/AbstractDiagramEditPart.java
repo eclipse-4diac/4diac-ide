@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017  Profactor GbmH, TU Wien ACIN, fortiss 
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Ingo Hengy, Alois Zoitl, Jose Cabral
@@ -54,7 +55,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		newFigure.setBorder(new MarginBorder(10));
 		newFigure.setLayoutManager(new FreeformLayout());
 		newFigure.setOpaque(false);
-		
+
 		updateRouter(newFigure);
 
 		return newFigure;
@@ -74,9 +75,8 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	}
 
 	private void updateRuler() {
-		getViewer().setProperty(
-				RulerProvider.PROPERTY_RULER_VISIBILITY,
-				Boolean.valueOf(Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_RULERS)));
+		getViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, Boolean
+				.valueOf(Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_RULERS)));
 	}
 
 	/*
@@ -89,11 +89,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		if (!isActive()) {
 			super.activate();
 			if (getPreferenceChangeListener() != null) {
-				Activator
-						.getDefault()
-						.getPreferenceStore()
-						.addPropertyChangeListener(
-								getPreferenceChangeListener());
+				Activator.getDefault().getPreferenceStore().addPropertyChangeListener(getPreferenceChangeListener());
 			}
 		}
 	}
@@ -108,18 +104,13 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		if (isActive()) {
 			super.deactivate();
 			if (getPreferenceChangeListener() != null) {
-				Activator
-						.getDefault()
-						.getPreferenceStore()
-						.removePropertyChangeListener(
-								getPreferenceChangeListener());
+				Activator.getDefault().getPreferenceStore().removePropertyChangeListener(getPreferenceChangeListener());
 			}
 		}
 	}
 
 	protected void showGrid() {
-		getViewer().setProperty(
-				SnapToGrid.PROPERTY_GRID_VISIBLE,
+		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE,
 				Boolean.valueOf(Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_GRID)));
 	}
 
@@ -135,25 +126,16 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 			listener = new IPropertyChangeListener() {
 				@Override
 				public void propertyChange(final PropertyChangeEvent event) {
-					if (event.getProperty().equals(
-							DiagramPreferences.SNAP_TO_GRID)) {
-						// refresh();
-
-					}
-					if (event.getProperty().equals(
-							DiagramPreferences.SHOW_GRID)) {
+					if (event.getProperty().equals(DiagramPreferences.SHOW_GRID)) {
 						showGrid();
 					}
-					if (event.getProperty().equals(
-							DiagramPreferences.GRID_SPACING)) {
+					if (event.getProperty().equals(DiagramPreferences.GRID_SPACING)) {
 						updateGrid();
 					}
-					if (event.getProperty().equals(
-							DiagramPreferences.SHOW_RULERS)) {
+					if (event.getProperty().equals(DiagramPreferences.SHOW_RULERS)) {
 						updateRuler();
 					}
-					if (event.getProperty().equals(
-							DiagramPreferences.CONNECTION_ROUTER)) {
+					if (event.getProperty().equals(DiagramPreferences.CONNECTION_ROUTER)) {
 						updateRouter(getFigure());
 					}
 				}
@@ -162,39 +144,34 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		return listener;
 	}
 
-	
 	protected void updateRouter(IFigure figure) {
 		ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
 		connLayer.setConnectionRouter(RouterUtil.getConnectionRouter(figure));
 	}
 
 	protected void updateGrid() {
-		int gridSpacing = Activator.getDefault().getPreferenceStore()
-				.getInt(DiagramPreferences.GRID_SPACING);
-		
-		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_SPACING,
-				new Dimension(gridSpacing, gridSpacing));
+		int gridSpacing = Activator.getDefault().getPreferenceStore().getInt(DiagramPreferences.GRID_SPACING);
+
+		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(gridSpacing, gridSpacing));
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editparts.AbstractGraphicalEditPart#getAdapter(java.lang
+	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#getAdapter(java.lang
 	 * .Class)
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(final Class key) {
 		if (key == SnapToHelper.class) {
-			List<SnapToGrid> snapStrategies = new ArrayList<SnapToGrid>();
-			Boolean val = Activator.getDefault().getPreferenceStore()
-					.getBoolean(DiagramPreferences.SNAP_TO_GRID);
+			List<SnapToGrid> snapStrategies = new ArrayList<>();
+			Boolean val = Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SNAP_TO_GRID);
 			if (val != null && val.booleanValue()) {
 				snapStrategies.add(new SnapToGrid(this));
 			}
 
-			if (snapStrategies.size() == 0) {
+			if (snapStrategies.isEmpty()) {
 				return null;
 			}
 			if (snapStrategies.size() == 1) {

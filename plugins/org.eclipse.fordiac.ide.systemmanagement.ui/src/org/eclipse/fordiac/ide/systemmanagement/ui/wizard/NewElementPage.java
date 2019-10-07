@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2013, 2015 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -121,8 +122,7 @@ public abstract class NewElementPage extends WizardPage {
 		l.setText(Messages.NewElementPage_ParentSystemLabel);
 		l.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		treeViewer = new TreeViewer(parent); // , SWT.MULTI | SWT.H_SCROLL |
-		// SWT.V_SCROLL);
+		treeViewer = new TreeViewer(parent); 
 		treeViewer.setContentProvider(new SystemContentProvider());
 		treeViewer.setLabelProvider(new SystemLabelProvider());
 
@@ -178,8 +178,9 @@ public abstract class NewElementPage extends WizardPage {
 	 * @param template
 	 */
 	public void setFileName(String template) {
-		if (this.text != null)
+		if (this.text != null) {
 			this.text.setText(template);
+		}
 	}
 
 	/**

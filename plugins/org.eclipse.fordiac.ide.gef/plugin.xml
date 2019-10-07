@@ -3,6 +3,24 @@
 <plugin>
    <extension-point id="ConnectionRouterProvider" name="ConnectionRouterProvider" schema="schema/ConnectionRouterProvider.exsd"/>
    <extension-point id="ChildrenProvider" name="ChildrenProvider" schema="schema/ChildrenProvider.exsd"/>
+    <extension point="org.eclipse.ui.themes">
+        <themeElementCategory
+            id="org.eclipse.fordiac.ide.themeCategory"
+            label="4diac IDE">
+            <description>
+                The theme settings for 4diac IDE.
+            </description>
+        </themeElementCategory>
+        <fontDefinition
+                label="Diagram Font"
+                defaultsTo="org.eclipse.jface.textfont"
+                categoryId="org.eclipse.fordiac.ide.themeCategory"
+                id="org.eclipse.fordiac.ide.preferences.diagramFontDefinition">
+            <description>
+                Font to be used in all 4diac IDE graphical editors and diagrams
+            </description>
+        </fontDefinition>
+    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page

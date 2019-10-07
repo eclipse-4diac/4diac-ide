@@ -2,10 +2,11 @@
  * Copyright (c) 2016 Profactor GbmH, fortiss GmbH,  
  * 				 2018 Johannes Kepler University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl 
@@ -19,6 +20,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.systemconfiguration.Activator;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
@@ -28,9 +30,9 @@ import org.eclipse.swt.dnd.DND;
 public class SysConfTemplateTransferDropTargetListener extends
 		TemplateTransferDropTargetListener {
 
-	AutomationSystem system;
+	private AutomationSystem system;
 	
-	private class SysConfTemplateCreationFactory implements CreationFactory {
+	private static class SysConfTemplateCreationFactory implements CreationFactory {
 
 		/** The type template. */
 		private final Object typeTemplate;
@@ -109,12 +111,12 @@ public class SysConfTemplateTransferDropTargetListener extends
 		}else if(template instanceof TemplateCreationFactory){
 			return super.getFactory(template);
 		}else {
-			System.out.println("Type not in list: " + template.getClass().getName()); //$NON-NLS-1$
+			Activator.getDefault().logError("Type not in list: " + template.getClass().getName()); //$NON-NLS-1$
 		}
 		return null;
 	}
 	
-	private boolean isSysConfEditorType(Object template) {
+	private static boolean isSysConfEditorType(Object template) {
 		return (template instanceof DeviceTypePaletteEntry) 
 				|| (template instanceof ResourceTypeEntry)
 				|| (template instanceof SegmentTypePaletteEntry);

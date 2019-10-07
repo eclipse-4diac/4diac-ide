@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2012 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
@@ -28,7 +29,7 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 public class SystemConfEditPartFactory  extends Abstract4diacEditPartFactory {
 
 	/**Editparts that have gradient fill require a zoom manger to correctly scale the pattern when zoomed*/
-	protected ZoomManager zoomManager;
+	private ZoomManager zoomManager;
 	
 	
 	public SystemConfEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {

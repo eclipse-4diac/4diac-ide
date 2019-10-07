@@ -7,7 +7,7 @@
             allowMultiple="false"
             category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.typemanagement.navigator.TypeNavigator"
-            icon="fordiacimage://ICON_TypeNavigator"
+            icon="fordiacimage://ICON_TYPE_NAVIGATOR"
             id="org.eclipse.fordiac.ide.typemanagement.navigator.view"
             name="Type Navigator">
       </view>
@@ -18,7 +18,7 @@
             class="org.eclipse.ui.editors.text.TextEditor"
             contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
             extensions="dev"
-            icon="fordiacimage://ICON_Device"
+            icon="fordiacimage://ICON_DEVICE"
             id="org.eclipse.fordiac.ide.fbtypeeditor.editors.DeviceTypeEditor"
             name="Device Type Editor">
       </editor>
@@ -26,7 +26,7 @@
             class="org.eclipse.ui.editors.text.TextEditor"
             contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
             extensions="res"
-            icon="fordiacimage://ICON_Resource"
+            icon="fordiacimage://ICON_RESOURCE"
             id="org.eclipse.fordiac.ide.fbtypeeditor.editors.ResourceTypeEditor"
             name="Resource Type Editor">
       </editor>
@@ -34,7 +34,7 @@
             class="org.eclipse.ui.editors.text.TextEditor"
             contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
             extensions="seg"
-            icon="fordiacimage://ICON_Segment"
+            icon="fordiacimage://ICON_SEGMENT"
             id="org.eclipse.fordiac.ide.fbtypeeditor.editors.SegmentTypeEditor"
             name="Segment Type Editor">
       </editor>
@@ -484,4 +484,19 @@
              </triggerPoints>             
       </navigatorContent>
       </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencePage"
+            id="org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencePage"
+            name="Type Managament Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.typemanagement.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>

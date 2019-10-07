@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2010 - 2014 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -32,18 +33,16 @@ public class FordiacMarkersView extends MarkerSupportView {
 	@Override
 	public void createPartControl(Composite parent) {
 		// TODO find a better way, as super.createPartControl normally is
-		// restricted for access;
+		// restricted for access
 		super.createPartControl(parent);
 		Object provider = getSite().getSelectionProvider();
 		if (provider instanceof StructuredViewer) {
 
-			new OpenAndLinkWithEditorHelper(
-					(StructuredViewer)provider) {
+			new OpenAndLinkWithEditorHelper((StructuredViewer) provider) {
 				/*
 				 * (non-Javadoc)
 				 * 
-				 * @see
-				 * org.eclipse.ui.OpenAndLinkWithEditorHelper#activate(org.eclipse
+				 * @see org.eclipse.ui.OpenAndLinkWithEditorHelper#activate(org.eclipse
 				 * .jface.viewers.ISelection )
 				 */
 				@Override
@@ -60,9 +59,8 @@ public class FordiacMarkersView extends MarkerSupportView {
 				/*
 				 * (non-Javadoc)
 				 * 
-				 * @see
-				 * org.eclipse.ui.OpenAndLinkWithEditorHelper#linkToEditor(org
-				 * .eclipse .jface.viewers .ISelection)
+				 * @see org.eclipse.ui.OpenAndLinkWithEditorHelper#linkToEditor(org .eclipse
+				 * .jface.viewers .ISelection)
 				 */
 				@Override
 				protected void linkToEditor(ISelection selection) {
@@ -72,9 +70,8 @@ public class FordiacMarkersView extends MarkerSupportView {
 				/*
 				 * (non-Javadoc)
 				 * 
-				 * @see
-				 * org.eclipse.ui.OpenAndLinkWithEditorHelper#open(org.eclipse
-				 * .jface .viewers.ISelection, boolean)
+				 * @see org.eclipse.ui.OpenAndLinkWithEditorHelper#open(org.eclipse .jface
+				 * .viewers.ISelection, boolean)
 				 */
 				@Override
 				protected void open(ISelection selection, boolean activate) {
@@ -84,7 +81,6 @@ public class FordiacMarkersView extends MarkerSupportView {
 		}
 	}
 
-	
 	/**
 	 * Open the selected markers
 	 */

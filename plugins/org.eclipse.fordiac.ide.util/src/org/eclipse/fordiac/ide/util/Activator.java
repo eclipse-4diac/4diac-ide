@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2014 Profactor GbmH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -12,8 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.util;
 
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
-import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -46,8 +46,6 @@ public class Activator extends Abstract4DIACUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		getPreferenceStore().setValue(PreferenceConstants.P_HIDE_EVENT_CON, false);
-		getPreferenceStore().setValue(PreferenceConstants.P_HIDE_DATA_CON, false);
 	}
 
 	/*

@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2010, 2015 Profactor GbmH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Gerd Kainz
@@ -32,15 +33,6 @@ public class DeploymentPerspective implements IPerspectiveFactory {
 		// empty constructor
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * 
-	 * 
-	 * 
-	 * @seeorg.eclipse.ui.IPerspectiveFactory#createInitialLayout(org.eclipse.ui.
-	 * IPageLayout)
-	 */
 	@Override
 	public void createInitialLayout(final IPageLayout factory) {
 		this.factory = factory;
@@ -56,11 +48,6 @@ public class DeploymentPerspective implements IPerspectiveFactory {
 	 * Adds the views.
 	 */
 	private void addViews() {
-
-		// IFolderLayout bottom = factory.createFolder("bottomLeft",
-		// //$NON-NLS-1$
-		// IPageLayout.BOTTOM, 0.75f, factory.getEditorArea());
-		// bottom.addView(IPageLayout.ID_PROP_SHEET); // NON-NLS-1
 		IFolderLayout topRight = factory.createFolder("topRight", //$NON-NLS-1$
 				IPageLayout.RIGHT, 0.5f, factory.getEditorArea());
 		topRight.addView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
@@ -77,7 +64,6 @@ public class DeploymentPerspective implements IPerspectiveFactory {
 				IPageLayout.BOTTOM, 0.75f, "topLeft"); //$NON-NLS-1$
 		bottomLeft.addView("org.eclipse.fordiac.ide.runtime.views.RuntimeLauncherView"); //$NON-NLS-1$
 	}
-	
 
 	/**
 	 * Adds the action sets.

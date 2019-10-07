@@ -1,24 +1,25 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2012, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Keppler University Linz
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl 
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - removed editor check from canUndo 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.ui.IEditorPart;
 
 /**
  * The Class SegmentSetConstraintCommand.
@@ -37,26 +38,13 @@ public class SegmentSetConstraintCommand extends Command {
 	/** The request. */
 	private final ChangeBoundsRequest request;
 
-	/** The editor. */
-	private IEditorPart editor;
-
 	private final Segment segment;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#canUndo()
-	 */
-	@Override
-	public boolean canUndo() {
-		return editor.equals(Abstract4DIACUIPlugin.getCurrentActiveEditor());
-
-	}
 
 	/**
 	 * Instantiates a new segment set constraint command.
 	 */
-	public SegmentSetConstraintCommand(final Segment segment, final Rectangle newBounds, final ChangeBoundsRequest request) {
+	public SegmentSetConstraintCommand(final Segment segment, final Rectangle newBounds,
+			final ChangeBoundsRequest request) {
 		setLabel(MOVE_LABEL);
 		this.newBounds = newBounds;
 		this.segment = segment;
@@ -85,7 +73,6 @@ public class SegmentSetConstraintCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
 		oldBounds = new Rectangle(segment.getX(), segment.getY(), segment.getWidth(), -1);
 		redo();
 	}
@@ -109,9 +96,9 @@ public class SegmentSetConstraintCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		 segment.setWidth(oldBounds.width);
-		 segment.setX(oldBounds.x);
-		 segment.setY(oldBounds.y);
+		segment.setWidth(oldBounds.width);
+		segment.setX(oldBounds.x);
+		segment.setY(oldBounds.y);
 	}
 
 }

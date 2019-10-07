@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -32,7 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
@@ -48,10 +49,10 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEditorPart {
 
-	protected CompositeFBType fbType;
-	protected CommandStack commandStack;
-	protected Palette palette;
-	protected EContentAdapter adapter = new EContentAdapter() {
+	private CompositeFBType fbType;
+	private CommandStack commandStack;
+	private Palette palette;
+	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
@@ -175,7 +176,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 		}
 
 		setPartName(Messages.CompositeNetworkEditor_LABEL_CompositeEditor);
-		setTitleImage(FordiacImage.ICON_FBNetwork.getImage());
+		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
 
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
 	}

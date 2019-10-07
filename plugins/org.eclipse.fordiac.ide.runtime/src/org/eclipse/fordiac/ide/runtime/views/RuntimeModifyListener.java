@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2013 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Martijn Rooker, Gerhard Ebenhofer, Alois Zoitl
@@ -30,8 +31,8 @@ import org.eclipse.swt.events.ModifyListener;
  */
 public class RuntimeModifyListener implements ModifyListener {
 
-	protected IRuntimeLauncher launcher;
-	protected String name;
+	private IRuntimeLauncher launcher;
+	private String name;
 	
 	/**
 	 * Instantiates a new runtime modify listener.
@@ -49,6 +50,14 @@ public class RuntimeModifyListener implements ModifyListener {
 	 */
 	@Override
 	public void modifyText(ModifyEvent e) {		
+	}
+	
+	public IRuntimeLauncher getLauncher() {
+		return launcher;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 }

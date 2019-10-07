@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
@@ -26,6 +27,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECAction <em>EC Action</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getOutTransitions <em>Out Transitions</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getInTransitions <em>In Transitions</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC <em>ECC</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECState()
@@ -36,6 +38,7 @@ public interface ECState extends INamedElement, PositionableElement {
 	/**
 	 * Returns the value of the '<em><b>EC Action</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ECAction}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState <em>EC State</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>EC Action</em>' containment reference list isn't clear,
@@ -44,7 +47,8 @@ public interface ECState extends INamedElement, PositionableElement {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>EC Action</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECState_ECAction()
-	 * @model containment="true"
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState
+	 * @model opposite="eCState" containment="true"
 	 *        extendedMetaData="kind='element' name='ECAction' namespace='##targetNamespace'"
 	 * @generated
 	 */
@@ -90,9 +94,32 @@ public interface ECState extends INamedElement, PositionableElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);'"
 	 * @generated
 	 */
 	boolean isStartState();
+
+	/**
+	 * Returns the value of the '<em><b>ECC</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECState <em>EC State</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>ECC</em>' container reference.
+	 * @see #setECC(ECC)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECState_ECC()
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC#getECState
+	 * @model opposite="eCState" transient="false"
+	 * @generated
+	 */
+	ECC getECC();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC <em>ECC</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>ECC</em>' container reference.
+	 * @see #getECC()
+	 * @generated
+	 */
+	void setECC(ECC value);
 
 } // ECState

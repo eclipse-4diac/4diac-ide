@@ -2,10 +2,11 @@
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
  * * 
- * * All rights reserved. This program and the accompanying materials
- * * are made available under the terms of the Eclipse Public License v1.0
- * * which accompanies this distribution, and is available at
- * * http://www.eclipse.org/legal/epl-v10.html
+ * * This program and the accompanying materials are made available under the
+ * * terms of the Eclipse Public License 2.0 which is available at
+ * * http://www.eclipse.org/legal/epl-2.0.
+ * *
+ * * SPDX-License-Identifier: EPL-2.0
  * *
  * * Contributors:
  * *   Gerhard Ebenhofer, Alois Zoitl
@@ -300,13 +301,22 @@ public interface DevResponsePackage extends EPackage {
 	int RESPONSE__ENDPOINTLIST = 4;
 
 	/**
+	 * The feature id for the '<em><b>Connection</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESPONSE__CONNECTION = 5;
+
+	/**
 	 * The number of structural features of the '<em>Response</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESPONSE_FEATURE_COUNT = 5;
+	int RESPONSE_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl <em>Watches</em>}' class.
@@ -659,6 +669,17 @@ public interface DevResponsePackage extends EPackage {
 	EReference getResponse_Endpointlist();
 
 	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getConnection <em>Connection</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Connection</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getConnection()
+	 * @see #getResponse()
+	 * @generated
+	 */
+	EReference getResponse_Connection();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Watches <em>Watches</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -952,6 +973,14 @@ public interface DevResponsePackage extends EPackage {
 		 * @generated
 		 */
 		EReference RESPONSE__ENDPOINTLIST = eINSTANCE.getResponse_Endpointlist();
+
+		/**
+		 * The meta object literal for the '<em><b>Connection</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESPONSE__CONNECTION = eINSTANCE.getResponse_Connection();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl <em>Watches</em>}' class.

@@ -1,9 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2016 Profactor GmbH, fortiss GmbH
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -11,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
-import org.eclipse.draw2d.ActionEvent;
-import org.eclipse.draw2d.ActionListener;
 import org.eclipse.draw2d.Button;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -37,9 +36,7 @@ public class TestEventEditPart extends TestEditPart implements
 	 */
 
 	protected void registerTriggerElement() {
-		// if (isVariable()) {
 		TestingManager.getInstance().addTriggerElement(getModel());
-		// }
 	}
 	
 	@Override
@@ -48,8 +45,8 @@ public class TestEventEditPart extends TestEditPart implements
 
 	@Override
 	protected void updatePos() {
-		if(null != parentPart){
-			Rectangle bounds = parentPart.getFigure().getBounds();
+		if(null != getParentPart()){
+			Rectangle bounds = getParentPart().getFigure().getBounds();
 			int x = 0;
 			if (isInput()) {
 	
@@ -74,14 +71,7 @@ public class TestEventEditPart extends TestEditPart implements
 	@Override
 	protected IFigure createFigureForModel() {
 		Button bt = new Button(getModel().getInterfaceElement().getName());
-		bt.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				getModel().sendEvent();
-				// TestingManager.getInstance().sendEvent(getCastedModel());
-			}
-		});
+		bt.addActionListener(e -> getModel().sendEvent());
 		return bt;
 	}
 

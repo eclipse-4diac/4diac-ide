@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, AIT, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Matthias Plasch, Filip Andren, Alois Zoitl, Monika Wenger
@@ -39,15 +40,15 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public class FlattenSubAppCommand extends Command {
-	final SubApp subapp;
-	final FBNetwork parent;
-	List<FBNetworkElement> elements = new ArrayList<>();
-	List<EventConnection> transferEventConnections = new ArrayList<>();
-	List<DataConnection> transferDataConnections = new ArrayList<>();
-	List<AdapterConnection> transferAdapterConnections = new ArrayList<>();
-	CompoundCommand deleteCommands = new CompoundCommand();
-	CompoundCommand createCommands = new CompoundCommand();
-	CompoundCommand mappCommands = new CompoundCommand();
+	private final SubApp subapp;
+	private final FBNetwork parent;
+	private List<FBNetworkElement> elements = new ArrayList<>();
+	private List<EventConnection> transferEventConnections = new ArrayList<>();
+	private List<DataConnection> transferDataConnections = new ArrayList<>();
+	private List<AdapterConnection> transferAdapterConnections = new ArrayList<>();
+	private CompoundCommand deleteCommands = new CompoundCommand();
+	private CompoundCommand createCommands = new CompoundCommand();
+	private CompoundCommand mappCommands = new CompoundCommand();
 
 	public FlattenSubAppCommand(SubApp subapp) {
 		super(Messages.FlattenSubAppCommand_LABEL_FlattenSubAppCommand);

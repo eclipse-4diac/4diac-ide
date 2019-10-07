@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -146,7 +147,6 @@ public interface PaletteEntry extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if(null != eContainer()){\n  return (PaletteGroup)eContainer();\n}\nreturn null;'"
 	 * @generated
 	 */
 	PaletteGroup getGroup();
@@ -155,7 +155,6 @@ public interface PaletteEntry extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return getFile().getProjectRelativePath().toOSString();'"
 	 * @generated
 	 */
 	String getProjectRelativeTypePath();

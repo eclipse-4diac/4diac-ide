@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
@@ -51,7 +52,6 @@ public interface ConfigurableObject extends INamedElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String" typeDataType="org.eclipse.emf.ecore.xml.type.String" valueDataType="org.eclipse.emf.ecore.xml.type.String" commentDataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);'"
 	 * @generated
 	 */
 	void setAttribute(String attributeName, String type, String value, String comment);
@@ -60,7 +60,6 @@ public interface ConfigurableObject extends INamedElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);'"
 	 * @generated
 	 */
 	Attribute getAttribute(String attributeName);
@@ -69,7 +68,6 @@ public interface ConfigurableObject extends INamedElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);'"
 	 * @generated
 	 */
 	String getAttributeValue(String attributeName);

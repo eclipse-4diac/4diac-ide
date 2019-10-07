@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Michael Hofmann, Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
@@ -24,10 +25,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionFBParameter;
 import org.eclipse.fordiac.ide.util.dnd.TransferDataSelectionOfFb;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -105,11 +106,11 @@ public class ListFBCreateCommand extends FBCreateCommand {
 							List<PaletteEntry> fbTypes = system.getPalette().getTypeEntries(element.getFbTypeName());
 							if (!fbTypes.isEmpty() && fbTypes.get(0) instanceof FBTypePaletteEntry) {
 								element.setTypePaletteEntry(((FBTypePaletteEntry) fbTypes.get(0)));
-								ListFBCreateCommand.this.paletteEntry = element.getTypePaletteEntry();
+								ListFBCreateCommand.this.setPaletteEntry(element.getTypePaletteEntry());
 								ListFBCreateCommand.super.execute();
 
 								for (TransferDataSelectionFBParameter fbParametert : element.getFbParameters()) {
-									IInterfaceElement fbInterfaceElement = ListFBCreateCommand.this.element.getInterfaceElement(fbParametert.getName());
+									IInterfaceElement fbInterfaceElement = ListFBCreateCommand.this.getElement().getInterfaceElement(fbParametert.getName());
 									if (fbInterfaceElement instanceof VarDeclaration){
 										Value val = ((VarDeclaration)fbInterfaceElement).getValue();
 										val.setValue(fbParametert.getValue());
@@ -155,7 +156,7 @@ public class ListFBCreateCommand extends FBCreateCommand {
 					@Override
 					public void execute(Object res) {
 						if (res instanceof FBTypePaletteEntry) {
-							ListFBCreateCommand.this.paletteEntry = ((FBTypePaletteEntry) res);
+							ListFBCreateCommand.this.setPaletteEntry((FBTypePaletteEntry) res);
 							ListFBCreateCommand.super.execute();
 						}
 					}
@@ -178,11 +179,4 @@ public class ListFBCreateCommand extends FBCreateCommand {
 
 	}
 
-	@Override
-	public boolean canUndo() {
-		if (editor != null) {
-			return super.canUndo();
-		}
-		return false;
-	}
 }

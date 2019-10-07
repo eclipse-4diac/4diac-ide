@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Monika Wenger, Alois Zoitl
@@ -27,24 +28,24 @@ public class FBTypeInfoSection extends CompilableTypeInfoSection {
 
 	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if(part instanceof FBTypeEditor){
-			return ((FBTypeEditor)part).getCommandStack();
+		if (part instanceof FBTypeEditor) {
+			return ((FBTypeEditor) part).getCommandStack();
 		}
-		if(part instanceof ContentOutline){
-			return ((FBTypeContentOutline) ((ContentOutline)part).getCurrentPage()).getCommandStack();
+		if (part instanceof ContentOutline) {
+			return ((FBTypeContentOutline) ((ContentOutline) part).getCurrentPage()).getCommandStack();
 		}
 		return null;
 	}
 
 	@Override
 	protected LibraryElement getInputType(Object input) {
-		if(input instanceof FBTypeEditPart){
-			return ((FBTypeEditPart) input).getModel();	
+		if (input instanceof FBTypeEditPart) {
+			return ((FBTypeEditPart) input).getModel();
 		}
-		if(input instanceof FBTypeRootEditPart){
-				return ((FBTypeRootEditPart) input).getCastedFBTypeModel();
+		if (input instanceof FBTypeRootEditPart) {
+			return ((FBTypeRootEditPart) input).getModel();
 		}
-		if(input instanceof PropertiesItemProvider){
+		if (input instanceof PropertiesItemProvider) {
 			return (LibraryElement) ((PropertiesItemProvider) input).getTarget();
 		}
 		return null;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="1.10.3.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="1.11.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.eclipse.fordiac.ide.images/images/dialog.png"/>
@@ -16,7 +16,7 @@
    <launcherArgs>
       <programArgs>-nl en
       </programArgs>
-      <vmArgs>-Declipse.buildId=1.10.3
+      <vmArgs>-Declipse.buildId=1.11.0
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
@@ -25,8 +25,7 @@
    <windowImages i16="/org.eclipse.fordiac.ide/icons/fordiac16.png" i32="/org.eclipse.fordiac.ide/icons/fordiac32.png" i48="/org.eclipse.fordiac.ide/icons/fordiac48.png" i256="/org.eclipse.fordiac.ide/icons/fordiac256.png"/>
 
    <splash
-      location="org.eclipse.fordiac.ide"
-      startupProgressRect="248,306,239,4" />
+      location="org.eclipse.fordiac.ide" />
    <launcher name="4diac-ide">
       <linux icon="/icons/fordiac.xpm"/>
       <macosx icon="/icons/fordiac.icns"/>
@@ -41,10 +40,8 @@
    <vm>
       <linux include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</linux>
       <macos include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</macos>
-      <solaris include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</solaris>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
    </vm>
-
 
    <plugins>
       <plugin id="com.google.guava"/>
@@ -114,14 +111,6 @@
       <plugin id="org.eclipse.e4.ui.workbench.renderers.swt"/>
       <plugin id="org.eclipse.e4.ui.workbench.swt"/>
       <plugin id="org.eclipse.e4.ui.workbench3"/>
-      <plugin id="org.eclipse.ecf"/>
-      <plugin id="org.eclipse.ecf.filetransfer"/>
-      <plugin id="org.eclipse.ecf.identity"/>
-      <plugin id="org.eclipse.ecf.provider.filetransfer"/>
-      <plugin id="org.eclipse.ecf.provider.filetransfer.httpclient4"/>
-      <plugin id="org.eclipse.ecf.provider.filetransfer.httpclient4.ssl" fragment="true"/>
-      <plugin id="org.eclipse.ecf.provider.filetransfer.ssl" fragment="true"/>
-      <plugin id="org.eclipse.ecf.ssl" fragment="true"/>
       <plugin id="org.eclipse.emf.common"/>
       <plugin id="org.eclipse.emf.common.ui"/>
       <plugin id="org.eclipse.emf.ecore"/>
@@ -264,11 +253,9 @@
       <feature id="org.eclipse.ecf.core.feature"/>
       <feature id="org.eclipse.ecf.core.ssl.feature"/>
       <feature id="org.eclipse.ecf.filetransfer.feature"/>
-      <feature id="org.eclipse.ecf.filetransfer.httpclient4.feature"/>
-      <feature id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature"/>
+      <feature id="org.eclipse.ecf.filetransfer.httpclient45.feature"/>
       <feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
       <feature id="org.eclipse.xtext.ui"/>
-      <feature id="org.eclipse.epp.logging.aeri.feature"/>
       <feature id="org.eclipse.emf.databinding"/>
       <feature id="org.eclipse.xtext.redist"/>
       <feature id="org.eclipse.fordiac.ide.deployment.feature"/>
@@ -285,9 +272,12 @@
    </features>
 
    <configurations>
-      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
-      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
-      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="3" />
+      <plugin id="org.apache.felix.scr" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
    </configurations>
 
    <preferencesInfo>

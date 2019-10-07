@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -39,7 +40,7 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 		setConnectable(true);
 	}
 
-	protected DirectEditManager manager;
+	private DirectEditManager manager;
 
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
@@ -62,9 +63,7 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof CompositeInternalInterfaceEditPart) {
-					ChangeNameCommand cmd = new ChangeNameCommand(getModel(),
-							(String) request.getCellEditor().getValue());
-					return cmd;
+					return new ChangeNameCommand(getModel(), (String) request.getCellEditor().getValue());
 				}
 				return null;
 			}

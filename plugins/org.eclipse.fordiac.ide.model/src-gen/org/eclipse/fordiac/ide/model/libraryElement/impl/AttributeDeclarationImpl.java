@@ -1,16 +1,17 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *  *
- *  * All rights reserved. This program and the accompanying materials
- *  * are made available under the terms of the Eclipse Public License v1.0
- *  * which accompanies this distribution, and is available at
- *  * http://www.eclipse.org/legal/epl-v10.html
- *  *
- *  * Contributors:
- *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
- *  *     - initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
@@ -23,9 +24,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedElement;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Attribute Declaration</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Attribute Declaration</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -40,9 +40,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedElement;
  */
 public class AttributeDeclarationImpl extends I4DIACElementImpl implements AttributeDeclaration {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -50,9 +50,9 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	protected static final String NAME_EDEFAULT = "";
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -61,8 +61,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -71,8 +70,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -80,9 +78,9 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	protected String comment = COMMENT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -90,9 +88,9 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	protected static final BaseType1 TYPE_EDEFAULT = BaseType1.STRING;
 
 	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -101,8 +99,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 
 	/**
 	 * The default value of the '{@link #getInitialValue() <em>Initial Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getInitialValue()
 	 * @generated
 	 * @ordered
@@ -111,8 +108,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 
 	/**
 	 * The cached value of the '{@link #getInitialValue() <em>Initial Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getInitialValue()
 	 * @generated
 	 * @ordered
@@ -120,8 +116,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	protected String initialValue = INITIAL_VALUE_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected AttributeDeclarationImpl() {
@@ -129,8 +124,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -139,8 +133,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -149,8 +142,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -162,8 +154,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -172,8 +163,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -185,8 +175,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -195,8 +184,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -208,8 +196,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -218,8 +205,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -231,8 +217,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -251,8 +236,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -275,8 +259,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -299,8 +282,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -319,8 +301,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -335,8 +316,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -351,8 +331,7 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -372,4 +351,4 @@ public class AttributeDeclarationImpl extends I4DIACElementImpl implements Attri
 		return result.toString();
 	}
 
-} //AttributeDeclarationImpl
+} // AttributeDeclarationImpl

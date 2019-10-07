@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Monika Wenger
@@ -25,7 +26,6 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementComma
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -38,12 +38,15 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected INamedElement getInputType(Object input) {
+	protected SubApp getInputType(Object input) {
 		if (input instanceof SubAppForFBNetworkEditPart) {
 			return ((SubAppForFBNetworkEditPart) input).getModel();
 		}
 		if (input instanceof UISubAppNetworkEditPart) {
 			return ((UISubAppNetworkEditPart) input).getSubApp();
+		}
+		if (input instanceof SubApp) {
+			return (SubApp) input;
 		}
 		return null;
 	}

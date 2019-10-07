@@ -1,9 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2018 fortiss GmbH, Johannes Kepler University
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
@@ -18,7 +19,7 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
 public interface DeploymentHelper {
 	
-	public static String getVariableValue(VarDeclaration varDecl, AutomationSystem system) {
+	static String getVariableValue(VarDeclaration varDecl, AutomationSystem system) {
 		Value value = varDecl.getValue();
 		if (null != value && null != value.getValue() && !"".equals(value.getValue())){ //$NON-NLS-1$
 			String val = value.getValue();
@@ -33,7 +34,7 @@ public interface DeploymentHelper {
 		return null;	
 	}
 	
-	public static String getMgrID(final Device dev) {
+	static String getMgrID(final Device dev) {
 		for(VarDeclaration varDecl : dev.getVarDeclarations()) {
 			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) { //$NON-NLS-1$
 				String val = DeploymentHelper.getVariableValue(varDecl, dev.getAutomationSystem());

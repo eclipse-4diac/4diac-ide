@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Register Service using HTTP" Name="RegisterServiceHTTP">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2018-09-21" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs/>
+    <EventOutputs/>
+    <InputVars/>
+    <OutputVars/>
+    <Sockets>
+      <AdapterDeclaration Comment="Register Service adapter" Name="registerService" Type="RegisterServiceAdp" x="-155.0" y="1810.0"/>
+    </Sockets>
+  </InterfaceList>
+  <FBNetwork>
+    <FB Comment="" Name="Register" Type="CLIENT_1_2" x="10115.0" y="700.0"/>
+    <FB Comment="" Name="Unregister" Type="CLIENT_1_2" x="10090.0" y="2800.0"/>
+    <FB Comment="" Name="InitFlagReg" Type="E_SR" x="7410.0" y="695.0"/>
+    <FB Comment="" Name="E_PERMIT" Type="E_PERMIT" x="9100.0" y="300.0"/>
+    <FB Comment="" Name="CreateRegisterID" Type="APPEND_STRING_3" x="3400.0" y="900.0">
+      <Parameter Name="IN_1" Value="STRING#http["/>
+      <Parameter Name="IN_3" Value="STRING#/register; POST; application/json]"/>
+    </FB>
+    <FB Comment="" Name="F_STRING_TO_WSTRING" Type="F_STRING_TO_WSTRING" x="4600.0" y="900.0"/>
+    <FB Comment="" Name="E_PERMIT_1" Type="E_PERMIT" x="9100.0" y="2100.0"/>
+    <FB Comment="" Name="InitFlagUnReg" Type="E_SR" x="7400.0" y="2400.0"/>
+    <FB Comment="" Name="CreateUnRegisterID" Type="APPEND_STRING_3" x="3400.0" y="3000.0">
+      <Parameter Name="IN_1" Value="STRING#http["/>
+      <Parameter Name="IN_3" Value="STRING#/remove; PUT; application/json]"/>
+    </FB>
+    <FB Comment="" Name="F_STRING_TO_WSTRING_1" Type="F_STRING_TO_WSTRING" x="4585.0" y="3000.0"/>
+    <FB Comment="" Name="ANYToJSON" Type="ANYToJSON" x="6000.0" y="1905.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="E_PERMIT.PERMIT" Source="InitFlagReg.Q" dx1="790.0"/>
+      <Connection Comment="" Destination="F_STRING_TO_WSTRING.IN" Source="CreateRegisterID.OUT"/>
+      <Connection Comment="" Destination="F_STRING_TO_WSTRING_1.IN" Source="CreateUnRegisterID.OUT"/>
+      <Connection Comment="" Destination="Unregister.ID" Source="F_STRING_TO_WSTRING_1.OUT"/>
+      <Connection Comment="" Destination="Unregister.QI" Source="InitFlagUnReg.Q" dx1="725.0"/>
+      <Connection Comment="" Destination="E_PERMIT_1.PERMIT" Source="InitFlagUnReg.Q" dx1="720.0"/>
+      <Connection Comment="" Destination="Register.QI" Source="InitFlagReg.Q" dx1="1220.0"/>
+      <Connection Comment="" Destination="Register.ID" Source="F_STRING_TO_WSTRING.OUT"/>
+      <Connection Comment="" Destination="Register.SD_1" Source="ANYToJSON.output" dx1="2355.0"/>
+      <Connection Comment="" Destination="Unregister.SD_1" Source="ANYToJSON.output" dx1="2355.0"/>
+      <Connection Comment="" Destination="ANYToJSON.input" Source="registerService.serviceRegistryEntry"/>
+      <Connection Comment="" Destination="CreateRegisterID.IN_2" Source="registerService.endpoint" dx1="755.0"/>
+      <Connection Comment="" Destination="CreateUnRegisterID.IN_2" Source="registerService.endpoint" dx1="765.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="F_STRING_TO_WSTRING.REQ" Source="CreateRegisterID.CNF"/>
+      <Connection Comment="" Destination="InitFlagReg.S" Source="F_STRING_TO_WSTRING.CNF" dx1="955.0"/>
+      <Connection Comment="" Destination="F_STRING_TO_WSTRING_1.REQ" Source="CreateUnRegisterID.CNF"/>
+      <Connection Comment="" Destination="InitFlagUnReg.S" Source="F_STRING_TO_WSTRING_1.CNF" dx1="1040.0"/>
+      <Connection Comment="" Destination="Unregister.INIT" Source="InitFlagUnReg.EO" dx1="1085.0"/>
+      <Connection Comment="" Destination="E_PERMIT_1.EI" Source="Unregister.INITO" dx1="60.0" dx2="60.0" dy="-1155.0"/>
+      <Connection Comment="" Destination="Unregister.REQ" Source="E_PERMIT_1.EO" dx1="290.0"/>
+      <Connection Comment="" Destination="InitFlagUnReg.R" Source="Unregister.CNF" dx1="350.0" dx2="290.0" dy="-1435.0"/>
+      <Connection Comment="" Destination="Register.INIT" Source="InitFlagReg.EO" dx1="1220.0"/>
+      <Connection Comment="" Destination="Register.REQ" Source="E_PERMIT.EO" dx1="290.0"/>
+      <Connection Comment="" Destination="E_PERMIT.EI" Source="Register.INITO" dx1="60.0" dx2="60.0" dy="-720.0"/>
+      <Connection Comment="" Destination="InitFlagReg.R" Source="Register.CNF" dx1="325.0" dx2="265.0" dy="-975.0"/>
+      <Connection Comment="" Destination="ANYToJSON.REQ" Source="F_STRING_TO_WSTRING.CNF" dx1="265.0"/>
+      <Connection Comment="" Destination="ANYToJSON.REQ" Source="F_STRING_TO_WSTRING_1.CNF" dx1="260.0"/>
+      <Connection Comment="" Destination="registerService.doneRegister" Source="Register.CNF" dx1="60.0" dx2="150.0" dy="-1690.0"/>
+      <Connection Comment="" Destination="registerService.doneUnregister" Source="Unregister.CNF" dx1="60.0" dx2="215.0" dy="970.0"/>
+      <Connection Comment="" Destination="CreateRegisterID.REQ" Source="registerService.registerService" dx1="1185.0"/>
+      <Connection Comment="" Destination="CreateUnRegisterID.REQ" Source="registerService.unregisterService" dx1="1185.0"/>
+    </EventConnections>
+  </FBNetwork>
+</FBType>

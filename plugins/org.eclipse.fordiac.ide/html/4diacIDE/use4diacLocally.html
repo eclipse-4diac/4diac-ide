@@ -1,13 +1,15 @@
 <!DOCTYPE html> 
 <!--
  Copyright (c) 2010 - 2017 TU Wien ACIN, fortiss GmbH
-               2018 Johannes Kepler University Linz
+               2018 - 2019 Johannes Kepler University Linz
                2018 - 2019 Andrea Zoitl
+               2019 - Jan Holzweber
   
- All rights reserved. This program and the accompanying materials
- are made available under the terms of the Eclipse Public License v1.0
- which accompanies this distribution, and is available at
- http://www.eclipse.org/legal/epl-v10.html
+ This program and the accompanying materials are made available under the
+ terms of the Eclipse Public License 2.0 which is available at
+ http://www.eclipse.org/legal/epl-2.0.
+
+ SPDX-License-Identifier: EPL-2.0
  
  Contributors:
    Carolyn Oates, Alois Zoitl, Monika Wenger, Milan Vathoopan,
@@ -15,6 +17,7 @@
      - initial API and implementation and/or initial documentation
    Andrea Zoitl - cleaning up tutorials for 1.10 release, updated ToC
    Bianca Wiesmayr - minor text corrections
+   Jan Holzweber - added tutorial Step 7
 -->
 
 <html lang="en">
@@ -37,6 +40,7 @@
       <li><a href="../../html/4diacIDE/createOwnTypes.html">Create Your own Function Block Types</a></li>
       <li><a href="../../html/4diacIDE/otherUseful.html">Other Basic Features</a></li>
       <li><a href="../../html/4diacIDE/advancedFeatures.html">Advanced Features</a></li>
+      <li><a href="../../html/4ddiacIDE/dynamicTypeLoader.html">Deploying new FBs with the Dynamic Type Loader</a></li>
     </ol>
     
     <p>In this tutorial you create a simple Blinking application. It's the "Hello World" of automation programs, so it teaches the key aspects and workflow of 4diac IDE. The application will run locally, so no connection to any PLC or external hardware is needed. The architecture is shown below.</p>
@@ -168,7 +172,7 @@
     <p>Mapping FBs means defining in which device each FBs will run. 
     All mapped FBs are changing their fill color to the device's color during the mapping process.</p>
 	
-    <p>Go to the Application created before, select the FBs you want to map by clicking left and draw a rectangle over it (in this case all of them), 
+    <p>Go to the Application created before, select the FBs you want to map by left-clicking or drawing a rectangle over it (in this case all of them), 
     <p><span class="menu4diac">right click &rarr; Map to ... &rarr; FORTE_PC &rarr; Blinky_RES</span></p>
 
     <img src="../../html/4diacIDE/img/Step1/mappingInAppEditor.png" alt="Mapping of Function Block Instances within the Application Editor" />

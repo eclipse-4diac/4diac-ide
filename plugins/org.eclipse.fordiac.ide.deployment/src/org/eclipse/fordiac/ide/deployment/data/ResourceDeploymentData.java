@@ -1,9 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2017, 2018 fortiss GmbH
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
@@ -33,7 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  */
 public class ResourceDeploymentData {
 	
-	public class ParameterData{
+	public static class ParameterData{
 		private String value;
 		private VarDeclaration var;
 		private String prefix;
@@ -58,13 +59,17 @@ public class ResourceDeploymentData {
 		}			
 	}
 	
-	public final Resource res;
+	private final Resource res;
 
 	private List<FBDeploymentData> fbs = new ArrayList<>();
 	
 	private List<ConnectionDeploymentData> connections = new ArrayList<>();
 	
 	private List<ParameterData> params = new ArrayList<>();
+	
+	public Resource getRes() {
+		return res;
+	}
 		
 	public List<FBDeploymentData> getFbs() {
 		return fbs;
@@ -136,9 +141,9 @@ public class ResourceDeploymentData {
 		return retVal;
 	}
 		
-	private class ConDeploymentDest{
-		final String prefix;
-		final IInterfaceElement destination;
+	private static class ConDeploymentDest{
+		private final String prefix;
+		private final IInterfaceElement destination;
 		
 		public ConDeploymentDest(String prefix, IInterfaceElement destination) {
 			super();

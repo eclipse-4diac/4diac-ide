@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2014 Profactor GbmH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -27,8 +28,6 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -50,9 +49,6 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 	/** The thumbnail. */
 	private Thumbnail thumbnail;
 
-	/** The dispose listener. */
-	private DisposeListener disposeListener;
-	
 	private GraphicalViewer graphicalViewer;
 
 	public DiagramOutlinePage(GraphicalViewer graphicalViewer) {
@@ -117,16 +113,12 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 			thumbnail.setSource(root
 					.getLayer(LayerConstants.PRINTABLE_LAYERS));
 			lws.setContents(thumbnail);
-			disposeListener = new DisposeListener() {
-				@Override
-				public void widgetDisposed(final DisposeEvent e) {
-					if (thumbnail != null) {
-						thumbnail.deactivate();
-						thumbnail = null;
-					}
+			getEditor().addDisposeListener(e -> {
+				if (thumbnail != null) {
+					thumbnail.deactivate();
+					thumbnail = null;
 				}
-			};
-			getEditor().addDisposeListener(disposeListener);
+			});
 		}
 	}
 
@@ -136,9 +128,9 @@ class DiagramOutlinePage extends org.eclipse.ui.part.Page implements
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
 	@Override
-	public Object getAdapter(@SuppressWarnings("rawtypes") final Class type) {
-		if (type == ZoomManager.class) {
-			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
+	public <T> T getAdapter(Class<T> adapter) {
+		if (adapter == ZoomManager.class) {
+			return adapter.cast(getGraphicalViewer().getProperty(ZoomManager.class.toString()));
 		}
 		return null;
 	}

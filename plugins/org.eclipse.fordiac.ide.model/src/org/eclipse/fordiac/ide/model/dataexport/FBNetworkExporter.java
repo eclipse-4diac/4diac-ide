@@ -1,21 +1,24 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2014, 2017 Profactor GmbH, fortiss GmbH
- * 				 2018 Johannes Keppler University
+ * 				 2018 - 2019 Johannes Keppler University, Linz
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl 
  *       - initial API and implementation and/or initial documentation
- *  Alois Zoitl - Refactored class hierarchy of xml exporters  
+ *   Alois Zoitl - Refactored class hierarchy of xml exporters  
+ *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -149,13 +152,13 @@ class FBNetworkExporter extends CommonElementExporter{
 		if(0 != connection.getDx1()) {
 			//only export connection routing information if not a straight line
 			connectionElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE,
-					reConvertCoordinate(connection.getDx1()).toString());
+					CoordinateConverter.INSTANCE.convertTo1499XML(connection.getDx1()));
 			if(0 != connection.getDx2()) {
 				//only export the second two if a five segment connection
 				connectionElement.setAttribute(LibraryElementTags.DX2_ATTRIBUTE,
-						reConvertCoordinate(connection.getDx2()).toString());
+						CoordinateConverter.INSTANCE.convertTo1499XML(connection.getDx2()));
 				connectionElement.setAttribute(LibraryElementTags.DY_ATTRIBUTE,
-						reConvertCoordinate(connection.getDy()).toString());
+						CoordinateConverter.INSTANCE.convertTo1499XML(connection.getDy()));
 			}
 		}
 	}

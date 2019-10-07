@@ -6,6 +6,7 @@ Export-Package: org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.gef.editparts,
  org.eclipse.fordiac.ide.gef.figures,
  org.eclipse.fordiac.ide.gef.handles,
+ org.eclipse.fordiac.ide.gef.listeners,
  org.eclipse.fordiac.ide.gef.policies,
  org.eclipse.fordiac.ide.gef.preferences,
  org.eclipse.fordiac.ide.gef.properties,
@@ -15,19 +16,18 @@ Export-Package: org.eclipse.fordiac.ide.gef,
 Require-Bundle: org.eclipse.gef,
  org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.fordiac.ide.ui.controls,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.ui.controls,
+ org.eclipse.fordiac.ide.ui;bundle-version="[1.11.0,2.0.0)",
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.emf.edit,
  org.eclipse.emf.ecore.edit,
  org.eclipse.fordiac.ide.model.edit
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.10.3.qualifier
+Bundle-Version: 1.11.0.qualifier
 Bundle-Name: Graphical Utilites (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.gef.Activator
 Bundle-ManifestVersion: 2

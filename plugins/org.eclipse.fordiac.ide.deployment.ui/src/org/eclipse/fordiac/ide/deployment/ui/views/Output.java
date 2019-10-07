@@ -2,10 +2,11 @@
  * Copyright (c) 2008, 2010 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  * 				 2018 Johannes Kepler University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -35,6 +36,7 @@ import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.ui.xml.XMLConfiguration;
 import org.eclipse.fordiac.ide.deployment.ui.xml.XMLPartitionScanner;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
+import org.eclipse.fordiac.ide.ui.providers.SourceViewerColorProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.text.DefaultInformationControl;
@@ -240,7 +242,10 @@ public class Output extends ViewPart implements IDeploymentListener {
 				0, 0)));
 		// this will draw the squigglies under the text
 		sv.addPainter(ap);
+		
+		SourceViewerColorProvider.initializeSourceViewerColors(sv);
 	}
+	
 
 	/**
 	 * The Class AnnotationHover.

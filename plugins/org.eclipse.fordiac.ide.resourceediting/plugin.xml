@@ -6,7 +6,7 @@
       <editor
             class="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor"
             contributorClass="org.eclipse.fordiac.ide.util.ZoomUndoRedoActionBarContributor"
-            icon="fordiacimage://ICON_Resource"
+            icon="fordiacimage://ICON_RESOURCE"
             id="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor"
             name="ResourceEditor">
       </editor>
@@ -15,7 +15,7 @@
          point="org.eclipse.fordiac.ide.util.openListener">
       <openListener
             class="org.eclipse.fordiac.ide.resourceediting.actions.OpenResourceEditorAction"
-            icon="fordiacimage://ICON_Resource"
+            icon="fordiacimage://ICON_RESOURCE"
             id="org.eclipse.fordiac.ide.resourceediting.actions.OpenResourceEditorAction"
             label="Resource">
       </openListener>
@@ -90,7 +90,7 @@
                id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar">
             <command
                   commandId="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
-                  icon="fordiacimage://ICON_Application"
+                  icon="fordiacimage://ICON_APPLICATION"
                   id="org.eclipse.fordiac.ide.resourceediting.toolbars.ShowFBInAppCommand"
                   tooltip="Show FB in Application">
             </command>
@@ -100,7 +100,7 @@
             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <command
                commandId="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
-               icon="fordiacimage://ICON_Application"
+               icon="fordiacimage://ICON_APPLICATION"
                tooltip="Show in Application Editor">
             <visibleWhen
                   checkEnabled="true">

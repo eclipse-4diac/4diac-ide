@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Monika Wenger
@@ -31,16 +32,17 @@ import org.eclipse.ui.views.contentoutline.ContentOutline;
 public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
 	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
-		return new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(fillTypeCombo()[0]), getType().getInterfaceList(), isInput, -1);
+		return new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(fillTypeCombo()[0]),
+				getType().getInterfaceList(), isInput, -1);
 	}
-	
+
 	@Override
 	protected INamedElement getInputType(Object input) {
-		if(input instanceof FBTypeEditPart){
-			return ((FBTypeEditPart) input).getModel();	
+		if (input instanceof FBTypeEditPart) {
+			return ((FBTypeEditPart) input).getModel();
 		}
-		if(input instanceof FBTypeRootEditPart){
-				return ((FBTypeRootEditPart) input).getCastedFBTypeModel();
+		if (input instanceof FBTypeRootEditPart) {
+			return ((FBTypeRootEditPart) input).getModel();
 		}
 		return null;
 	}
@@ -49,25 +51,25 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 	protected DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection) {
 		return new DeleteInterfaceCommand(selection);
 	}
-	
+
 	@Override
 	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput,
 			boolean moveUp) {
 		return new ChangeInterfaceOrderCommand(selection, isInput, moveUp);
 	}
-	
+
 	@Override
 	protected FBType getType() {
-		return (FBType)type;
+		return (FBType) type;
 	}
-	
+
 	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if(part instanceof FBTypeEditor){
-			return ((FBTypeEditor)part).getCommandStack();
+		if (part instanceof FBTypeEditor) {
+			return ((FBTypeEditor) part).getCommandStack();
 		}
-		if(part instanceof ContentOutline){
-			return ((FBTypeContentOutline) ((ContentOutline)part).getCurrentPage()).getCommandStack();
+		if (part instanceof ContentOutline) {
+			return ((FBTypeContentOutline) ((ContentOutline) part).getCurrentPage()).getCommandStack();
 		}
 		return null;
 	}

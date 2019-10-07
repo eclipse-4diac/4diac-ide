@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2013 - 2016 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -13,7 +14,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
 
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteGroup;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -33,16 +34,16 @@ public final class ECCPaletteFactory {
 
 	private static void fillPalette(final PaletteRoot palette) {
 		PaletteGroup eccGroup = new PaletteGroup(Messages.ECCPaletteFactory_LABEL_ECCGroup);
-		ImageDescriptor desc = FordiacImage.ICON_ECState.getImageDescriptor();
+		ImageDescriptor desc = FordiacImage.ICON_EC_STATE.getImageDescriptor();
 		CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(
 				Messages.ECCPaletteFactory_LABEL_State, Messages.ECCPaletteFactory_TOOLTIP_State,
 				new StateCreationFactory(), desc, desc);
 		eccGroup.add(combined);
-		desc = FordiacImage.ICON_ECAction.getImageDescriptor();
+		desc = FordiacImage.ICON_EC_ACTION.getImageDescriptor();
 		combined = new CombinedTemplateCreationEntry(Messages.ECCPaletteFactory_LABEL_Action,
 				Messages.ECCPaletteFactory_TOOLTIP_Action, new ActionCreationFactory(), desc, desc);
 		eccGroup.add(combined);
-		desc = FordiacImage.ICON_Algorithm.getImageDescriptor();
+		desc = FordiacImage.ICON_ALGORITHM.getImageDescriptor();
 		combined = new CombinedTemplateCreationEntry(Messages.ECCPaletteFactory_LABEL_STAlgorithm,
 				Messages.ECCPaletteFactory_TOOLTIP_STAlgorithm, new STAlgorithmCreationFactory(), desc, desc);
 		eccGroup.add(combined);

@@ -76,7 +76,6 @@
         <details key="kind" value="element"/>
         <details key="name" value="VarDeclaration"/>
         <details key="namespace" value="http://www.fordiac.org/61499/lib"/>
-        <details key="group" value="#group:0"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

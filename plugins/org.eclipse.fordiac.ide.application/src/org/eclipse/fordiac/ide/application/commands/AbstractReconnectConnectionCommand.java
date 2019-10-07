@@ -1,13 +1,16 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2017 fortiss GmbH
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * 				 2019 Johannes Keppler University Linz
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl, Monika Wenger
  *    - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
@@ -17,19 +20,16 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ReconnectRequest;
-import org.eclipse.ui.IEditorPart;
 
 public abstract class AbstractReconnectConnectionCommand extends Command {
-	protected final FBNetwork parent;
-	protected final ReconnectRequest request;
-	private IEditorPart editor;
-	protected DeleteConnectionCommand deleteConnectionCmd;
-	protected AbstractConnectionCreateCommand connectionCreateCmd;
+	private final FBNetwork parent;
+	private final ReconnectRequest request;
+	private DeleteConnectionCommand deleteConnectionCmd;
+	private AbstractConnectionCreateCommand connectionCreateCmd;
 
 	public AbstractReconnectConnectionCommand(String label, final ReconnectRequest request, final FBNetwork parent) {
 		super(label);
@@ -37,11 +37,14 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 		this.parent = parent;
 	}
 
-	@Override
-	public boolean canUndo() {
-		return editor.equals(Abstract4DIACUIPlugin.getCurrentActiveEditor());	
+	public ReconnectRequest getRequest() {
+		return request;
 	}
-	
+
+	protected FBNetwork getParent() {
+		return parent;
+	}
+
 	@Override
 	public boolean canExecute() {
 		EditPart source = null;
@@ -52,40 +55,40 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 		} else if (request.getType().equals(RequestConstants.REQ_RECONNECT_SOURCE)) {
 			source = request.getTarget();
 			target = request.getConnectionEditPart().getTarget();
-		}		
-		if((source instanceof InterfaceEditPart) && (target instanceof InterfaceEditPart)){
-			IInterfaceElement sourceIE = ((InterfaceEditPart)source).getModel();
-			IInterfaceElement targetIE = ((InterfaceEditPart)target).getModel();
+		}
+		if ((source instanceof InterfaceEditPart) && (target instanceof InterfaceEditPart)) {
+			IInterfaceElement sourceIE = ((InterfaceEditPart) source).getModel();
+			IInterfaceElement targetIE = ((InterfaceEditPart) target).getModel();
 			return checkSourceAndTarget(sourceIE, targetIE);
-		}	
+		}
 		return false;
 	}
-	
+
 	@Override
 	public void execute() {
-		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
 		Connection con = (Connection) request.getConnectionEditPart().getModel();
 		deleteConnectionCmd = new DeleteConnectionCommand(con);
-		connectionCreateCmd = createConnectionCreateCommand();
+		connectionCreateCmd = createConnectionCreateCommand(parent);
 
 		if (request.getType().equals(RequestConstants.REQ_RECONNECT_TARGET)) {
 			doReconnectTarget();
 		}
 		if (request.getType().equals(RequestConstants.REQ_RECONNECT_SOURCE)) {
 			doReconnectSource();
-		}	
-		
+		}
+
 		connectionCreateCmd.setArrangementConstraints(con.getDx1(), con.getDx2(), con.getDy());
-		
+
 		deleteConnectionCmd.execute();
 		connectionCreateCmd.execute();
 	}
 
 	protected void doReconnectSource() {
 		connectionCreateCmd.setSource(((InterfaceEditPart) request.getTarget()).getModel());
-		connectionCreateCmd.setDestination(((InterfaceEditPart) request.getConnectionEditPart().getTarget()).getModel());
+		connectionCreateCmd
+				.setDestination(((InterfaceEditPart) request.getConnectionEditPart().getTarget()).getModel());
 	}
-	
+
 	protected void doReconnectTarget() {
 		connectionCreateCmd.setSource(((InterfaceEditPart) request.getConnectionEditPart().getSource()).getModel());
 		connectionCreateCmd.setDestination(((InterfaceEditPart) request.getTarget()).getModel());
@@ -94,16 +97,16 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	@Override
 	public void redo() {
 		deleteConnectionCmd.redo();
-		connectionCreateCmd.redo();	
+		connectionCreateCmd.redo();
 	}
-	
+
 	@Override
 	public void undo() {
 		connectionCreateCmd.undo();
 		deleteConnectionCmd.undo();
 	}
-	
-	protected abstract AbstractConnectionCreateCommand createConnectionCreateCommand();
-	
-	protected abstract boolean checkSourceAndTarget(IInterfaceElement sourceIE, IInterfaceElement targetIE);	
+
+	protected abstract AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent);
+
+	protected abstract boolean checkSourceAndTarget(IInterfaceElement sourceIE, IInterfaceElement targetIE);
 }

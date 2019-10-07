@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2013 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Ingo Hegny, Alois Zoitl
@@ -49,7 +50,6 @@ import org.eclipse.fordiac.ide.gef.figures.GradientLabel;
 import org.eclipse.fordiac.ide.gef.figures.HorizontalLineFigure;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
-import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -105,7 +105,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (!isActive()) {
 			super.activate();
 			getCastedModel().eAdapters().add(adapter);
-			((ECC) getCastedModel().eContainer()).eAdapters().add(eccAdapter);
+			getCastedModel().getECC().eAdapters().add(eccAdapter);
 			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		}
 	}
@@ -116,16 +116,15 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 			super.deactivate();
 			getCastedModel().eAdapters().remove(adapter);
 
-			if (getCastedModel().eContainer() != null) {
-				((ECC) getCastedModel().eContainer()).eAdapters().remove(eccAdapter);
+			if (getCastedModel().getECC() != null) {
+				getCastedModel().getECC().eAdapters().remove(eccAdapter);
 			}
 			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		}
 	}
 
-	public class StateBorder extends LineBorder {
+	public static class StateBorder extends LineBorder {
 		private boolean initialState;
-		private Rectangle tempRect2;
 
 		public boolean isInitialState() {
 			return initialState;
@@ -165,7 +164,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 			graphics.drawRectangle(tempRect);
 			if (initialState) {
-				tempRect2 = new Rectangle(tempRect);
+				Rectangle tempRect2 = new Rectangle(tempRect);
 				tempRect2.shrink(3, 3);
 				graphics.drawRectangle(tempRect2);
 			}
@@ -290,9 +289,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	@Override
 	protected IFigure createFigure() {
-		ECStateFigure figure = new ECStateFigure();
-		// updateBorder();
-		return figure;
+		return new ECStateFigure();
 	}
 
 	@Override
@@ -406,12 +403,9 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	}
 
 	@Override
-	public DirectEditManager getManager() {
-		if (manager == null) {
-			Label l = getNameLabel();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
-					new IdentifierVerifyListener());
-		}
-		return manager;
+	protected DirectEditManager createDirectEditManager() {		 
+		Label l = getNameLabel();
+		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
+				new IdentifierVerifyListener());
 	}
 }

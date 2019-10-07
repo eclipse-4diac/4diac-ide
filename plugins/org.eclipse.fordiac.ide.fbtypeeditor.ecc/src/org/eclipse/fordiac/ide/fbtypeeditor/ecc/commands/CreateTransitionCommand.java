@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2013, 2016, 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -138,7 +139,7 @@ public class CreateTransitionCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return (null != source && null != destination && null != source.eContainer());
+		return (null != source && null != destination && null != source.getECC());
 	}
 
 	/*
@@ -148,7 +149,7 @@ public class CreateTransitionCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		parent = (ECC) source.eContainer();
+		parent = source.getECC();
 
 		transition = LibraryElementFactory.eINSTANCE.createECTransition();
 

@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: FORTE Export for FORTE V1.0.x New Generation (Incubation)
+Bundle-SymbolicName: org.eclipse.fordiac.ide.export.forte_ng;singleton:=true
+Bundle-Version: 1.11.0.qualifier
+Bundle-Vendor: Eclipse 4diac
+Automatic-Module-Name: org.eclipse.fordiac.ide.export.forte_ng
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Activator: org.eclipse.fordiac.ide.export.forte_ng.Activator
+Require-Bundle: com.google.guava,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.xtext,
+ org.eclipse.fordiac.ide.export,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.structuredtext,
+ org.eclipse.fordiac.ide.ui

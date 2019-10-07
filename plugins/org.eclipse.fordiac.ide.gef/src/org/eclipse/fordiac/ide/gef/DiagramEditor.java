@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Waldemar Eisenmenger
@@ -21,10 +22,11 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.ui.controls.editors.I4diacModelEditor;
+import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -82,14 +84,12 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 * Instantiates a new diagram editor.
 	 */
 	public DiagramEditor() {
-		// setEditDomain(new DefaultEditDomain(this));
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util
 	 * .EventObject)
 	 */
 	@Override
@@ -105,18 +105,15 @@ public abstract class DiagramEditor extends GraphicalEditor
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		for (Iterator iter = getGraphicalViewer().getRootEditPart()
-				.getChildren().iterator(); iter.hasNext();) {
+		for (Iterator iter = getGraphicalViewer().getRootEditPart().getChildren().iterator(); iter.hasNext();) {
 			EditPart ep = (EditPart) iter.next();
 			ep.refresh();
 		}
 	}
 
-	private RulerComposite rulerComp;
-
 	@Override
 	protected void createGraphicalViewer(final Composite parent) {
-		rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
+		RulerComposite rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
 
 		GraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
 		viewer.createControl(rulerComp);
@@ -127,16 +124,17 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
 	}
-	
-	/** Create the root edit part used in this diagram editor. 
-	 * Editors which need special behavior should override this function
+
+	/**
+	 * Create the root edit part used in this diagram editor. Editors which need
+	 * special behavior should override this function
 	 * 
 	 * @return the new root edit part
 	 */
-	protected ScalableFreeformRootEditPart createRootEditPart(){
+	protected ScalableFreeformRootEditPart createRootEditPart() {
 		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -148,7 +146,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer) getGraphicalViewer();
 
 		ScalableFreeformRootEditPart root = createRootEditPart();
-		
+
 		ContextMenuProvider cmp = getContextMenuProvider(viewer, root.getZoomManager());
 		if (cmp != null) {
 			viewer.setContextMenu(cmp);
@@ -163,14 +161,13 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 		viewer.setKeyHandler(viewerKeyHandler);
 
-		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1),
-				MouseWheelZoomHandler.SINGLETON);
+		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
 	}
 
-	public ZoomManager getZoomManger(){		
-		return ((ScalableFreeformRootEditPart)(getGraphicalViewer().getRootEditPart())).getZoomManager();
+	public ZoomManager getZoomManger() {
+		return ((ScalableFreeformRootEditPart) (getGraphicalViewer().getRootEditPart())).getZoomManager();
 	}
-	
+
 	/**
 	 * Gets the edits the part factory.
 	 * 
@@ -181,15 +178,12 @@ public abstract class DiagramEditor extends GraphicalEditor
 	/**
 	 * Gets the context menu provider.
 	 * 
-	 * @param viewer
-	 *            the viewer
-	 * @param root
-	 *            the root
+	 * @param viewer the viewer
+	 * @param root   the root
 	 * 
 	 * @return the context menu provider
 	 */
-	protected abstract ContextMenuProvider getContextMenuProvider(
-			ScrollingGraphicalViewer viewer,
+	protected abstract ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer,
 			ZoomManager zoomManager);
 
 	/**
@@ -206,7 +200,6 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 */
 	@Override
 	protected void initializeGraphicalViewer() {
-		// super.initializeGraphicalViewer();
 		GraphicalViewer viewer = getGraphicalViewer();
 		viewer.setContents(getModel());
 		// listen for dropped parts
@@ -215,9 +208,8 @@ public abstract class DiagramEditor extends GraphicalEditor
 			viewer.addDropTargetListener(createTransferDropTargetListener());
 		}
 		// enable drag from palette
-		getGraphicalViewer().addDropTargetListener(
-				new TemplateTransferDropTargetListener(getGraphicalViewer()));
-		viewer.addDropTargetListener(new ParameterDropTargetListener(getGraphicalViewer()));		
+		getGraphicalViewer().addDropTargetListener(new TemplateTransferDropTargetListener(getGraphicalViewer()));
+		viewer.addDropTargetListener(new ParameterDropTargetListener(getGraphicalViewer()));
 	}
 
 	/*
@@ -227,8 +219,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 * org.eclipse.ui.IEditorInput)
 	 */
 	@Override
-	public void init(final IEditorSite site, final IEditorInput input)
-			throws PartInitException {
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setModel(input);
 		super.init(site, input);
 	}
@@ -236,8 +227,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 	/**
 	 * Sets the model.
 	 * 
-	 * @param input
-	 *            the new model
+	 * @param input the new model
 	 */
 	protected void setModel(final IEditorInput input) {
 		setEditDomain(new DefaultEditDomain(this));
@@ -309,17 +299,13 @@ public abstract class DiagramEditor extends GraphicalEditor
 	protected KeyHandler getCommonKeyHandler() {
 		if (sharedKeyHandler == null) {
 			sharedKeyHandler = new KeyHandler();
-			sharedKeyHandler
-					.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
-							getActionRegistry().getAction(
-									ActionFactory.DELETE.getId()));
-			sharedKeyHandler.put(
-					KeyStroke.getPressed(SWT.F2, 0),
-					getActionRegistry().getAction(
-							GEFActionConstants.DIRECT_EDIT));
+			sharedKeyHandler.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
+					getActionRegistry().getAction(ActionFactory.DELETE.getId()));
+			sharedKeyHandler.put(KeyStroke.getPressed(SWT.F2, 0),
+					getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
 			sharedKeyHandler.put(/* CTRL + '=' */
-			KeyStroke.getPressed('+', 0x3d, SWT.CTRL), getActionRegistry()
-					.getAction(GEFActionConstants.ZOOM_IN));
+					KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
+					getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
 
 		}
 		return sharedKeyHandler;
@@ -328,16 +314,14 @@ public abstract class DiagramEditor extends GraphicalEditor
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(
 	 * java.lang.Class)
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(final Class type) {
 		if (type == ZoomManager.class) {
-			return getGraphicalViewer().getProperty(
-					ZoomManager.class.toString());
+			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
 		}
 		if (type == IContentOutlinePage.class) {
 			outlinePage = new DiagramOutlinePage(getGraphicalViewer());
@@ -372,38 +356,38 @@ public abstract class DiagramEditor extends GraphicalEditor
 		action = new DirectEditAction((IWorkbenchPart) this);
 		getActionRegistry().registerAction(action);
 		getSelectionActions().add(action.getId());
-		
-		action = new AlignmentAction((IWorkbenchPart) this,
-				PositionConstants.LEFT);
+
+		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.LEFT);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction((IWorkbenchPart) this,
-				PositionConstants.RIGHT);
+		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.RIGHT);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction((IWorkbenchPart) this,
-				PositionConstants.TOP);
+		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.TOP);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction((IWorkbenchPart) this,
-				PositionConstants.BOTTOM);
+		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.BOTTOM);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction((IWorkbenchPart) this,
-				PositionConstants.CENTER);
+		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.CENTER);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction((IWorkbenchPart) this,
-				PositionConstants.MIDDLE);
+		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.MIDDLE);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
 		super.createActions();
+
+		// remove the default print action and register our own one
+		registry.removeAction(registry.getAction(ActionFactory.PRINT.getId()));
+		action = new PrintPreviewAction(getGraphicalViewer());
+		registry.registerAction(action);
+		getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.PRINT.getId(), action);
 
 	}
 
@@ -448,7 +432,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 	public GraphicalViewer getViewer() {
 		return getGraphicalViewer();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 

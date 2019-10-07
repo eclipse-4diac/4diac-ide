@@ -5,7 +5,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="org.eclipse.fordiac.ide.deployment.ui.perspectives.DeploymentPerspective"
-            icon="fordiacimage://ICON_DeploymentPerspective"
+            icon="fordiacimage://ICON_DEPLOYMENT_PERSPECTIVE"
             id="org.eclipse.fordiac.ide.deployment.ui.perspectives.DeploymentPerspective"
             name="Deployment">
       </perspective>
@@ -15,21 +15,21 @@
       <view
             category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView"
-            icon="fordiacimage://ICON_DownloadSelectionTreeView"
+            icon="fordiacimage://ICON_DOWNLOAD_SELECTION_TREE_VIEW"
             id="org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView"
             name="Deployment Selection">
       </view>
       <view
             category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.deployment.ui.views.Output"
-            icon="fordiacimage://ICON_DeploymentConsole"
+            icon="fordiacimage://ICON_DEPLOYMENT_CONSOLE"
             id="org.eclipse.fordiac.ide.deployment.ui.views.Output"
             name="Deployment Console">
       </view>
       <view
             category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.deployment.ui.views.Mode"
-            icon="fordiacimage://ICON_Download"
+            icon="fordiacimage://ICON_DOWNLOAD"
             id="org.eclipse.fordiac.ide.deployment.ui.views.Mode"
             name="Download">
       </view>
@@ -114,7 +114,7 @@
          allPopups="false"
          locationURI="popup:org.eclipse.ui.popup.any?after=additions">
       <command commandId="org.eclipse.fordiac.ide.deployment.ui.deploy"
-            icon="fordiacimage://ICON_Download">  
+            icon="fordiacimage://ICON_DOWNLOAD">  
          <visibleWhen
                checkEnabled="false">
             <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.DeployDefinition" />
@@ -123,7 +123,7 @@
       <separator name="deviceInteractions" visible="true"/>
       <command
             commandId="org.eclipse.fordiac.ide.deployment.ui.cleanDevice"
-            icon="fordiacimage://ICON_ClearDevice"
+            icon="fordiacimage://ICON_CLEAR_DEVICE"
             label="Delete all Resources"
             style="push">
          <visibleWhen
@@ -142,7 +142,7 @@
       </command>
 	   <command
 	         commandId="org.eclipse.fordiac.ide.deployment.ui.killDevice"
-	         icon="fordiacimage://ICON_KillDevice"
+	         icon="fordiacimage://ICON_KILL_DEVICE"
 	         label="Kill Device"
 	         style="push">
 	      <visibleWhen
@@ -152,7 +152,7 @@
 	   </command>
 	   <command
 	         commandId="org.eclipse.fordiac.ide.deployment.ui.deleteResource"
-	         icon="fordiacimage://ICON_DeleteResource"
+	         icon="fordiacimage://ICON_DELETE_RESOURCE"
 	         label="Delete Resource"
 	         style="push">
 	      <visibleWhen
@@ -190,14 +190,14 @@
 	<menuContribution
             locationURI="menu:org.eclipse.ui.run?after=additions">
         <command commandId="org.eclipse.fordiac.ide.deployment.ui.deploy"
-            icon="fordiacimage://ICON_Download"/>
+            icon="fordiacimage://ICON_DOWNLOAD"/>
         <separator
                   name="deviceInteractions"
                   visible="true">
             </separator>    
 		<command
 		    commandId="org.eclipse.fordiac.ide.deployment.ui.cleanDevice"
-		    icon="fordiacimage://ICON_ClearDevice"
+		    icon="fordiacimage://ICON_CLEAR_DEVICE"
 		    label="Delete all Resources"
 		    style="push">
 		</command>
@@ -208,13 +208,13 @@
 		</command>
 		<command
 			 commandId="org.eclipse.fordiac.ide.deployment.ui.killDevice"
-			 icon="fordiacimage://ICON_KillDevice"
+			 icon="fordiacimage://ICON_KILL_DEVICE"
 			 label="Kill Device"
 			 style="push">
 		</command>
 		<command
 			 commandId="org.eclipse.fordiac.ide.deployment.ui.deleteResource"
-			 icon="fordiacimage://ICON_DeleteResource"
+			 icon="fordiacimage://ICON_DELETE_RESOURCE"
 			 label="Delete Resource"
 			 style="push">
 		</command>

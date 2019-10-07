@@ -2,10 +2,11 @@
  * Copyright (c) 2009, - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH.
  * 			2018, TU Wie/ACIN
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Martin Melik Merkumians, Monika Wenger, 
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -29,10 +29,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.export.ExportFilter;
-import org.eclipse.fordiac.ide.export.utils.ExportException;
-import org.eclipse.fordiac.ide.export.utils.IExportFilter;
-import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.export.ExportException;
+import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -63,11 +61,11 @@ import org.w3c.dom.NodeList;
  * export functionality to create *.cpp and *.h files in the FORTE V1.0.x format
  * 
  */
-public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilter {
+public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFilter {
 
-	private static final String C_BASIC_FB = "CBasicFB";
+	private static final String C_BASIC_FB = "CBasicFB"; //$NON-NLS-1$
 
-	protected class AdapterInstance {
+	protected static class AdapterInstance {
 		public AdapterInstance(String name, String adapterType, boolean isPlug,
 				org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType adapterFBType) {
 			this.name = name;
@@ -106,15 +104,15 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 
 	private int numCompFBParams = 0;
 
-	protected int eventInCount;
+	private int eventInCount;
 
-	protected int eventOutCount;
+	private int eventOutCount;
 
-	protected int adapterCount;
+	private int adapterCount;
 
-	protected List<AdapterInstance> adapters = new ArrayList<>();
+	private List<AdapterInstance> adapters = new ArrayList<>();
 
-	protected List<String> eventInputs = new ArrayList<>();
+	private List<String> eventInputs = new ArrayList<>();
 
 	private StructuredTextEmitter structuredTextEmitter = new StructuredTextEmitter(this);
 
@@ -145,10 +143,6 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 
 	public void addInfoMsg(final String msg) {
 		forteEmitterInfos.add(" - " + libraryType.getName() + ": " + msg); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
-	public Map<String, VarDefinition> getVars() {
-		return vars;
 	}
 
 	public List<AdapterInstance> getAdapters() {
@@ -378,7 +372,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 	protected void exportFBConstructor() {
 		pwH.println("\npublic:"); //$NON-NLS-1$
 
-		if (baseClass.equals(C_BASIC_FB) | baseClass.equals("CSimpleFB")) { // $NON-NLS-1$
+		if (baseClass.equals(C_BASIC_FB) || baseClass.equals("CSimpleFB")) { // $NON-NLS-1$
 			pwH.println("  FORTE_" //$NON-NLS-1$
 					+ name + "(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : "); //$NON-NLS-1$
 			pwH.print("       " //$NON-NLS-1$
@@ -561,12 +555,12 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 				for (int j = 0; j < childs.getLength(); j++) {
 					org.w3c.dom.Node childnode = childs.item(j);
 					if (childnode instanceof Element) {
-						Element childel = (Element) childnode;
+						Element childElem = (Element) childnode;
 						pwCPP.println(MessageFormat.format(
 								"  m_roObjectHandler.getFB(g_nStringId{0})->getDataInput(g_nStringId{1})->fromString(\"{2}\");", //$NON-NLS-1$
-								new Object[] { el.getAttribute("Name"), //$NON-NLS-1$
-										childel.getAttribute("Name"), //$NON-NLS-1$
-										childel.getAttribute("Value") })); //$NON-NLS-1$
+								el.getAttribute("Name"), //$NON-NLS-1$
+								childElem.getAttribute("Name"), //$NON-NLS-1$
+								childElem.getAttribute("Value"))); //$NON-NLS-1$
 					}
 				}
 			}
@@ -630,7 +624,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 		StringBuilder names = new StringBuilder();
 		StringBuilder withs = new StringBuilder();
 		StringBuilder withIndexes = new StringBuilder();
-		int withcount[] = new int[varNames.size()];
+		int[] withcount = new int[varNames.size()];
 		for (int i = 0; i < varNames.size(); ++i) {
 			withcount[i] = 0;
 		}
@@ -1009,15 +1003,8 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 	protected void exportDC() {
 	}
 
-	private AdapterFBType findAdapterType(final AdapterDeclaration paAdapter) {
-		DataType myDT = paAdapter.getType();
-		AdapterType myAT = null;
-		if (myDT instanceof AdapterType) {
-			myAT = (AdapterType) myDT;
-			return myAT.getAdapterFBType();
-		}
-
-		return null;
+	private static AdapterFBType findAdapterType(final AdapterDeclaration paAdapter) {
+		return paAdapter.getType().getAdapterFBType();
 	}
 
 	@Override
@@ -1056,8 +1043,9 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 							+ "::scm_astAdapterInstances[] = {"); //$NON-NLS-1$
 					for (int i = 0; i < adapters.size(); i++) {
 						AdapterInstance myAdapter = adapters.get(i);
-						if (i > 0)
+						if (i > 0) {
 							pwCPP.println(","); //$NON-NLS-1$
+						}
 						pwCPP.print("{g_nStringId" + myAdapter.getAdapterType() //$NON-NLS-1$
 								+ ", " + "g_nStringId" + myAdapter.getName() //$NON-NLS-1$ //$NON-NLS-2$
 								+ ", "); //$NON-NLS-1$
@@ -1377,12 +1365,12 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 						// if we are here the guard length is definitely
 						// not zero
 						// TODO: Check for adapter-event!
-						boolean AdapterEvent = false;
+						boolean adapterEvent = false;
 						StringTokenizer mySTok = new StringTokenizer(guard, "&", true); //$NON-NLS-1$
 						String myTestString = ""; //$NON-NLS-1$
 
 						// retrieve first element (adapter-events are
-						// given as first element of guarding condition;
+						// given as first element of guarding condition
 						// should be in events finally)
 						if (mySTok.hasMoreTokens()) {
 							myTestString = mySTok.nextToken();
@@ -1421,7 +1409,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 									}
 									if (null != myEv) {
 										alternativeEvent.append(myTest4Event).append("()"); //$NON-NLS-1$
-										AdapterEvent = true;
+										adapterEvent = true;
 										// remove separator "&" from
 										// token-list...
 										if (mySTok.hasMoreTokens()) {
@@ -1436,7 +1424,7 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 							}
 
 						}
-						if (AdapterEvent) {
+						if (adapterEvent) {
 							if (alternativeGuard.length() != 0) {
 								pwCPP.print("("); //$NON-NLS-1$
 							}
@@ -1462,13 +1450,13 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 		}
 	}
 
-	private AdapterFBType checkIfAdapter(final String Name) {
+	private AdapterFBType checkIfAdapter(final String name) {
 
 		Iterator<AdapterInstance> myIter = adapters.iterator();
 		AdapterInstance myAdapterInfo;
 		while (myIter.hasNext()) {
 			myAdapterInfo = myIter.next();
-			if (myAdapterInfo.getName().equals(Name)) {
+			if (myAdapterInfo.getName().equals(name)) {
 				return myAdapterInfo.getAdapterFBType();
 			}
 		}
@@ -1556,16 +1544,6 @@ public class ForteExportFilter1_0_x extends ExportFilter implements IExportFilte
 		}
 
 		return -1;
-	}
-
-	@Override
-	public String getExportFilterDescription() {
-		return "FORTE Export for FORTE 1.x"; //$NON-NLS-1$
-	}
-
-	@Override
-	public String getExportFilterName() {
-		return "FORTE 1.x"; //$NON-NLS-1$
 	}
 
 	private void exportInitialValues() {

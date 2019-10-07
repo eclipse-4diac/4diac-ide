@@ -1,14 +1,19 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2018  Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Kepler University, Linz
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Martijn Rooker,Gerhard Ebenhofer, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - moved coordinate system resolution conversion to dedicated class,
+ *   			   moved connection value parsing to fbnetwork importer where it 
+ *                 belongs
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -25,15 +30,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.VarInitialization;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -101,12 +103,12 @@ public class ImportUtils {
 	 */
 	public static List<VarDeclaration> parseInputVariables(final Node node) throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
-		ArrayList<VarDeclaration> varDecl = new ArrayList<VarDeclaration>();
+		ArrayList<VarDeclaration> varDecl = new ArrayList<>();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
 			if (n.getNodeName().equals(LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
 				VarDeclaration var = parseVarDeclaration(n);
-				((IInterfaceElement) var).setIsInput(true);
+				var.setIsInput(true);
 				varDecl.add(var);
 			}
 		}
@@ -126,12 +128,12 @@ public class ImportUtils {
 	 */
 	public static List<VarDeclaration> parseOutputVariables(final Node node) throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
-		ArrayList<VarDeclaration> varDecl = new ArrayList<VarDeclaration>();
+		ArrayList<VarDeclaration> varDecl = new ArrayList<>();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node n = childNodes.item(i);
 			if (n.getNodeName().equals(LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
 				VarDeclaration var = parseVarDeclaration(n);
-				((IInterfaceElement) var).setIsInput(false);
+				var.setIsInput(false);
 				varDecl.add(var);
 			}
 		}
@@ -218,33 +220,6 @@ public class ImportUtils {
 			e.setComment(comment.getNodeValue());
 		}
 		return e;
-	}
-
-	/**
-	 * Convert coordinate.
-	 * 
-	 * @param value
-	 *            the value
-	 * 
-	 * @return the int value
-	 */
-	public static int convertCoordinate(final double value) {
-		double lineHeight = 20;  //TODO make this resolution dependant and font size dependant
-		return (int)(lineHeight / 100.0 * value);
-	}
-
-	/**
-	 * returns an valid dx, dy integer value
-	 * 
-	 * @param value
-	 * @return if value is valid the converted int of that otherwise 0
-	 */
-	public static int parseConnectionValue(String value) {
-		try {
-			return ImportUtils.convertCoordinate(Double.parseDouble(value));
-		} catch (Exception ex) {
-			return 0;
-		}
 	}
 
 	public static AdapterEvent createAdapterEvent(Event event, AdapterDeclaration a) {

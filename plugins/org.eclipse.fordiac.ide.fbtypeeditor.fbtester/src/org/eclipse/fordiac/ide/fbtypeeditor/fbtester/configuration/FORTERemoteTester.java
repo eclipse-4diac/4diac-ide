@@ -2,10 +2,11 @@
  * Copyright (c) 2012 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 							 Johannes Kepler University	   	
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Ingo Hegny, Alois Zoitl, Monika Wenger
@@ -47,7 +48,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -95,10 +96,10 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 		this.running = running;
 		if(running){
 			run.setText("Stop Testing FB");
-			run.setImage(FordiacImage.ICON_Stop.getImage());
+			run.setImage(FordiacImage.ICON_STOP.getImage());
 		}else{
 			run.setText("Start Testing FB");
-			run.setImage(FordiacImage.ICON_Start.getImage());
+			run.setImage(FordiacImage.ICON_START.getImage());
 		}
 	}
 
@@ -244,7 +245,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 			this.socket = socket;
 		}
 
-		int i = 0;
+		private int i = 0;
 
 		@Override
 		public void run() {

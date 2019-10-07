@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2014 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl, Monika Wenger
@@ -17,7 +18,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 /**
  * The Class ChangeCompilerInfoHeader.
  */
-public class ChangeCompilerInfoHeaderCommand extends ChangeComplierInfoCommand {
+public class ChangeCompilerInfoHeaderCommand extends ChangeCompilerInfoCommand {
 	
 	/** The new ApplicationDomain value. */
 	private String newHeader;
@@ -37,7 +38,7 @@ public class ChangeCompilerInfoHeaderCommand extends ChangeComplierInfoCommand {
 	 */
 	@Override
 	public void execute() {
-		oldHeader = compilerInfo.getHeader();
+		oldHeader = getCompilerInfo().getHeader();
 		redo();
 	}
 
@@ -48,7 +49,7 @@ public class ChangeCompilerInfoHeaderCommand extends ChangeComplierInfoCommand {
 	 */
 	@Override
 	public void undo() {
-		compilerInfo.setHeader(oldHeader);
+		getCompilerInfo().setHeader(oldHeader);
 	}
 
 	/*
@@ -58,7 +59,7 @@ public class ChangeCompilerInfoHeaderCommand extends ChangeComplierInfoCommand {
 	 */
 	@Override
 	public void redo() {
-		compilerInfo.setHeader(newHeader);
+		getCompilerInfo().setHeader(newHeader);
 	}
 
 }

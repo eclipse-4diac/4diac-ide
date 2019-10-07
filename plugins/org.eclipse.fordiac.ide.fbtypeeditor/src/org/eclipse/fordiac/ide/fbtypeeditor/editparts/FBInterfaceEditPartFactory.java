@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -26,12 +27,16 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 
     private Palette systemPalette;
-    protected ZoomManager zoomManager;
+    private ZoomManager zoomManager;
     
 	public FBInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette, ZoomManager zoomManager) {
 		super(editor);
 		this.systemPalette = systemPalette;
 		this.zoomManager = zoomManager;
+	}
+	
+	public ZoomManager getZoomManager() {
+		return zoomManager;
 	}
 	
 	@Override

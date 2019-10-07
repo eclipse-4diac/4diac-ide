@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Jose Cabral
@@ -20,7 +21,7 @@ public class OnlineCreateFBHandler extends AbstractOnlineFBHandler {
 
 	@Override
 	protected void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
-		executor.createFBInstance(new FBDeploymentData("", resFB), resource); //$NON-NLS-1$  //TODO correctly determine prefix
+		executor.createFBInstance(new FBDeploymentData("", getResFB()), getResource()); //$NON-NLS-1$  //TODO correctly determine prefix
 	}
 	
 	@Override	

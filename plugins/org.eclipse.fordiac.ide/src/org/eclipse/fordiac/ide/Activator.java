@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2012 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -16,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImageURLStreamHandlerService;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImageURLStreamHandlerService;
 import org.eclipse.jface.util.Policy;
 import org.eclipse.jface.util.StatusHandler;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -43,7 +44,7 @@ public class Activator extends AbstractUIPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
 	 * )
@@ -52,7 +53,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		FordiacImageURLStreamHandlerService.getInstance().register();
 		super.start(context);
-		
+
 		Version v = context.getBundle().getVersion();
 		String version = v.getMajor() + "." + v.getMinor() + "." + v.getMicro(); //$NON-NLS-1$ //$NON-NLS-2$
 		System.setProperty("org.eclipse.fordiac.ide.version", version); //$NON-NLS-1$
@@ -61,38 +62,34 @@ public class Activator extends AbstractUIPlugin {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm"); //$NON-NLS-1$
 			Date d = sdf.parse(qualifier);
-			SimpleDateFormat sdf_visu = new SimpleDateFormat("yyyy-MM-dd_HHmm"); //$NON-NLS-1$
-			qualifier = sdf_visu.format(d);
+			SimpleDateFormat sdfVisu = new SimpleDateFormat("yyyy-MM-dd_HHmm"); //$NON-NLS-1$
+			qualifier = sdfVisu.format(d);
 		} catch (Exception ex) {
 			// can be ignored
 		}
 
 		System.setProperty("org.eclipse.fordiac.ide.buildid", qualifier); //$NON-NLS-1$
-		System.out.println(version);
-		System.out.println(v.getQualifier());
-		
-		System.out.println("eclipse.buildId: " + System.getProperty("eclipse.buildId")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		plugin = this;
-		
+
 		disableJFaceErrorMessages();
 	}
 
-	private void disableJFaceErrorMessages() {
-		//set a special status handler which will do nothing here.
-		//this should then be correctly handled by automatic error reporting.
+	private static void disableJFaceErrorMessages() {
+		// set a special status handler which will do nothing here.
+		// this should then be correctly handled by automatic error reporting.
 		Policy.setStatusHandler(new StatusHandler() {
 			@Override
-			public void show(IStatus status, String title) {				
-				//do nothing
+			public void show(IStatus status, String title) {
+				// do nothing
 			}
 		});
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
 	 * )
@@ -105,7 +102,7 @@ public class Activator extends AbstractUIPlugin {
 
 	/**
 	 * Returns the shared instance.
-	 * 
+	 *
 	 * @return the shared instance
 	 */
 	public static Activator getDefault() {

@@ -8,7 +8,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage
 
 /**
  * Provides labels for a EObjects.
@@ -27,13 +27,13 @@ class StructuredTextLabelProvider extends DefaultEObjectLabelProvider {
 
 	def image(VarDeclaration decl) {
 		if(decl.eContainer instanceof BasicFBType && (decl.eContainer as BasicFBType).internalVars.contains(decl)) {
-			FordiacImage.ICON_Data.imageDescriptor
+			FordiacImage.ICON_DATA.imageDescriptor
 		}
 		else if(decl.isIsInput) {
-			FordiacImage.ICON_DataInput.imageDescriptor
+			FordiacImage.ICON_DATA_INPUT.imageDescriptor
 		}
 		else {
-			FordiacImage.ICON_DataOutput.imageDescriptor
+			FordiacImage.ICON_DATA_OUTPUT.imageDescriptor
 		}
 	}
 }

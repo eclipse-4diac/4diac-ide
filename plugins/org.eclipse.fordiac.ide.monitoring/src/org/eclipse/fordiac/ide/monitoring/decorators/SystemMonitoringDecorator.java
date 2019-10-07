@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2015, 2016 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl
@@ -14,7 +15,7 @@ package org.eclipse.fordiac.ide.monitoring.decorators;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelDecorator;
@@ -65,7 +66,7 @@ public class SystemMonitoringDecorator implements ILabelDecorator {
 	private Image getOverlayImage(Image image) {
 		if(null == overlayImage){
 			DecorationOverlayIcon icon = new DecorationOverlayIcon(image, 
-					FordiacImage.ICON_MonitoringDecorator.getImageDescriptor(), IDecoration.TOP_LEFT);
+					FordiacImage.ICON_MONITORING_DECORATOR.getImageDescriptor(), IDecoration.TOP_LEFT);
 			overlayImage = icon.createImage();
 		}
 		

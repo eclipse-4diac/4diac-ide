@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GbmH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl
@@ -28,7 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.DialogCellEditor;
@@ -61,14 +62,13 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 	
 	static void initSelectedProperties(Device device) {
-		ArrayList<VarDeclaration> selectedProperties = new ArrayList<VarDeclaration>();
+		List<VarDeclaration> selectedProperties = new ArrayList<>();
 		for (VarDeclaration varDecl : device.getVarDeclarations()) {
 			if (!varDecl.getName().equalsIgnoreCase("mgr_id")) { //$NON-NLS-1$
 				selectedProperties.add(varDecl);
 			}
 		}
-		DeploymentCoordinator.INSTANCE.setDeviceProperties(device,
-				selectedProperties);
+		DeploymentCoordinator.INSTANCE.setDeviceProperties(device, selectedProperties);
 	}
 	
 		
@@ -256,17 +256,17 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 		public Image getImage(final Object obj) {
 			String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
 			if (obj instanceof AutomationSystem) {
-				return FordiacImage.ICON_SystemConfiguration.getImage();
+				return FordiacImage.ICON_SYSTEM_CONFIGURATION.getImage();
 			}
 			if (obj instanceof Device) {
-				return FordiacImage.ICON_Device.getImage();
+				return FordiacImage.ICON_DEVICE.getImage();
 			}
 			if (obj instanceof Resource) {
 				Resource res = (Resource) obj;
 				if (res.isDeviceTypeResource()) {
-					return FordiacImage.ICON_FirmwareResource.getImage();
+					return FordiacImage.ICON_FIRMWARE_RESOURCE.getImage();
 				}
-				return FordiacImage.ICON_Resource.getImage();
+				return FordiacImage.ICON_RESOURCE.getImage();
 			}
 			return PlatformUI.getWorkbench().getSharedImages().getImage(imageKey);
 		}
@@ -290,16 +290,21 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
-			if (columnIndex == 0) {
+			switch (columnIndex) {
+			case 0:
 				return getText(element);
-			} else if (columnIndex == 1) {
+			case 1:
 				if (element instanceof Device) {
 					return DeploymentHelper.getMgrID((Device)element);
 				}
-			} else if (columnIndex == 2) {
+				break;
+			case 2:
 				if (element instanceof Device) {
 					return getSelectedString(element);
 				}
+				break;
+			default:
+				break;
 			}
 			return ""; //$NON-NLS-1$
 		}
@@ -330,13 +335,9 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 		setLabelProvider(new DownloadDecoratingLabelProvider(lp ,decorator));
 		
 		setCellModifier(new ICellModifier() {
-
 			@Override
 			public boolean canModify(final Object element, final String property) {
-				if (property.equals(DOWNLOAD_DEV_PROPERTIES) && element instanceof Device) {
-					return true;
-				}
-				return false;
+				return (property.equals(DOWNLOAD_DEV_PROPERTIES) && element instanceof Device);
 			}
 
 			@Override

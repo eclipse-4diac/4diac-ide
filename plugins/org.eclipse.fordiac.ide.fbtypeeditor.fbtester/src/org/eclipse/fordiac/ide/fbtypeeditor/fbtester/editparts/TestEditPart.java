@@ -1,9 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2017 Profactor GmbH, fortiss GmbH
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -29,10 +30,10 @@ import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.policies.SetTestValueEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -50,7 +51,11 @@ public class TestEditPart extends AbstractViewEditPart implements
 		SpecificLayerEditPart {
 
 	/** The parent part. */
-	protected org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart parentPart;
+	private org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart parentPart;
+	
+	public org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart getParentPart() {
+		return parentPart;
+	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -125,7 +130,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 	 * @return true, if is event
 	 */
 	public boolean isEvent() {
-		return getModel().getInterfaceElement() instanceof EventImpl;
+		return getModel().getInterfaceElement() instanceof Event;
 	}
 
 	/**
@@ -134,7 +139,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 	 * @return true, if is variable
 	 */
 	public boolean isVariable() {
-		return getModel().getInterfaceElement() instanceof VarDeclarationImpl;
+		return getModel().getInterfaceElement() instanceof VarDeclaration;
 	}
 
 	/** The oldx. */

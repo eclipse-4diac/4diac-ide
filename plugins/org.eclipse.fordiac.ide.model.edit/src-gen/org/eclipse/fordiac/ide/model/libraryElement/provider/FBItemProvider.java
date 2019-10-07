@@ -1,16 +1,17 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *  *
- *  * All rights reserved. This program and the accompanying materials
- *  * are made available under the terms of the Eclipse Public License v1.0
- *  * which accompanies this distribution, and is available at
- *  * http://www.eclipse.org/legal/epl-v10.html
- *  *
- *  * Contributors:
- *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
- *  *     - initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ *  Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
@@ -26,7 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.FB} object.
@@ -71,10 +72,10 @@ public class FBItemProvider
 	public Object getImage(Object object) {
 		FBType type = ((FB)object).getType();
 		if(type instanceof BasicFBType){
-			return overlayImage(object, FordiacImage.ICON_BasicFB.getImage());
+			return overlayImage(object, FordiacImage.ICON_BASIC_FB.getImage());
 		}
 		else if(type instanceof CompositeFBType){
-			return overlayImage(object, FordiacImage.ICON_CompositeFB.getImage());
+			return overlayImage(object, FordiacImage.ICON_COMPOSITE_FB.getImage());
 		}
 		else if(type instanceof ServiceInterfaceFBType){
 			return overlayImage(object, FordiacImage.ICON_SIFB.getImage());			

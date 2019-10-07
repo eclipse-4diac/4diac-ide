@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Martin Jobst
@@ -16,11 +17,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.export.ExportException;
+import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.ui.Activator;
 import org.eclipse.fordiac.ide.export.ui.Messages;
-import org.eclipse.fordiac.ide.export.utils.ExportException;
-import org.eclipse.fordiac.ide.export.utils.IExportFilter;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -86,8 +89,19 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	public boolean performFinish() {
 	   page.saveWidgetValues();	
 		
-	   final IExportFilter filter = page.getSelectedExportFilter();
-		
+		final IConfigurationElement conf;
+		final IExportFilter filter;
+		try {
+			conf = page.getSelectedExportFilter();
+			filter = (IExportFilter) conf.createExecutableExtension("class");
+		} catch (CoreException e) {
+			MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
+			msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
+			msg.open();
+			Activator.getDefault().logError(msg.getMessage(), e);
+			return true;
+		}
+
        IRunnableWithProgress op = new IRunnableWithProgress() {			
     	   
 			@SuppressWarnings("rawtypes")
@@ -99,7 +113,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 				String outputDirectory = page.getDirectory();	
 				SystemManager systemManager = SystemManager.INSTANCE;
 				
-				monitor.beginTask("Exporting selected types using exporter: " + filter.getExportFilterName(), 
+				monitor.beginTask("Exporting selected types using exporter: " + conf.getAttribute("name"),
 						resources.size());
 				
 				for (Object object : resources) {

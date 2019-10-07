@@ -2,10 +2,11 @@
  * Copyright (c) 2008, 2009, 2012, 2014, 2015 Profactor GmbH, fortiss GmbH,
  * 				 2018 Johannes Kepler University 
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -28,7 +29,7 @@ import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 /**
  * The Class RouterUtil.
  */
-public class RouterUtil {
+public final class RouterUtil {
 
 	/**
 	 * Gets the connection router.
@@ -79,6 +80,8 @@ public class RouterUtil {
 		return factory;
 	}
 	
-	
+	private RouterUtil() {
+		throw new UnsupportedOperationException("RouterUtil utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 	
 }

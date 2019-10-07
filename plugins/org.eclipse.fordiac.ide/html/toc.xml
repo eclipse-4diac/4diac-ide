@@ -3,10 +3,11 @@
  Copyright (c) 2014 - 2017 fortiss GmbH, University of Thessaloniki
                2018 - 2019 Andrea Zoitl
   
- All rights reserved. This program and the accompanying materials
- are made available under the terms of the Eclipse Public License v1.0
- which accompanies this distribution, and is available at
- http://www.eclipse.org/legal/epl-v10.html
+ This program and the accompanying materials are made available under the
+ terms of the Eclipse Public License 2.0 which is available at
+ http://www.eclipse.org/legal/epl-2.0.
+
+ SPDX-License-Identifier: EPL-2.0
  
  Contributors:
     Monika Wenger, Alois Zoitl, Giorgis Sfiris, Waldemar Eisenmenger, 
@@ -188,6 +189,16 @@
          </topic>
          <topic href="html/4diacIDE/advancedFeatures.html" label="Subapplications (NOT READY YET)">
          </topic>
+      </topic>
+      <topic href="html/4diacIDE/dynamicTypeLoader.html" label="Step 7 - Deploying new FBs with the Dynamic Type Loader">
+         <topic href="html/4diacIDE/dynamicTypeLoader.html#getCCompiler" label="Downloading the Compiler">
+         </topic>
+         <topic href="html/4diacIDE/dynamicTypeLoader.html#getLua" label="Downloading Lua">
+         </topic>
+         <topic href="html/4diacIDE/dynamicTypeLoader.html#CompileForte" label="Compiling FORTE with the LuaJit">
+         </topic>
+         <topic href="html/4diacIDE/dynamicTypeLoader.html#enableDTL" label="Enabling the Dynmic Type Loader">
+         </topic>
       </topic>  
     </topic>
 
@@ -241,6 +252,14 @@
       <topic href="html/communication/opc_ua.html#client" label="OPC UA Client">
       </topic>
     </topic>
+    <topic label="OPC UA from 4diac 1.11.0"  href="html/communication/opc_ua_version1.html">
+      <topic label="Build FORTE with OPC UA" href="html/communication/opc_ua_version1.html#build" />
+      <topic label="General Overview" href="html/communication/opc_ua_version1.html#general" />
+      <topic label="OPC UA Variables" href="html/communication/opc_ua_version1.html#variables" />
+      <topic label="OPC UA Methods" href="html/communication/opc_ua_version1.html#methods" />
+      <topic label="OPC UA Method Call" href="html/communication/opc_ua_version1.html#methodCall"/>
+      <topic label="OPC UA Subscription" href="html/communication/opc_ua_version1.html#subscription"/>
+    </topic>
  <topic href="html/communication/http.html" label="HTTP">
  </topic>
 	<topic href="html/communication/ros.html" label="ROS"/>
@@ -260,7 +279,8 @@
     </topic>
     <topic label="Modbus" href="html/communication/modbus.html"/>
     <topic label="OPC DA" href="html/communication/opc.html"/>
-    <topic label="openPOWERLINK" href="html/communication/openPOWERLINK.html"/>
+    <topic href="html/communication/openPOWERLINK.html" label="openPOWERLINK">
+    </topic>
     <topic href="html/communication/xqueries.html" label="Access BaseX Database with XQuery">
        <topic href="html/communication/xqueries.html#build" label="Build 4diac-rte to run an Application which sends XQueries">
        </topic>
@@ -268,6 +288,8 @@
        </topic>
        <topic href="html/communication/xqueries.html#application" label="Create an Application to send XQueries to BaseX">
        </topic>
+    </topic>
+    <topic href="html/communication/arrowhead.html" label="Arrowhead">
     </topic>
   </topic>  
 		
@@ -281,6 +303,7 @@
       <topic label="Building and Running 4DIAC-IDE from Source" href="html/development/building4diac.html#buildFromSource"> 
       </topic>
       <topic label="Building a Binary 4DIAC-IDE Package from Source" href="html/development/building4diac.html#buildBinary" /> 
+      <topic label="Updating 4diac IDE Target Platform" href="html/development/ideUpdateTargetPlatform.html" />
     </topic>
     <topic label="FORTE">
       <topic label="Structured Datatypes" href="html/development/forte_struct.html"/>

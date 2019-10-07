@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DataType SYSTEM "http://www.holobloc.com/xml/DataType.dtd" >
+<DataType Name="ArrowheadCloud" Comment="A cloud representation for the Arrowhead framework 4.0" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Jose Cabral" Date="2018-09-26" />
+  <ASN1Tag Class="APPLICATION" Number="1" />
+  <StructuredType >
+    <VarDeclaration Name="operator" Type="WSTRING" Comment="" />
+    <VarDeclaration Name="cloudName" Type="WSTRING" Comment="Name of the cloud" />
+    <VarDeclaration Name="address" Type="WSTRING" Comment="" />
+    <VarDeclaration Name="port" Type="DINT" Comment="" />
+    <VarDeclaration Name="gatekeeperServiceURI" Type="WSTRING" Comment="" />
+    <VarDeclaration Name="authenticationInfo" Type="WSTRING" Comment="" />
+	  <VarDeclaration Name="secure" Type="BOOL" Comment="" />
+  </StructuredType>
+</DataType>

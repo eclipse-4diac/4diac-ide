@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2011, 2014, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH 
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -19,7 +20,6 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  */
 public class ToolTipFigure extends Figure {
 	
-	protected VerticalLineCompartmentFigure line;
+	private final VerticalLineCompartmentFigure line;
 
 	/**
 	 * Instantiates a new tool tip figure.
@@ -64,6 +64,10 @@ public class ToolTipFigure extends Figure {
 		} else if (element instanceof VarDeclaration) {
 			addVarDefaultValue((VarDeclaration)element);
 		}
+	}
+	
+	public final VerticalLineCompartmentFigure getLine() {
+		return line;
 	}
 	
 	private void addWiths(Event element) {
@@ -109,8 +113,8 @@ public class ToolTipFigure extends Figure {
 					}
 				}
 			}
-		} else if(null != var.getFBNetworkElement() && var.getFBNetworkElement().getType() instanceof FBType){
-			return ((FBType)var.getFBNetworkElement().getType()).getInterfaceList().getVariable(var.getName());
+		} else if(null != var.getFBNetworkElement() && null != var.getFBNetworkElement().getType()){
+			return var.getFBNetworkElement().getType().getInterfaceList().getVariable(var.getName());
 		}
 		return null;
 	}

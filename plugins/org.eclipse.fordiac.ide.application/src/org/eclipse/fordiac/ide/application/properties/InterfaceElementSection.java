@@ -2,10 +2,11 @@
  * Copyright (c) 2016, 2017 fortiss GmbH
  * 				 2019 Johannes Kepler University Linz	
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Monika Wenger, Alois Zoitl
@@ -40,7 +41,6 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.properties.InterfaceElementSection {
 	private TreeViewer connectionsTree;
-	private Button delConnection;
 	private Group group;
 
 	@Override
@@ -64,9 +64,9 @@ public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.propert
 		connectionsTree.setContentProvider(new ConnectionContentProvider());
 		connectionsTree.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
 		connectionsTree.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
-		new AdapterFactoryTreeEditor(connectionsTree.getTree(), adapterFactory);
+		new AdapterFactoryTreeEditor(connectionsTree.getTree(), getAdapterFactory());
 
-		delConnection = getWidgetFactory().createButton(group, "", SWT.PUSH); //$NON-NLS-1$
+		Button delConnection = getWidgetFactory().createButton(group, "", SWT.PUSH); //$NON-NLS-1$
 		delConnection.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, false, true));
 		delConnection.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		delConnection.setToolTipText("delete Connection");
@@ -100,7 +100,7 @@ public class InterfaceElementSection extends org.eclipse.fordiac.ide.gef.propert
 		connectionsTree.setInput(null);
 	}
 
-	public class ConnectionContentProvider implements ITreeContentProvider {
+	private static class ConnectionContentProvider implements ITreeContentProvider {
 		private IInterfaceElement element;
 
 		@Override

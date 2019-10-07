@@ -1,14 +1,17 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Kepler University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
  *   - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - added diagram font preference 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -27,6 +30,7 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
+import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
@@ -37,8 +41,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
-import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -46,6 +50,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -57,9 +62,10 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	private Device referencedDevice;
 
+	private DiagramFontChangeListener fontChangeListener;
+
 	/** necessary that the gradient pattern can be scaled accordingly */
 	private final ZoomManager zoomManager;
-	
 
 	public ZoomManager getZoomManager() {
 		return zoomManager;
@@ -68,6 +74,11 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	public AbstractFBNElementEditPart(final ZoomManager zoomManager) {
 		super();
 		this.zoomManager = zoomManager;
+	}
+
+	@Override
+	public AbstractFBNetworkElementFigure getFigure() {
+		return (AbstractFBNetworkElementFigure) super.getFigure();
 	}
 
 	private EContentAdapter colorChangeListener = new EContentAdapter() {
@@ -85,7 +96,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				refreshToolTip(); //TODO add here checks that better define when the tooltip should be refreshed
+				refreshToolTip(); // TODO add here checks that better define when the tooltip should be refreshed
 				if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
 					updateDeviceListener();
 				}
@@ -99,10 +110,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 		@Override
 		public void notifyChanged(Notification notification) {
-			if (notification.getFeature() == LibraryElementPackage.eINSTANCE
-					.getI4DIACElement_Annotations()) {
+			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getI4DIACElement_Annotations()) {
 				refreshName();
-				
+
 			}
 		}
 
@@ -117,7 +127,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			referencedDevice = device;
 			if (referencedDevice != null) {
 				referencedDevice.eAdapters().add(colorChangeListener);
-			}			
+			}
 			backgroundColorChanged(getFigure());
 		}
 	}
@@ -129,6 +139,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		if (getModel() != null) {
 			getModel().eAdapters().add(annotationContentAdapter);
 		}
+		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
 	}
 
 	@Override
@@ -140,21 +151,29 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		if (getModel() != null) {
 			getModel().eAdapters().remove(annotationContentAdapter);
 		}
+		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
 	}
-	
+
+	private IPropertyChangeListener getFontChangeListener() {
+		if (null == fontChangeListener) {
+			fontChangeListener = new DiagramFontChangeListener(getFigure());
+		}
+		return fontChangeListener;
+	}
+
 	public boolean isOnlyThisOrNothingSelected() {
 		@SuppressWarnings("unchecked")
 		List<EditPart> selection = getViewer().getSelectedEditParts();
-		if(selection.size() > 1){
+		if (selection.size() > 1) {
 			return false;
-		} else if(selection.size() == 1){
+		} else if (selection.size() == 1) {
 			return selection.get(0) == this;
 		}
 		return true;
 	}
 
 	protected void refreshToolTip() {
-		getCastedFigure().refreshToolTips();
+		getFigure().refreshToolTips();
 	}
 
 	@Override
@@ -165,15 +184,14 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	@Override
 	protected void refreshName() {
 		super.refreshName();
-		getCastedFigure().refreshIcon();
+		getFigure().refreshIcon();
 	}
 
-	
 	@Override
 	public FBNetworkElement getModel() {
 		return (FBNetworkElement) super.getModel();
 	}
-	
+
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
@@ -183,20 +201,20 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		// Highlight In and Outconnections of the selected fb, allow alignment of FBs
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FBNElementSelectionPolicy());
 
-		//FBNetwork elements need a special rename command therefore we remove the standard edit policy and add a adjusted one
+		// FBNetwork elements need a special rename command therefore we remove the
+		// standard edit policy and add a adjusted one
 		removeEditPolicy(EditPolicy.DIRECT_EDIT_ROLE);
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy() {
-			 @Override
+			@Override
 			protected Command getDirectEditCommand(DirectEditRequest request) {
-			        if (getHost() instanceof AbstractFBNElementEditPart) {
-			            return new ChangeFBNetworkElementName(((AbstractFBNElementEditPart) getHost()).getModel(),
-						(String) request.getCellEditor().getValue());
-			        }
-			        return null;
-			    }
+				if (getHost() instanceof AbstractFBNElementEditPart) {
+					return new ChangeFBNetworkElementName(((AbstractFBNElementEditPart) getHost()).getModel(),
+							(String) request.getCellEditor().getValue());
+				}
+				return null;
+			}
 		});
 	}
-
 
 	/**
 	 * Returns the label wich contains the instance name of a FB.
@@ -204,17 +222,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	 * @return the label
 	 */
 	public Label getInstanceNameLabel() {
-		if (getCastedFigure() != null) {
-			return getCastedFigure().getInstanceNameLabel();
-		}
-		return null;
-	}
-
-	private AbstractFBNetworkElementFigure getCastedFigure() {
-		if (getFigure() instanceof AbstractFBNetworkElementFigure) {
-			return (AbstractFBNetworkElementFigure) getFigure();
-		}
-		return null;
+		return getFigure().getInstanceNameLabel();
 	}
 
 	/** The listener. */
@@ -229,16 +237,13 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	 */
 	@Override
 	public org.eclipse.jface.util.IPropertyChangeListener getPreferenceChangeListener() {
-		if (listener == null) {
+		if (null == listener) {
 			listener = new org.eclipse.jface.util.IPropertyChangeListener() {
 				@Override
 				public void propertyChange(final PropertyChangeEvent event) {
-					if (event.getProperty().equals(
-							PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
-							|| event.getProperty().equals(
-									PreferenceConstants.P_DATA_CONNECTOR_COLOR)
-							|| event.getProperty().equals(
-									PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)){
+					if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
+							|| event.getProperty().equals(PreferenceConstants.P_DATA_CONNECTOR_COLOR)
+							|| event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)) {
 						getFigure().repaint();
 					}
 				}
@@ -265,7 +270,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	private Device findDevice() {
 		Resource res = null;
 		if (null != getModel() && getModel().isMapped()) {
-			res = getModel().getResource();			
+			res = getModel().getResource();
 		}
 		return (null != res) ? res.getDevice() : null;
 	}
@@ -277,22 +282,28 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
 			if (interfaceEditPart.isInput()) {
 				if (interfaceEditPart.isEvent()) {
-					getCastedFigure().getEventInputs().add(child, getModel().getInterface().getEventInputs().indexOf(interfaceEditPart.getModel()));
-				} else{
-					if(interfaceEditPart.isAdapter()){
-						getCastedFigure().getSockets().add(child, getModel().getInterface().getSockets().indexOf(interfaceEditPart.getModel()));
-					}else if (interfaceEditPart.isVariable()) {
-						getCastedFigure().getDataInputs().add(child, getModel().getInterface().getInputVars().indexOf(interfaceEditPart.getModel()));
+					getFigure().getEventInputs().add(child,
+							getModel().getInterface().getEventInputs().indexOf(interfaceEditPart.getModel()));
+				} else {
+					if (interfaceEditPart.isAdapter()) {
+						getFigure().getSockets().add(child,
+								getModel().getInterface().getSockets().indexOf(interfaceEditPart.getModel()));
+					} else if (interfaceEditPart.isVariable()) {
+						getFigure().getDataInputs().add(child,
+								getModel().getInterface().getInputVars().indexOf(interfaceEditPart.getModel()));
 					}
 				}
 			} else {
 				if (interfaceEditPart.isEvent()) {
-					getCastedFigure().getEventOutputs().add(child, getModel().getInterface().getEventOutputs().indexOf(interfaceEditPart.getModel()));
-				} else { 
-					if(interfaceEditPart.isAdapter()){
-						getCastedFigure().getPlugs().add(child, getModel().getInterface().getPlugs().indexOf(interfaceEditPart.getModel()));
-					}else if (interfaceEditPart.isVariable()) {
-						getCastedFigure().getDataOutputs().add(child, getModel().getInterface().getOutputVars().indexOf(interfaceEditPart.getModel()));
+					getFigure().getEventOutputs().add(child,
+							getModel().getInterface().getEventOutputs().indexOf(interfaceEditPart.getModel()));
+				} else {
+					if (interfaceEditPart.isAdapter()) {
+						getFigure().getPlugs().add(child,
+								getModel().getInterface().getPlugs().indexOf(interfaceEditPart.getModel()));
+					} else if (interfaceEditPart.isVariable()) {
+						getFigure().getDataOutputs().add(child,
+								getModel().getInterface().getOutputVars().indexOf(interfaceEditPart.getModel()));
 					}
 				}
 
@@ -309,22 +320,22 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
 			if (interfaceEditPart.isInput()) {
 				if (interfaceEditPart.isEvent()) {
-					getCastedFigure().getEventInputs().remove(child);
-				} else { 
-					if(interfaceEditPart.isAdapter()){
-						getCastedFigure().getSockets().remove(child);
-					}else if (interfaceEditPart.isVariable()) {
-						getCastedFigure().getDataInputs().remove(child);
-					}	
+					getFigure().getEventInputs().remove(child);
+				} else {
+					if (interfaceEditPart.isAdapter()) {
+						getFigure().getSockets().remove(child);
+					} else if (interfaceEditPart.isVariable()) {
+						getFigure().getDataInputs().remove(child);
+					}
 				}
 			} else {
 				if (interfaceEditPart.isEvent()) {
-					getCastedFigure().getEventOutputs().remove(child);
-				} else { 
-					if(interfaceEditPart.isAdapter()){
-						getCastedFigure().getPlugs().remove(child);
-					}else if (interfaceEditPart.isVariable()) {
-						getCastedFigure().getDataOutputs().remove(child);
+					getFigure().getEventOutputs().remove(child);
+				} else {
+					if (interfaceEditPart.isAdapter()) {
+						getFigure().getPlugs().remove(child);
+					} else if (interfaceEditPart.isVariable()) {
+						getFigure().getDataOutputs().remove(child);
 					}
 				}
 
@@ -345,9 +356,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	public INamedElement getINamedElement() {
 		return getModel();
 	}
-	
+
 	@Override
-	protected PositionableElement getPositionableElement(){
+	protected PositionableElement getPositionableElement() {
 		return getModel();
 	}
 
@@ -356,21 +367,11 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		return getInstanceNameLabel();
 	}
 
-	/**
-	 * Gets the manager.
-	 * 
-	 * @return the manager
-	 */
 	@Override
-	public DirectEditManager getManager() {
-		if (manager == null) {
-			Label l = getNameLabel();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class,
-					new NameCellEditorLocator(l), l,
-					new IdentifierVerifyListener());
-		}
-
-		return manager;
+	protected DirectEditManager createDirectEditManager() {
+		Label l = getNameLabel();
+		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
+				new IdentifierVerifyListener());
 	}
 
 	@Override

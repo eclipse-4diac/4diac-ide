@@ -1,16 +1,17 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *  *
- *  * All rights reserved. This program and the accompanying materials
- *  * are made available under the terms of the Eclipse Public License v1.0
- *  * which accompanies this distribution, and is available at
- *  * http://www.eclipse.org/legal/epl-v10.html
- *  *
- *  * Contributors:
- *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
- *  *     - initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
@@ -24,9 +25,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Simple FB Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Simple
+ * FB Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -39,8 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	/**
 	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getAlgorithm()
 	 * @generated
 	 * @ordered
@@ -48,8 +47,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	protected Algorithm algorithm;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected SimpleFBTypeImpl() {
@@ -57,8 +55,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -67,8 +64,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -77,8 +73,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public NotificationChain basicSetAlgorithm(Algorithm newAlgorithm, NotificationChain msgs) {
@@ -92,8 +87,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -112,8 +106,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -126,8 +119,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -140,11 +132,9 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -156,8 +146,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -171,8 +160,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -184,4 +172,4 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 		return super.eIsSet(featureID);
 	}
 
-} //SimpleFBTypeImpl
+} // SimpleFBTypeImpl

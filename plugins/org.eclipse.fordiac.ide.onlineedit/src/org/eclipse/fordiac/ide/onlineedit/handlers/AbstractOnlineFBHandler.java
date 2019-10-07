@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Jose Cabral, Alois Zoitl
@@ -19,9 +20,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 public abstract class AbstractOnlineFBHandler extends AbstractDeploymentCommand{
 	
-	FB fb = null;
-	Resource resource = null;
-	FB resFB = null;
+	private FB fb = null;
+	private Resource resource = null;
+	private FB resFB = null;
 	
 	@Override
 	protected boolean prepareParametersToExecute(Object element){
@@ -30,14 +31,12 @@ public abstract class AbstractOnlineFBHandler extends AbstractDeploymentCommand{
 		}else if(element instanceof FB){
 			fb = (FB)element;
 		}
-		if(null != fb){
-			if(fb.isMapped()){
-  				resource = fb.getResource();
-  				if(null != resource){
-  					device = resource.getDevice();
-  					resFB = (FB)fb.getOpposite();
-  					return (null != device && null != resFB);
-  				}
+		if(null != fb && fb.isMapped()){
+			resource = fb.getResource();
+			if(null != resource){
+				setDevice(resource.getDevice());
+				resFB = (FB)fb.getOpposite();
+				return (null != getDevice() && null != resFB);
 			}
 		}
 		return false;
@@ -46,6 +45,14 @@ public abstract class AbstractOnlineFBHandler extends AbstractDeploymentCommand{
 	@Override
 	protected String getCurrentElementName() {
 		return "Function Block: " + fb.getName();
+	}
+	
+	public FB getResFB() {
+		return resFB;
+	}
+	
+	public Resource getResource() {
+		return resource;
 	}
 
 }

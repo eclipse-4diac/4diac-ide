@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2014 -2106 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Monika Wenger, Alois Zoitl
@@ -12,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.properties;
 
+import org.eclipse.fordiac.ide.gef.properties.TypeInfoSection;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -23,16 +25,16 @@ public class SystemInfoSection extends TypeInfoSection {
 
 	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if((part instanceof CommonNavigator) && (input instanceof AutomationSystem)){
-			return  SystemManager.INSTANCE.getCommandStack((AutomationSystem)input);
+		if ((part instanceof CommonNavigator) && (input instanceof AutomationSystem)) {
+			return SystemManager.INSTANCE.getCommandStack((AutomationSystem) input);
 		}
 		return null;
 	}
 
 	@Override
 	protected LibraryElement getInputType(Object input) {
-		if(input instanceof AutomationSystem){
-			return (AutomationSystem) input;	
+		if (input instanceof AutomationSystem) {
+			return (AutomationSystem) input;
 		}
 		return null;
 	}

@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2017 - 2018 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Jose Cabral
@@ -27,16 +28,14 @@ import java.util.regex.PatternSyntaxException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.eclipse.fordiac.ide.fmu.Activator;
-import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.deployment.AbstractFileManagementHandler;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.fmu.Activator;
+import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -50,9 +49,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 
 public final class FMUDeviceManagementCommunicationHandler extends AbstractFileManagementHandler {
 	
@@ -605,8 +605,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		
 		// store internal FB. Take care of the names
 		for (FBNetworkElement elem : composite.getFBNetwork().getNetworkElements()) {
-			if (elem instanceof FBImpl && !(elem instanceof AdapterFBImpl)) {
-				FBImpl fb = (FBImpl) elem;
+			if (elem instanceof FB && !(elem instanceof AdapterFB)) {
+				FB fb = (FB) elem;
 				populateInputsAndOutputs(fb.getName(), fb.getTypeName(), composite.getFBNetwork(), previousNames + fbName + "."); //$NON-NLS-1$
 			}
 		}
@@ -662,12 +662,12 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 					initialValue = replaced;
 				}
 			}
-			if (-1 != initialValue.indexOf('#')) { //$NON-NLS-1$
+			if (-1 != initialValue.indexOf('#')) {
 				if(FMUInputOutput.variableType.UNKNOWN == type){
-					type = FMUInputOutput.getTypeFromString(initialValue.substring(0, initialValue.indexOf('#'))); //$NON-NLS-1$
+					type = FMUInputOutput.getTypeFromString(initialValue.substring(0, initialValue.indexOf('#'))); 
 				}
 				
-				initialValue = initialValue.substring(initialValue.indexOf('#') + 1); //$NON-NLS-1$
+				initialValue = initialValue.substring(initialValue.indexOf('#') + 1);
 			}
 			returnValue = new FMUInputOutput("", false, FMUInputOutput.variableScope.PARAM, type, initialValue); //$NON-NLS-1$
 		}

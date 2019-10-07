@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2015 Profactor GbmH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -26,16 +27,16 @@ import org.eclipse.ui.PlatformUI;
 public class ErrorAnnotation extends Annotation {
 
 	/** The marker. */
-	IMarker marker;
+	private IMarker marker;
 
 	/** The text. */
-	String text;
+	private String text;
 
 	/** The line. */
-	int line;
+	private int line;
 
 	/** The position. */
-	Position position;
+	private Position position;
 
 	/**
 	 * Instantiates a new error annotation.

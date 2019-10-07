@@ -2,10 +2,11 @@
  * Copyright (c) 2008, 2012 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH,  
  * 				 2018 Johannes Kepler University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl 
@@ -26,7 +27,7 @@ import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteEntry;
@@ -149,7 +150,7 @@ public final class SystemConfPaletteFactory {
 		
 		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
 			if(entry instanceof ResourceTypeEntry){
-				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_Resource.getImageDescriptor());
+				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_RESOURCE.getImageDescriptor());
 				if (paletteEntry != null) {
 					entries.add(paletteEntry);
 				}				
@@ -163,7 +164,7 @@ public final class SystemConfPaletteFactory {
 		List<PaletteEntry> entries = new ArrayList<>();
 		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
 			if(entry instanceof DeviceTypePaletteEntry){
-				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_Device.getImageDescriptor());
+				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_DEVICE.getImageDescriptor());
 				if (paletteEntry != null) {
 					entries.add(paletteEntry);				
 				}
@@ -177,7 +178,7 @@ public final class SystemConfPaletteFactory {
 		List<PaletteEntry> entries = new ArrayList<>();
 		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
 			if(entry instanceof SegmentTypePaletteEntry){
-				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_Segment.getImageDescriptor());
+				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_SEGMENT.getImageDescriptor());
 				if (paletteEntry != null) {
 					entries.add(paletteEntry);
 				}

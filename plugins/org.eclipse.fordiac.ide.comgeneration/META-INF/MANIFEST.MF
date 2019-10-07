@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Communication Generation (Incubation)
 Bundle-SymbolicName: org.eclipse.fordiac.ide.comgeneration;singleton:=true
-Bundle-Version: 1.10.3.qualifier
+Bundle-Version: 1.11.0.qualifier
 Bundle-Activator: org.eclipse.fordiac.ide.comgeneration.plugin.Activator
 Bundle-Vendor: Eclipse 4diac
 Require-Bundle: org.eclipse.ui,
@@ -12,11 +12,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.edit,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.application,
- org.eclipse.fordiac.ide.util,
  org.eclipse.draw2d,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.model.commands,
- org.eclipse.fordiac.ide.ui.controls
+ org.eclipse.fordiac.ide.ui;bundle-version="[1.11.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.eclipse.fordiac.ide.comgeneration

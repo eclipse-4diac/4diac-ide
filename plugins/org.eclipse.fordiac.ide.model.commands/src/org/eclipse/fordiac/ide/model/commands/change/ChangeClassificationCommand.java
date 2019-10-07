@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2012 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl
@@ -38,7 +39,7 @@ public class ChangeClassificationCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void execute() {
-		oldClassification = identification.getClassification();
+		oldClassification = getIdentification().getClassification();
 		redo();
 	}
 
@@ -49,7 +50,7 @@ public class ChangeClassificationCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void undo() {
-		identification.setClassification(oldClassification);
+		getIdentification().setClassification(oldClassification);
 	}
 
 	/*
@@ -59,7 +60,7 @@ public class ChangeClassificationCommand extends ChangeIdentificationCommand {
 	 */
 	@Override
 	public void redo() {
-		identification.setClassification(newClassification);
+		getIdentification().setClassification(newClassification);
 	}
 
 }

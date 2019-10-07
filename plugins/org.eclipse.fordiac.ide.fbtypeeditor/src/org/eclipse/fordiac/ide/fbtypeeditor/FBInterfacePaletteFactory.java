@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -24,7 +25,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteEntry;
@@ -47,7 +48,7 @@ public final class FBInterfacePaletteFactory {
 		PaletteDrawer drawer = new PaletteDrawer("EventTypes");
 
 		for (DataType type : EventTypeLibrary.getInstance().getEventTypes()){
-			ImageDescriptor desc = FordiacImage.ICON_DataType.getImageDescriptor();
+			ImageDescriptor desc = FordiacImage.ICON_DATA_TYPE.getImageDescriptor();
 			CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(
 					type.getName(), type.getComment(), new DataTypeCreationFactory(type), desc, desc);
 			drawer.add(combined);
@@ -57,7 +58,7 @@ public final class FBInterfacePaletteFactory {
 		drawer = new PaletteDrawer("DataTypes");
 
 		for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
-			ImageDescriptor desc = FordiacImage.ICON_DataType.getImageDescriptor();
+			ImageDescriptor desc = FordiacImage.ICON_DATA_TYPE.getImageDescriptor();
 			CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(
 					dataType.getName(), dataType.getComment(), new DataTypeCreationFactory(dataType), desc, desc);
 			drawer.add(combined);
@@ -118,7 +119,7 @@ public final class FBInterfacePaletteFactory {
 		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry paletteEntry : group.getEntries()) {
 			if(paletteEntry instanceof AdapterTypePaletteEntry){
 				AdapterTypePaletteEntry entry = (AdapterTypePaletteEntry) paletteEntry;
-				ImageDescriptor desc = FordiacImage.ICON_DataType.getImageDescriptor();
+				ImageDescriptor desc = FordiacImage.ICON_DATA_TYPE.getImageDescriptor();
 				entries.add(new CombinedTemplateCreationEntry(
 						entry.getLabel(), entry.getType().getComment(), 
 						new DataTypeCreationFactory(entry.getType()), desc, desc));

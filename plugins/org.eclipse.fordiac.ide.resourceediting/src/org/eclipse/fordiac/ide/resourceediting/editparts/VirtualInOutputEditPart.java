@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -31,7 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -170,11 +171,11 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 			super();
 			setOpaque(false);
 			if (!isInput()) {
-				setIcon(FordiacImage.ICON_LinkOutput.getImage());
+				setIcon(FordiacImage.ICON_LINK_OUTPUT.getImage());
 				setLabelAlignment(PositionConstants.LEFT);
 				setTextAlignment(PositionConstants.LEFT);
 			} else {
-				setIcon(FordiacImage.ICON_LinkInput.getImage());
+				setIcon(FordiacImage.ICON_LINK_INPUT.getImage());
 				setLabelAlignment(PositionConstants.RIGHT);
 				setTextAlignment(PositionConstants.RIGHT);
 			}

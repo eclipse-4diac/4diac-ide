@@ -2,10 +2,11 @@
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
  * * 
- * * All rights reserved. This program and the accompanying materials
- * * are made available under the terms of the Eclipse Public License v1.0
- * * which accompanies this distribution, and is available at
- * * http://www.eclipse.org/legal/epl-v10.html
+ * * This program and the accompanying materials are made available under the
+ * * terms of the Eclipse Public License 2.0 which is available at
+ * * http://www.eclipse.org/legal/epl-2.0.
+ * *
+ * * SPDX-License-Identifier: EPL-2.0
  * *
  * * Contributors:
  * *   Gerhard Ebenhofer, Alois Zoitl
@@ -21,6 +22,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.fordiac.ide.deployment.devResponse.Connection;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
@@ -40,6 +42,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getReason <em>Reason</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getFblist <em>Fblist</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getEndpointlist <em>Endpointlist</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getConnection <em>Connection</em>}</li>
  * </ul>
  *
  * @generated
@@ -114,6 +117,16 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * @ordered
 	 */
 	protected EndpointList endpointlist;
+
+	/**
+	 * The cached value of the '{@link #getConnection() <em>Connection</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getConnection()
+	 * @generated
+	 * @ordered
+	 */
+	protected Connection connection;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -306,6 +319,46 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * @generated
 	 */
 	@Override
+	public Connection getConnection() {
+		if (connection != null && connection.eIsProxy()) {
+			InternalEObject oldConnection = (InternalEObject)connection;
+			connection = (Connection)eResolveProxy(oldConnection);
+			if (connection != oldConnection) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DevResponsePackage.RESPONSE__CONNECTION, oldConnection, connection));
+			}
+		}
+		return connection;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Connection basicGetConnection() {
+		return connection;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setConnection(Connection newConnection) {
+		Connection oldConnection = connection;
+		connection = newConnection;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__CONNECTION, oldConnection, connection));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case DevResponsePackage.RESPONSE__ID:
@@ -321,6 +374,9 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
 				if (resolve) return getEndpointlist();
 				return basicGetEndpointlist();
+			case DevResponsePackage.RESPONSE__CONNECTION:
+				if (resolve) return getConnection();
+				return basicGetConnection();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -330,7 +386,6 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -348,6 +403,9 @@ public class ResponseImpl extends EObjectImpl implements Response {
 				return;
 			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
 				setEndpointlist((EndpointList)newValue);
+				return;
+			case DevResponsePackage.RESPONSE__CONNECTION:
+				setConnection((Connection)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -376,6 +434,9 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
 				setEndpointlist((EndpointList)null);
 				return;
+			case DevResponsePackage.RESPONSE__CONNECTION:
+				setConnection((Connection)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -398,6 +459,8 @@ public class ResponseImpl extends EObjectImpl implements Response {
 				return fblist != null;
 			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
 				return endpointlist != null;
+			case DevResponsePackage.RESPONSE__CONNECTION:
+				return connection != null;
 		}
 		return super.eIsSet(featureID);
 	}

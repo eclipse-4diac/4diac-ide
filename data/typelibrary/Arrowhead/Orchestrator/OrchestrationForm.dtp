@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DataType SYSTEM "http://www.holobloc.com/xml/DataType.dtd" >
+<DataType Name="OrchestrationForm" Comment="Reponse sent by the orchestrator" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Jose Cabral" Date="2018-09-26" />
+  <ASN1Tag Class="APPLICATION" Number="1" />
+  <StructuredType >
+    <VarDeclaration Name="service" Type="ArrowheadService" Comment="The exact Service that needs to be consumed. This response matches the ServiceRequestForm’s (if that was filled out), but it comes from the exact Service instance with proper metadata and interface identifier (only one)." />
+    <VarDeclaration Name="provider" Type="ArrowheadSystem" Comment="The Application System description that will provide the Service." />
+    <VarDeclaration Name="serviceURI" Type="WSTRING" Comment="The base URL within the Service Provider that will contain the seeked Service." />
+    <VarDeclaration Name="instruction" Type="WSTRING" Comment="Optional additional data from the orchestration" />
+    <VarDeclaration Name="authorizationToken" Type="WSTRING" Comment="The encrypted authorization token." />
+    <VarDeclaration Name="signature" Type="WSTRING" Comment="The signature from the Authorization System for the token (verifying the token issuing)" />
+    <VarDeclaration Name="warnings" Type="WSTRING" ArraySize="10" Comment="The signature from the Authorization System for the token (verifying the token issuing)" />
+  </StructuredType>
+</DataType>

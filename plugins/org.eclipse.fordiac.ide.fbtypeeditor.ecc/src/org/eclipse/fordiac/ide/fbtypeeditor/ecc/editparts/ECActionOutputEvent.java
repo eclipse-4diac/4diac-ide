@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2013 TU Wien ACIN, Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl, Gerhard Ebenhofer
@@ -15,7 +16,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 
 public class ECActionOutputEvent {
-	ECAction action;
+	private ECAction action;
 	
 	public ECAction getAction(){
 		return action;

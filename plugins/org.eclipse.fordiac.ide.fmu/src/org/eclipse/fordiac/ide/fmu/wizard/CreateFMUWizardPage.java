@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2017 - 2018 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Jose Cabral
@@ -32,7 +33,7 @@ import org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTree;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.ui.controls.DirectoryChooserControl;
+import org.eclipse.fordiac.ide.ui.DirectoryChooserControl;
 
 public class CreateFMUWizardPage extends WizardPage {
 

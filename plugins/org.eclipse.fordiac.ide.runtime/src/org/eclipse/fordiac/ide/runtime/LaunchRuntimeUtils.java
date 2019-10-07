@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2009, 2010, 2013, 2014 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Thomas Strasser, Gerhard Ebenhofer, Alois Zoitl  
@@ -23,7 +24,7 @@ import org.eclipse.debug.core.ILaunchManager;
 /**
  * The Class LaunchRuntimeUtils.
  */
-public class LaunchRuntimeUtils {
+public final class LaunchRuntimeUtils {
 
 	/**
 	 * Starts a new launch runtime configuration.
@@ -64,10 +65,6 @@ public class LaunchRuntimeUtils {
 					"org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY", //$NON-NLS-1$
 					location);
 
-			// wc.setAttribute(IDebugUIConstants.ATTR_CAPTURE_IN_CONSOLE,
-			// false);
-			// wc.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, false);
-
 			config = wc.doSave();
 			launcht = config.launch(ILaunchManager.RUN_MODE, null);
 
@@ -76,10 +73,14 @@ public class LaunchRuntimeUtils {
 			} catch (InterruptedException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
-			// config.launch(ILaunchManager.RUN_MODE, null);
 		} catch (CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
 		return launcht;
 	}
+	
+	private LaunchRuntimeUtils() {
+		throw new UnsupportedOperationException("LaunchRuntimeUtils utility class should not be instantiated!"); //$NON-NLS-1$
+	}
+
 }

@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH.
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Filip Andren, Ingo Hegny
@@ -25,7 +26,7 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -59,7 +60,6 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 	private KeyHandler sharedKeyHandler;
 	private CommandStack commandStack;
 
-
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInputWithNotify(input);
@@ -70,7 +70,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 		setSite(site);
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
 		setPartName("Service");
-		setTitleImage(FordiacImage.ICON_ServiceSequence.getImage());
+		setTitleImage(FordiacImage.ICON_SERVICE_SEQUENCE.getImage());
 		super.init(site, input);
 	}
 
@@ -87,7 +87,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 			@Override
 			public void buildContextMenu(IMenuManager menu) {
 				super.buildContextMenu(menu);
-				IAction action = registry.getAction(ActionFactory.DELETE.getId());
+				IAction action = getRegistry().getAction(ActionFactory.DELETE.getId());
 				menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 			}
 		};
@@ -136,18 +136,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 				Object ob = null;
 				if (sel.getFirstElement() instanceof SequenceRootEditPart) {
 					ob = ((FBType) ((SequenceRootEditPart) sel.getFirstElement()).getModel()).getService();
-				}
-				// if (sel.getFirstElement() instanceof ConnectionEditPart) {
-				// ob =
-				// ((ConnectionEditPart)sel.getFirstElement()).getSource().getModel();
-				// if(ob instanceof InputPrimitiveEditPart){
-				// ob = ((InputPrimitiveEditPart)ob).getModel();
-				// }
-				// else if(ob instanceof OutputPrimitiveEditPart){
-				// ob = ((OutputPrimitiveEditPart)ob).getModel();
-				// }
-				// }
-				else if (sel.getFirstElement() instanceof OutputPrimitiveEditPart) {
+				} else if (sel.getFirstElement() instanceof OutputPrimitiveEditPart) {
 					ob = ((OutputPrimitiveEditPart) sel.getFirstElement()).getModel();
 				} else if (sel.getFirstElement() instanceof InputPrimitiveEditPart) {
 					ob = ((InputPrimitiveEditPart) sel.getFirstElement()).getModel();
@@ -171,7 +160,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 		if (null != selectedElement) {
 			Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
 			getGraphicalViewer().flush();
-			if (editpart != null && editpart instanceof EditPart && ((EditPart) editpart).isSelectable()) {
+			if (editpart instanceof EditPart && ((EditPart) editpart).isSelectable()) {
 				getGraphicalViewer().select((EditPart) editpart);
 				return true;
 			}

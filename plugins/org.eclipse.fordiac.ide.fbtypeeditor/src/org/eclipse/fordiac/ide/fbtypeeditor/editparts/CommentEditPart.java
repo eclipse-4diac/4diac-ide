@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -26,14 +27,13 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 
-public class CommentEditPart extends AbstractInterfaceElementEditPart implements
-		EditPart {
+public class CommentEditPart extends AbstractInterfaceElementEditPart implements EditPart {
 
 	private Label comment;
 
 	@Override
 	public IInterfaceElement getCastedModel() {
-		return ((CommentField)getModel()).getReferencedElement();
+		return ((CommentField) getModel()).getReferencedElement();
 	}
 
 	@Override
@@ -45,38 +45,30 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart implements
 
 	@Override
 	protected void update() {
-		comment.setText(((CommentField)getModel()).getLabel());
+		comment.setText(((CommentField) getModel()).getLabel());
 	}
-	
+
 	@Override
 	protected void createEditPolicies() {
-		// super.createEditPolicies();
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
-				new INamedElementRenameEditPolicy() {
-					@Override
-					protected Command getDirectEditCommand(
-							final DirectEditRequest request) {
-						if (getHost() instanceof AbstractDirectEditableEditPart) {
-							ChangeCommentCommand cmd = new ChangeCommentCommand(
-									getCastedModel(), (String) request
-											.getCellEditor().getValue());
-							return cmd;
-						}
-						return null;
-					}
-
-				});
-		
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
+			@Override
+			protected Command getDirectEditCommand(final DirectEditRequest request) {
+				if (getHost() instanceof AbstractDirectEditableEditPart) {
+					return new ChangeCommentCommand(getCastedModel(), (String) request.getCellEditor().getValue());
+				}
+				return null;
+			}
+		});
 	}
-	
+
 	@Override
 	public void performRequest(final Request request) {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
 		if (request.getType() == RequestConstants.REQ_OPEN) {
-			//Perform double click as direct edit
-			request.setType(RequestConstants.REQ_DIRECT_EDIT); 
+			// Perform double click as direct edit
+			request.setType(RequestConstants.REQ_DIRECT_EDIT);
 		}
 		super.performRequest(request);
 	}
@@ -90,7 +82,7 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart implements
 	public INamedElement getINamedElement() {
 		return getCastedModel();
 	}
-	
+
 	@Override
 	public void refreshName() {
 		getNameLabel().setText(getCastedModel().getComment());

@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
@@ -25,6 +26,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getAlgorithm <em>Algorithm</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getOutput <em>Output</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState <em>EC State</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECAction()
@@ -83,5 +85,29 @@ public interface ECAction extends EObject {
 	 * @generated
 	 */
 	void setOutput(Event value);
+
+	/**
+	 * Returns the value of the '<em><b>EC State</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECAction <em>EC Action</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>EC State</em>' container reference.
+	 * @see #setECState(ECState)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECAction_ECState()
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState#getECAction
+	 * @model opposite="eCAction" required="true" transient="false"
+	 * @generated
+	 */
+	ECState getECState();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState <em>EC State</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>EC State</em>' container reference.
+	 * @see #getECState()
+	 * @generated
+	 */
+	void setECState(ECState value);
 
 } // ECAction

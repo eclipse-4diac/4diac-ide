@@ -2,10 +2,11 @@
  * Copyright (c) 2011, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 				 2018 Johannes Kepler University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Ingo Hegny, Gerhard Ebenhofer, Alois Zoitl
@@ -28,7 +29,7 @@ import org.eclipse.swt.graphics.RGB;
  * 
  */
 
-public class PreferenceGetter {
+public final class PreferenceGetter {
 
 	/** The used colors. */
 	private static Map<RGB, Color> usedColors = new HashMap<>();
@@ -52,5 +53,7 @@ public class PreferenceGetter {
 	}
 	
 	
-
+	private PreferenceGetter() {
+		throw new UnsupportedOperationException("PreferenceGetter utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 }

@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2016 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
@@ -26,7 +27,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class AdvancedRoundedRectangle extends RoundedRectangle {
 
-	protected int side = PositionConstants.NONE;
+	private int side = PositionConstants.NONE;
 	private ZoomManager zoomManager;
 	private Figure parent;
 	private boolean useGradient = false;
@@ -86,7 +87,6 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 			graphics.setForegroundPattern(pattern);
 		}
 
-		// graphics.fillRectangle(boundingRect);
 		graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width,
 				getCornerDimensions().height);
 		graphics.setBackgroundPattern(null);
@@ -119,19 +119,24 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 		int arcHeight = Math.max(0, getCornerDimensions().height
 				- (int) lineInset);
 
-		if (width == 0 || height == 0)
+		if (width == 0 || height == 0) {
 			return;
+		}
 		if (arcWidth == 0 || arcHeight == 0) {
-			if ((side & PositionConstants.NORTH) != 0)
+			if ((side & PositionConstants.NORTH) != 0) {
 				graphics.drawLine(r.x, r.y, r.x + r.width, r.y);
-			if ((side & PositionConstants.EAST) != 0)
+			}
+			if ((side & PositionConstants.EAST) != 0) {
 				graphics.drawLine(r.x + r.width, r.y, r.x + r.width, r.y
 						+ r.height);
-			if ((side & PositionConstants.SOUTH) != 0)
+			}
+			if ((side & PositionConstants.SOUTH) != 0) {
 				graphics.drawLine(r.x, r.y + r.height, r.x + r.width, r.y
 						+ r.height);
-			if ((side & PositionConstants.WEST) != 0)
+			}
+			if ((side & PositionConstants.WEST) != 0) {
 				graphics.drawLine(r.x, r.y, r.x, r.y + r.height);
+			}
 			if ((side & PositionConstants.NONE) != 0) {
 				// nothing to do!
 			}
@@ -146,30 +151,38 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 			y += height;
 			height = -height;
 		}
-		if (arcWidth < 0)
+		if (arcWidth < 0) {
 			arcWidth = -arcWidth;
-		if (arcHeight < 0)
+		}
+		if (arcHeight < 0) {
 			arcHeight = -arcHeight;
-		if (arcWidth > width)
+		}
+		if (arcWidth > width) {
 			arcWidth = width;
-		if (arcHeight > height)
+		}
+		if (arcHeight > height) {
 			arcHeight = height;
+		}
 
 		if (arcWidth < width) {
-			if ((side & PositionConstants.NORTH) != 0)
+			if ((side & PositionConstants.NORTH) != 0) {
 				graphics.drawLine(x + arcWidth / 2, y,
 						x + width - arcWidth / 2, y);
-			if ((side & PositionConstants.SOUTH) != 0)
+			}
+			if ((side & PositionConstants.SOUTH) != 0) {
 				graphics.drawLine(x + arcWidth / 2, y + height, x + width
 						- arcWidth / 2, y + height);
+			}
 		}
 		if (arcHeight < height) {
-			if ((side & PositionConstants.WEST) != 0)
+			if ((side & PositionConstants.WEST) != 0) {
 				graphics.drawLine(x, y + arcHeight / 2, x, y + height
 						- arcHeight / 2);
-			if ((side & PositionConstants.EAST) != 0)
+			}
+			if ((side & PositionConstants.EAST) != 0) {
 				graphics.drawLine(x + width, y + arcHeight / 2, x + width, y
 						+ height - arcHeight / 2);
+			}
 		}
 		if (arcWidth != 0 && arcHeight != 0) {
 

@@ -6,7 +6,7 @@
       <wizard
             category="org.eclipse.fordiac.ide.newWizard.category"
             class="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"
-            icon="fordiacimage://ICON_System"
+            icon="fordiacimage://ICON_SYSTEM"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"
             name="%wizard.name.0"
             project="true">
@@ -17,7 +17,7 @@
       <wizard
             category="org.eclipse.fordiac.ide.newWizard.category"
             class="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"
-            icon="fordiacimage://ICON_Application"
+            icon="fordiacimage://ICON_APPLICATION"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"
             name="%LABEL_NewApplicationWizard"
             project="false">
@@ -39,7 +39,7 @@
       <view
       		category="org.eclipse.fordiac.ide.view.category"
             class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemExplorer"
-            icon="fordiacimage://ICON_SystemExplorer"
+            icon="fordiacimage://ICON_SYSTEM_EXPLORER"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"
             name="%SystemExplorer.name">
       </view>
@@ -220,7 +220,7 @@
             locationURI="popup:org.eclipse.ui.popup.any?endof=group.reorganize">
          <command
                commandId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.refresh"
-               icon="fordiacimage://ICON_Refresh"
+               icon="fordiacimage://ICON_REFRESH"
                tooltip="Refresh tree">
             <visibleWhen
                   checkEnabled="false">
@@ -248,7 +248,7 @@
             <propertyTab
                   category="systemInfo"
                   id="property.tab.systeminfo"
-                  image="fordiacimage://ICON_System"
+                  image="fordiacimage://ICON_SYSTEM"
                   label="System Info">
             </propertyTab>
             <propertyTab
@@ -280,51 +280,13 @@
       <extension
             point="org.eclipse.ui.views.properties.tabbed.propertySections">
          <propertySections
-               contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
-            <propertySection
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.TypeInfoSection"
-                  id="property.section.system.fBTypeInfo"
-                  tab="property.tab.system.fbtypeinfo">
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.FB">
-               </input>
-            </propertySection>
+               contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">           
             <propertySection
                   class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.SystemInfoSection"
                   id="property.section.systemInfo"
                   tab="property.tab.systeminfo">
                <input
                      type="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-               </input>
-            </propertySection>
-            <propertySection
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.ResourceInterfaceSection"
-                  id="org.eclipse.fordiac.ide.systemmanagement.properties.ResourceInterfaceSection"
-                  tab="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab">
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Resource">
-               </input>
-            </propertySection>
-            <propertySection
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.DeviceInterfaceSection"
-                  id="org.eclipse.fordiac.ide.systemmanagement.properties.DeviceInterfaceSection"
-                  tab="property.tab.system.deviceInfo">
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Device">
-               </input>
-            </propertySection>
-            <propertySection
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.AttributeSection"
-                  id="org.eclipse.fordiac.ide.systemmanagement.properties.AttributeSection"
-                  tab="property.tab.system.attributeInfo">
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Device">
-               </input>
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Segment">
-               </input>
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Application">
                </input>
             </propertySection>
             <propertySection
@@ -356,7 +318,7 @@
       <extension
             point="org.eclipse.ui.ide.projectNatureImages">
          <image
-               icon="fordiacimage://OVERLAY_DistributedNature"
+               icon="fordiacimage://OVERLAY_DISTRIBUTED_NATURE"
                id="org.eclipse.fordiac.ide.systemmanagement.FordiacNature.img"
                natureId="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
          </image>

@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2010, 2013, 2015 Profactor GbmH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -14,8 +15,8 @@ package org.eclipse.fordiac.ide.deployment.ui.views;
 
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.ISelectedElementsChangedListener;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -54,7 +55,7 @@ public class Mode extends ViewPart implements ISelectionListener {
 
 		downloadButton = new Button(root, SWT.NONE);
 		downloadButton.setText(Messages.Mode_DownloadButtonLabel);
-		downloadButton.setImage(FordiacImage.ICON_Download.getImage());
+		downloadButton.setImage(FordiacImage.ICON_DOWNLOAD.getImage());
 		downloadButton.setEnabled(false);
 		downloadButton.addSelectionListener(new SelectionListener() {
 

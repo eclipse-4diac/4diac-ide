@@ -1,15 +1,19 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
- * 				 2018 Johannes Kepler University
- * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * 				 2018 - 2019 Johannes Kepler University Linz
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - added diagram font preference
+ *     - changed section border to a simple line removing issues on Linux and
+ *       modernizing the look
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 
@@ -23,22 +27,22 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.Activator;
-import org.eclipse.fordiac.ide.gef.draw2d.FordiacFigureUtilities;
+import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
+import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
+import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -48,6 +52,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteDeviceEditPolicy;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeviceViewLayoutEditPolicy;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.SegmentNodeEditPolicy;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
@@ -67,7 +72,8 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	/** necessary that the gradient pattern can be scaled accordingly */
 	private ZoomManager zoomManager;
 	private ResourceContainer resContainer;
-	
+	private DiagramFontChangeListener fontChangeListener;
+
 	DeviceEditPart(ZoomManager zoomManager) {
 		super();
 		setConnectable(true);
@@ -78,20 +84,39 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	public Device getModel() {
 		return (Device) super.getModel();
 	}
-	
+
+	@Override
+	public void activate() {
+		super.activate();
+		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
+	}
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
+	}
+
+	private IPropertyChangeListener getFontChangeListener() {
+		if (null == fontChangeListener) {
+			fontChangeListener = new DiagramFontChangeListener(getFigure());
+		}
+		return fontChangeListener;
+	}
+
 	@Override
 	protected EContentAdapter createContentAdapter() {
-		return new EContentAdapter(){
-			@Override 
-			public void notifyChanged(Notification notification) { 
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(Notification notification) {
 				Object feature = notification.getFeature();
-				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)){
+				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)) {
 					backgroundColorChanged(getFigure());
-				} else {			
+				} else {
 					super.notifyChanged(notification);
 					refreshChildren();
 					refreshTargetConnections();
-				} 
+				}
 			}
 		};
 	}
@@ -100,15 +125,15 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	public INamedElement getINamedElement() {
 		return getModel();
 	}
-	
+
 	@Override
-	protected PositionableElement getPositionableElement(){
+	protected PositionableElement getPositionableElement() {
 		return getModel();
 	}
 
 	@Override
 	public DeviceFigure getFigure() {
-		return (DeviceFigure)super.getFigure();
+		return (DeviceFigure) super.getFigure();
 	}
 
 	@Override
@@ -134,11 +159,11 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			super.removeChildVisual(childEditPart);
 		}
 	}
-	
+
 	@Override
 	public void setModel(Object model) {
 		super.setModel(model);
-		resContainer = new ResourceContainer((Device)model);
+		resContainer = new ResourceContainer((Device) model);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -184,7 +209,6 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		setColor(figure, fordiacColor);
 
 	}
-	
 
 	private final class DeviceConnectionAnchor extends ChopboxAnchor {
 		DeviceConnectionAnchor(IFigure owner) {
@@ -205,8 +229,9 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		}
 	}
 
-	private class DeviceFigure extends Shape implements InteractionStyleFigure {
+	private class DeviceFigure extends Shape implements InteractionStyleFigure, IFontUpdateListener {
 		private final Label instanceNameLabel = new Label();
+		private Label typeLabel;
 		private Figure dataInputs = new Figure();
 		private Figure contentPane;
 
@@ -214,139 +239,125 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		public int getIntersectionStyle(Point location) {
 			if (instanceNameLabel.intersects(new Rectangle(location, new Dimension(1, 1)))) {
 				return InteractionStyleFigure.REGION_DRAG; // move/drag
-			} 
+			}
 			return InteractionStyleFigure.REGION_CONNECTION; // connection
 		}
 
-		private RoundedRectangle bottom = new RoundedRectangle(){
-			@Override	
-			protected void fillShape(Graphics graphics){
-				Display display=Display.getCurrent();
+		private RoundedRectangle bottom = new RoundedRectangle() {
+			@Override
+			protected void fillShape(Graphics graphics) {
+				Display display = Display.getCurrent();
 				Rectangle boundingRect = getBounds().getCopy();
 				boundingRect.scale(zoomManager.getZoom());
 				Point topLeft = boundingRect.getTopLeft();
 				Point bottomRight = boundingRect.getBottomRight();
-				Color first=ColorHelper.lighter(getBackgroundColor());
-				Pattern pattern = new Pattern(display,topLeft.x,topLeft.y,bottomRight.x,bottomRight.y,first,getBackgroundColor());
+				Color first = ColorHelper.lighter(getBackgroundColor());
+				Pattern pattern = new Pattern(display, topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, first,
+						getBackgroundColor());
 				graphics.setBackgroundPattern(pattern);
-				graphics.fillRoundRectangle(getBounds(),getCornerDimensions().width,getCornerDimensions().height);
+				graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
 				graphics.setBackgroundPattern(null);
 				pattern.dispose();
 				first.dispose();
 			}
 		};
 
-			public DeviceFigure() {
-				setBackgroundColor(ColorConstants.white);
-				this.setFillXOR(true);
-				
-				setLayoutManager(new ToolbarLayout());
-				
-				createInstanceNameLabel(this);				
+		public DeviceFigure() {
+			setBackgroundColor(ColorConstants.white);
+			this.setFillXOR(true);
 
-				IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-				int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
-				bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
-				ToolbarLayout bottomLayout = new ToolbarLayout();
-				bottomLayout.setStretchMinorAxis(true);
-				bottom.setLayoutManager(bottomLayout);
-				bottom.setOutline(false);
-				add(bottom);
-				
-				createDeviceInfoSection(bottom);
-				
-				ToolbarLayout bottomInputsLayout = new ToolbarLayout(false);
-				bottomInputsLayout.setStretchMinorAxis(true);
-				dataInputs.setLayoutManager(bottomInputsLayout);
-				dataInputs.setOpaque(false);
-				bottom.add(dataInputs);
-				createContentPane(bottom);
-			}
+			setLayoutManager(new ToolbarLayout());
 
-			private void createInstanceNameLabel(Figure parent) {
-				instanceNameLabel.setText(getINamedElement().getName());
-				instanceNameLabel.setTextAlignment(PositionConstants.CENTER);
-				instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DEFAULT_FONT));
-				parent.add(instanceNameLabel);
-			}
+			createInstanceNameLabel(this);
 
-			private void createDeviceInfoSection(Figure parent) {
-				ToolbarLayout deviceInfoLayout = new ToolbarLayout();
-				deviceInfoLayout.setStretchMinorAxis(true);
-				
-				Figure deviceInfo = new Figure();
-				deviceInfo.setLayoutManager(deviceInfoLayout);
-				LibraryElement type = getModel().getType();
-				String typeName = (null != type) ? type.getName() : "Type not set!";
-				Label l = new Label(typeName);
-				deviceInfo.add(l);
-				l.setTextAlignment(PositionConstants.CENTER);
-				l.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
-				l.setBorder(new MarginBorder(0, 0, 10, 0));
-				
-				parent.add(deviceInfo);
-				
-				deviceInfo.setBorder(new LineBorder() {	
-					@Override
-					public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
-						tempRect.setBounds(getPaintRectangle(figure, insets));
-						if (1 == (getWidth() & 1)) {
-							tempRect.height--;
-						}
-						tempRect.shrink(getWidth() / 2, getWidth() / 2);
-						graphics.setLineWidth(getWidth());
-						graphics.setBackgroundColor(bottom.getBackgroundColor());
-						FordiacFigureUtilities.paintEtchedBorder(graphics,
-								new Rectangle(tempRect.x - 3, tempRect.y + tempRect.height - 3, tempRect.width + 5, 3));
-					}
-				});
-			}
-	
-			private void createContentPane(RoundedRectangle container) {
-				contentPane = new Figure();
-				contentPane.setLayoutManager(new ToolbarLayout());
-				container.add(contentPane);
-				contentPane.setBorder(new LineBorder() {	
-					@Override
-					public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
-						tempRect.setBounds(getPaintRectangle(figure, insets));
-						if (1 == (getWidth() & 1)) {
-							tempRect.height--;
-						}
-						tempRect.shrink(getWidth() / 2, getWidth() / 2);
-						graphics.setLineWidth(getWidth());
-						graphics.setBackgroundColor(bottom.getBackgroundColor());
-						FordiacFigureUtilities.paintEtchedBorder(graphics,
-								new Rectangle(tempRect.x - 3, tempRect.y, tempRect.width + 5, 3));
-					}
-				});
-			}
+			IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
+			int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
+			bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
+			ToolbarLayout bottomLayout = new ToolbarLayout();
+			bottomLayout.setStretchMinorAxis(true);
+			bottom.setLayoutManager(bottomLayout);
+			bottom.setOutline(false);
+			add(bottom);
 
-			public Label getName() {
-				return instanceNameLabel;
-			}
-	
-			public Figure getConnectionReferenceFigure() {
-				return bottom;
-			}
-	
-			@Override
-			protected void fillShape(final Graphics graphics) {
-				//Nothing to do here right now
-			}
-	
-			@Override
-			protected void outlineShape(final Graphics graphics) {
-				//Nothing to do here right now
-			}
+			createDeviceInfoSection(bottom);
 
-			public Figure getDataInputs() {
-				return dataInputs;
-			}
-	
-			public Figure getContentPane() {
-				return contentPane;
-			}
+			ToolbarLayout bottomInputsLayout = new ToolbarLayout(false);
+			bottomInputsLayout.setStretchMinorAxis(true);
+			dataInputs.setLayoutManager(bottomInputsLayout);
+			dataInputs.setOpaque(false);
+			dataInputs.setBorder(new AdvancedLineBorder(PositionConstants.SOUTH));
+			bottom.add(dataInputs);
+			createContentPane(bottom);
+			setInstanceAndTypeLabelFonts();
+		}
+
+		private void createInstanceNameLabel(Figure parent) {
+			instanceNameLabel.setText(getINamedElement().getName());
+			instanceNameLabel.setTextAlignment(PositionConstants.CENTER);
+			parent.add(instanceNameLabel);
+		}
+
+		private void createDeviceInfoSection(Figure parent) {
+			ToolbarLayout deviceInfoLayout = new ToolbarLayout();
+			deviceInfoLayout.setStretchMinorAxis(true);
+
+			Figure deviceInfo = new Figure();
+			deviceInfo.setLayoutManager(deviceInfoLayout);
+			LibraryElement type = getModel().getType();
+			String typeName = (null != type) ? type.getName() : "Type not set!";
+			typeLabel = new Label(typeName);
+			deviceInfo.add(typeLabel);
+			typeLabel.setTextAlignment(PositionConstants.CENTER);
+			typeLabel.setBorder(new MarginBorder(0, 0, 10, 0));
+
+			parent.add(deviceInfo);
+
+			deviceInfo.setBorder(new AdvancedLineBorder(PositionConstants.SOUTH));
+		}
+
+		private void createContentPane(RoundedRectangle container) {
+			contentPane = new Figure();
+			contentPane.setLayoutManager(new ToolbarLayout());
+			container.add(contentPane);
+		}
+
+		public Label getName() {
+			return instanceNameLabel;
+		}
+
+		public Figure getConnectionReferenceFigure() {
+			return bottom;
+		}
+
+		@Override
+		protected void fillShape(final Graphics graphics) {
+			// Nothing to do here right now
+		}
+
+		@Override
+		protected void outlineShape(final Graphics graphics) {
+			// Nothing to do here right now
+		}
+
+		public Figure getDataInputs() {
+			return dataInputs;
+		}
+
+		public Figure getContentPane() {
+			return contentPane;
+		}
+
+		@Override
+		public void updateFonts() {
+			setInstanceAndTypeLabelFonts();
+			invalidateTree();
+			revalidate();
+		}
+
+		public void setInstanceAndTypeLabelFonts() {
+			instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(PreferenceConstants.DIAGRAM_FONT));
+			typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
+		}
 	}
 
 	@Override

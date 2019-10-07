@@ -1,16 +1,17 @@
 /**
  * *******************************************************************************
- *  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *  *
- *  * All rights reserved. This program and the accompanying materials
- *  * are made available under the terms of the Eclipse Public License v1.0
- *  * which accompanies this distribution, and is available at
- *  * http://www.eclipse.org/legal/epl-v10.html
- *  *
- *  * Contributors:
- *  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
- *  *     - initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ *  Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
@@ -34,7 +35,7 @@ import org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -117,7 +118,7 @@ public class ServiceTransactionItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {		
-		return overlayImage(object, FordiacImage.ICON_Transaction.getImage());
+		return overlayImage(object, FordiacImage.ICON_TRANSACTION.getImage());
 	}
 
 	/**

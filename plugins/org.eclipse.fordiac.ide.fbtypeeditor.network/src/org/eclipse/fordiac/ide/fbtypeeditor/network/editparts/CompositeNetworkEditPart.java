@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2012, 2014, 2016, 2017  Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -40,7 +41,7 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	/** The adapter. */
-	protected EContentAdapter adapter;
+	private EContentAdapter adapter;
 
 	/*
 	 * (non-Javadoc)
@@ -80,8 +81,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 			adapter = new EContentAdapter() {
 				@Override
 				public void notifyChanged(final Notification notification) {
-					int type = notification.getEventType();
-					switch (type) {
+					switch (notification.getEventType()) {
 					case Notification.ADD:
 					case Notification.ADD_MANY:
 						refreshChildren();
@@ -95,8 +95,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 					case Notification.REMOVE_MANY:
 						refreshChildren();
 						break;
-					case Notification.SET:
-						// refreshVisuals();
+					default:
 						break;
 					}
 				}
@@ -264,6 +263,6 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	}
 
 	protected Boolean isVarVisible(final EditPart childEditPart) {
-		return childEditPart.getModel() instanceof AdapterDeclaration ? false : true;
+		return !(childEditPart.getModel() instanceof AdapterDeclaration);
 	}
 }

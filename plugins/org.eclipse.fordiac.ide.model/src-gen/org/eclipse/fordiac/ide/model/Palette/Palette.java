@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -16,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -123,10 +125,33 @@ public interface Palette extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" typeNameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='PaletteEntry entry = null;\n//TODO reconsider when namespaces are coming how to retrieve the type\nList&lt;PaletteEntry&gt; entries = getTypeEntries(typeName);\nif (!entries.isEmpty()) {\n\tentry = entries.get(0);\n} \nreturn entry;'"
 	 * @generated
 	 */
 	PaletteEntry getTypeEntry(String typeName);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" adapterTypeNameRequired="true"
+	 * @generated
+	 */
+	AdapterTypePaletteEntry getAdapterTypeEntry(String adapterTypeName);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<AdapterTypePaletteEntry> getAdapterTypes();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<AdapterTypePaletteEntry> getAdapterTypesSorted();
 
 	public PaletteEntry createFBTypeEntry(IFile file, PaletteGroup parent);
 	public PaletteEntry createDeviceEntry(IFile file, PaletteGroup parent);

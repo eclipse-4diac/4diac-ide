@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DataType SYSTEM "http://www.holobloc.com/xml/DataType.dtd" >
+<DataType Name="ServiceQueryForm" Comment="A service query form for the Arrowhead framework 4.0" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Jose Cabral" Date="2018-09-26" />
+  <ASN1Tag Class="APPLICATION" Number="1" />
+  <StructuredType >
+	  <VarDeclaration Name="service" Type="ArrowheadService" Comment="The Arrowhead Service object that is looked for (SD and supported IDD-s)" />
+	  <VarDeclaration Name="metadataSearch" Type="BOOL" Comment="True, if service metadata shall be taken into account during query." />
+    <VarDeclaration Name="pingProviders" Type="BOOL" Comment="True, if the selected (query fitting) Application Systems shall be pinged to see if they’re alive." />
+    <VarDeclaration Name="version" Type="DINT" Comment="The minimum version of the Service we are looking for." />
+  </StructuredType>
+</DataType>

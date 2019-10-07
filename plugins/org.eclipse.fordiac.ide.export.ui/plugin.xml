@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="ExportFilter" name="org.eclipse.fordiac.ide.export.exportFilter" schema="schema/ExportFilter.exsd"/>
    <extension
          point="org.eclipse.ui.exportWizards">
       <wizard
             category="org.eclipse.fordiac.ide.export.ui"
             class="org.eclipse.fordiac.ide.export.ui.wizard.FordiacExportWizard"
-            icon="fordiacimage://ICON_Export"
+            icon="fordiacimage://ICON_EXPORT"
             id="org.eclipse.fordiac.ide.export.ui.wizard.FordiacExportWizard"
             name="4diac IDE Type Export">
       </wizard>

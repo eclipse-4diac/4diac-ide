@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="*******************************************************************************&#xD;&#xA; * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH&#xA; *&#xD;&#xA; * All rights reserved. This program and the accompanying materials&#xD;&#xA; * are made available under the terms of the Eclipse Public License v1.0&#xD;&#xA; * which accompanies this distribution, and is available at&#xD;&#xA; * http://www.eclipse.org/legal/epl-v10.html&#xD;&#xA; *&#xA; * Contributors:&#xA; *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst&#xA; *     - initial API and implementation and/or initial documentation&#xA; *******************************************************************************"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="*******************************************************************************&#xA;Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH&#xA;&#xA;This program and the accompanying materials are made available under the&#xA;terms of the Eclipse Public License 2.0 which is available at&#xA;http://www.eclipse.org/legal/epl-2.0.&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst&#xA;     - initial API and implementation and/or initial documentation&#xA;*******************************************************************************"
     modelDirectory="/org.eclipse.fordiac.ide.model/src-gen" creationSubmenus="true"
     editDirectory="/org.eclipse.fordiac.ide.model.edit/src-gen" modelPluginID="org.eclipse.fordiac.ide.model"
     templateDirectory="" modelName="fordiac" nonNLSMarkers="true" importerID="org.eclipse.emf.importer.ecore"
@@ -18,6 +18,13 @@
       <genOperations ecoreOperation="palette.ecore#//Palette/getTypeEntry" body="PaletteEntry entry = null;&#xA;//TODO reconsider when namespaces are coming how to retrieve the type&#xA;List&lt;PaletteEntry> entries = getTypeEntries(typeName);&#xA;if (!entries.isEmpty()) {&#xA;&#x9;entry = entries.get(0);&#xA;} &#xA;return entry;">
         <genParameters ecoreParameter="palette.ecore#//Palette/getTypeEntry/typeName"/>
       </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//Palette/getAdapterTypeEntry"
+          body="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypeEntry(this, adapterTypeName);">
+        <genParameters ecoreParameter="palette.ecore#//Palette/getAdapterTypeEntry/adapterTypeName"/>
+      </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//Palette/getAdapterTypes" body="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypes(this);"/>
+      <genOperations ecoreOperation="palette.ecore#//Palette/getAdapterTypesSorted"
+          body="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypesSorted(this);"/>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//PaletteGroup">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference palette.ecore#//PaletteGroup/entries"/>
@@ -92,6 +99,7 @@
     <genClasses ecoreClass="lib.ecore#//AdapterDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/paletteEntry"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/getType" body="//this code can not be moved to a model annotations class&#xA;return (AdapterType)super.getType();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterType">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterType/adapterFBType"/>
@@ -109,6 +117,9 @@
     <genClasses ecoreClass="lib.ecore#//BasicFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BasicFBType/eCC"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BasicFBType/algorithm"/>
+      <genOperations ecoreOperation="lib.ecore#//BasicFBType/getAlgorithmNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//BasicFBType/getAlgorithmNamed/name"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CompilerInfo">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilerInfo/compiler"/>
@@ -160,16 +171,19 @@
     <genClasses ecoreClass="lib.ecore#//ECAction">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECAction/algorithm"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECAction/output"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//ECAction/eCState"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ECC">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ECC/eCState"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ECC/eCTransition"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECC/start"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//ECC/basicFBType"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ECState">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ECState/eCAction"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECState/outTransitions"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECState/inTransitions"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//ECState/eCC"/>
       <genOperations ecoreOperation="lib.ecore#//ECState/isStartState" body="return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ECTransition">
@@ -178,8 +192,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECTransition/source"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECTransition/destination"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECTransition/conditionEvent"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//ECTransition/eCC"/>
       <genOperations ecoreOperation="lib.ecore#//ECTransition/getConditionText" body="return org.eclipse.fordiac.ide.model.Annotations.getConditionText(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//ECTransition/getECC" body="return org.eclipse.fordiac.ide.model.Annotations.getECC(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Event">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>

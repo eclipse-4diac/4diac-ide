@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Register many services with different serviceDefinition and serviceURI " Name="RegisterMultipleServicesHTTP">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH &#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: PL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-02-08" Organization="fortiss GmbH" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="Register the services" Name="register" Type="Event"/>
+      <SubAppEvent Comment="Unregister the services" Name="unregister" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="Services registered" Name="registerDone" Type="Event"/>
+      <SubAppEvent Comment="Services unregistered" Name="unregisterUndone" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="ArrowheadSystem that is providing the Service" Name="provider" Type="ArrowheadSystem"/>
+      <VarDeclaration ArraySize="10" Comment="Identifications of the services" Name="serviceDefinition" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="Interfaces implemented by the service" Name="interfaces" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="Metadata of the service in key=value format" Name="serviceMetadata" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="The URL subpaths of the Services within the address:port of the Provider" Name="serviceURI" Type="WSTRING"/>
+      <VarDeclaration Comment="The version numbering of the Service provided" Name="version" Type="DINT"/>
+      <VarDeclaration Comment="True, if the service is provided via UDP. By default, it is false" Name="udp" Type="BOOL"/>
+      <VarDeclaration Comment="Service validity time period expressed in seconds. This gets converted to a date-time, and stored in the database" Name="ttl" Type="DINT"/>
+      <VarDeclaration Comment="Metadata belonging to a service/provider pair" Name="metadata" Type="WSTRING"/>
+      <VarDeclaration Comment="Endpoint (IP:PORT/URI) of the Service Registry" Name="SREndpoint" Type="WSTRING"/>
+    </InputVars>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="Reset" Type="E_MERGE" x="13520.0" y="-425.0"/>
+    <FB Comment="" Name="FieldsToArrowheadService" Type="FieldsToArrowheadService" x="6550.0" y="1300.0"/>
+    <FB Comment="" Name="RegUnreg" Type="E_SWITCH" x="11355.0" y="2215.0"/>
+    <FB Comment="" Name="Register" Type="E_SR" x="7125.0" y="-25.0"/>
+    <FB Comment="" Name="RegisterService" Type="RegisterService" x="13325.0" y="2840.0"/>
+    <FB Comment="" Name="RegisterServiceHTTP" Type="RegisterServiceHTTP" x="15160.0" y="3160.0"/>
+    <FB Comment="" Name="RegUnregDone" Type="E_SWITCH" x="12160.0" y="590.0"/>
+    <FB Comment="" Name="FieldsToServiceRegistryEntry" Type="FieldsToServiceRegistryEntry" x="8350.0" y="2160.0"/>
+    <FB Comment="" Name="GetName" Type="GET_AT_INDEX" x="5840.0" y="4935.0"/>
+    <FB Comment="" Name="E_CTU" Type="E_CTU" x="4610.0" y="5115.0"/>
+    <FB Comment="" Name="E_SWITCH" Type="E_SWITCH" x="9505.0" y="5125.0"/>
+    <FB Comment="" Name="WSTRING2WSTRING" Type="WSTRING2WSTRING" x="7300.0" y="5250.0"/>
+    <FB Comment="" Name="IsLast" Type="F_EQ" x="8705.0" y="5155.0">
+      <Parameter Name="IN1" Value="WSTRING#&quot;&quot;"/>
+    </FB>
+    <FB Comment="" Name="GetURI" Type="GET_AT_INDEX" x="5830.0" y="5730.0"/>
+    <FB Comment="" Name="E_SPLIT" Type="E_SPLIT" x="10310.0" y="5150.0"/>
+    <FB Comment="" Name="PermitUnreg" Type="E_PERMIT" x="4770.0" y="-715.0"/>
+    <FB Comment="" Name="F_NOT" Type="F_NOT" x="3775.0" y="-715.0"/>
+    <FB Comment="" Name="PermitReg" Type="E_PERMIT" x="4775.0" y="-1680.0"/>
+    <FB Comment="" Name="Regblock" Type="E_SR" x="2710.0" y="-1410.0"/>
+    <FB Comment="" Name="F_NOT_1" Type="F_NOT" x="3780.0" y="-1720.0"/>
+    <FB Comment="" Name="UnRegBlock" Type="E_SR" x="2675.0" y="-535.0"/>
+    <FB Comment="" Name="ARRAY2ARRAY_10_WSTRING" Type="ARRAY2ARRAY_10_WSTRING" x="2875.0" y="4810.0"/>
+    <FB Comment="" Name="ARRAY2ARRAY_10_WSTRING_1" Type="ARRAY2ARRAY_10_WSTRING" x="2910.0" y="3760.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="FieldsToServiceRegistryEntry.providedService" Source="FieldsToArrowheadService.arrowheadService" dx1="110.0"/>
+      <Connection Comment="" Destination="RegUnreg.G" Source="Register.Q" dx1="2800.0"/>
+      <Connection Comment="" Destination="RegUnregDone.G" Source="Register.Q" dx1="3350.0"/>
+      <Connection Comment="" Destination="RegisterService.serviceRegistryEntry" Source="FieldsToServiceRegistryEntry.serviceRegistryEntry" dx1="530.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadService.interfaces" Source="interfaces" dx1="2355.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadService.serviceMetadata" Source="serviceMetadata" dx1="2240.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRegistryEntry.version" Source="version" dx1="1130.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRegistryEntry.udp" Source="udp" dx1="925.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRegistryEntry.ttl" Source="ttl" dx1="725.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRegistryEntry.metadata" Source="metadata" dx1="565.0"/>
+      <Connection Comment="" Destination="RegisterService.endpoint" Source="SREndpoint" dx1="360.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRegistryEntry.provider" Source="provider" dx1="1625.0"/>
+      <Connection Comment="" Destination="GetName.INDEX" Source="E_CTU.CV" dx1="500.0"/>
+      <Connection Comment="" Destination="WSTRING2WSTRING.IN" Source="GetName.OUT" dx1="425.0"/>
+      <Connection Comment="" Destination="GetURI.INDEX" Source="E_CTU.CV" dx1="495.0"/>
+      <Connection Comment="" Destination="E_SWITCH.G" Source="IsLast.OUT" dx1="210.0"/>
+      <Connection Comment="" Destination="IsLast.IN2" Source="WSTRING2WSTRING.OUT" dx1="310.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRegistryEntry.serviceURI" Source="GetURI.OUT" dx1="660.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadService.serviceDefinition" Source="GetName.OUT" dx1="60.0" dx2="60.0" dy="-1865.0"/>
+      <Connection Comment="" Destination="PermitUnreg.PERMIT" Source="F_NOT.OUT"/>
+      <Connection Comment="" Destination="F_NOT.IN" Source="UnRegBlock.Q" dx1="115.0"/>
+      <Connection Comment="" Destination="PermitReg.PERMIT" Source="F_NOT_1.OUT" dx1="300.0"/>
+      <Connection Comment="" Destination="F_NOT_1.IN" Source="Regblock.Q" dx1="225.0"/>
+      <Connection Comment="" Destination="GetURI.IN_ARRAY" Source="ARRAY2ARRAY_10_WSTRING.OUT" dx1="445.0"/>
+      <Connection Comment="" Destination="ARRAY2ARRAY_10_WSTRING.IN" Source="serviceURI" dx1="1090.0"/>
+      <Connection Comment="" Destination="GetName.IN_ARRAY" Source="ARRAY2ARRAY_10_WSTRING_1.OUT" dx1="1380.0"/>
+      <Connection Comment="" Destination="ARRAY2ARRAY_10_WSTRING_1.IN" Source="serviceDefinition" dx1="1305.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="Reset.EI1" Source="RegUnregDone.EO0" dx1="420.0"/>
+      <Connection Comment="" Destination="Reset.EI2" Source="RegUnregDone.EO1" dx1="580.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRegistryEntry.REQ" Source="FieldsToArrowheadService.CNF" dx1="305.0"/>
+      <Connection Comment="" Destination="RegUnreg.EI" Source="FieldsToServiceRegistryEntry.CNF" dx1="535.0"/>
+      <Connection Comment="" Destination="RegisterService.unregister" Source="RegUnreg.EO0" dx1="910.0"/>
+      <Connection Comment="" Destination="RegisterService.register" Source="RegUnreg.EO1" dx1="760.0"/>
+      <Connection Comment="" Destination="registerDone" Source="RegUnregDone.EO1" dx1="60.0" dx2="60.0" dy="-400.0"/>
+      <Connection Comment="" Destination="unregisterUndone" Source="RegUnregDone.EO0" dx1="60.0" dx2="60.0" dy="-300.0"/>
+      <Connection Comment="" Destination="E_SWITCH.EI" Source="IsLast.CNF" dx1="210.0"/>
+      <Connection Comment="" Destination="IsLast.REQ" Source="WSTRING2WSTRING.CNF" dx1="235.0"/>
+      <Connection Comment="" Destination="WSTRING2WSTRING.REQ" Source="GetURI.CNF" dx1="515.0"/>
+      <Connection Comment="" Destination="E_CTU.CU" Source="E_SPLIT.EO1" dx1="60.0" dx2="60.0" dy="-690.0"/>
+      <Connection Comment="" Destination="E_SPLIT.EI" Source="E_SWITCH.EO0" dx1="185.0"/>
+      <Connection Comment="" Destination="E_CTU.R" Source="E_SWITCH.EO1" dx1="200.0" dx2="625.0" dy="1250.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadService.REQ" Source="E_SPLIT.EO2" dx1="280.0" dx2="205.0" dy="-1140.0"/>
+      <Connection Comment="" Destination="GetName.REQ" Source="RegisterService.doneRegister" dx1="60.0" dx2="60.0" dy="-550.0"/>
+      <Connection Comment="" Destination="RegUnregDone.EI" Source="E_CTU.RO" dx1="285.0"/>
+      <Connection Comment="" Destination="PermitReg.EI" Source="F_NOT_1.CNF" dx1="300.0"/>
+      <Connection Comment="" Destination="PermitUnreg.EI" Source="F_NOT.CNF"/>
+      <Connection Comment="" Destination="Register.R" Source="PermitUnreg.EO" dx1="960.0"/>
+      <Connection Comment="" Destination="Register.S" Source="PermitReg.EO" dx1="1330.0"/>
+      <Connection Comment="" Destination="UnRegBlock.R" Source="Reset.EO" dx1="60.0" dx2="60.0" dy="420.0"/>
+      <Connection Comment="" Destination="Regblock.R" Source="Reset.EO" dx1="60.0" dx2="60.0" dy="-1685.0"/>
+      <Connection Comment="" Destination="F_NOT_1.REQ" Source="register" dx1="1060.0"/>
+      <Connection Comment="" Destination="F_NOT.REQ" Source="unregister" dx1="1290.0"/>
+      <Connection Comment="" Destination="UnRegBlock.S" Source="PermitUnreg.EO" dx1="60.0" dx2="60.0" dy="-170.0"/>
+      <Connection Comment="" Destination="Regblock.S" Source="PermitUnreg.EO" dx1="150.0" dx2="60.0" dy="-345.0"/>
+      <Connection Comment="" Destination="Regblock.S" Source="PermitReg.EO" dx1="60.0" dx2="410.0" dy="-335.0"/>
+      <Connection Comment="" Destination="UnRegBlock.S" Source="PermitReg.EO" dx1="180.0" dx2="60.0" dy="730.0"/>
+      <Connection Comment="" Destination="GetName.REQ" Source="RegisterService.doneUnregister" dx1="240.0" dx2="190.0" dy="-910.0"/>
+      <Connection Comment="" Destination="GetName.REQ" Source="ARRAY2ARRAY_10_WSTRING.CNF" dx1="875.0"/>
+      <Connection Comment="" Destination="ARRAY2ARRAY_10_WSTRING.REQ" Source="ARRAY2ARRAY_10_WSTRING_1.CNF" dx1="60.0" dx2="60.0" dy="690.0"/>
+      <Connection Comment="" Destination="ARRAY2ARRAY_10_WSTRING_1.REQ" Source="PermitReg.EO" dx1="340.0" dx2="60.0" dy="3055.0"/>
+      <Connection Comment="" Destination="ARRAY2ARRAY_10_WSTRING_1.REQ" Source="PermitUnreg.EO" dx1="60.0" dx2="60.0" dy="2675.0"/>
+      <Connection Comment="" Destination="GetURI.REQ" Source="GetName.CNF" dx1="60.0" dx2="60.0" dy="395.0"/>
+    </EventConnections>
+    <AdapterConnections>
+      <Connection Comment="" Destination="RegisterServiceHTTP.registerService" Source="RegisterService.registerService" dx1="185.0"/>
+    </AdapterConnections>
+  </SubAppNetwork>
+</SubAppType>

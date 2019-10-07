@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2011 Profactor GmbH, TU Wien ACIN
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Ingo Hegny, Gerhard Ebenhofer
@@ -15,7 +16,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences;
 /**
  * Constant definitions for plug-in preferences
  */
-public class PreferenceConstants {
+public final class PreferenceConstants {
 
 	/** The Constant P_ECC_STATE_COLOR. */                                                          
 	public static final String P_ECC_STATE_COLOR = "ECCEditorStateColor";                            //$NON-NLS-1$
@@ -38,4 +39,7 @@ public class PreferenceConstants {
 	/** The Constant P_ECC_EVENT_BORDER_COLOR. */                                                   
 	public static final String P_ECC_EVENT_BORDER_COLOR = "ECCEditorEventBorderColor";     //$NON-NLS-1$
 	
+	private PreferenceConstants() {
+		throw new UnsupportedOperationException("PreferenceConstants utility class should not be instantiated!"); //$NON-NLS-1$
+	}
 }

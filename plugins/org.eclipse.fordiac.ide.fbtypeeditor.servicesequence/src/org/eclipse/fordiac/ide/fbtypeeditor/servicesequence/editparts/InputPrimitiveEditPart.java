@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 - 2015 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -31,7 +32,7 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart{
 	private ConnectingConnection connectingConnection;
 	
 	InputPrimitiveEditPart(){
-		connection = new PrimitiveConnection(true);	
+		super(new PrimitiveConnection(true));	
 		connectingConnection = new ConnectingConnection();
 	}
 	
@@ -51,14 +52,14 @@ public class InputPrimitiveEditPart extends PrimitiveEditPart{
 		if (view != null) {
 			temp.add(connectingConnection);
 		}
-		temp.add(connection);
+		temp.add(getPrimitiveConnection());
 		return temp;
 	}
 
 	@Override
 	public List<Object> getModelTargetConnections() {
 		ArrayList<Object> temp = new ArrayList<>();
-		temp.add(connection);
+		temp.add(getPrimitiveConnection());
 		return temp;
 	}
 

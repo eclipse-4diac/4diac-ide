@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Transform 61499 types to JSON format" Name="ANYToJSON">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2018-09-21" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Request transformation" Name="REQ" Type="Event">
+        <With Var="input"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Transformation finished" Name="CNF" Type="Event">
+        <With Var="output"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Input to be transformed" Name="input" Type="ANY"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="JSON transformation from input" Name="output" Type="STRING"/>
+    </OutputVars>
+  </InterfaceList>
+  <Service Comment="Transform 61499 types to JSON format" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+</FBType>

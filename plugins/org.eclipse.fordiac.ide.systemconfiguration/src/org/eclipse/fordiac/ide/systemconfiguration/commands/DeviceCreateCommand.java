@@ -1,14 +1,17 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * 				 2019 Johannes Keppler University Linz
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz, Monika Wenger, Kiril Dorofeev
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
@@ -30,14 +33,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
-import org.eclipse.fordiac.ide.util.Activator;
+import org.eclipse.fordiac.ide.ui.UIPlugin;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.fordiac.ide.util.YUV;
-import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.ui.IEditorPart;
 
 public class DeviceCreateCommand extends Command {
 	private static final String CREATE_DEVICE_LABEL = Messages.DeviceCreateCommand_LABEL_CreateDevice;
@@ -45,15 +46,9 @@ public class DeviceCreateCommand extends Command {
 	private final SystemConfiguration parent;
 	private final Rectangle bounds;
 	private Device device;
-	private IEditorPart editor;
 
 	public Device getDevice() {
 		return device;
-	}
-
-	@Override
-	public boolean canUndo() {
-		return editor.equals(Abstract4DIACUIPlugin.getCurrentActiveEditor());
 	}
 
 	public DeviceCreateCommand(final DeviceTypePaletteEntry entry, final SystemConfiguration parent,
@@ -71,27 +66,23 @@ public class DeviceCreateCommand extends Command {
 
 	@Override
 	public void execute() {
-		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
-		setLabel(getLabel() + "(" + (editor != null ? editor.getTitle() : "") + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		if (parent != null) {
-			createDevice();
-			device.setPaletteEntry(entry);
-			SystemImporter.createParamters(device);
-			setDeviceProfile();
-			device.setX(bounds.x);
-			device.setY(bounds.y);
-			parent.getDevices().add(device);
-			// the name needs to be set after the device is added to the network
-			// so that name checking works correctly
-			device.setName(NameRepository.createUniqueName(device, entry.getDeviceType().getName()));
-			setDeviceAttributes();
-			createResource();		
-			SystemManager.INSTANCE.notifyListeners();
-		}
+		createDevice();
+		device.setPaletteEntry(entry);
+		SystemImporter.createParamters(device);
+		setDeviceProfile();
+		device.setX(bounds.x);
+		device.setY(bounds.y);
+		parent.getDevices().add(device);
+		// the name needs to be set after the device is added to the network
+		// so that name checking works correctly
+		device.setName(NameRepository.createUniqueName(device, entry.getDeviceType().getName()));
+		setDeviceAttributes();
+		createResource();
+		SystemManager.INSTANCE.notifyListeners();
 	}
-	
+
 	private void setDeviceAttributes() {
-		for(AttributeDeclaration attributeDeclaration : entry.getDeviceType().getAttributeDeclarations()) {
+		for (AttributeDeclaration attributeDeclaration : entry.getDeviceType().getAttributeDeclarations()) {
 			Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 			attribute.setName(attributeDeclaration.getName());
 			attribute.setComment(attributeDeclaration.getComment());
@@ -103,10 +94,11 @@ public class DeviceCreateCommand extends Command {
 
 	private void setDeviceProfile() {
 		String profile;
-		if(null != device.getType().getProfile() && !"".equals(device.getType().getProfile())){ //$NON-NLS-1$
+		if (null != device.getType().getProfile() && !"".equals(device.getType().getProfile())) { //$NON-NLS-1$
 			profile = device.getType().getProfile();
-		}else{ 
-			profile = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE);
+		} else {
+			profile = UIPlugin.getDefault().getPreferenceStore()
+					.getString(PreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE);
 		}
 		device.setProfile(profile);
 	}
@@ -130,7 +122,7 @@ public class DeviceCreateCommand extends Command {
 						+ (res.getPaletteEntry() != null ? " (" + res.getTypeName() + ") " : "(N/A)")
 						+ " not found. Please check whether your palette contains that type and add it manually to your device!");
 			}
-		}		
+		}
 		createDefaultResource();
 	}
 
@@ -140,18 +132,18 @@ public class DeviceCreateCommand extends Command {
 				|| device.getType().getName().contains("FRAME")) { //$NON-NLS-1$
 			type = getResourceType("PANEL_RESOURCE"); //$NON-NLS-1$
 		} else {
-			type = getResourceType("EMB_RES"); //$NON-NLS-1$ 
+			type = getResourceType("EMB_RES"); //$NON-NLS-1$
 		}
-		if(null != type) {
-			ResourceCreateCommand cmd = new ResourceCreateCommand(type, device, false);	
+		if (null != type) {
+			ResourceCreateCommand cmd = new ResourceCreateCommand(type, device, false);
 			cmd.execute();
 		}
 	}
 
 	private ResourceTypeEntry getResourceType(String resTypeName) {
 		List<PaletteEntry> typeEntries = device.getPaletteEntry().getGroup().getPallete().getTypeEntries(resTypeName);
-		if(!typeEntries.isEmpty() && typeEntries.get(0) instanceof ResourceTypeEntry) {
-			return (ResourceTypeEntry)typeEntries.get(0);
+		if (!typeEntries.isEmpty() && typeEntries.get(0) instanceof ResourceTypeEntry) {
+			return (ResourceTypeEntry) typeEntries.get(0);
 		}
 		return null;
 	}

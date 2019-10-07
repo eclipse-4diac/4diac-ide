@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -31,18 +32,16 @@ public class FBTypeDragAssistant extends CommonDragAdapterAssistant {
 	}
 
 	@Override
-	public void dragStart(DragSourceEvent anEvent,
-			IStructuredSelection aSelection) {
-		// TemplateTransfer.getInstance().setTemplate(null);
+	public void dragStart(DragSourceEvent anEvent, IStructuredSelection aSelection) {
 		if (aSelection.getFirstElement() instanceof IFile) {
 			IFile fbTypeFile = (IFile) aSelection.getFirstElement();
 			Palette fbPalette = FBTypeUtils
 					.getPalletteForFBTypeFile(fbTypeFile);
 			if (fbPalette != null) {
-				PaletteEntry entry = TypeLibrary.getPaletteEntry(
-						fbPalette, fbTypeFile);
-				if (entry != null)
+				PaletteEntry entry = TypeLibrary.getPaletteEntry(fbPalette, fbTypeFile);
+				if (entry != null) {
 					TemplateTransfer.getInstance().setTemplate(entry);
+				}
 
 			} else {
 				anEvent.doit = false;
@@ -52,15 +51,12 @@ public class FBTypeDragAssistant extends CommonDragAdapterAssistant {
 	}
 
 	@Override
-	public boolean setDragData(DragSourceEvent anEvent,
-			IStructuredSelection aSelection) {
+	public boolean setDragData(DragSourceEvent anEvent, IStructuredSelection aSelection) {
 		if (aSelection.getFirstElement() instanceof IFile) {
 			IFile fbTypeFile = (IFile) aSelection.getFirstElement();
-			Palette fbPalette = FBTypeUtils
-					.getPalletteForFBTypeFile(fbTypeFile);
+			Palette fbPalette = FBTypeUtils.getPalletteForFBTypeFile(fbTypeFile);
 			if (fbPalette != null) {
-				PaletteEntry entry = TypeLibrary.getPaletteEntry(
-						fbPalette, fbTypeFile);
+				PaletteEntry entry = TypeLibrary.getPaletteEntry(fbPalette, fbTypeFile);
 
 				if (null != entry) {
 					anEvent.data = entry;

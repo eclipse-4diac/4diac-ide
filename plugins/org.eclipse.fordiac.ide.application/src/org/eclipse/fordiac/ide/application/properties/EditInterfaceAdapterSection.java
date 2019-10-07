@@ -1,11 +1,15 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * 				 2019 Johannes Kepler University
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
  *
- * Monika Wenger - initial implementation
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ *   Monika Wenger - initial implementation
+ *   Alois Zoitl - moved adapter search code to palette
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -23,24 +27,26 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
 	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
-		AdapterType type = getAdapterTypes(getPalette()).get(0).getType();
+		AdapterType type = getPalette().getAdapterTypes().get(0).getType();
 		return new CreateSubAppInterfaceElementCommand(type, getType().getInterface(), isInput, -1);
 	}
 
 	@Override
-	protected INamedElement getInputType(Object input) {
+	protected SubApp getInputType(Object input) {
 		if (input instanceof SubAppForFBNetworkEditPart) {
 			return ((SubAppForFBNetworkEditPart) input).getModel();
 		}
 		if (input instanceof UISubAppNetworkEditPart) {
 			return ((UISubAppNetworkEditPart) input).getSubApp();
+		}
+		if (input instanceof SubApp) {
+			return (SubApp) input;
 		}
 		return null;
 	}

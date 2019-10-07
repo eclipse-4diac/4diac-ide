@@ -3,8 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.fordiac</groupId>
 	<artifactId>parent</artifactId>
-	<version>1.10.3-SNAPSHOT</version>
+	<version>1.11.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	<name>Eclipse 4diac IDE Parent Project</name>
 	<modules>
 		<module>../org.eclipse.fordiac.ide</module>
 		<module>../org.eclipse.fordiac.ide.application</module>
@@ -15,9 +16,9 @@
 		<module>../org.eclipse.fordiac.ide.export.compare</module>
 		<module>../org.eclipse.fordiac.ide.export.forte_1.0.x</module>
 		<module>../org.eclipse.fordiac.ide.export.forte_lua</module>
+		<module>../org.eclipse.fordiac.ide.export.forte_ng</module>
 		<module>../org.eclipse.fordiac.ide.export.ui</module>
 		<module>../org.eclipse.fordiac.ide.fbrtlauncher</module>
-		<module>../org.eclipse.fordiac.ide.fbtypeeditor.fbtest</module>
 		<module>../org.eclipse.fordiac.ide.fbtypeeditor.fbtester</module>
 		<module>../org.eclipse.fordiac.ide.fbtypeeditor</module>
 		<module>../org.eclipse.fordiac.ide.fbtypeeditor.ecc</module>
@@ -42,7 +43,7 @@
 		<module>../org.eclipse.fordiac.ide.subapptypeeditor</module>
 		<module>../org.eclipse.fordiac.ide.systemimport</module>
 		<module>../org.eclipse.fordiac.ide.systemconfiguration</module>
-		<module>../org.eclipse.fordiac.ide.ui.controls</module>
+		<module>../org.eclipse.fordiac.ide.ui</module>
 		<module>../org.eclipse.fordiac.ide.util</module>
 		<module>../../tests/org.eclipse.fordiac.ide.test.util</module>
 		<module>../org.eclipse.fordiac.ide.monitoring</module>
@@ -60,9 +61,10 @@
 	</modules>
 
 	<properties>
-		<tycho.version>1.2.0</tycho.version>
-		<tycho-repo.url>http://download.eclipse.org/releases/2018-09</tycho-repo.url>
+		<tycho.version>1.4.0</tycho.version>
+		<tycho-repo.url>http://download.eclipse.org/releases/2019-09</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
+		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 	</properties>
 
 	<repositories>
@@ -94,6 +96,12 @@
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho.version}</version>
 				<extensions>true</extensions>
+				<configuration>
+					<generateDownloadStatsProperty>true</generateDownloadStatsProperty>
+					<extraArtifactRepositoryProperties>
+						<p2.statsURI>http://download.eclipse.org/stats/</p2.statsURI>
+					</extraArtifactRepositoryProperties>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -104,7 +112,7 @@
 						<artifact>
 							<groupId>org.eclipse.fordiac</groupId>
 							<artifactId>org.eclipse.fordiac.ide.product</artifactId>
-							<version>1.10.3-SNAPSHOT</version>
+							<version>1.11.0-SNAPSHOT</version>
 						</artifact>
 					</target>
 					
@@ -113,31 +121,21 @@
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.equinox.executable</id>
-								<versionRange>3.6.0</versionRange>
+								<versionRange>3.8.500</versionRange>
 							</requirement>
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.platform</id>
-								<versionRange>0.0.0</versionRange>
+								<versionRange>4.13.0</versionRange>
 							</requirement>
 						</extraRequirements>
 					</dependency-resolution>
-
+ 
 					<environments>
 						<environment>
 							<os>linux</os>
 							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
 							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
 						</environment>
 						<environment>
 							<os>win32</os>
@@ -168,14 +166,14 @@
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.equinox.executable</id>
-								<versionRange>3.6.0</versionRange>
+								<versionRange>3.8.500</versionRange>
 							</requirement>
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.platform</id>
 								<versionRange>0.0.0</versionRange>
 							</requirement>
-						</extraRequirements>
+						</extraRequirements> 
 					</dependency-resolution>
 				</configuration>
 			</plugin>

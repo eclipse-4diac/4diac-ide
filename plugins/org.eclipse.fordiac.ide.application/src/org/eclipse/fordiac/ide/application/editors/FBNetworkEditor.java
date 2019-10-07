@@ -1,16 +1,18 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- * 							 Johannes Kepler University
+ * 				 2018 - 2019 Johannes Kepler University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch, Filip Andren,
  *   Monika Wenger 
  *   - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - fixed copy/paste handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
@@ -38,8 +40,8 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.ContextMenuProvider;
@@ -60,40 +62,41 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionFactory;
 
 /**
  * The main editor for FBNetworks.
  */
-public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements ISystemEditor{
-	
-	private static final PaletteFlyoutPreferences PALETTE_PREFERENCES = new PaletteFlyoutPreferences(
-				"FBNetworkPalette.Location", //$NON-NLS-1$
-				"FBNetworkPalette.Size", //$NON-NLS-1$
-				"FBNetworkPalette.State"); //$NON-NLS-1$
+public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements ISystemEditor {
 
+	private static final PaletteFlyoutPreferences PALETTE_PREFERENCES = new PaletteFlyoutPreferences(
+			"FBNetworkPalette.Location", //$NON-NLS-1$
+			"FBNetworkPalette.Size", //$NON-NLS-1$
+			"FBNetworkPalette.State"); //$NON-NLS-1$
 
 	private FBNetwork model;
-	
+
 	protected void setModel(FBNetwork model) {
 		this.model = model;
 	}
-	
+
 	public CommandStack getFBEditorCommandStack() {
 		return getCommandStack();
 	}
-	
+
 	@Override
 	protected ScalableFreeformRootEditPart createRootEditPart() {
-		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()){
-			@Override	
+		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()) {
+			@Override
 			public DragTracker getDragTracker(Request req) {
-				MarqueeDragTracker dragTracker = new AdvancedMarqueeDragTracker(){
-					//redefined from MarqueeSelectionTool
+				MarqueeDragTracker dragTracker = new AdvancedMarqueeDragTracker() {
+					// redefined from MarqueeSelectionTool
 					static final int DEFAULT_MODE = 0;
 					static final int TOGGLE_MODE = 1;
-					
+
 					@SuppressWarnings({ "rawtypes", "unchecked" })
 					@Override
 					protected void performMarqueeSelect() {
@@ -105,19 +108,17 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 						// dependent on the current mode of the tool
 						Collection editPartsToSelect = new LinkedHashSet();
 						Collection editPartsToDeselect = new HashSet();
-						for (Iterator iterator = marqueeSelectedEditParts.iterator(); iterator
-								.hasNext();) {
+						for (Iterator iterator = marqueeSelectedEditParts.iterator(); iterator.hasNext();) {
 							EditPart affectedEditPart = (EditPart) iterator.next();
 							if (affectedEditPart.getSelected() == EditPart.SELECTED_NONE
-									|| getCurrentSelectionMode() != TOGGLE_MODE){
-								//only add connections and FBs
-								if((affectedEditPart instanceof FBEditPart) || 
-										(affectedEditPart instanceof ConnectionEditPart) ||
-										(affectedEditPart instanceof SubAppForFBNetworkEditPart)){
+									|| getCurrentSelectionMode() != TOGGLE_MODE) {
+								// only add connections and FBs
+								if ((affectedEditPart instanceof FBEditPart)
+										|| (affectedEditPart instanceof ConnectionEditPart)
+										|| (affectedEditPart instanceof SubAppForFBNetworkEditPart)) {
 									editPartsToSelect.add(affectedEditPart);
 								}
-							}
-							else{
+							} else {
 								editPartsToDeselect.add(affectedEditPart);
 							}
 						}
@@ -131,14 +132,13 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 						getCurrentViewer().setSelection(new StructuredSelection(editPartsToSelect.toArray()));
 					}
 				};
-				
+
 				dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 				return dragTracker;
 			}
 		};
 	}
-		
-	
+
 	@Override
 	public FBNetwork getModel() {
 		return model;
@@ -168,8 +168,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 
 	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
-		return new ApplicationEditorTemplateTransferDropTargetListener(
-				getGraphicalViewer(), getSystem());
+		return new ApplicationEditorTemplateTransferDropTargetListener(getGraphicalViewer(), getSystem());
 	}
 
 	@Override
@@ -180,13 +179,15 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 				.getAction(ActionFactory.COPY.getId());
 
 		getGraphicalViewer().addSelectionChangedListener(copy);
+
+		getGraphicalControl().addListener(SWT.Activate, this::handleActivationChanged);
+		getGraphicalControl().addListener(SWT.Deactivate, this::handleActivationChanged);
 	}
 
 	@Override
 	public AutomationSystem getSystem() {
 		return getModel().getAutomationSystem();
 	}
-
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
@@ -201,7 +202,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 	protected void createActions() {
 		ActionRegistry registry = getActionRegistry();
 		IAction action;
-		
+
 		action = new SaveAsSubApplicationTypeAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
@@ -209,40 +210,38 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 		action = new UnmapAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-		
+
 		action = new UnmapAllAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
 		action = new CopyEditPartsAction(this);
 		registry.registerAction(action);
-		getEditorSite().getActionBars().setGlobalActionHandler(
-				ActionFactory.COPY.getId(), action);
 
 		action = new PasteEditPartsAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-		getEditorSite().getActionBars().setGlobalActionHandler(
-				ActionFactory.PASTE.getId(), action);
-		
+
 		action = new UpdateFBTypeAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-		
+
 		super.createActions();
-		
-		//remove the select all action added in the graphical editor and replace it with our
+
+		// remove the select all action added in the graphical editor and replace it
+		// with our
 		action = registry.getAction(ActionFactory.SELECT_ALL.getId());
-		registry.removeAction(action);		
+		registry.removeAction(action);
 		getSelectionActions().remove(action.getId());
 		action = new FBNetworkSelectAllAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-		
-		//we need a special delete action that will order connections before everything else		
+
+		// we need a special delete action that will order connections before everything
+		// else
 		action = registry.getAction(ActionFactory.DELETE.getId());
 		registry.removeAction(action);
-		getSelectionActions().remove(action.getId());		
+		getSelectionActions().remove(action.getId());
 		action = new DeleteFBNetworkAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
@@ -256,19 +255,22 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-		//we don't need a PalletteRoot as our Pallette viewer will fill itself from the System provided in createPaletteViewerProvider()
+		// we don't need a PalletteRoot as our Pallette viewer will fill itself from the
+		// System provided in createPaletteViewerProvider()
 		return null;
 	}
-	
+
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
 		return new FBTypePaletteViewerProvider(getSystem().getProject(), getEditDomain(), getPalletNavigatorID());
 	}
-	
-	/** Method for providing the id to be used for generating the CNF for showing the pallette.
+
+	/**
+	 * Method for providing the id to be used for generating the CNF for showing the
+	 * pallette.
 	 * 
-	 * This method is to be subclassed by fbnetwork editors which would like to show different types in there 
-	 * pallete (e.g., Composite type editor). 
+	 * This method is to be subclassed by fbnetwork editors which would like to show
+	 * different types in there pallete (e.g., Composite type editor).
 	 * 
 	 * @return the navigator id
 	 */
@@ -278,13 +280,13 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 	}
 
 	@Override
-	protected FlyoutPreferences getPalettePreferences(){
+	protected FlyoutPreferences getPalettePreferences() {
 		return PALETTE_PREFERENCES;
 	}
 
-	public void selectFB(FB fb) {
-		EditPart editPart = (EditPart)getGraphicalViewer().getEditPartRegistry().get(fb);
-		if(null != editPart){
+	public void selectFBNetworkElement(FBNetworkElement fb) {
+		EditPart editPart = (EditPart) getGraphicalViewer().getEditPartRegistry().get(fb);
+		if (null != editPart) {
 			getGraphicalViewer().select(editPart);
 			getGraphicalViewer().reveal(editPart);
 		}
@@ -294,5 +296,21 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette  implements 
 	public void doSaveAs() {
 		// empty
 	}
-	
+
+	private void handleActivationChanged(Event event) {
+		IAction copy = null;
+		IAction paste = null;
+		if (event.type == SWT.Activate) {
+			copy = getActionRegistry().getAction(ActionFactory.COPY.getId());
+			paste = getActionRegistry().getAction(ActionFactory.PASTE.getId());
+		}
+		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.COPY.getId()) != copy) {
+			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copy);
+		}
+		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.PASTE.getId()) != paste) {
+			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.PASTE.getId(), paste);
+		}
+		getEditorSite().getActionBars().updateActionBars();
+	}
+
 }

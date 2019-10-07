@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2015, 2016 fortiss GmbH
- * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Monika Wenger, Alois Zoitl
@@ -23,24 +24,19 @@ public class InterfaceSection extends AbstractInterfaceSection {
 
 	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if(part instanceof DiagramEditorWithFlyoutPalette){
-			return ((DiagramEditorWithFlyoutPalette)part).getCommandStack();
+		if (part instanceof DiagramEditorWithFlyoutPalette) {
+			return ((DiagramEditorWithFlyoutPalette) part).getCommandStack();
 		}
 		return null;
 	}
 
 	@Override
 	protected FBNetworkElement getInputType(Object input) {
-		if(input instanceof AbstractFBNElementEditPart){
+		if (input instanceof AbstractFBNElementEditPart) {
 			return ((AbstractFBNElementEditPart) input).getModel();
+		} else if (input instanceof FBNetworkElement) {
+			return (FBNetworkElement) input;
 		}
 		return null;
-	}
-
-	@Override
-	protected void setInputCode() {}
-
-	@Override
-	protected void setInputInit() {
 	}
 }

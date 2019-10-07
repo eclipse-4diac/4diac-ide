@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2016, 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl
@@ -13,15 +14,11 @@
 package org.eclipse.fordiac.ide.subapptypeeditor.editparts;
 
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.subapptypeeditor.policies.SubAppTypeFBNetworkLayoutEditPolicy;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class SubAppTypeNetworkEditPartFactory extends CompositeNetworkEditPartFactory {
@@ -33,12 +30,11 @@ public class SubAppTypeNetworkEditPartFactory extends CompositeNetworkEditPartFa
 	@Override
 	protected EditPart getPartForElement(EditPart context, Object modelElement) {
 		if (modelElement instanceof FBNetwork) {
-			TypedSubAppNetworkEditPart compositeNetEP = new TypedSubAppNetworkEditPart();
-			return compositeNetEP;
+			return new TypedSubAppNetworkEditPart();
 		}
 
 		if (modelElement instanceof SubApp) {
-			return new SubAppForFBNetworkEditPart(zoomManager);
+			return new SubAppForFBNetworkEditPart(getZoomManager());
 		}
 		return super.getPartForElement(context, modelElement);
 	}

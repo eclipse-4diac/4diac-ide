@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Get the endpoint at INDEX from a request orchestration response" Name="GetEndpointFromOrchestrationHTTPPartial">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: PL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-02-19" Organization="fortiss GmbH" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="Request orchestration" Name="REQ" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="Request finished" Name="CNF" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="The ArrowheadSystem identifier that is requesting the orchestration" Name="requesterSystem" Type="ArrowheadSystem"/>
+      <VarDeclaration Comment="Not to be used by Application Systems. This field is only used when there is an inbound request from another Cloud. This can only be submitted by the Gatekeeper" Name="requesterCloud" Type="ArrowheadCloud"/>
+      <VarDeclaration Comment="Identification of the service" InitialValue="" Name="serviceDefinition" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="Interfaces implemented by the service" InitialValue="" Name="interfaces" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="Metadata of the service in key=value format" Name="serviceMetadata" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="These flags can be set to tailor the orchestration process (use just the names of the flags to be enabled)" Name="orchestrationFlags" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="There can be a list from the Consumer stating which other Application Systems (even from other Clouds) it wishes to connect. If this field is filled out, the Orchestrator will try to facilitate these preferences" Name="preferredProviders" Type="PreferredProvider"/>
+      <VarDeclaration ArraySize="10" Comment="This object will be presenting the Consumer’s selected QoS level. Not implemented" Name="requestedQoS" Type="WSTRING"/>
+      <VarDeclaration Comment="Enpoint of the orchestrator" Name="orchestratorEndpoint" Type="WSTRING"/>
+      <VarDeclaration Comment="Position in the array of the requested forms" Name="INDEX" Type="UINT"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Endpoint at position INDEX from orchestration forms" Name="endpoint" Type="WSTRING"/>
+    </OutputVars>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <SubApp Comment="" Name="RequestOrchestrationHTTPPartial" Type="RequestOrchestrationHTTPPartial" x="2430.0" y="-260.0"/>
+    <FB Comment="" Name="GET_AT_INDEX" Type="GET_AT_INDEX" x="5255.0" y="850.0"/>
+    <SubApp Comment="" Name="GetEndpointFromOrchestrationForm" Type="GetEndpointFromOrchestrationForm" x="6445.0" y="945.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="GetEndpointFromOrchestrationForm.orchestrationForm" Source="GET_AT_INDEX.OUT" dx1="190.0"/>
+      <Connection Comment="" Destination="endpoint" Source="GetEndpointFromOrchestrationForm.endpoint" dx1="375.0"/>
+      <Connection Comment="" Destination="GET_AT_INDEX.IN_ARRAY" Source="RequestOrchestrationHTTPPartial.serviceRequestForm" dx1="680.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.requesterSystem" Source="requesterSystem" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.requesterCloud" Source="requesterCloud" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.serviceDefinition" Source="serviceDefinition" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.interfaces" Source="interfaces" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.serviceMetadata" Source="serviceMetadata" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.orchestrationFlags" Source="orchestrationFlags" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.preferredProviders" Source="preferredProviders" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.requestedQoS" Source="requestedQoS" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.orchestratorEndpoint" Source="orchestratorEndpoint" dx1="840.0"/>
+      <Connection Comment="" Destination="GET_AT_INDEX.INDEX" Source="INDEX" dx1="2255.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="GetEndpointFromOrchestrationForm.REQ" Source="GET_AT_INDEX.CNF" dx1="190.0"/>
+      <Connection Comment="" Destination="CNF" Source="GetEndpointFromOrchestrationForm.CNF" dx1="375.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.REQ" Source="REQ" dx1="840.0"/>
+      <Connection Comment="" Destination="GET_AT_INDEX.REQ" Source="RequestOrchestrationHTTPPartial.CNF" dx1="800.0"/>
+    </EventConnections>
+  </SubAppNetwork>
+</SubAppType>

@@ -1,14 +1,18 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * 				 2018 - 2019 Johannes Kepler University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - fixed copy/paste handling
+ *   Alois Zoitl - added diagram font preference 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
@@ -21,10 +25,14 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
+import org.eclipse.fordiac.ide.gef.listeners.FigureFontUpdateListener;
+import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.ui.controls.editors.I4diacModelEditor;
+import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.util.UntypedEditorInput;
 import org.eclipse.gef.ContextMenuProvider;
@@ -52,10 +60,13 @@ import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -84,16 +95,16 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	/** The outline page. */
 	private DiagramOutlinePage outlinePage;
 
-	//needed for tabbed property sheets
-	@Override public CommandStack getCommandStack() {
+	// needed for tabbed property sheets
+	@Override
+	public CommandStack getCommandStack() {
 		return super.getCommandStack();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util
 	 * .EventObject)
 	 */
 	@Override
@@ -109,8 +120,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		for (Iterator iter = getGraphicalViewer().getRootEditPart()
-				.getChildren().iterator(); iter.hasNext();) {
+		for (Iterator iter = getGraphicalViewer().getRootEditPart().getChildren().iterator(); iter.hasNext();) {
 			EditPart ep = (EditPart) iter.next();
 			ep.refresh();
 		}
@@ -129,6 +139,17 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		hookGraphicalViewer();
 		initializeGraphicalViewer();
 
+		viewer.getControl().setFont(JFaceResources.getFont(PreferenceConstants.DIAGRAM_FONT));
+
+		final IPropertyChangeListener fontChangeListener = new DiagramFontChangeListener(
+				new FigureFontUpdateListener(((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getFigure(),
+						PreferenceConstants.DIAGRAM_FONT));
+
+		JFaceResources.getFontRegistry().addListener(fontChangeListener);
+		viewer.getControl().addDisposeListener(e -> {
+			JFaceResources.getFontRegistry().removeListener(fontChangeListener);
+		});
+
 		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
 	}
 
@@ -137,11 +158,10 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		return rulerComp;
 	}
 
-	
-	protected ScalableFreeformRootEditPart createRootEditPart(){
+	protected ScalableFreeformRootEditPart createRootEditPart() {
 		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -164,16 +184,14 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditPartFactory());
 
-		KeyHandler viewerKeyHandler = new GraphicalViewerKeyHandler(viewer)
-				.setParent(getCommonKeyHandler());
+		KeyHandler viewerKeyHandler = new GraphicalViewerKeyHandler(viewer).setParent(getCommonKeyHandler());
 		viewer.setKeyHandler(viewerKeyHandler);
 
-		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1),
-				MouseWheelZoomHandler.SINGLETON);
+		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
 	}
-	
-	public ZoomManager getZoomManger(){		
-		return ((ScalableFreeformRootEditPart)(getGraphicalViewer().getRootEditPart())).getZoomManager();
+
+	public ZoomManager getZoomManger() {
+		return ((ScalableFreeformRootEditPart) (getGraphicalViewer().getRootEditPart())).getZoomManager();
 	}
 
 	/**
@@ -186,14 +204,12 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	/**
 	 * Gets the context menu provider.
 	 * 
-	 * @param viewer
-	 *            the viewer
-	 * @param zoom the zoom manager of the root edit part
+	 * @param viewer the viewer
+	 * @param zoom   the zoom manager of the root edit part
 	 * 
 	 * @return the context menu provider
 	 */
-	protected abstract ContextMenuProvider getContextMenuProvider(
-			ScrollingGraphicalViewer viewer,
+	protected abstract ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer,
 			ZoomManager zoomManager);
 
 	/**
@@ -210,19 +226,16 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	 */
 	@Override
 	protected void initializeGraphicalViewer() {
-		// super.initializeGraphicalViewer();
 		GraphicalViewer viewer = getGraphicalViewer();
 		viewer.setContents(getModel());
 		// listen for dropped parts
 		TransferDropTargetListener listener = createTransferDropTargetListener();
 		if (listener != null) {
-			viewer.addDropTargetListener(createTransferDropTargetListener());
+			viewer.addDropTargetListener(listener);
 		}
 		// enable drag from palette
-		getGraphicalViewer().addDropTargetListener(
-				new TemplateTransferDropTargetListener(getGraphicalViewer()));
-		viewer.addDropTargetListener(new ParameterDropTargetListener(
-				getGraphicalViewer()));
+		getGraphicalViewer().addDropTargetListener(new TemplateTransferDropTargetListener(getGraphicalViewer()));
+		viewer.addDropTargetListener(new ParameterDropTargetListener(getGraphicalViewer()));
 	}
 
 	/*
@@ -232,26 +245,33 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	 * org.eclipse.ui.IEditorInput)
 	 */
 	@Override
-	public void init(final IEditorSite site, final IEditorInput input)
-			throws PartInitException {
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setModel(input);
 		super.init(site, input);
 		if (input.getName() != null) {
 			setPartName(input.getName());
 		}
-	}
-	
-	protected void updateEditorTitle(String newTitel) {
-		((UntypedEditorInput)getEditorInput()).setName(newTitel); //update the editor input so that the tooltip and header bars are correct as well
-		setPartName(newTitel);
+		ActionRegistry registry = getActionRegistry();
+		IActionBars bars = site.getActionBars();
+		String id = ActionFactory.UNDO.getId();
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+		id = ActionFactory.REDO.getId();
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+		id = ActionFactory.DELETE.getId();
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+		bars.updateActionBars();
 	}
 
+	protected void updateEditorTitle(String newTitel) {
+		((UntypedEditorInput) getEditorInput()).setName(newTitel); // update the editor input so that the tooltip and
+																	// header bars are correct as well
+		setPartName(newTitel);
+	}
 
 	/**
 	 * Sets the model.
 	 * 
-	 * @param input
-	 *            the new model
+	 * @param input the new model
 	 */
 	protected void setModel(final IEditorInput input) {
 
@@ -277,8 +297,8 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	 * IProgressMonitor)
 	 */
 	@Override
-	public abstract void doSave(final IProgressMonitor monitor); 
-	
+	public abstract void doSave(final IProgressMonitor monitor);
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -305,17 +325,13 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	protected KeyHandler getCommonKeyHandler() {
 		if (sharedKeyHandler == null) {
 			sharedKeyHandler = new KeyHandler();
-			sharedKeyHandler
-					.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
-							getActionRegistry().getAction(
-									ActionFactory.DELETE.getId()));
-			sharedKeyHandler.put(
-					KeyStroke.getPressed(SWT.F2, 0),
-					getActionRegistry().getAction(
-							GEFActionConstants.DIRECT_EDIT));
+			sharedKeyHandler.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
+					getActionRegistry().getAction(ActionFactory.DELETE.getId()));
+			sharedKeyHandler.put(KeyStroke.getPressed(SWT.F2, 0),
+					getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
 			sharedKeyHandler.put(/* CTRL + '=' */
-			KeyStroke.getPressed('+', 0x3d, SWT.CTRL), getActionRegistry()
-					.getAction(GEFActionConstants.ZOOM_IN));
+					KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
+					getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
 
 		}
 		return sharedKeyHandler;
@@ -324,16 +340,14 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(
 	 * java.lang.Class)
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(final Class type) {
 		if (type == ZoomManager.class) {
-			return getGraphicalViewer().getProperty(
-					ZoomManager.class.toString());
+			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
 		}
 		if (type == IContentOutlinePage.class) {
 			outlinePage = new DiagramOutlinePage(getGraphicalViewer());
@@ -369,39 +383,38 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		action = new DirectEditAction((IWorkbenchPart) this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
-		
-		action = new AlignmentAction((IWorkbenchPart) this,
-				PositionConstants.LEFT);
+
+		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.LEFT);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction((IWorkbenchPart) this,
-				PositionConstants.RIGHT);
+		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.RIGHT);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction((IWorkbenchPart) this,
-				PositionConstants.TOP);
+		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.TOP);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction((IWorkbenchPart) this,
-				PositionConstants.BOTTOM);
+		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.BOTTOM);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction((IWorkbenchPart) this,
-				PositionConstants.CENTER);
+		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.CENTER);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction((IWorkbenchPart) this,
-				PositionConstants.MIDDLE);
+		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.MIDDLE);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
 		super.createActions();
 
+		// remove the default print action and register our own one
+		registry.removeAction(registry.getAction(ActionFactory.PRINT.getId()));
+		action = new PrintPreviewAction(getGraphicalViewer());
+		registry.registerAction(action);
+		getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.PRINT.getId(), action);
 	}
 
 	/*
@@ -445,7 +458,6 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		return getGraphicalViewer();
 	}
 
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -458,8 +470,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 			@Override
 			protected void configurePaletteViewer(final PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
-				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(
-						viewer));
+				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
 			}
 		};
 	}

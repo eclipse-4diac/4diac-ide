@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2009 - 2016 Profactor GbmH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl 
@@ -12,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.views;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,10 +32,12 @@ import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry;
 import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSFactory;
 import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
+import org.eclipse.fordiac.ide.systemconfiguration.Messages;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.VirtualDNSTagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
@@ -90,6 +94,9 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 	
 	/** The delete entry action. */
 	private IAction deleteEntryAction;
+	
+	private static final String DEFAULT_VARIABLE_NAME = "localhost"; //$NON-NLS-1$
+	private static final String DEFAULT_VALUE = "127.0.0.1"; //$NON-NLS-1$
 
 	@Override
 	public void createPartControl(Composite parent) {	
@@ -101,14 +108,14 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		sectionClient.setLayout(new GridLayout(4, false));	
 
 		Label configLabel = new Label(sectionClient, SWT.NONE);
-		configLabel.setText("Configuration:");
+		configLabel.setText(Messages.virtualDNSConfigurationTitle + ":"); //$NON-NLS-1$
 
 		availableDNS = new CCombo(sectionClient, SWT.Expand);
 		availableDNS.setSize(240, -1);
 		availableDNS.addListener(SWT.Selection, e -> handleDNSSelection(availableDNS.getSelectionIndex()));
 
 		newConfiguration = new Button(sectionClient, SWT.NONE);
-		newConfiguration.setText("New");
+		newConfiguration.setText(Messages.virtualDNSNewConfiguration);
 		newConfiguration.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		newConfiguration.addListener(SWT.Selection, e -> {
 			if (system != null) {
@@ -117,7 +124,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		});
 		
 		delete = new Button(sectionClient, SWT.NONE);
-		delete.setText("Delete");		
+		delete.setText(Messages.virtualDNSDeleteConfiguration);		
 		delete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		delete.addListener(SWT.Selection, e -> {
 			management.getAvailableDNSCollections().remove(selectedCollection);
@@ -127,7 +134,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		
 
 		selected = new Button(sectionClient, SWT.CHECK);
-		selected.setText("Active Configuration");
+		selected.setText(Messages.virtualDNSActiveConfigurationText);
 		
 		GridData gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
 		gridData.horizontalIndent = 5;
@@ -140,7 +147,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 				management.setActiveVirtualDNS(selectedCollection);
 			}
 		});
-
+		
 		createDNSEntryList(sectionClient);
 
 		updateAvailableCollections();
@@ -163,75 +170,9 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 		filteredTree.setLayoutData(treeGridData);
 
-		TreeViewerColumn column1 = new TreeViewerColumn(
-				filteredTree.getViewer(), SWT.None);
-		column1.getColumn().setText("Variable");
-		column1.getColumn().setWidth(200);
-		column1.setEditingSupport(new EditingSupport(column1.getViewer()) {
-
-			@Override
-			protected void setValue(Object element, Object value) {
-				if (element instanceof VirtualDNSEntry) {
-					((VirtualDNSEntry) element).setName(value.toString());
-					filteredTree.getViewer().refresh();
-					SystemManager.INSTANCE.saveTagProvider(system,
-							provider);
-				}
-			}
-
-			@Override
-			protected Object getValue(Object element) {
-				if (element instanceof VirtualDNSEntry) {
-					return ((VirtualDNSEntry) element).getName();
-				}
-				return "";
-			}
-
-			@Override
-			protected CellEditor getCellEditor(Object element) {
-				return new TextCellEditor(filteredTree.getViewer().getTree());
-			}
-
-			@Override
-			protected boolean canEdit(Object element) {
-				return true;
-			}
-		});
-
-		TreeViewerColumn column2 = new TreeViewerColumn(
-				filteredTree.getViewer(), SWT.None);
-		column2.getColumn().setText("Value");
-		column2.getColumn().setWidth(800);
-		column2.setEditingSupport(new EditingSupport(column2.getViewer()) {
-
-			@Override
-			protected void setValue(Object element, Object value) {
-				if (element instanceof VirtualDNSEntry) {
-					((VirtualDNSEntry) element).setValue(value.toString());
-					filteredTree.getViewer().refresh();
-					SystemManager.INSTANCE.saveTagProvider(system,
-							provider);
-				}
-			}
-
-			@Override
-			protected Object getValue(Object element) {
-				if (element instanceof VirtualDNSEntry) {
-					return ((VirtualDNSEntry) element).getValue();
-				}
-				return ""; //$NON-NLS-1$
-			}
-
-			@Override
-			protected CellEditor getCellEditor(Object element) {
-				return new TextCellEditor(filteredTree.getViewer().getTree());
-			}
-
-			@Override
-			protected boolean canEdit(Object element) {
-				return true;
-			}
-		});
+		createFirstColumn();
+		
+		createSecondColumn();
 
 		filteredTree.getViewer().getTree().setHeaderVisible(true);
 		filteredTree.getViewer().getTree().setLinesVisible(true);
@@ -302,6 +243,96 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 
 		});
 	}
+	
+	private boolean variableNameAlreadyExists(VirtualDNSEntry element, String newValue) {
+		for (VirtualDNSEntry entry : selectedCollection.getVirtualDNSEntries()) {
+			if (entry.getName().equals(newValue) && !entry.equals(element)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void createFirstColumn() {
+		TreeViewerColumn column1 = new TreeViewerColumn(
+				filteredTree.getViewer(), SWT.None);
+		column1.getColumn().setText(Messages.virtualDNSFirstColumnTitle);
+		column1.getColumn().setWidth(200);
+		column1.setEditingSupport(new EditingSupport(column1.getViewer()) {
+
+			@Override
+			protected void setValue(Object element, Object value) {
+				if (element instanceof VirtualDNSEntry) {
+					
+					if (variableNameAlreadyExists((VirtualDNSEntry) element, value.toString())) {
+						Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat
+								.format(Messages.virtualDNSSameVariableNameError, value.toString()));
+					} else {
+						((VirtualDNSEntry) element).setName(value.toString());
+						filteredTree.getViewer().refresh();
+
+						SystemManager.INSTANCE.saveTagProvider(system,
+								provider);
+					}
+				}
+			}
+	
+			@Override
+			protected Object getValue(Object element) {
+				if (element instanceof VirtualDNSEntry) {
+					return ((VirtualDNSEntry) element).getName();
+				}
+				return ""; //$NON-NLS-1$
+			}
+
+			@Override
+			protected CellEditor getCellEditor(Object element) {
+				return new TextCellEditor(filteredTree.getViewer().getTree());
+			}
+
+			@Override
+			protected boolean canEdit(Object element) {
+				return true;
+			}
+		});
+	}
+	
+	private void createSecondColumn() {
+		TreeViewerColumn column2 = new TreeViewerColumn(
+				filteredTree.getViewer(), SWT.None);
+		column2.getColumn().setText(Messages.virtualDNSSecondColumnTitle);
+		column2.getColumn().setWidth(800);
+		column2.setEditingSupport(new EditingSupport(column2.getViewer()) {
+
+			@Override
+			protected void setValue(Object element, Object value) {
+				if (element instanceof VirtualDNSEntry) {
+					((VirtualDNSEntry) element).setValue(value.toString());
+					filteredTree.getViewer().refresh();
+					SystemManager.INSTANCE.saveTagProvider(system,
+							provider);
+				}
+			}
+
+			@Override
+			protected Object getValue(Object element) {
+				if (element instanceof VirtualDNSEntry) {
+					return ((VirtualDNSEntry) element).getValue();
+				}
+				return ""; //$NON-NLS-1$
+			}
+
+			@Override
+			protected CellEditor getCellEditor(Object element) {
+				return new TextCellEditor(filteredTree.getViewer().getTree());
+			}
+
+			@Override
+			protected boolean canEdit(Object element) {
+				return true;
+			}
+		});
+	}
 
 	private void updateAvailableCollections() {
 		availableDNS.removeAll();
@@ -346,7 +377,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 	private void updateContents() {
 		if(null != system){
 			
-			setPartName(viewName + ": " + system.getName());
+			setPartName(viewName + ": " + system.getName()); //$NON-NLS-1$
 			try {
 				provider = SystemManager.INSTANCE.getTagProvider(
 						Class.forName(VirtualDNSTagProvider.class.getName()),
@@ -398,7 +429,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 				//TODO add type navigator
 			}
 			
-			if(system != newSystem){
+			if(null != newSystem && system != newSystem){ //if no system is selected (normally when changing to Deployment view or others), keep the old one, otherwise you need to click on the application to update 
 				//only update if a new system has been selected
 				system = newSystem;
 				updateContents();
@@ -440,27 +471,17 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 	}
 
 	private void creteNewConfiguration() {
-		IInputValidator validator = new IInputValidator() {
-			@Override
-			public String isValid(String newText) {
-				if (newText.length() > 0) {
-					return null;
-				} 
-				return "Name must not be empty";
-			}
-		};
-
+		
+		IInputValidator validator = newText -> (newText.length() > 0) ? null : Messages.virtualDNSEmptyNameError;
+		
 		InputDialog collectionName = new InputDialog(Display
 				.getDefault().getActiveShell(),
-				"Configuration Name",
-				"Please enter a name for the Configuration",
-				"Configuration", validator);
+				Messages.virtualDNSNewConfigTitle,
+				Messages.virtualDNSNewConfigMessage,
+				Messages.virtualDNSNewConfigDefaultName, validator);
 		collectionName.setBlockOnOpen(true);
 		int ret = collectionName.open();
-		if (ret == Window.CANCEL) {
-			return;
-		} else if (ret == Window.OK) {
-
+		if (ret == Window.OK) {
 			VirtualDNSCollection collection = VirtualDNSFactory.eINSTANCE
 					.createVirtualDNSCollection();
 			collection.setName(collectionName.getValue());
@@ -474,8 +495,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 				
 				updateAvailableCollections();
 			}
-
-		}
+		} // add else for Window.CANCEL if needed
 	}
 
 	private void cloneActiveVirtualDNSEntries(VirtualDNSCollection collection,
@@ -485,7 +505,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		for (VirtualDNSEntry srcEntry : activeVirtualDNS.getVirtualDNSEntries()) {
 			VirtualDNSEntry entry = VirtualDNSFactory.eINSTANCE.createVirtualDNSEntry();
 			entry.setName(srcEntry.getName());
-			entry.setValue("Value not set");
+			entry.setValue(Messages.virtualDNSValueNotSet);
 			collection.getVirtualDNSEntries().add(entry);
 		}		
 	}
@@ -499,7 +519,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		 * Instantiates a new new version info action.
 		 */
 		public NewEntryAction() {
-			super("New Entry");
+			super(Messages.virtualDNSNewEntryButtonText);
 			setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		}
 
@@ -512,8 +532,16 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		public void run() {
 			VirtualDNSEntry entry = VirtualDNSFactory.eINSTANCE
 					.createVirtualDNSEntry();
-			entry.setName("localhost"); //$NON-NLS-1$
-			entry.setValue("127.0.0.1"); //$NON-NLS-1$
+			
+			//check if default variable name is present, and look for names with an incrementing suffix
+			String nameToAssing = DEFAULT_VARIABLE_NAME;
+			int counter = 1; 
+			while(variableNameAlreadyExists(null, nameToAssing)) {
+				nameToAssing = DEFAULT_VARIABLE_NAME + "_" + Integer.toString(counter++); //$NON-NLS-1$
+			}
+			
+			entry.setName(nameToAssing); 
+			entry.setValue(DEFAULT_VALUE); 
 			if (selectedCollection != null) {
 				selectedCollection.getVirtualDNSEntries().add(entry);
 			}
@@ -531,7 +559,7 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 		 * Instantiates a new delete version info action.
 		 */
 		public DeleteEntryAction() {
-			super("Delete Entry");
+			super(Messages.virtualDNSDeleteEntryButtonText);
 			setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
 		}
 

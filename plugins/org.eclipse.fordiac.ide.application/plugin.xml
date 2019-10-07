@@ -7,14 +7,14 @@
             class="org.eclipse.fordiac.ide.application.editors.ApplicationEditor"
             contributorClass="org.eclipse.fordiac.ide.util.ZoomUndoRedoActionBarContributor"
             default="true"
-            icon="fordiacimage://ICON_Application"
+            icon="fordiacimage://ICON_APPLICATION"
             id="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor"
             name="FBNetworkEditor"/>
       <editor
             class="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor"
             contributorClass="org.eclipse.fordiac.ide.util.ZoomUndoRedoActionBarContributor"
             default="true"
-            icon="fordiacimage://ICON_SubApp"
+            icon="fordiacimage://ICON_SUB_APP"
             id="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor"
             name="SubapplicationEditor">
       </editor>
@@ -130,6 +130,9 @@
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
+            </input>
          </propertySection>
          <propertySection
                enablesFor="1"
@@ -139,9 +142,12 @@
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
+            </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.ConnectionSection"
+               class="org.eclipse.fordiac.ide.gef.properties.ConnectionSection"
                enablesFor="1"
                id="org.eclipse.fordiac.ide.application.properties.ConnectionSection"
                tab="org.eclipse.fordiac.ide.application.propertyConnectionTab">
@@ -155,6 +161,14 @@
                tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+               id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+               tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
+            <input
+                  type="org.eclipse.fordiac.ide.gef.editparts.ValueEditPart">
             </input>
          </propertySection>
          <propertySection
@@ -176,6 +190,9 @@
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.model.libraryElement.SubApp">
+            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.EditInterfaceDataSection"
@@ -186,6 +203,9 @@
             </input>
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
+            </input>
+            <input
+                  type="org.eclipse.fordiac.ide.model.libraryElement.SubApp">
             </input>
          </propertySection>
          <propertySection
@@ -198,9 +218,12 @@
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.model.libraryElement.SubApp">
+            </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.AttributeSection"
+               class="org.eclipse.fordiac.ide.application.properties.ApplicationAttributeSection"
                id="org.eclipse.fordiac.ide.application.properties.AttributeSection"
                tab="org.eclipse.fordiac.ide.application.propertyAttributeTab">
             <input
@@ -228,7 +251,7 @@
          point="org.eclipse.fordiac.ide.util.openListener">
       <openListener
             class="org.eclipse.fordiac.ide.application.actions.OpenApplicationEditorAction"
-            icon="fordiacimage://ICON_Application"
+            icon="fordiacimage://ICON_APPLICATION"
             id="org.eclipse.fordiac.ide.application.actions.OpenApplicationEditorAction"
             label="Open Application">
       </openListener>
@@ -237,7 +260,7 @@
          point="org.eclipse.fordiac.ide.util.openListener">
       <openListener
             class="org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"
-            icon="fordiacimage://ICON_SubApp"
+            icon="fordiacimage://ICON_SUB_APP"
             id="org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"
             label="Open Subapplication">
       </openListener>

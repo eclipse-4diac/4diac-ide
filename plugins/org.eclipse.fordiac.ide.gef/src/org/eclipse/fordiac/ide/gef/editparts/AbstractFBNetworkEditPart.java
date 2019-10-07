@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl, Monika Wenger
@@ -28,7 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart{
 
 	/** The child providers. */
-	List<IChildrenProvider> childProviders = null;
+	private List<IChildrenProvider> childProviders = null;
 
 	
 	@Override

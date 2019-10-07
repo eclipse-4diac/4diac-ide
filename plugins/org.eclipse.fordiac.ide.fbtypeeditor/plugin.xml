@@ -54,19 +54,19 @@
          <propertyTab
                category="interface"
                id="property.tab.adapter"
-               image="fordiacimage://ICON_Adapter"
+               image="fordiacimage://ICON_ADAPTER"
                label="Adapter">
          </propertyTab>
          <propertyTab
                category="interface"
                id="property.tab.event"
-               image="fordiacimage://ICON_Event"
+               image="fordiacimage://ICON_EVENT"
                label="Event">
          </propertyTab>
          <propertyTab
                category="interface"
                id="property.tab.data"
-               image="fordiacimage://ICON_Data"
+               image="fordiacimage://ICON_DATA"
                label="Data">
          </propertyTab>
          <propertyTab

@@ -1,14 +1,18 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2011 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - moved openEditor helper function to EditorUtils  
+ *   Alois Zoitl - added diagram font preference 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 
@@ -19,42 +23,61 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
+import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
+import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
-import org.eclipse.fordiac.ide.systemconfiguration.Activator;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteResourceEditPolicy;
-import org.eclipse.fordiac.ide.util.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 
 public class ResourceEditPart extends AbstractViewEditPart {
-	private ResourceFigure figure;
+	private DiagramFontChangeListener fontChangeListener;
+
+	@Override
+	public void activate() {
+		super.activate();
+		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
+	}
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
+	}
+
+	private IPropertyChangeListener getFontChangeListener() {
+		if (null == fontChangeListener) {
+			fontChangeListener = new DiagramFontChangeListener(getFigure());
+		}
+		return fontChangeListener;
+	}
 
 	@Override
 	protected void refreshVisuals() {
 		// nothing to do
 	}
-	
+
 	@Override
 	public void refreshName() {
 		getNameLabel().setText(getINamedElement().getName());
 	}
 
-	public class ResourceFigure extends Figure {
+	public class ResourceFigure extends Figure implements IFontUpdateListener {
 		private final Label instanceName;
 		private final Label typeInfo;
 
 		public ResourceFigure() {
-			GridLayout mainLayout = new GridLayout(2, false);
+			GridLayout mainLayout = new GridLayout(3, false);
 			mainLayout.marginHeight = 2;
 			setLayoutManager(mainLayout);
 			if (getINamedElement() == null) {
@@ -63,16 +86,18 @@ public class ResourceEditPart extends AbstractViewEditPart {
 				instanceName = new Label(getINamedElement().getName());
 			}
 			if (getModel().isDeviceTypeResource()) {
-				instanceName.setIcon(FordiacImage.ICON_FirmwareResource.getImage());
+				instanceName.setIcon(FordiacImage.ICON_FIRMWARE_RESOURCE.getImage());
 			}
 			add(instanceName);
 			String type = "N/D";
 			if (getModel() != null) {
 				type = getModel().getTypeName();
 			}
-			typeInfo = new Label("(" //$NON-NLS-1$
-					+ type + ")"); //$NON-NLS-1$
-			typeInfo.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
+
+			add(new Label(":")); //$NON-NLS-1$
+
+			typeInfo = new Label(type);
+			setTypeLabelFonts();
 			add(typeInfo);
 			setOpaque(false);
 		}
@@ -80,19 +105,32 @@ public class ResourceEditPart extends AbstractViewEditPart {
 		public Label getInstanceName() {
 			return instanceName;
 		}
+
+		@Override
+		public void updateFonts() {
+			setTypeLabelFonts();
+			invalidateTree();
+			revalidate();
+		}
+
+		public void setTypeLabelFonts() {
+			typeInfo.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
+		}
 	}
 
 	@Override
 	protected IFigure createFigureForModel() {
-		if (figure == null) {
-			figure = new ResourceFigure();
-		}
-		return figure;
+		return new ResourceFigure();
+	}
+
+	@Override
+	public ResourceFigure getFigure() {
+		return (ResourceFigure) super.getFigure();
 	}
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteResourceEditPolicy());		
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteResourceEditPolicy());
 		// EditPolicy which allows the direct edit of the Instance Name
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy());
 	}
@@ -139,20 +177,14 @@ public class ResourceEditPart extends AbstractViewEditPart {
 	@Override
 	protected void backgroundColorChanged(IFigure figure) {
 	}
-	
+
 	@Override
 	public void performRequest(final Request request) {
-		if (request.getType() == RequestConstants.REQ_OPEN) {		
+		if (request.getType() == RequestConstants.REQ_OPEN) {
 			ResourceEditorInput input = new ResourceEditorInput(getModel());
-			
-			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			try {
-				activePage.openEditor(input,ResourceDiagramEditor.class.getName());
-			} catch (PartInitException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-			}
-		}else{
+			EditorUtils.openEditor(input, ResourceDiagramEditor.class.getName());
+		} else {
 			super.performRequest(request);
-		}		
+		}
 	}
 }

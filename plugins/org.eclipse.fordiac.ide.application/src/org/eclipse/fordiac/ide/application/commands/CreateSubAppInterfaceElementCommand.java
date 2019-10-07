@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl
@@ -18,23 +19,27 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 
 public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementCommand {
 
-	CreateInterfaceElementCommand mirroredElement = null;
+	private CreateInterfaceElementCommand mirroredElement = null;
 
 	public CreateSubAppInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput,
 			int index) {
 		super(dataType, interfaceList, isInput, index);
 	}
+	
+	public CreateInterfaceElementCommand getMirroredElement() { 
+		return mirroredElement;
+	}
 
 	@Override
 	public void execute() {
 		super.execute();
-		if(interfaceList.getFBNetworkElement().isMapped()) {
+		if(getInterfaceList().getFBNetworkElement().isMapped()) {
 			//the subapp is mapped so we need to created the interface element also in the opposite entry
-			mirroredElement = new CreateInterfaceElementCommand(dataType, interfaceList.getFBNetworkElement().getOpposite().getInterface(),
-					isInput, index);
+			mirroredElement = new CreateInterfaceElementCommand(getDataType(), getInterfaceList().getFBNetworkElement().getOpposite().getInterface(),
+					isInput(), getIndex());
 			mirroredElement.execute();
 			//Set the same name as the one we have also on the mirrored
-			mirroredElement.getInterfaceElement().setName(interfaceElement.getName());
+			mirroredElement.getInterfaceElement().setName(getInterfaceElement().getName());
 		}
 	}
 

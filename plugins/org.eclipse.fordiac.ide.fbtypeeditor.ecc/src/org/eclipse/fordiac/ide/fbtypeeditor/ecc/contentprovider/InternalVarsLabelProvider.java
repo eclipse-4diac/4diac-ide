@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2013, 2015 Profactor GmbH, fortiss GmbH
- * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -20,41 +21,30 @@ import org.eclipse.swt.graphics.Image;
 /**
  * The Class InternalVarsLabelProvider.
  */
-public class InternalVarsLabelProvider extends LabelProvider implements
-		ITableLabelProvider {
+public class InternalVarsLabelProvider extends LabelProvider implements ITableLabelProvider {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object,
-	 *      int)
-	 */
 	@Override
 	public Image getColumnImage(final Object element, final int columnIndex) {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object,
-	 *      int)
-	 */
 	@Override
 	public String getColumnText(final Object element, final int columnIndex) {
-
 		if (element instanceof VarDeclaration) {
+			VarDeclaration varDecl = ((VarDeclaration) element);
 			switch (columnIndex) {
 			case 0:
-				return ((VarDeclaration) element).getName();
+				return varDecl.getName();
 			case 1:
-				return ((VarDeclaration) element).getType().getName();
+				return varDecl.getType().getName();
 			case 2:
-				return ((VarDeclaration) element).getComment();
+				return (varDecl.getArraySize() > 0) ? Integer.toString(varDecl.getArraySize()) : ""; //$NON-NLS-1$
 			case 3:
-				return ((VarDeclaration) element).getArraySize() > 0 ? Integer.toString(((VarDeclaration) element).getArraySize()) : ""; //$NON-NLS-1$
+				return (varDecl.getValue() != null && varDecl.getValue().getValue() != null)
+						? varDecl.getValue().getValue()
+						: ""; //$NON-NLS-1$
 			case 4:
-				return ((VarDeclaration) element).getValue() != null && ((VarDeclaration) element).getValue().getValue() !=  null ? ((VarDeclaration) element).getValue().getValue() : ""; //$NON-NLS-1$
+				return varDecl.getComment();
 			default:
 				break;
 			}

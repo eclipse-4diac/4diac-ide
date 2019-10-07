@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Jose Cabral, Alois Zoitl
@@ -28,17 +29,18 @@ public class DeleteResourceHandler extends AbstractDeploymentCommand {
 	
 	@Override
 	protected boolean prepareParametersToExecute(Object element) {
-		device = null;
+		setDevice(null);
+		
 		if (element instanceof Resource){
 			resource = (Resource) element;
-			device =  resource.getDevice();
-			if (null != device ){
+			setDevice(resource.getDevice());
+			if (null != getDevice() ){
 				return true;	
 			}
 		}else if (element instanceof ResourceEditPart){
 			resource = ((ResourceEditPart) element).getModel();
-			device =  resource.getDevice();
-			if (null != device ){
+			setDevice(resource.getDevice());
+			if (null != getDevice() ){
 				return true;	
 			}
 		}
@@ -53,7 +55,7 @@ public class DeleteResourceHandler extends AbstractDeploymentCommand {
 	
 	@Override
 	protected void manageExecutorError() {
-		DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(device, resource);		
+		DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(getDevice(), resource);		
 	}
 	
 	@Override

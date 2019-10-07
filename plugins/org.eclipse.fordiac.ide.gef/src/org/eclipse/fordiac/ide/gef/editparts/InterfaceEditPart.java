@@ -1,21 +1,23 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH, 
- * 				 2018 Johannes Kepler University 
+ * 				 2018 - 2019 Johannes Kepler University 
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Waldemar Eisenmenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - allowed resource drop on on whole interfaces  
+ *   Alois Zoitl - allowed resource drop on on whole interfaces
+ *   Alois Zoitl - extracted interface selection policy and added connection 
+ *   			   creation feedback
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.draw2d.ConnectionAnchor;
@@ -31,17 +33,16 @@ import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.DataInterfaceLayoutEditPolicy;
+import org.eclipse.fordiac.ide.gef.policies.InterfaceElementSelectionPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.Activator;
-import org.eclipse.fordiac.ide.util.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -51,12 +52,11 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
-import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart implements
 		NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private ValueEditPart referencedPart;
-	protected int mouseState;
+	private int mouseState;
 	
 	private EContentAdapter contentAdapter = new EContentAdapter() {
 		@Override
@@ -160,58 +160,23 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 
 	protected abstract GraphicalNodeEditPolicy getNodeEditPolicy();
 
-	public void setInOutConnectionsWidth(int with) {
-		boolean hideData = Activator.getDefault().getPreferenceStore()
-				.getBoolean(PreferenceConstants.P_HIDE_DATA_CON);
-		boolean hideEvent = Activator.getDefault().getPreferenceStore()
-				.getBoolean(PreferenceConstants.P_HIDE_EVENT_CON);
-		for (@SuppressWarnings("rawtypes")
-		Iterator iterator = getSourceConnections().iterator(); iterator
-				.hasNext();) {
-			ConnectionEditPart cep = (ConnectionEditPart) iterator.next();
+	@SuppressWarnings("unchecked")
+	public void setInOutConnectionsWidth(int width) {
+		boolean hide = isEvent() ? 
+				Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON) :
+				Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON);
+		
+		getSourceConnections().forEach(cep -> checkConnection(width, hide, (ConnectionEditPart)cep));
+		getTargetConnections().forEach(cep -> checkConnection(width, hide, (ConnectionEditPart)cep));
+	}
 
-			if (cep.getFigure() instanceof PolylineConnection) {
-				((PolylineConnection) cep.getFigure()).setLineWidth(with);
-				if (cep.getModel() instanceof DataConnection) {
-					if (with > 1 && hideData) {
-						((PolylineConnection) cep.getFigure()).setVisible(true);
-					} else if (with < 2) {
-						((PolylineConnection) cep.getFigure())
-								.setVisible(!hideData);
-					}
-				}
-				if (cep.getModel() instanceof EventConnection) {
-					if (with > 1 && hideEvent) {
-						((PolylineConnection) cep.getFigure()).setVisible(true);
-					} else if (with < 2) {
-						((PolylineConnection) cep.getFigure())
-								.setVisible(!hideEvent);
-					}
-				}
-			}
-		}
-		for (@SuppressWarnings("rawtypes")
-		Iterator iterator = getTargetConnections().iterator(); iterator
-				.hasNext();) {
-			ConnectionEditPart cep = (ConnectionEditPart) iterator.next();
-			if (cep.getFigure() instanceof PolylineConnection) {
-				((PolylineConnection) cep.getFigure()).setLineWidth(with);
-				if (cep.getModel() instanceof DataConnection) {
-					if (with > 1 && hideData) {
-						((PolylineConnection) cep.getFigure()).setVisible(true);
-					} else if (with < 2) {
-						((PolylineConnection) cep.getFigure())
-								.setVisible(!hideData);
-					}
-				}
-				if (cep.getModel() instanceof EventConnection) {
-					if (with > 1 && hideEvent) {
-						((PolylineConnection) cep.getFigure()).setVisible(true);
-					} else if (with < 2) {
-						((PolylineConnection) cep.getFigure())
-								.setVisible(!hideEvent);
-					}
-				}
+	private static void checkConnection(int width, boolean hide, ConnectionEditPart cep) {
+		if (cep.getFigure() instanceof PolylineConnection) {
+			((PolylineConnection) cep.getFigure()).setLineWidth(width);
+			if (width > 1 && hide) {
+				((PolylineConnection) cep.getFigure()).setVisible(true);
+			} else if (width < 2) {
+				((PolylineConnection) cep.getFigure()).setVisible(!hide);
 			}
 		}
 	}
@@ -222,19 +187,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 		if(null != nodeEditPolicy) {
 			installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, nodeEditPolicy);
 		}
-		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
-				new SelectionEditPolicy() {
-
-					@Override
-					protected void showSelection() {
-						setInOutConnectionsWidth(2);
-					}
-
-					@Override
-					protected void hideSelection() {
-						setInOutConnectionsWidth(0);
-					}
-				});
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new InterfaceElementSelectionPolicy(this));
 
 		if (isVariable()) {
 			// layoutrole that allows to drop "strings" to an Input Variable
@@ -271,7 +224,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	}
 
 	public boolean isEvent() {
-		return getModel() instanceof EventImpl;
+		return getModel() instanceof Event;
 	}
 	
 	public boolean isAdapter() {

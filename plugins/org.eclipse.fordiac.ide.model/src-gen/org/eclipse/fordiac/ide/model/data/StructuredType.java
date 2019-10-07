@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Martin Jobst
@@ -44,7 +45,7 @@ public interface StructuredType extends DataType {
 	 * @return the value of the '<em>Var Declaration</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getStructuredType_VarDeclaration()
 	 * @model containment="true" transient="true" volatile="true" derived="true"
-	 *        extendedMetaData="kind='element' name='VarDeclaration' namespace='http://www.fordiac.org/61499/lib' group='#group:0'"
+	 *        extendedMetaData="kind='element' name='VarDeclaration' namespace='http://www.fordiac.org/61499/lib'"
 	 * @generated
 	 */
 	EList<VarDeclaration> getVarDeclaration();

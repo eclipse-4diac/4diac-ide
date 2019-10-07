@@ -1,22 +1,29 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 fortiss GmbH, Johannes Kepler University
+ * Copyright (c) 2017, 2018 fortiss GmbH
+ * 				 2018 - 2019 Johannes Kepler University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - fixed untyped subapp interface updates and according code cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.Label;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
+import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -27,47 +34,58 @@ import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.viewers.TextCellEditor;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
-	protected DirectEditManager manager;
-	
+	private DirectEditManager manager;
+
+	private EContentAdapter contentAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			Object feature = notification.getFeature();
+			if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
+				refresh();
+			}
+			super.notifyChanged(notification);
+		}
+	};
+
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
-			new INamedElementRenameEditPolicy() {
-				@Override
-				protected Command getDirectEditCommand(
-						final DirectEditRequest request) {
-					if (getHost() instanceof UntypedSubAppInterfaceElementEditPart) {
-						return new ChangeSubAppIENameCommand(getModel(), (String)request.getCellEditor().getValue());
-					}
-					return null;
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
+			@Override
+			protected Command getDirectEditCommand(final DirectEditRequest request) {
+				if (getHost() instanceof UntypedSubAppInterfaceElementEditPart) {
+					return new ChangeSubAppIENameCommand(getModel(), (String) request.getCellEditor().getValue());
 				}
-			});
+				return null;
+			}
+		});
 		// allow delete of a subapp's interface element
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteSubAppInterfaceElementPolicy());
 	}
-	
+
 	@Override
 	public void performRequest(final Request request) {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
-		if ((request.getType() == RequestConstants.REQ_OPEN) ||
-				(request.getType() == RequestConstants.REQ_DIRECT_EDIT)){
+		if ((request.getType() == RequestConstants.REQ_OPEN)
+				|| (request.getType() == RequestConstants.REQ_DIRECT_EDIT)) {
 			getManager().show();
 		}
 		super.performRequest(request);
 	}
-	
+
 	public DirectEditManager getManager() {
 		if (manager == null) {
 			Label l = getNameLabel();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class,
-					new NameCellEditorLocator(l), l,
+			manager = new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
 					new IdentifierVerifyListener()) {
 				@Override
 				protected void bringDown() {
 					if (getEditPart() instanceof UntypedSubAppInterfaceElementEditPart) {
-						((UntypedSubAppInterfaceElementEditPart) getEditPart()).refreshName();
+						((UntypedSubAppInterfaceElementEditPart) getEditPart()).refresh();
 					}
 					super.bringDown();
 				}
@@ -75,12 +93,20 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		}
 		return manager;
 	}
-	
+
 	public Label getNameLabel() {
 		return (Label) getFigure();
 	}
-	
-	public void refreshName() {
+
+	@Override
+	protected EContentAdapter getContentAdapter() {
+		return contentAdapter;
+	}
+
+	@Override
+	public void refresh() {
+		super.refresh();
 		getNameLabel().setText(getModel().getName());
+		getFigure().setToolTip(new ToolTipFigure(getModel()));
 	}
 }

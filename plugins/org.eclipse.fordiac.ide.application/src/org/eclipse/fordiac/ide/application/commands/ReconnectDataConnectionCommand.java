@@ -1,13 +1,14 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2014, 2016 Profactor GmbH, AIT, fortiss GmbH
- * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Filip Andren, Alois Zoitl 
+ *   Gerhard Ebenhofer, Filip Andren, Alois Zoitl
  *   - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
@@ -27,27 +28,26 @@ import org.eclipse.gef.requests.ReconnectRequest;
  */
 public class ReconnectDataConnectionCommand extends AbstractReconnectConnectionCommand {
 
-
 	/**
 	 * A command for reconnecting data connection.
-	 * 
+	 *
 	 * @param request the request
 	 */
 	public ReconnectDataConnectionCommand(final ReconnectRequest request, FBNetwork parent) {
 		super(Messages.ReconnectDataConnectionCommand_LABEL, request, parent);
 	}
-	
+
 	@Override
 	protected boolean checkSourceAndTarget(IInterfaceElement sourceIE, IInterfaceElement targetIE) {
-		if((sourceIE instanceof VarDeclaration) && (targetIE instanceof VarDeclaration)){
-			return LinkConstraints.canExistDataConnection((VarDeclaration)sourceIE, (VarDeclaration)targetIE,
-					(Connection)request.getConnectionEditPart().getModel());
+		if ((sourceIE instanceof VarDeclaration) && (targetIE instanceof VarDeclaration)) {
+			return LinkConstraints.canExistDataConnection((VarDeclaration) sourceIE, (VarDeclaration) targetIE,
+					getParent(), (Connection) getRequest().getConnectionEditPart().getModel());
 		}
 		return false;
 	}
-	
+
 	@Override
-	protected AbstractConnectionCreateCommand createConnectionCreateCommand() {
+	protected AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent) {
 		return new DataConnectionCreateCommand(parent);
 	}
 }

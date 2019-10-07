@@ -1,14 +1,17 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH,  fortiss GmbH, AIT
+ * 				 2019 Johannes Keppler University Linz
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Filip Pr�stl Andr�n, Monika Wenger
  *       - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - removed editor check from canUndo 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
@@ -16,32 +19,23 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementComma
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.ui.IEditorPart;
 
 public class UnmapCommand extends Command {
-	private final IEditorPart editor;	
 	private final Mapping mapping;
 	private final AutomationSystem system;
-	
+
 	private DeleteFBNetworkElementCommand deleteMappedFBCmd;
-	
+
 	public UnmapCommand(final FBNetworkElement element) {
 		super("Unmap");
 		mapping = element.getMapping();
 		system = mapping.getAutomationSystem();
-		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
 	}
 
 	@Override
-	public boolean canExecute() {		
+	public boolean canExecute() {
 		return mapping != null && null != system;
-	}
-
-	@Override
-	public boolean canUndo() {
-		return editor != null && editor.equals(Abstract4DIACUIPlugin.getCurrentActiveEditor());
 	}
 
 	@Override
@@ -66,9 +60,9 @@ public class UnmapCommand extends Command {
 		mapping.getFrom().setMapping(null);
 		mapping.getTo().setMapping(null);
 		system.getMapping().remove(mapping);
-		deleteMappedFBCmd.redo();		
+		deleteMappedFBCmd.redo();
 	}
-	
+
 	public FBNetworkElement getMappedFBNetworkElement() {
 		return deleteMappedFBCmd.getFBNetworkElement();
 	}

@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009 Profactor GbmH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer
@@ -32,12 +33,12 @@ public class NonRuleBasedDamagerRepairer implements IPresentationDamager,
 		IPresentationRepairer {
 
 	/** The document this object works on */
-	protected IDocument fDocument;
+	private IDocument fDocument;
 	/**
 	 * The default text attribute if non is returned as data by the current
 	 * token
 	 */
-	protected TextAttribute fDefaultTextAttribute;
+	private TextAttribute fDefaultTextAttribute;
 
 	/**
 	 * Constructor for NonRuleBasedDamagerRepairer.

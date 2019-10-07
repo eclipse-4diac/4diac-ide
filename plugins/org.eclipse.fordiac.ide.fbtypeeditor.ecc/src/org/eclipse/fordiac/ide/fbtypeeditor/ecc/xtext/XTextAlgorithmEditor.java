@@ -1,15 +1,18 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
+ *   Alois Zoitl - added code for handling better appreance in dark theme
+  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.xtext;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -18,18 +21,17 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.ui.providers.SourceViewerColorProvider;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.source.AbstractRulerColumn;
 import org.eclipse.jface.text.source.LineNumberRulerColumn;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xtext.ui.editor.XtextSourceViewer;
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditor;
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorModelAccess;
-	
+
 /**
  * XText based algorithm editor.
  * 
@@ -38,7 +40,6 @@ import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorModelAccess;
  */
 @SuppressWarnings("restriction")
 public class XTextAlgorithmEditor implements IAlgorithmEditor {
-
 
 	private EmbeddedEditor editor;
 
@@ -51,12 +52,13 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
-			if(Notification.REMOVING_ADAPTER != notification.getEventType()){
-				if(!(notification.getNotifier() instanceof Algorithm)){
+			if (Notification.REMOVING_ADAPTER != notification.getEventType()) {
+				if (!(notification.getNotifier() instanceof Algorithm)) {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							if((null != editor.getViewer()) && (null != editor.getViewer().getControl()) && (!editor.getViewer().getControl().isDisposed())){ 
+							if ((null != editor.getViewer()) && (null != editor.getViewer().getControl())
+									&& (!editor.getViewer().getControl().isDisposed())) {
 								updatePrefix();
 							}
 						}
@@ -69,34 +71,35 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 	public XTextAlgorithmEditor(EmbeddedEditor editor, BaseFBType fbType) {
 		this.editor = editor;
 		this.fbType = fbType;
-		embeddedEditorModelAccess = this.editor.createPartialEditor("","","", true); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		
-		LineNumberRulerColumn lnrc = new LineNumberRulerColumn(){
-			@Override
-			protected String createDisplayString(int line) {
-				//if(line >= prefixeLineCount){
-					line -= prefixeLineCount;					
-				//}				
-				return super.createDisplayString(line);
-			}			
-		};
-		
-		getViewer().addVerticalRulerColumn(lnrc);
+		embeddedEditorModelAccess = this.editor.createPartialEditor("", "", "", true); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+		SourceViewerColorProvider.initializeSourceViewerColors(getViewer());
+
+		getViewer().addVerticalRulerColumn(createLineNumberRulerColumn());
 
 		AbstractRulerColumn column = new AbstractRulerColumn() {
-		};		
-		getViewer().addVerticalRulerColumn(column); //Place holder for folding, also adds distance between line numbers and alg text
+		};
+		getViewer().addVerticalRulerColumn(column); // Place holder for folding, also adds distance between line numbers
+													// and alg text
 
 		this.fbType.eAdapters().add(adapter);
-		editor.getViewer().getControl().addDisposeListener(new DisposeListener() {
-			
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				getFBType().eAdapters().remove(adapter);	
-			}
-		});
-		
+		editor.getViewer().getControl().addDisposeListener(e -> getFBType().eAdapters().remove(adapter));
+
 		updatePrefix();
+	}
+
+	private LineNumberRulerColumn createLineNumberRulerColumn() {
+		LineNumberRulerColumn lnrc = new LineNumberRulerColumn() {
+			@Override
+			protected String createDisplayString(int line) {
+				line -= prefixLineCount;
+				return super.createDisplayString(line);
+			}
+		};
+
+		lnrc.setForeground(getViewer().getTextWidget().getForeground());
+		lnrc.setBackground(getViewer().getTextWidget().getBackground());
+		return lnrc;
 	}
 
 	protected BaseFBType getFBType() {
@@ -121,9 +124,9 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 	public void setAlgorithmText(String text) {
 		embeddedEditorModelAccess.updateModel(regeneratePrefix(), text, ""); //$NON-NLS-1$
 	}
-	
+
 	@Override
-	public String getAlgorithmText(){
+	public String getAlgorithmText() {
 		return embeddedEditorModelAccess.getEditablePart();
 	}
 
@@ -132,36 +135,37 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 		return getViewer().getControl();
 	}
 
-	
-	int prefixeLineCount = 0;
-	
+	private int prefixLineCount = 0;
+
 	private void updatePrefix() {
 		documentValid = false;
 		embeddedEditorModelAccess.updatePrefix(regeneratePrefix());
-		
+
 		try {
-			prefixeLineCount = getViewer().getDocument().getNumberOfLines(0, getViewer().getVisibleRegion().getOffset());
-			prefixeLineCount--;  //the first line starts after the prefix
+			prefixLineCount = getViewer().getDocument().getNumberOfLines(0,
+					getViewer().getVisibleRegion().getOffset());
+			prefixLineCount--; // the first line starts after the prefix
 		} catch (BadLocationException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
-		
+
 		documentValid = true;
 	}
-	
-	/** Provide a prefix string to be used for algorithm parsing.
+
+	/**
+	 * Provide a prefix string to be used for algorithm parsing.
 	 * 
-	 * The prefix can be used to import stuff or to provide access to the inputs, outputs, and internal variables
-	 * of the FB.
+	 * The prefix can be used to import stuff or to provide access to the inputs,
+	 * outputs, and internal variables of the FB.
 	 * 
 	 * Per default we return an empty string.
 	 * 
 	 * @return the new prefix to be used for parsing the algorithm, must not be null
 	 */
 	protected String regeneratePrefix() {
-		return "";  //$NON-NLS-1$
+		return ""; //$NON-NLS-1$
 	}
-	
+
 	private boolean documentValid = true;
 
 	@Override

@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -31,7 +32,7 @@ import org.eclipse.fordiac.ide.systemmanagement.Activator;
 /**
  * The Class SystemPaletteManagement.
  */
-public class SystemPaletteManagement {
+public final class SystemPaletteManagement {
 
 	/**
 	 * Copy tool type lib to project.
@@ -72,6 +73,10 @@ public class SystemPaletteManagement {
 			}
 		}
 		targetLocation.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+	}
+	
+	private SystemPaletteManagement() {
+		throw new UnsupportedOperationException("SystemPaletteManagement utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 
 }

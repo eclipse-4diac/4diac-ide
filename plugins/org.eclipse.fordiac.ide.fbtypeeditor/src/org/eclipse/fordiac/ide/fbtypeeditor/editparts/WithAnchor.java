@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2011 Profactor GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer
@@ -18,8 +19,8 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 
 public class WithAnchor extends ChopboxAnchor {
-	protected final int pos;
-	protected final EditPart editPart;
+	private final int pos;
+	private final EditPart editPart;
 
 	public WithAnchor(final IFigure figure, final int pos, final EditPart editPart) {
 		super(figure);
@@ -27,11 +28,15 @@ public class WithAnchor extends ChopboxAnchor {
 		this.editPart = editPart;
 	}
 
-	protected double getZoomFactor(){
+	protected double getZoomFactor() {
 		double zoom = 1.0;
-		if(editPart.getRoot() instanceof ScalableFreeformRootEditPart){
-			zoom = ((ScalableFreeformRootEditPart)editPart.getRoot()).getZoomManager().getZoom();
+		if (editPart.getRoot() instanceof ScalableFreeformRootEditPart) {
+			zoom = ((ScalableFreeformRootEditPart) editPart.getRoot()).getZoomManager().getZoom();
 		}
 		return zoom;
+	}
+
+	protected int getPos() {
+		return pos;
 	}
 }

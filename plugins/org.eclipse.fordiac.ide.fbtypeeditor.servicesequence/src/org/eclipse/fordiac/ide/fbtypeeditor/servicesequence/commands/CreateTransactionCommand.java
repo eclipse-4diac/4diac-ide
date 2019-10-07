@@ -1,14 +1,17 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Keppler University Linz
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - removed editor check from canUndo 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
@@ -21,16 +24,11 @@ import org.eclipse.gef.commands.Command;
 
 public class CreateTransactionCommand extends Command {
 
-	private ServiceTransaction transaction;	
+	private ServiceTransaction transaction;
 	private ServiceSequence parent;
-	
+
 	public CreateTransactionCommand(ServiceSequence sequence) {
 		this.parent = sequence;
-	}
-
-	@Override
-	public boolean canUndo() {
-		return transaction != null;
 	}
 
 	@Override
@@ -38,7 +36,7 @@ public class CreateTransactionCommand extends Command {
 		transaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 		InputPrimitive primitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
 		primitive.setEvent("INIT"); //$NON-NLS-1$
-		primitive.setInterface(((Service)parent.eContainer()).getLeftInterface());
+		primitive.setInterface(((Service) parent.eContainer()).getLeftInterface());
 		transaction.setInputPrimitive(primitive);
 		parent.getServiceTransaction().add(transaction);
 	}

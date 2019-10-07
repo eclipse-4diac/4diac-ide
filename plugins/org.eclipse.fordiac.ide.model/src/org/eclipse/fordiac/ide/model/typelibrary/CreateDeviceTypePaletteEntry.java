@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2014 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Waldemar Eisenmenger
@@ -15,22 +16,16 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
-import org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl;
 
 public class CreateDeviceTypePaletteEntry implements IPaletteEntryCreator, TypeLibraryTags {
 
 	@Override
 	public boolean canHandle(IFile file) {
-		if (DEVICE_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension())){
-			 return true;
-		 } 
-		return false;
+		return (DEVICE_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
 	}
 
 	@Override
-	public PaletteEntryImpl createPaletteEntry() {
-		DeviceTypePaletteEntry entry = PaletteFactory.eINSTANCE.createDeviceTypePaletteEntry();
-			
-		return (PaletteEntryImpl) entry;
+	public DeviceTypePaletteEntry createPaletteEntry() {
+		return PaletteFactory.eINSTANCE.createDeviceTypePaletteEntry();
 	}
 }

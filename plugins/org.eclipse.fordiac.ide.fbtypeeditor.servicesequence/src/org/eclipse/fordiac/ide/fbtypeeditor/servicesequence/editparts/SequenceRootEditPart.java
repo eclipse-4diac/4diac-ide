@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2015 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -77,7 +78,7 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 		super.deactivate();
 	}
 	
-	public class ServiceFigure extends FreeformLayeredPane {
+	public static class ServiceFigure extends FreeformLayeredPane {
 		private Figure leftFigure;
 		private Figure middleFigure;
 		private Figure rightFigure;

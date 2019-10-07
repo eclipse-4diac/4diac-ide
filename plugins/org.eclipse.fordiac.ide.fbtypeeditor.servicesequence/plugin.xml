@@ -26,31 +26,31 @@
          <propertyTab
                category="serviceSequence"
                id="property.tab.service"
-               image="fordiacimage://ICON_Service"
+               image="fordiacimage://ICON_SERVICE"
                label="Service">
          </propertyTab>
          <propertyTab
                category="serviceSequence"
                id="property.tab.serviceSequence"
-               image="fordiacimage://ICON_ServiceSequence"
+               image="fordiacimage://ICON_SERVICE_SEQUENCE"
                label="Service Sequence">
          </propertyTab>
          <propertyTab
                category="serviceSequence"
                id="property.tab.inputPrimitive"
-               image="fordiacimage://ICON_RigthInputPrimitive"
+               image="fordiacimage://ICON_RIGHT_INPUT_PRIMITIVE"
                label="Input Primitive">
          </propertyTab>
          <propertyTab
                category="serviceSequence"
                id="property.tab.outputPrimitive"
-               image="fordiacimage://ICON_RigthOutputPrimitive"
+               image="fordiacimage://ICON_RIGHT_OUTPUT_PRIMITIVE"
                label="Output Primitive">
          </propertyTab>
          <propertyTab
                category="serviceSequence"
                id="property.tab.transaction"
-               image="fordiacimage://ICON_Transaction"
+               image="fordiacimage://ICON_TRANSACTION"
                label="Transaction">
          </propertyTab>
       </propertyTabs>

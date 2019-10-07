@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
@@ -87,7 +88,6 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getResource(this);'"
 	 * @generated
 	 */
 	Resource getResource();
@@ -96,7 +96,6 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);'"
 	 * @generated
 	 */
 	IInterfaceElement getInterfaceElement(String name);
@@ -105,7 +104,6 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getOpposite(this);'"
 	 * @generated
 	 */
 	FBNetworkElement getOpposite();
@@ -114,7 +112,6 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getFbNetwork(this);'"
 	 * @generated
 	 */
 	FBNetwork getFbNetwork();
@@ -122,7 +119,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.fordiac.ide.model.Annotations.checkConnections(this);'"
+	 * @model
 	 * @generated
 	 */
 	void checkConnections();
@@ -131,7 +128,6 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.isMapped(this);'"
 	 * @generated
 	 */
 	boolean isMapped();
@@ -140,7 +136,6 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='//the base class of all types a FBNetworkElement can be (FB, Subapp, Adapter) is a FBType. Therefore we can have this here.\n\n//this cannot be moved to the annotation class because there we don\'t have the super access!!!\n\nreturn super.getType() instanceof FBType ? (FBType)super.getType() : null;'"
 	 * @generated
 	 */
 	@Override

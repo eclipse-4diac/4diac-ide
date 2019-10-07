@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2012, 2015 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -34,11 +35,9 @@ public class ChangeCommentCommand extends Command {
 	 * Instantiates a new change comment command.
 	 * 
 	 * @param interfaceElement the interface element
-	 * @param comment the comment
+	 * @param comment          the comment
 	 */
-	public ChangeCommentCommand(final INamedElement interfaceElement,
-			final String comment) {
-//		super();
+	public ChangeCommentCommand(final INamedElement interfaceElement, final String comment) {
 		this.interfaceElement = interfaceElement;
 		this.comment = comment;
 	}

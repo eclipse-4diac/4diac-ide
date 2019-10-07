@@ -1,26 +1,26 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2013, 2016, 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 Johannes Keppler University Linz
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - removed editor check from canUndo 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECTransitionEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
-import org.eclipse.fordiac.ide.ui.controls.Abstract4DIACUIPlugin;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ReconnectRequest;
-import org.eclipse.ui.IEditorPart;
 
 /**
  * A command for reconnecting transition connections.
@@ -30,33 +30,18 @@ import org.eclipse.ui.IEditorPart;
 public class ReconnectTransitionCommand extends Command {
 
 	/** The request. */
-	protected final ReconnectRequest request;
-
-	/** The editor. */
-	private IEditorPart editor;
+	private final ReconnectRequest request;
 
 	/** The cmd. */
-	protected DeleteTransitionCommand cmd;
+	private DeleteTransitionCommand cmd;
 
 	/** The dccc. */
-	protected CreateTransitionCommand dccc;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#canUndo()
-	 */
-	@Override
-	public boolean canUndo() {
-		return editor.equals(Abstract4DIACUIPlugin.getCurrentActiveEditor());
-
-	}
+	private CreateTransitionCommand dccc;
 
 	/**
 	 * A command for reconnecting data connection.
 	 * 
-	 * @param request
-	 *            the request
+	 * @param request the request
 	 */
 	public ReconnectTransitionCommand(final ReconnectRequest request) {
 		super("Reconnect Transition");
@@ -78,7 +63,6 @@ public class ReconnectTransitionCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		editor = Abstract4DIACUIPlugin.getCurrentActiveEditor();
 		if (request.getType().equals(RequestConstants.REQ_RECONNECT_TARGET)) {
 			doReconnectTarget();
 		}
@@ -92,15 +76,15 @@ public class ReconnectTransitionCommand extends Command {
 	 * Do reconnect source.
 	 */
 	protected void doReconnectSource() {
-		ECTransition transition = ((ECTransitionEditPart)request.getConnectionEditPart()).getCastedModel();
+		ECTransition transition = (ECTransition) request.getConnectionEditPart().getModel();
 		cmd = new DeleteTransitionCommand(transition);
 		dccc = new CreateTransitionCommand();
-		dccc.setSource(((ECStateEditPart) request.getTarget()).getCastedModel());
-		dccc.setDestination(((ECStateEditPart) request.getConnectionEditPart().getTarget()).getCastedModel());
+		dccc.setSource((ECState) request.getTarget().getModel());
+		dccc.setDestination((ECState) request.getConnectionEditPart().getTarget().getModel());
 
 		dccc.setDestinationLocation(new Point(dccc.getDestination().getX(), dccc.getDestination().getY()));
 		dccc.setSourceLocation(request.getLocation());
-		
+
 		dccc.setConditionEvent(transition.getConditionEvent());
 		dccc.setConditionExpression(transition.getConditionExpression());
 		cmd.execute();
@@ -111,17 +95,16 @@ public class ReconnectTransitionCommand extends Command {
 	 * Do reconnect target.
 	 */
 	protected void doReconnectTarget() {
-		ECTransition transition = ((ECTransitionEditPart)request.getConnectionEditPart()).getCastedModel();
+		ECTransition transition = (ECTransition) request.getConnectionEditPart().getModel();
 		cmd = new DeleteTransitionCommand(transition);
 		dccc = new CreateTransitionCommand();
-		dccc.setSource(((ECStateEditPart) request.getConnectionEditPart()
-				.getSource()).getCastedModel());
-		dccc.setDestination(((ECStateEditPart) request.getTarget()).getCastedModel());
+		dccc.setSource((ECState) request.getConnectionEditPart().getSource().getModel());
+		dccc.setDestination((ECState) request.getTarget().getModel());
 		dccc.setDestinationLocation(request.getLocation());
 		dccc.setSourceLocation(new Point(dccc.getSource().getX(), dccc.getSource().getY()));
 		dccc.setConditionEvent(transition.getConditionEvent());
-		dccc.setConditionExpression(transition.getConditionExpression());		
-		
+		dccc.setConditionExpression(transition.getConditionExpression());
+
 		cmd.execute();
 		dccc.execute();
 
@@ -148,6 +131,5 @@ public class ReconnectTransitionCommand extends Command {
 		cmd.undo();
 
 	}
-
 
 }

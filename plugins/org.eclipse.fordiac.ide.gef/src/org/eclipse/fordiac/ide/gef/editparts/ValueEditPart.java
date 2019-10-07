@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2012, 2014 - 2017 Profactor GbmH, fortiss GmbH 
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
@@ -43,23 +44,24 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.viewers.TextCellEditor;
 
-public class ValueEditPart extends AbstractGraphicalEditPart implements
-		NodeEditPart {
+public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
 	private DirectEditManager manager;
 
 	private ValueFigure figure;
-	private EditPart context;	
+	private EditPart context;
 	private InterfaceEditPart parentPart;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
 	 */
 	@Override
 	public void activate() {
 		super.activate();
 		getModel().eAdapters().add(contentAdapter);
-		
+
 		@SuppressWarnings("rawtypes")
 		Set set = getViewer().getEditPartRegistry().keySet();
 		for (@SuppressWarnings("rawtypes")
@@ -68,8 +70,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 			if (object instanceof IInterfaceElement) {
 				if (((IInterfaceElement) object).equals(getModel().getVarDeclaration())) {
 
-					EditPart part = (EditPart) getViewer()
-							.getEditPartRegistry().get(object);
+					EditPart part = (EditPart) getViewer().getEditPartRegistry().get(object);
 					if (part instanceof InterfaceEditPart) {
 						parentPart = (InterfaceEditPart) part;
 						IFigure f = parentPart.getFigure();
@@ -81,9 +82,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 
 							@Override
 							public void ancestorMoved(IFigure ancestor) {
-								// calculatePos();
 								refreshVisuals();
-
 							}
 
 							@Override
@@ -97,8 +96,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 		}
 		refreshVisuals();
 	}
-	
-	
 
 	private Point calculatePos() {
 		if (parentPart != null) {
@@ -130,9 +127,10 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 		width = Math.min(width, 600);
 		return width;
 	}
-	
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
 	 */
 	@Override
@@ -143,7 +141,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 			manager = null;
 		}
 	}
-	
+
 	private final EContentAdapter contentAdapter = new EContentAdapter() {
 
 		@Override
@@ -177,13 +175,13 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 				setLabelAlignment(PositionConstants.LEFT);
 				setTextAlignment(PositionConstants.LEFT);
 			}
-			
+
 			setMinimumSize(new Dimension(50, 1));
 			setToolTip(new ValueToolTipFigure(getIInterfaceElement(), getModel()));
 		}
 
 	}
-	
+
 	/**
 	 * Refresh value.
 	 */
@@ -196,7 +194,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#refresh()
 	 */
 	@Override
@@ -206,7 +206,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 		refreshPosition();
 	}
 
-	
 	@Override
 	public Label getFigure() {
 		return (Label) super.getFigure();
@@ -237,8 +236,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 	@Override
 	protected void createEditPolicies() {
 		// EditPolicy which allows the direct edit of the value
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
-				new ValueEditPartChangeEditPolicy());
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ValueEditPartChangeEditPolicy());
 	}
 
 	@Override
@@ -252,7 +250,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 	 * @return true, if is input
 	 */
 	public boolean isInput() {
-		// return getCastedModel().getIInterfaceElement().isIsInput();
 		return true;
 	}
 
@@ -262,7 +259,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 	 * @return true, if is event
 	 */
 	public boolean isEvent() {
-		// return getCastedModel().getIInterfaceElement() instanceof EventImpl;
 		return false;
 	}
 
@@ -273,42 +269,50 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 	 */
 	public boolean isVariable() {
 		return true;
-		// return getCastedModel().getIInterfaceElement() instanceof
-		// VarDeclarationImpl;
 	}
 
 	private IInterfaceElement getIInterfaceElement() {
 		return getModel().getVarDeclaration();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.ConnectionEditPart)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
+	 * ConnectionEditPart)
 	 */
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(
-			final ConnectionEditPart connection) {
+	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.Request)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
+	 * Request)
 	 */
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.ConnectionEditPart)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
+	 * ConnectionEditPart)
 	 */
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(
-			final ConnectionEditPart connection) {
+	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.Request)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
+	 * Request)
 	 */
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
@@ -352,8 +356,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 	public DirectEditManager getManager() {
 		if (manager == null) {
 			Label l = getFigure();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class,
-					new NameCellEditorLocator(l), l);
+			manager = new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
 		}
 
 		return manager;
@@ -366,17 +369,19 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements
 		getManager().show();
 	}
 
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef.Request)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef.
+	 * Request)
 	 */
 	@Override
 	public void performRequest(final Request request) {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN) {
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
 			performDirectEdit();
 
 		} else {

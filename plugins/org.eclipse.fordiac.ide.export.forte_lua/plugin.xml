@@ -2,9 +2,11 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.fordiac.ide.export.ui.ExportFilter">
+         point="org.eclipse.fordiac.ide.export.exportFilter">
       <ExportFilter
             class="org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter"
+            description="FORTE Lua Export"
+            name="FORTE Lua"
             sortIndex="20">
       </ExportFilter>
    </extension>

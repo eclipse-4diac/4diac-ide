@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
@@ -143,7 +144,6 @@ public interface InterfaceList extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true" many="false"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getAllInterfaceElements(this);'"
 	 * @generated
 	 */
 	EList<IInterfaceElement> getAllInterfaceElements();
@@ -152,7 +152,6 @@ public interface InterfaceList extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getEvent(this, name);'"
 	 * @generated
 	 */
 	Event getEvent(String name);
@@ -161,7 +160,6 @@ public interface InterfaceList extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getVariable(this, name);'"
 	 * @generated
 	 */
 	VarDeclaration getVariable(String name);
@@ -170,7 +168,6 @@ public interface InterfaceList extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" nameRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);'"
 	 * @generated
 	 */
 	IInterfaceElement getInterfaceElement(String name);
@@ -179,7 +176,6 @@ public interface InterfaceList extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);'"
 	 * @generated
 	 */
 	FBNetworkElement getFBNetworkElement();
@@ -187,7 +183,7 @@ public interface InterfaceList extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='return org.eclipse.fordiac.ide.model.Annotations.getAdapter(this, name);'"
+	 * @model
 	 * @generated
 	 */
 	AdapterDeclaration getAdapter(String name);

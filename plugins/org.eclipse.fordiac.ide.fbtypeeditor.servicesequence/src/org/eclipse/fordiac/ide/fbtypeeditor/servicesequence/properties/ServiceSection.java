@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2016 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Monika Wenger, Alois Zoitl
@@ -83,8 +84,8 @@ public class ServiceSection extends AbstractServiceSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);	
-		createServiceSection(leftComposite);
-		createSequencesSection(rightComposite);
+		createServiceSection(getLeftComposite());
+		createSequencesSection(getRightComposite());
 	}
 	
 	private void createServiceSection(Composite parent){
@@ -149,7 +150,7 @@ public class ServiceSection extends AbstractServiceSection {
 		sequencesViewer.getTree().setLayoutData(gridData);	
 		sequencesViewer.setContentProvider(new AdapterFactoryContentProvider(getAdapterFactory()));
 		sequencesViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
-		new AdapterFactoryTreeEditor(sequencesViewer.getTree(), adapterFactory);
+		new AdapterFactoryTreeEditor(sequencesViewer.getTree(), getAdapterFactory());
 		sequencesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {

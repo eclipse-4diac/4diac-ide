@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2013 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -52,15 +53,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 		f.setBorder(new MarginBorder(10));
 		f.setLayoutManager(new FreeformLayout());
 		f.setOpaque(false);
-		// Create the static router for the connection layer
-		// ConnectionLayer connLayer = (ConnectionLayer)
-		// getLayer(LayerConstants.CONNECTION_LAYER);
-		// connLayer.setConnectionRouter(new
-		// WestEastManhattanConnectionRouter());
-		
 		getLayer(LayerConstants.CONNECTION_LAYER).setLayoutManager(new FreeformLayout());
-
-		
 		return f;
 	}
 
@@ -74,7 +67,6 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 		if (!isActive()) {
 			super.activate();
 			((Notifier) getModel()).eAdapters().add(getContentAdapter());
-
 		}
 	}
 
@@ -88,7 +80,6 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 		if (isActive()) {
 			super.deactivate();
 			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
-
 		}
 	}
 
@@ -110,7 +101,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 					case Notification.REMOVE_MANY:
 						refreshChildren();
 						break;
-					case Notification.SET:
+					default:
 						break;
 					}
 				}
@@ -126,8 +117,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 	 */
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE,
-				new RootComponentEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		// handles constraint changes of model elements and creation of new
 		// model elements
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ECCXYLayoutEditPolicy());
@@ -152,7 +142,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 	 */
 	@Override
 	protected List<?> getModelChildren() {
-		ArrayList<ECState> temp = new ArrayList<ECState>();
+		List<ECState> temp = new ArrayList<>();
 		temp.addAll(getCastedECCModel().getECState());
 		return temp;
 	}

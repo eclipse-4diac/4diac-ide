@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2012 - 2015 Profactor GbmH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -33,7 +34,7 @@ import org.eclipse.ui.actions.ActionFactory;
 public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 
 	private final ZoomManager zoomManager;
-	protected ActionRegistry registry;
+	private final ActionRegistry registry;
 
 	/**
 	 * Instantiates a new zoom undo redo context menu provider.
@@ -47,6 +48,10 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 		super(viewer);
 		this.zoomManager = zoomManager;
 		this.registry = registry;
+	}
+	
+	public ActionRegistry getRegistry() {
+		return registry;
 	}
 
 	/*
@@ -73,37 +78,48 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 		MenuManager submenu = new MenuManager("&Align");
 
 		action = registry.getAction(GEFActionConstants.ALIGN_LEFT);
-		if (action != null && action.isEnabled())
+		if (action != null && action.isEnabled()) {
 			submenu.add(action);
+		}
 
 		action = registry.getAction(GEFActionConstants.ALIGN_CENTER);
-		if (action != null && action.isEnabled())
+		if (action != null && action.isEnabled()) {
 			submenu.add(action);
+		}
 
 		action = registry.getAction(GEFActionConstants.ALIGN_RIGHT);
-		if (action != null && action.isEnabled())
+		if (action != null && action.isEnabled()) {
 			submenu.add(action);
+		}
 
 		submenu.add(new Separator());
 
 		action = registry.getAction(GEFActionConstants.ALIGN_TOP);
-		if (action != null && action.isEnabled())
+		if (action != null && action.isEnabled()) {
 			submenu.add(action);
+		}
 
 		action = registry.getAction(GEFActionConstants.ALIGN_MIDDLE);
-		if (action != null && action.isEnabled())
+		if (action != null && action.isEnabled()) {
 			submenu.add(action);
+		}
 
 		action = registry.getAction(GEFActionConstants.ALIGN_BOTTOM);
-		if (action != null && action.isEnabled())
+		if (action != null && action.isEnabled()) {
 			submenu.add(action);
+		}
 
 		if (!submenu.isEmpty()){
 			menu.appendToGroup(GEFActionConstants.GROUP_REST, submenu);
 		}
+		
+		action = registry.getAction(ActionFactory.PRINT.getId());
+		if (action != null && action.isEnabled()) {
+			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
+		}
 	}
 
-	private final class GraphZoomInAction extends ZoomInAction {
+	private static final class GraphZoomInAction extends ZoomInAction {
 		public GraphZoomInAction(final ZoomManager zoomManager) {
 			super(zoomManager);
 		}
@@ -114,7 +130,7 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 		}
 	}
 
-	private final class GraphZoomOutAction extends ZoomOutAction {
+	private static final class GraphZoomOutAction extends ZoomOutAction {
 		public GraphZoomOutAction(final ZoomManager zoomManager) {
 			super(zoomManager);
 		}

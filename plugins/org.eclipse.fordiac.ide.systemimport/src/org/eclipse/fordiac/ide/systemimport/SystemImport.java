@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2013, 2016, 2017 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Waldemar Eisenmenger
@@ -40,8 +41,6 @@ import org.eclipse.ui.IWorkbench;
 public class SystemImport extends Wizard implements IImportWizard {
 	private static final String FORDIAC_SYSTEM_IMPORT_SECTION = "4DIAC_SYSTEM_IMPORT_SECTION"; //$NON-NLS-1$
 	
-	AutomationSystem system = null;
-
 	/**
 	 * Instantiates a new system import.
 	 */
@@ -83,7 +82,7 @@ public class SystemImport extends Wizard implements IImportWizard {
 
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				system = SystemManager.INSTANCE.createLocalProject(page.getProjectName());
+				AutomationSystem system = SystemManager.INSTANCE.createLocalProject(page.getProjectName());
 				try(InputStream stream = new FileInputStream(page.getSelectedSystemFile());) {
 					SystemImporter sysImporter = new SystemImporter();					
 					sysImporter.importSystem(stream, system);

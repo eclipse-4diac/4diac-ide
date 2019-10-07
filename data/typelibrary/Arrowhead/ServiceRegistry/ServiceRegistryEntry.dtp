@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DataType SYSTEM "http://www.holobloc.com/xml/DataType.dtd" >
+<DataType Name="ServiceRegistryEntry" Comment="A service registry entry for the Arrowhead framework 4.0" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Jose Cabral" Date="2018-09-26" />
+  <ASN1Tag Class="APPLICATION" Number="1" />
+  <StructuredType >
+    <VarDeclaration Name="providedService" Type="ArrowheadService" Comment="The Arrowhead Service object that is provided (SD and supported IDD-s)" />
+	  <VarDeclaration Name="provider" Type="ArrowheadSystem" Comment="ArrowheadSystem that is providing the Service" />
+	  <VarDeclaration Name="serviceURI" Type="WSTRING" Comment="The URL subpath of the Service within the address:port of the Provider" />
+    <VarDeclaration Name="version" Type="DINT" Comment="The version numbering of the Service provided" />
+    <VarDeclaration Name="udp" Type="BOOL" Comment="True, if the service is provided via UDP. By default, it is false" />
+    <VarDeclaration Name="ttl" Type="DINT" Comment="Service validity time period expressed in seconds. This gets converted to a date-time, and stored in the database" />
+    <VarDeclaration Name="metadata" Type="WSTRING" Comment="Metadata belonging to a service/provider pair" />
+  </StructuredType>
+</DataType>

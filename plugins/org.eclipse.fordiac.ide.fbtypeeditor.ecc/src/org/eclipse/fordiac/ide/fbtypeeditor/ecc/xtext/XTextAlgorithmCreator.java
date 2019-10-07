@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH, TU Wien ACIN
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl, Monika Wenger, Martin Jobst, Martin Melik Merkumians
@@ -19,7 +20,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditorCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xtext.Constants;
@@ -39,14 +39,14 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 	private static final String LINKING_FILE_EXTENSION = "xtextfbt";   //$NON-NLS-1$
 	
 	@Inject
-	protected EmbeddedEditorFactory editorFactory;
+	private EmbeddedEditorFactory editorFactory;
 
 	@Inject
 	private Provider<XtextResourceSet> resourceSetProvider;
 
 	@Inject
 	@Named(Constants.FILE_EXTENSIONS)
-	public String fileExtension;
+	private String fileExtension;
 		
 
 	@Override
@@ -71,19 +71,18 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 
 			private void createAdapterResource(XtextResourceSet resourceSet, EcoreUtil.Copier copier,
 					AdapterDeclaration adapter) {
-				if(adapter.getType() instanceof AdapterType){
-					Resource adapterResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
-					copier.copy(adapter.getType());
-					adapterResource.getContents().add(copier.copy(EcoreUtil.getRootContainer(((AdapterType)adapter.getType()).getAdapterFBType())));
-				}
+				Resource adapterResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
+				copier.copy(adapter.getType());
+				adapterResource.getContents().add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
 			}
 
 			protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
 				String name = "__synthetic"; //$NON-NLS-1$
 				for (int i = 0; i < Integer.MAX_VALUE; i++) {
 					URI syntheticUri = URI.createURI(name + i + "." + fileExtension); //$NON-NLS-1$
-					if (resourceSet.getResource(syntheticUri, false) == null)
+					if (resourceSet.getResource(syntheticUri, false) == null) {
 						return syntheticUri;
+					}
 				}
 				throw new IllegalStateException();
 			}

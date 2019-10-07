@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2010 - 2016  Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Martin Melik Merkumians
@@ -23,15 +24,14 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.application.commands.NewAppCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
+import org.eclipse.fordiac.ide.systemmanagement.ui.commands.NewAppCommand;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
+import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -85,16 +85,14 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 				}
 			};
 			getContainer().run(false, true, op);
-		} catch (InvocationTargetException x) {
+		} catch (InvocationTargetException | InterruptedException x) {
 			return false;
-		} catch (InterruptedException x) {
-			return false;
-		}
+		} 
 		// everything worked fine
 		return true;
 	}
 
-	protected String[] getNatureIDs() {
+	private static String[] getNatureIDs() {
 		return new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID};
 	}
 	
@@ -104,29 +102,25 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 	 * @param monitor
 	 *            the monitor
 	 */
-	public AutomationSystem createProject(final IProgressMonitor monitor) {
+	private void createProject(final IProgressMonitor monitor) {
 		try {
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
-			String projectName = page.getProjectName(); 
-			boolean defaultPalette = page.importDefaultPalette();
-			IPath location = page.getLocationPath();
+			IProject project = root.getProject(page.getProjectName());
+			IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(project.getName());
 
-			IProject project = root.getProject(projectName);
-			IProjectDescription description = ResourcesPlugin.getWorkspace()
-					.newProjectDescription(project.getName());
+			IPath location = page.getLocationPath();
 			if (!Platform.getLocation().equals(location)) {
 				description.setLocation(location);
 			}
 
-			description
-					.setNatureIds(getNatureIDs()); 
+			description.setNatureIds(getNatureIDs()); 
 
 			project.create(description, monitor);
 			project.open(monitor);
 
 			// configure palette
-			if (defaultPalette) {
+			if (page.importDefaultPalette()) {
 				SystemPaletteManagement.copyToolTypeLibToProject(project);
 			}
 
@@ -134,21 +128,17 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 			// otherwise the palette is not correctly initialzed
 			AutomationSystem system = SystemManager.INSTANCE.createAutomationSystem(project);
 
-			setupVersionInfo(system);
+			TypeManagementPreferencesHelper.setupVersionInfo(system);
 			SystemManager.INSTANCE.addSystem(system);
 			
 			createInitialApplication(monitor, system);
 			
 			SystemManager.INSTANCE.saveSystem(system);
-			
-			return system;
-
 		} catch (CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		} finally {
 			monitor.done();
 		}
-		return null;
 	}
 
 	private void createInitialApplication(final IProgressMonitor monitor, AutomationSystem system) {
@@ -159,15 +149,6 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 		if(page.getOpenApplication() && null != app){
 			OpenListenerManager.openEditor(app);
 		}
-	}
-
-	private static void setupVersionInfo(AutomationSystem system) {
-		VersionInfo verInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();			
-		//TODO retrieve this information from some generic location, maybe wizard
-		verInfo.setAuthor("Author");
-		verInfo.setOrganization("Eclipse 4diac");
-		verInfo.setVersion("1.0");
-		system.getVersionInfo().add(verInfo);
 	}
 
 	/*

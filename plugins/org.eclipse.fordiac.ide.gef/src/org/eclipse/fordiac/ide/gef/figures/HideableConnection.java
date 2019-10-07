@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2015, 2017 Profactor GbmH, fortiss GmbH 
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -24,10 +25,10 @@ public class HideableConnection extends PolylineConnection {
 	
 	public static final int BEND_POINT_BEVEL_SIZE = 5;
 	
-	boolean hidden = false;
-	String label = ""; //$NON-NLS-1$
-	Rectangle moveRect = new Rectangle();
-	org.eclipse.fordiac.ide.model.libraryElement.Connection model;
+	private boolean hidden = false;
+	private String label = ""; //$NON-NLS-1$
+	private Rectangle moveRect = new Rectangle();
+	private org.eclipse.fordiac.ide.model.libraryElement.Connection model;
 	
 	public void setModel(org.eclipse.fordiac.ide.model.libraryElement.Connection newModel){
 		model = newModel;
@@ -68,10 +69,8 @@ public class HideableConnection extends PolylineConnection {
 			g.drawText(label, new Point(getEnd().x - dim.width - 25, getEnd().y-dim.height/2));
 			moveRect.x = getEnd().x - dim.width - 25; 
 			moveRect.y = getEnd().y-dim.height/2; 
-			moveRect.width =5; 
-			moveRect.height =5; 
-			//g.drawOval(moveRect);
-			
+			moveRect.width = 5; 
+			moveRect.height = 5; 			
 		} else {
 			drawBeveledPolyline(g);
 		}

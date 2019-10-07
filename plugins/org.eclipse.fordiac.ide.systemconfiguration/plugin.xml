@@ -6,7 +6,7 @@
       <editor
             class="org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor"
             contributorClass="org.eclipse.fordiac.ide.util.ZoomUndoRedoActionBarContributor"
-            icon="fordiacimage://ICON_SystemConfiguration"
+            icon="fordiacimage://ICON_SYSTEM_CONFIGURATION"
             id="org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor"
             name="System Configuration">
       </editor>
@@ -45,12 +45,15 @@
       <propertySections
             contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
          <propertySection
-               class="org.eclipse.fordiac.ide.systemconfiguration.properties.DeviceInterfaceSection"
+               class="org.eclipse.fordiac.ide.systemconfiguration.properties.DeviceSection"
                id="org.eclipse.fordiac.ide.systemconfiguration.properties.InterfaceSection"
                tab="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab">
             <input
                   type="org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart">
             </input>
+            <input
+                  type="org.eclipse.fordiac.ide.model.libraryElement.Device">
+             </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.systemconfiguration.properties.AttributeSection"
@@ -61,6 +64,15 @@
             </input>
             <input
                   type="org.eclipse.fordiac.ide.systemconfiguration.editparts.SegmentEditPart">
+            </input>
+            <input
+                     type="org.eclipse.fordiac.ide.model.libraryElement.Device">
+            </input>
+            <input
+                     type="org.eclipse.fordiac.ide.model.libraryElement.Segment">
+            </input>
+            <input
+                     type="org.eclipse.fordiac.ide.model.libraryElement.Application">
             </input>
          </propertySection>
          <propertySection
@@ -83,12 +95,15 @@
             </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.systemconfiguration.properties.ResourceInterfaceSection"
+               class="org.eclipse.fordiac.ide.systemconfiguration.properties.ResourceSection"
                id="org.eclipse.fordiac.ide.systemconfiguration.properties.ResourceInterfaceSection"
                tab="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab">
             <input
                   type="org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart">
             </input>
+            <input
+                     type="org.eclipse.fordiac.ide.model.libraryElement.Resource">
+               </input>
          </propertySection>
       </propertySections>
    </extension>
@@ -96,7 +111,7 @@
          point="org.eclipse.fordiac.ide.util.openListener">
       <openListener
             class="org.eclipse.fordiac.ide.systemconfiguration.actions.OpenSystemConfEditorAction"
-            icon="fordiacimage://ICON_SystemConfiguration"
+            icon="fordiacimage://ICON_SYSTEM_CONFIGURATION"
             id="org.eclipse.fordiac.ide.systemconfiguration.actions.OpenSystemConfEditorAction"
             label="Systemconfiguration">
       </openListener>

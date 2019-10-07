@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Monika Wenger
@@ -22,23 +23,26 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 
 public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
 	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
-		return new CreateSubAppInterfaceElementCommand(EventTypeLibrary.getInstance().getType(fillTypeCombo()[0]), getType().getInterface(), isInput, -1);
+		return new CreateSubAppInterfaceElementCommand(EventTypeLibrary.getInstance().getType(fillTypeCombo()[0]),
+				getType().getInterface(), isInput, -1);
 	}
-	
+
 	@Override
-	protected INamedElement getInputType(Object input) {
-		if(input instanceof SubAppForFBNetworkEditPart){
+	protected SubApp getInputType(Object input) {
+		if (input instanceof SubAppForFBNetworkEditPart) {
 			return ((SubAppForFBNetworkEditPart) input).getModel();
 		}
-		if(input instanceof UISubAppNetworkEditPart){
-			return ((UISubAppNetworkEditPart)input).getSubApp();
+		if (input instanceof UISubAppNetworkEditPart) {
+			return ((UISubAppNetworkEditPart) input).getSubApp();
+		}
+		if (input instanceof SubApp) {
+			return (SubApp) input;
 		}
 		return null;
 	}
@@ -47,15 +51,15 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 	protected DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection) {
 		return new DeleteSubAppInterfaceElementCommand(selection);
 	}
-	
+
 	@Override
 	protected ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean isInput,
 			boolean moveUp) {
 		return new ChangeSubAppInterfaceOrderCommand(selection, isInput, moveUp);
 	}
-	
+
 	@Override
 	protected SubApp getType() {
-		return (SubApp)type;
+		return (SubApp) type;
 	}
 }

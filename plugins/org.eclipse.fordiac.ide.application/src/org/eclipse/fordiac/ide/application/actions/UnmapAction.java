@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 2013, 2016, 2017 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -105,7 +106,11 @@ public class UnmapAction extends SelectionAction implements
 	}
 
 	/** The selected f bs. */
-	protected final List<FBNetworkElement> selectedNetworkElements = new ArrayList<>();
+	private final List<FBNetworkElement> selectedNetworkElements = new ArrayList<>();
+	
+	public List<FBNetworkElement> getSelectedNetworkElements() {
+		return selectedNetworkElements;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -122,7 +127,7 @@ public class UnmapAction extends SelectionAction implements
 				checkSelectedModelElement(ep.getModel());
 			}
 		}
-		return (selectedNetworkElements.size() > 0);
+		return (!selectedNetworkElements.isEmpty());
 	}
 
 	protected void checkSelectedModelElement(FBNetworkElement model) {

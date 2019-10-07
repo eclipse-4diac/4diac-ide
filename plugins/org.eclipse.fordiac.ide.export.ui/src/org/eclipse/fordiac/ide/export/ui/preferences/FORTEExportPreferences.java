@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2009 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Ingo Hegny, Alois Zoitl, Martin Jobst
@@ -15,8 +16,8 @@ package org.eclipse.fordiac.ide.export.ui.preferences;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
 import org.eclipse.fordiac.ide.export.utils.CompareEditorOpenerUtil;
-import org.eclipse.fordiac.ide.export.utils.ICompareEditorOpener;
 import org.eclipse.fordiac.ide.export.utils.PreferenceConstants;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;

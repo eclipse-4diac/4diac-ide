@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2012 - 2017 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
@@ -17,9 +18,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 /**
  * A factory for creating new EditParts.
@@ -28,7 +29,7 @@ import org.eclipse.gef.editparts.ZoomManager;
  */
 public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 	
-	public ResourceDiagramEditPartFactory(final ResourceDiagramEditor editor, ZoomManager zoomManager) {
+	public ResourceDiagramEditPartFactory(final GraphicalEditor editor, ZoomManager zoomManager) {
 		super(editor, zoomManager);
 	}
 
@@ -40,7 +41,7 @@ public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 			return new FBNetworkContainerEditPart();
 		}
 		if (modelElement instanceof FB) {
-			return new ResFBEditPart(zoomManager);
+			return new ResFBEditPart(getZoomManager());
 		}
 		if (modelElement instanceof IInterfaceElement) {
 			IInterfaceElement element = (IInterfaceElement)modelElement;

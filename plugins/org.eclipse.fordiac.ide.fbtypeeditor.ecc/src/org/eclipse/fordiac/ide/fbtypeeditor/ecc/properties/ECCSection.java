@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2017 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Monika Wenger, Alois Zoitl
@@ -24,43 +25,44 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 abstract class ECCSection extends AbstractECSection {
-	
+
 	@Override
 	protected BasicFBType getType() {
-		if(type instanceof ECC){
-			return (BasicFBType) ((ECC)type).eContainer();
+		if (type instanceof ECC) {
+			return ((ECC) type).getBasicFBType();
 		}
 		return null;
 	}
 
 	@Override
 	protected Object getInputType(Object input) {
-		if(input instanceof ECCRootEditPart){
-			return ((ECCRootEditPart) input).getCastedECCModel();	
+		if (input instanceof ECCRootEditPart) {
+			return ((ECCRootEditPart) input).getCastedECCModel();
 		}
-		if(input instanceof ECC){
+		if (input instanceof ECC) {
 			return input;
 		}
-		if(input instanceof ECActionAlgorithmEditPart){
-			return ((ECActionAlgorithmEditPart) input).getAction().eContainer().eContainer();	
+		if (input instanceof ECActionAlgorithmEditPart) {
+			return ((ECActionAlgorithmEditPart) input).getAction().getECState().getECC();
 		}
-		if(input instanceof ECActionOutputEventEditPart){
+		if (input instanceof ECActionOutputEventEditPart) {
 			ECAction action = ((ECActionOutputEventEditPart) input).getAction();
-			if(null != action && null != action.eContainer() && null != action.eContainer()){
-				return action.eContainer().eContainer();
+			if (null != action && null != action.getECState()) {
+				return action.getECState().getECC();
 			}
 		}
-		if(input instanceof ECTransitionEditPart){
-			return ((ECTransitionEditPart) input).getCastedModel().eContainer();	
+		if (input instanceof ECTransitionEditPart) {
+			return ((ECTransitionEditPart) input).getModel().getECC();
 		}
-		if(input instanceof ECStateEditPart){
-			return ((ECStateEditPart) input).getCastedModel().eContainer();	
+		if (input instanceof ECStateEditPart) {
+			return ((ECStateEditPart) input).getCastedModel().getECC();
 		}
 		return null;
 	}
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		createSuperControls = false;
-		super.createControls(parent, tabbedPropertySheetPage);	
+		super.createControls(parent, tabbedPropertySheetPage);
 	}
 }

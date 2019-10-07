@@ -2,10 +2,11 @@
  * Copyright (c) 2012 - 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler 
  * 							 University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz, Monika Wenger
@@ -15,6 +16,7 @@
 package org.eclipse.fordiac.ide.monitoring.editparts;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.draw2d.AncestorListener;
 import org.eclipse.draw2d.IFigure;
@@ -27,12 +29,11 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.monitoring.Activator;
-import org.eclipse.fordiac.ide.util.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
@@ -83,8 +84,8 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 				}
 				else if (interfaceElement instanceof AdapterDeclaration) {
 					IInterfaceElement subInterfaceElement = null;
-					InterfaceList interfaceList = ((AdapterType)((AdapterDeclaration)interfaceElement).getType()).getInterfaceList();
-					ArrayList<IInterfaceElement> list = new ArrayList<IInterfaceElement>();
+					InterfaceList interfaceList = ((AdapterDeclaration)interfaceElement).getType().getInterfaceList();
+					List<IInterfaceElement> list = new ArrayList<>();
 					list.addAll(interfaceList.getEventInputs());
 					list.addAll(interfaceList.getEventOutputs());
 					list.addAll(interfaceList.getInputVars());

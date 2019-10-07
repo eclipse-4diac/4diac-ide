@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008 -2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Martin Jobst
@@ -14,17 +15,13 @@ package org.eclipse.fordiac.ide.export.ui.wizard;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.export.ui.Activator;
-import org.eclipse.fordiac.ide.export.utils.IExportFilter;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -68,34 +65,32 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		super(pageName, selection);
 	}
 
-	private final List<IExportFilter> exportFilters = new ArrayList<>();
+	private final List<IConfigurationElement> exportFilters = new ArrayList<>();
 	private Combo filters;
 
 	private void addAvailableExportFilter(final Group group) {
-		SortedMap<Integer, IExportFilter> sortedExportFiltersMap = new TreeMap<>();
-
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				Activator.PLUGIN_ID, "ExportFilter"); //$NON-NLS-1$
-		for (int i = 0; i < elems.length; i++) {
-			IConfigurationElement element = elems[i];
-			try {
-				Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IExportFilter) {
-					Integer sortIndex = Integer.valueOf(element.getAttribute("sortIndex")); //$NON-NLS-1$
-					sortedExportFiltersMap.put(sortIndex,
-							(IExportFilter) object);
-				}
-			} catch (CoreException corex) {
-				Activator.getDefault().logError("Error loading Export Filter", corex);
-			}
-		}
+		IConfigurationElement[] elems = registry
+				.getConfigurationElementsFor("org.eclipse.fordiac.ide.export.exportFilter"); //$NON-NLS-1$
+		Arrays.sort(elems, new Comparator<IConfigurationElement>() {
 
-		for (Iterator<IExportFilter> iterator = sortedExportFiltersMap.values()
-				.iterator(); iterator.hasNext();) {
-			IExportFilter exportFilter = iterator.next();
-			exportFilters.add(exportFilter);
-		}
+			@Override
+			public int compare(IConfigurationElement o1, IConfigurationElement o2) {
+				int sortIndex1 = 0;
+				try {
+					sortIndex1 = Integer.parseInt(o1.getAttribute("sortIndex"));
+				} catch(NumberFormatException e) {
+				}
+				int sortIndex2 = 0;
+				try {
+					sortIndex2 = Integer.parseInt(o2.getAttribute("sortIndex"));
+				} catch(NumberFormatException e) {
+				}
+				return sortIndex1 - sortIndex2;
+			}
+		});
+		exportFilters.clear();
+		exportFilters.addAll(Arrays.asList(elems));
 
 		Composite composite = new Composite(group, SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -113,8 +108,8 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 		filters.setLayoutData(data);
 
-		for (IExportFilter exportFilter : exportFilters) {
-			filters.add(exportFilter.getExportFilterName());
+		for (IConfigurationElement exportFilter : exportFilters) {
+			filters.add(exportFilter.getAttribute("name"));
 		}
 
 		filters.addListener( SWT.Selection, event -> updatePageCompletion());
@@ -125,7 +120,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	 * 
 	 * @return the selected export filter
 	 */
-	public IExportFilter getSelectedExportFilter() {
+	public IConfigurationElement getSelectedExportFilter() {
 		return exportFilters.get(filters.getSelectionIndex());
 	}
 
@@ -226,8 +221,8 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		if (getDialogSettings() != null) {
 			String currentFilterSelectionName = getDialogSettings().get(STORE_CURRENT_FILTER_SELECTION_ID);
 			if (currentFilterSelectionName != null) {
-				for (IExportFilter filter : exportFilters) {
-					if (filter.getExportFilterName().equals(
+				for (IConfigurationElement filter : exportFilters) {
+					if (filter.getAttribute("name").equals(
 							currentFilterSelectionName)) {
 						filters.select(exportFilters.indexOf(filter));
 						break;
@@ -253,7 +248,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 			// Saves current export filter for next session.
 			getDialogSettings().put(STORE_CURRENT_FILTER_SELECTION_ID,
-					getSelectedExportFilter().getExportFilterName());
+					getSelectedExportFilter().getAttribute("name"));
 		}
 	}
 

@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
@@ -2050,13 +2051,22 @@ public interface LibraryElementPackage extends EPackage {
 	int EC_ACTION__OUTPUT = 1;
 
 	/**
+	 * The feature id for the '<em><b>EC State</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EC_ACTION__EC_STATE = 2;
+
+	/**
 	 * The number of structural features of the '<em>EC Action</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EC_ACTION_FEATURE_COUNT = 2;
+	int EC_ACTION_FEATURE_COUNT = 3;
 
 	/**
 	 * The feature id for the '<em><b>EC State</b></em>' containment reference list.
@@ -2086,13 +2096,22 @@ public interface LibraryElementPackage extends EPackage {
 	int ECC__START = 2;
 
 	/**
+	 * The feature id for the '<em><b>Basic FB Type</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ECC__BASIC_FB_TYPE = 3;
+
+	/**
 	 * The number of structural features of the '<em>ECC</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ECC_FEATURE_COUNT = 3;
+	int ECC_FEATURE_COUNT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
@@ -2167,13 +2186,22 @@ public interface LibraryElementPackage extends EPackage {
 	int EC_STATE__IN_TRANSITIONS = INAMED_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>ECC</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EC_STATE__ECC = INAMED_ELEMENT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>EC State</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EC_STATE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 5;
+	int EC_STATE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl <em>Primitive</em>}' class.
@@ -2436,13 +2464,22 @@ public interface LibraryElementPackage extends EPackage {
 	int EC_TRANSITION__CONDITION_EVENT = POSITIONABLE_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>ECC</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EC_TRANSITION__ECC = POSITIONABLE_ELEMENT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>EC Transition</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EC_TRANSITION_FEATURE_COUNT = POSITIONABLE_ELEMENT_FEATURE_COUNT + 5;
+	int EC_TRANSITION_FEATURE_COUNT = POSITIONABLE_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list.
@@ -6068,6 +6105,17 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECAction_Output();
 
 	/**
+	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState <em>EC State</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>EC State</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState()
+	 * @see #getECAction()
+	 * @generated
+	 */
+	EReference getECAction_ECState();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC <em>ECC</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6111,6 +6159,17 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getECC_Start();
 
 	/**
+	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType <em>Basic FB Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Basic FB Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC#getBasicFBType()
+	 * @see #getECC()
+	 * @generated
+	 */
+	EReference getECC_BasicFBType();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState <em>EC State</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6152,6 +6211,17 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getECState_InTransitions();
+
+	/**
+	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC <em>ECC</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>ECC</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC()
+	 * @see #getECState()
+	 * @generated
+	 */
+	EReference getECState_ECC();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition <em>EC Transition</em>}'.
@@ -6206,6 +6276,17 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getECTransition_ConditionEvent();
+
+	/**
+	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getECC <em>ECC</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>ECC</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getECC()
+	 * @see #getECTransition()
+	 * @generated
+	 */
+	EReference getECTransition_ECC();
 
 	/**
 	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource <em>Source</em>}'.
@@ -8344,6 +8425,14 @@ public interface LibraryElementPackage extends EPackage {
 		EReference EC_ACTION__OUTPUT = eINSTANCE.getECAction_Output();
 
 		/**
+		 * The meta object literal for the '<em><b>EC State</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EC_ACTION__EC_STATE = eINSTANCE.getECAction_ECState();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECCImpl <em>ECC</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -8378,6 +8467,14 @@ public interface LibraryElementPackage extends EPackage {
 		EReference ECC__START = eINSTANCE.getECC_Start();
 
 		/**
+		 * The meta object literal for the '<em><b>Basic FB Type</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ECC__BASIC_FB_TYPE = eINSTANCE.getECC_BasicFBType();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECStateImpl <em>EC State</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -8410,6 +8507,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference EC_STATE__IN_TRANSITIONS = eINSTANCE.getECState_InTransitions();
+
+		/**
+		 * The meta object literal for the '<em><b>ECC</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EC_STATE__ECC = eINSTANCE.getECState_ECC();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl <em>EC Transition</em>}' class.
@@ -8452,6 +8557,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference EC_TRANSITION__CONDITION_EVENT = eINSTANCE.getECTransition_ConditionEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>ECC</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EC_TRANSITION__ECC = eINSTANCE.getECTransition_ECC();
 
 		/**
 		 * The meta object literal for the '<em><b>Source</b></em>' reference feature.

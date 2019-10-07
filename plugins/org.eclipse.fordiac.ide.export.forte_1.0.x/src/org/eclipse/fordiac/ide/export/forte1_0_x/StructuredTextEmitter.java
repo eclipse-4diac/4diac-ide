@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2010 - 20147 TU Wien ACIN, Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl, Monika Wenger, Ingo Hegny, Matthias Plasch, Jose Cabral,
@@ -22,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.eclipse.fordiac.ide.export.ExportFilter.VarDefinition;
+import org.eclipse.fordiac.ide.export.forte1_0_x.CPPExportFilter.VarDefinition;
 import org.eclipse.fordiac.ide.export.forte1_0_x.ForteExportFilter1_0_x.AdapterInstance;
 import org.eclipse.fordiac.ide.util.STStringTokenHandling;
 
@@ -45,7 +46,7 @@ public class StructuredTextEmitter {
 		private String forControlVal;
 	}
 
-	List<ForValBuffer> forValBuf = new ArrayList<>();
+	private List<ForValBuffer> forValBuf = new ArrayList<>();
 
 	public StructuredTextEmitter(ForteExportFilter1_0_x exportFilter) {
 		this.exportFilter = exportFilter;
@@ -131,8 +132,9 @@ public class StructuredTextEmitter {
 			return;
 		}
 		if (statement.equals(":")) { //$NON-NLS-1$
-			if (!tokens.hasMoreElements())
+			if (!tokens.hasMoreElements()) {
 				return;
+			}
 			statement = tokens.nextToken();
 			if (statement.equals("=")) { //$NON-NLS-1$
 				pwCPP.print(" = "); //$NON-NLS-1$
@@ -382,8 +384,9 @@ public class StructuredTextEmitter {
 				// print till end of line
 				while (!statement.equals("\n") && !statement.equals("\r")) { //$NON-NLS-1$ //$NON-NLS-2$
 					pwCPP.print(statement);
-					if (!tokens.hasMoreElements())
+					if (!tokens.hasMoreElements()) {
 						return;
+					}
 					statement = tokens.nextToken();
 				}
 				pwCPP.println(""); // issue a new line //$NON-NLS-1$
@@ -406,8 +409,9 @@ public class StructuredTextEmitter {
 							var = tokens.nextToken();
 							pwCPP.print(var);
 						} while (!var.equals("*")); //$NON-NLS-1$
-						if (!tokens.hasMoreElements())
+						if (!tokens.hasMoreElements()) {
 							return;
+						}
 						var = tokens.nextToken();
 						if (var.equals("/")) { //$NON-NLS-1$
 							endTag = true;

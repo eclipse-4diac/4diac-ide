@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2012 Profactor GbmH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer
@@ -12,8 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.dnd;
 
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.gef.EditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
@@ -46,11 +47,12 @@ public class ParameterDropTargetListener extends
 
 	@Override
 	protected void handleDragOver() {
-		EditPart ep = getTargetEditPart();
-		if (ep instanceof InterfaceEditPart) {
-			if (((InterfaceEditPart) ep).isInput()
-					&& !((InterfaceEditPart) ep).isEvent())
+		Object model = getTargetEditPart().getModel();
+		if (model instanceof IInterfaceElement) {
+			if (((IInterfaceElement) model).isIsInput()					
+					&& !(model instanceof Event)) {
 				getCurrentEvent().detail = DND.DROP_COPY;
+			}
 		} else {
 			getCurrentEvent().detail = DND.DROP_NONE;
 		}

@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008, 2009, 2011 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl
@@ -34,7 +35,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,7 +46,7 @@ import org.w3c.dom.NodeList;
  * Managing class for importing *.dev files
  */
 
-public class DEVImporter {
+public final class DEVImporter {
 
 	/**
 	 * Import dev type.
@@ -295,5 +295,10 @@ public class DEVImporter {
 			device.setProfile(value.getNodeValue());
 		}
 	}
+	
+	private DEVImporter() {
+		throw new UnsupportedOperationException("DEVImporter utility class should not be instantiated!"); //$NON-NLS-1$
+	}
+
 
 }

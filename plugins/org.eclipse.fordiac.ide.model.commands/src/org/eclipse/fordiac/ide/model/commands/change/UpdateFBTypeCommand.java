@@ -1,17 +1,18 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2017 AIT, fortiss GmbH, Profactor GmbH
  * 				 2018 - 2019 Johannes Kepler University
- * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Filip Andren, Alois Zoitl, Gerhard Ebenhofer, Monika Wenger 
+ *   Filip Andren, Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - reworked update fb type to accept also supapps
- *   Alois Zoitl - fixed issues in maintaining FB parameters   
+ *   Alois Zoitl - fixed issues in maintaining FB parameters
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
@@ -47,9 +48,9 @@ public class UpdateFBTypeCommand extends Command {
 
 	// Helper data class for storing connection data of resource connection as the
 	// connections are lost during the unmapping process
-	private class ConnData {
-		public IInterfaceElement source;
-		public IInterfaceElement dest;
+	private static class ConnData {
+		private IInterfaceElement source;
+		private IInterfaceElement dest;
 
 		public ConnData(IInterfaceElement source, IInterfaceElement dest) {
 			this.source = source;
@@ -90,7 +91,7 @@ public class UpdateFBTypeCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -131,7 +132,7 @@ public class UpdateFBTypeCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override
@@ -153,7 +154,7 @@ public class UpdateFBTypeCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -171,6 +172,14 @@ public class UpdateFBTypeCommand extends Command {
 		if (unmapCmd != null) {
 			unmapCmd.undo();
 		}
+	}
+
+	protected void setEntry(PaletteEntry entry) {
+		this.entry = entry;
+	}
+
+	protected PaletteEntry getEntry() {
+		return entry;
 	}
 
 	private void handleApplicationConnections() {

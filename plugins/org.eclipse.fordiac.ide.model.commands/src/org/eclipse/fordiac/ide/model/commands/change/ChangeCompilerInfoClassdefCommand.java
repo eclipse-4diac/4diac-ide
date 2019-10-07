@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2014 fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Alois Zoitl, Monika Wenger
@@ -17,7 +18,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 /**
  * The Class ChangeCompilerInfoClassdef.
  */
-public class ChangeCompilerInfoClassdefCommand extends ChangeComplierInfoCommand {
+public class ChangeCompilerInfoClassdefCommand extends ChangeCompilerInfoCommand {
 	
 	/** The new ApplicationDomain value. */
 	private String newClassdef;
@@ -37,7 +38,7 @@ public class ChangeCompilerInfoClassdefCommand extends ChangeComplierInfoCommand
 	 */
 	@Override
 	public void execute() {
-		oldClassdef = compilerInfo.getClassdef();
+		oldClassdef = getCompilerInfo().getClassdef();
 		redo();
 	}
 
@@ -48,7 +49,7 @@ public class ChangeCompilerInfoClassdefCommand extends ChangeComplierInfoCommand
 	 */
 	@Override
 	public void undo() {
-		compilerInfo.setClassdef(oldClassdef);
+		getCompilerInfo().setClassdef(oldClassdef);
 	}
 
 	/*
@@ -58,7 +59,7 @@ public class ChangeCompilerInfoClassdefCommand extends ChangeComplierInfoCommand
 	 */
 	@Override
 	public void redo() {
-		compilerInfo.setClassdef(newClassdef);
+		getCompilerInfo().setClassdef(newClassdef);
 	}
 
 }

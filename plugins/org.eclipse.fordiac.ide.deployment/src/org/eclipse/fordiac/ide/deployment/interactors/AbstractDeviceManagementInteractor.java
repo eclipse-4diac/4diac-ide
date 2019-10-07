@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2018 Johannes Kepler University
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Alois Zoitl - initial API and implementation and/or initial documentation
@@ -27,8 +28,8 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 	
 	private final IDeviceManagementCommunicationHandler commHandler;
 	private final Device device;
-	private Set<String> fbTypes = null;
-	private Set<String> adapterTypes = null;
+	private Set<String> fbTypes = Collections.emptySet();
+	private Set<String> adapterTypes = Collections.emptySet();
 	
 	private final List<IDeploymentListener> listeners = new ArrayList<>();
 	
@@ -106,9 +107,9 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 		adapterTypes = (null != types) ? types : Collections.emptySet();
 	}
 	
-	protected void resetTypes() {
-		fbTypes = null;
-		adapterTypes = null;
+	protected final void resetTypes() {
+		fbTypes = Collections.emptySet();
+		adapterTypes = Collections.emptySet();
 	}
 	
 	/** create a device managment communication handler suitable for the given device

@@ -3,10 +3,11 @@
  * 				 2018 Johannes Kepler University
  * 
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch, Filip Andren,
@@ -63,15 +64,14 @@ import org.eclipse.swt.widgets.Display;
  * @author gebenh
  */
 public enum SystemManager {
-	
+
 	INSTANCE;
-	
+
 	public static final String FORDIAC_PROJECT_NATURE_ID = "org.eclipse.fordiac.ide.systemmanagement.FordiacNature"; //$NON-NLS-1$
 	public static final String OLD_DISTRIBUTED_PROJECT_NATURE_ID = "org.fordiac.systemManagement.DistributedNature"; //$NON-NLS-1$
-	
+
 	static final String SYSTEM_FILE_ENDING = ".sys"; //$NON-NLS-1$
 
-	
 	/** The model systems. */
 	private List<AutomationSystem> systems = new ArrayList<>();
 
@@ -81,14 +81,13 @@ public enum SystemManager {
 
 	/** The listeners. */
 	private List<DistributedSystemListener> listeners = new ArrayList<>();
-	
+
 	private final Map<AutomationSystem, CommandStack> systemCommandStacks = new HashMap<>();
 
 	/**
 	 * Gets the command stack.
 	 * 
-	 * @param system
-	 *          the system
+	 * @param system the system
 	 * 
 	 * @return the command stack
 	 */
@@ -98,7 +97,6 @@ public enum SystemManager {
 		}
 		return systemCommandStacks.get(system);
 	}
-
 
 	/**
 	 * Notify listeners.
@@ -110,12 +108,10 @@ public enum SystemManager {
 		}
 	}
 
-
 	/**
 	 * Adds the workspace listener.
 	 * 
-	 * @param listener
-	 *            the listener
+	 * @param listener the listener
 	 */
 	public void addWorkspaceListener(final DistributedSystemListener listener) {
 		if (!listeners.contains(listener)) {
@@ -139,12 +135,11 @@ public enum SystemManager {
 	 * Add a system to be managed by the system manager. Additionally, it
 	 * initializes the palette of the system.
 	 * 
-	 * @param system
-	 *            the system to be added
+	 * @param system the system to be added
 	 */
 	public void addSystem(final AutomationSystem system) {
 		systems.add(system);
-		//keep system list sorted so that it is alphabethical shown in all lists
+		// keep system list sorted so that it is alphabethical shown in all lists
 		Collections.sort(systems, NamedElementComparator.INSTANCE);
 		notifyListeners();
 		Runnable job = createUniqueFBNamesValidity(system);
@@ -154,11 +149,10 @@ public enum SystemManager {
 	/**
 	 * Remove a system from the set of systems managed by the system manager
 	 * 
-	 * @param system
-	 *            to be added
+	 * @param system to be added
 	 */
 	public void removeSystem(final AutomationSystem system) {
-		if(systems.remove(system)){
+		if (systems.remove(system)) {
 			// TODO cleanup other hash tables the system may be in
 			notifyListeners();
 		}
@@ -185,15 +179,15 @@ public enum SystemManager {
 		}
 		// remove all existing models to get the models that no longer exist
 		removeOrphanedSystems(oldSystems);
-		
+
 	}
 
 	private void removeOrphanedSystems(List<AutomationSystem> oldSystems) {
 		for (AutomationSystem automationSystem : oldSystems) {
-			if(null == getSystemForName(automationSystem.getName())){
-				removeSystem(automationSystem);			
+			if (null == getSystemForName(automationSystem.getName())) {
+				removeSystem(automationSystem);
 			}
-		}		
+		}
 	}
 
 	public AutomationSystem loadProject(IProject project) {
@@ -206,7 +200,7 @@ public enum SystemManager {
 			time2 = System.currentTimeMillis();
 			System.out.println(time2 - time1 + " ms"); //$NON-NLS-1$
 			if (system != null) {
-				//TODO do we need to check if the system is already in the list?
+				// TODO do we need to check if the system is already in the list?
 				addSystem(system);
 				// load the applications
 				Runnable runnable = runningJobs.get(system);
@@ -234,16 +228,17 @@ public enum SystemManager {
 	/**
 	 * Checks if is distributed system.
 	 * 
-	 * @param project
-	 *            the project
+	 * @param project the project
 	 * 
 	 * @return true, if is distributed system
 	 */
 	private static boolean isDistributedSystem(final IProject project) {
 		boolean retval = false;
 		try {
-			retval = (project.getNature(FORDIAC_PROJECT_NATURE_ID) != null) ||
-					(project.getNature(OLD_DISTRIBUTED_PROJECT_NATURE_ID) != null);  //Allow that also pre eclipse 4diac projects are loaded correctly
+			retval = (project.getNature(FORDIAC_PROJECT_NATURE_ID) != null)
+					|| (project.getNature(OLD_DISTRIBUTED_PROJECT_NATURE_ID) != null); // Allow that also pre eclipse
+																						// 4diac projects are loaded
+																						// correctly
 		} catch (CoreException e) {
 			Activator.getDefault().logWarning(e.getMessage(), e);
 		}
@@ -253,13 +248,12 @@ public enum SystemManager {
 	/**
 	 * Load system.
 	 * 
-	 * @param project
-	 *            the project
+	 * @param project the project
 	 * 
 	 * @return the automation system
 	 */
 	private AutomationSystem loadSystem(final IProject project) {
-		//TODO model refactoring - check if the marker deletion is a good idea here
+		// TODO model refactoring - check if the marker deletion is a good idea here
 		try {
 			project.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 		} catch (CoreException e1) {
@@ -267,28 +261,28 @@ public enum SystemManager {
 		}
 
 		IFile systemFile = project.getFile(project.getName() + SYSTEM_FILE_ENDING);
-		if(systemFile.exists()){
+		if (systemFile.exists()) {
 			AutomationSystem system = createAutomationSystem(project);
 			SystemImporter sysImporter = new SystemImporter();
-			try (InputStream stream = systemFile.getContents()){
+			try (InputStream stream = systemFile.getContents()) {
 				sysImporter.importSystem(stream, system);
 			} catch (CoreException | IOException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
-			} 
+			}
 			return system;
 		}
 		return null;
 	}
 
 	public AutomationSystem createAutomationSystem(IProject project) {
-		AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();			
+		AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
 		system.setName(project.getName());
 		system.setProject(project);
-		
+
 		// create PhysicalConfiguration
 		SystemConfiguration sysConf = LibraryElementFactory.eINSTANCE.createSystemConfiguration();
 		system.setSystemConfiguration(sysConf);
-		
+
 		initializePalette(system);
 		loadTagProvider(system);
 		return system;
@@ -301,8 +295,7 @@ public enum SystemManager {
 		ArrayList<ITagProvider> providers = tagProviders.get(system);
 
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				Activator.PLUGIN_ID, "tagProvider"); //$NON-NLS-1$
+		IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID, "tagProvider"); //$NON-NLS-1$
 		for (int i = 0; i < elems.length; i++) {
 			IConfigurationElement element = elems[i];
 			try {
@@ -314,7 +307,7 @@ public enum SystemManager {
 					}
 				}
 			} catch (CoreException corex) {
-				Activator.getDefault().logError("Error loading TagProviders!", corex);				 //$NON-NLS-1$
+				Activator.getDefault().logError("Error loading TagProviders!", corex); //$NON-NLS-1$
 			}
 		}
 
@@ -369,7 +362,7 @@ public enum SystemManager {
 					// Annotation anno = fb.createAnnotation("FB name not unique");
 					// anno.setServity(IMarker.SEVERITY_ERROR);
 					// }
-					if(element instanceof SubApp){
+					if (element instanceof SubApp) {
 						checkAndCreateAnnotation(system, ((SubApp) element).getFbNetwork().getNetworkElements());
 					}
 				}
@@ -377,15 +370,11 @@ public enum SystemManager {
 		};
 	}
 
-
-
 	/**
 	 * Save system.
 	 * 
-	 * @param system
-	 *            the system
-	 * @param all
-	 *            the all
+	 * @param system the system
+	 * @param all    the all
 	 */
 	public void saveSystem(final org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem system) {
 		IProject project = system.getProject();
@@ -396,8 +385,7 @@ public enum SystemManager {
 	/**
 	 * Gets the system for name.
 	 * 
-	 * @param string
-	 *            the string
+	 * @param string the string
 	 * 
 	 * @return the system for name
 	 */
@@ -405,7 +393,7 @@ public enum SystemManager {
 		for (AutomationSystem system : systems) {
 			if (system.getName().equals(string)) {
 				return system;
-			}			
+			}
 		}
 		return null;
 	}
@@ -442,7 +430,7 @@ public enum SystemManager {
 			return temp;
 		}
 	}
-	
+
 	public static boolean isUniqueSystemName(final String name) {
 		return (INSTANCE.getSystemForName(name) == null && !getProjectHandle(name).exists());
 	}
@@ -501,11 +489,9 @@ public enum SystemManager {
 			project.create(description, monitor);
 			project.open(monitor);
 
-			
 			SystemPaletteManagement.copyToolTypeLibToProject(project);
-		
 
-			AutomationSystem system = createAutomationSystem(project); 
+			AutomationSystem system = createAutomationSystem(project);
 			INSTANCE.addSystem(system);
 
 			AutomationSystem sys2 = INSTANCE.getSystemForName(system.getName());
@@ -515,7 +501,7 @@ public enum SystemManager {
 
 			return system;
 		} catch (CoreException x) {
-			// Activator.getDefault().logError(x.getMessage(), x);
+			Activator.getDefault().logError(x.getMessage(), x);
 		} finally {
 			monitor.done();
 		}

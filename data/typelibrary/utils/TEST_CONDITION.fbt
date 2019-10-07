@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Service Interface Function Block Type" Name="TEST_CONDITION">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: PL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-01-16" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Request Test" Name="REQ" Type="Event">
+        <With Var="check"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Test finished" Name="CNF" Type="Event"/>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Test fails if check == 0, passes otherwise" Name="check" Type="BOOL"/>
+    </InputVars>
+  </InterfaceList>
+</FBType>

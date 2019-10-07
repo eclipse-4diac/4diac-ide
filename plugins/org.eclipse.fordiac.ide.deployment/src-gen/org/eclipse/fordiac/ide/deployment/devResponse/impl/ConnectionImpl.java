@@ -2,10 +2,11 @@
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
  * * 
- * * All rights reserved. This program and the accompanying materials
- * * are made available under the terms of the Eclipse Public License v1.0
- * * which accompanies this distribution, and is available at
- * * http://www.eclipse.org/legal/epl-v10.html
+ * * This program and the accompanying materials are made available under the
+ * * terms of the Eclipse Public License 2.0 which is available at
+ * * http://www.eclipse.org/legal/epl-2.0.
+ * *
+ * * SPDX-License-Identifier: EPL-2.0
  * *
  * * Contributors:
  * *   Gerhard Ebenhofer, Alois Zoitl
@@ -221,9 +222,9 @@ public class ConnectionImpl extends EObjectImpl implements Connection {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (source: "); //$NON-NLS-1$
+		result.append(" (Source: "); //$NON-NLS-1$
 		result.append(source);
-		result.append(", destination: "); //$NON-NLS-1$
+		result.append(", Destination: "); //$NON-NLS-1$
 		result.append(destination);
 		result.append(')');
 		return result.toString();

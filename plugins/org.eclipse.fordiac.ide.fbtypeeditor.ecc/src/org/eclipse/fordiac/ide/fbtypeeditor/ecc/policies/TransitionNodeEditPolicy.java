@@ -1,10 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2011, 2013 Profactor GmbH, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
@@ -15,7 +16,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ReconnectTransitionCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.CreateConnectionRequest;
@@ -35,16 +36,14 @@ public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy {
 	protected Command getConnectionCompleteCommand(
 			final CreateConnectionRequest request) {
 		if (request.getStartCommand() instanceof CreateTransitionCommand) {
-			CreateTransitionCommand command = (CreateTransitionCommand) request
-					.getStartCommand();
-			if (getHost() instanceof ECStateEditPart) {
+			CreateTransitionCommand command = (CreateTransitionCommand) request.getStartCommand();
+			if (getHost().getModel() instanceof ECState) {
 
 				Point destination = request.getLocation().getCopy();
 				getHostFigure().translateToRelative(destination);
 				
 				command.setDestinationLocation(destination);
-				command.setDestination(((ECStateEditPart) getHost())
-						.getCastedModel());
+				command.setDestination((ECState) getHost().getModel());
 				return command;
 			}
 		}
@@ -62,13 +61,11 @@ public class TransitionNodeEditPolicy extends GraphicalNodeEditPolicy {
 			final CreateConnectionRequest request) {
 
 		CreateTransitionCommand cmd = new CreateTransitionCommand();
-		if (getHost() instanceof ECStateEditPart) {
-				
-
+		if (getHost().getModel() instanceof ECState) {
 			Point source = request.getLocation().getCopy();
 			getHostFigure().translateToRelative(source);
 			
-			cmd.setSource(((ECStateEditPart) getHost()).getCastedModel());
+			cmd.setSource((ECState) getHost().getModel());
 			cmd.setSourceLocation(source);
 			cmd.setViewer(getHost().getViewer());
 		}

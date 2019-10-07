@@ -1,10 +1,11 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
@@ -116,9 +117,9 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 		if (newECC != eCC) {
 			NotificationChain msgs = null;
 			if (eCC != null)
-				msgs = ((InternalEObject)eCC).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.BASIC_FB_TYPE__ECC, null, msgs);
+				msgs = ((InternalEObject)eCC).eInverseRemove(this, LibraryElementPackage.ECC__BASIC_FB_TYPE, ECC.class, msgs);
 			if (newECC != null)
-				msgs = ((InternalEObject)newECC).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.BASIC_FB_TYPE__ECC, null, msgs);
+				msgs = ((InternalEObject)newECC).eInverseAdd(this, LibraryElementPackage.ECC__BASIC_FB_TYPE, ECC.class, msgs);
 			msgs = basicSetECC(newECC, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
@@ -137,6 +138,32 @@ public class BasicFBTypeImpl extends BaseFBTypeImpl implements BasicFBType {
 			algorithm = new EObjectContainmentEList<Algorithm>(Algorithm.class, this, LibraryElementPackage.BASIC_FB_TYPE__ALGORITHM);
 		}
 		return algorithm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Algorithm getAlgorithmNamed(final String name) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.BASIC_FB_TYPE__ECC:
+				if (eCC != null)
+					msgs = ((InternalEObject)eCC).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.BASIC_FB_TYPE__ECC, null, msgs);
+				return basicSetECC((ECC)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
