@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2009, - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH.
  * 			2018, TU Wie/ACIN
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,7 +9,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Martin Melik Merkumians, Monika Wenger, 
+ *   Gerhard Ebenhofer, Alois Zoitl, Martin Melik Merkumians, Monika Wenger,
  *   Ingo Hegny, Matthias Plasch, Jose Cabral, Martin Jobst
  *     - initial API and implementation and/or initial documentation
  *   Martin Melik Merkumians - adds export for SimpleFB
@@ -59,7 +59,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * export functionality to create *.cpp and *.h files in the FORTE V1.0.x format
- * 
+ *
  */
 public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFilter {
 
@@ -210,7 +210,7 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 		if (libraryType instanceof CompilableType) {
 			CompilableType type = (CompilableType) libraryType;
 			if (null != type.getCompilerInfo() && null != type.getCompilerInfo().getHeader()) {
-				pwCPP.println(type.getCompilerInfo().getHeader());
+				pwH.println(type.getCompilerInfo().getHeader());
 			}
 		}
 	}
@@ -225,44 +225,9 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 
 	@Override
 	protected void exportFBStarter() {
-		InterfaceList interfaceList = null;
+		setBaseClass();
 
-		if (libraryType instanceof BasicFBType) {
-			baseClass = C_BASIC_FB; // $NON-NLS-1$
-			pwH.println("\n#include <basicfb.h>"); //$NON-NLS-1$
-			forteEmitterInfos
-					.add("  - Creating header and source files for Basic Function Block " + libraryType.getName());
-			interfaceList = ((FBType) libraryType).getInterfaceList();
-		} else if (libraryType instanceof SimpleFBType) {
-			baseClass = "CSimpleFB"; // $NON-NLS-1$
-			pwH.println("\n#include <simplefb.h>"); //$NON-NLS-1$
-			forteEmitterInfos
-					.add("  - Creating header and source files for Simple Function Block " + libraryType.getName());
-			interfaceList = ((FBType) libraryType).getInterfaceList();
-		} else if (libraryType instanceof CompositeFBType) {
-			pwH.println("\n#include <cfb.h>"); //$NON-NLS-1$
-			pwH.println("#include <typelib.h>"); //$NON-NLS-1$
-			baseClass = "CCompositeFB"; //$NON-NLS-1$
-			forteEmitterInfos
-					.add("  - Creating header and source files for Composite Function Block " + libraryType.getName());
-			interfaceList = ((FBType) libraryType).getInterfaceList();
-
-		} else if (libraryType instanceof ServiceInterfaceFBType) {
-			pwH.println("\n#include <funcbloc.h>"); //$NON-NLS-1$
-			baseClass = "CFunctionBlock"; //$NON-NLS-1$
-			forteEmitterInfos.add("  - Creating header and source files for Service Interface Function Block " + name);
-			interfaceList = ((FBType) libraryType).getInterfaceList();
-		} else if (libraryType instanceof AdapterType) {
-			pwH.println("\n#include <adapter.h>"); //$NON-NLS-1$
-			pwH.println("#include <typelib.h>"); //$NON-NLS-1$
-			baseClass = "CAdapter"; //$NON-NLS-1$
-			forteEmitterInfos
-					.add("  - Creating header and source files for Adapter Function Block " + libraryType.getName());
-			interfaceList = ((AdapterType) libraryType).getInterfaceList();
-		} else {
-			forteEmitterErrors.add(
-					"  - FB is not of supported class {Basic Function Block, Composite Function Block, Service Interface Function Block}");
-		}
+		InterfaceList interfaceList = getInterfaceList();
 
 		if (interfaceList != null) {
 			Set<String> datatypeNames = new HashSet<>();
@@ -319,6 +284,57 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 
 	}
 
+	private void setBaseClass() {
+		if (libraryType instanceof BasicFBType) {
+			baseClass = C_BASIC_FB; // $NON-NLS-1$
+			pwH.println("\n#include <basicfb.h>"); //$NON-NLS-1$
+			forteEmitterInfos
+					.add("  - Creating header and source files for Basic Function Block " + libraryType.getName());
+		} else if (libraryType instanceof SimpleFBType) {
+			baseClass = "CSimpleFB"; // $NON-NLS-1$
+			pwH.println("\n#include <simplefb.h>"); //$NON-NLS-1$
+			forteEmitterInfos
+					.add("  - Creating header and source files for Simple Function Block " + libraryType.getName());
+		} else if (libraryType instanceof CompositeFBType) {
+			pwH.println("\n#include <cfb.h>"); //$NON-NLS-1$
+			pwH.println("#include <typelib.h>"); //$NON-NLS-1$
+			baseClass = "CCompositeFB"; //$NON-NLS-1$
+			forteEmitterInfos
+					.add("  - Creating header and source files for Composite Function Block " + libraryType.getName());
+		} else if (libraryType instanceof ServiceInterfaceFBType) {
+			pwH.println("\n#include <funcbloc.h>"); //$NON-NLS-1$
+			baseClass = "CFunctionBlock"; //$NON-NLS-1$
+			forteEmitterInfos.add("  - Creating header and source files for Service Interface Function Block " + name);
+		} else if (libraryType instanceof AdapterType) {
+			pwH.println("\n#include <adapter.h>"); //$NON-NLS-1$
+			pwH.println("#include <typelib.h>"); //$NON-NLS-1$
+			baseClass = "CAdapter"; //$NON-NLS-1$
+			forteEmitterInfos
+					.add("  - Creating header and source files for Adapter Function Block " + libraryType.getName());
+		} else {
+			forteEmitterErrors.add(
+					"  - FB is not of supported class {Basic, Simple, Composite, or Service Interface Function Block}");
+		}
+
+		if (libraryType instanceof CompilableType) {
+			CompilableType type = (CompilableType) libraryType;
+			if (null != type.getCompilerInfo() && null != type.getCompilerInfo().getClassdef()
+					&& !"".equals(type.getCompilerInfo().getClassdef())) { //$NON-NLS-1$
+				baseClass = type.getCompilerInfo().getClassdef();
+			}
+		}
+	}
+
+	private InterfaceList getInterfaceList() {
+		InterfaceList interfaceList = null;
+		if (libraryType instanceof FBType) {
+			interfaceList = ((FBType) libraryType).getInterfaceList();
+		} else if (libraryType instanceof AdapterType) {
+			interfaceList = ((AdapterType) libraryType).getInterfaceList();
+		}
+		return interfaceList;
+	}
+
 	private static void extractAdapterTypeNames(EList<AdapterDeclaration> adapters, Set<String> dataTypeNames) {
 		if (!adapters.isEmpty()) {
 			for (int i = 0; i < adapters.size(); i++) {
@@ -372,7 +388,7 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 	protected void exportFBConstructor() {
 		pwH.println("\npublic:"); //$NON-NLS-1$
 
-		if (baseClass.equals(C_BASIC_FB) || baseClass.equals("CSimpleFB")) { // $NON-NLS-1$
+		if (libraryType instanceof BasicFBType || libraryType instanceof SimpleFBType) { // $NON-NLS-1$
 			pwH.println("  FORTE_" //$NON-NLS-1$
 					+ name + "(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : "); //$NON-NLS-1$
 			pwH.print("       " //$NON-NLS-1$
@@ -829,8 +845,8 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 		if (type.equals("ST")) { //$NON-NLS-1$
 			structuredTextEmitter.exportStructuredTextAlgorithm(src, pwCPP);
 		} else {
-			pwCPP.println("#error Algorithm of type: '" + type //$NON-NLS-1$
-					+ "' not supported!!!"); //$NON-NLS-1$
+			pwCPP.println("#warning Algorithm of type: '" + type //$NON-NLS-1$
+					+ "' may lead to unexpected results!"); //$NON-NLS-1$
 			pwCPP.println(src);
 		}
 
