@@ -845,8 +845,10 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 		if (type.equals("ST")) { //$NON-NLS-1$
 			structuredTextEmitter.exportStructuredTextAlgorithm(src, pwCPP);
 		} else {
-			pwCPP.println("#warning Algorithm of type: '" + type //$NON-NLS-1$
-					+ "' may lead to unexpected results!"); //$NON-NLS-1$
+			pwCPP.println("#pragma GCC warning \"Algorithm of type: '" + type //$NON-NLS-1$
+					+ "' may lead to unexpected results\"!"); //$NON-NLS-1$
+			pwCPP.println("#pragma message (\"warning Algorithm of type: '" + type //$NON-NLS-1$
+					+ "' may lead to unexpected results!\")"); //$NON-NLS-1$
 			pwCPP.println(src);
 		}
 
