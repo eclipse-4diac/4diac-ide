@@ -21,21 +21,21 @@ import java.util.List;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.CanPubSubGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.EthernetPubSubGenerator;
 import org.eclipse.fordiac.ide.comgeneration.plugin.Activator;
+import org.eclipse.fordiac.ide.comgeneration.plugin.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 
 public final class ProtocolSelector {
-	
+
 	public static void doAutomatedProtocolSelection(CommunicationModel model) {
 		for (CommunicationChannel channel : model.getChannels().values()) {
 			List<Segment> commonSegments = new ArrayList<>();
 			Iterator<CommunicationChannelDestination> destinationIterator = channel.getDestinations().iterator();
-			
+
 			CommunicationChannelDestination destination = destinationIterator.next();
 			for (CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
 				commonSegments.add(mediaInfo.getSegment());
 			}
-			
-			
+
 			while (destinationIterator.hasNext()) {
 				destination = destinationIterator.next();
 				Iterator<Segment> segmentIterator = commonSegments.iterator();
@@ -52,19 +52,19 @@ public final class ProtocolSelector {
 					}
 				}
 			}
-			
+
 			Segment selectedCommonSegment = null;
 			if (!commonSegments.isEmpty()) {
 				sortSegments(commonSegments);
 				selectedCommonSegment = commonSegments.get(0);
 			}
-			
+
 			destinationIterator = channel.getDestinations().iterator();
 			while (destinationIterator.hasNext()) {
 				destination = destinationIterator.next();
-				
+
 				Segment selectedSegment = selectedCommonSegment;
-				
+
 				if (selectedSegment == null) {
 					ArrayList<Segment> availableSegments = new ArrayList<Segment>();
 					for (CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
@@ -75,7 +75,7 @@ public final class ProtocolSelector {
 						selectedSegment = availableSegments.get(0);
 					}
 				}
-				
+
 				if (selectedSegment != null) {
 					for (CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
 						if (mediaInfo.getSegment() == selectedSegment) {
@@ -85,13 +85,13 @@ public final class ProtocolSelector {
 						}
 					}
 				} else {
-					Activator.getDefault().logError("No connection available for ");
+					Activator.getDefault().logError(Messages.ProtocolSelector_NoConnectionAvailable);
 				}
-				
+
 			}
 		}
 	}
-	
+
 	private static String getProtocolIdForMetiaType(Segment segment) {
 		if (segment.getType().getName().equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
 			return EthernetPubSubGenerator.PROTOCOL_ID;
@@ -100,31 +100,30 @@ public final class ProtocolSelector {
 		}
 		return null;
 	}
-	
-	
+
 	private static void sortSegments(List<Segment> segmentList) {
 		Collections.sort(segmentList, (Segment o1, Segment o2) -> {
-				String name1 = o1.getType().getName();
-				String name2 = o2.getType().getName();
-				
-				if (name1.equalsIgnoreCase("Can")) { //$NON-NLS-1$
-					if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$
-						return 0;
-					} 
-					return -1;
-				} else if (name1.equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
-					if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$
-						return 1;
-					} else if (name2.equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
-						return 0;
-					} 
-					return -1;
+			String name1 = o1.getType().getName();
+			String name2 = o2.getType().getName();
+
+			if (name1.equalsIgnoreCase("Can")) { //$NON-NLS-1$
+				if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$
+					return 0;
 				}
-				return 0;
-			});
+				return -1;
+			} else if (name1.equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
+				if (name2.equalsIgnoreCase("Can")) { //$NON-NLS-1$
+					return 1;
+				} else if (name2.equalsIgnoreCase("Ethernet")) { //$NON-NLS-1$
+					return 0;
+				}
+				return -1;
+			}
+			return 0;
+		});
 	}
-	
+
 	private ProtocolSelector() {
-		throw new UnsupportedOperationException("ProtocolSelector utility class should not be instantiated!");
+		throw new UnsupportedOperationException("ProtocolSelector utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 }
