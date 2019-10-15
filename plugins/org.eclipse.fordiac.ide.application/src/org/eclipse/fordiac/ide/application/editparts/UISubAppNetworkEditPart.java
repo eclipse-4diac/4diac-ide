@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, AIT, fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,9 +9,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Filip Andren, Alois Zoitl, Monika Wenger 
+ *   Gerhard Ebenhofer, Filip Andren, Alois Zoitl, Monika Wenger
  *   - initial API and implementation and/or initial documentation
- *   Alois Zoitl - fixed untyped subapp interface updates and according code cleanup 
+ *   Alois Zoitl - fixed untyped subapp interface updates and according code cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -36,16 +36,19 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (LibraryElementPackage.eINSTANCE.getFBNetworkElement_Interface().equals(notification.getFeature())) {
-				refresh();
-			}
-
 			switch (notification.getEventType()) {
 			case Notification.ADD:
 			case Notification.ADD_MANY:
+			case Notification.MOVE:
+				if (notification.getNewValue() instanceof IInterfaceElement) {
+					refreshChildren();
+				}
+				break;
 			case Notification.REMOVE:
 			case Notification.REMOVE_MANY:
-				refreshChildren();
+				if (notification.getOldValue() instanceof IInterfaceElement) {
+					refreshChildren();
+				}
 				break;
 			case Notification.SET:
 				refreshVisuals();
@@ -59,9 +62,9 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 	@Override
 	public void activate() {
 		super.activate();
-		if (null != getModel() && !getModel().eAdapters().contains(contentAdapter)) {
+		if ((null != getModel()) && !getModel().eAdapters().contains(contentAdapter)) {
 			getModel().eAdapters().add(contentAdapter);
-			if (null != getSubApp() && !getSubApp().eAdapters().contains(contentAdapter)) {
+			if ((null != getSubApp()) && !getSubApp().eAdapters().contains(contentAdapter)) {
 				getSubApp().eAdapters().add(contentAdapter);
 			}
 		}
@@ -110,7 +113,8 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	private void addChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
 		IFigure child = childEditPart.getFigure();
-		if (childEditPart.getModel().isIsInput()) {
+		if (childEditPart.getModel().isIsInput()) { // use model isInput! because EditPart.isInput treats inputs as
+													// outputs for visual appearance
 			if (childEditPart.isEvent()) {
 				getLeftEventInterfaceContainer().add(child,
 						getSubApp().getInterface().getEventInputs().indexOf(childEditPart.getModel()));
@@ -155,7 +159,7 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	private void removeChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
 		IFigure child = childEditPart.getFigure();
-		if (childEditPart.isInput()) {
+		if (childEditPart.getModel().isIsInput()) {
 			if (childEditPart.isEvent()) {
 				getLeftEventInterfaceContainer().remove(child);
 			} else if (childEditPart.isAdapter()) {
