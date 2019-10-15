@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2016, 2017, 2019 fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,8 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Jose Cabral - Set version and description using general function
- *   Alois Zoitl - moved openEditor helper function to EditorUtils  
+ *   Alois Zoitl - moved openEditor helper function to EditorUtils
+ *   			 - fixed double connection creation issue
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.wizards;
 
@@ -40,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -170,24 +172,24 @@ public class SaveAsSubappWizard extends Wizard {
 	}
 
 	private void performSubappNetworkSetup(SubAppType type) {
-		FBNetwork dstNetwork = EcoreUtil.copy(subApp.getSubAppNetwork());
+		FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
+		dstNetwork.getNetworkElements().addAll(EcoreUtil.copyAll(subApp.getSubAppNetwork().getNetworkElements()));
+		createConnections(type, dstNetwork);
+		type.setFBNetwork(dstNetwork);
+	}
 
-		dstNetwork.getEventConnections().clear();
+	private void createConnections(SubAppType type, FBNetwork dstNetwork) {
 		for (Connection connection : subApp.getSubAppNetwork().getEventConnections()) {
 			dstNetwork.getEventConnections().add((EventConnection) createConnection(type, dstNetwork, connection));
 		}
 
-		dstNetwork.getDataConnections().clear();
 		for (Connection connection : subApp.getSubAppNetwork().getDataConnections()) {
 			dstNetwork.getDataConnections().add((DataConnection) createConnection(type, dstNetwork, connection));
 		}
 
-		dstNetwork.getAdapterConnections().clear();
 		for (Connection connection : subApp.getSubAppNetwork().getAdapterConnections()) {
 			dstNetwork.getAdapterConnections().add((AdapterConnection) createConnection(type, dstNetwork, connection));
 		}
-
-		type.setFBNetwork(dstNetwork);
 	}
 
 	private Connection createConnection(SubAppType type, FBNetwork dstNetwork, Connection connection) {
