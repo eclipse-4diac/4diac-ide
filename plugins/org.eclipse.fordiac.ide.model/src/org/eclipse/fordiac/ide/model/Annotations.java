@@ -14,7 +14,7 @@
  *   Monika Wenger - extracted the model helper methods into this annotations class
  *   Monika Wenger - introduced IEC 61499 attribute support into the model
  *   Alois Zoitl - reworked model helper functions for better mapping and sub-app
- *                 support  
+ *                 support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
@@ -110,8 +110,8 @@ public final class Annotations {
 	public static AutomationSystem getAutomationSystem(Application a) {
 		return (AutomationSystem) a.eContainer();
 	}
-	
-	// *** BasicFBType ***//	
+
+	// *** BasicFBType ***//
 	public static Algorithm getAlgorithmNamed(BasicFBType basicFBType, String name) {
 		return basicFBType.getAlgorithm().stream().filter(alg -> alg.getName().equals(name)).findFirst().orElse(null);
 	}
@@ -572,7 +572,7 @@ public final class Annotations {
 
 	// *** TypedConfigureableObject ***//
 	public static String getTypeName(TypedConfigureableObject tco) {
-		return tco.getPaletteEntry().getLabel();
+		return (null != tco.getPaletteEntry()) ? tco.getPaletteEntry().getLabel() : null;
 	}
 
 	public static LibraryElement getType(TypedConfigureableObject tco) {
