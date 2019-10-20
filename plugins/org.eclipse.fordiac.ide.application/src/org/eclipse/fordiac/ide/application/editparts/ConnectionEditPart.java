@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
  * 							 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Gerd Kainz, 
- *   Filip Pröstl-Andren 
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Gerd Kainz,
+ *   Filip Pröstl-Andren
  *   - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
@@ -26,8 +26,8 @@ import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
 import org.eclipse.fordiac.ide.application.policies.ConnectionGraphicalNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DisableConnectionHandleRoleEditPolicy;
-import org.eclipse.fordiac.ide.application.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
+import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.gef.router.RouterUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
@@ -60,19 +60,25 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	private final IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
-			if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR) &&  getModel() instanceof EventConnection) {
+			if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
+					&& getModel() instanceof EventConnection) {
 				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
 			}
-			if (event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR) && getModel() instanceof AdapterConnection) {
-				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
+			if (event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)
+					&& getModel() instanceof AdapterConnection) {
+				getFigure()
+						.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
 			}
-			if (event.getProperty().equals(PreferenceConstants.P_DATA_CONNECTOR_COLOR) && getModel() instanceof DataConnection) {
+			if (event.getProperty().equals(PreferenceConstants.P_DATA_CONNECTOR_COLOR)
+					&& getModel() instanceof DataConnection) {
 				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_DATA_CONNECTOR_COLOR));
 			}
-			if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON) && getModel() instanceof DataConnection) {
+			if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON)
+					&& getModel() instanceof DataConnection) {
 				getFigure().setVisible(!((Boolean) event.getNewValue()));
 			}
-			if (event.getProperty().equals(PreferenceConstants.P_HIDE_EVENT_CON) && getModel() instanceof EventConnection) {
+			if (event.getProperty().equals(PreferenceConstants.P_HIDE_EVENT_CON)
+					&& getModel() instanceof EventConnection) {
 				getFigure().setVisible(!((Boolean) event.getNewValue()));
 			}
 		}
@@ -82,22 +88,18 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	protected void createEditPolicies() {
 		// Selection handle edit policy.
 		// Makes the connection show a feedback, when selected by the user.
-		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE,
-				new FeedbackConnectionEndpointEditPolicy());
-		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE,
-				new DisableConnectionHandleRoleEditPolicy());
+		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new FeedbackConnectionEndpointEditPolicy());
+		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new DisableConnectionHandleRoleEditPolicy());
 
 		// Allows the removal of the connection model element
-		installEditPolicy(EditPolicy.CONNECTION_ROLE,
-				new DeleteConnectionEditPolicy());
+		installEditPolicy(EditPolicy.CONNECTION_ROLE, new DeleteConnectionEditPolicy());
 
 		if (getConnectionFigure().getConnectionRouter() instanceof BendpointPolicyRouter) {
 			installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE,
-					((BendpointPolicyRouter) getConnectionFigure()
-							.getConnectionRouter())
+					((BendpointPolicyRouter) getConnectionFigure().getConnectionRouter())
 							.getBendpointPolicy(getModel()));
 		}
-		
+
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new ConnectionGraphicalNodeEditPolicy());
 	}
 
@@ -107,8 +109,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 		String status = getModel().getAttributeValue(HIDEN_CON);
 		if (connection instanceof HideableConnection) {
-			((HideableConnection) connection)
-					.setHidden((status != null && status.equalsIgnoreCase(HIDDEN) ? true : false));
+			((HideableConnection) connection).setHidden(status != null && status.equalsIgnoreCase(HIDDEN));
 			if (getModel() != null && getModel().getSourceElement() != null) {
 				((HideableConnection) connection)
 						.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$

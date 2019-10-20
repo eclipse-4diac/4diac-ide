@@ -17,7 +17,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.application.policies.FeedbackConnectionEndpointEditPolicy;
+import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.gef.router.RouterUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;

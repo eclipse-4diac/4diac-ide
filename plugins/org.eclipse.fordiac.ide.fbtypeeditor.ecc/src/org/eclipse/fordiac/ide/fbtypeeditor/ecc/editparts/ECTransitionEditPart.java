@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Ingo Hengy, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - extracted TransitionFigure code and changed to cubic spline
+ *   Alois Zoitl - reworked transition and handle widths
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -27,11 +28,13 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECTransitionFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.fordiac.ide.util.STStringTokenHandling;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
@@ -40,13 +43,14 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.editpolicies.ConnectionEditPolicy;
-import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.GroupRequest;
 
 public class ECTransitionEditPart extends AbstractConnectionEditPart {
+
+	private static final int NORMAL_WIDTH = 2;
 
 	private final EContentAdapter adapter = new EContentAdapter() {
 		@Override
@@ -135,7 +139,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	protected void createEditPolicies() {
 		// // Selection handle edit policy.
 		// // Makes the connection show a feedback, when selected by the user.
-		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new ConnectionEndpointEditPolicy());
+		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE,
+				new FeedbackConnectionEndpointEditPolicy(NORMAL_WIDTH, ConnectionPreferenceValues.SELECTED_LINE_WIDTH));
 
 		installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE, new TransitionBendPointEditPolicy(getModel()));
 
@@ -204,7 +209,9 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		return new ECTransitionFigure(getModel());
+		ECTransitionFigure figure = new ECTransitionFigure(getModel());
+		figure.setLineWidth(NORMAL_WIDTH);
+		return figure;
 	}
 
 	@Override
@@ -225,17 +232,14 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			super.deactivate();
 			getModel().eAdapters().remove(adapter);
 			getModel().getECC().eAdapters().remove(adapter);
-
 			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().remove(interfaceAdapter);
 		}
 	}
 
 	public void highlight(boolean highlight) {
 		PolylineConnection pc = getConnectionFigure();
-		if (highlight && pc != null) {
-			pc.setLineWidth(3);
-		} else if (!highlight && pc != null) {
-			pc.setLineWidth(2);
+		if (null != pc) {
+			pc.setLineWidth((highlight) ? ConnectionPreferenceValues.HIGHLIGTHED_LINE_WIDTH : NORMAL_WIDTH);
 		}
 	}
 
