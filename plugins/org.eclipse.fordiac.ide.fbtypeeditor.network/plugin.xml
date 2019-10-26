@@ -55,6 +55,11 @@
                id="org.eclipse.fordiac.ide.fbnet.propertyConnectionTab"
                label="Connection">
          </propertyTab>
+         <propertyTab
+               category="Connection"
+               id="org.eclipse.fordiac.ide.fbnet.CreateConnection"
+               label="Create Connection">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -62,7 +67,7 @@
       <propertySections
             contributorId="property.contributor.fb">
          <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.network.properties.CompositeInterfaceSection"
+               class="org.eclipse.fordiac.ide.application.properties.InterfaceSection"
                id="org.eclipse.fordiac.ide.fbnet.properties.InterfaceSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab">
             <input
@@ -78,7 +83,7 @@
             </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.network.properties.CompositeInterfaceElementSection"
+               class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                id="org.eclipse.fordiac.ide.fbnet.properties.InterfaceElementSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceElementTab">
             <input
@@ -88,11 +93,21 @@
           <propertySection
                class="org.eclipse.fordiac.ide.application.properties.FBTypeInfoSection"
                id="org.eclipse.fordiac.ide.fbnet.properties.FBTypeInfoSection"
-             
-          tab="org.eclipse.fordiac.ide.fbnet.propertyFBTypeInfoTab">
-         
+               tab="org.eclipse.fordiac.ide.fbnet.propertyFBTypeInfoTab">
             <input
                   type="org.eclipse.fordiac.ide.application.editparts.FBEditPart">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
+               enablesFor="2"
+               id="org.eclipse.fordiac.ide.fbnet.properties.ConnectionSection"
+               tab="org.eclipse.fordiac.ide.fbnet.propertyConnectionTab">
+            <input
+                  type="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
+            </input>
+            <input
+                  type="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeInternalInterfaceEditPart">
             </input>
          </propertySection>
       </propertySections>

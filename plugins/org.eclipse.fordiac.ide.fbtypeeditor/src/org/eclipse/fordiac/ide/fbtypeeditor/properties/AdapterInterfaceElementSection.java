@@ -12,7 +12,8 @@
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - moved adapter search code to palette
- *******************************************************************************/
+ *               - cleaned command stack handling for property sections
+ ******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.ArrayList;
@@ -20,8 +21,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeContentOutline;
-import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeEditPart;
@@ -46,8 +45,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class AdapterInterfaceElementSection extends AbstractSection {
@@ -71,17 +68,6 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 		}
 		if (input instanceof VarDeclaration) {
 			return (VarDeclaration) input;
-		}
-		return null;
-	}
-
-	@Override
-	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if (part instanceof FBTypeEditor) {
-			return ((FBTypeEditor) part).getCommandStack();
-		}
-		if (part instanceof ContentOutline) {
-			return ((FBTypeContentOutline) ((ContentOutline) part).getCurrentPage()).getCommandStack();
 		}
 		return null;
 	}
