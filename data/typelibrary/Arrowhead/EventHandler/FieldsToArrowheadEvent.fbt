@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Transform individual fields to an Arrowhead Event type" Name="FieldsToArrowheadEvent">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Cabral" Date="2019-10-17" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="type"/>
+        <With Var="payload"/>
+        <With Var="timestamp"/>
+        <With Var="eventMetadata"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="arrowheadEvent"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="The type of the event, an event ID of sorts" Name="type" Type="WSTRING"/>
+      <VarDeclaration Comment="String data of the event" Name="payload" Type="WSTRING"/>
+      <VarDeclaration Comment="Date and time of the event" Name="timestamp" Type="DATE_AND_TIME"/>
+      <VarDeclaration ArraySize="10" Comment="Key=value pairs of additional data about the event" Name="eventMetadata" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Created Arrowhead event" Name="arrowheadEvent" Type="ArrowheadEvent"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="1565.0" y="695.0"/>
+      <ECState Comment="" Name="REQ" x="780.0" y="1215.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="725.0" y="690.0"/>
+      <ECTransition Comment="" Condition="REQ" Destination="REQ" Source="START" x="1295.0" y="1005.0"/>
+    </ECC>
+    <Algorithm Comment="Initialization algorithm" Name="REQ">
+      <ST Text="VAR&#13;&#10;  i: INT;&#13;&#10;END_VAR;&#13;&#10;&#13;&#10;i := 0;&#13;&#10;arrowheadEvent.type := type; &#13;&#10;arrowheadEvent.payload := payload;&#13;&#10;arrowheadEvent.timestamp = timestamp;&#13;&#10;&#13;&#10;WHILE i &lt; 10 DO //looks like while is faster than FOR when exporting to cpp&#13;&#10;  arrowheadEvent.eventMetadata[i] :=  eventMetadata[i];&#13;&#10;  i := i + 1;&#13;&#10;END_WHILE"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

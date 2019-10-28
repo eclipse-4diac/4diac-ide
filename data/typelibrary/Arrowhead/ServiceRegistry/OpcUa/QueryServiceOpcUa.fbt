@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Query for Services using OPC UA" Name="QueryServiceOpcUa">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-09-17" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <Sockets>
+      <AdapterDeclaration Comment="" Name="queryServices" Type="QueryServicesAdp" x="2000.0" y="1400.0"/>
+    </Sockets>
+  </InterfaceList>
+  <FBNetwork>
+    <FB Comment="" Name="APPEND_STRING_3" Type="APPEND_STRING_3" x="4860.0" y="2090.0">
+      <Parameter Name="IN_1" Value="STRING#opc_ua[CALL_METHOD; "/>
+      <Parameter Name="IN_3" Value="STRING##; /Objects/2:ServiceRegistry/2:query]"/>
+    </FB>
+    <FB Comment="" Name="F_STRING_TO_WSTRING" Type="F_STRING_TO_WSTRING" x="6155.0" y="2075.0"/>
+    <FB Comment="" Name="InitFlag" Type="E_SR" x="7435.0" y="1675.0"/>
+    <FB Comment="" Name="E_PERMIT" Type="E_PERMIT" x="8300.0" y="800.0"/>
+    <FB Comment="" Name="ANYToJSON" Type="ANYToJSON" x="3900.0" y="1400.0"/>
+    <FB Comment="" Name="GetHTTPResult" Type="GetArrayResponseFromJSON" x="500.0" y="1400.0"/>
+    <FB Comment="" Name="Query" Type="CLIENT_1" x="9060.0" y="1660.0"/>
+    <FB Comment="" Name="E_SWITCH_1" Type="E_SWITCH" x="12400.0" y="1500.0"/>
+    <FB Comment="" Name="E_SWITCH" Type="E_SWITCH" x="10500.0" y="1600.0"/>
+    <FB Comment="" Name="E_DELAY" Type="E_DELAY" x="14000.0" y="1500.0">
+      <Parameter Name="DT" Value="T#250ms"/>
+    </FB>
+    <FB Comment="" Name="E_CTU" Type="E_CTU" x="11600.0" y="1500.0">
+      <Parameter Name="PV" Value="UINT#3"/>
+    </FB>
+    <EventConnections>
+      <Connection Comment="" Destination="F_STRING_TO_WSTRING.REQ" Source="APPEND_STRING_3.CNF" dx1="285.0"/>
+      <Connection Comment="" Destination="InitFlag.S" Source="F_STRING_TO_WSTRING.CNF" dx1="190.0"/>
+      <Connection Comment="" Destination="APPEND_STRING_3.REQ" Source="ANYToJSON.CNF" dx1="185.0"/>
+      <Connection Comment="" Destination="ANYToJSON.REQ" Source="queryServices.query"/>
+      <Connection Comment="" Destination="queryServices.queried" Source="GetHTTPResult.CNF"/>
+      <Connection Comment="" Destination="Query.INIT" Source="InitFlag.EO" dx1="295.0"/>
+      <Connection Comment="" Destination="Query.REQ" Source="E_PERMIT.EO" dx1="220.0"/>
+      <Connection Comment="" Destination="E_PERMIT.EI" Source="Query.INITO" dx1="60.0" dx2="60.0" dy="-1290.0"/>
+      <Connection Comment="" Destination="E_DELAY.START" Source="E_SWITCH_1.EO0"/>
+      <Connection Comment="" Destination="E_SWITCH_1.EI" Source="E_CTU.CUO"/>
+      <Connection Comment="" Destination="E_CTU.CU" Source="E_SWITCH.EO0" dx1="310.0"/>
+      <Connection Comment="" Destination="GetHTTPResult.REQ" Source="E_SWITCH.EO1" dx1="405.0" dx2="60.0" dy="-1900.0"/>
+      <Connection Comment="" Destination="InitFlag.R" Source="E_SWITCH.EO1" dx1="260.0" dx2="150.0" dy="-1650.0"/>
+      <Connection Comment="" Destination="E_SWITCH.EI" Source="Query.CNF" dx1="445.0"/>
+      <Connection Comment="" Destination="InitFlag.R" Source="E_SWITCH_1.EO1" dx1="60.0" dx2="60.0" dy="1350.0"/>
+      <Connection Comment="" Destination="GetHTTPResult.REQ" Source="E_SWITCH_1.EO1" dx1="60.0" dx2="360.0" dy="-2170.0"/>
+      <Connection Comment="" Destination="Query.REQ" Source="E_DELAY.EO" dx1="60.0" dx2="230.0" dy="-210.0"/>
+      <Connection Comment="" Destination="E_CTU.R" Source="E_SWITCH.EO1" dx1="310.0"/>
+      <Connection Comment="" Destination="E_CTU.R" Source="E_SWITCH_1.EO1" dx1="60.0" dx2="60.0" dy="120.0"/>
+    </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="F_STRING_TO_WSTRING.IN" Source="APPEND_STRING_3.OUT" dx1="285.0"/>
+      <Connection Comment="" Destination="E_PERMIT.PERMIT" Source="InitFlag.Q" dx1="205.0"/>
+      <Connection Comment="" Destination="ANYToJSON.input" Source="queryServices.serviceQueryForm"/>
+      <Connection Comment="" Destination="APPEND_STRING_3.IN_2" Source="queryServices.endpoint" dx1="325.0"/>
+      <Connection Comment="" Destination="queryServices.serviceEntries" Source="GetHTTPResult.output"/>
+      <Connection Comment="" Destination="Query.QI" Source="InitFlag.Q" dx1="370.0"/>
+      <Connection Comment="" Destination="Query.ID" Source="F_STRING_TO_WSTRING.OUT" dx1="840.0"/>
+      <Connection Comment="" Destination="Query.SD_1" Source="ANYToJSON.output" dx1="4045.0"/>
+      <Connection Comment="" Destination="GetHTTPResult.response" Source="Query.RD_1" dx1="60.0" dx2="60.0" dy="460.0"/>
+      <Connection Comment="" Destination="E_SWITCH_1.G" Source="E_CTU.Q"/>
+      <Connection Comment="" Destination="E_SWITCH.G" Source="Query.QO" dx1="445.0"/>
+    </DataConnections>
+  </FBNetwork>
+</FBType>

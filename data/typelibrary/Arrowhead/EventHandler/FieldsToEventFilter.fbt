@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Transform individual fields to an Arrowhead Event Filter type" Name="FieldsToEventFilter">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Cabral" Date="2019-09-17" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="eventType"/>
+        <With Var="consumer"/>
+        <With Var="startDate"/>
+        <With Var="notifyUri"/>
+        <With Var="sources"/>
+        <With Var="endDate"/>
+        <With Var="filterMetadata"/>
+        <With Var="matchMetadata"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="eventFilter"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Event type, similar to topics in MQTT" Name="eventType" Type="WSTRING"/>
+      <VarDeclaration Comment="The Subscriber ArrowheadSystem, that will consume the new events" Name="consumer" Type="ArrowheadSystem"/>
+      <VarDeclaration ArraySize="10" Comment="List of ArrowheadSystem the Subscriber wants to receive events from" Name="sources" Type="ArrowheadSystem"/>
+      <VarDeclaration Comment="If set, the Subscriber wants to receive events with timestamps after this date-time" Name="startDate" Type="DATE_AND_TIME"/>
+      <VarDeclaration Comment="If set, the Subscriber wants to receive events with timestamps before this date-time" Name="endDate" Type="DATE_AND_TIME"/>
+      <VarDeclaration ArraySize="10" Comment="Metadata about the events, which can be used for further filtering in format key=value" Name="filterMetadata" Type="WSTRING"/>
+      <VarDeclaration Comment="The URL subpath where the Event Handler should sent the new events to" Name="notifyUri" Type="WSTRING"/>
+      <VarDeclaration Comment="Should the Event Handler filter events based on the metadata" Name="matchMetadata" Type="BOOL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Created Arrowhead event Filter" Name="eventFilter" Type="EventFilter"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="1565.0" y="695.0"/>
+      <ECState Comment="" Name="REQ" x="780.0" y="1215.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="725.0" y="690.0"/>
+      <ECTransition Comment="" Condition="REQ" Destination="REQ" Source="START" x="1295.0" y="1005.0"/>
+    </ECC>
+    <Algorithm Comment="Initialization algorithm" Name="REQ">
+      <ST Text="VAR&#13;&#10;  i: INT;&#13;&#10;END_VAR;&#13;&#10;&#13;&#10;i := 0;&#13;&#10;eventFilter.eventType := eventType; &#13;&#10;eventFilter.consumer := consumer;&#13;&#10;eventFilter.startDate := startDate;&#13;&#10;eventFilter.endDate := endDate;&#13;&#10;eventFilter.notifyUri := notifyUri;&#13;&#10;eventFilter.matchMetadata := matchMetadata;&#13;&#10;&#13;&#10;WHILE i &lt; 10 DO //looks like while is faster than FOR when exporting to cpp&#13;&#10;  eventFilter.sources[i] := sources[i];&#13;&#10;  eventFilter.filterMetadata[i] :=  filterMetadata[i];&#13;&#10;  i := i + 1;&#13;&#10;END_WHILE"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

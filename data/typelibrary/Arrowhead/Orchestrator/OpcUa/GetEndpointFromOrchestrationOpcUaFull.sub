@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
-<SubAppType Comment="Get the endpoint at INDEX from a request orchestration response" Name="GetEndpointFromOrchestrationHTTPPFull">
+<SubAppType Comment="Get the endpoint at INDEX from a request orchestration response" Name="GetEndpointFromOrchestrationOpcUaFull">
   <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
-  <VersionInfo Author="Jose Cabral" Date="2019-02-19" Organization="fortiss GmbH" Version="1.0"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-09-17" Organization="fortiss GmbH" Version="1.0"/>
   <SubAppInterfaceList>
     <SubAppEventInputs>
       <SubAppEvent Comment="Request orchestration" Name="REQ" Type="Event"/>
@@ -38,36 +38,36 @@
   <SubAppNetwork>
     <FB Comment="" Name="GET_AT_INDEX" Type="GET_AT_INDEX" x="7530.0" y="280.0"/>
     <SubApp Comment="" Name="GetEndpointFromOrchestrationForm" Type="GetEndpointFromOrchestrationForm" x="8710.0" y="380.0"/>
-    <SubApp Comment="" Name="RequestOrchestrationHTTPPFull" Type="RequestOrchestrationHTTPPFull" x="3330.0" y="-260.0"/>
-    <DataConnections>
-      <Connection Comment="" Destination="GetEndpointFromOrchestrationForm.orchestrationForm" Source="GET_AT_INDEX.OUT"/>
-      <Connection Comment="" Destination="GET_AT_INDEX.INDEX" Source="INDEX" dx1="6400.0"/>
-      <Connection Comment="" Destination="endpoint" Source="GetEndpointFromOrchestrationForm.endpoint" dx1="60.0" dx2="60.0" dy="-310.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.systemName" Source="systemName" dx1="660.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.address" Source="address" dx1="2420.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.port" Source="port" dx1="885.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.authenticationInfo" Source="authenticationInfo" dx1="990.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.Operator" Source="Operator" dx1="1240.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.cloudName" Source="cloudName" dx1="1240.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.addressCloud" Source="addressCloud" dx1="1240.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.portCloud" Source="portCloud" dx1="1240.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.gatekeeperServiceURI" Source="gatekeeperServiceURI" dx1="1240.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.authenticationInfoCloud" Source="authenticationInfoCloud" dx1="1240.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.secure" Source="secure" dx1="1240.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.serviceDefinition" Source="serviceDefinition" dx1="1240.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.interfaces" Source="interfaces" dx1="1240.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.serviceMetadata" Source="serviceMetadata" dx1="1240.0"/>
-      <Connection Comment="" Destination="GET_AT_INDEX.IN_ARRAY" Source="RequestOrchestrationHTTPPFull.serviceRequestForm" dx1="2230.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.preferredProviders" Source="preferredProviders" dx1="1240.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.orchestrationFlags" Source="orchestrationFlags" dx1="1240.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.requestedQoS" Source="requestedQoS" dx1="1240.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.orchestratorEndpoint" Source="orchestratorEndpoint" dx1="1240.0"/>
-    </DataConnections>
+    <SubApp Comment="" Name="RequestOrchestrationOpcUaFull" Type="RequestOrchestrationOpcUaFull" x="3330.0" y="-260.0"/>
     <EventConnections>
       <Connection Comment="" Destination="GetEndpointFromOrchestrationForm.REQ" Source="GET_AT_INDEX.CNF" dx1="295.0"/>
-      <Connection Comment="" Destination="CNF" Source="GetEndpointFromOrchestrationForm.CNF" dx1="60.0" dx2="60.0" dy="-245.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPFull.REQ" Source="REQ" dx1="1240.0"/>
-      <Connection Comment="" Destination="GET_AT_INDEX.REQ" Source="RequestOrchestrationHTTPPFull.CNF" dx1="2575.0"/>
+      <Connection Comment="" Destination="CNF" Source="GetEndpointFromOrchestrationForm.CNF" dx1="60.0" dx2="60.0" dy="-230.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.REQ" Source="REQ" dx1="1240.0"/>
+      <Connection Comment="" Destination="GET_AT_INDEX.REQ" Source="RequestOrchestrationOpcUaFull.CNF" dx1="2200.0"/>
     </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="GetEndpointFromOrchestrationForm.orchestrationForm" Source="GET_AT_INDEX.OUT"/>
+      <Connection Comment="" Destination="GET_AT_INDEX.INDEX" Source="INDEX" dx1="6390.0"/>
+      <Connection Comment="" Destination="endpoint" Source="GetEndpointFromOrchestrationForm.endpoint" dx1="60.0" dx2="60.0" dy="-305.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.systemName" Source="systemName" dx1="660.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.address" Source="address" dx1="2190.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.port" Source="port" dx1="885.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.authenticationInfo" Source="authenticationInfo" dx1="990.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.Operator" Source="Operator" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.cloudName" Source="cloudName" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.addressCloud" Source="addressCloud" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.portCloud" Source="portCloud" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.gatekeeperServiceURI" Source="gatekeeperServiceURI" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.authenticationInfoCloud" Source="authenticationInfoCloud" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.secure" Source="secure" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.serviceDefinition" Source="serviceDefinition" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.interfaces" Source="interfaces" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.serviceMetadata" Source="serviceMetadata" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.orchestrationFlags" Source="orchestrationFlags" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.preferredProviders" Source="preferredProviders" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.requestedQoS" Source="requestedQoS" dx1="1240.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaFull.orchestratorEndpoint" Source="orchestratorEndpoint" dx1="1240.0"/>
+      <Connection Comment="" Destination="GET_AT_INDEX.IN_ARRAY" Source="RequestOrchestrationOpcUaFull.serviceRequestForm" dx1="2200.0"/>
+    </DataConnections>
   </SubAppNetwork>
 </SubAppType>

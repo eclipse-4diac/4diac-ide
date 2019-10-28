@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Publish event Function Block" Name="ArrowheadPublish">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Cabral" Date="2019-09-17" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Publish Event" Name="publish" Type="Event">
+        <With Var="publishEvent"/>
+        <With Var="endpoint"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Event was published" Name="published" Type="Event"/>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Publish event to be sent" Name="publishEvent" Type="PublishEvent"/>
+      <VarDeclaration Comment="Endpoint (IP:PORT/URI) of the Event Handler (not officially in the documentation, but it simplifies the FBs)" Name="endpoint" Type="WSTRING"/>
+    </InputVars>
+    <Plugs>
+      <AdapterDeclaration Comment="" Name="ArrowheadPublishAdp" Type="ArrowheadPublishAdp" x="2200.0" y="-200.0"/>
+    </Plugs>
+  </InterfaceList>
+  <FBNetwork>
+    <EventConnections>
+      <Connection Comment="" Destination="ArrowheadPublishAdp.publish" Source="publish" dx1="805.0"/>
+      <Connection Comment="" Destination="published" Source="ArrowheadPublishAdp.published" dx1="60.0" dx2="60.0" dy="55.0"/>
+    </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="ArrowheadPublishAdp.publishEvent" Source="publishEvent" dx1="805.0"/>
+      <Connection Comment="" Destination="ArrowheadPublishAdp.endpoint" Source="endpoint" dx1="805.0"/>
+    </DataConnections>
+  </FBNetwork>
+</FBType>

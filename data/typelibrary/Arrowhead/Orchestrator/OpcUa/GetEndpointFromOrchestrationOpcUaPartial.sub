@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
-<SubAppType Comment="Get the endpoint at INDEX from a request orchestration response" Name="GetEndpointFromOrchestrationHTTPPartial">
+<SubAppType Comment="Get the endpoint at INDEX from a request orchestration response" Name="GetEndpointFromOrchestrationOpcUaPartial">
   <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
-  <VersionInfo Author="Jose Cabral" Date="2019-02-19" Organization="fortiss GmbH" Version="1.0"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-09-17" Organization="fortiss GmbH" Version="1.0"/>
   <SubAppInterfaceList>
     <SubAppEventInputs>
       <SubAppEvent Comment="Request orchestration" Name="REQ" Type="Event"/>
@@ -27,29 +27,29 @@
     </OutputVars>
   </SubAppInterfaceList>
   <SubAppNetwork>
-    <SubApp Comment="" Name="RequestOrchestrationHTTPPartial" Type="RequestOrchestrationHTTPPartial" x="2430.0" y="-260.0"/>
     <FB Comment="" Name="GET_AT_INDEX" Type="GET_AT_INDEX" x="5255.0" y="850.0"/>
     <SubApp Comment="" Name="GetEndpointFromOrchestrationForm" Type="GetEndpointFromOrchestrationForm" x="6445.0" y="945.0"/>
-    <DataConnections>
-      <Connection Comment="" Destination="GetEndpointFromOrchestrationForm.orchestrationForm" Source="GET_AT_INDEX.OUT" dx1="190.0"/>
-      <Connection Comment="" Destination="endpoint" Source="GetEndpointFromOrchestrationForm.endpoint" dx1="375.0"/>
-      <Connection Comment="" Destination="GET_AT_INDEX.IN_ARRAY" Source="RequestOrchestrationHTTPPartial.serviceRequestForm" dx1="680.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.requesterSystem" Source="requesterSystem" dx1="840.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.requesterCloud" Source="requesterCloud" dx1="840.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.serviceDefinition" Source="serviceDefinition" dx1="840.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.interfaces" Source="interfaces" dx1="840.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.serviceMetadata" Source="serviceMetadata" dx1="840.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.orchestrationFlags" Source="orchestrationFlags" dx1="840.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.preferredProviders" Source="preferredProviders" dx1="840.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.requestedQoS" Source="requestedQoS" dx1="840.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.orchestratorEndpoint" Source="orchestratorEndpoint" dx1="840.0"/>
-      <Connection Comment="" Destination="GET_AT_INDEX.INDEX" Source="INDEX" dx1="2255.0"/>
-    </DataConnections>
+    <SubApp Comment="" Name="RequestOrchestrationOpcUaPartial" Type="RequestOrchestrationOpcUaPartial" x="2430.0" y="-260.0"/>
     <EventConnections>
       <Connection Comment="" Destination="GetEndpointFromOrchestrationForm.REQ" Source="GET_AT_INDEX.CNF" dx1="190.0"/>
-      <Connection Comment="" Destination="CNF" Source="GetEndpointFromOrchestrationForm.CNF" dx1="375.0"/>
-      <Connection Comment="" Destination="RequestOrchestrationHTTPPartial.REQ" Source="REQ" dx1="840.0"/>
-      <Connection Comment="" Destination="GET_AT_INDEX.REQ" Source="RequestOrchestrationHTTPPartial.CNF" dx1="800.0"/>
+      <Connection Comment="" Destination="CNF" Source="GetEndpointFromOrchestrationForm.CNF" dx1="60.0" dx2="60.0" dy="-515.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.REQ" Source="REQ" dx1="840.0"/>
+      <Connection Comment="" Destination="GET_AT_INDEX.REQ" Source="RequestOrchestrationOpcUaPartial.CNF" dx1="800.0"/>
     </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="GetEndpointFromOrchestrationForm.orchestrationForm" Source="GET_AT_INDEX.OUT" dx1="190.0"/>
+      <Connection Comment="" Destination="endpoint" Source="GetEndpointFromOrchestrationForm.endpoint" dx1="60.0" dx2="60.0" dy="-590.0"/>
+      <Connection Comment="" Destination="GET_AT_INDEX.INDEX" Source="INDEX" dx1="1415.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.requesterSystem" Source="requesterSystem" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.requesterCloud" Source="requesterCloud" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.serviceDefinition" Source="serviceDefinition" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.interfaces" Source="interfaces" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.serviceMetadata" Source="serviceMetadata" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.orchestrationFlags" Source="orchestrationFlags" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.preferredProviders" Source="preferredProviders" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.requestedQoS" Source="requestedQoS" dx1="840.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.orchestratorEndpoint" Source="orchestratorEndpoint" dx1="840.0"/>
+      <Connection Comment="" Destination="GET_AT_INDEX.IN_ARRAY" Source="RequestOrchestrationOpcUaPartial.serviceRequestForm" dx1="680.0"/>
+    </DataConnections>
   </SubAppNetwork>
 </SubAppType>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Subscribe Event Function Block" Name="SubscribeEvent">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Cabral" Date="2019-09-18" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initialization Request" Name="Subscribe" Type="Event">
+        <With Var="eventFilter"/>
+        <With Var="endpoint"/>
+      </Event>
+      <Event Comment="Normal Execution Request" Name="Unsubscribe" Type="Event">
+        <With Var="eventFilter"/>
+        <With Var="endpoint"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Subscribe finished" Name="Subscribed" Type="Event"/>
+      <Event Comment="Unsubscribe from event" Name="Unsubscribed" Type="Event"/>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Event filter " Name="eventFilter" Type="EventFilter"/>
+      <VarDeclaration Comment="Endpoint (IP:PORT/URI) of the Service Registry (not officially in the documentation, but it simplifies the FBs)" Name="endpoint" Type="WSTRING"/>
+    </InputVars>
+    <Plugs>
+      <AdapterDeclaration Comment="Subscribe event adapter" Name="SubscribeEventAdp" Type="SubscribeEventAdp" x="3000.0" y="-100.0"/>
+    </Plugs>
+  </InterfaceList>
+  <FBNetwork>
+    <EventConnections>
+      <Connection Comment="" Destination="SubscribeEventAdp.Unsubscribe" Source="Unsubscribe" dx1="1230.0"/>
+      <Connection Comment="" Destination="SubscribeEventAdp.Subscribe" Source="Subscribe" dx1="1230.0"/>
+      <Connection Comment="" Destination="Subscribed" Source="SubscribeEventAdp.Subscribed" dx1="60.0" dx2="60.0" dy="5.0"/>
+      <Connection Comment="" Destination="Unsubscribed" Source="SubscribeEventAdp.Unsubscribed" dx1="60.0" dx2="60.0" dy="5.0"/>
+    </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="SubscribeEventAdp.eventFilter" Source="eventFilter" dx1="1230.0"/>
+      <Connection Comment="" Destination="SubscribeEventAdp.endpoint" Source="endpoint" dx1="1230.0"/>
+    </DataConnections>
+  </FBNetwork>
+</FBType>

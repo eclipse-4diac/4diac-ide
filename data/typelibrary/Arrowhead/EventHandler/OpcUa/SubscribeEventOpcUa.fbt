@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Subscribe event using OPC UA" Name="SubscribeEventOpcUa">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Cabral" Date="2019-09-18" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <Sockets>
+      <AdapterDeclaration Comment="SubscribeEvent adapter" Name="SubscribeEventAdp" Type="SubscribeEventAdp" x="1000.0" y="800.0"/>
+    </Sockets>
+  </InterfaceList>
+  <FBNetwork>
+    <FB Comment="" Name="InitFlagReg" Type="E_SR" x="9495.0" y="-505.0"/>
+    <FB Comment="" Name="E_PERMIT" Type="E_PERMIT" x="11185.0" y="-900.0"/>
+    <FB Comment="" Name="InitFlagUnReg" Type="E_SR" x="9485.0" y="1200.0"/>
+    <FB Comment="" Name="F_STRING_TO_WSTRING" Type="F_STRING_TO_WSTRING" x="6685.0" y="-300.0"/>
+    <FB Comment="" Name="CreateRegisterID" Type="APPEND_STRING_3" x="5485.0" y="-300.0">
+      <Parameter Name="IN_1" Value="STRING#opc_ua[CALL_METHOD; "/>
+      <Parameter Name="IN_3" Value="STRING##; /Objects/2:EventHandler/2:subscribe]"/>
+    </FB>
+    <FB Comment="" Name="ANYToJSON" Type="ANYToJSON" x="8085.0" y="705.0"/>
+    <FB Comment="" Name="E_PERMIT_1" Type="E_PERMIT" x="11185.0" y="900.0"/>
+    <FB Comment="" Name="CreateRegisterID_1" Type="APPEND_STRING_3" x="5500.0" y="1500.0">
+      <Parameter Name="IN_1" Value="STRING#opc_ua[CALL_METHOD; "/>
+      <Parameter Name="IN_3" Value="STRING##; /Objects/2:EventHandler/2:unsubscribe]"/>
+    </FB>
+    <FB Comment="" Name="F_STRING_TO_WSTRING_2" Type="F_STRING_TO_WSTRING" x="6700.0" y="1500.0"/>
+    <FB Comment="" Name="Register" Type="CLIENT_1_0" x="12200.0" y="-500.0"/>
+    <FB Comment="" Name="Unregister" Type="CLIENT_1_0" x="12175.0" y="1600.0"/>
+    <FB Comment="" Name="E_DELAY_1" Type="E_DELAY" x="17000.0" y="1600.0">
+      <Parameter Name="DT" Value="T#250ms"/>
+    </FB>
+    <FB Comment="" Name="E_SWITCH_1_1" Type="E_SWITCH" x="15400.0" y="1600.0"/>
+    <FB Comment="" Name="E_SWITCH_2" Type="E_SWITCH" x="13500.0" y="1700.0"/>
+    <FB Comment="" Name="E_CTU_1" Type="E_CTU" x="14600.0" y="1600.0">
+      <Parameter Name="PV" Value="UINT#3"/>
+    </FB>
+    <FB Comment="" Name="E_DELAY_1_1" Type="E_DELAY" x="17200.0" y="-800.0">
+      <Parameter Name="DT" Value="T#250ms"/>
+    </FB>
+    <FB Comment="" Name="E_SWITCH_1_1_1" Type="E_SWITCH" x="15600.0" y="-800.0"/>
+    <FB Comment="" Name="E_SWITCH_2_1" Type="E_SWITCH" x="13700.0" y="-700.0"/>
+    <FB Comment="" Name="E_CTU_1_1" Type="E_CTU" x="14800.0" y="-800.0">
+      <Parameter Name="PV" Value="UINT#3"/>
+    </FB>
+    <EventConnections>
+      <Connection Comment="" Destination="F_STRING_TO_WSTRING.REQ" Source="CreateRegisterID.CNF"/>
+      <Connection Comment="" Destination="ANYToJSON.REQ" Source="F_STRING_TO_WSTRING.CNF" dx1="265.0"/>
+      <Connection Comment="" Destination="InitFlagReg.S" Source="F_STRING_TO_WSTRING.CNF" dx1="955.0"/>
+      <Connection Comment="" Destination="CreateRegisterID.REQ" Source="SubscribeEventAdp.Subscribe" dx1="975.0"/>
+      <Connection Comment="" Destination="CreateRegisterID_1.REQ" Source="SubscribeEventAdp.Unsubscribe" dx1="385.0"/>
+      <Connection Comment="" Destination="F_STRING_TO_WSTRING_2.REQ" Source="CreateRegisterID_1.CNF"/>
+      <Connection Comment="" Destination="ANYToJSON.REQ" Source="F_STRING_TO_WSTRING_2.CNF" dx1="350.0"/>
+      <Connection Comment="" Destination="InitFlagUnReg.S" Source="F_STRING_TO_WSTRING_2.CNF" dx1="1260.0"/>
+      <Connection Comment="" Destination="Register.INIT" Source="InitFlagReg.EO" dx1="1110.0"/>
+      <Connection Comment="" Destination="Register.REQ" Source="E_PERMIT.EO" dx1="290.0"/>
+      <Connection Comment="" Destination="E_PERMIT.EI" Source="Register.INITO" dx1="60.0" dx2="60.0" dy="-720.0"/>
+      <Connection Comment="" Destination="Unregister.INIT" Source="InitFlagUnReg.EO" dx1="1085.0"/>
+      <Connection Comment="" Destination="Unregister.REQ" Source="E_PERMIT_1.EO" dx1="290.0"/>
+      <Connection Comment="" Destination="E_PERMIT_1.EI" Source="Unregister.INITO" dx1="60.0" dx2="60.0" dy="-1070.0"/>
+      <Connection Comment="" Destination="E_CTU_1.R" Source="E_SWITCH_2.EO1" dx1="310.0"/>
+      <Connection Comment="" Destination="E_CTU_1.R" Source="E_SWITCH_1_1.EO1" dx1="60.0" dx2="60.0" dy="-505.0"/>
+      <Connection Comment="" Destination="E_SWITCH_1_1.EI" Source="E_CTU_1.CUO"/>
+      <Connection Comment="" Destination="E_CTU_1.CU" Source="E_SWITCH_2.EO0" dx1="310.0"/>
+      <Connection Comment="" Destination="E_DELAY_1.START" Source="E_SWITCH_1_1.EO0"/>
+      <Connection Comment="" Destination="E_CTU_1_1.R" Source="E_SWITCH_2_1.EO1" dx1="310.0"/>
+      <Connection Comment="" Destination="E_CTU_1_1.R" Source="E_SWITCH_1_1_1.EO1" dx1="60.0" dx2="60.0" dy="-505.0"/>
+      <Connection Comment="" Destination="E_SWITCH_1_1_1.EI" Source="E_CTU_1_1.CUO"/>
+      <Connection Comment="" Destination="E_CTU_1_1.CU" Source="E_SWITCH_2_1.EO0" dx1="310.0"/>
+      <Connection Comment="" Destination="E_DELAY_1_1.START" Source="E_SWITCH_1_1_1.EO0"/>
+      <Connection Comment="" Destination="SubscribeEventAdp.Unsubscribed" Source="E_SWITCH_2.EO1" dx1="60.0" dx2="60.0" dy="1790.0"/>
+      <Connection Comment="" Destination="InitFlagUnReg.R" Source="E_SWITCH_2.EO1" dx1="60.0" dx2="60.0" dy="-1520.0"/>
+      <Connection Comment="" Destination="E_SWITCH_2.EI" Source="Unregister.CNF"/>
+      <Connection Comment="" Destination="Unregister.REQ" Source="E_DELAY_1.EO" dx1="60.0" dx2="60.0" dy="-940.0"/>
+      <Connection Comment="" Destination="InitFlagUnReg.R" Source="E_SWITCH_1_1.EO1" dx1="60.0" dx2="60.0" dy="640.0"/>
+      <Connection Comment="" Destination="SubscribeEventAdp.Unsubscribed" Source="E_SWITCH_1_1.EO1" dx1="185.0" dx2="620.0" dy="3460.0"/>
+      <Connection Comment="" Destination="SubscribeEventAdp.Subscribed" Source="E_SWITCH_2_1.EO1" dx1="115.0" dx2="60.0" dy="-1415.0"/>
+      <Connection Comment="" Destination="InitFlagReg.R" Source="E_SWITCH_2_1.EO1" dx1="225.0" dx2="265.0" dy="-975.0"/>
+      <Connection Comment="" Destination="E_SWITCH_2_1.EI" Source="Register.CNF" dx1="470.0"/>
+      <Connection Comment="" Destination="Register.REQ" Source="E_DELAY_1_1.EO" dx1="60.0" dx2="60.0" dy="-635.0"/>
+      <Connection Comment="" Destination="InitFlagReg.R" Source="E_SWITCH_1_1_1.EO1" dx1="60.0" dx2="60.0" dy="-650.0"/>
+      <Connection Comment="" Destination="SubscribeEventAdp.Subscribed" Source="E_SWITCH_1_1_1.EO1" dx1="60.0" dx2="170.0" dy="750.0"/>
+    </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="E_PERMIT_1.PERMIT" Source="InitFlagUnReg.Q" dx1="720.0"/>
+      <Connection Comment="" Destination="F_STRING_TO_WSTRING.IN" Source="CreateRegisterID.OUT"/>
+      <Connection Comment="" Destination="E_PERMIT.PERMIT" Source="InitFlagReg.Q" dx1="790.0"/>
+      <Connection Comment="" Destination="CreateRegisterID.IN_2" Source="SubscribeEventAdp.endpoint" dx1="1675.0"/>
+      <Connection Comment="" Destination="ANYToJSON.input" Source="SubscribeEventAdp.eventFilter" dx1="2975.0"/>
+      <Connection Comment="" Destination="CreateRegisterID_1.IN_2" Source="SubscribeEventAdp.endpoint" dx1="1335.0"/>
+      <Connection Comment="" Destination="F_STRING_TO_WSTRING_2.IN" Source="CreateRegisterID_1.OUT"/>
+      <Connection Comment="" Destination="Register.QI" Source="InitFlagReg.Q" dx1="1110.0"/>
+      <Connection Comment="" Destination="Register.ID" Source="F_STRING_TO_WSTRING.OUT"/>
+      <Connection Comment="" Destination="Register.SD_1" Source="ANYToJSON.output" dx1="2355.0"/>
+      <Connection Comment="" Destination="Unregister.QI" Source="InitFlagUnReg.Q" dx1="725.0"/>
+      <Connection Comment="" Destination="Unregister.ID" Source="F_STRING_TO_WSTRING_2.OUT" dx1="2605.0"/>
+      <Connection Comment="" Destination="Unregister.SD_1" Source="ANYToJSON.output" dx1="1750.0"/>
+      <Connection Comment="" Destination="E_SWITCH_1_1.G" Source="E_CTU_1.Q"/>
+      <Connection Comment="" Destination="E_SWITCH_1_1_1.G" Source="E_CTU_1_1.Q"/>
+      <Connection Comment="" Destination="E_SWITCH_2.G" Source="Unregister.QO" dx1="380.0"/>
+      <Connection Comment="" Destination="E_SWITCH_2_1.G" Source="Register.QO" dx1="470.0"/>
+    </DataConnections>
+  </FBNetwork>
+</FBType>
