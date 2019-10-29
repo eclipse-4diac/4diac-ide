@@ -291,7 +291,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 
 	@Override
 	public String getSpecificLayer() {
-		return ZoomScalableFreeformRootEditPart.TOPLAYER;
+		return ZoomScalableFreeformRootEditPart.TOP_LAYER;
 	}
 
 	/**

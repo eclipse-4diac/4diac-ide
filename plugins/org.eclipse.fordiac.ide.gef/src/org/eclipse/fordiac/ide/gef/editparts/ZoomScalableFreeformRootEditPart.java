@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2015 - 2018 Profactor GbmH, fortiss GmbH, 
- * 								   Johannes Kepler University 
- * 
+ * Copyright (c) 2008, 2015 - 2018 Profactor GbmH, fortiss GmbH,
+ * 				 2018 - 2019 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,6 +11,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Changed grid layer so that it shows every 10th and 5th line
+ *                 emphasized
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -23,6 +25,7 @@ import org.eclipse.draw2d.FreeformLayeredPane;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.LayeredPane;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.GridLayer;
@@ -38,41 +41,112 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.handlers.IHandlerService;
 
-/**
- * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
- * 
- */
-public class ZoomScalableFreeformRootEditPart extends
-		ScalableFreeformRootEditPart {
+public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPart {
 
-	/** MarqueeDragTracker which deselects all elements on right click if nothing
-	 *  so that the correct conext menu is shown. 
-	 *  We are only here if there is no element under the cursor.
+	/**
+	 * Grid layer that draws the grid in dashed lines and every X line solid to give
+	 * the grid more structure
+	 */
+	private static class MajorMinorGridLayer extends GridLayer {
+		private static final int MAJOR_INTERLEAVE = 10; // draw each 10th line thicker dashed to give the grid more
+														// structure
+		private static final int MEDIUM_INTERLEAVE = 5; // draw each 5th line medium dashed to give the grid more
+														// structure
+
+		private static final float[] GRID_MINOR_DASHES_STYLE = new float[] { 1.0f, 5.0f };
+		private static final float[] GRID_MEDIUM_DASHES_STYLE = new float[] { 2.0f, 4.0f };
+		private static final float[] GRID_MAJOR_DASHES_STYLE = new float[] { 4.0f, 2.0f };
+
+		@Override
+		protected void paintGrid(final Graphics g) {
+			int origLineStyle = g.getLineStyle();
+			g.setLineStyle(Graphics.LINE_CUSTOM);
+
+			Rectangle clip = g.getClip(Rectangle.SINGLETON);
+
+			if (gridX > 0) {
+				drawVerLines(g, clip);
+			}
+
+			if (gridY > 0) {
+				drawHorLines(g, clip);
+			}
+			g.setLineStyle(origLineStyle);
+		}
+
+		private void drawVerLines(final Graphics g, Rectangle clip) {
+			int majorInterleaveX = gridX * MAJOR_INTERLEAVE;
+			int medInterleaveX = gridX * MEDIUM_INTERLEAVE;
+			for (int i = getLineStart(origin.x, clip.x, gridX); i < clip.x + clip.width; i += gridX) {
+				setLineStyle(g, i, origin.x, majorInterleaveX, medInterleaveX);
+				g.drawLine(i, clip.y, i, clip.y + clip.height);
+			}
+		}
+
+		private void drawHorLines(final Graphics g, Rectangle clip) {
+			int majorInterleaveY = gridY * MAJOR_INTERLEAVE;
+			int medInterleaveY = gridY * MEDIUM_INTERLEAVE;
+			for (int i = getLineStart(origin.y, clip.y, gridY); i < clip.y + clip.height; i += gridY) {
+				setLineStyle(g, i, origin.y, majorInterleaveY, medInterleaveY);
+				g.drawLine(clip.x, i, clip.x + clip.width, i);
+			}
+		}
+
+		private static int getLineStart(int origin, int clip, int distance) {
+			int newOrigin = origin;
+			if (origin >= clip) {
+				while (newOrigin - distance >= clip) {
+					newOrigin -= distance;
+				}
+			} else {
+				while (newOrigin < clip) {
+					newOrigin += distance;
+				}
+			}
+			return newOrigin;
+		}
+
+		private static void setLineStyle(final Graphics g, final int currLinePos, final int origin,
+				final int majorInterleave, int mediumInterleave) {
+			int delta = origin - currLinePos;
+			if (0 == (delta % majorInterleave)) {
+				g.setLineDash(GRID_MAJOR_DASHES_STYLE);
+			} else if (0 == (delta % mediumInterleave)) {
+				g.setLineDash(GRID_MEDIUM_DASHES_STYLE);
+			} else {
+				g.setLineDash(GRID_MINOR_DASHES_STYLE);
+			}
+		}
+
+	}
+
+	/**
+	 * MarqueeDragTracker which deselects all elements on right click if nothing so
+	 * that the correct conext menu is shown. We are only here if there is no
+	 * element under the cursor.
 	 */
 	public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
 		@Override
 		protected boolean handleButtonDown(int button) {
-			if(3 == button) {
-				//on right click deselect everything
+			if (3 == button) {
+				// on right click deselect everything
 				getViewer().setSelection(StructuredSelection.EMPTY);
 			}
 			return super.handleButtonDown(button);
 		}
 	}
 
-	public static final String TOPLAYER = "TOPLAYER"; //$NON-NLS-1$
-	private static final float[] GRID_DASHES_STYLE = new float[] { 1.0f, 5.0f };
-	
+	public static final String TOP_LAYER = "TOPLAYER"; //$NON-NLS-1$
+
 	public ZoomScalableFreeformRootEditPart(IWorkbenchPartSite site, ActionRegistry actionRegistry) {
 		configureZoomManger();
 		setupZoomActions(site, actionRegistry);
 	}
-	
-	@Override	
+
+	@Override
 	public DragTracker getDragTracker(Request req) {
 		return new AdvancedMarqueeDragTracker();
 	}
-
 
 	@Override
 	protected LayeredPane createPrintableLayers() {
@@ -80,43 +154,26 @@ public class ZoomScalableFreeformRootEditPart extends
 		layeredPane.add(new FreeformLayer(), PRIMARY_LAYER);
 		ConnectionLayer connectionLayer = new ConnectionLayer();
 		layeredPane.add(connectionLayer, CONNECTION_LAYER);
-		
+
 		FreeformLayer topLayer = new FreeformLayer();
 		topLayer.setLayoutManager(new FreeformLayout());
-		layeredPane.add(topLayer, TOPLAYER);
+		layeredPane.add(topLayer, TOP_LAYER);
 		return layeredPane;
 	}
 
 	@Override
 	protected GridLayer createGridLayer() {
-		return new GridLayer(){
-
-			@Override
-			protected void paintGrid(final Graphics g) {
-				int origLineStyle = g.getLineStyle();
-				g.setLineStyle(Graphics.LINE_CUSTOM);
-				g.setLineDash(GRID_DASHES_STYLE);      //set the line style for all grid lines				
-				super.paintGrid(g);
-				g.setLineStyle(origLineStyle);
-			}
-			
-		};
+		return new MajorMinorGridLayer();
 	}
-	
-	
+
 	private void configureZoomManger() {
 		List<String> zoomLevels = new ArrayList<>(3);
 		zoomLevels.add(ZoomManager.FIT_ALL);
 		zoomLevels.add(ZoomManager.FIT_WIDTH);
 		zoomLevels.add(ZoomManager.FIT_HEIGHT);
 		getZoomManager().setZoomLevelContributions(zoomLevels);
-		
-		getZoomManager().setZoomLevels(
-				new double[] { .25, .5, .75, .80, .85, .90, 1.0, 1.5, 2.0, 2.5,
-						3, 4 });
-
-		// TODO __geben -> move ZoomManager.Animate_zooom_in_out to preference page
-		getZoomManager().setZoomAnimationStyle(ZoomManager.ANIMATE_ZOOM_IN_OUT);		
+		getZoomManager().setZoomLevels(new double[] { .25, .5, .75, .80, .85, .90, 1.0, 1.5, 2.0, 2.5, 3, 4 });
+		getZoomManager().setZoomAnimationStyle(ZoomManager.ANIMATE_ZOOM_IN_OUT);
 	}
 
 	private void setupZoomActions(IWorkbenchPartSite site, ActionRegistry actionRegistry) {
@@ -126,13 +183,10 @@ public class ZoomScalableFreeformRootEditPart extends
 		actionRegistry.registerAction(zoomOut);
 
 		IHandlerService zoomInService = site.getService(IHandlerService.class);
-		zoomInService.activateHandler(zoomIn.getActionDefinitionId(),
-				new ActionHandler(zoomIn));
+		zoomInService.activateHandler(zoomIn.getActionDefinitionId(), new ActionHandler(zoomIn));
 
 		IHandlerService zoomOutService = site.getService(IHandlerService.class);
-		zoomOutService.activateHandler(zoomOut.getActionDefinitionId(),
-				new ActionHandler(zoomOut));
+		zoomOutService.activateHandler(zoomOut.getActionDefinitionId(), new ActionHandler(zoomOut));
 
-		
 	}
 }
