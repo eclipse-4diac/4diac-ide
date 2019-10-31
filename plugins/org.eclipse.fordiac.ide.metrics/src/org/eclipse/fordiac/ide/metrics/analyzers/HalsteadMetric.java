@@ -23,9 +23,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
-public class HalsteadMetric implements ICodeMetricAnalyzer {
+public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 	private static final int ST_OPERATOR_COUNT = 16;
 	private static final String[] ST_OPERATORS = { "**", ":=", "<=", ">=", "<>", "-", "NOT", "*", "/", "MOD", "+", "<", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$
 			">", //$NON-NLS-1$
@@ -50,11 +49,7 @@ public class HalsteadMetric implements ICodeMetricAnalyzer {
 	@Override
 	public void calculateMetrics(Application app) {
 
-		for (FBNetworkElement fb : app.getFBNetwork().getNetworkElements()) {
-			if (fb.getType() instanceof BasicFBType) {
-				analyzeBFB((BasicFBType) fb.getType());
-			}
-		}
+		super.calculateMetrics(app);
 
 		uniqueOperands += uniqueTrans;
 		uniqueOperator += uniqueTrans;
@@ -69,7 +64,8 @@ public class HalsteadMetric implements ICodeMetricAnalyzer {
 
 	}
 
-	private void analyzeBFB(BasicFBType basicFBType) {
+	@Override
+	protected void analyzeBFB(BasicFBType basicFBType) {
 		ECC ecc = basicFBType.getECC();
 		for (ECTransition trans : ecc.getECTransition()) {
 			if (!transCond.contains(trans.getConditionExpression())) {

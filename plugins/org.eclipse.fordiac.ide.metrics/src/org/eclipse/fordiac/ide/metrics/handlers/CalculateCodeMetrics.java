@@ -21,7 +21,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.fordiac.ide.metrics.analyzers.CyclomaticComplexity;
 import org.eclipse.fordiac.ide.metrics.analyzers.HalsteadMetric;
-import org.eclipse.fordiac.ide.metrics.analyzers.ICodeMetricAnalyzer;
+import org.eclipse.fordiac.ide.metrics.analyzers.AbstractCodeMetricAnalyzer;
 import org.eclipse.fordiac.ide.metrics.analyzers.MetricData;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -128,15 +128,15 @@ public class CalculateCodeMetrics extends AbstractHandler {
 	}
 
 	private static void calculateApplicationMetrics(Application app, List<MetricData> result) {
-		List<ICodeMetricAnalyzer> analyzers = getAnalyzers();
-		for (ICodeMetricAnalyzer analyzer : analyzers) {
+		List<AbstractCodeMetricAnalyzer> analyzers = getAnalyzers();
+		for (AbstractCodeMetricAnalyzer analyzer : analyzers) {
 			analyzer.calculateMetrics(app);
 			result.addAll(analyzer.getResults());
 		}
 	}
 
-	private static List<ICodeMetricAnalyzer> getAnalyzers() {
-		List<ICodeMetricAnalyzer> analyzers = new ArrayList<>();
+	private static List<AbstractCodeMetricAnalyzer> getAnalyzers() {
+		List<AbstractCodeMetricAnalyzer> analyzers = new ArrayList<>();
 		analyzers.add(new CyclomaticComplexity());
 		analyzers.add(new HalsteadMetric());
 		return analyzers;
