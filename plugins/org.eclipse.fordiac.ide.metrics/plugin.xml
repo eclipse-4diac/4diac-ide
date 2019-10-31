@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+         point="org.eclipse.ui.commands">
+       <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            id="org.eclipse.fordiac.ide.metrics.commands.calculateCodeMetrics"
+            name="Calculate Code Metrics">
+      </command>
+    </extension>   
+    <extension
+         point="org.eclipse.ui.handlers">
+         <handler
+            class="org.eclipse.fordiac.ide.metrics.handlers.CalculateCodeMetrics"
+            commandId="org.eclipse.fordiac.ide.metrics.commands.calculateCodeMetrics">
+      </handler>
+    </extension>  
+    <extension
+         point="org.eclipse.ui.menus">
+        <menuContribution
+                locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <command
+            commandId="org.eclipse.fordiac.ide.metrics.commands.calculateCodeMetrics"
+            label="Calculate Code Metrics"
+            style="push">
+             <visibleWhen
+                   checkEnabled="false">
+                <with variable="selection" >
+                    <iterate ifEmpty="false">
+                    <instanceof
+                            value="org.eclipse.fordiac.ide.model.libraryElement.Application">
+                      </instanceof>
+                    </iterate>
+                </with>  
+             </visibleWhen>
+          </command>                       
+        </menuContribution>
+    </extension>        
+</plugin>
