@@ -412,6 +412,66 @@ $ mkdir build &amp;&amp; cd "build"</div>
 	<li>If the value you subscribed for has changed on the server, an updated value will appear at <span class="element4diac">RD_1</span> port</li>
 </ol>
 
+<h2 id="securityClients">Connect to secure servers</h2>
+
+<p class="attention"><span class="inlineTitle">Attention</span>: You need to use v1.0 of open62541 to use encryption.</p>
+
+<p>If you need to connect to OPC UA servers which have some kind of security enabled, you need some extra steps.</p>
+
+<ol>
+	<li>You need to compile mbedtls first using the mbedtls-2.7.1 tag
+	<div class="code">$ git clone https://github.com/ARMmbed/mbedtls
+$ cd mbedtls
+$ git checkout mbedtls-2.7.1
+$ mkdir build
+$ cd build
+$ cmake -DENABLE_TESTING=Off ../
+$ make
+</div>
+	</li>
+	<li>With the mbedtls compile, you need to compile open62541 with security (remember that only v1.0 is supported to be used with security enabled in 4diac Forte). For that, you need to set the UA_ENABLE_ENCRYPTION to true, which will show some new variables in CMake (MBEDCRYPTO_LIBRARY, MBEDTLS_INCLUDE_DIRS, MBEDTLS_LIBRARY and MBEDX509_LIBRARY). Set them to library files and folders according to their name. After that, you compile open62541 as before.</li>
+
+	<li>With open62541 compiled with encryption, you need now to compile forte with encryption. In CMake, set the variable FORTE_COM_OPC_UA_ENCRYPTION to true. This will also make appear new variables, similar as in open62541: 
+		<ul>
+			<li>FORTE_COM_OPC_UA_ENCRYPTION_INCLUDE_DIR: include folder in the mbedtls build directory</li>
+			<li>FORTE_COM_OPC_UA_ENCRYPTION_LIB_DIR: folder in build directory of mbedtls where the three libaries are. You could add many directories separated by a semicolon</li>
+		</ul>
+		After that, compile forte as usual.
+	</li>
+
+	<li>With forte compiled with encryption, you will need a CONFIG_FILE to write the security configurations for the endpoints to be connected by forte. The file must be written in a key=value way (no blank space between them). When trying to connect to a server, forte will read the file and look for an "ednpoint" key until it finds one whose value matches the one he's connecting to and read the following lines until the end of the file or until it finds another "endpoint" key. That means that to configure an endpoint, you write it first followed by the configurations for it. The allowed keys are:
+
+	<ul>
+		<li>endpoint: string where to connect to. Example opc.tcp://192.168.1.150:4840</li>
+	 	<li>username: string to be used as username. Example john</li>
+	 	<li>password: string to be used as password. Example doe</li>
+	 	<li>certificate: certificate file. Example /home/user/myCertificate/my_certificate.der</li>
+	 	<li>privateKey: private key file. Example /home/user/myCertificate/my_key.der</li>
+	 	<li>securityMode: integer. 1: None (default); 2:Sign; 3: Sign and encrypt</li>
+	 	<li>securityPolicy: string URI. For example http://opcfoundation.org/UA/SecurityPolicy#Basic256. Defaults to http://opcfoundation.org/UA/SecurityPolicy#None</li>
+	</ul>
+
+	The example file will look like this (let's call it configSecurity.forte):
+
+	<div class="code">endpoint=opc.tcp://192.168.1.150:4840
+username=john
+password=doe
+certificate=/home/user/myCertificate/my_certificate.der
+privateKey=/home/user/myCertificate/my_key.der
+securityPolicy=http://opcfoundation.org/UA/SecurityPolicy#Basic256
+securityMode=1
+	</div>
+
+	<p>The username and password, in theory, be used without compling the encryption libraries, but even in some tests where the security was just username and password and the security mode was NONE, the certificate and private key were needed.</p>
+	</li>
+
+	<li>Once you have the file, you need to tell forte to look for it, and for that, you should start forte and pass the flag "-oc CONFIG_FILE"
+		<div class="code">$ ./forte -oc configSecurity.forte</div>
+	</li>
+</ol>
+
+<p>You're done. Now, when your application tries to connect to opc.tcp://192.168.1.150:4840, it will use the configuration you set in the configSecurity.forte file.</p>
+
 <h1>Where to go from here?</h1>
 
 <p>Go back to Protocols index:</p>
