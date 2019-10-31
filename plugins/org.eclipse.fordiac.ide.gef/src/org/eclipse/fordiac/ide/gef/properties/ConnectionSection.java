@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
  *     - merged the ConnectionSection classes
+ *   Alois Zoitl - cleaned command stack handling for property sections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -28,7 +29,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class ConnectionSection extends AbstractSection {
@@ -86,11 +86,6 @@ public class ConnectionSection extends AbstractSection {
 			return ((Connection) inputHelper);
 		}
 		return null;
-	}
-
-	@Override
-	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		return part.getAdapter(CommandStack.class);
 	}
 
 	private static String getFBNameFromIInterfaceElement(IInterfaceElement element) {

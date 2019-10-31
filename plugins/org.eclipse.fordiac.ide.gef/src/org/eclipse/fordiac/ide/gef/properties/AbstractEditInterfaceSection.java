@@ -14,13 +14,13 @@
  *               code clean-up
  *   Bianca Wiesmayr - extract table creation
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
+ *               - cleaned command stack handling for property sections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
@@ -63,7 +63,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection extends AbstractSection {
@@ -100,14 +99,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 	public TableViewer getInputsViewer() {
 		return inputsViewer;
-	}
-
-	@Override
-	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if (part instanceof DiagramEditorWithFlyoutPalette) {
-			return ((DiagramEditorWithFlyoutPalette) part).getCommandStack();
-		}
-		return null;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -41,7 +41,7 @@ import org.eclipse.ltk.core.refactoring.participants.ResourceChangeChecker;
 public class DeleteFBTypeParticipant extends DeleteParticipant {
 
 	private List<String> typeNames = new ArrayList<>();
-	
+
 	@Override
 	protected boolean initialize(Object element) {
 		return (element instanceof IFile);
@@ -53,63 +53,62 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 	}
 
 	@Override
-	public RefactoringStatus checkConditions(IProgressMonitor pm,
-			CheckConditionsContext context) throws OperationCanceledException {
+	public RefactoringStatus checkConditions(IProgressMonitor pm, CheckConditionsContext context)
+			throws OperationCanceledException {
 		ResourceChangeChecker resChecker = context.getChecker(ResourceChangeChecker.class);
 		IResourceChangeDescriptionFactory deltaFactory = resChecker.getDeltaFactory();
 		IResourceDelta[] affectedChildren = deltaFactory.getDelta().getAffectedChildren();
 
 		return verifyAffectedChildren(affectedChildren);
 	}
-	
+
 	private RefactoringStatus verifyAffectedChildren(IResourceDelta[] affectedChildren) {
 		for (IResourceDelta resourceDelta : affectedChildren) {
-			if(resourceDelta.getResource() instanceof IFile){
+			if (resourceDelta.getResource() instanceof IFile) {
 				Palette palette = SystemManager.INSTANCE.getPalette(resourceDelta.getResource().getProject());
-				
+
 				typeNames.clear();
-				
-				String typeNameToDelete = TypeLibrary.getTypeNameFromFile((IFile)resourceDelta.getResource());
+
+				String typeNameToDelete = TypeLibrary.getTypeNameFromFile((IFile) resourceDelta.getResource());
 				checkTypeContainment(palette.getRootGroup(), typeNameToDelete);
-				
-				if(!typeNames.isEmpty()){
-					return RefactoringStatus.createWarningStatus("FB type " + typeNameToDelete + 
-							" is used in the following types: " + typeNames.toString());
-				}					
-			}else{
+
+				if (!typeNames.isEmpty()) {
+					return RefactoringStatus.createWarningStatus(
+							"FB type " + typeNameToDelete + " is used in the following types: " + typeNames.toString());
+				}
+			} else {
 				return verifyAffectedChildren(resourceDelta.getAffectedChildren());
 			}
 		}
 		return new RefactoringStatus();
 	}
 
-	private void checkTypeContainment(PaletteGroup rootGroup,
-			String searchTypeName) {
-		
+	private void checkTypeContainment(PaletteGroup rootGroup, String searchTypeName) {
+
 		for (PaletteEntry entry : rootGroup.getEntries()) {
 			FBNetwork network = null;
-			if(entry.getType() instanceof CompositeFBType){
-				network = ((CompositeFBType)entry.getType()).getFBNetwork();
-			}else if(entry.getType() instanceof ResourceType){
-				network = ((ResourceType)entry.getType()).getFBNetwork();
-			}else if(entry.getType() instanceof SubAppType){
-				network = ((SubAppType)entry.getType()).getFBNetwork();
+			if (entry.getType() instanceof CompositeFBType) {
+				network = ((CompositeFBType) entry.getType()).getFBNetwork();
+			} else if (entry.getType() instanceof ResourceType) {
+				network = ((ResourceType) entry.getType()).getFBNetwork();
+			} else if (entry.getType() instanceof SubAppType) {
+				network = ((SubAppType) entry.getType()).getFBNetwork();
 			}
-			
-			if(null != network && containsElementWithType(searchTypeName, network)){
+
+			if (null != network && containsElementWithType(searchTypeName, network)) {
 				typeNames.add(entry.getLabel());
 			}
 		}
-		
-		for(PaletteGroup group: rootGroup.getSubGroups()){
+
+		for (PaletteGroup group : rootGroup.getSubGroups()) {
 			checkTypeContainment(group, searchTypeName);
 		}
-		
+
 	}
 
 	private static boolean containsElementWithType(String searchTypeName, FBNetwork network) {
 		for (FBNetworkElement element : network.getNetworkElements()) {
-			if(searchTypeName.equals(element.getTypeName())){
+			if (searchTypeName.equals(element.getTypeName())) {
 				return true;
 			}
 		}
@@ -117,8 +116,7 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 	}
 
 	@Override
-	public Change createChange(IProgressMonitor pm) throws CoreException,
-			OperationCanceledException {
+	public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		return null;
 	}
 

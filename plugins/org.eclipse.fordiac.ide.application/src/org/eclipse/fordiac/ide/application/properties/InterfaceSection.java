@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015, 2016 fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,25 +11,15 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - cleaned command stack handling for property sections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.ui.IWorkbenchPart;
 
 public class InterfaceSection extends AbstractInterfaceSection {
-
-	@Override
-	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if (part instanceof DiagramEditorWithFlyoutPalette) {
-			return ((DiagramEditorWithFlyoutPalette) part).getCommandStack();
-		}
-		return null;
-	}
 
 	@Override
 	protected FBNetworkElement getInputType(Object input) {
