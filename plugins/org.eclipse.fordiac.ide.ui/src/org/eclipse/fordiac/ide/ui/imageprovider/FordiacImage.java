@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2016 fortiss GmbH. Profactor GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -36,8 +36,8 @@ import org.eclipse.ui.PlatformUI;
 
 public enum FordiacImage {
 	// @formatter:off
-	MISSING,          //Image used for missing images in input streams
-	
+	MISSING, // Image used for missing images in input streams
+
 	// Part Images
 
 	// Icon Images
@@ -59,6 +59,7 @@ public enum FordiacImage {
 	ICON_DEPLOYMENT_CONSOLE,
 	ICON_DEPLOYMENT_PERSPECTIVE,
 	ICON_DEVICE,
+	ICON_DISCOVER,
 	ICON_DOWNLOAD,
 	ICON_DOWNLOAD_SELECTION_TREE_VIEW,
 	ICON_EC_ACTION,
@@ -69,8 +70,8 @@ public enum FordiacImage {
 	ICON_EVENT_OUTPUT,
 	ICON_EXPAND_ALL,
 	ICON_EXPORT,
-	ICON_FB, 
-	ICON_FB_NETWORK, 
+	ICON_FB,
+	ICON_FB_NETWORK,
 	ICON_FB_TESTER,
 	ICON_FIRMWARE_RESOURCE,
 	ICON_FMU,
@@ -100,7 +101,7 @@ public enum FordiacImage {
 	ICON_SEGMENT,
 	ICON_SERVICE,
 	ICON_SERVICE_SEQUENCE,
-	ICON_SIFB, 
+	ICON_SIFB,
 	ICON_SUB_APP,
 	ICON_SOCKETS,
 	ICON_START,
@@ -123,37 +124,35 @@ public enum FordiacImage {
 	ICON_TestOK,
 	ICON_NoTest,
 	ICON_TesterTemplate,
-	
-	
+
 	// Overlay Images
 	OVERLAY_DISTRIBUTED_NATURE;
-	
-	
+
 	// @formatter:on
 
 	private static final String IMAGES_DIRECTORY = "images"; //$NON-NLS-1$
 	private static final String FORDIAC_IMAGE_PROPERTIES = "fordiacimages"; //$NON-NLS-1$
-	private static ResourceBundle foridacImageProperties = ResourceBundle
-			.getBundle(FORDIAC_IMAGE_PROPERTIES);
+	private static ResourceBundle foridacImageProperties = ResourceBundle.getBundle(FORDIAC_IMAGE_PROPERTIES);
 
 	private static Map<Image, Image> errorImages = new HashMap<>();
 	private static int count = 0;
-	
-	//FIXME: find a better way to handle overlay images
+
+	// FIXME: find a better way to handle overlay images
 	public static Image getErrorOverlayImage(Image image) {
 		if (image == null) {
 			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEC_FIELD_ERROR);
 		}
 		if (!errorImages.containsKey(image)) {
-			DecorationOverlayIcon overlay = new DecorationOverlayIcon(image, 
-					PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR), IDecoration.TOP_LEFT);
+			DecorationOverlayIcon overlay = new DecorationOverlayIcon(image,
+					PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR),
+					IDecoration.TOP_LEFT);
 			count++;
 			System.out.println("createErrorOverlayImage " + count);
 			errorImages.put(image, overlay.createImage());
 		}
 		return errorImages.get(image);
 	}
-	
+
 	private FordiacImage() {
 	}
 
@@ -173,8 +172,7 @@ public enum FordiacImage {
 		ImageDescriptor id = JFaceResources.getImageRegistry().getDescriptor(this.name());
 		if (id == null) {
 			if (addImageDescriptor(this.name())) {
-				id = JFaceResources.getImageRegistry().getDescriptor(
-						this.name());
+				id = JFaceResources.getImageRegistry().getDescriptor(this.name());
 			} else {
 				id = getErrorImageDescriptor();
 			}
@@ -185,7 +183,7 @@ public enum FordiacImage {
 	public InputStream getImageAsInputStream() throws IOException {
 		InputStream ret = null;
 		URL fileLocation = getImageURL(this.name());
-		if(null != fileLocation){
+		if (null != fileLocation) {
 			ret = fileLocation.openConnection().getInputStream();
 		} else {
 			ret = MISSING.getImageAsInputStream();
@@ -206,7 +204,7 @@ public enum FordiacImage {
 
 	private static URL getImageURL(String name) {
 		String fileName = foridacImageProperties.getString(name);
-		return FileLocator.find(UIPlugin.getDefault().getBundle(), 
+		return FileLocator.find(UIPlugin.getDefault().getBundle(),
 				new Path(IMAGES_DIRECTORY + IPath.SEPARATOR + fileName), null);
 	}
 
@@ -220,13 +218,11 @@ public enum FordiacImage {
 		return si.getImageDescriptor(ISharedImages.IMG_OBJS_ERROR_TSK);
 	}
 
-	public static DecorationOverlayIcon createOverlayImage(Image image,
-			ImageDescriptor imageDescriptor) {
+	public static DecorationOverlayIcon createOverlayImage(Image image, ImageDescriptor imageDescriptor) {
 		return createOverlayImage(image, imageDescriptor, IDecoration.TOP_LEFT);
 	}
 
-	public static DecorationOverlayIcon createOverlayImage(Image image,
-			ImageDescriptor imageDescriptor, int quadrant) {
+	public static DecorationOverlayIcon createOverlayImage(Image image, ImageDescriptor imageDescriptor, int quadrant) {
 		return new DecorationOverlayIcon(image, imageDescriptor, quadrant);
 	}
 }

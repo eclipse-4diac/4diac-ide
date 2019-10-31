@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH, 
+ * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH,
  * 							 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -27,23 +27,25 @@ import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
-/** Factory for loading DeviceManagementInteractors and handle related data (e.g., profile names)
- * 
+/**
+ * Factory for loading DeviceManagementInteractors and handle related data
+ * (e.g., profile names)
+ *
  */
 public enum DeviceManagementInteractorFactory {
-	
+
 	INSTANCE;
-	
+
 	private List<IDeviceManagementInteractorProvider> deviceManagementInteractorProviders = null;
-	
+
 	/**
 	 * Gets the device managment interactor.
-	 * 
-	 * @param device
-	 *            the device for which a deployment executor should be get
-	 * @param overrideComHandler
-	 *            if not null this com handler will be given to the executor
-	 * 
+	 *
+	 * @param device             the device for which a deployment executor should
+	 *                           be get
+	 * @param overrideComHandler if not null this com handler will be given to the
+	 *                           executor
+	 *
 	 * @return the deployment executor
 	 */
 	public IDeviceManagementInteractor getDeviceManagementInteractor(final Device device,
@@ -60,17 +62,19 @@ public enum DeviceManagementInteractorFactory {
 	public IDeviceManagementInteractor getDeviceManagementInteractor(final Device device) {
 		return getDeviceManagementInteractor(device, null, null);
 	}
-	
-	/** Get a list of names of the profiles supported by the registered device managment interactors
-	 * 
-	 * @return list of strings with the names of the profiles 
+
+	/**
+	 * Get a list of names of the profiles supported by the registered device
+	 * managment interactors
+	 *
+	 * @return list of strings with the names of the profiles
 	 */
 	public List<String> getAvailableProfileNames() {
 		return getDeviceManagementInteractorList().stream().map(interactor -> interactor.getProfileName())
 				.collect(Collectors.toList());
 	}
-	
-	private List<IDeviceManagementInteractorProvider> getDeviceManagementInteractorList(){
+
+	private List<IDeviceManagementInteractorProvider> getDeviceManagementInteractorList() {
 		if (null == deviceManagementInteractorProviders) {
 			deviceManagementInteractorProviders = loadDeviceManagmentInteractors();
 		}
@@ -79,8 +83,8 @@ public enum DeviceManagementInteractorFactory {
 
 	private static List<IDeviceManagementInteractorProvider> loadDeviceManagmentInteractors() {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				Activator.PLUGIN_ID, "devicemanagementinteractor"); //$NON-NLS-1$
+		IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
+				"devicemanagementinteractor"); //$NON-NLS-1$
 		ArrayList<IDeviceManagementInteractorProvider> interactors = new ArrayList<>(elems.length);
 		for (IConfigurationElement element : elems) {
 			try {
@@ -93,5 +97,5 @@ public enum DeviceManagementInteractorFactory {
 			}
 		}
 		return interactors;
-	}	
+	}
 }

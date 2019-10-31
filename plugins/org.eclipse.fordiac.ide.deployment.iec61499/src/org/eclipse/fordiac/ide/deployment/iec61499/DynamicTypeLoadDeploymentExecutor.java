@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 - 2018 fortiss GmbH, Johannes Kepler University
  * 				 2019		Jan Holzweber
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,8 +11,9 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - reworked this class for the new device managment interaction 
- *                 interface  
+ *     - fixed E_RESTART
+ *   Alois Zoitl - reworked this class for the new device managment interaction
+ *                 interface
  *   Jan Holzweber - reworked deploying mechanism
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499;
@@ -72,6 +73,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
 import org.eclipse.swt.widgets.Display;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -143,7 +145,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	public void createFBType(final FBType fbType) throws DeploymentException {
 		setAttribute(getDevice(), "FBType", getTypes()); //$NON-NLS-1$
 
-		if (fbType instanceof BasicFBType || fbType instanceof CompositeFBType) {
+		if ((fbType instanceof BasicFBType) || (fbType instanceof CompositeFBType)) {
 			if (fbType instanceof CompositeFBType) {
 				createFBTypesOfCFB(fbType);
 			}
@@ -172,16 +174,16 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				if (!adapters.isEmpty()) {
 					createAdapterTypes(adapters);
 				}
-				createFBType((FBType) netelem.getType());
+				createFBType(netelem.getType());
 			}
 		}
 	}
 
 	private String createLuaXmlRequestMessage(final FBType fbType) {
-		ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();		
+		ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
 
 		String escapedLuaScript = escapeXmlCharacters(luaFilter.createLUA(fbType));
-		
+
 		return MessageFormat.format(CREATE_FB_TYPE, getNextId(), fbType.getName(), escapedLuaScript);
 	}
 
@@ -238,14 +240,14 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	public void queryResourcesWithNetwork(Device dev) {
 		try {
 			for (org.eclipse.fordiac.ide.deployment.devResponse.Resource resource : queryResources()) {
-				Resource res = LibraryElementFactory.eINSTANCE.createResource();
-				res.setName(resource.getName());
-				res.setPaletteEntry(getResourceType(dev, resource.getType()));
-				res.setFBNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
-				dev.getResource().add(res);
-				queryFBNetwork(res);
-				queryConnections(res);
-				queryParameters(res);
+				ResourceCreateCommand cmd = new ResourceCreateCommand(getResourceType(dev, resource.getType()), dev,
+						false);
+				cmd.execute();
+				cmd.getResource().setName(resource.getName());
+				dev.getResource().add(cmd.getResource());
+				queryFBNetwork(cmd.getResource());
+				queryConnections(cmd.getResource());
+				queryParameters(cmd.getResource());
 			}
 		} catch (Exception e) {
 			logger.error(MessageFormat.format(Messages.DTL_QueryFailed, "Resources")); //$NON-NLS-1$
@@ -347,26 +349,8 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private void createFBNetwork(Resource res, XMLResource xmlResource) {
 		for (EObject object : xmlResource.getContents()) {
 			if (object instanceof Response) {
-				int i = 0;
-				if (getAdapterTypes().isEmpty()) {
-					createNotExistingAdapterTypes(res);
-				}
-				for (org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : ((Response) object).getFblist()
-						.getFbs()) {
-					FBTypePaletteEntry entry = (FBTypePaletteEntry) res.getDevice().getAutomationSystem().getPalette()
-							.getTypeEntry(fbresult.getType());
-					if (null == entry) {
-						addTypeToTypelib(res, fbresult.getType(), "fbt", QUERY_FB_TYPE); //$NON-NLS-1$
-						entry = (FBTypePaletteEntry) res.getDevice().getAutomationSystem().getPalette()
-								.getTypeEntry(fbresult.getType());
-					}
-					FBCreateCommand fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
-					if (fbcmd.canExecute()) {
-						fbcmd.execute();
-						fbcmd.getFB().setName(fbresult.getName());
-					}
-					i++;
-				}
+				createNotExistingAdapterTypes(res);
+				addFBNetworkElements(res, (Response) object);
 			}
 		}
 	}
@@ -375,6 +359,27 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		for (String entryName : getAdapterTypes()) {
 			if (null == res.getDevice().getAutomationSystem().getPalette().getTypeEntry(entryName)) {
 				addTypeToTypelib(res, entryName, "adp", QUERY_ADAPTER_TYPE);
+			}
+		}
+	}
+
+	private void addFBNetworkElements(Resource res, Response object) {
+		int i = 0;
+		for (org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : (object).getFblist().getFbs()) {
+			if (!"E_RESTART".equals(fbresult.getType())) {
+				FBTypePaletteEntry entry = (FBTypePaletteEntry) res.getDevice().getAutomationSystem().getPalette()
+						.getTypeEntry(fbresult.getType());
+				if (null == entry) {
+					addTypeToTypelib(res, fbresult.getType(), "fbt", QUERY_FB_TYPE); //$NON-NLS-1$
+					entry = (FBTypePaletteEntry) res.getDevice().getAutomationSystem().getPalette()
+							.getTypeEntry(fbresult.getType());
+				}
+				FBCreateCommand fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
+				if (fbcmd.canExecute()) {
+					fbcmd.execute();
+					fbcmd.getFB().setName(fbresult.getName());
+				}
+				i++;
 			}
 		}
 	}
@@ -409,7 +414,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	private static ResourceTypeEntry getResourceType(Device device, String resTypeName) {
 		List<PaletteEntry> typeEntries = device.getPaletteEntry().getGroup().getPallete().getTypeEntries(resTypeName);
-		if (!typeEntries.isEmpty() && typeEntries.get(0) instanceof ResourceTypeEntry) {
+		if (!typeEntries.isEmpty() && (typeEntries.get(0) instanceof ResourceTypeEntry)) {
 			return (ResourceTypeEntry) typeEntries.get(0);
 		}
 		return null;

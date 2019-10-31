@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH, 
+ * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
- * 
+ *
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch, Filip Andren,
  *   Waldemar Eisenmenger, Martin Melik Merkumians
  *     - initial API and implementation and/or initial documentation
- *  Alois Zoitl - Refactored class hierarchy of xml exporters  
+ *  Alois Zoitl - Refactored class hierarchy of xml exporters
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +59,7 @@ import org.eclipse.swt.widgets.Display;
 
 /**
  * The Class SystemManager.
- * 
+ *
  * @author gebenh
  */
 public enum SystemManager {
@@ -86,9 +85,9 @@ public enum SystemManager {
 
 	/**
 	 * Gets the command stack.
-	 * 
+	 *
 	 * @param system the system
-	 * 
+	 *
 	 * @return the command stack
 	 */
 	public CommandStack getCommandStack(final AutomationSystem system) {
@@ -102,15 +101,14 @@ public enum SystemManager {
 	 * Notify listeners.
 	 */
 	public void notifyListeners() {
-		for (Iterator<DistributedSystemListener> iterator = listeners.iterator(); iterator.hasNext();) {
-			DistributedSystemListener listener = iterator.next();
+		for (DistributedSystemListener listener : listeners) {
 			listener.distributedSystemWorkspaceChanged();
 		}
 	}
 
 	/**
 	 * Adds the workspace listener.
-	 * 
+	 *
 	 * @param listener the listener
 	 */
 	public void addWorkspaceListener(final DistributedSystemListener listener) {
@@ -134,7 +132,7 @@ public enum SystemManager {
 	/**
 	 * Add a system to be managed by the system manager. Additionally, it
 	 * initializes the palette of the system.
-	 * 
+	 *
 	 * @param system the system to be added
 	 */
 	public void addSystem(final AutomationSystem system) {
@@ -148,7 +146,7 @@ public enum SystemManager {
 
 	/**
 	 * Remove a system from the set of systems managed by the system manager
-	 * 
+	 *
 	 * @param system to be added
 	 */
 	public void removeSystem(final AutomationSystem system) {
@@ -160,7 +158,7 @@ public enum SystemManager {
 
 	/**
 	 * Gets the systems.
-	 * 
+	 *
 	 * @return the systems
 	 */
 	public List<AutomationSystem> getSystems() {
@@ -174,8 +172,8 @@ public enum SystemManager {
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		List<AutomationSystem> oldSystems = new ArrayList<>(systems);
 		systems.clear();
-		for (int i = 0; i < projects.length; i++) {
-			loadProject(projects[i]);
+		for (IProject project : projects) {
+			loadProject(project);
 		}
 		// remove all existing models to get the models that no longer exist
 		removeOrphanedSystems(oldSystems);
@@ -198,7 +196,7 @@ public enum SystemManager {
 			time1 = System.currentTimeMillis();
 			system = loadSystem(project);
 			time2 = System.currentTimeMillis();
-			System.out.println(time2 - time1 + " ms"); //$NON-NLS-1$
+			System.out.println((time2 - time1) + " ms"); //$NON-NLS-1$
 			if (system != null) {
 				// TODO do we need to check if the system is already in the list?
 				addSystem(system);
@@ -222,14 +220,14 @@ public enum SystemManager {
 		system.setPalette(palette);
 
 		time2 = System.currentTimeMillis();
-		System.out.println(time2 - time1 + " ms for typelib"); //$NON-NLS-1$
+		System.out.println((time2 - time1) + " ms for typelib"); //$NON-NLS-1$
 	}
 
 	/**
 	 * Checks if is distributed system.
-	 * 
+	 *
 	 * @param project the project
-	 * 
+	 *
 	 * @return true, if is distributed system
 	 */
 	private static boolean isDistributedSystem(final IProject project) {
@@ -247,9 +245,10 @@ public enum SystemManager {
 
 	/**
 	 * Load system.
-	 * 
+	 *
+	 *
 	 * @param project the project
-	 * 
+	 *
 	 * @return the automation system
 	 */
 	private AutomationSystem loadSystem(final IProject project) {
@@ -296,8 +295,7 @@ public enum SystemManager {
 
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID, "tagProvider"); //$NON-NLS-1$
-		for (int i = 0; i < elems.length; i++) {
-			IConfigurationElement element = elems[i];
+		for (IConfigurationElement element : elems) {
 			try {
 				Object object = element.createExecutableExtension("Interface"); //$NON-NLS-1$
 				if (object instanceof ITagProvider) {
@@ -372,7 +370,7 @@ public enum SystemManager {
 
 	/**
 	 * Save system.
-	 * 
+	 *
 	 * @param system the system
 	 * @param all    the all
 	 */
@@ -384,9 +382,9 @@ public enum SystemManager {
 
 	/**
 	 * Gets the system for name.
-	 * 
+	 *
 	 * @param string the string
-	 * 
+	 *
 	 * @return the system for name
 	 */
 	public AutomationSystem getSystemForName(final String string) {
@@ -400,9 +398,9 @@ public enum SystemManager {
 
 	/**
 	 * Gets the project handle.
-	 * 
+	 *
 	 * @param name the name
-	 * 
+	 *
 	 * @return the project handle
 	 */
 	private static IProject getProjectHandle(String name) {
@@ -411,9 +409,9 @@ public enum SystemManager {
 
 	/**
 	 * returns a unique/valid name for a system.
-	 * 
+	 *
 	 * @param name the name
-	 * 
+	 *
 	 * @return a unique/valid system name
 	 */
 	private static String getValidSystemName(final String name) {
@@ -423,7 +421,7 @@ public enum SystemManager {
 		} else {
 			int i = 1;
 			String temp = name + "_" + i; //$NON-NLS-1$
-			while (INSTANCE.getSystemForName(temp) != null || getProjectHandle(temp).exists()) {
+			while ((INSTANCE.getSystemForName(temp) != null) || getProjectHandle(temp).exists()) {
 				i++;
 				temp = name + "_" + i; //$NON-NLS-1$
 			}
@@ -432,7 +430,7 @@ public enum SystemManager {
 	}
 
 	public static boolean isUniqueSystemName(final String name) {
-		return (INSTANCE.getSystemForName(name) == null && !getProjectHandle(name).exists());
+		return ((INSTANCE.getSystemForName(name) == null) && !getProjectHandle(name).exists());
 	}
 
 	public ITagProvider getTagProvider(Class<?> class1, AutomationSystem system) {
@@ -495,7 +493,7 @@ public enum SystemManager {
 			INSTANCE.addSystem(system);
 
 			AutomationSystem sys2 = INSTANCE.getSystemForName(system.getName());
-			if (sys2 != null && !sys2.equals(system)) {
+			if ((sys2 != null) && !sys2.equals(system)) {
 				system = sys2;
 			}
 
