@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 TU Wien, ACIN, Johannes Kepler University Linz
+ * Copyright (c) 2019 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,19 +8,29 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Peter Gsellmann - initial API and implementation and/or initial documentation
- *   Alois Zoitl - Changed analysis result to key value pairs
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
+
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
-import java.util.List;
+public class MetricData {
 
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
+	private final String name;
 
-public interface ICodeMetricAnalyzer {
+	private final double value;
 
-	void calculateMetrics(Application app);
+	public MetricData(String name, double value) {
+		super();
+		this.name = name;
+		this.value = value;
+	}
 
-	List<MetricData> getResults();
+	public String getName() {
+		return name;
+	}
+
+	public double getValue() {
+		return value;
+	}
 
 }
