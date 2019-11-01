@@ -24,13 +24,19 @@
             commandId="org.eclipse.fordiac.ide.metrics.commands.calculateCodeMetrics"
             label="Calculate Code Metrics"
             style="push">
-             <visibleWhen
-                   checkEnabled="false">
+             <visibleWhen checkEnabled="false">                
                 <with variable="selection" >
-                    <iterate ifEmpty="false">
-                    <instanceof
-                            value="org.eclipse.fordiac.ide.model.libraryElement.Application">
-                      </instanceof>
+                    <count value="1" />
+                    <iterate
+                          ifEmpty="false">
+                        <or>      
+                            <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Application" />
+                            <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.SubApp" />
+                            <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBType" />
+                            <adapt type="org.eclipse.core.resources.IResource">
+                                <test property="org.eclipse.core.resources.extension" value="fbt" />
+                            </adapt>
+                        </or>                  
                     </iterate>
                 </with>  
              </visibleWhen>

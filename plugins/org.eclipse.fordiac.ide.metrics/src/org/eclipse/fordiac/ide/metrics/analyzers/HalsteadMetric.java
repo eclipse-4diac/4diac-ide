@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 	private static final int ST_OPERATOR_COUNT = 16;
@@ -47,9 +47,9 @@ public class HalsteadMetric extends AbstractCodeMetricAnalyzer {
 	private List<String> event = new ArrayList<>();
 
 	@Override
-	public void calculateMetrics(Application app) {
+	public void calculateMetrics(INamedElement element) {
 
-		super.calculateMetrics(app);
+		super.calculateMetrics(element);
 
 		uniqueOperands += uniqueTrans;
 		uniqueOperator += uniqueTrans;

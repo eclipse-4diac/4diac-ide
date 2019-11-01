@@ -17,11 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	static final String[] CONDITIONS = { "IF", "FOR", "WHILE", "REPEAT" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -30,9 +30,9 @@ public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	double ccapp = 0.0;
 
 	@Override
-	public void calculateMetrics(Application app) {
-		super.calculateMetrics(app);
-		metrics.add(0, new MetricData("Cyclomatic Number " + app.getName(), ccapp));
+	public void calculateMetrics(INamedElement element) {
+		super.calculateMetrics(element);
+		metrics.add(0, new MetricData("Cyclomatic Number " + element.getName(), ccapp));
 	}
 
 	@Override

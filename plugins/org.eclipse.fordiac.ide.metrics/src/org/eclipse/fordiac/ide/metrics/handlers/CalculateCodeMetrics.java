@@ -19,11 +19,17 @@ import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.fordiac.ide.metrics.analyzers.AbstractCodeMetricAnalyzer;
 import org.eclipse.fordiac.ide.metrics.analyzers.CyclomaticComplexity;
 import org.eclipse.fordiac.ide.metrics.analyzers.HalsteadMetric;
-import org.eclipse.fordiac.ide.metrics.analyzers.AbstractCodeMetricAnalyzer;
 import org.eclipse.fordiac.ide.metrics.analyzers.MetricData;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -75,8 +81,9 @@ public class CalculateCodeMetrics extends AbstractHandler {
 
 		private final List<MetricData> data;
 
-		public MetricsResultDialog(Shell parent, final List<MetricData> data) {
-			super(parent, "Calculated Metrics", null, null, INFORMATION, 0, IDialogConstants.OK_LABEL);
+		public MetricsResultDialog(Shell parent, INamedElement element, final List<MetricData> data) {
+			super(parent, "Calculated Metrics for " + element.getName(), null, null, INFORMATION, 0,
+					IDialogConstants.OK_LABEL);
 			this.data = data;
 		}
 
@@ -113,24 +120,42 @@ public class CalculateCodeMetrics extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
-		StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-
 		List<MetricData> result = new ArrayList<>();
 
-		for (Object element : selection.toList()) {
-			if (element instanceof Application) {
-				calculateApplicationMetrics((Application) element, result);
-			}
-		}
+		INamedElement selectedElement = getSelectedElement(
+				(StructuredSelection) HandlerUtil.getCurrentSelection(event));
 
-		displayResults(result, HandlerUtil.getActiveWorkbenchWindowChecked(event));
+		if (null != selectedElement) {
+			calculateMetrics(selectedElement, result);
+			displayResults(selectedElement, result, HandlerUtil.getActiveWorkbenchWindowChecked(event));
+		}
 		return null;
 	}
 
-	private static void calculateApplicationMetrics(Application app, List<MetricData> result) {
+	private static INamedElement getSelectedElement(StructuredSelection currentSelection) {
+		Object obj = currentSelection.getFirstElement();
+
+		if (obj instanceof IFile) {
+			return checkSelectedFile((IFile) obj);
+		}
+		return (obj instanceof INamedElement) ? (INamedElement) obj : null;
+	}
+
+	private static INamedElement checkSelectedFile(IFile file) {
+		Palette palette = FBTypeUtils.getPalletteForFBTypeFile(file);
+		if (palette != null) {
+			PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, file);
+			if (entry instanceof FBTypePaletteEntry) {
+				return ((FBTypePaletteEntry) entry).getFBType();
+			}
+		}
+		return null;
+	}
+
+	private static void calculateMetrics(INamedElement element, List<MetricData> result) {
 		List<AbstractCodeMetricAnalyzer> analyzers = getAnalyzers();
 		for (AbstractCodeMetricAnalyzer analyzer : analyzers) {
-			analyzer.calculateMetrics(app);
+			analyzer.calculateMetrics(element);
 			result.addAll(analyzer.getResults());
 		}
 	}
@@ -142,8 +167,9 @@ public class CalculateCodeMetrics extends AbstractHandler {
 		return analyzers;
 	}
 
-	private static void displayResults(List<MetricData> result, IWorkbenchWindow workbenchWindow) {
-		MetricsResultDialog resultDialog = new MetricsResultDialog(workbenchWindow.getShell(), result);
+	private static void displayResults(INamedElement element, List<MetricData> result,
+			IWorkbenchWindow workbenchWindow) {
+		MetricsResultDialog resultDialog = new MetricsResultDialog(workbenchWindow.getShell(), element, result);
 		resultDialog.open();
 	}
 
