@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 TU Wien, ACIN
+ * Copyright (c) 2019 TU Wien, ACIN, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Peter Gsellmann - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Changed analysis result to key value pairs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
@@ -128,37 +129,22 @@ public class HalsteadMetric implements ICodeMetricAnalyzer {
 	}
 
 	@Override
-	public void printMetrics(StringBuilder result) {
+	public List<MetricData> getResults() {
 		double n2Major = operands + operandST;
 		double n2 = uniqueOperands + operandST;
 		double n1Major = operators + operatorST;
 		double n1 = uniqueOperator + uniqueOperatorST;
 
-		result.append("Distinct operators ");
-		result.append(n1);
-		result.append("\n");
+		List<MetricData> results = new ArrayList<>();
 
-		result.append("Distinct operands ");
-		result.append(n2);
-		result.append("\n");
-		result.append("Total number of operators ");
-		result.append(n1Major);
-		result.append("\n");
-		result.append("Total number of operands ");
-		result.append(n2Major);
-		result.append("\n");
-		result.append("Distinct operators ST ");
-		result.append(uniqueOperatorST);
-		result.append("\n");
-		result.append("Distinct operands ST ");
-		result.append(operandST);
-		result.append("\n");
-		result.append("Total number of operators ST ");
-		result.append(operatorST);
-		result.append("\n");
-		result.append("Total number of operands ST ");
-		result.append(operandST);
-		result.append("\n");
+		results.add(new MetricData("Distinct operators ", n1));
+		results.add(new MetricData("Distinct operands ", n2));
+		results.add(new MetricData("Total number of operators ", n1Major));
+		results.add(new MetricData("Total number of operands ", n2Major));
+		results.add(new MetricData("Distinct operators ST ", uniqueOperatorST));
+		results.add(new MetricData("Distinct operands ST ", operandST));
+		results.add(new MetricData("Total number of operators ST ", operatorST));
+		results.add(new MetricData("Total number of operands ST ", operandST));
 
 		double nMAjor = n1Major + n2Major;
 		double n = n1 + n2;
@@ -168,28 +154,15 @@ public class HalsteadMetric implements ICodeMetricAnalyzer {
 		double d = n1 / 2 * n2Major / n2;
 		double e = d * v;
 
-		result.append("Program Length ");
-		result.append(nMAjor);
-		result.append("\n");
-		result.append("Program vocabulary ");
-		result.append(n);
-		result.append("\n");
-		result.append("Estimated length ");
-		result.append(nHat);
-		result.append("\n");
-		result.append("Purity ratio ");
-		result.append(pr);
-		result.append("\n");
-		result.append("Program volume ");
-		result.append(v);
-		result.append("\n");
-		result.append("Difficulty ");
-		result.append(d);
-		result.append("\n");
-		result.append("Program Effort ");
-		result.append(e);
-		result.append("\n");
+		results.add(new MetricData("Program Length ", nMAjor));
+		results.add(new MetricData("Program vocabulary ", n));
+		results.add(new MetricData("Estimated length ", nHat));
+		results.add(new MetricData("Purity ratio ", pr));
+		results.add(new MetricData("Program volume ", v));
+		results.add(new MetricData("Difficulty ", d));
+		results.add(new MetricData("Program Effort ", e));
 
+		return results;
 	}
 
 }

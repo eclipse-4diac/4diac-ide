@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 TU Wien, ACIN
+ * Copyright (c) 2019 TU Wien, ACIN, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Peter Gsellmann - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Changed analysis result to key value pairs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.metrics.analyzers;
 
@@ -25,7 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 public class CyclomaticComplexity implements ICodeMetricAnalyzer {
 	static final String[] CONDITIONS = { "IF", "FOR", "WHILE", "REPEAT" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
-	List<String> metric = new ArrayList<>();
+	List<MetricData> metrics = new ArrayList<>();
 
 	@Override
 	public void calculateMetrics(Application app) {
@@ -35,19 +36,16 @@ public class CyclomaticComplexity implements ICodeMetricAnalyzer {
 			if (fb.getType() instanceof BasicFBType) {
 				double ccfb = analyseBFB(((BasicFBType) fb.getType()));
 				ccapp += ccfb;
-				metric.add("Cyclomatic Number " + app.getName() + " : " + fb.getTypeName() + " " + ccfb);
+				metrics.add(new MetricData("Cyclomatic Number " + app.getName() + " : " + fb.getTypeName(), ccfb));
 			}
 		}
-		metric.add(0, "Cyclomatic Number " + app.getName() + " " + ccapp);
+		metrics.add(0, new MetricData("Cyclomatic Number " + app.getName(), ccapp));
 
 	}
 
 	@Override
-	public void printMetrics(StringBuilder result) {
-		metric.forEach(el -> {
-			result.append(el);
-			result.append("\n");
-		});
+	public List<MetricData> getResults() {
+		return metrics;
 	}
 
 	private static double analyseBFB(BasicFBType fbType) {
