@@ -16,31 +16,23 @@ package org.eclipse.fordiac.ide.metrics.analyzers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
-public class CyclomaticComplexity implements ICodeMetricAnalyzer {
+public class CyclomaticComplexity extends AbstractCodeMetricAnalyzer {
 	static final String[] CONDITIONS = { "IF", "FOR", "WHILE", "REPEAT" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 	List<MetricData> metrics = new ArrayList<>();
+	double ccapp = 0.0;
 
 	@Override
 	public void calculateMetrics(Application app) {
-		double ccapp = 0.0;
-
-		for (FBNetworkElement fb : app.getFBNetwork().getNetworkElements()) {
-			if (fb.getType() instanceof BasicFBType) {
-				double ccfb = analyseBFB(((BasicFBType) fb.getType()));
-				ccapp += ccfb;
-				metrics.add(new MetricData("Cyclomatic Number " + app.getName() + " : " + fb.getTypeName(), ccfb));
-			}
-		}
+		super.calculateMetrics(app);
 		metrics.add(0, new MetricData("Cyclomatic Number " + app.getName(), ccapp));
-
 	}
 
 	@Override
@@ -48,40 +40,46 @@ public class CyclomaticComplexity implements ICodeMetricAnalyzer {
 		return metrics;
 	}
 
-	private static double analyseBFB(BasicFBType fbType) {
-		ECC ecc = fbType.getECC();
+	@Override
+	protected void analyzeBFB(BasicFBType basicFBType) {
+		ECC ecc = basicFBType.getECC();
 
-		int nrstates = ecc.getECState().size();
-		int nrtransitions = ecc.getECTransition().size();
+		double ccfb = (ecc.getECTransition().size() - ecc.getECState().size() + 2);
 
-		double ccfb = (nrtransitions - nrstates + 2);
-
-		int saveIndex = 0;
 		for (ECState state : ecc.getECState()) {
 			for (ECAction action : state.getECAction()) {
 				if (null != action.getAlgorithm()) {
-					for (String cond : CONDITIONS) {
-						int lastIndex = 0;
-						while (-1 != lastIndex) {
-							if (cond.equals("REPEAT")) {
-								saveIndex = action.getAlgorithm().toString().indexOf(cond + "\r\n", lastIndex);
-							} else {
-								saveIndex = action.getAlgorithm().toString().indexOf(cond + " ", lastIndex);
-							}
-							if (0 != saveIndex) {
-								lastIndex = saveIndex;
-								if (-1 != lastIndex) {
-									ccfb++;
-									lastIndex += cond.length();
-								}
-							}
-						}
-					}
+					ccfb += analyzeAlgorithm(action.getAlgorithm());
 				}
 			}
 		}
 
-		return ccfb;
+		ccapp += ccfb;
+		metrics.add(new MetricData("Cyclomatic Number " + basicFBType.getName(), ccfb));
+	}
+
+	private static double analyzeAlgorithm(Algorithm algorithm) {
+		double ccAlg = 0.0;
+		String algText = algorithm.toString();
+		int saveIndex = 0;
+		for (String cond : CONDITIONS) {
+			int lastIndex = 0;
+			while (-1 != lastIndex) {
+				if (cond.equals("REPEAT")) {
+					saveIndex = algText.indexOf(cond + "\r\n", lastIndex);
+				} else {
+					saveIndex = algText.toString().indexOf(cond + " ", lastIndex);
+				}
+				if (0 != saveIndex) {
+					lastIndex = saveIndex;
+					if (-1 != lastIndex) {
+						ccAlg++;
+						lastIndex += cond.length();
+					}
+				}
+			}
+		}
+		return ccAlg;
 	}
 
 }
