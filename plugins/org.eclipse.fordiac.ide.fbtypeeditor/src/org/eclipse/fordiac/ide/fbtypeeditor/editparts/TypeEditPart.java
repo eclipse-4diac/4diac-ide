@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,8 +11,9 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - moved adapter search code to palette  
- *   Alois Zoitl - added diagram font preference 
+ *   Alois Zoitl - moved adapter search code to palette
+ *   Alois Zoitl - added diagram font preference
+ *               - added selection feedback
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
@@ -26,6 +27,7 @@ import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
+import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -134,6 +136,11 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
 	@Override
 	protected void createEditPolicies() {
+
+		ModifiedNonResizeableEditPolicy handle = new ModifiedNonResizeableEditPolicy();
+		handle.setDragAllowed(false);
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, handle);
+
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
 			@Override
 			protected void showCurrentEditValue(DirectEditRequest request) {
@@ -204,7 +211,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
 	@Override
 	public Label getNameLabel() {
-		return (Label) getFigure();
+		return getFigure();
 	}
 
 	@Override
