@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2012, 2014 - 2017 Profactor GbmH, fortiss GmbH 
- * 
+ * Copyright (c) 2008, 2009, 2012, 2014 - 2017 Profactor GbmH, fortiss GmbH
+ * 				 2019 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,11 +11,9 @@
  * Contributors:
  *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - cleaned up some code
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
-
-import java.util.Iterator;
-import java.util.Set;
 
 import org.eclipse.draw2d.AncestorListener;
 import org.eclipse.draw2d.ConnectionAnchor;
@@ -47,14 +46,12 @@ import org.eclipse.jface.viewers.TextCellEditor;
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
 	private DirectEditManager manager;
-
-	private ValueFigure figure;
 	private EditPart context;
 	private InterfaceEditPart parentPart;
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
 	 */
 	@Override
@@ -62,37 +59,27 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		super.activate();
 		getModel().eAdapters().add(contentAdapter);
 
-		@SuppressWarnings("rawtypes")
-		Set set = getViewer().getEditPartRegistry().keySet();
-		for (@SuppressWarnings("rawtypes")
-		Iterator iterator = set.iterator(); iterator.hasNext();) {
-			Object object = iterator.next();
-			if (object instanceof IInterfaceElement) {
-				if (((IInterfaceElement) object).equals(getModel().getVarDeclaration())) {
+		Object part = getViewer().getEditPartRegistry().get(getModel().getVarDeclaration());
+		if (part instanceof InterfaceEditPart) {
+			parentPart = (InterfaceEditPart) part;
+			IFigure f = parentPart.getFigure();
+			f.addAncestorListener(new AncestorListener() {
 
-					EditPart part = (EditPart) getViewer().getEditPartRegistry().get(object);
-					if (part instanceof InterfaceEditPart) {
-						parentPart = (InterfaceEditPart) part;
-						IFigure f = parentPart.getFigure();
-						f.addAncestorListener(new AncestorListener() {
-
-							@Override
-							public void ancestorRemoved(IFigure ancestor) {
-							}
-
-							@Override
-							public void ancestorMoved(IFigure ancestor) {
-								refreshVisuals();
-							}
-
-							@Override
-							public void ancestorAdded(IFigure ancestor) {
-							}
-						});
-					}
-
+				@Override
+				public void ancestorRemoved(IFigure ancestor) {
+					// Nothing to do here
 				}
-			}
+
+				@Override
+				public void ancestorMoved(IFigure ancestor) {
+					refreshVisuals();
+				}
+
+				@Override
+				public void ancestorAdded(IFigure ancestor) {
+					// Nothing to do here
+				}
+			});
 		}
 		refreshVisuals();
 	}
@@ -130,7 +117,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
 	 */
 	@Override
@@ -196,7 +183,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#refresh()
 	 */
 	@Override
@@ -213,7 +200,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/**
 	 * Sets the visible.
-	 * 
+	 *
 	 * @param visible the new visible
 	 */
 	public void setVisible(final boolean visible) {
@@ -246,28 +233,10 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/**
 	 * Checks if is input.
-	 * 
+	 *
 	 * @return true, if is input
 	 */
 	public boolean isInput() {
-		return true;
-	}
-
-	/**
-	 * Checks if is event.
-	 * 
-	 * @return true, if is event
-	 */
-	public boolean isEvent() {
-		return false;
-	}
-
-	/**
-	 * Checks if is variable.
-	 * 
-	 * @return true, if is variable
-	 */
-	public boolean isVariable() {
 		return true;
 	}
 
@@ -277,7 +246,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
 	 * ConnectionEditPart)
 	 */
@@ -288,7 +257,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.NodeEditPart#getSourceConnectionAnchor(org.eclipse.gef.
 	 * Request)
 	 */
@@ -299,7 +268,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
 	 * ConnectionEditPart)
 	 */
@@ -310,7 +279,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.NodeEditPart#getTargetConnectionAnchor(org.eclipse.gef.
 	 * Request)
 	 */
@@ -332,7 +301,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/**
 	 * Gets the context.
-	 * 
+	 *
 	 * @return the context
 	 */
 	public EditPart getContext() {
@@ -341,7 +310,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/**
 	 * Sets the context.
-	 * 
+	 *
 	 * @param context the new context
 	 */
 	public void setContext(final EditPart context) {
@@ -350,7 +319,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/**
 	 * Gets the manager.
-	 * 
+	 *
 	 * @return the manager
 	 */
 	public DirectEditManager getManager() {
@@ -371,7 +340,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef.
 	 * Request)
