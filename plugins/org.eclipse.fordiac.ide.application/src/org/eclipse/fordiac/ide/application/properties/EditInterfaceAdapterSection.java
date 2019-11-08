@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 				 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +10,7 @@
  *
  *   Monika Wenger - initial implementation
  *   Alois Zoitl - moved adapter search code to palette
+ *   Bianca Wiesmayr - create command now has enhanced guess
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -32,9 +33,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
-		AdapterType type = getPalette().getAdapterTypes().get(0).getType();
-		return new CreateSubAppInterfaceElementCommand(type, getType().getInterface(), isInput, -1);
+	protected CreateInterfaceElementCommand newCreateCommand(IInterfaceElement interfaceElement, boolean isInput) {
+		AdapterType last = getLastUsedAdapterType(getType().getInterface(), interfaceElement, isInput);
+		int pos = getInsertingIndex(interfaceElement, isInput);
+		return new CreateSubAppInterfaceElementCommand(last, getType().getInterface(), isInput, pos);
 	}
 
 	@Override

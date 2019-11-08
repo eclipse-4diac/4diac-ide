@@ -10,8 +10,9 @@
  *
  *   Monika Wenger - initial implementation
  *   Alois Zoitl - moved adapter search code to palette
- *               - cleaned command stack handling for property sections
- *******************************************************************************/
+ *               - cleaned command stack handling for property section
+ *   Bianca Wiesmayr - create command now has enhanced guess
+*******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
@@ -26,11 +27,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
-
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
-		AdapterType type = getPalette().getAdapterTypes().get(0).getType();
-		return new CreateInterfaceElementCommand(type, getType().getInterfaceList(), isInput, -1);
+	protected CreateInterfaceElementCommand newCreateCommand(IInterfaceElement interfaceElement, boolean isInput) {
+		AdapterType last = getLastUsedAdapterType(getType().getInterfaceList(), interfaceElement, isInput);
+		int pos = getInsertingIndex(interfaceElement, isInput);
+		return new CreateInterfaceElementCommand(last, getType().getInterfaceList(), isInput, pos);
 	}
 
 	@Override

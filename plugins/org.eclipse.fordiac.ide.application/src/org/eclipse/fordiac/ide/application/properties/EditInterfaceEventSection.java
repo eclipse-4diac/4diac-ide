@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 
+ * 				 2019 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,7 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr - create command now has enhanced guess
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -22,15 +24,16 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceEventSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 
 public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
-		return new CreateSubAppInterfaceElementCommand(EventTypeLibrary.getInstance().getType(fillTypeCombo()[0]),
-				getType().getInterface(), isInput, -1);
+	protected CreateInterfaceElementCommand newCreateCommand(IInterfaceElement interfaceElement, boolean isInput) {
+		DataType last = getLastUsedEventType(getType().getInterface(), isInput, interfaceElement);
+		int pos = getInsertingIndex(interfaceElement, isInput);
+		return new CreateSubAppInterfaceElementCommand(last, getType().getInterface(), isInput, pos);
 	}
 
 	@Override

@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
@@ -79,7 +80,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		EVENT, DATA, ADAPTER
 	}
 
-	protected abstract CreateInterfaceElementCommand newCreateCommand(boolean isInput);
+	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
 	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);
 
@@ -155,7 +156,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	}
 
 	private void configureButtonList(AddDeleteReorderListWidget buttons, TableViewer viewer, boolean inputs) {
-		buttons.bindToTableViewer(viewer, this, ref -> newCreateCommand(inputs),
+		buttons.bindToTableViewer(viewer, this, ref -> newCreateCommand((IInterfaceElement) ref, inputs),
 				ref -> newDeleteCommand((IInterfaceElement) ref),
 				ref -> newOrderCommand((IInterfaceElement) ref, inputs, true),
 				ref -> newOrderCommand((IInterfaceElement) ref, inputs, false));
@@ -248,7 +249,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 		@Override
 		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof SubApp || inputElement instanceof FBType) {
+			if ((inputElement instanceof SubApp) || (inputElement instanceof FBType)) {
 				if (inputs) {
 					return getInputs(inputElement);
 				} else {
@@ -319,7 +320,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 
 		@Override
 		public boolean canModify(final Object element, final String property) {
-			return !(TYPE.equals(property) && element instanceof IInterfaceElement
+			return !(TYPE.equals(property) && (element instanceof IInterfaceElement)
 					&& (!((IInterfaceElement) element).getInputConnections().isEmpty()
 							|| !((IInterfaceElement) element).getOutputConnections().isEmpty()));
 		}
@@ -377,4 +378,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		}
 	}
 
+	protected int getInsertingIndex(IInterfaceElement interfaceElement, EList interfaceList) {
+		return interfaceList.indexOf(interfaceElement) + 1;
+	}
 }

@@ -136,6 +136,7 @@ public class CreateInterfaceElementCommand extends Command {
 	private void insertElement() {
 		@SuppressWarnings("unchecked")
 		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
+
 		temp.add(index == -1 ? temp.size() : index, interfaceElement);
 	}
 

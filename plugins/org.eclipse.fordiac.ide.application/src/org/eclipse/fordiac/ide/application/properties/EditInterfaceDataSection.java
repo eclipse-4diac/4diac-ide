@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 
+ * 				 2019 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,7 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
+*   Bianca Wiesmayr - create command now has enhanced guess
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -28,13 +30,13 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 
 public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(boolean isInput) {
-		return new CreateSubAppInterfaceElementCommand(DataTypeLibrary.getInstance().getType(fillTypeCombo()[2]),
-				getType().getInterface(), isInput, -1);
+	protected CreateInterfaceElementCommand newCreateCommand(IInterfaceElement interfaceElement, boolean isInput) {
+		DataType last = getLastUsedDataType(getType().getInterface(), isInput, interfaceElement);
+		int pos = getInsertingIndex(interfaceElement, isInput);
+		return new CreateSubAppInterfaceElementCommand(last, getType().getInterface(), isInput, pos);
 	}
 
 	@Override
@@ -71,4 +73,5 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	protected SubApp getType() {
 		return (SubApp) type;
 	}
+
 }
