@@ -13,6 +13,7 @@
  *   Jose Cabral - Set version and description using general function
  *   Alois Zoitl - moved openEditor helper function to EditorUtils
  *   			 - fixed double connection creation issue
+ *               - extracted fbnetwork copying code into helper class for re-use
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.wizards;
 
@@ -32,16 +33,9 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -162,52 +156,12 @@ public class SaveAsSubappWizard extends Wizard {
 
 	private void performTypeSetup(SubAppType type) {
 		performInterfaceSetup(type);
-		performSubappNetworkSetup(type);
+		type.setFBNetwork(FBNetworkHelper.copyFBNetWork(subApp.getSubAppNetwork(), type.getInterfaceList()));
 	}
 
 	private void performInterfaceSetup(SubAppType type) {
 		// replace interface list with newly generated
 		InterfaceList interfaceList = EcoreUtil.copy(subApp.getInterface());
 		type.setInterfaceList(interfaceList);
-	}
-
-	private void performSubappNetworkSetup(SubAppType type) {
-		FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
-		dstNetwork.getNetworkElements().addAll(EcoreUtil.copyAll(subApp.getSubAppNetwork().getNetworkElements()));
-		createConnections(type, dstNetwork);
-		type.setFBNetwork(dstNetwork);
-	}
-
-	private void createConnections(SubAppType type, FBNetwork dstNetwork) {
-		for (Connection connection : subApp.getSubAppNetwork().getEventConnections()) {
-			dstNetwork.getEventConnections().add((EventConnection) createConnection(type, dstNetwork, connection));
-		}
-
-		for (Connection connection : subApp.getSubAppNetwork().getDataConnections()) {
-			dstNetwork.getDataConnections().add((DataConnection) createConnection(type, dstNetwork, connection));
-		}
-
-		for (Connection connection : subApp.getSubAppNetwork().getAdapterConnections()) {
-			dstNetwork.getAdapterConnections().add((AdapterConnection) createConnection(type, dstNetwork, connection));
-		}
-	}
-
-	private Connection createConnection(SubAppType type, FBNetwork dstNetwork, Connection connection) {
-		Connection newConn = EcoreUtil.copy(connection);
-		newConn.setSource(getInterfaceElement(connection.getSource(), type.getInterfaceList(), dstNetwork));
-		newConn.setDestination(getInterfaceElement(connection.getDestination(), type.getInterfaceList(), dstNetwork));
-		return newConn;
-	}
-
-	private IInterfaceElement getInterfaceElement(IInterfaceElement ie, InterfaceList typeInterface,
-			FBNetwork dstNetwork) {
-		if (subApp.equals(ie.getFBNetworkElement())) {
-			return typeInterface.getInterfaceElement(ie.getName());
-		}
-		FBNetworkElement element = dstNetwork.getElementNamed(ie.getFBNetworkElement().getName());
-		if (null == element) {
-			return null;
-		}
-		return element.getInterfaceElement(ie.getName());
 	}
 }
