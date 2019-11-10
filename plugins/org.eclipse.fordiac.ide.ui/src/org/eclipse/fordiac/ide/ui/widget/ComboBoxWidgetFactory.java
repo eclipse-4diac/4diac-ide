@@ -18,6 +18,7 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class ComboBoxWidgetFactory {
@@ -55,7 +56,14 @@ public class ComboBoxWidgetFactory {
 				if (item.toLowerCase().startsWith(currentSequence)) {
 					// Prevent any other handler to use that key
 					keyEvent.doit = false;
-					combo.select(index);
+					int oldIndex = combo.getSelectionIndex();
+					if (oldIndex != index) {
+						combo.select(index);
+						Event e = new Event();
+						e.time = keyEvent.time;
+						e.stateMask = keyEvent.stateMask;
+						combo.notifyListeners(SWT.Selection, e);
+					}
 					break;
 				}
 				index++;

@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ * 				 2019 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - Moved position calculation to the comment type edit part
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
@@ -20,7 +22,6 @@ import java.util.List;
 import org.eclipse.draw2d.AncestorListener;
 import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.ConnectionAnchor;
-import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PolylineConnection;
@@ -45,7 +46,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.ConnectionEditPart;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
@@ -103,6 +103,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		fig.addAncestorListener(new AncestorListener() {
 			@Override
 			public void ancestorRemoved(IFigure ancestor) {
+				// nothing to do here
 			}
 
 			@Override
@@ -121,41 +122,12 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 
 	@Override
 	protected void update() {
-		EditPart parent = getParent();
-		while (parent != null && !(parent instanceof FBTypeRootEditPart)) {
-			parent = parent.getParent();
-		}
-		if (parent != null) {
-			FBTypeRootEditPart fbcep = (FBTypeRootEditPart) parent;
-			CommentTypeField commentField = fbcep.getCommentField(getCastedModel());
-			InterfaceList interfaceList = ((InterfaceList) getCastedModel().eContainer());
-			if (interfaceList == null) { // can occur if the interfaceelement
-				// gets
-				// deleted
-				return;
-			}
-			int nrOfInputEvents = interfaceList.getEventInputs().size();
-			int nrOfOutputEvents = interfaceList.getEventOutputs().size();
-			if (commentField != null) {
-				Object o = getViewer().getEditPartRegistry().get(commentField);
-				String label = commentField.getLabel();
-				int x = 0;
-				Rectangle bounds = getFigure().getBounds();
-				if (o instanceof CommentTypeEditPart) {
-					if (isInput()) {
-						x = bounds.x - 15 - FigureUtilities.getTextWidth(label, getNameLabel().getFont())
-								- nrOfInputEvents * 10;
-					} else {
-						x = bounds.x + bounds.width + 15 + nrOfOutputEvents * 10;
-
-					}
-					((CommentTypeEditPart) o).getFigure().setLocation(new Point(x, bounds.y));
-					((CommentTypeEditPart) o).getFigure()
-							.setSize(FigureUtilities.getTextWidth(label, getNameLabel().getFont()), bounds.height);
-				}
+		if (getCastedModel() instanceof Event && null != sourceConnections) {
+			for (Object con : sourceConnections) {
+				WithEditPart with = (WithEditPart) con;
+				with.updateWithPos();
 			}
 		}
-		updateWiths();
 	}
 
 	@Override
@@ -286,15 +258,6 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	@Override
 	public INamedElement getINamedElement() {
 		return getCastedModel();
-	}
-
-	private void updateWiths() {
-		if (getCastedModel() instanceof Event && null != sourceConnections) {
-			for (Object con : sourceConnections) {
-				WithEditPart with = (WithEditPart) con;
-				with.updateWithPos();
-			}
-		}
 	}
 
 	@Override

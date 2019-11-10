@@ -11,6 +11,7 @@
  * Contributors:
  *   Monika Wenger - initial API and implementation and/or initial documentation
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
+ *               - cleaned command stack handling for property sections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -19,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.model.commands.change.AttributeChangeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AttributeCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.AttributeDeleteCommand;
@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -54,7 +53,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
@@ -156,14 +154,6 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		if (null != type) {
 			attributeViewer.setInput(getType());
 		}
-	}
-
-	@Override
-	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if (part instanceof DiagramEditorWithFlyoutPalette) {
-			return ((DiagramEditorWithFlyoutPalette) part).getCommandStack();
-		}
-		return null;
 	}
 
 	@Override

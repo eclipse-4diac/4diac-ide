@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -178,7 +178,7 @@ public class ECTransitionFigure extends PolylineConnection {
 			Vector midEnd = new Vector((float) getEnd().x - getPoints().getMidpoint().x,
 					(float) getEnd().y - getPoints().getMidpoint().y);
 
-			Vector startEndNorm = startEnd.getDivided(startEnd.getLength());
+			Vector startEndNorm = startEnd.getDivided((startEnd.getLength() < 0.0001) ? 1.0 : startEnd.getLength());
 			Vector startEnd30 = startEndNorm
 					.getMultiplied(startMid.getLength() * TRANSITION_CONTROL_POINT_VECTOR_LENGTH);
 			Vector startMid30 = startMid.getMultiplied(TRANSITION_CONTROL_POINT_VECTOR_LENGTH);

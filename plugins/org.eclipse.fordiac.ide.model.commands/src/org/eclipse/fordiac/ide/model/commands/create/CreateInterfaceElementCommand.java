@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -42,15 +42,15 @@ public class CreateInterfaceElementCommand extends Command {
 		this.index = index;
 		this.interfaceList = interfaceList;
 	}
-	
+
 	protected boolean isInput() {
 		return isInput;
 	}
-	
+
 	protected DataType getDataType() {
 		return dataType;
 	}
-	
+
 	protected InterfaceList getInterfaceList() {
 		return interfaceList;
 	}
@@ -58,14 +58,14 @@ public class CreateInterfaceElementCommand extends Command {
 	protected int getIndex() {
 		return index;
 	}
-	
+
 	public IInterfaceElement getInterfaceElement() {
 		return interfaceElement;
 	}
 
 	@Override
 	public boolean canExecute() {
-		return null != dataType && (null != interfaceList);
+		return (null != dataType) && (null != interfaceList);
 	}
 
 	private void setInterfaces(InterfaceList interfaceList) {
@@ -107,23 +107,19 @@ public class CreateInterfaceElementCommand extends Command {
 		interfaceElement.setIsInput(isInput);
 		interfaceElement.setType(dataType);
 		interfaceElement.setTypeName(dataType.getName());
-		if (dataType instanceof AdapterType && interfaceList.eContainer() instanceof CompositeFBType
-				&& !(interfaceList.eContainer() instanceof SubAppType)) { // only show the internal adapter FBs for
-																			// composite and not subapp types
-			cmd = new AdapterCreateCommand(10, 10, (AdapterDeclaration) interfaceElement,
-					(CompositeFBType) interfaceList.eContainer());
+		createAdapterCreateCommand();
+		insertElement();
+		if (null != cmd) {
+			cmd.execute();
 		}
-		redo();
 		interfaceElement.setName(NameRepository.createUniqueName(interfaceElement, dataType.getName()));
 	}
 
 	@Override
 	public void redo() {
-		@SuppressWarnings("unchecked")
-		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
-		temp.add(index == -1 ? temp.size() : index, interfaceElement);
+		insertElement();
 		if (null != cmd) {
-			cmd.execute();
+			cmd.redo();
 		}
 	}
 
@@ -132,8 +128,23 @@ public class CreateInterfaceElementCommand extends Command {
 		@SuppressWarnings("unchecked")
 		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
 		temp.remove(interfaceElement);
-		if (null != cmd && cmd.canExecute()) {
+		if ((null != cmd) && cmd.canExecute()) {
 			cmd.undo();
+		}
+	}
+
+	private void insertElement() {
+		@SuppressWarnings("unchecked")
+		EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaces;
+		temp.add(index == -1 ? temp.size() : index, interfaceElement);
+	}
+
+	private void createAdapterCreateCommand() {
+		if ((dataType instanceof AdapterType) && (interfaceList.eContainer() instanceof CompositeFBType)
+				&& !(interfaceList.eContainer() instanceof SubAppType)) { // only show the internal adapter FBs for
+			// composite and not subapp types
+			cmd = new AdapterCreateCommand(10, 10, (AdapterDeclaration) interfaceElement,
+					(CompositeFBType) interfaceList.eContainer());
 		}
 	}
 }

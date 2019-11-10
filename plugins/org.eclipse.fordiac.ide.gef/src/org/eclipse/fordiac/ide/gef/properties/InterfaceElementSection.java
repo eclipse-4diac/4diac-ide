@@ -12,10 +12,10 @@
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed sub-app type update, code clean-up
+ *               - cleaned command stack handling for property sections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -42,7 +42,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InterfaceElementSection extends AbstractSection {
@@ -177,14 +176,6 @@ public class InterfaceElementSection extends AbstractSection {
 		typeCombo.setEnabled(
 				editAble && getType().getInputConnections().isEmpty() && getType().getOutputConnections().isEmpty());
 
-	}
-
-	@Override
-	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		if (part instanceof DiagramEditorWithFlyoutPalette) {
-			return ((DiagramEditorWithFlyoutPalette) part).getCommandStack();
-		}
-		return null;
 	}
 
 	@SuppressWarnings("static-method") // this method allows sub-classes to provide own change type commands, e.g.,

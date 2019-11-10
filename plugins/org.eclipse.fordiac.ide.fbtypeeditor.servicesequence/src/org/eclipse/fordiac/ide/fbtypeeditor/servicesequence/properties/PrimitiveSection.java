@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - cleaned command stack handling for property sections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
@@ -43,7 +45,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class PrimitiveSection extends AbstractServiceSection {
@@ -263,11 +264,6 @@ public class PrimitiveSection extends AbstractServiceSection {
 		} else {
 			serviceInterfaceCombo.select(1);
 		}
-	}
-
-	@Override
-	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		return super.getCommandStack(part);
 	}
 
 	@Override

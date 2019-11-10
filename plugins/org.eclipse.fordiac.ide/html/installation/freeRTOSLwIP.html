@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2019 fortiss GmbH
+ 			     
+ This program and the accompanying materials are made available under the
+ terms of the Eclipse Public License 2.0 which is available at
+ http://www.eclipse.org/legal/epl-2.0.
+
+ SPDX-License-Identifier: EPL-2.0
+ 
+ Contributors:
+   Jose Cabral
+     - initial API and implementation and/or initial documentation
+     
+-->
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <title>Building 4diac&nbsp;FORTE for freeRTOS + LwIP</title>
+      <link rel="stylesheet" type="text/css" href="../help.css">
+   </head>
+
+  <body>
+
+<!--********************************************************************************************-->
+
+     <h1 id="topOfPage">Introduction</h1>
+      <p>This guide is for compiling 4diac&nbsp;FORTE for freeRTOS and LwIP. <a href="https://www.freertos.org/" target="_blank">freeRTOS</a> is a free real-time operative system which is not attached to a specific hardware, but it can run in many different ones. The operative system is very small and simple, and initially didn't have any TCP/IP support, that's why a common practice was to use it together with <a href="https://savannah.nongnu.org/projects/lwip/" target="_blank">LwIP</a>, a small TCP/IP stack. freeRTOS now also have an extra support for TCP/IP (see <a href="https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/index.html" target="_blank">here</a>) but for now FORTE is compiled using LwIP.</p>
+
+      <p>This guide helps you make FORTE run on some hardware where freeRTOS and LwIP are already able to run. Since you can be using any hardware, no support for IO is provided here and this guide will help you compile FORTE as a static library that  you can later add to some project you already have working on your hardware, so the following points are assumed before starting this guide
+        <ul>
+          <li>You have and IDE  and a compiler installed in your computer that allows you to compile code to your hardware (from now on, cross-IDE and cross-compiler),</li>
+          <li>You have an example using freeRTOS and LwIP running in your hardware, meaning that the freeRTOS and LwIP code are present in your computer, and</li>
+          <li>you have a basic understanding of tasks of freeRTOS</li>
+        </ul>
+      </p>
+
+
+      <p>If you checked all points before, keep going. If you don't have a freeRTOS and LwIP example this guide won't help you much.</p>
+
+
+<!--***************-->
+     
+      <h1>Set CMake and compile</h1>
+  
+      <ol>
+        <li>Open CMake-GUI and complete as shown in the image
+            <ol>
+              <li>Set the 4diac&nbsp;FORTE source path where you cloned the Git repository.</li>
+              <li>Set path for binaries where you want to create the library. 
+              Normally, <span class="folderLocation">bin/freeRTOS is used.</span></li>
+              <li>Press <span class="button4diac">Configure</span></li>
+            </ol>
+            <p><img src="../../html/installation/img/raspiCrossLinux1.png" alt="Selecting folders in CMake"/></p>
+          </li>
+           <li>Select the correct option
+            <ol>
+              <li>Select the tool you normally use to compile your programs. 
+              This example follows using UNIX Makefiles from the list.</li>
+              <li>Select <span class="button4diac">Specify tools for cross-compiling.</span>(you can also do it selecting "Specify toolchain file for cross-compiling" but that requires that you create the file first, which if you can do it later when you have more experience with CMake)</li>
+              <li>Press <span class="button4diac">Next</span></li>
+            </ol>
+            <p><img src="../../html/installation/img/raspberrySPS_configure.png" alt="CMake Setup"/></p>
+          </li>
+          <li>Setup for cross-compilation
+            <ol>
+              <li>Write a name for the OS (normally freeRTOS, it won't affect the compilation).</li>
+              <li>Select the path to the C cross-compiler for your hardware. This you can look for in the properties of your project in your cross-IDE.</li>
+              <li>Select the path to the C++ cross-compiler for your hardware. This you can look for in the properties of your project in your cross-IDE.</li>
+              <li>The target root field can be left empty.</li>
+              <li>Click <span class="button4diac">Finish</span></li>
+            </ol>
+            <p><img src="../../html/installation/img/raspiCrossLinux3.png" alt="Select cross-compiling tools."/></p>
+          </li>
+          <li>Configure the compilation
+             <p>A list with all variables of 4diac&nbsp;FORTE in red should be shown in CMake.</p>
+            <ol>
+              <li>Set the FORTE_ARCHITECTURE variable to FreeRTOSLwIP and click Configure</li>
+              <li>Check the information that appears in CMake about the LwIP configuration.</li>
+              <li>The variable FORTE_FreeRTOSLwIP_INCLUDES should appear now and it is the most important one. You should set it to the several paths where the freeRTOS and LwIP headers are, each separated by a semicolon. For example: <span class="folderLocation">${MAIN_DIRECTORY}/FreeRTOS/portable;${MAIN_DIRECTORY}/include;${MAIN_DIRECTORY}/lwip/src/include;${MAIN_DIRECTORY}/lwip/port</span> where ${MAIN_DIRECTORY} is the path where you have your freeRTOS and LwIP code. When you later compile and it fails with an error saying that some "includes" are missing, this variable should be updated where the folders where the missing files are located.</li>
+              <li>It might be the case that you also need to set the CMAKE_C_FLAGS and CMAKE_CXX_FLAGS variables with the flags needed for your hardware. You can check which flags you need from the proeperties of your example project in your cross-IDE.</li>
+              <li>Set FORTE_BUILD_EXECUTABLE to false and FORTE_BUILD_STATIC_LIBRARY to true.</li>
+              <li>Click <span class="button4diac">Configure</span> and the variables that need revision will appear again in red and the rest in white. 
+              Check these variables and press <span class="button4diac">Configure</span> until no variable is shown in red. Here you can add the modules that you want FORTE to have, but from the freeRTOS point of view, there's nothing else you need.</li>
+            </ol>
+          </li>
+          <li>Generate files
+            <ul>
+              <li>Click <span class="button4diac">Generate</span></li>
+            </ul>
+            
+          </li>
+          <li>Build 4diac&nbsp;FORTE
+            <ul>
+              <li>Go to the recently generated folder and execute make (or build it as you normally do)
+               <div class="code">$ cd bin/freeRTOS
+$ make</div> 
+              </li>
+              <li>If no error occurred, you'll have a file called libforte-static.a under the <span class="folderLocation">bin/freeRTOS/src</span> folder. If you got an error, check again the variables in CMake, specially FORTE_FreeRTOSLwIP_INCLUDES, CMAKE_C_FLAGS and CMAKE_CXX_FLAGS.</li>
+            </ul>
+          </li>
+      </ol>
+
+
+
+<!--********************************************************************************************-->
+   
+  <h1>Add the FORTE library to your project</h1>
+
+  <ol>
+    <li>Add the recently compiled library (libforte-static.a) to your project, this step depends on the cross-IDE you have.</li>
+    <li>Copy the file <span class="folderLocation">src/arch/freeRTOS/forte_Init.h</span> to your project.</li>
+    <li>In your file where your "main" function is located, you need to include forte_Init.h and add a task that will start the "forte_thread" task. A working example of the task running FORTE is as follow (PRINTF can cause problems, so change it to your logging function or delete it):
+<div class="code">static void forte_thread(void *arg)
+{
+  forteGlobalInitialize();
+  TForteInstance forteInstance = 0;
+  int resultForte = forteStartInstanceGeneric(0, 0, &forteInstance);
+  if(FORTE_OK == resultForte){
+    forteJoinInstance(forteInstance);
+  }else{
+    PRINTF("Error %d: Couldn't start forte\n", resultForte);
+  }
+  forteGlobalDeinitialize();
+  vTaskDelete(NULL);
+}</div> 
+    </li>
+  </ol>
+
+  <p>If everything is Ok, FORTE will start and you'll be able to deploy to it on port 61499. If you have some problems, read the following section</p>
+
+  <h1>Troubleshooting</h1>
+
+  <p>It's probable that FORTE doesn't run in the first try. You should take care of the following:</p>
+  <ul>
+    <li>Make sure that you have a good amount of RAM available in your system for the stack and heap memory. To see if your system is running out of memory, in your  FreeRTOSConfig.h make sure you have:
+<div class="code">#define configCHECK_FOR_STACK_OVERFLOW 1
+#define configUSE_MALLOC_FAILED_HOOK 1
+</div>
+
+And add the following functions to your main file:
+
+<div class="code">void vApplicationMallocFailedHook(){
+  for(;;){
+    vTaskDelay(pdMS_TO_TICKS(1000));
+  }
+}
+
+void vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName ){
+  for(;;){
+    vTaskDelay(pdMS_TO_TICKS(1000));
+  }
+}
+</div>
+
+and put a breakpoint in both vTaskDelay. If the programs reaches one of these breakpoints, you have a memory problem. 
+
+    </li>
+
+    <li>You should configure your hardware and start the LwIP task before FORTE.</li>
+    <li>A configuration of task creation that worked for some users is:
+      <ol>
+        <li>Create a Task called "stack_init"</li>
+        <li>Start scheduler</li>
+        <li>"stack_init" will run and initialize the LwIP stack (which internally creates a LwIP task)</li>
+        <li>After that, "stack_init" creates the "forte_thread" task as seen before</li>
+        <li>"stack_init" finishes with vTaskDelete(NULL);</li>
+      </ol>
+    </li>
+    <li>For C++ projects (like FORTE) a call to "__libc_init_array();" is needed. In some cases this is not done by default by the generated code of the example. Try adding this call right at the beginning of the main() function before any other call.</li>
+  </ul>
+
+
+
+  
+   
+
+<!--********************************************************************************************-->
+
+<h1 id="whereToGoFromHere">Where to go from here?</h1>
+
+<p>Now that you installed the required tools, it's time to start using them. Take a look at the following tutorials:</p>
+
+<p><a href="../../html/4diacIDE/overview.html">Step 0 - 4diac IDE Overview</a></p>
+
+<p>If you want to compile 4diac&nbsp;FORTE for another platform or want to know more about that, here's a quick link back:</p>
+
+<p><a href="../../html/installation/install.html">Install Eclipse 4diac</a></p>
+
+<p>If you want to go back to the Start Here page, we leave you here a fast access</p>
+
+<p><a href="../../html/startHere/startHere.html">Where to Start</a></p>
+
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+</body>
+</html>
