@@ -58,6 +58,11 @@
     A full list of all bugs addressed in this release can be found on the &lt;a href="https://projects.eclipse.org/projects/iot.4diac/releases/1.11.0/bugs"&gt;1.10.0 release page&lt;/a&gt;
              </text>  	 	 		
        	</group>
+       	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.11.1">   
+            <text>
+            The first maintenance release for 4diac 1.11 provides 12 usability and bug fixes for 4diac IDE.
+            </text>
+        </group>    
    	</extensionContent>
    	
    	<extensionContent id="fordiac-news" style="css/style.css" name="Whats New Extension" path="whatsnew/@">
@@ -73,16 +78,16 @@
 		<group style-id="content-group" id="orgfordiacide-introLink-group"
 		           label="Previous Releases">
             <link label="1.10.3" url="https://www.eclipse.org/4diac/en_news.php#en_news_20190821" id="orgfordiacide-webLink" style-id="content-link">
-                <text>The second maintenance release for 4DIAC 1.10 provides 11 bug fixes for 4diac IDE, and 6 for  4diac FORTE.
+                <text>The third maintenance release for 4diac 1.10 provides 11 bug fixes for 4diac IDE, and 6 for  4diac FORTE.
                 </text>                
             </link> 
 
             <link label="1.10.2" url="http://www.eclipse.org/4diac/en_news.php#en_news_20190414" id="orgfordiacide-webLink" style-id="content-link">
-                <text>The second maintenance release for 4DIAC 1.10 provides 11 bug fixes for 4diac IDE, and 6 for  4diac FORTE.
+                <text>The second maintenance release for 4diac 1.10 provides 11 bug fixes for 4diac IDE, and 6 for  4diac FORTE.
                 </text>                
             </link> 
             <link label="1.10.1" url="http://www.eclipse.org/4diac/en_news.php#en_news_20181221" id="orgfordiacide-webLink" style-id="content-link">
-                <text>The first maintenance release for 4DIAC 1.10 provides 3 usability bug fixes for 4diac IDE, and 1 for FORTE.
+                <text>The first maintenance release for 4diac 1.10 provides 3 usability bug fixes for 4diac IDE, and 1 for FORTE.
                 </text>                
             </link> 
             

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2013, 2016, 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -29,6 +29,7 @@ import org.eclipse.gef.commands.Command;
  * The Class CreateTransitionCommand.
  */
 public class CreateTransitionCommand extends Command {
+	static final Point SELF_TRANS_OFFSET = new Point(10, 50);
 
 	/** The source. */
 	private ECState source;
@@ -63,17 +64,14 @@ public class CreateTransitionCommand extends Command {
 
 	/**
 	 * Convenience constructor preloading the command with the required parameters
-	 * 
+	 *
 	 * The rationale for this convenience constructor is, that in programmatic code
 	 * generation, all these parameters are known when the command is generated.
 	 * With this constructor the needed code for code generation can be reduced
-	 * 
-	 * @param source
-	 *            The starting state of the transition
-	 * @param destination
-	 *            The end state of the transition
-	 * @param conditionEvent
-	 *            The event triggering the transition
+	 *
+	 * @param source         The starting state of the transition
+	 * @param destination    The end state of the transition
+	 * @param conditionEvent The event triggering the transition
 	 */
 	public CreateTransitionCommand(ECState source, ECState destination, Event conditionEvent) {
 		this.source = source;
@@ -101,7 +99,7 @@ public class CreateTransitionCommand extends Command {
 
 	/**
 	 * Gets the source.
-	 * 
+	 *
 	 * @return the source
 	 */
 	public ECState getSource() {
@@ -110,9 +108,8 @@ public class CreateTransitionCommand extends Command {
 
 	/**
 	 * Sets the source.
-	 * 
-	 * @param source
-	 *            the new source
+	 *
+	 * @param source the new source
 	 */
 	public void setSource(final ECState source) {
 		this.source = source;
@@ -120,7 +117,7 @@ public class CreateTransitionCommand extends Command {
 
 	/**
 	 * Gets the destination.
-	 * 
+	 *
 	 * @return the destination
 	 */
 	public ECState getDestination() {
@@ -129,9 +126,8 @@ public class CreateTransitionCommand extends Command {
 
 	/**
 	 * Sets the destination.
-	 * 
-	 * @param destination
-	 *            the new destination
+	 *
+	 * @param destination the new destination
 	 */
 	public void setDestination(final ECState destination) {
 		this.destination = destination;
@@ -144,7 +140,7 @@ public class CreateTransitionCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -153,43 +149,15 @@ public class CreateTransitionCommand extends Command {
 
 		transition = LibraryElementFactory.eINSTANCE.createECTransition();
 
-		int x1 = sourceLocation.x;
-		int x2 = destLocation.x;
-		int y1 = sourceLocation.y;
-		int y2 = destLocation.y;
-
-		int x = 0;
-		int y = 0;
-
-		if (x1 > x2) {
-			x = (x1 - x2) / 2 + x2;
-		} else if (x2 > x1) {
-			x = (x2 - x1) / 2 + x1;
-		} else {
-			x = x1;
-		}
-
-		if (y1 > y2) {
-			y = (y1 - y2) / 2 + y2;
-		} else if (y2 > y1) {
-			y = (y2 - y1) / 2 + y1;
-		} else {
-			y = y1;
-		}
-
 		parent.getECTransition().add(transition);
 
-		// it is necessary to invode the following code after adding the
+		// it is necessary to invoke the following code after adding the
 		// transition to the parent, otherwise ECTransitionEditPart will
-		// throw an nullpointer in the activate method!
+		// throw a NPE in the activate method!
 
-		if (source.equals(destination)) { // self transition
-			transition.setX(x + 10);
-			transition.setY(y + 50);
-		} else {
-			transition.setX(x);
-			transition.setY(y);
-		}
+		Point bendPoint = calcTransitionBendPoint();
+		transition.setX(bendPoint.x);
+		transition.setY(bendPoint.y);
 		transition.setSource(source);
 		transition.setDestination(destination);
 		transition.setConditionEvent(conditionEvent);
@@ -209,21 +177,20 @@ public class CreateTransitionCommand extends Command {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#canUndo()
-	 */
+	private Point calcTransitionBendPoint() {
+		Point bendPoint = sourceLocation.getCopy();
+		bendPoint.translate(destLocation.getDifference(sourceLocation).scale(0.5)); // middle between source and dest
+		if (source.equals(destination)) { // self transition
+			bendPoint.translate(SELF_TRANS_OFFSET);
+		}
+		return bendPoint;
+	}
+
 	@Override
 	public boolean canUndo() {
 		return parent != null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
 	@Override
 	public void undo() {
 		transition.setSource(null);
@@ -231,23 +198,20 @@ public class CreateTransitionCommand extends Command {
 		parent.getECTransition().remove(transition);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
 	@Override
 	public void redo() {
+		// Before setting source and destination the transition needs to be added to the
+		// ECC otherwise we get NPE in the transition editpart when the adapter to the
+		// ECC is created
+		parent.getECTransition().add(transition);
 		transition.setSource(source);
 		transition.setDestination(destination);
-		parent.getECTransition().add(transition);
 	}
 
 	/**
 	 * Sets the source location.
-	 * 
-	 * @param location
-	 *            the new source location
+	 *
+	 * @param location the new source location
 	 */
 	public void setSourceLocation(final Point location) {
 		this.sourceLocation = location;
@@ -255,9 +219,8 @@ public class CreateTransitionCommand extends Command {
 
 	/**
 	 * Sets the destination location.
-	 * 
-	 * @param location
-	 *            the new destination location
+	 *
+	 * @param location the new destination location
 	 */
 	public void setDestinationLocation(final Point location) {
 		this.destLocation = location;

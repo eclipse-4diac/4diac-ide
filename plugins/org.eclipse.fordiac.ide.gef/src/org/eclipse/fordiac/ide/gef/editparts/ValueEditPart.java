@@ -15,8 +15,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
-import java.util.Set;
-
 import org.eclipse.draw2d.AncestorListener;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.FigureUtilities;
@@ -75,38 +73,31 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
 	public void activate() {
 		super.activate();
 		getModel().eAdapters().add(contentAdapter);
 
-		Set set = getViewer().getEditPartRegistry().keySet();
-		for (Object object : set) {
-			if ((object instanceof IInterfaceElement)
-					&& (((IInterfaceElement) object).equals(getModel().getVarDeclaration()))) {
-				EditPart part = (EditPart) getViewer().getEditPartRegistry().get(object);
-				if (part instanceof InterfaceEditPart) {
-					parentPart = (InterfaceEditPart) part;
-					IFigure f = parentPart.getFigure();
-					f.addAncestorListener(new AncestorListener() {
+		Object part = getViewer().getEditPartRegistry().get(getModel().getVarDeclaration());
+		if (part instanceof InterfaceEditPart) {
+			parentPart = (InterfaceEditPart) part;
+			IFigure f = parentPart.getFigure();
+			f.addAncestorListener(new AncestorListener() {
 
-						@Override
-						public void ancestorRemoved(IFigure ancestor) {
-							// nothing to do here
-						}
-
-						@Override
-						public void ancestorMoved(IFigure ancestor) {
-							refreshVisuals();
-						}
-
-						@Override
-						public void ancestorAdded(IFigure ancestor) {
-							// nothing to do here
-						}
-					});
+				@Override
+				public void ancestorRemoved(IFigure ancestor) {
+					// Nothing to do here
 				}
-			}
+
+				@Override
+				public void ancestorMoved(IFigure ancestor) {
+					refreshVisuals();
+				}
+
+				@Override
+				public void ancestorAdded(IFigure ancestor) {
+					// Nothing to do here
+				}
+			});
 		}
 
 		refreshVisuals();

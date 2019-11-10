@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.swt
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.11.0.qualifier
+Bundle-Version: 1.11.1.qualifier
 Bundle-Name: FMU exporter
 Bundle-Activator: org.eclipse.fordiac.ide.fmu.Activator
 Bundle-ManifestVersion: 2

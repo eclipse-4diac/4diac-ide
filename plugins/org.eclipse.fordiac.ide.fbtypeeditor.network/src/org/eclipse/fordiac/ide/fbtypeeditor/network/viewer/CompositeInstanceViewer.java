@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2013 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ * 				 2019 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - copying the FB type to fix issues in monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
@@ -17,16 +19,20 @@ import java.util.EventObject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.viewer.composite.CompositeInstanceViewerInput;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
 import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -42,7 +48,6 @@ public class CompositeInstanceViewer extends DiagramEditor {
 	private FB fb;
 	private CompositeFBType cfbt;
 	private FBEditPart fbEditPart;
-	
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
@@ -50,8 +55,7 @@ public class CompositeInstanceViewer extends DiagramEditor {
 	}
 
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer,
-			ZoomManager zoomManager) {
+	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer, ZoomManager zoomManager) {
 		return new ZoomUndoRedoContextMenuProvider(getGraphicalViewer(), zoomManager, getActionRegistry());
 	}
 
@@ -84,49 +88,54 @@ public class CompositeInstanceViewer extends DiagramEditor {
 			if ((content instanceof FB) && (((FB) content).getType() instanceof CompositeFBType)) {
 				fb = (FB) content;
 				setPartName(getNameHierarchy());
-				//we need to copy the type so that we have an instance specific network TODO consider using here the type
-				//cfbt = EcoreUtil.copy((CompositeFBType) fb.getFBType()); 
-				cfbt = (CompositeFBType) fb.getType();
+				// we need to copy the type so that we have an instance specific network
+				cfbt = createFBType((CompositeFBType) fb.getType(), fb.getInterface());
 				this.fbEditPart = untypedInput.getFbEditPart();
 			}
 		}
 	}
 
+	private static CompositeFBType createFBType(final CompositeFBType type, final InterfaceList interfaceList) {
+		CompositeFBType typeCopy = LibraryElementFactory.eINSTANCE.createCompositeFBType();
+		typeCopy.setInterfaceList(EcoreUtil.copy(interfaceList));
+		typeCopy.setFBNetwork(FBNetworkHelper.copyFBNetWork(type.getFBNetwork(), typeCopy.getInterfaceList()));
+		return typeCopy;
+	}
 
 	@Override
-	public FBNetwork getModel(){
+	public FBNetwork getModel() {
 		return cfbt.getFBNetwork();
 	}
-	
+
 	@Override
 	protected void initializeGraphicalViewer() {
 		GraphicalViewer viewer = getGraphicalViewer();
-		if (cfbt.getFBNetwork() != null) {			
+		if (cfbt.getFBNetwork() != null) {
 			viewer.setContents(getModel());
 		}
 	}
-	
+
 	@Override
 	public void commandStackChanged(EventObject event) {
 		// nothing to do as its a viewer!
 	}
-	
+
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		// nothing to do as its a viewer!
 	}
-	
+
 	private String getNameHierarchy() {
-		//TODO mabye a nice helper function to be put into the fb model
-		StringBuilder retVal =  new StringBuilder(fb.getName());
+		// TODO mabye a nice helper function to be put into the fb model
+		StringBuilder retVal = new StringBuilder(fb.getName());
 		EObject cont = fb.eContainer().eContainer();
-		while(cont instanceof INamedElement){
-			retVal.insert(0, ((INamedElement)cont).getName() + "."); //$NON-NLS-1$
-			if(cont instanceof Application) {
+		while (cont instanceof INamedElement) {
+			retVal.insert(0, ((INamedElement) cont).getName() + "."); //$NON-NLS-1$
+			if (cont instanceof Application) {
 				break;
 			}
 			cont = cont.eContainer().eContainer();
-		}		
+		}
 		return retVal.toString();
 	}
 
