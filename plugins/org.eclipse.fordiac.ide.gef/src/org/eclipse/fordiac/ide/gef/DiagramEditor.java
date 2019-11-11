@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -65,7 +65,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 /**
  * A base editor for various graphical editors.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public abstract class DiagramEditor extends GraphicalEditor
@@ -88,7 +88,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util
 	 * .EventObject)
 	 */
@@ -128,7 +128,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 	/**
 	 * Create the root edit part used in this diagram editor. Editors which need
 	 * special behavior should override this function
-	 * 
+	 *
 	 * @return the new root edit part
 	 */
 	protected ScalableFreeformRootEditPart createRootEditPart() {
@@ -137,7 +137,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#configureGraphicalViewer()
 	 */
 	@Override
@@ -170,17 +170,17 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Gets the edits the part factory.
-	 * 
+	 *
 	 * @return the edits the part factory
 	 */
 	protected abstract EditPartFactory getEditPartFactory();
 
 	/**
 	 * Gets the context menu provider.
-	 * 
+	 *
 	 * @param viewer the viewer
 	 * @param root   the root
-	 * 
+	 *
 	 * @return the context menu provider
 	 */
 	protected abstract ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer,
@@ -188,14 +188,14 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Creates the transfer drop target listener.
-	 * 
+	 *
 	 * @return the transfer drop target listener
 	 */
 	protected abstract TransferDropTargetListener createTransferDropTargetListener();
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#initializeGraphicalViewer()
 	 */
 	@Override
@@ -214,7 +214,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite,
 	 * org.eclipse.ui.IEditorInput)
 	 */
@@ -226,7 +226,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Sets the model.
-	 * 
+	 *
 	 * @param input the new model
 	 */
 	protected void setModel(final IEditorInput input) {
@@ -240,27 +240,27 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Gets the system.
-	 * 
+	 *
 	 * @return the system
 	 */
 	public abstract AutomationSystem getSystem();
 
 	/**
 	 * Gets the file name.
-	 * 
+	 *
 	 * @return the file name
 	 */
 	public abstract String getFileName();
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @seeorg.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.
 	 * IProgressMonitor)
 	 */
 	@Override
 	public abstract void doSave(final IProgressMonitor monitor);
-// TODO model refactoring - consider if a generic save would be possible here	
+// TODO model refactoring - consider if a generic save would be possible here
 //	{
 //		// TODO __gebenh error handling if save fails!
 //
@@ -273,7 +273,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#doSaveAs()
 	 */
 	@Override
@@ -283,7 +283,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#isSaveAsAllowed()
 	 */
 	@Override
@@ -293,7 +293,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Gets the common key handler.
-	 * 
+	 *
 	 * @return the common key handler
 	 */
 	protected KeyHandler getCommonKeyHandler() {
@@ -303,9 +303,9 @@ public abstract class DiagramEditor extends GraphicalEditor
 					getActionRegistry().getAction(ActionFactory.DELETE.getId()));
 			sharedKeyHandler.put(KeyStroke.getPressed(SWT.F2, 0),
 					getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
-			sharedKeyHandler.put(/* CTRL + '=' */
-					KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
-					getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
+//			sharedKeyHandler.put(/* CTRL + '=' */
+//					KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
+//					getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
 
 		}
 		return sharedKeyHandler;
@@ -313,7 +313,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(
 	 * java.lang.Class)
 	 */
@@ -335,7 +335,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Gets the editor.
-	 * 
+	 *
 	 * @return the editor
 	 */
 	protected FigureCanvas getEditor() {
@@ -344,7 +344,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#createActions()
 	 */
 	@SuppressWarnings("unchecked")
@@ -393,7 +393,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getSelectionActions()
 	 */
 	@SuppressWarnings("rawtypes")
@@ -404,7 +404,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Gets the sel actions.
-	 * 
+	 *
 	 * @return the sel actions
 	 */
 	@SuppressWarnings("rawtypes")
@@ -414,7 +414,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IWorkbenchPart#dispose()
 	 */
 	@Override
@@ -426,7 +426,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/**
 	 * Returns the GraphicalViewer of this Editor.
-	 * 
+	 *
 	 * @return the GraphicalViewer
 	 */
 	public GraphicalViewer getViewer() {
@@ -435,7 +435,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor
 	 * #getContributorId()

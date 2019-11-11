@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
  * 				 2018 - 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,7 +10,7 @@
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch, Filip Andren,
- *   Monika Wenger 
+ *   Monika Wenger
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed copy/paste handling
  *******************************************************************************/
@@ -23,6 +23,7 @@ import java.util.LinkedHashSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.application.actions.CopyEditPartsAction;
+import org.eclipse.fordiac.ide.application.actions.CutEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkSelectAllAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
@@ -173,13 +174,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@Override
 	protected void configureGraphicalViewer() {
-
 		super.configureGraphicalViewer();
-		final CopyEditPartsAction copy = (CopyEditPartsAction) getActionRegistry()
-				.getAction(ActionFactory.COPY.getId());
-
-		getGraphicalViewer().addSelectionChangedListener(copy);
-
 		getGraphicalControl().addListener(SWT.Activate, this::handleActivationChanged);
 		getGraphicalControl().addListener(SWT.Deactivate, this::handleActivationChanged);
 	}
@@ -217,6 +212,11 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 		action = new CopyEditPartsAction(this);
 		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new CutEditPartsAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
 
 		action = new PasteEditPartsAction(this);
 		registry.registerAction(action);
@@ -268,10 +268,10 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	/**
 	 * Method for providing the id to be used for generating the CNF for showing the
 	 * pallette.
-	 * 
+	 *
 	 * This method is to be subclassed by fbnetwork editors which would like to show
 	 * different types in there pallete (e.g., Composite type editor).
-	 * 
+	 *
 	 * @return the navigator id
 	 */
 	@SuppressWarnings("static-method")
@@ -299,13 +299,18 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	private void handleActivationChanged(Event event) {
 		IAction copy = null;
+		IAction cut = null;
 		IAction paste = null;
 		if (event.type == SWT.Activate) {
 			copy = getActionRegistry().getAction(ActionFactory.COPY.getId());
+			cut = getActionRegistry().getAction(ActionFactory.CUT.getId());
 			paste = getActionRegistry().getAction(ActionFactory.PASTE.getId());
 		}
 		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.COPY.getId()) != copy) {
 			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copy);
+		}
+		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.CUT.getId()) != cut) {
+			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.CUT.getId(), cut);
 		}
 		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.PASTE.getId()) != paste) {
 			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.PASTE.getId(), paste);

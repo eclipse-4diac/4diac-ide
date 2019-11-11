@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
  * 				 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -76,7 +76,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 	/**
 	 * Instantiates a new uIFB network context menu provider.
-	 * 
+	 *
 	 * @param viewer      the viewer
 	 * @param registry    the registry
 	 * @param zoomManager the zoom manager
@@ -100,7 +100,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ContextMenuProvider#buildContextMenu(org.eclipse.jface.
 	 * action.IMenuManager)
 	 */
@@ -135,6 +135,9 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
 		action = getRegistry().getAction(ActionFactory.COPY.getId());
+		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
+
+		action = getRegistry().getAction(ActionFactory.CUT.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
 		action = getRegistry().getAction(ActionFactory.PASTE.getId());
@@ -338,9 +341,9 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 	/**
 	 * Check is currently mapped to.
-	 * 
+	 *
 	 * @param res the res
-	 * 
+	 *
 	 * @return true, if successful
 	 */
 	private boolean checkIsCurrentlyMappedTo(final Resource res) {

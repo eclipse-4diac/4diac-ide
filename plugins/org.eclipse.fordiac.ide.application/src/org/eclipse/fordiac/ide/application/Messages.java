@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -121,6 +121,8 @@ public class Messages extends NLS {
 	public static String InterfaceElementSection_ConnectionGroup;
 
 	public static String CopyEditPartsAction_Text;
+
+	public static String CutEditPartsAction_Text;
 
 	public static String PasteEditPartsAction_Text;
 

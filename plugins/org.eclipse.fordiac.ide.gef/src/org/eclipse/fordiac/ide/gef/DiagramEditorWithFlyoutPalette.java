@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
  * 				 2018 - 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -12,7 +12,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed copy/paste handling
- *   Alois Zoitl - added diagram font preference 
+ *   Alois Zoitl - added diagram font preference
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
@@ -80,7 +80,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 /**
  * A base editor for various graphical editors.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWithFlyoutPalette
@@ -103,7 +103,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util
 	 * .EventObject)
 	 */
@@ -164,7 +164,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#configureGraphicalViewer()
 	 */
 	@Override
@@ -196,17 +196,17 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/**
 	 * Gets the edits the part factory.
-	 * 
+	 *
 	 * @return the edits the part factory
 	 */
 	protected abstract EditPartFactory getEditPartFactory();
 
 	/**
 	 * Gets the context menu provider.
-	 * 
+	 *
 	 * @param viewer the viewer
 	 * @param zoom   the zoom manager of the root edit part
-	 * 
+	 *
 	 * @return the context menu provider
 	 */
 	protected abstract ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer,
@@ -214,14 +214,14 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/**
 	 * Creates the transfer drop target listener.
-	 * 
+	 *
 	 * @return the transfer drop target listener
 	 */
 	protected abstract TransferDropTargetListener createTransferDropTargetListener();
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#initializeGraphicalViewer()
 	 */
 	@Override
@@ -240,7 +240,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite,
 	 * org.eclipse.ui.IEditorInput)
 	 */
@@ -270,7 +270,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/**
 	 * Sets the model.
-	 * 
+	 *
 	 * @param input the new model
 	 */
 	protected void setModel(final IEditorInput input) {
@@ -285,14 +285,14 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/**
 	 * Gets the system.
-	 * 
+	 *
 	 * @return the system
 	 */
 	public abstract AutomationSystem getSystem();
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @seeorg.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.
 	 * IProgressMonitor)
 	 */
@@ -301,7 +301,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#doSaveAs()
 	 */
 	@Override
@@ -309,7 +309,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#isSaveAsAllowed()
 	 */
 	@Override
@@ -319,7 +319,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/**
 	 * Gets the common key handler.
-	 * 
+	 *
 	 * @return the common key handler
 	 */
 	protected KeyHandler getCommonKeyHandler() {
@@ -329,17 +329,13 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 					getActionRegistry().getAction(ActionFactory.DELETE.getId()));
 			sharedKeyHandler.put(KeyStroke.getPressed(SWT.F2, 0),
 					getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
-			sharedKeyHandler.put(/* CTRL + '=' */
-					KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
-					getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
-
 		}
 		return sharedKeyHandler;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(
 	 * java.lang.Class)
 	 */
@@ -362,7 +358,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/**
 	 * Gets the editor.
-	 * 
+	 *
 	 * @return the editor
 	 */
 	protected FigureCanvas getEditor() {
@@ -371,7 +367,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#createActions()
 	 */
 	@SuppressWarnings("unchecked")
@@ -419,7 +415,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getSelectionActions()
 	 */
 	@SuppressWarnings("rawtypes")
@@ -430,7 +426,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/**
 	 * Gets the sel actions.
-	 * 
+	 *
 	 * @return the sel actions
 	 */
 	@SuppressWarnings("rawtypes")
@@ -440,7 +436,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IWorkbenchPart#dispose()
 	 */
 	@Override
@@ -451,7 +447,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/**
 	 * Returns the GraphicalViewer of this Editor.
-	 * 
+	 *
 	 * @return the GraphicalViewer
 	 */
 	public GraphicalViewer getViewer() {
@@ -460,7 +456,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @seeorg.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#
 	 * createPaletteViewerProvider()
 	 */
@@ -477,7 +473,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor
 	 * #getContributorId()
