@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Request Orchestration using OPC UA with all fields from services to be set" Name="RequestOrchestrationOpcUaPartial">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-09-17" Organization="fortiss GmbH" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="Request orchestration" Name="REQ" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="Request finished" Name="CNF" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="The ArrowheadSystem identifier that is requesting the orchestration" Name="requesterSystem" Type="ArrowheadSystem"/>
+      <VarDeclaration Comment="Not to be used by Application Systems. This field is only used when there is an inbound request from another Cloud. This can only be submitted by the Gatekeeper" Name="requesterCloud" Type="ArrowheadCloud"/>
+      <VarDeclaration Comment="Identification of the service" InitialValue="" Name="serviceDefinition" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="Interfaces implemented by the service" InitialValue="" Name="interfaces" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="Metadata of the service in key=value format" Name="serviceMetadata" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="These flags can be set to tailor the orchestration process (use just the names of the flags to be enabled)" Name="orchestrationFlags" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="There can be a list from the Consumer stating which other Application Systems (even from other Clouds) it wishes to connect. If this field is filled out, the Orchestrator will try to facilitate these preferences" Name="preferredProviders" Type="PreferredProvider"/>
+      <VarDeclaration ArraySize="10" Comment="This object will be presenting the Consumer’s selected QoS level. Not implemented" Name="requestedQoS" Type="WSTRING"/>
+      <VarDeclaration Comment="Enpoint of the orchestrator" Name="orchestratorEndpoint" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration ArraySize="10" Comment="Response from the orchestrator" Name="serviceRequestForm" Type="OrchestrationForm"/>
+    </OutputVars>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="FieldsToServiceRequestForm" Type="FieldsToServiceRequestForm" x="3805.0" y="-85.0"/>
+    <FB Comment="" Name="FieldsToArrowheadService" Type="FieldsToArrowheadService" x="1510.0" y="1475.0"/>
+    <FB Comment="" Name="RequestOrchestrationForm" Type="RequestOrchestrationForm" x="6135.0" y="1900.0"/>
+    <FB Comment="" Name="RequestOrchestrationOpcUa" Type="RequestOrchestrationOpcUa" x="8520.0" y="2400.0"/>
+    <EventConnections>
+      <Connection Comment="" Destination="FieldsToArrowheadService.REQ" Source="REQ" dx1="465.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRequestForm.REQ" Source="FieldsToArrowheadService.CNF" dx1="355.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationForm.requestOrchestator" Source="FieldsToServiceRequestForm.CNF" dx1="555.0"/>
+      <Connection Comment="" Destination="CNF" Source="RequestOrchestrationForm.responseReceived" dx1="60.0" dx2="60.0" dy="-990.0"/>
+    </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="FieldsToServiceRequestForm.requesterSystem" Source="requesterSystem" dx1="1670.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRequestForm.requesterCloud" Source="requesterCloud" dx1="1500.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRequestForm.requestedService" Source="FieldsToArrowheadService.arrowheadService" dx1="550.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadService.serviceDefinition" Source="serviceDefinition" dx1="400.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadService.interfaces" Source="interfaces" dx1="335.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadService.serviceMetadata" Source="serviceMetadata" dx1="260.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRequestForm.orchestrationFlags" Source="orchestrationFlags" dx1="1500.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRequestForm.preferredProviders" Source="preferredProviders" dx1="1500.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRequestForm.requestedQoS" Source="requestedQoS" dx1="1500.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationForm.serviceRequestForm" Source="FieldsToServiceRequestForm.serviceRequestForm" dx1="505.0"/>
+      <Connection Comment="" Destination="serviceRequestForm" Source="RequestOrchestrationForm.orchestrationResponse" dx1="60.0" dx2="60.0" dy="-1065.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationForm.endpoint" Source="orchestratorEndpoint" dx1="2695.0"/>
+    </DataConnections>
+    <AdapterConnections>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUa.requestOrchestration" Source="RequestOrchestrationForm.requestOrchestration" dx1="435.0"/>
+    </AdapterConnections>
+  </SubAppNetwork>
+</SubAppType>

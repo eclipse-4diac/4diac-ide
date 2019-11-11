@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Query services using OPC UA with all service's fields to be defined" Name="QueryServiceOpcUaSubFull">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH &#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-09-17" Organization="fortiss GmbH" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="Query for services" Name="REQ" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="Query finished" Name="CNF" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Interfaces implemented by the service" Name="serviceDefinition" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="Interfaces implemented by the service" Name="interfaces" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="Metadata of the service in key=value format" Name="serviceMetadata" Type="WSTRING"/>
+      <VarDeclaration Comment="True, if service metadata shall be taken into account during query" Name="metadaSearch" Type="BOOL"/>
+      <VarDeclaration Comment="True, if the selected (query fitting) Application Systems shall be pinged to see if they’re alive" Name="pingProviders" Type="BOOL"/>
+      <VarDeclaration Comment="The minimum version of the Service we are looking for" Name="version" Type="DINT"/>
+      <VarDeclaration Comment="Address of the Service Registry" Name="address" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration ArraySize="10" Comment="" Name="serviceEntries" Type="ServiceRegistryEntry"/>
+    </OutputVars>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="FieldsToArrowheadService" Type="FieldsToArrowheadService" x="1395.0" y="-245.0"/>
+    <SubApp Comment="" Name="QueryServiceOpcUaSub" Type="QueryServiceOpcUaSub" x="3705.0" y="-25.0"/>
+    <EventConnections>
+      <Connection Comment="" Destination="FieldsToArrowheadService.REQ" Source="REQ" dx1="385.0"/>
+      <Connection Comment="" Destination="QueryServiceOpcUaSub.REQ" Source="FieldsToArrowheadService.CNF" dx1="570.0"/>
+      <Connection Comment="" Destination="CNF" Source="QueryServiceOpcUaSub.CNF" dx1="60.0" dx2="60.0" dy="-30.0"/>
+    </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="FieldsToArrowheadService.interfaces" Source="interfaces" dx1="290.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadService.serviceDefinition" Source="serviceDefinition" dx1="290.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadService.serviceMetadata" Source="serviceMetadata" dx1="290.0"/>
+      <Connection Comment="" Destination="QueryServiceOpcUaSub.service" Source="FieldsToArrowheadService.arrowheadService" dx1="480.0"/>
+      <Connection Comment="" Destination="QueryServiceOpcUaSub.metadaSearch" Source="metadaSearch" dx1="1500.0"/>
+      <Connection Comment="" Destination="QueryServiceOpcUaSub.pingProviders" Source="pingProviders" dx1="1500.0"/>
+      <Connection Comment="" Destination="QueryServiceOpcUaSub.version" Source="version" dx1="1500.0"/>
+      <Connection Comment="" Destination="QueryServiceOpcUaSub.address" Source="address" dx1="1500.0"/>
+      <Connection Comment="" Destination="serviceEntries" Source="QueryServiceOpcUaSub.serviceEntries" dx1="60.0" dx2="60.0" dy="-105.0"/>
+    </DataConnections>
+  </SubAppNetwork>
+</SubAppType>

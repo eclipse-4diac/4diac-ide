@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE DataType SYSTEM "http://www.holobloc.com/xml/DataType.dtd" >
 <DataType Name="ServiceQueryForm" Comment="A service query form for the Arrowhead framework 4.0" >
-  <Identification Standard="61499-2" />
+  <Identification Description="Copyright (c) 2019 fortiss GmbH &#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
   <VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Jose Cabral" Date="2018-09-26" />
   <ASN1Tag Class="APPLICATION" Number="1" />
   <StructuredType >

@@ -30,6 +30,7 @@
 		<module>../org.eclipse.fordiac.ide.fmu</module>
 		<module>../org.eclipse.fordiac.ide.gef</module>
 		<module>../org.eclipse.fordiac.ide.images</module>
+		<module>../org.eclipse.fordiac.ide.metrics</module>
 		<module>../org.eclipse.fordiac.ide.model</module>
 		<module>../org.eclipse.fordiac.ide.model.edit</module>
 		<module>../org.eclipse.fordiac.ide.model.structuredtext</module>

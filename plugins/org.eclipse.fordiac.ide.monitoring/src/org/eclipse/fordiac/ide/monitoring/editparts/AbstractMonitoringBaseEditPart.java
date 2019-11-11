@@ -184,7 +184,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 
 	@Override
 	public String getSpecificLayer() {
-		return ZoomScalableFreeformRootEditPart.TOPLAYER;
+		return ZoomScalableFreeformRootEditPart.TOP_LAYER;
 	}
 	
 	@Override

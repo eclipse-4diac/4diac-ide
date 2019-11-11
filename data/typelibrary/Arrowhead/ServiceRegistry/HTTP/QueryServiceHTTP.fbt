@@ -18,7 +18,7 @@
     <FB Comment="" Name="InitFlag" Type="E_SR" x="6975.0" y="1685.0"/>
     <FB Comment="" Name="E_PERMIT" Type="E_PERMIT" x="7840.0" y="810.0"/>
     <FB Comment="" Name="ANYToJSON" Type="ANYToJSON" x="3460.0" y="1395.0"/>
-    <FB Comment="" Name="GetHTTPResult" Type="GetArrayResponseFromHTTP" x="500.0" y="1400.0"/>
+    <FB Comment="" Name="GetHTTPResult" Type="GetArrayResponseFromJSON" x="500.0" y="1400.0"/>
     <DataConnections>
       <Connection Comment="" Destination="F_STRING_TO_WSTRING.IN" Source="APPEND_STRING_3.OUT" dx1="285.0"/>
       <Connection Comment="" Destination="Query.ID" Source="F_STRING_TO_WSTRING.OUT" dx1="840.0"/>

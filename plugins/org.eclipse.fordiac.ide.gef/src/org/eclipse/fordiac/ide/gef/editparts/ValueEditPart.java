@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2012, 2014 - 2017 Profactor GbmH, fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * 				 2019 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,16 +11,16 @@
  * Contributors:
  *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - cleaned up some code
+ *   Alois Zoitl - added preference driven max width for value edit parts
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.draw2d.AncestorListener;
 import org.eclipse.draw2d.ConnectionAnchor;
+import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Notification;
@@ -29,9 +29,11 @@ import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -41,13 +43,29 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.graphics.FontMetrics;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
 	private DirectEditManager manager;
 	private EditPart context;
 	private InterfaceEditPart parentPart;
+
+	static int maxWidth = -1;
+
+	private static int getMaxWidth() {
+		if (-1 == maxWidth) {
+			IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
+			int maxLabelSize = pf.getInt(DiagramPreferences.MAX_VALUE_LABEL_SIZE);
+			FontMetrics fm = FigureUtilities
+					.getFontMetrics(JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
+			maxWidth = (int) (maxLabelSize * fm.getAverageCharacterWidth());
+		}
+		return maxWidth;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -81,7 +99,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 				}
 			});
 		}
+
 		refreshVisuals();
+
 	}
 
 	private Point calculatePos() {
@@ -111,7 +131,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	private int calculateWidth() {
 		int width = getFigure().getPreferredSize().width;
 		width = Math.max(40, width);
-		width = Math.min(width, 600);
+		width = Math.min(width, getMaxWidth());
 		return width;
 	}
 
@@ -163,7 +183,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 				setTextAlignment(PositionConstants.LEFT);
 			}
 
-			setMinimumSize(new Dimension(50, 1));
 			setToolTip(new ValueToolTipFigure(getIInterfaceElement(), getModel()));
 		}
 
@@ -208,10 +227,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	}
 
 	protected IFigure createFigureForModel() {
-		if (figure == null) {
-			figure = new ValueFigure();
-		}
-		return figure;
+		return new ValueFigure();
 	}
 
 	@Override
@@ -237,7 +253,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 * @return true, if is input
 	 */
 	public boolean isInput() {
-		return true;
+		return getIInterfaceElement().isIsInput();
 	}
 
 	private IInterfaceElement getIInterfaceElement() {

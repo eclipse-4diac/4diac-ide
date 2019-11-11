@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DataType SYSTEM "http://www.holobloc.com/xml/DataType.dtd" >
+<DataType Name="EventFilter" Comment="EventFilter type used to subsribe/unsubscribe to/from the EventHandler" >
+  <Identification Description="Copyright (c) 2019 fortiss GmbH &#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Jose Cabral" Date="2019-09-17" />
+  <ASN1Tag Class="APPLICATION" Number="1" />
+  <StructuredType >
+    <VarDeclaration Name="eventType" Type="WSTRING" Comment="Event type, similar to topics in MQTT." />
+    <VarDeclaration Name="consumer" Type="ArrowheadSystem" Comment="The Subscriber ArrowheadSystem, that will consume the new events." />
+    <VarDeclaration Name="sources" Type="ArrowheadSystem" ArraySize="10" Comment="List of ArrowheadSystem the Subscriber wants to receive events from." />
+	<VarDeclaration Name="startDate" Type="DATE_AND_TIME" Comment="If set, the Subscriber wants to receive events with timestamps after this date-time." />
+	<VarDeclaration Name="endDate" Type="DATE_AND_TIME" Comment="If set, the Subscriber wants to receive events with timestamps before this date-time." />
+	<VarDeclaration Name="filterMetadata" Type="WSTRING" ArraySize="10" Comment="Metadata about the events, which can be used for further filtering." />
+	<VarDeclaration Name="notifyUri" Type="WSTRING" Comment="The URL subpath where the Event Handler should sent the new events to." />
+	<VarDeclaration Name="matchMetadata" Type="BOOL" Comment="Should the Event Handler filter events based on the metadata." />
+  </StructuredType>
+</DataType>

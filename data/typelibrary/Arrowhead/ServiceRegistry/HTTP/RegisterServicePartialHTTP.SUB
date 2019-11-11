@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
 <SubAppType Comment="Register a Service using HTTP. The system information is encapsulated" Name="RegisterServicePartialHTTP">
-  <Identification Description="Copyright (c) 2019 fortiss GmbH &#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: PL-2.0" Standard="61499-2"/>
+  <Identification Description="Copyright (c) 2019 fortiss GmbH &#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
   <VersionInfo Author="Jose Cabral" Date="2019-01-31" Organization="fortiss GmbH" Version="1.0"/>
   <SubAppInterfaceList>
     <SubAppEventInputs>
@@ -30,6 +30,21 @@
     <FB Comment="" Name="E_SR" Type="E_SR" x="6365.0" y="-135.0"/>
     <FB Comment="" Name="E_SWITCH" Type="E_SWITCH" x="7880.0" y="415.0"/>
     <FB Comment="" Name="E_REND" Type="E_REND" x="7210.0" y="270.0"/>
+    <EventConnections>
+      <Connection Comment="" Destination="doneRegister" Source="RegisterService.doneRegister" dx1="1570.0"/>
+      <Connection Comment="" Destination="doneUnregister" Source="RegisterService.doneUnregister" dx1="1570.0"/>
+      <Connection Comment="" Destination="RegisterService.register" Source="E_SWITCH.EO1" dx1="80.0"/>
+      <Connection Comment="" Destination="RegisterService.unregister" Source="E_SWITCH.EO0" dx1="225.0"/>
+      <Connection Comment="" Destination="E_SR.S" Source="register" dx1="2855.0"/>
+      <Connection Comment="" Destination="E_SR.R" Source="unregister" dx1="2855.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRegistryEntry.REQ" Source="register" dx1="2420.0"/>
+      <Connection Comment="" Destination="FieldsToServiceRegistryEntry.REQ" Source="unregister" dx1="2420.0"/>
+      <Connection Comment="" Destination="E_REND.EI1" Source="register" dx1="3315.0"/>
+      <Connection Comment="" Destination="E_REND.EI1" Source="unregister" dx1="3315.0"/>
+      <Connection Comment="" Destination="E_REND.EI2" Source="FieldsToServiceRegistryEntry.CNF" dx1="60.0" dx2="60.0" dy="-505.0"/>
+      <Connection Comment="" Destination="E_SWITCH.EI" Source="E_REND.EO" dx1="150.0"/>
+      <Connection Comment="" Destination="E_REND.R" Source="E_REND.EO" dx1="85.0" dx2="175.0" dy="-370.0"/>
+    </EventConnections>
     <DataConnections>
       <Connection Comment="" Destination="RegisterService.serviceRegistryEntry" Source="FieldsToServiceRegistryEntry.serviceRegistryEntry" dx1="665.0"/>
       <Connection Comment="" Destination="FieldsToServiceRegistryEntry.serviceURI" Source="serviceURI" dx1="615.0"/>
@@ -42,23 +57,8 @@
       <Connection Comment="" Destination="FieldsToServiceRegistryEntry.provider" Source="provider" dx1="3285.0"/>
       <Connection Comment="" Destination="FieldsToServiceRegistryEntry.providedService" Source="providedService" dx1="2420.0"/>
     </DataConnections>
-    <EventConnections>
-      <Connection Comment="" Destination="doneRegister" Source="RegisterService.doneRegister" dx1="1065.0"/>
-      <Connection Comment="" Destination="doneUnregister" Source="RegisterService.doneUnregister" dx1="1065.0"/>
-      <Connection Comment="" Destination="RegisterService.register" Source="E_SWITCH.EO1" dx1="80.0"/>
-      <Connection Comment="" Destination="RegisterService.unregister" Source="E_SWITCH.EO0" dx1="255.0"/>
-      <Connection Comment="" Destination="E_SR.S" Source="register" dx1="2855.0"/>
-      <Connection Comment="" Destination="E_SR.R" Source="unregister" dx1="2855.0"/>
-      <Connection Comment="" Destination="FieldsToServiceRegistryEntry.REQ" Source="register" dx1="2420.0"/>
-      <Connection Comment="" Destination="FieldsToServiceRegistryEntry.REQ" Source="unregister" dx1="2420.0"/>
-      <Connection Comment="" Destination="E_REND.EI1" Source="register" dx1="3315.0"/>
-      <Connection Comment="" Destination="E_REND.EI1" Source="unregister" dx1="3315.0"/>
-      <Connection Comment="" Destination="E_REND.EI2" Source="FieldsToServiceRegistryEntry.CNF" dx1="355.0"/>
-      <Connection Comment="" Destination="E_SWITCH.EI" Source="E_REND.EO" dx1="150.0"/>
-      <Connection Comment="" Destination="E_REND.R" Source="E_REND.EO" dx1="85.0" dx2="175.0" dy="-370.0"/>
-    </EventConnections>
     <AdapterConnections>
-      <Connection Comment="" Destination="RegisterServiceHTTP_1.registerService" Source="RegisterService.registerService" dx1="240.0"/>
+      <Connection Comment="" Destination="RegisterServiceHTTP_1.registerService" Source="RegisterService.registerService" dx1="95.0"/>
     </AdapterConnections>
   </SubAppNetwork>
 </SubAppType>

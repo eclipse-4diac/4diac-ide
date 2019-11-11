@@ -15,4 +15,31 @@
             class="org.eclipse.fordiac.ide.ui.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.eclipse.fordiac.ide.ui.handlers.ContributeHandler"
+            description="Information on how to contribute to Eclipse 4diac"
+            id="org.eclipse.fordiac.ide.ui.contribute"
+            name="Contribute">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:help?after=about">
+         <command
+               commandId="org.eclipse.fordiac.ide.ui.contribute"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="org.eclipse.fordiac.ide.ui.contribute"
+            icon="platform:/plugin/org.eclipse.ui.ide/icons/full/elcl16/smartmode_co.png">
+      </image>
+   </extension>
 </plugin>

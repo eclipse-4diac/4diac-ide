@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
 <SubAppType Comment="Get the endpoint at INDEX from a request orchestration response" Name="GetEndpointFromOrchestrationHTTPPartial">
-  <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: PL-2.0" Standard="61499-2"/>
+  <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
   <VersionInfo Author="Jose Cabral" Date="2019-02-19" Organization="fortiss GmbH" Version="1.0"/>
   <SubAppInterfaceList>
     <SubAppEventInputs>

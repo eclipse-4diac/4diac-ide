@@ -171,11 +171,11 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 	@SuppressWarnings("rawtypes")
 	private void createFBMenus(final IMenuManager menu) {
 		useChangeFBType = false;
-		String text = "Insert FB";
+		String text = Messages.UIFBNetworkContextMenuProvider_InsertFB;
 		List eps = editor.getViewer().getSelectedEditParts();
 		for (Object ep : eps) {
 			if (ep instanceof FBEditPart || ep instanceof SubAppForFBNetworkEditPart) {
-				text = "Change Type";
+				text = Messages.UIFBNetworkContextMenuProvider_ChangeType;
 				useChangeFBType = true;
 				break;
 			}

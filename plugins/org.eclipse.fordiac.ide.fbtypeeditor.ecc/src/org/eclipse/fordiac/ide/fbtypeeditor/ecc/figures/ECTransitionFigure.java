@@ -106,7 +106,6 @@ public class ECTransitionFigure extends PolylineConnection {
 	private final TransitionOrderDecorator transitionOrderDecorator;
 
 	public ECTransitionFigure(ECTransition ecTransition) {
-		setLineWidth(2);
 		setAntialias(SWT.ON);
 		setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_TRANSITION_COLOR));
 

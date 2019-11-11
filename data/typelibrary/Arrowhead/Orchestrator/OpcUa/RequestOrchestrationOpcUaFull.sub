@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Request Orchestration using OPC UA with all fields from services, system and cloud to be set" Name="RequestOrchestrationOpcUaFull">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-09-17" Organization="fortiss GmbH" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="Request orchestration" Name="REQ" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="Request finished" Name="CNF" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Identification of the system" Name="systemName" Type="WSTRING"/>
+      <VarDeclaration Comment="Address of the offered services" Name="address" Type="WSTRING"/>
+      <VarDeclaration Comment="Port of the of the offered services" Name="port" Type="DINT"/>
+      <VarDeclaration Comment="Authentication info of the system" Name="authenticationInfo" Type="WSTRING"/>
+      <VarDeclaration Comment="Company (the capital  O is to avoid clash when exporting to C++)" Name="Operator" Type="WSTRING"/>
+      <VarDeclaration Comment="Identification of the cloud" Name="cloudName" Type="WSTRING"/>
+      <VarDeclaration Comment="Address to access the cloud" Name="addressCloud" Type="WSTRING"/>
+      <VarDeclaration Comment="Port to access the cloud" Name="portCloud" Type="DINT"/>
+      <VarDeclaration Comment="(Unclear documentation)" Name="gatekeeperServiceURI" Type="WSTRING"/>
+      <VarDeclaration Comment="Authentication info of the cloud" Name="authenticationInfoCloud" Type="WSTRING"/>
+      <VarDeclaration Comment="(Unclear documentation)" Name="secure" Type="BOOL"/>
+      <VarDeclaration Comment="Identification of the service" InitialValue="" Name="serviceDefinition" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="Interfaces implemented by the service" InitialValue="" Name="interfaces" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="Metadata of the service in key=value format" Name="serviceMetadata" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="These flags can be set to tailor the orchestration process (use just the names of the flags to be enabled)" Name="orchestrationFlags" Type="WSTRING"/>
+      <VarDeclaration ArraySize="10" Comment="There can be a list from the Consumer stating which other Application Systems (even from other Clouds) it wishes to connect. If this field is filled out, the Orchestrator will try to facilitate these preferences" Name="preferredProviders" Type="PreferredProvider"/>
+      <VarDeclaration ArraySize="10" Comment="This object will be presenting the Consumer’s selected QoS level. Not implemented" Name="requestedQoS" Type="WSTRING"/>
+      <VarDeclaration Comment="Enpoint of the orchestrator" Name="orchestratorEndpoint" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration ArraySize="10" Comment="Response from the orchestrator" Name="serviceRequestForm" Type="OrchestrationForm"/>
+    </OutputVars>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="FieldsToArrowheadCloud" Type="FieldsToArrowheadCloud" x="2785.0" y="145.0"/>
+    <FB Comment="" Name="FieldsToArrowheadSystem" Type="FieldsToArrowheadSystem" x="2825.0" y="-695.0"/>
+    <SubApp Comment="" Name="RequestOrchestrationOpcUaPartial" Type="RequestOrchestrationOpcUaPartial" x="6700.0" y="735.0"/>
+    <EventConnections>
+      <Connection Comment="" Destination="FieldsToArrowheadSystem.REQ" Source="REQ" dx1="465.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadCloud.REQ" Source="FieldsToArrowheadSystem.CNF" dx1="60.0" dx2="60.0" dy="660.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.REQ" Source="FieldsToArrowheadCloud.CNF" dx1="1270.0"/>
+      <Connection Comment="" Destination="CNF" Source="RequestOrchestrationOpcUaPartial.CNF" dx1="60.0" dx2="60.0" dy="-410.0"/>
+    </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="FieldsToArrowheadSystem.systemName" Source="systemName" dx1="660.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadCloud.Operator" Source="Operator" dx1="1250.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadSystem.address" Source="address" dx1="720.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadSystem.port" Source="port" dx1="885.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadSystem.authenticationInfo" Source="authenticationInfo" dx1="990.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadCloud.cloudName" Source="cloudName" dx1="950.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadCloud.address" Source="addressCloud" dx1="950.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadCloud.port" Source="portCloud" dx1="950.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadCloud.gatekeeperServiceURI" Source="gatekeeperServiceURI" dx1="950.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadCloud.authenticationInfo" Source="authenticationInfoCloud" dx1="950.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadCloud.secure" Source="secure" dx1="950.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.requesterSystem" Source="FieldsToArrowheadSystem.arrowheadSystem" dx1="1525.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.requesterCloud" Source="FieldsToArrowheadCloud.arrowheadCloud" dx1="1245.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.serviceDefinition" Source="serviceDefinition" dx1="2925.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.interfaces" Source="interfaces" dx1="2925.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.serviceMetadata" Source="serviceMetadata" dx1="2925.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.orchestrationFlags" Source="orchestrationFlags" dx1="2925.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.preferredProviders" Source="preferredProviders" dx1="2925.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.requestedQoS" Source="requestedQoS" dx1="2925.0"/>
+      <Connection Comment="" Destination="RequestOrchestrationOpcUaPartial.orchestratorEndpoint" Source="orchestratorEndpoint" dx1="2925.0"/>
+      <Connection Comment="" Destination="serviceRequestForm" Source="RequestOrchestrationOpcUaPartial.serviceRequestForm" dx1="60.0" dx2="60.0" dy="-485.0"/>
+    </DataConnections>
+  </SubAppNetwork>
+</SubAppType>

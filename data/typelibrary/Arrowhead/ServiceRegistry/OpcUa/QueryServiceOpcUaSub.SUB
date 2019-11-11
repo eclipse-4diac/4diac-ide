@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Query services using OPC UA with the service defined" Name="QueryServiceOpcUaSub">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH &#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-09-17" Organization="fortiss GmbH" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="Query for services" Name="REQ" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="Query finished" Name="CNF" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="The Arrowhead Service object that is looked for (SD and supported IDD-s)" Name="service" Type="ArrowheadService"/>
+      <VarDeclaration Comment="True, if service metadata shall be taken into account during query" Name="metadaSearch" Type="BOOL"/>
+      <VarDeclaration Comment="True, if the selected (query fitting) Application Systems shall be pinged to see if they’re alive" Name="pingProviders" Type="BOOL"/>
+      <VarDeclaration Comment="The minimum version of the Service we are looking for" Name="version" Type="DINT"/>
+      <VarDeclaration Comment="Address of the Service Registry (not officially in the documentation, but it simplifies the FBs)" Name="address" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration ArraySize="10" Comment="" Name="serviceEntries" Type="ServiceRegistryEntry"/>
+    </OutputVars>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="FieldsToServiceQueryForm" Type="FieldsToServiceQueryForm" x="2400.0" y="-165.0"/>
+    <FB Comment="" Name="QueryService" Type="QueryService" x="4920.0" y="155.0"/>
+    <FB Comment="" Name="QueryServiceOpcUa" Type="QueryServiceOpcUa" x="6540.0" y="865.0"/>
+    <EventConnections>
+      <Connection Comment="" Destination="QueryService.query" Source="FieldsToServiceQueryForm.CNF" dx1="655.0"/>
+      <Connection Comment="" Destination="CNF" Source="QueryService.queried" dx1="60.0" dx2="60.0" dy="-120.0"/>
+      <Connection Comment="" Destination="FieldsToServiceQueryForm.REQ" Source="REQ" dx1="945.0"/>
+    </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="QueryService.serviceQueryForm" Source="FieldsToServiceQueryForm.serviceQueryForm" dx1="470.0"/>
+      <Connection Comment="" Destination="serviceEntries" Source="QueryService.serviceEntries" dx1="60.0" dx2="60.0" dy="-195.0"/>
+      <Connection Comment="" Destination="FieldsToServiceQueryForm.service" Source="service" dx1="750.0"/>
+      <Connection Comment="" Destination="FieldsToServiceQueryForm.metadataSearch" Source="metadaSearch" dx1="525.0"/>
+      <Connection Comment="" Destination="FieldsToServiceQueryForm.pingProviders" Source="pingProviders" dx1="390.0"/>
+      <Connection Comment="" Destination="FieldsToServiceQueryForm.version" Source="version" dx1="210.0"/>
+      <Connection Comment="" Destination="QueryService.address" Source="address" dx1="100.0"/>
+    </DataConnections>
+    <AdapterConnections>
+      <Connection Comment="" Destination="QueryServiceOpcUa.queryServices" Source="QueryService.queryServices" dx1="100.0"/>
+    </AdapterConnections>
+  </SubAppNetwork>
+</SubAppType>

@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.jface.text,
  org.eclipse.ui.workbench,
  org.eclipse.ui.editors,
- org.eclipse.ui.views.properties.tabbed
+ org.eclipse.ui.views.properties.tabbed,
+ org.eclipse.core.commands
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 1.11.1.qualifier

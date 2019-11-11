@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2013 fortiss GmbH
- * 
+ * 				 2019 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,8 +9,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *               - increased size of middle bendpoint
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies;
 
@@ -21,6 +22,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.MoveBendpointCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.BendpointEditPolicy;
@@ -62,13 +64,8 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 	 * @see SelectionHandlesEditPolicy#createSelectionHandles()
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	protected List createSelectionHandles() {
-		return createHandlesForUserBendpoints();
-	}
-
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private List createHandlesForUserBendpoints() {
+	protected List createSelectionHandles() {
 		List list = new ArrayList();
 		ConnectionEditPart connEP = (ConnectionEditPart) getHost();
 		PointList points = getConnection().getPoints();
@@ -78,7 +75,7 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 
 		if (bendPoints == null) {
 			bendPoints = new ArrayList();
-		}else if (!bendPoints.isEmpty()) {
+		} else if (!bendPoints.isEmpty()) {
 			currBendPoint = ((Bendpoint) bendPoints.get(0)).getLocation();
 		}
 
@@ -86,7 +83,7 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 			// If the current user bendpoint matches a bend location, show a move handle
 			if (i < points.size() - 1 && bendPointIndex < bendPoints.size()
 					&& currBendPoint.equals(points.getPoint(i + 1))) {
-				list.add(new BendpointMoveHandle(connEP, bendPointIndex, i + 1));
+				list.add(createBendPointMoveHandle(connEP, bendPointIndex, i));
 
 				// Go to the next user bendpoint
 				bendPointIndex++;
@@ -97,5 +94,11 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 		}
 
 		return list;
+	}
+
+	private static BendpointMoveHandle createBendPointMoveHandle(ConnectionEditPart connEP, int bendPointIndex, int i) {
+		BendpointMoveHandle handle = new BendpointMoveHandle(connEP, bendPointIndex, i + 1);
+		handle.setPreferredSize(ConnectionPreferenceValues.HANDLE_SIZE, ConnectionPreferenceValues.HANDLE_SIZE);
+		return handle;
 	}
 }

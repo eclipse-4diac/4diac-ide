@@ -110,6 +110,34 @@ public class Messages extends NLS {
 
 	public static String SaveAsSubApplicationTypeAction_WizardOverrideMessage;
 
+	public static String UnmapAllAction_Text;
+
+	public static String UpdateFBTypeAction_Text;
+
+	public static String ConnectionConstraintsPrefernecePage_Description;
+
+	public static String ConnectionConstraintsPrefernecePage_EnableFORTETypeCasts;
+
+	public static String InterfaceElementSection_ConnectionGroup;
+
+	public static String CopyEditPartsAction_Text;
+
+	public static String PasteEditPartsAction_Text;
+
+	public static String ListFBCreateCommand_FBTypeNotFound;
+
+	public static String UIFBNetworkContextMenuProvider_InsertFB;
+
+	public static String UIFBNetworkContextMenuProvider_ChangeType;
+
+	public static String FBNetworkElementTooltipFigure_VersionLabel;
+
+	public static String InterfaceElementSection_DeleteConnectionToolTip;
+
+	public static String InterfaceElementSection_InConnections;
+
+	public static String InterfaceElementSection_OutConnections;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

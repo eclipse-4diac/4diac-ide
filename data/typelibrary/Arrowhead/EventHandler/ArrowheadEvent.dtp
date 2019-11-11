@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DataType SYSTEM "http://www.holobloc.com/xml/DataType.dtd" >
+<DataType Name="ArrowheadEvent" Comment="Event type of the Arrowhead Framework" >
+  <Identification Description="Copyright (c) 2019 fortiss GmbH &#13;&#10;&#13;&#10;This program and the accompanying materials are made &#13;&#10;available under the terms of the Eclipse Public License 2.0 &#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Jose Cabral" Date="2019-09-17" />
+  <ASN1Tag Class="APPLICATION" Number="1" />
+  <StructuredType >
+    <VarDeclaration Name="type" Type="WSTRING" Comment="The type of the event, an event ID of sorts." />
+	<VarDeclaration Name="payload" Type="WSTRING" Comment="String data of the event." />
+	<VarDeclaration Name="timestamp" Type="DATE_AND_TIME" Comment="Date and time of the event." />
+	<VarDeclaration Name="eventMetadata" Type="WSTRING" ArraySize="10" Comment="Key=value pairs of additional data about the event." />
+  </StructuredType>
+</DataType>

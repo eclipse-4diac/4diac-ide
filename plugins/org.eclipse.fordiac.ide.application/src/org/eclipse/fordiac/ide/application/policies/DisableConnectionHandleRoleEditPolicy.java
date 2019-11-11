@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.fordiac.ide.gef.editparts.IDeactivatableConnectionHandleRoleEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 

@@ -13,13 +13,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class UnmapAllAction extends UnmapAction {
-	
+
 	/** The Constant ID. */
 	public static final String ID = "UnmapAll"; //$NON-NLS-1$
 
@@ -31,20 +32,19 @@ public class UnmapAllAction extends UnmapAction {
 	public UnmapAllAction(final IWorkbenchPart part) {
 		super(part);
 		setId(ID);
-		setText("Unmap All");
+		setText(Messages.UnmapAllAction_Text);
 	}
-	
 
 	@Override
 	protected boolean calculateEnabled() {
-		if(!super.calculateEnabled()){
-			FBNetwork fbNetwork = (FBNetwork)((DiagramEditorWithFlyoutPalette)getWorkbenchPart()).getModel();
-			for(FBNetworkElement element : fbNetwork.getNetworkElements()){
+		if (!super.calculateEnabled()) {
+			FBNetwork fbNetwork = (FBNetwork) ((DiagramEditorWithFlyoutPalette) getWorkbenchPart()).getModel();
+			for (FBNetworkElement element : fbNetwork.getNetworkElements()) {
 				checkSelectedModelElement(element);
 			}
 			return (!getSelectedNetworkElements().isEmpty());
 		}
 		return false;
 	}
-	
+
 }

@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.application.preferences;
 
 import org.eclipse.fordiac.ide.application.ApplicationPlugin;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -22,27 +23,26 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 /**
  * The Class ConnectionConstraintsPrefernecePage.
  */
-public class ConnectionConstraintsPrefernecePage extends
-		FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class ConnectionConstraintsPrefernecePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	/**
-	 * Instantiates a new connection constraints prefernece page.
+	 * Instantiates a new connection constraints preference page.
 	 */
 	public ConnectionConstraintsPrefernecePage() {
 		super(GRID);
 		setPreferenceStore(ApplicationPlugin.getDefault().getPreferenceStore());
-		setDescription("Preferences for Connections!");
+		setDescription(Messages.ConnectionConstraintsPrefernecePage_Description);
 	}
 
 	/**
-	 * Creates the field editors. Field editors are abstractions of the common
-	 * GUI blocks needed to manipulate various types of preferences. Each field
-	 * editor knows how to save and restore itself.
+	 * Creates the field editors. Field editors are abstractions of the common GUI
+	 * blocks needed to manipulate various types of preferences. Each field editor
+	 * knows how to save and restore itself.
 	 */
 	@Override
 	public void createFieldEditors() {
 		addField(new BooleanFieldEditor(PreferenceConstants.P_BOOLEAN,
-				"Enable FORTE TypeCasts.", getFieldEditorParent()));
+				Messages.ConnectionConstraintsPrefernecePage_EnableFORTETypeCasts, getFieldEditorParent()));
 
 	}
 
@@ -53,7 +53,7 @@ public class ConnectionConstraintsPrefernecePage extends
 	 */
 	@Override
 	public void init(final IWorkbench workbench) {
-		//nothing todo here
+		// nothing todo here
 	}
 
 }

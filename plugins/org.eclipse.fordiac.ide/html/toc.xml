@@ -260,6 +260,7 @@
       <topic label="OPC UA Methods" href="html/communication/opc_ua_version1.html#methods" />
       <topic label="OPC UA Method Call" href="html/communication/opc_ua_version1.html#methodCall"/>
       <topic label="OPC UA Subscription" href="html/communication/opc_ua_version1.html#subscription"/>
+      <topic label="Connect to secure servers" href="html/communication/opc_ua_version1.html#securityClients"/>
     </topic>
  <topic href="html/communication/http.html" label="HTTP">
  </topic>
