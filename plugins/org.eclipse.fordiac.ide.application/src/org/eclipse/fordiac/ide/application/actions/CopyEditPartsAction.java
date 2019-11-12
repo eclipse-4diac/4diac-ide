@@ -17,12 +17,16 @@
 package org.eclipse.fordiac.ide.application.actions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.SelectionAction;
@@ -57,12 +61,11 @@ public class CopyEditPartsAction extends SelectionAction {
 		for (Object obj : getSelectedObjects()) {
 			if (obj instanceof EditPart) {
 				Object model = ((EditPart) obj).getModel();
-				if ((model instanceof FBNetworkElement) || (model instanceof Connection)) {
+				if (model instanceof FBNetworkElement) {
 					return true;
 				}
 			}
 		}
-
 		return false;
 	}
 
@@ -72,19 +75,32 @@ public class CopyEditPartsAction extends SelectionAction {
 		Clipboard.getDefault().setContents(templates);
 	}
 
-	private List<Object> getSelectedTemplates() {
+	protected List<Object> getSelectedTemplates() {
 		List<Object> templates = new ArrayList<>();
 		for (Object obj : getSelectedObjects()) {
 			if (obj instanceof EditPart) {
 				Object model = ((EditPart) obj).getModel();
 				if (model instanceof FBNetworkElement) {
 					templates.add(model);
-				} else if (model instanceof Connection) {
-					templates.add(new ConnectionReference((Connection) model));
+					templates.addAll(getAllFBNElementConnections((FBNetworkElement) model));
 				}
 			}
 		}
 		return templates;
+	}
+
+	private static Collection<ConnectionReference> getAllFBNElementConnections(FBNetworkElement model) {
+		List<ConnectionReference> connections = new ArrayList<>();
+
+		for (IInterfaceElement elem : model.getInterface().getAllInterfaceElements()) {
+			connections.addAll(getConnectionList(elem).stream().map(conn -> new ConnectionReference(conn))
+					.collect(Collectors.toList()));
+		}
+		return connections;
+	}
+
+	private static EList<Connection> getConnectionList(IInterfaceElement elem) {
+		return elem.isIsInput() ? elem.getInputConnections() : elem.getOutputConnections();
 	}
 
 }

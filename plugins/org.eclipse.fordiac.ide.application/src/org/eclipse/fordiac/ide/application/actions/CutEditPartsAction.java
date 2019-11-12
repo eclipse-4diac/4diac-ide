@@ -12,27 +12,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.Clipboard;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
-public class CutEditPartsAction extends SelectionAction {
-
-	CompoundCommand deleteCommands;
+/**
+ * Cut action which will use the copy part and delete the selected FBs
+ *
+ */
+public class CutEditPartsAction extends CopyEditPartsAction {
 
 	/**
 	 * Instantiates a new copy edit parts action.
@@ -49,47 +46,19 @@ public class CutEditPartsAction extends SelectionAction {
 	}
 
 	@Override
-	protected boolean calculateEnabled() {
-		for (Object obj : getSelectedObjects()) {
-			if (obj instanceof EditPart) {
-				Object model = ((EditPart) obj).getModel();
-				if ((model instanceof FBNetworkElement) || (model instanceof Connection)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	@Override
 	public void run() {
-		deleteCommands = new CompoundCommand();
-		List<Object> templates = analyzeSelection();
-		execute(deleteCommands);
+		List<Object> templates = getSelectedTemplates();
+		execute(getFBDeleteCommands(templates));
 		Clipboard.getDefault().setContents(templates);
 	}
 
-	private List<Object> analyzeSelection() {
-		List<Object> templates = new ArrayList<>();
-		List<DeleteFBNetworkElementCommand> deleteFBCommands = new ArrayList<>();
-		List<DeleteConnectionCommand> deleteConnCommands = new ArrayList<>();
-		for (Object obj : getSelectedObjects()) {
-			if (obj instanceof EditPart) {
-				Object model = ((EditPart) obj).getModel();
-				if (model instanceof FBNetworkElement) {
-					deleteFBCommands.add(new DeleteFBNetworkElementCommand((FBNetworkElement) model));
-					templates.add(model);
-				} else if (model instanceof Connection) {
-					// add connections to the beginning so that they will be deleted first
-					deleteConnCommands.add(new DeleteConnectionCommand((Connection) model));
-					templates.add(new ConnectionReference((Connection) model));
-				}
+	private static Command getFBDeleteCommands(List<Object> templates) {
+		CompoundCommand cmd = new CompoundCommand();
+		for (Object obj : templates) {
+			if (obj instanceof FBNetworkElement) {
+				cmd.add(new DeleteFBNetworkElementCommand((FBNetworkElement) obj));
 			}
 		}
-		// first add all connection commands to the command list needed for undo/redo
-		deleteConnCommands.forEach(deleteCommands::add);
-		deleteFBCommands.forEach(deleteCommands::add);
-		return templates;
+		return cmd;
 	}
-
 }
