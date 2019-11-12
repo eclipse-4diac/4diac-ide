@@ -200,32 +200,23 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
-		int pos = 1;
+		int pos = calculateWithPos(connection, isInput());
 		if (isInput()) {
-			pos = calculateInputWithPos(connection);
 			return new InputWithAnchor(getFigure(), pos, this);
 
 		}
-		pos = calculateOutputWithPos(connection);
 		return new OutputWithAnchor(getFigure(), pos, this);
 	}
 
-	private int calculateOutputWithPos(final ConnectionEditPart connection) {
-		int pos;
+	private static int calculateWithPos(final ConnectionEditPart connection, boolean isInput) {
+		int pos = 1;
 		With with = (With) connection.getModel();
 		Event event = (Event) with.eContainer();
 
 		InterfaceList interfaceList = (InterfaceList) event.eContainer();
-		pos = interfaceList.getEventOutputs().indexOf(event) + 1;
-		return pos;
-	}
-
-	private int calculateInputWithPos(final ConnectionEditPart connection) {
-		int pos;
-		With with = (With) connection.getModel();
-		Event event = (Event) with.eContainer();
-		InterfaceList interfaceList = (InterfaceList) event.eContainer();
-		pos = interfaceList.getEventInputs().indexOf(event) + 1;
+		if (null != interfaceList) {
+			pos += ((isInput) ? interfaceList.getEventInputs() : interfaceList.getEventOutputs()).indexOf(event);
+		}
 		return pos;
 	}
 
@@ -236,13 +227,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
-		int pos = 1;
-		if (isInput()) {
-			pos = calculateInputWithPos(connection);
-			return new InputWithAnchor(getFigure(), pos, this);
-		}
-		pos = calculateOutputWithPos(connection);
-		return new OutputWithAnchor(getFigure(), pos, this);
+		return getSourceConnectionAnchor(connection);
 	}
 
 	@Override
