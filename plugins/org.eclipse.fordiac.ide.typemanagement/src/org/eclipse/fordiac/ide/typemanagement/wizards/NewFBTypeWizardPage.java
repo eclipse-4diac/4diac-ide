@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2010 - 2019 Profactor GmbH, TU Wien ACIN, fortiss GmbH, 
- * 							 Johannes Kepler University          
- * 
+ * Copyright (c) 2010 - 2019 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - reworked type selection to a type list with description  
+ *   Alois Zoitl - reworked type selection to a type list with description
  *   Bianca Wiesmayr - extracted TableViewer creation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
@@ -188,9 +188,13 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		templateTableViewer.setInput(templateList);
 
 		templateTableViewer.addSelectionChangedListener(ev -> handleEvent(null));
+
+		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		data.widthHint = 250;
+		templateTableViewer.getControl().setLayoutData(data);
 	}
 
-	private void configureTypeTableLayout(Table table) {
+	private static void configureTypeTableLayout(Table table) {
 		TableColumn tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Name");
 
@@ -226,7 +230,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
 	}
 
-	private TemplateInfo createTemplateFileInfo(File f) {
+	private static TemplateInfo createTemplateFileInfo(File f) {
 		Scanner scanner;
 		String name = f.getName();
 		String description = ""; //$NON-NLS-1$
