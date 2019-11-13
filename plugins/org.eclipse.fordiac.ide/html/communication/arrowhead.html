@@ -21,11 +21,13 @@
 </head>
 
 <body>
-<h1 id="topOfPage">How to use 4DIAC's Arrowhead library</h1>
+<h1 id="topOfPage">How to use 4diac's Arrowhead library</h1>
 
 <h2 id="intro">Introduction</h2>
 
-<p>The <a href="https://github.com/arrowhead-f/core-java" target="_blank"> Arrowhead Framework (AF)</a> is a framework that provides interoperability between services in a Service Oriented Architectue (SOA) systems. The actual scope and its definition are not easy to understand at first and its documentation does not always help, so the following paragraph will try explain the basics of the AF.</p>
+<p>4diac supports communication with the ServiceRegisty, Orchestrator, Authorization and EventHandler core system of the Arrowhead Framework version 4.1.2 using HTTP-JSON and OPCUA-JSON.</p>
+
+<p>The <a href="https://github.com/arrowhead-f/core-java" target="_blank"> Arrowhead Framework (AF)</a> is a framework that provides interoperability between services in a Service Oriented Architectue (SOA). The actual scope and its definition are not easy to understand at first and its documentation does not always help, so the following paragraph will try explain the basics of the AF.</p>
 
 <p>The AF is a set of interfaces, rules and documentation system that allow devices to provide and consume services. The AF defines types in an abstract way for Services, Cloud, System and others concepts.</p>
 
@@ -46,11 +48,12 @@
 
 <p>As seen before, the service interface between the consumer and provider is not fixed and the AF has nothing to do with it. The AF provides the support to register services, and look for them.</p>
 
-<p>The developed 4DIAC's Arrowhead library provides the FBs and AF types to communicate to the official <a href="https://github.com/arrowhead-f/core-java" target="_blank"> Arrowhead Framework</a> using HTTP/JSON.</p>
+
+<p>IMPORTANT: The developed 4diac's Arrowhead library provides the FBs and AF types to communicate to the official <a href="https://github.com/arrowhead-f/core-java" target="_blank"> Arrowhead Framework</a> version 4.1.2. The new version 4.1.3 of the AF is in another repository and the API has changed so it's not compatible with the 4diac's library. The provided library can be used with HTTP using the provided link before, or OPC UA, but for that you need to use <a ref="https://github.com/cabralfortiss/core-java/tree/opcUa" target="_blank">this special fork</a> which extends the AF with OPC UA interfaces.</p>
 
 <h2>Enabling the Arrowhead Module in 4diac FORTE</h2>
 
-<p>The first thing that's needed is to have a version of 4diac FORTE with the Arrowhead Module enabled. For that, you'll need to compile your own 4diac FORTE. To do that, follow these <a href="../../html/installation/install.html#ownFORTE"> steps</a> and in CMake set the variable <span class="specificText">FORTE_MODULE_Arrowhead</span> and <span class="specificText">FORTE_COM_HTTP</span> to TRUE.</p>
+<p>The first thing that's needed is to have a version of 4diac FORTE with the Arrowhead Module enabled. For that, you'll need to compile your own 4diac FORTE. To do that, follow these <a href="../../html/installation/install.html#ownFORTE"> steps</a> and in CMake set the variable <span class="specificText">FORTE_MODULE_Arrowhead</span> and <span class="specificText">FORTE_COM_HTTP</span> or/and <span class="specificText">FORTE_COM_OPC_UA</span> to TRUE.</p>
 
 <p>After 4diac FORTE compiles, you'll be ready to use the FBs library in 4diac IDE.</p>
 
@@ -64,13 +67,13 @@
 
 <div><img src="../../html/communication/img/arrowhead/abstractRegisterService.png" alt="Abstract definition of the Register Service offered by the Service Registry core system"></div>
 
-<p>The socket for this adapter is given by each implementation. The next figure shows the Function Block that implements the actual HTTP communication to the Service Registry. Its only input is the socket adapter, the counter part of the plug adapter from the previous figure. By connecting them, the information is passed to this Function Block that handles the communication.</p>
+<p>The socket for this adapter is given by each implementation. The next figure shows the Function Block that implements the actual HTTP communication to the Service Registry (there's one with the same interface for OPC UA but different internal implementation). Its only input is the socket adapter, the counter part of the plug adapter from the previous figure. By connecting them, the information is passed to this Function Block that handles the communication.</p>
 
 <div><img src="../../html/communication/img/arrowhead/httpRegisterService.png" alt="Register Service implementation in HTTP Rest"></div>
 
-<p>This decoupled architecture allows to quickly implement another type of communication. For example, if the Service Registry offers an OPC UA interface, only the Function Block in the last figure must be re-implemented with the specifics of OPC UA.</p>
+<p>This decoupled architecture allows to quickly implement another type of communication. For example, to connect to the Service Registry with an OPC UA interface, only the Function Block in the last figure needed to be re-implemented with the specifics of OPC UA.</p>
 
-<p>On the top most level, sub-applications were implemented in order to facilitate the user using the library. For example, for registering a service, instead of building from the lowest level, which requires many Function Blocks and connections, an encapsulated sub-application is provided that offers all parameters for it. The following figure shows the sub-application with all parameters to register and unregister a service.</p>
+<p>On the top most level, sub-applications were implemented in order to facilitate the user using the library. For example, for registering a service, instead of building from the lowest level, which requires many Function Blocks and connections, an encapsulated sub-application is provided that offers all parameters for it. The following figure shows the sub-application with all parameters to register and unregister a service using HTTP.</p>
 
 <div><img src="../../html/communication/img/arrowhead/httpRegisterServiceFull.png" alt="Sub-application for registering a service using HTTP"></div>
 
@@ -115,6 +118,17 @@
     				<li><span class="specificText">RegisterServicePartialHTTP: Register a Service using HTTP. The system information is encapsulated</span></li>
     			</ul>
     		</li>
+    		<li>OpcUa
+    			<ul>
+    				<li>QueryServiceOpcUa: Query for Services using OpcUa</li>
+    				<li><span class="specificText">QueryServiceOpcUaSub: Query services using OpcUa with the service defined</span></li>
+    				<li><span class="specificText">QueryServiceOpcUaSubFull: Query services using OpcUa with all service's fields to be defined</span></li>
+    				<li><span class="specificText">RegisterMultipleServicesOpcUa: Register many services with different serviceDefinition and serviceURI </span></li>
+    				<li><span class="specificText">RegisterServiceFullOpcUa: Register a Service using OpcUa. All possible parameters are available to be set</span></li>
+    				<li>RegisterServiceOpcUa: Register Service using OpcUa</li>
+    				<li><span class="specificText">RegisterServicePartialOpcUa: Register a Service using OpcUa. The system information is encapsulated</span></li>
+    			</ul>
+    		</li>
      	</ul>
     </li>
     <li>Orchestrator
@@ -134,9 +148,53 @@
     				<li><span class="specificText">RequestOrchestrationHTTPFull: Request Orchestration using HTTP with all fields from services, system and cloud to be set</span></li>
     			</ul>
     		</li>
+    		<li>OpcUa
+    			<ul>
+    				<li><span class="specificText">GetEndpointFromOrchestrationOpcUaPartial: Get the endpoint at INDEX from a request orchestration response</span></li>
+    				<li><span class="specificText">GetEndpointFromOrchestrationOpcUaFull: Get the endpoint at INDEX from a request orchestration response</span></li>
+    				<li>RequestOrchestrationOpcUa: Request Orchestration Function Block using OpcUa</li>
+    				<li><span class="specificText">RequestOrchestrationOpcUaPartial: Request Orchestration using OpcUa with all fields from services to be set</span></li>
+    				<li><span class="specificText">RequestOrchestrationOpcUaFull: Request Orchestration using OpcUa with all fields from services, system and cloud to be set</span></li>
+    			</ul>
+    		</li>
+    	</ul>
+    </li>
+    <li>Event Handler
+    	<ul>
+    		<li>ArrowheadPublish: Publish event Function Block</li>
+    		<li>ArrowheadPublishAdp: Publish event adapter</li>
+    		<li>FieldsToArrowheadEvent: Transform individual fields to an Arrowhead Event type</li>
+    		<li>FieldsToEventFilter: Transform individual fields to an Arrowhead Event Filter type</li>
+    		<li>FieldsToPublishEvent: Transform individual fields to an Arrowhead Publish Event</li>
+    		<li>SubscribeEvent: Subscribe Event Function Block</li>
+    		<li>SubscribeEventAdp: Subscribe event adapter</li>
+    		<li>HTTP
+    			<ul>
+    				<li>PublishEventHTTP: Publish event using HTTP</li>
+    				<li><span class="specificText">PublishEventHTTPFull: Publish Event using HTTP. All possible parameters are available to be set</span></li>
+    				<li><span class="specificText">PublishEventHTTPPartial: Publish Event using HTTP. The system and event information are encapsulated</span></li>
+    				<li>SubscribeEventHTTP: Subscribe event using HTTP</li>
+    				<li><span class="specificText">SubscribeEventHTTPFull: Publish event using HTTP.  The consumer is encapsulated</span></li>
+    				<li><span class="specificText">SubscribeEventHTTPPartial:Publish event using HTTP.  The consumer is encapsulated</span></li>
+       			</ul>
+    		</li>
+    		<li>OpcUa
+    			<ul>
+    				<li>PublishEventOpcUa: Publish event using OpcUa</li>
+    				<li><span class="specificText">PublishEventOpcUaFull: Publish Event using OpcUa. All possible parameters are available to be set</span></li>
+    				<li><span class="specificText">PublishEventOpcUaPartial: Publish Event using OpcUa. The system and event information are encapsulated</span></li>
+    				<li>SubscribeEventOpcUa: Subscribe event using OpcUa</li>
+    				<li><span class="specificText">SubscribeEventOpcUaFull: Publish event using OpcUa.  The consumer is encapsulated</span></li>
+    				<li><span class="specificText">SubscribeEventOpcUaPartial:Publish event using OpcUa.  The consumer is encapsulated</span></li>
+       			</ul>
+    		</li>
     	</ul>
     </li>
 </ul>
+
+<h2>Examples</h2>
+
+<p>To see some examples on how the Function Blocks are used, you can check the <a href="https://git.eclipse.org/c/4diac/org.eclipse.4diac.examples.git" target="_blank">examples respository</a></p>
 
 <h1>Where to go from here?</h1>
 
