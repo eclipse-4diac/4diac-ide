@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019 Johannes Kepler University Linz, fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,71 +9,112 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Kirill Dorofeev - extended to support on-the-fly transitions and states creation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECStateCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.ECC;
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.requests.LocationRequest;
 import org.eclipse.gef.tools.CreationTool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.ui.IEditorPart;
 
 final class ECCEditorEditDomain extends FBTypeEditDomain {
 	private static class StateCreationTool extends CreationTool {
-		
-		private StateCreationFactory stateFactory = new StateCreationFactory();  
+
+		protected StateCreationFactory stateFactory = new StateCreationFactory();
 		private ActionCreationFactory actionFactory = new ActionCreationFactory();
-		
+
 		public StateCreationTool() {
 			setFactory(stateFactory);
 			setUnloadWhenFinished(false);
 		}
-		
+
 		@Override
 		protected void handleFinished() {
-			super.handleFinished(); 
+			super.handleFinished();
 			handleMove();
 		}
-				
+
 		@Override
 		protected boolean updateTargetUnderMouse() {
 			boolean changed = super.updateTargetUnderMouse();
-			if(changed) {
-				if(getTargetEditPart() instanceof ECStateEditPart || 
-						getTargetEditPart() instanceof ECActionAlgorithmEditPart|| 
-						getTargetEditPart() instanceof ECActionOutputEventEditPart ) {
+			if (changed) {
+				if (getTargetEditPart() instanceof ECStateEditPart
+						|| getTargetEditPart() instanceof ECActionAlgorithmEditPart
+						|| getTargetEditPart() instanceof ECActionOutputEventEditPart) {
 					setFactory(actionFactory);
 				} else {
 					setFactory(stateFactory);
-				}				
-			}			
+				}
+			}
 			return changed;
 		}
-		
+
 		public void setLocationActivation(Point point) {
 			getCurrentInput().setMouseLocation(point.x, point.y);
 			handleMove();
 		}
-		
+
 	}
-	
-	private static class ECCPanningSelectionTool extends AdvancedPanningSelectionTool{
+
+	private static class ECCPanningSelectionTool extends AdvancedPanningSelectionTool {
 		public Point getLastLocation() {
-			return ((LocationRequest)super.getTargetHoverRequest()).getLocation();
+			return ((LocationRequest) super.getTargetHoverRequest()).getLocation();
 		}
 	}
-	
-	private StateCreationTool creationTool = new StateCreationTool();
-	
-	
+
+	private static class TransitionStateCreationTool extends CreationTool {
+		private ECC ecc;
+		private Point point;
+
+		public TransitionStateCreationTool(ECC ecc) {
+			this.ecc = ecc;
+			setFactory(new StateCreationFactory());
+			setUnloadWhenFinished(false);
+		}
+
+		public void setLocationActivation(Point point) {
+			this.point = point;
+			handleMove();
+		}
+
+		public void performCreation() {
+			ECState destState = (ECState) getFactory().getNewObject();
+			destState.setX(point.x);
+			destState.setY(point.y);
+			CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, point, ecc);
+			CreateTransitionCommand createTransitionCommand = new CreateTransitionCommand(sourceState, destState, null);
+			CompoundCommand compCom = new CompoundCommand();
+			compCom.add(createStateCommand);
+			compCom.add(createTransitionCommand);
+			setCurrentCommand(compCom);
+			performCreation(1);
+		}
+	}
+
+	private StateCreationTool stateCreationTool = new StateCreationTool();
+	private TransitionStateCreationTool transitionStateCreationTool = new TransitionStateCreationTool(
+			((ECCEditor) getEditorPart()).getFbType().getECC());
+	private static boolean transition = false;
+	private static boolean createTransitionAndState = false;
+	private static ECState sourceState;
+
 	ECCEditorEditDomain(IEditorPart editorPart, CommandStack commandStack) {
 		super(editorPart, commandStack);
 		setDefaultTool(new ECCPanningSelectionTool());
@@ -81,10 +122,15 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 
 	@Override
 	public void keyDown(KeyEvent keyEvent, EditPartViewer viewer) {
-		if(keyEvent.keyCode == SWT.MOD1) { // Ctrl or Command key was pressed
-			setActiveTool(creationTool);
-			super.keyDown(keyEvent, viewer);
-			creationTool.setLocationActivation(((ECCPanningSelectionTool)getDefaultTool()).getLastLocation());
+		if (keyEvent.keyCode == SWT.MOD1) { // Ctrl or Command key was pressed
+			if (transition) {
+				createTransitionAndState = true;
+				super.keyDown(keyEvent, viewer);
+			} else {
+				setActiveTool(stateCreationTool);
+				super.keyDown(keyEvent, viewer);
+				stateCreationTool.setLocationActivation(((ECCPanningSelectionTool) getDefaultTool()).getLastLocation());
+			}
 		} else {
 			super.keyDown(keyEvent, viewer);
 		}
@@ -92,9 +138,37 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 
 	@Override
 	public void keyUp(KeyEvent keyEvent, EditPartViewer viewer) {
-		if(keyEvent.keyCode == SWT.MOD1) { // Ctrl or Command key was pressed
+		if (keyEvent.keyCode == SWT.MOD1 && !transition) { // Ctrl or Command key was pressed
 			setActiveTool(getDefaultTool());
 		}
 		super.keyUp(keyEvent, viewer);
+	}
+
+	@Override
+	public void mouseDrag(MouseEvent mouseEvent, EditPartViewer viewer) {
+		if (((AdvancedPanningSelectionTool) getDefaultTool()).getTargetEditPart() instanceof ECStateEditPart) {
+			transition = true;
+			sourceState = (ECState) ((ECStateEditPart) (((AdvancedPanningSelectionTool) getDefaultTool())
+					.getTargetEditPart())).getModel();
+		}
+		super.mouseDrag(mouseEvent, viewer);
+	}
+
+	@Override
+	public void mouseUp(MouseEvent mouseEvent, EditPartViewer viewer) {
+		super.mouseUp(mouseEvent, viewer);
+		if (transition) {
+			if (createTransitionAndState && ((AdvancedPanningSelectionTool) getDefaultTool())
+					.getTargetEditPart() instanceof FreeformGraphicalRootEditPart) {
+				transitionStateCreationTool
+						.setLocationActivation(((ECCPanningSelectionTool) getDefaultTool()).getLastLocation());
+				setActiveTool(transitionStateCreationTool);
+				transitionStateCreationTool.performCreation();
+				setActiveTool(getDefaultTool());
+				createTransitionAndState = false;
+			}
+			transition = false;
+			setActiveTool(getDefaultTool());
+		}
 	}
 }
