@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Publish event using OpcUa. The consumer is encapsulated" Name="SubscribeEventOpcUaPartial">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH This program and the accompanying materials are made SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-11-12" Organization="fortiss GmbH" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="" Name="Subscribe" Type="Event"/>
+      <SubAppEvent Comment="" Name="Unsubscribe" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="" Name="Subscribed" Type="Event"/>
+      <SubAppEvent Comment="" Name="Unsubscribed" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Event type, similar to topics in MQTT" Name="eventType" Type="WSTRING"/>
+      <VarDeclaration Comment="The Subscriber ArrowheadSystem, that will consume the new events" Name="consumer" Type="ArrowheadSystem"/>
+      <VarDeclaration ArraySize="10" Comment="List of ArrowheadSystem the Subscriber wants to receive events from" Name="sources" Type="ArrowheadSystem"/>
+      <VarDeclaration Comment="If set, the Subscriber wants to receive events with timestamps after this date-time" Name="startDate" Type="DATE_AND_TIME"/>
+      <VarDeclaration Comment="If set, the Subscriber wants to receive events with timestamps before this date-time" Name="endDate" Type="DATE_AND_TIME"/>
+      <VarDeclaration ArraySize="10" Comment="Metadata about the events, which can be used for further filtering in format key=value" Name="filterMetadata" Type="ANY_ELEMENTARY"/>
+      <VarDeclaration Comment="The URL subpath where the Event Handler should sent the new events to" Name="notifyUri" Type="WSTRING"/>
+      <VarDeclaration Comment="Should the Event Handler filter events based on the metadata" Name="matchMetadata" Type="BOOL"/>
+      <VarDeclaration Comment="Endpoint (IP:PORT/URI) of the Service Registry (not officially in the documentation, but it simplifies the FBs)" Name="EHendpoint" Type="WSTRING"/>
+    </InputVars>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="SubscribeEvent" Type="SubscribeEvent" x="8086.95652173913" y="782.6086956521739"/>
+    <FB Comment="" Name="FieldsToEventFilter" Type="FieldsToEventFilter" x="1826.086956521739" y="-173.91304347826087"/>
+    <FB Comment="" Name="E_SWITCH" Type="E_SWITCH" x="5565.217391304348" y="-695.6521739130435"/>
+    <FB Comment="" Name="E_SR" Type="E_SR" x="1739.1304347826085" y="-869.5652173913043"/>
+    <FB Comment="" Name="SubscribeEventOpcUa" Type="SubscribeEventOpcUa" x="10804.347826086956" y="1047.8260869565217"/>
+    <EventConnections>
+      <Connection Comment="" Destination="Subscribed" Source="SubscribeEvent.Subscribed" dx1="1430.4347826086955"/>
+      <Connection Comment="" Destination="FieldsToEventFilter.REQ" Source="Subscribe" dx1="808.695652173913"/>
+      <Connection Comment="" Destination="FieldsToEventFilter.REQ" Source="Unsubscribe" dx1="917.391304347826"/>
+      <Connection Comment="" Destination="E_SR.S" Source="Subscribe" dx1="204.3478260869565"/>
+      <Connection Comment="" Destination="E_SR.R" Source="Unsubscribe" dx1="339.1304347826087"/>
+      <Connection Comment="" Destination="E_SWITCH.EI" Source="FieldsToEventFilter.CNF" dx1="1230.4347826086955"/>
+      <Connection Comment="" Destination="SubscribeEvent.Subscribe" Source="E_SWITCH.EO1" dx1="300.0"/>
+      <Connection Comment="" Destination="SubscribeEvent.Unsubscribe" Source="E_SWITCH.EO0" dx1="78.26086956521739"/>
+      <Connection Comment="" Destination="Unsubscribed" Source="SubscribeEvent.Unsubscribed" dx1="1430.4347826086955"/>
+    </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="SubscribeEvent.eventFilter" Source="FieldsToEventFilter.eventFilter" dx1="304.3478260869565"/>
+      <Connection Comment="" Destination="FieldsToEventFilter.consumer" Source="consumer" dx1="765.2173913043478"/>
+      <Connection Comment="" Destination="FieldsToEventFilter.eventType" Source="eventType" dx1="430.4347826086956"/>
+      <Connection Comment="" Destination="FieldsToEventFilter.sources" Source="sources" dx1="430.4347826086956"/>
+      <Connection Comment="" Destination="FieldsToEventFilter.startDate" Source="startDate" dx1="430.4347826086956"/>
+      <Connection Comment="" Destination="FieldsToEventFilter.endDate" Source="endDate" dx1="430.4347826086956"/>
+      <Connection Comment="" Destination="FieldsToEventFilter.filterMetadata" Source="filterMetadata" dx1="430.4347826086956"/>
+      <Connection Comment="" Destination="FieldsToEventFilter.notifyUri" Source="notifyUri" dx1="430.4347826086956"/>
+      <Connection Comment="" Destination="FieldsToEventFilter.matchMetadata" Source="matchMetadata" dx1="430.4347826086956"/>
+      <Connection Comment="" Destination="SubscribeEvent.endpoint" Source="EHendpoint" dx1="1691.304347826087"/>
+      <Connection Comment="" Destination="E_SWITCH.G" Source="E_SR.Q" dx1="1660.8695652173913"/>
+    </DataConnections>
+    <AdapterConnections>
+      <Connection Comment="" Destination="SubscribeEventOpcUa.SubscribeEventAdp" Source="SubscribeEvent.SubscribeEventAdp" dx1="773.9130434782609"/>
+    </AdapterConnections>
+  </SubAppNetwork>
+</SubAppType>

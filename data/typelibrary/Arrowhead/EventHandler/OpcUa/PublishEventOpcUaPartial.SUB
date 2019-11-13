@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Publish Event using OpcUa. The system and event information are encapsulated" Name="PublishEventOpcUaPartial">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH This program and the accompanying materials are made SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-11-12" Organization="fortiss GmbH" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="" Name="Publish" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="" Name="Published" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="ArrowheadSystem publishing the event" Name="source" Type="ArrowheadSystem"/>
+      <VarDeclaration Comment="The published event" Name="event" Type="ArrowheadEvent"/>
+      <VarDeclaration Comment="The URL subpath the Event Handler can use to inform the publisher about the results of the event propagation. If null, the Event Handler will not try to send the results" Name="deliveryCompleteUri" Type="WSTRING"/>
+      <VarDeclaration Comment="Endpoint (IP:PORT/URI) of the Event Handler (not officially in the documentation, but it simplifies the FBs)" Name="EHendpoint" Type="WSTRING"/>
+    </InputVars>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="ArrowheadPublish" Type="ArrowheadPublish" x="6956.521739130434" y="695.6521739130435"/>
+    <FB Comment="" Name="FieldsToPublishEvent" Type="FieldsToPublishEvent" x="2173.913043478261" y="-173.91304347826087"/>
+    <FB Comment="" Name="PublishEventOpcUa" Type="PublishEventOpcUa" x="9391.304347826086" y="956.5217391304348"/>
+    <EventConnections>
+      <Connection Comment="" Destination="ArrowheadPublish.publish" Source="FieldsToPublishEvent.CNF" dx1="1147.8260869565217"/>
+      <Connection Comment="" Destination="Published" Source="ArrowheadPublish.published" dx1="1169.5652173913043"/>
+      <Connection Comment="" Destination="FieldsToPublishEvent.REQ" Source="Publish" dx1="439.1304347826087"/>
+    </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="ArrowheadPublish.publishEvent" Source="FieldsToPublishEvent.publishEvent" dx1="826.0869565217391"/>
+      <Connection Comment="" Destination="FieldsToPublishEvent.source" Source="source" dx1="439.1304347826087"/>
+      <Connection Comment="" Destination="FieldsToPublishEvent.event" Source="event" dx1="439.1304347826087"/>
+      <Connection Comment="" Destination="FieldsToPublishEvent.deliveryCompleteUri" Source="deliveryCompleteUri" dx1="439.1304347826087"/>
+      <Connection Comment="" Destination="ArrowheadPublish.endpoint" Source="EHendpoint" dx1="382.6086956521739"/>
+    </DataConnections>
+    <AdapterConnections>
+      <Connection Comment="" Destination="PublishEventOpcUa.publishEvent" Source="ArrowheadPublish.ArrowheadPublishAdp" dx1="408.695652173913"/>
+    </AdapterConnections>
+  </SubAppNetwork>
+</SubAppType>

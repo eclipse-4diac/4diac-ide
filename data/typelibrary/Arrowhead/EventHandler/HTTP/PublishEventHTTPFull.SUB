@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE SubAppType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<SubAppType Comment="Publish Event using HTTP. All possible parameters are available to be set" Name="PublishEventHTTPFull">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH This program and the accompanying materials are made SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-11-12" Organization="fortiss GmbH" Version="1.0"/>
+  <SubAppInterfaceList>
+    <SubAppEventInputs>
+      <SubAppEvent Comment="" Name="Publish" Type="Event"/>
+    </SubAppEventInputs>
+    <SubAppEventOutputs>
+      <SubAppEvent Comment="" Name="Published" Type="Event"/>
+    </SubAppEventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Identification of the system" Name="systemName" Type="WSTRING"/>
+      <VarDeclaration Comment="Address of the offered services" Name="address" Type="WSTRING"/>
+      <VarDeclaration Comment="Port of the of the offered services" Name="port" Type="DINT"/>
+      <VarDeclaration Comment="Authentication info of the system" Name="authenticationInfo" Type="WSTRING"/>
+      <VarDeclaration Comment="The type of the event, an event ID of sorts" Name="type" Type="WSTRING"/>
+      <VarDeclaration Comment="String data of the event" Name="payload" Type="WSTRING"/>
+      <VarDeclaration Comment="Date and time of the event" Name="timestamp" Type="DATE_AND_TIME"/>
+      <VarDeclaration ArraySize="10" Comment="Key=value pairs of additional data about the event" Name="eventMetadata" Type="WSTRING"/>
+      <VarDeclaration Comment="The URL subpath the Event Handler can use to inform the publisher about the results of the event propagation. If null, the Event Handler will not try to send the results" Name="deliveryCompleteUri" Type="WSTRING"/>
+      <VarDeclaration Comment="Endpoint (IP:PORT/URI) of the Event Handler (not officially in the documentation, but it simplifies the FBs)" Name="EHendpoint" Type="WSTRING"/>
+    </InputVars>
+  </SubAppInterfaceList>
+  <SubAppNetwork>
+    <FB Comment="" Name="FieldsToArrowheadEvent" Type="FieldsToArrowheadEvent" x="1826.086956521739" y="739.1304347826086"/>
+    <FB Comment="" Name="FieldsToArrowheadSystem" Type="FieldsToArrowheadSystem" x="1826.086956521739" y="-260.8695652173913"/>
+    <SubApp Comment="" Name="PublishEventHTTPPartial" Type="PublishEventHTTPPartial" x="6521.739130434782" y="1130.4347826086955"/>
+    <EventConnections>
+      <Connection Comment="" Destination="FieldsToArrowheadEvent.REQ" Source="FieldsToArrowheadSystem.CNF" dx1="56.52173913043478" dx2="56.52173913043478" dy="739.1304347826086"/>
+      <Connection Comment="" Destination="Published" Source="PublishEventHTTPPartial.Published" dx1="591.3043478260869"/>
+      <Connection Comment="" Destination="PublishEventHTTPPartial.Publish" Source="FieldsToArrowheadEvent.CNF" dx1="2504.3478260869565"/>
+      <Connection Comment="" Destination="FieldsToArrowheadSystem.REQ" Source="Publish" dx1="465.2173913043478"/>
+    </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="PublishEventHTTPPartial.source" Source="FieldsToArrowheadSystem.arrowheadSystem" dx1="1578.2608695652173"/>
+      <Connection Comment="" Destination="PublishEventHTTPPartial.event" Source="FieldsToArrowheadEvent.arrowheadEvent" dx1="1486.9565217391303"/>
+      <Connection Comment="" Destination="FieldsToArrowheadSystem.systemName" Source="systemName" dx1="400.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadSystem.address" Source="address"/>
+      <Connection Comment="" Destination="FieldsToArrowheadSystem.port" Source="port" dx1="400.0"/>
+      <Connection Comment="" Destination="FieldsToArrowheadSystem.authenticationInfo" Source="authenticationInfo"/>
+      <Connection Comment="" Destination="FieldsToArrowheadEvent.type" Source="type" dx1="752.1739130434783"/>
+      <Connection Comment="" Destination="FieldsToArrowheadEvent.payload" Source="payload" dx1="652.1739130434783"/>
+      <Connection Comment="" Destination="FieldsToArrowheadEvent.timestamp" Source="timestamp" dx1="534.7826086956521"/>
+      <Connection Comment="" Destination="FieldsToArrowheadEvent.eventMetadata" Source="eventMetadata" dx1="400.0"/>
+      <Connection Comment="" Destination="PublishEventHTTPPartial.deliveryCompleteUri" Source="deliveryCompleteUri" dx1="295.65217391304344"/>
+      <Connection Comment="" Destination="PublishEventHTTPPartial.EHendpoint" Source="EHendpoint" dx1="200.0"/>
+    </DataConnections>
+  </SubAppNetwork>
+</SubAppType>
