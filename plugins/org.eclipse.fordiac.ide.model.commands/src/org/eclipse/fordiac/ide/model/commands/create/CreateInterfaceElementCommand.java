@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
+ *               2019 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  *
  * Contributors:
  *   Monika Wenger - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr - command now contains newly created element
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.commands.create;
@@ -24,9 +26,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
-public class CreateInterfaceElementCommand extends Command {
+public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 	private boolean isInput;
 	private DataType dataType;
 	private IInterfaceElement interfaceElement;
@@ -147,5 +149,10 @@ public class CreateInterfaceElementCommand extends Command {
 			cmd = new AdapterCreateCommand(10, 10, (AdapterDeclaration) interfaceElement,
 					(CompositeFBType) interfaceList.eContainer());
 		}
+	}
+
+	@Override
+	public Object getCreatedElement() {
+		return interfaceElement;
 	}
 }

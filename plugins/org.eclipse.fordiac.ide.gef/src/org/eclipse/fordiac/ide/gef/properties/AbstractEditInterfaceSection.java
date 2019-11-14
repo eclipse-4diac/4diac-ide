@@ -381,4 +381,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	protected int getInsertingIndex(IInterfaceElement interfaceElement, EList interfaceList) {
 		return interfaceList.indexOf(interfaceElement) + 1;
 	}
+
+	protected abstract int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput);
 }
