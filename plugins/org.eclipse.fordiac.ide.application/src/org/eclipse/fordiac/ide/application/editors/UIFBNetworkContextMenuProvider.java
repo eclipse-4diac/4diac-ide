@@ -12,6 +12,9 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Filip Andren, Waldemar Eisenmenger,
  *   Monika Wenger - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed issues in pop-up menu with sub-app types
+ *               - show icons for folders, and FB
+ *               - fixed issue in submenu generation when fb types are in the
+ *                 root folder
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
@@ -189,6 +192,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		MenuManager submenu = new MenuManager(text);
 		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
 		fillMenuForPalletteGroup(submenu, palette.getRootGroup().getSubGroups());
+		addFBMenuEntries(palette.getRootGroup(), submenu);
 	}
 
 	private boolean useChangeFBType = false;
@@ -198,19 +202,22 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 		for (PaletteGroup group : subGroups) {
 			MenuManager submenu = createSubMenu(group);
-
-			for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
-
-				if (entry instanceof FBTypePaletteEntry || entry instanceof SubApplicationTypePaletteEntry) {
-					Action action = getActionForPaletteEntry(entry);
-					if (null != action) {
-						setActionIcon(action, entry);
-						submenu.add(action);
-					}
-				}
-			}
+			addFBMenuEntries(group, submenu);
 			if (!submenu.isEmpty()) {
 				insertTypeEntry.add(submenu);
+			}
+		}
+	}
+
+	private void addFBMenuEntries(PaletteGroup group, MenuManager submenu) {
+		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
+
+			if (entry instanceof FBTypePaletteEntry || entry instanceof SubApplicationTypePaletteEntry) {
+				Action action = getActionForPaletteEntry(entry);
+				if (null != action) {
+					setActionIcon(action, entry);
+					submenu.add(action);
+				}
 			}
 		}
 	}
