@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH
- * 
+ * 				 2019 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,8 +9,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   			 - made the getImageForFile public so it can be used by the
+ *                 palette, some code cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
@@ -45,12 +47,12 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	@Override
 	public Image getImage(Object element) {
 		if (element instanceof IFile) {
-			return getImageForFBFile((IFile) element);
+			return getImageForFile((IFile) element);
 		}
 		return super.getImage(element);
 	}
 
-	private static Image getImageForFBFile(IFile element) {
+	public static Image getImageForFile(IFile element) {
 		Image image = null;
 
 		if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
@@ -58,37 +60,41 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		} else if (TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
 			image = FordiacImage.ICON_SUB_APP.getImage();
 		} else if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			Palette palette = FBTypeUtils.getPalletteForFBTypeFile(element);
-			if (palette != null) {
-				PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, element);
-
-				if (null != entry) {
-					FBType type = ((FBTypePaletteEntry) entry).getFBType();
-					if (type instanceof BasicFBType) {
-						image = FordiacImage.ICON_BASIC_FB.getImage();
-					} else if (type instanceof CompositeFBType) {
-						image = FordiacImage.ICON_COMPOSITE_FB.getImage();
-					} else if (type instanceof ServiceInterfaceFBType) {
-						image = FordiacImage.ICON_SIFB.getImage();
-					}
-				} else {
-					// partly load file to determine type
-					image = checkUnloadedFBType(element);
-				}
-			}
+			image = getImageForFBTypeFile(element);
 		}
 
-		if (null != image) {
-			if (fileHasProblems(element)) {
-				return FordiacImage.getErrorOverlayImage(image);
-			}
+		if (null != image && fileHasProblems(element)) {
+			return FordiacImage.getErrorOverlayImage(image);
 		}
 
 		return image;
 	}
 
+	private static Image getImageForFBTypeFile(IFile element) {
+		Image image = null;
+		Palette palette = FBTypeUtils.getPalletteForFBTypeFile(element);
+		if (palette != null) {
+			PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, element);
+
+			if (null != entry) {
+				FBType type = ((FBTypePaletteEntry) entry).getFBType();
+				if (type instanceof BasicFBType) {
+					image = FordiacImage.ICON_BASIC_FB.getImage();
+				} else if (type instanceof CompositeFBType) {
+					image = FordiacImage.ICON_COMPOSITE_FB.getImage();
+				} else if (type instanceof ServiceInterfaceFBType) {
+					image = FordiacImage.ICON_SIFB.getImage();
+				}
+			} else {
+				// partly load file to determine type
+				image = checkUnloadedFBType(element);
+			}
+		}
+		return image;
+	}
+
 	private static boolean fileHasProblems(IFile element) {
-		IMarker problems[] = null;
+		IMarker[] problems = null;
 		try {
 			problems = element.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 		} catch (CoreException e) {
