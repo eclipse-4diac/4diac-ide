@@ -316,7 +316,6 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected IMenuManager createHWMappingMenu() {
 		MenuManager submenu = new MenuManager(Messages.UIFBNetworkContextMenuProvider_LABEL_HardwareMapping);
 		GEFActionConstants.addStandardActionGroups(submenu);
@@ -326,30 +325,44 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
 
 		if (isFBorSubAppSelected(selection) && activeEditor instanceof FBNetworkEditor) {
-			FBNetworkEditor editor = (FBNetworkEditor) activeEditor;
-			List<Device> devices = editor.getSystem().getSystemConfiguration().getDevices();
+			FBNetworkEditor fbEditor = (FBNetworkEditor) activeEditor;
+			List<Device> devices = fbEditor.getSystem().getSystemConfiguration().getDevices();
 
 			for (Device device : devices) {
-				MenuManager devmenu = new MenuManager(device.getName() == null ? "Device" : device.getName()); //$NON-NLS-1$
-				GEFActionConstants.addStandardActionGroups(devmenu);
+				MenuManager devMenu = createDeviceMenuEntry(device);
 
-				List<Resource> resources = device.getResource();
-				for (Resource res : resources) {
-					if (!res.isDeviceTypeResource()) {
-						IAction action = getMapAction(activeEditor, res);
-						if (action != null) {
-							editor.getSelActions().add(action.getId());
-							if (action.isEnabled()) {
-								action.setChecked(checkIsCurrentlyMappedTo(res));
-								devmenu.appendToGroup(GEFActionConstants.GROUP_REST, action);
-							}
-						}
+				for (Resource res : device.getResource()) {
+					IAction action = createResourceMappingEntry(fbEditor, res);
+					if (null != action) {
+						devMenu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 					}
 				}
-				submenu.appendToGroup(GEFActionConstants.GROUP_REST, devmenu);
+				submenu.appendToGroup(GEFActionConstants.GROUP_REST, devMenu);
 			}
 		}
 		return submenu;
+	}
+
+	private static MenuManager createDeviceMenuEntry(Device device) {
+		MenuManager devMenu = new MenuManager(device.getName() == null ? "Device" : device.getName()); //$NON-NLS-1$
+		devMenu.setImageDescriptor(FordiacImage.ICON_DEVICE.getImageDescriptor());
+		GEFActionConstants.addStandardActionGroups(devMenu);
+		return devMenu;
+	}
+
+	@SuppressWarnings("unchecked")
+	private IAction createResourceMappingEntry(FBNetworkEditor fbEditor, Resource res) {
+		if (!res.isDeviceTypeResource()) {
+			IAction action = getMapAction(fbEditor, res);
+			if (action != null) {
+				fbEditor.getSelActions().add(action.getId());
+				if (action.isEnabled()) {
+					action.setChecked(checkIsCurrentlyMappedTo(res));
+					return action;
+				}
+			}
+		}
+		return null;
 	}
 
 	private static boolean isFBorSubAppSelected(ISelection selection) {
@@ -368,6 +381,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		if (res != null) {
 			IAction action;
 			action = new MapAction(activeEditor, res);
+			action.setImageDescriptor(FordiacImage.ICON_RESOURCE.getImageDescriptor());
 			return action;
 		}
 		return null;
