@@ -1,6 +1,10 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH
+<<<<<<< HEAD
  * 				 2019 Johannes Kepler University Linz
+=======
+ * 				 2019 Johannes Kepler University
+>>>>>>> 1.11.x
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,7 +14,12 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+<<<<<<< HEAD
  *   			 - cleaned up issues reported by sonarlint
+=======
+ *   			 - made the getImageForFile public so it can be used by the
+ *                 palette, some code cleanup
+>>>>>>> 1.11.x
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
@@ -46,12 +55,12 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	@Override
 	public Image getImage(Object element) {
 		if (element instanceof IFile) {
-			return getImageForFBFile((IFile) element);
+			return getImageForFile((IFile) element);
 		}
 		return super.getImage(element);
 	}
 
-	private static Image getImageForFBFile(IFile element) {
+	public static Image getImageForFile(IFile element) {
 		Image image = null;
 
 		if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
@@ -59,16 +68,17 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		} else if (TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
 			image = FordiacImage.ICON_SUB_APP.getImage();
 		} else if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			image = getFBTypeImage(element);
+			image = getImageForFBTypeFile(element);
 		}
 
 		if (null != image && fileHasProblems(element)) {
 			return FordiacImage.getErrorOverlayImage(image);
 		}
+
 		return image;
 	}
 
-	private static Image getFBTypeImage(IFile element) {
+	private static Image getImageForFBTypeFile(IFile element) {
 		FBType type = getFBTypeFromFile(element);
 
 		if (type instanceof BasicFBType) {
@@ -84,7 +94,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static boolean fileHasProblems(IFile element) {
-		IMarker problems[] = null;
+		IMarker[] problems = null;
 		try {
 			problems = element.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 		} catch (CoreException e) {

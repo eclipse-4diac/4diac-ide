@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2014, 2016 Profactor GmbH, TU Wien ACIN fortiss GmbH,
- * 				 2018 Johannes Kepler University		
+ * 				 2018 Johannes Kepler University
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -14,9 +14,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.IFigure;
@@ -25,18 +23,14 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentTypeField;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.LayerConstants;
@@ -109,16 +103,14 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 	public FBType getCastedFBTypeModel() {
 		return getEditorInput().getContent();
 	}
-	
-	private FBTypeEditorInput getEditorInput(){
-		return (FBTypeEditorInput)getModel();
-	}
-	
-	private PaletteEntry getPaletteEntry(){
-		return getEditorInput().getPaletteEntry();
+
+	private FBTypeEditorInput getEditorInput() {
+		return (FBTypeEditorInput) getModel();
 	}
 
-	private final Map<IInterfaceElement, CommentTypeField> commentMapping = new HashMap<>();
+	private PaletteEntry getPaletteEntry() {
+		return getEditorInput().getPaletteEntry();
+	}
 
 	@Override
 	protected List<?> getModelChildren() {
@@ -133,34 +125,9 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 		createValues(fB);
 		children.add(fB);
 
-		for (IInterfaceElement elem: fB.getInterface().getAllInterfaceElements()) {
+		for (IInterfaceElement elem : fB.getInterface().getAllInterfaceElements()) {
 			children.add(createTestElement(fB, elem));
 
-		}
-
-		InterfaceList il = getCastedFBTypeModel().getInterfaceList();
-		if (il != null) {
-			for (VarDeclaration varDecl : il.getInputVars()) {
-				CommentTypeField field = new CommentTypeField(varDecl);
-				children.add(field);
-				commentMapping.put(varDecl, field);
-			}
-			for (Event varDecl : il.getEventInputs()) {
-				CommentTypeField field = new CommentTypeField(varDecl);
-				children.add(field);
-				commentMapping.put(varDecl, field);
-			}
-			for (VarDeclaration varDecl : il.getOutputVars()) {
-				CommentTypeField field = new CommentTypeField(varDecl);
-				children.add(field);
-				commentMapping.put(varDecl, field);
-			}
-			for (Event varDecl : il.getEventOutputs()) {
-				CommentTypeField field = new CommentTypeField(varDecl);
-				children.add(field);
-				commentMapping.put(varDecl, field);
-			}
-		} else {
 		}
 
 		return children;
