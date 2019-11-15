@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2015, 2017 fortiss GmbH
- * 
+ * 				 2019 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,8 +9,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl 
- *   - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *               - added automatic tree expansion on searching
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
@@ -24,8 +25,6 @@ import org.eclipse.fordiac.ide.typemanagement.util.TypeListPatternFilter;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -46,14 +45,14 @@ public class FBPaletteViewer extends PaletteViewer {
 	private CommonViewer commonViewer;
 	private PatternFilter patternFilter = null;
 	private final String navigatorId;
-	
+	private Object[] expandedElements;
+
 	public FBPaletteViewer(String navigatorId) {
 		super();
 		this.navigatorId = navigatorId;
 	}
 
-	public void createTypeLibTreeControl(Composite parent,
-			IProject project) {
+	public void createTypeLibTreeControl(Composite parent, IProject project) {
 
 		Composite container = new Composite(parent, SWT.NONE);
 
@@ -78,32 +77,25 @@ public class FBPaletteViewer extends PaletteViewer {
 			}
 
 		});
-		text.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				setSearchFilter(text.getText());
-			}
-		});
+		text.addModifyListener(e -> setSearchFilter(text.getText()));
 
 		createCommonViewer(container, project);
 
 		setControl(container);
-		
+
 		setupResourceChangeListener(project);
 	}
 
 	private void createCommonViewer(Composite container, IProject project) {
-		commonViewer = new CommonViewer(navigatorId,
-				container, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
+		commonViewer = new CommonViewer(navigatorId, container, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
 
 		INavigatorContentService contentService = NavigatorContentServiceFactory.INSTANCE
 				.createContentService(navigatorId, commonViewer);
 
 		contentService.createCommonContentProvider();
 		contentService.createCommonLabelProvider();
-		
-		INavigatorFilterService filterService = commonViewer
-				.getNavigatorContentService().getFilterService();
+
+		INavigatorFilterService filterService = commonViewer.getNavigatorContentService().getFilterService();
 		ViewerFilter[] visibleFilters = filterService.getVisibleFilters(true);
 		for (int i = 0; i < visibleFilters.length; i++) {
 			commonViewer.addFilter(visibleFilters[i]);
@@ -111,75 +103,80 @@ public class FBPaletteViewer extends PaletteViewer {
 
 		commonViewer.setSorter(new CommonViewerSorter());
 		commonViewer.addFilter(new TypeListPatternFilter());
-		
+
 		commonViewer.getControl().addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseUp(MouseEvent e) {
-				// currently nothing todo here				
+				// currently nothing to do here
 			}
-			
+
 			@Override
 			public void mouseDown(MouseEvent e) {
 				// set the focus on this part on any mouse click, fixes issue in drag and drop
 				commonViewer.getControl().forceFocus();
 			}
-			
+
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				// currently nothing todo here				
+				// currently nothing to do here
 			}
 		});
 
-		
-		if(project.getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)){
+		if (project.getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)) {
 			commonViewer.setInput(TypeLibrary.getToolLibFolder());
-		}else{
-			commonViewer.setInput(project);			
+		} else {
+			commonViewer.setInput(project);
 		}
 
-		GridData fillBoth = new GridData();
-		fillBoth.horizontalAlignment = GridData.FILL;
-		fillBoth.grabExcessHorizontalSpace = true;
-		fillBoth.verticalAlignment = GridData.FILL;
-		fillBoth.grabExcessVerticalSpace = true;
+		GridData fillBoth = new GridData(GridData.FILL, GridData.FILL, true, true);
 		commonViewer.getControl().setLayoutData(fillBoth);
 	}
 
 	private void setSearchFilter(String string) {
-		if (patternFilter == null)	{
+		if (null == patternFilter) {
 			patternFilter = new TypeListPatternFilter();
 			commonViewer.addFilter(patternFilter);
-		}		
+		}
 		patternFilter.setPattern(string);
 		commonViewer.refresh(false);
+		handleTreeExpansion(string);
+	}
+
+	private void handleTreeExpansion(String string) {
+		if (!string.isEmpty()) {
+			if (null == expandedElements) {
+				expandedElements = commonViewer.getExpandedElements();
+			}
+			commonViewer.expandAll();
+		} else {
+			commonViewer.setExpandedElements(expandedElements);
+			expandedElements = null;
+		}
 	}
 
 	@Override
 	protected void hookControl() {
 		// do nothing here! Especially do not call super.hookControl!
 	}
-	
+
 	private void setupResourceChangeListener(final IProject project) {
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {			
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
 			@Override
 			public void resourceChanged(IResourceChangeEvent event) {
 				if (event.getType() != IResourceChangeEvent.POST_CHANGE) {
-		            return;
+					return;
 				}
 				IResourceDelta rootDelta = event.getDelta();
 				IResourceDelta docDelta = rootDelta.findMember(project.getFullPath());
 				if (docDelta == null) {
-		            return;
+					return;
 				}
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						if(null != commonViewer && !commonViewer.getControl().isDisposed()){
-							commonViewer.refresh();
-						}						
+				Display.getDefault().asyncExec(() -> {
+					if (null != commonViewer && !commonViewer.getControl().isDisposed()) {
+						commonViewer.refresh();
 					}
-				});				
+				});
 			}
 		});
 	}
