@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -39,32 +39,25 @@ public class WithEditPart extends AbstractConnectionEditPart {
 
 	private boolean isInput() {
 		With with = getCastedModel();
-		if(null != with){
+		if (null != with) {
 			Event event = (Event) with.eContainer();
-			if( null != event){
+			if (null != event) {
 				return event.isIsInput();
-			}else{
+			} else {
 				return false;
-			}		
+			}
 		}
 		return false;
 	}
 
-	private int calculateInputWithPos() {
-		int pos;
+	private int calculateWithPos() {
+		int pos = 1;
 		With with = getCastedModel();
 		Event event = (Event) with.eContainer();
 		InterfaceList interfaceList = (InterfaceList) event.eContainer();
-		pos = interfaceList.getEventInputs().indexOf(event) + 1;
-		return pos;
-	}
-
-	private int calculateOutputWithPos() {
-		int pos;
-		With with = getCastedModel();
-		Event event = (Event) with.eContainer();
-		InterfaceList interfaceList = (InterfaceList) event.eContainer();
-		pos = interfaceList.getEventOutputs().indexOf(event) + 1;
+		if (null != interfaceList) {
+			pos += ((isInput()) ? interfaceList.getEventInputs() : interfaceList.getEventOutputs()).indexOf(event);
+		}
 		return pos;
 	}
 
@@ -72,8 +65,7 @@ public class WithEditPart extends AbstractConnectionEditPart {
 	protected void createEditPolicies() {
 		// // Selection handle edit policy.
 		// // Makes the connection show a feedback, when selected by the user.
-		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE,
-				new ConnectionEndpointEditPolicy());
+		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new ConnectionEndpointEditPolicy());
 		// // Allows the removal of the connection model element
 		installEditPolicy(EditPolicy.CONNECTION_ROLE, new ConnectionEditPolicy() {
 			@Override
@@ -83,10 +75,9 @@ public class WithEditPart extends AbstractConnectionEditPart {
 		});
 	}
 
-
 	@Override
 	protected IFigure createFigure() {
-		PolylineConnection connection = (PolylineConnection) super.createFigure();		
+		PolylineConnection connection = (PolylineConnection) super.createFigure();
 		updateConnection(connection);
 		return connection;
 	}
@@ -95,6 +86,7 @@ public class WithEditPart extends AbstractConnectionEditPart {
 		int h = 15;
 		float scale = 0.2f;
 		PointList rect = new PointList();
+		int withPos = calculateWithPos();
 		rect.addPoint(-h, -h);
 		rect.addPoint(-h, h);
 		rect.addPoint(h, h);
@@ -103,9 +95,9 @@ public class WithEditPart extends AbstractConnectionEditPart {
 		rect.addPoint(0, -h);
 		if (isInput()) {
 			rect.addPoint(0, -h - 45);
-			rect.addPoint(0, +h + 45 * calculateInputWithPos());
+			rect.addPoint(0, +h + 45 * withPos);
 		} else {
-			rect.addPoint(0, -h - 45 * calculateOutputWithPos());
+			rect.addPoint(0, -h - 45 * withPos);
 			rect.addPoint(0, +h + 45);
 		}
 		rect.addPoint(0, -h);
@@ -117,11 +109,11 @@ public class WithEditPart extends AbstractConnectionEditPart {
 		targetRect.addPoint(-h, -h);
 		targetRect.addPoint(0, -h);
 		if (isInput()) {
-			targetRect.addPoint(0, -h - 45 * calculateInputWithPos());
+			targetRect.addPoint(0, -h - 45 * withPos);
 			targetRect.addPoint(0, +h + 45);
 		} else {
 			targetRect.addPoint(0, -h - 45);
-			targetRect.addPoint(0, +h + 45 * calculateOutputWithPos());
+			targetRect.addPoint(0, +h + 45 * withPos);
 		}
 		targetRect.addPoint(0, -h);
 		PolygonDecoration rectDec = new PolygonDecoration();
@@ -146,8 +138,7 @@ public class WithEditPart extends AbstractConnectionEditPart {
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(
-					propertyChangeListener);
+			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		}
 	}
 
@@ -155,15 +146,15 @@ public class WithEditPart extends AbstractConnectionEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			Activator.getDefault().getPreferenceStore()
-					.removePropertyChangeListener(propertyChangeListener);
+			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		}
 	}
-	
+
 	public void updateWithPos() {
-		if(null != getCastedModel().eContainer()){
-			//if the container is null our model got already removed from it. We don't need to perform updates.
-			updateConnection((PolylineConnection)getFigure());	
+		if (null != getCastedModel().eContainer()) {
+			// if the container is null our model got already removed from it. We don't need
+			// to perform updates.
+			updateConnection((PolylineConnection) getFigure());
 			refreshSourceAnchor();
 			refreshTargetAnchor();
 		}

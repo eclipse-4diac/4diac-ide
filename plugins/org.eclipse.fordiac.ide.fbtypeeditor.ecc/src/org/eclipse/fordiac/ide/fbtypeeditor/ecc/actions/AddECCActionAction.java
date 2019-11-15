@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2016 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -71,7 +71,7 @@ public class AddECCActionAction extends SelectionAction {
 	private static ECState getState(List selectedObjects) {
 		ECState state = null;
 		if (selectedObjects.get(0) instanceof ECStateEditPart) {
-			state = ((ECStateEditPart) selectedObjects.get(0)).getCastedModel();
+			state = ((ECStateEditPart) selectedObjects.get(0)).getModel();
 		} else if (selectedObjects.get(0) instanceof ECActionAlgorithmEditPart) {
 			ECActionAlgorithmEditPart part = (ECActionAlgorithmEditPart) selectedObjects.get(0);
 			state = part.getAction().getECState();

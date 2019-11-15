@@ -18,7 +18,7 @@ public class AttributeSection extends AbstractAttributeSection {
 	protected ConfigurableObject getInputType(Object input) {
 		Object inputHelper = (input instanceof EditPart) ? ((EditPart) input).getModel() : input;
 		if (inputHelper instanceof ConfigurableObject) {
-			return (ConfigurableObject) input;
+			return (ConfigurableObject) inputHelper;
 		}
 		return null;
 	}

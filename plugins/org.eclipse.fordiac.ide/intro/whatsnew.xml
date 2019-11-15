@@ -60,7 +60,12 @@
        	</group>
        	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.11.1">   
             <text>
-            The first maintenance release for 4diac 1.11 provides 12 usability and bug fixes for 4diac IDE.
+            The first maintenance release for 4diac 1.11 provides 13 usability and bug fixes for 4diac IDE.
+            </text>
+        </group>
+        <group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 1.11.2">   
+            <text>
+            The first maintenance release for 4diac 1.11 provides 9 usability and bug fixes for 4diac IDE identified and fixed during the 4days of 4diac summit.
             </text>
         </group>    
    	</extensionContent>

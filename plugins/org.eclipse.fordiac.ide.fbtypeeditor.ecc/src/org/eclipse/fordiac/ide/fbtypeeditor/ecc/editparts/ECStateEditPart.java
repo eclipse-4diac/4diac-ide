@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2013 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -71,7 +71,7 @@ import org.eclipse.swt.SWT;
 
 public class ECStateEditPart extends AbstractDirectEditableEditPart implements NodeEditPart {
 	private List<Object> stateChildren;
-	
+
 	private final EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -104,8 +104,8 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			getCastedModel().eAdapters().add(adapter);
-			getCastedModel().getECC().eAdapters().add(eccAdapter);
+			getModel().eAdapters().add(adapter);
+			getModel().getECC().eAdapters().add(eccAdapter);
 			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		}
 	}
@@ -114,10 +114,10 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			getCastedModel().eAdapters().remove(adapter);
+			getModel().eAdapters().remove(adapter);
 
-			if (getCastedModel().getECC() != null) {
-				getCastedModel().getECC().eAdapters().remove(eccAdapter);
+			if (getModel().getECC() != null) {
+				getModel().getECC().eAdapters().remove(eccAdapter);
 			}
 			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		}
@@ -198,9 +198,9 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 			layout.setHorizontal(true);
 			layout.setMinorAlignment(OrderedLayout.ALIGN_CENTER);
 			stateLabel.setLayoutManager(layout);
-			nameLabel = new GradientLabel(((ZoomScalableFreeformRootEditPart)getRoot()).getZoomManager());
-			stateLabel.add(nameLabel); 
-			nameLabel.setText(getCastedModel().getName());
+			nameLabel = new GradientLabel(((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager());
+			stateLabel.add(nameLabel);
+			nameLabel.setText(getModel().getName());
 			nameLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
 			nameLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
 			nameLabel.setOpaque(true);
@@ -218,7 +218,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 		/**
 		 * Sets the checks for action.
-		 * 
+		 *
 		 * @param hasAction the new checks for action
 		 */
 		public void setHasAction(final boolean hasAction) {
@@ -260,7 +260,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	}
 
 	private boolean isInitialState() {
-		return getCastedModel().isStartState();
+		return getModel().isStartState();
 	}
 
 	@Override
@@ -280,7 +280,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		} else {
 			stateChildren.clear();
 		}
-		for (ECAction ecAction : getCastedModel().getECAction()) {
+		for (ECAction ecAction : getModel().getECAction()) {
 			stateChildren.add(new ECActionAlgorithm(ecAction));
 			stateChildren.add(new ECActionOutputEvent(ecAction));
 		}
@@ -300,7 +300,10 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
 			@Override
 			protected Command getDeleteCommand(final GroupRequest request) {
-				return new DeleteECStateCommand(getCastedModel());
+				if (!getModel().getECC().getStart().equals(getModel())) {
+					return new DeleteECStateCommand(getModel());
+				}
+				return null;
 			}
 		});
 		// Highlight In and Out-Transitions of the selected State
@@ -319,26 +322,27 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		super.performRequest(request);
 	}
 
-	public ECState getCastedModel() {
-		return (ECState) getModel();
+	@Override
+	public ECState getModel() {
+		return (ECState) super.getModel();
 	}
 
 	@Override
 	protected void refreshVisuals() {
-		Rectangle rect = new Rectangle(getCastedModel().getX(), getCastedModel().getY(), -1, -1);
+		Rectangle rect = new Rectangle(getModel().getX(), getModel().getY(), -1, -1);
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rect);
-		((ECStateFigure) getFigure()).setHasAction(!getCastedModel().getECAction().isEmpty());
+		((ECStateFigure) getFigure()).setHasAction(!getModel().getECAction().isEmpty());
 		super.refreshVisuals();
 	}
 
 	@Override
 	protected List<ECTransition> getModelSourceConnections() {
-		return getCastedModel().getOutTransitions();
+		return getModel().getOutTransitions();
 	}
 
 	@Override
 	protected List<ECTransition> getModelTargetConnections() {
-		return getCastedModel().getInTransitions();
+		return getModel().getInTransitions();
 	}
 
 	@Override
@@ -374,7 +378,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	@Override
 	public INamedElement getINamedElement() {
-		return getCastedModel();
+		return getModel();
 	}
 
 	/** The property change listener. */
@@ -403,7 +407,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	}
 
 	@Override
-	protected DirectEditManager createDirectEditManager() {		 
+	protected DirectEditManager createDirectEditManager() {
 		Label l = getNameLabel();
 		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
 				new IdentifierVerifyListener());

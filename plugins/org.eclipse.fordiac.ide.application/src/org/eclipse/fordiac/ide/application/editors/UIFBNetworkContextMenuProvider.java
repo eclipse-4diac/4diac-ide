@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
  * 				 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -12,6 +12,9 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Filip Andren, Waldemar Eisenmenger,
  *   Monika Wenger - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed issues in pop-up menu with sub-app types
+ *               - show icons for folders, and FB
+ *               - fixed issue in submenu generation when fb types are in the
+ *                 root folder
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
@@ -41,8 +44,12 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -55,12 +62,14 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
@@ -76,7 +85,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 	/**
 	 * Instantiates a new uIFB network context menu provider.
-	 * 
+	 *
 	 * @param viewer      the viewer
 	 * @param registry    the registry
 	 * @param zoomManager the zoom manager
@@ -100,7 +109,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ContextMenuProvider#buildContextMenu(org.eclipse.jface.
 	 * action.IMenuManager)
 	 */
@@ -183,46 +192,74 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		MenuManager submenu = new MenuManager(text);
 		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
 		fillMenuForPalletteGroup(submenu, palette.getRootGroup().getSubGroups());
+		addFBMenuEntries(palette.getRootGroup(), submenu);
 	}
 
 	private boolean useChangeFBType = false;
 
 	private void fillMenuForPalletteGroup(MenuManager insertTypeEntry, EList<PaletteGroup> subGroups) {
-
-		MenuManager submenu;
-		Action action;
-
 		// TODO sort groups alphabetically
 
 		for (PaletteGroup group : subGroups) {
-			submenu = new MenuManager(group.getLabel());
-			fillMenuForPalletteGroup(submenu, group.getSubGroups());
-
-			for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
-
-				if (entry instanceof FBTypePaletteEntry || entry instanceof SubApplicationTypePaletteEntry) {
-					if (useChangeFBType) {
-						action = (Action) getRegistry().getAction(entry.getFile().getFullPath().toString().concat("_") //$NON-NLS-1$
-								.concat(UpdateFBTypeAction.ID));
-					} else {
-						action = (Action) getRegistry().getAction(entry.getFile().getFullPath().toString());
-					}
-					if (null == action) {
-						if (useChangeFBType) {
-							action = createChangeFBTypeAction(entry);
-						} else {
-							action = createFBInsertAction(entry);
-						}
-					}
-					if (null != action) {
-						submenu.add(action);
-					}
-				}
-			}
+			MenuManager submenu = createSubMenu(group);
+			addFBMenuEntries(group, submenu);
 			if (!submenu.isEmpty()) {
 				insertTypeEntry.add(submenu);
 			}
 		}
+	}
+
+	private void addFBMenuEntries(PaletteGroup group, MenuManager submenu) {
+		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
+
+			if (entry instanceof FBTypePaletteEntry || entry instanceof SubApplicationTypePaletteEntry) {
+				Action action = getActionForPaletteEntry(entry);
+				if (null != action) {
+					setActionIcon(action, entry);
+					submenu.add(action);
+				}
+			}
+		}
+	}
+
+	private MenuManager createSubMenu(PaletteGroup group) {
+		MenuManager submenu = new MenuManager(group.getLabel());
+		fillMenuForPalletteGroup(submenu, group.getSubGroups());
+		submenu.setImageDescriptor(
+				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER));
+		return submenu;
+	}
+
+	private Action getActionForPaletteEntry(org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry) {
+		Action action;
+		if (useChangeFBType) {
+			action = (Action) getRegistry().getAction(entry.getFile().getFullPath().toString().concat("_") //$NON-NLS-1$
+					.concat(UpdateFBTypeAction.ID));
+		} else {
+			action = (Action) getRegistry().getAction(entry.getFile().getFullPath().toString());
+		}
+		if (null == action) {
+			if (useChangeFBType) {
+				action = createChangeFBTypeAction(entry);
+			} else {
+				action = createFBInsertAction(entry);
+			}
+		}
+		return action;
+	}
+
+	private static void setActionIcon(Action action, PaletteEntry entry) {
+		ImageDescriptor image = null;
+		if (entry.getType() instanceof SubAppType) {
+			image = FordiacImage.ICON_SUB_APP.getImageDescriptor();
+		} else if (entry.getType() instanceof BasicFBType) {
+			image = FordiacImage.ICON_BASIC_FB.getImageDescriptor();
+		} else if (entry.getType() instanceof CompositeFBType) {
+			image = FordiacImage.ICON_COMPOSITE_FB.getImageDescriptor();
+		} else {
+			image = FordiacImage.ICON_SIFB.getImageDescriptor();
+		}
+		action.setImageDescriptor(image);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -279,7 +316,6 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected IMenuManager createHWMappingMenu() {
 		MenuManager submenu = new MenuManager(Messages.UIFBNetworkContextMenuProvider_LABEL_HardwareMapping);
 		GEFActionConstants.addStandardActionGroups(submenu);
@@ -289,30 +325,44 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
 
 		if (isFBorSubAppSelected(selection) && activeEditor instanceof FBNetworkEditor) {
-			FBNetworkEditor editor = (FBNetworkEditor) activeEditor;
-			List<Device> devices = editor.getSystem().getSystemConfiguration().getDevices();
+			FBNetworkEditor fbEditor = (FBNetworkEditor) activeEditor;
+			List<Device> devices = fbEditor.getSystem().getSystemConfiguration().getDevices();
 
 			for (Device device : devices) {
-				MenuManager devmenu = new MenuManager(device.getName() == null ? "Device" : device.getName()); //$NON-NLS-1$
-				GEFActionConstants.addStandardActionGroups(devmenu);
+				MenuManager devMenu = createDeviceMenuEntry(device);
 
-				List<Resource> resources = device.getResource();
-				for (Resource res : resources) {
-					if (!res.isDeviceTypeResource()) {
-						IAction action = getMapAction(activeEditor, res);
-						if (action != null) {
-							editor.getSelActions().add(action.getId());
-							if (action.isEnabled()) {
-								action.setChecked(checkIsCurrentlyMappedTo(res));
-								devmenu.appendToGroup(GEFActionConstants.GROUP_REST, action);
-							}
-						}
+				for (Resource res : device.getResource()) {
+					IAction action = createResourceMappingEntry(fbEditor, res);
+					if (null != action) {
+						devMenu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 					}
 				}
-				submenu.appendToGroup(GEFActionConstants.GROUP_REST, devmenu);
+				submenu.appendToGroup(GEFActionConstants.GROUP_REST, devMenu);
 			}
 		}
 		return submenu;
+	}
+
+	private static MenuManager createDeviceMenuEntry(Device device) {
+		MenuManager devMenu = new MenuManager(device.getName() == null ? "Device" : device.getName()); //$NON-NLS-1$
+		devMenu.setImageDescriptor(FordiacImage.ICON_DEVICE.getImageDescriptor());
+		GEFActionConstants.addStandardActionGroups(devMenu);
+		return devMenu;
+	}
+
+	@SuppressWarnings("unchecked")
+	private IAction createResourceMappingEntry(FBNetworkEditor fbEditor, Resource res) {
+		if (!res.isDeviceTypeResource()) {
+			IAction action = getMapAction(fbEditor, res);
+			if (action != null) {
+				fbEditor.getSelActions().add(action.getId());
+				if (action.isEnabled()) {
+					action.setChecked(checkIsCurrentlyMappedTo(res));
+					return action;
+				}
+			}
+		}
+		return null;
 	}
 
 	private static boolean isFBorSubAppSelected(ISelection selection) {
@@ -331,6 +381,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		if (res != null) {
 			IAction action;
 			action = new MapAction(activeEditor, res);
+			action.setImageDescriptor(FordiacImage.ICON_RESOURCE.getImageDescriptor());
 			return action;
 		}
 		return null;
@@ -338,9 +389,9 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 	/**
 	 * Check is currently mapped to.
-	 * 
+	 *
 	 * @param res the res
-	 * 
+	 *
 	 * @return true, if successful
 	 */
 	private boolean checkIsCurrentlyMappedTo(final Resource res) {

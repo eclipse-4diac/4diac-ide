@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2012 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -61,10 +61,9 @@ public class ECStateLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
-
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
-		ModifiedNonResizeableEditPolicy editPolicy = new ModifiedNonResizeableEditPolicy(0, new Insets(0)){
+		ModifiedNonResizeableEditPolicy editPolicy = new ModifiedNonResizeableEditPolicy(0, new Insets(0)) {
 			@Override
 			protected Command getMoveCommand(ChangeBoundsRequest request) {
 				return getActionMoveCommand(request);
@@ -73,11 +72,11 @@ public class ECStateLayoutEditPolicy extends XYLayoutEditPolicy {
 		editPolicy.setDragAllowed(true);
 		return editPolicy;
 	}
-	
+
 	@Override
 	protected Command getAddCommand(Request generic) {
-		//move actions between states
-		if(generic instanceof ChangeBoundsRequest) {
+		// move actions between states
+		if (generic instanceof ChangeBoundsRequest) {
 			return getActionMoveCommand((ChangeBoundsRequest) generic);
 		}
 		return null;
@@ -87,16 +86,16 @@ public class ECStateLayoutEditPolicy extends XYLayoutEditPolicy {
 		Command cmd = null;
 		ECState targetState = null;
 		ECAction action = null;
-		int index = -1; 
+		int index = -1;
 		if (getHost() instanceof ECStateEditPart) {
-			targetState = ((ECStateEditPart)getHost()).getCastedModel();
+			targetState = ((ECStateEditPart) getHost()).getModel();
 			index = targetState.getECAction().size();
-			if(!((ChangeBoundsRequest)request).getEditParts().isEmpty()) {
-				if(((ChangeBoundsRequest)request).getEditParts().get(0) instanceof ECActionAlgorithmEditPart) {
-					action = ((ECActionAlgorithmEditPart)((ChangeBoundsRequest)request).getEditParts().get(0)).getAction();
+			if (!request.getEditParts().isEmpty()) {
+				if (request.getEditParts().get(0) instanceof ECActionAlgorithmEditPart) {
+					action = ((ECActionAlgorithmEditPart) request.getEditParts().get(0)).getAction();
 				}
-				if(((ChangeBoundsRequest)request).getEditParts().get(0) instanceof ECActionOutputEventEditPart) {
-					action = ((ECActionOutputEventEditPart)((ChangeBoundsRequest)request).getEditParts().get(0)).getAction();
+				if (request.getEditParts().get(0) instanceof ECActionOutputEventEditPart) {
+					action = ((ECActionOutputEventEditPart) request.getEditParts().get(0)).getAction();
 				}
 			}
 			cmd = new ActionMoveCommand(action, targetState, index);

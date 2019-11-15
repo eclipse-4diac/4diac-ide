@@ -50,7 +50,7 @@ public class StateSection extends AbstractECSection {
 	@Override
 	protected Object getInputType(Object input) {
 		if (input instanceof ECStateEditPart) {
-			return ((ECStateEditPart) input).getCastedModel();
+			return ((ECStateEditPart) input).getModel();
 		}
 		if (input instanceof ECState) {
 			return input;
