@@ -7,7 +7,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.ui;bundle-version="[1.11.0,2.0.0)"
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.11.1.qualifier
+Bundle-Version: 1.11.2.qualifier
 Bundle-Name: Runtime (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.runtime.Activator
 Bundle-ManifestVersion: 2
