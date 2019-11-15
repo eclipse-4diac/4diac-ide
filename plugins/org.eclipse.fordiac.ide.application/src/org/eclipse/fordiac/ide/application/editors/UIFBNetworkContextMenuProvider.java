@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
  * 				 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -41,8 +41,12 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.AdvancedPanningSelectionTool;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -55,12 +59,14 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
@@ -76,7 +82,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 	/**
 	 * Instantiates a new uIFB network context menu provider.
-	 * 
+	 *
 	 * @param viewer      the viewer
 	 * @param registry    the registry
 	 * @param zoomManager the zoom manager
@@ -100,7 +106,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ContextMenuProvider#buildContextMenu(org.eclipse.jface.
 	 * action.IMenuManager)
 	 */
@@ -188,33 +194,17 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 	private boolean useChangeFBType = false;
 
 	private void fillMenuForPalletteGroup(MenuManager insertTypeEntry, EList<PaletteGroup> subGroups) {
-
-		MenuManager submenu;
-		Action action;
-
 		// TODO sort groups alphabetically
 
 		for (PaletteGroup group : subGroups) {
-			submenu = new MenuManager(group.getLabel());
-			fillMenuForPalletteGroup(submenu, group.getSubGroups());
+			MenuManager submenu = createSubMenu(group);
 
 			for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
 
 				if (entry instanceof FBTypePaletteEntry || entry instanceof SubApplicationTypePaletteEntry) {
-					if (useChangeFBType) {
-						action = (Action) getRegistry().getAction(entry.getFile().getFullPath().toString().concat("_") //$NON-NLS-1$
-								.concat(UpdateFBTypeAction.ID));
-					} else {
-						action = (Action) getRegistry().getAction(entry.getFile().getFullPath().toString());
-					}
-					if (null == action) {
-						if (useChangeFBType) {
-							action = createChangeFBTypeAction(entry);
-						} else {
-							action = createFBInsertAction(entry);
-						}
-					}
+					Action action = getActionForPaletteEntry(entry);
 					if (null != action) {
+						setActionIcon(action, entry);
 						submenu.add(action);
 					}
 				}
@@ -223,6 +213,46 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 				insertTypeEntry.add(submenu);
 			}
 		}
+	}
+
+	private MenuManager createSubMenu(PaletteGroup group) {
+		MenuManager submenu = new MenuManager(group.getLabel());
+		fillMenuForPalletteGroup(submenu, group.getSubGroups());
+		submenu.setImageDescriptor(
+				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER));
+		return submenu;
+	}
+
+	private Action getActionForPaletteEntry(org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry) {
+		Action action;
+		if (useChangeFBType) {
+			action = (Action) getRegistry().getAction(entry.getFile().getFullPath().toString().concat("_") //$NON-NLS-1$
+					.concat(UpdateFBTypeAction.ID));
+		} else {
+			action = (Action) getRegistry().getAction(entry.getFile().getFullPath().toString());
+		}
+		if (null == action) {
+			if (useChangeFBType) {
+				action = createChangeFBTypeAction(entry);
+			} else {
+				action = createFBInsertAction(entry);
+			}
+		}
+		return action;
+	}
+
+	private static void setActionIcon(Action action, PaletteEntry entry) {
+		ImageDescriptor image = null;
+		if (entry.getType() instanceof SubAppType) {
+			image = FordiacImage.ICON_SUB_APP.getImageDescriptor();
+		} else if (entry.getType() instanceof BasicFBType) {
+			image = FordiacImage.ICON_BASIC_FB.getImageDescriptor();
+		} else if (entry.getType() instanceof CompositeFBType) {
+			image = FordiacImage.ICON_COMPOSITE_FB.getImageDescriptor();
+		} else {
+			image = FordiacImage.ICON_SIFB.getImageDescriptor();
+		}
+		action.setImageDescriptor(image);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -338,9 +368,9 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 	/**
 	 * Check is currently mapped to.
-	 * 
+	 *
 	 * @param res the res
-	 * 
+	 *
 	 * @return true, if successful
 	 */
 	private boolean checkIsCurrentlyMappedTo(final Resource res) {
