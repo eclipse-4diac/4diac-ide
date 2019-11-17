@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,9 +9,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *   - initial API and implementation and/or initial documentation
- *   Alois Zoitl - added diagram font preference 
+ *   Alois Zoitl - added diagram font preference
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
+import org.eclipse.fordiac.ide.gef.tools.ScrollingDragEditPartsTracker;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -43,9 +44,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.DirectEditRequest;
@@ -218,7 +221,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	/**
 	 * Returns the label wich contains the instance name of a FB.
-	 * 
+	 *
 	 * @return the label
 	 */
 	public Label getInstanceNameLabel() {
@@ -232,7 +235,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	 * Returns an <code>IPropertyChangeListener</code> with implemented
 	 * <code>propertyChange()</code>. e.g. a color change event repaints the
 	 * FunctionBlock.
-	 * 
+	 *
 	 * @return the preference change listener
 	 */
 	@Override
@@ -382,6 +385,11 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			}
 		}
 		super.setTransparency(value);
+	}
+
+	@Override
+	public DragTracker getDragTracker(Request request) {
+		return new ScrollingDragEditPartsTracker(this);
 	}
 
 }

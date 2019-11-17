@@ -12,6 +12,7 @@ Export-Package: org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.gef.properties,
  org.eclipse.fordiac.ide.gef.router,
  org.eclipse.fordiac.ide.gef.ruler,
+ org.eclipse.fordiac.ide.gef.tools,
  org.eclipse.fordiac.ide.gef.utilities
 Require-Bundle: org.eclipse.gef,
  org.eclipse.ui,

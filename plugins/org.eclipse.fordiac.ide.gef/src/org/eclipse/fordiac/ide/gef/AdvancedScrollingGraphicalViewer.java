@@ -59,10 +59,14 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 	}
 
 	private Point getNewScrollPosition(MouseEvent me) {
-		Point newLocation = getFigureCanvas().getViewport().getViewLocation();
+		Point newLocation = getViewLocation();
 		newLocation.x += getScrollDelta(me.x, getControl().getBounds().x, getControl().getBounds().width);
 		newLocation.y += getScrollDelta(me.y, getControl().getBounds().y, getControl().getBounds().height);
 		return newLocation;
+	}
+
+	public Point getViewLocation() {
+		return getFigureCanvas().getViewport().getViewLocation();
 	}
 
 	private static int getScrollDelta(int mousePos, int controllPos, int length) {

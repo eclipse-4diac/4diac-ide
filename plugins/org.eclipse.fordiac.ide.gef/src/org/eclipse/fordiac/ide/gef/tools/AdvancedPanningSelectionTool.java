@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2012 Profactor GbmH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util;
+package org.eclipse.fordiac.ide.gef.tools;
 
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.FigureCanvas;
@@ -40,7 +40,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 
 	/**
 	 * Checks if is moved.
-	 * 
+	 *
 	 * @return true, if is moved
 	 */
 	public boolean isMoved() {
@@ -57,9 +57,8 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 
 	/**
 	 * Returns <code>true</code> if spacebar condition was accepted.
-	 * 
-	 * @param e
-	 *          the key event
+	 *
+	 * @param e the key event
 	 * @return true if the space bar was the key event.
 	 */
 
@@ -90,7 +89,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 
 	/**
 	 * Returns the cursor used under normal conditions.
-	 * 
+	 *
 	 * @see #setDefaultCursor(Cursor)
 	 * @return the default cursor
 	 */
@@ -107,9 +106,8 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 */
 	@Override
 	protected boolean handleButtonDown(int which) {
-		if ((which == 3 && getCurrentViewer().getControl() instanceof FigureCanvas) &&
-			 (stateTransition(STATE_INITIAL, PAN)) &&
-				 (stateTransition(PAN, PAN_IN_PROGRESS))) {
+		if ((which == 3 && getCurrentViewer().getControl() instanceof FigureCanvas)
+				&& (stateTransition(STATE_INITIAL, PAN)) && (stateTransition(PAN, PAN_IN_PROGRESS))) {
 			refreshCursor();
 			viewLocation = ((FigureCanvas) getCurrentViewer().getControl()).getViewport().getViewLocation();
 			updateTargetRequest();
@@ -124,18 +122,16 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 		}
 		if (which == 1 && getCurrentViewer().getControl() instanceof FigureCanvas
 				&& stateTransition(PAN, PAN_IN_PROGRESS)) {
-			viewLocation = ((FigureCanvas) getCurrentViewer().getControl())
-					.getViewport().getViewLocation();
+			viewLocation = ((FigureCanvas) getCurrentViewer().getControl()).getViewport().getViewLocation();
 			return true;
 		}
-		
-		if((2 == which) && (getCurrentViewer().getControl() instanceof FigureCanvas)){
+
+		if ((2 == which) && (getCurrentViewer().getControl() instanceof FigureCanvas)) {
 			isSpaceBarDown = true;
 			if (stateTransition(STATE_INITIAL, PAN)) {
 				stateTransition(PAN, PAN_IN_PROGRESS);
 				refreshCursor();
-				viewLocation = ((FigureCanvas) getCurrentViewer().getControl())
-						.getViewport().getViewLocation();
+				viewLocation = ((FigureCanvas) getCurrentViewer().getControl()).getViewport().getViewLocation();
 			}
 			return true;
 		}
@@ -149,8 +145,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	protected boolean handleButtonUp(int which) {
 		if (which == 3 && stateTransition(PAN_IN_PROGRESS, STATE_INITIAL)) {
 			refreshCursor();
-			Point currentLocation = ((FigureCanvas) getCurrentViewer().getControl())
-					.getViewport().getViewLocation();
+			Point currentLocation = ((FigureCanvas) getCurrentViewer().getControl()).getViewport().getViewLocation();
 
 			if (currentLocation.equals(viewLocation)) {
 				moved = false;
@@ -169,8 +164,8 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 			refreshCursor();
 			return true;
 		}
-		
-		if (2 == which){
+
+		if (2 == which) {
 			if (stateTransition(PAN_IN_PROGRESS, STATE_INITIAL)) {
 				isSpaceBarDown = false;
 				refreshCursor();
@@ -186,13 +181,11 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 */
 	@Override
 	protected boolean handleDrag() {
-		if (isInState(PAN_IN_PROGRESS)
-				&& getCurrentViewer().getControl() instanceof FigureCanvas) {
+		if (isInState(PAN_IN_PROGRESS) && getCurrentViewer().getControl() instanceof FigureCanvas) {
 			FigureCanvas canvas = (FigureCanvas) getCurrentViewer().getControl();
-			canvas.scrollTo(viewLocation.x - getDragMoveDelta().width, viewLocation.y
-					- getDragMoveDelta().height);
+			canvas.scrollTo(viewLocation.x - getDragMoveDelta().width, viewLocation.y - getDragMoveDelta().height);
 			return true;
-		} 
+		}
 		return super.handleDrag();
 	}
 
@@ -220,7 +213,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 				refreshCursor();
 			}
 			return true;
-		} 
+		}
 		if (stateTransition(PAN, STATE_INITIAL)) {
 			refreshCursor();
 			isSpaceBarDown = false;
@@ -249,7 +242,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 
 	/**
 	 * Returns the current x, y position of the mouse cursor.
-	 * 
+	 *
 	 * @return the mouse location
 	 */
 	@Override
@@ -257,7 +250,9 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 		return new Point(getCurrentInput().getMouseLocation());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see org.eclipse.gef.tools.TargetingTool#getTargetEditPart()
 	 */
 	@Override
