@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2015 TU Wien ACIN, fortiss GmbH
- * 
+ *               2019 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,8 @@
  * Contributors:
  *   Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr
+ *     - command now returns newly created elements
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
@@ -20,12 +23,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
 /**
  * The Class CreateInternalVariableCommand.
  */
-public class CreateInternalVariableCommand extends Command {
+public class CreateInternalVariableCommand extends AbstractCreationCommand {
 
 	/** The data type. */
 	private final DataType dataType;
@@ -34,24 +37,21 @@ public class CreateInternalVariableCommand extends Command {
 	private final BasicFBType fbType;
 
 	private VarDeclaration varDecl;
-	
+
 	/**
 	 * Instantiates a new creates the input variable command.
-	 * 
-	 * @param dataType
-	 *            the data type
-	 * @param fbType
-	 *            the fb type
+	 *
+	 * @param dataType the data type
+	 * @param fbType   the fb type
 	 */
 	public CreateInternalVariableCommand(final BasicFBType fbType) {
 		this.dataType = DataTypeLibrary.getInstance().getType("BOOL"); //$NON-NLS-1$
 		this.fbType = fbType;
 	}
 
-
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -70,7 +70,7 @@ public class CreateInternalVariableCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -82,14 +82,18 @@ public class CreateInternalVariableCommand extends Command {
 		return varDecl;
 	}
 
-
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override
 	public void redo() {
 		fbType.getInternalVars().add(varDecl);
+	}
+
+	@Override
+	public Object getCreatedElement() {
+		return varDecl;
 	}
 }

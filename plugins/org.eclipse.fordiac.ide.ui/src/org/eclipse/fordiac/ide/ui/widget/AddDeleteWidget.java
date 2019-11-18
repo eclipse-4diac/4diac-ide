@@ -8,12 +8,15 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Alois Zoitl - initial implementation
+ * Bianca Wiesmayr - enhanced add functionality
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
+import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -81,7 +84,7 @@ public class AddDeleteWidget {
 		deleteButton.addListener(SWT.Selection, deleteListener);
 	}
 
-	public void bindToTableViewer(TableViewer viewer, CommandExecutor executor, CommandProvider addCommand,
+	public void bindToTableViewer(TableViewer viewer, CommandExecutor executor, CreationCommandProvider addCommand,
 			CommandProvider deleteCommand) {
 
 		Listener createListener = getAddListener(viewer, executor, addCommand);
@@ -130,20 +133,20 @@ public class AddDeleteWidget {
 		};
 	}
 
-	@SuppressWarnings("unchecked")
 	private static Listener getAddListener(TableViewer viewer, CommandExecutor executor,
-			CommandProvider commandProvider) {
+			CreationCommandProvider commandProvider) {
 		return ev -> {
-			if (viewer.getStructuredSelection().isEmpty()) {
-				executor.executeCommand(commandProvider.getCommand(null));
-				viewer.refresh();
-			} else {
-				Command cmd = commandProvider.getCommand(
-						viewer.getStructuredSelection().toList().get(viewer.getStructuredSelection().size() - 1));
-				executor.executeCommand(cmd);
-				viewer.setSelection(null);
-				viewer.refresh();
-			}
+			AbstractCreationCommand cmd = commandProvider.getCommand(getReferencedElement(viewer));
+			executor.executeCommand(cmd);
+			viewer.refresh();
+			viewer.setSelection(new StructuredSelection(cmd.getCreatedElement()));
 		};
+	}
+
+	private static Object getReferencedElement(TableViewer viewer) {
+		if (!viewer.getStructuredSelection().isEmpty()) {
+			return viewer.getStructuredSelection().toList().get(viewer.getStructuredSelection().size() - 1);
+		}
+		return null;
 	}
 }
