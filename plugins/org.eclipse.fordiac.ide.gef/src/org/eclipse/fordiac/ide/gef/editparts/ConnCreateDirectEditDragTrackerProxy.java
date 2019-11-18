@@ -1,5 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2018 fortiss GmbH
+ *				 2019 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,11 +10,13 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   			 - handle scrolling during connection creation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import java.util.Map;
 
+import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
@@ -29,22 +33,30 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
 public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
-	
+
 	private static final class FordiacConnectionDragCreatinTool extends ConnectionDragCreationTool {
-		
+
 		public FordiacConnectionDragCreatinTool() {
 			super();
 			setDefaultCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
 			setDisabledCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_NO));
 		}
+
+		@Override
+		public void mouseDrag(MouseEvent me, EditPartViewer viewer) {
+			super.mouseDrag(me, viewer);
+			if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
+				((AdvancedScrollingGraphicalViewer) viewer).checkScrollPositionDuringDrag(me);
+			}
+		}
 	}
 
 	private ConnectionDragCreationTool connectionTool;
 	private SelectEditPartTracker editPartTracker;
-	
+
 	public ConnCreateDirectEditDragTrackerProxy(EditPart editPart) {
-	    this.connectionTool = new FordiacConnectionDragCreatinTool();
-	    this.editPartTracker = new SelectEditPartTracker(editPart);
+		this.connectionTool = new FordiacConnectionDragCreatinTool();
+		this.editPartTracker = new SelectEditPartTracker(editPart);
 	}
 
 	@Override
@@ -142,16 +154,16 @@ public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
 		connectionTool.nativeDragStarted(event, viewer);
 		editPartTracker.nativeDragStarted(event, viewer);
 	}
- 
+
 	@Override
 	public void setEditDomain(EditDomain domain) {
-		connectionTool.setEditDomain(domain);		
-		editPartTracker.setEditDomain(domain);		
+		connectionTool.setEditDomain(domain);
+		editPartTracker.setEditDomain(domain);
 	}
 
 	@Override
 	public void setViewer(EditPartViewer viewer) {
-		connectionTool.setViewer(viewer);		
+		connectionTool.setViewer(viewer);
 		editPartTracker.setViewer(viewer);
 	}
 
@@ -170,7 +182,7 @@ public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
 	@Override
 	public void setProperties(@SuppressWarnings("rawtypes") Map properties) {
 		connectionTool.setProperties(properties);
-		editPartTracker.setProperties(properties);		
+		editPartTracker.setProperties(properties);
 	}
 
 	@Override
