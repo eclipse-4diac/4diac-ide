@@ -18,8 +18,9 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
@@ -76,25 +77,29 @@ public class CopyEditPartsAction extends SelectionAction {
 	}
 
 	protected List<Object> getSelectedTemplates() {
+		Set<Connection> connectionSet = new HashSet<>();
 		List<Object> templates = new ArrayList<>();
 		for (Object obj : getSelectedObjects()) {
 			if (obj instanceof EditPart) {
 				Object model = ((EditPart) obj).getModel();
 				if (model instanceof FBNetworkElement) {
 					templates.add(model);
-					templates.addAll(getAllFBNElementConnections((FBNetworkElement) model));
+					templates.addAll(getAllFBNElementConnections((FBNetworkElement) model, connectionSet));
 				}
 			}
 		}
 		return templates;
 	}
 
-	private static Collection<ConnectionReference> getAllFBNElementConnections(FBNetworkElement model) {
+	private static Collection<ConnectionReference> getAllFBNElementConnections(FBNetworkElement model,
+			Set<Connection> connectionSet) {
 		List<ConnectionReference> connections = new ArrayList<>();
 
 		for (IInterfaceElement elem : model.getInterface().getAllInterfaceElements()) {
-			connections.addAll(getConnectionList(elem).stream().map(conn -> new ConnectionReference(conn))
-					.collect(Collectors.toList()));
+			getConnectionList(elem).stream().filter(conn -> !connectionSet.contains(conn)).forEach(conn -> {
+				connectionSet.add(conn);
+				connections.add(new ConnectionReference(conn));
+			});
 		}
 		return connections;
 	}
