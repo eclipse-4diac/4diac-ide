@@ -36,7 +36,8 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	protected CreateInterfaceElementCommand newCreateCommand(IInterfaceElement interfaceElement, boolean isInput) {
 		DataType last = getLastUsedDataType(getType().getInterface(), isInput, interfaceElement);
 		int pos = getInsertingIndex(interfaceElement, isInput);
-		return new CreateSubAppInterfaceElementCommand(last, getType().getInterface(), isInput, pos);
+		return new CreateSubAppInterfaceElementCommand(last, getCreationName(interfaceElement),
+				getType().getInterface(), isInput, pos);
 	}
 
 	@Override

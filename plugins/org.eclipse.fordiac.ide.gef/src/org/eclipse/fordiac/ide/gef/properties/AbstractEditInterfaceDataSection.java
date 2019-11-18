@@ -52,12 +52,14 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (null != interfaceElement) {
 			return interfaceElement.getType();
 		}
-		if (getDataList(interfaceList, isInput).isEmpty()) {
-			return getDataList(interfaceList, isInput).get(getDataList(interfaceList, isInput).size() - 1).getType();
+		EList<VarDeclaration> dataList = getDataList(interfaceList, isInput);
+		if (!dataList.isEmpty()) {
+			return dataList.get(dataList.size() - 1).getType();
 		}
-		return DataTypeLibrary.getInstance().getType("bool");//$NON-NLS-1$ // bool is defaul
+		return DataTypeLibrary.getInstance().getType("bool");//$NON-NLS-1$ // bool is default
 	}
 
+	@Override
 	protected int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput) {
 		if (null != interfaceElement) {
 			InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();

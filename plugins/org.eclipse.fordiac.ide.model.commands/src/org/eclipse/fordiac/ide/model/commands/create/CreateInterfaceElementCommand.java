@@ -37,12 +37,23 @@ public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 	private int index;
 	private InterfaceList interfaceList;
 	private AdapterCreateCommand cmd;
+	private String name;
 
 	public CreateInterfaceElementCommand(DataType dataType, InterfaceList interfaceList, boolean isInput, int index) {
 		this.isInput = isInput;
 		this.dataType = dataType;
 		this.index = index;
 		this.interfaceList = interfaceList;
+		this.name = dataType.getName();
+	}
+
+	public CreateInterfaceElementCommand(DataType dataType, String name, InterfaceList interfaceList, boolean isInput,
+			int index) {
+		this.isInput = isInput;
+		this.dataType = dataType;
+		this.index = index;
+		this.interfaceList = interfaceList;
+		this.name = (null != name) ? name : dataType.getName();
 	}
 
 	protected boolean isInput() {
@@ -114,7 +125,7 @@ public class CreateInterfaceElementCommand extends AbstractCreationCommand {
 		if (null != cmd) {
 			cmd.execute();
 		}
-		interfaceElement.setName(NameRepository.createUniqueName(interfaceElement, dataType.getName()));
+		interfaceElement.setName(NameRepository.createUniqueName(interfaceElement, name));
 	}
 
 	@Override

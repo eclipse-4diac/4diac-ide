@@ -31,7 +31,8 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	protected CreateInterfaceElementCommand newCreateCommand(IInterfaceElement interfaceElement, boolean isInput) {
 		AdapterType last = getLastUsedAdapterType(getType().getInterfaceList(), interfaceElement, isInput);
 		int pos = getInsertingIndex(interfaceElement, isInput);
-		return new CreateInterfaceElementCommand(last, getType().getInterfaceList(), isInput, pos);
+		return new CreateInterfaceElementCommand(last, getCreationName(interfaceElement), getType().getInterfaceList(),
+				isInput, pos);
 	}
 
 	@Override

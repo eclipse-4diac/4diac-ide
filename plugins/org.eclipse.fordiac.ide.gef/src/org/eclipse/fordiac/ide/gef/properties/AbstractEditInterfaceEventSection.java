@@ -52,8 +52,9 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		if (null != interfaceElement) {
 			return interfaceElement.getType();
 		}
-		if (!getEventList(interfaceList, isInput).isEmpty()) {
-			return getEventList(interfaceList, isInput).get(getEventList(interfaceList, isInput).size() - 1).getType();
+		EList<Event> eventList = getEventList(interfaceList, isInput);
+		if (!eventList.isEmpty()) {
+			return eventList.get(eventList.size() - 1).getType();
 		}
 		return EventTypeLibrary.getInstance().getType(fillTypeCombo()[0]);
 	}

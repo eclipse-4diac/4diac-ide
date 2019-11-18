@@ -383,4 +383,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	}
 
 	protected abstract int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput);
+
+	protected String getCreationName(IInterfaceElement interfaceElement) {
+		return (null != interfaceElement) ? interfaceElement.getName() : null;
+	}
 }

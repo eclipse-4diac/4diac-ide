@@ -32,7 +32,8 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 	protected CreateInterfaceElementCommand newCreateCommand(IInterfaceElement interfaceElement, boolean isInput) {
 		DataType last = getLastUsedEventType(getType().getInterfaceList(), isInput, interfaceElement);
 		int pos = getInsertingIndex(interfaceElement, isInput);
-		return new CreateInterfaceElementCommand(last, getType().getInterfaceList(), isInput, pos);
+		return new CreateInterfaceElementCommand(last, getCreationName(interfaceElement), getType().getInterfaceList(),
+				isInput, pos);
 	}
 
 	@Override

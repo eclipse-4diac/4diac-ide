@@ -25,20 +25,26 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 			int index) {
 		super(dataType, interfaceList, isInput, index);
 	}
-	
-	public CreateInterfaceElementCommand getMirroredElement() { 
+
+	public CreateSubAppInterfaceElementCommand(DataType dataType, String name, InterfaceList interfaceList,
+			boolean isInput, int index) {
+		super(dataType, name, interfaceList, isInput, index);
+	}
+
+	public CreateInterfaceElementCommand getMirroredElement() {
 		return mirroredElement;
 	}
 
 	@Override
 	public void execute() {
 		super.execute();
-		if(getInterfaceList().getFBNetworkElement().isMapped()) {
-			//the subapp is mapped so we need to created the interface element also in the opposite entry
-			mirroredElement = new CreateInterfaceElementCommand(getDataType(), getInterfaceList().getFBNetworkElement().getOpposite().getInterface(),
-					isInput(), getIndex());
+		if (getInterfaceList().getFBNetworkElement().isMapped()) {
+			// the subapp is mapped so we need to created the interface element also in the
+			// opposite entry
+			mirroredElement = new CreateInterfaceElementCommand(getDataType(),
+					getInterfaceList().getFBNetworkElement().getOpposite().getInterface(), isInput(), getIndex());
 			mirroredElement.execute();
-			//Set the same name as the one we have also on the mirrored
+			// Set the same name as the one we have also on the mirrored
 			mirroredElement.getInterfaceElement().setName(getInterfaceElement().getName());
 		}
 	}
@@ -46,7 +52,7 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 	@Override
 	public void redo() {
 		super.redo();
-		if(null != mirroredElement) {
+		if (null != mirroredElement) {
 			mirroredElement.redo();
 		}
 	}
@@ -54,7 +60,7 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 	@Override
 	public void undo() {
 		super.undo();
-		if(null != mirroredElement) {
+		if (null != mirroredElement) {
 			mirroredElement.undo();
 		}
 	}
