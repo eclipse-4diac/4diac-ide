@@ -20,14 +20,17 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateTransitionCommand
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.ConnCreateDirectEditDragTrackerProxy;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.SharedCursors;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.requests.LocationRequest;
+import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.gef.tools.CreationTool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -77,6 +80,14 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 		public Point getLastLocation() {
 			return ((LocationRequest) super.getTargetHoverRequest()).getLocation();
 		}
+
+		public void changeCursor() {
+			if (getDragTracker() instanceof ConnCreateDirectEditDragTrackerProxy) {
+				ConnectionDragCreationTool tool = ((ConnCreateDirectEditDragTrackerProxy) getDragTracker())
+						.getConnectionTool();
+				tool.setDisabledCursor(SharedCursors.CURSOR_TREE_ADD);
+			}
+		}
 	}
 
 	private static class TransitionStateCreationTool extends CreationTool {
@@ -125,6 +136,7 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 		if (keyEvent.keyCode == SWT.MOD1) { // Ctrl or Command key was pressed
 			if (transition) {
 				createTransitionAndState = true;
+				((ECCPanningSelectionTool) getDefaultTool()).changeCursor();
 				super.keyDown(keyEvent, viewer);
 			} else {
 				setActiveTool(stateCreationTool);
