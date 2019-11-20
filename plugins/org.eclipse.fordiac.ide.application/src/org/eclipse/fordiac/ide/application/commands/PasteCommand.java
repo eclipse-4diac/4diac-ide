@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -202,23 +201,31 @@ public class PasteCommand extends Command {
 		return cmd;
 	}
 
-	private static void copyConnection(ConnectionReference connRef, FBNetworkElement copiedSrc,
-			FBNetworkElement copiedDest, AbstractConnectionCreateCommand cmd) {
+	private void copyConnection(ConnectionReference connRef, FBNetworkElement copiedSrc, FBNetworkElement copiedDest,
+			AbstractConnectionCreateCommand cmd) {
 		// if the copied src or copied destination are null use the original
 		IInterfaceElement source = checkForCopiedInterfaceElement(
-				(null != copiedSrc) ? copiedSrc : connRef.getSourceElement(), connRef.getSource());
+				getConnTargetFBNElement(connRef.getSourceElement(), copiedSrc), connRef.getSource());
 		IInterfaceElement destination = checkForCopiedInterfaceElement(
-				(null != copiedDest) ? copiedDest : connRef.getDestinationElement(), connRef.getDestination());
+				getConnTargetFBNElement(connRef.getDestinationElement(), copiedDest), connRef.getDestination());
 
 		cmd.setSource(source);
 		cmd.setDestination(destination);
 		cmd.setArrangementConstraints(connRef.getDx1(), connRef.getDx2(), connRef.getDy());
 	}
 
+	private FBNetworkElement getConnTargetFBNElement(FBNetworkElement fbNetworkElement, FBNetworkElement copy) {
+		if (null != copy) {
+			// the connection endpoint is a copied FB return this one
+			return copy;
+		}
+		// search if we have an FB in the target with the name
+		return dstFBNetwork.getElementNamed(fbNetworkElement.getName());
+	}
+
 	private static IInterfaceElement checkForCopiedInterfaceElement(FBNetworkElement targetElement,
 			IInterfaceElement orig) {
-		Assert.isNotNull(targetElement);
-		return targetElement.getInterfaceElement(orig.getName());
+		return (null == targetElement) ? null : targetElement.getInterfaceElement(orig.getName());
 	}
 
 	private Point calculatePastePos(FBNetworkElement element) {
