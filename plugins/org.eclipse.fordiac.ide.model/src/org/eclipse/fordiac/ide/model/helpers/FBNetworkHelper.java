@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import java.util.List;
+
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -22,6 +25,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl;
+import org.eclipse.gef.EditPart;
+import org.eclipse.swt.graphics.Point;
 
 public final class FBNetworkHelper {
 
@@ -79,6 +85,45 @@ public final class FBNetworkHelper {
 			return null;
 		}
 		return element.getInterfaceElement(ie.getName());
+	}
+
+	/**
+	 * methods for updating position of FBNetwork after creating/flattening
+	 * subapp/...
+	 */
+
+	public static Point getTopLeftCornerOfFBNetwork(List<?> selection) {
+		Assert.isNotNull(selection);
+		Point pt = new Point(0, 0);
+		Object fb = null;
+		for (Object sel : selection) {
+			fb = (sel instanceof EditPart) ? ((EditPart) sel).getModel() : sel;
+			if (fb instanceof FBImpl) {
+				pt.x = (pt.x == 0) ? ((FBNetworkElement) fb).getX() : Math.min(pt.x, ((FBNetworkElement) fb).getX());
+				pt.y = (pt.y == 0) ? ((FBNetworkElement) fb).getY() : Math.min(pt.y, ((FBNetworkElement) fb).getY());
+			}
+		}
+		return pt;
+	}
+
+	public static final int Y_OFFSET_FROM_TOP_LEFT_CORNER = 80; // from top-left corner of container
+	public static final int X_OFFSET_FROM_TOP_LEFT_CORNER = 150;
+
+	public static void moveFBNetworkByOffset(Iterable<FBNetworkElement> fbNetwork, int xOffset, int yOffset) {
+		for (FBNetworkElement el : fbNetwork) {
+			el.setX(el.getX() - xOffset);
+			el.setY(el.getY() - yOffset);
+		}
+	}
+
+	public static void removeXYOffsetForFBNetwork(List<FBNetworkElement> fbNetwork) {
+		Point offset = getTopLeftCornerOfFBNetwork(fbNetwork);
+		moveFBNetworkByOffset(fbNetwork, offset.x - X_OFFSET_FROM_TOP_LEFT_CORNER,
+				offset.y - Y_OFFSET_FROM_TOP_LEFT_CORNER);
+	}
+
+	public static void moveFBNetworkByOffset(List<FBNetworkElement> fbNetwork, Point offset) {
+		moveFBNetworkByOffset(fbNetwork, offset.x, offset.y);
 	}
 
 	private FBNetworkHelper() {
