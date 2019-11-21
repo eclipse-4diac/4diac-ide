@@ -13,6 +13,8 @@
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed untyped subapp interface updates and according code cleanup
  *   Bianca Wiesmayr - fixed untyped subapp interface reorder/delete
+ *   Alois Zoitl - separated FBNetworkElement from instance name for better
+ *                 direct editing of instance names
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -20,7 +22,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction;
-import org.eclipse.fordiac.ide.application.figures.AbstractFBNetworkElementFigure;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -91,7 +93,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		if (request.getType().equals(RequestConstants.REQ_OPEN)) {
 			if (null != getModel().getPaletteEntry()) {
 				// we have a type open the sub-app type editor
-				AbstractFBNetworkElementFigure.openTypeInEditor(getModel());
+				FBNetworkElementFigure.openTypeInEditor(getModel());
 			} else {
 				SubApp subApp = getModel();
 				if ((null == subApp.getSubAppNetwork()) && subApp.isMapped()) {

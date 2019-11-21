@@ -1,5 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2014, 2018 Profactor GmbH, fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,6 +11,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Monika Wenger
  *    - initial implementation
+ *   Alois Zoitl - separated FBNetworkElement from instance name for better
+ *                 direct editing of instance names
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
@@ -25,28 +29,20 @@ import org.eclipse.swt.graphics.Point;
 /**
  * The Class FBEditPart.
  */
-public class TesterFBEditPart extends
-		org.eclipse.fordiac.ide.application.editparts.FBEditPart {
+public class TesterFBEditPart extends org.eclipse.fordiac.ide.application.editparts.FBEditPart {
 
 	/** The control listener. */
 	private ControlListener controlListener;
 
-	
 	public TesterFBEditPart(ZoomManager zoomManager) {
 		super(zoomManager);
 	}
-	
+
 	@Override
 	protected EContentAdapter createContentAdapter() {
-		//Provide an empty content adpater as we don't want to react in the tester to the classical FBN editing changes
+		// Provide an empty content adpater as we don't want to react in the tester to
+		// the classical FBN editing changes
 		return new EContentAdapter();
-	}
-
-	
-	@Override
-	protected void refreshName() {
-		// always display empty name in fb tester
-		getNameLabel().setText(""); //$NON-NLS-1$
 	}
 
 	@Override
@@ -58,14 +54,13 @@ public class TesterFBEditPart extends
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		if (getParent() != null && getParent().getViewer() != null
-				&& getParent().getViewer().getControl() != null && controlListener != null) {
-			getParent().getViewer().getControl()
-					.removeControlListener(controlListener);
+		if (getParent() != null && getParent().getViewer() != null && getParent().getViewer().getControl() != null
+				&& controlListener != null) {
+			getParent().getViewer().getControl().removeControlListener(controlListener);
 			controlListener = null;
 		}
 	}
-	
+
 	@Override
 	protected void createEditPolicies() {
 		// should be readonly in fb tester
@@ -89,19 +84,17 @@ public class TesterFBEditPart extends
 
 	/**
 	 * Update.
-	 * 
-	 * @param bounds
-	 *            the bounds
+	 *
+	 * @param bounds the bounds
 	 */
 	protected void update(final Rectangle bounds) {
-		((GraphicalEditPart) getParent()).setLayoutConstraint(this,
-				getFigure(), bounds);
+		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#refreshVisuals()
 	 */
 	@Override
@@ -122,8 +115,7 @@ public class TesterFBEditPart extends
 			};
 			if (getParent() != null && getParent().getViewer() != null
 					&& getParent().getViewer().getControl() != null) {
-				getParent().getViewer().getControl()
-						.addControlListener(controlListener);
+				getParent().getViewer().getControl().addControlListener(controlListener);
 			}
 		}
 		updatePosition();
@@ -131,13 +123,11 @@ public class TesterFBEditPart extends
 	}
 
 	private void updatePosition() {
-		if (getParent() != null && getParent().getViewer() != null
-				&& getParent().getViewer().getControl() != null) {
+		if (getParent() != null && getParent().getViewer() != null && getParent().getViewer().getControl() != null) {
 			Point p = getParent().getViewer().getControl().getSize();
 			Dimension dim = getFigure().getPreferredSize(-1, -1);
 
-			Rectangle rect = new Rectangle(p.x / 2 - dim.width / 2, p.y / 2
-					- dim.height / 2, -1, -1);
+			Rectangle rect = new Rectangle(p.x / 2 - dim.width / 2, p.y / 2 - dim.height / 2, -1, -1);
 			update(rect);
 		}
 	}

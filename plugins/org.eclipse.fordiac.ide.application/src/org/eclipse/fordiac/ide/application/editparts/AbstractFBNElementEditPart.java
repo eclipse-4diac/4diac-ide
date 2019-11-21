@@ -12,17 +12,20 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added diagram font preference
+ *   			 - separated FBNetworkElement from instance name for better
+ *                 direct editing of instance names
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.application.figures.AbstractFBNetworkElementFigure;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteFBNElementEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNElementSelectionPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
@@ -31,13 +34,12 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
-import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.tools.ScrollingDragEditPartsTracker;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
@@ -49,13 +51,10 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.TextCellEditor;
 
 /**
@@ -80,8 +79,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
-	public AbstractFBNetworkElementFigure getFigure() {
-		return (AbstractFBNetworkElementFigure) super.getFigure();
+	public FBNetworkElementFigure getFigure() {
+		return (FBNetworkElementFigure) super.getFigure();
 	}
 
 	private EContentAdapter colorChangeListener = new EContentAdapter() {
@@ -185,12 +184,6 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
-	protected void refreshName() {
-		super.refreshName();
-		getFigure().refreshIcon();
-	}
-
-	@Override
 	public FBNetworkElement getModel() {
 		return (FBNetworkElement) super.getModel();
 	}
@@ -204,28 +197,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		// Highlight In and Outconnections of the selected fb, allow alignment of FBs
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FBNElementSelectionPolicy());
 
-		// FBNetwork elements need a special rename command therefore we remove the
-		// standard edit policy and add a adjusted one
+		// FBNetwork elements renaming is done in a dedicated editpart
 		removeEditPolicy(EditPolicy.DIRECT_EDIT_ROLE);
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy() {
-			@Override
-			protected Command getDirectEditCommand(DirectEditRequest request) {
-				if (getHost() instanceof AbstractFBNElementEditPart) {
-					return new ChangeFBNetworkElementName(((AbstractFBNElementEditPart) getHost()).getModel(),
-							(String) request.getCellEditor().getValue());
-				}
-				return null;
-			}
-		});
-	}
-
-	/**
-	 * Returns the label wich contains the instance name of a FB.
-	 *
-	 * @return the label
-	 */
-	public Label getInstanceNameLabel() {
-		return getFigure().getInstanceNameLabel();
 	}
 
 	/** The listener. */
@@ -241,14 +214,11 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	@Override
 	public org.eclipse.jface.util.IPropertyChangeListener getPreferenceChangeListener() {
 		if (null == listener) {
-			listener = new org.eclipse.jface.util.IPropertyChangeListener() {
-				@Override
-				public void propertyChange(final PropertyChangeEvent event) {
-					if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
-							|| event.getProperty().equals(PreferenceConstants.P_DATA_CONNECTOR_COLOR)
-							|| event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)) {
-						getFigure().repaint();
-					}
+			listener = event -> {
+				if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
+						|| event.getProperty().equals(PreferenceConstants.P_DATA_CONNECTOR_COLOR)
+						|| event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)) {
+					getFigure().repaint();
 				}
 			};
 		}
@@ -283,37 +253,61 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceEditPart) {
 			InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
-			if (interfaceEditPart.isInput()) {
-				if (interfaceEditPart.isEvent()) {
-					getFigure().getEventInputs().add(child,
-							getModel().getInterface().getEventInputs().indexOf(interfaceEditPart.getModel()));
-				} else {
-					if (interfaceEditPart.isAdapter()) {
-						getFigure().getSockets().add(child,
-								getModel().getInterface().getSockets().indexOf(interfaceEditPart.getModel()));
-					} else if (interfaceEditPart.isVariable()) {
-						getFigure().getDataInputs().add(child,
-								getModel().getInterface().getInputVars().indexOf(interfaceEditPart.getModel()));
-					}
-				}
-			} else {
-				if (interfaceEditPart.isEvent()) {
-					getFigure().getEventOutputs().add(child,
-							getModel().getInterface().getEventOutputs().indexOf(interfaceEditPart.getModel()));
-				} else {
-					if (interfaceEditPart.isAdapter()) {
-						getFigure().getPlugs().add(child,
-								getModel().getInterface().getPlugs().indexOf(interfaceEditPart.getModel()));
-					} else if (interfaceEditPart.isVariable()) {
-						getFigure().getDataOutputs().add(child,
-								getModel().getInterface().getOutputVars().indexOf(interfaceEditPart.getModel()));
-					}
-				}
+			getTargetFigure(interfaceEditPart).add(child, getInterfaceElementIndex(interfaceEditPart));
+		} else {
+			getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
+		}
+	}
 
+	private IFigure getTargetFigure(InterfaceEditPart interfaceEditPart) {
+		if (interfaceEditPart.isInput()) {
+			if (interfaceEditPart.isEvent()) {
+				return getFigure().getEventInputs();
+			}
+			if (interfaceEditPart.isAdapter()) {
+				return getFigure().getSockets();
+			}
+			if (interfaceEditPart.isVariable()) {
+				return getFigure().getDataInputs();
 			}
 		} else {
-			super.addChildVisual(childEditPart, index);
+			if (interfaceEditPart.isEvent()) {
+				return getFigure().getEventOutputs();
+			}
+			if (interfaceEditPart.isAdapter()) {
+				return getFigure().getPlugs();
+			}
+			if (interfaceEditPart.isVariable()) {
+				return getFigure().getDataOutputs();
+			}
 		}
+		return getFigure();
+	}
+
+	private int getInterfaceElementIndex(InterfaceEditPart interfaceEditPart) {
+		InterfaceList interfaceList = getModel().getInterface();
+		if (interfaceEditPart.isInput()) {
+			if (interfaceEditPart.isEvent()) {
+				return interfaceList.getEventInputs().indexOf(interfaceEditPart.getModel());
+			}
+			if (interfaceEditPart.isAdapter()) {
+				return interfaceList.getSockets().indexOf(interfaceEditPart.getModel());
+			}
+			if (interfaceEditPart.isVariable()) {
+				return interfaceList.getInputVars().indexOf(interfaceEditPart.getModel());
+			}
+		} else {
+			if (interfaceEditPart.isEvent()) {
+				return interfaceList.getEventOutputs().indexOf(interfaceEditPart.getModel());
+			}
+			if (interfaceEditPart.isAdapter()) {
+				return interfaceList.getPlugs().indexOf(interfaceEditPart.getModel());
+			}
+			if (interfaceEditPart.isVariable()) {
+				return interfaceList.getOutputVars().indexOf(interfaceEditPart.getModel());
+			}
+		}
+		return -1;
 	}
 
 	@Override
@@ -321,28 +315,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceEditPart) {
 			InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
-			if (interfaceEditPart.isInput()) {
-				if (interfaceEditPart.isEvent()) {
-					getFigure().getEventInputs().remove(child);
-				} else {
-					if (interfaceEditPart.isAdapter()) {
-						getFigure().getSockets().remove(child);
-					} else if (interfaceEditPart.isVariable()) {
-						getFigure().getDataInputs().remove(child);
-					}
-				}
-			} else {
-				if (interfaceEditPart.isEvent()) {
-					getFigure().getEventOutputs().remove(child);
-				} else {
-					if (interfaceEditPart.isAdapter()) {
-						getFigure().getPlugs().remove(child);
-					} else if (interfaceEditPart.isVariable()) {
-						getFigure().getDataOutputs().remove(child);
-					}
-				}
-
-			}
+			getTargetFigure(interfaceEditPart).remove(child);
 		} else {
 			super.removeChildVisual(childEditPart);
 		}
@@ -350,7 +323,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	@Override
 	protected List<Object> getModelChildren() {
-		ArrayList<Object> elements = new ArrayList<>();
+		List<Object> elements = new ArrayList<>();
+		elements.add(new InstanceName(getModel()));
 		elements.addAll(getModel().getInterface().getAllInterfaceElements());
 		return elements;
 	}
@@ -366,8 +340,19 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
+	protected void performDirectEdit() {
+		// don't do anything here as direct editing of fbnetwork element instances names
+		// is handled in an own editpart
+	}
+
+	@Override
 	public Label getNameLabel() {
-		return getInstanceNameLabel();
+		return null;
+	}
+
+	@Override
+	protected void refreshName() {
+		// don't do anyting here
 	}
 
 	@Override

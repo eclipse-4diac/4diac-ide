@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,12 +11,13 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - moved openEditor helper function to EditorUtils  
- *   Alois Zoitl - added diagram font preference 
+ *   Alois Zoitl - moved openEditor helper function to EditorUtils
+ *               - added diagram font preference
+ *   			 - separated FBNetworkElement from instance name for better
+ *                 direct editing of instance names
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
@@ -39,18 +40,14 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
-import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -58,16 +55,15 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * The visualization of an FB. It Provides several containers for its interface.
- * 
+ *
  */
-public abstract class AbstractFBNetworkElementFigure extends Shape implements ITransparencyFigure, IFontUpdateListener {
+public class FBNetworkElementFigure extends Shape implements ITransparencyFigure, IFontUpdateListener {
 
 	private static final class OpenTypeListener implements MouseListener {
 		private final AbstractFBNElementEditPart editPart;
@@ -109,9 +105,6 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 	/** The model. */
 	private FBNetworkElement model = null;
 
-	/** The instance name label. */
-	private SetableAlphaLabel instanceNameLabel = null;
-
 	/** The top. */
 	private RoundedRectangle top;
 
@@ -143,46 +136,12 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 	protected AbstractFBNElementEditPart editPart;
 
-	protected AbstractFBNetworkElementFigure() {
-		configureRectangles();
-	}
-
 	public FBNetworkElement getModel() {
 		return model;
 	}
 
 	public ZoomManager getZoomManager() {
 		return (null != editPart) ? editPart.getZoomManager() : null;
-	}
-
-	private void configureRectangles() {
-		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
-		Color borderColor = getBorderColor(model.getType());
-
-		top = new AdvancedRoundedRectangle(PositionConstants.NORTH | PositionConstants.EAST | PositionConstants.WEST,
-				getZoomManager(), this, true, borderColor);
-		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
-
-		GridLayout topLayout = new GridLayout(2, false);
-		topLayout.marginHeight = 4;
-		topLayout.marginWidth = 0;
-		topLayout.horizontalSpacing = 0;
-		topLayout.verticalSpacing = 0;
-		top.setLayoutManager(topLayout);
-
-		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, getZoomManager(), this,
-				true, borderColor);
-
-		bottom = new AdvancedRoundedRectangle(PositionConstants.SOUTH | PositionConstants.EAST | PositionConstants.WEST,
-				getZoomManager(), this, true, borderColor);
-		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
-		GridLayout bottomLayout = new GridLayout(2, false);
-		bottomLayout.marginHeight = 4;
-		bottomLayout.marginWidth = 0;
-		bottomLayout.horizontalSpacing = 0;
-		bottomLayout.verticalSpacing = 0;
-		bottom.setLayoutManager(bottomLayout);
 	}
 
 	// TODO consider moving this into a subclass for adapter fbs and return here
@@ -196,59 +155,108 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 	/**
 	 * Instantiates a new fB figure.
-	 * 
+	 *
 	 * @param model the model
 	 */
-	public AbstractFBNetworkElementFigure(final FBNetworkElement model, AbstractFBNElementEditPart editPart) {
+	public FBNetworkElementFigure(final FBNetworkElement model, AbstractFBNElementEditPart editPart) {
 		this.model = model;
 		this.editPart = editPart;
-		configureRectangles();
-		this.setFillXOR(false);
-		this.setOpaque(false);
+		configureMainFigure();
+		createFBFigureShape(model);
+		refreshToolTips();
+		setTypeLabelFont();
+	}
 
-		GridLayout gridLayout = new GridLayout(1, true);
-		gridLayout.verticalSpacing = 2;
-		gridLayout.marginHeight = 0;
-		gridLayout.marginWidth = 0;
-		gridLayout.horizontalSpacing = 0;
-		gridLayout.verticalSpacing = -1;
-		setLayoutManager(gridLayout);
+	private void createFBFigureShape(final FBNetworkElement model) {
+		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
+		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
+		Color borderColor = getBorderColor(model.getType());
 
-		createInstanceNameLabel(model.getName());
+		Figure fbFigureContainer = createFigureContainer();
+		createFBTop(fbFigureContainer, cornerDim, borderColor);
+		configureFBMiddle(model, fbFigureContainer, borderColor);
+		createFBBottom(fbFigureContainer, cornerDim, borderColor);
+	}
 
-		add(top);
-		GridData topLayoutData = new GridData(
-				GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
-		setConstraint(top, topLayoutData);
+	private void createFBBottom(Figure fbFigureContainer, int cornerDim, Color borderColor) {
+		bottom = new AdvancedRoundedRectangle(PositionConstants.SOUTH | PositionConstants.EAST | PositionConstants.WEST,
+				getZoomManager(), this, true, borderColor);
+		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
+		GridLayout bottomLayout = new GridLayout(2, false);
+		bottomLayout.marginHeight = 4;
+		bottomLayout.marginWidth = 0;
+		bottomLayout.horizontalSpacing = 0;
+		bottomLayout.verticalSpacing = 0;
+		bottom.setLayoutManager(bottomLayout);
 
-		setupTopIOs(top);
+		GridData bottomLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
+		bottomLayoutData.verticalAlignment = SWT.TOP;
 
+		fbFigureContainer.add(bottom);
+		fbFigureContainer.setConstraint(bottom, bottomLayoutData);
+
+		setBottomIOs(bottom);
+	}
+
+	private void configureFBMiddle(final FBNetworkElement model, Figure fbFigureContainer, Color borderColor) {
 		Figure middleContainer = new Figure();
 		BorderLayout borderLayout = new BorderLayout();
 		middleContainer.setLayoutManager(borderLayout);
 		borderLayout.setHorizontalSpacing(10);
 		middleContainer.setBorder(new MarginBorder(0, 7, 0, 7));
 
-		add(middleContainer);
+		fbFigureContainer.add(middleContainer);
 		GridData middleLayouData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		setConstraint(middleContainer, middleLayouData);
+		fbFigureContainer.setConstraint(middleContainer, middleLayouData);
 
-		setupTypeNameAndVersion(model, middleContainer);
+		setupTypeNameAndVersion(model, middleContainer, borderColor);
+	}
 
-		GridData bottomLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
-				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-		bottomLayoutData.verticalAlignment = SWT.TOP;
+	private void createFBTop(Figure fbFigureContainer, int cornerDim, Color borderColor) {
+		top = new AdvancedRoundedRectangle(PositionConstants.NORTH | PositionConstants.EAST | PositionConstants.WEST,
+				getZoomManager(), this, true, borderColor);
+		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 
-		add(bottom);
-		setConstraint(bottom, bottomLayoutData);
+		GridLayout topLayout = new GridLayout(2, false);
+		topLayout.marginHeight = 4;
+		topLayout.marginWidth = 0;
+		topLayout.horizontalSpacing = 0;
+		topLayout.verticalSpacing = 0;
+		top.setLayoutManager(topLayout);
 
-		setBottomIOs(bottom);
+		fbFigureContainer.add(top);
+		GridData topLayoutData = new GridData(
+				GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
+		fbFigureContainer.setConstraint(top, topLayoutData);
 
-		refreshToolTips();
+		setupTopIOs(top);
+	}
 
-		updateResourceTypeFigure();
+	private Figure createFigureContainer() {
+		Figure fbFigureContainer = new Figure();
+		add(fbFigureContainer);
+		setConstraint(fbFigureContainer, new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 
-		setInstanceAndTypeLabelFonts();
+		GridLayout gridLayout = new GridLayout(1, true);
+		gridLayout.marginHeight = 0;
+		gridLayout.marginWidth = 0;
+		gridLayout.horizontalSpacing = 0;
+		gridLayout.verticalSpacing = -1;
+		fbFigureContainer.setLayoutManager(gridLayout);
+		return fbFigureContainer;
+	}
+
+	private void configureMainFigure() {
+		setFillXOR(false);
+		setOpaque(false);
+
+		GridLayout mainLayout = new GridLayout(1, true);
+		mainLayout.marginHeight = 0;
+		mainLayout.marginWidth = 0;
+		mainLayout.horizontalSpacing = 0;
+		mainLayout.verticalSpacing = -1;
+		setLayoutManager(mainLayout);
 	}
 
 	private void setupTopIOs(IFigure parent) {
@@ -305,21 +313,10 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		bottomOutputArea.add(plugs);
 	}
 
-	private void createInstanceNameLabel(final String instanceName) {
-		GridData instanceNameLayout = new GridData();
-		instanceNameLayout.grabExcessHorizontalSpace = true;
-		instanceNameLayout.horizontalAlignment = SWT.CENTER;
+	protected void setupTypeNameAndVersion(final FBNetworkElement model, Figure container, Color borderColor) {
+		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, getZoomManager(), this,
+				true, borderColor);
 
-		instanceNameLabel = new SetableAlphaLabel();
-		instanceNameLabel.setText(instanceName);
-		instanceNameLabel.setTextAlignment(PositionConstants.CENTER);
-		instanceNameLabel.setLabelAlignment(PositionConstants.CENTER);
-
-		add(instanceNameLabel);
-		setConstraint(instanceNameLabel, instanceNameLayout);
-	}
-
-	protected void setupTypeNameAndVersion(final FBNetworkElement model, Figure container) {
 		container.add(middle, BorderLayout.CENTER);
 		middle.setCornerDimensions(new Dimension());
 
@@ -390,55 +387,15 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		return new OpenTypeListener(editPart);
 	}
 
-	protected void updateResourceTypeFigure() {
-		if (isResoruceTypeFBNElement()) {
-			getInstanceNameLabel().setIcon(FordiacImage.ICON_LOCKED_STATE.getImage());
-		}
-	}
-
-	private void updateOverlay() {
-		Image image = getInstanceNameLabel().getIcon();
-		for (Annotation anno : model.getAnnotations()) {
-			if (anno.getServity() == IMarker.SEVERITY_ERROR) {
-				image = FordiacImage.getErrorOverlayImage(image);
-				break;
-			}
-		}
-		if (null == model.getPaletteEntry() && !(model instanceof SubApp)) { // TODO model refactoring - consider to
-																				// move this to something specific for
-																				// untyped subapps
-			image = FordiacImage.getErrorOverlayImage(image);
-		}
-		getInstanceNameLabel().setIcon(image);
-	}
-
-	public void refreshIcon() {
-		if (isResoruceTypeFBNElement()) {
-			updateResourceTypeFigure();
-		} else {
-			getInstanceNameLabel().setIcon(null);
-		}
-		updateOverlay();
-	}
-
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return model.getTypeName() + ":" //$NON-NLS-1$
 				+ model.getName();
-	}
-
-	/**
-	 * Gets the instance name SetableAlphaLabel.
-	 * 
-	 * @return the instance name SetableAlphaLabel
-	 */
-	public SetableAlphaLabel getInstanceNameLabel() {
-		return instanceNameLabel;
 	}
 
 	/**
@@ -450,7 +407,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 	/**
 	 * Gets the event inputs.
-	 * 
+	 *
 	 * @return the event inputs
 	 */
 	public Figure getEventInputs() {
@@ -459,7 +416,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 	/**
 	 * Gets the event outputs.
-	 * 
+	 *
 	 * @return the event outputs
 	 */
 	public Figure getEventOutputs() {
@@ -468,7 +425,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 	/**
 	 * Gets the data inputs.
-	 * 
+	 *
 	 * @return the data inputs
 	 */
 	public Figure getDataInputs() {
@@ -481,7 +438,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 	/**
 	 * Gets the data outputs.
-	 * 
+	 *
 	 * @return the data outputs
 	 */
 	public Figure getDataOutputs() {
@@ -494,7 +451,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.draw2d.Shape#fillShape(org.eclipse.draw2d.Graphics)
 	 */
 	@Override
@@ -504,7 +461,7 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.draw2d.Shape#outlineShape(org.eclipse.draw2d.Graphics)
 	 */
 	@Override
@@ -520,9 +477,6 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		top.setAlpha(value);
 		middle.setAlpha(value);
 
-		if (instanceNameLabel != null) {
-			instanceNameLabel.setAlpha(value);
-		}
 		if (typeLabel != null) {
 			typeLabel.setAlpha(value);
 		}
@@ -538,26 +492,15 @@ public abstract class AbstractFBNetworkElementFigure extends Shape implements IT
 		return getAlpha();
 	}
 
-	public Image getIcon() {
-		return getInstanceNameLabel().getIcon();
-	}
-
-	public void setIcon(Image image) {
-		getInstanceNameLabel().setIcon(image);
-	}
-
 	@Override
 	public void updateFonts() {
-		setInstanceAndTypeLabelFonts();
+		setTypeLabelFont();
 		invalidateTree();
 		revalidate();
 	}
 
-	public void setInstanceAndTypeLabelFonts() {
-		instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(PreferenceConstants.DIAGRAM_FONT));
+	private void setTypeLabelFont() {
 		typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
 	}
-
-	protected abstract boolean isResoruceTypeFBNElement();
 
 }
