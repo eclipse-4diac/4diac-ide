@@ -24,16 +24,53 @@
             name="Contribute">
       </command>
    </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
+    <extension point="org.eclipse.ui.menus">
+        <menuContribution
             allPopups="false"
             locationURI="menu:help?after=about">
-         <command
-               commandId="org.eclipse.fordiac.ide.ui.contribute"
-               style="push">
-         </command>
-      </menuContribution>
+            <command
+                commandId="org.eclipse.fordiac.ide.ui.contribute" style="push">
+            </command>
+        </menuContribution>
+        <!-- Source menu definitions to be used by the different plugins of Eclipse 4diac or external contributions
+             The structure is based on the source menu of Eclipse JDT and CDT.
+        -->
+        <menuContribution
+                locationURI="menu:org.eclipse.ui.main.menu?after=edit">                
+            <menu
+               label="Source"
+               mnemonic="S"
+               id="org.eclipse.4diac.ide.source.menu">
+                 <separator
+                       name="commentGroup"
+                       visible="true">
+                 </separator>          
+                 <separator
+                       name="editGroup"
+                       visible="true">
+                 </separator>
+                 <separator
+                      name="importGroup"
+                       visible="true">
+                </separator>
+                <separator
+                      name="generateGroup"
+                       visible="true">
+                </separator>
+                <separator
+                      name="codeGroup"
+                       visible="true">
+                </separator>
+                <separator
+                      name="externalizeGroup"
+                       visible="true">
+                </separator>
+                <separator
+                      name="convertGroup"
+                       visible="true">
+                </separator>
+            </menu>
+        </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">
