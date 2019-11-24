@@ -316,6 +316,12 @@
             id="org.eclipse.fordiac.ide.application.commands.flattenSubApp"
             name="Flatten Subapplication">
       </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.UntypeSubApplicationHandler"
+            id="org.eclipse.fordiac.ide.application.commands.untypeSubApp"
+            name="Remove Subapplication Type">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -388,6 +394,7 @@
       </menuContribution>
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup"> 
             <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
       </menuContribution>
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
@@ -422,11 +429,16 @@
 		         </with>
             </visibleWhen>
          </command>
-         <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp"
-               label="Flatten subapplication"
-               tooltip="Flatten the subapplication">
+         <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp">
             <visibleWhen
                   checkEnabled="false">
+               <reference
+                     definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp">
+            <visibleWhen checkEnabled="true">
                <reference
                      definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
                </reference>

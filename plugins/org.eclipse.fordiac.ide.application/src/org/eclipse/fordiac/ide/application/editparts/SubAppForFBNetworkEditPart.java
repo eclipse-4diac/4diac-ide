@@ -15,6 +15,7 @@
  *   Bianca Wiesmayr - fixed untyped subapp interface reorder/delete
  *   Alois Zoitl - separated FBNetworkElement from instance name for better
  *                 direct editing of instance names
+ *               - added update support for removing or readding subapp type
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -32,7 +33,6 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.ZoomManager;
 
-//TODO model refactoring - consder inheriting from fbeditpart when model refatoring is finished
 public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 
 	public SubAppForFBNetworkEditPart(final ZoomManager zoomManager) {
@@ -42,6 +42,11 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	@Override
 	protected IFigure createFigureForModel() {
 		return new SubAppForFbNetworkFigure(getModel(), this);
+	}
+
+	@Override
+	public SubAppForFbNetworkFigure getFigure() {
+		return (SubAppForFbNetworkFigure) super.getFigure();
 	}
 
 	@Override
@@ -97,7 +102,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 			} else {
 				SubApp subApp = getModel();
 				if ((null == subApp.getSubAppNetwork()) && subApp.isMapped()) {
-					// we are mapped and the mirrord subapp located in the resource, get the one
+					// we are mapped and the mirrored subapp located in the resource, get the one
 					// from the application
 					subApp = (SubApp) subApp.getOpposite();
 				}
@@ -106,5 +111,11 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		} else {
 			super.performRequest(request);
 		}
+	}
+
+	@Override
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+		getFigure().updateTypeLabel(getModel());
 	}
 }

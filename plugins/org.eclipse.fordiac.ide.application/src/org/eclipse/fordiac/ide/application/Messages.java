@@ -140,6 +140,8 @@ public class Messages extends NLS {
 
 	public static String InterfaceElementSection_OutConnections;
 
+	public static String UntypeSubappCommand_Label;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

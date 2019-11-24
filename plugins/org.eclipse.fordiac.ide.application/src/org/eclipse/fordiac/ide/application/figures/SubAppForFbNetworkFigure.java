@@ -34,9 +34,10 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	@Override
 	protected void setupTypeNameAndVersion(FBNetworkElement model, Figure container, Color borderColor) {
 		super.setupTypeNameAndVersion(model, container, borderColor);
-		if (null == model.getType()) {
-			// we have an untyped sub app don't show any text in the label
-			typeLabel.setText(""); //$NON-NLS-1$
-		}
+		updateTypeLabel((SubApp) model);
+	}
+
+	public void updateTypeLabel(SubApp model) {
+		typeLabel.setText(null != model.getType() ? model.getTypeName() : ""); //$NON-NLS-1$
 	}
 }
