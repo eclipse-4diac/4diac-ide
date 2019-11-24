@@ -322,6 +322,12 @@
             id="org.eclipse.fordiac.ide.application.commands.untypeSubApp"
             name="Remove Subapplication Type">
       </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoParentHandler"
+            id="org.eclipse.fordiac.ide.application.commands.gotoparent"
+            name="Go To Parent">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -392,6 +398,12 @@
                   mnemonic="S">
             </command>
       </menuContribution>
+      <menuContribution
+            locationURI="menu:navigate?after=goTo">
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
+                  icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png"/>
+      </menuContribution>            
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup"> 
             <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
@@ -408,6 +420,12 @@
             </command>
          </toolbar>
       </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.workbench.navigate">
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
+                  icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png"/>
+      </menuContribution>    
       <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
          <command
@@ -442,6 +460,15 @@
                <reference
                      definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
                </reference>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
+               icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png">
+            <visibleWhen checkEnabled="true">
+                <with variable="activeEditorId">
+                    <equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
+                </with>
             </visibleWhen>
          </command>
          <command commandId="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor"> 
