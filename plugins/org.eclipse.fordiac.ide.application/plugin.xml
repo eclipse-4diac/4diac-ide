@@ -313,7 +313,6 @@
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
-            defaultHandler="org.eclipse.fordiac.ide.application.handlers.FlattenSubApplication"
             id="org.eclipse.fordiac.ide.application.commands.flattenSubApp"
             name="Flatten Subapplication">
       </command>
@@ -349,6 +348,13 @@
 			    <reference definitionId="org.eclipse.fordiac.ide.application.FocusOnActivation" />
 			</activeWhen>
       </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.application.handlers.FlattenSubApplication"
+            commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp">
+            <activeWhen>
+                <reference definitionId="org.eclipse.fordiac.ide.application.SubAppSelection" />
+            </activeWhen>
+      </handler>
       <handler 
             class="org.eclipse.fordiac.ide.application.handlers.NewSubApplication"
             commandId="org.eclipse.fordiac.ide.application.commands.newSubApp">
@@ -379,6 +385,9 @@
                   commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
                   mnemonic="S">
             </command>
+      </menuContribution>
+      <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup"> 
+            <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp" />
       </menuContribution>
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
@@ -562,9 +571,10 @@
                     <instanceof
                           value="org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart">
                     </instanceof>
+                    <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart" />
                   </or>
                </iterate>
-         </with>  
+            </with>
       </definition>      
 	   <definition
 	         id="org.eclipse.fordiac.ide.application.FocusOnActivation">
