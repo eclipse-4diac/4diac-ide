@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017  Profactor GbmH, TU Wien ACIN, AIT, fortiss GmbH 
- * 
+ * Copyright (c) 2008 - 2017  Profactor GbmH, TU Wien ACIN, AIT, fortiss GmbH
+ * 				 2019 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Filip Andren, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - separated FBNetworkElement from instance name for better
+ *                 direct editing of instance names
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -36,35 +39,33 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.graphics.RGB;
 
-public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
+public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	private static final String ERROR_IN_CREATE_FIGURE = Messages.AbstractViewEditPart_ERROR_createFigure;
 	private DirectEditManager manager;
-	
+
 	private EContentAdapter adapter;
 
 	private EContentAdapter getContentAdapter() {
-		if(null == adapter) {
+		if (null == adapter) {
 			adapter = createContentAdapter();
 			Assert.isNotNull(adapter);
 		}
 		return adapter;
 	}
-	
+
 	private final EContentAdapter iNamedElementContentAdapter = new EContentAdapter() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
-			if(notification.getNotifier().equals(getINamedElement())){
+			if (notification.getNotifier().equals(getINamedElement())) {
 				Object feature = notification.getFeature();
-				if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(
-						feature)) {
+				if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
 					refreshName();
 				}
-				if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment()
-						.equals(feature)) {
+				if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
 					refreshComment();
 				}
-	
+
 				super.notifyChanged(notification);
 			}
 		}
@@ -74,18 +75,17 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
 		Color fordiacColor = getBackgroundColor();
 		setColor(figure, fordiacColor);
 	}
-	
-	protected Color getBackgroundColor(){
+
+	protected Color getBackgroundColor() {
 		return null;
 	}
 
 	protected void setColor(IFigure figure, Color fordiacColor) {
 		org.eclipse.swt.graphics.Color newColor;
 		if (fordiacColor != null) {
-			newColor = ColorManager.getColor(new RGB(fordiacColor.getRed(),
-					fordiacColor.getGreen(), fordiacColor.getBlue()));
-		}
- 		else {
+			newColor = ColorManager
+					.getColor(new RGB(fordiacColor.getRed(), fordiacColor.getGreen(), fordiacColor.getBlue()));
+		} else {
 			newColor = null;
 		}
 		figure.setBackgroundColor(newColor);
@@ -100,28 +100,29 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
 	}
 
 	protected void refreshComment() {
-		// TODO __gebenh implement refreshComment if necessary
+		// The default edit part does not show any comment, override in subclasses if
+		// comments are shown and require updates
 	}
 
 	/**
 	 * Needs to return an EContentAdapter which will be registered on the model
 	 * objects and gets informed if something change.
-	 * 
-	 * @return EContentAdapter the EContentAdapter of the derived class (must
-	 *         not be null).
+	 *
+	 * @return EContentAdapter the EContentAdapter of the derived class (must not be
+	 *         null).
 	 */
 	protected abstract EContentAdapter createContentAdapter();
 
 	/**
 	 * If an View needs to be informed for changes in the PreferencePage (e.g.
 	 * change of a Color) the derived class have to return an
-	 * IPropertyChangeListener with implemented <code>propertyChange()</code>
-	 * method if notification on changes are required otherwise it can return
+	 * IPropertyChangeListener with implemented <code>propertyChange()</code> method
+	 * if notification on changes are required otherwise it can return
 	 * <code>null</code>.
-	 * 
-	 * @return IPropertyChangeListener the IPropertyChangeListener of the
-	 *         derived class or <code>null</code> if derived class should not be
-	 *         added to the listeners.
+	 *
+	 * @return IPropertyChangeListener the IPropertyChangeListener of the derived
+	 *         class or <code>null</code> if derived class should not be added to
+	 *         the listeners.
 	 */
 	protected abstract IPropertyChangeListener getPreferenceChangeListener();
 
@@ -134,11 +135,7 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
 			}
 			((Notifier) getModel()).eAdapters().add(getContentAdapter());
 			if (getPreferenceChangeListener() != null) {
-				Activator
-						.getDefault()
-						.getPreferenceStore()
-						.addPropertyChangeListener(
-								getPreferenceChangeListener());
+				Activator.getDefault().getPreferenceStore().addPropertyChangeListener(getPreferenceChangeListener());
 			}
 		}
 	}
@@ -148,16 +145,11 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
 		if (isActive()) {
 			super.deactivate();
 			if (getINamedElement() != null) {
-				getINamedElement().eAdapters().remove(
-						iNamedElementContentAdapter);
+				getINamedElement().eAdapters().remove(iNamedElementContentAdapter);
 			}
 			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
 			if (getPreferenceChangeListener() != null) {
-				Activator
-						.getDefault()
-						.getPreferenceStore()
-						.removePropertyChangeListener(
-								getPreferenceChangeListener());
+				Activator.getDefault().getPreferenceStore().removePropertyChangeListener(getPreferenceChangeListener());
 			}
 		}
 	}
@@ -166,9 +158,9 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
 
 	/**
 	 * Creates the <code>Figure</code> to be used as this part's <i>visuals</i>.
-	 * 
+	 *
 	 * @return a figure
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
 	 * @see #createFigureForModel()
 	 */
@@ -191,23 +183,21 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
 		super.createEditPolicies();
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());
 		// EditPolicy which allows the direct edit of the Instance Name
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
-				new AbstractViewRenameEditPolicy());
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy());
 	}
 
 	@Override
 	public void performRequest(final Request request) {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN) {
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
 			performDirectEdit();
 		} else {
 			super.performRequest(request);
 		}
 	}
 
-	public DirectEditManager getManager() {
+	protected DirectEditManager getManager() {
 		if (manager == null) {
 			manager = createDirectEditManager();
 		}
@@ -219,22 +209,8 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
 		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
 	}
 
-	public void performDirectEdit() {
+	protected void performDirectEdit() {
 		getManager().show();
-	}
-
-	/**
-	 * Performs direct edit setting the initial text to be the initialCharacter.
-	 * 
-	 * @param initialCharacter
-	 *            the initial character
-	 */
-	public void performDirectEdit(final char initialCharacter) {
-		if (getManager() instanceof LabelDirectEditManager) {
-			((LabelDirectEditManager) getManager()).show(initialCharacter);
-		} else {
-			getManager().show();
-		}
 	}
 
 	public void setTransparency(int value) {
@@ -242,7 +218,5 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart{
 			((ITransparencyFigure) getFigure()).setTransparency(value);
 		}
 	}
-	
-	
-	
+
 }
