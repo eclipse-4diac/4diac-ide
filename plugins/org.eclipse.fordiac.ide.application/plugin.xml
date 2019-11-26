@@ -387,6 +387,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+6">
       </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+ARROW_UP">
+      </key>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
