@@ -42,7 +42,6 @@ import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.ContextMenuProvider;
@@ -284,8 +283,8 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		return PALETTE_PREFERENCES;
 	}
 
-	public void selectFBNetworkElement(FBNetworkElement fb) {
-		EditPart editPart = (EditPart) getGraphicalViewer().getEditPartRegistry().get(fb);
+	public void selectElement(Object element) {
+		EditPart editPart = (EditPart) getGraphicalViewer().getEditPartRegistry().get(element);
 		if (null != editPart) {
 			getGraphicalViewer().select(editPart);
 			getGraphicalViewer().reveal(editPart);

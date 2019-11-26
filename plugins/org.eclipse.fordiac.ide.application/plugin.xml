@@ -328,6 +328,12 @@
             id="org.eclipse.fordiac.ide.application.commands.gotoparent"
             name="Go To Parent">
       </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.FollowConnectionHandler"
+            id="org.eclipse.fordiac.ide.application.commands.followConnection"
+            name="Follow Connection">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -393,6 +399,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+ARROW_UP">
       </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.followConnection"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+ARROW_RIGHT">
+      </key>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -409,6 +421,8 @@
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
                   icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png"/>
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.followConnection" />
       </menuContribution>            
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup"> 
             <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp" />
@@ -474,6 +488,24 @@
             <visibleWhen checkEnabled="true">
                 <with variable="activeEditorId">
                     <equals value="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor" />
+                </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.followConnection" >
+            <visibleWhen checkEnabled="true">
+                <with variable="selection">
+                   <count value="1"/>
+                   <iterate>
+                      <or>
+                        <instanceof
+                              value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
+                        </instanceof>
+                        <instanceof
+                              value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart">
+                        </instanceof>
+                      </or>
+                   </iterate>
                 </with>
             </visibleWhen>
          </command>
