@@ -40,7 +40,7 @@ import org.eclipse.ui.IEditorPart;
 final class ECCEditorEditDomain extends FBTypeEditDomain {
 	private static class StateCreationTool extends CreationTool {
 
-		protected StateCreationFactory stateFactory = new StateCreationFactory();
+		private StateCreationFactory stateFactory = new StateCreationFactory();
 		private ActionCreationFactory actionFactory = new ActionCreationFactory();
 
 		public StateCreationTool() {
@@ -93,11 +93,16 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 	private static class TransitionStateCreationTool extends CreationTool {
 		private ECC ecc;
 		private Point point;
+		private ECState sourceState;
 
 		public TransitionStateCreationTool(ECC ecc) {
 			this.ecc = ecc;
 			setFactory(new StateCreationFactory());
 			setUnloadWhenFinished(false);
+		}
+		
+		public void setSourceState(ECState state) {
+			this.sourceState = state;
 		}
 
 		public void setLocationActivation(Point point) {
@@ -122,9 +127,8 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 	private StateCreationTool stateCreationTool = new StateCreationTool();
 	private TransitionStateCreationTool transitionStateCreationTool = new TransitionStateCreationTool(
 			((ECCEditor) getEditorPart()).getFbType().getECC());
-	private static boolean transition = false;
-	private static boolean createTransitionAndState = false;
-	private static ECState sourceState;
+	private boolean transition = false;
+	private boolean createTransitionAndState = false;
 
 	ECCEditorEditDomain(IEditorPart editorPart, CommandStack commandStack) {
 		super(editorPart, commandStack);
@@ -160,8 +164,8 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 	public void mouseDrag(MouseEvent mouseEvent, EditPartViewer viewer) {
 		if (((AdvancedPanningSelectionTool) getDefaultTool()).getTargetEditPart() instanceof ECStateEditPart) {
 			transition = true;
-			sourceState = (ECState) ((ECStateEditPart) (((AdvancedPanningSelectionTool) getDefaultTool())
-					.getTargetEditPart())).getModel();
+			transitionStateCreationTool.setSourceState((ECState) ((ECStateEditPart) (((AdvancedPanningSelectionTool) getDefaultTool())
+					.getTargetEditPart())).getModel());
 		}
 		super.mouseDrag(mouseEvent, viewer);
 	}
