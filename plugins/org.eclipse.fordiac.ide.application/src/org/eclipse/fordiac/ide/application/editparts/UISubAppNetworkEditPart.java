@@ -24,9 +24,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -41,15 +39,9 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 			case Notification.ADD:
 			case Notification.ADD_MANY:
 			case Notification.MOVE:
-				if (isContainedChild(notification.getNewValue())) {
-					refreshChildren();
-				}
-				break;
 			case Notification.REMOVE:
 			case Notification.REMOVE_MANY:
-				if (isContainedChild(notification.getOldValue())) {
-					refreshChildren();
-				}
+				refreshChildren();
 				break;
 			case Notification.SET:
 				refreshVisuals();
@@ -57,10 +49,6 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 			default:
 				break;
 			}
-		}
-
-		private boolean isContainedChild(final Object value) {
-			return (value instanceof IInterfaceElement) || (value instanceof SubApp) || (value instanceof FBImpl);
 		}
 	};
 
