@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2016 Profactor GbmH, fortiss GmbH
- * 
+ * 				 2019 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - added removing the watch listener on dispose
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.views;
 
@@ -62,7 +64,7 @@ public class WatchesView extends ViewPart {
 		root.setLayout(new GridLayout());
 		PatternFilter patternFilter = new PatternFilter();
 
-		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL, patternFilter, true);
+		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL, patternFilter, true, true);
 
 		GridData treeGridData = new GridData();
 		treeGridData.grabExcessHorizontalSpace = true;
@@ -119,6 +121,12 @@ public class WatchesView extends ViewPart {
 
 	private void addWatchesAdapters() {
 		MonitoringManager.getInstance().addWatchesAdapter(listener);
+	}
+
+	@Override
+	public void dispose() {
+		MonitoringManager.getInstance().removeWatchesAdapter(listener);
+		super.dispose();
 	}
 
 	@Override

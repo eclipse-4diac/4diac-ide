@@ -23,6 +23,8 @@ import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.EditPart;
@@ -35,6 +37,16 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart 
 	private static final int DISTANCE_TO_FB_BORDER = 15;
 
 	InterfaceEditPart referencedInterface;
+
+	private EContentAdapter contentAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			if (Notification.SET == notification.getEventType()) {
+				refreshVisuals();
+			}
+		}
+	};
 
 	/**
 	 * The Class CommentTypeContainerFigure for handling the layout of one comment
@@ -58,6 +70,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart 
 	@Override
 	public void activate() {
 		super.activate();
+		getModel().getReferencedElement().eAdapters().add(contentAdapter);
 		Object part = getViewer().getEditPartRegistry().get(getInterfaceElement());
 		if (part instanceof InterfaceEditPart) {
 			referencedInterface = (InterfaceEditPart) part;
@@ -79,6 +92,12 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements EditPart 
 				}
 			});
 		}
+	}
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		getModel().getReferencedElement().eAdapters().remove(contentAdapter);
 	}
 
 	@Override
