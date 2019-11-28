@@ -16,46 +16,27 @@ package org.eclipse.fordiac.ide.gef.editparts;
 
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.gef.tools.FordiacConnectionDragCreationTool;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.gef.tools.SelectEditPartTracker;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
 public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
-
-	private static final class FordiacConnectionDragCreatinTool extends ConnectionDragCreationTool {
-
-		public FordiacConnectionDragCreatinTool() {
-			super();
-			setDefaultCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
-			setDisabledCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_NO));
-		}
-
-		@Override
-		public void mouseDrag(MouseEvent me, EditPartViewer viewer) {
-			super.mouseDrag(me, viewer);
-			if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
-				((AdvancedScrollingGraphicalViewer) viewer).checkScrollPositionDuringDrag(me);
-			}
-		}
-	}
 
 	private ConnectionDragCreationTool connectionTool;
 	private SelectEditPartTracker editPartTracker;
 
 	public ConnCreateDirectEditDragTrackerProxy(EditPart editPart) {
-		this.connectionTool = new FordiacConnectionDragCreatinTool();
+		this.connectionTool = new FordiacConnectionDragCreationTool();
 		this.editPartTracker = new SelectEditPartTracker(editPart);
 	}
 	
