@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Changed grid layer so that it shows every 10th and 5th line
  *                 emphasized
+ *               - added autoscroll to marquee drag tracker
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -25,8 +26,12 @@ import org.eclipse.draw2d.FreeformLayeredPane;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.LayeredPane;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
@@ -38,6 +43,7 @@ import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.handlers.IHandlerService;
 
@@ -124,6 +130,9 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	 * MarqueeDragTracker which deselects all elements on right click if nothing so
 	 * that the correct conext menu is shown. We are only here if there is no
 	 * element under the cursor.
+	 *
+	 * Furthermore it performs autoscrolling if the user went beyond the viewport
+	 * boundaries.
 	 */
 	public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
 		@Override
@@ -134,6 +143,21 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 			}
 			return super.handleButtonDown(button);
 		}
+
+		@Override
+		public void mouseDrag(MouseEvent me, EditPartViewer viewer) {
+			if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
+				Point oldViewPort = ((AdvancedScrollingGraphicalViewer) viewer).getViewLocation();
+				((AdvancedScrollingGraphicalViewer) viewer).checkScrollPositionDuringDrag(me);
+				Dimension delta = oldViewPort
+						.getDifference(((AdvancedScrollingGraphicalViewer) viewer).getViewLocation());
+				// Compensate the moved scrolling in the start position for correct dropping of
+				// moved parts
+				setStartLocation(getStartLocation().getTranslated(delta));
+			}
+			super.mouseDrag(me, viewer);
+		}
+
 	}
 
 	public static final String TOP_LAYER = "TOPLAYER"; //$NON-NLS-1$
