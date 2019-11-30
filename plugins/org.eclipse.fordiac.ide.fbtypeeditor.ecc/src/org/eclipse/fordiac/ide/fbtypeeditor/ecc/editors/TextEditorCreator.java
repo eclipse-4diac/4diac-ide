@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012 - 2014 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2012 - 2016 fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,27 +8,31 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
+ *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
+package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * The Interface IAlgorithmEditorCreator.
+ * The Class TextEditorCreator.
  */
-public interface IAlgorithmEditorCreator {
+public class TextEditorCreator implements IAlgorithmEditorCreator {
 
 	/**
-	 * Creates the algorithm editor.
-	 * 
-	 * @param parent
-	 *            the parent
-	 * 
-	 * @return the i algorithm editor
+	 * Instantiates a new text editor creator.
 	 */
-	IAlgorithmEditor createAlgorithmEditor(Composite parent, BaseFBType fbType);
+	public TextEditorCreator() {
+	}
+
+	@Override
+	public IAlgorithmEditor createAlgorithmEditor(final Composite parent, BaseFBType fbType) {
+		TextEditor editor = new TextEditor(parent, null, null, false,
+				SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		return editor;
+	}
 
 }

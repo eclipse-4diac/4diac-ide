@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 				 2018 - 2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,13 +11,14 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - changed inheritence to DiagramEditorWithFlyoutPalette, 
- *                 removed duplicated code 
+ *   Alois Zoitl - changed inheritence to DiagramEditorWithFlyoutPalette,
+ *                 removed duplicated code
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
+package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.AddECCActionAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.DeleteECCAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.ECCSelectAllAction;
@@ -100,9 +101,6 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		IAction action = getActionRegistry().getAction(NewStateAction.CREATE_STATE);
 		((NewStateAction) action).setViewerControl((FigureCanvas) viewer.getControl());
 		((NewStateAction) action).setZoomManager(getZoomManger());
-
-		viewer.getKeyHandler().put(KeyStroke.getPressed(SWT.DEL, 127, 0),
-				getActionRegistry().getAction(ActionFactory.DELETE.getId()));
 	}
 
 	@Override
@@ -115,6 +113,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		return keyHandler;
 	}
 
+	@Override
 	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer, ZoomManager zoomManager) {
 		return new ZoomUndoRedoContextMenuProvider(viewer, zoomManager, getActionRegistry()) {
 			@Override
@@ -217,22 +216,27 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 			return true;
 		}
 		if (selectedElement instanceof ECAction) {
-			obj = getGraphicalViewer().getEditPartRegistry().get(((ECAction) selectedElement).getECState());
-			if (null != obj) {
-				for (Object element : ((ECStateEditPart) obj).getCurrentChildren()) {
-					if ((element instanceof ECActionAlgorithm)
-							&& (selectedElement.equals(((ECActionAlgorithm) element).getAction()))) {
-						obj = getGraphicalViewer().getEditPartRegistry().get(element);
-						if (null != obj) {
-							getGraphicalViewer().select((EditPart) obj);
-						}
-					}
-				}
-			}
+			handleActionOutlineSelection((ECAction) selectedElement);
 			return true;
 		}
 
 		return false;
+	}
+
+	private void handleActionOutlineSelection(ECAction action) {
+		Object obj = getGraphicalViewer().getEditPartRegistry().get(action.getECState());
+		if (null != obj) {
+			for (Object element : ((ECStateEditPart) obj).getCurrentChildren()) {
+				if ((element instanceof ECActionAlgorithm)
+						&& (action.equals(((ECActionAlgorithm) element).getAction()))) {
+					obj = getGraphicalViewer().getEditPartRegistry().get(element);
+					if (null != obj) {
+						getGraphicalViewer().select((EditPart) obj);
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	private CommandStack commandStack;

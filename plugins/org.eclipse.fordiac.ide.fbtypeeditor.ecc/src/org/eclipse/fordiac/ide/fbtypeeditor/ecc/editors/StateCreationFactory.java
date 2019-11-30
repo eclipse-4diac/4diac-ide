@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009 Profactor GmbH
+ * Copyright (c) 2008 Profactor GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,16 +11,16 @@
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
+package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
-import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.gef.requests.CreationFactory;
 
 /**
- * A factory for creating ActionCreation objects.
+ * A factory for creating StateCreation objects.
  */
-public class ActionCreationFactory implements CreationFactory {
+public class StateCreationFactory implements CreationFactory {
 
 	/*
 	 * (non-Javadoc)
@@ -29,7 +29,9 @@ public class ActionCreationFactory implements CreationFactory {
 	 */
 	@Override
 	public Object getNewObject() {
-		return LibraryElementFactory.eINSTANCE.createECAction();	
+		ECState state = LibraryElementFactory.eINSTANCE.createECState();
+		state.setName("State"); //$NON-NLS-1$
+		return state;
 	}
 
 	/*
@@ -39,7 +41,7 @@ public class ActionCreationFactory implements CreationFactory {
 	 */
 	@Override
 	public Object getObjectType() {
-		return ECAction.class;
+		return ECState.class;
 	}
 
 }

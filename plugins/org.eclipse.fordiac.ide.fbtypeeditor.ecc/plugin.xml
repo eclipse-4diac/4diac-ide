@@ -5,7 +5,7 @@
    <extension
          point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
       <editor
-            class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditor"
+            class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.ECCEditor"
             sortIndex="40"
             type="basic">
       </editor>
@@ -13,7 +13,7 @@
    <extension
          point="org.eclipse.fordiac.ide.fbtypeeditor.ecc.algorithmEditor">
       <algorithmEditor
-            class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.TextEditorCreator"
+            class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.TextEditorCreator"
             language="AnyText">
       </algorithmEditor>
    </extension>

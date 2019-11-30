@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditorCreator;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditorCreator;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 
 public abstract class AbstractECSection extends AbstractSection {

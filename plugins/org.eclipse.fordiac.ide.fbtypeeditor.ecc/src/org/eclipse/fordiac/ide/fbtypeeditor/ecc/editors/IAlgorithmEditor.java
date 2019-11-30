@@ -11,7 +11,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
+package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.widgets.Control;

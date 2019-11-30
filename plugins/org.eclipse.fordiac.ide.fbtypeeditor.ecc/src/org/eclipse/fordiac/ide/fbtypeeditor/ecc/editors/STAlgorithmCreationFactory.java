@@ -11,7 +11,7 @@
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
+package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;

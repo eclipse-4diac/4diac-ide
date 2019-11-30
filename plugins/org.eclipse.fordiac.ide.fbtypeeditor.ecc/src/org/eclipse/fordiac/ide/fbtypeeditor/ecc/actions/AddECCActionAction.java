@@ -15,13 +15,13 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.ActionCreationFactory;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECActionCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.ActionCreationFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.ui.actions.SelectionAction;
@@ -61,7 +61,7 @@ public class AddECCActionAction extends SelectionAction {
 
 	@Override
 	public void run() {
-		ECCEditor editor = (ECCEditor) getWorkbenchPart();
+		IFBTEditorPart editor = (IFBTEditorPart) getWorkbenchPart();
 		ECAction action = (ECAction) actionFactory.getNewObject();
 		execute(new CreateECActionCommand(action, getState(getSelectedObjects())));
 		editor.outlineSelectionChanged(action);

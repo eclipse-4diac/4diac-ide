@@ -18,7 +18,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.xtext;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.IAlgorithmEditor;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.ui.providers.SourceViewerColorProvider;

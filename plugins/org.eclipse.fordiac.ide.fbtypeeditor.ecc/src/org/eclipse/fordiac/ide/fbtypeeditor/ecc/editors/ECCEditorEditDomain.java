@@ -11,7 +11,7 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Kirill Dorofeev - extended to support on-the-fly transitions and states creation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc;
+package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
