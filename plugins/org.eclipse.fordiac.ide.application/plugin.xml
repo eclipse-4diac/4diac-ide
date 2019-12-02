@@ -324,6 +324,13 @@
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.ConnectThroughHandler"
+            description="Take the connection going into this FB and connect them through the target of the output"
+            id="org.eclipse.fordiac.ide.application.commands.connectThrough"
+            name="Bypass FB">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoParentHandler"
             id="org.eclipse.fordiac.ide.application.commands.gotoparent"
             name="Go To Parent">
@@ -405,6 +412,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+ARROW_RIGHT">
       </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.application.commands.connectThrough"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M2+M3+-">
+      </key>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -427,6 +440,7 @@
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup"> 
             <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
       </menuContribution>
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
@@ -480,6 +494,24 @@
                <reference
                      definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
                </reference>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" >
+            <visibleWhen checkEnabled="true">
+                <with variable="selection">
+                   <count value="2"/>
+                   <iterate>
+                      <or>
+                        <instanceof
+                              value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
+                        </instanceof>
+                        <instanceof
+                              value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart">
+                        </instanceof>
+                      </or>
+                   </iterate>
+                </with>
             </visibleWhen>
          </command>
          <command

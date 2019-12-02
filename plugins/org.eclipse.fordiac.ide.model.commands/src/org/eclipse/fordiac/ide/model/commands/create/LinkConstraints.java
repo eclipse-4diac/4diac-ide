@@ -227,7 +227,7 @@ public final class LinkConstraints {
 	 *
 	 * @return true, if successful
 	 */
-	private static boolean typeCheck(final VarDeclaration source, final VarDeclaration target) {
+	public static boolean typeCheck(final VarDeclaration source, final VarDeclaration target) {
 
 		boolean automaticCasts = ModelCommandsPlugin.getDefault().getPreferenceStore()
 				.getBoolean(PREFERENCE_ENABLE_CASTS);
