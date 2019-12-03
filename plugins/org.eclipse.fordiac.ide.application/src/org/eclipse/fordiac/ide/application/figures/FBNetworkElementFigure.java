@@ -132,15 +132,19 @@ public class FBNetworkElementFigure extends Shape implements ITransparencyFigure
 	/** The plugs. */
 	private final Figure plugs = new Figure();
 
-	protected UnderlineAlphaLabel typeLabel;
+	private UnderlineAlphaLabel typeLabel;
 
-	protected AbstractFBNElementEditPart editPart;
+	private AbstractFBNElementEditPart editPart;
 
-	public FBNetworkElement getModel() {
+	protected FBNetworkElement getModel() {
 		return model;
 	}
 
-	public ZoomManager getZoomManager() {
+	protected UnderlineAlphaLabel getTypeLabel() {
+		return typeLabel;
+	}
+
+	protected ZoomManager getZoomManager() {
 		return (null != editPart) ? editPart.getZoomManager() : null;
 	}
 
@@ -167,7 +171,7 @@ public class FBNetworkElementFigure extends Shape implements ITransparencyFigure
 		setTypeLabelFont();
 	}
 
-	private void createFBFigureShape(final FBNetworkElement model) {
+	private final void createFBFigureShape(final FBNetworkElement model) {
 		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
 		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
 		Color borderColor = getBorderColor(model.getType());

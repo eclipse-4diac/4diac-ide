@@ -38,6 +38,6 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	}
 
 	public void updateTypeLabel(SubApp model) {
-		typeLabel.setText(null != model.getType() ? model.getTypeName() : ""); //$NON-NLS-1$
+		getTypeLabel().setText(null != model.getType() ? model.getTypeName() : ""); //$NON-NLS-1$
 	}
 }

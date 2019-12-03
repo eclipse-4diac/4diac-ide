@@ -33,7 +33,7 @@ import org.eclipse.swt.events.MouseEvent;
 
 public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracker {
 
-	private static class InlineConnectionDragCreationTool extends FordiacConnectionDragCreationTool {
+	private static final class InlineConnectionDragCreationTool extends FordiacConnectionDragCreationTool {
 		private final EditPart originalSource;
 
 		private InlineConnectionDragCreationTool(EditPart originalSource, EditDomain editDomain,

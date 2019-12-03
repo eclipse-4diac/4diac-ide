@@ -37,7 +37,7 @@ import org.eclipse.gef.tools.ConnectionEndpointTracker;
  */
 public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEditPolicy {
 
-	private static class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle {
+	private static final class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle {
 		private ScrollingConnectionEndpointHandle(ConnectionEditPart owner, int endPoint) {
 			super(owner, endPoint);
 			setPreferredSize(ConnectionPreferenceValues.HANDLE_SIZE, ConnectionPreferenceValues.HANDLE_SIZE);
@@ -45,8 +45,9 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 
 		@Override
 		protected DragTracker createDragTracker() {
-			if (isFixed())
+			if (isFixed()) {
 				return null;
+			}
 			ConnectionEndpointTracker tracker;
 			tracker = new ScrollingConnectionEndpointTracker((ConnectionEditPart) getOwner());
 			if (getEndPoint() == ConnectionLocator.SOURCE) {
