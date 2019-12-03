@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.application.actions.FBInsertAction;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkElementInsertAction;
 import org.eclipse.fordiac.ide.application.actions.MapAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
-import org.eclipse.fordiac.ide.application.actions.SaveAsSubApplicationTypeAction;
 import org.eclipse.fordiac.ide.application.actions.SubAppInsertAction;
 import org.eclipse.fordiac.ide.application.actions.UnmapAction;
 import org.eclipse.fordiac.ide.application.actions.UnmapAllAction;
@@ -158,11 +157,6 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		action = getRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
 		if (action != null && action.isEnabled()) {
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-		}
-
-		action = getRegistry().getAction(SaveAsSubApplicationTypeAction.ID);
-		if ((action != null) && (action.isEnabled())) {
-			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 		}
 
 		createMappingMenuEntries(menu);

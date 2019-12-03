@@ -86,7 +86,7 @@ public class UpdateFBTypeCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return null != fbnElement.getType();
+		return null != entry && null != fbnElement && null != network;
 	}
 
 	/*

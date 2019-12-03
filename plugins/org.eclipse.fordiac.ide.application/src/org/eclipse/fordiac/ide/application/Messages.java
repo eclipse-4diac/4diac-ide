@@ -88,11 +88,12 @@ public class Messages extends NLS {
 	/** The Unmap action_ unmap_ label. */
 	public static String UnmapAction_Unmap_Label;
 
-	public static String SaveAsSubApplicationTypeAction_SaveAsSubApplicationTypeText;
-
 	public static String SaveAsSubApplicationTypeAction_UntypedSubappError;
 
 	public static String SaveAsSubApplicationTypeAction_UntypedSubappErrorDescription;
+
+	public static String SaveAsSubappHandler_ReplaceDialogTitle;
+	public static String SaveAsSubappHandler_ReplaceDialogText;
 
 	public static String SaveAsSubApplicationTypeAction_WizardTitle;
 

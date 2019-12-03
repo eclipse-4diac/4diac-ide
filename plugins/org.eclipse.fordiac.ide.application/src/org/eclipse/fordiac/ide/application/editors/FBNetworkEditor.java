@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.application.actions.CutEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkSelectAllAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
-import org.eclipse.fordiac.ide.application.actions.SaveAsSubApplicationTypeAction;
 import org.eclipse.fordiac.ide.application.actions.UnmapAction;
 import org.eclipse.fordiac.ide.application.actions.UnmapAllAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
@@ -196,10 +195,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	protected void createActions() {
 		ActionRegistry registry = getActionRegistry();
 		IAction action;
-
-		action = new SaveAsSubApplicationTypeAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
 
 		action = new UnmapAction(this);
 		registry.registerAction(action);

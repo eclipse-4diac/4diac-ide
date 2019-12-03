@@ -55,9 +55,15 @@ public class SaveAsSubappWizard extends Wizard {
 
 	private SaveAsSubappWizardPage newFilePage;
 
+	private PaletteEntry entry = null;
+
 	public SaveAsSubappWizard(SubApp subApp) {
 		setWindowTitle(Messages.SaveAsSubApplicationTypeAction_WizardTitle);
 		this.subApp = subApp;
+	}
+
+	public PaletteEntry getEntry() {
+		return entry;
 	}
 
 	@Override
@@ -81,7 +87,7 @@ public class SaveAsSubappWizard extends Wizard {
 		if (perform) {
 			if (createSubAppTemplateCopy()) { // copy the subapp template so that we don't need to write code for any
 												// basic type information stuff (e.g., version, coments etc.)
-				PaletteEntry entry = getPalletEntry();
+				entry = getPalletEntry();
 				LibraryElement type = entry.getType();
 				type.setName(TypeLibrary.getTypeNameFromFile(entry.getFile()));
 
