@@ -127,8 +127,8 @@ abstract class ForteFBTemplate extends ExportTemplate {
 	'''
 
 	def protected CharSequence generateFBInterfaceDefinition() {
-		val int[] inputWith = newArrayList
-		val int[] inputWithIndexes = newArrayList
+		val inputWith = newArrayList
+		val inputWithIndexes = newArrayList
 		type.interfaceList.eventInputs.forEach[event | {
 			if(event.with.empty) {
 				inputWithIndexes.add(-1)
@@ -140,8 +140,8 @@ abstract class ForteFBTemplate extends ExportTemplate {
 				inputWith.add(255)
 			}
 		}]
-		val int[] outputWith = newArrayList
-		val int[] outputWithIndexes = newArrayList
+		val outputWith = newArrayList
+		val outputWithIndexes = newArrayList
 		type.interfaceList.eventOutputs.forEach[event | {
 			if(event.with.empty) {
 				outputWithIndexes.add(-1)
