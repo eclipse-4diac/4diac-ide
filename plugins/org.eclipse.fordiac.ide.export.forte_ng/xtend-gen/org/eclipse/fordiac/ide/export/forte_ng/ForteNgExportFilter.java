@@ -28,12 +28,15 @@ import org.eclipse.fordiac.ide.export.forte_ng.composite.CompositeFBHeaderTempla
 import org.eclipse.fordiac.ide.export.forte_ng.composite.CompositeFBImplTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.service.ServiceInterfaceFBHeaderTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.service.ServiceInterfaceFBImplTemplate;
+import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBHeaderTemplate;
+import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBImplTemplate;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 
@@ -58,6 +61,24 @@ public class ForteNgExportFilter extends TemplateExportFilter {
       Path _get_1 = Paths.get("");
       BasicFBImplTemplate _basicFBImplTemplate = new BasicFBImplTemplate(((BasicFBType)type), _builder_1.toString(), _get_1);
       _switchResult = Collections.<IExportTemplate>unmodifiableSet(CollectionLiterals.<IExportTemplate>newHashSet(_basicFBHeaderTemplate, _basicFBImplTemplate));
+    }
+    if (!_matched) {
+      if (type instanceof SimpleFBType) {
+        _matched=true;
+        StringConcatenation _builder = new StringConcatenation();
+        String _name = ((SimpleFBType)type).getName();
+        _builder.append(_name);
+        _builder.append(".h");
+        Path _get = Paths.get("");
+        SimpleFBHeaderTemplate _simpleFBHeaderTemplate = new SimpleFBHeaderTemplate(((SimpleFBType)type), _builder.toString(), _get);
+        StringConcatenation _builder_1 = new StringConcatenation();
+        String _name_1 = ((SimpleFBType)type).getName();
+        _builder_1.append(_name_1);
+        _builder_1.append(".cpp");
+        Path _get_1 = Paths.get("");
+        SimpleFBImplTemplate _simpleFBImplTemplate = new SimpleFBImplTemplate(((SimpleFBType)type), _builder_1.toString(), _get_1);
+        _switchResult = Collections.<IExportTemplate>unmodifiableSet(CollectionLiterals.<IExportTemplate>newHashSet(_simpleFBHeaderTemplate, _simpleFBImplTemplate));
+      }
     }
     if (!_matched) {
       if (type instanceof CompositeFBType) {
