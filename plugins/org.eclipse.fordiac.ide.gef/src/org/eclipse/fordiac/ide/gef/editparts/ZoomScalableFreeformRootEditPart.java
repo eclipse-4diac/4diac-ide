@@ -26,6 +26,8 @@ import org.eclipse.draw2d.FreeformLayeredPane;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.LayeredPane;
+import org.eclipse.draw2d.ScalableFigure;
+import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -212,5 +214,10 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		IHandlerService zoomOutService = site.getService(IHandlerService.class);
 		zoomOutService.activateHandler(zoomOut.getActionDefinitionId(), new ActionHandler(zoomOut));
 
+	}
+
+	@Override
+	protected ZoomManager createZoomManager(ScalableFigure scalableFigure, Viewport viewport) {
+		return new AdvancedZoomManager(scalableFigure, viewport);
 	}
 }
