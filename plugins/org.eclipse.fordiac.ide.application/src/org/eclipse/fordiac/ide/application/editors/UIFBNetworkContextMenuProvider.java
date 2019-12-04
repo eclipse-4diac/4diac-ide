@@ -293,7 +293,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 		if (null != action) {
 			getRegistry().registerAction(action);
-			action.updateCreatePosition(pt);
+			action.updateCreatePosition(getPoint().x, getPoint().y);
 		}
 
 		return action;
