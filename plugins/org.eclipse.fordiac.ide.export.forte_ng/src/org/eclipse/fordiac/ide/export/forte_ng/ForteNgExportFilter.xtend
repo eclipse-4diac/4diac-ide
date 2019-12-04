@@ -28,6 +28,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
+import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBHeaderTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBImplTemplate
 
 class ForteNgExportFilter extends TemplateExportFilter {
 
@@ -37,6 +40,11 @@ class ForteNgExportFilter extends TemplateExportFilter {
 				#{
 					new BasicFBHeaderTemplate(type, '''«type.name».h''', Paths.get("")),
 					new BasicFBImplTemplate(type, '''«type.name».cpp''', Paths.get(""))
+				}
+			SimpleFBType:
+				#{
+					new SimpleFBHeaderTemplate(type, '''«type.name».h''', Paths.get("")),
+					new SimpleFBImplTemplate(type, '''«type.name».cpp''', Paths.get(""))
 				}
 			CompositeFBType:
 				#{
