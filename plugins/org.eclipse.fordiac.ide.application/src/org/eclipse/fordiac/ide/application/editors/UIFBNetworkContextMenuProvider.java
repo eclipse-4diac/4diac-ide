@@ -151,7 +151,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 		action = getRegistry().getAction(ActionFactory.PASTE.getId());
 		if (action instanceof PasteEditPartsAction) {
-			((PasteEditPartsAction) action).setPastRefPosition(pt);
+			((PasteEditPartsAction) action).setPastRefPosition(getPoint());
 		}
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
