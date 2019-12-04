@@ -17,11 +17,12 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
+import org.eclipse.fordiac.ide.application.editors.UIFBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class NewSubApplication extends AbstractHandler {
@@ -30,11 +31,26 @@ public class NewSubApplication extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
 		FBNetworkEditor editor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
 		StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
+		// ZoomManager zoomManager = (ZoomManager)
+		// editor.getViewer().getProperty(ZoomManager.class.toString());
+		if (selection.size() == 1) {
+			// new empty subapp at mouse cursor location
+			Point pos = getPositionInViewer(editor);
 
-		Point pos = FBNetworkHelper.getTopLeftCornerOfFBNetwork(selection.toList());
-		NewSubAppCommand cmd = new NewSubAppCommand(editor.getModel(), selection.toList(), pos.x, pos.y);
-		editor.getCommandStack().execute(cmd);
+			NewSubAppCommand cmd = new NewSubAppCommand(editor.getModel(), selection.toList(), pos.x, pos.y);
+			editor.getCommandStack().execute(cmd);
+		} else {
+			org.eclipse.swt.graphics.Point pos = FBNetworkHelper.getTopLeftCornerOfFBNetwork(selection.toList());
+			NewSubAppCommand cmd = new NewSubAppCommand(editor.getModel(), selection.toList(), pos.x, pos.y);
+			editor.getCommandStack().execute(cmd);
+		}
+
 		return null;
+	}
+
+	private static Point getPositionInViewer(FBNetworkEditor editor) {
+
+		return ((UIFBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getPoint();
 	}
 
 }
