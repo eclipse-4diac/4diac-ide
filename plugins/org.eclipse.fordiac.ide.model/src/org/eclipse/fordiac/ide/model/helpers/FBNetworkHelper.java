@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Point;
 
@@ -98,7 +97,7 @@ public final class FBNetworkHelper {
 		Object fb = null;
 		for (Object sel : selection) {
 			fb = (sel instanceof EditPart) ? ((EditPart) sel).getModel() : sel;
-			if (fb instanceof FBImpl) {
+			if (fb instanceof FBNetworkElement) {
 				pt.x = (pt.x == 0) ? ((FBNetworkElement) fb).getX() : Math.min(pt.x, ((FBNetworkElement) fb).getX());
 				pt.y = (pt.y == 0) ? ((FBNetworkElement) fb).getY() : Math.min(pt.y, ((FBNetworkElement) fb).getY());
 			}
