@@ -31,8 +31,6 @@ public class NewSubApplication extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
 		FBNetworkEditor editor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
 		StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		// ZoomManager zoomManager = (ZoomManager)
-		// editor.getViewer().getProperty(ZoomManager.class.toString());
 		if (selection.size() == 1) {
 			// new empty subapp at mouse cursor location
 			Point pos = getPositionInViewer(editor);
@@ -49,7 +47,6 @@ public class NewSubApplication extends AbstractHandler {
 	}
 
 	private static Point getPositionInViewer(FBNetworkEditor editor) {
-
 		return ((UIFBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getPoint();
 	}
 
