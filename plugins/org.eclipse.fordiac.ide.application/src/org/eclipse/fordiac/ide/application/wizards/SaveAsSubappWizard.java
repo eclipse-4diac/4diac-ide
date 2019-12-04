@@ -143,15 +143,15 @@ public class SaveAsSubappWizard extends Wizard {
 	private PaletteEntry getPalletEntry() {
 		Palette palette = subApp.getSubAppNetwork().getAutomationSystem().getPalette();
 		IFile targetTypeFile = getTargetTypeFile();
-		PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, targetTypeFile);
+		PaletteEntry newEntry = TypeLibrary.getPaletteEntry(palette, targetTypeFile);
 
-		if (null == entry) {
+		if (null == newEntry) {
 			// refresh the palette and retry to fetch the entry
 			TypeLibrary.refreshPalette(palette);
-			entry = TypeLibrary.getPaletteEntry(palette, targetTypeFile);
+			newEntry = TypeLibrary.getPaletteEntry(palette, targetTypeFile);
 		}
 
-		return entry;
+		return newEntry;
 	}
 
 	private static void openTypeEditor(PaletteEntry entry) {

@@ -20,7 +20,7 @@ import org.eclipse.gef.editparts.ZoomManager;
 
 public class AdvancedZoomManager extends ZoomManager {
 
-	Point lastMousePos;
+	private Point lastMousePos;
 
 	AdvancedZoomManager(ScalableFigure pane, Viewport viewport) {
 		super(pane, viewport);

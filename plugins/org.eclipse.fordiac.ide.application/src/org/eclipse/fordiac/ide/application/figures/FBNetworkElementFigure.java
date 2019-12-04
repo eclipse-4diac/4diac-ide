@@ -171,7 +171,7 @@ public class FBNetworkElementFigure extends Shape implements ITransparencyFigure
 		setTypeLabelFont();
 	}
 
-	private final void createFBFigureShape(final FBNetworkElement model) {
+	private void createFBFigureShape(final FBNetworkElement model) {
 		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
 		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
 		Color borderColor = getBorderColor(model.getType());

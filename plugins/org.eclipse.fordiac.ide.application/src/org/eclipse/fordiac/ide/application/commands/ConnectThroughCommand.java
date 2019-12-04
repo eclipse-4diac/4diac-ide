@@ -28,11 +28,11 @@ import org.eclipse.gef.commands.CompoundCommand;
 
 public class ConnectThroughCommand extends Command {
 
-	final IInterfaceElement input;
-	final IInterfaceElement output;
+	private final IInterfaceElement input;
+	private final IInterfaceElement output;
 
-	final CompoundCommand deleteConnectionCommands = new CompoundCommand();
-	final CompoundCommand createConnectionCommands = new CompoundCommand();
+	private final CompoundCommand deleteConnectionCommands = new CompoundCommand();
+	private final CompoundCommand createConnectionCommands = new CompoundCommand();
 
 	public ConnectThroughCommand(IInterfaceElement input, IInterfaceElement output) {
 		this.input = input;
