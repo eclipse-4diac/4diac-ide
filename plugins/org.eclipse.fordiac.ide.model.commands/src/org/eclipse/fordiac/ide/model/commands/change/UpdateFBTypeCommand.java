@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
@@ -29,6 +30,7 @@ import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -283,9 +285,15 @@ public class UpdateFBTypeCommand extends Command {
 	}
 
 	protected FBNetworkElement createCopiedFBEntry(FBNetworkElement srcElement) {
-		FBNetworkElement copy = (entry instanceof SubApplicationTypePaletteEntry)
-				? LibraryElementFactory.eINSTANCE.createSubApp()
-				: LibraryElementFactory.eINSTANCE.createFB();
+		FBNetworkElement copy;
+		if (entry instanceof SubApplicationTypePaletteEntry) {
+			copy = LibraryElementFactory.eINSTANCE.createSubApp();
+		} else if (entry instanceof AdapterTypePaletteEntry) {
+			copy = LibraryElementFactory.eINSTANCE.createAdapterFB();
+			((AdapterFB) copy).setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
+		} else {
+			copy = LibraryElementFactory.eINSTANCE.createFB();
+		}
 		copy.setPaletteEntry(entry);
 		return copy;
 	}
