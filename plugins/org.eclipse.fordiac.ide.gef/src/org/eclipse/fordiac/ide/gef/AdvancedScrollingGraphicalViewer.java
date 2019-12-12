@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added method to handle mouse drags outside of the viewport
  *                 Bug #553136.
+ *   Bianca Wiesmayr - support keyboard navigation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
@@ -69,16 +70,24 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 		return getFigureCanvas().getViewport().getViewLocation();
 	}
 
-	private static int getScrollDelta(int mousePos, int controllPos, int length) {
-		if (mousePos < controllPos) {
-			return mousePos - controllPos;
+	private static int getScrollDelta(int mousePos, int controlPos, int length) {
+		if (mousePos < controlPos) {
+			return mousePos - controlPos;
 		}
 
-		if (controllPos + length < mousePos) {
-			return mousePos - (controllPos + length);
+		if ((controlPos + length) < mousePos) {
+			return mousePos - (controlPos + length);
 		}
 
 		return 0;
 	}
 
+	public void scrollByOffset(int dx, int dy) {
+		Point location = getViewLocation();
+		getFigureCanvas().scrollSmoothTo(location.x + dx, location.y + dy);
+	}
+
+	public org.eclipse.swt.graphics.Point getFigureCanvasSize() {
+		return getFigureCanvas().getSize();
+	}
 }
