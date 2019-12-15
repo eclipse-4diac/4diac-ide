@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * 				 2019 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,7 @@
  *   Alois Zoitl - added diagram font preference
  *   			 - separated FBNetworkElement from instance name for better
  *                 direct editing of instance names
+ *               - added separate colors for different data types
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -216,7 +217,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		if (null == listener) {
 			listener = event -> {
 				if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
-						|| event.getProperty().equals(PreferenceConstants.P_DATA_CONNECTOR_COLOR)
+						|| PreferenceConstants.isDataConnectorProperty(event.getProperty())
 						|| event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)) {
 					getFigure().repaint();
 				}
