@@ -95,6 +95,10 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 			}
 			return InteractionStyleFigure.REGION_DRAG;
 		}
+
+		public void updateConnectorColor() {
+			((ConnectorBorder) getBorder()).updateColor();
+		}
 	}
 
 	@Override
@@ -127,6 +131,9 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 				WithEditPart with = (WithEditPart) con;
 				with.updateWithPos();
 			}
+		}
+		if (getCastedModel() instanceof VarDeclaration) {
+			((InterfaceFigure) getFigure()).updateConnectorColor();
 		}
 	}
 
