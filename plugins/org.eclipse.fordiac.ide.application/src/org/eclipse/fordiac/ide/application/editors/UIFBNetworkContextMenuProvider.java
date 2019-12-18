@@ -195,9 +195,16 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		addFBMenuEntries(palette.getRootGroup(), submenu);
 	}
 
+	public void buildFBInsertMenu(final IMenuManager menu, Point point) {
+		pt = point;
+		useChangeFBType = false;
+		fillMenuForPaletteGroup(menu, palette.getRootGroup().getSubGroups());
+		addFBMenuEntries(palette.getRootGroup(), menu);
+	}
+
 	private boolean useChangeFBType;
 
-	private void fillMenuForPaletteGroup(MenuManager insertTypeEntry, EList<PaletteGroup> subGroups) {
+	private void fillMenuForPaletteGroup(IMenuManager insertTypeEntry, EList<PaletteGroup> subGroups) {
 		// TODO sort groups alphabetically
 
 		for (PaletteGroup group : subGroups) {
@@ -209,7 +216,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		}
 	}
 
-	private void addFBMenuEntries(PaletteGroup group, MenuManager submenu) {
+	private void addFBMenuEntries(PaletteGroup group, IMenuManager submenu) {
 		for (PaletteEntry entry : group.getEntries()) {
 
 			if ((entry instanceof FBTypePaletteEntry) || (entry instanceof SubApplicationTypePaletteEntry)) {

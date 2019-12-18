@@ -47,6 +47,7 @@ import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
@@ -59,9 +60,12 @@ import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionFactory;
@@ -129,6 +133,22 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 						}
 
 						getCurrentViewer().setSelection(new StructuredSelection(editPartsToSelect.toArray()));
+					}
+
+					@Override
+					public void mouseUp(MouseEvent me, EditPartViewer viewer) {
+						if (0 != (me.stateMask & SWT.MOD1)) {
+							showFBInsertMenu(me, viewer);
+						} else {
+							super.mouseUp(me, viewer);
+						}
+					}
+
+					public void showFBInsertMenu(MouseEvent me, EditPartViewer viewer) {
+						MenuManager mgr = new MenuManager();
+						((UIFBNetworkContextMenuProvider) viewer.getContextMenu()).buildFBInsertMenu(mgr,
+								new Point(me.x, me.y));
+						mgr.createContextMenu(viewer.getControl()).setVisible(true);
 					}
 				};
 
