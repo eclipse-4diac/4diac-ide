@@ -132,7 +132,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 				with.updateWithPos();
 			}
 		}
-		if (getCastedModel() instanceof VarDeclaration) {
+		if ((getCastedModel() instanceof VarDeclaration) && (getFigure() instanceof InterfaceFigure)) {
 			((InterfaceFigure) getFigure()).updateConnectorColor();
 		}
 	}
