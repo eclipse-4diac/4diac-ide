@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,13 +11,15 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - added diagram font preference 
+ *   Alois Zoitl - added diagram font preference
+ *               - extracted common FB shape for interface and fbn editors
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -164,50 +166,45 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart {
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceContainerEditPart) {
-			if (childEditPart.getModel() instanceof EventInputContainer) {
-				getFigure().getInputEvents().add(child);
+			Figure cont = getContainer(childEditPart);
+			if (null != cont) {
+				cont.add(child);
 			}
-			if (childEditPart.getModel() instanceof EventOutputContainer) {
-				getFigure().getOutputEvents().add(child);
-			}
-			if (childEditPart.getModel() instanceof VariableInputContainer) {
-				getFigure().getInputVariables().add(child);
-			}
-			if (childEditPart.getModel() instanceof VariableOutputContainer) {
-				getFigure().getOutputVariables().add(child);
-			}
-			if (childEditPart.getModel() instanceof SocketContainer) {
-				getFigure().getSockets().add(child);
-			}
-			if (childEditPart.getModel() instanceof PlugContainer) {
-				getFigure().getPlugs().add(child);
-			}
+
 		} else {
 			super.addChildVisual(childEditPart, index);
 		}
+	}
+
+	private Figure getContainer(EditPart childEditPart) {
+		if (childEditPart.getModel() instanceof EventInputContainer) {
+			return getFigure().getEventInputs();
+		}
+		if (childEditPart.getModel() instanceof EventOutputContainer) {
+			return getFigure().getEventOutputs();
+		}
+		if (childEditPart.getModel() instanceof VariableInputContainer) {
+			return getFigure().getDataInputs();
+		}
+		if (childEditPart.getModel() instanceof VariableOutputContainer) {
+			return getFigure().getDataOutputs();
+		}
+		if (childEditPart.getModel() instanceof SocketContainer) {
+			return getFigure().getSockets();
+		}
+		if (childEditPart.getModel() instanceof PlugContainer) {
+			return getFigure().getPlugs();
+		}
+		return null;
 	}
 
 	@Override
 	protected void removeChildVisual(EditPart childEditPart) {
 		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceContainerEditPart) {
-			if (childEditPart.getModel() instanceof EventInputContainer) {
-				getFigure().getInputEvents().remove(child);
-			}
-			if (childEditPart.getModel() instanceof EventOutputContainer) {
-				getFigure().getOutputEvents().remove(child);
-			}
-			if (childEditPart.getModel() instanceof VariableInputContainer) {
-				getFigure().getInputVariables().remove(child);
-			}
-			if (childEditPart.getModel() instanceof VariableOutputContainer) {
-				getFigure().getOutputVariables().remove(child);
-			}
-			if (childEditPart.getModel() instanceof SocketContainer) {
-				getFigure().getSockets().remove(child);
-			}
-			if (childEditPart.getModel() instanceof PlugContainer) {
-				getFigure().getPlugs().remove(child);
+			Figure cont = getContainer(childEditPart);
+			if (null != cont) {
+				cont.remove(child);
 			}
 		} else {
 			super.removeChildVisual(childEditPart);
@@ -255,6 +252,6 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart {
 
 	@Override
 	public Label getNameLabel() {
-		return getFigure().getTypeNameLabel();
+		return getFigure().getTypeLabel();
 	}
 }

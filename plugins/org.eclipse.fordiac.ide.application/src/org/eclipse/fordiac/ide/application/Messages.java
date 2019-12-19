@@ -21,8 +21,6 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.application.messages"; //$NON-NLS-1$
 
-	public static String FBFigure_TYPE_NOT_SET;
-
 	public static String CreateConnectionSection_CreateConnection;
 
 	/** The Create sub app command_ label create sub app command. */
@@ -30,9 +28,6 @@ public class Messages extends NLS {
 
 	/** The FB edit part_ erro r_ unsupported fb type. */
 	public static String FBEditPart_ERROR_UnsupportedFBType;
-
-	/** The FB figure_ no t_ define d_ text. */
-	public static String FBFigure_NOT_DEFINED_Text;
 
 	/** The FB tooltip figure_ labe l_ application. */
 	public static String FBTooltipFigure_LABEL_Application;

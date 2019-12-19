@@ -13,14 +13,12 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - separated FBNetworkElement from instance name for better
  *                 direct editing of instance names
+ *               - extracted common FB shape for interface and fbn editors
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
-import org.eclipse.draw2d.Figure;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.swt.graphics.Color;
 
 /**
  * The Class SubAppForFbNetworkFigure.
@@ -29,12 +27,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 
 	public SubAppForFbNetworkFigure(SubApp model, SubAppForFBNetworkEditPart editPart) {
 		super(model, editPart);
-	}
-
-	@Override
-	protected void setupTypeNameAndVersion(FBNetworkElement model, Figure container, Color borderColor) {
-		super.setupTypeNameAndVersion(model, container, borderColor);
-		updateTypeLabel((SubApp) model);
+		updateTypeLabel(model);
 	}
 
 	public void updateTypeLabel(SubApp model) {
