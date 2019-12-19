@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -14,6 +14,8 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.network.editparts;
 
 import org.eclipse.draw2d.Label;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
@@ -21,8 +23,10 @@ import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInternalInte
 import org.eclipse.fordiac.ide.gef.editparts.ConnCreateDirectEditDragTrackerProxy;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
+import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -34,7 +38,7 @@ import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.viewers.TextCellEditor;
 
 public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfaceEditPartRO {
-	
+
 	public CompositeInternalInterfaceEditPart() {
 		super();
 		setConnectable(true);
@@ -90,6 +94,7 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 	@Override
 	protected void refreshVisuals() {
 		getNameLabel().setText(getModel().getName());
+		getFigure().setToolTip(new ToolTipFigure(getModel()));
 		super.refreshVisuals();
 	}
 
@@ -108,4 +113,23 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 	private Label getNameLabel() {
 		return (Label) getFigure();
 	}
+
+	@Override
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				Object feature = notification.getFeature();
+				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
+					refresh();
+				}
+				super.notifyChanged(notification);
+			}
+		};
+	}
+
 }

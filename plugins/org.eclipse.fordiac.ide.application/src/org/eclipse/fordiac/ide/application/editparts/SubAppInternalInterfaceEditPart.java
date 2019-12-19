@@ -14,14 +14,15 @@ package org.eclipse.fordiac.ide.application.editparts;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
+import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.gef.EditPolicy;
 
 public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceElementEditPart {
-	
+
 	@Override
 	protected IFigure createFigure() {
 		InterfaceFigure figure = new InterfaceFigure();
-		figure.setBorder(new ConnectorBorder(getModel()){
+		figure.setBorder(new ConnectorBorder(getModel()) {
 			@Override
 			public boolean isInput() {
 				return !super.isInput();
@@ -29,17 +30,23 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 		});
 		return figure;
 	}
-	
+
 	@Override
 	public boolean isInput() {
 		return !super.isInput();
 	}
-	
+
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 		// allow delete of a subapp's interface element
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteSubAppInterfaceElementPolicy());
 	}
-	
+
+	@Override
+	protected void refreshVisuals() {
+		getFigure().setToolTip(new ToolTipFigure(getModel()));
+		super.refreshVisuals();
+	}
+
 }
