@@ -35,8 +35,8 @@ public class GotoParentHandler extends AbstractHandler {
 		SubAppNetworkEditor editor = (SubAppNetworkEditor) HandlerUtil.getActiveEditor(event);
 
 		EObject model = editor.getModel().eContainer().eContainer().eContainer();
-		EditorUtils.openEditor(getEditorInput(model), getEditorId(model));
-
+		FBNetworkEditor newEditor = (FBNetworkEditor) EditorUtils.openEditor(getEditorInput(model), getEditorId(model));
+		newEditor.selectElement(editor.getModel().eContainer());
 		return Status.OK_STATUS;
 	}
 
