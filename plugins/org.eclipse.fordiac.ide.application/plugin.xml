@@ -326,7 +326,7 @@
             categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.UntypeSubApplicationHandler"
             id="org.eclipse.fordiac.ide.application.commands.untypeSubApp"
-            name="Remove Subapplication Type">
+            name="Detach from Subapplication Type">
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
