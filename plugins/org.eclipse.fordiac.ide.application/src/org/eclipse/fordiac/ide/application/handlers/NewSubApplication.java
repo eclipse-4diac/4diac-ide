@@ -37,6 +37,7 @@ public class NewSubApplication extends AbstractHandler {
 
 			NewSubAppCommand cmd = new NewSubAppCommand(editor.getModel(), selection.toList(), pos.x, pos.y);
 			editor.getCommandStack().execute(cmd);
+			editor.selectFBNetworkElement(cmd.getElement());
 		} else {
 			org.eclipse.swt.graphics.Point pos = FBNetworkHelper.getTopLeftCornerOfFBNetwork(selection.toList());
 			NewSubAppCommand cmd = new NewSubAppCommand(editor.getModel(), selection.toList(), pos.x, pos.y);
