@@ -63,7 +63,8 @@ public class FBPaletteViewer extends PaletteViewer {
 		layout.marginTop = 0;
 		container.setLayout(layout);
 
-		final Text text = new Text(container, SWT.SEARCH | SWT.ICON_CANCEL);
+		final Text text = new Text(container, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
+		text.setMessage("Search for Type");
 
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.addSelectionListener(new SelectionAdapter() {
