@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.export
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 1.11.2.qualifier
+Bundle-Version: 1.11.3.qualifier
 Bundle-Name: Export UI (Incubation)
 Bundle-Activator: org.eclipse.fordiac.ide.export.ui.Activator
 Bundle-ManifestVersion: 2

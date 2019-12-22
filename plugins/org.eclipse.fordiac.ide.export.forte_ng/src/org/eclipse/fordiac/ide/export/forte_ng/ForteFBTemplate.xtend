@@ -12,7 +12,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 abstract class ForteFBTemplate extends ExportTemplate {
 
 	new(String name, Path prefix) {
-		super(name, prefix)
+		super(name, prefix) 
 	}
 
 	def protected FBType getType()

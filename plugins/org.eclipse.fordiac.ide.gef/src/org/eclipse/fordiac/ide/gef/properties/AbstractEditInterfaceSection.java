@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -54,7 +55,6 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -163,9 +163,9 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 	}
 
 	private void setCellEditors(TableViewer viewer) {
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(viewer.getTable()),
+		viewer.setCellEditors(new CellEditor[] { new CustomTextCellEditor(viewer.getTable()),
 				ComboBoxWidgetFactory.createComboBoxCellEditor(viewer.getTable(), fillTypeCombo(), SWT.READ_ONLY),
-				new TextCellEditor(viewer.getTable()) });
+				new CustomTextCellEditor(viewer.getTable()) });
 	}
 
 	private void createOutputEdit(Composite parent) {

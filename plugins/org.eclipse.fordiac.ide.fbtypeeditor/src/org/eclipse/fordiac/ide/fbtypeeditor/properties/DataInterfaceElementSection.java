@@ -154,8 +154,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 				eventComposite.setVisible(true);
 				withEventsViewer.setInput(getType());
 				Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
-				getType().getWiths().stream().filter(with -> (null != with.getVariables()))
-						.map(with -> withEventsViewer.testFindItem(with.getVariables()))
+				getType().getWiths().stream().map(with -> withEventsViewer.testFindItem(with.eContainer()))
 						.filter(item -> (item instanceof TableItem))
 						.forEach(item -> ((TableItem) item).setChecked(true));
 			} else {
