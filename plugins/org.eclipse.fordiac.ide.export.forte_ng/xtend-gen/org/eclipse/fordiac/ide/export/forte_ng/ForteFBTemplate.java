@@ -2,6 +2,7 @@ package org.eclipse.fordiac.ide.export.forte_ng;
 
 import com.google.common.collect.Iterables;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -17,7 +18,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
-import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
@@ -353,35 +353,35 @@ public abstract class ForteFBTemplate extends ExportTemplate {
   }
   
   protected CharSequence generateFBInterfaceDefinition() {
-    final int[] inputWith = ((int[])Conversions.unwrapArray(CollectionLiterals.<Integer>newArrayList(), int.class));
-    final int[] inputWithIndexes = ((int[])Conversions.unwrapArray(CollectionLiterals.<Integer>newArrayList(), int.class));
+    final ArrayList<Object> inputWith = CollectionLiterals.<Object>newArrayList();
+    final ArrayList<Object> inputWithIndexes = CollectionLiterals.<Object>newArrayList();
     final Consumer<Event> _function = (Event event) -> {
       boolean _isEmpty = event.getWith().isEmpty();
       if (_isEmpty) {
-        ((List<Integer>)Conversions.doWrapArray(inputWithIndexes)).add(Integer.valueOf((-1)));
+        inputWithIndexes.add(Integer.valueOf((-1)));
       } else {
-        ((List<Integer>)Conversions.doWrapArray(inputWithIndexes)).add(Integer.valueOf(((List<Integer>)Conversions.doWrapArray(inputWith)).size()));
+        inputWithIndexes.add(Integer.valueOf(inputWith.size()));
         EList<With> _with = event.getWith();
         for (final With with : _with) {
-          ((List<Integer>)Conversions.doWrapArray(inputWith)).add(Integer.valueOf(this.getType().getInterfaceList().getInputVars().indexOf(with.getVariables())));
+          inputWith.add(Integer.valueOf(this.getType().getInterfaceList().getInputVars().indexOf(with.getVariables())));
         }
-        ((List<Integer>)Conversions.doWrapArray(inputWith)).add(Integer.valueOf(255));
+        inputWith.add(Integer.valueOf(255));
       }
     };
     this.getType().getInterfaceList().getEventInputs().forEach(_function);
-    final int[] outputWith = ((int[])Conversions.unwrapArray(CollectionLiterals.<Integer>newArrayList(), int.class));
-    final int[] outputWithIndexes = ((int[])Conversions.unwrapArray(CollectionLiterals.<Integer>newArrayList(), int.class));
+    final ArrayList<Object> outputWith = CollectionLiterals.<Object>newArrayList();
+    final ArrayList<Object> outputWithIndexes = CollectionLiterals.<Object>newArrayList();
     final Consumer<Event> _function_1 = (Event event) -> {
       boolean _isEmpty = event.getWith().isEmpty();
       if (_isEmpty) {
-        ((List<Integer>)Conversions.doWrapArray(outputWithIndexes)).add(Integer.valueOf((-1)));
+        outputWithIndexes.add(Integer.valueOf((-1)));
       } else {
-        ((List<Integer>)Conversions.doWrapArray(outputWithIndexes)).add(Integer.valueOf(((List<Integer>)Conversions.doWrapArray(outputWith)).size()));
+        outputWithIndexes.add(Integer.valueOf(outputWith.size()));
         EList<With> _with = event.getWith();
         for (final With with : _with) {
-          ((List<Integer>)Conversions.doWrapArray(outputWith)).add(Integer.valueOf(this.getType().getInterfaceList().getOutputVars().indexOf(with.getVariables())));
+          outputWith.add(Integer.valueOf(this.getType().getInterfaceList().getOutputVars().indexOf(with.getVariables())));
         }
-        ((List<Integer>)Conversions.doWrapArray(outputWith)).add(Integer.valueOf(255));
+        outputWith.add(Integer.valueOf(255));
       }
     };
     this.getType().getInterfaceList().getEventOutputs().forEach(_function_1);
@@ -442,7 +442,7 @@ public abstract class ForteFBTemplate extends ExportTemplate {
         CharSequence _fBClassName_4 = this.getFBClassName();
         _builder.append(_fBClassName_4);
         _builder.append("::scm_anEIWith[] = {");
-        String _join = IterableExtensions.join(((Iterable<?>)Conversions.doWrapArray(inputWith)), ", ");
+        String _join = IterableExtensions.join(inputWith, ", ");
         _builder.append(_join);
         _builder.append("};");
         _builder.newLineIfNotEmpty();
@@ -450,7 +450,7 @@ public abstract class ForteFBTemplate extends ExportTemplate {
         CharSequence _fBClassName_5 = this.getFBClassName();
         _builder.append(_fBClassName_5);
         _builder.append("::scm_anEIWithIndexes[] = {");
-        String _join_1 = IterableExtensions.join(((Iterable<?>)Conversions.doWrapArray(inputWithIndexes)), ", ");
+        String _join_1 = IterableExtensions.join(inputWithIndexes, ", ");
         _builder.append(_join_1);
         _builder.append("};");
         _builder.newLineIfNotEmpty();
@@ -473,7 +473,7 @@ public abstract class ForteFBTemplate extends ExportTemplate {
         CharSequence _fBClassName_7 = this.getFBClassName();
         _builder.append(_fBClassName_7);
         _builder.append("::scm_anEOWith[] = {");
-        String _join_2 = IterableExtensions.join(((Iterable<?>)Conversions.doWrapArray(outputWith)), ", ");
+        String _join_2 = IterableExtensions.join(outputWith, ", ");
         _builder.append(_join_2);
         _builder.append("};");
         _builder.newLineIfNotEmpty();
@@ -481,7 +481,7 @@ public abstract class ForteFBTemplate extends ExportTemplate {
         CharSequence _fBClassName_8 = this.getFBClassName();
         _builder.append(_fBClassName_8);
         _builder.append("::scm_anEOWithIndexes[] = {");
-        String _join_3 = IterableExtensions.join(((Iterable<?>)Conversions.doWrapArray(outputWithIndexes)), ", ");
+        String _join_3 = IterableExtensions.join(outputWithIndexes, ", ");
         _builder.append(_join_3);
         _builder.append("};");
         _builder.newLineIfNotEmpty();

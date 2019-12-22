@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 				 2018 - 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,10 +9,11 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl, Monika Wenger 
+ *   Alois Zoitl, Monika Wenger
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl  - reworked to make it usable for AddElementsToSubApp
- *   Alois Zoitl - moved openEditor helper function to EditorUtils  
+ *   Alois Zoitl - moved openEditor helper function to EditorUtils
+ *   Bianca Wiesmayr - fix position of elements within subapp
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
@@ -33,10 +34,10 @@ import org.eclipse.ui.IEditorInput;
 
 public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	/** The input for reopening subApp. */
-	private IEditorInput input = null;
+	private IEditorInput input;
 	private final AddElementsToSubAppCommand addElements;
-	private MapToCommand mappSubappCmd = null; // can not be in the compound command as it needs to be performed when
-												// subapp interface is finished
+	private MapToCommand mapSubappCmd; // can not be in the compound command as it needs to be performed when
+										// subapp interface is finished
 
 	public NewSubAppCommand(FBNetwork fbNetwork, List<?> selection, int x, int y) {
 		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
@@ -51,8 +52,8 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 		// We can not call redo here as the unmap and map commands would not be handled
 		// correctly
 		addElements.execute();
-		if (null != mappSubappCmd) {
-			mappSubappCmd.execute();
+		if (null != mapSubappCmd) {
+			mapSubappCmd.execute();
 		}
 		openClosedEditor();
 	}
@@ -61,16 +62,16 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	public void redo() {
 		super.redo();
 		addElements.redo();
-		if (null != mappSubappCmd) {
-			mappSubappCmd.redo();
+		if (null != mapSubappCmd) {
+			mapSubappCmd.redo();
 		}
 		openClosedEditor();
 	}
 
 	@Override
 	public void undo() {
-		if (null != mappSubappCmd) {
-			mappSubappCmd.undo();
+		if (null != mapSubappCmd) {
+			mapSubappCmd.undo();
 		}
 		addElements.undo(); // this has to be done bevor super.undo() as otherwise addElements does not have
 							// the correct networks.
@@ -81,7 +82,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	private void checkMapping(List<?> selection) {
 		Resource res = null;
 		for (Object ne : selection) {
-			if (ne instanceof EditPart && ((EditPart) ne).getModel() instanceof FBNetworkElement) {
+			if ((ne instanceof EditPart) && (((EditPart) ne).getModel() instanceof FBNetworkElement)) {
 				FBNetworkElement element = (FBNetworkElement) ((EditPart) ne).getModel();
 				if (element.isMapped()) {
 					if (null == res) {
@@ -96,7 +97,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 			}
 		}
 		if (null != res) {
-			mappSubappCmd = new MapToCommand(getSubApp(), res);
+			mapSubappCmd = new MapToCommand(getSubApp(), res);
 		}
 	}
 
@@ -119,7 +120,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	private void openClosedEditor() {
-		if (input != null) {
+		if (null != input) {
 			EditorUtils.openEditor(input, SubAppNetworkEditor.class.getName());
 		}
 	}

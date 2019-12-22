@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="1.11.2.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="1.11.3.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.eclipse.fordiac.ide.images/images/dialog.png"/>
@@ -15,8 +15,18 @@
 
    <launcherArgs>
       <programArgs>-nl en
+--launcher.appendVmargs
       </programArgs>
-      <vmArgs>-Declipse.buildId=1.11.2
+      <vmArgs>-Dosgi.requiredJavaVersion=1.8
+-Dosgi.instance.area.default=@user.home/4diacIDE-workspace
+-XX:+UseG1GC
+-XX:+UseStringDeduplication
+-XX:+AggressiveOpts
+-Dosgi.requiredJavaVersion=1.8
+-Dosgi.dataAreaRequiresExplicitInit=true
+-Xmn512m
+-Xms1024m
+-Xmx3024m
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>

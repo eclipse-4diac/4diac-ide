@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017, 2018 fortiss GmbH
  * 				 2018 - 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -35,20 +35,6 @@ import org.eclipse.jface.viewers.TextCellEditor;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
 	private DirectEditManager manager;
-
-	private EContentAdapter contentAdapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
-				refresh();
-			}
-			super.notifyChanged(notification);
-		}
-	};
 
 	@Override
 	protected void createEditPolicies() {
@@ -99,8 +85,20 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	}
 
 	@Override
-	protected EContentAdapter getContentAdapter() {
-		return contentAdapter;
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				Object feature = notification.getFeature();
+				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
+					refresh();
+				}
+				super.notifyChanged(notification);
+			}
+		};
 	}
 
 	@Override

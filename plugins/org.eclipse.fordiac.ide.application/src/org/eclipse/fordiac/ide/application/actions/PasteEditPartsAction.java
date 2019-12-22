@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
  * 				 2018 - 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -41,7 +41,7 @@ public class PasteEditPartsAction extends SelectionAction {
 
 	/**
 	 * Instantiates a new paste edit parts action.
-	 * 
+	 *
 	 * @param editor the editor
 	 */
 	public PasteEditPartsAction(IWorkbenchPart editor) {
@@ -51,7 +51,7 @@ public class PasteEditPartsAction extends SelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		FBNetwork fbNetwork = getFBNetwork();
-		return null != fbNetwork && !getClipboardContents().isEmpty();
+		return (null != fbNetwork) && !getClipboardContents().isEmpty();
 	}
 
 	protected Command createPasteCommand() {
@@ -83,7 +83,7 @@ public class PasteEditPartsAction extends SelectionAction {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.action.Action#run()
 	 */
 	@Override
@@ -101,6 +101,10 @@ public class PasteEditPartsAction extends SelectionAction {
 
 	public void setPastRefPosition(Point pt) {
 		pasteRefPosition = pt;
+	}
+
+	public void setPastRefPosition(org.eclipse.draw2d.geometry.Point point) {
+		setPastRefPosition(new Point(point.x, point.y));
 	}
 
 }

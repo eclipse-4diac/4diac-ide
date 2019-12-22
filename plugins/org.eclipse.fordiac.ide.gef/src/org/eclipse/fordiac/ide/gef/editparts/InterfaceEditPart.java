@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH, 
- * 				 2018 - 2019 Johannes Kepler University 
- * 
+ * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * 				 2018 - 2019 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -12,7 +12,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Waldemar Eisenmenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - allowed resource drop on on whole interfaces
- *   Alois Zoitl - extracted interface selection policy and added connection 
+ *   Alois Zoitl - extracted interface selection policy and added connection
  *   			   creation feedback
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
@@ -53,34 +53,22 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 
-public abstract class InterfaceEditPart extends AbstractConnectableEditPart implements
-		NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
+public abstract class InterfaceEditPart extends AbstractConnectableEditPart
+		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private ValueEditPart referencedPart;
 	private int mouseState;
-	
-	private EContentAdapter contentAdapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature) 
-					|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
-				refresh();
-			}
-			super.notifyChanged(notification);
-		}
 
-	};	
-	
-	public InterfaceEditPart(){
+	private EContentAdapter contentAdapter = null;
+
+	public InterfaceEditPart() {
 		setConnectable(true);
 	}
 
 	@Override
-	public DragTracker getDragTracker(Request request){
+	public DragTracker getDragTracker(Request request) {
 		return new ConnCreateDirectEditDragTrackerProxy(this);
 	}
-	
+
 	public int getMouseState() {
 		return mouseState;
 	}
@@ -93,16 +81,16 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 		}
 	}
 
-	protected String getLabelText(){
+	protected String getLabelText() {
 		return getModel().getName();
 	}
-	
+
 	public class InterfaceFigure extends SetableAlphaLabel {
 		public InterfaceFigure() {
 			super();
 			setOpaque(false);
 			setText(getLabelText());
-			setBorder(new ConnectorBorder(getModel()));	
+			setBorder(new ConnectorBorder(getModel()));
 			if (isInput()) {
 				setLabelAlignment(PositionConstants.LEFT);
 				setTextAlignment(PositionConstants.LEFT);
@@ -111,38 +99,39 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 				setTextAlignment(PositionConstants.RIGHT);
 			}
 			setToolTip(new ToolTipFigure(getModel()));
-			
-			if(isAdapter()){
-				//this mouse listener acquires the current mouse state including the modifier keys so that we can use it in 
-				//case we are clicking on an adapter with the ctrl key pressed.
-				addMouseMotionListener(new MouseMotionListener(){
-	
+
+			if (isAdapter()) {
+				// this mouse listener acquires the current mouse state including the modifier
+				// keys so that we can use it in
+				// case we are clicking on an adapter with the ctrl key pressed.
+				addMouseMotionListener(new MouseMotionListener() {
+
 					@Override
 					public void mouseDragged(MouseEvent me) {
 						mouseState = me.getState();
 					}
-	
+
 					@Override
 					public void mouseEntered(MouseEvent me) {
 						mouseState = me.getState();
-						
+
 					}
-	
+
 					@Override
 					public void mouseExited(MouseEvent me) {
 						mouseState = me.getState();
 					}
-	
+
 					@Override
 					public void mouseHover(MouseEvent me) {
 						mouseState = me.getState();
 					}
-	
+
 					@Override
 					public void mouseMoved(MouseEvent me) {
 						mouseState = me.getState();
 					}
-					
+
 				});
 			}
 		}
@@ -162,12 +151,12 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 
 	@SuppressWarnings("unchecked")
 	public void setInOutConnectionsWidth(int width) {
-		boolean hide = isEvent() ? 
-				Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON) :
-				Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON);
-		
-		getSourceConnections().forEach(cep -> checkConnection(width, hide, (ConnectionEditPart)cep));
-		getTargetConnections().forEach(cep -> checkConnection(width, hide, (ConnectionEditPart)cep));
+		boolean hide = isEvent()
+				? Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON)
+				: Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON);
+
+		getSourceConnections().forEach(cep -> checkConnection(width, hide, (ConnectionEditPart) cep));
+		getTargetConnections().forEach(cep -> checkConnection(width, hide, (ConnectionEditPart) cep));
 	}
 
 	private static void checkConnection(int width, boolean hide, ConnectionEditPart cep) {
@@ -184,7 +173,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	@Override
 	protected void createEditPolicies() {
 		GraphicalNodeEditPolicy nodeEditPolicy = getNodeEditPolicy();
-		if(null != nodeEditPolicy) {
+		if (null != nodeEditPolicy) {
 			installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, nodeEditPolicy);
 		}
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new InterfaceElementSelectionPolicy(this));
@@ -193,25 +182,24 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 			// layoutrole that allows to drop "strings" to an Input Variable
 			// which is than used as Parameter
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, getLayoutPolicy());
-			
-			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
-					new ValueEditPartChangeEditPolicy(){
-						@Override
-						protected ValueEditPart getValueEditPart() {						
-							return getReferencedValueEditPart();
-						}					
+
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ValueEditPartChangeEditPolicy() {
+				@Override
+				protected ValueEditPart getValueEditPart() {
+					return getReferencedValueEditPart();
+				}
 			});
 		}
 	}
 
-	@SuppressWarnings("static-method")  // we want to allow subclasses to provide different layout policies
+	@SuppressWarnings("static-method") // we want to allow subclasses to provide different layout policies
 	protected LayoutEditPolicy getLayoutPolicy() {
 		return new DataInterfaceLayoutEditPolicy();
 	}
 
 	@Override
 	public void setConnectionHandleRoleEnabled(boolean enabled) {
-		//nothing to do
+		// nothing to do
 	}
 
 	@Override
@@ -226,7 +214,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	public boolean isEvent() {
 		return getModel() instanceof Event;
 	}
-	
+
 	public boolean isAdapter() {
 		return getModel() instanceof AdapterDeclaration;
 	}
@@ -239,16 +227,34 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 	}
 
-	//Allows childclasses to provide their own content adapters 
-	protected EContentAdapter getContentAdapter() {
+	private EContentAdapter getContentAdapter() {
+		if (null == contentAdapter) {
+			contentAdapter = createContentAdapter();
+		}
 		return contentAdapter;
+	}
+
+	// Allows childclasses to provide their own content adapters
+	protected EContentAdapter createContentAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				Object feature = notification.getFeature();
+				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
+					refresh();
+				}
+				super.notifyChanged(notification);
+			}
+		};
 	}
 
 	@Override
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			getModel().eAdapters().add(getContentAdapter());			
+			getModel().eAdapters().add(getContentAdapter());
 		}
 	}
 
@@ -262,8 +268,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	}
 
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(
-			final ConnectionEditPart connection) {
+	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		return new FixedAnchor(getFigure(), isInput(), this);
 	}
 
@@ -273,8 +278,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(
-			final ConnectionEditPart connection) {
+	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
@@ -285,8 +289,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 
 	@Override
 	protected List<?> getModelSourceConnections() {
-		if(!isInput()){
-			//only outputs have source connections
+		if (!isInput()) {
+			// only outputs have source connections
 			return getModel().getOutputConnections();
 		}
 		return Collections.emptyList();
@@ -294,8 +298,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 
 	@Override
 	protected List<?> getModelTargetConnections() {
-		if(isInput()){
-			//only outputs have source connections
+		if (isInput()) {
+			// only outputs have source connections
 			return getModel().getInputConnections();
 		}
 		return Collections.emptyList();
@@ -316,8 +320,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 		if (request.getType() == RequestConstants.REQ_MOVE) {
 			// TODO: move parent editpart??
 		}
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN) {
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
 			ValueEditPart part = getReferencedValueEditPart();
 			if ((part != null) && (isVariable()) && (!(getModel() instanceof AdapterDeclaration))) {
 				part.performDirectEdit();
@@ -329,9 +332,9 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart impl
 
 	public ValueEditPart getReferencedValueEditPart() {
 		if (null == referencedPart && getModel() instanceof VarDeclaration) {
-			Object temp = getViewer().getEditPartRegistry().get(((VarDeclaration)getModel()).getValue()); 
+			Object temp = getViewer().getEditPartRegistry().get(((VarDeclaration) getModel()).getValue());
 			if (temp instanceof ValueEditPart) {
-				referencedPart = (ValueEditPart)temp;
+				referencedPart = (ValueEditPart) temp;
 			}
 		}
 		return referencedPart;
