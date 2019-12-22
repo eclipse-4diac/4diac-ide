@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
@@ -30,25 +31,26 @@ public class NewSubApplication extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
 		FBNetworkEditor editor = (FBNetworkEditor) HandlerUtil.getActiveEditor(event);
+
 		StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		if (selection.size() == 1) {
-			// new empty subapp at mouse cursor location
-			Point pos = getPositionInViewer(editor);
+		Point pos = getInsertPos(editor, selection);
+		NewSubAppCommand cmd = new NewSubAppCommand(editor.getModel(), selection.toList(), pos.x, pos.y);
+		editor.getCommandStack().execute(cmd);
+		editor.selectElement(cmd.getElement());
 
-			NewSubAppCommand cmd = new NewSubAppCommand(editor.getModel(), selection.toList(), pos.x, pos.y);
-			editor.getCommandStack().execute(cmd);
-			editor.selectElement(cmd.getElement());
-		} else {
-			org.eclipse.swt.graphics.Point pos = FBNetworkHelper.getTopLeftCornerOfFBNetwork(selection.toList());
-			NewSubAppCommand cmd = new NewSubAppCommand(editor.getModel(), selection.toList(), pos.x, pos.y);
-			editor.getCommandStack().execute(cmd);
-		}
-
-		return null;
+		return Status.OK_STATUS;
 	}
 
-	private static Point getPositionInViewer(FBNetworkEditor editor) {
-		return ((UIFBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getPoint();
+	public static Point getInsertPos(FBNetworkEditor editor, StructuredSelection selection) {
+		Point pos = null;
+		if (selection.size() == 1) {
+			// new empty subapp at mouse cursor location
+			pos = ((UIFBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getPoint();
+		} else {
+			org.eclipse.swt.graphics.Point swtPos1 = FBNetworkHelper.getTopLeftCornerOfFBNetwork(selection.toList());
+			pos = new Point(swtPos1.x, swtPos1.y);
+		}
+		return pos;
 	}
 
 }
