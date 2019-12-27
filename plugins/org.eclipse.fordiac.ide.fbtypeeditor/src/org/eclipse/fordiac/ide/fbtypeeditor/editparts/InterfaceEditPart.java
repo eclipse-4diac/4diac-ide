@@ -34,7 +34,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
-import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -53,7 +52,6 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
-import org.eclipse.jface.viewers.TextCellEditor;
 
 public class InterfaceEditPart extends AbstractInterfaceElementEditPart implements NodeEditPart {
 
@@ -254,16 +252,6 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 
 	@Override
 	protected DirectEditManager createDirectEditManager() {
-		Label l = getNameLabel();
-		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
-				new IdentifierVerifyListener()) {
-			@Override
-			protected void bringDown() {
-				if (getEditPart() instanceof InterfaceEditPart) {
-					((InterfaceEditPart) getEditPart()).refreshName();
-				}
-				super.bringDown();
-			}
-		}; // ensures that interface elements are only valid identifiers
+		return new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
 	}
 }

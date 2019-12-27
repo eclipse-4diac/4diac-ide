@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
-import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.tools.ScrollingDragEditPartsTracker;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
@@ -56,7 +55,6 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.viewers.TextCellEditor;
 
 /**
  * This class implements an EditPart for a FunctionBlock.
@@ -358,9 +356,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	@Override
 	protected DirectEditManager createDirectEditManager() {
-		Label l = getNameLabel();
-		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
-				new IdentifierVerifyListener());
+		return new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
 	}
 
 	@Override

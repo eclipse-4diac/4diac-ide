@@ -45,7 +45,6 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.graphics.FontMetrics;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
@@ -340,10 +339,8 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 */
 	public DirectEditManager getManager() {
 		if (manager == null) {
-			Label l = getFigure();
-			manager = new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
+			manager = new LabelDirectEditManager(this, getFigure());
 		}
-
 		return manager;
 	}
 

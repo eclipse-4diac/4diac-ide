@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2013, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH 
- * 
+ * Copyright (c) 2008, 2009, 2011, 2013, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -19,9 +19,9 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -32,14 +32,21 @@ import org.eclipse.ui.part.CellEditorActionHandler;
 
 /**
  * The Class LabelDirectEditManager.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class LabelDirectEditManager extends DirectEditManager {
 
 	private IActionBars actionBars;
 	private CellEditorActionHandler actionHandler;
-	private IAction copy, cut, paste, undo, redo, find, selectAll, delete;
+	private IAction copy;
+	private IAction cut;
+	private IAction paste;
+	private IAction undo;
+	private IAction redo;
+	private IAction find;
+	private IAction selectAll;
+	private IAction delete;
 
 	/** The label. */
 	private Label label;
@@ -53,39 +60,31 @@ public class LabelDirectEditManager extends DirectEditManager {
 
 	/**
 	 * The Constructor.
-	 * 
-	 * @param source     the source
-	 * @param editorType the editor type
-	 * @param locator    the locator
-	 * @param label      the label
+	 *
+	 * @param source the source
+	 * @param label  the label
 	 */
-	@SuppressWarnings("rawtypes")
-	public LabelDirectEditManager(final GraphicalEditPart source, final Class editorType,
-			final CellEditorLocator locator, final Label label) {
-		super(source, editorType, locator);
-		this.label = label;
+	public LabelDirectEditManager(final GraphicalEditPart source, final Label label) {
+		this(source, label, null);
 	}
 
 	/**
 	 * The Constructor.
-	 * 
+	 *
 	 * @param source                  the source
-	 * @param editorType              the editor type
-	 * @param locator                 the locator
 	 * @param label                   the label
 	 * @param aditionalVerifyListener the aditional verify listener
 	 */
-	@SuppressWarnings("rawtypes")
-	public LabelDirectEditManager(final GraphicalEditPart source, final Class editorType,
-			final CellEditorLocator locator, final Label label, VerifyListener aditionalVerifyListener) {
-		super(source, editorType, locator);
+	public LabelDirectEditManager(final GraphicalEditPart source, final Label label,
+			VerifyListener aditionalVerifyListener) {
+		super(source, TextCellEditor.class, new NameCellEditorLocator(label));
 		this.label = label;
 		this.aditionalVerify = aditionalVerifyListener;
 	}
 
 	/**
 	 * Show.
-	 * 
+	 *
 	 * @param initialChar the initial char
 	 */
 	public void show(final char initialChar) {
@@ -101,20 +100,11 @@ public class LabelDirectEditManager extends DirectEditManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.tools.DirectEditManager#bringDown()
 	 */
 	@Override
 	protected void bringDown() {
-		if (getEditPart() instanceof ValueEditPart) {
-			((ValueEditPart) getEditPart()).refreshValue();
-		}
-		if (getEditPart() instanceof AbstractViewEditPart) {
-			((AbstractViewEditPart) getEditPart()).refreshName();
-		}
-		if (getEditPart() instanceof AbstractDirectEditableEditPart) {
-			((AbstractDirectEditableEditPart) getEditPart()).refreshName();
-		}
 		Font disposeFont = scaledFont;
 		scaledFont = null;
 		initialString = null;
@@ -138,7 +128,7 @@ public class LabelDirectEditManager extends DirectEditManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.tools.DirectEditManager#initCellEditor()
 	 */
 	@Override
@@ -208,7 +198,7 @@ public class LabelDirectEditManager extends DirectEditManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.tools.DirectEditManager#unhookListeners()
 	 */
 	@Override
