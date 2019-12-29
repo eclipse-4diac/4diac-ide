@@ -17,36 +17,19 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.gef.Activator;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.tools.DirectEditManager;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.part.CellEditorActionHandler;
 
 /**
  * The Class LabelDirectEditManager.
  *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
-public class LabelDirectEditManager extends DirectEditManager {
-
-	private IActionBars actionBars;
-	private CellEditorActionHandler actionHandler;
-	private IAction copy;
-	private IAction cut;
-	private IAction paste;
-	private IAction undo;
-	private IAction redo;
-	private IAction find;
-	private IAction selectAll;
-	private IAction delete;
+public class LabelDirectEditManager extends TextDirectEditManager {
 
 	/** The label. */
 	private Label label;
@@ -108,17 +91,6 @@ public class LabelDirectEditManager extends DirectEditManager {
 		Font disposeFont = scaledFont;
 		scaledFont = null;
 		initialString = null;
-
-		if (actionHandler != null) {
-			actionHandler.dispose();
-			actionHandler = null;
-		}
-		if (actionBars != null) {
-			restoreSavedActions(actionBars);
-			actionBars.updateActionBars();
-			actionBars = null;
-		}
-
 		getLocator().relocate(getCellEditor());
 		super.bringDown();
 		if (disposeFont != null) {
@@ -156,37 +128,6 @@ public class LabelDirectEditManager extends DirectEditManager {
 		scaledFont = new Font(null, data);
 		text.setFont(scaledFont);
 		text.selectAll();
-
-		// Hook the cell editor's copy/paste actions to the actionBars so that
-		// they can
-		// be invoked via keyboard shortcuts.
-		actionBars = EditorUtils.getCurrentActiveEditor().getEditorSite().getActionBars();
-		saveCurrentActions(actionBars);
-		actionHandler = new CellEditorActionHandler(actionBars);
-		actionHandler.addCellEditor(getCellEditor());
-		actionBars.updateActionBars();
-	}
-
-	private void restoreSavedActions(IActionBars actionBars) {
-		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), copy);
-		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), paste);
-		actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), delete);
-		actionBars.setGlobalActionHandler(ActionFactory.SELECT_ALL.getId(), selectAll);
-		actionBars.setGlobalActionHandler(ActionFactory.CUT.getId(), cut);
-		actionBars.setGlobalActionHandler(ActionFactory.FIND.getId(), find);
-		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), undo);
-		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redo);
-	}
-
-	private void saveCurrentActions(IActionBars actionBars) {
-		copy = actionBars.getGlobalActionHandler(ActionFactory.COPY.getId());
-		paste = actionBars.getGlobalActionHandler(ActionFactory.PASTE.getId());
-		delete = actionBars.getGlobalActionHandler(ActionFactory.DELETE.getId());
-		selectAll = actionBars.getGlobalActionHandler(ActionFactory.SELECT_ALL.getId());
-		cut = actionBars.getGlobalActionHandler(ActionFactory.CUT.getId());
-		find = actionBars.getGlobalActionHandler(ActionFactory.FIND.getId());
-		undo = actionBars.getGlobalActionHandler(ActionFactory.UNDO.getId());
-		redo = actionBars.getGlobalActionHandler(ActionFactory.REDO.getId());
 	}
 
 	public void setInitialString(String val) {
