@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.fordiac.ide.application.actions.CopyEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.CutEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
@@ -38,7 +39,11 @@ import org.eclipse.fordiac.ide.application.utilities.ApplicationEditorTemplateTr
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
+import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
@@ -49,10 +54,14 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
+import org.eclipse.gef.requests.DirectEditRequest;
+import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.tools.MarqueeDragTracker;
 import org.eclipse.gef.tools.MarqueeSelectionTool;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -68,12 +77,142 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.actions.ActionFactory;
 
 /**
  * The main editor for FBNetworks.
  */
 public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements ISystemEditor {
+
+	private class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
+		NewInstanceDirectEditManager manager;
+
+		private FBNetworkRootEditPart(IWorkbenchPartSite site, ActionRegistry actionRegistry) {
+			super(site, actionRegistry);
+		}
+
+		@Override
+		public DragTracker getDragTracker(Request req) {
+			MarqueeDragTracker dragTracker = new AdvancedMarqueeDragTracker() {
+				// redefined from MarqueeSelectionTool
+				static final int DEFAULT_MODE = 0;
+				static final int TOGGLE_MODE = 1;
+
+				@SuppressWarnings({ "rawtypes", "unchecked" })
+				@Override
+				protected void performMarqueeSelect() {
+					// determine which edit parts are affected by the current marquee
+					// selection
+					Collection marqueeSelectedEditParts = calculateMarqueeSelectedEditParts();
+
+					// calculate nodes/connections that are to be selected/deselected,
+					// dependent on the current mode of the tool
+					Collection editPartsToSelect = new LinkedHashSet();
+					Collection editPartsToDeselect = new HashSet();
+					for (Iterator iterator = marqueeSelectedEditParts.iterator(); iterator.hasNext();) {
+						EditPart affectedEditPart = (EditPart) iterator.next();
+						if (affectedEditPart.getSelected() == EditPart.SELECTED_NONE
+								|| getCurrentSelectionMode() != TOGGLE_MODE) {
+							// only add connections and FBs
+							if ((affectedEditPart instanceof FBEditPart)
+									|| (affectedEditPart instanceof ConnectionEditPart)
+									|| (affectedEditPart instanceof SubAppForFBNetworkEditPart)) {
+								editPartsToSelect.add(affectedEditPart);
+							}
+						} else {
+							editPartsToDeselect.add(affectedEditPart);
+						}
+					}
+
+					// include the current viewer selection, if not in DEFAULT mode.
+					if (getCurrentSelectionMode() != DEFAULT_MODE) {
+						editPartsToSelect.addAll(getCurrentViewer().getSelectedEditParts());
+						editPartsToSelect.removeAll(editPartsToDeselect);
+					}
+
+					getCurrentViewer().setSelection(new StructuredSelection(editPartsToSelect.toArray()));
+				}
+
+				@Override
+				public void mouseUp(MouseEvent me, EditPartViewer viewer) {
+					if (0 != (me.stateMask & SWT.MOD1)) {
+						showFBInsertMenu(me, viewer);
+					} else {
+						super.mouseUp(me, viewer);
+					}
+				}
+
+				public void showFBInsertMenu(MouseEvent me, EditPartViewer viewer) {
+					MenuManager mgr = new MenuManager();
+					((UIFBNetworkContextMenuProvider) viewer.getContextMenu()).buildFBInsertMenu(mgr,
+							new Point(me.x, me.y));
+					mgr.createContextMenu(viewer.getControl()).setVisible(true);
+				}
+			};
+
+			dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
+			return dragTracker;
+		}
+
+		@Override
+		public void performRequest(final Request request) {
+			// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
+			// REQ_OPEN -> doubleclick
+
+			if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
+					|| request.getType() == RequestConstants.REQ_OPEN) {
+				performDirectEdit(((SelectionRequest) request).getLocation());
+			} else {
+				super.performRequest(request);
+			}
+		}
+
+		private NewInstanceDirectEditManager getManager() {
+			if (null == manager) {
+				manager = new NewInstanceDirectEditManager(this, getPalette());
+			}
+			return manager;
+		}
+
+		private void performDirectEdit(org.eclipse.draw2d.geometry.Point point) {
+			getManager().updateRefPosition(new Point(point.x, point.y));
+			getManager().show();
+		}
+
+		@Override
+		public Command getCommand(Request request) {
+			if (request instanceof DirectEditRequest) {
+				return getDirectEditCommand((DirectEditRequest) request);
+			}
+			return super.getCommand(request);
+		}
+
+		private Command getDirectEditCommand(DirectEditRequest request) {
+			Object value = request.getCellEditor().getValue();
+			Point refPoint = getInsertPos();
+			if (value instanceof FBTypePaletteEntry) {
+				return new FBCreateCommand((FBTypePaletteEntry) value, FBNetworkEditor.this.getModel(), refPoint.x,
+						refPoint.y);
+			}
+			if (value instanceof SubApplicationTypePaletteEntry) {
+				return new CreateSubAppInstanceCommand((SubApplicationTypePaletteEntry) value,
+						FBNetworkEditor.this.getModel(), refPoint.x, refPoint.y);
+			}
+			return null;
+		}
+
+		private Point getInsertPos() {
+			Point location = getManager().getLocator().getRefPoint();
+			FigureCanvas figureCanvas = (FigureCanvas) getViewer().getControl();
+			org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
+			location.x += viewLocation.x;
+			location.y += viewLocation.y;
+			org.eclipse.draw2d.geometry.Point insertPos = new org.eclipse.draw2d.geometry.Point(location.x, location.y)
+					.scale(1.0 / getZoomManager().getZoom());
+			return new Point(insertPos.x, insertPos.y);
+		}
+	}
 
 	private static final PaletteFlyoutPreferences PALETTE_PREFERENCES = new PaletteFlyoutPreferences(
 			"FBNetworkPalette.Location", //$NON-NLS-1$
@@ -92,70 +231,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@Override
 	protected ScalableFreeformRootEditPart createRootEditPart() {
-		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()) {
-			@Override
-			public DragTracker getDragTracker(Request req) {
-				MarqueeDragTracker dragTracker = new AdvancedMarqueeDragTracker() {
-					// redefined from MarqueeSelectionTool
-					static final int DEFAULT_MODE = 0;
-					static final int TOGGLE_MODE = 1;
-
-					@SuppressWarnings({ "rawtypes", "unchecked" })
-					@Override
-					protected void performMarqueeSelect() {
-						// determine which edit parts are affected by the current marquee
-						// selection
-						Collection marqueeSelectedEditParts = calculateMarqueeSelectedEditParts();
-
-						// calculate nodes/connections that are to be selected/deselected,
-						// dependent on the current mode of the tool
-						Collection editPartsToSelect = new LinkedHashSet();
-						Collection editPartsToDeselect = new HashSet();
-						for (Iterator iterator = marqueeSelectedEditParts.iterator(); iterator.hasNext();) {
-							EditPart affectedEditPart = (EditPart) iterator.next();
-							if (affectedEditPart.getSelected() == EditPart.SELECTED_NONE
-									|| getCurrentSelectionMode() != TOGGLE_MODE) {
-								// only add connections and FBs
-								if ((affectedEditPart instanceof FBEditPart)
-										|| (affectedEditPart instanceof ConnectionEditPart)
-										|| (affectedEditPart instanceof SubAppForFBNetworkEditPart)) {
-									editPartsToSelect.add(affectedEditPart);
-								}
-							} else {
-								editPartsToDeselect.add(affectedEditPart);
-							}
-						}
-
-						// include the current viewer selection, if not in DEFAULT mode.
-						if (getCurrentSelectionMode() != DEFAULT_MODE) {
-							editPartsToSelect.addAll(getCurrentViewer().getSelectedEditParts());
-							editPartsToSelect.removeAll(editPartsToDeselect);
-						}
-
-						getCurrentViewer().setSelection(new StructuredSelection(editPartsToSelect.toArray()));
-					}
-
-					@Override
-					public void mouseUp(MouseEvent me, EditPartViewer viewer) {
-						if (0 != (me.stateMask & SWT.MOD1)) {
-							showFBInsertMenu(me, viewer);
-						} else {
-							super.mouseUp(me, viewer);
-						}
-					}
-
-					public void showFBInsertMenu(MouseEvent me, EditPartViewer viewer) {
-						MenuManager mgr = new MenuManager();
-						((UIFBNetworkContextMenuProvider) viewer.getContextMenu()).buildFBInsertMenu(mgr,
-								new Point(me.x, me.y));
-						mgr.createContextMenu(viewer.getControl()).setVisible(true);
-					}
-				};
-
-				dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
-				return dragTracker;
-			}
-		};
+		return new FBNetworkRootEditPart(getSite(), getActionRegistry());
 	}
 
 	@Override

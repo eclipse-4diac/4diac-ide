@@ -33,11 +33,14 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.tools.MarqueeDragTracker;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.ZoomInAction;
@@ -158,6 +161,25 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 				setStartLocation(getStartLocation().getTranslated(delta));
 			}
 			super.mouseDrag(me, viewer);
+		}
+
+		@Override
+		protected boolean handleDoubleClick(int button) {
+			if (1 == button) {
+				performOpen();
+			}
+			return true;
+		}
+
+		protected void performOpen() {
+			EditPart editPart = getCurrentViewer().findObjectAt(getLocation());
+			if (null != editPart) {
+				SelectionRequest request = new SelectionRequest();
+				request.setLocation(getLocation());
+				// request.setModifiers(getCurrentInput().getModifiers());
+				request.setType(RequestConstants.REQ_OPEN);
+				editPart.performRequest(request);
+			}
 		}
 
 	}
