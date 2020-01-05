@@ -13,25 +13,32 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Extracted this class from the FBInsertAction
  *   Bianca Wiesmayr - correctly calculate position for inserting
+ *   Alois Zoitl - reworked action to always create a new creation command
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.UIFBNetworkContextMenuProvider;
+import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
+import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 
-	private AbstractCreateFBNetworkElementCommand createCmd;
+	final PaletteEntry paletteEntry;
+	final FBNetwork fbNetwork;
 
-	protected FBNetworkElementInsertAction(IWorkbenchPart part, AbstractCreateFBNetworkElementCommand createCmd,
-			PaletteEntry paletteEntry) {
+	public FBNetworkElementInsertAction(IWorkbenchPart part, PaletteEntry paletteEntry, FBNetwork fbNetwork) {
 		super(part);
-		this.createCmd = createCmd;
+		this.paletteEntry = paletteEntry;
+		this.fbNetwork = fbNetwork;
 
 		setId(paletteEntry.getFile().getFullPath().toString());
 		setText(paletteEntry.getLabel());
@@ -39,25 +46,28 @@ public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		return createCmd.canExecute();
+		return null != paletteEntry && null != fbNetwork;
 	}
 
 	@Override
 	public void run() {
+		execute(createFBNetworkElementCreateCommand());
+	}
+
+	private AbstractCreateFBNetworkElementCommand createFBNetworkElementCreateCommand() {
 		Point pt = getPositionInViewer((FBNetworkEditor) getWorkbenchPart());
-		updateCreatePosition(pt);
-		execute(createCmd);
+
+		if (paletteEntry instanceof FBTypePaletteEntry) {
+			return new FBCreateCommand((FBTypePaletteEntry) paletteEntry, fbNetwork, pt.x, pt.y);
+		} else if (paletteEntry instanceof SubApplicationTypePaletteEntry) {
+			return new CreateSubAppInstanceCommand((SubApplicationTypePaletteEntry) paletteEntry, fbNetwork, pt.x,
+					pt.y);
+		}
+
+		return null;
 	}
 
 	private static Point getPositionInViewer(FBNetworkEditor editor) {
 		return ((UIFBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getPoint();
-	}
-
-	public void updateCreatePosition(int x, int y) {
-		createCmd.updateCreatePosition(x, y);
-	}
-
-	public void updateCreatePosition(Point p) {
-		updateCreatePosition(p.x, p.y);
 	}
 }
