@@ -47,8 +47,8 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 		public String toString() {
 			return iP + ":" + port; //$NON-NLS-1$
 		}
-	}	
-	
+	}
+
 	@Override
 	public boolean isConnected() {
 		return null != socket && socket.isConnected() && !socket.isClosed();
@@ -59,14 +59,15 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 		mgrInfo = getValidMgrInformation(address);
 		socket = new Socket();
 		int timeout = HoloblocDeploymentPreferences.getConnectionTimeout();
-		SocketAddress sockaddr = new InetSocketAddress(mgrInfo.iP, mgrInfo.port);		
+		SocketAddress sockaddr = new InetSocketAddress(mgrInfo.iP, mgrInfo.port);
 		try {
 			socket.connect(sockaddr, timeout); // 3s as timeout
 			socket.setSoTimeout(timeout);
 			outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 		} catch (IOException e) {
-			throw new DeploymentException("Could not connect to device", e);
+			throw new DeploymentException(Messages.EthernetDeviceManagementCommunicationHandler_CouldNotConnectToDevice,
+					e);
 		}
 	}
 
@@ -89,14 +90,14 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 		@SuppressWarnings("unused")
 		byte b = inputStream.readByte();
 		short size = inputStream.readShort();
-		StringBuilder response = new StringBuilder(size); 
+		StringBuilder response = new StringBuilder(size);
 		for (int i = 0; i < size; i++) {
 			response.append((char) inputStream.readByte());
 		}
 		return response.toString();
 	}
-	
-	public String getInfo(String destination){
+
+	public String getInfo(String destination) {
 		String info = mgrInfo.toString();
 		if (!destination.equals("")) { //$NON-NLS-1$
 			info += ": " + destination; //$NON-NLS-1$
@@ -120,18 +121,16 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 		return response;
 	}
 
-
 	/**
-	 * returns a valid MgrInformation if the mgrID contains valid destination
-	 * string (e.g. localhost:61499) else null is returned valid ports are
-	 * between 1024 - 65535
+	 * returns a valid MgrInformation if the mgrID contains valid destination string
+	 * (e.g. localhost:61499) else null is returned valid ports are between 1024 -
+	 * 65535
 	 * 
-	 * @param mgrID
-	 *            the mgr id
+	 * @param mgrID the mgr id
 	 * 
 	 * @return the valid mgr information
-	 * @throws InvalidMgmtID
-	 *             when the given ide is no valid ip address port compbination
+	 * @throws InvalidMgmtID when the given ide is no valid ip address port
+	 *                       compbination
 	 */
 	private static MgrInformation getValidMgrInformation(final String mgrID) throws DeploymentException {
 		if (null != mgrID) {
@@ -145,8 +144,8 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 					mgrInfo.iP = adress.getHostAddress();
 					port = Integer.parseInt(splitID[1]);
 				} catch (NumberFormatException | UnknownHostException e) {
-					throw new DeploymentException(MessageFormat.format(Messages.EthernetComHandler_InvalidMgmtID,
-							mgrID), e);
+					throw new DeploymentException(
+							MessageFormat.format(Messages.EthernetComHandler_InvalidMgmtID, mgrID), e);
 				}
 				if (LOWER_INVALID_PORT < port && port < UPPER_INVALID_PORT) {
 					mgrInfo.port = port;
@@ -156,7 +155,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 		}
 		throw new DeploymentException(MessageFormat.format(Messages.EthernetComHandler_InvalidMgmtID, mgrID));
 	}
-	
+
 	private static String trimQuoutes(final String toTrim) {
 		String id = toTrim;
 		if (id.startsWith("\"")) { //$NON-NLS-1$
