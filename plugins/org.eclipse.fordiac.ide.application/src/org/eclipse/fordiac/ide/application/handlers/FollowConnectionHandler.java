@@ -20,6 +20,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
@@ -50,7 +51,8 @@ public class FollowConnectionHandler extends AbstractHandler {
 		private final FBNetworkEditor editor;
 
 		public OppositeSelectionDialog(Shell parent, List<IInterfaceElement> opposites, FBNetworkEditor editor) {
-			super(parent, INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false, "Select Connection End", null);
+			super(parent, INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false,
+					Messages.FBPaletteViewer_SelectConnectionEnd, null);
 			this.opposites = opposites;
 			this.editor = editor;
 		}

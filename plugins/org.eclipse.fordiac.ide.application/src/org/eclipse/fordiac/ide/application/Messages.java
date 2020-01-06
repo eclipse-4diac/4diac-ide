@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2019 - 2020 Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl
+ *     - Externalized all translatable strings 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application;
 
@@ -137,6 +140,10 @@ public class Messages extends NLS {
 	public static String InterfaceElementSection_OutConnections;
 
 	public static String UntypeSubappCommand_Label;
+
+	public static String FBPaletteViewer_SearchForType;
+
+	public static String FBPaletteViewer_SelectConnectionEnd;
 
 	static {
 		// initialize resource bundle

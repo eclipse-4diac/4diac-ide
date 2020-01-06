@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeListPatternFilter;
@@ -64,7 +65,7 @@ public class FBPaletteViewer extends PaletteViewer {
 		container.setLayout(layout);
 
 		final Text text = new Text(container, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
-		text.setMessage("Search for Type");
+		text.setMessage(Messages.FBPaletteViewer_SearchForType);
 
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.addSelectionListener(new SelectionAdapter() {
