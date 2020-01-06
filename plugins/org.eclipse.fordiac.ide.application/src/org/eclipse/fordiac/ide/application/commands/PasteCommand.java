@@ -48,8 +48,9 @@ public class PasteCommand extends Command {
 	@SuppressWarnings("rawtypes")
 	private final List templates;
 	private final FBNetwork dstFBNetwork;
+	private FBNetwork srcFBNetwork = null;
 
-	private final Map<String, FBNetworkElement> copiedElements = new HashMap<>();
+	private final Map<FBNetworkElement, FBNetworkElement> copiedElements = new HashMap<>();
 
 	private final List<FBNetworkElement> elementsToCopy = new ArrayList<>();
 
@@ -122,14 +123,23 @@ public class PasteCommand extends Command {
 		for (Object object : templates) {
 			if (object instanceof FBNetworkElement) {
 				FBNetworkElement element = (FBNetworkElement) object;
+				if (null == srcFBNetwork) {
+					srcFBNetwork = element.getFbNetwork();
+				}
 				elementsToCopy.add(element);
 				x = Math.min(x, element.getX());
 				y = Math.min(y, element.getY());
 			} else if (object instanceof ConnectionReference) {
 				connectionsToCopy.add((ConnectionReference) object);
+			} else if (object instanceof FBNetwork) {
+				srcFBNetwork = (FBNetwork) object;
 			}
 		}
 
+		updateDelta(x, y);
+	}
+
+	private void updateDelta(int x, int y) {
 		if (calcualteDelta) {
 			if (null != pasteRefPos) {
 				xDelta = pasteRefPos.x - x;
@@ -144,7 +154,7 @@ public class PasteCommand extends Command {
 	private void copyFBs() {
 		for (FBNetworkElement element : elementsToCopy) {
 			FBNetworkElement copiedElement = createElementCopyFB(element);
-			copiedElements.put(element.getName(), copiedElement);
+			copiedElements.put(element, copiedElement);
 			dstFBNetwork.getNetworkElements().add(copiedElement);
 			copiedElement.setName(NameRepository.createUniqueName(copiedElement, element.getName()));
 		}
@@ -171,8 +181,8 @@ public class PasteCommand extends Command {
 
 	private void copyConnections() {
 		for (ConnectionReference connRef : connectionsToCopy) {
-			FBNetworkElement copiedSrc = copiedElements.get(connRef.getSourceElement().getName());
-			FBNetworkElement copiedDest = copiedElements.get(connRef.getDestinationElement().getName());
+			FBNetworkElement copiedSrc = copiedElements.get(connRef.getSourceElement());
+			FBNetworkElement copiedDest = copiedElements.get(connRef.getDestinationElement());
 
 			if (null != copiedSrc || null != copiedDest) {
 				// Only copy if one end of the connection is copied as well otherwise we will
@@ -203,29 +213,25 @@ public class PasteCommand extends Command {
 
 	private void copyConnection(ConnectionReference connRef, FBNetworkElement copiedSrc, FBNetworkElement copiedDest,
 			AbstractConnectionCreateCommand cmd) {
-		// if the copied src or copied destination are null use the original
-		IInterfaceElement source = checkForCopiedInterfaceElement(
-				getConnTargetFBNElement(connRef.getSourceElement(), copiedSrc), connRef.getSource());
-		IInterfaceElement destination = checkForCopiedInterfaceElement(
-				getConnTargetFBNElement(connRef.getDestinationElement(), copiedDest), connRef.getDestination());
+		IInterfaceElement source = getInterfaceElement(connRef.getSource(), copiedSrc);
+		IInterfaceElement destination = getInterfaceElement(connRef.getDestination(), copiedDest);
 
 		cmd.setSource(source);
 		cmd.setDestination(destination);
 		cmd.setArrangementConstraints(connRef.getDx1(), connRef.getDx2(), connRef.getDy());
 	}
 
-	private FBNetworkElement getConnTargetFBNElement(FBNetworkElement fbNetworkElement, FBNetworkElement copy) {
-		if (null != copy) {
-			// the connection endpoint is a copied FB return this one
-			return copy;
+	private IInterfaceElement getInterfaceElement(IInterfaceElement orig, FBNetworkElement copiedElement) {
+		if (null != copiedElement) {
+			// we have a copied connection target get the interface element from it
+			return copiedElement.getInterfaceElement(orig.getName());
+		} else if (dstFBNetwork.equals(srcFBNetwork)) {
+			// we have a connection target to an existing FBNElement, only retrieve the
+			// interface element if the target FBNetwrok is the same as the source. In this
+			// case it is save to return the original interface element.
+			return orig;
 		}
-		// search if we have an FB in the target with the name
-		return dstFBNetwork.getElementNamed(fbNetworkElement.getName());
-	}
-
-	private static IInterfaceElement checkForCopiedInterfaceElement(FBNetworkElement targetElement,
-			IInterfaceElement orig) {
-		return (null == targetElement) ? null : targetElement.getInterfaceElement(orig.getName());
+		return null;
 	}
 
 	private Point calculatePastePos(FBNetworkElement element) {

@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -49,6 +50,9 @@ public class CutEditPartsAction extends CopyEditPartsAction {
 	public void run() {
 		List<Object> templates = getSelectedTemplates();
 		execute(getFBDeleteCommands(templates));
+		// add the src FBNetwork to the model as the cut deletes the FBs from the
+		// network and we therefore loose the source fbnetwork for checks in pasting
+		templates.add(getWorkbenchPart().getAdapter(FBNetwork.class));
 		Clipboard.getDefault().setContents(templates);
 	}
 

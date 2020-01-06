@@ -311,6 +311,15 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		// empty
 	}
 
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (adapter == FBNetwork.class) {
+			return getModel();
+		}
+		return super.getAdapter(adapter);
+	}
+
 	private void handleActivationChanged(Event event) {
 		IAction copy = null;
 		IAction cut = null;
