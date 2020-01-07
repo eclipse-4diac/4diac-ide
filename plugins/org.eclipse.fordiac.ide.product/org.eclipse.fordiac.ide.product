@@ -21,8 +21,6 @@
 -Dosgi.instance.area.default=@user.home/4diacIDE-workspace
 -XX:+UseG1GC
 -XX:+UseStringDeduplication
--XX:+AggressiveOpts
--Dosgi.requiredJavaVersion=1.8
 -Dosgi.dataAreaRequiresExplicitInit=true
 -Xmn512m
 -Xms1024m
