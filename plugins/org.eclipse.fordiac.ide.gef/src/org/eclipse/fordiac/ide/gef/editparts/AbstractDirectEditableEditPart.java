@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017  Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -26,7 +26,6 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.tools.DirectEditManager;
-import org.eclipse.jface.viewers.TextCellEditor;
 
 /**
  * The Class AbstractDirectEditableEditPart.
@@ -59,14 +58,14 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 
 	/**
 	 * Gets the i named element.
-	 * 
+	 *
 	 * @return the i named element
 	 */
 	public abstract INamedElement getINamedElement();
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
 	 */
 	@Override
@@ -80,7 +79,7 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
 	 */
 	@Override
@@ -101,7 +100,7 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef.
 	 * Request)
@@ -117,7 +116,7 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 
 	/**
 	 * Gets the manager.
-	 * 
+	 *
 	 * @return the manager
 	 */
 	public DirectEditManager getManager() {
@@ -128,13 +127,12 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 	}
 
 	protected DirectEditManager createDirectEditManager() {
-		Label l = getNameLabel();
-		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
+		return new LabelDirectEditManager(this, getNameLabel());
 	}
 
 	/**
 	 * Gets the name label.
-	 * 
+	 *
 	 * @return the name label
 	 */
 	public abstract Label getNameLabel();

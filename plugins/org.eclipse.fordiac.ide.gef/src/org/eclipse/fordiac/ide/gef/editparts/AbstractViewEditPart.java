@@ -36,7 +36,6 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.graphics.RGB;
 
 public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
@@ -205,8 +204,7 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	}
 
 	protected DirectEditManager createDirectEditManager() {
-		Label l = getNameLabel();
-		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
+		return new LabelDirectEditManager(this, getNameLabel());
 	}
 
 	protected void performDirectEdit() {

@@ -19,7 +19,6 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
-import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
@@ -38,7 +37,6 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.viewers.TextCellEditor;
 
 public class InstanceNameEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
@@ -166,8 +164,7 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 	}
 
 	private DirectEditManager createDirectEditManager() {
-		Label l = getFigure();
-		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l);
+		return new LabelDirectEditManager(this, getFigure());
 	}
 
 	private void performDirectEdit() {

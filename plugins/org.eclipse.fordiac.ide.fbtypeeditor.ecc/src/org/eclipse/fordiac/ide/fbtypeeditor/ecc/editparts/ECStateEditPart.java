@@ -44,7 +44,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
-import org.eclipse.fordiac.ide.gef.editparts.NameCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.figures.GradientLabel;
 import org.eclipse.fordiac.ide.gef.figures.HorizontalLineFigure;
@@ -66,7 +65,6 @@ import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 
 public class ECStateEditPart extends AbstractDirectEditableEditPart implements NodeEditPart {
@@ -408,8 +406,6 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	@Override
 	protected DirectEditManager createDirectEditManager() {
-		Label l = getNameLabel();
-		return new LabelDirectEditManager(this, TextCellEditor.class, new NameCellEditorLocator(l), l,
-				new IdentifierVerifyListener());
+		return new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
 	}
 }
