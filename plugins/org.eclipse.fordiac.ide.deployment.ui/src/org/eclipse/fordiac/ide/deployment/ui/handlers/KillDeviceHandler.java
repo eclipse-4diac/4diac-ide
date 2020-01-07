@@ -17,20 +17,20 @@ package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.ui.Messages;
 
 /**
  * The Class KillDeviceAction.
  */
 public class KillDeviceHandler extends AbstractDeviceDeploymentCommand {
 
-
 	@Override
 	public void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
 		executor.killDevice(getDevice());
 	}
-	
+
 	@Override
 	protected String getErrorMessageHeader() {
-		return "Kill Device Error";
+		return Messages.KillDeviceHandler_KillDeviceError;
 	}
 }

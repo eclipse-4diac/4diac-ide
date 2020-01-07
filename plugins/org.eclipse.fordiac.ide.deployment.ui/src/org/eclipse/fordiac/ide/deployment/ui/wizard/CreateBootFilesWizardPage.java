@@ -32,12 +32,12 @@ public class CreateBootFilesWizardPage extends WizardPage {
 	private IStructuredSelection selection;
 	private DirectoryChooserControl dcc;
 	private DownloadSelectionTree systemTree;
-	
+
 	public CreateBootFilesWizardPage(IStructuredSelection selection) {
 		super(Messages.FordiacCreateBootfilesWizard_PageName);
-		
+
 		this.selection = selection;
-		
+
 		setDescription(Messages.FordiacCreateBootfilesWizard_PageDESCRIPTION);
 		setTitle(Messages.FordiacCreateBootfilesWizard_PageTITLE);
 	}
@@ -54,46 +54,40 @@ public class CreateBootFilesWizardPage extends WizardPage {
 
 		createSystemsContainer(composite);
 		createDestinationGroup(composite);
-		
+
 		setPageComplete(validatePage());
 		// Show description on opening
 		setErrorMessage(null);
 		setMessage(null);
 		setControl(composite);
 	}
-	
-	
-	public Object[] getSelectedElements(){
+
+	public Object[] getSelectedElements() {
 		return systemTree.getCheckedElements();
 	}
 
-
 	private void createSystemsContainer(Composite composite) {
-		systemTree = new DownloadSelectionTree( composite, SWT.FULL_SELECTION
-						| SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
-		
+		systemTree = new DownloadSelectionTree(composite,
+				SWT.FULL_SELECTION | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
+
 		GridData fillBoth = new GridData();
 		fillBoth.horizontalAlignment = GridData.FILL;
 		fillBoth.grabExcessHorizontalSpace = true;
 		fillBoth.verticalAlignment = GridData.FILL;
 		fillBoth.grabExcessVerticalSpace = true;
 		systemTree.getTree().setLayoutData(fillBoth);
-		
-		
-		systemTree.setInput(this); //the systemTree needs this only as reference
-		
+
+		systemTree.setInput(this); // the systemTree needs this only as reference
+
 		systemTree.addCheckStateListener(event -> setPageComplete(validatePage()));
-		
-		
+
 		checkSelectedElements();
 	}
-	
 
 	/**
 	 * Creates the file name group.
 	 * 
-	 * @param composite
-	 *          the composite
+	 * @param composite the composite
 	 */
 	private void createDestinationGroup(final Composite composite) {
 
@@ -101,16 +95,16 @@ public class CreateBootFilesWizardPage extends WizardPage {
 		stretch.grabExcessHorizontalSpace = true;
 		stretch.horizontalAlignment = SWT.FILL;
 
-		dcc = new DirectoryChooserControl(composite, SWT.NONE, "Destination: ");
+		dcc = new DirectoryChooserControl(composite, SWT.NONE, Messages.CreateBootFilesWizardPage_Destination);
 		dcc.addDirectoryChangedListener(newDirectory -> {
-				saveDir(newDirectory);
-				setPageComplete(validatePage());
+			saveDir(newDirectory);
+			setPageComplete(validatePage());
 		});
 
 		dcc.setLayoutData(stretch);
 		loadDir();
 	}
-	
+
 	/**
 	 * Returns whether this page's controls currently all contain valid values.
 	 * 
@@ -119,19 +113,19 @@ public class CreateBootFilesWizardPage extends WizardPage {
 	 */
 	private boolean validatePage() {
 		if (dcc.getDirectory() == null || dcc.getDirectory().equals("")) { //$NON-NLS-1$
-			setErrorMessage("Destination not selected!");
+			setErrorMessage(Messages.CreateBootFilesWizardPage_DestinationNotSelected);
 			return false;
 		}
-				
-		if(0 == systemTree.getCheckedElements().length){
-			setErrorMessage("Nothing selected for boot-file generation!");
+
+		if (0 == systemTree.getCheckedElements().length) {
+			setErrorMessage(Messages.CreateBootFilesWizardPage_NothingSelectedForBootFileGeneration);
 			return false;
 		}
 
 		setErrorMessage(null);
 		return true;
 	}
-	
+
 	/**
 	 * Loads cached directory, if available.
 	 */
@@ -143,7 +137,7 @@ public class CreateBootFilesWizardPage extends WizardPage {
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the directory.
 	 * 
@@ -152,36 +146,34 @@ public class CreateBootFilesWizardPage extends WizardPage {
 	public void setDirectory(final String dir) {
 		dcc.setDirectory(dir);
 	}
-	
+
 	public String getDirectory() {
 		return dcc.getDirectory();
 	}
-	
+
 	/**
 	 * Saves current directory for next session.
 	 * 
-	 * @param currentDir
-	 *          the current dir
+	 * @param currentDir the current dir
 	 */
 	private void saveDir(final String currentDir) {
 		getDialogSettings().put(SETTING_CURRENT_DIR, currentDir);
 	}
 
-	
 	private void checkSelectedElements() {
-		
-		//first expand all selected elements
+
+		// first expand all selected elements
 		for (Object obj : selection.toArray()) {
-			if(obj instanceof AutomationSystem){
+			if (obj instanceof AutomationSystem) {
 				expandSystem(obj);
-			}else if(obj instanceof Device){
-				expandDevice((Device)obj);
-			}else if(obj instanceof Resource){
-				expandResource((Resource)obj);
-			}			
+			} else if (obj instanceof Device) {
+				expandDevice((Device) obj);
+			} else if (obj instanceof Resource) {
+				expandResource((Resource) obj);
+			}
 		}
-		
-		//second select them and then check them.
+
+		// second select them and then check them.
 		systemTree.setSelection(selection);
 
 		systemTree.setCheckedElements(selection.toArray());
@@ -200,5 +192,4 @@ public class CreateBootFilesWizardPage extends WizardPage {
 		systemTree.setExpandedState(obj, true);
 	}
 
-	
 }

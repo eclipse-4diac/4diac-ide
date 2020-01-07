@@ -19,6 +19,7 @@ import java.io.StringReader;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.deployment.Activator;
+import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -135,7 +136,7 @@ public class XMLFormatter {
 		private String tagText;
 
 		protected abstract void clear();
-		
+
 		public Reader getReader() {
 			return reader;
 		}
@@ -178,14 +179,12 @@ public class XMLFormatter {
 	private static class TagReaderFactory {
 
 		// Warning: the order of the Array is important!
-		private static TagReader[] tagReaders = new TagReader[] {
-				new CommentReader(), new DoctypeDeclarationReader(),
+		private static TagReader[] tagReaders = new TagReader[] { new CommentReader(), new DoctypeDeclarationReader(),
 				new ProcessingInstructionReader(), new XmlElementReader() };
 
 		private static TagReader textNodeReader = new TextReader();
 
-		public static TagReader createTagReaderFor(final Reader reader)
-				throws IOException {
+		public static TagReader createTagReaderFor(final Reader reader) throws IOException {
 
 			char[] buf = new char[10];
 			reader.mark(10);
@@ -220,7 +219,9 @@ public class XMLFormatter {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.ant.internal.ui.editor.formatter.XmlDocumentFormatter.TagReader#getStartOfTag()
+		 * @see
+		 * org.eclipse.ant.internal.ui.editor.formatter.XmlDocumentFormatter.TagReader#
+		 * getStartOfTag()
 		 */
 		@Override
 		public String getStartOfTag() {
@@ -230,7 +231,9 @@ public class XMLFormatter {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.ant.internal.ui.editor.formatter.XmlDocumentFormatter.TagReader#isTextNode()
+		 * @see
+		 * org.eclipse.ant.internal.ui.editor.formatter.XmlDocumentFormatter.TagReader#
+		 * isTextNode()
 		 */
 		@Override
 		public boolean isTextNode() {
@@ -269,8 +272,7 @@ public class XMLFormatter {
 				node = new StringBuilder();
 				for (int i = 0; i < whitespace.length(); i++) {
 					char whitespaceCharacter = whitespace.charAt(i);
-					if (whitespaceCharacter == '\n'
-							|| whitespaceCharacter == '\r') {
+					if (whitespaceCharacter == '\n' || whitespaceCharacter == '\r') {
 						node.append(whitespaceCharacter);
 					}
 				}
@@ -285,7 +287,9 @@ public class XMLFormatter {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.ant.internal.ui.editor.formatter.XmlDocumentFormatter.TagReader#requiresInitialIndent()
+		 * @see
+		 * org.eclipse.ant.internal.ui.editor.formatter.XmlDocumentFormatter.TagReader#
+		 * requiresInitialIndent()
 		 */
 		@Override
 		public boolean requiresInitialIndent() {
@@ -295,7 +299,9 @@ public class XMLFormatter {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.ant.internal.ui.editor.formatter.XmlDocumentFormatter.TagReader#startsOnNewline()
+		 * @see
+		 * org.eclipse.ant.internal.ui.editor.formatter.XmlDocumentFormatter.TagReader#
+		 * startsOnNewline()
 		 */
 		@Override
 		public boolean startsOnNewline() {
@@ -377,8 +383,7 @@ public class XMLFormatter {
 		depth = -1;
 	}
 
-	private void copyNode(final Reader reader, final StringBuilder out)
-			throws IOException {
+	private void copyNode(final Reader reader, final StringBuilder out) throws IOException {
 
 		TagReader tag = TagReaderFactory.createTagReaderFor(reader);
 
@@ -406,7 +411,7 @@ public class XMLFormatter {
 	/**
 	 * Returns the indent of the given string.
 	 * 
-	 * @param line the text line
+	 * @param line     the text line
 	 * @param tabWidth the width of the '\t' character.
 	 * 
 	 * @return the int
@@ -488,7 +493,7 @@ public class XMLFormatter {
 			}
 			reader.close();
 		} catch (IOException e) {
-			Activator.getDefault().logWarning("Eception during xml formating", e);
+			Activator.getDefault().logWarning(Messages.XMLFormatter_ExceptionDuringXMLFormating, e);
 		}
 		return formattedXml.toString();
 	}
@@ -517,23 +522,21 @@ public class XMLFormatter {
 
 	/**
 	 * Returns the indentation of the line at <code>offset</code> as a
-	 * <code>StringBuilder</code>. If the offset is not valid, the empty
-	 * string is returned.
+	 * <code>StringBuilder</code>. If the offset is not valid, the empty string is
+	 * returned.
 	 * 
-	 * @param offset the offset in the document
+	 * @param offset   the offset in the document
 	 * @param document the document
 	 * 
 	 * @return the indentation (leading whitespace) of the line in which
-	 * <code>offset</code> is located
+	 *         <code>offset</code> is located
 	 */
-	public static StringBuilder getLeadingWhitespace(final int offset,
-			final IDocument document) {
+	public static StringBuilder getLeadingWhitespace(final int offset, final IDocument document) {
 		StringBuilder indent = new StringBuilder();
 		try {
 			IRegion line = document.getLineInformationOfOffset(offset);
 			int lineOffset = line.getOffset();
-			int nonWS = findEndOfWhiteSpace(document, lineOffset, lineOffset
-					+ line.getLength());
+			int nonWS = findEndOfWhiteSpace(document, lineOffset, lineOffset + line.getLength());
 			indent.append(document.get(lineOffset, nonWS - lineOffset));
 			return indent;
 		} catch (BadLocationException e) {
@@ -542,24 +545,24 @@ public class XMLFormatter {
 	}
 
 	/**
-	 * Returns the first offset greater than <code>offset</code> and smaller
-	 * than <code>end</code> whose character is not a space or tab character.
-	 * If no such offset is found, <code>end</code> is returned.
+	 * Returns the first offset greater than <code>offset</code> and smaller than
+	 * <code>end</code> whose character is not a space or tab character. If no such
+	 * offset is found, <code>end</code> is returned.
 	 * 
 	 * @param document the document to search in
-	 * @param offset the offset at which searching start
-	 * @param end the offset at which searching stops
+	 * @param offset   the offset at which searching start
+	 * @param end      the offset at which searching stops
 	 * 
-	 * @return the offset in the specifed range whose character is not a space
-	 * or tab
+	 * @return the offset in the specifed range whose character is not a space or
+	 *         tab
 	 * 
 	 * @throws BadLocationException the bad location exception
 	 * 
-	 * @exception BadLocationException
-	 * if position is an invalid range in the given document
+	 * @exception BadLocationException if position is an invalid range in the given
+	 *                                 document
 	 */
-	public static int findEndOfWhiteSpace(final IDocument document, int offset,
-			final int end) throws BadLocationException {
+	public static int findEndOfWhiteSpace(final IDocument document, int offset, final int end)
+			throws BadLocationException {
 		while (offset < end) {
 			char c = document.getChar(offset);
 			if (c != ' ' && c != '\t') {

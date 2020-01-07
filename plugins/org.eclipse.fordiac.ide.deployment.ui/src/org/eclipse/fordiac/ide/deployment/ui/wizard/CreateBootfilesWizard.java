@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.deployment.ui.wizard;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,7 @@ import org.eclipse.ui.IWorkbench;
 public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 
 	private static final String FORDIAC_CREATE_BOOTFILES_SECTION = "4DIAC_CREATE_BOOTFILES_SECTION"; //$NON-NLS-1$
-	
+
 	private IStructuredSelection selection;
 	private CreateBootFilesWizardPage page;
 
@@ -49,7 +50,7 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 		IDialogSettings settings = Activator.getDefault().getDialogSettings();
 
 		if (null != settings.getSection(FORDIAC_CREATE_BOOTFILES_SECTION)) {
-			//if section does not exist create it
+			// if section does not exist create it
 			settings.addNewSection(FORDIAC_CREATE_BOOTFILES_SECTION);
 		}
 		setDialogSettings(settings);
@@ -69,46 +70,51 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public boolean performFinish() {
-		IRunnableWithProgress iop = new IRunnableWithProgress(){
+		IRunnableWithProgress iop = new IRunnableWithProgress() {
 
 			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {				
+			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				String outputDirectory = page.getDirectory();
-				Map<Device, List<Object> > workLoad = prepareWorkload(); 				
-				monitor.beginTask("Generating boot-files for the selected resources", workLoad.size());				
+				Map<Device, List<Object>> workLoad = prepareWorkload();
+				monitor.beginTask(Messages.CreateBootfilesWizard_GeneratingBootFilesForTheSelectedResources,
+						workLoad.size());
 				for (Entry<Device, List<Object>> entry : workLoad.entrySet()) {
-					String fileName = outputDirectory +  File.separatorChar +  entry.getKey().getAutomationSystem().getName() + "_" + entry.getKey().getName() + ".fboot";				
+					String fileName = MessageFormat.format(Messages.CreateBootfilesWizard_IProgressMonitorMonitor,
+							outputDirectory, File.separatorChar, entry.getKey().getAutomationSystem().getName(),
+							entry.getKey().getName());
+
 					BootFileDeviceManagementCommunicationHandler.createBootFile(entry.getValue(), fileName, getShell());
 					monitor.worked(1);
 				}
-				monitor.done();				
-			}			
+				monitor.done();
+			}
 		};
-		
-		try {	    
+
+		try {
 			new ProgressMonitorDialog(getShell()).run(false, false, iop);
-	    } catch (Exception e) {
-	    	MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
-			msg.setMessage("Boot-file creation error:\n" + e.getMessage());
+		} catch (Exception e) {
+			MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
+			msg.setMessage(Messages.CreateBootfilesWizard_BootFileCreationError + e.getMessage());
 			msg.open();
 			Activator.getDefault().logError(msg.getMessage(), e);
-	    }	
+		}
 
 		return true;
 	}
 
 	private Map<Device, List<Object>> prepareWorkload() {
 		Object[] selectedElements = page.getSelectedElements();
-		Map<Device, List<Object> > workLoad = new HashMap<>();
+		Map<Device, List<Object>> workLoad = new HashMap<>();
 
 		for (Object object : selectedElements) {
-			if(object instanceof Resource){
-				insertResource(workLoad, (Resource)object);
-			}else if (object instanceof Device){
-				//if the device is selected we need to add it so that its parameters are added as well
-				getWorkLoadEntryList(workLoad, (Device)object).add(object);
+			if (object instanceof Resource) {
+				insertResource(workLoad, (Resource) object);
+			} else if (object instanceof Device) {
+				// if the device is selected we need to add it so that its parameters are added
+				// as well
+				getWorkLoadEntryList(workLoad, (Device) object).add(object);
 			}
-		}		
+		}
 		return workLoad;
 	}
 
@@ -118,10 +124,10 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 	}
 
 	private static List<Object> getWorkLoadEntryList(Map<Device, List<Object>> workLoad, Device device) {
-		if(!workLoad.containsKey(device)){
+		if (!workLoad.containsKey(device)) {
 			workLoad.put(device, new ArrayList<Object>());
 		}
 		return workLoad.get(device);
 	}
-	
+
 }

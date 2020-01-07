@@ -92,7 +92,9 @@ public class Output extends ViewPart implements IDeploymentListener {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
+	 * @see
+	 * org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.
+	 * Composite)
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -113,8 +115,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 	/**
 	 * Fill local tool bar.
 	 * 
-	 * @param manager
-	 *            the manager
+	 * @param manager the manager
 	 */
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		Action clearAction = new Action(Messages.Output_ClearActionLabel) {
@@ -123,7 +124,8 @@ public class Output extends ViewPart implements IDeploymentListener {
 				clearOutput();
 			}
 		};
-		clearAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_CLEAR));
+		clearAction.setImageDescriptor(
+				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_CLEAR));
 		clearAction.setToolTipText(Messages.Output_ClearTooltip);
 		clearAction.setDescription(Messages.Output_ClearDescription);
 		manager.add(clearAction);
@@ -140,7 +142,9 @@ public class Output extends ViewPart implements IDeploymentListener {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.text.source.ISharedTextColors#getColor(org.eclipse.swt.graphics.RGB)
+		 * @see
+		 * org.eclipse.jface.text.source.ISharedTextColors#getColor(org.eclipse.swt.
+		 * graphics.RGB)
 		 */
 		@Override
 		public Color getColor(final RGB rgb) {
@@ -177,8 +181,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 	/**
 	 * Creates the source viewer.
 	 * 
-	 * @param parent
-	 *            the parent
+	 * @param parent the parent
 	 */
 	private void createSourceViewer(final Composite parent) {
 
@@ -188,8 +191,8 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 		CompositeRuler compositeRuler = new CompositeRuler();
 		OverviewRuler overviewRuler = new OverviewRuler(annotationMarker, OVERVIEW_RULER_WIDTH, colorCache);
-		AnnotationRulerColumn annotationRuler = new AnnotationRulerColumn(
-				fAnnotationModel, ANNOTATION_RULES_COLUMN_WIDTH, annotationMarker);
+		AnnotationRulerColumn annotationRuler = new AnnotationRulerColumn(fAnnotationModel,
+				ANNOTATION_RULES_COLUMN_WIDTH, annotationMarker);
 		compositeRuler.setModel(fAnnotationModel);
 		overviewRuler.setModel(fAnnotationModel);
 
@@ -207,13 +210,10 @@ public class Output extends ViewPart implements IDeploymentListener {
 		overviewRuler.setAnnotationTypeLayer(ERROR_TYPE, 3);
 		overviewRuler.setAnnotationTypeLayer(WARNIGN_TYPE, 4);
 		// // set what color is used on the overview ruler for the type
-		overviewRuler.setAnnotationTypeColor(ERROR_TYPE, colorCache
-				.getColor(new RGB(255, 0, 0)));
-		overviewRuler.setAnnotationTypeColor(WARNIGN_TYPE, colorCache
-				.getColor(new RGB(255, 255, 0)));
+		overviewRuler.setAnnotationTypeColor(ERROR_TYPE, colorCache.getColor(new RGB(255, 0, 0)));
+		overviewRuler.setAnnotationTypeColor(WARNIGN_TYPE, colorCache.getColor(new RGB(255, 255, 0)));
 
-		sv = new SourceViewer(parent, compositeRuler, overviewRuler, true,
-				SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		sv = new SourceViewer(parent, compositeRuler, overviewRuler, true, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 
 		GridData gd = new GridData(GridData.FILL, GridData.FILL, true, true);
 		sv.getControl().setLayoutData(gd);
@@ -231,21 +231,18 @@ public class Output extends ViewPart implements IDeploymentListener {
 		sv.configure(new XMLConfiguration());
 
 		// hover manager that shows text when we hover
-		AnnotationBarHoverManager fAnnotationHoverManager = new AnnotationBarHoverManager(
-				compositeRuler, sv, new AnnotationHover(),
-				new AnnotationConfiguration());
+		AnnotationBarHoverManager fAnnotationHoverManager = new AnnotationBarHoverManager(compositeRuler, sv,
+				new AnnotationHover(), new AnnotationConfiguration());
 		fAnnotationHoverManager.install(annotationRuler.getControl());
 
 		AnnotationPainter ap = new AnnotationPainter(sv, annotationMarker);
 		ap.addAnnotationType(ERROR_TYPE);
-		ap.setAnnotationTypeColor(ERROR_TYPE, colorCache.getColor(new RGB(255,
-				0, 0)));
+		ap.setAnnotationTypeColor(ERROR_TYPE, colorCache.getColor(new RGB(255, 0, 0)));
 		// this will draw the squigglies under the text
 		sv.addPainter(ap);
-		
+
 		SourceViewerColorProvider.initializeSourceViewerColors(sv);
 	}
-	
 
 	/**
 	 * The Class AnnotationHover.
@@ -255,23 +252,21 @@ public class Output extends ViewPart implements IDeploymentListener {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.text.source.IAnnotationHover#getHoverInfo(org.eclipse.jface.text.source.ISourceViewer,
-		 *      int)
+		 * @see
+		 * org.eclipse.jface.text.source.IAnnotationHover#getHoverInfo(org.eclipse.jface
+		 * .text.source.ISourceViewer, int)
 		 */
 		@Override
 		@SuppressWarnings({ "unchecked", "rawtypes" })
-		public String getHoverInfo(final ISourceViewer sourceViewer,
-				final int lineNumber) {
+		public String getHoverInfo(final ISourceViewer sourceViewer, final int lineNumber) {
 
 			Map annotations = new HashMap();
 
-			for (Iterator iterator = fAnnotationModel.getAnnotationIterator(); iterator
-					.hasNext();) {
+			for (Iterator iterator = fAnnotationModel.getAnnotationIterator(); iterator.hasNext();) {
 				Annotation annotation = (Annotation) iterator.next();
 				if (annotation instanceof ErrorAnnotation) {
 					ErrorAnnotation err = (ErrorAnnotation) annotation;
-					annotations.put(Integer.toString(err.getLine()), err
-							.getText());
+					annotations.put(Integer.toString(err.getLine()), err.getText());
 				}
 
 			}
@@ -282,24 +277,22 @@ public class Output extends ViewPart implements IDeploymentListener {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.text.ITextHover#getHoverInfo(org.eclipse.jface.text.ITextViewer,
-		 *      org.eclipse.jface.text.IRegion)
+		 * @see org.eclipse.jface.text.ITextHover#getHoverInfo(org.eclipse.jface.text.
+		 * ITextViewer, org.eclipse.jface.text.IRegion)
 		 */
 		@Override
-		public String getHoverInfo(final ITextViewer textViewer,
-				final IRegion hoverRegion) {
+		public String getHoverInfo(final ITextViewer textViewer, final IRegion hoverRegion) {
 			return null;
 		}
 
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.text.ITextHover#getHoverRegion(org.eclipse.jface.text.ITextViewer,
-		 *      int)
+		 * @see org.eclipse.jface.text.ITextHover#getHoverRegion(org.eclipse.jface.text.
+		 * ITextViewer, int)
 		 */
 		@Override
-		public IRegion getHoverRegion(final ITextViewer textViewer,
-				final int offset) {
+		public IRegion getHoverRegion(final ITextViewer textViewer, final int offset) {
 			return null;
 		}
 	}
@@ -312,7 +305,9 @@ public class Output extends ViewPart implements IDeploymentListener {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.text.IInformationControlCreator#createInformationControl(org.eclipse.swt.widgets.Shell)
+		 * @see
+		 * org.eclipse.jface.text.IInformationControlCreator#createInformationControl(
+		 * org.eclipse.swt.widgets.Shell)
 		 */
 		@Override
 		public IInformationControl createInformationControl(final Shell shell) {
@@ -327,39 +322,33 @@ public class Output extends ViewPart implements IDeploymentListener {
 	 */
 	@Override
 	public void setFocus() {
-		//nothing to do here	
+		// nothing to do here
 	}
 
 	/**
 	 * Gets the formatted xml.
 	 * 
-	 * @param command
-	 *            the command
+	 * @param command the command
 	 * 
 	 * @return the formatted xml
 	 * 
-	 * @throws TransformerFactoryConfigurationError
-	 *             the transformer factory configuration error
+	 * @throws TransformerFactoryConfigurationError the transformer factory
+	 *                                              configuration error
 	 */
-	private String getFormattedXML(final String command)
-			throws TransformerFactoryConfigurationError {
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
-				.newInstance();
+	private String getFormattedXML(final String command) throws TransformerFactoryConfigurationError {
+		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder;
 		try {
 			documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
-			org.w3c.dom.Document doc = documentBuilder.parse(new InputSource(
-					new StringReader(command)));
+			org.w3c.dom.Document doc = documentBuilder.parse(new InputSource(new StringReader(command)));
 
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
-					"yes"); //$NON-NLS-1$
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); //$NON-NLS-1$
 
-			transformer.setOutputProperty(
-					"{http://xml.apache.org/xalan}indent-amount", "2"); //$NON-NLS-1$ //$NON-NLS-2$
+			transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "2"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			DOMSource domSource = new DOMSource(doc);
 
@@ -368,7 +357,7 @@ public class Output extends ViewPart implements IDeploymentListener {
 			transformer.transform(domSource, streamResult);
 			return outputStream.toString();
 		} catch (Exception e) {
-			return "The given command:\n" + command +"\n has an issue. The reason is: " + e.getMessage();
+			return MessageFormat.format(Messages.Output_FormattedXML, command, e.getMessage());
 		}
 	}
 
@@ -379,11 +368,11 @@ public class Output extends ViewPart implements IDeploymentListener {
 	public void connectionOpened() {
 		// nothing to do
 	}
-	
+
 	@Override
 	public void postResponseReceived(final String response, final String source) {
 		Display.getDefault().asyncExec(() -> {
-			buffer.append("\n");//$NON-NLS-1$ 
+			buffer.append("\n");//$NON-NLS-1$
 			buffer.append(getFormattedXML(response));
 		});
 	}
@@ -392,18 +381,18 @@ public class Output extends ViewPart implements IDeploymentListener {
 	public void postCommandSent(String info, String destination, String command) {
 		Display.getDefault().asyncExec(() -> {
 
-				String temp = MessageFormat.format(Messages.Output_Comment, info);
-				buffer.append("\n\n");//$NON-NLS-1$ 
-				buffer.append(temp);
-				buffer.append("\n");//$NON-NLS-1$ 
-				buffer.append(getFormattedXML(command));
+			String temp = MessageFormat.format(Messages.Output_Comment, info);
+			buffer.append("\n\n");//$NON-NLS-1$
+			buffer.append(temp);
+			buffer.append("\n");//$NON-NLS-1$
+			buffer.append(getFormattedXML(command));
 		});
 	}
-	
+
 	@Override
-	public void connectionClosed() {		
-		IDocument document = sv.getDocument(); 
-		if(null != document){
+	public void connectionClosed() {
+		IDocument document = sv.getDocument();
+		if (null != document) {
 			Display.getDefault().asyncExec(() -> document.set(buffer.toString()));
 		}
 	}

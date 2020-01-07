@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
+import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
 
@@ -24,10 +25,10 @@ public abstract class AbstractDeviceDeploymentCommand extends AbstractDeployment
 
 	@Override
 	protected boolean prepareParametersToExecute(Object element) {
-		if (element instanceof Device){
+		if (element instanceof Device) {
 			setDevice((Device) element);
 			return true;
-		}else if(element instanceof DeviceEditPart){
+		} else if (element instanceof DeviceEditPart) {
 			setDevice(((DeviceEditPart) element).getModel());
 			return true;
 		}
@@ -36,7 +37,7 @@ public abstract class AbstractDeviceDeploymentCommand extends AbstractDeployment
 
 	@Override
 	protected String getCurrentElementName() {
-		return "Device: " + getDevice().getName();
+		return Messages.AbstractDeviceDeploymentCommand_DeviceName + getDevice().getName();
 	}
 
 }
