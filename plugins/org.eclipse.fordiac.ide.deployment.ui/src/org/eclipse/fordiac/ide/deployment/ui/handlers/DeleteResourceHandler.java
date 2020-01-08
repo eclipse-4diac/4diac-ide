@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
+import java.text.MessageFormat;
+
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
@@ -64,7 +66,7 @@ public class DeleteResourceHandler extends AbstractDeploymentCommand {
 
 	@Override
 	protected String getCurrentElementName() {
-		return Messages.DeleteResourceHandler_Resource + resource.getName();
+		return MessageFormat.format(Messages.DeleteResourceHandler_Resource, resource.getName());
 	}
 
 }

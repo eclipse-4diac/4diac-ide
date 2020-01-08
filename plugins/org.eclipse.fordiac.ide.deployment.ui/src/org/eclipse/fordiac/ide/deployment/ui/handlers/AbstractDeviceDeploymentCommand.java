@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
+import java.text.MessageFormat;
+
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart;
@@ -37,7 +39,7 @@ public abstract class AbstractDeviceDeploymentCommand extends AbstractDeployment
 
 	@Override
 	protected String getCurrentElementName() {
-		return Messages.AbstractDeviceDeploymentCommand_DeviceName + getDevice().getName();
+		return MessageFormat.format(Messages.AbstractDeviceDeploymentCommand_DeviceName, getDevice().getName());
 	}
 
 }
