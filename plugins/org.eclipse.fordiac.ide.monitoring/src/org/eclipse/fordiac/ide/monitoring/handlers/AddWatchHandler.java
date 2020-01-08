@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerd Kainz, Alois Zoitl, Monika Wenger 
+ *   Gerd Kainz, Alois Zoitl, Monika Wenger
  *               - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
@@ -51,7 +51,7 @@ import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class AddWatchHandler extends AbstractMonitoringHandler {
-	
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		super.execute(event);
@@ -62,70 +62,71 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 			for (InterfaceEditPart editPart : foundElements) {
 				PortElement port = MonitoringManagerUtils.createPortElement(editPart);
 				createMonitoringElement(manager, port);
-			}		
+			}
 			refreshEditor();
-		}		
+		}
 		return null;
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext){
+	public void setEnabled(Object evaluationContext) {
 		boolean needToAdd = false;
-		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);		
+		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof StructuredSelection) {
-			needToAdd = !getSelectedWatchedelements(MonitoringManager.getInstance(), (StructuredSelection) selection).isEmpty();
+			needToAdd = !getSelectedWatchedelements(MonitoringManager.getInstance(), (StructuredSelection) selection)
+					.isEmpty();
 		}
 		setBaseEnabled(needToAdd);
 	}
-	
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static Set<InterfaceEditPart> getSelectedWatchedelements(MonitoringManager manager, StructuredSelection selection) {
+	private static Set<InterfaceEditPart> getSelectedWatchedelements(MonitoringManager manager,
+			StructuredSelection selection) {
 		Set<InterfaceEditPart> foundElements = new HashSet<>();
 		for (Iterator iterator = selection.iterator(); iterator.hasNext();) {
 			Object selectedObject = iterator.next();
 
 			if (selectedObject instanceof FBEditPart) {
-				if (MonitoringManagerUtils.canBeMonitored((FBEditPart)selectedObject)) {
-					foundElements.addAll((Collection<? extends InterfaceEditPart>) ((FBEditPart)selectedObject).getChildren().stream().filter(element -> element instanceof InterfaceEditPart).
-							collect(Collectors.toSet()));
+				if (MonitoringManagerUtils.canBeMonitored((FBEditPart) selectedObject)) {
+					foundElements.addAll((Collection<? extends InterfaceEditPart>) ((FBEditPart) selectedObject)
+							.getChildren().stream().filter(element -> element instanceof InterfaceEditPart)
+							.collect(Collectors.toSet()));
 				}
-			}  else if ((selectedObject instanceof InterfaceEditPart) &&
-					!(selectedObject instanceof MonitoringAdapterInterfaceEditPart)) {
-				InterfaceEditPart iEditPart = (InterfaceEditPart)selectedObject;
-				if(MonitoringManagerUtils.canBeMonitored(iEditPart)
-						&& !manager.containsPort(iEditPart.getModel())) {
+			} else if ((selectedObject instanceof InterfaceEditPart)
+					&& !(selectedObject instanceof MonitoringAdapterInterfaceEditPart)) {
+				InterfaceEditPart iEditPart = (InterfaceEditPart) selectedObject;
+				if (MonitoringManagerUtils.canBeMonitored(iEditPart) && !manager.containsPort(iEditPart.getModel())) {
 					foundElements.add(iEditPart);
 				}
 			}
-		}	
+		}
 		return foundElements;
 	}
-	
+
 	protected MonitoringBaseElement createMonitoringElement(MonitoringManager manager, PortElement port) {
 		MonitoringBaseElement element;
 		if (port instanceof AdapterPortElement) {
 			element = MonitoringFactory.eINSTANCE.createMonitoringAdapterElement();
-		}
-		else {
+		} else {
 			element = MonitoringFactory.eINSTANCE.createMonitoringElement();
 		}
 		element.setPort(port);
 		manager.addMonitoringElement(element);
 		if (port instanceof AdapterPortElement) {
-			MonitoringAdapterElement adpaterElement = (MonitoringAdapterElement)element;
+			MonitoringAdapterElement adpaterElement = (MonitoringAdapterElement) element;
 			createMonitoringElementsForAdapterInterface(manager, adpaterElement);
 		}
 		return element;
 	}
 
-	private void createMonitoringElementsForAdapterInterface(MonitoringManager manager, MonitoringAdapterElement adpaterElement) {
+	private void createMonitoringElementsForAdapterInterface(MonitoringManager manager,
+			MonitoringAdapterElement adpaterElement) {
 		createMonitoredAdpaterFBView(adpaterElement);
-		refreshEditor();	
+		refreshEditor();
 		PortElement port = adpaterElement.getPort();
 		List<MonitoringElement> childElements = adpaterElement.getElements();
-			InterfaceList interfaceList =  adpaterElement.getMonitoredAdapterFB().getInterface();
-		List<PortElement> ports = ((AdapterPortElement)port).getPorts();
+		InterfaceList interfaceList = adpaterElement.getMonitoredAdapterFB().getInterface();
+		List<PortElement> ports = ((AdapterPortElement) port).getPorts();
 		ArrayList<IInterfaceElement> ios = new ArrayList<>();
 		ios.addAll(interfaceList.getEventInputs());
 		ios.addAll(interfaceList.getEventOutputs());
@@ -136,8 +137,9 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 			newPort.setFb(port.getFb());
 			newPort.setInterfaceElement(io);
 			newPort.setResource(port.getResource());
+			newPort.getHierarchy().addAll(port.getHierarchy());
 			ports.add(newPort);
-			childElements.add((MonitoringElement)createMonitoringElement(manager, newPort));
+			childElements.add((MonitoringElement) createMonitoringElement(manager, newPort));
 		}
 	}
 
@@ -145,14 +147,14 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		AdapterFB fb = LibraryElementFactory.eINSTANCE.createAdapterFB();
 		IInterfaceElement interfaceElement = adpaterElement.getPort().getInterfaceElement();
 		Palette palette = interfaceElement.getFBNetworkElement().getFbNetwork().getAutomationSystem().getPalette();
-		List<PaletteEntry> types = palette.getTypeEntries(((AdapterDeclaration)interfaceElement).getType().getName());
-		fb.setPaletteEntry(types.get(0));	
-		fb.setAdapterDecl((AdapterDeclaration)interfaceElement);
-		fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());	
-		createMonitoredAdapterInterface(fb);		
+		List<PaletteEntry> types = palette.getTypeEntries(((AdapterDeclaration) interfaceElement).getType().getName());
+		fb.setPaletteEntry(types.get(0));
+		fb.setAdapterDecl((AdapterDeclaration) interfaceElement);
+		fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		createMonitoredAdapterInterface(fb);
 		adpaterElement.setMonitoredAdapterFB(fb);
 	}
-	
+
 	private static void createMonitoredAdapterInterface(AdapterFB fb) {
 		InterfaceList interfaceList = fb.getInterface();
 		for (Event event : fb.getType().getInterfaceList().getEventInputs()) {
@@ -167,7 +169,7 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 		for (VarDeclaration var : fb.getType().getInterfaceList().getOutputVars()) {
 			interfaceList.getOutputVars().add(EcoreUtil.copy(var));
 		}
-		//currently IEC 61499 does not allow adapters in adapters. 
-		//If this changes here also plugs and sockets need to be added
-	}	
+		// currently IEC 61499 does not allow adapters in adapters.
+		// If this changes here also plugs and sockets need to be added
+	}
 }
