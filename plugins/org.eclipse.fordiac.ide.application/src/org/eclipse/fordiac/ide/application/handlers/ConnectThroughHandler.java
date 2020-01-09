@@ -80,11 +80,8 @@ public class ConnectThroughHandler extends AbstractHandler {
 	}
 
 	private static boolean checkSelectedIEs(IInterfaceElement element1, IInterfaceElement element2) {
-		if ((!element2.isIsInput()) && (element1.getClass().equals(element2.getClass()))
-				&& element1.getFBNetworkElement().equals(element2.getFBNetworkElement())) {
-			// the second element is an output, both are of the same type, and both are
-			// interface elements from the same
-			// fbnetworkelement instance
+		if ((!element2.isIsInput()) && (element1.getClass().equals(element2.getClass()))) {
+			// the second element is an output, both are of the same type
 			if (!element1.getInputConnections().isEmpty() && !element2.getOutputConnections().isEmpty()) {
 				if (element1 instanceof VarDeclaration) {
 					return LinkConstraints.typeCheck((VarDeclaration) element1, (VarDeclaration) element2);

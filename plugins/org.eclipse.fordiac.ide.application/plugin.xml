@@ -422,7 +422,7 @@
             commandId="org.eclipse.fordiac.ide.application.commands.connectThrough"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M2+M3+-">
+            sequence="M1+B">
       </key>
    </extension>
    <extension
