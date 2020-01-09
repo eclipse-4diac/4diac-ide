@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.application.editors;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -157,7 +158,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	private void configureTextControl(final Text textControl) {
 		textControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		textControl.setMessage("Search for Type");
+		textControl.setMessage(Messages.NewInstanceCellEditor_SearchForType);
 		textControl.addListener(SWT.Modify, event -> {
 			updateSelectionList(textControl.getText());
 		});

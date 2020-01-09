@@ -24,13 +24,27 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.application.messages"; //$NON-NLS-1$
 
+	public static String ConnectionConstraintsPrefernecePage_Description;
+
+	public static String ConnectionConstraintsPrefernecePage_EnableFORTETypeCasts;
+
+	public static String CopyEditPartsAction_Text;
+
 	public static String CreateConnectionSection_CreateConnection;
 
 	/** The Create sub app command_ label create sub app command. */
 	public static String CreateSubAppCommand_LABELCreateSubAppCommand;
 
+	public static String CutEditPartsAction_Text;
+
 	/** The FB edit part_ erro r_ unsupported fb type. */
 	public static String FBEditPart_ERROR_UnsupportedFBType;
+
+	public static String FBNetworkElementTooltipFigure_VersionLabel;
+
+	public static String FBPaletteViewer_SearchForType;
+
+	public static String FBPaletteViewer_SelectConnectionEnd;
 
 	/** The FB tooltip figure_ labe l_ application. */
 	public static String FBTooltipFigure_LABEL_Application;
@@ -44,8 +58,20 @@ public class Messages extends NLS {
 	/** The Flatten sub app command_ labe l_ flatten sub app command. */
 	public static String FlattenSubAppCommand_LABEL_FlattenSubAppCommand;
 
+	public static String InterfaceElementSection_ConnectionGroup;
+
+	public static String InterfaceElementSection_DeleteConnectionToolTip;
+
+	public static String InterfaceElementSection_InConnections;
+
+	public static String InterfaceElementSection_OutConnections;
+
+	public static String ListFBCreateCommand_FBTypeNotFound;
+
 	/** The Map sub app to command_ staus message_ already mapped. */
 	public static String MapSubAppToCommand_STAUSMessage_AlreadyMapped;
+
+	public static String NewInstanceCellEditor_SearchForType;
 
 	/** The New sub application action_ new subapplication text. */
 	public static String NewSubApplicationAction_NewSubapplicationText;
@@ -56,7 +82,6 @@ public class Messages extends NLS {
 	public static String OpenApplicationEditorAction_Name;
 
 	public static String OpenCompositeInstanceViewerAction_Name;
-
 	/**
 	 * The Open sub application editor action_ erro r_ open subapplication editor.
 	 */
@@ -64,33 +89,20 @@ public class Messages extends NLS {
 
 	public static String OpenSubApplicationEditorAction_Name;
 
+	public static String PasteEditPartsAction_Text;
+
 	public static String ReconnectDataConnectionCommand_LABEL;
+
 	public static String ReconnectEventConnectionCommand_LABEL;
+
 	public static String ReconnectAdapterConnectionCommand_LABEL;
-
-	/** The Sub app for fb network figure_ labe l_ not defined. */
-	public static String SubAppForFbNetworkFigure_LABEL_NotDefined;
-
-	/** The Sub app tooltip figure_ labe l_ application. */
-	public static String SubAppTooltipFigure_LABEL_Application;
-
-	/** The Sub app tooltip figure_ labe l_ mapped to. */
-	public static String SubAppTooltipFigure_LABEL_MappedTo;
-
-	/** The Sub app tooltip figure_ labe l_ system. */
-	public static String SubAppTooltipFigure_LABEL_System;
-
-	/** The UIFB network context menu provider_ labe l_ hardware mapping. */
-	public static String UIFBNetworkContextMenuProvider_LABEL_HardwareMapping;
-
-	/** The Unmap action_ unmap_ label. */
-	public static String UnmapAction_Unmap_Label;
 
 	public static String SaveAsSubApplicationTypeAction_UntypedSubappError;
 
 	public static String SaveAsSubApplicationTypeAction_UntypedSubappErrorDescription;
 
 	public static String SaveAsSubappHandler_ReplaceDialogTitle;
+
 	public static String SaveAsSubappHandler_ReplaceDialogText;
 
 	public static String SaveAsSubApplicationTypeAction_WizardTitle;
@@ -109,41 +121,33 @@ public class Messages extends NLS {
 
 	public static String SaveAsSubApplicationTypeAction_WizardOverrideMessage;
 
-	public static String UnmapAllAction_Text;
+	/** The Sub app for fb network figure_ labe l_ not defined. */
+	public static String SubAppForFbNetworkFigure_LABEL_NotDefined;
 
-	public static String UpdateFBTypeAction_Text;
+	/** The Sub app tooltip figure_ labe l_ application. */
+	public static String SubAppTooltipFigure_LABEL_Application;
 
-	public static String ConnectionConstraintsPrefernecePage_Description;
+	/** The Sub app tooltip figure_ labe l_ mapped to. */
+	public static String SubAppTooltipFigure_LABEL_MappedTo;
 
-	public static String ConnectionConstraintsPrefernecePage_EnableFORTETypeCasts;
+	/** The Sub app tooltip figure_ labe l_ system. */
+	public static String SubAppTooltipFigure_LABEL_System;
 
-	public static String InterfaceElementSection_ConnectionGroup;
-
-	public static String CopyEditPartsAction_Text;
-
-	public static String CutEditPartsAction_Text;
-
-	public static String PasteEditPartsAction_Text;
-
-	public static String ListFBCreateCommand_FBTypeNotFound;
+	/** The UIFB network context menu provider_ labe l_ hardware mapping. */
+	public static String UIFBNetworkContextMenuProvider_LABEL_HardwareMapping;
 
 	public static String UIFBNetworkContextMenuProvider_InsertFB;
 
 	public static String UIFBNetworkContextMenuProvider_ChangeType;
 
-	public static String FBNetworkElementTooltipFigure_VersionLabel;
+	/** The Unmap action_ unmap_ label. */
+	public static String UnmapAction_Unmap_Label;
 
-	public static String InterfaceElementSection_DeleteConnectionToolTip;
-
-	public static String InterfaceElementSection_InConnections;
-
-	public static String InterfaceElementSection_OutConnections;
+	public static String UnmapAllAction_Text;
 
 	public static String UntypeSubappCommand_Label;
 
-	public static String FBPaletteViewer_SearchForType;
-
-	public static String FBPaletteViewer_SelectConnectionEnd;
+	public static String UpdateFBTypeAction_Text;
 
 	static {
 		// initialize resource bundle
