@@ -29,14 +29,12 @@ import org.eclipse.swt.custom.StyleRange;
 /**
  * The Class NonRuleBasedDamagerRepairer.
  */
-public class NonRuleBasedDamagerRepairer implements IPresentationDamager,
-		IPresentationRepairer {
+public class NonRuleBasedDamagerRepairer implements IPresentationDamager, IPresentationRepairer {
 
 	/** The document this object works on */
 	private IDocument fDocument;
 	/**
-	 * The default text attribute if non is returned as data by the current
-	 * token
+	 * The default text attribute if non is returned as data by the current token
 	 */
 	private TextAttribute fDefaultTextAttribute;
 
@@ -64,15 +62,12 @@ public class NonRuleBasedDamagerRepairer implements IPresentationDamager,
 	}
 
 	/**
-	 * Returns the end offset of the line that contains the specified offset or
-	 * if the offset is inside a line delimiter, the end offset of the next
-	 * line.
+	 * Returns the end offset of the line that contains the specified offset or if
+	 * the offset is inside a line delimiter, the end offset of the next line.
 	 * 
-	 * @param offset
-	 *            the offset whose line end offset must be computed
+	 * @param offset the offset whose line end offset must be computed
 	 * @return the line end offset for the given offset
-	 * @exception BadLocationException
-	 *                if offset is invalid in the current document
+	 * @exception BadLocationException if offset is invalid in the current document
 	 */
 	protected int endOfLineOf(final int offset) throws BadLocationException {
 
@@ -93,39 +88,34 @@ public class NonRuleBasedDamagerRepairer implements IPresentationDamager,
 	/**
 	 * Gets the damage region.
 	 * 
-	 * @param partition the partition
-	 * @param event the event
+	 * @param partition                   the partition
+	 * @param event                       the event
 	 * @param documentPartitioningChanged the document partitioning changed
 	 * 
 	 * @return the damage region
 	 * 
 	 * @see IPresentationDamager#getDamageRegion(ITypedRegion, DocumentEvent,
-	 * boolean)
+	 *      boolean)
 	 */
 	@Override
-	public IRegion getDamageRegion(final ITypedRegion partition,
-			final DocumentEvent event, boolean documentPartitioningChanged) {
+	public IRegion getDamageRegion(final ITypedRegion partition, final DocumentEvent event,
+			boolean documentPartitioningChanged) {
 		if (!documentPartitioningChanged) {
 			try {
 
-				IRegion info = fDocument.getLineInformationOfOffset(event
-						.getOffset());
+				IRegion info = fDocument.getLineInformationOfOffset(event.getOffset());
 				int start = Math.max(partition.getOffset(), info.getOffset());
 
-				int end = event.getOffset()
-						+ (event.getText() == null ? event.getLength() : event
-								.getText().length());
+				int end = event.getOffset() + (event.getText() == null ? event.getLength() : event.getText().length());
 
-				if (info.getOffset() <= end
-						&& end <= info.getOffset() + info.getLength()) {
+				if (info.getOffset() <= end && end <= info.getOffset() + info.getLength()) {
 					// optimize the case of the same line
 					end = info.getOffset() + info.getLength();
 				} else {
 					end = endOfLineOf(end);
 				}
 
-				end = Math.min(partition.getOffset() + partition.getLength(),
-						end);
+				end = Math.min(partition.getOffset() + partition.getLength(), end);
 				return new Region(start, end - start);
 
 			} catch (BadLocationException x) {
@@ -140,35 +130,29 @@ public class NonRuleBasedDamagerRepairer implements IPresentationDamager,
 	 * Creates the presentation.
 	 * 
 	 * @param presentation the presentation
-	 * @param region the region
+	 * @param region       the region
 	 * 
-	 * @see IPresentationRepairer#createPresentation(TextPresentation,
-	 * ITypedRegion)
+	 * @see IPresentationRepairer#createPresentation(TextPresentation, ITypedRegion)
 	 */
 	@Override
-	public void createPresentation(final TextPresentation presentation,
-			final ITypedRegion region) {
-		addRange(presentation, region.getOffset(), region.getLength(),
-				fDefaultTextAttribute);
+	public void createPresentation(final TextPresentation presentation, final ITypedRegion region) {
+		addRange(presentation, region.getOffset(), region.getLength(), fDefaultTextAttribute);
 	}
 
 	/**
 	 * Adds style information to the given text presentation.
 	 * 
-	 * @param presentation
-	 *            the text presentation to be extended
-	 * @param offset
-	 *            the offset of the range to be styled
-	 * @param length
-	 *            the length of the range to be styled
-	 * @param attr
-	 *            the attribute describing the style of the range to be styled
+	 * @param presentation the text presentation to be extended
+	 * @param offset       the offset of the range to be styled
+	 * @param length       the length of the range to be styled
+	 * @param attr         the attribute describing the style of the range to be
+	 *                     styled
 	 */
-	protected void addRange(final TextPresentation presentation,
-			final int offset, final int length, final TextAttribute attr) {
+	protected void addRange(final TextPresentation presentation, final int offset, final int length,
+			final TextAttribute attr) {
 		if (attr != null) {
-			presentation.addStyleRange(new StyleRange(offset, length, attr
-					.getForeground(), attr.getBackground(), attr.getStyle()));
+			presentation.addStyleRange(
+					new StyleRange(offset, length, attr.getForeground(), attr.getBackground(), attr.getStyle()));
 		}
 	}
 }

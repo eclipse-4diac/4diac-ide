@@ -33,14 +33,14 @@ public class DeleteECActionCommand extends Command {
 
 	@Override
 	public void undo() {
-		if(null != parent){
+		if (null != parent) {
 			parent.getECAction().add(ecAction);
 		}
 	}
 
 	@Override
 	public void redo() {
-		if(null != parent){
+		if (null != parent) {
 			parent.getECAction().remove(ecAction);
 		}
 	}

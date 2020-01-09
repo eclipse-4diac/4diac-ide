@@ -129,10 +129,11 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 				IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 				layerFig.add(child);
 				return;
-			} 
-		} 
-		//as some of the children are in a different layer we can not use the index given. 
-		//Currently -1 seams to be the best option
+			}
+		}
+		// as some of the children are in a different layer we can not use the index
+		// given.
+		// Currently -1 seams to be the best option
 		super.addChildVisual(childEditPart, -1);
 	}
 
@@ -145,9 +146,9 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 				IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 				layerFig.remove(child);
 				return;
-			} 
+			}
 		}
 		super.removeChildVisual(childEditPart);
 	}
-	
+
 }

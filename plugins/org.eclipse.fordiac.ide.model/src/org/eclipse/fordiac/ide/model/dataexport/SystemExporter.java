@@ -39,28 +39,26 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.w3c.dom.Element;
 
-public class SystemExporter extends CommonElementExporter{
+public class SystemExporter extends CommonElementExporter {
 	private final AutomationSystem system;
 	private final Element systemRootElement;
 
-	
 	public SystemExporter(final AutomationSystem system) {
 		super();
 		this.system = system;
-		systemRootElement = createRootElement(system, LibraryElementTags.SYSTEM); 
+		systemRootElement = createRootElement(system, LibraryElementTags.SYSTEM);
 	}
-	
 
-	public void saveSystem(final IFile targetFile){	 
+	public void saveSystem(final IFile targetFile) {
 		// write the dom to the file
-		if(null != getDom()){
+		if (null != getDom()) {
 			addIdentification(systemRootElement, system);
 			addVersionInfo(systemRootElement, system);
-			
+
 			addApplication();
-			
+
 			SystemConfiguration systemConfiguration = system.getSystemConfiguration();
-			if (null != systemConfiguration) {			
+			if (null != systemConfiguration) {
 				systemConfiguration.getDevices().forEach(device -> addDevice(device));
 				addMapping();
 				addSegment(systemConfiguration.getSegments());
@@ -69,7 +67,7 @@ public class SystemExporter extends CommonElementExporter{
 			writeToFile(targetFile);
 		}
 	}
-	
+
 	private void addApplication() {
 		for (Application app : system.getApplication()) {
 			Element appElement = createElement(LibraryElementTags.APPLICATION_ELEMENT);
@@ -79,7 +77,6 @@ public class SystemExporter extends CommonElementExporter{
 			systemRootElement.appendChild(appElement);
 		}
 	}
-
 
 	private void addLink(List<Link> linksList) {
 		for (Link link : linksList) {
@@ -95,9 +92,9 @@ public class SystemExporter extends CommonElementExporter{
 		for (Segment segment : segmentsList) {
 			Element segmentElement = createElement(LibraryElementTags.SEGMENT_ELEMENT);
 			setNameTypeCommentAttribute(segmentElement, segment, segment.getType());
-			
+
 			CommonElementExporter.setXYAttributes(segmentElement, segment.getX(), segment.getY());
-			segmentElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE, 
+			segmentElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE,
 					CoordinateConverter.INSTANCE.convertTo1499XML(segment.getWidth()));
 			addColorAttributeElement(segmentElement, segment);
 			addAttributes(segmentElement, segment.getAttributes(), segment);
@@ -109,50 +106,54 @@ public class SystemExporter extends CommonElementExporter{
 		for (Mapping mappingEntry : system.getMapping()) {
 			String fromString = getFullHierarchicalName(mappingEntry.getFrom());
 			String toString = getFullHierarchicalName(mappingEntry.getTo());
-			
-			if((null != fromString) && (null != toString)){
+
+			if ((null != fromString) && (null != toString)) {
 				Element mappingElement = createElement(LibraryElementTags.MAPPING_ELEMENT);
 				mappingElement.setAttribute(LibraryElementTags.MAPPING_FROM_ATTRIBUTE, fromString);
 				mappingElement.setAttribute(LibraryElementTags.MAPPING_TO_ATTRIBUTE, toString);
 				systemRootElement.appendChild(mappingElement);
-			}			
+			}
 		}
 	}
 
-	/** Got trhough the containment of the FB and generate a name for all containers the FB is contained in
-	 *  up to the application or the device (e.g., app1.subapp2.fbname, dev1.res3.fb3name). 
+	/**
+	 * Got trhough the containment of the FB and generate a name for all containers
+	 * the FB is contained in up to the application or the device (e.g.,
+	 * app1.subapp2.fbname, dev1.res3.fb3name).
 	 * 
-	 * @param fbNetworkElement the FBNetworkElement for which the name should be gnerated
+	 * @param fbNetworkElement the FBNetworkElement for which the name should be
+	 *                         gnerated
 	 * @return dot seperated full name
 	 */
 	private static String getFullHierarchicalName(FBNetworkElement fbNetworkElement) {
 		Deque<String> names = new ArrayDeque<>();
 
-		if(null != fbNetworkElement){
+		if (null != fbNetworkElement) {
 			names.addFirst(fbNetworkElement.getName());
 			EObject container = fbNetworkElement;
-			do{
-				FBNetworkElement runner = (FBNetworkElement)container;
+			do {
+				FBNetworkElement runner = (FBNetworkElement) container;
 				container = runner.getFbNetwork().eContainer();
-				if(container instanceof INamedElement){
+				if (container instanceof INamedElement) {
 					names.addFirst("."); //$NON-NLS-1$
-					names.addFirst(((INamedElement)container).getName());
-					if(container instanceof Resource){
+					names.addFirst(((INamedElement) container).getName());
+					if (container instanceof Resource) {
 						names.addFirst("."); //$NON-NLS-1$
-						names.addFirst(((Resource)container).getDevice().getName());
+						names.addFirst(((Resource) container).getDevice().getName());
 						break;
 					}
-				}else{
+				} else {
 					break;
 				}
-			}while(container instanceof FBNetworkElement);  //we are still in a subapp, try to find the resource or application as stop point
-			
+			} while (container instanceof FBNetworkElement); // we are still in a subapp, try to find the resource or
+																// application as stop point
+
 			StringBuilder fullName = new StringBuilder();
 			for (String string : names) {
 				fullName.append(string);
 			}
 			return fullName.toString();
-		}		
+		}
 		return null;
 	}
 
@@ -173,24 +174,26 @@ public class SystemExporter extends CommonElementExporter{
 	}
 
 	private void addAttributes(Element element, EList<Attribute> attributes, ConfigurableObject configurableObject) {
-		for(Attribute attribute : attributes) {
-			Element domAttribute = createAttributeElement(attribute.getName(), attribute.getType().getName(), attribute.getValue(), attribute.getComment());
+		for (Attribute attribute : attributes) {
+			Element domAttribute = createAttributeElement(attribute.getName(), attribute.getType().getName(),
+					attribute.getValue(), attribute.getComment());
 			element.appendChild(domAttribute);
 		}
 	}
-	
+
 	private void addDeviceProfile(Element deviceElement, Device device) {
 		String profileName = device.getProfile();
-		if(null != profileName && !"".equals(profileName)){   //$NON-NLS-1$
-			Element profileAttribute = createAttributeElement(LibraryElementTags.DEVICE_PROFILE, "STRING", profileName, "device profile");		 //$NON-NLS-1$ //$NON-NLS-2$
+		if (null != profileName && !"".equals(profileName)) { //$NON-NLS-1$
+			Element profileAttribute = createAttributeElement(LibraryElementTags.DEVICE_PROFILE, "STRING", profileName, //$NON-NLS-1$
+					"device profile"); //$NON-NLS-1$
 			deviceElement.appendChild(profileAttribute);
 		}
-		
+
 	}
 
 	private void addResources(Element deviceElement, List<Resource> resourcesList) {
 		for (Resource resource : resourcesList) {
-			if(!resource.isDeviceTypeResource()){
+			if (!resource.isDeviceTypeResource()) {
 				addResource(deviceElement, resource);
 			}
 		}
@@ -199,19 +202,16 @@ public class SystemExporter extends CommonElementExporter{
 	/**
 	 * Adds the resource.
 	 * 
-	 * @param parent
-	 *            the parent
-	 * @param resourceView
-	 *            the resource view
+	 * @param parent       the parent
+	 * @param resourceView the resource view
 	 */
 	private void addResource(final Element parent, Resource resource) {
 		Element resourceElement = getDom().createElement(LibraryElementTags.RESOURCE_ELEMENT);
 		setNameTypeCommentAttribute(resourceElement, resource, resource.getType());
-		setXYAttributes(resourceElement, 0, 0);		
+		setXYAttributes(resourceElement, 0, 0);
 		addParamsConfig(resourceElement, resource.getVarDeclarations());
 		resourceElement.appendChild(new FBNetworkExporter(getDom()).createFBNetworkElement(resource.getFBNetwork()));
 		parent.appendChild(resourceElement);
 	}
-
 
 }

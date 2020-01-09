@@ -27,31 +27,32 @@ public final class PreferenceConstants {
 	public static final String P_FORCE_COLOR = "forceColor"; //$NON-NLS-1$
 
 	public static final String P_POLLING_INTERVAL = "pollingInterval"; //$NON-NLS-1$
-	
+
 	public static final int P_POLLING_INTERVAL_DEVAULT_VALUE = 300;
-	
+
 	public static final String P_MONITORING_TRANSPARENCY = "monitoringTransparency"; //$NON-NLS-1$
-	
+
 	public static final int P_MONITORING_TRANSPARENCY_VALUE = 190;
-	
-	public static int getPollingInterval(){
+
+	public static int getPollingInterval() {
 		int timeout = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.P_POLLING_INTERVAL);
-		if(0 == timeout){
+		if (0 == timeout) {
 			timeout = P_POLLING_INTERVAL_DEVAULT_VALUE;
-		}		
+		}
 		return timeout;
 	}
-	
-	public static int getMonitoringTransparency(){
-		int transparency = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.P_MONITORING_TRANSPARENCY);
-		if(0 == transparency){
+
+	public static int getMonitoringTransparency() {
+		int transparency = Activator.getDefault().getPreferenceStore()
+				.getInt(PreferenceConstants.P_MONITORING_TRANSPARENCY);
+		if (0 == transparency) {
 			transparency = P_MONITORING_TRANSPARENCY_VALUE;
-		}		
+		}
 		return transparency;
 	}
-	
+
 	private PreferenceConstants() {
-		//class should not be instantiable
+		// class should not be instantiable
 	}
 
 }

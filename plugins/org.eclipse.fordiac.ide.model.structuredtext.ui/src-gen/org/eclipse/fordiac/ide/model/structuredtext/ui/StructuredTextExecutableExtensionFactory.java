@@ -10,7 +10,7 @@ import org.osgi.framework.Bundle;
 
 /**
  * This class was generated. Customizations should only happen in a newly
- * introduced subclass. 
+ * introduced subclass.
  */
 public class StructuredTextExecutableExtensionFactory extends AbstractGuiceAwareExecutableExtensionFactory {
 
@@ -18,10 +18,11 @@ public class StructuredTextExecutableExtensionFactory extends AbstractGuiceAware
 	protected Bundle getBundle() {
 		return StructuredtextActivator.getInstance().getBundle();
 	}
-	
+
 	@Override
 	protected Injector getInjector() {
-		return StructuredtextActivator.getInstance().getInjector(StructuredtextActivator.ORG_ECLIPSE_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_STRUCTUREDTEXT);
+		return StructuredtextActivator.getInstance()
+				.getInjector(StructuredtextActivator.ORG_ECLIPSE_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_STRUCTUREDTEXT);
 	}
-	
+
 }

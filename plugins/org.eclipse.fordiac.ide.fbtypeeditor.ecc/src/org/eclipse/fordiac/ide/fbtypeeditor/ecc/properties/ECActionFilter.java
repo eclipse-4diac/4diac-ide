@@ -24,16 +24,16 @@ public class ECActionFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if(toTest instanceof ECActionAlgorithmEditPart){
+		if (toTest instanceof ECActionAlgorithmEditPart) {
 			return true;
 		}
-		if(toTest instanceof ECActionOutputEventEditPart){
+		if (toTest instanceof ECActionOutputEventEditPart) {
 			return true;
 		}
-		if(toTest instanceof ECActionAlgorithm || toTest instanceof ECActionOutputEvent){
+		if (toTest instanceof ECActionAlgorithm || toTest instanceof ECActionOutputEvent) {
 			return true;
 		}
-		if(toTest instanceof ECAction){
+		if (toTest instanceof ECAction) {
 			return true;
 		}
 		return false;

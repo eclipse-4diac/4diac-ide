@@ -38,8 +38,12 @@ public class ComboCellEditorLocator implements CellEditorLocator {
 		setLabel(label);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.tools.CellEditorLocator#relocate(org.eclipse.jface.viewers.CellEditor)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.gef.tools.CellEditorLocator#relocate(org.eclipse.jface.viewers.
+	 * CellEditor)
 	 */
 	@Override
 	public void relocate(final CellEditor celleditor) {
@@ -60,8 +64,7 @@ public class ComboCellEditorLocator implements CellEditorLocator {
 	/**
 	 * Sets the label.
 	 * 
-	 * @param label
-	 *            The label to set
+	 * @param label The label to set
 	 */
 	protected void setLabel(final Label label) {
 		this.label = label;

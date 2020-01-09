@@ -40,7 +40,7 @@ import org.eclipse.ui.IWorkbench;
  */
 public class SystemImport extends Wizard implements IImportWizard {
 	private static final String FORDIAC_SYSTEM_IMPORT_SECTION = "4DIAC_SYSTEM_IMPORT_SECTION"; //$NON-NLS-1$
-	
+
 	/**
 	 * Instantiates a new system import.
 	 */
@@ -83,8 +83,8 @@ public class SystemImport extends Wizard implements IImportWizard {
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				AutomationSystem system = SystemManager.INSTANCE.createLocalProject(page.getProjectName());
-				try(InputStream stream = new FileInputStream(page.getSelectedSystemFile());) {
-					SystemImporter sysImporter = new SystemImporter();					
+				try (InputStream stream = new FileInputStream(page.getSelectedSystemFile());) {
+					SystemImporter sysImporter = new SystemImporter();
 					sysImporter.importSystem(stream, system);
 					SystemManager.INSTANCE.saveSystem(system);
 				} catch (IOException e) {

@@ -24,16 +24,18 @@ import org.eclipse.jface.action.IMenuManager;
  */
 public class ResourceDiagramEditorContextMenuProvider extends UIFBNetworkContextMenuProvider {
 
-	public ResourceDiagramEditorContextMenuProvider(final ResourceDiagramEditor editor, 
-			final ActionRegistry registry, final ZoomManager zoomManager, Palette palette) {
+	public ResourceDiagramEditorContextMenuProvider(final ResourceDiagramEditor editor, final ActionRegistry registry,
+			final ZoomManager zoomManager, Palette palette) {
 		super(editor, registry, zoomManager, palette);
-		//Nothing that we need to do here
+		// Nothing that we need to do here
 	}
 
 	@Override
 	protected IMenuManager createHWMappingMenu() {
-		//for now we don't want to map anything from the resource. In the future we may want to allow
-		//mapping FBs from resources to applications then some code should be added here.
+		// for now we don't want to map anything from the resource. In the future we may
+		// want to allow
+		// mapping FBs from resources to applications then some code should be added
+		// here.
 		return null;
 	}
 }

@@ -11,6 +11,7 @@ public class StructuredTextAntlrTokenFileProvider implements IAntlrTokenFileProv
 	@Override
 	public InputStream getAntlrTokenFile() {
 		ClassLoader classLoader = getClass().getClassLoader();
-		return classLoader.getResourceAsStream("org/eclipse/fordiac/ide/model/structuredtext/parser/antlr/internal/InternalStructuredTextParser.tokens");
+		return classLoader.getResourceAsStream(
+				"org/eclipse/fordiac/ide/model/structuredtext/parser/antlr/internal/InternalStructuredTextParser.tokens");
 	}
 }

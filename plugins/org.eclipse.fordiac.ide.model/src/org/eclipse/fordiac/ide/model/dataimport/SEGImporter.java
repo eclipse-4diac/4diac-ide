@@ -39,12 +39,11 @@ import org.w3c.dom.NodeList;
  */
 
 public final class SEGImporter {
-		
+
 	/**
 	 * Import seg type.
 	 * 
-	 * @param iFile
-	 *          the segmentType file
+	 * @param iFile the segmentType file
 	 * 
 	 * @return the segment type
 	 */
@@ -57,8 +56,7 @@ public final class SEGImporter {
 
 			try {
 				// TODO: set local dtd for validating!
-				dbf.setAttribute(
-						"http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
+				dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
 						Boolean.FALSE);
 				db = dbf.newDocumentBuilder();
 				Document document = db.parse(iFile.getContents());
@@ -78,19 +76,16 @@ public final class SEGImporter {
 	/**
 	 * Parses the seg type.
 	 * 
-	 * @param type
-	 *          the type
-	 * @param rootNode
-	 *          the root node
+	 * @param type     the type
+	 * @param rootNode the root node
 	 * 
 	 * @return the segment type
 	 * 
-	 * @throws TypeImportException
-	 *           the FBT import exception
-	 * @throws ParseException 
+	 * @throws TypeImportException the FBT import exception
+	 * @throws ParseException
 	 */
-	private static SegmentType parseSEGType(final SegmentType type,
-			final Node rootNode) throws TypeImportException, ParseException {
+	private static SegmentType parseSEGType(final SegmentType type, final Node rootNode)
+			throws TypeImportException, ParseException {
 		if (rootNode.getNodeName().equals(LibraryElementTags.SEGMENT_TYPE_ELEMENT)) {
 			NamedNodeMap map = rootNode.getAttributes();
 			Node name = map.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE);
@@ -105,16 +100,13 @@ public final class SEGImporter {
 			for (int i = 0; i < childNodes.getLength(); i++) {
 				Node n = childNodes.item(i);
 				if (n.getNodeName().equals(LibraryElementTags.IDENTIFICATION_ELEMENT)) {
-					type.setIdentification(CommonElementImporter.parseIdentification(
-							type, n));
+					type.setIdentification(CommonElementImporter.parseIdentification(type, n));
 				}
 				if (n.getNodeName().equals(LibraryElementTags.VERSION_INFO_ELEMENT)) {
-					type.getVersionInfo().add(
-							CommonElementImporter.parseVersionInfo(type, n));
+					type.getVersionInfo().add(CommonElementImporter.parseVersionInfo(type, n));
 				}
 				if (n.getNodeName().equals(LibraryElementTags.COMPILER_INFO_ELEMENT)) {
-					type.setCompilerInfo(CompilableElementImporter.parseCompilerInfo(
-							type, n));
+					type.setCompilerInfo(CompilableElementImporter.parseCompilerInfo(type, n));
 				}
 				if (n.getNodeName().equals(LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
 					VarDeclaration v = ImportUtils.parseVarDeclaration(n);
@@ -124,13 +116,12 @@ public final class SEGImporter {
 
 			}
 			return type;
-		} 
+		}
 		throw new ParseException(Messages.FBTImporter_PARSE_FBTYPE_PARSEEXCEPTION, 0);
 	}
-	
+
 	private SEGImporter() {
 		throw new UnsupportedOperationException("SEGImporter utility class should not be instantiated!"); //$NON-NLS-1$
 	}
-
 
 }

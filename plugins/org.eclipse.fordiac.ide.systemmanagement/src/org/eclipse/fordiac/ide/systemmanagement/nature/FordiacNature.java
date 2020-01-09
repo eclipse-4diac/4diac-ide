@@ -53,7 +53,8 @@ public class FordiacNature implements IProjectNature {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.core.resources.IProjectNature#setProject(org.eclipse.core.resources.IProject)
+	 * @see org.eclipse.core.resources.IProjectNature#setProject(org.eclipse.core.
+	 * resources.IProject)
 	 */
 	@Override
 	public void setProject(final IProject project) {

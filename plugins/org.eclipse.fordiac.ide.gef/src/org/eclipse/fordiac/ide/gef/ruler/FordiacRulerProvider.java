@@ -16,12 +16,12 @@ package org.eclipse.fordiac.ide.gef.ruler;
 import org.eclipse.gef.rulers.RulerProvider;
 
 class FordiacRulerProvider extends RulerProvider {
-	
+
 	@Override
 	public int getUnit() {
 		return UNIT_PIXELS;
 	}
-	
+
 	@Override
 	public Object getRuler() {
 		return this;

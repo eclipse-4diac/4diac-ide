@@ -22,24 +22,25 @@ import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactor
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 
 final class FBTypeComposedAdapterFactory {
-	
+
 	private static ComposedAdapterFactory fbTypeCompAdapterFactory;
-	
-	static ComposedAdapterFactory getAdapterFactory(){
-		if (fbTypeCompAdapterFactory == null){
+
+	static ComposedAdapterFactory getAdapterFactory() {
+		if (fbTypeCompAdapterFactory == null) {
 			fbTypeCompAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 		}
 		return fbTypeCompAdapterFactory;
 	}
-	
-	private static List<AdapterFactory> createFactoryList(){
+
+	private static List<AdapterFactory> createFactoryList() {
 		ArrayList<AdapterFactory> factories = new ArrayList<AdapterFactory>();
 		factories.add(new LibraryElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());
 		return factories;
 	}
-	
+
 	private FBTypeComposedAdapterFactory() {
-		throw new UnsupportedOperationException("Utility class FBTypecomposedAdapterFactory should not be insantiated!");
+		throw new UnsupportedOperationException(
+				"Utility class FBTypecomposedAdapterFactory should not be insantiated!");
 	}
 }

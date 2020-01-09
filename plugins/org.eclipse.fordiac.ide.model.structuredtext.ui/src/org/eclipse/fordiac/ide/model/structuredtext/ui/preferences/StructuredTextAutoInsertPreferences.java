@@ -24,15 +24,16 @@ public class StructuredTextAutoInsertPreferences extends FieldEditorPreferencePa
 		super(GRID);
 		setPreferenceStore(ExtendedStructuredTextActivator.getInstance().getPreferenceStore());
 	}
-	
+
 	@Override
 	public void init(IWorkbench workbench) {
-		//nothing todo here
+		// nothing todo here
 	}
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new BooleanFieldEditor(PreferenceInitializer.AUTO_INSERT, "Automatic insert closing braces and quotes", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceInitializer.AUTO_INSERT, "Automatic insert closing braces and quotes",
+				getFieldEditorParent()));
 	}
 
 }

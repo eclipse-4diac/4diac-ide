@@ -17,15 +17,12 @@ import org.eclipse.fordiac.ide.runtime.IRuntimeLauncher;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 
-
 /**
- * The listener interface for receiving runtimeModify events.
- * The class that is interested in processing a runtimeModify
- * event implements this interface, and the object created
- * with that class is registered with a component using the
- * component's <code>addRuntimeModifyListener<code> method. When
- * the runtimeModify event occurs, that object's appropriate
- * method is invoked.
+ * The listener interface for receiving runtimeModify events. The class that is
+ * interested in processing a runtimeModify event implements this interface, and
+ * the object created with that class is registered with a component using the
+ * component's <code>addRuntimeModifyListener<code> method. When the
+ * runtimeModify event occurs, that object's appropriate method is invoked.
  * 
  * @see RuntimeModifyEvent
  */
@@ -33,29 +30,32 @@ public class RuntimeModifyListener implements ModifyListener {
 
 	private IRuntimeLauncher launcher;
 	private String name;
-	
+
 	/**
 	 * Instantiates a new runtime modify listener.
 	 * 
 	 * @param iLauncher the i launcher
-	 * @param name the name
+	 * @param name      the name
 	 */
-	RuntimeModifyListener (IRuntimeLauncher iLauncher, String name) {
+	RuntimeModifyListener(IRuntimeLauncher iLauncher, String name) {
 		launcher = iLauncher;
 		this.name = name;
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.
+	 * ModifyEvent)
 	 */
 	@Override
-	public void modifyText(ModifyEvent e) {		
+	public void modifyText(ModifyEvent e) {
 	}
-	
+
 	public IRuntimeLauncher getLauncher() {
 		return launcher;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

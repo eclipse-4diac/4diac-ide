@@ -20,11 +20,10 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fortelauncher.messages"; //$NON-NLS-1$
-	
+
 	/** The Forte launcher_ erro r_ wrong port. */
 	public static String ForteLauncher_ERROR_WrongPort;
-	
-	
+
 	/** The Forte launcher_ labe l_ port param. */
 	public static String ForteLauncher_LABEL_PortParam;
 	static {

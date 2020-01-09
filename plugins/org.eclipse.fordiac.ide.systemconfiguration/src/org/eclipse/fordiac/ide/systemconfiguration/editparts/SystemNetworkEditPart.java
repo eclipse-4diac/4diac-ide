@@ -109,22 +109,17 @@ public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 		children.addAll(getDeviceInputValues(getModel().getDevices()));
 		return children;
 	}
-	
-	
-	 private static List<? extends EObject> getDeviceInputValues(EList<Device> devices) {
-		 List<Value> children = new ArrayList<>();
-		 for (Device dev : devices) {
-			 for (VarDeclaration varDecl : dev.getVarDeclarations()) {
-				 if (varDecl.getValue() != null) {
-					 children.add(varDecl.getValue());
-				 }
-			 }
-		 }
-		 return children;		 
-	 }
-			
 
-
-	
+	private static List<? extends EObject> getDeviceInputValues(EList<Device> devices) {
+		List<Value> children = new ArrayList<>();
+		for (Device dev : devices) {
+			for (VarDeclaration varDecl : dev.getVarDeclarations()) {
+				if (varDecl.getValue() != null) {
+					children.add(varDecl.getValue());
+				}
+			}
+		}
+		return children;
+	}
 
 }

@@ -19,38 +19,39 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class DeviceDeploymentData {
-	
+
 	private final Device dev;
-	
+
 	private List<ResourceDeploymentData> resData = new ArrayList<>();
-	
-	private List<VarDeclaration> selectedDevParams =  Collections.emptyList();
-	
+
+	private List<VarDeclaration> selectedDevParams = Collections.emptyList();
+
 	public DeviceDeploymentData(Device device) {
 		dev = device;
 	}
-	
+
 	public Device getDevice() {
 		return dev;
 	}
-	
+
 	public void addResourceData(ResourceDeploymentData data) {
 		resData.add(data);
 	}
-	
-	public List<ResourceDeploymentData> getResData(){
+
+	public List<ResourceDeploymentData> getResData() {
 		return resData;
 	}
-	
+
 	public void setSeltectedDevParams(List<VarDeclaration> selParams) {
 		selectedDevParams = Collections.unmodifiableList(new ArrayList<>(selParams));
 	}
-	
-	
-	/**Get the unmodifyable list of the selecte params to be downloaded to this device 
+
+	/**
+	 * Get the unmodifyable list of the selecte params to be downloaded to this
+	 * device
 	 */
-	public List<VarDeclaration> getSelectedDevParams(){
+	public List<VarDeclaration> getSelectedDevParams() {
 		return selectedDevParams;
 	}
-		
+
 }

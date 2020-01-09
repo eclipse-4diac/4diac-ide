@@ -47,20 +47,20 @@ public class CreateInputPrimitiveCommand extends Command {
 		Service service = (Service) element.eContainer().eContainer();
 		newPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
 		newPrimitive.setEvent("INIT"); //$NON-NLS-1$
-		if (type.equals(ServiceInterfacePaletteFactory.LEFT_INPUT_PRIMITIVE)) {			
+		if (type.equals(ServiceInterfacePaletteFactory.LEFT_INPUT_PRIMITIVE)) {
 			newPrimitive.setInterface(service.getLeftInterface());
-		} else{
+		} else {
 			newPrimitive.setInterface(service.getRightInterface());
-		} 
+		}
 		element.setInputPrimitive(newPrimitive);
 		super.execute();
 	}
-	
+
 	@Override
 	public void undo() {
-		element.setInputPrimitive(null);		
+		element.setInputPrimitive(null);
 	}
-	
+
 	@Override
 	public void redo() {
 		element.setInputPrimitive(newPrimitive);

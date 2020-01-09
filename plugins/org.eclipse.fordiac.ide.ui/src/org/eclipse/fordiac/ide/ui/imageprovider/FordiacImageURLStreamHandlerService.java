@@ -28,9 +28,8 @@ import org.osgi.service.url.AbstractURLStreamHandlerService;
 import org.osgi.service.url.URLConstants;
 import org.osgi.service.url.URLStreamHandlerService;
 
-public class FordiacImageURLStreamHandlerService extends
-		AbstractURLStreamHandlerService {
-	
+public class FordiacImageURLStreamHandlerService extends AbstractURLStreamHandlerService {
+
 	private static final String FORDIAC_IMAGE_PROTOCOL = "fordiacimage"; //$NON-NLS-1$
 
 	private static FordiacImageURLStreamHandlerService instance;

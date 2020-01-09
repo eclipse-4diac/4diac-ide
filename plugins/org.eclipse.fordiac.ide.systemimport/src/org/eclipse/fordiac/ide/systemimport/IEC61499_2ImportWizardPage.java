@@ -129,7 +129,7 @@ public class IEC61499_2ImportWizardPage extends WizardPage {
 			setErrorMessage("The selected File does not exist!");
 			return false;
 		}
-		
+
 		setErrorMessage(null);
 		return true;
 	}
@@ -137,11 +137,11 @@ public class IEC61499_2ImportWizardPage extends WizardPage {
 	public File getSelectedSystemFile() {
 		return new File(fcc.getFile());
 	}
-	
-	public String getProjectName(){
-		String[] val1 = fcc.getFile().split(File.separatorChar=='\\' ? "\\\\" : File.separator); //$NON-NLS-1$
+
+	public String getProjectName() {
+		String[] val1 = fcc.getFile().split(File.separatorChar == '\\' ? "\\\\" : File.separator); //$NON-NLS-1$
 		String[] val2 = val1[val1.length - 1].split("\\."); //$NON-NLS-1$
-		
+
 		return val2[0];
 	}
 }

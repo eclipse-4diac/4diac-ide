@@ -16,46 +16,48 @@ import org.eclipse.fordiac.ide.model.structuredtext.ui.internal.StructuredtextAc
 import org.osgi.framework.BundleContext;
 
 /**
- * An extended activator which extends the standard generated xtext activator for
- * expressions as sublanguage
+ * An extended activator which extends the standard generated xtext activator
+ * for expressions as sublanguage
  */
 @SuppressWarnings("all")
 public class ExtendedStructuredTextActivator extends StructuredtextActivator {
-  public static final String ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION = "org.eclipse.fordiac.ide.model.structuredtext.Expression";
-  
-  private static StructuredtextActivator INSTANCE;
-  
-  @Override
-  public void start(final BundleContext context) throws Exception {
-    super.start(context);
-    ExtendedStructuredTextActivator.INSTANCE = this;
-  }
-  
-  @Override
-  public void stop(final BundleContext context) throws Exception {
-    ExtendedStructuredTextActivator.INSTANCE = null;
-    super.stop(context);
-  }
-  
-  public static StructuredtextActivator getInstance() {
-    return ExtendedStructuredTextActivator.INSTANCE;
-  }
-  
-  @Override
-  public com.google.inject.Module getRuntimeModule(final String grammar) {
-    boolean _equals = ExtendedStructuredTextActivator.ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION.equals(grammar);
-    if (_equals) {
-      return new ExpressionRuntimeModule();
-    }
-    return super.getRuntimeModule(grammar);
-  }
-  
-  @Override
-  public com.google.inject.Module getUiModule(final String grammar) {
-    boolean _equals = ExtendedStructuredTextActivator.ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION.equals(grammar);
-    if (_equals) {
-      return new ExpressionUiModule(this);
-    }
-    return super.getUiModule(grammar);
-  }
+	public static final String ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION = "org.eclipse.fordiac.ide.model.structuredtext.Expression";
+
+	private static StructuredtextActivator INSTANCE;
+
+	@Override
+	public void start(final BundleContext context) throws Exception {
+		super.start(context);
+		ExtendedStructuredTextActivator.INSTANCE = this;
+	}
+
+	@Override
+	public void stop(final BundleContext context) throws Exception {
+		ExtendedStructuredTextActivator.INSTANCE = null;
+		super.stop(context);
+	}
+
+	public static StructuredtextActivator getInstance() {
+		return ExtendedStructuredTextActivator.INSTANCE;
+	}
+
+	@Override
+	public com.google.inject.Module getRuntimeModule(final String grammar) {
+		boolean _equals = ExtendedStructuredTextActivator.ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION
+				.equals(grammar);
+		if (_equals) {
+			return new ExpressionRuntimeModule();
+		}
+		return super.getRuntimeModule(grammar);
+	}
+
+	@Override
+	public com.google.inject.Module getUiModule(final String grammar) {
+		boolean _equals = ExtendedStructuredTextActivator.ORG_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_EXPRESSION
+				.equals(grammar);
+		if (_equals) {
+			return new ExpressionUiModule(this);
+		}
+		return super.getUiModule(grammar);
+	}
 }

@@ -24,8 +24,7 @@ public interface IAlgorithmEditorCreator {
 	/**
 	 * Creates the algorithm editor.
 	 * 
-	 * @param parent
-	 *            the parent
+	 * @param parent the parent
 	 * 
 	 * @return the i algorithm editor
 	 */

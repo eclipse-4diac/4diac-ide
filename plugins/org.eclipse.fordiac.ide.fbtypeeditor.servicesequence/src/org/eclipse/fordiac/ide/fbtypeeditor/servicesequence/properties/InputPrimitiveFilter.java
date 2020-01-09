@@ -21,10 +21,10 @@ public class InputPrimitiveFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if(toTest instanceof InputPrimitiveEditPart){
+		if (toTest instanceof InputPrimitiveEditPart) {
 			return true;
 		}
-		if(toTest instanceof InputPrimitive){
+		if (toTest instanceof InputPrimitive) {
 			return true;
 		}
 		return false;

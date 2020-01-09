@@ -31,13 +31,14 @@ public class FBTypeParser extends AbstractContentAssistParser {
 			nameMappings = new HashMap<AbstractElement, String>() {
 				private static final long serialVersionUID = 1L;
 				{
-					put(grammarAccess.getLibraryElementAccess().getNameAssignment(), "rule__LibraryElement__NameAssignment");
+					put(grammarAccess.getLibraryElementAccess().getNameAssignment(),
+							"rule__LibraryElement__NameAssignment");
 				}
 			};
 		}
 		return nameMappings.get(element);
 	}
-			
+
 	@Override
 	protected String[] getInitialHiddenTokens() {
 		return new String[] { "RULE_WS", "RULE_ML_COMMENT", "RULE_SL_COMMENT" };

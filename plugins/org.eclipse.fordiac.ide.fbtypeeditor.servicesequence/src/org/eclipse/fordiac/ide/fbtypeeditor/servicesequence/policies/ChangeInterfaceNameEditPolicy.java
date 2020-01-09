@@ -25,15 +25,15 @@ public class ChangeInterfaceNameEditPolicy extends DirectEditPolicy {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.DirectEditPolicy#getDirectEditCommand(org
+	 * @see org.eclipse.gef.editpolicies.DirectEditPolicy#getDirectEditCommand(org
 	 * .eclipse.gef.requests.DirectEditRequest)
 	 */
 	@Override
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
 		if (getHost() instanceof SequenceRootEditPart) {
 			SequenceRootEditPart viewEditPart = (SequenceRootEditPart) getHost();
-			return new ChangeServiceInterfaceNameCommand((String) request.getCellEditor().getValue(), viewEditPart.getFBType(), viewEditPart.isLeft(request));
+			return new ChangeServiceInterfaceNameCommand((String) request.getCellEditor().getValue(),
+					viewEditPart.getFBType(), viewEditPart.isLeft(request));
 		}
 		return null;
 	}
@@ -41,8 +41,7 @@ public class ChangeInterfaceNameEditPolicy extends DirectEditPolicy {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.DirectEditPolicy#showCurrentEditValue(org
+	 * @see org.eclipse.gef.editpolicies.DirectEditPolicy#showCurrentEditValue(org
 	 * .eclipse.gef.requests.DirectEditRequest)
 	 */
 	@Override
@@ -50,10 +49,10 @@ public class ChangeInterfaceNameEditPolicy extends DirectEditPolicy {
 		String value = (String) request.getCellEditor().getValue();
 		if (getHost() instanceof SequenceRootEditPart) {
 			SequenceRootEditPart viewEditPart = (SequenceRootEditPart) getHost();
-			if(viewEditPart.isLeft(request)){
-				((ServiceFigure)viewEditPart.getFigure()).getLeftLabel().setText(value);
-			}else{
-				((ServiceFigure)viewEditPart.getFigure()).getRightLabel().setText(value);
+			if (viewEditPart.isLeft(request)) {
+				((ServiceFigure) viewEditPart.getFigure()).getLeftLabel().setText(value);
+			} else {
+				((ServiceFigure) viewEditPart.getFigure()).getRightLabel().setText(value);
 			}
 		}
 	}

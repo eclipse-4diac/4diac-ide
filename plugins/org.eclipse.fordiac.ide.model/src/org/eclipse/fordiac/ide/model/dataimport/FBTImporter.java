@@ -496,7 +496,8 @@ public class FBTImporter implements LibraryElementTags {
 		if (null != aFB.getType() && null != aFB.getType().getInterfaceList()) {
 			aFB.setInterface(EcoreUtil.copy(aFB.getType().getInterfaceList()));
 		} else {
-			//if we don't have a type or interface list set an empty interface list to adapter
+			// if we don't have a type or interface list set an empty interface list to
+			// adapter
 			aFB.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		}
 		fbNetwork.getNetworkElements().add(aFB);

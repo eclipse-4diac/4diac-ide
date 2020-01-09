@@ -28,37 +28,26 @@ public interface IExportFilter {
 	/**
 	 * Export.
 	 * 
-	 * @param typeFile
-	 *          the path
-	 * @param destination
-	 *          the destination
-	 * @param forceOverwrite
-	 *          the force overwrite
+	 * @param typeFile       the path
+	 * @param destination    the destination
+	 * @param forceOverwrite the force overwrite
 	 * 
-	 * @throws ExportException
-	 *           the export exception
+	 * @throws ExportException the export exception
 	 */
-	void export(IFile typeFile, String destination, boolean forceOverwrite)
-			throws ExportException;
+	void export(IFile typeFile, String destination, boolean forceOverwrite) throws ExportException;
 
 	/**
 	 * Export.
 	 * 
-	 * @param typeFile
-	 *          the path
-	 * @param destination
-	 *          the destination
-	 * @param forceOverwrite
-	 *          the force overwrite
-	 * @param type
-	 *          the LibraryElement
+	 * @param typeFile       the path
+	 * @param destination    the destination
+	 * @param forceOverwrite the force overwrite
+	 * @param type           the LibraryElement
 	 * 
-	 * @throws ExportException
-	 *           the export exception
+	 * @throws ExportException the export exception
 	 * @since 0.1
 	 */
-	void export(IFile typeFile, String destination, boolean forceOverwrite,
-			LibraryElement type) throws ExportException;
+	void export(IFile typeFile, String destination, boolean forceOverwrite, LibraryElement type) throws ExportException;
 
 	/**
 	 * Warnings occured during export.

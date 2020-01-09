@@ -40,12 +40,11 @@ public class RenameApplication extends AbstractHandler {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof TreeSelection) {
 			if (((TreeSelection) selection).getFirstElement() instanceof Application) {
-				Application application = (Application) ((TreeSelection) selection)
-						.getFirstElement();
-				
+				Application application = (Application) ((TreeSelection) selection).getFirstElement();
+
 				String newName = showRenameDialog(application);
-				if(null != newName){
-					performApplicationRename(application, newName);					
+				if (null != newName) {
+					performApplicationRename(application, newName);
 				}
 			}
 		}
@@ -53,35 +52,34 @@ public class RenameApplication extends AbstractHandler {
 	}
 
 	private static String showRenameDialog(final Application application) {
-		InputDialog dialog = new InputDialog(Display.getDefault()
-				.getActiveShell(), "Rename Application", "Enter new application name", application.getName(), 
-				new IInputValidator(){
+		InputDialog dialog = new InputDialog(Display.getDefault().getActiveShell(), "Rename Application",
+				"Enter new application name", application.getName(), new IInputValidator() {
 					@Override
 					public String isValid(String newText) {
-						if(application.getName().equals(newText)){
+						if (application.getName().equals(newText)) {
 							return "Application name not different!";
 						}
 						if (!NameRepository.isValidName(application, newText)) {
 							return Messages.NewApplicationPage_ErrorMessageInvalidAppName;
 						}
 						return null;
-					}			
-		}){
+					}
+				}) {
 			@Override
-			protected Control createDialogArea(Composite parent){
+			protected Control createDialogArea(Composite parent) {
 				Control retval = super.createDialogArea(parent);
 				getText().addVerifyListener(new IdentifierVerifyListener());
 				return retval;
 			}
-		};		
+		};
 		int ret = dialog.open();
 		if (ret == Window.OK) {
 			return dialog.getValue();
-		}		
+		}
 		return null;
 	}
 
-	private static void performApplicationRename(Application application, String newName) {		
+	private static void performApplicationRename(Application application, String newName) {
 		ChangeNameCommand cmd = new ChangeNameCommand(application, newName);
 		CommandStack cmdStack = SystemManager.INSTANCE.getCommandStack(application.getAutomationSystem());
 		cmdStack.execute(cmd);

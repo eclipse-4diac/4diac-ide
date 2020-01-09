@@ -25,7 +25,8 @@ public class ValueEditPartChangeEditPolicy extends DirectEditPolicy {
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
 		ValueEditPart valueEditPart = getValueEditPart();
 		if (null != valueEditPart) {
-			return new ChangeValueCommand(valueEditPart.getModel().getVarDeclaration(), (String) request.getCellEditor().getValue());
+			return new ChangeValueCommand(valueEditPart.getModel().getVarDeclaration(),
+					(String) request.getCellEditor().getValue());
 		}
 		return null;
 	}
@@ -38,11 +39,12 @@ public class ValueEditPartChangeEditPolicy extends DirectEditPolicy {
 			valueEditPart.getFigure().setText(value);
 		}
 	}
-	
-	/**Retrieve the correct valueedit part for this policy
-	 * Referencing classes like the interfaceedit part may override it 
+
+	/**
+	 * Retrieve the correct valueedit part for this policy Referencing classes like
+	 * the interfaceedit part may override it
 	 */
-	protected ValueEditPart getValueEditPart(){
+	protected ValueEditPart getValueEditPart() {
 		ValueEditPart retval = null;
 		if (getHost() instanceof ValueEditPart) {
 			retval = (ValueEditPart) getHost();

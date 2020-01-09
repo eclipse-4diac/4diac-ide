@@ -37,8 +37,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-
-/** Removes all selected watches
+/**
+ * Removes all selected watches
  *
  */
 public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
@@ -47,7 +47,7 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		super.execute(event);
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		
+
 		if (selection instanceof StructuredSelection) {
 			MonitoringManager manager = MonitoringManager.getInstance();
 			Set<IInterfaceElement> foundElements = getSelectedWatchedelements(manager, (StructuredSelection) selection);
@@ -55,62 +55,68 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 				removeMonitoringElement(manager, ifElement);
 			}
 			refreshEditor();
-		}		
+		}
 		return null;
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext){
+	public void setEnabled(Object evaluationContext) {
 		boolean needToAdd = false;
 		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		
+
 		if (selection instanceof StructuredSelection) {
-			needToAdd = !getSelectedWatchedelements(MonitoringManager.getInstance(), (StructuredSelection) selection).isEmpty();
+			needToAdd = !getSelectedWatchedelements(MonitoringManager.getInstance(), (StructuredSelection) selection)
+					.isEmpty();
 		}
 		setBaseEnabled(needToAdd);
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static Set<IInterfaceElement> getSelectedWatchedelements(MonitoringManager manager, StructuredSelection selection) {
+	private static Set<IInterfaceElement> getSelectedWatchedelements(MonitoringManager manager,
+			StructuredSelection selection) {
 		Set<IInterfaceElement> foundElements = new HashSet<>();
 		for (Iterator iterator = selection.iterator(); iterator.hasNext();) {
 			Object selectedObject = iterator.next();
-			
-			if(selectedObject instanceof EditPart) { 
-				if (selectedObject instanceof MonitoringEditPart){
-					IInterfaceElement ie = ((MonitoringEditPart)selectedObject).getModel().getPort().getInterfaceElement();
-					if(manager.containsPort(ie)) {
+
+			if (selectedObject instanceof EditPart) {
+				if (selectedObject instanceof MonitoringEditPart) {
+					IInterfaceElement ie = ((MonitoringEditPart) selectedObject).getModel().getPort()
+							.getInterfaceElement();
+					if (manager.containsPort(ie)) {
 						foundElements.add(ie);
 					}
-				}else if (((EditPart)selectedObject).getModel() instanceof EObject) {
-						foundElements.addAll(getWatchedelementsForLibrayElement(manager, (EObject)((EditPart)selectedObject).getModel()));
+				} else if (((EditPart) selectedObject).getModel() instanceof EObject) {
+					foundElements.addAll(getWatchedelementsForLibrayElement(manager,
+							(EObject) ((EditPart) selectedObject).getModel()));
 				}
 			} else if (selectedObject instanceof EObject) {
-				foundElements.addAll(getWatchedelementsForLibrayElement(manager, (EObject)selectedObject));
+				foundElements.addAll(getWatchedelementsForLibrayElement(manager, (EObject) selectedObject));
 			}
-		}	
+		}
 		return foundElements;
 	}
 
-	private static Set<IInterfaceElement> getWatchedelementsForLibrayElement(MonitoringManager manager, EObject element) {
+	private static Set<IInterfaceElement> getWatchedelementsForLibrayElement(MonitoringManager manager,
+			EObject element) {
 		Set<IInterfaceElement> foundElements = new HashSet<>();
 		if (element instanceof FBNetworkElement) {
-			foundElements.addAll(getWatchedIfElementsForFB(manager, (FBNetworkElement)element));
+			foundElements.addAll(getWatchedIfElementsForFB(manager, (FBNetworkElement) element));
 		} else if (element instanceof FBNetwork) {
-			foundElements.addAll(getWatchedElementsFromFBNetwork(manager, (FBNetwork)element));
-		}else if (element instanceof IInterfaceElement) {
-			if(manager.containsPort( (IInterfaceElement)element)) {
-				foundElements.add((IInterfaceElement)element);
+			foundElements.addAll(getWatchedElementsFromFBNetwork(manager, (FBNetwork) element));
+		} else if (element instanceof IInterfaceElement) {
+			if (manager.containsPort((IInterfaceElement) element)) {
+				foundElements.add((IInterfaceElement) element);
 			}
 		} else if (element instanceof AutomationSystem) {
-			foundElements.addAll( getWatchedElementsFromSystem(manager, (AutomationSystem)element));
+			foundElements.addAll(getWatchedElementsFromSystem(manager, (AutomationSystem) element));
 		} else if (element instanceof Application) {
-			foundElements.addAll( getWatchedElementsFromFBNetwork(manager, ((Application)element).getFBNetwork()));
+			foundElements.addAll(getWatchedElementsFromFBNetwork(manager, ((Application) element).getFBNetwork()));
 		}
-		return foundElements;				
+		return foundElements;
 	}
 
-	private static Set<IInterfaceElement>  getWatchedElementsFromFBNetwork(MonitoringManager manager, FBNetwork fbNetwork) {
+	private static Set<IInterfaceElement> getWatchedElementsFromFBNetwork(MonitoringManager manager,
+			FBNetwork fbNetwork) {
 		Set<IInterfaceElement> foundElements = new HashSet<>();
 		for (FBNetworkElement fbnElement : fbNetwork.getNetworkElements()) {
 			foundElements.addAll(getWatchedIfElementsForFB(manager, fbnElement));
@@ -118,31 +124,30 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 		return foundElements;
 	}
 
-	private static Set<IInterfaceElement> getWatchedIfElementsForFB(MonitoringManager manager,
-			FBNetworkElement model) {
+	private static Set<IInterfaceElement> getWatchedIfElementsForFB(MonitoringManager manager, FBNetworkElement model) {
 		Set<IInterfaceElement> foundElements = new HashSet<>();
 		for (IInterfaceElement element : model.getInterface().getAllInterfaceElements()) {
-			if(manager.containsPort(element)) {
+			if (manager.containsPort(element)) {
 				foundElements.add(element);
 			}
-		}	
+		}
 		return foundElements;
 	}
-	
+
 	private static Collection<? extends IInterfaceElement> getWatchedElementsFromSystem(MonitoringManager manager,
 			AutomationSystem system) {
 		Set<IInterfaceElement> foundElements = new HashSet<>();
 		for (Application application : system.getApplication()) {
-			foundElements.addAll( getWatchedElementsFromFBNetwork(manager, application.getFBNetwork()));
+			foundElements.addAll(getWatchedElementsFromFBNetwork(manager, application.getFBNetwork()));
 		}
 		return foundElements;
 	}
-	
-	private static void removeMonitoringElement(MonitoringManager manager, IInterfaceElement port) {	
+
+	private static void removeMonitoringElement(MonitoringManager manager, IInterfaceElement port) {
 		MonitoringBaseElement element = manager.getMonitoringElement(port);
 
 		if (element instanceof MonitoringAdapterElement) {
-			for (MonitoringElement child : ((MonitoringAdapterElement)element).getElements()) {
+			for (MonitoringElement child : ((MonitoringAdapterElement) element).getElements()) {
 				manager.removeMonitoringElement(child);
 			}
 		}

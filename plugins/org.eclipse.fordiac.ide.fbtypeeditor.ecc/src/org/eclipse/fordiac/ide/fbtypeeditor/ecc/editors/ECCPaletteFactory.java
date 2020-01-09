@@ -26,7 +26,7 @@ public final class ECCPaletteFactory {
 			"ECCPaletteFactory.Location", //$NON-NLS-1$
 			"ECCPaletteFactory.Size", //$NON-NLS-1$
 			"ECCPaletteFactory.State"); //$NON-NLS-1$
-	
+
 	public static PaletteRoot createPalette() {
 		final PaletteRoot palette = new PaletteRoot();
 		fillPalette(palette);

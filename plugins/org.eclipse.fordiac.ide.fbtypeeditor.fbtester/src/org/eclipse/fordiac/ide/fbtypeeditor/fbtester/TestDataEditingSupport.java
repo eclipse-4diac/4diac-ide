@@ -21,7 +21,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.TableColumn;
 
-
 public class TestDataEditingSupport extends EditingSupport {
 
 	private final TableColumn col;
@@ -35,11 +34,9 @@ public class TestDataEditingSupport extends EditingSupport {
 	protected boolean canEdit(Object element) {
 		if (col.getData(FBTester.COLUMN_TYPE).equals(FBTester.NAME)) {
 			return true;
-		} else if (col.getData(FBTester.COLUMN_TYPE)
-				.equals(FBTester.INPUT_VARIABLE)) {
+		} else if (col.getData(FBTester.COLUMN_TYPE).equals(FBTester.INPUT_VARIABLE)) {
 			return true;
-		} else if (col.getData(FBTester.COLUMN_TYPE).equals(
-				FBTester.OUTPUT_VARIABLE)) {
+		} else if (col.getData(FBTester.COLUMN_TYPE).equals(FBTester.OUTPUT_VARIABLE)) {
 			return true;
 		}
 		return false;
@@ -59,19 +56,15 @@ public class TestDataEditingSupport extends EditingSupport {
 	protected Object getValue(Object element) {
 		if (col.getData(FBTester.COLUMN_TYPE).equals(FBTester.NAME)) {
 			return ((TestData) element).getTestName();
-		} else if (col.getData(FBTester.COLUMN_TYPE)
-				.equals(FBTester.INPUT_VARIABLE)) {
+		} else if (col.getData(FBTester.COLUMN_TYPE).equals(FBTester.INPUT_VARIABLE)) {
 			Object obj = col.getData(FBTester.INPUT_VARIABLE);
 			if (obj instanceof VarDeclaration) {
-				return ((TestData) element).getValueFor(((VarDeclaration) obj)
-						.getName());
+				return ((TestData) element).getValueFor(((VarDeclaration) obj).getName());
 			}
-		} else if (col.getData(FBTester.COLUMN_TYPE).equals(
-				FBTester.OUTPUT_VARIABLE)) {
+		} else if (col.getData(FBTester.COLUMN_TYPE).equals(FBTester.OUTPUT_VARIABLE)) {
 			Object obj = col.getData(FBTester.OUTPUT_VARIABLE);
 			if (obj instanceof VarDeclaration) {
-				return ((TestData) element).getResultFor(((VarDeclaration) obj)
-						.getName());
+				return ((TestData) element).getResultFor(((VarDeclaration) obj).getName());
 			}
 		}
 		return null;
@@ -82,8 +75,7 @@ public class TestDataEditingSupport extends EditingSupport {
 		if (col.getData(FBTester.COLUMN_TYPE).equals(FBTester.INPUT_VARIABLE)) {
 			Object obj = col.getData(FBTester.INPUT_VARIABLE);
 			if (obj instanceof VarDeclaration) {
-				((TestData) element).setValueFor(((VarDeclaration) obj).getName(),
-						value.toString());
+				((TestData) element).setValueFor(((VarDeclaration) obj).getName(), value.toString());
 				getViewer().refresh();
 				return;
 			}
@@ -91,8 +83,7 @@ public class TestDataEditingSupport extends EditingSupport {
 		if (col.getData(FBTester.COLUMN_TYPE).equals(FBTester.OUTPUT_VARIABLE)) {
 			Object obj = col.getData(FBTester.OUTPUT_VARIABLE);
 			if (obj instanceof VarDeclaration) {
-				((TestData) element).setResultFor(((VarDeclaration) obj).getName(),
-						value.toString());
+				((TestData) element).setResultFor(((VarDeclaration) obj).getName(), value.toString());
 				getViewer().refresh();
 				return;
 			}

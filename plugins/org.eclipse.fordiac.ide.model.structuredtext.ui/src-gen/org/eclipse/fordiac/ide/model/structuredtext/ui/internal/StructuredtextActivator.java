@@ -19,35 +19,36 @@ import org.osgi.framework.BundleContext;
 
 /**
  * This class was generated. Customizations should only happen in a newly
- * introduced subclass. 
+ * introduced subclass.
  */
 public class StructuredtextActivator extends AbstractUIPlugin {
 
 	public static final String ORG_ECLIPSE_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_STRUCTUREDTEXT = "org.eclipse.fordiac.ide.model.structuredtext.StructuredText";
-	
+
 	private static final Logger logger = Logger.getLogger(StructuredtextActivator.class);
-	
+
 	private static StructuredtextActivator INSTANCE;
-	
-	private Map<String, Injector> injectors = Collections.synchronizedMap(Maps.<String, Injector> newHashMapWithExpectedSize(1));
-	
+
+	private Map<String, Injector> injectors = Collections
+			.synchronizedMap(Maps.<String, Injector>newHashMapWithExpectedSize(1));
+
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		INSTANCE = this;
 	}
-	
+
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		injectors.clear();
 		INSTANCE = null;
 		super.stop(context);
 	}
-	
+
 	public static StructuredtextActivator getInstance() {
 		return INSTANCE;
 	}
-	
+
 	public Injector getInjector(String language) {
 		synchronized (injectors) {
 			Injector injector = injectors.get(language);
@@ -57,7 +58,7 @@ public class StructuredtextActivator extends AbstractUIPlugin {
 			return injector;
 		}
 	}
-	
+
 	protected Injector createInjector(String language) {
 		try {
 			Module runtimeModule = getRuntimeModule(language);
@@ -71,23 +72,23 @@ public class StructuredtextActivator extends AbstractUIPlugin {
 			throw new RuntimeException("Failed to create injector for " + language, e);
 		}
 	}
-	
+
 	protected Module getRuntimeModule(String grammar) {
 		if (ORG_ECLIPSE_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_STRUCTUREDTEXT.equals(grammar)) {
 			return new StructuredTextRuntimeModule();
 		}
 		throw new IllegalArgumentException(grammar);
 	}
-	
+
 	protected Module getUiModule(String grammar) {
 		if (ORG_ECLIPSE_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_STRUCTUREDTEXT.equals(grammar)) {
 			return new StructuredTextUiModule(this);
 		}
 		throw new IllegalArgumentException(grammar);
 	}
-	
+
 	protected Module getSharedStateModule() {
 		return new SharedStateModule();
 	}
-	
+
 }

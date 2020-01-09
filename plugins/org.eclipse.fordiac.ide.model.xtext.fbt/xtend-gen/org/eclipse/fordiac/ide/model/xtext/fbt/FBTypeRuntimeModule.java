@@ -18,12 +18,13 @@ import org.eclipse.xtext.serializer.ISerializer;
 import org.eclipse.xtext.serializer.impl.Serializer;
 
 /**
- * Use this class to register components to be used at runtime / without the Equinox extension registry.
+ * Use this class to register components to be used at runtime / without the
+ * Equinox extension registry.
  */
 @SuppressWarnings("all")
 public class FBTypeRuntimeModule extends AbstractFBTypeRuntimeModule {
-  @Override
-  public Class<? extends ISerializer> bindISerializer() {
-    return Serializer.class;
-  }
+	@Override
+	public Class<? extends ISerializer> bindISerializer() {
+		return Serializer.class;
+	}
 }

@@ -64,7 +64,7 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 		withEventsViewer = TableWidgetFactory.createPropertyTableViewer(eventComposite, SWT.CHECK);
 		withEventsViewer.setContentProvider(new VarContentProvider());
 		withEventsViewer.setLabelProvider(new VarDeclarationLabelProvider());
-		
+
 		Table tableWith = withEventsViewer.getTable();
 		configureTableLayout(tableWith);
 		tableWith.addListener(SWT.Selection, event -> {

@@ -16,20 +16,25 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 import org.eclipse.emf.ecore.EObject;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Identification</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Identification</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getApplicationDomain <em>Application Domain</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getClassification <em>Classification</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getDescription <em>Description</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getFunction <em>Function</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getStandard <em>Standard</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getType <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getApplicationDomain
+ * <em>Application Domain</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getClassification
+ * <em>Classification</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getDescription
+ * <em>Description</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getFunction
+ * <em>Function</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getStandard
+ * <em>Standard</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getType
+ * <em>Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIdentification()
@@ -38,13 +43,14 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Identification extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Application Domain</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Application Domain</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Application Domain</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Application Domain</em>' attribute.
 	 * @see #setApplicationDomain(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIdentification_ApplicationDomain()
@@ -55,9 +61,11 @@ public interface Identification extends EObject {
 	String getApplicationDomain();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getApplicationDomain <em>Application Domain</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getApplicationDomain
+	 * <em>Application Domain</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Application Domain</em>' attribute.
 	 * @see #getApplicationDomain()
 	 * @generated
@@ -65,13 +73,14 @@ public interface Identification extends EObject {
 	void setApplicationDomain(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Classification</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Classification</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Classification</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Classification</em>' attribute isn't clear, there
+	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Classification</em>' attribute.
 	 * @see #setClassification(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIdentification_Classification()
@@ -82,9 +91,11 @@ public interface Identification extends EObject {
 	String getClassification();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getClassification <em>Classification</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getClassification
+	 * <em>Classification</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Classification</em>' attribute.
 	 * @see #getClassification()
 	 * @generated
@@ -92,13 +103,14 @@ public interface Identification extends EObject {
 	void setClassification(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Description</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Description</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Description</em>' attribute isn't clear, there
+	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Description</em>' attribute.
 	 * @see #setDescription(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIdentification_Description()
@@ -109,9 +121,11 @@ public interface Identification extends EObject {
 	String getDescription();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getDescription <em>Description</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getDescription
+	 * <em>Description</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @param value the new value of the '<em>Description</em>' attribute.
 	 * @see #getDescription()
 	 * @generated
@@ -119,13 +133,14 @@ public interface Identification extends EObject {
 	void setDescription(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Function</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Function</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Function</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Function</em>' attribute isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Function</em>' attribute.
 	 * @see #setFunction(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIdentification_Function()
@@ -136,9 +151,10 @@ public interface Identification extends EObject {
 	String getFunction();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getFunction <em>Function</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getFunction
+	 * <em>Function</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Function</em>' attribute.
 	 * @see #getFunction()
 	 * @generated
@@ -146,13 +162,14 @@ public interface Identification extends EObject {
 	void setFunction(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Standard</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Standard</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Standard</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Standard</em>' attribute isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Standard</em>' attribute.
 	 * @see #setStandard(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIdentification_Standard()
@@ -163,9 +180,10 @@ public interface Identification extends EObject {
 	String getStandard();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getStandard <em>Standard</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getStandard
+	 * <em>Standard</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Standard</em>' attribute.
 	 * @see #getStandard()
 	 * @generated
@@ -173,13 +191,14 @@ public interface Identification extends EObject {
 	void setStandard(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Type</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Type</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Type</em>' attribute isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Type</em>' attribute.
 	 * @see #setType(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIdentification_Type()
@@ -190,9 +209,10 @@ public interface Identification extends EObject {
 	String getType();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getType <em>Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Identification#getType
+	 * <em>Type</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Type</em>' attribute.
 	 * @see #getType()
 	 * @generated

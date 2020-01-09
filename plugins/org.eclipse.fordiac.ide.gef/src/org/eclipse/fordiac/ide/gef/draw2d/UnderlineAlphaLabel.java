@@ -20,7 +20,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 public class UnderlineAlphaLabel extends SetableAlphaLabel {
 
 	private boolean drawUnderline = false;
-	
+
 	public UnderlineAlphaLabel() {
 		super();
 	}
@@ -37,12 +37,12 @@ public class UnderlineAlphaLabel extends SetableAlphaLabel {
 		this.drawUnderline = drawUnderline;
 		repaint();
 	}
-	
+
 	@Override
 	protected void paintFigure(Graphics graphics) {
 		super.paintFigure(graphics);
 		Rectangle bounds = getBounds();
-		if(drawUnderline){
+		if (drawUnderline) {
 			graphics.translate(bounds.x, bounds.y);
 			Point loc = new Point(getTextLocation());
 			loc.y += bounds.height - 2;
@@ -50,6 +50,5 @@ public class UnderlineAlphaLabel extends SetableAlphaLabel {
 			graphics.translate(-bounds.x, -bounds.y);
 		}
 	}
-	
 
 }

@@ -62,11 +62,9 @@ public class Mode extends ViewPart implements ISelectionListener {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				Object[] selected = treeView.getSelectedElements();
-				clearDownloadConsole();				
+				clearDownloadConsole();
 				DeploymentCoordinator.INSTANCE.performDeployment(selected);
 			}
-
-			
 
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
@@ -74,26 +72,25 @@ public class Mode extends ViewPart implements ISelectionListener {
 			}
 
 		});
-		
+
 		contributeToActionBars();
 
-		getSite()
-				.getPage()
-				.addSelectionListener(
-						"org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView", //$NON-NLS-1$
-						this);
+		getSite().getPage().addSelectionListener(
+				"org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTreeView", //$NON-NLS-1$
+				this);
 	}
-	
+
 	private void clearDownloadConsole() {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IViewPart view = page.findView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
-		
-		if ((null != view) && (view instanceof Output)){
-			Output output = (Output)view;
+
+		if ((null != view) && (view instanceof Output)) {
+			Output output = (Output) view;
 			output.clearOutput();
 		}
-				
+
 	}
+
 	/**
 	 * Contribute to action bars.
 	 */
@@ -105,8 +102,7 @@ public class Mode extends ViewPart implements ISelectionListener {
 	/**
 	 * Fill local toolbar.
 	 * 
-	 * @param manager
-	 *            the manager
+	 * @param manager the manager
 	 */
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		// currently not used
@@ -126,18 +122,17 @@ public class Mode extends ViewPart implements ISelectionListener {
 	/** The tree view. */
 	private DownloadSelectionTreeView treeView = null;
 	private ISelectedElementsChangedListener changeListener = null;
-	
 
 	private ISelectedElementsChangedListener getChangeListener() {
-		if(null == changeListener){
+		if (null == changeListener) {
 			changeListener = new ISelectedElementsChangedListener() {
-					@Override
-					public void selectionChanged() {
-						if((null != treeView) && (!downloadButton.isDisposed())){						
-							downloadButton.setEnabled((treeView.getSelectedElements().length > 0));						
-						}
+				@Override
+				public void selectionChanged() {
+					if ((null != treeView) && (!downloadButton.isDisposed())) {
+						downloadButton.setEnabled((treeView.getSelectedElements().length > 0));
 					}
-				};
+				}
+			};
 		}
 		return changeListener;
 	}
@@ -149,8 +144,7 @@ public class Mode extends ViewPart implements ISelectionListener {
 	 * IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
 	 */
 	@Override
-	public void selectionChanged(final IWorkbenchPart part,
-			final ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (part instanceof DownloadSelectionTreeView) {
 			if (treeView != part) {
 				treeView = (DownloadSelectionTreeView) part;
@@ -161,9 +155,9 @@ public class Mode extends ViewPart implements ISelectionListener {
 	}
 
 	@Override
-	public void dispose() {		
+	public void dispose() {
 		super.dispose();
-		if(null != treeView){
+		if (null != treeView) {
 			treeView.removeSelectedElementsChangedListener(getChangeListener());
 		}
 	}

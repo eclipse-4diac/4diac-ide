@@ -42,9 +42,8 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 			layout.setMinorSpacing(0);
 			layout.setHorizontal(false);
 			layout.setStretchMinorAxis(true);
-			if (getModel() instanceof VariableInputContainer || 
-					getModel() instanceof SocketContainer){
-			  layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+			if (getModel() instanceof VariableInputContainer || getModel() instanceof SocketContainer) {
+				layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 			}
 			setLayoutManager(layout);
 			setPreferredSize(30, 10);
@@ -79,28 +78,22 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected void createEditPolicies() {
 		if (getModel() instanceof EventInputContainer) {
-			installEditPolicy(EditPolicy.LAYOUT_ROLE,
-					new EventInputContainerLayoutEditPolicy());
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new EventInputContainerLayoutEditPolicy());
 		}
 		if (getModel() instanceof EventOutputContainer) {
-			installEditPolicy(EditPolicy.LAYOUT_ROLE,
-					new EventOutputContainerLayoutEditPolicy());
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new EventOutputContainerLayoutEditPolicy());
 		}
-		if (getModel() instanceof VariableInputContainer){
-			installEditPolicy(EditPolicy.LAYOUT_ROLE,
-					new VariableInputContainerLayoutEditPolicy());
+		if (getModel() instanceof VariableInputContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VariableInputContainerLayoutEditPolicy());
 		}
-		if(getModel() instanceof SocketContainer){
-			installEditPolicy(EditPolicy.LAYOUT_ROLE,
-					new SocketContainerLayoutEditPolicy());
+		if (getModel() instanceof SocketContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new SocketContainerLayoutEditPolicy());
 		}
-		if (getModel() instanceof VariableOutputContainer ) {
-			installEditPolicy(EditPolicy.LAYOUT_ROLE,
-					new VariableOutputContainerLayoutEditPolicy());
+		if (getModel() instanceof VariableOutputContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VariableOutputContainerLayoutEditPolicy());
 		}
-		if(getModel() instanceof PlugContainer) {
-			installEditPolicy(EditPolicy.LAYOUT_ROLE,
-					new PlugContainerLayoutEditPolicy());
+		if (getModel() instanceof PlugContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new PlugContainerLayoutEditPolicy());
 		}
 	}
 
@@ -128,7 +121,7 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 		super.removeChildVisual(childEditPart);
 		if (getContentPane().getChildren().size() == 0) {
 			Dimension dim = TextUtilities.INSTANCE.getTextExtents("INT", getContentPane().getFont());
-			dim.height =(int) (dim.height * 0.66);
+			dim.height = (int) (dim.height * 0.66);
 			getContentPane().setPreferredSize(dim);
 		}
 	}

@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.util.dnd;
 public class TransferDataSelectionFBParameter {
 	private String name = null;
 	private String value = null;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -33,15 +33,15 @@ public class TransferDataSelectionFBParameter {
 		this.value = value;
 	}
 
-	public TransferDataSelectionFBParameter(){
+	public TransferDataSelectionFBParameter() {
 		this(null, null);
 	}
-	
-	public TransferDataSelectionFBParameter(String name){
+
+	public TransferDataSelectionFBParameter(String name) {
 		this(name, null);
 	}
-	
-	public TransferDataSelectionFBParameter(String name, String value){
+
+	public TransferDataSelectionFBParameter(String name, String value) {
 		this.name = name;
 		this.value = value;
 	}

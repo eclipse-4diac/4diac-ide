@@ -17,14 +17,14 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 
 public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGenerator {
 	private final Palette palette;
-	
+
 	public AbstractMediaSpecificGenerator(Palette palette) {
 		super();
 		this.palette = palette;
 	}
-	
+
 	public Palette getPalette() {
 		return palette;
 	}
-	
+
 }

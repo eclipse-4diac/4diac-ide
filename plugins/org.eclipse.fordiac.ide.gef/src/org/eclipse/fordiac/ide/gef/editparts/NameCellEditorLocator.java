@@ -39,12 +39,16 @@ public class NameCellEditorLocator implements CellEditorLocator {
 		setLabel(label);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.tools.CellEditorLocator#relocate(org.eclipse.jface.viewers.CellEditor)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.gef.tools.CellEditorLocator#relocate(org.eclipse.jface.viewers.
+	 * CellEditor)
 	 */
 	@Override
 	public void relocate(final CellEditor celleditor) {
-		if(null != celleditor) {
+		if (null != celleditor) {
 			Text text = (Text) celleditor.getControl();
 			Point pref = text.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 			Rectangle rect = label.getTextBounds().getCopy();
@@ -63,8 +67,7 @@ public class NameCellEditorLocator implements CellEditorLocator {
 	/**
 	 * Sets the label.
 	 * 
-	 * @param label
-	 *            The label to set
+	 * @param label The label to set
 	 */
 	protected void setLabel(final Label label) {
 		this.label = label;

@@ -34,18 +34,17 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class ClearFocusOn extends AbstractHandler {
 	private static final int NOT_TRANSPARENT = 255;
 
-
 	/**
-	 * the command has been executed, so extract extract the needed information
-	 * from the application context.
+	 * the command has been executed, so extract extract the needed information from
+	 * the application context.
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActiveEditor(event);
 		if (part instanceof FBNetworkEditor) {
 			GraphicalViewer viewer = ((FBNetworkEditor) part).getViewer();
-			Map<?,?> map = viewer.getEditPartRegistry();
-			for (Entry<?, ?> entry  : map.entrySet()) {
+			Map<?, ?> map = viewer.getEditPartRegistry();
+			for (Entry<?, ?> entry : map.entrySet()) {
 				Object obj = entry.getKey();
 				if (obj instanceof FB) {
 					Object editPartAsObject = entry.getValue();

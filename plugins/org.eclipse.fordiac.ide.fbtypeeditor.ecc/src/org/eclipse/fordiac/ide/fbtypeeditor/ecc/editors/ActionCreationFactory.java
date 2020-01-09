@@ -29,7 +29,7 @@ public class ActionCreationFactory implements CreationFactory {
 	 */
 	@Override
 	public Object getNewObject() {
-		return LibraryElementFactory.eINSTANCE.createECAction();	
+		return LibraryElementFactory.eINSTANCE.createECAction();
 	}
 
 	/*

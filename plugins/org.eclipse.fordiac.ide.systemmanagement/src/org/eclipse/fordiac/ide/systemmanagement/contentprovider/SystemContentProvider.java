@@ -28,8 +28,7 @@ public class SystemContentProvider implements ITreeContentProvider {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java
+	 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java
 	 * .lang.Object)
 	 */
 	@Override
@@ -41,8 +40,7 @@ public class SystemContentProvider implements ITreeContentProvider {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.
+	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.
 	 * Object)
 	 */
 	@Override
@@ -54,8 +52,7 @@ public class SystemContentProvider implements ITreeContentProvider {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object
-	 * )
+	 * org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object )
 	 */
 	@Override
 	public Object getParent(final Object child) {
@@ -65,8 +62,7 @@ public class SystemContentProvider implements ITreeContentProvider {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.
+	 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.
 	 * Object)
 	 */
 	@Override
@@ -92,8 +88,7 @@ public class SystemContentProvider implements ITreeContentProvider {
 	 * .viewers.Viewer, java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public void inputChanged(final Viewer viewer, final Object oldInput,
-			final Object newInput) {
+	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 	}
 

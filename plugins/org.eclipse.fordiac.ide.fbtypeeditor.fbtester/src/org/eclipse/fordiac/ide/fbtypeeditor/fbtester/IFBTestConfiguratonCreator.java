@@ -18,14 +18,12 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.swt.widgets.Composite;
 
-
-public interface IFBTestConfiguratonCreator extends ISetValueListener,
-		ITriggerEventListener {
+public interface IFBTestConfiguratonCreator extends ISetValueListener, ITriggerEventListener {
 
 	IFBTestConfiguration createConfigurationPage(Composite parent);
 
 	void setType(FBType type);
-	
+
 	void setGroup(PaletteGroup group);
 
 }

@@ -13,11 +13,9 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.data;
 
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Value Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Value
+ * Type</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getValueType()

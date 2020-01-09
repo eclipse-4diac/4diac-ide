@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceEleme
 import org.eclipse.gef.EditPart;
 
 public class UntypedSubAppInterfaceElementEditPartForResource extends UntypedSubAppInterfaceElementEditPart {
-	
+
 	@Override
 	protected IFigure createFigure() {
 		IFigure fig = super.createFigure();

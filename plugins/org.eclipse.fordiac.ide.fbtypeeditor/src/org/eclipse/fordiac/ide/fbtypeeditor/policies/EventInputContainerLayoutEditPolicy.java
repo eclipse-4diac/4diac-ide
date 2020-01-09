@@ -63,14 +63,16 @@ public class EventInputContainerLayoutEditPolicy extends AbstractInterfaceContai
 			if (after != null) {
 				afterEP = (InterfaceEditPart) after;
 			}
-			if (childEP.isEvent() && childEP.isInput() && (afterEP == null || (afterEP.isEvent() && afterEP.isInput()))) {
+			if (childEP.isEvent() && childEP.isInput()
+					&& (afterEP == null || (afterEP.isEvent() && afterEP.isInput()))) {
 				int newIndex = -1;
 				if (after == null) {
 					newIndex = getHost().getChildren().size();
 				} else {
 					newIndex = getHost().getChildren().indexOf(after);
 				}
-				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(), ((IInterfaceElement)childEP.getModel()).isIsInput(), newIndex);
+				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(),
+						((IInterfaceElement) childEP.getModel()).isIsInput(), newIndex);
 			}
 		}
 		return null;
@@ -86,7 +88,7 @@ public class EventInputContainerLayoutEditPolicy extends AbstractInterfaceContai
 			index = type.getInterfaceList().getEventInputs().indexOf(ref.getModel());
 		}
 		if (childClass instanceof EventType && type != null) {
-			return new CreateInterfaceElementCommand((DataType)childClass, type.getInterfaceList(), true, index);
+			return new CreateInterfaceElementCommand((DataType) childClass, type.getInterfaceList(), true, index);
 		}
 		return null;
 	}

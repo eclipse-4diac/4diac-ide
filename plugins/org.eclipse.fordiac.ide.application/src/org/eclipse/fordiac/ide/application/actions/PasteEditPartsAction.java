@@ -89,7 +89,7 @@ public class PasteEditPartsAction extends SelectionAction {
 	@Override
 	public void runWithEvent(Event event) {
 		if (event.widget instanceof FigureCanvas) {
-          	// handles insertion via copy&paste
+			// handles insertion via copy&paste
 			setMouseLocationAsPastePos(event);
 		}
 		super.runWithEvent(event);

@@ -43,7 +43,7 @@ public enum CoordinateConverter {
 
 		@Override
 		public void run() {
-			Font diagramFont = JFaceResources.getFont(PreferenceConstants.DIAGRAM_FONT);			
+			Font diagramFont = JFaceResources.getFont(PreferenceConstants.DIAGRAM_FONT);
 			lineHeight = FigureUtilities.getFontMetrics(diagramFont).getHeight();
 		}
 	}
@@ -51,7 +51,7 @@ public enum CoordinateConverter {
 	private CoordinateConverter() {
 		LineHeightRunnable lineHeight = new LineHeightRunnable();
 
-		Display.getDefault().syncExec(lineHeight); 
+		Display.getDefault().syncExec(lineHeight);
 		transformationScale = lineHeight.getLineHeight() / 100.0;
 	}
 

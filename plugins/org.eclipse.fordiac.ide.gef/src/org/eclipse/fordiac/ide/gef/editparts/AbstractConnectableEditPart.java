@@ -45,7 +45,7 @@ public abstract class AbstractConnectableEditPart extends AbstractGraphicalEditP
 	@Override
 	public DragTracker getDragTracker(Request request) {
 		if (useConnectionTool()) {
-			return new ConnCreateDirectEditDragTrackerProxy(this); 
+			return new ConnCreateDirectEditDragTrackerProxy(this);
 		}
 		return super.getDragTracker(request);
 	}

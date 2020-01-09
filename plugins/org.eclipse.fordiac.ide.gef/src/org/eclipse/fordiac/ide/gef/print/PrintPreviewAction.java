@@ -39,9 +39,9 @@ public class PrintPreviewAction extends Action {
 		this.viewer = viewer;
 		setId(ActionFactory.PRINT.getId());
 		setText(Messages.PrintPreviewAction_LABEL_Print);
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages(); 
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_ETOOL_PRINT_EDIT));
-	    setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_ETOOL_PRINT_EDIT_DISABLED));
+		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_ETOOL_PRINT_EDIT_DISABLED));
 	}
 
 	/**
@@ -51,11 +51,11 @@ public class PrintPreviewAction extends Action {
 	 * @return true, if checks if is enabled
 	 */
 	@Override
-	public boolean isEnabled() {		
-		if (viewer != null)  {
+	public boolean isEnabled() {
+		if (viewer != null) {
 			return true;
 		}
-		
+
 		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		return (editor != null || window.getActivePage().getActiveEditor() instanceof GraphicalEditor);
 	}
@@ -66,8 +66,7 @@ public class PrintPreviewAction extends Action {
 	@Override
 	public void run() {
 		if (viewer == null) {
-			IWorkbenchWindow window = PlatformUI.getWorkbench()
-					.getActiveWorkbenchWindow();
+			IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 			if (window.getActivePage().getActiveEditor() instanceof GraphicalEditor) {
 				editor = (GraphicalEditor) window.getActivePage().getActiveEditor();
 			}
@@ -79,8 +78,7 @@ public class PrintPreviewAction extends Action {
 
 		if (null != viewer) {
 			Shell shell = viewer.getControl().getShell();
-			PrintPreview preview = new PrintPreview(shell, viewer,
-					Messages.PrintPreviewAction_LABEL_PrintPreview);
+			PrintPreview preview = new PrintPreview(shell, viewer, Messages.PrintPreviewAction_LABEL_PrintPreview);
 			preview.setBlockOnOpen(true);
 			preview.open();
 		}

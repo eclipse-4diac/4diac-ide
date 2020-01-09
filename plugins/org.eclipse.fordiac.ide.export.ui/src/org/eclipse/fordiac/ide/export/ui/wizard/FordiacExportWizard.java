@@ -47,7 +47,7 @@ import org.eclipse.ui.ide.IDE;
 public class FordiacExportWizard extends Wizard implements IExportWizard {
 
 	private static final String FORDIAC_EXPORT_SECTION = "4DIAC_EXPORT_SECTION"; //$NON-NLS-1$
-	
+
 	private IStructuredSelection selection;
 
 	/**
@@ -57,8 +57,8 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		IDialogSettings settings = Activator.getDefault().getDialogSettings();
 
 		if (null == settings.getSection(FORDIAC_EXPORT_SECTION)) {
-			//section does not exist create a section
-			 settings.addNewSection(FORDIAC_EXPORT_SECTION);
+			// section does not exist create a section
+			settings.addNewSection(FORDIAC_EXPORT_SECTION);
 		}
 		setDialogSettings(settings);
 		setWindowTitle(Messages.FordiacExportWizard_LABEL_Window_Title);
@@ -66,15 +66,16 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 
 	private SelectFBTypesWizardPage page;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.wizard.Wizard#addPages()
 	 */
 	@Override
 	public void addPages() {
 		super.addPages();
 
-		page = new SelectFBTypesWizardPage(
-				Messages.FordiacExportWizard_WizardPage, selection);
+		page = new SelectFBTypesWizardPage(Messages.FordiacExportWizard_WizardPage, selection);
 		page.setDescription(Messages.FordiacExportWizard_DESCRIPTION_WizardPage);
 		page.setTitle(Messages.FordiacExportWizard_TITLE_WizardPage);
 		addPage(page);
@@ -87,8 +88,8 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-	   page.saveWidgetValues();	
-		
+		page.saveWidgetValues();
+
 		final IConfigurationElement conf;
 		final IExportFilter filter;
 		try {
@@ -102,66 +103,62 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 			return true;
 		}
 
-       IRunnableWithProgress op = new IRunnableWithProgress() {			
-    	   
+		IRunnableWithProgress op = new IRunnableWithProgress() {
+
 			@SuppressWarnings("rawtypes")
 			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException,
-					InterruptedException {
-				
+			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
 				List resources = page.getSelectedResources();
-				String outputDirectory = page.getDirectory();	
+				String outputDirectory = page.getDirectory();
 				SystemManager systemManager = SystemManager.INSTANCE;
-				
+
 				monitor.beginTask("Exporting selected types using exporter: " + conf.getAttribute("name"),
 						resources.size());
-				
+
 				for (Object object : resources) {
-					if(object instanceof IFile) {
-						IFile file = (IFile)object;
-						
+					if (object instanceof IFile) {
+						IFile file = (IFile) object;
+
 						Palette palette = systemManager.getPalette(file.getProject());
 						PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, file);
 						LibraryElement type = entry.getType();
-						
+
 						monitor.subTask("Exporting type: " + entry.getLabel());
-						
+
 						try {
-							if(null != type){
+							if (null != type) {
 								filter.export(file, outputDirectory, page.overwriteWithoutWarning(), type);
-							}
-							else{
+							} else {
 								filter.export(file, outputDirectory, page.overwriteWithoutWarning());
 							}
 						} catch (ExportException e) {
 							MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-							msg.setMessage(Messages.FordiacExportWizard_ERROR
-									+ e.getMessage());
+							msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
 							msg.open();
 						}
-						
+
 						monitor.worked(1);
 					}
 				}
-				
+
 				monitor.done();
-				
+
 			}
 		};
-		
-		try {	    
+
+		try {
 			new ProgressMonitorDialog(getShell()).run(false, false, op);
-	    } catch (Exception e) {
-	    	MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-			msg.setMessage(Messages.FordiacExportWizard_ERROR
-					+ e.getMessage());
+		} catch (Exception e) {
+			MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
+			msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
 			msg.open();
 		}
-		
-		if((!filter.getErrors().isEmpty()) || (!filter.getWarnings().isEmpty())){
+
+		if ((!filter.getErrors().isEmpty()) || (!filter.getWarnings().isEmpty())) {
 			new ExportStatusMessageDialog(getShell(), filter.getWarnings(), filter.getErrors()).open();
 		}
-		
+
 		return true;
 	}
 
@@ -173,8 +170,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void init(final IWorkbench workbench,
-			final IStructuredSelection currentSelection) {
+	public void init(final IWorkbench workbench, final IStructuredSelection currentSelection) {
 		List selectedResources = IDE.computeSelectedResources(currentSelection);
 		this.selection = new StructuredSelection(selectedResources);
 	}

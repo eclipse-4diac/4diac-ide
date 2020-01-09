@@ -16,15 +16,15 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 import org.eclipse.emf.common.util.EList;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Configurable Object</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Configurable Object</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject#getAttributes <em>Attributes</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject#getAttributes
+ * <em>Attributes</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConfigurableObject()
@@ -33,14 +33,16 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface ConfigurableObject extends INamedElement {
 	/**
-	 * Returns the value of the '<em><b>Attributes</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.Attribute}.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Attributes</b></em>' containment reference
+	 * list. The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.Attribute}. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Attributes</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Attributes</em>' containment reference list isn't
+	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Attributes</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConfigurableObject_Attributes()
 	 * @model containment="true" resolveProxies="true"
@@ -49,25 +51,29 @@ public interface ConfigurableObject extends INamedElement {
 	EList<Attribute> getAttributes();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String" typeDataType="org.eclipse.emf.ecore.xml.type.String" valueDataType="org.eclipse.emf.ecore.xml.type.String" commentDataType="org.eclipse.emf.ecore.xml.type.String"
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        typeDataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        valueDataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        commentDataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */
 	void setAttribute(String attributeName, String type, String value, String comment);
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */
 	Attribute getAttribute(String attributeName);
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */
 	String getAttributeValue(String attributeName);

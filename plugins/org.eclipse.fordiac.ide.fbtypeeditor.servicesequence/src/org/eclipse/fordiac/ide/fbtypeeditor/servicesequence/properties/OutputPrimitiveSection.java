@@ -30,19 +30,19 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class OutputPrimitiveSection extends PrimitiveSection {
 
 	private Text testResultText;
-	
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);	
-		createOutputPrimitiveSection(getLeftComposite());	
+		super.createControls(parent, tabbedPropertySheetPage);
+		createOutputPrimitiveSection(getLeftComposite());
 	}
-	
-	private void createOutputPrimitiveSection(Composite parent){
+
+	private void createOutputPrimitiveSection(Composite parent) {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Test Result:"); 
-		testResultText = createGroupText(composite, true);	
+		getWidgetFactory().createCLabel(composite, "Test Result:");
+		testResultText = createGroupText(composite, true);
 		testResultText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
@@ -51,27 +51,27 @@ public class OutputPrimitiveSection extends PrimitiveSection {
 				addContentAdapter();
 			}
 		});
-	}	
-	
+	}
+
 	@Override
-	protected OutputPrimitive getType(){
-		return (OutputPrimitive)type;
+	protected OutputPrimitive getType() {
+		return (OutputPrimitive) type;
 	}
 
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
-		if(null == commandStack){ //disable all fields
+		if (null == commandStack) { // disable all fields
 			testResultText.setEnabled(false);
 		}
-	}	
-	
+	}
+
 	@Override
 	public void refresh() {
 		super.refresh();
 		CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if(null != type) {
+		if (null != type) {
 			testResultText.setText(Integer.toString(getType().getTestResult()));
 		}
 		commandStack = commandStackBuffer;

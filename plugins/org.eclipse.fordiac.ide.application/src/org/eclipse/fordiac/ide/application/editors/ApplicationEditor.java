@@ -19,12 +19,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.ui.IEditorInput;
 
 public class ApplicationEditor extends FBNetworkEditor {
-	
+
 	/** The adapter. */
 	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
-		public void notifyChanged(
-				final Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			int type = notification.getEventType();
 			int featureId = notification.getFeatureID(Application.class);
 
@@ -42,26 +41,25 @@ public class ApplicationEditor extends FBNetworkEditor {
 
 	};
 
-	
 	@Override
 	protected void setModel(final IEditorInput input) {
 		if (input instanceof ApplicationEditorInput) {
 			ApplicationEditorInput appInput = (ApplicationEditorInput) input;
 			Application app = appInput.getContent();
 			setModel(app.getFBNetwork());
-			
+
 			// register EContentAdapter to be informed on changes of the
 			// application name
 			app.eAdapters().add(adapter);
-			
+
 		}
 		super.setModel(input);
 	}
-	
+
 	@Override
 	public void dispose() {
 		if (adapter != null && getModel() != null && getModel().eAdapters().contains(adapter)) {
-				getModel().eAdapters().remove(adapter);
+			getModel().eAdapters().remove(adapter);
 		}
 		super.dispose();
 	}

@@ -26,29 +26,26 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
-
 public class WatchesContentProvider implements ITreeContentProvider {
 
 	private Viewer viewer;
 
 	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
-		public void notifyChanged(
-				final org.eclipse.emf.common.notify.Notification notification) {
+		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 			int featureID = notification.getFeatureID(MonitoringElement.class);
 			if (featureID == MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE
 					&& notification.getNotifier() instanceof MonitoringElement) {
 				Display.getDefault().asyncExec(() -> {
-						if(!viewer.getControl().isDisposed()){
-							((TreeViewer) viewer).refresh(notification.getNotifier());
-						}
+					if (!viewer.getControl().isDisposed()) {
+						((TreeViewer) viewer).refresh(notification.getNotifier());
 					}
-				);
+				});
 
 			}
 		}
 	};
-	
+
 	private List<MonitoringBaseElement> watchedElements = new ArrayList<>();
 
 	@Override
@@ -61,13 +58,13 @@ public class WatchesContentProvider implements ITreeContentProvider {
 
 		watchedElements.clear();
 
-		for (MonitoringBaseElement element  : MonitoringManager.getInstance().getElementsToMonitor()) {
+		for (MonitoringBaseElement element : MonitoringManager.getInstance().getElementsToMonitor()) {
 			if (element != null && !watchedElements.contains(element)) {
 				element.eAdapters().add(adapter);
 				watchedElements.add(element);
 			}
 		}
-		
+
 		return watchedElements.toArray();
 	}
 
@@ -103,5 +100,5 @@ public class WatchesContentProvider implements ITreeContentProvider {
 			}
 		}
 	}
-	
+
 }

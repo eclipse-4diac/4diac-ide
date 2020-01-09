@@ -34,56 +34,62 @@ public abstract class AbstractFBTypeUiModule extends DefaultUiModule {
 	public AbstractFBTypeUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
 	}
-	
+
 	// contributed by org.eclipse.xtext.xtext.generator.ImplicitFragment
 	public Provider<? extends IAllContainersState> provideIAllContainersState() {
 		return Access.getJavaProjectsState();
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends IProposalConflictHelper> bindIProposalConflictHelper() {
 		return AntlrProposalConflictHelper.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public void configureContentAssistLexer(Binder binder) {
-		binder.bind(Lexer.class)
-			.annotatedWith(Names.named(LexerIdeBindings.CONTENT_ASSIST))
-			.to(InternalFBTypeLexer.class);
+		binder.bind(Lexer.class).annotatedWith(Names.named(LexerIdeBindings.CONTENT_ASSIST))
+				.to(InternalFBTypeLexer.class);
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public void configureHighlightingLexer(Binder binder) {
 		binder.bind(org.eclipse.xtext.parser.antlr.Lexer.class)
-			.annotatedWith(Names.named(LexerIdeBindings.HIGHLIGHTING))
-			.to(org.eclipse.fordiac.ide.model.xtext.fbt.parser.antlr.lexer.InternalFBTypeLexer.class);
+				.annotatedWith(Names.named(LexerIdeBindings.HIGHLIGHTING))
+				.to(org.eclipse.fordiac.ide.model.xtext.fbt.parser.antlr.lexer.InternalFBTypeLexer.class);
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public void configureHighlightingTokenDefProvider(Binder binder) {
-		binder.bind(ITokenDefProvider.class)
-			.annotatedWith(Names.named(LexerIdeBindings.HIGHLIGHTING))
-			.to(AntlrTokenDefProvider.class);
+		binder.bind(ITokenDefProvider.class).annotatedWith(Names.named(LexerIdeBindings.HIGHLIGHTING))
+				.to(AntlrTokenDefProvider.class);
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends ContentAssistContext.Factory> bindContentAssistContext$Factory() {
 		return DelegatingContentAssistContextFactory.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends IContentAssistParser> bindIContentAssistParser() {
 		return FBTypeParser.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public void configureContentAssistLexerProvider(Binder binder) {
 		binder.bind(InternalFBTypeLexer.class).toProvider(LexerProvider.create(InternalFBTypeLexer.class));
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.exporting.SimpleNamesFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.exporting.SimpleNamesFragment2
 	public Class<? extends IDependentElementsCalculator> bindIDependentElementsCalculator() {
 		return DefaultDependentElementsCalculator.class;
 	}
-	
+
 }

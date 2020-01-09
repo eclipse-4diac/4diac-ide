@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Display;
 /**
  * The Class ColorManager.
  * 
- * TODO model refactoring - consider replacing it with jface resoruce 
+ * TODO model refactoring - consider replacing it with jface resoruce
  */
 public final class ColorManager {
 
@@ -56,11 +56,11 @@ public final class ColorManager {
 		}
 		return color;
 	}
-	
-	public static Color getColor(final org.eclipse.fordiac.ide.model.libraryElement.Color color) {		
-		return getColor(new RGB(color.getRed(), color.getGreen(), color.getBlue()));		 
+
+	public static Color getColor(final org.eclipse.fordiac.ide.model.libraryElement.Color color) {
+		return getColor(new RGB(color.getRed(), color.getGreen(), color.getBlue()));
 	}
-	
+
 	private ColorManager() {
 		throw new UnsupportedOperationException("LaunchRuntimeUtils utility class should not be instantiated!"); //$NON-NLS-1$
 	}

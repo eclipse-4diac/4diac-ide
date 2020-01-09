@@ -19,24 +19,24 @@ import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteracto
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
 public class FDBK2DevMgmInteractorProvider extends DefaultDevMgmInteractorProvider {
-	private static final String PROFILE_NAME = "FBDK2"; //$NON-NLS-1$	
-	
+	private static final String PROFILE_NAME = "FBDK2"; //$NON-NLS-1$
+
 	private static final String WRITE_PARAMETER_FBDK2 = "<Request ID=\"{0}\" Action=\"WRITE\"><Parameter Value=\"{1}\" Reference=\"{2}\" /></Request>"; //$NON-NLS-1$
 
-	
 	@Override
-	public String getProfileName(){
+	public String getProfileName() {
 		return PROFILE_NAME;
 	}
-	
+
 	@Override
-	public IDeviceManagementInteractor createInteractor(Device dev, IDeviceManagementCommunicationHandler overrideHandler) {
+	public IDeviceManagementInteractor createInteractor(Device dev,
+			IDeviceManagementCommunicationHandler overrideHandler) {
 		return new DeploymentExecutor(dev, overrideHandler) {
-			
+
 			@Override
 			protected String getWriteParameterMessage() {
 				return WRITE_PARAMETER_FBDK2;
-			}			
+			}
 		};
 	}
 }

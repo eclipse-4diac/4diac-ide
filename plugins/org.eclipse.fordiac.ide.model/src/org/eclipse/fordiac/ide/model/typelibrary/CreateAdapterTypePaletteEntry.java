@@ -18,10 +18,10 @@ import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 
 public class CreateAdapterTypePaletteEntry implements IPaletteEntryCreator, TypeLibraryTags {
-	
+
 	@Override
 	public boolean canHandle(IFile file) {
-		 return (ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
+		return (ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
 	}
 
 	@Override

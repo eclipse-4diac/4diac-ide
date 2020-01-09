@@ -38,19 +38,18 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Display;
 
+public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 
-public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
-	
 	/** The property change listener. */
 	private final IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
 			if (event.getProperty().equals(PreferenceConstants.P_MONITORING_TRANSPARENCY)) {
-				((SetableAlphaLabel)getFigure()).setAlpha(PreferenceConstants.getMonitoringTransparency());
+				((SetableAlphaLabel) getFigure()).setAlpha(PreferenceConstants.getMonitoringTransparency());
 			}
 		}
 	};
-	
+
 	@Override
 	public void activate() {
 		if (!isActive()) {
@@ -58,7 +57,6 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		}
 	}
-		
 
 	@Override
 	public void deactivate() {
@@ -67,7 +65,6 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		}
 	}
-
 
 	public boolean isEvent() {
 		return getInterfaceElement() instanceof Event;
@@ -84,25 +81,25 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 
 	@Override
 	protected void createEditPolicies() {
-		if(!isEvent()) {
-			//only allow direct edit if it is not an event, see Bug 510735 for details.
-			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy(){	
-						@Override
-						protected Command getDirectEditCommand(DirectEditRequest request) {
-							String value = (String) request.getCellEditor().getValue();
-							MonitoringEditPart editPart = (MonitoringEditPart)getHost();
-							MonitoringManager.getInstance().writeValue(editPart.getModel(), value);
-							return null;
-						}
-	
-						@Override
-						protected void showCurrentEditValue(DirectEditRequest request) {
-							String value = (String) request.getCellEditor().getValue();
-							MonitoringEditPart editPart = (MonitoringEditPart)getHost();
-							if (null != editPart) {
-								editPart.getNameLabel().setText(value);
-							}							
-						}										
+		if (!isEvent()) {
+			// only allow direct edit if it is not an event, see Bug 510735 for details.
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
+				@Override
+				protected Command getDirectEditCommand(DirectEditRequest request) {
+					String value = (String) request.getCellEditor().getValue();
+					MonitoringEditPart editPart = (MonitoringEditPart) getHost();
+					MonitoringManager.getInstance().writeValue(editPart.getModel(), value);
+					return null;
+				}
+
+				@Override
+				protected void showCurrentEditValue(DirectEditRequest request) {
+					String value = (String) request.getCellEditor().getValue();
+					MonitoringEditPart editPart = (MonitoringEditPart) getHost();
+					if (null != editPart) {
+						editPart.getNameLabel().setText(value);
+					}
+				}
 			});
 		}
 	}
@@ -110,10 +107,8 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 	@Override
 	protected void setBackgroundColor(IFigure l) {
 		if (getModel().isForce()) {
-			l.setBackgroundColor(PreferenceGetter
-					.getColor(
-							Activator.getDefault().getPreferenceStore(),
-							org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_FORCE_COLOR));
+			l.setBackgroundColor(PreferenceGetter.getColor(Activator.getDefault().getPreferenceStore(),
+					org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_FORCE_COLOR));
 		} else {
 			super.setBackgroundColor(l);
 		}
@@ -157,14 +152,13 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 
 		};
 	}
-	
+
 	@Override
 	public void performRequest(final Request request) {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN) {
-			if(!isEvent()) {
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+			if (!isEvent()) {
 				performDirectEdit();
 			}
 		} else {
@@ -174,17 +168,16 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 
 	@Override
 	public boolean understandsRequest(Request request) {
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN) {
-			return isVariable(); //Currently only allow direct when we are a variable
-		} 
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+			return isVariable(); // Currently only allow direct when we are a variable
+		}
 		return super.understandsRequest(request);
-	}	
+	}
 
 	public void setValue(String string) {
 		if (isActive() && getFigure() != null) {
 			if (getModel().isForce() && getModel().getForceValue() != null) {
-				((Label) getFigure()).setText(getModel().getForceValue() + " (" + string + ")");  //$NON-NLS-1$//$NON-NLS-2$
+				((Label) getFigure()).setText(getModel().getForceValue() + " (" + string + ")"); //$NON-NLS-1$//$NON-NLS-2$
 			} else {
 				((Label) getFigure()).setText(string);
 			}
@@ -192,5 +185,4 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart  {
 		}
 	}
 
-	
 }

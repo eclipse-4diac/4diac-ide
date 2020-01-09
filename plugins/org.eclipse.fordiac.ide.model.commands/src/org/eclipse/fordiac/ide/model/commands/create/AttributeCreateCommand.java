@@ -25,7 +25,7 @@ public class AttributeCreateCommand extends Command {
 	public AttributeCreateCommand(ConfigurableObject configurableObject) {
 		this.configurableObject = configurableObject;
 	}
-	
+
 	@Override
 	public boolean canExecute() {
 		return null != configurableObject;

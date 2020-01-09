@@ -100,7 +100,7 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 			setFactory(new StateCreationFactory());
 			setUnloadWhenFinished(false);
 		}
-		
+
 		public void setSourceState(ECState state) {
 			this.sourceState = state;
 		}
@@ -164,8 +164,9 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 	public void mouseDrag(MouseEvent mouseEvent, EditPartViewer viewer) {
 		if (((AdvancedPanningSelectionTool) getDefaultTool()).getTargetEditPart() instanceof ECStateEditPart) {
 			transition = true;
-			transitionStateCreationTool.setSourceState((ECState) ((ECStateEditPart) (((AdvancedPanningSelectionTool) getDefaultTool())
-					.getTargetEditPart())).getModel());
+			transitionStateCreationTool
+					.setSourceState((ECState) ((ECStateEditPart) (((AdvancedPanningSelectionTool) getDefaultTool())
+							.getTargetEditPart())).getModel());
 		}
 		super.mouseDrag(mouseEvent, viewer);
 	}

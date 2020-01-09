@@ -35,44 +35,42 @@ import org.w3c.dom.Element;
 /**
  * The Class FbtExporter.
  */
-class FbtExporter extends AbstractTypeExporter{
+class FbtExporter extends AbstractTypeExporter {
 
-	
 	/**
 	 * Instantiates a new fbt exporter.
-	 * @param entry 
+	 * 
+	 * @param entry
 	 */
 	FbtExporter(FBTypePaletteEntry entry) {
 		super(entry.getFBType());
 	}
-	
+
 	@Override
 	protected String getRootTag() {
-		return  LibraryElementTags.FB_TYPE;
+		return LibraryElementTags.FB_TYPE;
 	}
-	
+
 	@Override
-	protected void createTypeSpecificXMLEntries(Element rootElement){
+	protected void createTypeSpecificXMLEntries(Element rootElement) {
 		if (getType() instanceof CompositeFBType) {
 			FBNetworkExporter nwExporter = new FBNetworkExporter(getDom());
 			rootElement.appendChild(nwExporter.createFBNetworkElement(((CompositeFBType) getType()).getFBNetwork()));
 		} else if (getType() instanceof BasicFBType) {
 			addBasicFB(rootElement, (BasicFBType) getType());
-		} else if(getType() instanceof SimpleFBType) {
+		} else if (getType() instanceof SimpleFBType) {
 			addSimpleFB(rootElement, (SimpleFBType) getType());
 		}
 	}
-	
+
 	/*
 	 * <!ELEMENT BasicFB (InternalVars?,ECC?,Algorithm)>
 	 */
 	/**
 	 * Adds the basic fb.
 	 * 
-	 * @param rootEle
-	 *            the root ele
-	 * @param type
-	 *            the type
+	 * @param rootEle the root ele
+	 * @param type    the type
 	 */
 	private void addBasicFB(final Element rootEle, final BasicFBType type) {
 		Element basicElement = createElement(LibraryElementTags.BASIC_F_B_ELEMENT);
@@ -82,15 +80,11 @@ class FbtExporter extends AbstractTypeExporter{
 		rootEle.appendChild(basicElement);
 	}
 
-	
-
 	/**
 	 * Adds the other algorithm.
 	 * 
-	 * @param algorithmElement
-	 *            the algorithm element
-	 * @param algorithm
-	 *            the algorithm
+	 * @param algorithmElement the algorithm element
+	 * @param algorithm        the algorithm
 	 */
 	private void addOtherAlgorithm(final Element algorithmElement, final OtherAlgorithm algorithm) {
 		Element st = createElement(LibraryElementTags.OTHER_ELEMENT);
@@ -110,12 +104,9 @@ class FbtExporter extends AbstractTypeExporter{
 	/**
 	 * Adds the st algorithm.
 	 * 
-	 * @param dom
-	 *            the dom
-	 * @param algorithmElement
-	 *            the algorithm element
-	 * @param algorithm
-	 *            the algorithm
+	 * @param dom              the dom
+	 * @param algorithmElement the algorithm element
+	 * @param algorithm        the algorithm
 	 */
 	private void addSTAlgorithm(final Element algorithmElement, final STAlgorithm algorithm) {
 		Element st = createElement(LibraryElementTags.ST_ELEMENT);
@@ -133,17 +124,14 @@ class FbtExporter extends AbstractTypeExporter{
 	/**
 	 * Adds the ecc.
 	 * 
-	 * @param basicElement
-	 *            the basic element
-	 * @param ecc
-	 *            the ecc
+	 * @param basicElement the basic element
+	 * @param ecc          the ecc
 	 */
-	private void addECC(final Element basicElement,
-			final ECC ecc) {
+	private void addECC(final Element basicElement, final ECC ecc) {
 		Element eccElement = createElement(LibraryElementTags.ECC_ELEMENT);
 		if (ecc != null) {
 			addECStates(eccElement, ecc.getECState(), ecc.getStart());
-			ecc.getECTransition().forEach(transition -> eccElement.appendChild(createTransitionEntry(transition)) );
+			ecc.getECTransition().forEach(transition -> eccElement.appendChild(createTransitionEntry(transition)));
 		}
 		basicElement.appendChild(eccElement);
 	}
@@ -157,10 +145,10 @@ class FbtExporter extends AbstractTypeExporter{
 	 * #IMPLIED >
 	 */
 
-	/** Create a transition entry for the dom
+	/**
+	 * Create a transition entry for the dom
 	 * 
-	 * @param transition
-	 *            the transition
+	 * @param transition the transition
 	 */
 	private Element createTransitionEntry(final ECTransition transition) {
 		Element transElement = createElement(LibraryElementTags.ECTRANSITION_ELEMENT);
@@ -168,9 +156,9 @@ class FbtExporter extends AbstractTypeExporter{
 		transElement.setAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE, transition.getDestination().getName());
 		transElement.setAttribute(LibraryElementTags.CONDITION_ATTRIBUTE, transition.getConditionText());
 		transElement.setAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, transition.getComment());
-		
+
 		CommonElementExporter.exportXandY(transition, transElement);
-		
+
 		return transElement;
 	}
 
@@ -183,15 +171,11 @@ class FbtExporter extends AbstractTypeExporter{
 	/**
 	 * Adds the ec states.
 	 * 
-	 * @param eccElement
-	 *            the ecc element
-	 * @param states
-	 *            the states
-	 * @param startState
-	 *            the start state
+	 * @param eccElement the ecc element
+	 * @param states     the states
+	 * @param startState the start state
 	 */
-	private void addECStates(final Element eccElement, final List<ECState> states,
-			final ECState startState) {
+	private void addECStates(final Element eccElement, final List<ECState> states, final ECState startState) {
 		eccElement.appendChild(createECState(startState));
 		states.forEach(state -> {
 			if (!state.equals(startState)) {
@@ -204,19 +188,17 @@ class FbtExporter extends AbstractTypeExporter{
 	/**
 	 * Creates the ec state.
 	 * 
-	 * @param dom
-	 *            the dom
-	 * @param state
-	 *            the state
+	 * @param dom   the dom
+	 * @param state the state
 	 * 
 	 * @return the element
 	 */
 	private Element createECState(final ECState state) {
 		Element stateElement = createElement(LibraryElementTags.ECSTATE_ELEMENT);
-		
+
 		setNameAttribute(stateElement, state.getName());
 		setCommentAttribute(stateElement, state);
-		
+
 		CommonElementExporter.exportXandY(state, stateElement);
 
 		addECActions(stateElement, state.getECAction());
@@ -232,37 +214,29 @@ class FbtExporter extends AbstractTypeExporter{
 	/**
 	 * Adds the ec actions.
 	 * 
-	 * @param dom
-	 *            the dom
-	 * @param stateElement
-	 *            the state element
-	 * @param actions
-	 *            the actions
+	 * @param dom          the dom
+	 * @param stateElement the state element
+	 * @param actions      the actions
 	 */
 	private void addECActions(final Element stateElement, final List<ECAction> actions) {
 		for (ECAction action : actions) {
 			Element actionElement = createElement(LibraryElementTags.ECACTION_ELEMENT);
 			if (action.getAlgorithm() != null) {
-				actionElement.setAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm()
-						.getName());
+				actionElement.setAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm().getName());
 			}
 			if (action.getOutput() != null) {
-				actionElement.setAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE, action.getOutput()
-						.getName());
+				actionElement.setAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE, action.getOutput().getName());
 			}
 			stateElement.appendChild(actionElement);
 		}
 	}
-	
+
 	/**
 	 * Adds the simple fb.
 	 * 
-	 * @param dom
-	 *            the dom
-	 * @param rootEle
-	 *            the root ele
-	 * @param type
-	 *            the type
+	 * @param dom     the dom
+	 * @param rootEle the root ele
+	 * @param type    the type
 	 */
 	private void addSimpleFB(final Element rootEle, final SimpleFBType type) {
 		Element simpleElement = createElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
@@ -274,26 +248,22 @@ class FbtExporter extends AbstractTypeExporter{
 	/**
 	 * Adds the algorithm.
 	 * 
-	 * @param dom
-	 *            the dom
-	 * @param basicElement
-	 *            the basic element
-	 * @param algorithms
-	 *            the algorithms
+	 * @param dom          the dom
+	 * @param basicElement the basic element
+	 * @param algorithms   the algorithms
 	 */
 	private void addAlgorithm(final Element basicElement, final Algorithm algorithm) {
 		Element algorithmElement = createElement(LibraryElementTags.ALGORITHM_ELEMENT);
-		
+
 		setNameAttribute(algorithmElement, algorithm.getName());
 		setCommentAttribute(algorithmElement, algorithm);
-		
+
 		if (algorithm instanceof STAlgorithm) {
 			addSTAlgorithm(algorithmElement, (STAlgorithm) algorithm);
 		} else if (algorithm instanceof OtherAlgorithm) {
-			addOtherAlgorithm(algorithmElement,
-					(OtherAlgorithm) algorithm);
+			addOtherAlgorithm(algorithmElement, (OtherAlgorithm) algorithm);
 		}
-		
+
 		basicElement.appendChild(algorithmElement);
 	}
 

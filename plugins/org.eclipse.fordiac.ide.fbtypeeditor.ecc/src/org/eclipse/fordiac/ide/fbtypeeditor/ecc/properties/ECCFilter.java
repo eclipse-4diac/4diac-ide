@@ -21,10 +21,10 @@ public class ECCFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if(toTest instanceof ECCRootEditPart){
+		if (toTest instanceof ECCRootEditPart) {
 			return true;
 		}
-		if(toTest instanceof ECC){
+		if (toTest instanceof ECC) {
 			return true;
 		}
 		return false;

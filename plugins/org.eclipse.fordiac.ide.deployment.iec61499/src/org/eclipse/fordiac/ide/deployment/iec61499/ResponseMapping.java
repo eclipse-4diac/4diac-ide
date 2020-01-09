@@ -22,71 +22,44 @@ import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 
 public class ResponseMapping {
 	private Map<String, Object> loadOptions;
-	
+
 	public ResponseMapping() {
 		loadOptions = new HashMap<String, Object>();
 		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
 
 		XMLMapImpl map = new XMLMapImpl();
 		map.setNoNamespacePackage(DevResponsePackage.eINSTANCE);
-	
-		//mappings do not seem to make any difference this is why they have been deleted
-		//the loading seems to be case sensitive, therefore attributes in lower case letters
+
+		// mappings do not seem to make any difference this is why they have been
+		// deleted
+		// the loading seems to be case sensitive, therefore attributes in lower case
+		// letters
 		loadOptions.put(XMLResource.OPTION_XML_MAP, map);
 	}
 
-/* query Resources, query FBs
-<Response ID="0">
-  <FBList>
-    <FB Name="RTest" Type="EMB_RES"/>
-  </FBList>
-</Response>	
-*/
+	/*
+	 * query Resources, query FBs <Response ID="0"> <FBList> <FB Name="RTest"
+	 * Type="EMB_RES"/> </FBList> </Response>
+	 */
 
-/* query FB Interface
-<Response ID="0">
-  <FBType Comment="" Name="BOOL2BOOL">
-  <InterfaceList>
-    <EventInputs>
-      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
-        <With Var="IN"/>
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
-        <With Var="OUT"/>
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Comment="Input event qualifier" Name="IN" Type="BOOL"/>
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Comment="Output event qualifier" Name="OUT" Type="BOOL"/>
-    </OutputVars>
-  </InterfaceList>
-</FBType>
-</Response>	
-*/	
-	
-/* Monitoring
-<Response ID="43">
-  <Watches>
-    <Resource name="RTest">
-    	<FB name="FlipFlop">
-    		<Port name="Q">
-    			<Data value="FALSE" forced="false"></Data>
-    		</Port>
-    		<Port name="CNF">
-    			<Data value="0" time="0"></Data>
-    		</Port>
-    		<Port name="REQ">
-    			<Data value="0" time="0"></Data>
-    		</Port>
-    	</FB>
-    </Resource>
-  </Watches>
-</Response>
-*/	
+	/*
+	 * query FB Interface <Response ID="0"> <FBType Comment="" Name="BOOL2BOOL">
+	 * <InterfaceList> <EventInputs> <Event Comment="Normal Execution Request"
+	 * Name="REQ" Type="Event"> <With Var="IN"/> </Event> </EventInputs>
+	 * <EventOutputs> <Event Comment="Execution Confirmation" Name="CNF"
+	 * Type="Event"> <With Var="OUT"/> </Event> </EventOutputs> <InputVars>
+	 * <VarDeclaration Comment="Input event qualifier" Name="IN" Type="BOOL"/>
+	 * </InputVars> <OutputVars> <VarDeclaration Comment="Output event qualifier"
+	 * Name="OUT" Type="BOOL"/> </OutputVars> </InterfaceList> </FBType> </Response>
+	 */
+
+	/*
+	 * Monitoring <Response ID="43"> <Watches> <Resource name="RTest"> <FB
+	 * name="FlipFlop"> <Port name="Q"> <Data value="FALSE" forced="false"></Data>
+	 * </Port> <Port name="CNF"> <Data value="0" time="0"></Data> </Port> <Port
+	 * name="REQ"> <Data value="0" time="0"></Data> </Port> </FB> </Resource>
+	 * </Watches> </Response>
+	 */
 	public Map<String, Object> getLoadOptions() {
 		return loadOptions;
 	}

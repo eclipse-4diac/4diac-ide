@@ -31,7 +31,6 @@ import org.eclipse.gef.editpolicies.FlowLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-
 public class ResourceContainerLayoutEditPolicy extends FlowLayoutEditPolicy {
 
 	@Override
@@ -43,7 +42,6 @@ public class ResourceContainerLayoutEditPolicy extends FlowLayoutEditPolicy {
 		}
 		return new ModifiedNonResizeableEditPolicy(cornerDim, new Insets(1));
 	}
-
 
 	@Override
 	protected Command createMoveChildCommand(EditPart child, EditPart after) {
@@ -63,14 +61,14 @@ public class ResourceContainerLayoutEditPolicy extends FlowLayoutEditPolicy {
 				EditPart ref = getInsertionReference(request);
 				int index = -1;
 				if (ref != null) {
-					index = resContainerEditPart.getModel().getDevice().getResource().indexOf(((ResourceEditPart) ref).getModel());
+					index = resContainerEditPart.getModel().getDevice().getResource()
+							.indexOf(((ResourceEditPart) ref).getModel());
 				}
 				return new ResourceCreateCommand(type, resContainerEditPart.getModel().getDevice(), index, false);
 			}
 		}
 		return null;
 	}
-
 
 	@Override
 	protected Command createAddCommand(EditPart child, EditPart after) {
@@ -80,12 +78,12 @@ public class ResourceContainerLayoutEditPolicy extends FlowLayoutEditPolicy {
 	private ResourceMoveCommand getMoveCommand(EditPart child, EditPart after) {
 		ResourceMoveCommand cmd = null;
 		if (child instanceof ResourceEditPart && getHost() instanceof ResourceContainerEditPart) {
-			int index = -1; 
-			Device targetDevice = ((ResourceContainerEditPart)getHost()).getModel().getDevice();
+			int index = -1;
+			Device targetDevice = ((ResourceContainerEditPart) getHost()).getModel().getDevice();
 			if (after == null) {
 				index = targetDevice.getResource().size();
 			} else {
-				index = targetDevice.getResource().indexOf(after.getModel()); 
+				index = targetDevice.getResource().indexOf(after.getModel());
 			}
 			cmd = new ResourceMoveCommand((Resource) child.getModel(), targetDevice, index);
 		}

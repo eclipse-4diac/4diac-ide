@@ -39,13 +39,13 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
 
-public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*ResizableCompartmentEditPart*/ {
+public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* ResizableCompartmentEditPart */ {
 
 	private EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if(getCastedModel().eAdapters().contains(adapter)){
+			if (getCastedModel().eAdapters().contains(adapter)) {
 				refresh();
 			}
 		}
@@ -58,7 +58,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 		}
 		super.activate();
 	}
-	
+
 	@Override
 	public void deactivate() {
 		if (isActive()) {
@@ -66,7 +66,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 		}
 		super.deactivate();
 	}
-		
+
 	public class ServiceSequenceFigure extends Layer {
 		private Label nameLabel;
 		private final Layer transactionContainer;
@@ -84,7 +84,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 			nameLayoutData.horizontalAlignment = GridData.FILL;
 			getLayoutManager().setConstraint(nameLabel, nameLayoutData);
 			add(nameLabel);
-			
+
 			transactionContainer = new Layer();
 			GridLayout containerLayout;
 			transactionContainer.setLayoutManager(containerLayout = new GridLayout());
@@ -92,18 +92,18 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 			GridData containerData = new GridData();
 			containerData.grabExcessHorizontalSpace = true;
 			containerData.horizontalAlignment = GridData.FILL;
-			getLayoutManager().setConstraint(transactionContainer, containerData);		
+			getLayoutManager().setConstraint(transactionContainer, containerData);
 			add(transactionContainer);
 		}
 
 		public Label getLabel() {
 			return nameLabel;
 		}
-		
-		public void setLabelText(String name){
+
+		public void setLabelText(String name) {
 			this.nameLabel.setText(null != name ? name : ""); //$NON-NLS-1$
-		}		
-		
+		}
+
 		public Layer getTransactionContainer() {
 			return transactionContainer;
 		}
@@ -116,7 +116,8 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
 			@Override
 			protected Command getDeleteCommand(final GroupRequest request) {
-				return new DeleteServiceSequenceCommand((FBType) getCastedModel().eContainer().eContainer(), getCastedModel());
+				return new DeleteServiceSequenceCommand((FBType) getCastedModel().eContainer().eContainer(),
+						getCastedModel());
 			}
 		});
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new HighlightEditPolicy());
@@ -134,7 +135,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 		layoutData.grabExcessHorizontalSpace = true;
 		layoutData.horizontalAlignment = GridData.FILL;
 		figure.getLayoutManager().setConstraint(figure, layoutData);
-		
+
 		return figure;
 	}
 
@@ -171,7 +172,7 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		ServiceSequenceFigure figure = (ServiceSequenceFigure) getFigure();
-		if(null != getCastedModel()){
+		if (null != getCastedModel()) {
 			figure.setLabelText(getCastedModel().getName());
 		}
 	}
@@ -183,6 +184,6 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /*Re
 
 	@Override
 	public Label getNameLabel() {
-		return ((ServiceSequenceFigure)getFigure()).getLabel();
+		return ((ServiceSequenceFigure) getFigure()).getLabel();
 	}
 }

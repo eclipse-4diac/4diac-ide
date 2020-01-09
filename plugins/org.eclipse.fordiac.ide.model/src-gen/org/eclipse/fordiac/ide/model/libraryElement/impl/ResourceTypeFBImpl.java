@@ -21,16 +21,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Resource Type FB</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Resource Type FB</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class ResourceTypeFBImpl extends FBImpl implements ResourceTypeFB {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ResourceTypeFBImpl() {
@@ -38,8 +37,8 @@ public class ResourceTypeFBImpl extends FBImpl implements ResourceTypeFB {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -48,8 +47,8 @@ public class ResourceTypeFBImpl extends FBImpl implements ResourceTypeFB {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -63,8 +62,9 @@ public class ResourceTypeFBImpl extends FBImpl implements ResourceTypeFB {
 		name = newName;
 		NameRepository.checkNameIdentifier(this);
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONFIGURABLE_OBJECT__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONFIGURABLE_OBJECT__NAME,
+					oldName, name));
 
 	}
 
-} //ResourceTypeFBImpl
+} // ResourceTypeFBImpl

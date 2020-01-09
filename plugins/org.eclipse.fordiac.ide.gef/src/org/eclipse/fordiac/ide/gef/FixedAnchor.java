@@ -33,10 +33,8 @@ public class FixedAnchor extends ChopboxAnchor {
 	/**
 	 * Instantiates a new fixed anchor.
 	 * 
-	 * @param owner
-	 *          the owner
-	 * @param isInput
-	 *          the is input
+	 * @param owner   the owner
+	 * @param isInput the is input
 	 */
 	public FixedAnchor(final IFigure owner, final boolean isInput) {
 		super(owner);
@@ -46,15 +44,11 @@ public class FixedAnchor extends ChopboxAnchor {
 	/**
 	 * Instantiates a new fixed anchor.
 	 * 
-	 * @param owner
-	 *          the owner
-	 * @param isInput
-	 *          the is input
-	 * @param editPart
-	 *          the editPart this anchor is related to
+	 * @param owner    the owner
+	 * @param isInput  the is input
+	 * @param editPart the editPart this anchor is related to
 	 */
-	public FixedAnchor(final IFigure owner, final boolean isInput,
-			GraphicalEditPart editPart) {
+	public FixedAnchor(final IFigure owner, final boolean isInput, GraphicalEditPart editPart) {
 		super(owner);
 		this.isInput = isInput;
 		this.editPart = editPart;
@@ -74,14 +68,15 @@ public class FixedAnchor extends ChopboxAnchor {
 			location = getBox().getLeft();
 		} else {
 			location = getBox().getRight();
-			location.x -= 1; //the right seems to be exactly the pixel after the box. With this -1 we get the border of the box.
+			location.x -= 1; // the right seems to be exactly the pixel after the box. With this -1 we get
+								// the border of the box.
 		}
-		
+
 		getOwner().translateToAbsolute(location);
-		
+
 		return location;
 	}
-	
+
 	@Override
 	public Point getReferencePoint() {
 		return getLocation(null);
@@ -94,7 +89,7 @@ public class FixedAnchor extends ChopboxAnchor {
 	public GraphicalEditPart getEditPart() {
 		return editPart;
 	}
-	
+
 	public boolean isInput() {
 		return isInput;
 	}

@@ -31,8 +31,7 @@ public class XMLScanner extends RuleBasedScanner {
 	 * Instantiates a new xML scanner.
 	 */
 	public XMLScanner() {
-		IToken procInstr = new Token(new TextAttribute(ColorManager
-				.getColor(IXMLColorConstants.PROC_INSTR)));
+		IToken procInstr = new Token(new TextAttribute(ColorManager.getColor(IXMLColorConstants.PROC_INSTR)));
 
 		IRule[] rules = new IRule[2];
 		// Add rule for processing instructions

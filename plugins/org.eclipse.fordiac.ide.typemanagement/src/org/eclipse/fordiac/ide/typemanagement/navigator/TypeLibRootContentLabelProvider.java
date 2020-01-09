@@ -43,7 +43,7 @@ public class TypeLibRootContentLabelProvider implements ILabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
-		if(element instanceof TypeLibRootElement){
+		if (element instanceof TypeLibRootElement) {
 			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
 		}
 		return null;
@@ -51,7 +51,7 @@ public class TypeLibRootContentLabelProvider implements ILabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		if(element instanceof TypeLibRootElement){
+		if (element instanceof TypeLibRootElement) {
 			return "Type Library";
 		}
 		return null;

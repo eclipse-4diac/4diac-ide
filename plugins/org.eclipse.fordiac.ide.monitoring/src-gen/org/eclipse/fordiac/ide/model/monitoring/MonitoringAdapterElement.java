@@ -17,18 +17,18 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Adapter Element</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Adapter
+ * Element</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getElements <em>Elements</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getMonitoredAdapterFB <em>Monitored Adapter FB</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getElements
+ * <em>Elements</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getMonitoredAdapterFB
+ * <em>Monitored Adapter FB</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getMonitoringAdapterElement()
@@ -38,14 +38,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 public interface MonitoringAdapterElement extends MonitoringBaseElement {
 
 	/**
-	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement}.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Elements</b></em>' containment reference
+	 * list. The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement}. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Elements</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Elements</em>' containment reference list isn't
+	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Elements</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getMonitoringAdapterElement_Elements()
 	 * @model containment="true"
@@ -61,6 +63,7 @@ public interface MonitoringAdapterElement extends MonitoringBaseElement {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Monitored Adapter FB</em>' reference.
 	 * @see #setMonitoredAdapterFB(AdapterFB)
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getMonitoringAdapterElement_MonitoredAdapterFB()
@@ -70,9 +73,11 @@ public interface MonitoringAdapterElement extends MonitoringBaseElement {
 	AdapterFB getMonitoredAdapterFB();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getMonitoredAdapterFB <em>Monitored Adapter FB</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement#getMonitoredAdapterFB
+	 * <em>Monitored Adapter FB</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Monitored Adapter FB</em>' reference.
 	 * @see #getMonitoredAdapterFB()
 	 * @generated

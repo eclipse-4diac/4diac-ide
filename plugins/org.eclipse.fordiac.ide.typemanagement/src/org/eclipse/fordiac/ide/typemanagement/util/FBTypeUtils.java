@@ -24,20 +24,19 @@ public final class FBTypeUtils {
 
 	public static Palette getPalletteForFBTypeFile(IFile element) {
 		Palette palette = null;
-		if(null != element){
-			if(element.getProject().getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)){ 
-			  palette = TypeLibrary.getInstance().getPalette(); 
-			} 
-			else{
+		if (null != element) {
+			if (element.getProject().getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)) {
+				palette = TypeLibrary.getInstance().getPalette();
+			} else {
 				AutomationSystem system = SystemManager.INSTANCE.getSystemForName(element.getProject().getName());
-				if(null != system){
+				if (null != system) {
 					palette = system.getPalette();
 				}
 			}
 		}
 		return palette;
 	}
-	
+
 	private FBTypeUtils() {
 		throw new UnsupportedOperationException("FBTypeUtils utility class should not be instantiated!"); //$NON-NLS-1$
 	}

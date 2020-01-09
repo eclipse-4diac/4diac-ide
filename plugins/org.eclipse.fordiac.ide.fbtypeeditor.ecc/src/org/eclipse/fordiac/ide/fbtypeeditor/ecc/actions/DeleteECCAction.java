@@ -61,15 +61,15 @@ public class DeleteECCAction extends DeleteAction {
 					list.add((EditPart) object);
 				}
 			} else if (object instanceof EditPart) {
-				list.add((EditPart)object);
+				list.add((EditPart) object);
 			}
-		}		
+		}
 		return list;
 	}
 
 	@SuppressWarnings("rawtypes")
 	private static boolean stateContainedInDeleteList(List objects, ECState eState) {
-		for(Object object : objects) {
+		for (Object object : objects) {
 			if (object instanceof EditPart && ((EditPart) object).getModel().equals(eState)) {
 				return true;
 			}

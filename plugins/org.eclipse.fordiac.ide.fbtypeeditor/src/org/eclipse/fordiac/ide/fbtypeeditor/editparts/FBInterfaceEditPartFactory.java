@@ -26,35 +26,30 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 
-    private Palette systemPalette;
-    private ZoomManager zoomManager;
-    
+	private Palette systemPalette;
+	private ZoomManager zoomManager;
+
 	public FBInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette, ZoomManager zoomManager) {
 		super(editor);
 		this.systemPalette = systemPalette;
 		this.zoomManager = zoomManager;
 	}
-	
+
 	public ZoomManager getZoomManager() {
 		return zoomManager;
 	}
-	
+
 	@Override
-	protected EditPart getPartForElement(final EditPart context,
-			final Object modelElement) {
+	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		if (modelElement instanceof FBType && context == null) {
 			return new FBTypeRootEditPart();
 		}
-		if (modelElement instanceof FBType
-				&& context instanceof FBTypeRootEditPart) {
+		if (modelElement instanceof FBType && context instanceof FBTypeRootEditPart) {
 			return new FBTypeEditPart(zoomManager);
 		}
-		if (modelElement instanceof EventInputContainer
-				|| modelElement instanceof EventOutputContainer
-				|| modelElement instanceof VariableInputContainer
-				|| modelElement instanceof VariableOutputContainer
-				|| modelElement instanceof SocketContainer
-			    || modelElement instanceof PlugContainer) {
+		if (modelElement instanceof EventInputContainer || modelElement instanceof EventOutputContainer
+				|| modelElement instanceof VariableInputContainer || modelElement instanceof VariableOutputContainer
+				|| modelElement instanceof SocketContainer || modelElement instanceof PlugContainer) {
 			return new InterfaceContainerEditPart();
 		}
 
@@ -62,10 +57,9 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 			return new InterfaceEditPart();
 		}
 		if (modelElement instanceof VarDeclaration) {
-			if (modelElement instanceof AdapterDeclaration){
+			if (modelElement instanceof AdapterDeclaration) {
 				return new AdapterInterfaceEditPart(systemPalette);
-			}
-			else{
+			} else {
 				return createInterfaceEditPart();
 			}
 		}
@@ -78,15 +72,15 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 		if (modelElement instanceof CommentTypeField.CommentTypeSeparator) {
 			return new CommentTypeSeparatorEditPart();
 		}
-		if (modelElement instanceof CommentField){
+		if (modelElement instanceof CommentField) {
 			return new CommentEditPart();
 		}
-		if (modelElement instanceof TypeField){
+		if (modelElement instanceof TypeField) {
 			return new TypeEditPart(systemPalette);
 		}
 		throw createEditpartCreationException(modelElement);
 	}
-	
+
 	protected EditPart createInterfaceEditPart() {
 		return new InterfaceEditPart();
 	}

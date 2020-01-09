@@ -25,16 +25,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>FB Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB Type
+ * Palette Entry</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePaletteEntry {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected FBTypePaletteEntryImpl() {
@@ -42,8 +41,8 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -51,34 +50,34 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 		return PalettePackage.Literals.FB_TYPE_PALETTE_ENTRY;
 	}
 
-	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public FBType getFBType() {
 		LibraryElement type = getType();
-		if((null !=type) && (type instanceof FBType)){
-		   return (FBType) type;
+		if ((null != type) && (type instanceof FBType)) {
+			return (FBType) type;
 		}
 		return null;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if((null != type) && (type instanceof FBType)){
+		if ((null != type) && (type instanceof FBType)) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
-				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no FBType as type entry for FBTypePaletteEntry");
+			if (null != type) {
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+						"tried to set no FBType as type entry for FBTypePaletteEntry");
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
@@ -88,13 +87,13 @@ public class FBTypePaletteEntryImpl extends PaletteEntryImpl implements FBTypePa
 	protected LibraryElement loadType() {
 		LibraryElement retval = null;
 		Palette palette = getGroup().getPallete();
-		
+
 		retval = new FBTImporter().importType(getFile(), palette);
-		
+
 		if (retval == null) {
 			Activator.getDefault().logError("Error loading type: " + getFile().getName());
 		}
 		return retval;
 	}
 
-} //FBTypePaletteEntryImpl
+} // FBTypePaletteEntryImpl

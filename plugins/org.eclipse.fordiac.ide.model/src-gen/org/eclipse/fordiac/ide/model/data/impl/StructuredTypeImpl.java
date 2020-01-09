@@ -25,22 +25,22 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Structured Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Structured Type</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl#getVarDeclaration <em>Var Declaration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl#getVarDeclaration
+ * <em>Var Declaration</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class StructuredTypeImpl extends DataTypeImpl implements StructuredType {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected StructuredTypeImpl() {
@@ -48,8 +48,8 @@ public class StructuredTypeImpl extends DataTypeImpl implements StructuredType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -58,91 +58,94 @@ public class StructuredTypeImpl extends DataTypeImpl implements StructuredType {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<VarDeclaration> getVarDeclaration() {
-		// TODO: implement this method to return the 'Var Declaration' containment reference list
+		// TODO: implement this method to return the 'Var Declaration' containment
+		// reference list
 		// Ensure that you remove @generated or mark it @generated NOT
-		// The list is expected to implement org.eclipse.emf.ecore.util.InternalEList and org.eclipse.emf.ecore.EStructuralFeature.Setting
-		// so it's likely that an appropriate subclass of org.eclipse.emf.ecore.util.EcoreEList should be used.
+		// The list is expected to implement org.eclipse.emf.ecore.util.InternalEList
+		// and org.eclipse.emf.ecore.EStructuralFeature.Setting
+		// so it's likely that an appropriate subclass of
+		// org.eclipse.emf.ecore.util.EcoreEList should be used.
 		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-				return ((InternalEList<?>)getVarDeclaration()).basicRemove(otherEnd, msgs);
+		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
+			return ((InternalEList<?>) getVarDeclaration()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-				return getVarDeclaration();
+		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
+			return getVarDeclaration();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-				getVarDeclaration().clear();
-				getVarDeclaration().addAll((Collection<? extends VarDeclaration>)newValue);
-				return;
+		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
+			getVarDeclaration().clear();
+			getVarDeclaration().addAll((Collection<? extends VarDeclaration>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-				getVarDeclaration().clear();
-				return;
+		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
+			getVarDeclaration().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-				return !getVarDeclaration().isEmpty();
+		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
+			return !getVarDeclaration().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //StructuredTypeImpl
+} // StructuredTypeImpl

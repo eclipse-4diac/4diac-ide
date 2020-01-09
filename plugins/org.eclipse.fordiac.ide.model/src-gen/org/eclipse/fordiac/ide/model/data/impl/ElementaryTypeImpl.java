@@ -18,16 +18,15 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.ElementaryType;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Elementary Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Elementary Type</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class ElementaryTypeImpl extends ValueTypeImpl implements ElementaryType {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ElementaryTypeImpl() {
@@ -35,8 +34,8 @@ public class ElementaryTypeImpl extends ValueTypeImpl implements ElementaryType 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -44,4 +43,4 @@ public class ElementaryTypeImpl extends ValueTypeImpl implements ElementaryType 
 		return DataPackage.Literals.ELEMENTARY_TYPE;
 	}
 
-} //ElementaryTypeImpl
+} // ElementaryTypeImpl

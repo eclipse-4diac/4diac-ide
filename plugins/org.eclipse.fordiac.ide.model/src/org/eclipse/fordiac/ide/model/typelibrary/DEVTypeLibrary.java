@@ -50,8 +50,6 @@ public final class DEVTypeLibrary {
 		return instance;
 	}
 
-	
-
 	/**
 	 * Gets the device type importer.
 	 * 
@@ -63,8 +61,8 @@ public final class DEVTypeLibrary {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		ArrayList<IDeviceTypeImporter> typeImporter = new ArrayList<IDeviceTypeImporter>();
 
-		IConfigurationElement[] elems = registry.getConfigurationElementsFor(
-				org.eclipse.fordiac.ide.model.Activator.PLUGIN_ID, "deviceTypeLoader"); //$NON-NLS-1$
+		IConfigurationElement[] elems = registry
+				.getConfigurationElementsFor(org.eclipse.fordiac.ide.model.Activator.PLUGIN_ID, "deviceTypeLoader"); //$NON-NLS-1$
 		for (int i = 0; i < elems.length; i++) {
 			IConfigurationElement element = elems[i];
 			try {

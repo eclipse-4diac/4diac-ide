@@ -15,7 +15,6 @@
  */
 package org.eclipse.fordiac.ide.model.data.provider;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -27,17 +26,17 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DerivedType;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.data.DerivedType} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.data.DerivedType} object. <!--
+ * begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
-public class DerivedTypeItemProvider
-	extends ValueTypeItemProvider {
+public class DerivedTypeItemProvider extends ValueTypeItemProvider {
 	/**
-	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DerivedTypeItemProvider(AdapterFactory adapterFactory) {
@@ -45,9 +44,9 @@ public class DerivedTypeItemProvider
 	}
 
 	/**
-	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -61,31 +60,23 @@ public class DerivedTypeItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Base Type feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Base Type feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addBaseTypePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_DerivedType_baseType_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_DerivedType_baseType_feature", "_UI_DerivedType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 DataPackage.Literals.DERIVED_TYPE__BASE_TYPE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_DerivedType_baseType_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_DerivedType_baseType_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_DerivedType_type"), //$NON-NLS-1$
+						DataPackage.Literals.DERIVED_TYPE__BASE_TYPE, true, false, true, null, null, null));
 	}
 
 	/**
-	 * This returns DerivedType.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns DerivedType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -94,24 +85,23 @@ public class DerivedTypeItemProvider
 	}
 
 	/**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((DerivedType)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_DerivedType_type") : //$NON-NLS-1$
-			getString("_UI_DerivedType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((DerivedType) object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_DerivedType_type") : //$NON-NLS-1$
+				getString("_UI_DerivedType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -121,10 +111,10 @@ public class DerivedTypeItemProvider
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

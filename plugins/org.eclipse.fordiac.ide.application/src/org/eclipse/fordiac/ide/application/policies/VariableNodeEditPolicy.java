@@ -31,24 +31,26 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy#getConnectionCreateCommand(org.eclipse.gef.requests.CreateConnectionRequest)
+	 * @see org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy#
+	 * getConnectionCreateCommand(org.eclipse.gef.requests.CreateConnectionRequest)
 	 */
 	@Override
-	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {		
+	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {
 		DataConnectionCreateCommand cmd = new DataConnectionCreateCommand(getParentNetwork());
 		cmd.setSource(((InterfaceEditPart) getHost()).getModel());
-		if ((cmd.getSource() instanceof VarDeclaration) &&
-				(!LinkConstraints.isWithConstraintOK(((VarDeclaration)cmd.getSource())))) {
-			return null; // Elements which are not connected by a with construct are not allowed to be connected
-		}		
+		if ((cmd.getSource() instanceof VarDeclaration)
+				&& (!LinkConstraints.isWithConstraintOK(((VarDeclaration) cmd.getSource())))) {
+			return null; // Elements which are not connected by a with construct are not allowed to be
+							// connected
+		}
 		request.setStartCommand(cmd);
 		return new DataConnectionCreateCommand(getParentNetwork());
 
 	}
-	
+
 	@Override
 	protected Command createReconnectCommand(ReconnectRequest request) {
 		return new ReconnectDataConnectionCommand(request, getParentNetwork());
 	}
-	
+
 }

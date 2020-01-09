@@ -45,14 +45,14 @@ public final class RESImporter {
 	/**
 	 * Import res type.
 	 * 
-	 * @param resFile the fbt file
+	 * @param resFile      the fbt file
 	 * @param parseNetwork the parse network
-	 * @param palette the palette
+	 * @param palette      the palette
 	 * 
 	 * @return the resource type
 	 */
 	public static ResourceType importResType(final IFile resFile, final Palette palette) {
-		
+
 		if (resFile.exists()) {
 
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -61,14 +61,12 @@ public final class RESImporter {
 
 			try {
 				// TODO: set local dtd for validating!
-				dbf.setAttribute(
-						"http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
+				dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
 						Boolean.FALSE);
 				db = dbf.newDocumentBuilder();
 				Document document = db.parse(resFile.getContents());
 				Element rootNode = document.getDocumentElement();
-				ResourceType type = LibraryElementFactory.eINSTANCE
-						.createResourceType();
+				ResourceType type = LibraryElementFactory.eINSTANCE.createResourceType();
 				// parse document and fill type
 				return parseResType(type, rootNode, palette);
 
@@ -83,43 +81,35 @@ public final class RESImporter {
 	/**
 	 * Parses the res type.
 	 * 
-	 * @param type
-	 *          the type
-	 * @param rootNode
-	 *          the root node
-	 * @param parseNetwork
-	 *          the parse network
+	 * @param type         the type
+	 * @param rootNode     the root node
+	 * @param parseNetwork the parse network
 	 * 
 	 * @return the resource type
 	 * 
-	 * @throws TypeImportException
-	 *           the FBT import exception
-	 * @throws ReferencedTypeNotFoundException
-	 *           the referenced type not found exception
-	 * @throws ParseException 
+	 * @throws TypeImportException             the FBT import exception
+	 * @throws ReferencedTypeNotFoundException the referenced type not found
+	 *                                         exception
+	 * @throws ParseException
 	 */
-	private static ResourceType parseResType(final ResourceType type,
-			final Node rootNode, final Palette palette)
+	private static ResourceType parseResType(final ResourceType type, final Node rootNode, final Palette palette)
 			throws TypeImportException, ReferencedTypeNotFoundException, ParseException {
 		if (rootNode.getNodeName().equals(LibraryElementTags.RESOURCETYPE_ELEMENT)) {
 			NamedNodeMap map = rootNode.getAttributes();
-			
+
 			CommonElementImporter.readNameCommentAttributes(type, map);
-			
+
 			NodeList childNodes = rootNode.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); i++) {
 				Node n = childNodes.item(i);
 				if (n.getNodeName().equals(LibraryElementTags.IDENTIFICATION_ELEMENT)) {
-					type.setIdentification(CommonElementImporter.parseIdentification(
-							type, n));
+					type.setIdentification(CommonElementImporter.parseIdentification(type, n));
 				}
 				if (n.getNodeName().equals(LibraryElementTags.VERSION_INFO_ELEMENT)) {
-					type.getVersionInfo().add(
-							CommonElementImporter.parseVersionInfo(type, n));
+					type.getVersionInfo().add(CommonElementImporter.parseVersionInfo(type, n));
 				}
 				if (n.getNodeName().equals(LibraryElementTags.COMPILER_INFO_ELEMENT)) {
-					type.setCompilerInfo(CompilableElementImporter.parseCompilerInfo(
-							type, n));
+					type.setCompilerInfo(CompilableElementImporter.parseCompilerInfo(type, n));
 				}
 				if (n.getNodeName().equals(LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
 					VarDeclaration v = ImportUtils.parseVarDeclaration(n);
@@ -134,7 +124,7 @@ public final class RESImporter {
 				}
 			}
 			return type;
-		} 
+		}
 		throw new ParseException(Messages.FBTImporter_PARSE_FBTYPE_PARSEEXCEPTION, 0);
 	}
 
@@ -142,5 +132,4 @@ public final class RESImporter {
 		throw new UnsupportedOperationException("RESImporter utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 
-	
 }

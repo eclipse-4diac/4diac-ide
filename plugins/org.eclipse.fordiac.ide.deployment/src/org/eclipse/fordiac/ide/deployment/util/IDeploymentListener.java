@@ -20,21 +20,21 @@ package org.eclipse.fordiac.ide.deployment.util;
  */
 public interface IDeploymentListener {
 
-	
 	void connectionOpened();
+
 	/**
 	 * 
-	 * @param info a string containing "ip:port : resource"
+	 * @param info        a string containing "ip:port : resource"
 	 * @param destination the resource
-	 * @param command the command
+	 * @param command     the command
 	 */
 	void postCommandSent(String info, String destination, String command);
-	
+
 	/**
 	 * Response received.
 	 * 
 	 * @param response the response
-	 * @param source the source
+	 * @param source   the source
 	 */
 	void postResponseReceived(String response, String source);
 

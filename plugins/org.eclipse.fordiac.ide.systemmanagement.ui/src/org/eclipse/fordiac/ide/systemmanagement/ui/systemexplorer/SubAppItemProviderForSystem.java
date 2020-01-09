@@ -25,38 +25,40 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.SubAppItemProvider;
 
-/** a dedicated item provider that will ensure that in the system tree the subapplication will have the 
- * content of the subapp without the intermediate subappnetwork node shown.
+/**
+ * a dedicated item provider that will ensure that in the system tree the
+ * subapplication will have the content of the subapp without the intermediate
+ * subappnetwork node shown.
  * 
  * @author alil
  *
  */
 public class SubAppItemProviderForSystem extends SubAppItemProvider {
-	
+
 	private FBNetworkItemProvider subAppNetworkItemProvider = null;
 
 	public SubAppItemProviderForSystem(AdapterFactory adapterFactory) {
 		super(adapterFactory);
-		subAppNetworkItemProvider = new FBNetworkItemProvider(adapterFactory){
+		subAppNetworkItemProvider = new FBNetworkItemProvider(adapterFactory) {
 
 			@Override
 			public void fireNotifyChanged(Notification notification) {
-				FBNetwork network = (FBNetwork)notification.getNotifier();
-				Notification wrappedNotification = ViewerNotification.wrapNotification(notification, network.eContainer()); 
+				FBNetwork network = (FBNetwork) notification.getNotifier();
+				Notification wrappedNotification = ViewerNotification.wrapNotification(notification,
+						network.eContainer());
 				super.fireNotifyChanged(wrappedNotification);
 			}
-			
+
 		};
 	}
 
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(
-			Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		return subAppNetworkItemProvider.getChildrenFeatures(getFBNetwork(object));
 	}
 
 	@Override
-	public Collection<?> getChildren(Object object) {		
+	public Collection<?> getChildren(Object object) {
 		return subAppNetworkItemProvider.getChildren(getFBNetwork(object));
 	}
 
@@ -68,17 +70,17 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 
 	@Override
 	public Object getParent(Object object) {
-		EObject cont = ((SubApp)object).eContainer();
-		if(cont instanceof FBNetwork){
-			return ((FBNetwork)cont).eContainer();
+		EObject cont = ((SubApp) object).eContainer();
+		if (cont instanceof FBNetwork) {
+			return ((FBNetwork) cont).eContainer();
 		}
 		return super.getParent(object);
 	}
 
 	private FBNetwork getFBNetwork(Object object) {
-		FBNetwork subAppNetwork = ((SubApp)object).getSubAppNetwork();
-		if(null != subAppNetwork && !subAppNetwork.eAdapters().contains(subAppNetworkItemProvider)){
-			//register to the subappnetwork changes so that the viewer is updated
+		FBNetwork subAppNetwork = ((SubApp) object).getSubAppNetwork();
+		if (null != subAppNetwork && !subAppNetwork.eAdapters().contains(subAppNetworkItemProvider)) {
+			// register to the subappnetwork changes so that the viewer is updated
 			subAppNetwork.eAdapters().add(subAppNetworkItemProvider);
 		}
 		return subAppNetwork;

@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtester.model.testdata.impl;
 
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -24,14 +23,15 @@ import org.eclipse.fordiac.ide.fbtester.model.testdata.ValuedVarDecl;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Valued Var Decl</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Valued
+ * Var Decl</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.impl.ValuedVarDeclImpl#getVarDeclaration <em>Var Declaration</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.impl.ValuedVarDeclImpl#getValue <em>Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.impl.ValuedVarDeclImpl#getVarDeclaration
+ * <em>Var Declaration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.impl.ValuedVarDeclImpl#getValue
+ * <em>Value</em>}</li>
  * </ul>
  * </p>
  *
@@ -39,9 +39,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  */
 public class ValuedVarDeclImpl extends EObjectImpl implements ValuedVarDecl {
 	/**
-	 * The cached value of the '{@link #getVarDeclaration() <em>Var Declaration</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getVarDeclaration() <em>Var
+	 * Declaration</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getVarDeclaration()
 	 * @generated
 	 * @ordered
@@ -49,9 +49,9 @@ public class ValuedVarDeclImpl extends EObjectImpl implements ValuedVarDecl {
 	protected VarDeclaration varDeclaration;
 
 	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -59,9 +59,9 @@ public class ValuedVarDeclImpl extends EObjectImpl implements ValuedVarDecl {
 	protected static final String VALUE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -69,8 +69,8 @@ public class ValuedVarDeclImpl extends EObjectImpl implements ValuedVarDecl {
 	protected String value = VALUE_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ValuedVarDeclImpl() {
@@ -78,8 +78,8 @@ public class ValuedVarDeclImpl extends EObjectImpl implements ValuedVarDecl {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -88,26 +88,27 @@ public class ValuedVarDeclImpl extends EObjectImpl implements ValuedVarDecl {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public VarDeclaration getVarDeclaration() {
 		if (varDeclaration != null && varDeclaration.eIsProxy()) {
-			InternalEObject oldVarDeclaration = (InternalEObject)varDeclaration;
-			varDeclaration = (VarDeclaration)eResolveProxy(oldVarDeclaration);
+			InternalEObject oldVarDeclaration = (InternalEObject) varDeclaration;
+			varDeclaration = (VarDeclaration) eResolveProxy(oldVarDeclaration);
 			if (varDeclaration != oldVarDeclaration) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TestdataPackage.VALUED_VAR_DECL__VAR_DECLARATION, oldVarDeclaration, varDeclaration));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							TestdataPackage.VALUED_VAR_DECL__VAR_DECLARATION, oldVarDeclaration, varDeclaration));
 			}
 		}
 		return varDeclaration;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public VarDeclaration basicGetVarDeclaration() {
@@ -115,8 +116,8 @@ public class ValuedVarDeclImpl extends EObjectImpl implements ValuedVarDecl {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -124,12 +125,13 @@ public class ValuedVarDeclImpl extends EObjectImpl implements ValuedVarDecl {
 		VarDeclaration oldVarDeclaration = varDeclaration;
 		varDeclaration = newVarDeclaration;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.VALUED_VAR_DECL__VAR_DECLARATION, oldVarDeclaration, varDeclaration));
+			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.VALUED_VAR_DECL__VAR_DECLARATION,
+					oldVarDeclaration, varDeclaration));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -138,8 +140,8 @@ public class ValuedVarDeclImpl extends EObjectImpl implements ValuedVarDecl {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -147,86 +149,89 @@ public class ValuedVarDeclImpl extends EObjectImpl implements ValuedVarDecl {
 		String oldValue = value;
 		value = newValue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.VALUED_VAR_DECL__VALUE, oldValue, value));
+			eNotify(new ENotificationImpl(this, Notification.SET, TestdataPackage.VALUED_VAR_DECL__VALUE, oldValue,
+					value));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case TestdataPackage.VALUED_VAR_DECL__VAR_DECLARATION:
-				if (resolve) return getVarDeclaration();
-				return basicGetVarDeclaration();
-			case TestdataPackage.VALUED_VAR_DECL__VALUE:
-				return getValue();
+		case TestdataPackage.VALUED_VAR_DECL__VAR_DECLARATION:
+			if (resolve)
+				return getVarDeclaration();
+			return basicGetVarDeclaration();
+		case TestdataPackage.VALUED_VAR_DECL__VALUE:
+			return getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case TestdataPackage.VALUED_VAR_DECL__VAR_DECLARATION:
-				setVarDeclaration((VarDeclaration)newValue);
-				return;
-			case TestdataPackage.VALUED_VAR_DECL__VALUE:
-				setValue((String)newValue);
-				return;
+		case TestdataPackage.VALUED_VAR_DECL__VAR_DECLARATION:
+			setVarDeclaration((VarDeclaration) newValue);
+			return;
+		case TestdataPackage.VALUED_VAR_DECL__VALUE:
+			setValue((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case TestdataPackage.VALUED_VAR_DECL__VAR_DECLARATION:
-				setVarDeclaration((VarDeclaration)null);
-				return;
-			case TestdataPackage.VALUED_VAR_DECL__VALUE:
-				setValue(VALUE_EDEFAULT);
-				return;
+		case TestdataPackage.VALUED_VAR_DECL__VAR_DECLARATION:
+			setVarDeclaration((VarDeclaration) null);
+			return;
+		case TestdataPackage.VALUED_VAR_DECL__VALUE:
+			setValue(VALUE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case TestdataPackage.VALUED_VAR_DECL__VAR_DECLARATION:
-				return varDeclaration != null;
-			case TestdataPackage.VALUED_VAR_DECL__VALUE:
-				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+		case TestdataPackage.VALUED_VAR_DECL__VAR_DECLARATION:
+			return varDeclaration != null;
+		case TestdataPackage.VALUED_VAR_DECL__VALUE:
+			return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (value: ");
@@ -235,4 +240,4 @@ public class ValuedVarDeclImpl extends EObjectImpl implements ValuedVarDecl {
 		return result.toString();
 	}
 
-} //ValuedVarDeclImpl
+} // ValuedVarDeclImpl

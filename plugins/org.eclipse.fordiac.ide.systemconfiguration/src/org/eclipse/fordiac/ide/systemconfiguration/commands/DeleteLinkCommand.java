@@ -21,7 +21,7 @@ import org.eclipse.gef.commands.Command;
 
 public class DeleteLinkCommand extends Command {
 	private Link link;
-	private Segment source; 
+	private Segment source;
 	private Device destination;
 	private SystemConfiguration sysConf;
 
@@ -37,7 +37,7 @@ public class DeleteLinkCommand extends Command {
 	@Override
 	public void execute() {
 		source = link.getSegment();
-		destination = link.getDevice();		
+		destination = link.getDevice();
 		sysConf = (SystemConfiguration) link.eContainer();
 		redo();
 	}

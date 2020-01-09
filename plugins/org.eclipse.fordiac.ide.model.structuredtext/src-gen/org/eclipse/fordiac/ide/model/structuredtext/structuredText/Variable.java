@@ -3,17 +3,14 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext.structuredText;
 
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Variable</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Variable</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getVariable()
  * @model
  * @generated
  */
-public interface Variable extends Expression
-{
+public interface Variable extends Expression {
 } // Variable

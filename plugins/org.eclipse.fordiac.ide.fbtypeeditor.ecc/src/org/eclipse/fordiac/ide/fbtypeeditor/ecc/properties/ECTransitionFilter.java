@@ -21,10 +21,10 @@ public class ECTransitionFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if(toTest instanceof ECTransitionEditPart){
+		if (toTest instanceof ECTransitionEditPart) {
 			return true;
 		}
-		if(toTest instanceof ECTransition){
+		if (toTest instanceof ECTransition) {
 			return true;
 		}
 		return false;

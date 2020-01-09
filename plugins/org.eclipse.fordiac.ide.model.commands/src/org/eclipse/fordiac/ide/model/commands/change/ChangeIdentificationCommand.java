@@ -25,7 +25,7 @@ public abstract class ChangeIdentificationCommand extends Command {
 
 	/** The identification of the type. */
 	private final Identification identification;
-	
+
 	protected Identification getIdentification() {
 		return identification;
 	}
@@ -33,7 +33,7 @@ public abstract class ChangeIdentificationCommand extends Command {
 	/**
 	 * Instantiates a new change comment command.
 	 * 
-	 * @param type which identification information is about to change
+	 * @param type    which identification information is about to change
 	 * @param comment the comment
 	 */
 	public ChangeIdentificationCommand(LibraryElement type) {
@@ -43,6 +43,5 @@ public abstract class ChangeIdentificationCommand extends Command {
 		}
 		identification = type.getIdentification();
 	}
-
 
 }

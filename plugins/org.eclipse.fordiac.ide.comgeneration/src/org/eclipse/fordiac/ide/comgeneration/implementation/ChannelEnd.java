@@ -14,6 +14,5 @@
 package org.eclipse.fordiac.ide.comgeneration.implementation;
 
 public enum ChannelEnd {
-	SOURCE,
-	DESTINATION
+	SOURCE, DESTINATION
 }

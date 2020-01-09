@@ -17,21 +17,22 @@ import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
- * This class is the main class for the org.eclipse.fordiac.ide.application plugin. It
- * coordinates changes in data in different views. (e.g. changes in Workspace)
+ * This class is the main class for the org.eclipse.fordiac.ide.application
+ * plugin. It coordinates changes in data in different views. (e.g. changes in
+ * Workspace)
  * 
  */
 public class ModelCommandsPlugin extends Abstract4DIACUIPlugin {
 	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.model.commands"; //$NON-NLS-1$
 	// The shared instance.
 	private static Abstract4DIACUIPlugin plugin;
-		
+
 	public static Abstract4DIACUIPlugin getDefault() {
 		return plugin;
 	}
-	
+
 	public ModelCommandsPlugin() {
-		//empty constructur 
+		// empty constructur
 	}
 
 	/**

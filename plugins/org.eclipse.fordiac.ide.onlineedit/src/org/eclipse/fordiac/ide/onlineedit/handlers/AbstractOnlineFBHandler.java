@@ -18,39 +18,39 @@ import org.eclipse.fordiac.ide.deployment.ui.handlers.AbstractDeploymentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
-public abstract class AbstractOnlineFBHandler extends AbstractDeploymentCommand{
-	
+public abstract class AbstractOnlineFBHandler extends AbstractDeploymentCommand {
+
 	private FB fb = null;
 	private Resource resource = null;
 	private FB resFB = null;
-	
+
 	@Override
-	protected boolean prepareParametersToExecute(Object element){
-		if (element instanceof FBEditPart){
+	protected boolean prepareParametersToExecute(Object element) {
+		if (element instanceof FBEditPart) {
 			fb = ((FBEditPart) element).getModel();
-		}else if(element instanceof FB){
-			fb = (FB)element;
+		} else if (element instanceof FB) {
+			fb = (FB) element;
 		}
-		if(null != fb && fb.isMapped()){
+		if (null != fb && fb.isMapped()) {
 			resource = fb.getResource();
-			if(null != resource){
+			if (null != resource) {
 				setDevice(resource.getDevice());
-				resFB = (FB)fb.getOpposite();
+				resFB = (FB) fb.getOpposite();
 				return (null != getDevice() && null != resFB);
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected String getCurrentElementName() {
 		return "Function Block: " + fb.getName();
 	}
-	
+
 	public FB getResFB() {
 		return resFB;
 	}
-	
+
 	public Resource getResource() {
 		return resource;
 	}

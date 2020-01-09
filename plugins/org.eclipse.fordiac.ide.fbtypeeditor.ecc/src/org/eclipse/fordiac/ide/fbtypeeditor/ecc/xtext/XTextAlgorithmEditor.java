@@ -142,8 +142,7 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 		embeddedEditorModelAccess.updatePrefix(regeneratePrefix());
 
 		try {
-			prefixLineCount = getViewer().getDocument().getNumberOfLines(0,
-					getViewer().getVisibleRegion().getOffset());
+			prefixLineCount = getViewer().getDocument().getNumberOfLines(0, getViewer().getVisibleRegion().getOffset());
 			prefixLineCount--; // the first line starts after the prefix
 		} catch (BadLocationException e) {
 			Activator.getDefault().logError(e.getMessage(), e);

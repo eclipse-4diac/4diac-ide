@@ -22,28 +22,24 @@ import org.eclipse.gef.commands.Command;
  */
 public class DeleteInternalVariableCommand extends Command {
 
-	
 	/** The fb type. */
 	private final BasicFBType fbType;
 
 	private VarDeclaration varToDelete;
-	
+
 	/** The old index. */
 	private int oldIndex;
-	
+
 	/**
 	 * Instantiates a new creates the input variable command.
 	 * 
-	 * @param dataType
-	 *            the data type
-	 * @param fbType
-	 *            the fb type
+	 * @param dataType the data type
+	 * @param fbType   the fb type
 	 */
 	public DeleteInternalVariableCommand(final BasicFBType fbType, final VarDeclaration var) {
 		this.fbType = fbType;
 		this.varToDelete = var;
 	}
-
 
 	/*
 	 * (non-Javadoc)
@@ -51,9 +47,9 @@ public class DeleteInternalVariableCommand extends Command {
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
-	public void execute() {		
+	public void execute() {
 		oldIndex = fbType.getInternalVars().indexOf(varToDelete);
-		
+
 		redo();
 	}
 

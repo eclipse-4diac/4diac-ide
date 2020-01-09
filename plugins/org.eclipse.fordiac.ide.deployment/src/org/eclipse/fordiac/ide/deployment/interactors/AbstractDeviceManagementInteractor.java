@@ -25,14 +25,14 @@ import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
 public abstract class AbstractDeviceManagementInteractor implements IDeviceManagementInteractor {
-	
+
 	private final IDeviceManagementCommunicationHandler commHandler;
 	private final Device device;
 	private Set<String> fbTypes = Collections.emptySet();
 	private Set<String> adapterTypes = Collections.emptySet();
-	
+
 	private final List<IDeploymentListener> listeners = new ArrayList<>();
-	
+
 	@Override
 	public boolean isConnected() {
 		return commHandler.isConnected();
@@ -53,13 +53,13 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 			listener.connectionClosed();
 		}
 	}
-	
+
 	public synchronized String sendREQ(String destination, String request) throws IOException {
 		String response = commHandler.sendREQ(destination, request);
 		for (IDeploymentListener listener : listeners) {
-			listener.postCommandSent(commHandler.getInfo(destination), destination, request); //do something with info
+			listener.postCommandSent(commHandler.getInfo(destination), destination, request); // do something with info
 		}
-		if(0 != response.length()) {
+		if (0 != response.length()) {
 			for (IDeploymentListener listener : listeners) {
 				listener.postResponseReceived(response, destination);
 			}
@@ -80,39 +80,40 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 			listeners.remove(listener);
 		}
 	}
-	
-	protected AbstractDeviceManagementInteractor(Device dev, IDeviceManagementCommunicationHandler overrideHandler){
+
+	protected AbstractDeviceManagementInteractor(Device dev, IDeviceManagementCommunicationHandler overrideHandler) {
 		this.device = dev;
 		resetTypes();
-		this.commHandler = (null != overrideHandler) ? overrideHandler : createCommunicationHandler(dev) ;
+		this.commHandler = (null != overrideHandler) ? overrideHandler : createCommunicationHandler(dev);
 	}
-	
+
 	protected Device getDevice() {
 		return device;
 	}
-	
+
 	public Set<String> getTypes() {
 		return fbTypes;
 	}
-	
+
 	protected void setTypes(Set<String> types) {
 		fbTypes = (null != types) ? types : Collections.emptySet();
 	}
-	
+
 	public Set<String> getAdapterTypes() {
 		return adapterTypes;
 	}
-	
+
 	protected void setAdapterTypes(Set<String> types) {
 		adapterTypes = (null != types) ? types : Collections.emptySet();
 	}
-	
+
 	protected final void resetTypes() {
 		fbTypes = Collections.emptySet();
 		adapterTypes = Collections.emptySet();
 	}
-	
-	/** create a device managment communication handler suitable for the given device
+
+	/**
+	 * create a device managment communication handler suitable for the given device
 	 * 
 	 * @param dev the device to be checked
 	 * @return the created handler

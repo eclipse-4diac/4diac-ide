@@ -26,7 +26,8 @@ public class ChangeStringEditPolicy extends DirectEditPolicy {
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
 		if (getHost() instanceof IChangeStringEditPart) {
 			IChangeStringEditPart viewEditPart = (IChangeStringEditPart) getHost();
-			return  new ChangeNameCommand((INamedElement) viewEditPart.getElement(), (String) request.getCellEditor().getValue());
+			return new ChangeNameCommand((INamedElement) viewEditPart.getElement(),
+					(String) request.getCellEditor().getValue());
 		}
 		return null;
 	}

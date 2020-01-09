@@ -41,17 +41,19 @@ class SystemElementItemProviderAdapterFactory extends LibraryElementItemProvider
 	@Override
 	public Adapter createFBAdapter() {
 		if (fbItemProvider == null) {
-			fbItemProvider = new FBItemProvider(this){
-				
-				/** we are not showing the real parent of FBs (i.e., FBNetwork or SubAppNetwork)
-				 *  in the tree. In order to ensure correct CNF behavior we need to provide a special getparent
+			fbItemProvider = new FBItemProvider(this) {
+
+				/**
+				 * we are not showing the real parent of FBs (i.e., FBNetwork or SubAppNetwork)
+				 * in the tree. In order to ensure correct CNF behavior we need to provide a
+				 * special getparent
 				 */
 				@Override
 				public Object getParent(Object object) {
-					
-					EObject cont = ((FB)object).eContainer();
-					if(cont instanceof FBNetwork){
-						return ((FBNetwork)cont).eContainer();
+
+					EObject cont = ((FB) object).eContainer();
+					if (cont instanceof FBNetwork) {
+						return ((FBNetwork) cont).eContainer();
 					}
 					return super.getParent(object);
 				}
@@ -59,7 +61,5 @@ class SystemElementItemProviderAdapterFactory extends LibraryElementItemProvider
 		}
 		return fbItemProvider;
 	}
-	
-	
-	
+
 }

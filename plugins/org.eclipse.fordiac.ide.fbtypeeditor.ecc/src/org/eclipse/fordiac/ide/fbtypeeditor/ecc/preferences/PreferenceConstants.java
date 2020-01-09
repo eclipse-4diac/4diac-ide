@@ -18,27 +18,27 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences;
  */
 public final class PreferenceConstants {
 
-	/** The Constant P_ECC_STATE_COLOR. */                                                          
-	public static final String P_ECC_STATE_COLOR = "ECCEditorStateColor";                            //$NON-NLS-1$
-	                                                                                                
-	/** The Constant P_ECC_STATE_BORDER_COLOR. */                                                   
-	public static final String P_ECC_STATE_BORDER_COLOR = "ECCEditorStateBorderColor";               //$NON-NLS-1$
-	                                                                                                
-	/** The Constant P_ECC_TRANSITION_COLOR. */                                                     
-	public static final String P_ECC_TRANSITION_COLOR = "ECCEditorTransitionColor";                  //$NON-NLS-1$
-	                                                                                                
-	/** The Constant P_ECC_ALGORITHM_COLOR. */                                                      
-	public static final String P_ECC_ALGORITHM_COLOR = "ECCEditorAlgorithmColor";                    //$NON-NLS-1$
-	                                                                                                
-	/** The Constant P_ECC_ALGORITHM_BORDER_COLOR. */                                               
-	public static final String P_ECC_ALGORITHM_BORDER_COLOR = "ECCEditorAlgorithmBorderColor";       //$NON-NLS-1$
-	                                                                                                
-	/** The Constant P_ECC_EVENT_COLOR. */                                                          
-	public static final String P_ECC_EVENT_COLOR = "ECCEditorEventColor";                            //$NON-NLS-1$
-	                                                                                                
-	/** The Constant P_ECC_EVENT_BORDER_COLOR. */                                                   
-	public static final String P_ECC_EVENT_BORDER_COLOR = "ECCEditorEventBorderColor";     //$NON-NLS-1$
-	
+	/** The Constant P_ECC_STATE_COLOR. */
+	public static final String P_ECC_STATE_COLOR = "ECCEditorStateColor"; //$NON-NLS-1$
+
+	/** The Constant P_ECC_STATE_BORDER_COLOR. */
+	public static final String P_ECC_STATE_BORDER_COLOR = "ECCEditorStateBorderColor"; //$NON-NLS-1$
+
+	/** The Constant P_ECC_TRANSITION_COLOR. */
+	public static final String P_ECC_TRANSITION_COLOR = "ECCEditorTransitionColor"; //$NON-NLS-1$
+
+	/** The Constant P_ECC_ALGORITHM_COLOR. */
+	public static final String P_ECC_ALGORITHM_COLOR = "ECCEditorAlgorithmColor"; //$NON-NLS-1$
+
+	/** The Constant P_ECC_ALGORITHM_BORDER_COLOR. */
+	public static final String P_ECC_ALGORITHM_BORDER_COLOR = "ECCEditorAlgorithmBorderColor"; //$NON-NLS-1$
+
+	/** The Constant P_ECC_EVENT_COLOR. */
+	public static final String P_ECC_EVENT_COLOR = "ECCEditorEventColor"; //$NON-NLS-1$
+
+	/** The Constant P_ECC_EVENT_BORDER_COLOR. */
+	public static final String P_ECC_EVENT_BORDER_COLOR = "ECCEditorEventBorderColor"; //$NON-NLS-1$
+
 	private PreferenceConstants() {
 		throw new UnsupportedOperationException("PreferenceConstants utility class should not be instantiated!"); //$NON-NLS-1$
 	}

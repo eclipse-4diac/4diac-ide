@@ -17,13 +17,13 @@ import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Adapter Monitoring Event</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Adapter
+ * Monitoring Event</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#getAdapterMonitoringEvent()
- * @model superTypes="org.eclipse.fordiac.ide.model.monitoring.IEditPartCreator org.eclipse.fordiac.ide.model.libraryElement.Event"
+ * @model superTypes="org.eclipse.fordiac.ide.model.monitoring.IEditPartCreator
+ *        org.eclipse.fordiac.ide.model.libraryElement.Event"
  * @generated
  */
 public interface AdapterMonitoringEvent extends IEditPartCreator, Event {

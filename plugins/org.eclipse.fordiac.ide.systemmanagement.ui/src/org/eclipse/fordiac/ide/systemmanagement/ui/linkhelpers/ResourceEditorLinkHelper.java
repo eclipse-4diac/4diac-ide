@@ -20,27 +20,26 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 
-public class ResourceEditorLinkHelper extends AbstractEditorLinkHelper  {
+public class ResourceEditorLinkHelper extends AbstractEditorLinkHelper {
 
 	@Override
 	public IStructuredSelection findSelection(IEditorInput anInput) {
-		if(anInput instanceof ResourceEditorInput){
-			ResourceEditorInput resInput = (ResourceEditorInput)anInput;
+		if (anInput instanceof ResourceEditorInput) {
+			ResourceEditorInput resInput = (ResourceEditorInput) anInput;
 			return new StructuredSelection(resInput.getContent());
 		}
 		return StructuredSelection.EMPTY;
 	}
 
 	@Override
-	public void activateEditor(IWorkbenchPage aPage,
-			IStructuredSelection aSelection) {
-		if (aSelection == null || aSelection.isEmpty()){
+	public void activateEditor(IWorkbenchPage aPage, IStructuredSelection aSelection) {
+		if (aSelection == null || aSelection.isEmpty()) {
 			return;
 		}
-		
+
 		if (aSelection.getFirstElement() instanceof Resource) {
-			IEditorInput resourceInput = new ResourceEditorInput((Resource)aSelection.getFirstElement());
-			activateEditor(aPage, resourceInput);	
+			IEditorInput resourceInput = new ResourceEditorInput((Resource) aSelection.getFirstElement());
+			activateEditor(aPage, resourceInput);
 		}
 	}
 

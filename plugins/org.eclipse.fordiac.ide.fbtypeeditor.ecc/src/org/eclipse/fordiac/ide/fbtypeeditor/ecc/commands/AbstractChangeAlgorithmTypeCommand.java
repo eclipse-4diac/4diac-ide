@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.gef.commands.Command;
 
 public abstract class AbstractChangeAlgorithmTypeCommand extends Command {
-	
+
 	private final BaseFBType fbType;
 	private final Algorithm oldAlgorithm;
 	private Algorithm newAlgorithm;
@@ -32,7 +32,7 @@ public abstract class AbstractChangeAlgorithmTypeCommand extends Command {
 		this.oldAlgorithm = oldAlgorithm;
 		this.algorithmType = algorithmType;
 	}
-	
+
 	@Override
 	public boolean canExecute() {
 		if (algorithmType.equalsIgnoreCase("ST")) { //$NON-NLS-1$
@@ -58,7 +58,7 @@ public abstract class AbstractChangeAlgorithmTypeCommand extends Command {
 
 		changeAlgorithm(getOldAlgorithm(), getNewAlgorithm());
 	}
-	
+
 	@Override
 	public void undo() {
 		changeAlgorithm(getNewAlgorithm(), getOldAlgorithm());
@@ -68,21 +68,21 @@ public abstract class AbstractChangeAlgorithmTypeCommand extends Command {
 	public void redo() {
 		changeAlgorithm(getOldAlgorithm(), getNewAlgorithm());
 	}
-	
+
 	protected abstract void changeAlgorithm(Algorithm oldAlg, Algorithm newAlg);
 
 	public Algorithm getNewAlgorithm() {
 		return newAlgorithm;
 	}
-	
+
 	protected Algorithm getOldAlgorithm() {
 		return oldAlgorithm;
 	}
-	
+
 	protected BaseFBType getType() {
 		return fbType;
 	}
-	
+
 	private Algorithm createSTAlgorithm() {
 		STAlgorithm algorithm = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		algorithm.setText(((TextAlgorithm) oldAlgorithm).getText());
@@ -99,7 +99,5 @@ public abstract class AbstractChangeAlgorithmTypeCommand extends Command {
 		algorithm.setLanguage("AnyText"); //$NON-NLS-1$
 		return algorithm;
 	}
-
-
 
 }

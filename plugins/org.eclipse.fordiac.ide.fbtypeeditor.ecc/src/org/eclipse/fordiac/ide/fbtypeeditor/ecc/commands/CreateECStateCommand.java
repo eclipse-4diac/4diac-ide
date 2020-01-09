@@ -36,12 +36,11 @@ public class CreateECStateCommand extends Command {
 	/**
 	 * Instantiates a new creates the ec state command.
 	 * 
-	 * @param ecState the ec state
+	 * @param ecState  the ec state
 	 * @param location the location
-	 * @param parent the parent
+	 * @param parent   the parent
 	 */
-	public CreateECStateCommand(final ECState ecState, final Point location,
-			final ECC parent) {
+	public CreateECStateCommand(final ECState ecState, final Point location, final ECC parent) {
 		super();
 		this.location = location;
 		this.ecState = ecState;

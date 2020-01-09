@@ -40,20 +40,20 @@ public class AdjustConnectionEditPolicy extends BendpointEditPolicy {
 	}
 
 	@Override
-	protected Command getDeleteBendpointCommand(
-			final BendpointRequest request) {
+	protected Command getDeleteBendpointCommand(final BendpointRequest request) {
 		return null;
 	}
 
 	@Override
-	protected Command getCreateBendpointCommand(
-			final BendpointRequest request) {
-		return new AdjustConnectionCommand(getConnection(), request.getLocation(), request.getIndex(), connection, getZoom());
+	protected Command getCreateBendpointCommand(final BendpointRequest request) {
+		return new AdjustConnectionCommand(getConnection(), request.getLocation(), request.getIndex(), connection,
+				getZoom());
 	}
 
 	@Override
 	protected void showCreateBendpointFeedback(BendpointRequest request) {
-		AdjustConnectionCommand cmd = new AdjustConnectionCommand(getConnection(), request.getLocation(), request.getIndex(), connection, getZoom());
+		AdjustConnectionCommand cmd = new AdjustConnectionCommand(getConnection(), request.getLocation(),
+				request.getIndex(), connection, getZoom());
 		if (cmd.canExecute()) {
 			cmd.execute();
 		}
@@ -69,11 +69,11 @@ public class AdjustConnectionEditPolicy extends BendpointEditPolicy {
 		}
 		return list;
 	}
-	
+
 	private double getZoom() {
 		double zoom = 1.0;
-		if(getHost().getRoot() instanceof ScalableFreeformRootEditPart) {
-			zoom = ((ScalableFreeformRootEditPart)(getHost().getRoot())).getZoomManager().getZoom(); 
+		if (getHost().getRoot() instanceof ScalableFreeformRootEditPart) {
+			zoom = ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager().getZoom();
 		}
 		return zoom;
 	}

@@ -46,21 +46,19 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ImportUtils {
-	
+
 	private ImportUtils() {
-		//empty private constructor so that this utility class can not be insantiated
+		// empty private constructor so that this utility class can not be insantiated
 	}
 
 	/**
 	 * This method parses Parameters.
 	 * 
-	 * @param node
-	 *            - the node in the DTD containing the Parameter
+	 * @param node - the node in the DTD containing the Parameter
 	 * 
 	 * @return p - the parsed Parameter
 	 * 
-	 * @throws TypeImportException
-	 *             the FBT import exception
+	 * @throws TypeImportException the FBT import exception
 	 */
 	public static VarDeclaration parseParameter(final Node node) throws TypeImportException {
 		Attribute p = LibraryElementFactory.eINSTANCE.createAttribute();
@@ -93,13 +91,11 @@ public class ImportUtils {
 	/**
 	 * This method parses InputVariables.
 	 * 
-	 * @param node
-	 *            - the node in the DTD containing the InputVariables
+	 * @param node - the node in the DTD containing the InputVariables
 	 * 
 	 * @return varDecl - A list containing all the parsed InputVariables
 	 * 
-	 * @throws TypeImportException
-	 *             the FBT import exception
+	 * @throws TypeImportException the FBT import exception
 	 */
 	public static List<VarDeclaration> parseInputVariables(final Node node) throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
@@ -118,13 +114,11 @@ public class ImportUtils {
 	/**
 	 * This method parses OutputVariables.
 	 * 
-	 * @param node
-	 *            - the node in the DTD containing the OutputVariables
+	 * @param node - the node in the DTD containing the OutputVariables
 	 * 
 	 * @return varDecl - A list containing all the parsed OutputVariables
 	 * 
-	 * @throws TypeImportException
-	 *             the FBT import exception
+	 * @throws TypeImportException the FBT import exception
 	 */
 	public static List<VarDeclaration> parseOutputVariables(final Node node) throws TypeImportException {
 		NodeList childNodes = node.getChildNodes();
@@ -143,13 +137,11 @@ public class ImportUtils {
 	/**
 	 * This method parses VariableDeclaration.
 	 * 
-	 * @param n
-	 *            - the node in the DTD containing the VariableDeclaration
+	 * @param n - the node in the DTD containing the VariableDeclaration
 	 * 
 	 * @return v - the parsed VariableDeclaration
 	 * 
-	 * @throws TypeImportException
-	 *             the FBT import exception
+	 * @throws TypeImportException the FBT import exception
 	 */
 	public static VarDeclaration parseVarDeclaration(final Node n) throws TypeImportException {
 		NamedNodeMap map = n.getAttributes();
@@ -197,13 +189,11 @@ public class ImportUtils {
 	/**
 	 * This method parsed Events.
 	 * 
-	 * @param n
-	 *            - the node in the DTD containing the Event
+	 * @param n - the node in the DTD containing the Event
 	 * 
 	 * @return e - the parsed Event
 	 * 
-	 * @throws TypeImportException
-	 *             the FBT import exception
+	 * @throws TypeImportException the FBT import exception
 	 */
 	public static Event parseEvent(final Node n) throws TypeImportException {
 		NamedNodeMap map = n.getAttributes();
@@ -247,15 +237,11 @@ public class ImportUtils {
 	/**
 	 * copies a file from in to out.
 	 * 
-	 * @param in
-	 *            source File
-	 * @param out
-	 *            destination File
+	 * @param in  source File
+	 * @param out destination File
 	 * 
-	 * @throws Exception
-	 * *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 * @throws Exception   *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public static void copyFile(final File in, final File out) throws IOException {
 		Files.copy(in.toPath(), out.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -270,7 +256,7 @@ public class ImportUtils {
 		}
 
 		Files.copy(in.toPath(), out.getLocation().toFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
-		
+
 		try {
 			out.getParent().refreshLocal(IResource.DEPTH_ONE, null);
 		} catch (CoreException e) {

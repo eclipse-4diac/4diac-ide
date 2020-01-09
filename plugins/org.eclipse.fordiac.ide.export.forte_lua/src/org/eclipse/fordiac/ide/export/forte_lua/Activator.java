@@ -19,13 +19,13 @@ import org.osgi.framework.BundleContext;
 public class Activator extends Abstract4DIACUIPlugin {
 
 	private static Abstract4DIACUIPlugin plugin;
-	
+
 	public static Abstract4DIACUIPlugin getDefault() {
 		return plugin;
 	}
-	
+
 	public Activator() {
-		//empty constructur 
+		// empty constructur
 	}
 
 	@Override

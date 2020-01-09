@@ -19,15 +19,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * The Class ChangeIdentifcationTypeCommand.
  */
 public class ChangeIdentifcationTypeCommand extends ChangeIdentificationCommand {
-	
+
 	/** The new Type value. */
 	private String newType;
 
 	/** The old Type value. */
 	private String oldType;
 
-	public ChangeIdentifcationTypeCommand(LibraryElement type,
-			final String newType) {
+	public ChangeIdentifcationTypeCommand(LibraryElement type, final String newType) {
 		super(type);
 		this.newType = newType;
 	}

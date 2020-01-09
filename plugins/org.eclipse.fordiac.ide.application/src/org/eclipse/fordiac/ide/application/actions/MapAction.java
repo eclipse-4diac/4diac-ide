@@ -40,7 +40,7 @@ public class MapAction extends SelectionAction {
 	/**
 	 * The Constructor.
 	 * 
-	 * @param part the part
+	 * @param part     the part
 	 * @param resource the resource
 	 */
 	public MapAction(final IWorkbenchPart part, final Resource resource) {
@@ -57,8 +57,7 @@ public class MapAction extends SelectionAction {
 	@Override
 	public void run() {
 		update();
-		for (Iterator<?> iterator = getSelectedObjects().iterator(); iterator
-				.hasNext();) {
+		for (Iterator<?> iterator = getSelectedObjects().iterator(); iterator.hasNext();) {
 			EditPart ep = (EditPart) iterator.next();
 			if (ep instanceof FBEditPart || ep instanceof SubAppForFBNetworkEditPart) {
 				MapToCommand cmd = new MapToCommand((FBNetworkElement) ep.getModel(), resource);

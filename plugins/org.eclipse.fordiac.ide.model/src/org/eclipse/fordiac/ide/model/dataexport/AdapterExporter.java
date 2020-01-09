@@ -20,19 +20,19 @@ import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.w3c.dom.Element;
 
 class AdapterExporter extends AbstractTypeExporter {
-	
+
 	public AdapterExporter(AdapterTypePaletteEntry entry) {
 		super(entry.getType().getAdapterFBType());
 	}
-	
+
 	@Override
 	protected String getRootTag() {
-		return  LibraryElementTags.ADAPTER_TYPE;
+		return LibraryElementTags.ADAPTER_TYPE;
 	}
 
 	@Override
 	protected void createTypeSpecificXMLEntries(Element rootElement) {
-		//for adapters there are no type specific xml entries
+		// for adapters there are no type specific xml entries
 	}
-	
+
 }

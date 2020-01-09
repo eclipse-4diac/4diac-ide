@@ -26,20 +26,21 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
-public class SystemConfEditPartFactory  extends Abstract4diacEditPartFactory {
+public class SystemConfEditPartFactory extends Abstract4diacEditPartFactory {
 
-	/**Editparts that have gradient fill require a zoom manger to correctly scale the pattern when zoomed*/
+	/**
+	 * Editparts that have gradient fill require a zoom manger to correctly scale
+	 * the pattern when zoomed
+	 */
 	private ZoomManager zoomManager;
-	
-	
+
 	public SystemConfEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {
 		super(editor);
 		this.zoomManager = zoomManager;
 	}
-	
+
 	@Override
-	protected EditPart getPartForElement(final EditPart context,
-			final Object modelElement) {
+	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		if (modelElement instanceof SystemConfiguration) {
 			return new SystemNetworkEditPart();
 		}
@@ -58,9 +59,9 @@ public class SystemConfEditPartFactory  extends Abstract4diacEditPartFactory {
 		if (modelElement instanceof Resource) {
 			return new ResourceEditPart();
 		}
-		if (modelElement instanceof Value){
+		if (modelElement instanceof Value) {
 			return new ValueEditPart();
- 		}
+		}
 		if (modelElement instanceof ResourceContainer) {
 			return new ResourceContainerEditPart();
 		}

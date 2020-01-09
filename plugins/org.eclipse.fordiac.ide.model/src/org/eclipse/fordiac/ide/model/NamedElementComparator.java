@@ -19,11 +19,11 @@ import java.util.Comparator;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public enum NamedElementComparator implements Comparator<INamedElement> {
-	
+
 	INSTANCE;
 
 	private Collator col = Collator.getInstance();
-	
+
 	@Override
 	public int compare(INamedElement o1, INamedElement o2) {
 		return col.compare(o1.getName(), o2.getName());

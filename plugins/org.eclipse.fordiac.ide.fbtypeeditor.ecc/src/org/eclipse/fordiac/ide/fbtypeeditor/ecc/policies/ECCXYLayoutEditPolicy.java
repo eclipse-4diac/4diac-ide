@@ -41,8 +41,7 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	@Override
-	protected Command createChangeConstraintCommand(
-			final ChangeBoundsRequest request, final EditPart child,
+	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
 		if (child instanceof ECStateEditPart) {
 			ECStateEditPart temp = (ECStateEditPart) child;
@@ -53,30 +52,28 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	@Override
-	protected Command getAddCommand(Request generic) {		
-		if(generic instanceof ChangeBoundsRequest){
-			ChangeBoundsRequest request = (ChangeBoundsRequest)generic;			
+	protected Command getAddCommand(Request generic) {
+		if (generic instanceof ChangeBoundsRequest) {
+			ChangeBoundsRequest request = (ChangeBoundsRequest) generic;
 			for (Object editPart : request.getEditParts()) {
-				if((editPart instanceof ECActionAlgorithmEditPart) ||
-						(editPart instanceof ECActionOutputEventEditPart)){
-					//actions should not be moved or resized
+				if ((editPart instanceof ECActionAlgorithmEditPart)
+						|| (editPart instanceof ECActionOutputEventEditPart)) {
+					// actions should not be moved or resized
 					return null;
 				}
 			}
-		}	
+		}
 		return super.getAddCommand(generic);
 	}
 
 	@Override
-	protected Command createChangeConstraintCommand(final EditPart child,
-			final Object constraint) {
+	protected Command createChangeConstraintCommand(final EditPart child, final Object constraint) {
 		return null;
 	}
 
 	@Override
-	protected Command getCreateCommand(final CreateRequest request) {	
-		if (request.getNewObjectType().equals(ECState.class)
-				&& getHost().getModel() instanceof ECC) {
+	protected Command getCreateCommand(final CreateRequest request) {
+		if (request.getNewObjectType().equals(ECState.class) && getHost().getModel() instanceof ECC) {
 			Point point = request.getLocation().getCopy();
 			getHostFigure().translateToRelative(point);
 			return new CreateECStateCommand((ECState) request.getNewObject(), point, (ECC) getHost().getModel());

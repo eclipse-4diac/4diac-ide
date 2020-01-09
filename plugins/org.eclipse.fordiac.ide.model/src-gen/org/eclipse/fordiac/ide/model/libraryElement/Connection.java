@@ -14,21 +14,27 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Connection</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Connection</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx1 <em>Dx1</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx2 <em>Dx2</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDy <em>Dy</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection <em>Res Type Connection</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection <em>Broken Connection</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource <em>Source</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination <em>Destination</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx1
+ * <em>Dx1</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx2
+ * <em>Dx2</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDy
+ * <em>Dy</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection
+ * <em>Res Type Connection</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection
+ * <em>Broken Connection</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource
+ * <em>Source</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination
+ * <em>Destination</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection()
@@ -37,13 +43,14 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  */
 public interface Connection extends ConfigurableObject {
 	/**
-	 * Returns the value of the '<em><b>Dx1</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Dx1</b></em>' attribute. <!-- begin-user-doc
+	 * -->
 	 * <p>
-	 * If the meaning of the '<em>Dx1</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Dx1</em>' attribute isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Dx1</em>' attribute.
 	 * @see #setDx1(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Dx1()
@@ -54,9 +61,10 @@ public interface Connection extends ConfigurableObject {
 	int getDx1();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx1 <em>Dx1</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx1
+	 * <em>Dx1</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Dx1</em>' attribute.
 	 * @see #getDx1()
 	 * @generated
@@ -64,13 +72,14 @@ public interface Connection extends ConfigurableObject {
 	void setDx1(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Dx2</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Dx2</b></em>' attribute. <!-- begin-user-doc
+	 * -->
 	 * <p>
-	 * If the meaning of the '<em>Dx2</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Dx2</em>' attribute isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Dx2</em>' attribute.
 	 * @see #setDx2(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Dx2()
@@ -81,9 +90,10 @@ public interface Connection extends ConfigurableObject {
 	int getDx2();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx2 <em>Dx2</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDx2
+	 * <em>Dx2</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Dx2</em>' attribute.
 	 * @see #getDx2()
 	 * @generated
@@ -91,13 +101,14 @@ public interface Connection extends ConfigurableObject {
 	void setDx2(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Dy</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Dy</b></em>' attribute. <!-- begin-user-doc
+	 * -->
 	 * <p>
-	 * If the meaning of the '<em>Dy</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Dy</em>' attribute isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Dy</em>' attribute.
 	 * @see #setDy(int)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Dy()
@@ -108,9 +119,10 @@ public interface Connection extends ConfigurableObject {
 	int getDy();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDy <em>Dy</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDy
+	 * <em>Dy</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Dy</em>' attribute.
 	 * @see #getDy()
 	 * @generated
@@ -125,6 +137,7 @@ public interface Connection extends ConfigurableObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Res Type Connection</em>' attribute.
 	 * @see #setResTypeConnection(boolean)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_ResTypeConnection()
@@ -134,9 +147,11 @@ public interface Connection extends ConfigurableObject {
 	boolean isResTypeConnection();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection <em>Res Type Connection</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection
+	 * <em>Res Type Connection</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Res Type Connection</em>' attribute.
 	 * @see #isResTypeConnection()
 	 * @generated
@@ -150,35 +165,37 @@ public interface Connection extends ConfigurableObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
 	boolean isResourceConnection();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
 	FBNetwork getFBNetwork();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model
 	 * @generated
 	 */
 	void checkIfConnectionBroken();
 
 	/**
-	 * Returns the value of the '<em><b>Broken Connection</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Broken Connection</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Broken Connection</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Broken Connection</em>' attribute.
 	 * @see #setBrokenConnection(boolean)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_BrokenConnection()
@@ -188,9 +205,11 @@ public interface Connection extends ConfigurableObject {
 	boolean isBrokenConnection();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection <em>Broken Connection</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection
+	 * <em>Broken Connection</em>}' attribute. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Broken Connection</em>' attribute.
 	 * @see #isBrokenConnection()
 	 * @generated
@@ -198,10 +217,11 @@ public interface Connection extends ConfigurableObject {
 	void setBrokenConnection(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Source</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections <em>Output Connections</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the value of the '<em><b>Source</b></em>' reference. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections
+	 * <em>Output Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Source</em>' reference.
 	 * @see #setSource(IInterfaceElement)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Source()
@@ -212,9 +232,10 @@ public interface Connection extends ConfigurableObject {
 	IInterfaceElement getSource();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource <em>Source</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource
+	 * <em>Source</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Source</em>' reference.
 	 * @see #getSource()
 	 * @generated
@@ -222,10 +243,11 @@ public interface Connection extends ConfigurableObject {
 	void setSource(IInterfaceElement value);
 
 	/**
-	 * Returns the value of the '<em><b>Destination</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections <em>Input Connections</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the value of the '<em><b>Destination</b></em>' reference. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections
+	 * <em>Input Connections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Destination</em>' reference.
 	 * @see #setDestination(IInterfaceElement)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Destination()
@@ -236,9 +258,11 @@ public interface Connection extends ConfigurableObject {
 	IInterfaceElement getDestination();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination <em>Destination</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination
+	 * <em>Destination</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @param value the new value of the '<em>Destination</em>' reference.
 	 * @see #getDestination()
 	 * @generated
@@ -246,16 +270,16 @@ public interface Connection extends ConfigurableObject {
 	void setDestination(IInterfaceElement value);
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
 	FBNetworkElement getSourceElement();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

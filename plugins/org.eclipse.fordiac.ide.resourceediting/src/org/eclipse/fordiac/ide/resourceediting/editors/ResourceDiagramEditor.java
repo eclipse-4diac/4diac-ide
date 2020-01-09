@@ -38,20 +38,20 @@ import org.eclipse.ui.IEditorInput;
  */
 public class ResourceDiagramEditor extends FBNetworkEditor {
 
-	private EContentAdapter resourceAdapter = new EContentAdapter(){
+	private EContentAdapter resourceAdapter = new EContentAdapter() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
 			Object feature = notification.getFeature();
-			if ((LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) && 
-					(getResource().equals(notification.getNotifier()))){				
+			if ((LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature))
+					&& (getResource().equals(notification.getNotifier()))) {
 				updateEditorTitle(ResourceEditorInput.getResourceEditorName(getResource()));
 			}
 			super.notifyChanged(notification);
 		}
-		
+
 	};
-	
+
 	private EContentAdapter colorChangeListener = new EContentAdapter() {
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -60,11 +60,10 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 			}
 		}
 	};
-		
-	private Resource getResource() {
-		return (Resource)getModel().eContainer();
-	}
 
+	private Resource getResource() {
+		return (Resource) getModel().eContainer();
+	}
 
 	@Override
 	protected void initializeGraphicalViewer() {
@@ -78,8 +77,7 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 	}
 
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(
-			final ScrollingGraphicalViewer viewer,
+	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
 		return new ResourceDiagramEditorContextMenuProvider(this, getActionRegistry(), zoomManager, getPalette());
 	}
@@ -89,16 +87,16 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 		if (input instanceof ResourceEditorInput) {
 			ResourceEditorInput resInput = (ResourceEditorInput) input;
 			Resource res = resInput.getContent();
-			setModel(res.getFBNetwork());				
+			setModel(res.getFBNetwork());
 			getResource().eAdapters().add(resourceAdapter);
 			getResource().getDevice().eAdapters().add(colorChangeListener);
 		}
 		super.setModel(input);
 	}
-		
+
 	@Override
-	public void dispose() {		
-		if(null != getResource()){
+	public void dispose() {
+		if (null != getResource()) {
 			getResource().eAdapters().remove(resourceAdapter);
 			getResource().getDevice().eAdapters().remove(colorChangeListener);
 		}
@@ -106,15 +104,17 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 		super.dispose();
 	}
 
-	private void updateGridColor(){
-		if(null != getResource()){
-			IFigure layer = ((ZoomScalableFreeformRootEditPart)getViewer().getRootEditPart()).getLayer(LayerConstants.GRID_LAYER);
-			if(null != layer){
+	private void updateGridColor() {
+		if (null != getResource()) {
+			IFigure layer = ((ZoomScalableFreeformRootEditPart) getViewer().getRootEditPart())
+					.getLayer(LayerConstants.GRID_LAYER);
+			if (null != layer) {
 				Color devColor = getResource().getDevice().getColor();
-				if(null != devColor){
-					org.eclipse.swt.graphics.Color newColor = ColorManager.getColor(new RGB(devColor.getRed(), devColor.getGreen(), devColor.getBlue()));
-					layer.setForegroundColor(newColor);				
-				}			
+				if (null != devColor) {
+					org.eclipse.swt.graphics.Color newColor = ColorManager
+							.getColor(new RGB(devColor.getRed(), devColor.getGreen(), devColor.getBlue()));
+					layer.setForegroundColor(newColor);
+				}
 			}
 		}
 	}

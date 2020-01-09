@@ -32,7 +32,8 @@ public class DynamicTypeLoadDevMgmInteractorProvider implements IDeviceManagemen
 	}
 
 	@Override
-	public IDeviceManagementInteractor createInteractor(Device dev, IDeviceManagementCommunicationHandler overrideHandler) {
+	public IDeviceManagementInteractor createInteractor(Device dev,
+			IDeviceManagementCommunicationHandler overrideHandler) {
 		return new DynamicTypeLoadDeploymentExecutor(dev, overrideHandler);
 	}
 

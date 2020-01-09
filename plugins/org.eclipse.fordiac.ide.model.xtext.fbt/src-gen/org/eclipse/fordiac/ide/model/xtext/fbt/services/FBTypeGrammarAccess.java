@@ -18,38 +18,44 @@ import org.eclipse.xtext.service.GrammarProvider;
 
 @Singleton
 public class FBTypeGrammarAccess extends AbstractGrammarElementFinder {
-	
+
 	public class LibraryElementElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.model.xtext.fbt.FBType.LibraryElement");
-		private final Assignment cNameAssignment = (Assignment)rule.eContents().get(1);
-		private final RuleCall cNameIDTerminalRuleCall_0 = (RuleCall)cNameAssignment.eContents().get(0);
-		
-		//LibraryElement:
-		//	name=ID;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//name=ID
-		public Assignment getNameAssignment() { return cNameAssignment; }
-		
-		//ID
-		public RuleCall getNameIDTerminalRuleCall_0() { return cNameIDTerminalRuleCall_0; }
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(),
+				"org.eclipse.fordiac.ide.model.xtext.fbt.FBType.LibraryElement");
+		private final Assignment cNameAssignment = (Assignment) rule.eContents().get(1);
+		private final RuleCall cNameIDTerminalRuleCall_0 = (RuleCall) cNameAssignment.eContents().get(0);
+
+		// LibraryElement:
+		// name=ID;
+		@Override
+		public ParserRule getRule() {
+			return rule;
+		}
+
+		// name=ID
+		public Assignment getNameAssignment() {
+			return cNameAssignment;
+		}
+
+		// ID
+		public RuleCall getNameIDTerminalRuleCall_0() {
+			return cNameIDTerminalRuleCall_0;
+		}
 	}
-	
-	
+
 	private final LibraryElementElements pLibraryElement;
-	
+
 	private final Grammar grammar;
-	
+
 	private final TerminalsGrammarAccess gaTerminals;
 
 	@Inject
-	public FBTypeGrammarAccess(GrammarProvider grammarProvider,
-			TerminalsGrammarAccess gaTerminals) {
+	public FBTypeGrammarAccess(GrammarProvider grammarProvider, TerminalsGrammarAccess gaTerminals) {
 		this.grammar = internalFindGrammar(grammarProvider);
 		this.gaTerminals = gaTerminals;
 		this.pLibraryElement = new LibraryElementElements();
 	}
-	
+
 	protected Grammar internalFindGrammar(GrammarProvider grammarProvider) {
 		Grammar grammar = grammarProvider.getGrammar(this);
 		while (grammar != null) {
@@ -65,67 +71,65 @@ public class FBTypeGrammarAccess extends AbstractGrammarElementFinder {
 		}
 		return grammar;
 	}
-	
+
 	@Override
 	public Grammar getGrammar() {
 		return grammar;
 	}
-	
-	
+
 	public TerminalsGrammarAccess getTerminalsGrammarAccess() {
 		return gaTerminals;
 	}
 
-	
-	//LibraryElement:
-	//	name=ID;
+	// LibraryElement:
+	// name=ID;
 	public LibraryElementElements getLibraryElementAccess() {
 		return pLibraryElement;
 	}
-	
+
 	public ParserRule getLibraryElementRule() {
 		return getLibraryElementAccess().getRule();
 	}
-	
-	//terminal ID:
-	//	'^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+
+	// terminal ID:
+	// '^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 	public TerminalRule getIDRule() {
 		return gaTerminals.getIDRule();
 	}
-	
-	//terminal INT returns ecore::EInt:
-	//	'0'..'9'+;
+
+	// terminal INT returns ecore::EInt:
+	// '0'..'9'+;
 	public TerminalRule getINTRule() {
 		return gaTerminals.getINTRule();
 	}
-	
-	//terminal STRING:
-	//	'"' ('\\' . | !('\\' | '"'))* '"' |
-	//	"'" ('\\' . | !('\\' | "'"))* "'";
+
+	// terminal STRING:
+	// '"' ('\\' . | !('\\' | '"'))* '"' |
+	// "'" ('\\' . | !('\\' | "'"))* "'";
 	public TerminalRule getSTRINGRule() {
 		return gaTerminals.getSTRINGRule();
 	}
-	
-	//terminal ML_COMMENT:
-	//	'/*'->'*/';
+
+	// terminal ML_COMMENT:
+	// '/*'->'*/';
 	public TerminalRule getML_COMMENTRule() {
 		return gaTerminals.getML_COMMENTRule();
 	}
-	
-	//terminal SL_COMMENT:
-	//	'//' !('\n' | '\r')* ('\r'? '\n')?;
+
+	// terminal SL_COMMENT:
+	// '//' !('\n' | '\r')* ('\r'? '\n')?;
 	public TerminalRule getSL_COMMENTRule() {
 		return gaTerminals.getSL_COMMENTRule();
 	}
-	
-	//terminal WS:
-	//	' ' | '\t' | '\r' | '\n'+;
+
+	// terminal WS:
+	// ' ' | '\t' | '\r' | '\n'+;
 	public TerminalRule getWSRule() {
 		return gaTerminals.getWSRule();
 	}
-	
-	//terminal ANY_OTHER:
-	//	.;
+
+	// terminal ANY_OTHER:
+	// .;
 	public TerminalRule getANY_OTHERRule() {
 		return gaTerminals.getANY_OTHERRule();
 	}

@@ -143,7 +143,8 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 					Integer value = (Integer) request.getCellEditor().getValue();
 					if (null != value) {
 						int selected = value.intValue();
-						List<Event> events = ECCContentAndLabelProvider.getOutputEvents(ECCContentAndLabelProvider.getFBType(getAction()));
+						List<Event> events = ECCContentAndLabelProvider
+								.getOutputEvents(ECCContentAndLabelProvider.getFBType(getAction()));
 						Event ev = null;
 						if (0 <= selected && selected < events.size()) {
 							ev = events.get(selected);
@@ -182,7 +183,8 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 
 	@Override
 	public void performDirectEdit() {
-		List<String> eventNames = ECCContentAndLabelProvider.getOutputEventNames(ECCContentAndLabelProvider.getFBType(getAction()));
+		List<String> eventNames = ECCContentAndLabelProvider
+				.getOutputEventNames(ECCContentAndLabelProvider.getFBType(getAction()));
 		int selected = (getAction().getOutput() != null) ? eventNames.indexOf(getAction().getOutput().getName())
 				: eventNames.size() - 1;
 		((ComboDirectEditManager) getManager()).updateComboData(eventNames);

@@ -33,23 +33,27 @@ import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 
 /**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Group</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Group</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteGroupImpl#getEntries <em>Entries</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteGroupImpl#getSubGroups <em>Sub Groups</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteGroupImpl#getLabel <em>Label</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteGroupImpl#getEntries
+ * <em>Entries</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteGroupImpl#getSubGroups
+ * <em>Sub Groups</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteGroupImpl#getLabel
+ * <em>Label</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 	/**
-	 * The cached value of the '{@link #getEntries() <em>Entries</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getEntries() <em>Entries</em>}' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getEntries()
 	 * @generated
 	 * @ordered
@@ -57,8 +61,9 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 	protected EList<PaletteEntry> entries;
 
 	/**
-	 * The cached value of the '{@link #getSubGroups() <em>Sub Groups</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getSubGroups() <em>Sub Groups</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getSubGroups()
 	 * @generated
 	 * @ordered
@@ -66,8 +71,9 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 	protected EList<PaletteGroup> subGroups;
 
 	/**
-	 * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #getLabel() <em>Label</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getLabel()
 	 * @generated
 	 * @ordered
@@ -75,8 +81,9 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 	protected static final String LABEL_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getLabel()
 	 * @generated
 	 * @ordered
@@ -85,6 +92,7 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected PaletteGroupImpl() {
@@ -93,6 +101,7 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -102,30 +111,35 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<PaletteEntry> getEntries() {
 		if (entries == null) {
-			entries = new EObjectContainmentEList.Resolving<PaletteEntry>(PaletteEntry.class, this, PalettePackage.PALETTE_GROUP__ENTRIES);
+			entries = new EObjectContainmentEList.Resolving<PaletteEntry>(PaletteEntry.class, this,
+					PalettePackage.PALETTE_GROUP__ENTRIES);
 		}
 		return entries;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<PaletteGroup> getSubGroups() {
 		if (subGroups == null) {
-			subGroups = new EObjectContainmentEList.Resolving<PaletteGroup>(PaletteGroup.class, this, PalettePackage.PALETTE_GROUP__SUB_GROUPS);
+			subGroups = new EObjectContainmentEList.Resolving<PaletteGroup>(PaletteGroup.class, this,
+					PalettePackage.PALETTE_GROUP__SUB_GROUPS);
 		}
 		return subGroups;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -135,6 +149,7 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -142,108 +157,116 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 		String oldLabel = label;
 		label = newLabel;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_GROUP__LABEL, oldLabel, label));
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_GROUP__LABEL, oldLabel,
+					label));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case PalettePackage.PALETTE_GROUP__ENTRIES:
-				return ((InternalEList<?>)getEntries()).basicRemove(otherEnd, msgs);
-			case PalettePackage.PALETTE_GROUP__SUB_GROUPS:
-				return ((InternalEList<?>)getSubGroups()).basicRemove(otherEnd, msgs);
+		case PalettePackage.PALETTE_GROUP__ENTRIES:
+			return ((InternalEList<?>) getEntries()).basicRemove(otherEnd, msgs);
+		case PalettePackage.PALETTE_GROUP__SUB_GROUPS:
+			return ((InternalEList<?>) getSubGroups()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PalettePackage.PALETTE_GROUP__ENTRIES:
-				return getEntries();
-			case PalettePackage.PALETTE_GROUP__SUB_GROUPS:
-				return getSubGroups();
-			case PalettePackage.PALETTE_GROUP__LABEL:
-				return getLabel();
+		case PalettePackage.PALETTE_GROUP__ENTRIES:
+			return getEntries();
+		case PalettePackage.PALETTE_GROUP__SUB_GROUPS:
+			return getSubGroups();
+		case PalettePackage.PALETTE_GROUP__LABEL:
+			return getLabel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PalettePackage.PALETTE_GROUP__ENTRIES:
-				getEntries().clear();
-				getEntries().addAll((Collection<? extends PaletteEntry>)newValue);
-				return;
-			case PalettePackage.PALETTE_GROUP__SUB_GROUPS:
-				getSubGroups().clear();
-				getSubGroups().addAll((Collection<? extends PaletteGroup>)newValue);
-				return;
-			case PalettePackage.PALETTE_GROUP__LABEL:
-				setLabel((String)newValue);
-				return;
+		case PalettePackage.PALETTE_GROUP__ENTRIES:
+			getEntries().clear();
+			getEntries().addAll((Collection<? extends PaletteEntry>) newValue);
+			return;
+		case PalettePackage.PALETTE_GROUP__SUB_GROUPS:
+			getSubGroups().clear();
+			getSubGroups().addAll((Collection<? extends PaletteGroup>) newValue);
+			return;
+		case PalettePackage.PALETTE_GROUP__LABEL:
+			setLabel((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PalettePackage.PALETTE_GROUP__ENTRIES:
-				getEntries().clear();
-				return;
-			case PalettePackage.PALETTE_GROUP__SUB_GROUPS:
-				getSubGroups().clear();
-				return;
-			case PalettePackage.PALETTE_GROUP__LABEL:
-				setLabel(LABEL_EDEFAULT);
-				return;
+		case PalettePackage.PALETTE_GROUP__ENTRIES:
+			getEntries().clear();
+			return;
+		case PalettePackage.PALETTE_GROUP__SUB_GROUPS:
+			getSubGroups().clear();
+			return;
+		case PalettePackage.PALETTE_GROUP__LABEL:
+			setLabel(LABEL_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PalettePackage.PALETTE_GROUP__ENTRIES:
-				return entries != null && !entries.isEmpty();
-			case PalettePackage.PALETTE_GROUP__SUB_GROUPS:
-				return subGroups != null && !subGroups.isEmpty();
-			case PalettePackage.PALETTE_GROUP__LABEL:
-				return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
+		case PalettePackage.PALETTE_GROUP__ENTRIES:
+			return entries != null && !entries.isEmpty();
+		case PalettePackage.PALETTE_GROUP__SUB_GROUPS:
+			return subGroups != null && !subGroups.isEmpty();
+		case PalettePackage.PALETTE_GROUP__LABEL:
+			return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (label: "); //$NON-NLS-1$
@@ -254,23 +277,21 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 
 	@Override
 	public CompilableType getTypeforName(String name) {
-		for (Iterator<PaletteEntry> iterator = getEntries().iterator(); iterator
-				.hasNext();) {
+		for (Iterator<PaletteEntry> iterator = getEntries().iterator(); iterator.hasNext();) {
 			PaletteEntry entry = iterator.next();
 			if (entry.getLabel().equals(name)) {
-				if(entry.getType() instanceof CompilableType){
-					return (CompilableType)entry.getType();
+				if (entry.getType() instanceof CompilableType) {
+					return (CompilableType) entry.getType();
 				}
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * This method adds an entry to a paletteGroup
 	 * 
-	 * @param entry
-	 *          - the entry that will be added to the paletteGroup
+	 * @param entry - the entry that will be added to the paletteGroup
 	 */
 	@Override
 	public void addEntry(final PaletteEntry entry) {
@@ -278,59 +299,59 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 			getEntries().add(entry);
 		}
 	}
-	
+
 	@Override
-	public boolean isEmpty(){
+	public boolean isEmpty() {
 		return (getSubGroups().isEmpty() && getEntries().isEmpty());
 	}
-	
+
 	@Override
-	public PaletteGroup getGroup(String label){
+	public PaletteGroup getGroup(String label) {
 		PaletteGroup retVal = null;
 		EList<PaletteGroup> groups = getSubGroups();
-		
+
 		for (PaletteGroup paletteGroup : groups) {
-			if(paletteGroup.getLabel().equals(label)){
+			if (paletteGroup.getLabel().equals(label)) {
 				retVal = paletteGroup;
 				break;
 			}
 		}
-		
+
 		return retVal;
 	}
-	
+
 	@Override
-	public Palette getPallete(){
+	public Palette getPallete() {
 		Palette retval = null;
-		
+
 		EObject runner = eContainer();
-		while (null != runner){
-			if(runner instanceof Palette){
+		while (null != runner) {
+			if (runner instanceof Palette) {
 				retval = (Palette) runner;
 				break;
 			}
 			runner = runner.eContainer();
 		}
-		
+
 		return retval;
 	}
 
 	@Override
-	public void removeEntryNamed(String entryName) {		
+	public void removeEntryNamed(String entryName) {
 		PaletteEntry entry = getEntry(entryName);
-		if(null != entry){
+		if (null != entry) {
 			EList<PaletteEntry> entries = getEntries();
 			entries.remove(entry);
 		}
-		
+
 	}
-	
+
 	@Override
-	public PaletteEntry getEntry(String entryName){
+	public PaletteEntry getEntry(String entryName) {
 		PaletteEntry retVal = null;
-		if(null != getEntries()){
+		if (null != getEntries()) {
 			for (PaletteEntry paletteEntry : getEntries()) {
-				if(paletteEntry.getLabel().equals(entryName)){
+				if (paletteEntry.getLabel().equals(entryName)) {
 					retVal = paletteEntry;
 					break;
 				}
@@ -341,9 +362,9 @@ public class PaletteGroupImpl extends EObjectImpl implements PaletteGroup {
 
 	@Override
 	public PaletteGroup getParentGroup() {
-		if(null != eContainer()){
-			if(eContainer() instanceof PaletteGroup){
-				return (PaletteGroup)eContainer();
+		if (null != eContainer()) {
+			if (eContainer() instanceof PaletteGroup) {
+				return (PaletteGroup) eContainer();
 			}
 		}
 		return null;

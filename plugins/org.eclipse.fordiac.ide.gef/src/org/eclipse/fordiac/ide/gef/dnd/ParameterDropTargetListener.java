@@ -21,8 +21,7 @@ import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.swt.dnd.DND;
 
-public class ParameterDropTargetListener extends
-		AbstractTransferDropTargetListener {
+public class ParameterDropTargetListener extends AbstractTransferDropTargetListener {
 
 	private ParameterValueFactory factory = new ParameterValueFactory();
 
@@ -49,8 +48,7 @@ public class ParameterDropTargetListener extends
 	protected void handleDragOver() {
 		Object model = getTargetEditPart().getModel();
 		if (model instanceof IInterfaceElement) {
-			if (((IInterfaceElement) model).isIsInput()					
-					&& !(model instanceof Event)) {
+			if (((IInterfaceElement) model).isIsInput() && !(model instanceof Event)) {
 				getCurrentEvent().detail = DND.DROP_COPY;
 			}
 		} else {

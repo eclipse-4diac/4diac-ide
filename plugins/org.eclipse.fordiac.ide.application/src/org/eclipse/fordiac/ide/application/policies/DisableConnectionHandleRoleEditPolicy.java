@@ -23,8 +23,7 @@ import org.eclipse.gef.EditPart;
  * This policy disables the connectionrole of an
  * IDeactivatableConnectionHandleRoleEditPart.
  */
-public class DisableConnectionHandleRoleEditPolicy extends
-		FeedbackConnectionEndpointEditPolicy {
+public class DisableConnectionHandleRoleEditPolicy extends FeedbackConnectionEndpointEditPolicy {
 
 	private IDeactivatableConnectionHandleRoleEditPart sourcePart;
 	private IDeactivatableConnectionHandleRoleEditPart destPart;
@@ -37,12 +36,10 @@ public class DisableConnectionHandleRoleEditPolicy extends
 
 			EditPart source = cep.getSource();
 			EditPart dest = cep.getTarget();
-			if (source != null
-					&& source instanceof IDeactivatableConnectionHandleRoleEditPart) {
+			if (source != null && source instanceof IDeactivatableConnectionHandleRoleEditPart) {
 				sourcePart = (InterfaceEditPart) source;
 			}
-			if (dest != null
-					&& dest instanceof IDeactivatableConnectionHandleRoleEditPart) {
+			if (dest != null && dest instanceof IDeactivatableConnectionHandleRoleEditPart) {
 				destPart = (InterfaceEditPart) dest;
 			}
 			if (sourcePart != null && destPart != null) {

@@ -24,16 +24,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Adapter Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Adapter
+ * Type Palette Entry</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements AdapterTypePaletteEntry {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected AdapterTypePaletteEntryImpl() {
@@ -41,8 +40,8 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -50,34 +49,34 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 		return PalettePackage.Literals.ADAPTER_TYPE_PALETTE_ENTRY;
 	}
 
-	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public AdapterType getType() {
 		LibraryElement type = super.getType();
-		if((null !=type) && (type instanceof AdapterType)){
-		   return (AdapterType) type;
+		if ((null != type) && (type instanceof AdapterType)) {
+			return (AdapterType) type;
 		}
 		return null;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if((null != type) && (type instanceof AdapterType)){
+		if ((null != type) && (type instanceof AdapterType)) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
-				Status  exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no AdapterType as type entry for AdapterTypePaletteEntry");
+			if (null != type) {
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+						"tried to set no AdapterType as type entry for AdapterTypePaletteEntry");
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
@@ -87,5 +86,5 @@ public class AdapterTypePaletteEntryImpl extends PaletteEntryImpl implements Ada
 	protected LibraryElement loadType() {
 		return ADPImporter.importAdapterType(getFile());
 	}
-	
-} //AdapterTypePaletteEntryImpl
+
+} // AdapterTypePaletteEntryImpl

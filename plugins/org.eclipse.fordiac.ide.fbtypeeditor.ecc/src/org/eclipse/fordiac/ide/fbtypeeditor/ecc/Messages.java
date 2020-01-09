@@ -29,42 +29,58 @@ public class Messages extends NLS {
 	public static String ECCPaletteFactory_TOOLTIP_State;
 	public static String ECCPaletteFactory_TOOLTIP_STAlgorithm;
 	public static String ECStateSetPositionCommand_LABEL_Move;
-	public static String StateCreationFactory_LABEL_NewECState;	
-	
-	/** The Fordiac ECC Editor preference page_ label_ preference page description. */
-	public static String FordiacECCPreferencePage_LABEL_PreferencePageDescription;	
-	
-	/** The Fordiac ECC Editor preference page_ label_ default ECC State color. */             
-	public static String FordiacECCPreferencePage_LABEL_ECCStateColor;          
-	                                                                                
-	/** The Fordiac ECC Editor preference page_ label_ default ECC State border color. */      
-	public static String FordiacECCPreferencePage_LABEL_ECCStateBorderColor;    
-	                                                                                
-	/** The Fordiac ECC Editor preference page_ label_ default ECC Algorithm color. */         
-	public static String FordiacECCPreferencePage_LABEL_ECCAlgorithmColor;      
-	                                                                                
-	/** The Fordiac ECC Editor preference page_ label_ default ECC Algorithm border color. */  
+	public static String StateCreationFactory_LABEL_NewECState;
+
+	/**
+	 * The Fordiac ECC Editor preference page_ label_ preference page description.
+	 */
+	public static String FordiacECCPreferencePage_LABEL_PreferencePageDescription;
+
+	/** The Fordiac ECC Editor preference page_ label_ default ECC State color. */
+	public static String FordiacECCPreferencePage_LABEL_ECCStateColor;
+
+	/**
+	 * The Fordiac ECC Editor preference page_ label_ default ECC State border
+	 * color.
+	 */
+	public static String FordiacECCPreferencePage_LABEL_ECCStateBorderColor;
+
+	/**
+	 * The Fordiac ECC Editor preference page_ label_ default ECC Algorithm color.
+	 */
+	public static String FordiacECCPreferencePage_LABEL_ECCAlgorithmColor;
+
+	/**
+	 * The Fordiac ECC Editor preference page_ label_ default ECC Algorithm border
+	 * color.
+	 */
 	public static String FordiacECCPreferencePage_LABEL_ECCAlgorithmBorderColor;
-	                                                                                
-	/** The Fordiac ECC Editor preference page_ label_ default ECC Event color. */             
-	public static String FordiacECCPreferencePage_LABEL_ECCEventColor;          
-	                                                                                
-	/** The Fordiac ECC Editor preference page_ label_ default ECC Event border color. */      
-	public static String FordiacECCPreferencePage_LABEL_ECCEventBorderColor;    
-	                                                                                
-	/** The Fordiac ECC Editor preference page_ label_ default ECC Transition color. */        
+
+	/** The Fordiac ECC Editor preference page_ label_ default ECC Event color. */
+	public static String FordiacECCPreferencePage_LABEL_ECCEventColor;
+
+	/**
+	 * The Fordiac ECC Editor preference page_ label_ default ECC Event border
+	 * color.
+	 */
+	public static String FordiacECCPreferencePage_LABEL_ECCEventBorderColor;
+
+	/**
+	 * The Fordiac ECC Editor preference page_ label_ default ECC Transition color.
+	 */
 	public static String FordiacECCPreferencePage_LABEL_ECCTransitionColor;
-	
+
 	public static String ECAlgorithmGroup_Title;
-	
+
 	public static String AlgorithmComposite_Language;
-	
+
 	public static String AlgorithmComposite_Comment;
-	
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}
+
 	private Messages() {
 	}
 }

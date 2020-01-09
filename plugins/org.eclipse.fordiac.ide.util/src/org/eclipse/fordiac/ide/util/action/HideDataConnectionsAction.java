@@ -22,42 +22,50 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 /**
  * The Class HideDataConnectionsAction.
  */
-public class HideDataConnectionsAction implements
-		IWorkbenchWindowActionDelegate {
+public class HideDataConnectionsAction implements IWorkbenchWindowActionDelegate {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#dispose()
 	 */
 	@Override
 	public void dispose() {
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#init(org.eclipse.ui.IWorkbenchWindow)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#init(org.eclipse.ui.
+	 * IWorkbenchWindow)
 	 */
 	@Override
 	public void init(IWorkbenchWindow window) {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
 	 */
 	@Override
 	public void run(IAction action) {
 		if (action.isChecked()) {
-			Activator.getDefault().getPreferenceStore().setValue(
-					"hideDataConnections", true);
+			Activator.getDefault().getPreferenceStore().setValue("hideDataConnections", true);
 
 		} else {
-			Activator.getDefault().getPreferenceStore().setValue(
-					"hideDataConnections", false);
+			Activator.getDefault().getPreferenceStore().setValue("hideDataConnections", false);
 		}
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.
+	 * IAction, org.eclipse.jface.viewers.ISelection)
 	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {

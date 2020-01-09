@@ -29,16 +29,12 @@ public abstract class UntypedEditorInput implements IEditorInput {
 
 	private String name;
 
-
 	/**
 	 * Constructor of UntypedEditorInput.
 	 * 
-	 * @param content
-	 *          the content
-	 * @param name
-	 *          the name
-	 * @param toolTip
-	 *          the tool tip
+	 * @param content the content
+	 * @param name    the name
+	 * @param toolTip the tool tip
 	 */
 	public UntypedEditorInput(final Object content, final String name) {
 		this.content = content;
@@ -52,7 +48,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 */
 	@Override
 	public boolean exists() {
-		return true; //our models do always exist
+		return true; // our models do always exist
 	}
 
 	/*
@@ -74,13 +70,14 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	public String getName() {
 		return name == null ? "" : name; //$NON-NLS-1$
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	/*In 4diac IDE we would like to have the tooltip the same as the name
-	 * Tooltip is the thing shown in the title. Name mostly in the part tab.
+	/*
+	 * In 4diac IDE we would like to have the tooltip the same as the name Tooltip
+	 * is the thing shown in the title. Name mostly in the part tab.
 	 */
 	@Override
 	public String getToolTipText() {
@@ -110,8 +107,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	/**
 	 * Equals.
 	 * 
-	 * @param obj
-	 *          the obj
+	 * @param obj the obj
 	 * 
 	 * @return <code>true</code> if <code>content</code> is equal.
 	 */
@@ -120,7 +116,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 		if (obj instanceof UntypedEditorInput && content != null) {
 			UntypedEditorInput input = (UntypedEditorInput) obj;
 			return content.equals(input.getContent());
-		} 
+		}
 		return false;
 	}
 
@@ -134,5 +130,4 @@ public abstract class UntypedEditorInput implements IEditorInput {
 		return content.hashCode();
 	}
 
-	
 }

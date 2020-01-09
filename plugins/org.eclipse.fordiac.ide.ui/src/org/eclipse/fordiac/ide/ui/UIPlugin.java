@@ -28,7 +28,7 @@ public class UIPlugin extends Abstract4DIACUIPlugin {
 	 * The constructor.
 	 */
 	public UIPlugin() {
-		//empty constructor
+		// empty constructor
 	}
 
 	/**

@@ -25,7 +25,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(HoloblocDeploymentPreferences.CONNECTION_TIMEOUT, 
+		store.setDefault(HoloblocDeploymentPreferences.CONNECTION_TIMEOUT,
 				HoloblocDeploymentPreferences.CONNECTION_TIMEOUT_DEFAULT_VALUE);
 
 	}

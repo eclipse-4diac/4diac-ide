@@ -68,20 +68,19 @@ public final class Messages extends NLS {
 
 	/** The Output_ download warning. */
 	public static String Output_DownloadWarning;
-	
-	/** Title of the create FMU wizard */  
+
+	/** Title of the create FMU wizard */
 	public static String FordiacCreateFMUWizard_LABEL_Window_Title;
-	
-	/** Page name of the create FMU wizard page*/  
+
+	/** Page name of the create FMU wizard page */
 	public static String FordiacCreateFMUWizard_PageName;
-	
-	/** Description of the create FMU page */  
+
+	/** Description of the create FMU page */
 	public static String FordiacCreateFMUWizard_PageDESCRIPTION;
-	
-	/** Title of the create FMU wizard page*/  
+
+	/** Title of the create FMU wizard page */
 	public static String FordiacCreateFMUWizard_PageTITLE;
-		
-	
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -17,19 +17,19 @@ import org.eclipse.fordiac.ide.model.structuredtext.ui.internal.StructuredtextAc
 import org.osgi.framework.Bundle;
 
 /**
- * Special factory that takes into account that the extend activator is used which
- * allows to inject xtext editors for both structured text and expresions
+ * Special factory that takes into account that the extend activator is used
+ * which allows to inject xtext editors for both structured text and expresions
  */
 @SuppressWarnings("all")
 public class StructuredTextFactory extends StructuredTextExecutableExtensionFactory {
-  @Override
-  protected Bundle getBundle() {
-    return ExtendedStructuredTextActivator.getInstance().getBundle();
-  }
-  
-  @Override
-  protected Injector getInjector() {
-    return ExtendedStructuredTextActivator.getInstance().getInjector(
-      StructuredtextActivator.ORG_ECLIPSE_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_STRUCTUREDTEXT);
-  }
+	@Override
+	protected Bundle getBundle() {
+		return ExtendedStructuredTextActivator.getInstance().getBundle();
+	}
+
+	@Override
+	protected Injector getInjector() {
+		return ExtendedStructuredTextActivator.getInstance()
+				.getInjector(StructuredtextActivator.ORG_ECLIPSE_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_STRUCTUREDTEXT);
+	}
 }

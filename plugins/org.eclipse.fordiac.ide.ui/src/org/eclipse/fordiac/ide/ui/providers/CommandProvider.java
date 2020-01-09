@@ -13,14 +13,16 @@ package org.eclipse.fordiac.ide.ui.providers;
 
 import org.eclipse.gef.commands.Command;
 
-/** Interface suitable for providing commands via a lambda to some executor
+/**
+ * Interface suitable for providing commands via a lambda to some executor
  */
 public interface CommandProvider {
-	
-	/** Provide a command for the given reference element
+
+	/**
+	 * Provide a command for the given reference element
 	 * 
 	 * @param refElement reference element for the command
-	 * @return the command 
+	 * @return the command
 	 */
 	Command getCommand(Object refElement);
 

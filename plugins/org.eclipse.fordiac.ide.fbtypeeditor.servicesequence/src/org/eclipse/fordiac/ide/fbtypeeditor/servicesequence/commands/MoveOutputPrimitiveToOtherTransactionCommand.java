@@ -23,7 +23,7 @@ public class MoveOutputPrimitiveToOtherTransactionCommand extends Command {
 	private ServiceTransaction dstTransaction;
 	private OutputPrimitive element;
 	private OutputPrimitive refElement;
-	
+
 	public MoveOutputPrimitiveToOtherTransactionCommand(ServiceTransaction srcTransaction,
 			ServiceTransaction dstTransaction, OutputPrimitive element, OutputPrimitive refElement) {
 		this.srcTransaction = srcTransaction;
@@ -31,8 +31,7 @@ public class MoveOutputPrimitiveToOtherTransactionCommand extends Command {
 		this.element = element;
 		this.refElement = refElement;
 	}
-	
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -42,21 +41,22 @@ public class MoveOutputPrimitiveToOtherTransactionCommand extends Command {
 	public boolean canExecute() {
 		return ((srcTransaction != null) && (dstTransaction != null) && (element != null));
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
 	public void execute() {
 		srcTransaction.getOutputPrimitive().remove(element);
-		if(null == refElement){
+		if (null == refElement) {
 			dstTransaction.getOutputPrimitive().add(element);
-		}
-		else{
+		} else {
 			int index = dstTransaction.getOutputPrimitive().indexOf(refElement);
 			dstTransaction.getOutputPrimitive().add(index, element);
 		}
 		super.execute();
 	}
-	
+
 }

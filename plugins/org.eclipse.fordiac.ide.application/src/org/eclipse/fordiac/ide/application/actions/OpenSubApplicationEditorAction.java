@@ -27,7 +27,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
  * The Class OpenSubApplicationEditorAction.
  */
 public class OpenSubApplicationEditorAction extends OpenListener {
-	
+
 	private static final String OPEN_SUBAPP_LISTENER_ID = "org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"; //$NON-NLS-1$
 
 	/** The uiSubAppNetwork. */

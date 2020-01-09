@@ -18,16 +18,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 public class FBDeploymentData {
 	private final String prefix;
 	private final FB fb;
-	
+
 	public FBDeploymentData(final String prefix, final FB fb) {
 		this.prefix = prefix;
 		this.fb = fb;
 	}
-	
+
 	public String getPrefix() {
 		return prefix;
 	}
-	
+
 	public FB getFb() {
 		return fb;
 	}

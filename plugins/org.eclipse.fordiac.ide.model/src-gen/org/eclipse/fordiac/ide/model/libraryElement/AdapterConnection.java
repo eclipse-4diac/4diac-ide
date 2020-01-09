@@ -13,11 +13,9 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Adapter Connection</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Adapter
+ * Connection</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterConnection()
@@ -26,16 +24,16 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  */
 public interface AdapterConnection extends Connection {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
 	AdapterDeclaration getAdapterSource();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

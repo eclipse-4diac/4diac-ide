@@ -48,13 +48,15 @@ public class Activator extends Abstract4DIACUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		
-		//transitional code for workspaces with ruler units. If inches or centimeters were used, the grid spacing is set to a default
-		if (getPreferenceStore().contains(RULER_UNITS) && 
-				org.eclipse.gef.rulers.RulerProvider.UNIT_PIXELS != getPreferenceStore().getInt(RULER_UNITS)){
+
+		// transitional code for workspaces with ruler units. If inches or centimeters
+		// were used, the grid spacing is set to a default
+		if (getPreferenceStore().contains(RULER_UNITS)
+				&& org.eclipse.gef.rulers.RulerProvider.UNIT_PIXELS != getPreferenceStore().getInt(RULER_UNITS)) {
 			getPreferenceStore().setValue(DiagramPreferences.GRID_SPACING, 20);
 			getPreferenceStore().setValue(RULER_UNITS, org.eclipse.gef.rulers.RulerProvider.UNIT_PIXELS);
-			//thre's no way to delete a key. See https://bugs.eclipse.org/bugs/show_bug.cgi?id=279774
+			// thre's no way to delete a key. See
+			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=279774
 		}
 	}
 
@@ -79,5 +81,5 @@ public class Activator extends Abstract4DIACUIPlugin {
 	public static Activator getDefault() {
 		return plugin;
 	}
-	
+
 }

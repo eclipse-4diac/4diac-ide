@@ -31,29 +31,30 @@ public class ChangeTransitionPriorityCommand extends Command {
 		this.state = state;
 		this.up = up;
 		this.oldStateIndex = state.getOutTransitions().indexOf(transition);
-		newStateIndex = oldStateIndex + (up ? -1 : 1); 
+		newStateIndex = oldStateIndex + (up ? -1 : 1);
 		oldECCTransitionIndex = transition.getECC().getECTransition().indexOf(transition);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return state.getOutTransitions().size() > 1 && ((up && oldStateIndex > 0) || 
-				(!up && oldStateIndex < (state.getOutTransitions().size() - 1)));
+		return state.getOutTransitions().size() > 1
+				&& ((up && oldStateIndex > 0) || (!up && oldStateIndex < (state.getOutTransitions().size() - 1)));
 	}
 
 	@Override
 	public void execute() {
-		//it is better to calculate these values here as then we have the checks in canExecute performed and know new index is valid
+		// it is better to calculate these values here as then we have the checks in
+		// canExecute performed and know new index is valid
 		ECTransition referenceTransition = state.getOutTransitions().get(newStateIndex);
-		newECCTransitionIndex = transition.getECC().getECTransition().indexOf(referenceTransition); 
+		newECCTransitionIndex = transition.getECC().getECTransition().indexOf(referenceTransition);
 		redo();
 	}
 
 	@Override
 	public void redo() {
-		//change order in state model
+		// change order in state model
 		state.getOutTransitions().move(newStateIndex, transition);
-		//change order in overall transition list
+		// change order in overall transition list
 		transition.getECC().getECTransition().move(newECCTransitionIndex, transition);
 	}
 

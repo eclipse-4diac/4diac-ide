@@ -25,39 +25,40 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.ApplicationItemProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
 
-/** a dedicated item provider that will ensure that in the system tree the application will have the content of the application
- * without the intermediate fbnetwork node shown.
+/**
+ * a dedicated item provider that will ensure that in the system tree the
+ * application will have the content of the application without the intermediate
+ * fbnetwork node shown.
  * 
  * @author alil
  *
  */
-public class ApplicationItemProviderForSystem extends
-		ApplicationItemProvider implements INotifyChangedListener {
-	
+public class ApplicationItemProviderForSystem extends ApplicationItemProvider implements INotifyChangedListener {
+
 	private FBNetworkItemProvider fbNetworkItemProvider = null;
 
 	public ApplicationItemProviderForSystem(AdapterFactory adapterFactory) {
 		super(adapterFactory);
-		fbNetworkItemProvider = new FBNetworkItemProvider(adapterFactory){
+		fbNetworkItemProvider = new FBNetworkItemProvider(adapterFactory) {
 
 			@Override
 			public void fireNotifyChanged(Notification notification) {
-				FBNetwork network = (FBNetwork)notification.getNotifier();
-				Notification wrappedNotification = ViewerNotification.wrapNotification(notification, network.eContainer()); 
+				FBNetwork network = (FBNetwork) notification.getNotifier();
+				Notification wrappedNotification = ViewerNotification.wrapNotification(notification,
+						network.eContainer());
 				super.fireNotifyChanged(wrappedNotification);
 			}
-			
+
 		};
 	}
 
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(
-			Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		return fbNetworkItemProvider.getChildrenFeatures(getFBNetwork(object));
 	}
 
 	@Override
-	public Collection<?> getChildren(Object object) {		
+	public Collection<?> getChildren(Object object) {
 		return fbNetworkItemProvider.getChildren(getFBNetwork(object));
 	}
 
@@ -67,12 +68,12 @@ public class ApplicationItemProviderForSystem extends
 	}
 
 	private FBNetwork getFBNetwork(Object object) {
-		FBNetwork fbNetwork = ((Application)object).getFBNetwork();
-		if(!fbNetwork.eAdapters().contains(fbNetworkItemProvider)){
-			//register to the fbnetwork changes so that the viewer is updated
+		FBNetwork fbNetwork = ((Application) object).getFBNetwork();
+		if (!fbNetwork.eAdapters().contains(fbNetworkItemProvider)) {
+			// register to the fbnetwork changes so that the viewer is updated
 			fbNetwork.eAdapters().add(fbNetworkItemProvider);
 		}
 		return fbNetwork;
 	}
-	
+
 }

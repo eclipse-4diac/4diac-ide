@@ -18,24 +18,24 @@ import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEd
 import org.eclipse.fordiac.ide.subapptypeeditor.editparts.SubAppTypeNetworkEditPartFactory;
 import org.eclipse.ui.IEditorInput;
 
-public class SubAppNetworkEditor extends CompositeNetworkEditor{
+public class SubAppNetworkEditor extends CompositeNetworkEditor {
 
 	@Override
 	protected void setModel(IEditorInput input) {
 		super.setModel(input);
 		setPartName("Subapplication Network");
 	}
-	
-	
+
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
 		return new SubAppTypeNetworkEditPartFactory(this, getZoomManger());
 	}
-	
+
 	@Override
 	protected String getPalletNavigatorID() {
-		// for subapp types we want to show the same as for applications. If we wouldn't provide this here
-		//we would get the palette of the composite FB type editor
+		// for subapp types we want to show the same as for applications. If we wouldn't
+		// provide this here
+		// we would get the palette of the composite FB type editor
 		return "org.eclipse.fordiac.ide.fbpaletteviewer"; //$NON-NLS-1$
 	}
 }

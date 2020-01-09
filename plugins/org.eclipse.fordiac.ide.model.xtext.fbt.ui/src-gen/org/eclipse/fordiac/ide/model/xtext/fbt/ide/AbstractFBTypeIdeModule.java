@@ -20,21 +20,23 @@ import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.Lexer;
 @SuppressWarnings("all")
 public abstract class AbstractFBTypeIdeModule extends DefaultIdeModule {
 
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public void configureContentAssistLexer(Binder binder) {
-		binder.bind(Lexer.class)
-			.annotatedWith(Names.named(LexerIdeBindings.CONTENT_ASSIST))
-			.to(InternalFBTypeLexer.class);
+		binder.bind(Lexer.class).annotatedWith(Names.named(LexerIdeBindings.CONTENT_ASSIST))
+				.to(InternalFBTypeLexer.class);
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends IContentAssistParser> bindIContentAssistParser() {
 		return FBTypeParser.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends IProposalConflictHelper> bindIProposalConflictHelper() {
 		return AntlrProposalConflictHelper.class;
 	}
-	
+
 }

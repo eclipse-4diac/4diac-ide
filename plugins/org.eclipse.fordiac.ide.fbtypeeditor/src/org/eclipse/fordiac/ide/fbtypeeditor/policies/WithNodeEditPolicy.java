@@ -23,27 +23,21 @@ import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.requests.ReconnectRequest;
 
-public class WithNodeEditPolicy extends GraphicalNodeEditPolicy implements
-		EditPolicy {
+public class WithNodeEditPolicy extends GraphicalNodeEditPolicy implements EditPolicy {
 
 	@Override
-	protected Command getConnectionCompleteCommand(
-			final CreateConnectionRequest request) {
+	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
 		if (request.getStartCommand() instanceof WithCreateCommand) {
-			WithCreateCommand command = (WithCreateCommand) request
-					.getStartCommand();
+			WithCreateCommand command = (WithCreateCommand) request.getStartCommand();
 			if (command.isForwardCreation()) {
 				if (((InterfaceEditPart) getHost()).isEvent()) {
 					command.setVarDeclaration(null);
 				} else {
-					command
-							.setVarDeclaration((VarDeclaration) ((InterfaceEditPart) getHost())
-									.getCastedModel());
+					command.setVarDeclaration((VarDeclaration) ((InterfaceEditPart) getHost()).getCastedModel());
 				}
 			} else {
 				if (((InterfaceEditPart) getHost()).isEvent()) {
-					command.setEvent((Event) ((InterfaceEditPart) getHost())
-							.getCastedModel());
+					command.setEvent((Event) ((InterfaceEditPart) getHost()).getCastedModel());
 				} else {
 					command.setEvent(null);
 				}
@@ -55,19 +49,15 @@ public class WithNodeEditPolicy extends GraphicalNodeEditPolicy implements
 	}
 
 	@Override
-	protected Command getConnectionCreateCommand(
-			final CreateConnectionRequest request) {
+	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {
 
 		WithCreateCommand cmd = new WithCreateCommand();
 		if (getHost() instanceof InterfaceEditPart) {
 			if (((InterfaceEditPart) getHost()).isEvent()) {
-				cmd.setEvent((Event) ((InterfaceEditPart) getHost())
-						.getCastedModel());
+				cmd.setEvent((Event) ((InterfaceEditPart) getHost()).getCastedModel());
 				cmd.setForwardCreation(true);
 			} else {
-				cmd
-						.setVarDeclaration((VarDeclaration) ((InterfaceEditPart) getHost())
-								.getCastedModel());
+				cmd.setVarDeclaration((VarDeclaration) ((InterfaceEditPart) getHost()).getCastedModel());
 				cmd.setForwardCreation(false);
 			}
 

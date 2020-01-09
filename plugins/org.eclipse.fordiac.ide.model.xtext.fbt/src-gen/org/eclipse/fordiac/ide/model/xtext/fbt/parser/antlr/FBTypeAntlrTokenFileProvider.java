@@ -11,6 +11,7 @@ public class FBTypeAntlrTokenFileProvider implements IAntlrTokenFileProvider {
 	@Override
 	public InputStream getAntlrTokenFile() {
 		ClassLoader classLoader = getClass().getClassLoader();
-		return classLoader.getResourceAsStream("org/eclipse/fordiac/ide/model/xtext/fbt/parser/antlr/internal/InternalFBTypeParser.tokens");
+		return classLoader.getResourceAsStream(
+				"org/eclipse/fordiac/ide/model/xtext/fbt/parser/antlr/internal/InternalFBTypeParser.tokens");
 	}
 }

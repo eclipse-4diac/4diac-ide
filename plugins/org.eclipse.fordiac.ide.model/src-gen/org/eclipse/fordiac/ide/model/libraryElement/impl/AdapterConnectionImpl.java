@@ -19,16 +19,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Adapter Connection</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Adapter
+ * Connection</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class AdapterConnectionImpl extends ConnectionImpl implements AdapterConnection {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected AdapterConnectionImpl() {
@@ -36,8 +35,8 @@ public class AdapterConnectionImpl extends ConnectionImpl implements AdapterConn
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -46,8 +45,8 @@ public class AdapterConnectionImpl extends ConnectionImpl implements AdapterConn
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -56,13 +55,13 @@ public class AdapterConnectionImpl extends ConnectionImpl implements AdapterConn
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public AdapterDeclaration getAdapterDestination() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAdapterDestination(this);
 	}
-	
-} //AdapterConnectionImpl
+
+} // AdapterConnectionImpl

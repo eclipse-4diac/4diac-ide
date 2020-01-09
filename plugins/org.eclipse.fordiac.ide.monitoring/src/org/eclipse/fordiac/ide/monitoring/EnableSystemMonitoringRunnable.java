@@ -28,19 +28,18 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 
 	private final SystemMonitoringData systemMonitoringData;
-	
+
 	public EnableSystemMonitoringRunnable(SystemMonitoringData systemMonitoringData) {
 		this.systemMonitoringData = systemMonitoringData;
 	}
 
 	@Override
-	public void run(IProgressMonitor monitor) throws InvocationTargetException,
-			InterruptedException {
-		
-		List<Device> devices = this.systemMonitoringData.getSystem().getSystemConfiguration().getDevices(); 
-		int count = devices.size() * 2 ;  // the * 2 is for creating the polling threads
+	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+		List<Device> devices = this.systemMonitoringData.getSystem().getSystemConfiguration().getDevices();
+		int count = devices.size() * 2; // the * 2 is for creating the polling threads
 		count += this.systemMonitoringData.getMonitoredElements().size();
-		
+
 		monitor.beginTask("Enable monitoring for system", count);
 		connectToDevices(devices, monitor);
 		addWatches(monitor);
@@ -51,10 +50,10 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 	private void connectToDevices(List<Device> devices, IProgressMonitor monitor) {
 		monitor.subTask("Connecting to the devices");
 		for (Device dev : devices) {
-			if(monitor.isCanceled()) { 
+			if (monitor.isCanceled()) {
 				break;
 			}
-			IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(dev); 
+			IDeviceManagementInteractor devMgmInteractor = getDevMgmInteractor(dev);
 			try {
 				devMgmInteractor.connect();
 			} catch (DeploymentException e) {
@@ -67,8 +66,8 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 
 	private void addWatches(IProgressMonitor monitor) {
 		monitor.subTask("Adding the watches");
-		for (MonitoringBaseElement element : systemMonitoringData.getMonitoredElements()){			
-			if(monitor.isCanceled()) {
+		for (MonitoringBaseElement element : systemMonitoringData.getMonitoredElements()) {
+			if (monitor.isCanceled()) {
 				break;
 			}
 			if (element instanceof MonitoringElement) {
@@ -76,31 +75,32 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 				systemMonitoringData.sendAddWatch(element);
 				monitor.worked(1);
 			}
-		}		
+		}
 	}
 
 	private void startPollingThreads(IProgressMonitor monitor) {
-		monitor.subTask("Enabling the polling threads");		
-		for (Entry<Device, DeviceMonitoringHandler> runner: systemMonitoringData.getDevMonitoringHandlers().entrySet()){
-			if(monitor.isCanceled()) {
+		monitor.subTask("Enabling the polling threads");
+		for (Entry<Device, DeviceMonitoringHandler> runner : systemMonitoringData.getDevMonitoringHandlers()
+				.entrySet()) {
+			if (monitor.isCanceled()) {
 				break;
 			}
 			runner.getValue().enable();
 			monitor.worked(1);
-		}		
+		}
 	}
-	
+
 	private IDeviceManagementInteractor getDevMgmInteractor(Device dev) {
 		return getOrCreateDevMonitoringHandler(dev).getDevMgmInteractor();
 	}
 
 	private DeviceMonitoringHandler getOrCreateDevMonitoringHandler(Device dev) {
 		DeviceMonitoringHandler retVal = systemMonitoringData.getDevMonitoringHandler(dev);
-		if(null == retVal) {
+		if (null == retVal) {
 			retVal = new DeviceMonitoringHandler(dev, systemMonitoringData);
 			systemMonitoringData.addDevMonitoringHandler(dev, retVal);
 		}
-		return retVal;		
+		return retVal;
 	}
 
 }

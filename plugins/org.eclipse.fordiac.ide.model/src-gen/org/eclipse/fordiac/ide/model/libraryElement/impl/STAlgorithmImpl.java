@@ -18,16 +18,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ST Algorithm</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>ST
+ * Algorithm</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class STAlgorithmImpl extends TextAlgorithmImpl implements STAlgorithm {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected STAlgorithmImpl() {
@@ -35,8 +34,8 @@ public class STAlgorithmImpl extends TextAlgorithmImpl implements STAlgorithm {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -44,4 +43,4 @@ public class STAlgorithmImpl extends TextAlgorithmImpl implements STAlgorithm {
 		return LibraryElementPackage.Literals.ST_ALGORITHM;
 	}
 
-} //STAlgorithmImpl
+} // STAlgorithmImpl

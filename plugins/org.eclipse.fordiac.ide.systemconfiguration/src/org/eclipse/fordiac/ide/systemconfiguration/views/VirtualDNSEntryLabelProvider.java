@@ -20,8 +20,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
-public class VirtualDNSEntryLabelProvider extends LabelProvider implements
-		ITableLabelProvider, ITableColorProvider {
+public class VirtualDNSEntryLabelProvider extends LabelProvider implements ITableLabelProvider, ITableColorProvider {
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {

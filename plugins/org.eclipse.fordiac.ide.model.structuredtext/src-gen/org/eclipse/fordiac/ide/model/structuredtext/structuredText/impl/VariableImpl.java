@@ -9,33 +9,29 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Variable</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Variable</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
-public class VariableImpl extends ExpressionImpl implements Variable
-{
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  protected VariableImpl()
-  {
-    super();
-  }
+public class VariableImpl extends ExpressionImpl implements Variable {
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected VariableImpl() {
+		super();
+	}
 
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  protected EClass eStaticClass()
-  {
-    return StructuredTextPackage.Literals.VARIABLE;
-  }
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	protected EClass eStaticClass() {
+		return StructuredTextPackage.Literals.VARIABLE;
+	}
 
-} //VariableImpl
+} // VariableImpl

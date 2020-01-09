@@ -34,7 +34,6 @@ public class CompositeInstanceViewerInput extends UntypedEditorInput {
 		this.fbEditPart = fbEditPart;
 	}
 
-	
 	@Override
 	public boolean exists() {
 		return false;

@@ -29,7 +29,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 
 public class SubAppNetworkEditor extends FBNetworkEditor {
-	private EContentAdapter adapter= new EContentAdapter() {
+	private EContentAdapter adapter = new EContentAdapter() {
 
 		@Override
 		public void notifyChanged(final Notification notification) {
@@ -37,10 +37,10 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 			int featureId = notification.getFeatureID(Application.class);
 
 			switch (type) {
-				case Notification.SET:
-					if (featureId == LibraryElementPackage.SUB_APP__NAME) {
-						updateEditorTitle(getSubApp().getName());
-					}
+			case Notification.SET:
+				if (featureId == LibraryElementPackage.SUB_APP__NAME) {
+					updateEditorTitle(getSubApp().getName());
+				}
 			}
 			firePropertyChange(PROP_DIRTY);
 		}
@@ -59,37 +59,35 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 	}
 
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(
-			final ScrollingGraphicalViewer viewer,
+	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
-		ContextMenuProvider cmp = new UIFBNetworkContextMenuProvider(this,
-				getActionRegistry(), zoomManager, getSystem().getPalette()) {
+		ContextMenuProvider cmp = new UIFBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager,
+				getSystem().getPalette()) {
 			@Override
-			protected IAction getMapAction(IEditorPart activeEditor,
-					Resource res) {
+			protected IAction getMapAction(IEditorPart activeEditor, Resource res) {
 				return null;
 			}
 		};
 		return cmp;
 	}
-	
+
 	@Override
 	protected void setModel(final IEditorInput input) {
 		if (input instanceof SubApplicationEditorInput) {
 			SubApplicationEditorInput subAppInput = (SubApplicationEditorInput) input;
-			setModel(subAppInput.getSubApp().getSubAppNetwork()); 
+			setModel(subAppInput.getSubApp().getSubAppNetwork());
 			// register EContentAdapter to be informed on changes of the subapplication name
 			getSubApp().eAdapters().add(adapter);
 		}
 		super.setModel(input);
 	}
-		
+
 	@Override
-	protected EditPartFactory getEditPartFactory() {		
+	protected EditPartFactory getEditPartFactory() {
 		return new UntypedSubAppEditPartFactory(this, getZoomManger());
 	}
-	
+
 	private SubApp getSubApp() {
-		return (SubApp)getModel().eContainer();
+		return (SubApp) getModel().eContainer();
 	}
 }

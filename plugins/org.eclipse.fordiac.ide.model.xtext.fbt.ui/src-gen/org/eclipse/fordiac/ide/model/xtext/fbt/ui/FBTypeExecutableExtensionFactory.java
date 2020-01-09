@@ -10,7 +10,7 @@ import org.osgi.framework.Bundle;
 
 /**
  * This class was generated. Customizations should only happen in a newly
- * introduced subclass. 
+ * introduced subclass.
  */
 public class FBTypeExecutableExtensionFactory extends AbstractGuiceAwareExecutableExtensionFactory {
 
@@ -18,10 +18,10 @@ public class FBTypeExecutableExtensionFactory extends AbstractGuiceAwareExecutab
 	protected Bundle getBundle() {
 		return FbtActivator.getInstance().getBundle();
 	}
-	
+
 	@Override
 	protected Injector getInjector() {
 		return FbtActivator.getInstance().getInjector(FbtActivator.ORG_ECLIPSE_FORDIAC_IDE_MODEL_XTEXT_FBT_FBTYPE);
 	}
-	
+
 }

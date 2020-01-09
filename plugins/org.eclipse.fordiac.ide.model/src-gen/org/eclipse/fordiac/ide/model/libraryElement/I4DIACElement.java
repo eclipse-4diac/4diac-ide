@@ -17,15 +17,15 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>I4DIAC Element</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>I4DIAC
+ * Element</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement#getAnnotations <em>Annotations</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement#getAnnotations
+ * <em>Annotations</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getI4DIACElement()
@@ -35,14 +35,16 @@ import org.eclipse.emf.ecore.EObject;
 public interface I4DIACElement extends EObject {
 
 	/**
-	 * Returns the value of the '<em><b>Annotations</b></em>' reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.Annotation}.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Annotations</b></em>' reference list. The
+	 * list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.Annotation}. <!--
+	 * begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Annotations</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Annotations</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getI4DIACElement_Annotations()
 	 * @model transient="true"
@@ -51,16 +53,16 @@ public interface I4DIACElement extends EObject {
 	EList<Annotation> getAnnotations();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model nameDataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */
 	Annotation createAnnotation(String name);
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model
 	 * @generated
 	 */

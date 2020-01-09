@@ -28,15 +28,14 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
-	
+
 	public ResourceDiagramEditPartFactory(final GraphicalEditor editor, ZoomManager zoomManager) {
 		super(editor, zoomManager);
 	}
 
 	@Override
-	protected EditPart getPartForElement(final EditPart context,
-			final Object modelElement) {
-		
+	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
+
 		if (modelElement instanceof FBNetwork) {
 			return new FBNetworkContainerEditPart();
 		}
@@ -44,13 +43,13 @@ public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 			return new ResFBEditPart(getZoomManager());
 		}
 		if (modelElement instanceof IInterfaceElement) {
-			IInterfaceElement element = (IInterfaceElement)modelElement;
-			if(element.getFBNetworkElement() instanceof SubApp && null == element.getFBNetworkElement().getType()){
-				return  new UntypedSubAppInterfaceElementEditPartForResource();
+			IInterfaceElement element = (IInterfaceElement) modelElement;
+			if (element.getFBNetworkElement() instanceof SubApp && null == element.getFBNetworkElement().getType()) {
+				return new UntypedSubAppInterfaceElementEditPartForResource();
 			}
 			return new InterfaceEditPartForResourceFBs();
 		}
-		if (modelElement instanceof VirtualIO) {	
+		if (modelElement instanceof VirtualIO) {
 			return new VirtualInOutputEditPart();
 		}
 		return super.getPartForElement(context, modelElement);

@@ -14,13 +14,13 @@
 package org.eclipse.fordiac.ide.util;
 
 /**
- * The listener interface for receiving ISelectedElementsChanged events.
- * The class that is interested in processing a ISelectedElementsChanged
- * event implements this interface, and the object created
- * with that class is registered with a component using the
- * component's <code>addISelectedElementsChangedListener<code> method. When
- * the ISelectedElementsChanged event occurs, that object's appropriate
- * method is invoked.
+ * The listener interface for receiving ISelectedElementsChanged events. The
+ * class that is interested in processing a ISelectedElementsChanged event
+ * implements this interface, and the object created with that class is
+ * registered with a component using the component's
+ * <code>addISelectedElementsChangedListener<code> method. When the
+ * ISelectedElementsChanged event occurs, that object's appropriate method is
+ * invoked.
  * 
  * @see ISelectedElementsChangedEvent
  */

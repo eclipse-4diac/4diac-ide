@@ -16,9 +16,8 @@ package org.eclipse.fordiac.ide.model.data;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Type</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDataType()

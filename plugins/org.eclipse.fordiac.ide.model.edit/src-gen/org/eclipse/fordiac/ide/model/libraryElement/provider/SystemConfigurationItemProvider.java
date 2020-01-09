@@ -15,7 +15,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -30,17 +29,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration}
+ * object. <!-- begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
-public class SystemConfigurationItemProvider
-	extends I4DIACElementItemProvider {
+public class SystemConfigurationItemProvider extends I4DIACElementItemProvider {
 	/**
-	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public SystemConfigurationItemProvider(AdapterFactory adapterFactory) {
@@ -48,9 +47,9 @@ public class SystemConfigurationItemProvider
 	}
 
 	/**
-	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -63,11 +62,12 @@ public class SystemConfigurationItemProvider
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an
+	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
+	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -81,22 +81,23 @@ public class SystemConfigurationItemProvider
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
+		// Check the type of the specified child object and return the proper feature to
+		// use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
 	/**
-	 * This returns SystemConfiguration.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns SystemConfiguration.gif. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated not
 	 */
 	@Override
@@ -105,9 +106,9 @@ public class SystemConfigurationItemProvider
 	}
 
 	/**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -116,10 +117,10 @@ public class SystemConfigurationItemProvider
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -127,42 +128,36 @@ public class SystemConfigurationItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SystemConfiguration.class)) {
-			case LibraryElementPackage.SYSTEM_CONFIGURATION__LINKS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			case LibraryElementPackage.SYSTEM_CONFIGURATION__DEVICES:
-			case LibraryElementPackage.SYSTEM_CONFIGURATION__SEGMENTS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-				return;
+		case LibraryElementPackage.SYSTEM_CONFIGURATION__LINKS:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+			return;
+		case LibraryElementPackage.SYSTEM_CONFIGURATION__DEVICES:
+		case LibraryElementPackage.SYSTEM_CONFIGURATION__SEGMENTS:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+			return;
 		}
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.SYSTEM_CONFIGURATION__DEVICES,
-				 LibraryElementFactory.eINSTANCE.createDevice()));
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.SYSTEM_CONFIGURATION__DEVICES,
+				LibraryElementFactory.eINSTANCE.createDevice()));
 
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.SYSTEM_CONFIGURATION__SEGMENTS,
-				 LibraryElementFactory.eINSTANCE.createSegment()));
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.SYSTEM_CONFIGURATION__SEGMENTS,
+				LibraryElementFactory.eINSTANCE.createSegment()));
 
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.SYSTEM_CONFIGURATION__LINKS,
-				 LibraryElementFactory.eINSTANCE.createLink()));
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.SYSTEM_CONFIGURATION__LINKS,
+				LibraryElementFactory.eINSTANCE.createLink()));
 	}
 
 }

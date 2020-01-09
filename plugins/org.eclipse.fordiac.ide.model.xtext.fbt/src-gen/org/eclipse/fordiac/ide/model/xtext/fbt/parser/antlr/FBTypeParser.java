@@ -18,14 +18,13 @@ public class FBTypeParser extends AbstractAntlrParser {
 	protected void setInitialHiddenTokens(XtextTokenStream tokenStream) {
 		tokenStream.setInitialHiddenTokens("RULE_WS", "RULE_ML_COMMENT", "RULE_SL_COMMENT");
 	}
-	
 
 	@Override
 	protected InternalFBTypeParser createParser(XtextTokenStream stream) {
 		return new InternalFBTypeParser(stream, getGrammarAccess());
 	}
 
-	@Override 
+	@Override
 	protected String getDefaultRuleName() {
 		return "LibraryElement";
 	}

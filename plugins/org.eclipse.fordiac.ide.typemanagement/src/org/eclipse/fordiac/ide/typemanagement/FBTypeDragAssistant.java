@@ -35,8 +35,7 @@ public class FBTypeDragAssistant extends CommonDragAdapterAssistant {
 	public void dragStart(DragSourceEvent anEvent, IStructuredSelection aSelection) {
 		if (aSelection.getFirstElement() instanceof IFile) {
 			IFile fbTypeFile = (IFile) aSelection.getFirstElement();
-			Palette fbPalette = FBTypeUtils
-					.getPalletteForFBTypeFile(fbTypeFile);
+			Palette fbPalette = FBTypeUtils.getPalletteForFBTypeFile(fbTypeFile);
 			if (fbPalette != null) {
 				PaletteEntry entry = TypeLibrary.getPaletteEntry(fbPalette, fbTypeFile);
 				if (entry != null) {

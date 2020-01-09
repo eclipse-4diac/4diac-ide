@@ -30,32 +30,28 @@ public interface ICompareEditorOpener {
 	/**
 	 * Sets the original file.
 	 * 
-	 * @param original
-	 *          the new original file
+	 * @param original the new original file
 	 */
 	void setOriginalFile(File original);
 
 	/**
 	 * Sets the new file.
 	 * 
-	 * @param newFile
-	 *          the new new file
+	 * @param newFile the new new file
 	 */
 	void setNewFile(File newFile);
 
 	/**
 	 * Sets the name.
 	 * 
-	 * @param name
-	 *          the new name
+	 * @param name the new name
 	 */
 	void setName(String name);
 
 	/**
 	 * Sets the title.
 	 * 
-	 * @param title
-	 *          the new title
+	 * @param title the new title
 	 */
 	void setTitle(String title);
 

@@ -18,40 +18,40 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public class DeleteSubAppInterfaceElementCommand extends DeleteInterfaceCommand {
-	
+
 	private DeleteInterfaceCommand opposite = null;
 
 	public DeleteSubAppInterfaceElementCommand(IInterfaceElement interfaceElement) {
 		super(interfaceElement);
-		if(interfaceElement.getFBNetworkElement().isMapped()) {
+		if (interfaceElement.getFBNetworkElement().isMapped()) {
 			FBNetworkElement fbE = interfaceElement.getFBNetworkElement().getOpposite();
 			IInterfaceElement element = fbE.getInterfaceElement(interfaceElement.getName());
-			if(null != element) {
+			if (null != element) {
 				opposite = new DeleteInterfaceCommand(element);
 			}
 		}
 	}
-	
+
 	@Override
 	public void execute() {
 		super.execute();
-		if(null != opposite) {
+		if (null != opposite) {
 			opposite.execute();
 		}
 	}
-	
+
 	@Override
 	public void undo() {
 		super.undo();
-		if(null != opposite) {
+		if (null != opposite) {
 			opposite.undo();
 		}
 	}
-	
+
 	@Override
 	public void redo() {
 		super.redo();
-		if(null != opposite) {
+		if (null != opposite) {
 			opposite.redo();
 		}
 	}

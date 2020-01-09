@@ -18,10 +18,10 @@ import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 
 public class CreateFBTypePaletteEntry implements IPaletteEntryCreator, TypeLibraryTags {
-	
+
 	@Override
 	public boolean canHandle(IFile file) {
-		 return (FB_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
+		return (FB_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
 	}
 
 	@Override

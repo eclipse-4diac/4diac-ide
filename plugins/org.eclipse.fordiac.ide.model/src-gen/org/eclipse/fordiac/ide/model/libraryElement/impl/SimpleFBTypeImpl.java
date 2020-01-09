@@ -31,15 +31,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl#getAlgorithm <em>Algorithm</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl#getAlgorithm
+ * <em>Algorithm</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	/**
-	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getAlgorithm()
 	 * @generated
 	 * @ordered
@@ -48,6 +50,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SimpleFBTypeImpl() {
@@ -56,6 +59,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -65,6 +69,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -74,20 +79,26 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetAlgorithm(Algorithm newAlgorithm, NotificationChain msgs) {
 		Algorithm oldAlgorithm = algorithm;
 		algorithm = newAlgorithm;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM, oldAlgorithm, newAlgorithm);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM, oldAlgorithm, newAlgorithm);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -95,79 +106,87 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 		if (newAlgorithm != algorithm) {
 			NotificationChain msgs = null;
 			if (algorithm != null)
-				msgs = ((InternalEObject)algorithm).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM, null, msgs);
+				msgs = ((InternalEObject) algorithm).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM, null, msgs);
 			if (newAlgorithm != null)
-				msgs = ((InternalEObject)newAlgorithm).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM, null, msgs);
+				msgs = ((InternalEObject) newAlgorithm).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM, null, msgs);
 			msgs = basicSetAlgorithm(newAlgorithm, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM, newAlgorithm, newAlgorithm));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM,
+					newAlgorithm, newAlgorithm));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
-				return basicSetAlgorithm(null, msgs);
+		case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
+			return basicSetAlgorithm(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
-				return getAlgorithm();
+		case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
+			return getAlgorithm();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
-				setAlgorithm((Algorithm)newValue);
-				return;
+		case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
+			setAlgorithm((Algorithm) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
-				setAlgorithm((Algorithm)null);
-				return;
+		case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
+			setAlgorithm((Algorithm) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
-				return algorithm != null;
+		case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
+			return algorithm != null;
 		}
 		return super.eIsSet(featureID);
 	}

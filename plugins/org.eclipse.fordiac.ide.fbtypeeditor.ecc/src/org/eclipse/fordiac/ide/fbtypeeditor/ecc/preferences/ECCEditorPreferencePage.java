@@ -25,8 +25,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  * elements of the ECC Editor.
  */
 
-public class ECCEditorPreferencePage extends FieldEditorPreferencePage
-		implements IWorkbenchPreferencePage {
+public class ECCEditorPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public ECCEditorPreferencePage() {
 		super(GRID);
@@ -35,45 +34,32 @@ public class ECCEditorPreferencePage extends FieldEditorPreferencePage
 	}
 
 	/**
-	 * Creates the field editors. Field editors are abstractions of the common
-	 * GUI blocks needed to manipulate various types of preferences. Each field
-	 * editor knows how to save and restore itself.
+	 * Creates the field editors. Field editors are abstractions of the common GUI
+	 * blocks needed to manipulate various types of preferences. Each field editor
+	 * knows how to save and restore itself.
 	 */
 	@Override
 	public void createFieldEditors() {
 		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_STATE_COLOR,
-				Messages.FordiacECCPreferencePage_LABEL_ECCStateColor,
-				getFieldEditorParent()));
-		addField(new ColorFieldEditor(
-				PreferenceConstants.P_ECC_STATE_BORDER_COLOR,
-				Messages.FordiacECCPreferencePage_LABEL_ECCStateBorderColor,
-				getFieldEditorParent()));
-		addField(new ColorFieldEditor(
-				PreferenceConstants.P_ECC_ALGORITHM_COLOR,
-				Messages.FordiacECCPreferencePage_LABEL_ECCAlgorithmColor,
-				getFieldEditorParent()));
-		addField(new ColorFieldEditor(
-				PreferenceConstants.P_ECC_ALGORITHM_BORDER_COLOR,
-				Messages.FordiacECCPreferencePage_LABEL_ECCAlgorithmBorderColor,
-				getFieldEditorParent()));
+				Messages.FordiacECCPreferencePage_LABEL_ECCStateColor, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR,
+				Messages.FordiacECCPreferencePage_LABEL_ECCStateBorderColor, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_ALGORITHM_COLOR,
+				Messages.FordiacECCPreferencePage_LABEL_ECCAlgorithmColor, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_ALGORITHM_BORDER_COLOR,
+				Messages.FordiacECCPreferencePage_LABEL_ECCAlgorithmBorderColor, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_EVENT_COLOR,
-				Messages.FordiacECCPreferencePage_LABEL_ECCEventColor,
-				getFieldEditorParent()));
-		addField(new ColorFieldEditor(
-				PreferenceConstants.P_ECC_EVENT_BORDER_COLOR,
-				Messages.FordiacECCPreferencePage_LABEL_ECCEventBorderColor,
-				getFieldEditorParent()));
-		addField(new ColorFieldEditor(
-				PreferenceConstants.P_ECC_TRANSITION_COLOR,
-				Messages.FordiacECCPreferencePage_LABEL_ECCTransitionColor,
-				getFieldEditorParent()));
+				Messages.FordiacECCPreferencePage_LABEL_ECCEventColor, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_EVENT_BORDER_COLOR,
+				Messages.FordiacECCPreferencePage_LABEL_ECCEventBorderColor, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_TRANSITION_COLOR,
+				Messages.FordiacECCPreferencePage_LABEL_ECCTransitionColor, getFieldEditorParent()));
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	@Override
 	public void init(IWorkbench workbench) {

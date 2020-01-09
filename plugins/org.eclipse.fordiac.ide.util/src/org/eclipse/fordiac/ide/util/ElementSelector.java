@@ -37,9 +37,9 @@ public class ElementSelector {
 		if (viewer != null) {
 			viewer.setSelection(new StructuredSelection(getSelectableEditParts(viewer, viewObjects)));
 		}
-		
+
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private List getSelectableEditParts(GraphicalViewer viewer, Collection viewObjects) {
 		List selectableChildren = new ArrayList();
@@ -57,7 +57,7 @@ public class ElementSelector {
 				}
 			}
 		}
-		
+
 		return selectableChildren;
 	}
 }

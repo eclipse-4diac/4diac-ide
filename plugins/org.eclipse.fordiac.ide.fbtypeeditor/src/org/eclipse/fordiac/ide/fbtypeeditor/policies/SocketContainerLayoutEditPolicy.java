@@ -32,7 +32,7 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class SocketContainerLayoutEditPolicy extends AbstractInterfaceContainerLayoutEditPolicy {
-	
+
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
 		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
@@ -40,7 +40,7 @@ public class SocketContainerLayoutEditPolicy extends AbstractInterfaceContainerL
 		if (cornerDim > 1) {
 			cornerDim = cornerDim / 2;
 		}
-		return new AbstractInterfaceSelectionEditPolicy(cornerDim, new Insets(1)){
+		return new AbstractInterfaceSelectionEditPolicy(cornerDim, new Insets(1)) {
 
 			@Override
 			protected List<? extends IInterfaceElement> getInterfaceElementList() {
@@ -50,13 +50,12 @@ public class SocketContainerLayoutEditPolicy extends AbstractInterfaceContainerL
 			@Override
 			protected Command getIECreateCommand(DataType type, int ref) {
 				return new CreateInterfaceElementCommand(type, getFBType().getInterfaceList(), true, ref);
-			}		
+			}
 		};
 	}
 
 	@Override
-	protected Command createMoveChildCommand(final EditPart child,
-			final EditPart after) {
+	protected Command createMoveChildCommand(final EditPart child, final EditPart after) {
 
 		if (child instanceof AdapterInterfaceEditPart) {
 			AdapterInterfaceEditPart childEP = (AdapterInterfaceEditPart) child;
@@ -72,7 +71,8 @@ public class SocketContainerLayoutEditPolicy extends AbstractInterfaceContainerL
 				} else {
 					newIndex = getHost().getChildren().indexOf(after);
 				}
-				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(), ((IInterfaceElement)childEP.getModel()).isIsInput(), newIndex);
+				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(),
+						((IInterfaceElement) childEP.getModel()).isIsInput(), newIndex);
 			}
 
 		}
@@ -83,9 +83,9 @@ public class SocketContainerLayoutEditPolicy extends AbstractInterfaceContainerL
 	protected Command getCreateCommand(final CreateRequest request) {
 		Object childClass = request.getNewObjectType();
 		FBType type = getFBType();
-		if (childClass instanceof AdapterType && type != null) {		
+		if (childClass instanceof AdapterType && type != null) {
 			int index = -1;
-			EditPart ref = getInsertionReference(request);		
+			EditPart ref = getInsertionReference(request);
 			if (ref != null) {
 				index = type.getInterfaceList().getSockets().indexOf(ref.getModel());
 			}

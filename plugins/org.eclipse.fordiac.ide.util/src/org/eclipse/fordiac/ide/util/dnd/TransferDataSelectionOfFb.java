@@ -30,11 +30,11 @@ public class TransferDataSelectionOfFb {
 	public String getFbTypeName() {
 		return fbTypeName;
 	}
-	
+
 	public void setFbTypeName(String fbTypeName) {
 		this.fbTypeName = fbTypeName;
 	}
-	
+
 	public FBTypePaletteEntry getTypePaletteEntry() {
 		return typePaletteEntry;
 	}
@@ -42,8 +42,6 @@ public class TransferDataSelectionOfFb {
 	public void setTypePaletteEntry(FBTypePaletteEntry typePaletteEntry) {
 		this.typePaletteEntry = typePaletteEntry;
 	}
-	
-	
 
 	public String getSelectionLabel() {
 		return selectionLabel;
@@ -69,7 +67,7 @@ public class TransferDataSelectionOfFb {
 		this.fbParameters = fbParameters;
 	}
 
-	public TransferDataSelectionOfFb(){
+	public TransferDataSelectionOfFb() {
 		typePaletteEntry = null;
 		selectionLabel = null;
 		selectionImage = null;

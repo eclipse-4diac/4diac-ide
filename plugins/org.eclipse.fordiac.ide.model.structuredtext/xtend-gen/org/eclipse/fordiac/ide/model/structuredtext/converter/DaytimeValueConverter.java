@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.converter.DateValueConverter
 
 @SuppressWarnings("all")
 public class DaytimeValueConverter extends DateValueConverter {
-  public DaytimeValueConverter() {
-    super(new SimpleDateFormat("HH:mm:ss"));
-  }
+	public DaytimeValueConverter() {
+		super(new SimpleDateFormat("HH:mm:ss"));
+	}
 }

@@ -38,7 +38,9 @@ public class DeleteTransactionCommand extends Command {
 		this.transactionElement = transactionElement;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -51,7 +53,9 @@ public class DeleteTransactionCommand extends Command {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -59,7 +63,9 @@ public class DeleteTransactionCommand extends Command {
 		parent.getServiceTransaction().add(index, transactionElement);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override

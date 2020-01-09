@@ -24,42 +24,36 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
+public class AlgorithmsItemProvider extends TransientBasicFBTypeListItemProvider {
 
-public class AlgorithmsItemProvider  extends TransientBasicFBTypeListItemProvider{
-	
-	public AlgorithmsItemProvider(AdapterFactory adapterFactory,
-			BasicFBType basicFBType) {
+	public AlgorithmsItemProvider(AdapterFactory adapterFactory, BasicFBType basicFBType) {
 		super(adapterFactory, basicFBType);
 	}
-	
+
 	@Override
-    public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object){
-      if (childrenFeatures == null)
-      {
-        super.getChildrenFeatures(object);
-        childrenFeatures.add(LibraryElementPackage.Literals.BASIC_FB_TYPE__ALGORITHM);
-      }
-      return childrenFeatures;
-    }
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(LibraryElementPackage.Literals.BASIC_FB_TYPE__ALGORITHM);
+		}
+		return childrenFeatures;
+	}
 
-    @Override
-    public String getText(Object object){
-      return "Algorithms";
-    }
-    
-    @Override
-    public Object getImage(Object object) {
-      return overlayImage(object, FordiacImage.ICON_ALGORITHM.getImage());      
-    }
+	@Override
+	public String getText(Object object) {
+		return "Algorithms";
+	}
 
-    @Override
-    protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
-    {
-      super.collectNewChildDescriptors(newChildDescriptors, object);
-      newChildDescriptors.add
-		(createChildParameter
-			(LibraryElementPackage.Literals.BASIC_FB_TYPE__ALGORITHM,
-			 LibraryElementFactory.eINSTANCE.createSTAlgorithm()));
-    }
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, FordiacImage.ICON_ALGORITHM.getImage());
+	}
+
+	@Override
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+		super.collectNewChildDescriptors(newChildDescriptors, object);
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASIC_FB_TYPE__ALGORITHM,
+				LibraryElementFactory.eINSTANCE.createSTAlgorithm()));
+	}
 
 }

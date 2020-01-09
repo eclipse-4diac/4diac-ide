@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 
-
 /**
  * Class used to initialize default preference values.
  */
@@ -40,7 +39,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		PreferenceConverter.setDefault(store, PreferenceConstants.P_WATCH_COLOR, ColorConstants.yellow.getRGB());
 
 		store.setDefault(PreferenceConstants.P_POLLING_INTERVAL, PreferenceConstants.P_POLLING_INTERVAL_DEVAULT_VALUE);
-		store.setDefault(PreferenceConstants.P_MONITORING_TRANSPARENCY, PreferenceConstants.P_MONITORING_TRANSPARENCY_VALUE);
+		store.setDefault(PreferenceConstants.P_MONITORING_TRANSPARENCY,
+				PreferenceConstants.P_MONITORING_TRANSPARENCY_VALUE);
 	}
 
 }

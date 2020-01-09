@@ -23,14 +23,13 @@ import org.eclipse.swt.graphics.Image;
 /**
  * The Class AlgorithmsLabelProvider.
  */
-public class AlgorithmsLabelProvider extends LabelProvider implements
-		ITableLabelProvider {
+public class AlgorithmsLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object,
-	 *      int)
+	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.
+	 * Object, int)
 	 */
 	@Override
 	public Image getColumnImage(final Object element, final int columnIndex) {
@@ -40,8 +39,9 @@ public class AlgorithmsLabelProvider extends LabelProvider implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object,
-	 *      int)
+	 * @see
+	 * org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object,
+	 * int)
 	 */
 	@Override
 	public String getColumnText(final Object element, final int columnIndex) {

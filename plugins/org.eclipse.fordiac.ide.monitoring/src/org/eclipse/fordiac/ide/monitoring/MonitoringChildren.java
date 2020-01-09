@@ -25,9 +25,7 @@ import org.eclipse.fordiac.ide.gef.editparts.IChildrenProvider;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 
-
-public class MonitoringChildren implements IMonitoringListener,
-		IChildrenProvider {
+public class MonitoringChildren implements IMonitoringListener, IChildrenProvider {
 
 	public MonitoringChildren() {
 		MonitoringManager.getInstance().registerMonitoringListener(this);
@@ -36,21 +34,22 @@ public class MonitoringChildren implements IMonitoringListener,
 	@Override
 	public List<IEditPartCreator> getChildren(FBNetwork fbNetwork) {
 		List<IEditPartCreator> arrayList = new ArrayList<>();
-		
-		//TODO - model refactoring fetch only the list of monitored elements of the same system
-		for (MonitoringBaseElement element : MonitoringManager.getInstance().getElementsToMonitor()) {			
-			if(null != element){
-				if(fbNetwork.getNetworkElements().contains(element.getPort().getFb())){
+
+		// TODO - model refactoring fetch only the list of monitored elements of the
+		// same system
+		for (MonitoringBaseElement element : MonitoringManager.getInstance().getElementsToMonitor()) {
+			if (null != element) {
+				if (fbNetwork.getNetworkElements().contains(element.getPort().getFb())) {
 					arrayList.add(element);
-				}
-				else if(null != element.getPort().getFb().getResource() && (!element.getPort().getFb().isResourceFB())){
-					//check if we are in the resource diagram editor for a mapped FB	
-					 if(element.getPort().getFb().getResource().getFBNetwork().equals(fbNetwork)){
+				} else if (null != element.getPort().getFb().getResource()
+						&& (!element.getPort().getFb().isResourceFB())) {
+					// check if we are in the resource diagram editor for a mapped FB
+					if (element.getPort().getFb().getResource().getFBNetwork().equals(fbNetwork)) {
 						arrayList.add(element);
-					 }
+					}
 				}
 			}
-			
+
 		}
 		return arrayList;
 	}
@@ -59,7 +58,6 @@ public class MonitoringChildren implements IMonitoringListener,
 	public boolean isEnabled() {
 		return true;
 	}
-
 
 	@Override
 	public void notifyAddPort(PortElement port) {

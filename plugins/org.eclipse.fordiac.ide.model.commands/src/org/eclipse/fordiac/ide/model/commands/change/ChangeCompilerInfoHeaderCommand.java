@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
  * The Class ChangeCompilerInfoHeader.
  */
 public class ChangeCompilerInfoHeaderCommand extends ChangeCompilerInfoCommand {
-	
+
 	/** The new ApplicationDomain value. */
 	private String newHeader;
 

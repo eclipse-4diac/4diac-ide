@@ -17,23 +17,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.ui.IElementFactory;
 import org.eclipse.ui.IMemento;
 
-public abstract class AbstractUntypedEditorInputFactory implements
-		IElementFactory {
-	
-   /**
-     * Tag for the automation system name.
-     */
-    private static final String TAG_AUTOMATION_SYSTEM = "SYSTEM"; //$NON-NLS-1$
-    
-    
-    protected static void saveAutomationSystem(IMemento memento, AutomationSystem system){
-    	if(null != system){
-    		memento.putString(TAG_AUTOMATION_SYSTEM, system.getName());
-    	}
-    }
-    
-    protected static String loadAutomationSystemName(IMemento memento){
-    	return memento.getString(TAG_AUTOMATION_SYSTEM);
-    }
+public abstract class AbstractUntypedEditorInputFactory implements IElementFactory {
+
+	/**
+	 * Tag for the automation system name.
+	 */
+	private static final String TAG_AUTOMATION_SYSTEM = "SYSTEM"; //$NON-NLS-1$
+
+	protected static void saveAutomationSystem(IMemento memento, AutomationSystem system) {
+		if (null != system) {
+			memento.putString(TAG_AUTOMATION_SYSTEM, system.getName());
+		}
+	}
+
+	protected static String loadAutomationSystemName(IMemento memento) {
+		return memento.getString(TAG_AUTOMATION_SYSTEM);
+	}
 
 }

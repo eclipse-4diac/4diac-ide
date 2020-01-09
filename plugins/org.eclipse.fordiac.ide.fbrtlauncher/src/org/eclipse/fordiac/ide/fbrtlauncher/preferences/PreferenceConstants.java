@@ -22,9 +22,9 @@ public final class PreferenceConstants {
 	public static final String P_PATH = "pathPreference"; //$NON-NLS-1$
 	/** The Constant P_LIB. */
 	public static final String P_LIB = "libPreference"; //$NON-NLS-1$
-	
+
 	private PreferenceConstants() {
 		throw new UnsupportedOperationException("PreferenceConstants utility class should not be instantiated!"); //$NON-NLS-1$
 	}
-	
+
 }

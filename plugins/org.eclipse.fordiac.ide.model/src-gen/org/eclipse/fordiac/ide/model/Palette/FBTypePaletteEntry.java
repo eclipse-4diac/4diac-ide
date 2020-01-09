@@ -17,9 +17,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>FB Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>FB Type
+ * Palette Entry</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getFBTypePaletteEntry()
@@ -29,20 +28,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 public interface FBTypePaletteEntry extends PaletteEntry {
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
 	FBType getFBType();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model
 	 * @generated
 	 */
 	@Override
 	void setType(LibraryElement type);
-	
+
 } // FBTypePaletteEntry

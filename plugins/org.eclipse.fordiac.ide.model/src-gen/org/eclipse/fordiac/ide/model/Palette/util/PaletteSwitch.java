@@ -28,31 +28,28 @@ import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 
 /**
- * <!-- begin-user-doc -->
- * The <b>Switch</b> for the model's inheritance hierarchy.
- * It supports the call {@link #doSwitch(EObject) doSwitch(object)}
+ * <!-- begin-user-doc --> The <b>Switch</b> for the model's inheritance
+ * hierarchy. It supports the call {@link #doSwitch(EObject) doSwitch(object)}
  * to invoke the <code>caseXXX</code> method for each class of the model,
- * starting with the actual class of the object
- * and proceeding up the inheritance hierarchy
- * until a non-null result is returned,
- * which is the result of the switch.
- * <!-- end-user-doc -->
+ * starting with the actual class of the object and proceeding up the
+ * inheritance hierarchy until a non-null result is returned, which is the
+ * result of the switch. <!-- end-user-doc -->
+ * 
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage
  * @generated
  */
 public class PaletteSwitch<T> extends Switch<T> {
 	/**
-	 * The cached model package
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached model package <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected static PalettePackage modelPackage;
 
 	/**
-	 * Creates an instance of the switch.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the switch. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	public PaletteSwitch() {
@@ -62,9 +59,9 @@ public class PaletteSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Checks whether this is a switch for the given package.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Checks whether this is a switch for the given package. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
 	 * @param ePackage the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
@@ -75,87 +72,104 @@ public class PaletteSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Calls <code>caseXXX</code> for each class of the model until one returns a
+	 * non null result; it yields that result. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated
 	 */
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case PalettePackage.PALETTE: {
-				Palette palette = (Palette)theEObject;
-				T result = casePalette(palette);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PalettePackage.PALETTE_GROUP: {
-				PaletteGroup paletteGroup = (PaletteGroup)theEObject;
-				T result = casePaletteGroup(paletteGroup);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PalettePackage.FB_TYPE_PALETTE_ENTRY: {
-				FBTypePaletteEntry fbTypePaletteEntry = (FBTypePaletteEntry)theEObject;
-				T result = caseFBTypePaletteEntry(fbTypePaletteEntry);
-				if (result == null) result = casePaletteEntry(fbTypePaletteEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PalettePackage.PALETTE_ENTRY: {
-				PaletteEntry paletteEntry = (PaletteEntry)theEObject;
-				T result = casePaletteEntry(paletteEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PalettePackage.DEVICE_TYPE_PALETTE_ENTRY: {
-				DeviceTypePaletteEntry deviceTypePaletteEntry = (DeviceTypePaletteEntry)theEObject;
-				T result = caseDeviceTypePaletteEntry(deviceTypePaletteEntry);
-				if (result == null) result = casePaletteEntry(deviceTypePaletteEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PalettePackage.RESOURCE_TYPE_ENTRY: {
-				ResourceTypeEntry resourceTypeEntry = (ResourceTypeEntry)theEObject;
-				T result = caseResourceTypeEntry(resourceTypeEntry);
-				if (result == null) result = casePaletteEntry(resourceTypeEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PalettePackage.SEGMENT_TYPE_PALETTE_ENTRY: {
-				SegmentTypePaletteEntry segmentTypePaletteEntry = (SegmentTypePaletteEntry)theEObject;
-				T result = caseSegmentTypePaletteEntry(segmentTypePaletteEntry);
-				if (result == null) result = casePaletteEntry(segmentTypePaletteEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PalettePackage.ADAPTER_TYPE_PALETTE_ENTRY: {
-				AdapterTypePaletteEntry adapterTypePaletteEntry = (AdapterTypePaletteEntry)theEObject;
-				T result = caseAdapterTypePaletteEntry(adapterTypePaletteEntry);
-				if (result == null) result = casePaletteEntry(adapterTypePaletteEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PalettePackage.SUB_APPLICATION_TYPE_PALETTE_ENTRY: {
-				SubApplicationTypePaletteEntry subApplicationTypePaletteEntry = (SubApplicationTypePaletteEntry)theEObject;
-				T result = caseSubApplicationTypePaletteEntry(subApplicationTypePaletteEntry);
-				if (result == null) result = casePaletteEntry(subApplicationTypePaletteEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			default: return defaultCase(theEObject);
+		case PalettePackage.PALETTE: {
+			Palette palette = (Palette) theEObject;
+			T result = casePalette(palette);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.PALETTE_GROUP: {
+			PaletteGroup paletteGroup = (PaletteGroup) theEObject;
+			T result = casePaletteGroup(paletteGroup);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.FB_TYPE_PALETTE_ENTRY: {
+			FBTypePaletteEntry fbTypePaletteEntry = (FBTypePaletteEntry) theEObject;
+			T result = caseFBTypePaletteEntry(fbTypePaletteEntry);
+			if (result == null)
+				result = casePaletteEntry(fbTypePaletteEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.PALETTE_ENTRY: {
+			PaletteEntry paletteEntry = (PaletteEntry) theEObject;
+			T result = casePaletteEntry(paletteEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.DEVICE_TYPE_PALETTE_ENTRY: {
+			DeviceTypePaletteEntry deviceTypePaletteEntry = (DeviceTypePaletteEntry) theEObject;
+			T result = caseDeviceTypePaletteEntry(deviceTypePaletteEntry);
+			if (result == null)
+				result = casePaletteEntry(deviceTypePaletteEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.RESOURCE_TYPE_ENTRY: {
+			ResourceTypeEntry resourceTypeEntry = (ResourceTypeEntry) theEObject;
+			T result = caseResourceTypeEntry(resourceTypeEntry);
+			if (result == null)
+				result = casePaletteEntry(resourceTypeEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.SEGMENT_TYPE_PALETTE_ENTRY: {
+			SegmentTypePaletteEntry segmentTypePaletteEntry = (SegmentTypePaletteEntry) theEObject;
+			T result = caseSegmentTypePaletteEntry(segmentTypePaletteEntry);
+			if (result == null)
+				result = casePaletteEntry(segmentTypePaletteEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.ADAPTER_TYPE_PALETTE_ENTRY: {
+			AdapterTypePaletteEntry adapterTypePaletteEntry = (AdapterTypePaletteEntry) theEObject;
+			T result = caseAdapterTypePaletteEntry(adapterTypePaletteEntry);
+			if (result == null)
+				result = casePaletteEntry(adapterTypePaletteEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.SUB_APPLICATION_TYPE_PALETTE_ENTRY: {
+			SubApplicationTypePaletteEntry subApplicationTypePaletteEntry = (SubApplicationTypePaletteEntry) theEObject;
+			T result = caseSubApplicationTypePaletteEntry(subApplicationTypePaletteEntry);
+			if (result == null)
+				result = casePaletteEntry(subApplicationTypePaletteEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		default:
+			return defaultCase(theEObject);
 		}
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Palette</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
+	 * Returns the result of interpreting the object as an instance of
+	 * '<em>Palette</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
+	 * 
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Palette</em>'.
+	 * @return the result of interpreting the object as an instance of
+	 *         '<em>Palette</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
@@ -164,13 +178,13 @@ public class PaletteSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Group</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
+	 * Returns the result of interpreting the object as an instance of
+	 * '<em>Group</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
+	 * 
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Group</em>'.
+	 * @return the result of interpreting the object as an instance of
+	 *         '<em>Group</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
@@ -179,13 +193,14 @@ public class PaletteSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>FB Type Palette Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
+	 * Returns the result of interpreting the object as an instance of '<em>FB Type
+	 * Palette Entry</em>'. <!-- begin-user-doc --> This implementation returns
+	 * null; returning a non-null result will terminate the switch. <!--
+	 * end-user-doc -->
+	 * 
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>FB Type Palette Entry</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>FB Type
+	 *         Palette Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
@@ -194,13 +209,13 @@ public class PaletteSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
+	 * Returns the result of interpreting the object as an instance of
+	 * '<em>Entry</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
+	 * 
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Entry</em>'.
+	 * @return the result of interpreting the object as an instance of
+	 *         '<em>Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
@@ -209,13 +224,14 @@ public class PaletteSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Device Type Palette Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
+	 * Returns the result of interpreting the object as an instance of '<em>Device
+	 * Type Palette Entry</em>'. <!-- begin-user-doc --> This implementation returns
+	 * null; returning a non-null result will terminate the switch. <!--
+	 * end-user-doc -->
+	 * 
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Device Type Palette Entry</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Device
+	 *         Type Palette Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
@@ -224,13 +240,13 @@ public class PaletteSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Resource Type Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
+	 * Returns the result of interpreting the object as an instance of '<em>Resource
+	 * Type Entry</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
+	 * 
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Resource Type Entry</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Resource
+	 *         Type Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
@@ -239,13 +255,14 @@ public class PaletteSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Segment Type Palette Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
+	 * Returns the result of interpreting the object as an instance of '<em>Segment
+	 * Type Palette Entry</em>'. <!-- begin-user-doc --> This implementation returns
+	 * null; returning a non-null result will terminate the switch. <!--
+	 * end-user-doc -->
+	 * 
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Segment Type Palette Entry</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Segment
+	 *         Type Palette Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
@@ -254,13 +271,14 @@ public class PaletteSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Adapter Type Palette Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
+	 * Returns the result of interpreting the object as an instance of '<em>Adapter
+	 * Type Palette Entry</em>'. <!-- begin-user-doc --> This implementation returns
+	 * null; returning a non-null result will terminate the switch. <!--
+	 * end-user-doc -->
+	 * 
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Adapter Type Palette Entry</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Adapter
+	 *         Type Palette Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
@@ -269,13 +287,14 @@ public class PaletteSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Sub Application Type Palette Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
+	 * Returns the result of interpreting the object as an instance of '<em>Sub
+	 * Application Type Palette Entry</em>'. <!-- begin-user-doc --> This
+	 * implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Sub Application Type Palette Entry</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Sub
+	 *         Application Type Palette Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
@@ -284,13 +303,14 @@ public class PaletteSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>EObject</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch, but this is the last case anyway.
-	 * <!-- end-user-doc -->
+	 * Returns the result of interpreting the object as an instance of
+	 * '<em>EObject</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * returning a non-null result will terminate the switch, but this is the last
+	 * case anyway. <!-- end-user-doc -->
+	 * 
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
+	 * @return the result of interpreting the object as an instance of
+	 *         '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
 	 * @generated
 	 */
@@ -299,4 +319,4 @@ public class PaletteSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-} //PaletteSwitch
+} // PaletteSwitch

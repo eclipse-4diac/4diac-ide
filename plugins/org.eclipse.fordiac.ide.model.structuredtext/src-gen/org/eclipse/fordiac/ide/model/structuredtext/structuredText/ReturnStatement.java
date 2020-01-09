@@ -3,17 +3,14 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext.structuredText;
 
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Return Statement</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Return
+ * Statement</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getReturnStatement()
  * @model
  * @generated
  */
-public interface ReturnStatement extends Statement
-{
+public interface ReturnStatement extends Statement {
 } // ReturnStatement

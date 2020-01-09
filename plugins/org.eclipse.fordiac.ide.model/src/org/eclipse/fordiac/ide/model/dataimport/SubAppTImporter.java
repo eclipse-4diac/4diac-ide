@@ -35,14 +35,16 @@ import org.w3c.dom.NodeList;
  * 
  * @author Martijn Rooker (martijn.rooker@profactor.at)
  */
-public class SubAppTImporter extends FBTImporter{
+public class SubAppTImporter extends FBTImporter {
 
-	/**This allows that the typeimporter can also be utilized to parse untyped subapp interfaces
+	/**
+	 * This allows that the typeimporter can also be utilized to parse untyped
+	 * subapp interfaces
 	 * 
 	 * @param palette
 	 */
 	@Override
-	public void setPalette(Palette palette){
+	public void setPalette(Palette palette) {
 		super.setPalette(palette);
 	}
 
@@ -50,39 +52,39 @@ public class SubAppTImporter extends FBTImporter{
 	 * Import sub app type.
 	 * 
 	 * @param subapptFile the subappt file
-	 * @param palette the palette
+	 * @param palette     the palette
 	 * 
 	 * @return the sub app type
 	 * 
-	 * @throws TypeImportException the FBT import exception
-	 * @throws ReferencedTypeNotFoundException the referenced type not found exception
+	 * @throws TypeImportException             the FBT import exception
+	 * @throws ReferencedTypeNotFoundException the referenced type not found
+	 *                                         exception
 	 */
-	public SubAppType importSubAppType(final IFile subapptFile,
-			final Palette palette) throws ReferencedTypeNotFoundException {
+	public SubAppType importSubAppType(final IFile subapptFile, final Palette palette)
+			throws ReferencedTypeNotFoundException {
 		FBType newType = importType(subapptFile, palette);
-		if(newType instanceof SubAppType){
-			return (SubAppType)newType;
-		}		
+		if (newType instanceof SubAppType) {
+			return (SubAppType) newType;
+		}
 		return null;
 	}
-	
+
 	@Override
-	protected FBType createType(){
+	protected FBType createType() {
 		return LibraryElementFactory.eINSTANCE.createSubAppType();
 	}
 
 	@Override
 	protected SubAppType getType() {
-		return (SubAppType)super.getType();
+		return (SubAppType) super.getType();
 	}
-	
-	
+
 	@Override
-	protected FBType parseType(Node rootNode) throws TypeImportException,
-			ReferencedTypeNotFoundException, ParseException {
+	protected FBType parseType(Node rootNode)
+			throws TypeImportException, ReferencedTypeNotFoundException, ParseException {
 		if (rootNode.getNodeName().equals(LibraryElementTags.SUBAPPTYPE_ELEMENT)) {
 			CommonElementImporter.readNameCommentAttributes(getType(), rootNode.getAttributes());
-			
+
 			NodeList childNodes = rootNode.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); i++) {
 				Node n = childNodes.item(i);
@@ -90,8 +92,7 @@ public class SubAppTImporter extends FBTImporter{
 					getType().setIdentification(CommonElementImporter.parseIdentification(getType(), n));
 				}
 				if (n.getNodeName().equals(VERSION_INFO_ELEMENT)) {
-					getType().getVersionInfo().add(
-							CommonElementImporter.parseVersionInfo(getType(), n));
+					getType().getVersionInfo().add(CommonElementImporter.parseVersionInfo(getType(), n));
 				}
 				if (n.getNodeName().equals(COMPILER_INFO_ELEMENT)) {
 					getType().setCompilerInfo(CompilableElementImporter.parseCompilerInfo(getType(), n));
@@ -99,22 +100,22 @@ public class SubAppTImporter extends FBTImporter{
 				if (n.getNodeName().equals(SUBAPPINTERFACE_LIST_ELEMENT)) {
 					getType().setInterfaceList(parseInterfaceList(n));
 				}
-				
+
 				if (n.getNodeName().equals(SERVICE_ELEMENT)) {
 					parseService(getType(), n);
 				}
-				
+
 				if (n.getNodeName().equals(LibraryElementTags.SUBAPPNETWORK_ELEMENT)) {
-					getType().setFBNetwork(new SubAppNetworkImporter(getPalette(), getType().getInterfaceList()).parseFBNetwork(n));
+					getType().setFBNetwork(
+							new SubAppNetworkImporter(getPalette(), getType().getInterfaceList()).parseFBNetwork(n));
 				}
-			
+
 			}
-			
+
 			return getType();
 		}
 		throw new ParseException(Messages.SubAppTImporter_ERROR, 0);
 	}
-
 
 	@Override
 	protected String getEventOutputElement() {
@@ -132,11 +133,9 @@ public class SubAppTImporter extends FBTImporter{
 	}
 
 	@Override
-	public void parseWithConstructs(NodeList childNodes,
-			Map<String, Event> eventInputs,
-			Map<String, Event> eventOutputs,
-			Map<String, VarDeclaration> variables) {
-		//supapps may not have a with construct. Therefore we are doing nothing here
+	public void parseWithConstructs(NodeList childNodes, Map<String, Event> eventInputs,
+			Map<String, Event> eventOutputs, Map<String, VarDeclaration> variables) {
+		// supapps may not have a with construct. Therefore we are doing nothing here
 	}
-			
+
 }

@@ -94,8 +94,7 @@ public class DeviceParametersDialog extends org.eclipse.jface.dialogs.Dialog {
 					public void widgetSelected(SelectionEvent e) {
 
 						if (((Button) e.getSource()).getSelection()) {
-							selectedProperties.add((VarDeclaration) ((Button) e.getSource())
-									.getData());
+							selectedProperties.add((VarDeclaration) ((Button) e.getSource()).getData());
 						} else {
 							selectedProperties.remove(((Button) e.getSource()).getData());
 						}

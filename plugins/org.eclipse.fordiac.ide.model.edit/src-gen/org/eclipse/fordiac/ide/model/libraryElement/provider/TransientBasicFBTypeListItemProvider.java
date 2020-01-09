@@ -29,43 +29,37 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 
-public class TransientBasicFBTypeListItemProvider extends ItemProviderAdapter implements
-	IEditingDomainItemProvider,
-	IStructuredItemContentProvider,
-	ITreeItemContentProvider,
-	IItemLabelProvider,
-	IItemPropertySource{
+public class TransientBasicFBTypeListItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
+		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 
 	public TransientBasicFBTypeListItemProvider(AdapterFactory adapterFactory, BasicFBType basicFBType) {
 		super(adapterFactory);
 		basicFBType.eAdapters().add(this);
 	}
-		
-    @Override
-    public Collection<?> getChildren(Object object)
-    {
-      return super.getChildren(target);
-    }
 
-    @Override
-    public Collection<?> getNewChildDescriptors(Object object, EditingDomain editingDomain, Object sibling)
-    {
-      return super.getNewChildDescriptors(target, editingDomain, sibling);
-    }
+	@Override
+	public Collection<?> getChildren(Object object) {
+		return super.getChildren(target);
+	}
 
-    @Override
-    public Object getParent(Object object) {
-      return target;
-    }
+	@Override
+	public Collection<?> getNewChildDescriptors(Object object, EditingDomain editingDomain, Object sibling) {
+		return super.getNewChildDescriptors(target, editingDomain, sibling);
+	}
 
-    @Override
-    public Object getImage(Object object) {
-      return overlayImage(object, getResourceLocator().getImage("full/obj16/FBType"));
-    }
+	@Override
+	public Object getParent(Object object) {
+		return target;
+	}
 
-    @Override
-    public ResourceLocator getResourceLocator(){
-      return fordiacEditPlugin.INSTANCE;
-    }
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBType"));
+	}
+
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return fordiacEditPlugin.INSTANCE;
+	}
 
 }

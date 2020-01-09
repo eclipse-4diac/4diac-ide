@@ -24,7 +24,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 public class HorizontalLineFigure extends Figure {
 
 	private static int lineThickness = 2;
-	
+
 	/**
 	 * Instantiates a new horizontal line figure.
 	 * 

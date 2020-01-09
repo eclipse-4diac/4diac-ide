@@ -17,9 +17,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Device Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Device
+ * Type Palette Entry</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getDeviceTypePaletteEntry()
@@ -27,12 +26,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * @generated
  */
 public interface DeviceTypePaletteEntry extends PaletteEntry {
-	
+
 	DeviceType getDeviceType();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model
 	 * @generated
 	 */

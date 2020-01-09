@@ -34,9 +34,8 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 
-public class FBTypeEditorContributor extends
-		MultiPageEditorActionBarContributor {
-	
+public class FBTypeEditorContributor extends MultiPageEditorActionBarContributor {
+
 	private ActionRegistry registry = new ActionRegistry();
 	private List<RetargetAction> retargetActions = new ArrayList<RetargetAction>();
 	private List<String> globalActionKeys = new ArrayList<String>();
@@ -44,13 +43,13 @@ public class FBTypeEditorContributor extends
 	public FBTypeEditorContributor() {
 		super();
 	}
-	
+
 	@Override
 	public void setActiveEditor(IEditorPart editor) {
 		ActionRegistry registry = editor.getAdapter(ActionRegistry.class);
-		if(null != registry){
+		if (null != registry) {
 			IActionBars bars = getActionBars();
-			for (String id : globalActionKeys){
+			for (String id : globalActionKeys) {
 				bars.setGlobalActionHandler(id, registry.getAction(id));
 			}
 		}
@@ -59,22 +58,22 @@ public class FBTypeEditorContributor extends
 
 	@Override
 	public void setActivePage(IEditorPart activeEditor) {
-		if(null != activeEditor){
+		if (null != activeEditor) {
 			ActionRegistry registry = activeEditor.getAdapter(ActionRegistry.class);
-			if(null != registry){
+			if (null != registry) {
 				IActionBars bars = getActionBars();
-				for (String id : globalActionKeys){
+				for (String id : globalActionKeys) {
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 				}
 			}
 		}
 	}
-	
+
 	protected void buildActions() {
 		addRetargetAction(new UndoRetargetAction());
 		addRetargetAction(new RedoRetargetAction());
 		addRetargetAction(new DeleteRetargetAction());
-		
+
 		addRetargetAction(new AlignmentRetargetAction(PositionConstants.LEFT));
 		addRetargetAction(new AlignmentRetargetAction(PositionConstants.CENTER));
 		addRetargetAction(new AlignmentRetargetAction(PositionConstants.RIGHT));
@@ -83,7 +82,6 @@ public class FBTypeEditorContributor extends
 		addRetargetAction(new AlignmentRetargetAction(PositionConstants.BOTTOM));
 	}
 
-	
 	@Override
 	public void contributeToToolBar(final IToolBarManager toolBarManager) {
 
@@ -93,11 +91,9 @@ public class FBTypeEditorContributor extends
 		toolBarManager.add(new Separator());
 
 		toolBarManager.add(new Separator());
-		String[] zoomStrings = new String[] { ZoomManager.FIT_ALL,
-				ZoomManager.FIT_HEIGHT, ZoomManager.FIT_WIDTH };
-		toolBarManager
-				.add(new ZoomComboContributionItem(getPage(), zoomStrings));
-		
+		String[] zoomStrings = new String[] { ZoomManager.FIT_ALL, ZoomManager.FIT_HEIGHT, ZoomManager.FIT_WIDTH };
+		toolBarManager.add(new ZoomComboContributionItem(getPage(), zoomStrings));
+
 		toolBarManager.add(new Separator());
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_LEFT));
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_CENTER));
@@ -107,34 +103,34 @@ public class FBTypeEditorContributor extends
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_MIDDLE));
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_BOTTOM));
 	}
-	
+
 	protected IAction getAction(String id) {
 		return getActionRegistry().getAction(id);
 	}
-	
+
 	protected ActionRegistry getActionRegistry() {
 		return registry;
 	}
-	
+
 	protected void addRetargetAction(RetargetAction action) {
 		addAction(action);
 		retargetActions.add(action);
 		getPage().addPartListener(action);
 		addGlobalActionKey(action.getId());
 	}
-	
+
 	protected void addAction(IAction action) {
 		getActionRegistry().registerAction(action);
 	}
-	
+
 	protected void addGlobalActionKey(String key) {
 		globalActionKeys.add(key);
 	}
-	
+
 	protected void declareGlobalActionKeys() {
 		this.addGlobalActionKey(ActionFactory.SELECT_ALL.getId());
 	}
-	
+
 	@Override
 	public void init(IActionBars bars) {
 		buildActions();

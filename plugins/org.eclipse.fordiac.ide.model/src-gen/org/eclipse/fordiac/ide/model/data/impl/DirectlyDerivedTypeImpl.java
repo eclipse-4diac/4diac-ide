@@ -18,16 +18,15 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Directly Derived Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Directly Derived Type</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class DirectlyDerivedTypeImpl extends DerivedTypeImpl implements DirectlyDerivedType {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected DirectlyDerivedTypeImpl() {
@@ -35,8 +34,8 @@ public class DirectlyDerivedTypeImpl extends DerivedTypeImpl implements Directly
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -44,4 +43,4 @@ public class DirectlyDerivedTypeImpl extends DerivedTypeImpl implements Directly
 		return DataPackage.Literals.DIRECTLY_DERIVED_TYPE;
 	}
 
-} //DirectlyDerivedTypeImpl
+} // DirectlyDerivedTypeImpl

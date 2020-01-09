@@ -3,17 +3,14 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext.structuredText;
 
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Continue Statement</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Continue
+ * Statement</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getContinueStatement()
  * @model
  * @generated
  */
-public interface ContinueStatement extends Statement
-{
+public interface ContinueStatement extends Statement {
 } // ContinueStatement

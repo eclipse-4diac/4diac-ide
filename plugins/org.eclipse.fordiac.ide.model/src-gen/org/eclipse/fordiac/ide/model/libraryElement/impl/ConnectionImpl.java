@@ -25,29 +25,35 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Connection</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Connection</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDx1 <em>Dx1</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDx2 <em>Dx2</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDy <em>Dy</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isResTypeConnection <em>Res Type Connection</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isBrokenConnection <em>Broken Connection</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getSource <em>Source</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDestination <em>Destination</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDx1
+ * <em>Dx1</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDx2
+ * <em>Dx2</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDy
+ * <em>Dy</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isResTypeConnection
+ * <em>Res Type Connection</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isBrokenConnection
+ * <em>Broken Connection</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getSource
+ * <em>Source</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDestination
+ * <em>Destination</em>}</li>
  * </ul>
  *
  * @generated
  */
 public abstract class ConnectionImpl extends ConfigurableObjectImpl implements Connection {
 	/**
-	 * The default value of the '{@link #getDx1() <em>Dx1</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getDx1() <em>Dx1</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDx1()
 	 * @generated
 	 * @ordered
@@ -55,9 +61,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	protected static final int DX1_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getDx1() <em>Dx1</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getDx1() <em>Dx1</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDx1()
 	 * @generated
 	 * @ordered
@@ -65,9 +71,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	protected int dx1 = DX1_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDx2() <em>Dx2</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getDx2() <em>Dx2</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDx2()
 	 * @generated
 	 * @ordered
@@ -75,9 +81,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	protected static final int DX2_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getDx2() <em>Dx2</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getDx2() <em>Dx2</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDx2()
 	 * @generated
 	 * @ordered
@@ -85,9 +91,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	protected int dx2 = DX2_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDy() <em>Dy</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getDy() <em>Dy</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDy()
 	 * @generated
 	 * @ordered
@@ -95,9 +101,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	protected static final int DY_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getDy() <em>Dy</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getDy() <em>Dy</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDy()
 	 * @generated
 	 * @ordered
@@ -105,9 +111,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	protected int dy = DY_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isResTypeConnection() <em>Res Type Connection</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #isResTypeConnection() <em>Res Type
+	 * Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isResTypeConnection()
 	 * @generated
 	 * @ordered
@@ -115,9 +121,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	protected static final boolean RES_TYPE_CONNECTION_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #isResTypeConnection() <em>Res Type Connection</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #isResTypeConnection() <em>Res Type
+	 * Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isResTypeConnection()
 	 * @generated
 	 * @ordered
@@ -125,9 +131,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	protected boolean resTypeConnection = RES_TYPE_CONNECTION_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isBrokenConnection() <em>Broken Connection</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #isBrokenConnection() <em>Broken
+	 * Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isBrokenConnection()
 	 * @generated
 	 * @ordered
@@ -135,9 +141,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	protected static final boolean BROKEN_CONNECTION_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #isBrokenConnection() <em>Broken Connection</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #isBrokenConnection() <em>Broken
+	 * Connection</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isBrokenConnection()
 	 * @generated
 	 * @ordered
@@ -146,8 +152,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 
 	/**
 	 * The cached value of the '{@link #getSource() <em>Source</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getSource()
 	 * @generated
 	 * @ordered
@@ -155,9 +161,9 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	protected IInterfaceElement source;
 
 	/**
-	 * The cached value of the '{@link #getDestination() <em>Destination</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getDestination() <em>Destination</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDestination()
 	 * @generated
 	 * @ordered
@@ -165,8 +171,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	protected IInterfaceElement destination;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ConnectionImpl() {
@@ -174,8 +180,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -184,8 +190,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -194,8 +200,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -207,8 +213,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -217,8 +223,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -230,8 +236,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -240,8 +246,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -253,8 +259,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -263,8 +269,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -272,12 +278,13 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		boolean oldResTypeConnection = resTypeConnection;
 		resTypeConnection = newResTypeConnection;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION, oldResTypeConnection, resTypeConnection));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION,
+					oldResTypeConnection, resTypeConnection));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -286,8 +293,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -296,8 +303,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -306,8 +313,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -316,8 +323,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -325,30 +332,32 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		boolean oldBrokenConnection = brokenConnection;
 		brokenConnection = newBrokenConnection;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__BROKEN_CONNECTION, oldBrokenConnection, brokenConnection));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__BROKEN_CONNECTION,
+					oldBrokenConnection, brokenConnection));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public IInterfaceElement getSource() {
 		if (source != null && source.eIsProxy()) {
-			InternalEObject oldSource = (InternalEObject)source;
-			source = (IInterfaceElement)eResolveProxy(oldSource);
+			InternalEObject oldSource = (InternalEObject) source;
+			source = (IInterfaceElement) eResolveProxy(oldSource);
 			if (source != oldSource) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.CONNECTION__SOURCE, oldSource, source));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.CONNECTION__SOURCE,
+							oldSource, source));
 			}
 		}
 		return source;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public IInterfaceElement basicGetSource() {
@@ -356,71 +365,79 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetSource(IInterfaceElement newSource, NotificationChain msgs) {
 		IInterfaceElement oldSource = source;
 		source = newSource;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__SOURCE, oldSource, newSource);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.CONNECTION__SOURCE, oldSource, newSource);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
-	
-	/** 
+	/**
 	 * @generated not
 	 */
 	@Override
 	public void setSource(IInterfaceElement newSource) {
 		setSourceGen(newSource);
-		if(null != getSource() && null != getDestination()){
+		if (null != getSource() && null != getDestination()) {
 			checkIfConnectionBroken();
 		}
 	}
+
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setSourceGen(IInterfaceElement newSource) {
 		if (newSource != source) {
 			NotificationChain msgs = null;
 			if (source != null)
-				msgs = ((InternalEObject)source).eInverseRemove(this, LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS, IInterfaceElement.class, msgs);
+				msgs = ((InternalEObject) source).eInverseRemove(this,
+						LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS, IInterfaceElement.class, msgs);
 			if (newSource != null)
-				msgs = ((InternalEObject)newSource).eInverseAdd(this, LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS, IInterfaceElement.class, msgs);
+				msgs = ((InternalEObject) newSource).eInverseAdd(this,
+						LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS, IInterfaceElement.class, msgs);
 			msgs = basicSetSource(newSource, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__SOURCE, newSource, newSource));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__SOURCE, newSource,
+					newSource));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public IInterfaceElement getDestination() {
 		if (destination != null && destination.eIsProxy()) {
-			InternalEObject oldDestination = (InternalEObject)destination;
-			destination = (IInterfaceElement)eResolveProxy(oldDestination);
+			InternalEObject oldDestination = (InternalEObject) destination;
+			destination = (IInterfaceElement) eResolveProxy(oldDestination);
 			if (destination != oldDestination) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.CONNECTION__DESTINATION, oldDestination, destination));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							LibraryElementPackage.CONNECTION__DESTINATION, oldDestination, destination));
 			}
 		}
 		return destination;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public IInterfaceElement basicGetDestination() {
@@ -428,53 +445,60 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetDestination(IInterfaceElement newDestination, NotificationChain msgs) {
 		IInterfaceElement oldDestination = destination;
 		destination = newDestination;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__DESTINATION, oldDestination, newDestination);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					LibraryElementPackage.CONNECTION__DESTINATION, oldDestination, newDestination);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
-	
-	/** 
+
+	/**
 	 * @generated not
 	 */
 	@Override
 	public void setDestination(IInterfaceElement newDestination) {
 		setDestinationGen(newDestination);
-		if(null != getSource() && null != getDestination()){
+		if (null != getSource() && null != getDestination()) {
 			checkIfConnectionBroken();
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setDestinationGen(IInterfaceElement newDestination) {
 		if (newDestination != destination) {
 			NotificationChain msgs = null;
 			if (destination != null)
-				msgs = ((InternalEObject)destination).eInverseRemove(this, LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS, IInterfaceElement.class, msgs);
+				msgs = ((InternalEObject) destination).eInverseRemove(this,
+						LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS, IInterfaceElement.class, msgs);
 			if (newDestination != null)
-				msgs = ((InternalEObject)newDestination).eInverseAdd(this, LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS, IInterfaceElement.class, msgs);
+				msgs = ((InternalEObject) newDestination).eInverseAdd(this,
+						LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS, IInterfaceElement.class, msgs);
 			msgs = basicSetDestination(newDestination, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__DESTINATION, newDestination, newDestination));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__DESTINATION,
+					newDestination, newDestination));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -483,8 +507,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -493,169 +517,174 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__SOURCE:
-				if (source != null)
-					msgs = ((InternalEObject)source).eInverseRemove(this, LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS, IInterfaceElement.class, msgs);
-				return basicSetSource((IInterfaceElement)otherEnd, msgs);
-			case LibraryElementPackage.CONNECTION__DESTINATION:
-				if (destination != null)
-					msgs = ((InternalEObject)destination).eInverseRemove(this, LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS, IInterfaceElement.class, msgs);
-				return basicSetDestination((IInterfaceElement)otherEnd, msgs);
+		case LibraryElementPackage.CONNECTION__SOURCE:
+			if (source != null)
+				msgs = ((InternalEObject) source).eInverseRemove(this,
+						LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS, IInterfaceElement.class, msgs);
+			return basicSetSource((IInterfaceElement) otherEnd, msgs);
+		case LibraryElementPackage.CONNECTION__DESTINATION:
+			if (destination != null)
+				msgs = ((InternalEObject) destination).eInverseRemove(this,
+						LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS, IInterfaceElement.class, msgs);
+			return basicSetDestination((IInterfaceElement) otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__SOURCE:
-				return basicSetSource(null, msgs);
-			case LibraryElementPackage.CONNECTION__DESTINATION:
-				return basicSetDestination(null, msgs);
+		case LibraryElementPackage.CONNECTION__SOURCE:
+			return basicSetSource(null, msgs);
+		case LibraryElementPackage.CONNECTION__DESTINATION:
+			return basicSetDestination(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__DX1:
-				return getDx1();
-			case LibraryElementPackage.CONNECTION__DX2:
-				return getDx2();
-			case LibraryElementPackage.CONNECTION__DY:
-				return getDy();
-			case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
-				return isResTypeConnection();
-			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
-				return isBrokenConnection();
-			case LibraryElementPackage.CONNECTION__SOURCE:
-				if (resolve) return getSource();
-				return basicGetSource();
-			case LibraryElementPackage.CONNECTION__DESTINATION:
-				if (resolve) return getDestination();
-				return basicGetDestination();
+		case LibraryElementPackage.CONNECTION__DX1:
+			return getDx1();
+		case LibraryElementPackage.CONNECTION__DX2:
+			return getDx2();
+		case LibraryElementPackage.CONNECTION__DY:
+			return getDy();
+		case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
+			return isResTypeConnection();
+		case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
+			return isBrokenConnection();
+		case LibraryElementPackage.CONNECTION__SOURCE:
+			if (resolve)
+				return getSource();
+			return basicGetSource();
+		case LibraryElementPackage.CONNECTION__DESTINATION:
+			if (resolve)
+				return getDestination();
+			return basicGetDestination();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__DX1:
-				setDx1((Integer)newValue);
-				return;
-			case LibraryElementPackage.CONNECTION__DX2:
-				setDx2((Integer)newValue);
-				return;
-			case LibraryElementPackage.CONNECTION__DY:
-				setDy((Integer)newValue);
-				return;
-			case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
-				setResTypeConnection((Boolean)newValue);
-				return;
-			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
-				setBrokenConnection((Boolean)newValue);
-				return;
-			case LibraryElementPackage.CONNECTION__SOURCE:
-				setSource((IInterfaceElement)newValue);
-				return;
-			case LibraryElementPackage.CONNECTION__DESTINATION:
-				setDestination((IInterfaceElement)newValue);
-				return;
+		case LibraryElementPackage.CONNECTION__DX1:
+			setDx1((Integer) newValue);
+			return;
+		case LibraryElementPackage.CONNECTION__DX2:
+			setDx2((Integer) newValue);
+			return;
+		case LibraryElementPackage.CONNECTION__DY:
+			setDy((Integer) newValue);
+			return;
+		case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
+			setResTypeConnection((Boolean) newValue);
+			return;
+		case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
+			setBrokenConnection((Boolean) newValue);
+			return;
+		case LibraryElementPackage.CONNECTION__SOURCE:
+			setSource((IInterfaceElement) newValue);
+			return;
+		case LibraryElementPackage.CONNECTION__DESTINATION:
+			setDestination((IInterfaceElement) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__DX1:
-				setDx1(DX1_EDEFAULT);
-				return;
-			case LibraryElementPackage.CONNECTION__DX2:
-				setDx2(DX2_EDEFAULT);
-				return;
-			case LibraryElementPackage.CONNECTION__DY:
-				setDy(DY_EDEFAULT);
-				return;
-			case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
-				setResTypeConnection(RES_TYPE_CONNECTION_EDEFAULT);
-				return;
-			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
-				setBrokenConnection(BROKEN_CONNECTION_EDEFAULT);
-				return;
-			case LibraryElementPackage.CONNECTION__SOURCE:
-				setSource((IInterfaceElement)null);
-				return;
-			case LibraryElementPackage.CONNECTION__DESTINATION:
-				setDestination((IInterfaceElement)null);
-				return;
+		case LibraryElementPackage.CONNECTION__DX1:
+			setDx1(DX1_EDEFAULT);
+			return;
+		case LibraryElementPackage.CONNECTION__DX2:
+			setDx2(DX2_EDEFAULT);
+			return;
+		case LibraryElementPackage.CONNECTION__DY:
+			setDy(DY_EDEFAULT);
+			return;
+		case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
+			setResTypeConnection(RES_TYPE_CONNECTION_EDEFAULT);
+			return;
+		case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
+			setBrokenConnection(BROKEN_CONNECTION_EDEFAULT);
+			return;
+		case LibraryElementPackage.CONNECTION__SOURCE:
+			setSource((IInterfaceElement) null);
+			return;
+		case LibraryElementPackage.CONNECTION__DESTINATION:
+			setDestination((IInterfaceElement) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__DX1:
-				return dx1 != DX1_EDEFAULT;
-			case LibraryElementPackage.CONNECTION__DX2:
-				return dx2 != DX2_EDEFAULT;
-			case LibraryElementPackage.CONNECTION__DY:
-				return dy != DY_EDEFAULT;
-			case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
-				return resTypeConnection != RES_TYPE_CONNECTION_EDEFAULT;
-			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
-				return brokenConnection != BROKEN_CONNECTION_EDEFAULT;
-			case LibraryElementPackage.CONNECTION__SOURCE:
-				return source != null;
-			case LibraryElementPackage.CONNECTION__DESTINATION:
-				return destination != null;
+		case LibraryElementPackage.CONNECTION__DX1:
+			return dx1 != DX1_EDEFAULT;
+		case LibraryElementPackage.CONNECTION__DX2:
+			return dx2 != DX2_EDEFAULT;
+		case LibraryElementPackage.CONNECTION__DY:
+			return dy != DY_EDEFAULT;
+		case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
+			return resTypeConnection != RES_TYPE_CONNECTION_EDEFAULT;
+		case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
+			return brokenConnection != BROKEN_CONNECTION_EDEFAULT;
+		case LibraryElementPackage.CONNECTION__SOURCE:
+			return source != null;
+		case LibraryElementPackage.CONNECTION__DESTINATION:
+			return destination != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (dx1: "); //$NON-NLS-1$
@@ -672,4 +701,4 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		return result.toString();
 	}
 
-} //ConnectionImpl
+} // ConnectionImpl

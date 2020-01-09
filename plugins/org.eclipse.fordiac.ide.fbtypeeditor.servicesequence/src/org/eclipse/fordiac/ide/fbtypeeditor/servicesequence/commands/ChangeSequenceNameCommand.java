@@ -20,18 +20,18 @@ public class ChangeSequenceNameCommand extends Command {
 	private ServiceSequence sequence;
 	private String name;
 	private String oldName;
-	
-	public ChangeSequenceNameCommand(String name, ServiceSequence sequence){
+
+	public ChangeSequenceNameCommand(String name, ServiceSequence sequence) {
 		this.sequence = sequence;
 		this.name = name;
 	}
-	
+
 	@Override
-	public void execute(){
+	public void execute() {
 		oldName = sequence.getName();
 		redo();
 	}
-	
+
 	@Override
 	public void undo() {
 		sequence.setName(oldName);

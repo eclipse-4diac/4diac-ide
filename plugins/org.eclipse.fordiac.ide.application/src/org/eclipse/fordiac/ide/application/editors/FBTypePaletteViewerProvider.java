@@ -20,7 +20,8 @@ import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.swt.widgets.Composite;
 
 public class FBTypePaletteViewerProvider extends PaletteViewerProvider {
-	/** the project for which the type palette viewer should be created
+	/**
+	 * the project for which the type palette viewer should be created
 	 * 
 	 */
 	private final IProject project;

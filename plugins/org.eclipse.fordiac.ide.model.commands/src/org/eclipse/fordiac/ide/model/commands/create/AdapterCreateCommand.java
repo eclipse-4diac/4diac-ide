@@ -26,11 +26,11 @@ public class AdapterCreateCommand extends FBCreateCommand {
 		getAdapterFB().setPaletteEntry(adapterDecl.getType().getPaletteEntry());
 		getAdapterFB().setAdapterDecl(adapterDecl);
 	}
-	
-	private AdapterFB getAdapterFB(){
-		return (AdapterFB)getElement();
+
+	private AdapterFB getAdapterFB() {
+		return (AdapterFB) getElement();
 	}
-	
+
 	@Override
 	protected InterfaceList getTypeInterfaceList() {
 		return getAdapterFB().getType().getInterfaceList();

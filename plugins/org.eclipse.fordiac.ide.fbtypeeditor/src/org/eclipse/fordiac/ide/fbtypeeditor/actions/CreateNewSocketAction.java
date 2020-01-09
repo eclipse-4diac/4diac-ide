@@ -21,7 +21,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class CreateNewSocketAction extends CreateFromNewAdapterAction {
 	public static final String ID = "CreateNewSocketAction"; //$NON-NLS-1$
-	
+
 	public CreateNewSocketAction(IWorkbenchPart part, FBType fbType) {
 		super(part, fbType);
 	}

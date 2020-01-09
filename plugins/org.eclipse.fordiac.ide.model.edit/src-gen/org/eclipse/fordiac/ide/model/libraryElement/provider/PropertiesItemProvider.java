@@ -24,55 +24,46 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
-public class PropertiesItemProvider extends TransientLibraryElementItemProvider{
+public class PropertiesItemProvider extends TransientLibraryElementItemProvider {
 
-	public PropertiesItemProvider(AdapterFactory adapterFactory,
-			LibraryElement libraryElement) {
+	public PropertiesItemProvider(AdapterFactory adapterFactory, LibraryElement libraryElement) {
 		super(adapterFactory, libraryElement);
 	}
-	
+
 	@Override
-    public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object){
-      if (childrenFeatures == null)
-      {
-        super.getChildrenFeatures(object);
-        childrenFeatures.add(LibraryElementPackage.Literals.LIBRARY_ELEMENT__IDENTIFICATION);
-        childrenFeatures.add(LibraryElementPackage.Literals.LIBRARY_ELEMENT__VERSION_INFO);
-        if(object instanceof CompilableType){
-        	childrenFeatures.add(LibraryElementPackage.Literals.COMPILABLE_TYPE__COMPILER_INFO);
-        }
-      }
-      return childrenFeatures;
-    }
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(LibraryElementPackage.Literals.LIBRARY_ELEMENT__IDENTIFICATION);
+			childrenFeatures.add(LibraryElementPackage.Literals.LIBRARY_ELEMENT__VERSION_INFO);
+			if (object instanceof CompilableType) {
+				childrenFeatures.add(LibraryElementPackage.Literals.COMPILABLE_TYPE__COMPILER_INFO);
+			}
+		}
+		return childrenFeatures;
+	}
 
-    @Override
-    public String getText(Object object){
-      return "Properties";
-    }
-    
-    @Override
-    public Object getImage(Object object) {
-      return overlayImage(object, FordiacImage.ICON_PROPERTIES.getImage());      
-    }
+	@Override
+	public String getText(Object object) {
+		return "Properties";
+	}
 
-    @Override
-    protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
-    {
-	  super.collectNewChildDescriptors(newChildDescriptors, object);
-	  newChildDescriptors.add
-		(createChildParameter
-			(LibraryElementPackage.Literals.LIBRARY_ELEMENT__VERSION_INFO,
-			 LibraryElementFactory.eINSTANCE.createVersionInfo()));
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, FordiacImage.ICON_PROPERTIES.getImage());
+	}
 
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.LIBRARY_ELEMENT__IDENTIFICATION,
-				 LibraryElementFactory.eINSTANCE.createIdentification()));
-		
-		newChildDescriptors.add
-		(createChildParameter
-			(LibraryElementPackage.Literals.COMPILABLE_TYPE__COMPILER_INFO,
-			 LibraryElementFactory.eINSTANCE.createCompilerInfo()));
-    }
-   
+	@Override
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+		super.collectNewChildDescriptors(newChildDescriptors, object);
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.LIBRARY_ELEMENT__VERSION_INFO,
+				LibraryElementFactory.eINSTANCE.createVersionInfo()));
+
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.LIBRARY_ELEMENT__IDENTIFICATION,
+				LibraryElementFactory.eINSTANCE.createIdentification()));
+
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.COMPILABLE_TYPE__COMPILER_INFO,
+				LibraryElementFactory.eINSTANCE.createCompilerInfo()));
+	}
+
 }

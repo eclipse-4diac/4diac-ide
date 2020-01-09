@@ -24,8 +24,7 @@ public class CreateSocketAction extends WorkbenchPartAction {
 	private FBType fbType;
 	private AdapterTypePaletteEntry entry;
 
-	public CreateSocketAction(IWorkbenchPart part, FBType fbType,
-			AdapterTypePaletteEntry entry) {
+	public CreateSocketAction(IWorkbenchPart part, FBType fbType, AdapterTypePaletteEntry entry) {
 		super(part);
 		setId(getID(entry));
 		setText(entry.getLabel());
@@ -40,7 +39,8 @@ public class CreateSocketAction extends WorkbenchPartAction {
 
 	@Override
 	public void run() {
-		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(entry.getType(), fbType.getInterfaceList(), true, -1);
+		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(entry.getType(),
+				fbType.getInterfaceList(), true, -1);
 		execute(cmd);
 	}
 

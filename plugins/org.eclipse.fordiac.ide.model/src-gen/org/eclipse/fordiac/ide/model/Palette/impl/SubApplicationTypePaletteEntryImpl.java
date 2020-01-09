@@ -25,16 +25,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Sub Application Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Sub
+ * Application Type Palette Entry</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl implements SubApplicationTypePaletteEntry {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SubApplicationTypePaletteEntryImpl() {
@@ -42,8 +41,8 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -52,32 +51,33 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public SubAppType getSubApplicationType() {
 		LibraryElement type = getType();
-		if((null !=type) && (type instanceof SubAppType)){
-		   return (SubAppType) type;
+		if ((null != type) && (type instanceof SubAppType)) {
+			return (SubAppType) type;
 		}
 		return null;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if((null != type) && (type instanceof SubAppType)){
+		if ((null != type) && (type instanceof SubAppType)) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
-				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry");
+			if (null != type) {
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+						"tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry");
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
@@ -87,13 +87,13 @@ public class SubApplicationTypePaletteEntryImpl extends PaletteEntryImpl impleme
 	protected LibraryElement loadType() {
 		LibraryElement retval = null;
 		Palette palette = getGroup().getPallete();
-		
+
 		retval = new SubAppTImporter().importType(getFile(), palette);
-		
+
 		if (retval == null) {
 			Activator.getDefault().logError("Error loading type: " + getFile().getName());
 		}
 		return retval;
 	}
 
-} //SubApplicationTypePaletteEntryImpl
+} // SubApplicationTypePaletteEntryImpl

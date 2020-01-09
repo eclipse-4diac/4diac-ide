@@ -30,7 +30,7 @@ class CommentField {
 	CommentField(IInterfaceElement referencedElement) {
 		this.referencedElement = referencedElement;
 	}
-	
+
 	public String getLabel() {
 		return getReferencedElement().getComment();
 	}

@@ -29,10 +29,10 @@ public class FBTypeInfoSection extends TypeInfoSection {
 
 	@Override
 	protected LibraryElement getInputType(Object input) {
-		if(input instanceof FBEditPart){
-			return ((FBEditPart) input).getModel().getType();	
-		} else if (input instanceof FBNetworkElement){
-			return ((FBNetworkElement) input).getType();				
+		if (input instanceof FBEditPart) {
+			return ((FBEditPart) input).getModel().getType();
+		} else if (input instanceof FBNetworkElement) {
+			return ((FBNetworkElement) input).getType();
 		}
 		return null;
 	}

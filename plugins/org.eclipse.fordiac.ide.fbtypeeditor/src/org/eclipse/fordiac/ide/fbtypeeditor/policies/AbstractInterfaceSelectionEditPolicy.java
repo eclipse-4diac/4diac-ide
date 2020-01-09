@@ -31,7 +31,6 @@ import org.eclipse.gef.handles.RelativeHandleLocator;
 
 public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonResizeableEditPolicy {
 
-
 	public AbstractInterfaceSelectionEditPolicy(int cornerDim, Insets insets) {
 		super(cornerDim, insets);
 	}
@@ -53,76 +52,76 @@ public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonRe
 	protected List createSelectionHandles() {
 		List list = super.createSelectionHandles();
 		InterfaceEditPart part = getInterfaceEditPart();
-		
+
 		PlusHandle top = createHandle(part, PositionConstants.NORTH);
 		list.add(top);
-		top.addMouseListener(new MouseListener(){
+		top.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mousePressed(MouseEvent me) {
-				createInterfaceElement(false);				
+				createInterfaceElement(false);
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent me) {					
+			public void mouseReleased(MouseEvent me) {
 			}
 
 			@Override
-			public void mouseDoubleClicked(MouseEvent me) {					
-			}			
+			public void mouseDoubleClicked(MouseEvent me) {
+			}
 		});
-		
+
 		PlusHandle bottom = createHandle(part, PositionConstants.SOUTH);
 		list.add(bottom);
-		bottom.addMouseListener(new MouseListener(){
+		bottom.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mousePressed(MouseEvent me) {
-				createInterfaceElement(true);				
+				createInterfaceElement(true);
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent me) {					
+			public void mouseReleased(MouseEvent me) {
 			}
 
 			@Override
-			public void mouseDoubleClicked(MouseEvent me) {					
-			}			
+			public void mouseDoubleClicked(MouseEvent me) {
+			}
 		});
 		return list;
 	}
 
-	
-	private InterfaceEditPart getInterfaceEditPart(){
-		return (InterfaceEditPart)getHost();
+	private InterfaceEditPart getInterfaceEditPart() {
+		return (InterfaceEditPart) getHost();
 	}
-	
-	private IInterfaceElement getModel(){
-		return (IInterfaceElement)getInterfaceEditPart().getModel();
+
+	private IInterfaceElement getModel() {
+		return (IInterfaceElement) getInterfaceEditPart().getModel();
 	}
-	
-	private PlusHandle createHandle(InterfaceEditPart part, int direction){
+
+	private PlusHandle createHandle(InterfaceEditPart part, int direction) {
 		return new PlusHandle(part, new RelativeHandleLocator(part.getFigure(), direction) {
 			@Override
 			public void relocate(IFigure target) {
 				super.relocate(target);
-				//assure that handle is not in the middle of the border but outside of it
-				//TODO if this code has proven to work move it to 4diac specific locater in GEF plugin
+				// assure that handle is not in the middle of the border but outside of it
+				// TODO if this code has proven to work move it to 4diac specific locater in GEF
+				// plugin
 				Rectangle targetBounds = target.getBounds();
 				Dimension targetSize = target.getPreferredSize();
 
 				targetBounds.x += ((targetSize.width + 1) / 4) * getXModifcation();
-				
+
 				targetBounds.y += ((targetSize.height + 1) / 4) * getYModifcation();
 				target.setBounds(targetBounds);
 			}
-			
+
 			private int getYModifcation() {
 				switch (direction & PositionConstants.NORTH_SOUTH) {
 				case PositionConstants.NORTH:
 					return -1;
 				case PositionConstants.SOUTH:
-					return  1;
+					return 1;
 				default:
 					return 0;
 				}
@@ -140,15 +139,15 @@ public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonRe
 			}
 		});
 	}
-	
+
 	private void createInterfaceElement(boolean after) {
 		List<? extends IInterfaceElement> list = getInterfaceElementList();
 		int ref = list.indexOf(getModel());
-		if(-1 != ref && after){
+		if (-1 != ref && after) {
 			ref++;
 		}
 		Command cmd = getIECreateCommand(getModel().getType(), ref);
-		if(null != cmd){
+		if (null != cmd) {
 			AbstractDirectEditableEditPart.executeCommand(cmd);
 		}
 	}

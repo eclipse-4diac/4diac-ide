@@ -59,17 +59,16 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 			// only refresh propertypage (page) if the event is not an
 			// REMOVING_ADAPTER event - otherwise, the remove adapter in the
 			// dispose method (called when closing the editor) will fail
-			if (notification.getEventType() != Notification.REMOVING_ADAPTER
-					&& (((notification.getNewValue() == null) && (notification
-							.getNewValue() != notification.getOldValue())) || ((notification
-							.getNewValue() != null) && !(notification
-							.getNewValue().equals(notification.getOldValue()))))) {
+			if (notification.getEventType() != Notification.REMOVING_ADAPTER && (((notification.getNewValue() == null)
+					&& (notification.getNewValue() != notification.getOldValue()))
+					|| ((notification.getNewValue() != null)
+							&& !(notification.getNewValue().equals(notification.getOldValue()))))) {
 				super.notifyChanged(notification);
 			}
 
 		}
 	};
-	
+
 	@Override
 	public void setCommonCommandStack(CommandStack commandStack) {
 		this.commandStack = commandStack;
@@ -77,19 +76,18 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
-		return new CompositeNetworkEditPartFactory(this, getZoomManger() );
+		return new CompositeNetworkEditPartFactory(this, getZoomManger());
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart part,
-			final ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		super.selectionChanged(part, selection);
 		updateActions(getSelectionActions());
 	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		//currently nothing needs to be done here
+		// currently nothing needs to be done here
 	}
 
 	@Override
@@ -102,20 +100,20 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	protected void createActions() {
 		ActionRegistry registry = getActionRegistry();
 		IAction action;
-		
+
 		super.createActions();
 
 		action = registry.getAction(UnmapAction.ID);
 		registry.removeAction(action);
-		
+
 		action = registry.getAction(UnmapAllAction.ID);
 		registry.removeAction(action);
-		
+
 		InterfaceContextMenuProvider.createInterfaceEditingActions(this, registry, fbType);
-		
+
 		super.createActions();
 	}
-	
+
 	@Override
 	public boolean outlineSelectionChanged(Object selectedElement) {
 
@@ -190,23 +188,22 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-		return null;  //we are filling a the palete directly in the viewer so we don't need it here
+		return null; // we are filling a the palete directly in the viewer so we don't need it here
 	}
 
-	
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(fbType.getPaletteEntry().getFile().getProject(), getEditDomain(), getPalletNavigatorID());
+		return new FBTypePaletteViewerProvider(fbType.getPaletteEntry().getFile().getProject(), getEditDomain(),
+				getPalletNavigatorID());
 	}
-	
+
 	@Override
 	protected String getPalletNavigatorID() {
 		return "org.eclipse.fordiac.ide.compositefbpaletteviewer"; //$NON-NLS-1$
 	}
-	
+
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(
-			final ScrollingGraphicalViewer viewer,
+	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
 		return new CFBNetworkcontextMenuProvider(this, getActionRegistry(), zoomManager, getPalette());
 	}

@@ -23,10 +23,10 @@ import org.eclipse.jface.text.rules.Token;
  * The Class XMLPartitionScanner.
  */
 public class XMLPartitionScanner extends RuleBasedPartitionScanner {
-	
+
 	/** The Constant XML_COMMENT. */
 	public static final String XML_COMMENT = "__xml_comment"; //$NON-NLS-1$
-	
+
 	/** The Constant XML_TAG. */
 	public static final String XML_TAG = "__xml_tag"; //$NON-NLS-1$
 

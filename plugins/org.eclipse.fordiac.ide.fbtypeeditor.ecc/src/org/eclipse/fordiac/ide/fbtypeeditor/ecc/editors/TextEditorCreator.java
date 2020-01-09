@@ -30,8 +30,7 @@ public class TextEditorCreator implements IAlgorithmEditorCreator {
 
 	@Override
 	public IAlgorithmEditor createAlgorithmEditor(final Composite parent, BaseFBType fbType) {
-		TextEditor editor = new TextEditor(parent, null, null, false,
-				SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		TextEditor editor = new TextEditor(parent, null, null, false, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		return editor;
 	}
 

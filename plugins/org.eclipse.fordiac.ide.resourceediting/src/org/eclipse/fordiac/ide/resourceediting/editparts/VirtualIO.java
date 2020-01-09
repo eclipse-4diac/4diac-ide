@@ -19,8 +19,8 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class VirtualIO implements Notifier{
-	
+public class VirtualIO implements Notifier {
+
 	private final IInterfaceElement referencedInterfaceElement;
 
 	public IInterfaceElement getReferencedInterfaceElement() {
@@ -45,12 +45,12 @@ public class VirtualIO implements Notifier{
 	@Override
 	public void eSetDeliver(boolean deliver) {
 		referencedInterfaceElement.eSetDeliver(deliver);
-		
+
 	}
 
 	@Override
 	public void eNotify(Notification notification) {
-		referencedInterfaceElement.eNotify(notification);		
+		referencedInterfaceElement.eNotify(notification);
 	}
 
 }

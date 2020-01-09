@@ -40,7 +40,7 @@ public class VariableInputContainerLayoutEditPolicy extends AbstractInterfaceCon
 		if (cornerDim > 1) {
 			cornerDim = cornerDim / 2;
 		}
-		return new AbstractInterfaceSelectionEditPolicy(cornerDim, new Insets(1)){
+		return new AbstractInterfaceSelectionEditPolicy(cornerDim, new Insets(1)) {
 
 			@Override
 			protected List<? extends IInterfaceElement> getInterfaceElementList() {
@@ -51,13 +51,12 @@ public class VariableInputContainerLayoutEditPolicy extends AbstractInterfaceCon
 			protected Command getIECreateCommand(DataType refElement, int ref) {
 				return new CreateInterfaceElementCommand(refElement, getFBType().getInterfaceList(), true, ref);
 			}
-			
+
 		};
 	}
 
 	@Override
-	protected Command createMoveChildCommand(final EditPart child,
-			final EditPart after) {
+	protected Command createMoveChildCommand(final EditPart child, final EditPart after) {
 
 		if (child instanceof InterfaceEditPart) {
 			InterfaceEditPart childEP = (InterfaceEditPart) child;
@@ -73,7 +72,8 @@ public class VariableInputContainerLayoutEditPolicy extends AbstractInterfaceCon
 				} else {
 					newIndex = getHost().getChildren().indexOf(after);
 				}
-				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(), ((IInterfaceElement)childEP.getModel()).isIsInput(), newIndex);
+				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(),
+						((IInterfaceElement) childEP.getModel()).isIsInput(), newIndex);
 			}
 		}
 		return null;
@@ -83,14 +83,14 @@ public class VariableInputContainerLayoutEditPolicy extends AbstractInterfaceCon
 	protected Command getCreateCommand(final CreateRequest request) {
 		Object childClass = request.getNewObjectType();
 		FBType type = getFBType();
-		if (childClass instanceof DataType && type != null
-				&& !(childClass instanceof EventType) && !(childClass instanceof AdapterType)) {		
+		if (childClass instanceof DataType && type != null && !(childClass instanceof EventType)
+				&& !(childClass instanceof AdapterType)) {
 			int index = -1;
-			EditPart ref = getInsertionReference(request);		
+			EditPart ref = getInsertionReference(request);
 			if (ref != null) {
 				index = type.getInterfaceList().getInputVars().indexOf(ref.getModel());
 			}
-			return new CreateInterfaceElementCommand((DataType)childClass, type.getInterfaceList(), true, index);
+			return new CreateInterfaceElementCommand((DataType) childClass, type.getInterfaceList(), true, index);
 		}
 		return null;
 	}

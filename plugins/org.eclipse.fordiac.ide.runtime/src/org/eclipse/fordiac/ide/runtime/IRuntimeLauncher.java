@@ -56,7 +56,7 @@ public interface IRuntimeLauncher {
 	/**
 	 * Sets the param.
 	 *
-	 * @param name the name
+	 * @param name  the name
 	 * @param value the value
 	 */
 	LaunchParameter setParam(String name, String value);

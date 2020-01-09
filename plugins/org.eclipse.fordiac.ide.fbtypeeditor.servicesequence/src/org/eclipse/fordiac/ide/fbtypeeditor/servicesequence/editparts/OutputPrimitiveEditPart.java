@@ -28,12 +28,12 @@ import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 
-public class OutputPrimitiveEditPart extends PrimitiveEditPart{
+public class OutputPrimitiveEditPart extends PrimitiveEditPart {
 
-	OutputPrimitiveEditPart(){
+	OutputPrimitiveEditPart() {
 		super(new PrimitiveConnection(false));
 	}
-	
+
 	@Override
 	public List<Object> getModelSourceConnections() {
 		ArrayList<Object> temp = new ArrayList<>();
@@ -59,7 +59,7 @@ public class OutputPrimitiveEditPart extends PrimitiveEditPart{
 	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
 		return null;
 	}
-	
+
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		if (connection instanceof PrimitiveConnectionEditPart) {
@@ -74,7 +74,7 @@ public class OutputPrimitiveEditPart extends PrimitiveEditPart{
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
 		if (connection instanceof PrimitiveConnectionEditPart) {
-			return new FixedAnchor(getNameLabel(), ! isLeftInterface());
+			return new FixedAnchor(getNameLabel(), !isLeftInterface());
 		} else if (connection instanceof ConnectingConnectionEditPart) {
 			return new AdvancedFixedAnchor(getCenterFigure(), isLeftInterface(), isLeftInterface() ? 3 : -4, 0);
 		}

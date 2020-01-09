@@ -46,7 +46,8 @@ public class CreateInputEventAction extends WorkbenchPartAction {
 
 	@Override
 	public void run() {
-		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(EventTypeLibrary.getInstance().getType(null), fbType.getInterfaceList(), true, -1);
+		CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(
+				EventTypeLibrary.getInstance().getType(null), fbType.getInterfaceList(), true, -1);
 		execute(cmd);
 	}
 }

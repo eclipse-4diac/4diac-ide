@@ -39,7 +39,7 @@ public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
 		this.connectionTool = new FordiacConnectionDragCreationTool();
 		this.editPartTracker = new SelectEditPartTracker(editPart);
 	}
-	
+
 	public ConnectionDragCreationTool getConnectionTool() {
 		return connectionTool;
 	}

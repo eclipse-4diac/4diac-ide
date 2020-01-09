@@ -52,7 +52,6 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		return new ModifiedNonResizeableEditPolicy(cornerDim, new Insets(1));
 	}
 
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -83,7 +82,7 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		if (childClass instanceof ResourceTypeEntry) {
 			ResourceTypeEntry type = (ResourceTypeEntry) request.getNewObjectType();
 			if (getHost() instanceof DeviceEditPart) {
-				return new ResourceCreateCommand(type, ((DeviceEditPart)getHost()).getModel(), false);
+				return new ResourceCreateCommand(type, ((DeviceEditPart) getHost()).getModel(), false);
 			}
 		}
 		return null;
@@ -101,13 +100,13 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 		return super.getCommand(request);
 	}
-	
+
 	@Override
-	protected Command createAddCommand(ChangeBoundsRequest request,
-			EditPart child, Object constraint){
+	protected Command createAddCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
 		if (child instanceof ResourceEditPart) {
-			Device targetDevice = ((DeviceEditPart)getHost()).getModel();
-			return new ResourceMoveCommand((Resource) child.getModel(), targetDevice, targetDevice.getResource().size());
+			Device targetDevice = ((DeviceEditPart) getHost()).getModel();
+			return new ResourceMoveCommand((Resource) child.getModel(), targetDevice,
+					targetDevice.getResource().size());
 		}
 		return null;
 	}
@@ -115,8 +114,7 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	/**
 	 * Returns the command contribution to an alignment request
 	 * 
-	 * @param request
-	 *            the alignment request
+	 * @param request the alignment request
 	 * @return the contribution to the alignment
 	 */
 	protected Command getAlignCommand(AlignmentRequest request) {

@@ -26,24 +26,17 @@ import org.eclipse.swt.widgets.Composite;
 public class TextEditor extends SourceViewer implements IAlgorithmEditor {
 
 	private Document document = new Document();
-	
+
 	/**
 	 * Instantiates a new text editor.
 	 * 
-	 * @param parent
-	 *            the parent
-	 * @param verticalRuler
-	 *            the vertical ruler
-	 * @param overviewRuler
-	 *            the overview ruler
-	 * @param showAnnotationsOverview
-	 *            the show annotations overview
-	 * @param styles
-	 *            the styles
+	 * @param parent                  the parent
+	 * @param verticalRuler           the vertical ruler
+	 * @param overviewRuler           the overview ruler
+	 * @param showAnnotationsOverview the show annotations overview
+	 * @param styles                  the styles
 	 */
-	public TextEditor(final Composite parent,
-			final IVerticalRuler verticalRuler,
-			final IOverviewRuler overviewRuler,
+	public TextEditor(final Composite parent, final IVerticalRuler verticalRuler, final IOverviewRuler overviewRuler,
 			final boolean showAnnotationsOverview, final int styles) {
 		super(parent, verticalRuler, overviewRuler, showAnnotationsOverview, styles);
 		setDocument(document);
@@ -63,9 +56,9 @@ public class TextEditor extends SourceViewer implements IAlgorithmEditor {
 	public void setAlgorithmText(String text) {
 		document.set(text);
 	}
-	
+
 	@Override
-	public String getAlgorithmText(){
+	public String getAlgorithmText() {
 		return document.get();
 	}
 

@@ -31,23 +31,21 @@ public final class CompilableElementImporter {
 	 * Parses the compiler info.
 	 * 
 	 * @param ctype the ctype
-	 * @param node the node
+	 * @param node  the node
 	 * 
 	 * @return the compiler info
 	 * 
 	 * @throws TypeImportException the FBT import exception
 	 */
-	public static CompilerInfo parseCompilerInfo(final CompilableType ctype,
-			final Node node) throws TypeImportException {
+	public static CompilerInfo parseCompilerInfo(final CompilableType ctype, final Node node)
+			throws TypeImportException {
 		NamedNodeMap map = node.getAttributes();
-		CompilerInfo compilerInfo = LibraryElementFactory.eINSTANCE
-				.createCompilerInfo();
+		CompilerInfo compilerInfo = LibraryElementFactory.eINSTANCE.createCompilerInfo();
 		ctype.setCompilerInfo(compilerInfo);
 		NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node compiler = childNodes.item(i);
-			if (compiler.getNodeName().equals(
-					LibraryElementTags.COMPILER_ELEMENT)) {
+			if (compiler.getNodeName().equals(LibraryElementTags.COMPILER_ELEMENT)) {
 				parseCompiler(compilerInfo, compiler);
 			}
 		}
@@ -67,16 +65,12 @@ public final class CompilableElementImporter {
 	/**
 	 * Parses the compiler.
 	 * 
-	 * @param compilerInfo
-	 *            the compiler info
-	 * @param compiler
-	 *            the compiler
+	 * @param compilerInfo the compiler info
+	 * @param compiler     the compiler
 	 * 
-	 * @throws TypeImportException
-	 *             the FBT import exception
+	 * @throws TypeImportException the FBT import exception
 	 */
-	private static void parseCompiler(final CompilerInfo compilerInfo,
-			final Node compiler) throws TypeImportException {
+	private static void parseCompiler(final CompilerInfo compilerInfo, final Node compiler) throws TypeImportException {
 		NamedNodeMap map = compiler.getAttributes();
 		Compiler comp = LibraryElementFactory.eINSTANCE.createCompiler();
 		Node language = map.getNamedItem(LibraryElementTags.LANGUAGE_ATTRIBUTE);
@@ -91,37 +85,32 @@ public final class CompilableElementImporter {
 			} else if ("OTHER".equalsIgnoreCase(language.getNodeValue())) { //$NON-NLS-1$
 				comp.setLanguage(Language.OTHER);
 			} else {
-				throw new TypeImportException(
-						Messages.CompilableElementImporter_ERROR_UnsupportedLanguage);
+				throw new TypeImportException(Messages.CompilableElementImporter_ERROR_UnsupportedLanguage);
 			}
 		} else {
-			throw new TypeImportException(
-					Messages.CompilableElementImporter_ERROR_LanguageNotDefined);
+			throw new TypeImportException(Messages.CompilableElementImporter_ERROR_LanguageNotDefined);
 		}
 		Node vendor = map.getNamedItem(LibraryElementTags.VENDOR_ATTRIBUTE);
 		if (vendor != null) {
 			comp.setVendor(vendor.getNodeValue());
 		} else {
-			throw new TypeImportException(
-					Messages.CompilableElementImporter_ERROR_VendorNotSet);
+			throw new TypeImportException(Messages.CompilableElementImporter_ERROR_VendorNotSet);
 		}
 		Node product = map.getNamedItem(LibraryElementTags.PRODUCT_ATTRIBUTE);
 		if (product != null) {
 			comp.setProduct(product.getNodeValue());
 		} else {
-			throw new TypeImportException(
-					Messages.CompilableElementImporter_ERROR_ProductNotSet);
+			throw new TypeImportException(Messages.CompilableElementImporter_ERROR_ProductNotSet);
 		}
 		Node version = map.getNamedItem(LibraryElementTags.VERSION_ATTRIBUTE);
 		if (version != null) {
 			comp.setVersion(version.getNodeValue());
 		} else {
-			throw new TypeImportException(
-					Messages.CompilableElementImporter_ERROR_VersionNotSet);
+			throw new TypeImportException(Messages.CompilableElementImporter_ERROR_VersionNotSet);
 		}
 		compilerInfo.getCompiler().add(comp);
 	}
-	
+
 	private CompilableElementImporter() {
 		throw new UnsupportedOperationException("Utility class CompilableElementImporter should not be insantiated!");
 	}

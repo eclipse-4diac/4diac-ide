@@ -24,10 +24,10 @@ import org.eclipse.ui.splash.BasicSplashHandler;
 /**
  * SplashHandler for the 4diac IDE diplaying a progress bar.
  * 
- * Although that this splash handler is only doing default things it helps us that 
- * the ide plugin will be the first plugin that will be loaded. With that the image url
- * handler is also loaded correctly. Until we are not moving to an full E4 model we need
- * to keep this SplashHandler. 
+ * Although that this splash handler is only doing default things it helps us
+ * that the ide plugin will be the first plugin that will be loaded. With that
+ * the image url handler is also loaded correctly. Until we are not moving to an
+ * full E4 model we need to keep this SplashHandler.
  * 
  * @author gebenh
  * 
@@ -48,11 +48,9 @@ public class SplashHandler extends BasicSplashHandler {
 		String progressRectString = null;
 		IProduct product = Platform.getProduct();
 		if (product != null) {
-			progressRectString = product
-					.getProperty(IProductConstants.STARTUP_PROGRESS_RECT);
+			progressRectString = product.getProperty(IProductConstants.STARTUP_PROGRESS_RECT);
 		}
-		Rectangle progressRect = StringConverter.asRectangle(progressRectString,
-				new Rectangle(10, 10, 300, 15));
+		Rectangle progressRect = StringConverter.asRectangle(progressRectString, new Rectangle(10, 10, 300, 15));
 		setProgressRect(progressRect);
 	}
 

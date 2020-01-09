@@ -33,35 +33,35 @@ import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>Factory</b>.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
+ * end-user-doc -->
+ * 
  * @generated
  */
 public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static PaletteFactory init() {
 		try {
-			PaletteFactory thePaletteFactory = (PaletteFactory)EPackage.Registry.INSTANCE.getEFactory(PalettePackage.eNS_URI);
+			PaletteFactory thePaletteFactory = (PaletteFactory) EPackage.Registry.INSTANCE
+					.getEFactory(PalettePackage.eNS_URI);
 			if (thePaletteFactory != null) {
 				return thePaletteFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new PaletteFactoryImpl();
 	}
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	public PaletteFactoryImpl() {
@@ -69,63 +69,71 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case PalettePackage.PALETTE: return createPalette();
-			case PalettePackage.PALETTE_GROUP: return createPaletteGroup();
-			case PalettePackage.FB_TYPE_PALETTE_ENTRY: return createFBTypePaletteEntry();
-			case PalettePackage.DEVICE_TYPE_PALETTE_ENTRY: return createDeviceTypePaletteEntry();
-			case PalettePackage.RESOURCE_TYPE_ENTRY: return createResourceTypeEntry();
-			case PalettePackage.SEGMENT_TYPE_PALETTE_ENTRY: return createSegmentTypePaletteEntry();
-			case PalettePackage.ADAPTER_TYPE_PALETTE_ENTRY: return createAdapterTypePaletteEntry();
-			case PalettePackage.SUB_APPLICATION_TYPE_PALETTE_ENTRY: return createSubApplicationTypePaletteEntry();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		case PalettePackage.PALETTE:
+			return createPalette();
+		case PalettePackage.PALETTE_GROUP:
+			return createPaletteGroup();
+		case PalettePackage.FB_TYPE_PALETTE_ENTRY:
+			return createFBTypePaletteEntry();
+		case PalettePackage.DEVICE_TYPE_PALETTE_ENTRY:
+			return createDeviceTypePaletteEntry();
+		case PalettePackage.RESOURCE_TYPE_ENTRY:
+			return createResourceTypeEntry();
+		case PalettePackage.SEGMENT_TYPE_PALETTE_ENTRY:
+			return createSegmentTypePaletteEntry();
+		case PalettePackage.ADAPTER_TYPE_PALETTE_ENTRY:
+			return createAdapterTypePaletteEntry();
+		case PalettePackage.SUB_APPLICATION_TYPE_PALETTE_ENTRY:
+			return createSubApplicationTypePaletteEntry();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-			case PalettePackage.IFILE:
-				return createIFileFromString(eDataType, initialValue);
-			case PalettePackage.IPROJECT:
-				return createIProjectFromString(eDataType, initialValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		case PalettePackage.IFILE:
+			return createIFileFromString(eDataType, initialValue);
+		case PalettePackage.IPROJECT:
+			return createIProjectFromString(eDataType, initialValue);
+		default:
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-			case PalettePackage.IFILE:
-				return convertIFileToString(eDataType, instanceValue);
-			case PalettePackage.IPROJECT:
-				return convertIProjectToString(eDataType, instanceValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		case PalettePackage.IFILE:
+			return convertIFileToString(eDataType, instanceValue);
+		case PalettePackage.IPROJECT:
+			return convertIProjectToString(eDataType, instanceValue);
+		default:
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -135,8 +143,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -146,8 +154,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -157,8 +165,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -168,8 +176,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -179,8 +187,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -190,8 +198,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -201,8 +209,8 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -212,17 +220,17 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public IFile createIFileFromString(EDataType eDataType, String initialValue) {
-		return (IFile)super.createFromString(eDataType, initialValue);
+		return (IFile) super.createFromString(eDataType, initialValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String convertIFileToString(EDataType eDataType, Object instanceValue) {
@@ -230,17 +238,17 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public IProject createIProjectFromString(EDataType eDataType, String initialValue) {
-		return (IProject)super.createFromString(eDataType, initialValue);
+		return (IProject) super.createFromString(eDataType, initialValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String convertIProjectToString(EDataType eDataType, Object instanceValue) {
@@ -248,18 +256,18 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public PalettePackage getPalettePackage() {
-		return (PalettePackage)getEPackage();
+		return (PalettePackage) getEPackage();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @deprecated
 	 * @generated
 	 */
@@ -268,4 +276,4 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 		return PalettePackage.eINSTANCE;
 	}
 
-} //PaletteFactoryImpl
+} // PaletteFactoryImpl

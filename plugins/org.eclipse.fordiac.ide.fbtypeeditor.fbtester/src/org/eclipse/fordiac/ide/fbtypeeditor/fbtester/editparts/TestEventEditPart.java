@@ -18,12 +18,10 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.TestingManager;
 
-
 /**
  * The Class TestEventEditPart.
  */
-public class TestEventEditPart extends TestEditPart implements
-		SpecificLayerEditPart {
+public class TestEventEditPart extends TestEditPart implements SpecificLayerEditPart {
 
 	@Override
 	public void activate() {
@@ -38,25 +36,23 @@ public class TestEventEditPart extends TestEditPart implements
 	protected void registerTriggerElement() {
 		TestingManager.getInstance().addTriggerElement(getModel());
 	}
-	
+
 	@Override
 	protected void createEditPolicies() {
 	}
 
 	@Override
 	protected void updatePos() {
-		if(null != getParentPart()){
+		if (null != getParentPart()) {
 			Rectangle bounds = getParentPart().getFigure().getBounds();
 			int x = 0;
 			if (isInput()) {
-	
+
 				int width = getFigure().getBounds().width;
-				x = bounds.x - 10 - width - 15
-						* getModel().getFb().getInterface().getEventInputs().size();
+				x = bounds.x - 10 - width - 15 * getModel().getFb().getInterface().getEventInputs().size();
 			} else {
-				x = bounds.x + bounds.width + 10 + 15
-						* getModel().getFb().getInterface().getEventInputs().size();
-	
+				x = bounds.x + bounds.width + 10 + 15 * getModel().getFb().getInterface().getEventInputs().size();
+
 			}
 			int y = bounds.y;
 			if (x != oldx || y != oldy) {

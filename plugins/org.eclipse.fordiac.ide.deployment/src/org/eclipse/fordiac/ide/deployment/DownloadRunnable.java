@@ -49,35 +49,40 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 class DownloadRunnable implements IRunnableWithProgress {
-	
-	private final List<DeviceDeploymentData>  deploymentData;
+
+	private final List<DeviceDeploymentData> deploymentData;
 	private final IDeviceManagementCommunicationHandler overrideDevMgmCommHandler;
 	private final IDeploymentListener outputView;
 	private final String profile;
 	private IProgressMonitor curMonitor;
-	
-	/** flag indicating if an existing resource should automatically be overriden or if the user should be asked
+
+	/**
+	 * flag indicating if an existing resource should automatically be overriden or
+	 * if the user should be asked
 	 */
 	private boolean overrideAll = false;
-	
-	/** set of automation systems where monitoring was active during deployment.
+
+	/**
+	 * set of automation systems where monitoring was active during deployment.
 	 * 
-	 * For these automation systems monitoring was disabled and need to be renabled after deployment.
+	 * For these automation systems monitoring was disabled and need to be renabled
+	 * after deployment.
 	 */
-	private final Set<AutomationSystem> monitoredSystems = new HashSet<>();  
+	private final Set<AutomationSystem> monitoredSystems = new HashSet<>();
 
 	/**
 	 * DownloadRunnable constructor.
 	 * 
-	 * @param deploymentData			the collection of elements to deploy
+	 * @param deploymentData            the collection of elements to deploy
 	 * @param overrideDevMgmCommHandler if not null this device management
 	 *                                  communication should be used instead the one
 	 *                                  derived from the device profile.
-	 * @param outputView				the view showing the download information
-	 * @param profile					if not null the profile to be used instead of the device's profile							                                 
+	 * @param outputView                the view showing the download information
+	 * @param profile                   if not null the profile to be used instead
+	 *                                  of the device's profile
 	 */
-	public DownloadRunnable(final List<DeviceDeploymentData>  deploymentData,
-			IDeviceManagementCommunicationHandler overrideDevMgmCommHandler, IDeploymentListener outputView, 
+	public DownloadRunnable(final List<DeviceDeploymentData> deploymentData,
+			IDeviceManagementCommunicationHandler overrideDevMgmCommHandler, IDeploymentListener outputView,
 			String profile) {
 		this.deploymentData = deploymentData;
 		this.overrideDevMgmCommHandler = overrideDevMgmCommHandler;
@@ -97,90 +102,96 @@ class DownloadRunnable implements IRunnableWithProgress {
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		this.curMonitor = monitor;
 		monitor.beginTask(Messages.DeploymentCoordinator_LABEL_PerformingDownload, calculateWorkAmount());
-		
-		for(DeviceDeploymentData devData : deploymentData) {
+
+		for (DeviceDeploymentData devData : deploymentData) {
 			if (monitor.isCanceled()) {
 				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 			}
-			deployDevice(devData);			
+			deployDevice(devData);
 		}
 		reenableMonitoring();
 		monitor.done();
 	}
 
 	private void deployDevice(DeviceDeploymentData devData) throws InvocationTargetException, InterruptedException {
-		IDeviceManagementInteractor executor = DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(devData.getDevice(), overrideDevMgmCommHandler, profile);
-		if (executor != null) {	
+		IDeviceManagementInteractor executor = DeviceManagementInteractorFactory.INSTANCE
+				.getDeviceManagementInteractor(devData.getDevice(), overrideDevMgmCommHandler, profile);
+		if (executor != null) {
 			checkMonitoring(devData.getDevice().getAutomationSystem());
 			addDeploymentListener(executor);
-			try(IDeviceManagementInteractorCloser closer = executor::disconnect){
+			try (IDeviceManagementInteractorCloser closer = executor::disconnect) {
 				executor.connect();
 				deployResources(devData, executor);
-				deployDeviceData(devData, executor);					
+				deployDeviceData(devData, executor);
 			} catch (final DeploymentException e) {
-				showDeploymentErrorDialog(devData.getDevice(), e);					
+				showDeploymentErrorDialog(devData.getDevice(), e);
 			} finally {
 				removeDeploymentListener(executor);
 			}
-			
+
 		} else {
 			DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(devData.getDevice(), null);
 		}
 	}
 
-	private void deployResources(DeviceDeploymentData devData, IDeviceManagementInteractor executor) throws InterruptedException, DeploymentException {
-		Set<String> resources = executor.queryResources().stream().map(res -> res.getName()).collect(Collectors.toSet());
-		
+	private void deployResources(DeviceDeploymentData devData, IDeviceManagementInteractor executor)
+			throws InterruptedException, DeploymentException {
+		Set<String> resources = executor.queryResources().stream().map(res -> res.getName())
+				.collect(Collectors.toSet());
+
 		for (ResourceDeploymentData resData : devData.getResData()) {
 			if (curMonitor.isCanceled()) {
 				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 			}
-			if(checkResource(resData.getRes(), resources, executor)) {
-				//the resource is ready for deployment
+			if (checkResource(resData.getRes(), resources, executor)) {
+				// the resource is ready for deployment
 				deployResource(resData, executor);
 			}
 		}
 	}
-	
-	
-	/** Check if the resource exists already in the device and if yes ask the user how to behave (i.e., abort, override, or override all).
+
+	/**
+	 * Check if the resource exists already in the device and if yes ask the user
+	 * how to behave (i.e., abort, override, or override all).
 	 * 
-	 * @param res				the resource that should be deployed
-	 * @param resourceNames		the names of all resources currently in the device
-	 * @param executor			the deployment executor	
-	 * @return 					true if the resource can and should be deployed. 
+	 * @param res           the resource that should be deployed
+	 * @param resourceNames the names of all resources currently in the device
+	 * @param executor      the deployment executor
+	 * @return true if the resource can and should be deployed.
 	 * @throws DeploymentException
 	 * @throws InterruptedException
 	 */
-	private boolean checkResource(Resource res, Set<String> resourceNames, IDeviceManagementInteractor executor) throws DeploymentException, InterruptedException{
-		if(resourceNames.contains(res.getName())) {
-			//the resource is in the device
-			if(overrideAll) {
+	private boolean checkResource(Resource res, Set<String> resourceNames, IDeviceManagementInteractor executor)
+			throws DeploymentException, InterruptedException {
+		if (resourceNames.contains(res.getName())) {
+			// the resource is in the device
+			if (overrideAll) {
 				executor.deleteResource(res.getName());
-			}else {
-				if(askOverrideForResource(res)){
+			} else {
+				if (askOverrideForResource(res)) {
 					executor.deleteResource(res.getName());
-				}else {
-					//the user has canceled to override this resource
+				} else {
+					// the user has canceled to override this resource
 					return false;
 				}
 			}
-		} 			
-		
+		}
+
 		return true;
 	}
 
-	private void deployDeviceData(DeviceDeploymentData devData, IDeviceManagementInteractor executor) throws DeploymentException {		
-		if(!devData.getSelectedDevParams().isEmpty()) {
+	private void deployDeviceData(DeviceDeploymentData devData, IDeviceManagementInteractor executor)
+			throws DeploymentException {
+		if (!devData.getSelectedDevParams().isEmpty()) {
 			Device device = devData.getDevice();
-			for(VarDeclaration var : devData.getSelectedDevParams()) {
+			for (VarDeclaration var : devData.getSelectedDevParams()) {
 				String value = DeploymentHelper.getVariableValue(var, device.getAutomationSystem());
 				if (null != value) {
 					executor.writeDeviceParameter(device, var.getName(), value);
-				}				
+				}
 				curMonitor.worked(1);
-			}		
-			//we have device parameters send start to the device so that 
+			}
+			// we have device parameters send start to the device so that
 			executor.startDevice(device);
 		}
 	}
@@ -189,31 +200,33 @@ class DownloadRunnable implements IRunnableWithProgress {
 		Display.getDefault().asyncExec(() -> {
 			final Shell shell = Display.getDefault().getActiveShell();
 			MessageDialog.openError(shell, Messages.DownloadRunnable_MajorDownloadError,
-					MessageFormat.format(Messages.DownloadRunnable_DownloadErrorDetails, device.getName(), DeploymentHelper.getMgrID(device), e.getMessage()));
-		});		
+					MessageFormat.format(Messages.DownloadRunnable_DownloadErrorDetails, device.getName(),
+							DeploymentHelper.getMgrID(device), e.getMessage()));
+		});
 	}
 
 	private void addDeploymentListener(IDeviceManagementInteractor executor) {
-		if (null != outputView) { 
+		if (null != outputView) {
 			executor.addDeploymentListener(outputView);
 		}
 	}
-	
+
 	private void removeDeploymentListener(IDeviceManagementInteractor executor) {
-		if (null != outputView) { 
+		if (null != outputView) {
 			executor.removeDeploymentListener(outputView);
 		}
 	}
 
 	private int calculateWorkAmount() {
-		int retVal = deploymentData.size(); 
-		
+		int retVal = deploymentData.size();
+
 		for (DeviceDeploymentData devData : deploymentData) {
 			retVal += devData.getSelectedDevParams().size();
 			retVal += devData.getResData().size();
 			for (ResourceDeploymentData resDepData : devData.getResData()) {
 				retVal += countResourceParams(resDepData.getRes());
-				retVal += resDepData.getFbs().size() + resDepData.getConnections().size() + resDepData.getParams().size();
+				retVal += resDepData.getFbs().size() + resDepData.getConnections().size()
+						+ resDepData.getParams().size();
 				// TODO count variables of Fbs
 			}
 		}
@@ -231,8 +244,8 @@ class DownloadRunnable implements IRunnableWithProgress {
 		return work;
 	}
 
-	protected void deployResource(final ResourceDeploymentData resDepData,
-			IDeviceManagementInteractor executor) throws DeploymentException {
+	protected void deployResource(final ResourceDeploymentData resDepData, IDeviceManagementInteractor executor)
+			throws DeploymentException {
 		Resource res = resDepData.getRes();
 		if (!res.isDeviceTypeResource()) {
 			executor.createResource(res);
@@ -251,7 +264,8 @@ class DownloadRunnable implements IRunnableWithProgress {
 		}
 	}
 
-	private void deployParamters(ResourceDeploymentData resDepData, IDeviceManagementInteractor executor) throws DeploymentException {
+	private void deployParamters(ResourceDeploymentData resDepData, IDeviceManagementInteractor executor)
+			throws DeploymentException {
 		for (ParameterData param : resDepData.getParams()) {
 			executor.writeFBParameter(resDepData.getRes(), param.getValue(),
 					new FBDeploymentData(param.getPrefix(), (FB) param.getVar().getFBNetworkElement()), param.getVar());
@@ -259,8 +273,8 @@ class DownloadRunnable implements IRunnableWithProgress {
 		}
 	}
 
-	private void deployConnections(final ResourceDeploymentData resDepData,
-			final IDeviceManagementInteractor executor) throws DeploymentException {
+	private void deployConnections(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor)
+			throws DeploymentException {
 		for (ConnectionDeploymentData con : resDepData.getConnections()) {
 			executor.createConnection(resDepData.getRes(), con);
 			curMonitor.worked(1);
@@ -270,7 +284,8 @@ class DownloadRunnable implements IRunnableWithProgress {
 		}
 	}
 
-	private void createFBInstance(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor) throws DeploymentException {
+	private void createFBInstance(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor)
+			throws DeploymentException {
 		Resource res = resDepData.getRes();
 		for (FBDeploymentData fbDepData : resDepData.getFbs()) {
 			if (!fbDepData.getFb().isResourceTypeFB()) {
@@ -290,14 +305,15 @@ class DownloadRunnable implements IRunnableWithProgress {
 		}
 	}
 
-	private void checkMonitoring(AutomationSystem automationSystem) throws InvocationTargetException, InterruptedException {
-		if(!monitoredSystems.contains(automationSystem)) {
+	private void checkMonitoring(AutomationSystem automationSystem)
+			throws InvocationTargetException, InterruptedException {
+		if (!monitoredSystems.contains(automationSystem)) {
 			AbstractMonitoringManager monitoringManager = AbstractMonitoringManager.getMonitoringManager();
-			if(monitoringManager.isSystemMonitored(automationSystem)) {
+			if (monitoringManager.isSystemMonitored(automationSystem)) {
 				monitoringManager.disableSystemSynch(automationSystem, curMonitor);
 				monitoredSystems.add(automationSystem);
 			}
-		}		
+		}
 	}
 
 	private void reenableMonitoring() throws InvocationTargetException, InterruptedException {
@@ -306,63 +322,64 @@ class DownloadRunnable implements IRunnableWithProgress {
 			monitoringManager.enableSystemSynch(system, curMonitor);
 		}
 	}
-	
-	private boolean askOverrideForResource(Resource res) throws InterruptedException {	
+
+	private boolean askOverrideForResource(Resource res) throws InterruptedException {
 		final AtomicInteger result = new AtomicInteger();
 		Display.getDefault().syncExec(() -> {
-				final Shell shell = Display.getDefault().getActiveShell();
-				MessageDialog dialog = new MessageDialog(shell, 
-						Messages.DownloadRunnable_ResourceAlreadyExists, null, 
-						MessageFormat.format(Messages.DownloadRunnable_ResourceOverrideQuestion, res.getName(), res.getDevice().getName()), MessageDialog.QUESTION, 
-						new String[] { Messages.DownloadRunnable_Replace,  SWT.getMessage("SWT_Abort"), SWT.getMessage("SWT_Cancel"), Messages.DownloadRunnable_ReplaceAll }, 0);  //$NON-NLS-1$ //$NON-NLS-2$
-				result.set(dialog.open());
-			});
-				
-		switch(result.get()) {
-		case 0:  // replace
-			return true; //override the resource
-		case 1:  // abort
+			final Shell shell = Display.getDefault().getActiveShell();
+			MessageDialog dialog = new MessageDialog(shell, Messages.DownloadRunnable_ResourceAlreadyExists, null,
+					MessageFormat.format(Messages.DownloadRunnable_ResourceOverrideQuestion, res.getName(),
+							res.getDevice().getName()),
+					MessageDialog.QUESTION,
+					new String[] { Messages.DownloadRunnable_Replace, SWT.getMessage("SWT_Abort"), //$NON-NLS-1$
+							SWT.getMessage("SWT_Cancel"), Messages.DownloadRunnable_ReplaceAll }, //$NON-NLS-1$
+					0);
+			result.set(dialog.open());
+		});
+
+		switch (result.get()) {
+		case 0: // replace
+			return true; // override the resource
+		case 1: // abort
 			throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 		case 3: // replace all
 			reasureOverrideAll();
-			
+
 			return true;
 		default:
 			break;
 		}
-		
-		return false;  //in the default case we don't want to override the resoruce
+
+		return false; // in the default case we don't want to override the resoruce
 	}
 
 	private void reasureOverrideAll() throws InterruptedException {
 		final StringBuilder message = new StringBuilder(Messages.DownloadRunnable_ReassureOveride);
-		
+
 		for (DeviceDeploymentData data : deploymentData) {
-			message.append("\n\t- ");  //$NON-NLS-1$
+			message.append("\n\t- "); //$NON-NLS-1$
 			message.append(data.getDevice().getName());
 			message.append(":"); //$NON-NLS-1$
-			for(ResourceDeploymentData resData: data.getResData()) {
-				message.append("\n\t\t- ");  //$NON-NLS-1$
+			for (ResourceDeploymentData resData : data.getResData()) {
+				message.append("\n\t\t- "); //$NON-NLS-1$
 				message.append(resData.getRes().getName());
 			}
 		}
-		
+
 		final AtomicInteger result = new AtomicInteger();
 		Display.getDefault().syncExec(() -> {
 			final Shell shell = Display.getDefault().getActiveShell();
-			MessageDialog dialog = new MessageDialog(shell, 
-					Messages.DownloadRunnable_ReassureOverideHeader, null, 
-					message.toString(), MessageDialog.QUESTION, 
-					new String[] { Messages.DownloadRunnable_ReplaceAll,  SWT.getMessage("SWT_Abort")}, 0);  //$NON-NLS-1$
+			MessageDialog dialog = new MessageDialog(shell, Messages.DownloadRunnable_ReassureOverideHeader, null,
+					message.toString(), MessageDialog.QUESTION,
+					new String[] { Messages.DownloadRunnable_ReplaceAll, SWT.getMessage("SWT_Abort") }, 0); //$NON-NLS-1$
 			result.set(dialog.open());
 		});
-		
-		if(1 == result.get()) {
+
+		if (1 == result.get()) {
 			throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
 		}
-		//if the user selects ReplaceAll we don't need to do anything special
+		// if the user selects ReplaceAll we don't need to do anything special
 		overrideAll = true;
 	}
-
 
 }

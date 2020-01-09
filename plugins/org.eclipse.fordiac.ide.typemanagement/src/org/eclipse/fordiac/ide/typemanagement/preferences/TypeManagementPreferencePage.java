@@ -53,7 +53,7 @@ public class TypeManagementPreferencePage extends FieldEditorPreferencePage impl
 	public void createFieldEditors() {
 
 		Group identificationGroup = new Group(getFieldEditorParent(), SWT.NONE);
-		identificationGroup.setText(Messages.typeManagementPreferencePageIdentificationTitle); 
+		identificationGroup.setText(Messages.typeManagementPreferencePageIdentificationTitle);
 
 		GridLayout gridLayout = new GridLayout(2, false);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -83,7 +83,7 @@ public class TypeManagementPreferencePage extends FieldEditorPreferencePage impl
 		identificationGroup.setLayout(gridLayout);
 
 		Group versionGroup = new Group(getFieldEditorParent(), SWT.NONE);
-		versionGroup.setText(Messages.typeManagementPreferencePageVersionTitle); 
+		versionGroup.setText(Messages.typeManagementPreferencePageVersionTitle);
 
 		StringFieldEditor version = new StringFieldEditor(PreferenceConstants.P_VERSION, PreferenceConstants.P_VERSION,
 				versionGroup);

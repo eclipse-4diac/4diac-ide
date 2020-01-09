@@ -35,9 +35,9 @@ import com.google.inject.name.Named;
 
 @SuppressWarnings("restriction")
 public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
-	
-	private static final String LINKING_FILE_EXTENSION = "xtextfbt";   //$NON-NLS-1$
-	
+
+	private static final String LINKING_FILE_EXTENSION = "xtextfbt"; //$NON-NLS-1$
+
 	@Inject
 	private EmbeddedEditorFactory editorFactory;
 
@@ -47,7 +47,6 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 	@Inject
 	@Named(Constants.FILE_EXTENSIONS)
 	private String fileExtension;
-		
 
 	@Override
 	public IAlgorithmEditor createAlgorithmEditor(Composite parent, final BaseFBType fbType) {
@@ -59,10 +58,10 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 				EcoreUtil.Copier copier = new EcoreUtil.Copier();
 				Resource fbResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
 				fbResource.getContents().add(copier.copy(EcoreUtil.getRootContainer(fbType)));
-				for(AdapterDeclaration adapter : fbType.getInterfaceList().getSockets()) {
+				for (AdapterDeclaration adapter : fbType.getInterfaceList().getSockets()) {
 					createAdapterResource(resourceSet, copier, adapter);
 				}
-				for(AdapterDeclaration adapter : fbType.getInterfaceList().getPlugs()) {
+				for (AdapterDeclaration adapter : fbType.getInterfaceList().getPlugs()) {
 					createAdapterResource(resourceSet, copier, adapter);
 				}
 				copier.copyReferences();
@@ -71,9 +70,11 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 
 			private void createAdapterResource(XtextResourceSet resourceSet, EcoreUtil.Copier copier,
 					AdapterDeclaration adapter) {
-				Resource adapterResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
+				Resource adapterResource = resourceSet
+						.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
 				copier.copy(adapter.getType());
-				adapterResource.getContents().add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
+				adapterResource.getContents()
+						.add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
 			}
 
 			protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
@@ -88,17 +89,18 @@ public class XTextAlgorithmCreator implements IAlgorithmEditorCreator {
 			}
 		};
 
-		EmbeddedEditor editor = editorFactory.newEditor(resourceProvider)
-				.showErrorAndWarningAnnotations().withParent(parent);
+		EmbeddedEditor editor = editorFactory.newEditor(resourceProvider).showErrorAndWarningAnnotations()
+				.withParent(parent);
 		return createXTextAlgorithmEditor(fbType, editor);
 	}
 
-	/** Factory method creating the Specific XTextAlgorithmEditor.  
+	/**
+	 * Factory method creating the Specific XTextAlgorithmEditor.
 	 * 
-	 * Should be overridden if you need a special XTextAlogrithm which performs additional setups for your DSL.
+	 * Should be overridden if you need a special XTextAlogrithm which performs
+	 * additional setups for your DSL.
 	 */
-	protected XTextAlgorithmEditor createXTextAlgorithmEditor(BaseFBType fbType,
-			EmbeddedEditor editor) {
+	protected XTextAlgorithmEditor createXTextAlgorithmEditor(BaseFBType fbType, EmbeddedEditor editor) {
 		return new XTextAlgorithmEditor(editor, fbType);
 	}
 

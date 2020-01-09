@@ -20,7 +20,7 @@ public class Activator extends Abstract4DIACUIPlugin {
 	public static final String PLUGIN_ID = "org.eclipse.fordiac.ide.comgeneration"; //$NON-NLS-1$
 	// The shared instance
 	private static Activator plugin;
-	
+
 	public Activator() {
 	}
 

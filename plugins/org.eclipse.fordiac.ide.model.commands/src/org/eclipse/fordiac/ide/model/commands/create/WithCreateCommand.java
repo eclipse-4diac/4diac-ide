@@ -61,7 +61,7 @@ public class WithCreateCommand extends Command {
 			Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.AdapterConnectionNotAllowed);
 			return false;
 		}
-		for(With w : varDeclaration.getWiths()) {
+		for (With w : varDeclaration.getWiths()) {
 			if (w.eContainer().equals(event)) {
 				Abstract4DIACUIPlugin.statusLineErrorMessage(Messages.WithExists);
 				return false;

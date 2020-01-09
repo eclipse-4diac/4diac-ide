@@ -34,12 +34,11 @@ public class ReferencedTypeNotFoundException extends Exception {
 	/**
 	 * Instantiates a new referenced type not found exception.
 	 * 
-	 * @param arg0 the arg0
-	 * @param type the type
+	 * @param arg0            the arg0
+	 * @param type            the type
 	 * @param missingTypeName the missing type name
 	 */
-	public ReferencedTypeNotFoundException(final String arg0,
-			final FBType type, final String missingTypeName) {
+	public ReferencedTypeNotFoundException(final String arg0, final FBType type, final String missingTypeName) {
 		super(arg0);
 		this.type = type;
 		this.missingTypeName = missingTypeName;

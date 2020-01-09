@@ -18,7 +18,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 
-
 /**
  * The Class SetTestValueEditPolicy.
  */
@@ -27,8 +26,7 @@ public class SetTestValueEditPolicy extends DirectEditPolicy {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.DirectEditPolicy#getDirectEditCommand(org.
+	 * @see org.eclipse.gef.editpolicies.DirectEditPolicy#getDirectEditCommand(org.
 	 * eclipse.gef.requests.DirectEditRequest)
 	 */
 	@Override
@@ -37,10 +35,12 @@ public class SetTestValueEditPolicy extends DirectEditPolicy {
 			TestEditPart testEditPart = (TestEditPart) getHost();
 			testEditPart.getModel().setValue((String) request.getCellEditor().getValue());
 			testEditPart.refresh();
-			
-			// return a dummy command needed to fulfill requirements of direct edit of interface value for testing.
-			// canExecute is set to false so that it is not put onto the command stack and makes the editor dirty.
-			return new Command(){
+
+			// return a dummy command needed to fulfill requirements of direct edit of
+			// interface value for testing.
+			// canExecute is set to false so that it is not put onto the command stack and
+			// makes the editor dirty.
+			return new Command() {
 				@Override
 				public boolean canExecute() {
 					return false;
@@ -53,8 +53,7 @@ public class SetTestValueEditPolicy extends DirectEditPolicy {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.DirectEditPolicy#showCurrentEditValue(org.
+	 * @see org.eclipse.gef.editpolicies.DirectEditPolicy#showCurrentEditValue(org.
 	 * eclipse.gef.requests.DirectEditRequest)
 	 */
 	@Override

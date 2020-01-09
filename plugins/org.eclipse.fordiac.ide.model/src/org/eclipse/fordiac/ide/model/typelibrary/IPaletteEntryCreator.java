@@ -16,9 +16,9 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 
-
 /**
- *  Objects implementing this element can create a palette entry if the file type can be handled. 
+ * Objects implementing this element can create a palette entry if the file type
+ * can be handled.
  * 
  * @author eisenmenger
  *
@@ -31,8 +31,7 @@ public interface IPaletteEntryCreator {
 	 * @param file file type
 	 * @return true if the file can handled and false if not.
 	 */
-	 boolean canHandle(IFile file);
-	 
+	boolean canHandle(IFile file);
 
 	/**
 	 * Creates the palette entry

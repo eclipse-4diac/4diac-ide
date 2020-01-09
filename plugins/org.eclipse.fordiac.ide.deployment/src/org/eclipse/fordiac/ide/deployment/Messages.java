@@ -32,21 +32,21 @@ public class Messages extends NLS {
 
 	/** The DeploymentCoordinator_MESSAGE_DefinedProfileNotSupported. */
 	public static String DeploymentCoordinator_MESSAGE_DefinedProfileNotSupported;
-	
+
 	public static String DeploymentCoordinator_MESSAGE_ProfileNotSet;
 
 	public static String DownloadRunnable_DownloadErrorDetails;
 
 	public static String DownloadRunnable_MajorDownloadError;
-	
+
 	public static String DownloadRunnable_ResourceAlreadyExists;
-	
+
 	public static String DownloadRunnable_ResourceOverrideQuestion;
-	
+
 	public static String DownloadRunnable_Replace;
-	
+
 	public static String DownloadRunnable_ReplaceAll;
-	
+
 	public static String DownloadRunnable_ReassureOverideHeader;
 	public static String DownloadRunnable_ReassureOveride;
 

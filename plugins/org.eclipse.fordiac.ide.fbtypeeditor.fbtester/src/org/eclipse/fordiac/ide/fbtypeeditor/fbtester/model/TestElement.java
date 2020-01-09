@@ -26,11 +26,10 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-
 /**
  * The Class TestElement.
  */
-public class TestElement  extends PositionableElementImpl implements IEditPartCreator{
+public class TestElement extends PositionableElementImpl implements IEditPartCreator {
 
 	/** The monitoring element. */
 	private String monitoringElement;
@@ -40,15 +39,13 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 
 	/** The value. */
 	private String value;
-	
-	
+
 	private int nrOfHistory = 500;
 	private List<String> historyValues = new ArrayList<>(nrOfHistory);
 	private List<Integer> historyCycles = new ArrayList<>(nrOfHistory);
 	private List<Long> historySec = new ArrayList<>(nrOfHistory);
 	private List<Long> historyUSec = new ArrayList<>(nrOfHistory);
 	private int currentInt = 0;
-	
 
 	/**
 	 * Gets the value.
@@ -63,19 +60,17 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 		if (currentInt == 0) {
 			return "0";
 		}
-		return historyValues.get((currentInt % nrOfHistory ) -1 );
+		return historyValues.get((currentInt % nrOfHistory) - 1);
 	}
 
-	
 	/**
 	 * Sets the value.
 	 * 
-	 * @param value
-	 *          the new value
+	 * @param value the new value
 	 */
 	public void setValue(String value) {
 		this.value = value;
-		for (ISetValueListener valueListener : valueListeners){
+		for (ISetValueListener valueListener : valueListeners) {
 			valueListener.setValue(this, value);
 		}
 	}
@@ -95,13 +90,11 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	/**
 	 * Sets the fb.
 	 * 
-	 * @param fb
-	 *          the new fb
+	 * @param fb the new fb
 	 */
 	public void setFb(FB fb) {
 		this.fb = fb;
 	}
-
 
 	/**
 	 * Gets the monitoring element as string.
@@ -115,8 +108,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	/**
 	 * Sets the monitoring element.
 	 * 
-	 * @param monitoringElement
-	 *          the new monitoring element
+	 * @param monitoringElement the new monitoring element
 	 */
 	public void setMonitoringElement(String monitoringElement) {
 		this.monitoringElement = monitoringElement;
@@ -152,8 +144,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	/**
 	 * Sets the element.
 	 * 
-	 * @param element
-	 *          the new element
+	 * @param element the new element
 	 */
 	public void setElement(IInterfaceElement element) {
 		this.element = element;
@@ -183,8 +174,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	@Override
 	public EditPart createEditPart() {
 		if (part == null) {
-			if (getInterfaceElement() instanceof Event
-					&& getInterfaceElement().isIsInput()) {
+			if (getInterfaceElement() instanceof Event && getInterfaceElement().isIsInput()) {
 				part = new TestEventEditPart();
 			} else {
 				part = new TestEditPart();
@@ -199,8 +189,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	/**
 	 * Adds the set value listener.
 	 * 
-	 * @param listener
-	 *          the listener
+	 * @param listener the listener
 	 */
 	public void addSetValueListener(ISetValueListener listener) {
 		if (!valueListeners.contains(listener)) {
@@ -214,8 +203,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	/**
 	 * Adds the trigger event listener.
 	 * 
-	 * @param listener
-	 *          the listener
+	 * @param listener the listener
 	 */
 	public void addTriggerEventListener(ITriggerEventListener listener) {
 		if (!eventListners.contains(listener)) {
@@ -227,7 +215,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	 * Send event.
 	 */
 	public void sendEvent() {
-		for (ITriggerEventListener eventListner : eventListners){
+		for (ITriggerEventListener eventListner : eventListners) {
 			eventListner.sendEvent(this);
 		}
 	}
@@ -235,8 +223,7 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 	/**
 	 * Update value.
 	 * 
-	 * @param value
-	 *          the value
+	 * @param value the value
 	 */
 	public void updateValue(final String value, int cycle) {
 		historyValues.add(currentInt % nrOfHistory, value);
@@ -254,13 +241,13 @@ public class TestElement  extends PositionableElementImpl implements IEditPartCr
 		});
 	}
 
-
 	/**
 	 * Sets the background color of the element
+	 * 
 	 * @param color
 	 */
 	public void setColor(final Color color) {
 		Display.getDefault().asyncExec(() -> part.setBackgroundColor(color));
 	}
-	
+
 }

@@ -31,20 +31,25 @@ import org.eclipse.gef.EditPart;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#isForce <em>Force</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getForceValue <em>Force Value</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getCurrentValue <em>Current Value</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getSec <em>Sec</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getUsec <em>Usec</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#isForce
+ * <em>Force</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getForceValue
+ * <em>Force Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getCurrentValue
+ * <em>Current Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getSec
+ * <em>Sec</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringElementImpl#getUsec
+ * <em>Usec</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
-		MonitoringElement {
+public class MonitoringElementImpl extends MonitoringBaseElementImpl implements MonitoringElement {
 	/**
-	 * The default value of the '{@link #isForce() <em>Force</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #isForce() <em>Force</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isForce()
 	 * @generated
 	 * @ordered
@@ -52,8 +57,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	protected static final boolean FORCE_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #isForce() <em>Force</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #isForce() <em>Force</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isForce()
 	 * @generated
 	 * @ordered
@@ -61,8 +67,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	protected boolean force = FORCE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getForceValue() <em>Force Value</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #getForceValue() <em>Force Value</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getForceValue()
 	 * @generated
 	 * @ordered
@@ -70,8 +77,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	protected static final String FORCE_VALUE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getForceValue() <em>Force Value</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getForceValue() <em>Force Value</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getForceValue()
 	 * @generated
 	 * @ordered
@@ -79,9 +87,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	protected String forceValue = FORCE_VALUE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getCurrentValue() <em>Current Value</em>}' attribute.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * The default value of the '{@link #getCurrentValue() <em>Current Value</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getCurrentValue()
 	 * @generated
 	 * @ordered
@@ -89,9 +97,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	protected static final String CURRENT_VALUE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getCurrentValue() <em>Current Value</em>}' attribute.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * The cached value of the '{@link #getCurrentValue() <em>Current Value</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getCurrentValue()
 	 * @generated
 	 * @ordered
@@ -119,8 +127,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	protected long sec = SEC_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getUsec() <em>Usec</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #getUsec() <em>Usec</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getUsec()
 	 * @generated
 	 * @ordered
@@ -128,8 +137,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	protected static final long USEC_EDEFAULT = 0L;
 
 	/**
-	 * The cached value of the '{@link #getUsec() <em>Usec</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getUsec() <em>Usec</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getUsec()
 	 * @generated
 	 * @ordered
@@ -138,6 +148,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected MonitoringElementImpl() {
@@ -146,6 +157,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -153,10 +165,11 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 		return MonitoringPackage.Literals.MONITORING_ELEMENT;
 	}
 
-	//private String[] monitoringElementAsArray;
+	// private String[] monitoringElementAsArray;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -166,6 +179,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -173,11 +187,13 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 		boolean oldForce = force;
 		force = newForce;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_ELEMENT__FORCE, oldForce, force));
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_ELEMENT__FORCE, oldForce,
+					force));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -187,6 +203,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -194,11 +211,13 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 		String oldForceValue = forceValue;
 		forceValue = newForceValue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE, oldForceValue, forceValue));
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE,
+					oldForceValue, forceValue));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated NOT
 	 */
 	@Override
@@ -219,15 +238,12 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 	 */
 	@Override
 	public void setCurrentValue(String newCurrentValue) {
-		if (currentValue == null
-				|| ((currentValue != null) && !currentValue
-						.equals(newCurrentValue))) {
+		if (currentValue == null || ((currentValue != null) && !currentValue.equals(newCurrentValue))) {
 			String oldCurrentValue = currentValue;
 			currentValue = newCurrentValue;
 			if (eNotificationRequired()) {
 				eNotify(new ENotificationImpl(this, Notification.SET,
-						MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE,
-						oldCurrentValue, currentValue));
+						MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE, oldCurrentValue, currentValue));
 			}
 		}
 		historyValues.add(currentInt % nrOfHistory, newCurrentValue);
@@ -238,6 +254,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -247,6 +264,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -254,11 +272,13 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 		long oldSec = sec;
 		sec = newSec;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_ELEMENT__SEC, oldSec, sec));
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_ELEMENT__SEC, oldSec,
+					sec));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -268,6 +288,7 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -275,7 +296,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 		long oldUsec = usec;
 		usec = newUsec;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_ELEMENT__USEC, oldUsec, usec));
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_ELEMENT__USEC, oldUsec,
+					usec));
 	}
 
 	/**
@@ -296,105 +318,111 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MonitoringPackage.MONITORING_ELEMENT__FORCE:
-				return isForce();
-			case MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE:
-				return getForceValue();
-			case MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE:
-				return getCurrentValue();
-			case MonitoringPackage.MONITORING_ELEMENT__SEC:
-				return getSec();
-			case MonitoringPackage.MONITORING_ELEMENT__USEC:
-				return getUsec();
+		case MonitoringPackage.MONITORING_ELEMENT__FORCE:
+			return isForce();
+		case MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE:
+			return getForceValue();
+		case MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE:
+			return getCurrentValue();
+		case MonitoringPackage.MONITORING_ELEMENT__SEC:
+			return getSec();
+		case MonitoringPackage.MONITORING_ELEMENT__USEC:
+			return getUsec();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MonitoringPackage.MONITORING_ELEMENT__FORCE:
-				setForce((Boolean)newValue);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE:
-				setForceValue((String)newValue);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE:
-				setCurrentValue((String)newValue);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__SEC:
-				setSec((Long)newValue);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__USEC:
-				setUsec((Long)newValue);
-				return;
+		case MonitoringPackage.MONITORING_ELEMENT__FORCE:
+			setForce((Boolean) newValue);
+			return;
+		case MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE:
+			setForceValue((String) newValue);
+			return;
+		case MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE:
+			setCurrentValue((String) newValue);
+			return;
+		case MonitoringPackage.MONITORING_ELEMENT__SEC:
+			setSec((Long) newValue);
+			return;
+		case MonitoringPackage.MONITORING_ELEMENT__USEC:
+			setUsec((Long) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MonitoringPackage.MONITORING_ELEMENT__FORCE:
-				setForce(FORCE_EDEFAULT);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE:
-				setForceValue(FORCE_VALUE_EDEFAULT);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE:
-				setCurrentValue(CURRENT_VALUE_EDEFAULT);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__SEC:
-				setSec(SEC_EDEFAULT);
-				return;
-			case MonitoringPackage.MONITORING_ELEMENT__USEC:
-				setUsec(USEC_EDEFAULT);
-				return;
+		case MonitoringPackage.MONITORING_ELEMENT__FORCE:
+			setForce(FORCE_EDEFAULT);
+			return;
+		case MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE:
+			setForceValue(FORCE_VALUE_EDEFAULT);
+			return;
+		case MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE:
+			setCurrentValue(CURRENT_VALUE_EDEFAULT);
+			return;
+		case MonitoringPackage.MONITORING_ELEMENT__SEC:
+			setSec(SEC_EDEFAULT);
+			return;
+		case MonitoringPackage.MONITORING_ELEMENT__USEC:
+			setUsec(USEC_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MonitoringPackage.MONITORING_ELEMENT__FORCE:
-				return force != FORCE_EDEFAULT;
-			case MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE:
-				return FORCE_VALUE_EDEFAULT == null ? forceValue != null : !FORCE_VALUE_EDEFAULT.equals(forceValue);
-			case MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE:
-				return CURRENT_VALUE_EDEFAULT == null ? currentValue != null : !CURRENT_VALUE_EDEFAULT.equals(currentValue);
-			case MonitoringPackage.MONITORING_ELEMENT__SEC:
-				return sec != SEC_EDEFAULT;
-			case MonitoringPackage.MONITORING_ELEMENT__USEC:
-				return usec != USEC_EDEFAULT;
+		case MonitoringPackage.MONITORING_ELEMENT__FORCE:
+			return force != FORCE_EDEFAULT;
+		case MonitoringPackage.MONITORING_ELEMENT__FORCE_VALUE:
+			return FORCE_VALUE_EDEFAULT == null ? forceValue != null : !FORCE_VALUE_EDEFAULT.equals(forceValue);
+		case MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE:
+			return CURRENT_VALUE_EDEFAULT == null ? currentValue != null : !CURRENT_VALUE_EDEFAULT.equals(currentValue);
+		case MonitoringPackage.MONITORING_ELEMENT__SEC:
+			return sec != SEC_EDEFAULT;
+		case MonitoringPackage.MONITORING_ELEMENT__USEC:
+			return usec != USEC_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (force: "); //$NON-NLS-1$
@@ -410,7 +438,6 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements
 		result.append(')');
 		return result.toString();
 	}
-
 
 	@Override
 	public EditPart createEditPart() {

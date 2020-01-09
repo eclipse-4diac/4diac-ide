@@ -42,28 +42,28 @@ import org.eclipse.swt.graphics.Point;
  */
 public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 
-
 	/** The content adapter. */
 	private EContentAdapter contentAdapter;
-	
+
 	private final Map<IInterfaceElement, VirtualIO> virutalIOMapping = new HashMap<>();
-	
+
 	@Override
-	protected EContentAdapter getContentAdapter(){
-		if(null == contentAdapter){
+	protected EContentAdapter getContentAdapter() {
+		if (null == contentAdapter) {
 			contentAdapter = new EContentAdapter() {
-					@Override
-					public void notifyChanged(Notification notification) {
-						super.notifyChanged(notification);
-						Object feature = notification.getFeature();
-						if (LibraryElementPackage.eINSTANCE.getFBNetwork_NetworkElements().equals(feature)
-								|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
-								|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)) {
-							refreshChildren();
-							refreshVisuals();
-						}
+				@Override
+				public void notifyChanged(Notification notification) {
+					super.notifyChanged(notification);
+					Object feature = notification.getFeature();
+					if (LibraryElementPackage.eINSTANCE.getFBNetwork_NetworkElements().equals(feature)
+							|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
+							|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections()
+									.equals(feature)) {
+						refreshChildren();
+						refreshVisuals();
 					}
-				};
+				}
+			};
 		}
 		return contentAdapter;
 	}
@@ -76,36 +76,37 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 	@Override
 	protected List getModelChildren() {
 		virutalIOMapping.clear();
-		ArrayList<Object> children = new ArrayList<>(super.getModelChildren()); 
+		ArrayList<Object> children = new ArrayList<>(super.getModelChildren());
 		ArrayList<Object> interfaceElements = new ArrayList<>();
 
 		for (Object object : children) {
-		    if (object instanceof FBNetworkElement) {
-		    	FBNetworkElement fbNetworkelement = (FBNetworkElement)object;
-		    	if(fbNetworkelement.isMapped()) {
-		    		FBNetworkElement opposite = fbNetworkelement.getOpposite();
-		    		for(IInterfaceElement ie : opposite.getInterface().getAllInterfaceElements()) {
-		    			EList<Connection> connections =  (ie.isIsInput()) ? ie.getInputConnections() : ie.getOutputConnections();
-		    			for (Connection connection : connections) {
-							if(connection.isBrokenConnection()) {
+			if (object instanceof FBNetworkElement) {
+				FBNetworkElement fbNetworkelement = (FBNetworkElement) object;
+				if (fbNetworkelement.isMapped()) {
+					FBNetworkElement opposite = fbNetworkelement.getOpposite();
+					for (IInterfaceElement ie : opposite.getInterface().getAllInterfaceElements()) {
+						EList<Connection> connections = (ie.isIsInput()) ? ie.getInputConnections()
+								: ie.getOutputConnections();
+						for (Connection connection : connections) {
+							if (connection.isBrokenConnection()) {
 								VirtualIO vIO = createVirtualIOElement(fbNetworkelement, ie.getName());
-								if(null != vIO) {
+								if (null != vIO) {
 									interfaceElements.add(vIO);
 								}
 							}
 						}
-		    		}
-		    	}
+					}
+				}
 			}
 		}
-		
+
 		children.addAll(interfaceElements);
 		return children;
 	}
 
 	private VirtualIO createVirtualIOElement(FBNetworkElement fbNetworkelement, String name) {
 		IInterfaceElement ie = fbNetworkelement.getInterfaceElement(name);
-		if(null != ie) {
+		if (null != ie) {
 			VirtualIO vIO = new VirtualIO(ie);
 			virutalIOMapping.put(ie, vIO);
 			return vIO;
@@ -113,16 +114,14 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 		return null;
 	}
 
-
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());		
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBNetworkXYLayoutEditPolicy());
 	}
 
-	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -138,7 +137,6 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 		}
 		super.performRequest(req);
 	}
-
 
 	@Override
 	protected void refreshVisuals() {

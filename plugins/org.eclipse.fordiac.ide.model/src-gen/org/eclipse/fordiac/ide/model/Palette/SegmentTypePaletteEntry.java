@@ -17,9 +17,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Segment Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Segment
+ * Type Palette Entry</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getSegmentTypePaletteEntry()
@@ -27,12 +26,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
  * @generated
  */
 public interface SegmentTypePaletteEntry extends PaletteEntry {
-	
+
 	SegmentType getSegmentType();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model
 	 * @generated
 	 */

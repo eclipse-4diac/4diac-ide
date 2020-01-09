@@ -36,7 +36,8 @@ public class ZoomUndoRedoActionBarContributor extends ActionBarContributor {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToToolBar(org.eclipse.jface.action.IToolBarManager)
+	 * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToToolBar(org.
+	 * eclipse.jface.action.IToolBarManager)
 	 */
 	@Override
 	public void contributeToToolBar(final IToolBarManager toolBarManager) {
@@ -47,11 +48,9 @@ public class ZoomUndoRedoActionBarContributor extends ActionBarContributor {
 		toolBarManager.add(new Separator());
 
 		toolBarManager.add(new Separator());
-		String[] zoomStrings = new String[] { ZoomManager.FIT_ALL,
-				ZoomManager.FIT_HEIGHT, ZoomManager.FIT_WIDTH };
-		toolBarManager
-				.add(new ZoomComboContributionItem(getPage(), zoomStrings));
-		
+		String[] zoomStrings = new String[] { ZoomManager.FIT_ALL, ZoomManager.FIT_HEIGHT, ZoomManager.FIT_WIDTH };
+		toolBarManager.add(new ZoomComboContributionItem(getPage(), zoomStrings));
+
 		toolBarManager.add(new Separator());
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_LEFT));
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_CENTER));
@@ -72,7 +71,7 @@ public class ZoomUndoRedoActionBarContributor extends ActionBarContributor {
 		addRetargetAction(new UndoRetargetAction());
 		addRetargetAction(new RedoRetargetAction());
 		addRetargetAction(new DeleteRetargetAction());
-		
+
 		addRetargetAction(new AlignmentRetargetAction(PositionConstants.LEFT));
 		addRetargetAction(new AlignmentRetargetAction(PositionConstants.CENTER));
 		addRetargetAction(new AlignmentRetargetAction(PositionConstants.RIGHT));
@@ -84,11 +83,12 @@ public class ZoomUndoRedoActionBarContributor extends ActionBarContributor {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.ui.actions.ActionBarContributor#declareGlobalActionKeys()
+	 * @see
+	 * org.eclipse.gef.ui.actions.ActionBarContributor#declareGlobalActionKeys()
 	 */
 	@Override
 	protected void declareGlobalActionKeys() {
 		this.addGlobalActionKey(ActionFactory.SELECT_ALL.getId());
 	}
-	
+
 }

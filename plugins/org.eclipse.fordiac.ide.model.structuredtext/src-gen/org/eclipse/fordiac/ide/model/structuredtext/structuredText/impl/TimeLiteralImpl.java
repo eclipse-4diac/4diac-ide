@@ -9,33 +9,29 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Time Literal</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Time
+ * Literal</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
-public class TimeLiteralImpl extends ConstantImpl implements TimeLiteral
-{
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  protected TimeLiteralImpl()
-  {
-    super();
-  }
+public class TimeLiteralImpl extends ConstantImpl implements TimeLiteral {
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected TimeLiteralImpl() {
+		super();
+	}
 
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  protected EClass eStaticClass()
-  {
-    return StructuredTextPackage.Literals.TIME_LITERAL;
-  }
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	protected EClass eStaticClass() {
+		return StructuredTextPackage.Literals.TIME_LITERAL;
+	}
 
-} //TimeLiteralImpl
+} // TimeLiteralImpl

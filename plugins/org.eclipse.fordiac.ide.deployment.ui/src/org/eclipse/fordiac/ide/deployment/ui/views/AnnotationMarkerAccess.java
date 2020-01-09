@@ -26,8 +26,7 @@ import org.eclipse.swt.widgets.Canvas;
 /**
  * The Class AnnotationMarkerAccess.
  */
-public class AnnotationMarkerAccess implements IAnnotationAccess,
-		IAnnotationAccessExtension {
+public class AnnotationMarkerAccess implements IAnnotationAccess, IAnnotationAccessExtension {
 
 	/**
 	 * Instantiates a new annotation marker access.
@@ -39,7 +38,9 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.text.source.IAnnotationAccessExtension#getTypeLabel(org.eclipse.jface.text.source.Annotation)
+	 * @see
+	 * org.eclipse.jface.text.source.IAnnotationAccessExtension#getTypeLabel(org.
+	 * eclipse.jface.text.source.Annotation)
 	 */
 	@Override
 	public String getTypeLabel(final Annotation annotation) {
@@ -55,7 +56,9 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.text.source.IAnnotationAccessExtension#getLayer(org.eclipse.jface.text.source.Annotation)
+	 * @see
+	 * org.eclipse.jface.text.source.IAnnotationAccessExtension#getLayer(org.eclipse
+	 * .jface.text.source.Annotation)
 	 */
 	@Override
 	public int getLayer(final Annotation annotation) {
@@ -69,27 +72,29 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.text.source.IAnnotationAccessExtension#paint(org.eclipse.jface.text.source.Annotation,
-	 *      org.eclipse.swt.graphics.GC, org.eclipse.swt.widgets.Canvas,
-	 *      org.eclipse.swt.graphics.Rectangle)
+	 * @see
+	 * org.eclipse.jface.text.source.IAnnotationAccessExtension#paint(org.eclipse.
+	 * jface.text.source.Annotation, org.eclipse.swt.graphics.GC,
+	 * org.eclipse.swt.widgets.Canvas, org.eclipse.swt.graphics.Rectangle)
 	 */
 	@Override
-	public void paint(final Annotation annotation, final GC gc,
-			final Canvas canvas, final Rectangle bounds) {
+	public void paint(final Annotation annotation, final GC gc, final Canvas canvas, final Rectangle bounds) {
 		if (annotation instanceof ErrorAnnotation) {
-		ImageUtilities.drawImage(((ErrorAnnotation) annotation).getImage(), gc,
-				canvas, bounds, SWT.CENTER, SWT.TOP);
+			ImageUtilities.drawImage(((ErrorAnnotation) annotation).getImage(), gc, canvas, bounds, SWT.CENTER,
+					SWT.TOP);
 		}
 		if (annotation instanceof WarningAnnotation) {
-			ImageUtilities.drawImage(((WarningAnnotation) annotation).getImage(), gc,
-					canvas, bounds, SWT.CENTER, SWT.TOP);
+			ImageUtilities.drawImage(((WarningAnnotation) annotation).getImage(), gc, canvas, bounds, SWT.CENTER,
+					SWT.TOP);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.text.source.IAnnotationAccessExtension#isPaintable(org.eclipse.jface.text.source.Annotation)
+	 * @see
+	 * org.eclipse.jface.text.source.IAnnotationAccessExtension#isPaintable(org.
+	 * eclipse.jface.text.source.Annotation)
 	 */
 	@Override
 	public boolean isPaintable(final Annotation annotation) {
@@ -106,12 +111,12 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.text.source.IAnnotationAccessExtension#isSubtype(java.lang.Object,
-	 *      java.lang.Object)
+	 * @see
+	 * org.eclipse.jface.text.source.IAnnotationAccessExtension#isSubtype(java.lang.
+	 * Object, java.lang.Object)
 	 */
 	@Override
-	public boolean isSubtype(final Object annotationType,
-			final Object potentialSupertype) {
+	public boolean isSubtype(final Object annotationType, final Object potentialSupertype) {
 		if (annotationType.equals(potentialSupertype)) {
 			return true;
 		}
@@ -123,7 +128,9 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.text.source.IAnnotationAccessExtension#getSupertypes(java.lang.Object)
+	 * @see
+	 * org.eclipse.jface.text.source.IAnnotationAccessExtension#getSupertypes(java.
+	 * lang.Object)
 	 */
 	@Override
 	public Object[] getSupertypes(final Object annotationType) {
@@ -133,7 +140,9 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.text.source.IAnnotationAccess#getType(org.eclipse.jface.text.source.Annotation)
+	 * @see
+	 * org.eclipse.jface.text.source.IAnnotationAccess#getType(org.eclipse.jface.
+	 * text.source.Annotation)
 	 */
 	@Override
 	public Object getType(final Annotation annotation) {
@@ -143,7 +152,9 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.text.source.IAnnotationAccess#isMultiLine(org.eclipse.jface.text.source.Annotation)
+	 * @see
+	 * org.eclipse.jface.text.source.IAnnotationAccess#isMultiLine(org.eclipse.jface
+	 * .text.source.Annotation)
 	 */
 	@Override
 	public boolean isMultiLine(final Annotation annotation) {
@@ -153,7 +164,9 @@ public class AnnotationMarkerAccess implements IAnnotationAccess,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.text.source.IAnnotationAccess#isTemporary(org.eclipse.jface.text.source.Annotation)
+	 * @see
+	 * org.eclipse.jface.text.source.IAnnotationAccess#isTemporary(org.eclipse.jface
+	 * .text.source.Annotation)
 	 */
 	@Override
 	public boolean isTemporary(final Annotation annotation) {

@@ -19,7 +19,7 @@ public class ConnectionEditPartRO extends ConnectionEditPart {
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
-		//we don't want to allow for RO connections that they can be deleted
+		// we don't want to allow for RO connections that they can be deleted
 		removeEditPolicy(EditPolicy.CONNECTION_ROLE);
 		removeEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE);
 	}

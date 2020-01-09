@@ -32,14 +32,13 @@ public class CompositeNetworkEditPartFactory extends ElementEditPartFactory {
 	}
 
 	@Override
-	protected EditPart getPartForElement(final EditPart context,
-			final Object modelElement) {
+	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		if (modelElement instanceof FBNetwork) {
 			return new CompositeNetworkEditPart();
 		}
 		if (modelElement instanceof IInterfaceElement) {
-			IInterfaceElement iElement = (IInterfaceElement)modelElement;
-			if(iElement.eContainer().eContainer() instanceof CompositeFBType){
+			IInterfaceElement iElement = (IInterfaceElement) modelElement;
+			if (iElement.eContainer().eContainer() instanceof CompositeFBType) {
 				return new CompositeInternalInterfaceEditPart();
 			}
 		}

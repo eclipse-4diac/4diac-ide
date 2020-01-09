@@ -158,7 +158,8 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					List<Algorithm> algorithms = ECCContentAndLabelProvider.getAlgorithms(ECCContentAndLabelProvider.getFBType(getAction()));
+					List<Algorithm> algorithms = ECCContentAndLabelProvider
+							.getAlgorithms(ECCContentAndLabelProvider.getFBType(getAction()));
 					int selected = ((Integer) request.getCellEditor().getValue()).intValue();
 					Algorithm alg = null;
 					if (selected < algorithms.size()) {
@@ -221,7 +222,8 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	 */
 	@Override
 	public void performDirectEdit() {
-		List<String> algNames = ECCContentAndLabelProvider.getAlgorithmNames(ECCContentAndLabelProvider.getFBType(getAction()));
+		List<String> algNames = ECCContentAndLabelProvider
+				.getAlgorithmNames(ECCContentAndLabelProvider.getFBType(getAction()));
 
 		int selected = (getAction().getAlgorithm() != null) ? algNames.indexOf(getAction().getAlgorithm().getName())
 				: algNames.size() - 1;

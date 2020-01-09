@@ -43,23 +43,19 @@ class CommonElementImporter {
 	 * 
 	 * @return the identification
 	 */
-	public static Identification parseIdentification(final LibraryElement elem,
-			final Node node) {
+	public static Identification parseIdentification(final LibraryElement elem, final Node node) {
 		NamedNodeMap map = node.getAttributes();
-		Identification ident = LibraryElementFactory.eINSTANCE
-				.createIdentification();
+		Identification ident = LibraryElementFactory.eINSTANCE.createIdentification();
 		elem.setIdentification(ident);
 		Node standard = map.getNamedItem(LibraryElementTags.STANDARD_ATTRIBUTE);
 		if (standard != null) {
 			ident.setStandard(standard.getNodeValue());
 		}
-		Node classification = map
-				.getNamedItem(LibraryElementTags.CLASSIFICATION_ATTRIBUTE);
+		Node classification = map.getNamedItem(LibraryElementTags.CLASSIFICATION_ATTRIBUTE);
 		if (classification != null) {
 			ident.setClassification(classification.getNodeValue());
 		}
-		Node applicationDomain = map
-				.getNamedItem(LibraryElementTags.APPLICATION_DOMAIN_ATTRIBUTE);
+		Node applicationDomain = map.getNamedItem(LibraryElementTags.APPLICATION_DOMAIN_ATTRIBUTE);
 		if (applicationDomain != null) {
 			ident.setApplicationDomain(applicationDomain.getNodeValue());
 		}
@@ -71,8 +67,7 @@ class CommonElementImporter {
 		if (type != null) {
 			ident.setType(type.getNodeValue());
 		}
-		Node description = map
-				.getNamedItem(LibraryElementTags.DESCRIPTION_ELEMENT);
+		Node description = map.getNamedItem(LibraryElementTags.DESCRIPTION_ELEMENT);
 		if (description != null) {
 			ident.setDescription(description.getNodeValue());
 		}
@@ -90,31 +85,26 @@ class CommonElementImporter {
 	 * 
 	 * @throws TypeImportException the FBT import exception
 	 */
-	public static VersionInfo parseVersionInfo(final LibraryElement elem,
-			final Node node) throws TypeImportException {
+	public static VersionInfo parseVersionInfo(final LibraryElement elem, final Node node) throws TypeImportException {
 		NamedNodeMap map = node.getAttributes();
-		VersionInfo versionInfo = LibraryElementFactory.eINSTANCE
-				.createVersionInfo();
+		VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
 		elem.getVersionInfo().add(versionInfo);
-		Node organization = map
-				.getNamedItem(LibraryElementTags.ORGANIZATION_ATTRIBUTE);
+		Node organization = map.getNamedItem(LibraryElementTags.ORGANIZATION_ATTRIBUTE);
 		if (organization != null) {
 			versionInfo.setOrganization(organization.getNodeValue());
-		} 
-		
+		}
+
 		Node version = map.getNamedItem(LibraryElementTags.VERSION_ATTRIBUTE);
 		if (version != null) {
 			versionInfo.setVersion(version.getNodeValue());
 		} else {
-			throw new TypeImportException(
-					Messages.CommonElementImporter_ERROR_MissingVersionInfo);
+			throw new TypeImportException(Messages.CommonElementImporter_ERROR_MissingVersionInfo);
 		}
 		Node author = map.getNamedItem(LibraryElementTags.AUTHOR_ATTRIBUTE);
 		if (author != null) {
 			versionInfo.setAuthor(author.getNodeValue());
 		} else {
-			throw new TypeImportException(
-					Messages.CommonElementImporter_ERROR_MissingAuthorInfo);
+			throw new TypeImportException(Messages.CommonElementImporter_ERROR_MissingAuthorInfo);
 		}
 		Node date = map.getNamedItem(LibraryElementTags.DATE_ATTRIBUTE);
 		if (date != null) {
@@ -125,17 +115,18 @@ class CommonElementImporter {
 		Node remarks = map.getNamedItem(LibraryElementTags.REMARKS_ATTRIBUTE);
 		if (remarks != null) {
 			versionInfo.setRemarks(remarks.getNodeValue());
-		}else{
+		} else {
 			versionInfo.setRemarks(""); //$NON-NLS-1$
 		}
 
 		return versionInfo;
 	}
 
-	/** search the child list of a node for a node with a given name
+	/**
+	 * search the child list of a node for a node with a given name
 	 * 
-	 * @param node the root node
-	 * @param nodeName  name of the node to be searched for
+	 * @param node     the root node
+	 * @param nodeName name of the node to be searched for
 	 * @return the found node or null if no node with given name could be found
 	 */
 	public static Node findChildNodeNamed(Node node, String nodeName) {
@@ -148,17 +139,16 @@ class CommonElementImporter {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Gets the xand y.
 	 * 
-	 * @param map
-	 *            the map
+	 * @param map                 the map
 	 * 
-	 * @param positionableElement  the positionable element where the parsed coordinates should be set to
+	 * @param positionableElement the positionable element where the parsed
+	 *                            coordinates should be set to
 	 * 
-	 * @throws TypeImportException
-	 *             the FBT import exception
+	 * @throws TypeImportException the FBT import exception
 	 */
 	public static void getXandY(final NamedNodeMap map, PositionableElement positionableElement)
 			throws TypeImportException {
@@ -172,25 +162,23 @@ class CommonElementImporter {
 				positionableElement.setY(CoordinateConverter.INSTANCE.convertFrom1499XML(y.getNodeValue()));
 			}
 		} catch (NumberFormatException nfe) {
-			throw new TypeImportException(
-					Messages.FBTImporter_POSITION_EXCEPTION);
+			throw new TypeImportException(Messages.FBTImporter_POSITION_EXCEPTION);
 		}
 	}
-	
-	
-	static void readNameCommentAttributes(INamedElement namedElement, NamedNodeMap attributeMap){
+
+	static void readNameCommentAttributes(INamedElement namedElement, NamedNodeMap attributeMap) {
 		readNameAttribute(namedElement, attributeMap);
 		readCommentAttribute(namedElement, attributeMap);
 	}
-	
-	private static void readNameAttribute(INamedElement namedElement, NamedNodeMap attributeMap){
+
+	private static void readNameAttribute(INamedElement namedElement, NamedNodeMap attributeMap) {
 		Node name = attributeMap.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE);
 		if (name != null) {
 			namedElement.setName(name.getNodeValue());
 		}
 	}
-	
-	private static void readCommentAttribute(INamedElement namedElement, NamedNodeMap attributeMap){
+
+	private static void readCommentAttribute(INamedElement namedElement, NamedNodeMap attributeMap) {
 		Node comment = attributeMap.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (comment != null) {
 			namedElement.setComment(comment.getNodeValue());
@@ -202,21 +190,22 @@ class CommonElementImporter {
 		Node type = attributeMap.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE);
 		Node value = attributeMap.getNamedItem(LibraryElementTags.VALUE_ATTRIBUTE);
 		Node comment = attributeMap.getNamedItem(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if(null != name && null != value){
-			confObject.setAttribute(name.getNodeValue(), null == type ? "STRING" : type.getNodeValue(), value.getNodeValue(), comment.getNodeValue()); //$NON-NLS-1$
-		}		
+		if (null != name && null != value) {
+			confObject.setAttribute(name.getNodeValue(), null == type ? "STRING" : type.getNodeValue(), //$NON-NLS-1$
+					value.getNodeValue(), comment.getNodeValue());
+		}
 	}
-	
+
 	static String getAttributeValue(NamedNodeMap attributeMap, String attName) {
 		Node value = attributeMap.getNamedItem(attName);
 		return (null != value) ? value.getNodeValue() : null;
 	}
-		
+
 	static boolean isProfileAttribute(NamedNodeMap attributeMap) {
 		Node name = attributeMap.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE);
 		return (null != name) && LibraryElementTags.DEVICE_PROFILE.equals(name.getNodeValue());
 	}
-	
+
 	private CommonElementImporter() {
 		throw new UnsupportedOperationException("Class CommonElementImporter should not be created!");
 	}

@@ -19,15 +19,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * The Class ChangeCommentCommand.
  */
 public class ChangeClassificationCommand extends ChangeIdentificationCommand {
-	
+
 	/** The new classification value. */
 	private String newClassification;
 
 	/** The old classification value. */
 	private String oldClassification;
 
-	public ChangeClassificationCommand(LibraryElement type,
-			final String newClassification) {
+	public ChangeClassificationCommand(LibraryElement type, final String newClassification) {
 		super(type);
 		this.newClassification = newClassification;
 	}

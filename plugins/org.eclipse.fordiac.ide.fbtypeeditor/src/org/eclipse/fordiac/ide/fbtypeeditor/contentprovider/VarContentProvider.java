@@ -25,17 +25,17 @@ public class VarContentProvider implements IStructuredContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
 		ArrayList<VarDeclaration> vars = new ArrayList<VarDeclaration>();
-		if(inputElement instanceof IInterfaceElement){
-			IInterfaceElement ielem = (IInterfaceElement)inputElement;
+		if (inputElement instanceof IInterfaceElement) {
+			IInterfaceElement ielem = (IInterfaceElement) inputElement;
 			FBType fbtype = (FBType) ielem.eContainer().eContainer();
 			// filter adapter elements as the are not allowed to be connected by with
-			if(ielem.isIsInput()){
+			if (ielem.isIsInput()) {
 				for (VarDeclaration var : fbtype.getInterfaceList().getInputVars()) {
 					if (!(var.getType() instanceof AdapterType)) {
 						vars.add(var);
 					}
-				}				
-			}else{
+				}
+			} else {
 				for (VarDeclaration var : fbtype.getInterfaceList().getOutputVars()) {
 					if (!(var.getType() instanceof AdapterType)) {
 						vars.add(var);

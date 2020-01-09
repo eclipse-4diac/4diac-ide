@@ -18,16 +18,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Input Primitive</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Input
+ * Primitive</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class InputPrimitiveImpl extends PrimitiveImpl implements InputPrimitive {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected InputPrimitiveImpl() {
@@ -35,8 +34,8 @@ public class InputPrimitiveImpl extends PrimitiveImpl implements InputPrimitive 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -44,4 +43,4 @@ public class InputPrimitiveImpl extends PrimitiveImpl implements InputPrimitive 
 		return LibraryElementPackage.Literals.INPUT_PRIMITIVE;
 	}
 
-} //InputPrimitiveImpl
+} // InputPrimitiveImpl

@@ -15,5 +15,5 @@ package org.eclipse.fordiac.ide.application.utilities;
 
 public interface ICreationExecutor {
 
-	void execute(Object element); 
+	void execute(Object element);
 }

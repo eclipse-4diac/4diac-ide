@@ -278,51 +278,44 @@ public class MapToCommand extends Command {
 
 	// This code is here to serve as template for handling the connections to be
 	// deleted
-	/* public void oldExecute() {
-		boolean deletedConnections = false;
-
-		uiResourceEditor.getResourceElement().getFBNetwork().getMappedFBs().add(mappedFBView.getFb());
-
-		for (InterfaceElementView interfaceElement : fbView.getInterfaceElements()) {
-			for (ConnectionView connectionView : interfaceElement.getInConnections()) {
-				if (connectionView.getSource().eContainer() instanceof FBView) {
-					FBView sourceFBView = ((FBView) connectionView.getSource().eContainer()).getMappedFB();
-					if (sourceFBView != null && sourceFBView.getFb().getResource()
-							.equals(uiResourceEditor.getResourceElement().getFBNetwork())) {
-						ConnectionView newConnection = UiFactory.eINSTANCE.createConnectionView();
-						newConnection.setConnectionElement(connectionView.getConnectionElement());
-						newConnection.setDestination(connectionView.getDestination().getMappedInterfaceElement());
-						newConnection.setSource(connectionView.getSource().getMappedInterfaceElement());
-						uiResourceEditor.getConnections().add(newConnection);
-						ConnectionUtil.addConnectionToResource(newConnection.getConnectionElement(),
-								uiResourceEditor.getResourceElement());
-						connectionView.getConnectionElement().setBrokenConnection(false);
-						System.out.println("notBroken: " + connectionView);
-
-						for (ConnectionView temp : connectionView.getSource().getMappedInterfaceElement()
-								.getOutConnections()) {
-							System.out.println(
-									"Is Resource Connection " + temp.getConnectionElement().isResourceConnection());
-							if (temp.getConnectionElement().isResourceConnection()) {
-								DeleteConnectionCommand deleteCMD = new DeleteConnectionCommand(temp);
-								deleteCMD.execute();
-								deletedConnections = true;
-							}
-						}
-					} else {
-						System.out.println("isBroken: " + connectionView);
-						connectionView.getConnectionElement().setBrokenConnection(true); // nothing to do
-					}
-				}
-			}
-		}
-		if (deletedConnections) {
-			MessageBox informUser = new MessageBox(Display.getDefault().getActiveShell());
-			informUser.setText("Warning");
-			informUser.setMessage(
-					"Remapping required deletion of Connections added within the Resource - please check your network");
-			informUser.open(); // TODO check whether markers could be used!
-		}
-	} */
+	/*
+	 * public void oldExecute() { boolean deletedConnections = false;
+	 * 
+	 * uiResourceEditor.getResourceElement().getFBNetwork().getMappedFBs().add(
+	 * mappedFBView.getFb());
+	 * 
+	 * for (InterfaceElementView interfaceElement : fbView.getInterfaceElements()) {
+	 * for (ConnectionView connectionView : interfaceElement.getInConnections()) {
+	 * if (connectionView.getSource().eContainer() instanceof FBView) { FBView
+	 * sourceFBView = ((FBView)
+	 * connectionView.getSource().eContainer()).getMappedFB(); if (sourceFBView !=
+	 * null && sourceFBView.getFb().getResource()
+	 * .equals(uiResourceEditor.getResourceElement().getFBNetwork())) {
+	 * ConnectionView newConnection = UiFactory.eINSTANCE.createConnectionView();
+	 * newConnection.setConnectionElement(connectionView.getConnectionElement());
+	 * newConnection.setDestination(connectionView.getDestination().
+	 * getMappedInterfaceElement());
+	 * newConnection.setSource(connectionView.getSource().getMappedInterfaceElement(
+	 * )); uiResourceEditor.getConnections().add(newConnection);
+	 * ConnectionUtil.addConnectionToResource(newConnection.getConnectionElement(),
+	 * uiResourceEditor.getResourceElement());
+	 * connectionView.getConnectionElement().setBrokenConnection(false);
+	 * System.out.println("notBroken: " + connectionView);
+	 * 
+	 * for (ConnectionView temp :
+	 * connectionView.getSource().getMappedInterfaceElement() .getOutConnections())
+	 * { System.out.println( "Is Resource Connection " +
+	 * temp.getConnectionElement().isResourceConnection()); if
+	 * (temp.getConnectionElement().isResourceConnection()) {
+	 * DeleteConnectionCommand deleteCMD = new DeleteConnectionCommand(temp);
+	 * deleteCMD.execute(); deletedConnections = true; } } } else {
+	 * System.out.println("isBroken: " + connectionView);
+	 * connectionView.getConnectionElement().setBrokenConnection(true); // nothing
+	 * to do } } } } if (deletedConnections) { MessageBox informUser = new
+	 * MessageBox(Display.getDefault().getActiveShell());
+	 * informUser.setText("Warning"); informUser.setMessage(
+	 * "Remapping required deletion of Connections added within the Resource - please check your network"
+	 * ); informUser.open(); // TODO check whether markers could be used! } }
+	 */
 
 }

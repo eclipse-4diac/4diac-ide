@@ -36,7 +36,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 
 public class Open4DIACElementAction extends BaseSelectionListenerAction {
-	
+
 	public static final String ID = Activator.PLUGIN_ID + ".OpenAction";//$NON-NLS-1$
 
 	public Open4DIACElementAction(IWorkbenchPart part) {
@@ -49,45 +49,45 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 	protected boolean updateSelection(IStructuredSelection selection) {
 		boolean retval = true;
 		Iterator element = getStructuredSelection().iterator();
-		while(element.hasNext() && (retval)) {
+		while (element.hasNext() && (retval)) {
 			Object obj = element.next();
-			if((obj instanceof Device) || (obj instanceof SystemConfiguration) || (obj instanceof Application) ||
-					(obj instanceof SubApp) || obj instanceof Resource){
+			if ((obj instanceof Device) || (obj instanceof SystemConfiguration) || (obj instanceof Application)
+					|| (obj instanceof SubApp) || obj instanceof Resource) {
 				continue;
-			}else if(obj instanceof FB){
-				//if we have an Fb check if it is in a subapp or application
-				retval = isFBInAppOrSubApp((FB)obj); 
-						
-			}else{
+			} else if (obj instanceof FB) {
+				// if we have an Fb check if it is in a subapp or application
+				retval = isFBInAppOrSubApp((FB) obj);
+
+			} else {
 				retval = false;
 			}
 		}
 		return retval;
 	}
-	
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void run() {
 		Iterator element = getStructuredSelection().iterator();
-		while(element.hasNext()) {
+		while (element.hasNext()) {
 			Object obj = element.next();
 			Object refObject = null;
-			
-			if(obj instanceof FB || (obj instanceof SubApp && null == ((SubApp)obj).getSubAppNetwork())){
-				//if an FB or a typed subapp is selected we need to open the according root node and use FBNetworkElement for selecting
+
+			if (obj instanceof FB || (obj instanceof SubApp && null == ((SubApp) obj).getSubAppNetwork())) {
+				// if an FB or a typed subapp is selected we need to open the according root
+				// node and use FBNetworkElement for selecting
 				refObject = obj;
-				obj = getFBRootNode((FBNetworkElement)obj);
-			}else if (obj instanceof Device){
+				obj = getFBRootNode((FBNetworkElement) obj);
+			} else if (obj instanceof Device) {
 				refObject = obj;
-				obj = ((Device)obj).getSystemConfiguration();				
-			}else if (obj instanceof Segment){
+				obj = ((Device) obj).getSystemConfiguration();
+			} else if (obj instanceof Segment) {
 				refObject = obj;
-				obj = ((Segment)refObject).eContainer();
+				obj = ((Segment) refObject).eContainer();
 			}
 
 			IEditorPart editor = OpenListenerManager.openEditor((I4DIACElement) obj);
-			AbstractEditorLinkHelper.selectObject(editor,refObject);
+			AbstractEditorLinkHelper.selectObject(editor, refObject);
 		}
 	}
 
@@ -99,8 +99,8 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 	private static EObject getFBRootNode(FBNetworkElement fb) {
 		EObject fbCont = fb.eContainer();
 		EObject rootNode = null;
-		if(fbCont instanceof FBNetwork){
-			rootNode = ((FBNetwork)fbCont).eContainer();
+		if (fbCont instanceof FBNetwork) {
+			rootNode = ((FBNetwork) fbCont).eContainer();
 		}
 		return rootNode;
 	}

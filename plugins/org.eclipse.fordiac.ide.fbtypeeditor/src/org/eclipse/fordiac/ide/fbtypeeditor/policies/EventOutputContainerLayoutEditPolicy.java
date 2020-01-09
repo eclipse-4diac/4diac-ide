@@ -39,7 +39,7 @@ public class EventOutputContainerLayoutEditPolicy extends AbstractInterfaceConta
 		if (cornerDim > 1) {
 			cornerDim = cornerDim / 2;
 		}
-		return new AbstractInterfaceSelectionEditPolicy(cornerDim, new Insets(1)){
+		return new AbstractInterfaceSelectionEditPolicy(cornerDim, new Insets(1)) {
 			@Override
 			protected List<? extends IInterfaceElement> getInterfaceElementList() {
 				return getFBType().getInterfaceList().getEventOutputs();
@@ -48,7 +48,7 @@ public class EventOutputContainerLayoutEditPolicy extends AbstractInterfaceConta
 			@Override
 			protected Command getIECreateCommand(DataType refElement, int ref) {
 				return new CreateInterfaceElementCommand(refElement, getFBType().getInterfaceList(), false, ref);
-			}	
+			}
 		};
 	}
 
@@ -68,8 +68,8 @@ public class EventOutputContainerLayoutEditPolicy extends AbstractInterfaceConta
 				} else {
 					newIndex = getHost().getChildren().indexOf(after);
 				}
-				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(), 
-						((IInterfaceElement)childEP.getModel()).isIsInput(), newIndex);
+				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(),
+						((IInterfaceElement) childEP.getModel()).isIsInput(), newIndex);
 			}
 		}
 		return null;
@@ -80,7 +80,7 @@ public class EventOutputContainerLayoutEditPolicy extends AbstractInterfaceConta
 		Object childClass = request.getNewObjectType();
 		FBType type = getFBType();
 		int index = -1;
-		EditPart ref = getInsertionReference(request);		
+		EditPart ref = getInsertionReference(request);
 		if (ref != null) {
 			index = type.getInterfaceList().getEventOutputs().indexOf(ref.getModel());
 		}

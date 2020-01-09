@@ -18,18 +18,21 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Entry</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLabel <em>Label</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getFile <em>File</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLastModificationTimestamp <em>Last Modification Timestamp</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLabel
+ * <em>Label</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getFile
+ * <em>File</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLastModificationTimestamp
+ * <em>Last Modification Timestamp</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType
+ * <em>Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPaletteEntry()
@@ -38,13 +41,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  */
 public interface PaletteEntry extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Label</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Label</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Label</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Label</em>' attribute isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Label</em>' attribute.
 	 * @see #setLabel(String)
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPaletteEntry_Label()
@@ -54,9 +58,10 @@ public interface PaletteEntry extends EObject {
 	String getLabel();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLabel <em>Label</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLabel
+	 * <em>Label</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Label</em>' attribute.
 	 * @see #getLabel()
 	 * @generated
@@ -64,13 +69,14 @@ public interface PaletteEntry extends EObject {
 	void setLabel(String value);
 
 	/**
-	 * Returns the value of the '<em><b>File</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>File</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>File</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>File</em>' attribute isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>File</em>' attribute.
 	 * @see #setFile(IFile)
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPaletteEntry_File()
@@ -80,9 +86,10 @@ public interface PaletteEntry extends EObject {
 	IFile getFile();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getFile <em>File</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getFile
+	 * <em>File</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>File</em>' attribute.
 	 * @see #getFile()
 	 * @generated
@@ -90,40 +97,47 @@ public interface PaletteEntry extends EObject {
 	void setFile(IFile value);
 
 	/**
-	 * Returns the value of the '<em><b>Last Modification Timestamp</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Last Modification Timestamp</b></em>'
+	 * attribute. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Last Modification Timestamp</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Last Modification Timestamp</em>' attribute isn't
+	 * clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Last Modification Timestamp</em>' attribute.
 	 * @see #setLastModificationTimestamp(long)
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPaletteEntry_LastModificationTimestamp()
-	 * @model unique="false" dataType="org.eclipse.emf.ecore.xml.type.Long" transient="true" ordered="false"
+	 * @model unique="false" dataType="org.eclipse.emf.ecore.xml.type.Long"
+	 *        transient="true" ordered="false"
 	 * @generated
 	 */
 	long getLastModificationTimestamp();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLastModificationTimestamp <em>Last Modification Timestamp</em>}' attribute.
-	 * <!-- begin-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getLastModificationTimestamp
+	 * <em>Last Modification Timestamp</em>}' attribute. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Last Modification Timestamp</em>' attribute.
+	 * 
+	 * @param value the new value of the '<em>Last Modification Timestamp</em>'
+	 *              attribute.
 	 * @see #getLastModificationTimestamp()
 	 * @generated
 	 */
 	void setLastModificationTimestamp(long value);
 
 	/**
-	 * Returns the value of the '<em><b>Type</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry <em>Palette Entry</em>}'.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Type</b></em>' reference. It is
+	 * bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry
+	 * <em>Palette Entry</em>}'. <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Type</em>' reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Type</em>' reference isn't clear, there really
+	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Type</em>' reference.
 	 * @see #setType(LibraryElement)
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPaletteEntry_Type()
@@ -134,9 +148,10 @@ public interface PaletteEntry extends EObject {
 	LibraryElement getType();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType <em>Type</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType
+	 * <em>Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Type</em>' reference.
 	 * @see #getType()
 	 * @generated
@@ -144,20 +159,20 @@ public interface PaletteEntry extends EObject {
 	void setType(LibraryElement value);
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
 	PaletteGroup getGroup();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        required="true"
 	 * @generated
 	 */
 	String getProjectRelativeTypePath();
 
-	
 } // PaletteEntry

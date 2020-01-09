@@ -19,28 +19,28 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 /**
- * <!-- begin-user-doc --> A representation of the model object '
- * <em><b>Test Data</b></em>'. <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object ' <em><b>Test
+ * Data</b></em>'. <!-- end-user-doc -->
  * 
  * <p>
  * The following features are supported:
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getTestName <em>Test
- * Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getEvent <em>Event
- * </em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getTestIntstance <em>
- * Test Intstance</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getEventOutputs <em>
- * Event Outputs</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getValues <em>Values
- * </em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getResults <em>
- * Results</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getLine <em>Line
- * </em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getType <em>Type
- * </em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getTestName
+ * <em>Test Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getEvent
+ * <em>Event </em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getTestIntstance
+ * <em> Test Intstance</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getEventOutputs
+ * <em> Event Outputs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getValues
+ * <em>Values </em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getResults
+ * <em> Results</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getLine
+ * <em>Line </em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getType
+ * <em>Type </em>}</li>
  * </ul>
  * </p>
  * 
@@ -69,11 +69,9 @@ public interface TestData extends EObject {
 	/**
 	 * Sets the value of the '
 	 * {@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getTestName
-	 * <em>Test Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	 * <em>Test Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @param value
-	 *          the new value of the '<em>Test Name</em>' attribute.
+	 * @param value the new value of the '<em>Test Name</em>' attribute.
 	 * @see #getTestName()
 	 * @generated
 	 */
@@ -101,8 +99,7 @@ public interface TestData extends EObject {
 	 * {@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getEvent
 	 * <em>Event</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @param value
-	 *          the new value of the '<em>Event</em>' reference.
+	 * @param value the new value of the '<em>Event</em>' reference.
 	 * @see #getEvent()
 	 * @generated
 	 */
@@ -112,8 +109,8 @@ public interface TestData extends EObject {
 	 * Returns the value of the '<em><b>Test Intstance</b></em>' attribute. <!--
 	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Test Intstance</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Test Intstance</em>' attribute isn't clear, there
+	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
@@ -131,17 +128,17 @@ public interface TestData extends EObject {
 	 * <em>Test Intstance</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
-	 * @param value
-	 *          the new value of the '<em>Test Intstance</em>' attribute.
+	 * @param value the new value of the '<em>Test Intstance</em>' attribute.
 	 * @see #getTestIntstance()
 	 * @generated
 	 */
 	void setTestIntstance(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Event Outputs</b></em>' reference list.
-	 * The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.libraryElement.Event}. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Event Outputs</b></em>' reference list. The
+	 * list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.Event}. <!--
+	 * begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Event Outputs</em>' reference list isn't clear,
 	 * there really should be more of a description here...
@@ -210,11 +207,10 @@ public interface TestData extends EObject {
 
 	/**
 	 * Sets the value of the '
-	 * {@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getLine <em>Line</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * {@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getLine
+	 * <em>Line</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @param value
-	 *          the new value of the '<em>Line</em>' attribute.
+	 * @param value the new value of the '<em>Line</em>' attribute.
 	 * @see #getLine()
 	 * @generated
 	 */
@@ -239,11 +235,10 @@ public interface TestData extends EObject {
 
 	/**
 	 * Sets the value of the '
-	 * {@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getType <em>Type</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * {@link org.eclipse.fordiac.ide.fbtester.model.testdata.TestData#getType
+	 * <em>Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @param value
-	 *          the new value of the '<em>Type</em>' reference.
+	 * @param value the new value of the '<em>Type</em>' reference.
 	 * @see #getType()
 	 * @generated
 	 */

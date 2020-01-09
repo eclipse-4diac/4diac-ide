@@ -23,7 +23,8 @@ import org.eclipse.ui.IPersistableElement;
  * 
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
-public abstract class PersistableUntypedEditorInput extends UntypedEditorInput implements  IPersistableElement, IPersistable {
+public abstract class PersistableUntypedEditorInput extends UntypedEditorInput
+		implements IPersistableElement, IPersistable {
 
 	public PersistableUntypedEditorInput(Object content, String name) {
 		super(content, name);
@@ -39,5 +40,4 @@ public abstract class PersistableUntypedEditorInput extends UntypedEditorInput i
 		return this;
 	}
 
-	
 }

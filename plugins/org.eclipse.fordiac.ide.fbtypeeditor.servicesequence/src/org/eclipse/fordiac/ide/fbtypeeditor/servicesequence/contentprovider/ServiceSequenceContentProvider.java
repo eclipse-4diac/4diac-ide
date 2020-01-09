@@ -23,21 +23,22 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 public class ServiceSequenceContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
-		if(inputElement instanceof ServiceSequence) {
-			return ((ServiceSequence)inputElement).getServiceTransaction().toArray();
+		if (inputElement instanceof ServiceSequence) {
+			return ((ServiceSequence) inputElement).getServiceTransaction().toArray();
 		}
 		return new Object[] {};
 	}
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if(parentElement instanceof ServiceSequence && null != ((ServiceSequence)parentElement).getServiceTransaction()){
-			return ((ServiceSequence)parentElement).getServiceTransaction().toArray();
+		if (parentElement instanceof ServiceSequence
+				&& null != ((ServiceSequence) parentElement).getServiceTransaction()) {
+			return ((ServiceSequence) parentElement).getServiceTransaction().toArray();
 		}
-		if(parentElement instanceof ServiceTransaction){
+		if (parentElement instanceof ServiceTransaction) {
 			EList<Primitive> list = new BasicEList<Primitive>();
-			list.add(((ServiceTransaction)parentElement).getInputPrimitive());
-			list.addAll(((ServiceTransaction)parentElement).getOutputPrimitive());
+			list.add(((ServiceTransaction) parentElement).getInputPrimitive());
+			list.addAll(((ServiceTransaction) parentElement).getOutputPrimitive());
 			return list.toArray();
 		}
 		return null;
@@ -45,19 +46,20 @@ public class ServiceSequenceContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object getParent(Object element) {
-		if(element instanceof ServiceSequence){
-			return ((ServiceSequence)element).eContainer();
+		if (element instanceof ServiceSequence) {
+			return ((ServiceSequence) element).eContainer();
 		}
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if(element instanceof ServiceSequence){
-			return ((ServiceSequence)element).getServiceTransaction().isEmpty();
+		if (element instanceof ServiceSequence) {
+			return ((ServiceSequence) element).getServiceTransaction().isEmpty();
 		}
-		if(element instanceof ServiceTransaction){
-			return null != ((ServiceTransaction)element).getInputPrimitive() || ((ServiceTransaction)element).getOutputPrimitive().size() > 0 ? true : false;
+		if (element instanceof ServiceTransaction) {
+			return null != ((ServiceTransaction) element).getInputPrimitive()
+					|| ((ServiceTransaction) element).getOutputPrimitive().size() > 0 ? true : false;
 		}
 		return false;
 	}

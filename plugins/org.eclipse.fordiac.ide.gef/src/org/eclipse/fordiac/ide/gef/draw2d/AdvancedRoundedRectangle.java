@@ -32,14 +32,14 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 	private Figure parent;
 	private boolean useGradient = false;
 	private Color color;
-	
+
 	public AdvancedRoundedRectangle(int side) {
 		super();
 		this.side = side;
 	}
 
-	public AdvancedRoundedRectangle(int side, ZoomManager zoomManager,
-			Figure parent, boolean useGradient, Color color) {
+	public AdvancedRoundedRectangle(int side, ZoomManager zoomManager, Figure parent, boolean useGradient,
+			Color color) {
 		super();
 		this.side = side;
 		this.zoomManager = zoomManager;
@@ -48,7 +48,7 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 		this.color = color;
 	}
 
-	public void setSide(int side){
+	public void setSide(int side) {
 		this.side = side;
 	}
 
@@ -79,16 +79,15 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 
 		Color first = ColorHelper.lighter(getBackgroundColor());
 
-		Pattern pattern = new Pattern(display, topLeft.x, topLeft.y,
-				bottomRight.x, bottomRight.y, first, getBackgroundColor());
+		Pattern pattern = new Pattern(display, topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, first,
+				getBackgroundColor());
 		if (background) {
 			graphics.setBackgroundPattern(pattern);
 		} else {
 			graphics.setForegroundPattern(pattern);
 		}
 
-		graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width,
-				getCornerDimensions().height);
+		graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
 		graphics.setBackgroundPattern(null);
 		pattern.dispose();
 		first.dispose();
@@ -96,7 +95,7 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 
 	@Override
 	protected void outlineShape(Graphics graphics) {
-		if(null != color){		
+		if (null != color) {
 			graphics.setForegroundColor(color);
 		}
 		float lineInset = Math.max(1.0f, getLineWidthFloat()) / 2.0f;
@@ -114,10 +113,8 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 
 		int width = r.width;
 		int height = r.height;
-		int arcWidth = Math.max(0, getCornerDimensions().width
-				- (int) lineInset);
-		int arcHeight = Math.max(0, getCornerDimensions().height
-				- (int) lineInset);
+		int arcWidth = Math.max(0, getCornerDimensions().width - (int) lineInset);
+		int arcHeight = Math.max(0, getCornerDimensions().height - (int) lineInset);
 
 		if (width == 0 || height == 0) {
 			return;
@@ -127,12 +124,10 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 				graphics.drawLine(r.x, r.y, r.x + r.width, r.y);
 			}
 			if ((side & PositionConstants.EAST) != 0) {
-				graphics.drawLine(r.x + r.width, r.y, r.x + r.width, r.y
-						+ r.height);
+				graphics.drawLine(r.x + r.width, r.y, r.x + r.width, r.y + r.height);
 			}
 			if ((side & PositionConstants.SOUTH) != 0) {
-				graphics.drawLine(r.x, r.y + r.height, r.x + r.width, r.y
-						+ r.height);
+				graphics.drawLine(r.x, r.y + r.height, r.x + r.width, r.y + r.height);
 			}
 			if ((side & PositionConstants.WEST) != 0) {
 				graphics.drawLine(r.x, r.y, r.x, r.y + r.height);
@@ -166,22 +161,18 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 
 		if (arcWidth < width) {
 			if ((side & PositionConstants.NORTH) != 0) {
-				graphics.drawLine(x + arcWidth / 2, y,
-						x + width - arcWidth / 2, y);
+				graphics.drawLine(x + arcWidth / 2, y, x + width - arcWidth / 2, y);
 			}
 			if ((side & PositionConstants.SOUTH) != 0) {
-				graphics.drawLine(x + arcWidth / 2, y + height, x + width
-						- arcWidth / 2, y + height);
+				graphics.drawLine(x + arcWidth / 2, y + height, x + width - arcWidth / 2, y + height);
 			}
 		}
 		if (arcHeight < height) {
 			if ((side & PositionConstants.WEST) != 0) {
-				graphics.drawLine(x, y + arcHeight / 2, x, y + height
-						- arcHeight / 2);
+				graphics.drawLine(x, y + arcHeight / 2, x, y + height - arcHeight / 2);
 			}
 			if ((side & PositionConstants.EAST) != 0) {
-				graphics.drawLine(x + width, y + arcHeight / 2, x + width, y
-						+ height - arcHeight / 2);
+				graphics.drawLine(x + width, y + arcHeight / 2, x + width, y + height - arcHeight / 2);
 			}
 		}
 		if (arcWidth != 0 && arcHeight != 0) {
@@ -189,15 +180,12 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 			if (side != PositionConstants.NONE) {
 
 				graphics.drawArc(x, y, arcWidth, arcHeight, 90, 90);
-				graphics.drawArc(x + width - arcWidth, y, arcWidth, arcHeight,
-						0, 90);
-				graphics.drawArc(x + width - arcWidth, y + height - arcHeight,
-						arcWidth, arcHeight, 0, -90);
-				graphics.drawArc(x, y + height - arcHeight, arcWidth,
-						arcHeight, 180, 90);
+				graphics.drawArc(x + width - arcWidth, y, arcWidth, arcHeight, 0, 90);
+				graphics.drawArc(x + width - arcWidth, y + height - arcHeight, arcWidth, arcHeight, 0, -90);
+				graphics.drawArc(x, y + height - arcHeight, arcWidth, arcHeight, 180, 90);
 			}
 		}
 
 	}
-	
+
 }

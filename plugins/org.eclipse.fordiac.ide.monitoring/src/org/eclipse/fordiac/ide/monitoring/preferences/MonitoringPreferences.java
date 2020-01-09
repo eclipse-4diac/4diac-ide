@@ -21,9 +21,7 @@ import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-
-public class MonitoringPreferences extends FieldEditorPreferencePage implements
-		IWorkbenchPreferencePage {
+public class MonitoringPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public MonitoringPreferences() {
 		super(GRID);
@@ -38,19 +36,16 @@ public class MonitoringPreferences extends FieldEditorPreferencePage implements
 	 */
 	@Override
 	public void createFieldEditors() {
-		ColorFieldEditor watchColor = new ColorFieldEditor(
-				PreferenceConstants.P_WATCH_COLOR, "Watch Color",
+		ColorFieldEditor watchColor = new ColorFieldEditor(PreferenceConstants.P_WATCH_COLOR, "Watch Color",
 				getFieldEditorParent());
 		addField(watchColor);
-		
-		ColorFieldEditor forceColor = new ColorFieldEditor(
-				PreferenceConstants.P_FORCE_COLOR, "Force Color",
+
+		ColorFieldEditor forceColor = new ColorFieldEditor(PreferenceConstants.P_FORCE_COLOR, "Force Color",
 				getFieldEditorParent());
 		addField(forceColor);
 
-		IntegerFieldEditor polling = new IntegerFieldEditor(
-				PreferenceConstants.P_POLLING_INTERVAL, "Polling interval in ms",
-				getFieldEditorParent(), PreferenceConstants.P_POLLING_INTERVAL_DEVAULT_VALUE);
+		IntegerFieldEditor polling = new IntegerFieldEditor(PreferenceConstants.P_POLLING_INTERVAL,
+				"Polling interval in ms", getFieldEditorParent(), PreferenceConstants.P_POLLING_INTERVAL_DEVAULT_VALUE);
 		polling.setValidRange(1, 60000);
 		addField(polling);
 
@@ -64,7 +59,7 @@ public class MonitoringPreferences extends FieldEditorPreferencePage implements
 
 	@Override
 	public void init(IWorkbench workbench) {
-		//nothing todo here
+		// nothing todo here
 	}
 
 }

@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.jface.viewers.Viewer;
 
-public class FBTypeContentProvider extends AdapterFactoryContentProvider  {
+public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 
 	public FBTypeContentProvider() {
 		super(FBTypeComposedAdapterFactory.getAdapterFactory());
@@ -39,7 +39,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider  {
 	@Override
 	public void dispose() {
 		super.dispose();
-		//TODO add resource monitoring
+		// TODO add resource monitoring
 	}
 
 	@Override
@@ -51,27 +51,25 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider  {
 		return getChildren(inputElement);
 	}
 
-	
-	
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof IFile)
-		{
-			IFile element = (IFile)parentElement;
+		if (parentElement instanceof IFile) {
+			IFile element = (IFile) parentElement;
 			Palette palette = FBTypeUtils.getPalletteForFBTypeFile(element);
-			if(palette != null){
+			if (palette != null) {
 				PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, element);
-				if(null != entry){
+				if (null != entry) {
 					parentElement = entry.getType();
-					if(parentElement instanceof AdapterType){
-						parentElement = ((AdapterType)parentElement).getAdapterFBType();
+					if (parentElement instanceof AdapterType) {
+						parentElement = ((AdapterType) parentElement).getAdapterFBType();
 					}
 				}
 			}
 		}
-		if((parentElement instanceof AutomationSystem) || (parentElement instanceof Application) ||
-			(parentElement instanceof SystemConfiguration) || (parentElement instanceof FB)
-			|| (parentElement instanceof Device) || (parentElement instanceof Resource) || (parentElement instanceof SubApp)){
+		if ((parentElement instanceof AutomationSystem) || (parentElement instanceof Application)
+				|| (parentElement instanceof SystemConfiguration) || (parentElement instanceof FB)
+				|| (parentElement instanceof Device) || (parentElement instanceof Resource)
+				|| (parentElement instanceof SubApp)) {
 			return null;
 		}
 		return super.getChildren(parentElement);
@@ -80,27 +78,27 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider  {
 	@Override
 	public Object getParent(Object element) {
 		Object retVal = null;
-		if (element instanceof IFile){
-			return ((IResource)element).getParent();
-		}else{
+		if (element instanceof IFile) {
+			return ((IResource) element).getParent();
+		} else {
 			retVal = super.getParent(element);
-			//FIXME check for the correct elements and return the IFile for them 
+			// FIXME check for the correct elements and return the IFile for them
 //			if(retval instanceof FBType){
 //				
 //			}
-					
+
 		}
 		return retVal;
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if((element instanceof AutomationSystem) || (element instanceof Application) ||
-				(element instanceof SystemConfiguration) || (element instanceof FB)
-				|| (element instanceof Device) || (element instanceof Resource) || (element instanceof SubApp)){
+		if ((element instanceof AutomationSystem) || (element instanceof Application)
+				|| (element instanceof SystemConfiguration) || (element instanceof FB) || (element instanceof Device)
+				|| (element instanceof Resource) || (element instanceof SubApp)) {
 			return false;
 		}
-		if (element instanceof IFile){
+		if (element instanceof IFile) {
 			return true;
 		}
 		return super.hasChildren(element);

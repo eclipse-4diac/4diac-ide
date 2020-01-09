@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 
 public class ChangeAlgorithmTypeCommand extends AbstractChangeAlgorithmTypeCommand {
 
-
 	public ChangeAlgorithmTypeCommand(BaseFBType fbType, Algorithm oldAlgorithm, String algorithmType) {
 		super(fbType, oldAlgorithm, algorithmType);
 	}
@@ -47,7 +46,7 @@ public class ChangeAlgorithmTypeCommand extends AbstractChangeAlgorithmTypeComma
 			}
 		}
 	}
-	
+
 	@Override
 	protected BasicFBType getType() {
 		return (BasicFBType) super.getType();

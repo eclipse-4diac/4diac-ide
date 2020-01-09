@@ -19,20 +19,20 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.jface.viewers.IFilter;
 
-public class EventInterfaceFilter implements IFilter{
+public class EventInterfaceFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if(toTest instanceof InterfaceEditPart && ((InterfaceEditPart) toTest).getCastedModel() instanceof Event){
+		if (toTest instanceof InterfaceEditPart && ((InterfaceEditPart) toTest).getCastedModel() instanceof Event) {
 			return true;
 		}
-		if(toTest instanceof TypeEditPart && ((TypeEditPart) toTest).getCastedModel() instanceof Event){
+		if (toTest instanceof TypeEditPart && ((TypeEditPart) toTest).getCastedModel() instanceof Event) {
 			return true;
 		}
-		if(toTest instanceof CommentEditPart && ((CommentEditPart) toTest).getCastedModel() instanceof Event){
+		if (toTest instanceof CommentEditPart && ((CommentEditPart) toTest).getCastedModel() instanceof Event) {
 			return true;
 		}
-		if(toTest instanceof Event){
+		if (toTest instanceof Event) {
 			return true;
 		}
 		return false;

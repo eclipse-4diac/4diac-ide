@@ -18,7 +18,8 @@ import org.eclipse.fordiac.ide.util.IOpenListener;
 import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.jface.action.Action;
 
-/** A default implementation handling open action for IOpenListener implementers
+/**
+ * A default implementation handling open action for IOpenListener implementers
  */
 public class OpenListenerAction extends Action {
 	private final IOpenListener openListener;

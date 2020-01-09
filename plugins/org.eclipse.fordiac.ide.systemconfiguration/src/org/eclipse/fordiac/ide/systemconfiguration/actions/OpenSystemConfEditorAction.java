@@ -35,7 +35,7 @@ public class OpenSystemConfEditorAction extends OpenListener {
 	private SystemConfiguration sysConf;
 
 	@Override
-	public void run(final IAction action) {		
+	public void run(final IAction action) {
 		SystemConfigurationEditorInput input = new SystemConfigurationEditorInput(sysConf);
 		openEditor(input, SystemConfigurationEditor.class.getName());
 	}

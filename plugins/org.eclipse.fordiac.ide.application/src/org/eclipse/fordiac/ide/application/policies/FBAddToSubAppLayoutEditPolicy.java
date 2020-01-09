@@ -34,8 +34,8 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
- * This policy creates an AddFBToSubAppCommand when user moves selected FBs
- * over a subapp. When this is possible the subapp is marked as selected.
+ * This policy creates an AddFBToSubAppCommand when user moves selected FBs over
+ * a subapp. When this is possible the subapp is marked as selected.
  */
 public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 
@@ -44,14 +44,17 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected Command getAddCommand(Request generic) {
-		if(generic instanceof ChangeBoundsRequest && getTargetEditPart(generic) instanceof SubAppForFBNetworkEditPart){
+		if (generic instanceof ChangeBoundsRequest
+				&& getTargetEditPart(generic) instanceof SubAppForFBNetworkEditPart) {
 			ChangeBoundsRequest request = (ChangeBoundsRequest) generic;
 			List editParts = request.getEditParts();
-			
-			for(Object obj : editParts) {
-				if(obj instanceof AbstractFBNElementEditPart) {
-					//we have at least one draged element to be added to the subapp, create an add command for it. 
-					return new AddElementsToSubAppCommand(((SubAppForFBNetworkEditPart)getTargetEditPart(generic)).getModel(), editParts); 
+
+			for (Object obj : editParts) {
+				if (obj instanceof AbstractFBNElementEditPart) {
+					// we have at least one draged element to be added to the subapp, create an add
+					// command for it.
+					return new AddElementsToSubAppCommand(
+							((SubAppForFBNetworkEditPart) getTargetEditPart(generic)).getModel(), editParts);
 				}
 			}
 		}
@@ -66,7 +69,8 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 			if (cornerDim > 1) {
 				cornerDim = cornerDim / 2;
 			}
-			moveHandle = new ModifiedMoveHandle((GraphicalEditPart) getTargetEditPart(request), new Insets(1), cornerDim);							
+			moveHandle = new ModifiedMoveHandle((GraphicalEditPart) getTargetEditPart(request), new Insets(1),
+					cornerDim);
 			addFeedback(moveHandle);
 		}
 	}
@@ -78,6 +82,5 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 			moveHandle = null;
 		}
 	}
-	
-	
+
 }

@@ -30,21 +30,23 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
 
 public final class MonitoringManagerUtils {
-	
+
 	private MonitoringManagerUtils() {
-		throw new AssertionError();  //class should not be instantiated
+		throw new AssertionError(); // class should not be instantiated
 	}
 
 	public static boolean canBeMonitored(org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart editPart) {
-		PortElement port = MonitoringManagerUtils.createPortElement(editPart);  //FIXME think how we can get away without creating a port element 
+		PortElement port = MonitoringManagerUtils.createPortElement(editPart); // FIXME think how we can get away
+																				// without creating a port element
 		return ((port != null) && (port.getPortString() != null));
 	}
-	
+
 	public static boolean canBeMonitored(FBEditPart obj) {
-		// As a first solution try to find the first interface editpart and see if we can monitoring
+		// As a first solution try to find the first interface editpart and see if we
+		// can monitoring
 		for (Object child : obj.getChildren()) {
-			if(child instanceof InterfaceEditPart){
-				return canBeMonitored((InterfaceEditPart)child);
+			if (child instanceof InterfaceEditPart) {
+				return canBeMonitored((InterfaceEditPart) child);
 			}
 		}
 		return false;
@@ -57,30 +59,28 @@ public final class MonitoringManagerUtils {
 		}
 
 		FBNetworkElement obj = editPart.getModel().getFBNetworkElement();
-		if(obj instanceof FB){
-			FB fb = (FB)obj; 
-			return createPortElement(fb, editPart);					
+		if (obj instanceof FB) {
+			FB fb = (FB) obj;
+			return createPortElement(fb, editPart);
 		}
-		
+
 		return null;
 
 	}
 
-	private static PortElement createPortElement(FB fb,
-			org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart ep) {
+	private static PortElement createPortElement(FB fb, org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart ep) {
 		PortElement p;
-		if (ep.getModel() instanceof AdapterDeclaration){
-			p = MonitoringFactory.eINSTANCE.createAdapterPortElement(); 
-		}
-		else{
+		if (ep.getModel() instanceof AdapterDeclaration) {
+			p = MonitoringFactory.eINSTANCE.createAdapterPortElement();
+		} else {
 			p = MonitoringBaseFactory.eINSTANCE.createPortElement();
 		}
 
-		Resource res = fb.getResource(); 
+		Resource res = fb.getResource();
 		if (res == null) {
 			return null;
 		}
-		
+
 		p.setResource(res);
 		p.setFb(fb);
 		setupFBHierarchy(fb, p);
@@ -90,14 +90,13 @@ public final class MonitoringManagerUtils {
 
 	private static PortElement createCompositeInternalPortString(
 			org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart editPart) {
-		
-		FBEditPart fbep = (FBEditPart)editPart.getParent();
-		CompositeNetworkViewerEditPart cnep = (CompositeNetworkViewerEditPart) editPart
-				.getParent().getParent();
+
+		FBEditPart fbep = (FBEditPart) editPart.getParent();
+		CompositeNetworkViewerEditPart cnep = (CompositeNetworkViewerEditPart) editPart.getParent().getParent();
 
 		ArrayList<CompositeNetworkViewerEditPart> parents = new ArrayList<>();
 
-		CompositeNetworkViewerEditPart root = cnep; 
+		CompositeNetworkViewerEditPart root = cnep;
 		parents.add(0, root);
 		while (root.getparentInstanceViewerEditPart() != null) {
 			parents.add(0, root.getparentInstanceViewerEditPart());
@@ -110,8 +109,7 @@ public final class MonitoringManagerUtils {
 			pe.setFb(fbep.getModel());
 
 			for (CompositeNetworkViewerEditPart compositeNetworkEditPart : parents) {
-				pe.getHierarchy().add(
-						compositeNetworkEditPart.getFbInstance().getName());
+				pe.getHierarchy().add(compositeNetworkEditPart.getFbInstance().getName());
 			}
 			return pe;
 		}
@@ -119,12 +117,11 @@ public final class MonitoringManagerUtils {
 	}
 
 	private static void setupFBHierarchy(FBNetworkElement element, PortElement p) {
-		if(!element.isMapped() && element.getFbNetwork().eContainer() instanceof SubApp) {
-			SubApp subApp = (SubApp)element.getFbNetwork().eContainer();
+		if (!element.isMapped() && element.getFbNetwork().eContainer() instanceof SubApp) {
+			SubApp subApp = (SubApp) element.getFbNetwork().eContainer();
 			setupFBHierarchy(subApp, p);
 			p.getHierarchy().add(subApp.getName());
-		}		
+		}
 	}
 
-	
 }

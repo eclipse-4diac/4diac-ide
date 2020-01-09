@@ -30,7 +30,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class TypeNavigator extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 	private PatternFilter patternFilter = null;
-	
+
 	@Override
 	public void createPartControl(Composite aParent) {
 		Composite container = new Composite(aParent, SWT.NONE);
@@ -40,7 +40,7 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 		layout.marginBottom = 0;
 		layout.marginTop = 0;
 		container.setLayout(layout);
-		final Text text = new Text(container, SWT.SEARCH | SWT.ICON_CANCEL);	
+		final Text text = new Text(container, SWT.SEARCH | SWT.ICON_CANCEL);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -52,23 +52,22 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 				}
 			}
 		});
-		text.addModifyListener(e -> setSearchFilter(text.getText()));		
-		super.createPartControl(container);		
+		text.addModifyListener(e -> setSearchFilter(text.getText()));
+		super.createPartControl(container);
 		GridData fillBoth = new GridData();
 		fillBoth.horizontalAlignment = GridData.FILL;
 		fillBoth.grabExcessHorizontalSpace = true;
 		fillBoth.verticalAlignment = GridData.FILL;
 		fillBoth.grabExcessVerticalSpace = true;
-		getCommonViewer().getControl().setLayoutData(fillBoth);		
+		getCommonViewer().getControl().setLayoutData(fillBoth);
 	}
-	
-	
-	void setSearchFilter(String filterString){
+
+	void setSearchFilter(String filterString) {
 		CommonViewer cv = getCommonViewer();
-		if (patternFilter == null)	{
+		if (patternFilter == null) {
 			patternFilter = new TypeListPatternFilter();
 			cv.addFilter(patternFilter);
-		}		
+		}
 		patternFilter.setPattern(filterString);
 		cv.refresh(false);
 	}
@@ -81,7 +80,7 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getAdapter(Class required) {
-		if(required == IPropertySheetPage.class){
+		if (required == IPropertySheetPage.class) {
 			return new TabbedPropertySheetPage(this);
 		}
 		return super.getAdapter(required);

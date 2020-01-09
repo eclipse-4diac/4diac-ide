@@ -37,7 +37,6 @@ import org.eclipse.swt.widgets.Text;
  */
 public class FileChooserControl extends Composite {
 
-
 	/** The text. */
 	private Text text = null;
 
@@ -50,14 +49,14 @@ public class FileChooserControl extends Composite {
 	/**
 	 * The Constructor.
 	 * 
-	 * @param parent the parent
-	 * @param style the style
-	 * @param label the label
-	 * @param filterNames the filter names
+	 * @param parent           the parent
+	 * @param style            the style
+	 * @param label            the label
+	 * @param filterNames      the filter names
 	 * @param filterExtensions the filter extensions
 	 */
-	public FileChooserControl(final Composite parent, final int style,
-			final String label, String[] filterNames, String[] filterExtensions) {
+	public FileChooserControl(final Composite parent, final int style, final String label, String[] filterNames,
+			String[] filterExtensions) {
 		super(parent, style);
 		this.labelText = label;
 		this.filterNames = filterNames.clone();
@@ -86,8 +85,7 @@ public class FileChooserControl extends Composite {
 		button.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
 			@Override
 			public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-				FileDialog dialog = new FileDialog(Display.getDefault()
-						.getActiveShell(), SWT.OPEN);
+				FileDialog dialog = new FileDialog(Display.getDefault().getActiveShell(), SWT.OPEN);
 				String dir = text.getText();
 
 				dialog.setText(labelText);
@@ -195,6 +193,6 @@ public class FileChooserControl extends Composite {
 		if (dir != null && !dir.equals(text.getText())) {
 			text.setText(dir);
 			notifyFileListeners();
-		} 
+		}
 	}
 } // @jve:decl-index=0:visual-constraint="10,10"

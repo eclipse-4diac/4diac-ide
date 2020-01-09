@@ -62,20 +62,23 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new LayoutEditPolicy() {
-			
+
 			@Override
 			protected Command getCreateCommand(CreateRequest request) {
 				return null;
 			}
-			
+
 			@Override
 			protected EditPolicy createChildEditPolicy(EditPart child) {
-				/* a simple selection edit policy which will show a rounded rectangle around the host */
+				/*
+				 * a simple selection edit policy which will show a rounded rectangle around the
+				 * host
+				 */
 				return new SelectionEditPolicy() {
-					private ModifiedMoveHandle handle = null; 
-					
+					private ModifiedMoveHandle handle = null;
+
 					private ModifiedMoveHandle getHandle() {
-						if(null == handle) {
+						if (null == handle) {
 							handle = new ModifiedMoveHandle((GraphicalEditPart) getHost(), new Insets(2), 14);
 						}
 						return handle;
@@ -83,7 +86,7 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 
 					@Override
 					protected void hideSelection() {
-						if (handle != null){
+						if (handle != null) {
 							IFigure layer = getLayer(LayerConstants.HANDLE_LAYER);
 							layer.remove(handle);
 						}
@@ -94,7 +97,7 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 						IFigure layer = getLayer(LayerConstants.HANDLE_LAYER);
 						layer.add(getHandle());
 					}
-					
+
 				};
 			}
 
@@ -104,5 +107,5 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 			}
 		});
 	}
-	
+
 }

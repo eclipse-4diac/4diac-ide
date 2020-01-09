@@ -20,9 +20,9 @@ import org.eclipse.gef.commands.Command;
  * The Class ChangeAuthorCommand.
  */
 public class ChangeAuthorCommand extends Command {
-	
+
 	private VersionInfo versionInfo;
-	
+
 	/** The new ApplicationDomain value. */
 	private String newAuthor;
 

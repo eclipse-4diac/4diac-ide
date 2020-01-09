@@ -16,31 +16,34 @@ package org.eclipse.fordiac.ide.model.data;
 import org.eclipse.emf.ecore.EObject;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Subrange</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Subrange</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit <em>Lower Limit</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit <em>Upper Limit</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit
+ * <em>Lower Limit</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit
+ * <em>Upper Limit</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getSubrange()
- * @model annotation="http://www.obeo.fr/dsl/dnc/archetype archetype='Description'"
+ * @model annotation="http://www.obeo.fr/dsl/dnc/archetype
+ *        archetype='Description'"
  * @generated
  */
 public interface Subrange extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Lower Limit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Lower Limit</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Lower Limit</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Lower Limit</em>' attribute isn't clear, there
+	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Lower Limit</em>' attribute.
 	 * @see #setLowerLimit(int)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getSubrange_LowerLimit()
@@ -51,9 +54,10 @@ public interface Subrange extends EObject {
 	int getLowerLimit();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit <em>Lower Limit</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit <em>Lower
+	 * Limit</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Lower Limit</em>' attribute.
 	 * @see #getLowerLimit()
 	 * @generated
@@ -61,13 +65,14 @@ public interface Subrange extends EObject {
 	void setLowerLimit(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Upper Limit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Upper Limit</b></em>' attribute. <!--
+	 * begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Upper Limit</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Upper Limit</em>' attribute isn't clear, there
+	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Upper Limit</em>' attribute.
 	 * @see #setUpperLimit(int)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getSubrange_UpperLimit()
@@ -78,9 +83,10 @@ public interface Subrange extends EObject {
 	int getUpperLimit();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit <em>Upper Limit</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit <em>Upper
+	 * Limit</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Upper Limit</em>' attribute.
 	 * @see #getUpperLimit()
 	 * @generated

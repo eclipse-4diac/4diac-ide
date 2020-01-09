@@ -67,5 +67,5 @@ public class Activator extends Abstract4DIACUIPlugin {
 	public static Activator getDefault() {
 		return plugin;
 	}
-	
+
 }

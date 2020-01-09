@@ -15,7 +15,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -29,16 +28,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType} object. <!--
+ * begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 	/**
-	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public BaseFBTypeItemProvider(AdapterFactory adapterFactory) {
@@ -46,9 +46,9 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 	}
 
 	/**
-	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -61,11 +61,12 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an
+	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
+	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -78,22 +79,22 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
+		// Check the type of the specified child object and return the proper feature to
+		// use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
 	/**
-	 * This returns BaseFBType.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns BaseFBType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -102,25 +103,23 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 	}
 
 	/**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((BaseFBType)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_BaseFBType_type") : //$NON-NLS-1$
-			getString("_UI_BaseFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((BaseFBType) object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_BaseFBType_type") : //$NON-NLS-1$
+				getString("_UI_BaseFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -128,33 +127,29 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(BaseFBType.class)) {
-			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-				return;
+		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+			return;
 		}
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
-				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
+				LibraryElementFactory.eINSTANCE.createVarDeclaration()));
 
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
-				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
+				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 	}
 
 }

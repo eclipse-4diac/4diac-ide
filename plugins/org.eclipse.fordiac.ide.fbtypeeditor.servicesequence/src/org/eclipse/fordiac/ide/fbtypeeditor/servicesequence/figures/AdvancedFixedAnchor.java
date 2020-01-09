@@ -28,13 +28,12 @@ public class AdvancedFixedAnchor extends FixedAnchor {
 	/**
 	 * Instantiates a new advanced fixed anchor.
 	 * 
-	 * @param owner the owner
+	 * @param owner   the owner
 	 * @param isInput the is input
-	 * @param moveX the move x
-	 * @param moveY the move y
+	 * @param moveX   the move x
+	 * @param moveY   the move y
 	 */
-	public AdvancedFixedAnchor(final IFigure owner, final boolean isInput,
-			final int moveX, final int moveY) {
+	public AdvancedFixedAnchor(final IFigure owner, final boolean isInput, final int moveX, final int moveY) {
 		super(owner, isInput);
 		this.moveX = moveX;
 		this.moveY = moveY;
@@ -43,7 +42,9 @@ public class AdvancedFixedAnchor extends FixedAnchor {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.draw2d.ConnectionAnchor#getLocation(org.eclipse.draw2d.geometry.Point)
+	 * @see
+	 * org.eclipse.draw2d.ConnectionAnchor#getLocation(org.eclipse.draw2d.geometry.
+	 * Point)
 	 */
 	@Override
 	public Point getLocation(final Point reference) {

@@ -14,7 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.monitoring.impl;
 
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -29,35 +28,35 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>Factory</b>.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
+ * end-user-doc -->
+ * 
  * @generated
  */
 public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static MonitoringFactory init() {
 		try {
-			MonitoringFactory theMonitoringFactory = (MonitoringFactory)EPackage.Registry.INSTANCE.getEFactory(MonitoringPackage.eNS_URI);
+			MonitoringFactory theMonitoringFactory = (MonitoringFactory) EPackage.Registry.INSTANCE
+					.getEFactory(MonitoringPackage.eNS_URI);
 			if (theMonitoringFactory != null) {
 				return theMonitoringFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new MonitoringFactoryImpl();
 	}
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	public MonitoringFactoryImpl() {
@@ -65,26 +64,31 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case MonitoringPackage.MONITORING_ELEMENT: return createMonitoringElement();
-			case MonitoringPackage.MONITORING_ADAPTER_ELEMENT: return createMonitoringAdapterElement();
-			case MonitoringPackage.ADAPTER_PORT_ELEMENT: return createAdapterPortElement();
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT: return createAdapterMonitoringEvent();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION: return createAdapterMonitoringVarDeclaration();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		case MonitoringPackage.MONITORING_ELEMENT:
+			return createMonitoringElement();
+		case MonitoringPackage.MONITORING_ADAPTER_ELEMENT:
+			return createMonitoringAdapterElement();
+		case MonitoringPackage.ADAPTER_PORT_ELEMENT:
+			return createAdapterPortElement();
+		case MonitoringPackage.ADAPTER_MONITORING_EVENT:
+			return createAdapterMonitoringEvent();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION:
+			return createAdapterMonitoringVarDeclaration();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -94,8 +98,8 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -105,8 +109,8 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -116,8 +120,8 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -127,8 +131,8 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -138,18 +142,18 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public MonitoringPackage getMonitoringPackage() {
-		return (MonitoringPackage)getEPackage();
+		return (MonitoringPackage) getEPackage();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @deprecated
 	 * @generated
 	 */
@@ -158,4 +162,4 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 		return MonitoringPackage.eINSTANCE;
 	}
 
-} //MonitoringFactoryImpl
+} // MonitoringFactoryImpl

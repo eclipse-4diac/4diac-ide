@@ -22,12 +22,13 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.ui.IWorkbenchPart;
 
-/** This special delete object will sort the commands that way that first the connections are added and then the other objects. 
+/**
+ * This special delete object will sort the commands that way that first the
+ * connections are added and then the other objects.
  * 
  */
 public class DeleteFBNetworkAction extends DeleteAction {
 
-	
 	public DeleteFBNetworkAction(IWorkbenchPart part) {
 		super(part);
 	}
@@ -44,21 +45,20 @@ public class DeleteFBNetworkAction extends DeleteAction {
 
 		List<EditPart> list = new ArrayList<>();
 
-		//Resort list such that the connects are before any other edit parts
+		// Resort list such that the connects are before any other edit parts
 		for (Object object : objects) {
-			if(object instanceof ConnectionEditPart){
-				list.add((EditPart)object);
+			if (object instanceof ConnectionEditPart) {
+				list.add((EditPart) object);
 			}
 		}
-		
+
 		for (Object object : objects) {
-			if(!(object instanceof ConnectionEditPart)){
-				list.add((EditPart)object);				
+			if (!(object instanceof ConnectionEditPart)) {
+				list.add((EditPart) object);
 			}
-		}	
+		}
 
 		return super.createDeleteCommand(list);
 	}
 
-	
 }

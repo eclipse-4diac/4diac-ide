@@ -21,7 +21,7 @@ public class CreateResourceTypePaletteEntry implements IPaletteEntryCreator, Typ
 
 	@Override
 	public boolean canHandle(IFile file) {
-		 return (RESOURCE_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
+		return (RESOURCE_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
 	}
 
 	@Override

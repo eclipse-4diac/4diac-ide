@@ -41,7 +41,9 @@ public class DeleteOutputPrimitiveCommand extends Command {
 		this.primitive = primitive;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -52,8 +54,7 @@ public class DeleteOutputPrimitiveCommand extends Command {
 			index = parent.getOutputPrimitive().indexOf(primitive);
 			parent.getOutputPrimitive().remove(primitive);
 
-			if (parent.getInputPrimitive() == null
-					&& parent.getOutputPrimitive().size() == 0) {
+			if (parent.getInputPrimitive() == null && parent.getOutputPrimitive().size() == 0) {
 				deleteTransactionCmd = new DeleteTransactionCommand(parent);
 				deleteTransactionCmd.execute();
 			}
@@ -62,7 +63,9 @@ public class DeleteOutputPrimitiveCommand extends Command {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -73,7 +76,9 @@ public class DeleteOutputPrimitiveCommand extends Command {
 		parent.getOutputPrimitive().add(index, primitive);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override

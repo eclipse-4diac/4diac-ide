@@ -85,8 +85,8 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 					}
 				}
 
-				Activator.getDefault().logError(
-						MessageFormat.format(Messages.CommGenerator_FBTypePaletteEntryNotFound, currentPath));
+				Activator.getDefault()
+						.logError(MessageFormat.format(Messages.CommGenerator_FBTypePaletteEntryNotFound, currentPath));
 
 			} else {
 				boolean foundSubGroup = false;

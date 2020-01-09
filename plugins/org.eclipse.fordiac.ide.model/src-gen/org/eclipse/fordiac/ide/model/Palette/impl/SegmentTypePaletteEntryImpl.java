@@ -24,16 +24,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Segment Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Segment
+ * Type Palette Entry</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements SegmentTypePaletteEntry {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected SegmentTypePaletteEntryImpl() {
@@ -41,8 +40,8 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -50,41 +49,41 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 		return PalettePackage.Literals.SEGMENT_TYPE_PALETTE_ENTRY;
 	}
 
-	
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public SegmentType getSegmentType() {
 		LibraryElement type = getType();
-		if((null !=type) && (type instanceof SegmentType)){
-		   return (SegmentType) type;
+		if ((null != type) && (type instanceof SegmentType)) {
+			return (SegmentType) type;
 		}
 		return null;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if((null != type) && (type instanceof SegmentType)){
+		if ((null != type) && (type instanceof SegmentType)) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
-				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "tried to set no SegmentType as type entry for SegmentTypePaletteEntry");
+			if (null != type) {
+				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+						"tried to set no SegmentType as type entry for SegmentTypePaletteEntry");
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
 	}
 
 	@Override
-	protected LibraryElement loadType(){
+	protected LibraryElement loadType() {
 		return SEGImporter.importSEGType(getFile());
 	}
-} //SegmentTypePaletteEntryImpl
+} // SegmentTypePaletteEntryImpl

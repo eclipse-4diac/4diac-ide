@@ -43,16 +43,14 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 
-
 /**
  * The Class TestEditPart.
  */
-public class TestEditPart extends AbstractViewEditPart implements
-		SpecificLayerEditPart {
+public class TestEditPart extends AbstractViewEditPart implements SpecificLayerEditPart {
 
 	/** The parent part. */
 	private org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart parentPart;
-	
+
 	public org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart getParentPart() {
 		return parentPart;
 	}
@@ -63,8 +61,8 @@ public class TestEditPart extends AbstractViewEditPart implements
 		super.activate();
 		Set set = getViewer().getEditPartRegistry().keySet();
 		for (Object object : set) {
-			if ((object instanceof IInterfaceElement)  && 
-					((IInterfaceElement) object).equals(getModel().getInterfaceElement())) {
+			if ((object instanceof IInterfaceElement)
+					&& ((IInterfaceElement) object).equals(getModel().getInterfaceElement())) {
 				EditPart part = (EditPart) getViewer().getEditPartRegistry().get(object);
 				if (part instanceof org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart) {
 					parentPart = (org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.InterfaceEditPart) part;
@@ -93,15 +91,16 @@ public class TestEditPart extends AbstractViewEditPart implements
 		updatePos();
 		registerElement();
 	}
-	
+
 	/**
 	 * Set the background color of this editparts figure
+	 * 
 	 * @param color
 	 */
 	public void setBackgroundColor(Color color) {
 		getFigure().setBackgroundColor(color);
 	}
-	
+
 	@Override
 	protected void refreshName() {
 		getNameLabel().setText(getModel().getValue());
@@ -152,10 +151,10 @@ public class TestEditPart extends AbstractViewEditPart implements
 	 * Update pos.
 	 */
 	protected void updatePos() {
-		if(null != parentPart){
+		if (null != parentPart) {
 			String label = ((Label) getFigure()).getText();
 			Rectangle bounds = parentPart.getFigure().getBounds();
-			
+
 			int x = 0;
 			if (isInput()) {
 				Font font = ((Label) getFigure()).getFont();
@@ -164,12 +163,10 @@ public class TestEditPart extends AbstractViewEditPart implements
 					width = FigureUtilities.getTextWidth(label, getFigure().getFont());
 					width = Math.max(width, getFigure().getBounds().width);
 				}
-				x = bounds.x - 10 - width - 15
-						* getModel().getFb().getInterface().getEventInputs().size();
+				x = bounds.x - 10 - width - 15 * getModel().getFb().getInterface().getEventInputs().size();
 			} else {
-				x = bounds.x + bounds.width + 10 + 15
-						* getModel().getFb().getInterface().getEventInputs().size();
-	
+				x = bounds.x + bounds.width + 10 + 15 * getModel().getFb().getInterface().getEventInputs().size();
+
 			}
 			int y = bounds.y;
 			if (x != oldx || y != oldy) {
@@ -205,7 +202,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 		l.setBackgroundColor(org.eclipse.draw2d.ColorConstants.yellow);
 		l.setPreferredSize(150, 20);
 		l.setBorder(new MarginBorder(3, 5, 3, 5));
-		
+
 		if (isInput()) {
 			LineBorder lb = new LineBorder() {
 				@Override
@@ -223,10 +220,10 @@ public class TestEditPart extends AbstractViewEditPart implements
 	protected EContentAdapter createContentAdapter() {
 		return new EContentAdapter() {
 			private boolean blockAdapter;
-			
+
 			@Override
 			public void notifyChanged(final Notification notification) {
-				if(!blockAdapter) {
+				if (!blockAdapter) {
 					blockAdapter = true;
 					super.notifyChanged(notification);
 					refreshVisuals();
@@ -246,9 +243,9 @@ public class TestEditPart extends AbstractViewEditPart implements
 	protected void refreshPosition() {
 		updatePos();
 		Rectangle bounds = null;
-		if(null != getModel()){
+		if (null != getModel()) {
 			bounds = new Rectangle(getModel().getX(), getModel().getY(), 80, -1);
-			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(),bounds);
+			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}
 
@@ -257,8 +254,7 @@ public class TestEditPart extends AbstractViewEditPart implements
 		if (request.getType() == RequestConstants.REQ_MOVE) {
 			return false;
 		}
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN) {
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
 			return isInput();
 		}
 		return super.understandsRequest(request);
@@ -266,9 +262,8 @@ public class TestEditPart extends AbstractViewEditPart implements
 
 	@Override
 	public void performRequest(Request request) {
-		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN) && 
-				!isInput()) {
+		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN)
+				&& !isInput()) {
 			return;
 		}
 		super.performRequest(request);
@@ -297,11 +292,10 @@ public class TestEditPart extends AbstractViewEditPart implements
 	/**
 	 * Sets the value.
 	 * 
-	 * @param string
-	 *          the new value
+	 * @param string the new value
 	 */
 	public void setValue(String string) {
-		if (isActive() &&getFigure() != null) {
+		if (isActive() && getFigure() != null) {
 			((Label) getFigure()).setText(string);
 		}
 	}

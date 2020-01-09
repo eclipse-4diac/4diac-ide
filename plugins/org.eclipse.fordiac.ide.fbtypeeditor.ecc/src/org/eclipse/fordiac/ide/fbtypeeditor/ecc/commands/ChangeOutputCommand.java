@@ -34,7 +34,7 @@ public class ChangeOutputCommand extends Command {
 	/**
 	 * Instantiates a new change output command.
 	 * 
-	 * @param action the action
+	 * @param action      the action
 	 * @param outputEvent the output event
 	 */
 	public ChangeOutputCommand(final ECAction action, final Event outputEvent) {

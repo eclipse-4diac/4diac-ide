@@ -33,15 +33,11 @@ public class CreationPopupDialog extends PopupDialog {
 
 	private ICreationExecutor executor;
 
-	public CreationPopupDialog(Shell parent, int shellStyle,
-			boolean takeFocusOnOpen, boolean persistSize,
-			boolean persistLocation, boolean showDialogMenu,
-			boolean showPersistActions, String titleText, String infoText,
-			Object[] elements, LabelProvider labelProvider,
-			ICreationExecutor executor) {
-		super(parent, shellStyle, takeFocusOnOpen, persistSize,
-				persistLocation, showDialogMenu, showPersistActions, titleText,
-				infoText);
+	public CreationPopupDialog(Shell parent, int shellStyle, boolean takeFocusOnOpen, boolean persistSize,
+			boolean persistLocation, boolean showDialogMenu, boolean showPersistActions, String titleText,
+			String infoText, Object[] elements, LabelProvider labelProvider, ICreationExecutor executor) {
+		super(parent, shellStyle, takeFocusOnOpen, persistSize, persistLocation, showDialogMenu, showPersistActions,
+				titleText, infoText);
 		this.elements = elements.clone();
 		this.labelProvider = labelProvider;
 		this.executor = executor;

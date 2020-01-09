@@ -45,31 +45,30 @@ public class CreateOutputPrimitiveCommand extends Command {
 	public void execute() {
 		Service service = (Service) parent.eContainer().eContainer();
 		newElement = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
-		newElement.setEvent("INITO");	 //$NON-NLS-1$
-		if (type.equals(ServiceInterfacePaletteFactory.LEFT_OUTPUT_PRIMITIVE)) {			
+		newElement.setEvent("INITO"); //$NON-NLS-1$
+		if (type.equals(ServiceInterfacePaletteFactory.LEFT_OUTPUT_PRIMITIVE)) {
 			newElement.setInterface(service.getLeftInterface());
 		} else if (type.equals(ServiceInterfacePaletteFactory.RIGHT_OUTPUT_PRIMITIVE)) {
 			newElement.setInterface(service.getRightInterface());
 		}
-		if(null == refElement){
+		if (null == refElement) {
 			parent.getOutputPrimitive().add(newElement);
-		}else{
+		} else {
 			int index = parent.getOutputPrimitive().indexOf(refElement);
 			parent.getOutputPrimitive().add(index, newElement);
 		}
 	}
-	
+
 	@Override
 	public void undo() {
-		parent.getOutputPrimitive().remove(newElement);		
+		parent.getOutputPrimitive().remove(newElement);
 	}
-	
+
 	@Override
 	public void redo() {
-		if(null == refElement){
+		if (null == refElement) {
 			parent.getOutputPrimitive().add(newElement);
-		}
-		else{
+		} else {
 			int index = parent.getOutputPrimitive().indexOf(refElement);
 			parent.getOutputPrimitive().add(index, newElement);
 		}

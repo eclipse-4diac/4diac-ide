@@ -32,31 +32,30 @@ public class RenameSystem extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		
 
 		if (selection instanceof TreeSelection) {
 			if (((TreeSelection) selection).getFirstElement() instanceof AutomationSystem) {
 				AutomationSystem system = (AutomationSystem) ((TreeSelection) selection).getFirstElement();
-				
+
 				IProject project = system.getProject();
 				runRenameAction(project);
-				
+
 			}
 		}
 		return null;
 	}
 
 	private static void runRenameAction(IProject project) {
-		RenameResourceAction action = new RenameResourceAction(new IShellProvider() {			
+		RenameResourceAction action = new RenameResourceAction(new IShellProvider() {
 			@Override
 			public Shell getShell() {
 				return Display.getDefault().getActiveShell();
 			}
 		});
-		
+
 		action.selectionChanged(new StructuredSelection(project));
-		
+
 		action.run();
-		
+
 	}
 }

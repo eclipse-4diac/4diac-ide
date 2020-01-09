@@ -19,15 +19,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * The Class ChangeDescriptionCommand.
  */
 public class ChangeDescriptionCommand extends ChangeIdentificationCommand {
-	
+
 	/** The new Description value. */
 	private String newDescription;
 
 	/** The old Description value. */
 	private String oldDescription;
 
-	public ChangeDescriptionCommand(LibraryElement type,
-			final String newDescription) {
+	public ChangeDescriptionCommand(LibraryElement type, final String newDescription) {
 		super(type);
 		this.newDescription = newDescription;
 	}

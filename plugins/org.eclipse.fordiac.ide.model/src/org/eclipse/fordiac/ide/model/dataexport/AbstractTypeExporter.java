@@ -38,13 +38,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public abstract class AbstractTypeExporter extends CommonElementExporter {
-	
+
 	private final FBType type;
-	
+
 	AbstractTypeExporter(FBType type) {
 		this.type = type;
 	}
-	
+
 	AbstractTypeExporter(Document dom) {
 		super(dom);
 		type = null;
@@ -53,20 +53,20 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	protected FBType getType() {
 		return type;
 	}
-	
-	public static void saveType(PaletteEntry entry){
+
+	public static void saveType(PaletteEntry entry) {
 		AbstractTypeExporter exporter = null;
-		
-		if(entry instanceof FBTypePaletteEntry){
-			exporter = new FbtExporter((FBTypePaletteEntry)entry);
-		}else if (entry instanceof AdapterTypePaletteEntry){
-			exporter = new AdapterExporter((AdapterTypePaletteEntry)entry);
-		}else if (entry instanceof SubApplicationTypePaletteEntry){
-			exporter = new SubApplicationTypeExporter((SubApplicationTypePaletteEntry)entry);
+
+		if (entry instanceof FBTypePaletteEntry) {
+			exporter = new FbtExporter((FBTypePaletteEntry) entry);
+		} else if (entry instanceof AdapterTypePaletteEntry) {
+			exporter = new AdapterExporter((AdapterTypePaletteEntry) entry);
+		} else if (entry instanceof SubApplicationTypePaletteEntry) {
+			exporter = new SubApplicationTypeExporter((SubApplicationTypePaletteEntry) entry);
 		}
-		
-		if(null != exporter){
-			exporter.createXMLEntries();			
+
+		if (null != exporter) {
+			exporter.createXMLEntries();
 			exporter.writeToFile(entry.getFile());
 			// "reset" the modification timestamp in the PaletteEntry
 			// to avoid reload - as for this timestamp it is not necessary
@@ -74,28 +74,26 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 			entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
 		}
 	}
-	
-	
-	
+
 	private void createXMLEntries() {
 		Element rootElement = createRootElement(getType(), getRootTag());
-		
-		addCompileAbleTypeData(rootElement, getType());		
+
+		addCompileAbleTypeData(rootElement, getType());
 		addInterfaceList(rootElement, getType().getInterfaceList());
 		createTypeSpecificXMLEntries(rootElement);
 		addService(rootElement, getType());
 	}
-	
+
 	protected abstract String getRootTag();
 
 	protected abstract void createTypeSpecificXMLEntries(Element rootElement);
-	
-	private void addCompileAbleTypeData(final Element rootElement, final CompilableType type){
+
+	private void addCompileAbleTypeData(final Element rootElement, final CompilableType type) {
 		addIdentification(rootElement, type);
 		addVersionInfo(rootElement, type);
 		addCompilerInfo(rootElement, type.getCompilerInfo());
 	}
-	
+
 	private void addCompilerInfo(final Element rootEle, final CompilerInfo compilerInfo) {
 		if (compilerInfo != null) {
 			Element compilerInfoElement = createElement(LibraryElementTags.COMPILER_INFO_ELEMENT);
@@ -110,22 +108,19 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 
 		}
 	}
-	
+
 	/**
 	 * Adds the compiler.
 	 * 
-	 * @param dom
-	 *            the dom
-	 * @param compilerInfo
-	 *            the compiler info
-	 * @param compiler
-	 *            the compiler
+	 * @param dom          the dom
+	 * @param compilerInfo the compiler info
+	 * @param compiler     the compiler
 	 */
-	private void addCompiler(final Element compilerInfo, final org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler) {
+	private void addCompiler(final Element compilerInfo,
+			final org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler) {
 		Element compilerElement = createElement(LibraryElementTags.COMPILER_ELEMENT);
 		if (compiler.getLanguage() != null) {
-			compilerElement.setAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE, compiler.getLanguage()
-					.getName());
+			compilerElement.setAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE, compiler.getLanguage().getName());
 		} else {
 			compilerElement.setAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE, ""); //$NON-NLS-1$
 		}
@@ -147,14 +142,12 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 
 		compilerInfo.appendChild(compilerElement);
 	}
-	
+
 	/**
 	 * Adds the interface list.
 	 * 
-	 * @param rootEle
-	 *            the root ele
-	 * @param fb
-	 *            the fb
+	 * @param rootEle the root ele
+	 * @param fb      the fb
 	 */
 	protected void addInterfaceList(final Element rootEle, final InterfaceList interfaceList) {
 		Element interfaceListElement = createElement(getInterfaceListElementName());
@@ -165,17 +158,17 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		addVarList(interfaceListElement, interfaceList.getOutputVars(), LibraryElementTags.OUTPUT_VARS_ELEMENT);
 		createAdapterList(interfaceListElement, interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT);
 		createAdapterList(interfaceListElement, interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT);
-		
+
 		rootEle.appendChild(interfaceListElement);
 	}
-
 
 	@SuppressWarnings("static-method")
 	protected String getInterfaceListElementName() {
 		return LibraryElementTags.INTERFACE_LIST_ELEMENT;
 	}
 
-	private void createAdapterList(final Element parentElement, final List<AdapterDeclaration> adapterList, final String elementName) {
+	private void createAdapterList(final Element parentElement, final List<AdapterDeclaration> adapterList,
+			final String elementName) {
 		if (!adapterList.isEmpty()) {
 			Element adpaterListElement = createElement(elementName);
 			adapterList.forEach(adapter -> addAdapterDeclaration(adpaterListElement, adapter));
@@ -195,16 +188,18 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	}
 
 	/**
-	 * Adds a var list (i.e., input or output data) to the dom. If the given var list is empty no element will be created. 
+	 * Adds a var list (i.e., input or output data) to the dom. If the given var
+	 * list is empty no element will be created.
 	 * 
 	 * @param parentElement the parent element to insert the varlist
-	 * @param varList	   the list of vars to create the entries for	
-	 * @param elementName the name of the xml element holding the event list
+	 * @param varList       the list of vars to create the entries for
+	 * @param elementName   the name of the xml element holding the event list
 	 */
-	protected void addVarList(final Element parentElement, final List<VarDeclaration> varList, final String elementName) {		
-		if(!varList.isEmpty()) {		
+	protected void addVarList(final Element parentElement, final List<VarDeclaration> varList,
+			final String elementName) {
+		if (!varList.isEmpty()) {
 			Element varListElement = createElement(elementName);
-			varList.forEach( varDecl -> {
+			varList.forEach(varDecl -> {
 				if (!(varDecl instanceof AdapterDeclaration)) {
 					addVariable(varListElement, varDecl);
 				}
@@ -216,46 +211,43 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	/**
 	 * Adds the variable.
 	 * 
-	 * @param parentElement
-	 *            the parent element
-	 * @param varDecl
-	 *            the var decl
+	 * @param parentElement the parent element
+	 * @param varDecl       the var decl
 	 */
 	protected void addVariable(final Element parentElement, final VarDeclaration varDecl) {
 		Element variableElement = createElement(LibraryElementTags.VAR_DECLARATION_ELEMENT);
 		setNameTypeCommentAttribute(variableElement, varDecl, varDecl.getType());
 
 		if (varDecl.isArray()) {
-			variableElement.setAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE, Integer.toString(varDecl.getArraySize()));
+			variableElement.setAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE,
+					Integer.toString(varDecl.getArraySize()));
 		}
-		if (varDecl.getValue() != null
-				&& varDecl.getValue().getValue() != null) {
+		if (varDecl.getValue() != null && varDecl.getValue().getValue() != null) {
 			variableElement.setAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl.getValue().getValue());
 		}
 		parentElement.appendChild(variableElement);
 	}
 
 	/**
-	 * Adds the an event list (i.e., input or output) to the dom. If the given event list is empty no element will be created.
+	 * Adds the an event list (i.e., input or output) to the dom. If the given event
+	 * list is empty no element will be created.
 	 * 
 	 * @param parentElement the parent element to insert the event list
-	 * @param eventList		the list of events to create the entry for
-	 * @param elementName	the name of the xml element holding the event list
+	 * @param eventList     the list of events to create the entry for
+	 * @param elementName   the name of the xml element holding the event list
 	 */
 	private void addEventList(final Element parentElement, final List<Event> eventList, final String elementName) {
-		if(!eventList.isEmpty()) {
+		if (!eventList.isEmpty()) {
 			Element eventListElement = createElement(elementName);
 			eventList.forEach(event -> addEvent(eventListElement, event));
 			parentElement.appendChild(eventListElement);
 		}
 	}
 
-
 	@SuppressWarnings("static-method")
 	protected String getEventOutputsElementName() {
 		return LibraryElementTags.EVENT_OUTPUTS;
 	}
-
 
 	@SuppressWarnings("static-method")
 	protected String getEventInputsElementName() {
@@ -264,22 +256,20 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 
 	/**
 	 * Adds the event.
-	 * @param parentElement
-	 *            the parent element
-	 * @param event
-	 *            the event
+	 * 
+	 * @param parentElement the parent element
+	 * @param event         the event
 	 */
 	private void addEvent(final Element parentElement, final Event event) {
 		Element eventElem = createElement(getEventElementName());
-		
+
 		setNameAttribute(eventElem, event.getName());
 		eventElem.setAttribute(LibraryElementTags.TYPE_ATTRIBUTE, "Event"); //$NON-NLS-1$
 		setCommentAttribute(eventElem, event);
-		
+
 		addWith(eventElem, event);
 		parentElement.appendChild(eventElem);
 	}
-
 
 	@SuppressWarnings("static-method")
 	protected String getEventElementName() {
@@ -289,10 +279,8 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	/**
 	 * Adds the with.
 	 * 
-	 * @param parentElement
-	 *            the parent element
-	 * @param event
-	 *            the event
+	 * @param parentElement the parent element
+	 * @param event         the event
 	 */
 	private void addWith(final Element parentElement, final Event event) {
 		for (With with : event.getWith()) {
@@ -308,28 +296,26 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 			parentElement.appendChild(withElement);
 		}
 	}
-	
 
 	/**
 	 * Adds the service.
 	 * 
-	 * @param rootEle
-	 *            the root ele
-	 * @param fb
-	 *            the fb
+	 * @param rootEle the root ele
+	 * @param fb      the fb
 	 */
-	private void addService(final Element rootEle,final FBType sfb) {
-		
-		if (null != sfb.getService() && sfb.getService().getRightInterface() != null && sfb.getService().getLeftInterface() != null) {
+	private void addService(final Element rootEle, final FBType sfb) {
+
+		if (null != sfb.getService() && sfb.getService().getRightInterface() != null
+				&& sfb.getService().getLeftInterface() != null) {
 
 			Element serviceElement = createElement(LibraryElementTags.SERVICE_ELEMENT);
-			serviceElement.setAttribute(LibraryElementTags.RIGHT_INTERFACE_ATTRIBUTE, sfb
-					.getService().getRightInterface().getName());
-			serviceElement.setAttribute(LibraryElementTags.LEFT_INTERFACE_ATTRIBUTE, sfb.getService().getLeftInterface()
-					.getName());
-			
+			serviceElement.setAttribute(LibraryElementTags.RIGHT_INTERFACE_ATTRIBUTE,
+					sfb.getService().getRightInterface().getName());
+			serviceElement.setAttribute(LibraryElementTags.LEFT_INTERFACE_ATTRIBUTE,
+					sfb.getService().getLeftInterface().getName());
+
 			setCommentAttribute(serviceElement, sfb);
-			
+
 			addServiceSequences(serviceElement, sfb.getService().getServiceSequence());
 
 			rootEle.appendChild(serviceElement);
@@ -339,15 +325,13 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	/**
 	 * Adds the service sequences.
 	 * 
-	 * @param serviceElement
-	 *            the service element
-	 * @param sequences
-	 *            the sequences
+	 * @param serviceElement the service element
+	 * @param sequences      the sequences
 	 */
 	private void addServiceSequences(final Element serviceElement, final List<ServiceSequence> sequences) {
 		for (ServiceSequence seq : sequences) {
 			Element seqElement = createElement(LibraryElementTags.SERVICE_SEQUENCE_ELEMENT);
-			
+
 			setNameAttribute(seqElement, seq.getName());
 			setCommentAttribute(seqElement, seq);
 			addServiceTransactions(seqElement, seq.getServiceTransaction());
@@ -358,14 +342,11 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	/**
 	 * Adds the service transactions.
 	 * 
-	 * @param seqElement
-	 *            the seq element
-	 * @param transactions
-	 *            the transactions
+	 * @param seqElement   the seq element
+	 * @param transactions the transactions
 	 */
-	private void addServiceTransactions(final Element seqElement,final List<ServiceTransaction> transactions) {
-		for (Iterator<ServiceTransaction> iter = transactions.iterator(); iter
-				.hasNext();) {
+	private void addServiceTransactions(final Element seqElement, final List<ServiceTransaction> transactions) {
+		for (Iterator<ServiceTransaction> iter = transactions.iterator(); iter.hasNext();) {
 			Element serviceTransaction = createElement(LibraryElementTags.SERVICE_TRANSACTION_ELEMENT);
 			ServiceTransaction transaction = iter.next();
 
@@ -383,31 +364,27 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	/**
 	 * Adds the input primitive.
 	 * 
-	 * @param serviceTransaction
-	 *            the service transaction
-	 * @param transaction
-	 *            the transaction
+	 * @param serviceTransaction the service transaction
+	 * @param transaction        the transaction
 	 */
-	private void addInputPrimitive(final Element serviceTransaction,
-			final ServiceTransaction transaction) {
+	private void addInputPrimitive(final Element serviceTransaction, final ServiceTransaction transaction) {
 		Element inputPrimitive = createElement(LibraryElementTags.INPUT_PRIMITIVE_ELEMENT);
 		if (transaction.getInputPrimitive().getInterface() != null
 				&& transaction.getInputPrimitive().getInterface().getName() != null) {
-			inputPrimitive.setAttribute(LibraryElementTags.INTERFACE_ATTRIBUTE, transaction
-					.getInputPrimitive().getInterface().getName());
+			inputPrimitive.setAttribute(LibraryElementTags.INTERFACE_ATTRIBUTE,
+					transaction.getInputPrimitive().getInterface().getName());
 		} else {
 			inputPrimitive.setAttribute(LibraryElementTags.INTERFACE_ATTRIBUTE, ""); //$NON-NLS-1$
 		}
 		if (transaction.getInputPrimitive().getEvent() != null) {
-			inputPrimitive.setAttribute(LibraryElementTags.EVENT_ELEMENT, transaction
-					.getInputPrimitive().getEvent());
+			inputPrimitive.setAttribute(LibraryElementTags.EVENT_ELEMENT, transaction.getInputPrimitive().getEvent());
 		} else {
 			inputPrimitive.setAttribute(LibraryElementTags.EVENT_ELEMENT, ""); //$NON-NLS-1$
 		}
 		if (transaction.getInputPrimitive().getParameters() != null
 				&& !transaction.getInputPrimitive().getParameters().equals(" ")) { //$NON-NLS-1$
-			inputPrimitive.setAttribute(LibraryElementTags.PARAMETERS_ATTRIBUTE, transaction
-					.getInputPrimitive().getParameters());
+			inputPrimitive.setAttribute(LibraryElementTags.PARAMETERS_ATTRIBUTE,
+					transaction.getInputPrimitive().getParameters());
 		}
 		serviceTransaction.appendChild(inputPrimitive);
 
@@ -416,10 +393,8 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	/**
 	 * Adds the output primitives.
 	 * 
-	 * @param serviceTransaction
-	 *            the service transaction
-	 * @param transaction
-	 *            the transaction
+	 * @param serviceTransaction the service transaction
+	 * @param transaction        the transaction
 	 */
 	private void addOutputPrimitives(final Element serviceTransaction, final ServiceTransaction transaction) {
 		for (Iterator<OutputPrimitive> iter = transaction.getOutputPrimitive().iterator(); iter.hasNext();) {

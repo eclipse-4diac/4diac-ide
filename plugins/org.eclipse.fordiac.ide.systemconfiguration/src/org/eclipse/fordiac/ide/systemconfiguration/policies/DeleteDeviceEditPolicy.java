@@ -23,13 +23,14 @@ import org.eclipse.gef.requests.GroupRequest;
  * 
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
-public class DeleteDeviceEditPolicy extends
-		org.eclipse.gef.editpolicies.ComponentEditPolicy {
+public class DeleteDeviceEditPolicy extends org.eclipse.gef.editpolicies.ComponentEditPolicy {
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.editpolicies.ComponentEditPolicy#createDeleteCommand(org.eclipse.gef.requests.GroupRequest)
+	 * @see
+	 * org.eclipse.gef.editpolicies.ComponentEditPolicy#createDeleteCommand(org.
+	 * eclipse.gef.requests.GroupRequest)
 	 */
 	@Override
 	protected Command createDeleteCommand(final GroupRequest request) {

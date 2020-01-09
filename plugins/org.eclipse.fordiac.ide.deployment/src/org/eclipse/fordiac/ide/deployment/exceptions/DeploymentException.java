@@ -12,7 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.exceptions;
 
-/** Typed exception for indicating deployment issues 
+/**
+ * Typed exception for indicating deployment issues
  *
  */
 public class DeploymentException extends Exception {

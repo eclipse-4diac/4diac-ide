@@ -17,16 +17,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 
 public class ECActionOutputEvent {
 	private ECAction action;
-	
-	public ECAction getAction(){
+
+	public ECAction getAction() {
 		return action;
 	}
-	
+
 	public ECActionOutputEvent(ECAction action) {
 		this.action = action;
 	}
-	
-	String getLabel(){
+
+	String getLabel() {
 		return action.getOutput().getName();
 	}
 }

@@ -90,9 +90,11 @@ public class CompositeInstanceViewer extends DiagramEditor {
 				setPartName(name);
 				// we need to copy the type so that we have an instance specific network
 				cfbt = createFBType((CompositeFBType) fb.getType(), fb.getInterface());
-				cfbt.setName(name); // we set the name of the type so internal function blocks can generate their hierarchy name from it
+				cfbt.setName(name); // we set the name of the type so internal function blocks can generate their
+									// hierarchy name from it
 				fbEditPart = untypedInput.getFbEditPart();
-				((CompositeInstanceViewerInput) input).setName(name); // the tooltip will show the whole name when hovering
+				((CompositeInstanceViewerInput) input).setName(name); // the tooltip will show the whole name when
+																		// hovering
 			}
 		}
 	}
@@ -131,7 +133,7 @@ public class CompositeInstanceViewer extends DiagramEditor {
 		// TODO mabye a nice helper function to be put into the fb model
 		StringBuilder retVal = new StringBuilder(fb.getName());
 		EObject cont = fb.eContainer().eContainer();
-		if(cont instanceof INamedElement) {
+		if (cont instanceof INamedElement) {
 			retVal.insert(0, ((INamedElement) cont).getName() + "."); //$NON-NLS-1$
 		}
 		return retVal.toString();

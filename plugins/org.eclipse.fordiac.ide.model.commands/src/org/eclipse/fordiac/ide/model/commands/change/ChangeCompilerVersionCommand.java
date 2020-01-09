@@ -20,14 +20,12 @@ import org.eclipse.gef.commands.Command;
  * The Class ChangeCompilerVersionCommand.
  */
 public class ChangeCompilerVersionCommand extends Command {
-	
-	
+
 	/** The new Compiler value. */
 	private Compiler compiler;
-	
+
 	private String newVersion;
 	private String oldVersion;
-
 
 	public ChangeCompilerVersionCommand(final Compiler compiler, final String newVersion) {
 		super();

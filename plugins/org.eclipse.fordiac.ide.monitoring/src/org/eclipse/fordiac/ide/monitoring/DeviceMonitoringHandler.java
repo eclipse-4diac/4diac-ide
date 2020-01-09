@@ -31,13 +31,13 @@ class DeviceMonitoringHandler implements Runnable {
 	private final IDeviceManagementInteractor devInteractor;
 	private final SystemMonitoringData systemMonData;
 	private final Thread thread;
-	
+
 	private boolean running = true;
-	
+
 	private synchronized void setRunning(boolean val) {
 		running = val;
 	}
-	
+
 	private synchronized boolean isRunning() {
 		return running;
 	}
@@ -48,24 +48,24 @@ class DeviceMonitoringHandler implements Runnable {
 		this.systemMonData = systemMonData;
 		this.thread = new Thread(this);
 	}
-	
-	public Thread getThread(){
+
+	public Thread getThread() {
 		return thread;
 	}
-	
+
 	public IDeviceManagementInteractor getDevMgmInteractor() {
 		return devInteractor;
 	}
-	
+
 	public synchronized void enable() {
 		setRunning(true);
 		thread.start();
 	}
-	
+
 	public synchronized void disable() {
 		setRunning(running);
 	}
-	
+
 	@Override
 	public void run() {
 		if (devInteractor != null) {
@@ -76,19 +76,19 @@ class DeviceMonitoringHandler implements Runnable {
 				} catch (InterruptedException e) {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}
-				if(devInteractor.isConnected()){
+				if (devInteractor.isConnected()) {
 					try {
 						Response resp = devInteractor.readWatches();
-						if(null != resp) {
+						if (null != resp) {
 							updateWatches(resp);
 						}
 					} catch (DeploymentException e) {
-						handleDeviceIssue();						
+						handleDeviceIssue();
 					}
 				} else {
 					setRunning(false);
 				}
-				
+
 			}
 		}
 	}
@@ -100,11 +100,12 @@ class DeviceMonitoringHandler implements Runnable {
 
 				for (FB fb : res.getFbs()) {
 					String fbName = resName + fb.getName() + "."; //$NON-NLS-1$
-					 
+
 					for (Port p : fb.getPorts()) {
-						final MonitoringBaseElement element = systemMonData.getMonitoringElementByPortString(fbName + p.getName());
+						final MonitoringBaseElement element = systemMonData
+								.getMonitoringElementByPortString(fbName + p.getName());
 						if (element instanceof MonitoringElement) {
-							updateMonitoringElement((MonitoringElement)element, p);
+							updateMonitoringElement((MonitoringElement) element, p);
 						}
 					}
 				}
@@ -128,7 +129,7 @@ class DeviceMonitoringHandler implements Runnable {
 			}
 		}
 	}
-	
+
 	private void handleDeviceIssue() {
 		// we have an issue with this device close connection clear monitoring values
 		try {
@@ -136,9 +137,9 @@ class DeviceMonitoringHandler implements Runnable {
 		} catch (DeploymentException e) {
 			// we don't need to do anything here
 		}
-		systemMonData.getMonitoredElements().stream().
-			filter(el -> (el.getPort().getDevice().equals(device) && (el instanceof MonitoringElement)) ).
-			forEach(el -> ((MonitoringElement)el).setCurrentValue(""));  //$NON-NLS-1$
+		systemMonData.getMonitoredElements().stream()
+				.filter(el -> (el.getPort().getDevice().equals(device) && (el instanceof MonitoringElement)))
+				.forEach(el -> ((MonitoringElement) el).setCurrentValue("")); //$NON-NLS-1$
 	}
 
 }

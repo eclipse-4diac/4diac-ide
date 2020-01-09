@@ -58,18 +58,21 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getRootGroup <em>Root Group</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getProject <em>Project</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getAutomationSystem <em>Automation System</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getRootGroup
+ * <em>Root Group</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getProject
+ * <em>Project</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteImpl#getAutomationSystem
+ * <em>Automation System</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
-	 * The cached value of the '{@link #getRootGroup() <em>Root Group</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getRootGroup() <em>Root Group</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getRootGroup()
 	 * @generated
 	 * @ordered
@@ -78,8 +81,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * The default value of the '{@link #getProject() <em>Project</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getProject()
 	 * @generated
 	 * @ordered
@@ -88,8 +91,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * The cached value of the '{@link #getProject() <em>Project</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getProject()
 	 * @generated
 	 * @ordered
@@ -97,9 +100,9 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	protected IProject project = PROJECT_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAutomationSystem() <em>Automation System</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getAutomationSystem() <em>Automation
+	 * System</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getAutomationSystem()
 	 * @generated
 	 * @ordered
@@ -108,6 +111,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected PaletteImpl() {
@@ -116,6 +120,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -124,50 +129,54 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public PaletteGroup getRootGroupGen() {
 		if (rootGroup != null && rootGroup.eIsProxy()) {
-			InternalEObject oldRootGroup = (InternalEObject)rootGroup;
-			rootGroup = (PaletteGroup)eResolveProxy(oldRootGroup);
+			InternalEObject oldRootGroup = (InternalEObject) rootGroup;
+			rootGroup = (PaletteGroup) eResolveProxy(oldRootGroup);
 			if (rootGroup != oldRootGroup) {
-				InternalEObject newRootGroup = (InternalEObject)rootGroup;
-				NotificationChain msgs = oldRootGroup.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PalettePackage.PALETTE__ROOT_GROUP, null, null);
+				InternalEObject newRootGroup = (InternalEObject) rootGroup;
+				NotificationChain msgs = oldRootGroup.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - PalettePackage.PALETTE__ROOT_GROUP, null, null);
 				if (newRootGroup.eInternalContainer() == null) {
-					msgs = newRootGroup.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PalettePackage.PALETTE__ROOT_GROUP, null, msgs);
+					msgs = newRootGroup.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PalettePackage.PALETTE__ROOT_GROUP,
+							null, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
+				if (msgs != null)
+					msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PalettePackage.PALETTE__ROOT_GROUP, oldRootGroup, rootGroup));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PalettePackage.PALETTE__ROOT_GROUP,
+							oldRootGroup, rootGroup));
 			}
 		}
 		return rootGroup;
 	}
-	
+
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated not
 	 */
 	@Override
 	public PaletteGroup getRootGroup() {
 		PaletteGroup root = getRootGroupGen();
-		
+
 		if (rootGroup == null) {
 			PaletteGroup group = PaletteFactory.eINSTANCE.createPaletteGroup();
 			group.setLabel("Root Group");
 			// FIX in order to set the parent (eContainer) relation!
 			setRootGroup(group);
 			root = group;
-		}		
+		}
 		return root;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public PaletteGroup basicGetRootGroup() {
@@ -175,23 +184,27 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetRootGroup(PaletteGroup newRootGroup, NotificationChain msgs) {
 		PaletteGroup oldRootGroup = rootGroup;
 		rootGroup = newRootGroup;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__ROOT_GROUP, oldRootGroup, newRootGroup);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					PalettePackage.PALETTE__ROOT_GROUP, oldRootGroup, newRootGroup);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -199,20 +212,22 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		if (newRootGroup != rootGroup) {
 			NotificationChain msgs = null;
 			if (rootGroup != null)
-				msgs = ((InternalEObject)rootGroup).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PalettePackage.PALETTE__ROOT_GROUP, null, msgs);
+				msgs = ((InternalEObject) rootGroup).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - PalettePackage.PALETTE__ROOT_GROUP, null, msgs);
 			if (newRootGroup != null)
-				msgs = ((InternalEObject)newRootGroup).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PalettePackage.PALETTE__ROOT_GROUP, null, msgs);
+				msgs = ((InternalEObject) newRootGroup).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - PalettePackage.PALETTE__ROOT_GROUP, null, msgs);
 			msgs = basicSetRootGroup(newRootGroup, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__ROOT_GROUP, newRootGroup, newRootGroup));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__ROOT_GROUP, newRootGroup,
+					newRootGroup));
 	}
 
-
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -221,8 +236,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -230,30 +245,32 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		IProject oldProject = project;
 		project = newProject;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__PROJECT, oldProject, project));
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__PROJECT, oldProject,
+					project));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public AutomationSystem getAutomationSystem() {
 		if (automationSystem != null && automationSystem.eIsProxy()) {
-			InternalEObject oldAutomationSystem = (InternalEObject)automationSystem;
-			automationSystem = (AutomationSystem)eResolveProxy(oldAutomationSystem);
+			InternalEObject oldAutomationSystem = (InternalEObject) automationSystem;
+			automationSystem = (AutomationSystem) eResolveProxy(oldAutomationSystem);
 			if (automationSystem != oldAutomationSystem) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PalettePackage.PALETTE__AUTOMATION_SYSTEM, oldAutomationSystem, automationSystem));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PalettePackage.PALETTE__AUTOMATION_SYSTEM,
+							oldAutomationSystem, automationSystem));
 			}
 		}
 		return automationSystem;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public AutomationSystem basicGetAutomationSystem() {
@@ -261,23 +278,27 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetAutomationSystem(AutomationSystem newAutomationSystem, NotificationChain msgs) {
 		AutomationSystem oldAutomationSystem = automationSystem;
 		automationSystem = newAutomationSystem;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__AUTOMATION_SYSTEM, oldAutomationSystem, newAutomationSystem);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					PalettePackage.PALETTE__AUTOMATION_SYSTEM, oldAutomationSystem, newAutomationSystem);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -285,35 +306,38 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		if (newAutomationSystem != automationSystem) {
 			NotificationChain msgs = null;
 			if (automationSystem != null)
-				msgs = ((InternalEObject)automationSystem).eInverseRemove(this, LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
+				msgs = ((InternalEObject) automationSystem).eInverseRemove(this,
+						LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
 			if (newAutomationSystem != null)
-				msgs = ((InternalEObject)newAutomationSystem).eInverseAdd(this, LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
+				msgs = ((InternalEObject) newAutomationSystem).eInverseAdd(this,
+						LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
 			msgs = basicSetAutomationSystem(newAutomationSystem, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__AUTOMATION_SYSTEM, newAutomationSystem, newAutomationSystem));
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE__AUTOMATION_SYSTEM,
+					newAutomationSystem, newAutomationSystem));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public PaletteEntry getTypeEntry(final String typeName) {
 		PaletteEntry entry = null;
-		//TODO reconsider when namespaces are coming how to retrieve the type
+		// TODO reconsider when namespaces are coming how to retrieve the type
 		List<PaletteEntry> entries = getTypeEntries(typeName);
 		if (!entries.isEmpty()) {
 			entry = entries.get(0);
-		} 
+		}
 		return entry;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -322,8 +346,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -332,8 +356,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -342,121 +366,129 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-				if (automationSystem != null)
-					msgs = ((InternalEObject)automationSystem).eInverseRemove(this, LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
-				return basicSetAutomationSystem((AutomationSystem)otherEnd, msgs);
+		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
+			if (automationSystem != null)
+				msgs = ((InternalEObject) automationSystem).eInverseRemove(this,
+						LibraryElementPackage.AUTOMATION_SYSTEM__PALETTE, AutomationSystem.class, msgs);
+			return basicSetAutomationSystem((AutomationSystem) otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd,
-			int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case PalettePackage.PALETTE__ROOT_GROUP:
-				return basicSetRootGroup(null, msgs);
-			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-				return basicSetAutomationSystem(null, msgs);
+		case PalettePackage.PALETTE__ROOT_GROUP:
+			return basicSetRootGroup(null, msgs);
+		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
+			return basicSetAutomationSystem(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PalettePackage.PALETTE__ROOT_GROUP:
-				if (resolve) return getRootGroup();
-				return basicGetRootGroup();
-			case PalettePackage.PALETTE__PROJECT:
-				return getProject();
-			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-				if (resolve) return getAutomationSystem();
-				return basicGetAutomationSystem();
+		case PalettePackage.PALETTE__ROOT_GROUP:
+			if (resolve)
+				return getRootGroup();
+			return basicGetRootGroup();
+		case PalettePackage.PALETTE__PROJECT:
+			return getProject();
+		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
+			if (resolve)
+				return getAutomationSystem();
+			return basicGetAutomationSystem();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PalettePackage.PALETTE__ROOT_GROUP:
-				setRootGroup((PaletteGroup)newValue);
-				return;
-			case PalettePackage.PALETTE__PROJECT:
-				setProject((IProject)newValue);
-				return;
-			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-				setAutomationSystem((AutomationSystem)newValue);
-				return;
+		case PalettePackage.PALETTE__ROOT_GROUP:
+			setRootGroup((PaletteGroup) newValue);
+			return;
+		case PalettePackage.PALETTE__PROJECT:
+			setProject((IProject) newValue);
+			return;
+		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
+			setAutomationSystem((AutomationSystem) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PalettePackage.PALETTE__ROOT_GROUP:
-				setRootGroup((PaletteGroup)null);
-				return;
-			case PalettePackage.PALETTE__PROJECT:
-				setProject(PROJECT_EDEFAULT);
-				return;
-			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-				setAutomationSystem((AutomationSystem)null);
-				return;
+		case PalettePackage.PALETTE__ROOT_GROUP:
+			setRootGroup((PaletteGroup) null);
+			return;
+		case PalettePackage.PALETTE__PROJECT:
+			setProject(PROJECT_EDEFAULT);
+			return;
+		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
+			setAutomationSystem((AutomationSystem) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PalettePackage.PALETTE__ROOT_GROUP:
-				return rootGroup != null;
-			case PalettePackage.PALETTE__PROJECT:
-				return PROJECT_EDEFAULT == null ? project != null : !PROJECT_EDEFAULT.equals(project);
-			case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
-				return automationSystem != null;
+		case PalettePackage.PALETTE__ROOT_GROUP:
+			return rootGroup != null;
+		case PalettePackage.PALETTE__PROJECT:
+			return PROJECT_EDEFAULT == null ? project != null : !PROJECT_EDEFAULT.equals(project);
+		case PalettePackage.PALETTE__AUTOMATION_SYSTEM:
+			return automationSystem != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (project: "); //$NON-NLS-1$
@@ -468,59 +500,52 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * This method creates a new PaletteEntry.
 	 * 
-	 * @param file
-	 *          - the eclipse resource file representation
+	 * @param file - the eclipse resource file representation
 	 * @return the newly created PaletteEntry
 	 */
 	@Override
 	public PaletteEntry createFBTypeEntry(final IFile file, PaletteGroup parent) {
-		FBTypePaletteEntry entry = PaletteFactory.eINSTANCE
-				.createFBTypePaletteEntry();
+		FBTypePaletteEntry entry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
 		configurePaletteEntry(entry, file, parent);
 		return entry;
-	}	
-	
+	}
 
 	@Override
-	public PaletteEntry createDeviceEntry(IFile file, PaletteGroup parent){
+	public PaletteEntry createDeviceEntry(IFile file, PaletteGroup parent) {
 		DeviceTypePaletteEntry entry = PaletteFactory.eINSTANCE.createDeviceTypePaletteEntry();
 		configurePaletteEntry(entry, file, parent);
 		return entry;
 	}
-	
+
 	@Override
 	public PaletteEntry createResourceTypeEntry(final IFile file, PaletteGroup parent) {
-		ResourceTypeEntry entry = PaletteFactory.eINSTANCE
-				.createResourceTypeEntry();
+		ResourceTypeEntry entry = PaletteFactory.eINSTANCE.createResourceTypeEntry();
 		configurePaletteEntry(entry, file, parent);
 		return entry;
 	}
-	
+
 	@Override
 	public PaletteEntry createSegmentTypeEntry(final IFile file, PaletteGroup parent) {
-		SegmentTypePaletteEntry entry = PaletteFactory.eINSTANCE
-				.createSegmentTypePaletteEntry();
+		SegmentTypePaletteEntry entry = PaletteFactory.eINSTANCE.createSegmentTypePaletteEntry();
 		configurePaletteEntry(entry, file, parent);
 		return entry;
 	}
-	
+
 	@Override
-	public PaletteEntry createAdapterEntry(IFile file, PaletteGroup parent){
+	public PaletteEntry createAdapterEntry(IFile file, PaletteGroup parent) {
 		AdapterTypePaletteEntry entry = PaletteFactory.eINSTANCE.createAdapterTypePaletteEntry();
 		configurePaletteEntry(entry, file, parent);
 		return entry;
 	}
-	
+
 	@Override
-	public PaletteEntry createSubApplicationEntry(IFile file, PaletteGroup parent){
+	public PaletteEntry createSubApplicationEntry(IFile file, PaletteGroup parent) {
 		SubApplicationTypePaletteEntry entry = PaletteFactory.eINSTANCE.createSubApplicationTypePaletteEntry();
 		configurePaletteEntry(entry, file, parent);
 		return entry;
 	}
 
-
-	private void configurePaletteEntry(PaletteEntry entry, IFile file,
-			PaletteGroup parent) {
+	private void configurePaletteEntry(PaletteEntry entry, IFile file, PaletteGroup parent) {
 		entry.setType(null);
 		entry.setLabel(TypeLibrary.getTypeNameFromFile(file));
 		entry.setFile(file);
@@ -530,15 +555,13 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * This method creates a new PaletteGroup
 	 * 
-	 * @param parent
-	 *          - the parent paletteGroup of the newly to be created paletteGroup
-	 * @param groupName
-	 *          - the name of the new paletteGroup
+	 * @param parent    - the parent paletteGroup of the newly to be created
+	 *                  paletteGroup
+	 * @param groupName - the name of the new paletteGroup
 	 * @return pGroup - the new created group, or null if no name has been given
 	 */
 	@Override
-	public PaletteGroup createGroup(final PaletteGroup parent,
-			final String groupName) {
+	public PaletteGroup createGroup(final PaletteGroup parent, final String groupName) {
 		if (groupName != null) {
 			PaletteGroup pGroup = PaletteFactory.eINSTANCE.createPaletteGroup();
 			pGroup.setLabel(groupName);
@@ -547,22 +570,21 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		}
 		return null;
 	}
-	
-	
+
 	@Override
-	public PaletteGroup createGroupWithFolder(final PaletteGroup parent, final String groupName){
+	public PaletteGroup createGroupWithFolder(final PaletteGroup parent, final String groupName) {
 		PaletteGroup pGroup = createGroup(parent, groupName);
-		
+
 		String path = groupName;
-		PaletteGroup runner = parent; 
-		while(runner.eContainer() instanceof PaletteGroup){
+		PaletteGroup runner = parent;
+		while (runner.eContainer() instanceof PaletteGroup) {
 			path = runner.getLabel() + "/" + path;
-			runner = (PaletteGroup)runner.eContainer();
+			runner = (PaletteGroup) runner.eContainer();
 		}
-		
+
 		IContainer cont = TypeLibrary.getLibPath(this);
 		IFolder groupFolder = cont.getFolder(new Path(path));
-		if(!groupFolder.exists()){
+		if (!groupFolder.exists()) {
 			IProgressMonitor monitor = new NullProgressMonitor();
 			try {
 				groupFolder.create(true, true, monitor);
@@ -571,7 +593,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 		}
-		
+
 		return pGroup;
 	}
 
@@ -579,9 +601,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	 * This method returns the group that is indicated in the path name. If the
 	 * group does not exist, it is created.
 	 * 
-	 * @param path
-	 *          - a list of strings, containing the entire path to the group
-	 * @param createDir - create the directory if the group has to be created 
+	 * @param path      - a list of strings, containing the entire path to the group
+	 * @param createDir - create the directory if the group has to be created
 	 * @return group - the group that is indicated in the path name
 	 */
 	@Override
@@ -603,11 +624,10 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		if (group == null && parent != null && dirName != null) {
 			// create new path
 			for (int i = path.indexOf(dirName); i < path.size(); i++) {
-				if(createDir){
-					group = createGroupWithFolder(parent, path.get(i));					
-				}
-				else{
-					group = createGroup(parent, path.get(i));					
+				if (createDir) {
+					group = createGroupWithFolder(parent, path.get(i));
+				} else {
+					group = createGroup(parent, path.get(i));
 				}
 				parent = group;
 			}
@@ -618,14 +638,11 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * This method searches for a specific subgroup in a list of groups.
 	 * 
-	 * @param group
-	 *          - a List of PaletteGroups
-	 * @param name
-	 *          - the name of the group being searched for
+	 * @param group - a List of PaletteGroups
+	 * @param name  - the name of the group being searched for
 	 * @return pGroup if the group is found, otherwise null
 	 */
-	private PaletteGroup checkSubGroups(final List<PaletteGroup> group,
-			final String name) {
+	private PaletteGroup checkSubGroups(final List<PaletteGroup> group, final String name) {
 		for (Iterator<PaletteGroup> iterator = group.iterator(); iterator.hasNext();) {
 			PaletteGroup pGroup = iterator.next();
 			if (pGroup.getLabel().equalsIgnoreCase(name)) {
@@ -635,10 +652,8 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return null;
 	}
 
-	private boolean removeSubGroups(final PaletteGroup pGroup,
-			final List<PaletteGroup> deleteAbleGroups) {
-		for (Iterator<PaletteGroup> iterator = pGroup.getSubGroups().iterator(); iterator
-				.hasNext();) {
+	private boolean removeSubGroups(final PaletteGroup pGroup, final List<PaletteGroup> deleteAbleGroups) {
+		for (Iterator<PaletteGroup> iterator = pGroup.getSubGroups().iterator(); iterator.hasNext();) {
 			PaletteGroup group = iterator.next();
 			removeSubGroups(group, deleteAbleGroups);
 		}
@@ -648,8 +663,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	@Override
 	public boolean removeGroups(final List<PaletteGroup> groups) {
-		for (Iterator<PaletteGroup> iterator = groups.iterator(); iterator
-				.hasNext();) {
+		for (Iterator<PaletteGroup> iterator = groups.iterator(); iterator.hasNext();) {
 			PaletteGroup group = iterator.next();
 			if (group.getParentGroup() != null) {
 				removeSubGroups(group.getParentGroup(), groups);
@@ -663,8 +677,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	public List<PaletteGroup> getAllGroups(final PaletteGroup group) {
 		List<PaletteGroup> temp = new ArrayList<PaletteGroup>();
 		temp.addAll(group.getSubGroups());
-		for (Iterator<PaletteGroup> iterator = group.getSubGroups().iterator(); iterator
-				.hasNext();) {
+		for (Iterator<PaletteGroup> iterator = group.getSubGroups().iterator(); iterator.hasNext();) {
 			temp.addAll(getAllGroups(iterator.next()));
 		}
 		return temp;
@@ -684,8 +697,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * This method searches for all instances of a FBType in the Palette
 	 * 
-	 * @param typeName
-	 *          - the name of the FBType searched for
+	 * @param typeName - the name of the FBType searched for
 	 * @return types - a list containing all occurences of FBType in the Palette
 	 */
 	@Override
@@ -696,8 +708,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * This method searches for all entries of a typeName in the Palette
 	 * 
-	 * @param typeName
-	 *          - the name of the FBType searched for
+	 * @param typeName - the name of the FBType searched for
 	 * @return types - a list containing all occurrences of PaletteEntries in the
 	 *         Palette
 	 */
@@ -707,24 +718,24 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	}
 
 	@Override
-	public PaletteEntry getTypeEntryForPath(String typePath, String typeEnding){
-		
-		//TODO similar code is in TypeLibrary.getTargetGroup(...);
+	public PaletteEntry getTypeEntryForPath(String typePath, String typeEnding) {
+
+		// TODO similar code is in TypeLibrary.getTargetGroup(...);
 		String[] path = typePath.split(ImportUtils.getSeperatorRegex());
-		if(path.length <= 1){
+		if (path.length <= 1) {
 			path = typePath.split("/");
-			//quick fix for wrong path
-			if(path.length <= 1){
+			// quick fix for wrong path
+			if (path.length <= 1) {
 				path = typePath.split("\\\\");
 			}
 		}
-		
+
 		List<String> groupPath = new ArrayList<String>();
 		int i = 0;
-		if(path[0].length() == 0){
-			i =1;
+		if (path[0].length() == 0) {
+			i = 1;
 		}
-		
+
 		for (; i < path.length; i++) {
 			String string = path[i];
 			if (!string.toUpperCase().endsWith(typeEnding.toUpperCase())) {
@@ -757,44 +768,37 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	}
 
 	/**
-	 * This method searches for all instances of a FBType in a specific
-	 * PaletteGroup
+	 * This method searches for all instances of a FBType in a specific PaletteGroup
 	 * 
-	 * @param group
-	 *          - the PaletteGroup being searched for the FBType
-	 * @param name
-	 *          - the name of the FBType being searched for
+	 * @param group - the PaletteGroup being searched for the FBType
+	 * @param name  - the name of the FBType being searched for
 	 * @return types - a list containing all occurrences of the FBType in the
 	 *         PaletteGroup
 	 */
-	private List<FBType> checkGroupsForFBType(final PaletteGroup group,
-			final String name) {
+	private List<FBType> checkGroupsForFBType(final PaletteGroup group, final String name) {
 		List<FBType> types = new ArrayList<FBType>();
-		
+
 		for (PaletteEntry entry : group.getEntries()) {
-			if((entry instanceof FBTypePaletteEntry) && (name.equals(entry.getLabel()))){
-				types.add(((FBTypePaletteEntry)entry).getFBType());				
+			if ((entry instanceof FBTypePaletteEntry) && (name.equals(entry.getLabel()))) {
+				types.add(((FBTypePaletteEntry) entry).getFBType());
 			}
 		}
-		for (PaletteGroup pGroup  : group.getSubGroups()) {
+		for (PaletteGroup pGroup : group.getSubGroups()) {
 			types.addAll(checkGroupsForFBType(pGroup, name));
 		}
 		return types;
 	}
 
 	/**
-	 * This method searches for all instances of a FBType/PaletteEntry in a
-	 * specific PaletteGroup
+	 * This method searches for all instances of a FBType/PaletteEntry in a specific
+	 * PaletteGroup
 	 * 
-	 * @param group
-	 *          - the PaletteGroup being searched for the FBType/PaletteEntry
-	 * @param name
-	 *          - the name of the FBType being searched for
+	 * @param group - the PaletteGroup being searched for the FBType/PaletteEntry
+	 * @param name  - the name of the FBType being searched for
 	 * @return types - a list containing all occurences of the FBType/PaletteEntry
 	 *         in the PaletteGroup
 	 */
-	private List<PaletteEntry> checkGroupsForFBTypeEntries(
-			final PaletteGroup group, final String name) {
+	private List<PaletteEntry> checkGroupsForFBTypeEntries(final PaletteGroup group, final String name) {
 		List<PaletteEntry> types = new ArrayList<PaletteEntry>();
 		for (PaletteEntry entry : group.getEntries()) {
 			if (entry.getLabel().equals(name)) {

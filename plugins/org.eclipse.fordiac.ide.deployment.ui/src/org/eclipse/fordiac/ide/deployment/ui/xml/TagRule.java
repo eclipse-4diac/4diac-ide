@@ -32,8 +32,8 @@ public class TagRule extends MultiLineRule {
 	}
 
 	@Override
-	protected boolean sequenceDetected(final ICharacterScanner scanner,
-			final char[] sequence, final boolean eofAllowed) {
+	protected boolean sequenceDetected(final ICharacterScanner scanner, final char[] sequence,
+			final boolean eofAllowed) {
 		int c = scanner.read();
 		if (sequence[0] == '<') {
 			if (c == '?') {

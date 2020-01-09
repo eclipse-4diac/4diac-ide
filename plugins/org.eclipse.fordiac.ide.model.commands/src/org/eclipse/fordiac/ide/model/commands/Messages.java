@@ -24,7 +24,7 @@ public class Messages extends NLS {
 	public static String FBCreateCommand_LABLE_CreateFunctionBlock;
 	public static String ViewSetPositionCommand_LABEL_Move;
 	public static String WithExists;
-	
+
 	public static String MapToCommand_STATUSMessage_AlreadyMapped;
 
 	public static String MapToCommand_STATUSMessage_TypeNotSupported;
@@ -32,16 +32,18 @@ public class Messages extends NLS {
 	/** The Link constraints_ status message_has already input connection. */
 	public static String LinkConstraints_STATUSMessage_hasAlreadyInputConnection;
 
-	/** The Link constraint outputconnections to check that adapters has only one outputconn */
+	/**
+	 * The Link constraint outputconnections to check that adapters has only one
+	 * outputconn
+	 */
 	public static String LinkConstraints_STATUSMessage_hasAlreadyOutputConnection;
-	
+
 	/** The Link constraints_ status message_ i n_ i n_ ou t_ ou t_not allowed. */
 	public static String LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed;
-	
+
 	/** The Link constraints_ status message_ not compatible. */
 	public static String LinkConstraints_STATUSMessage_NotCompatible;
-	
-	
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

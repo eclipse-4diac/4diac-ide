@@ -25,19 +25,17 @@ import org.eclipse.swt.graphics.Color;
 /**
  * The Class HighlightEditPolicy.
  */
-public class HighlightEditPolicy extends
-		org.eclipse.gef.editpolicies.GraphicalEditPolicy {
+public class HighlightEditPolicy extends org.eclipse.gef.editpolicies.GraphicalEditPolicy {
 
 	private Color revertColor;
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.AbstractEditPolicy#eraseTargetFeedback(org
+	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#eraseTargetFeedback(org
 	 * .eclipse.gef.Request)
 	 */
-	@Override	
+	@Override
 	public void eraseTargetFeedback(Request request) {
 		if (revertColor != null) {
 			setContainerBackground(revertColor);
@@ -56,14 +54,12 @@ public class HighlightEditPolicy extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.AbstractEditPolicy#getTargetEditPart(org
+	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#getTargetEditPart(org
 	 * .eclipse.gef.Request)
 	 */
 	@Override
 	public EditPart getTargetEditPart(Request request) {
-		return request.getType().equals(RequestConstants.REQ_SELECTION_HOVER) ? getHost()
-				: null;
+		return request.getType().equals(RequestConstants.REQ_SELECTION_HOVER) ? getHost() : null;
 	}
 
 	private void setContainerBackground(Color c) {
@@ -80,8 +76,7 @@ public class HighlightEditPolicy extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.gef.editpolicies.AbstractEditPolicy#showTargetFeedback(org
+	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#showTargetFeedback(org
 	 * .eclipse.gef.Request)
 	 */
 	@Override

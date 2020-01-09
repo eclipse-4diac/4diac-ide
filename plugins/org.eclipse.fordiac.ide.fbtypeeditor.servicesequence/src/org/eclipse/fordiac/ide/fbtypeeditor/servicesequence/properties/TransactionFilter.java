@@ -21,10 +21,10 @@ public class TransactionFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if(toTest instanceof TransactionEditPart){
+		if (toTest instanceof TransactionEditPart) {
 			return true;
 		}
-		if(toTest instanceof ServiceTransaction){
+		if (toTest instanceof ServiceTransaction) {
 			return true;
 		}
 		return false;

@@ -27,23 +27,24 @@ class SubApplicationTypeExporter extends AbstractTypeExporter {
 		super(entry.getSubApplicationType());
 	}
 
-	/* constructor to allow to use this exporter also for exporting the 
-	 * interface element of untyped subapps in fbnetworks
+	/*
+	 * constructor to allow to use this exporter also for exporting the interface
+	 * element of untyped subapps in fbnetworks
 	 */
 	SubApplicationTypeExporter(Document dom) {
 		super(dom);
 	}
 
 	@Override
-	protected SubAppType  getType() {
-		return (SubAppType)super.getType();
+	protected SubAppType getType() {
+		return (SubAppType) super.getType();
 	}
-	
+
 	@Override
 	protected String getRootTag() {
-		return  LibraryElementTags.SUBAPPTYPE_ELEMENT;
+		return LibraryElementTags.SUBAPPTYPE_ELEMENT;
 	}
-	
+
 	@Override
 	protected void createTypeSpecificXMLEntries(Element rootElement) {
 		rootElement.appendChild(new FBNetworkExporter(getDom()).createFBNetworkElement(getType().getFBNetwork()));

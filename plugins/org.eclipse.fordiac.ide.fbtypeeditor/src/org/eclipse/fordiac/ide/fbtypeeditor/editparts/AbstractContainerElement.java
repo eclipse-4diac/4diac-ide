@@ -20,14 +20,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public abstract class AbstractContainerElement {
 	private final FBType fbType;
-	
+
 	public AbstractContainerElement(FBType fbtype) {
 		this.fbType = fbtype;
 	}
 
-	public FBType getFbType(){
+	public FBType getFbType() {
 		return fbType;
-	}	
-	
+	}
+
 	abstract List<IInterfaceElement> getChildren();
 }

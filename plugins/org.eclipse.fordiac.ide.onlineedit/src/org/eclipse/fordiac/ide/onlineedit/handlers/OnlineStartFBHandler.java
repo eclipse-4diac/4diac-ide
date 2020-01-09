@@ -21,10 +21,11 @@ public class OnlineStartFBHandler extends AbstractOnlineFBHandler {
 
 	@Override
 	protected void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
-		executor.startFB(getResource(), new FBDeploymentData("", getResFB())); //$NON-NLS-1$  //TODO correctly determine prefix
+		executor.startFB(getResource(), new FBDeploymentData("", getResFB())); //$NON-NLS-1$ //TODO correctly determine
+																				// prefix
 	}
-	
-	@Override	
+
+	@Override
 	protected String getErrorMessageHeader() {
 		return "Online Start Function Block Error";
 	}

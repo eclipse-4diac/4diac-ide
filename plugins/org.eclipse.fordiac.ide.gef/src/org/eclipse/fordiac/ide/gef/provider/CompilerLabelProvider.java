@@ -21,14 +21,13 @@ import org.eclipse.swt.graphics.Image;
 /**
  * The Class CompilerLabelProvider.
  */
-public class CompilerLabelProvider extends LabelProvider implements
-		ITableLabelProvider {
+public class CompilerLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object,
-	 *      int)
+	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.
+	 * Object, int)
 	 */
 	@Override
 	public Image getColumnImage(final Object element, final int columnIndex) {
@@ -38,8 +37,9 @@ public class CompilerLabelProvider extends LabelProvider implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object,
-	 *      int)
+	 * @see
+	 * org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object,
+	 * int)
 	 */
 	@Override
 	public String getColumnText(final Object element, final int columnIndex) {

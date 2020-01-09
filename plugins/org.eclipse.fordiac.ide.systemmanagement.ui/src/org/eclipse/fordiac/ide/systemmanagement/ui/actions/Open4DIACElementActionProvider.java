@@ -30,9 +30,8 @@ import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 
-public class Open4DIACElementActionProvider extends
-		CommonActionProvider {
-	
+public class Open4DIACElementActionProvider extends CommonActionProvider {
+
 	private Open4DIACElementAction openAction;
 
 	private ICommonViewerWorkbenchSite viewSite = null;
@@ -47,7 +46,7 @@ public class Open4DIACElementActionProvider extends
 			contribute = true;
 		}
 	}
-	
+
 	@Override
 	public void fillContextMenu(IMenuManager aMenu) {
 		if (!contribute || getContext().getSelection().isEmpty()) {
@@ -59,7 +58,7 @@ public class Open4DIACElementActionProvider extends
 		if (openAction.isEnabled()) {
 			aMenu.insertAfter(ICommonMenuConstants.GROUP_OPEN, openAction);
 		}
-		
+
 		addOpenWithMenu(aMenu);
 	}
 
@@ -68,8 +67,7 @@ public class Open4DIACElementActionProvider extends
 		if (!contribute) {
 			return;
 		}
-		IStructuredSelection selection = (IStructuredSelection) getContext()
-				.getSelection();
+		IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
 		if (selection.size() == 1) {
 			openAction.selectionChanged(selection);
 			theActionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, openAction);
@@ -78,21 +76,21 @@ public class Open4DIACElementActionProvider extends
 	}
 
 	private void addOpenWithMenu(IMenuManager aMenu) {
-		IStructuredSelection ss = (IStructuredSelection) getContext()
-				.getSelection();
+		IStructuredSelection ss = (IStructuredSelection) getContext().getSelection();
 
 		if (ss == null || ss.size() != 1) {
 			return;
 		}
 
-		Object obj = ss.getFirstElement();		
-		List<IOpenListener> listeners = OpenListenerManager.INSTANCE.getOpenListener((I4DIACElement)obj);
-		
-		if(!listeners.isEmpty()){
+		Object obj = ss.getFirstElement();
+		List<IOpenListener> listeners = OpenListenerManager.INSTANCE.getOpenListener((I4DIACElement) obj);
+
+		if (!listeners.isEmpty()) {
 			// Create a menu flyout.
-			IMenuManager submenu = new MenuManager(Messages.OpenEditorProvider_OpenWithMenu_label, ICommonMenuConstants.GROUP_OPEN_WITH);
+			IMenuManager submenu = new MenuManager(Messages.OpenEditorProvider_OpenWithMenu_label,
+					ICommonMenuConstants.GROUP_OPEN_WITH);
 			submenu.add(new GroupMarker(ICommonMenuConstants.GROUP_TOP));
-			
+
 			for (IOpenListener openListener : listeners) {
 				submenu.add(openListener.getOpenListenerAction());
 			}

@@ -24,8 +24,10 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getVirtualDNSEntries <em>Virtual DNS Entries</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getName <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getVirtualDNSEntries
+ * <em>Virtual DNS Entries</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getName
+ * <em>Name</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage#getVirtualDNSCollection()
@@ -44,8 +46,8 @@ public interface VirtualDNSCollection extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * 
-	 * @return the value of the '<em>Virtual DNS Entries</em>' containment
-	 *         reference list.
+	 * @return the value of the '<em>Virtual DNS Entries</em>' containment reference
+	 *         list.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage#getVirtualDNSCollection_VirtualDNSEntries()
 	 * @model containment="true"
 	 * @generated
@@ -70,8 +72,10 @@ public interface VirtualDNSCollection extends EObject {
 	String getName();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getName <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getName
+	 * <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @param value the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated

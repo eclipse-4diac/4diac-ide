@@ -39,7 +39,7 @@ public class PlugContainerLayoutEditPolicy extends AbstractInterfaceContainerLay
 		if (cornerDim > 1) {
 			cornerDim = cornerDim / 2;
 		}
-		return new AbstractInterfaceSelectionEditPolicy(cornerDim, new Insets(1)){
+		return new AbstractInterfaceSelectionEditPolicy(cornerDim, new Insets(1)) {
 
 			@Override
 			protected List<? extends IInterfaceElement> getInterfaceElementList() {
@@ -47,15 +47,14 @@ public class PlugContainerLayoutEditPolicy extends AbstractInterfaceContainerLay
 			}
 
 			@Override
-			protected Command getIECreateCommand(DataType refElement, int ref) {				
+			protected Command getIECreateCommand(DataType refElement, int ref) {
 				return new CreateInterfaceElementCommand(refElement, getFBType().getInterfaceList(), false, ref);
 			}
 		};
 	}
 
 	@Override
-	protected Command createMoveChildCommand(final EditPart child,
-			final EditPart after) {
+	protected Command createMoveChildCommand(final EditPart child, final EditPart after) {
 		if (child instanceof AdapterInterfaceEditPart) {
 			AdapterInterfaceEditPart childEP = (AdapterInterfaceEditPart) child;
 			AdapterInterfaceEditPart afterEP = null;
@@ -70,7 +69,8 @@ public class PlugContainerLayoutEditPolicy extends AbstractInterfaceContainerLay
 				} else {
 					newIndex = getHost().getChildren().indexOf(after);
 				}
-				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(), ((IInterfaceElement)childEP.getModel()).isIsInput(), newIndex);
+				return new ChangeInterfaceOrderCommand((IInterfaceElement) childEP.getModel(),
+						((IInterfaceElement) childEP.getModel()).isIsInput(), newIndex);
 			}
 
 		}
@@ -83,7 +83,7 @@ public class PlugContainerLayoutEditPolicy extends AbstractInterfaceContainerLay
 		FBType type = getFBType();
 		if (childClass instanceof AdapterType && type != null) {
 			int index = -1;
-			EditPart ref = getInsertionReference(request);		
+			EditPart ref = getInsertionReference(request);
 			if (ref != null) {
 				index = type.getInterfaceList().getPlugs().indexOf(ref.getModel());
 			}

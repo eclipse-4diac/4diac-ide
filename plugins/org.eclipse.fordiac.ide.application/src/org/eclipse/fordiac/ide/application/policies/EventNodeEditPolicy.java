@@ -28,16 +28,17 @@ public class EventNodeEditPolicy extends InterfaceElementEditPolicy {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy#getConnectionCreateCommand(org.eclipse.gef.requests.CreateConnectionRequest)
+	 * @see org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy#
+	 * getConnectionCreateCommand(org.eclipse.gef.requests.CreateConnectionRequest)
 	 */
 	@Override
-	protected Command getConnectionCreateCommand( final CreateConnectionRequest request) {
+	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {
 		EventConnectionCreateCommand cmd = new EventConnectionCreateCommand(getParentNetwork());
 		cmd.setSource(((InterfaceEditPart) getHost()).getModel());
 		request.setStartCommand(cmd);
 		return new EventConnectionCreateCommand(getParentNetwork());
 	}
-	
+
 	@Override
 	protected Command createReconnectCommand(ReconnectRequest request) {
 		return new ReconnectEventConnectionCommand(request, getParentNetwork());

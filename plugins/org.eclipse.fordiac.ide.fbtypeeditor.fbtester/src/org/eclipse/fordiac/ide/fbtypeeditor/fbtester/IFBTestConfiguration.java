@@ -19,7 +19,6 @@ import org.eclipse.fordiac.ide.fbtester.model.testdata.ValuedVarDecl;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.swt.widgets.Control;
 
-
 public interface IFBTestConfiguration {
 
 	Control getControl();

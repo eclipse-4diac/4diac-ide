@@ -35,22 +35,23 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 
 	private StyledText text;
 	private String newLine = "";
-		
+
 	public ExportStatusMessageDialog(Shell parentShell, final List<String> warnings, final List<String> errors) {
-		super(parentShell, "4diac IDE Type Export Errors", "During Type export the following issues have been identified:", 
-				new Status(IStatus.INFO, "pluginid", errors.size() + " errors and " + warnings.size() + " warnings!"), 
+		super(parentShell, "4diac IDE Type Export Errors",
+				"During Type export the following issues have been identified:",
+				new Status(IStatus.INFO, "pluginid", errors.size() + " errors and " + warnings.size() + " warnings!"),
 				IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR);
-		 
+
 		this.warnings = warnings;
-		this.errors = errors;		
+		this.errors = errors;
 	}
 
 	@Override
 	protected Control createMessageArea(Composite parent) {
 		Control retval = super.createMessageArea(parent);
-		
-		new Label(parent, SWT.NONE);  //simple placeholder label
-		
+
+		new Label(parent, SWT.NONE); // simple placeholder label
+
 		Composite main = new Composite(parent, SWT.NONE);
 		main.setLayout(new GridLayout());
 		GridData fillBoth = new GridData();
@@ -67,12 +68,11 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 		fillText.horizontalAlignment = GridData.FILL;
 		fillText.verticalAlignment = GridData.FILL;
 
-		text = new StyledText(main, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL
-				| SWT.H_SCROLL);
+		text = new StyledText(main, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		text.setLayoutData(fillText);
-		
+
 		printMessages();
-		
+
 		return retval;
 	}
 
@@ -85,21 +85,21 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 		int count = 0;
 		StyleRange style1 = new StyleRange();
 
-		if(!warnings.isEmpty()){
+		if (!warnings.isEmpty()) {
 			String warning = "Warnings \n";
 			text.append(warning);
 			style1.start = count;
 			style1.length = warning.length();
 			style1.fontStyle = SWT.BOLD;
 			text.setStyleRange(style1);
-	
+
 			count += warning.length();
 			count += addLines(warnings);
 			text.append(newLine);
 			count += newLine.length();
 		}
-		
-		if(!errors.isEmpty()){
+
+		if (!errors.isEmpty()) {
 			String error = "Errors \n";
 			text.append(error);
 			style1 = new StyleRange();
@@ -113,9 +113,9 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 
 	private int addLines(List<String> messages) {
 		int count = 0;
-		
+
 		for (String string : messages) {
-			if(null != string){
+			if (null != string) {
 				count += string.length();
 				text.append(string);
 				newLine = "\n"; //$NON-NLS-1$

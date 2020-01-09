@@ -48,8 +48,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
  * 
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
-public class VirtualInOutputEditPart extends AbstractViewEditPart implements
-		NodeEditPart {
+public class VirtualInOutputEditPart extends AbstractViewEditPart implements NodeEditPart {
 
 	@Override
 	public void activate() {
@@ -76,7 +75,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 		getFigure().setToolTip(new VirtualIOTooltipFigure());
 
 	}
-	
+
 	private void updatePos() {
 		if (getParent() instanceof FBNetworkContainerEditPart) {
 			IInterfaceElement element = getIInterfaceElement();
@@ -96,9 +95,8 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 			x = bounds.x - 20 - FigureUtilities.getTextWidth(label, getFigure().getFont());
 		} else {
 			x = bounds.x + bounds.width + 1;
-		}				
-		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), 
-				new Rectangle(x, bounds.y, -1, -1));
+		}
+		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), new Rectangle(x, bounds.y, -1, -1));
 	}
 
 	/**
@@ -143,8 +141,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 		if (request.getType() == RequestConstants.REQ_MOVE) {
 			return false;
 		}
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN) {
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
 			return false;
 		}
 		return super.understandsRequest(request);
@@ -152,8 +149,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 
 	@Override
 	public void performRequest(Request request) {
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN) {
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
 			return;
 		}
 		super.performRequest(request);
@@ -215,7 +211,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 			}
 
 			add(new Label(dev.getName() + "." + res.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
-					+ fbNetElement.getName() + "." + getIInterfaceElement().getName()),BorderLayout.TOP); //$NON-NLS-1$
+					+ fbNetElement.getName() + "." + getIInterfaceElement().getName()), BorderLayout.TOP); //$NON-NLS-1$
 
 		}
 	}
@@ -231,8 +227,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	}
 
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(
-			final ConnectionEditPart connection) {
+	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
@@ -242,8 +237,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(
-			final ConnectionEditPart connection) {
+	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
@@ -261,9 +255,9 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements
 	public IPropertyChangeListener getPreferenceChangeListener() {
 		return null;
 	}
-	
+
 	@Override
 	protected void refreshName() {
-		//we don't have a name to refresh and therfore nothing todo here
+		// we don't have a name to refresh and therfore nothing todo here
 	}
 }

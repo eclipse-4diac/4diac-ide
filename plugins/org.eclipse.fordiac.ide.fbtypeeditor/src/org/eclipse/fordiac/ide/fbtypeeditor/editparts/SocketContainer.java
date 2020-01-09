@@ -19,7 +19,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class SocketContainer extends AbstractContainerElement{
+public class SocketContainer extends AbstractContainerElement {
 
 	public SocketContainer(final FBType fbtype) {
 		super(fbtype);

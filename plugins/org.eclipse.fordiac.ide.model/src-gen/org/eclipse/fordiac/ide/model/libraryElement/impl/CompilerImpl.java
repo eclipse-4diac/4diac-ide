@@ -21,26 +21,29 @@ import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Compiler</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Compiler</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getLanguage <em>Language</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getProduct <em>Product</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getVendor <em>Vendor</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getVersion <em>Version</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getLanguage
+ * <em>Language</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getProduct
+ * <em>Product</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getVendor
+ * <em>Vendor</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerImpl#getVersion
+ * <em>Version</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide.model.libraryElement.Compiler {
 	/**
-	 * The default value of the '{@link #getLanguage() <em>Language</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getLanguage() <em>Language</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getLanguage()
 	 * @generated
 	 * @ordered
@@ -49,8 +52,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 
 	/**
 	 * The cached value of the '{@link #getLanguage() <em>Language</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getLanguage()
 	 * @generated
 	 * @ordered
@@ -58,9 +61,9 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	protected Language language = LANGUAGE_EDEFAULT;
 
 	/**
-	 * This is true if the Language attribute has been set.
-	 * <!-- begin-user-doc -->
+	 * This is true if the Language attribute has been set. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 * @ordered
 	 */
@@ -68,8 +71,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 
 	/**
 	 * The default value of the '{@link #getProduct() <em>Product</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getProduct()
 	 * @generated
 	 * @ordered
@@ -78,8 +81,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 
 	/**
 	 * The cached value of the '{@link #getProduct() <em>Product</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getProduct()
 	 * @generated
 	 * @ordered
@@ -88,8 +91,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 
 	/**
 	 * The default value of the '{@link #getVendor() <em>Vendor</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getVendor()
 	 * @generated
 	 * @ordered
@@ -98,8 +101,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 
 	/**
 	 * The cached value of the '{@link #getVendor() <em>Vendor</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getVendor()
 	 * @generated
 	 * @ordered
@@ -108,8 +111,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 
 	/**
 	 * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getVersion()
 	 * @generated
 	 * @ordered
@@ -118,8 +121,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 
 	/**
 	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getVersion()
 	 * @generated
 	 * @ordered
@@ -127,8 +130,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	protected String version = VERSION_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected CompilerImpl() {
@@ -136,8 +139,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -146,8 +149,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -156,8 +159,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -167,12 +170,13 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 		boolean oldLanguageESet = languageESet;
 		languageESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPILER__LANGUAGE, oldLanguage, language, !oldLanguageESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPILER__LANGUAGE, oldLanguage,
+					language, !oldLanguageESet));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -182,12 +186,13 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 		language = LANGUAGE_EDEFAULT;
 		languageESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, LibraryElementPackage.COMPILER__LANGUAGE, oldLanguage, LANGUAGE_EDEFAULT, oldLanguageESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, LibraryElementPackage.COMPILER__LANGUAGE,
+					oldLanguage, LANGUAGE_EDEFAULT, oldLanguageESet));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -196,8 +201,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -206,8 +211,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -215,12 +220,13 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 		String oldProduct = product;
 		product = newProduct;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPILER__PRODUCT, oldProduct, product));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPILER__PRODUCT, oldProduct,
+					product));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -229,8 +235,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -238,12 +244,13 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 		String oldVendor = vendor;
 		vendor = newVendor;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPILER__VENDOR, oldVendor, vendor));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPILER__VENDOR, oldVendor,
+					vendor));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -252,8 +259,8 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -261,109 +268,114 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 		String oldVersion = version;
 		version = newVersion;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPILER__VERSION, oldVersion, version));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPILER__VERSION, oldVersion,
+					version));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPILER__LANGUAGE:
-				return getLanguage();
-			case LibraryElementPackage.COMPILER__PRODUCT:
-				return getProduct();
-			case LibraryElementPackage.COMPILER__VENDOR:
-				return getVendor();
-			case LibraryElementPackage.COMPILER__VERSION:
-				return getVersion();
+		case LibraryElementPackage.COMPILER__LANGUAGE:
+			return getLanguage();
+		case LibraryElementPackage.COMPILER__PRODUCT:
+			return getProduct();
+		case LibraryElementPackage.COMPILER__VENDOR:
+			return getVendor();
+		case LibraryElementPackage.COMPILER__VERSION:
+			return getVersion();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPILER__LANGUAGE:
-				setLanguage((Language)newValue);
-				return;
-			case LibraryElementPackage.COMPILER__PRODUCT:
-				setProduct((String)newValue);
-				return;
-			case LibraryElementPackage.COMPILER__VENDOR:
-				setVendor((String)newValue);
-				return;
-			case LibraryElementPackage.COMPILER__VERSION:
-				setVersion((String)newValue);
-				return;
+		case LibraryElementPackage.COMPILER__LANGUAGE:
+			setLanguage((Language) newValue);
+			return;
+		case LibraryElementPackage.COMPILER__PRODUCT:
+			setProduct((String) newValue);
+			return;
+		case LibraryElementPackage.COMPILER__VENDOR:
+			setVendor((String) newValue);
+			return;
+		case LibraryElementPackage.COMPILER__VERSION:
+			setVersion((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPILER__LANGUAGE:
-				unsetLanguage();
-				return;
-			case LibraryElementPackage.COMPILER__PRODUCT:
-				setProduct(PRODUCT_EDEFAULT);
-				return;
-			case LibraryElementPackage.COMPILER__VENDOR:
-				setVendor(VENDOR_EDEFAULT);
-				return;
-			case LibraryElementPackage.COMPILER__VERSION:
-				setVersion(VERSION_EDEFAULT);
-				return;
+		case LibraryElementPackage.COMPILER__LANGUAGE:
+			unsetLanguage();
+			return;
+		case LibraryElementPackage.COMPILER__PRODUCT:
+			setProduct(PRODUCT_EDEFAULT);
+			return;
+		case LibraryElementPackage.COMPILER__VENDOR:
+			setVendor(VENDOR_EDEFAULT);
+			return;
+		case LibraryElementPackage.COMPILER__VERSION:
+			setVersion(VERSION_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.COMPILER__LANGUAGE:
-				return isSetLanguage();
-			case LibraryElementPackage.COMPILER__PRODUCT:
-				return PRODUCT_EDEFAULT == null ? product != null : !PRODUCT_EDEFAULT.equals(product);
-			case LibraryElementPackage.COMPILER__VENDOR:
-				return VENDOR_EDEFAULT == null ? vendor != null : !VENDOR_EDEFAULT.equals(vendor);
-			case LibraryElementPackage.COMPILER__VERSION:
-				return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
+		case LibraryElementPackage.COMPILER__LANGUAGE:
+			return isSetLanguage();
+		case LibraryElementPackage.COMPILER__PRODUCT:
+			return PRODUCT_EDEFAULT == null ? product != null : !PRODUCT_EDEFAULT.equals(product);
+		case LibraryElementPackage.COMPILER__VENDOR:
+			return VENDOR_EDEFAULT == null ? vendor != null : !VENDOR_EDEFAULT.equals(vendor);
+		case LibraryElementPackage.COMPILER__VERSION:
+			return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (language: "); //$NON-NLS-1$
-		if (languageESet) result.append(language); else result.append("<unset>"); //$NON-NLS-1$
+		if (languageESet)
+			result.append(language);
+		else
+			result.append("<unset>"); //$NON-NLS-1$
 		result.append(", product: "); //$NON-NLS-1$
 		result.append(product);
 		result.append(", vendor: "); //$NON-NLS-1$
@@ -374,4 +386,4 @@ public class CompilerImpl extends EObjectImpl implements org.eclipse.fordiac.ide
 		return result.toString();
 	}
 
-} //CompilerImpl
+} // CompilerImpl

@@ -20,7 +20,9 @@ import org.eclipse.jface.text.rules.IWhitespaceDetector;
  */
 public class XMLWhitespaceDetector implements IWhitespaceDetector {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.text.rules.IWhitespaceDetector#isWhitespace(char)
 	 */
 	@Override

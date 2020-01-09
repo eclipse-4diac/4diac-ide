@@ -150,7 +150,7 @@ public class RuntimeLauncherView extends ViewPart {
 			PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(
 					// String defines active preference page, String[] defines all available
 					// preference pages
-					this.getSite().getWorkbenchWindow().getShell(), launcher.getPathPreferenceSettingPageID(), 
+					this.getSite().getWorkbenchWindow().getShell(), launcher.getPathPreferenceSettingPageID(),
 					new String[] { launcher.getPathPreferenceSettingPageID(),
 							"org.eclipse.fordiac.ide.preferences.FordiacPreferencePage" }, //$NON-NLS-1$
 					null);

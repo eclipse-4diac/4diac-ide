@@ -55,7 +55,8 @@ public class FBTypeEditorInput implements IEditorInput {
 
 	@Override
 	public String getToolTipText() {
-		return fbType.getComment() == null ? "" : fbType.getComment() + " (" + entry.getFile().getProjectRelativePath().toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return fbType.getComment() == null ? "" //$NON-NLS-1$
+				: fbType.getComment() + " (" + entry.getFile().getProjectRelativePath().toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -76,8 +77,7 @@ public class FBTypeEditorInput implements IEditorInput {
 	public boolean equals(final Object obj) {
 		if (obj instanceof FBTypeEditorInput) {
 			FBTypeEditorInput input = (FBTypeEditorInput) obj;
-			return fbType.equals(input.getContent())
-					&& entry.getFile().equals(input.getPaletteEntry().getFile());
+			return fbType.equals(input.getContent()) && entry.getFile().equals(input.getPaletteEntry().getFile());
 		} else {
 			return false;
 		}

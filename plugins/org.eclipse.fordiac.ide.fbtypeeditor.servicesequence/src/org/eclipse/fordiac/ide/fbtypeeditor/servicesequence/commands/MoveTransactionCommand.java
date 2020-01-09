@@ -35,17 +35,17 @@ public class MoveTransactionCommand extends Command {
 	public boolean canExecute() {
 		return ((parent != null) && (moveElement != null));
 	}
-	
+
 	@Override
 	public void execute() {
 		parent.getServiceTransaction().move(newIndex, moveElement);
 	}
-	
+
 	@Override
 	public void undo() {
 		parent.getServiceTransaction().move(oldIndex, moveElement);
 	}
-	
+
 	@Override
 	public void redo() {
 		parent.getServiceTransaction().move(newIndex, moveElement);

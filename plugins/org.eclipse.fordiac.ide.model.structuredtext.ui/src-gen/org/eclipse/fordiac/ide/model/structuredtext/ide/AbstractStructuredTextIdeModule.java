@@ -22,26 +22,29 @@ import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.Lexer;
 @SuppressWarnings("all")
 public abstract class AbstractStructuredTextIdeModule extends DefaultIdeModule {
 
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public void configureContentAssistLexer(Binder binder) {
-		binder.bind(Lexer.class)
-			.annotatedWith(Names.named(LexerIdeBindings.CONTENT_ASSIST))
-			.to(InternalStructuredTextLexer.class);
+		binder.bind(Lexer.class).annotatedWith(Names.named(LexerIdeBindings.CONTENT_ASSIST))
+				.to(InternalStructuredTextLexer.class);
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends IContentAssistParser> bindIContentAssistParser() {
 		return StructuredTextParser.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends IProposalConflictHelper> bindIProposalConflictHelper() {
 		return AntlrProposalConflictHelper.class;
 	}
-	
-	// contributed by org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
+
+	// contributed by
+	// org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
 	public Class<? extends IPrefixMatcher> bindIPrefixMatcher() {
 		return FQNPrefixMatcher.class;
 	}
-	
+
 }

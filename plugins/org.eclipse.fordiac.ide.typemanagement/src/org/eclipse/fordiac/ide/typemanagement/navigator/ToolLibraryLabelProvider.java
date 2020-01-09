@@ -45,11 +45,9 @@ public class ToolLibraryLabelProvider implements ILabelProvider {
 	public Image getImage(Object element) {
 		if (element instanceof IProject) {
 			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
-		}
-		else if (element instanceof IFolder && ((IFolder)element).isLinked()) {
+		} else if (element instanceof IFolder && ((IFolder) element).isLinked()) {
 			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
-		}
-		else {
+		} else {
 			return null;
 		}
 	}

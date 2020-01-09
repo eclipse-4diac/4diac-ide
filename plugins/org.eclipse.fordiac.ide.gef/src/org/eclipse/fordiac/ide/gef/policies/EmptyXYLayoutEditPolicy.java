@@ -38,7 +38,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 public class EmptyXYLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	private static final Dimension DEFAULT_SIZE = new Dimension(-1, -1);
 
-
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
 		return null;
@@ -85,22 +84,22 @@ public class EmptyXYLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		return new Rectangle(r);
 	}
 
-	protected EditPart getInsertionReference(Point mousePoint){
+	protected EditPart getInsertionReference(Point mousePoint) {
 		@SuppressWarnings("unchecked")
 		List<EditPart> children = getHost().getChildren();
-		if(!children.isEmpty()){
+		if (!children.isEmpty()) {
 			Transposer transposer = new Transposer();
 			transposer.setEnabled(false);
-			Point requestPoint = transposer.t(mousePoint);	
+			Point requestPoint = transposer.t(mousePoint);
 			Rectangle parentBoundCopy = ((AbstractGraphicalEditPart) getHost()).getFigure().getBounds().getCopy();
-			((AbstractGraphicalEditPart)getHost()).getFigure().translateToAbsolute(parentBoundCopy);
+			((AbstractGraphicalEditPart) getHost()).getFigure().translateToAbsolute(parentBoundCopy);
 			Rectangle parentBound = transposer.t(parentBoundCopy);
-			for(EditPart child : children){
-				Rectangle childBoundCopy = ((AbstractGraphicalEditPart)child).getFigure().getBounds().getCopy();
-				((AbstractGraphicalEditPart)child).getFigure().translateToAbsolute(childBoundCopy);
+			for (EditPart child : children) {
+				Rectangle childBoundCopy = ((AbstractGraphicalEditPart) child).getFigure().getBounds().getCopy();
+				((AbstractGraphicalEditPart) child).getFigure().translateToAbsolute(childBoundCopy);
 				Rectangle childBound = transposer.t(childBoundCopy);
-				if((requestPoint.y > parentBound.y) && (requestPoint.y <= childBound.bottom())){
-						return child;
+				if ((requestPoint.y > parentBound.y) && (requestPoint.y <= childBound.bottom())) {
+					return child;
 				}
 			}
 		}

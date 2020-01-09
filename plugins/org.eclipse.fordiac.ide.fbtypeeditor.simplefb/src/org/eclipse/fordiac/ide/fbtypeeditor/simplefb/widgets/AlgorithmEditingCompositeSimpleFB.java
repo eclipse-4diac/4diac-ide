@@ -26,20 +26,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class AlgorithmEditingCompositeSimpleFB extends AlgorithmEditingComposite {
-	
+
 	@Override
 	public void createControls(final Composite parent, final FormToolkit toolkit) {
-		Composite container = toolkit.createComposite(parent); 
-		
+		Composite container = toolkit.createComposite(parent);
+
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
 		container.setLayout(gridLayout);
-		
+
 		super.createControls(container, toolkit);
 	}
 
 	@Override
-	protected AbstractChangeAlgorithmTypeCommand getChangeAlgorithmTypeCommand(BaseFBType fbType, Algorithm oldAlgorithm, String algorithmType) {
+	protected AbstractChangeAlgorithmTypeCommand getChangeAlgorithmTypeCommand(BaseFBType fbType,
+			Algorithm oldAlgorithm, String algorithmType) {
 		return new ChangeAlgorithmTypeCommandSimpleFB(fbType, oldAlgorithm, algorithmType);
 	}
 

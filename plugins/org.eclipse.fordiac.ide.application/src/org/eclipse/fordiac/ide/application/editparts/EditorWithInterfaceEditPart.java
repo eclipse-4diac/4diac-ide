@@ -104,7 +104,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	public Figure getLeftAdapterInterfaceContainer() {
 		return leftAdapterContainer;
 	}
-	
+
 	public Figure getRightInterfaceContainer() {
 		return rightInterfaceContainer;
 	}
@@ -120,7 +120,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	public Figure getRightAdapterInterfaceContainer() {
 		return rightAdapterContainer;
 	}
-	
+
 	protected List<?> getInterfaceChildren() {
 		return Collections.EMPTY_LIST;
 	}
@@ -161,6 +161,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 				public void controlResized(final ControlEvent e) {
 					updateInterfacePosition();
 				}
+
 				@Override
 				public void controlMoved(final ControlEvent e) {
 				}

@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-
 public final class TestingManager {
 
 	private static TestingManager instance;
@@ -45,14 +44,14 @@ public final class TestingManager {
 	public void addTriggerElement(TestElement element) {
 		triggerElements.put(generateElementString(element), element);
 	}
-	
+
 	private static String generateElementString(TestElement element) {
 		return element.getFBString() + "_RES." + element.getFBString() + "." + element.getInterfaceElement().getName(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public Map<String, TestElement> getTriggerElements(FBType type) {
 		Map<String, TestElement> elements = new HashMap<>();
-		for (Entry<String, TestElement> entry: triggerElements.entrySet()) {
+		for (Entry<String, TestElement> entry : triggerElements.entrySet()) {
 			TestElement element = entry.getValue();
 			if ((element.getFb().getType().equals(type)) && (element.getInterfaceElement() instanceof Event)) {
 				elements.put(entry.getKey(), element);
@@ -65,16 +64,17 @@ public final class TestingManager {
 		testElements.put(generateElementString(element), element);
 	}
 
-	public Map<String, TestElement> getTestElements(FBType type,
-			ISetValueListener valueListener, ITriggerEventListener eventListener) {
+	public Map<String, TestElement> getTestElements(FBType type, ISetValueListener valueListener,
+			ITriggerEventListener eventListener) {
 		Map<String, TestElement> elements = new HashMap<>();
 		for (Entry<String, TestElement> entry : testElements.entrySet()) {
 			TestElement element = entry.getValue();
 			if (element.getFb().getType().equals(type)) {
 				element.addSetValueListener(valueListener);
 				element.addTriggerEventListener(eventListener);
-				if ( (element.getInterfaceElement() instanceof VarDeclaration) || 
-					((element.getInterfaceElement() instanceof Event && !element.getInterfaceElement().isIsInput()))) {
+				if ((element.getInterfaceElement() instanceof VarDeclaration)
+						|| ((element.getInterfaceElement() instanceof Event
+								&& !element.getInterfaceElement().isIsInput()))) {
 					elements.put(entry.getKey(), element);
 				}
 
@@ -88,14 +88,14 @@ public final class TestingManager {
 		for (Entry<String, TestElement> entry : testElements.entrySet()) {
 			TestElement element = entry.getValue();
 			if (element.getFb().getType().equals(type)) {
-				if ((element.getInterfaceElement() instanceof VarDeclaration) ||  
-						((element.getInterfaceElement() instanceof Event && !element.getInterfaceElement().isIsInput()))) {
+				if ((element.getInterfaceElement() instanceof VarDeclaration)
+						|| ((element.getInterfaceElement() instanceof Event
+								&& !element.getInterfaceElement().isIsInput()))) {
 					elements.put(entry.getKey(), element);
 				}
 			}
 		}
 		return elements;
 	}
-
 
 }

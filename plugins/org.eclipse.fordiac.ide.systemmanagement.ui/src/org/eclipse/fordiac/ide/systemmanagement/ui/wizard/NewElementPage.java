@@ -48,8 +48,7 @@ public abstract class NewElementPage extends WizardPage {
 	/**
 	 * Instantiates a new new application page.
 	 * 
-	 * @param pageName
-	 *            the page name
+	 * @param pageName the page name
 	 */
 	protected NewElementPage(final String pageName) {
 		super(pageName);
@@ -85,8 +84,7 @@ public abstract class NewElementPage extends WizardPage {
 	/**
 	 * Creates the file name group.
 	 * 
-	 * @param composite
-	 *            the composite
+	 * @param composite the composite
 	 */
 	protected void createFileNameGroup(final Composite composite) {
 		Label l = new Label(composite, SWT.NONE);
@@ -114,15 +112,14 @@ public abstract class NewElementPage extends WizardPage {
 	/**
 	 * Creates the project container.
 	 * 
-	 * @param parent
-	 *            the parent
+	 * @param parent the parent
 	 */
 	protected void createProjectContainer(final Composite parent) {
 		Label l = new Label(parent, SWT.NONE);
 		l.setText(Messages.NewElementPage_ParentSystemLabel);
 		l.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		treeViewer = new TreeViewer(parent); 
+		treeViewer = new TreeViewer(parent);
 		treeViewer.setContentProvider(new SystemContentProvider());
 		treeViewer.setLabelProvider(new SystemLabelProvider());
 
@@ -142,8 +139,8 @@ public abstract class NewElementPage extends WizardPage {
 	/**
 	 * Returns whether this page's controls currently all contain valid values.
 	 * 
-	 * @return <code>true</code> if all controls are valid, and
-	 *         <code>false</code> if at least one is invalid
+	 * @return <code>true</code> if all controls are valid, and <code>false</code>
+	 *         if at least one is invalid
 	 */
 	protected boolean validatePage() {
 		if (text == null || text.getText().isEmpty()) {
@@ -189,8 +186,7 @@ public abstract class NewElementPage extends WizardPage {
 	 * @return the selected system
 	 */
 	public AutomationSystem getSelectedSystem() {
-		return (AutomationSystem) ((IStructuredSelection) treeViewer
-				.getSelection()).getFirstElement();
+		return (AutomationSystem) ((IStructuredSelection) treeViewer.getSelection()).getFirstElement();
 	}
 
 	public void setSystem(AutomationSystem system) {

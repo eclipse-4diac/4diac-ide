@@ -19,16 +19,15 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Type</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Type</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
 public abstract class DataTypeImpl extends LibraryElementImpl implements DataType {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected DataTypeImpl() {
@@ -36,8 +35,8 @@ public abstract class DataTypeImpl extends LibraryElementImpl implements DataTyp
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -45,4 +44,4 @@ public abstract class DataTypeImpl extends LibraryElementImpl implements DataTyp
 		return DataPackage.Literals.DATA_TYPE;
 	}
 
-} //DataTypeImpl
+} // DataTypeImpl

@@ -36,7 +36,7 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	/**
 	 * Constructor.
 	 * 
-	 * @param arc the arc
+	 * @param arc    the arc
 	 * @param insets the insets
 	 */
 	public ModifiedNonResizeableEditPolicy(int arc, Insets insets) {

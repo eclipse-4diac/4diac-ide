@@ -30,9 +30,9 @@ public class FBTypeInfoSection extends CompilableTypeInfoSection {
 
 	@Override
 	protected LibraryElement getInputType(Object input) {
-		if(input instanceof IFile){
+		if (input instanceof IFile) {
 			IFile file = ((IFile) input);
-			return (TypeLibrary.getPaletteGroup( SystemManager.INSTANCE.getPalette(file.getProject()), file.getParent()))
+			return (TypeLibrary.getPaletteGroup(SystemManager.INSTANCE.getPalette(file.getProject()), file.getParent()))
 					.getEntry(TypeLibrary.getTypeNameFromFileName(file.getName())).getType();
 		}
 		return null;

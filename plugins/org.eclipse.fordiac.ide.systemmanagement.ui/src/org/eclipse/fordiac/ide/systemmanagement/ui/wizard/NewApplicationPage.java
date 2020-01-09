@@ -22,10 +22,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 public class NewApplicationPage extends NewElementPage {
-	
+
 	private Button openApplicationCheckbox;
-	
-	
 
 	protected NewApplicationPage(String pageName) {
 		super(pageName);
@@ -34,14 +32,14 @@ public class NewApplicationPage extends NewElementPage {
 	@Override
 	public void createControl(final Composite parent) {
 		super.createControl(parent);
-		
+
 		Composite container = (Composite) getControl();
 		openApplicationCheckbox = new Button(container, SWT.CHECK);
 		openApplicationCheckbox.setText(Messages.NewApplicationPage_OpenApplicationForEditing);
 		openApplicationCheckbox.setSelection(true);
-		
+
 	}
-	
+
 	@Override
 	public String validateElementName(String text) {
 		if (!isValidAppName(text, getSelectedSystem())) {
@@ -53,7 +51,7 @@ public class NewApplicationPage extends NewElementPage {
 	public boolean getOpenApplication() {
 		return openApplicationCheckbox.getSelection();
 	}
-	
+
 	/**
 	 * Checks if is valid app name.
 	 * 
@@ -63,10 +61,10 @@ public class NewApplicationPage extends NewElementPage {
 	 * @return true, if is valid app name
 	 */
 	private static boolean isValidAppName(final String appNameProposal, final AutomationSystem selectedSystem) {
-		if(!IdentifierVerifyer.isValidIdentifier(appNameProposal)){
+		if (!IdentifierVerifyer.isValidIdentifier(appNameProposal)) {
 			return false;
 		}
-		for (Application app : selectedSystem.getApplication()){
+		for (Application app : selectedSystem.getApplication()) {
 			if (appNameProposal.equalsIgnoreCase(app.getName())) {
 				return false;
 			}

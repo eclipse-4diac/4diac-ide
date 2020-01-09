@@ -30,14 +30,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class ToolTipFigure extends Figure {
-	
+
 	private final VerticalLineCompartmentFigure line;
 
 	/**
 	 * Instantiates a new tool tip figure.
 	 * 
-	 * @param element
-	 *            the element
+	 * @param element the element
 	 */
 	public ToolTipFigure(final INamedElement element) {
 		ToolbarLayout mainLayout = new ToolbarLayout(false);
@@ -46,8 +45,8 @@ public class ToolTipFigure extends Figure {
 
 		String nameLine = element.getName();
 
-		if ((element instanceof VarDeclaration) &&  (((VarDeclaration) element).getType() != null)) {
-				nameLine += " - " + ((VarDeclaration) element).getType().getName();
+		if ((element instanceof VarDeclaration) && (((VarDeclaration) element).getType() != null)) {
+			nameLine += " - " + ((VarDeclaration) element).getType().getName();
 		}
 
 		add(new Label(nameLine));
@@ -55,24 +54,24 @@ public class ToolTipFigure extends Figure {
 		line = new VerticalLineCompartmentFigure();
 		add(line);
 
-		String comment = element.getComment();		
+		String comment = element.getComment();
 		if ((comment != null) && (!comment.isEmpty())) {
 			line.add(new Label(comment));
 		}
-		if(element instanceof Event){
-			addWiths((Event)element);
+		if (element instanceof Event) {
+			addWiths((Event) element);
 		} else if (element instanceof VarDeclaration) {
-			addVarDefaultValue((VarDeclaration)element);
+			addVarDefaultValue((VarDeclaration) element);
 		}
 	}
-	
+
 	public final VerticalLineCompartmentFigure getLine() {
 		return line;
 	}
-	
+
 	private void addWiths(Event element) {
 		List<With> withs = element.getWith();
-		if(!withs.isEmpty()){
+		if (!withs.isEmpty()) {
 			boolean first = true;
 			StringBuilder withText = new StringBuilder("With: [");
 			for (With with : withs) {
@@ -86,17 +85,16 @@ public class ToolTipFigure extends Figure {
 				}
 			}
 			withText.append("]");
-			line.add(new Label(withText.toString()));			
+			line.add(new Label(withText.toString()));
 		}
-		
+
 	}
 
 	private void addVarDefaultValue(VarDeclaration var) {
-		VarDeclaration typeVar = getTypevariable(var);		
-		if(null != typeVar && null != typeVar.getValue()){
-			String initvalue = "Inital value: ";  
-			if(null != typeVar.getValue().getValue() && 
-					!typeVar.getValue().getValue().isEmpty()){
+		VarDeclaration typeVar = getTypevariable(var);
+		if (null != typeVar && null != typeVar.getValue()) {
+			String initvalue = "Inital value: ";
+			if (null != typeVar.getValue().getValue() && !typeVar.getValue().getValue().isEmpty()) {
 				initvalue += var.getValue().getValue();
 			}
 			line.add(new Label(initvalue));
@@ -104,20 +102,19 @@ public class ToolTipFigure extends Figure {
 	}
 
 	private static VarDeclaration getTypevariable(VarDeclaration var) {
-		if(var.eContainer() instanceof Device){
-			Device dev = (Device)var.eContainer();
-			if(null != dev.getType()) {
-				for(VarDeclaration typeVar : dev.getType().getVarDeclaration()){
-					if(typeVar.getName().equals(var.getName())){
+		if (var.eContainer() instanceof Device) {
+			Device dev = (Device) var.eContainer();
+			if (null != dev.getType()) {
+				for (VarDeclaration typeVar : dev.getType().getVarDeclaration()) {
+					if (typeVar.getName().equals(var.getName())) {
 						return typeVar;
 					}
 				}
 			}
-		} else if(null != var.getFBNetworkElement() && null != var.getFBNetworkElement().getType()){
+		} else if (null != var.getFBNetworkElement() && null != var.getFBNetworkElement().getType()) {
 			return var.getFBNetworkElement().getType().getInterfaceList().getVariable(var.getName());
 		}
 		return null;
 	}
-	
 
 }
