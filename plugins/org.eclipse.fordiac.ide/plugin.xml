@@ -34,10 +34,6 @@
                value="icons/fordiac16.png,icons/fordiac32.png,icons/fordiac48.png,icons/fordiac256.png">
          </property>
          <property
-               name="startupProgressRect"
-               value="375,375,172,4">
-         </property>
-         <property
                name="introTitle"
                value="Welcome to 4diac IDE">
          </property>
@@ -56,6 +52,10 @@
 <property
     name="applicationCSSResources"
     value="platform:/plugin/org.eclipse.platform/images/">
+</property>
+<property
+      name="startupProgressRect"
+      value="375,375,172,4">
 </property>
 <property
       name="preferenceCustomization"

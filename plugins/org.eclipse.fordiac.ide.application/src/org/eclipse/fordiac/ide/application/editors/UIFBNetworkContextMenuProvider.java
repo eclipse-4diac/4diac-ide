@@ -15,6 +15,7 @@
  *               - show icons for folders, and FB
  *               - fixed issue in submenu generation when fb types are in the
  *                 root folder
+ *               - reworked fb insert action to not reuse commands
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
@@ -23,17 +24,14 @@ import java.util.List;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.actions.FBInsertAction;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkElementInsertAction;
 import org.eclipse.fordiac.ide.application.actions.MapAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
-import org.eclipse.fordiac.ide.application.actions.SubAppInsertAction;
 import org.eclipse.fordiac.ide.application.actions.UnmapAction;
 import org.eclipse.fordiac.ide.application.actions.UnmapAllAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.utilities.FBTypeTemplateCreationFactory;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
@@ -43,8 +41,6 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
-import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -52,9 +48,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.jface.action.Action;
@@ -67,7 +61,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -279,27 +272,9 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 	}
 
 	private FBNetworkElementInsertAction createFBInsertAction(PaletteEntry entry) {
-		FBNetworkElementInsertAction action = null;
-		CreateRequest request = new CreateRequest();
-		request.setFactory(new FBTypeTemplateCreationFactory(entry));
-
-		org.eclipse.swt.graphics.Point location = Display.getCurrent().getCursorLocation();
-		location = getViewer().getControl().toControl(location.x, location.y);
-		request.setLocation(new org.eclipse.draw2d.geometry.Point(location));
-
-		Command cmd = getViewer().getContents().getCommand(request);
-
-		if (cmd instanceof FBCreateCommand) {
-			action = new FBInsertAction(editor, (FBCreateCommand) cmd);
-		} else if (cmd instanceof CreateSubAppInstanceCommand) {
-			action = new SubAppInsertAction(editor, (CreateSubAppInstanceCommand) cmd);
-		}
-
-		if (null != action) {
-			getRegistry().registerAction(action);
-			action.updateCreatePosition(getPoint().x, getPoint().y);
-		}
-
+		FBNetworkElementInsertAction action = new FBNetworkElementInsertAction(editor, entry,
+				((FBNetworkEditor) editor).getModel());
+		getRegistry().registerAction(action);
 		return action;
 	}
 
