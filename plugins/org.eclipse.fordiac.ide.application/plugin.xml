@@ -423,6 +423,10 @@
             </iterate>
          </activeWhen>
       </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.application.handlers.UnmapHandler"
+            commandId="org.eclipse.fordiac.ide.application.unmap">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -469,11 +473,17 @@
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.followConnection" />
       </menuContribution>            
-      <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup"> 
+      <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">
             <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
+                 </menuContribution>
+             <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup">
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.unmap"
+                  label="Unmap">
+            </command>
       </menuContribution>
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
@@ -742,5 +752,5 @@
 	        	</or>
 		    </with>
 	   </definition>
-   </extension>   
+   </extension>
 </plugin>
