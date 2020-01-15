@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,7 @@
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added mulitline selection and code cleanup.
- *   Bianca Wiesmayr - extract Table creation
+ *   Bianca Wiesmayr - extract Table creation, improve insertion
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
@@ -41,6 +41,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -92,8 +93,33 @@ public class InternalVarsSection extends ECCSection {
 		internalVarsViewer.setLabelProvider(new InternalVarsLabelProvider());
 		internalVarsViewer.setCellModifier(new InternalVarsCellModifier());
 
-		buttons.bindToTableViewer(internalVarsViewer, this, ref -> new CreateInternalVariableCommand(getType()),
+		buttons.bindToTableViewer(internalVarsViewer, this,
+				ref -> new CreateInternalVariableCommand(getType(), getInsertionIndex(), getName(), getDataType()),
 				ref -> new DeleteInternalVariableCommand(getType(), (VarDeclaration) ref));
+	}
+
+	private DataType getDataType() {
+		return (null != getLastSelectedVariable()) ? getLastSelectedVariable().getType() : null;
+	}
+
+	private String getName() {
+		return (null != getLastSelectedVariable()) ? getLastSelectedVariable().getName() : null;
+	}
+
+	private int getInsertionIndex() {
+		VarDeclaration alg = getLastSelectedVariable();
+		if (null == alg) {
+			return getType().getInternalVars().size();
+		}
+		return getType().getInternalVars().indexOf(alg) + 1;
+	}
+
+	private VarDeclaration getLastSelectedVariable() {
+		IStructuredSelection selection = internalVarsViewer.getStructuredSelection();
+		if (selection.isEmpty()) {
+			return null;
+		}
+		return (VarDeclaration) selection.toList().get(selection.toList().size() - 1);
 	}
 
 	private static void configureTableLayout(final Table table) {
