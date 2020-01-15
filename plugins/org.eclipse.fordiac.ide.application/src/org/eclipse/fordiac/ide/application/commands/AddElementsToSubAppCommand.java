@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018-2019 Johannes Kepler University
+ * Copyright (c) 2018-2020 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
- *   Bianca Wiesamyr - fix positioning of elements
+ *   Bianca Wiesmayr - fix positioning of elements
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
@@ -43,6 +43,7 @@ public class AddElementsToSubAppCommand extends Command {
 	private final List<Connection> movedConns = new ArrayList<>();
 	private final CompoundCommand modifiedConns = new CompoundCommand();
 	private final CompoundCommand changedSubAppIEs = new CompoundCommand();
+	private org.eclipse.swt.graphics.Point offset;
 
 	public AddElementsToSubAppCommand(SubApp targetSubApp, List<?> selection) {
 		this.targetSubApp = targetSubApp;
@@ -58,7 +59,7 @@ public class AddElementsToSubAppCommand extends Command {
 	public void execute() {
 		unmappingCmds.execute();
 		EList<FBNetworkElement> fbNetwork = targetSubApp.getSubAppNetwork().getNetworkElements();
-		FBNetworkHelper.removeXYOffsetForFBNetwork(elementsToAdd);
+		offset = FBNetworkHelper.removeXYOffsetForFBNetwork(elementsToAdd);
 		for (FBNetworkElement fbNetworkElement : elementsToAdd) {
 			fbNetwork.add(fbNetworkElement);
 			checkElementConnections(fbNetworkElement);
@@ -89,11 +90,11 @@ public class AddElementsToSubAppCommand extends Command {
 	}
 
 	private int getOriginalPositionX() {
-		return -targetSubApp.getX() + FBNetworkHelper.X_OFFSET_FROM_TOP_LEFT_CORNER;
+		return -offset.x + FBNetworkHelper.X_OFFSET_FROM_TOP_LEFT_CORNER;
 	}
 
 	private int getOriginalPositionY() {
-		return -targetSubApp.getY() + FBNetworkHelper.Y_OFFSET_FROM_TOP_LEFT_CORNER;
+		return -offset.y + FBNetworkHelper.Y_OFFSET_FROM_TOP_LEFT_CORNER;
 	}
 
 	private void fillElementList(List<?> selection) {
