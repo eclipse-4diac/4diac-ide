@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2014, 2015 Profactor GbmH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,7 +16,8 @@ package org.eclipse.fordiac.ide.monitoring.provider;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
@@ -30,7 +31,7 @@ public class WatchesContentProvider implements ITreeContentProvider {
 
 	private Viewer viewer;
 
-	private EContentAdapter adapter = new EContentAdapter() {
+	private Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 			int featureID = notification.getFeatureID(MonitoringElement.class);

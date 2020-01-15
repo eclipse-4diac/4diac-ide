@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -19,9 +19,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -37,20 +38,20 @@ import org.eclipse.swt.graphics.Point;
 
 /**
  * The Class FBNetworkContainerEditPart.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 
 	/** The content adapter. */
-	private EContentAdapter contentAdapter;
+	private Adapter contentAdapter;
 
 	private final Map<IInterfaceElement, VirtualIO> virutalIOMapping = new HashMap<>();
 
 	@Override
-	protected EContentAdapter getContentAdapter() {
+	protected Adapter getContentAdapter() {
 		if (null == contentAdapter) {
-			contentAdapter = new EContentAdapter() {
+			contentAdapter = new AdapterImpl() {
 				@Override
 				public void notifyChanged(Notification notification) {
 					super.notifyChanged(notification);
@@ -124,7 +125,7 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef
 	 * .Request)

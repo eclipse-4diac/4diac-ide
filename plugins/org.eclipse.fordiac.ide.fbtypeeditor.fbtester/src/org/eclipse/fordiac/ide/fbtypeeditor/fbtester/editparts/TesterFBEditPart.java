@@ -18,7 +18,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -39,10 +40,10 @@ public class TesterFBEditPart extends org.eclipse.fordiac.ide.application.editpa
 	}
 
 	@Override
-	protected EContentAdapter createContentAdapter() {
+	protected Adapter createContentAdapter() {
 		// Provide an empty content adpater as we don't want to react in the tester to
 		// the classical FBN editing changes
-		return new EContentAdapter();
+		return new AdapterImpl();
 	}
 
 	@Override

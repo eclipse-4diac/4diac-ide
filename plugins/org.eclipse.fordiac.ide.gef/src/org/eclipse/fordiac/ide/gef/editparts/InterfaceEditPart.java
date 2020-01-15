@@ -26,8 +26,9 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
@@ -58,7 +59,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	private ValueEditPart referencedPart;
 	private int mouseState;
 
-	private EContentAdapter contentAdapter = null;
+	private Adapter contentAdapter = null;
 
 	public InterfaceEditPart() {
 		setConnectable(true);
@@ -227,7 +228,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 	}
 
-	private EContentAdapter getContentAdapter() {
+	private Adapter getContentAdapter() {
 		if (null == contentAdapter) {
 			contentAdapter = createContentAdapter();
 		}
@@ -235,8 +236,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	// Allows childclasses to provide their own content adapters
-	protected EContentAdapter createContentAdapter() {
-		return new EContentAdapter() {
+	protected Adapter createContentAdapter() {
+		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				Object feature = notification.getFeature();

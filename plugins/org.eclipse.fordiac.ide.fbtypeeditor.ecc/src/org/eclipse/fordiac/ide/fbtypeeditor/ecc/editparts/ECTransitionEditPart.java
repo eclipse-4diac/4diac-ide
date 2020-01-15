@@ -19,8 +19,9 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.MoveBendpointCommand;
@@ -52,7 +53,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 	private static final int NORMAL_WIDTH = 2;
 
-	private final EContentAdapter adapter = new EContentAdapter() {
+	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
@@ -74,7 +75,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	}
 
 	/** The adapter. */
-	private final EContentAdapter interfaceAdapter = new EContentAdapter() {
+	private final Adapter interfaceAdapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(Notification notification) {

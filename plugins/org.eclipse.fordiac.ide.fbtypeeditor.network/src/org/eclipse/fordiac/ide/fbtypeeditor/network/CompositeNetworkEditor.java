@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,8 +16,9 @@ package org.eclipse.fordiac.ide.fbtypeeditor.network;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.actions.UnmapAction;
 import org.eclipse.fordiac.ide.application.actions.UnmapAllAction;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
@@ -52,7 +53,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	private CompositeFBType fbType;
 	private CommandStack commandStack;
 	private Palette palette;
-	private EContentAdapter adapter = new EContentAdapter() {
+	private Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);

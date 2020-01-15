@@ -32,8 +32,9 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECStateCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateLayoutEditPolicy;
@@ -70,7 +71,7 @@ import org.eclipse.swt.SWT;
 public class ECStateEditPart extends AbstractDirectEditableEditPart implements NodeEditPart {
 	private List<Object> stateChildren;
 
-	private final EContentAdapter adapter = new EContentAdapter() {
+	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
@@ -86,7 +87,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	};
 
 	/** The ecc adapter. */
-	private final EContentAdapter eccAdapter = new EContentAdapter() {
+	private final Adapter eccAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);

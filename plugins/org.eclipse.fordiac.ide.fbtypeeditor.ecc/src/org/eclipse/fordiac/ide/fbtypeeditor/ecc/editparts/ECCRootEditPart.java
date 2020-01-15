@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2013 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,9 +21,10 @@ import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECCXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
@@ -38,13 +39,13 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 public class ECCRootEditPart extends AbstractDiagramEditPart {
 
 	/** The adapter. */
-	private EContentAdapter adapter;
+	private Adapter adapter;
 
 	/**
 	 * Creates the <code>Figure</code> to be used as this part's <i>visuals</i>.
-	 * 
+	 *
 	 * @return a figure
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
 	 */
 	@Override
@@ -59,7 +60,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
 	 */
 	@Override
@@ -72,7 +73,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
 	 */
 	@Override
@@ -85,12 +86,12 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 
 	/**
 	 * Gets the content adapter.
-	 * 
+	 *
 	 * @return the content adapter
 	 */
-	public EContentAdapter getContentAdapter() {
-		if (adapter == null) {
-			adapter = new EContentAdapter() {
+	public Adapter getContentAdapter() {
+		if (null == adapter) {
+			adapter = new AdapterImpl() {
 				@Override
 				public void notifyChanged(final Notification notification) {
 					int type = notification.getEventType();
@@ -112,7 +113,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 
 	/**
 	 * Creates the EditPolicies used for this EditPart.
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
 	@Override
@@ -126,7 +127,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 
 	/**
 	 * returns the model object as <code>ECC</code>.
-	 * 
+	 *
 	 * @return ECC to be visualized
 	 */
 	public ECC getCastedECCModel() {
@@ -135,9 +136,9 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 
 	/**
 	 * Returns the children of the FBNetwork.
-	 * 
+	 *
 	 * @return the list of children s
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
 	 */
 	@Override

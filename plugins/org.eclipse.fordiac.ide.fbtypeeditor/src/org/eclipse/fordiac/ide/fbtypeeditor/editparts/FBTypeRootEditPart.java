@@ -21,6 +21,7 @@ import java.util.List;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ShortestPathConnectionRouter;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
@@ -33,7 +34,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 
-	private EContentAdapter adapter;
+	private Adapter adapter;
 
 	@Override
 	protected IFigure createFigure() {
@@ -60,8 +61,8 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 		}
 	}
 
-	public EContentAdapter getContentAdapter() {
-		if (adapter == null) {
+	public Adapter getContentAdapter() {
+		if (null == adapter) {
 			adapter = new EContentAdapter() {
 				@Override
 				public void notifyChanged(final Notification notification) {

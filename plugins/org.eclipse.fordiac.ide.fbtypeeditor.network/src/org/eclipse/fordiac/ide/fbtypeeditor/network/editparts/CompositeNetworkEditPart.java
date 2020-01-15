@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2012, 2014, 2016, 2017  Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LayoutManager;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
@@ -35,17 +36,17 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
 /**
  * Edit Part for the visualization of Composite Networks.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	/** The adapter. */
-	private EContentAdapter adapter;
+	private Adapter adapter;
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
 	 */
 	@Override
@@ -59,7 +60,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
 	 */
 	@Override
@@ -73,11 +74,11 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	/**
 	 * Gets the content adapter.
-	 * 
+	 *
 	 * @return the content adapter
 	 */
-	public EContentAdapter getContentAdapter() {
-		if (adapter == null) {
+	public Adapter getContentAdapter() {
+		if (null == adapter) {
 			adapter = new EContentAdapter() {
 				@Override
 				public void notifyChanged(final Notification notification) {
@@ -106,7 +107,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	/**
 	 * Creates the EditPolicies used for this EditPart.
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
 	@Override
@@ -120,7 +121,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	/**
 	 * Returns the children of the FBNetwork.
-	 * 
+	 *
 	 * @return the list of children s
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
 	 */
@@ -144,7 +145,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	/**
 	 * Adds the childEditParts figure to the corresponding container.
-	 * 
+	 *
 	 * @param childEditPart the child edit part
 	 * @param index         the index
 	 */
@@ -174,7 +175,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	/**
 	 * Removes the childEditParts figures from the correct container.
-	 * 
+	 *
 	 * @param childEditPart the child edit part
 	 */
 	@Override

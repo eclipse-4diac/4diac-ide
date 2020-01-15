@@ -22,8 +22,9 @@ import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.TestingManager;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
@@ -94,7 +95,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 
 	/**
 	 * Set the background color of this editparts figure
-	 * 
+	 *
 	 * @param color
 	 */
 	public void setBackgroundColor(Color color) {
@@ -116,7 +117,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 
 	/**
 	 * Checks if is input.
-	 * 
+	 *
 	 * @return true, if is input
 	 */
 	public boolean isInput() {
@@ -125,7 +126,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 
 	/**
 	 * Checks if is event.
-	 * 
+	 *
 	 * @return true, if is event
 	 */
 	public boolean isEvent() {
@@ -134,7 +135,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 
 	/**
 	 * Checks if is variable.
-	 * 
+	 *
 	 * @return true, if is variable
 	 */
 	public boolean isVariable() {
@@ -180,7 +181,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 
 	/**
 	 * Gets the casted model.
-	 * 
+	 *
 	 * @return the casted model
 	 */
 	@Override
@@ -217,8 +218,8 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 	}
 
 	@Override
-	protected EContentAdapter createContentAdapter() {
-		return new EContentAdapter() {
+	protected Adapter createContentAdapter() {
+		return new AdapterImpl() {
 			private boolean blockAdapter;
 
 			@Override
@@ -291,7 +292,7 @@ public class TestEditPart extends AbstractViewEditPart implements SpecificLayerE
 
 	/**
 	 * Sets the value.
-	 * 
+	 *
 	 * @param string the new value
 	 */
 	public void setValue(String string) {

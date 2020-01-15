@@ -10,7 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   
+ *
  *   Peter Gsellmann
  *     - incorporating simple fb
  *******************************************************************************/
@@ -31,8 +31,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.Activator;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -81,7 +82,7 @@ public class FBTypeEditor extends FormEditor
 	private CommandStack commandStack = new CommandStack();
 	private Palette fbPalette = null;
 
-	private final EContentAdapter adapter = new EContentAdapter() {
+	private final Adapter adapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -145,10 +146,10 @@ public class FBTypeEditor extends FormEditor
 	/**
 	 * The <code>MultiPageEditorExample</code> implementation of this method checks
 	 * that the input is an instance of <code>FBTypeEditorInput</code>.
-	 * 
+	 *
 	 * @param site        the site
 	 * @param editorInput the editor input
-	 * 
+	 *
 	 * @throws PartInitException the part init exception
 	 */
 	@Override
@@ -235,7 +236,7 @@ public class FBTypeEditor extends FormEditor
 
 	@Override
 	protected void addPages() {
-		SortedMap<Integer, IFBTEditorPart> sortedEditorsMap = new TreeMap<Integer, IFBTEditorPart>();
+		SortedMap<Integer, IFBTEditorPart> sortedEditorsMap = new TreeMap<>();
 
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs"); //$NON-NLS-1$
@@ -261,7 +262,7 @@ public class FBTypeEditor extends FormEditor
 			}
 		}
 
-		editors = new ArrayList<IFBTEditorPart>();
+		editors = new ArrayList<>();
 		FBTypeEditorInput editorInput = getFBTypeEditorInput();
 
 		for (Iterator<IFBTEditorPart> iterator = sortedEditorsMap.values().iterator(); iterator.hasNext();) {
@@ -282,7 +283,7 @@ public class FBTypeEditor extends FormEditor
 
 	/**
 	 * Check if the given editor type is a valid editor for the given type
-	 * 
+	 *
 	 * @param fbType     type to be edited in this type editor
 	 * @param editorType editor type string as defined the fBTEditorTabs.exsd
 	 * @return true if the editor should be shown otherwise false
@@ -304,7 +305,7 @@ public class FBTypeEditor extends FormEditor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui.
 	 * IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
 	 */

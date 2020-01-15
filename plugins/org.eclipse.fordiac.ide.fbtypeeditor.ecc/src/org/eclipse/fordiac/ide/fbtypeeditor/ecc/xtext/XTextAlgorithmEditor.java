@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,8 +15,9 @@
   *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.xtext;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -34,9 +35,9 @@ import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorModelAccess;
 
 /**
  * XText based algorithm editor.
- * 
+ *
  * Can be used with any xtext based grammar using dependency injection.
- * 
+ *
  */
 @SuppressWarnings("restriction")
 public class XTextAlgorithmEditor implements IAlgorithmEditor {
@@ -47,7 +48,7 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 
 	private BaseFBType fbType;
 
-	private final EContentAdapter adapter = new EContentAdapter() {
+	private final Adapter adapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -153,12 +154,12 @@ public class XTextAlgorithmEditor implements IAlgorithmEditor {
 
 	/**
 	 * Provide a prefix string to be used for algorithm parsing.
-	 * 
+	 *
 	 * The prefix can be used to import stuff or to provide access to the inputs,
 	 * outputs, and internal variables of the FB.
-	 * 
+	 *
 	 * Per default we return an empty string.
-	 * 
+	 *
 	 * @return the new prefix to be used for parsing the algorithm, must not be null
 	 */
 	protected String regeneratePrefix() {
