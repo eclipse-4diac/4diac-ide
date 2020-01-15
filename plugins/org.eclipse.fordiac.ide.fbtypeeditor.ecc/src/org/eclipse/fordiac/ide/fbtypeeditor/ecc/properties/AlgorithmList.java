@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2018 fortiss GmbH,
- * 				 2018 - 2019 Johannes Kepler University Linz (JKU)
+ * 				 2018 - 2020 Johannes Kepler University Linz (JKU)
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,6 +15,7 @@
  *   	- Created tableViewer as new WidgetFactory
  *   	- Shifted Grid heightHint and Width Hint to WidgetFactory.java
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
+ *   Bianca Wiesmayr - improve element insertion
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -38,6 +39,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -122,16 +124,32 @@ public class AlgorithmList implements CommandExecutor {
 		buttons.createControls(composite, widgetFactory);
 
 		createAlgorithmViewer(composite);
+		buttons.bindToTableViewer(algorithmViewer, this,
+				ref -> new CreateAlgorithmCommand(type, getInsertingIndex(), getName()),
+				ref -> new DeleteAlgorithmCommand(type, (Algorithm) ref));
+	}
 
-		buttons.bindToTableViewer(algorithmViewer, ev -> {
-			CreateAlgorithmCommand cmd = new CreateAlgorithmCommand(type);
-			executeCommand(cmd);
-			algorithmViewer.refresh();
-			if (null != cmd.getNewAlgorithm()) {
-				algorithmViewer.setSelection(new StructuredSelection(cmd.getNewAlgorithm()), true);
-			}
-		}, AddDeleteWidget.getSelectionListener(algorithmViewer, this,
-				ref -> new DeleteAlgorithmCommand(type, (Algorithm) ref)));
+	private Algorithm getLastSelectedAlgorithm() {
+		IStructuredSelection selection = algorithmViewer.getStructuredSelection();
+		if (selection.isEmpty()) {
+			return null;
+		}
+		return (Algorithm) selection.toList().get(selection.toList().size() - 1);
+	}
+
+	private int getInsertingIndex() {
+		Algorithm alg = getLastSelectedAlgorithm();
+		if (null == alg) {
+			return type.getAlgorithm().size();
+		}
+		return type.getAlgorithm().indexOf(alg) + 1;
+	}
+
+	private String getName() {
+		if (null != getLastSelectedAlgorithm()) {
+			return getLastSelectedAlgorithm().getName();
+		}
+		return null;
 	}
 
 	Composite getComposite() {
@@ -170,7 +188,7 @@ public class AlgorithmList implements CommandExecutor {
 
 	@Override
 	public void executeCommand(Command cmd) {
-		if (null != type && commandStack != null) {
+		if ((null != type) && (commandStack != null)) {
 			commandStack.execute(cmd);
 		}
 	}

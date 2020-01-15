@@ -25,13 +25,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
 public class CreateAlgorithmCommand extends AbstractCreationCommand {
+	private static final String DEFAULT_ALGORITHM_NAME = "ALG1"; // $NON-NLS-1$
+
 	private final BasicFBType fbType;
 	private STAlgorithm newAlgorithm;
 	private Algorithm oldAlgorithm;
 	private ECAction action;
+	private int index;
+	private String name;
 
 	public CreateAlgorithmCommand(final BasicFBType fbType) {
-		this.fbType = fbType;
+		this(fbType, fbType.getAlgorithm().size() - 1, null);
 	}
 
 	public Algorithm getNewAlgorithm() {
@@ -43,17 +47,23 @@ public class CreateAlgorithmCommand extends AbstractCreationCommand {
 		this.action = action;
 	}
 
+	public CreateAlgorithmCommand(final BasicFBType fbType, int index, String name) {
+		this.fbType = fbType;
+		this.index = index;
+		this.name = (null != name) ? name : DEFAULT_ALGORITHM_NAME;
+	}
+
 	@Override
 	public void execute() {
 		if (null != action) {
 			oldAlgorithm = action.getAlgorithm();
 		}
 		newAlgorithm = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-		newAlgorithm.setComment("new algorithm"); //$NON-NLS-1$
+		newAlgorithm.setComment("new algorithm");
 		newAlgorithm.setText(""); // especially the xtext editor requires at least an empty //$NON-NLS-1$
 									// algorithm text
 		redo();
-		newAlgorithm.setName(NameRepository.createUniqueName(newAlgorithm, "ALG")); //$NON-NLS-1$
+		newAlgorithm.setName(NameRepository.createUniqueName(newAlgorithm, name));
 	}
 
 	@Override
@@ -69,7 +79,7 @@ public class CreateAlgorithmCommand extends AbstractCreationCommand {
 		if (null != action) {
 			action.setAlgorithm(newAlgorithm);
 		}
-		fbType.getAlgorithm().add(newAlgorithm);
+		fbType.getAlgorithm().add(index, newAlgorithm);
 	}
 
 	@Override
