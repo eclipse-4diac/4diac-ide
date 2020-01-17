@@ -19,9 +19,10 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
@@ -42,9 +43,9 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	private static final String ERROR_IN_CREATE_FIGURE = Messages.AbstractViewEditPart_ERROR_createFigure;
 	private DirectEditManager manager;
 
-	private EContentAdapter adapter;
+	private Adapter adapter;
 
-	private EContentAdapter getContentAdapter() {
+	private Adapter getContentAdapter() {
 		if (null == adapter) {
 			adapter = createContentAdapter();
 			Assert.isNotNull(adapter);
@@ -52,7 +53,7 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 		return adapter;
 	}
 
-	private final EContentAdapter iNamedElementContentAdapter = new EContentAdapter() {
+	private final Adapter iNamedElementContentAdapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -104,13 +105,12 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	}
 
 	/**
-	 * Needs to return an EContentAdapter which will be registered on the model
-	 * objects and gets informed if something change.
+	 * Needs to return an Adapter which will be registered on the model objects and
+	 * gets informed if something change.
 	 *
-	 * @return EContentAdapter the EContentAdapter of the derived class (must not be
-	 *         null).
+	 * @return Adapter the Adapter of the derived class (must not be null).
 	 */
-	protected abstract EContentAdapter createContentAdapter();
+	protected abstract Adapter createContentAdapter();
 
 	/**
 	 * If an View needs to be informed for changes in the PreferencePage (e.g.

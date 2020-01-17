@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2019 TU Wien ACIN, Profactor GmbH, fortiss GmbH, 
- * 								Johannes Kepler University Linz (JKU) 
- * 
+ * Copyright (c) 2011 - 2019 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * 								Johannes Kepler University Linz (JKU)
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,8 +23,9 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeOutputCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECActionCommand;
@@ -57,7 +58,7 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
 public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart {
-	private final EContentAdapter adapter = new EContentAdapter() {
+	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
@@ -65,7 +66,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		}
 	};
 
-	private final EContentAdapter interfaceAdapter = new EContentAdapter() {
+	private final Adapter interfaceAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);

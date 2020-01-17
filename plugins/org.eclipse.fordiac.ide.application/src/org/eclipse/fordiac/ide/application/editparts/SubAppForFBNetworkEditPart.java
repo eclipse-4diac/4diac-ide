@@ -20,7 +20,9 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
@@ -35,8 +37,42 @@ import org.eclipse.gef.editparts.ZoomManager;
 
 public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 
+	private Adapter subAppInterfaceAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			switch (notification.getEventType()) {
+			case Notification.ADD:
+			case Notification.ADD_MANY:
+			case Notification.MOVE:
+			case Notification.REMOVE:
+			case Notification.REMOVE_MANY:
+				refreshChildren();
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
 	public SubAppForFBNetworkEditPart(final ZoomManager zoomManager) {
 		super(zoomManager);
+	}
+
+	@Override
+	public void activate() {
+		super.activate();
+		if ((null != getModel()) && !getModel().getInterface().eAdapters().contains(subAppInterfaceAdapter)) {
+			getModel().getInterface().eAdapters().add(subAppInterfaceAdapter);
+		}
+	}
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		if (null != getModel()) {
+			getModel().getInterface().eAdapters().remove(subAppInterfaceAdapter);
+		}
 	}
 
 	@Override
@@ -55,8 +91,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	}
 
 	@Override
-	public EContentAdapter createContentAdapter() {
-		return new EContentAdapter() {
+	public Adapter createContentAdapter() {
+		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);

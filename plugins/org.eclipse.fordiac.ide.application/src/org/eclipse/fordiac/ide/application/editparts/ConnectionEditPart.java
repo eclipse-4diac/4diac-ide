@@ -22,7 +22,7 @@ import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
 import org.eclipse.fordiac.ide.application.policies.ConnectionGraphicalNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
@@ -170,11 +170,11 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		}
 	}
 
-	private EContentAdapter contentAdapter;
+	private Adapter contentAdapter;
 
 	private Adapter getContentAdapter() {
 		if (contentAdapter == null) {
-			contentAdapter = new EContentAdapter() {
+			contentAdapter = new AdapterImpl() {
 				@Override
 				public void notifyChanged(Notification notification) {
 					Object feature = notification.getFeature();

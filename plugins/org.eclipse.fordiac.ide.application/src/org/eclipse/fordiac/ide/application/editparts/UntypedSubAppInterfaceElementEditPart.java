@@ -15,8 +15,9 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.Label;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
@@ -73,8 +74,8 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	}
 
 	@Override
-	protected EContentAdapter createContentAdapter() {
-		return new EContentAdapter() {
+	protected Adapter createContentAdapter() {
+		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				Object feature = notification.getFeature();

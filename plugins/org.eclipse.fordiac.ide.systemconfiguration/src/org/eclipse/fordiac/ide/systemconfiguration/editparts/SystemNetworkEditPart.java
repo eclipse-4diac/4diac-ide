@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,  
+ * Copyright (c) 2008, 2012, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,7 +9,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
@@ -22,10 +22,11 @@ import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -36,7 +37,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
 public class SystemNetworkEditPart extends AbstractDiagramEditPart {
-	private EContentAdapter adapter;
+	private Adapter adapter;
 
 	@Override
 	protected IFigure createFigure() {
@@ -64,9 +65,9 @@ public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 		}
 	}
 
-	public EContentAdapter getContentAdapter() {
-		if (adapter == null) {
-			adapter = new EContentAdapter() {
+	public Adapter getContentAdapter() {
+		if (null == adapter) {
+			adapter = new AdapterImpl() {
 				@Override
 				public void notifyChanged(final Notification notification) {
 					int type = notification.getEventType();

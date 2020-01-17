@@ -35,8 +35,9 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
@@ -105,8 +106,8 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
-	protected EContentAdapter createContentAdapter() {
-		return new EContentAdapter() {
+	protected Adapter createContentAdapter() {
+		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(Notification notification) {
 				Object feature = notification.getFeature();

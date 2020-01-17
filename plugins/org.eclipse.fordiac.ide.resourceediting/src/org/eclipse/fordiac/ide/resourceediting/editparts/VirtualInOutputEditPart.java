@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,8 +22,9 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
@@ -45,7 +46,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
  * This class implements an EditPart for an "VirtualInOutput". It is required if
  * a connection is "brocken" when mapped. (fbs distributed to different
  * resources)
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class VirtualInOutputEditPart extends AbstractViewEditPart implements NodeEditPart {
@@ -57,8 +58,8 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 	}
 
 	@Override
-	protected EContentAdapter createContentAdapter() {
-		return new EContentAdapter() {
+	protected Adapter createContentAdapter() {
+		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
@@ -101,7 +102,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 
 	/**
 	 * Gets the casted model.
-	 * 
+	 *
 	 * @return the casted model
 	 */
 	@Override
@@ -119,7 +120,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
 	@Override
@@ -131,7 +132,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.gef.editparts.AbstractEditPart#understandsRequest(org.eclipse
 	 * .gef.Request)

@@ -12,15 +12,16 @@
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.GraphicalEditPart;
 
 public abstract class AbstractPositionableElementEditPart extends AbstractViewEditPart {
 
-	private EContentAdapter contentAdapter = new EContentAdapter() {
+	private Adapter contentAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			Object feature = notification.getFeature();

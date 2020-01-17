@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2017 fortiss GbmH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -17,8 +17,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
@@ -77,7 +78,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 	class ViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
 
 		/** The adapter. */
-		private final EContentAdapter adapter = new EContentAdapter() {
+		private final Adapter adapter = new AdapterImpl() {
 
 			@Override
 			public void notifyChanged(Notification notification) {
@@ -97,7 +98,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see
 		 * org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface
 		 * .viewers.Viewer, java.lang.Object, java.lang.Object)
@@ -109,7 +110,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
 		 */
 		@Override
@@ -120,7 +121,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java
 		 * .lang.Object)
 		 */
@@ -142,7 +143,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see
 		 * org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object )
 		 */
@@ -159,7 +160,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.
 		 * Object)
 		 */
@@ -200,7 +201,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.
 		 * Object)
 		 */
@@ -226,7 +227,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
 		 */
 		@Override
@@ -242,7 +243,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
 		 */
 		@Override

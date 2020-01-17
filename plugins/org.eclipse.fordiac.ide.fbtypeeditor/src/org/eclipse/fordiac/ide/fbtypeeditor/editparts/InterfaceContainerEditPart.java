@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -21,6 +21,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.TextUtilities;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventInputContainerLayoutEditPolicy;
@@ -50,7 +51,7 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 		}
 	}
 
-	private final EContentAdapter econtentAdapter = new EContentAdapter() {
+	private final Adapter econtentAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			refreshChildren();

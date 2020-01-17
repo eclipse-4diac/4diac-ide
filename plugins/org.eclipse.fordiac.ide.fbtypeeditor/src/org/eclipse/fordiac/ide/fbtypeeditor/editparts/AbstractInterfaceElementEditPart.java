@@ -13,8 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -26,7 +27,7 @@ abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEd
 
 	protected abstract void update();
 
-	private final EContentAdapter adapter = new EContentAdapter() {
+	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);

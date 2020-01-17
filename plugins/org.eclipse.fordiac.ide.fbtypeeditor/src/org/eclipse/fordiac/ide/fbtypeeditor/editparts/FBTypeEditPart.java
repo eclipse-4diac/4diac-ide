@@ -24,6 +24,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.figures.FBTypeFigure;
@@ -55,7 +56,7 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart {
 	private PlugContainer plugcont;
 	private DiagramFontChangeListener fontChangeListener;
 
-	private final EContentAdapter adapter = new EContentAdapter() {
+	private final Adapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);

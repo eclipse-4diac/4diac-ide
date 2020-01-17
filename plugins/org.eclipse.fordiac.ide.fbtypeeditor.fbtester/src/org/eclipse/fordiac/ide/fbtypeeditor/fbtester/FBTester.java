@@ -36,9 +36,10 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.TestData;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.TestdataFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
@@ -126,7 +127,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	private final Map<String, TableColumn> dataColumns = new HashMap<>();
 	private final List<TestData> testDataCollection = new ArrayList<>();
 
-	private EContentAdapter eContentAdapter = new EContentAdapter() {
+	private Adapter eContentAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);

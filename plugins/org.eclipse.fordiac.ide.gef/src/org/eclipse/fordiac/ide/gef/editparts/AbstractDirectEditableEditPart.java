@@ -14,8 +14,9 @@
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.draw2d.Label;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -35,7 +36,7 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 	/** The manager. */
 	private DirectEditManager manager;
 
-	private final EContentAdapter adapter = new EContentAdapter() {
+	private final Adapter adapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -48,7 +49,7 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 
 	};
 
-	protected EContentAdapter getNameAdapter() {
+	protected Adapter getNameAdapter() {
 		return adapter;
 	}
 

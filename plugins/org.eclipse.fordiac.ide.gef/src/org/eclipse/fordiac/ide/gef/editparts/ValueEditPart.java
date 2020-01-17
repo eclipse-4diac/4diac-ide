@@ -23,8 +23,9 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
@@ -148,7 +149,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		}
 	}
 
-	private final EContentAdapter contentAdapter = new EContentAdapter() {
+	private final Adapter contentAdapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(Notification notification) {

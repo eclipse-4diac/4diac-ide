@@ -16,14 +16,16 @@ import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
@@ -88,12 +90,14 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		return fontChangeListener;
 	}
 
-	private final EContentAdapter contentAdapter = new EContentAdapter() {
+	private final Adapter contentAdapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
-			refreshValue();
-			super.notifyChanged(notification);
+			Object feature = notification.getFeature();
+			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
+				refreshValue();
+			}
 		}
 	};
 

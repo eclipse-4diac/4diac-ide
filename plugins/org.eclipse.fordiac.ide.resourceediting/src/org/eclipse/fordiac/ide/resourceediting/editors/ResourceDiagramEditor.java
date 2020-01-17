@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -14,8 +14,9 @@
 package org.eclipse.fordiac.ide.resourceediting.editors;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
@@ -33,12 +34,12 @@ import org.eclipse.ui.IEditorInput;
 
 /**
  * The main editor for ResourceDiagramEditors (mapping and resource editing).
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class ResourceDiagramEditor extends FBNetworkEditor {
 
-	private EContentAdapter resourceAdapter = new EContentAdapter() {
+	private Adapter resourceAdapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -52,7 +53,7 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 
 	};
 
-	private EContentAdapter colorChangeListener = new EContentAdapter() {
+	private Adapter colorChangeListener = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getColorizableElement_Color()) {

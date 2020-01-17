@@ -196,7 +196,7 @@ public enum SystemManager {
 			time1 = System.currentTimeMillis();
 			system = loadSystem(project);
 			time2 = System.currentTimeMillis();
-			System.out.println((time2 - time1) + " ms"); //$NON-NLS-1$
+			System.out.println("Loading time for System (" + project.getName() + "): " + (time2 - time1) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			if (system != null) {
 				// TODO do we need to check if the system is already in the list?
 				addSystem(system);
@@ -211,16 +211,10 @@ public enum SystemManager {
 	}
 
 	private static void initializePalette(AutomationSystem system) {
-		long time1;
-		long time2;
-		time1 = System.currentTimeMillis();
 		DataTypeLibrary.getInstance();
 		// load palette of the system and initialize the types
 		Palette palette = TypeLibrary.loadPalette(system.getProject());
 		system.setPalette(palette);
-
-		time2 = System.currentTimeMillis();
-		System.out.println((time2 - time1) + " ms for typelib"); //$NON-NLS-1$
 	}
 
 	/**

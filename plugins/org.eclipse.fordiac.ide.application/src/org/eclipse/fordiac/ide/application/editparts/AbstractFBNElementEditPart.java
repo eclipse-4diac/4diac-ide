@@ -24,8 +24,9 @@ import java.util.List;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteFBNElementEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNElementSelectionPolicy;
@@ -82,7 +83,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		return (FBNetworkElementFigure) super.getFigure();
 	}
 
-	private EContentAdapter colorChangeListener = new EContentAdapter() {
+	private Adapter colorChangeListener = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
 			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getColorizableElement_Color()) {
@@ -92,8 +93,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	};
 
 	@Override
-	protected EContentAdapter createContentAdapter() {
-		return new EContentAdapter() {
+	protected Adapter createContentAdapter() {
+		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
@@ -107,13 +108,12 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	/** The i named element content adapter. */
-	private final EContentAdapter annotationContentAdapter = new EContentAdapter() {
+	private final Adapter annotationContentAdapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(Notification notification) {
 			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getI4DIACElement_Annotations()) {
 				refreshName();
-
 			}
 		}
 
