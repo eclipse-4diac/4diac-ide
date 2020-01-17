@@ -12,7 +12,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Andrea Zoitl
- *     - Externalized all translatable strings 
+ *     - Externalized all translatable strings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application;
 
@@ -120,18 +120,6 @@ public class Messages extends NLS {
 	public static String SaveAsSubApplicationTypeAction_WizardOverrideTitle;
 
 	public static String SaveAsSubApplicationTypeAction_WizardOverrideMessage;
-
-	/** The Sub app for fb network figure_ labe l_ not defined. */
-	public static String SubAppForFbNetworkFigure_LABEL_NotDefined;
-
-	/** The Sub app tooltip figure_ labe l_ application. */
-	public static String SubAppTooltipFigure_LABEL_Application;
-
-	/** The Sub app tooltip figure_ labe l_ mapped to. */
-	public static String SubAppTooltipFigure_LABEL_MappedTo;
-
-	/** The Sub app tooltip figure_ labe l_ system. */
-	public static String SubAppTooltipFigure_LABEL_System;
 
 	/** The UIFB network context menu provider_ labe l_ hardware mapping. */
 	public static String UIFBNetworkContextMenuProvider_LABEL_HardwareMapping;
