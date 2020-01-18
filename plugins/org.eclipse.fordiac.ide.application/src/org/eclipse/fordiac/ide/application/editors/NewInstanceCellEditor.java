@@ -36,6 +36,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -133,8 +134,9 @@ public class NewInstanceCellEditor extends TextCellEditor {
 			@Override
 			public void setBounds(int x, int y, int width, int height) {
 				super.setBounds(x, y, width, height);
-				Rectangle editorBounds = getDisplay().map(text, null, text.getBounds());
-				popupShell.setBounds(editorBounds.x, editorBounds.y + editorBounds.height, editorBounds.width, 150);
+				Point screenPos = getParent().toDisplay(getLocation());
+				Rectangle compositeBounds = getBounds();
+				popupShell.setBounds(screenPos.x, screenPos.y + compositeBounds.height, compositeBounds.width, 150);
 				if (!popupShell.isVisible()) {
 					popupShell.setVisible(true);
 				}

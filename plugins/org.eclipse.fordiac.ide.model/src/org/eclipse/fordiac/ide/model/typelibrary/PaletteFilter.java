@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.ui.internal.misc.StringMatcher;
 
 public class PaletteFilter {
 
@@ -32,6 +33,7 @@ public class PaletteFilter {
 			|| (entry instanceof SubApplicationTypePaletteEntry);
 
 	private final Palette palette;
+	private StringMatcher matcher;
 
 	public PaletteFilter(Palette palette) {
 		this.palette = palette;
@@ -42,19 +44,30 @@ public class PaletteFilter {
 	}
 
 	public List<PaletteEntry> findTypes(final String searchString, final IPaletteEntryFilter filter) {
-		return checkGroupsForEntries(palette.getRootGroup(), searchString.toLowerCase(), filter);
+		setMatcher(searchString);
+		return checkGroupsForEntries(palette.getRootGroup(), filter);
 	}
 
-	private static List<PaletteEntry> checkGroupsForEntries(final PaletteGroup group, final String searchString,
-			final IPaletteEntryFilter filter) {
+	public void setMatcher(final String searchString) {
+		// emulate behavior as in PatternFilter used in the pallteview and typenavigator
+		// search
+		String searchPattern = searchString;
+		if (!searchString.endsWith(" ")) { //$NON-NLS-1$
+			searchPattern += "*"; //$NON-NLS-1$
+		}
+		searchPattern = "*" + searchPattern; //$NON-NLS-1$
+		matcher = new StringMatcher(searchPattern, true, false);
+	}
+
+	private List<PaletteEntry> checkGroupsForEntries(final PaletteGroup group, final IPaletteEntryFilter filter) {
 		List<PaletteEntry> types = new ArrayList<>();
 		for (PaletteEntry entry : group.getEntries()) {
-			if (filter.handleType(entry) && entry.getLabel().toLowerCase().startsWith(searchString)) {
+			if (filter.handleType(entry) && matcher.match(entry.getLabel())) {
 				types.add(entry);
 			}
 		}
 		for (PaletteGroup pGroup : group.getSubGroups()) {
-			types.addAll(checkGroupsForEntries(pGroup, searchString, filter));
+			types.addAll(checkGroupsForEntries(pGroup, filter));
 		}
 		return types;
 	}
