@@ -112,8 +112,8 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 					Collection editPartsToDeselect = new HashSet();
 					for (Iterator iterator = marqueeSelectedEditParts.iterator(); iterator.hasNext();) {
 						EditPart affectedEditPart = (EditPart) iterator.next();
-						if (affectedEditPart.getSelected() == EditPart.SELECTED_NONE
-								|| getCurrentSelectionMode() != TOGGLE_MODE) {
+						if ((affectedEditPart.getSelected() == EditPart.SELECTED_NONE)
+								|| (getCurrentSelectionMode() != TOGGLE_MODE)) {
 							// only add connections and FBs
 							if ((affectedEditPart instanceof FBEditPart)
 									|| (affectedEditPart instanceof ConnectionEditPart)
@@ -160,8 +160,8 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 			// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 			// REQ_OPEN -> doubleclick
 
-			if (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-					|| request.getType() == RequestConstants.REQ_OPEN) {
+			if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
+					|| (request.getType() == RequestConstants.REQ_OPEN)) {
 				performDirectEdit(((SelectionRequest) request).getLocation());
 			} else {
 				super.performRequest(request);
@@ -377,6 +377,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	public void selectElement(Object element) {
 		EditPart editPart = (EditPart) getGraphicalViewer().getEditPartRegistry().get(element);
 		if (null != editPart) {
+			getGraphicalViewer().flush();
 			getGraphicalViewer().select(editPart);
 			getGraphicalViewer().reveal(editPart);
 		}
