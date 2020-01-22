@@ -22,7 +22,7 @@
             name="%LABEL_NewApplicationWizard"
             project="false">
          <description>
-            %wizard.description.1 description body text
+            %wizard.description.1 
          </description>
       </wizard>
       <category
