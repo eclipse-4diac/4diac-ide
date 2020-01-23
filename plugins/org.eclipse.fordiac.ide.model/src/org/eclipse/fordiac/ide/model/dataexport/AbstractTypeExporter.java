@@ -1,7 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor Gmbh, TU Wien ACIN, fortiss GmbH
- * 				  2018 Johannes Keppler University
- * 
+ * 				 2018, 2020 Johannes Keppler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,13 +11,16 @@
  * Contributors:
  *  Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
- *  Alois Zoitl - extracted this helper class from the CommonElementExporter  
+ *  Alois Zoitl - extracted this helper class from the CommonElementExporter
+ *              - changed exporting the Saxx cursor api
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
-import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.stream.XMLStreamException;
+
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -30,12 +33,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 public abstract class AbstractTypeExporter extends CommonElementExporter {
 
@@ -45,8 +47,8 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		this.type = type;
 	}
 
-	AbstractTypeExporter(Document dom) {
-		super(dom);
+	protected AbstractTypeExporter(CommonElementExporter parent) {
+		super(parent);
 		type = null;
 	}
 
@@ -66,7 +68,11 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		}
 
 		if (null != exporter) {
-			exporter.createXMLEntries();
+			try {
+				exporter.createXMLEntries();
+			} catch (XMLStreamException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
+			}
 			exporter.writeToFile(entry.getFile());
 			// "reset" the modification timestamp in the PaletteEntry
 			// to avoid reload - as for this timestamp it is not necessary
@@ -75,91 +81,75 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		}
 	}
 
-	private void createXMLEntries() {
-		Element rootElement = createRootElement(getType(), getRootTag());
-
-		addCompileAbleTypeData(rootElement, getType());
-		addInterfaceList(rootElement, getType().getInterfaceList());
-		createTypeSpecificXMLEntries(rootElement);
-		addService(rootElement, getType());
+	private void createXMLEntries() throws XMLStreamException {
+		createNamedElementEntry(getType(), getRootTag());
+		addCompileAbleTypeData(getType());
+		addInterfaceList(getType().getInterfaceList());
+		createTypeSpecificXMLEntries();
+		addService(getType());
+		addEndElement();
 	}
 
 	protected abstract String getRootTag();
 
-	protected abstract void createTypeSpecificXMLEntries(Element rootElement);
+	protected abstract void createTypeSpecificXMLEntries() throws XMLStreamException;
 
-	private void addCompileAbleTypeData(final Element rootElement, final CompilableType type) {
-		addIdentification(rootElement, type);
-		addVersionInfo(rootElement, type);
-		addCompilerInfo(rootElement, type.getCompilerInfo());
+	private void addCompileAbleTypeData(final CompilableType type) throws XMLStreamException {
+		addIdentification(type);
+		addVersionInfo(type);
+		addCompilerInfo(type.getCompilerInfo());
 	}
 
-	private void addCompilerInfo(final Element rootEle, final CompilerInfo compilerInfo) {
-		if (compilerInfo != null) {
-			Element compilerInfoElement = createElement(LibraryElementTags.COMPILER_INFO_ELEMENT);
-			if (compilerInfo.getHeader() != null && !compilerInfo.getHeader().equals("")) { //$NON-NLS-1$
-				compilerInfoElement.setAttribute(LibraryElementTags.HEADER_ATTRIBUTE, compilerInfo.getHeader());
+	private void addCompilerInfo(final CompilerInfo compilerInfo) throws XMLStreamException {
+		if (null != compilerInfo) {
+			addStartElement(LibraryElementTags.COMPILER_INFO_ELEMENT);
+			if (null != compilerInfo.getHeader() && !compilerInfo.getHeader().equals("")) { //$NON-NLS-1$
+				getWriter().writeAttribute(LibraryElementTags.HEADER_ATTRIBUTE, compilerInfo.getHeader());
 			}
-			if (compilerInfo.getClassdef() != null && !compilerInfo.getClassdef().equals("")) { //$NON-NLS-1$
-				compilerInfoElement.setAttribute(LibraryElementTags.CLASSDEF_ATTRIBUTE, compilerInfo.getClassdef());
+			if (null != compilerInfo.getClassdef() && !compilerInfo.getClassdef().equals("")) { //$NON-NLS-1$
+				getWriter().writeAttribute(LibraryElementTags.CLASSDEF_ATTRIBUTE, compilerInfo.getClassdef());
 			}
-			compilerInfo.getCompiler().forEach(compiler -> addCompiler(compilerInfoElement, compiler));
-			rootEle.appendChild(compilerInfoElement);
-
+			for (org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler : compilerInfo.getCompiler()) {
+				addCompiler(compiler);
+			}
+			addEndElement();
 		}
 	}
 
 	/**
 	 * Adds the compiler.
-	 * 
-	 * @param dom          the dom
-	 * @param compilerInfo the compiler info
-	 * @param compiler     the compiler
+	 *
+	 * @param compiler the compiler
+	 * @throws XMLStreamException
 	 */
-	private void addCompiler(final Element compilerInfo,
-			final org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler) {
-		Element compilerElement = createElement(LibraryElementTags.COMPILER_ELEMENT);
-		if (compiler.getLanguage() != null) {
-			compilerElement.setAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE, compiler.getLanguage().getName());
-		} else {
-			compilerElement.setAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE, ""); //$NON-NLS-1$
-		}
-		if (compiler.getVendor() != null) {
-			compilerElement.setAttribute(LibraryElementTags.VENDOR_ATTRIBUTE, compiler.getVendor());
-		} else {
-			compilerElement.setAttribute(LibraryElementTags.VENDOR_ATTRIBUTE, ""); //$NON-NLS-1$
-		}
-		if (compiler.getProduct() != null) {
-			compilerElement.setAttribute(LibraryElementTags.PRODUCT_ATTRIBUTE, compiler.getProduct());
-		} else {
-			compilerElement.setAttribute(LibraryElementTags.PRODUCT_ATTRIBUTE, ""); //$NON-NLS-1$
-		}
-		if (compiler.getVersion() != null) {
-			compilerElement.setAttribute(LibraryElementTags.VERSION_ATTRIBUTE, compiler.getVersion());
-		} else {
-			compilerElement.setAttribute(LibraryElementTags.VERSION_ATTRIBUTE, ""); //$NON-NLS-1$
-		}
-
-		compilerInfo.appendChild(compilerElement);
+	private void addCompiler(final org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler)
+			throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.COMPILER_ELEMENT);
+		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,
+				(null != compiler.getLanguage()) ? compiler.getLanguage().getName() : ""); //$NON-NLS-1$
+		getWriter().writeAttribute(LibraryElementTags.VENDOR_ATTRIBUTE,
+				(null != compiler.getVendor()) ? compiler.getVendor() : ""); //$NON-NLS-1$
+		getWriter().writeAttribute(LibraryElementTags.PRODUCT_ATTRIBUTE,
+				(null != compiler.getProduct()) ? compiler.getProduct() : ""); //$NON-NLS-1$
+		getWriter().writeAttribute(LibraryElementTags.VERSION_ATTRIBUTE,
+				(null != compiler.getVersion()) ? compiler.getVersion() : ""); //$NON-NLS-1$
 	}
 
 	/**
 	 * Adds the interface list.
-	 * 
-	 * @param rootEle the root ele
-	 * @param fb      the fb
+	 *
+	 * @param fb the fb
+	 * @throws XMLStreamException
 	 */
-	protected void addInterfaceList(final Element rootEle, final InterfaceList interfaceList) {
-		Element interfaceListElement = createElement(getInterfaceListElementName());
-
-		addEventList(interfaceListElement, interfaceList.getEventInputs(), getEventInputsElementName());
-		addEventList(interfaceListElement, interfaceList.getEventOutputs(), getEventOutputsElementName());
-		addVarList(interfaceListElement, interfaceList.getInputVars(), LibraryElementTags.INPUT_VARS_ELEMENT);
-		addVarList(interfaceListElement, interfaceList.getOutputVars(), LibraryElementTags.OUTPUT_VARS_ELEMENT);
-		createAdapterList(interfaceListElement, interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT);
-		createAdapterList(interfaceListElement, interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT);
-
-		rootEle.appendChild(interfaceListElement);
+	protected void addInterfaceList(final InterfaceList interfaceList) throws XMLStreamException {
+		addStartElement(getInterfaceListElementName());
+		addEventList(interfaceList.getEventInputs(), getEventInputsElementName());
+		addEventList(interfaceList.getEventOutputs(), getEventOutputsElementName());
+		addVarList(interfaceList.getInputVars(), LibraryElementTags.INPUT_VARS_ELEMENT);
+		addVarList(interfaceList.getOutputVars(), LibraryElementTags.OUTPUT_VARS_ELEMENT);
+		createAdapterList(interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT);
+		createAdapterList(interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT);
+		addEndElement();
 	}
 
 	@SuppressWarnings("static-method")
@@ -167,80 +157,78 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		return LibraryElementTags.INTERFACE_LIST_ELEMENT;
 	}
 
-	private void createAdapterList(final Element parentElement, final List<AdapterDeclaration> adapterList,
-			final String elementName) {
+	private void createAdapterList(final List<AdapterDeclaration> adapterList, final String elementName)
+			throws XMLStreamException {
 		if (!adapterList.isEmpty()) {
-			Element adpaterListElement = createElement(elementName);
-			adapterList.forEach(adapter -> addAdapterDeclaration(adpaterListElement, adapter));
-			parentElement.appendChild(adpaterListElement);
+			addStartElement(elementName);
+			for (AdapterDeclaration adapter : adapterList) {
+				addAdapterDeclaration(adapter);
+			}
+			addEndElement();
 		}
 	}
 
-	private void addAdapterDeclaration(final Element parentElement, final AdapterDeclaration adapterDecl) {
-		Element adapterElement = createElement(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
-
-		setNameTypeCommentAttribute(adapterElement, adapterDecl, adapterDecl.getType());
-
+	private void addAdapterDeclaration(final AdapterDeclaration adapterDecl) throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
+		addNameTypeCommentAttribute(adapterDecl, adapterDecl.getType());
 		if (null != adapterDecl.getAdapterFB()) {
-			exportXandY(adapterDecl.getAdapterFB(), adapterElement);
+			addXYAttributes(adapterDecl.getAdapterFB());
 		}
-		parentElement.appendChild(adapterElement);
 	}
 
 	/**
 	 * Adds a var list (i.e., input or output data) to the dom. If the given var
 	 * list is empty no element will be created.
-	 * 
-	 * @param parentElement the parent element to insert the varlist
-	 * @param varList       the list of vars to create the entries for
-	 * @param elementName   the name of the xml element holding the event list
+	 *
+	 * @param varList     the list of vars to create the entries for
+	 * @param elementName the name of the xml element holding the event list
+	 * @throws XMLStreamException
 	 */
-	protected void addVarList(final Element parentElement, final List<VarDeclaration> varList,
-			final String elementName) {
+	protected void addVarList(final List<VarDeclaration> varList, final String elementName) throws XMLStreamException {
 		if (!varList.isEmpty()) {
-			Element varListElement = createElement(elementName);
-			varList.forEach(varDecl -> {
+			addStartElement(elementName);
+			for (VarDeclaration varDecl : varList) {
 				if (!(varDecl instanceof AdapterDeclaration)) {
-					addVariable(varListElement, varDecl);
+					addVariable(varDecl);
 				}
-			});
-			parentElement.appendChild(varListElement);
+			}
+			addEndElement();
 		}
 	}
 
 	/**
 	 * Adds the variable.
-	 * 
-	 * @param parentElement the parent element
-	 * @param varDecl       the var decl
+	 *
+	 * @param varDecl the var decl
+	 * @throws XMLStreamException
 	 */
-	protected void addVariable(final Element parentElement, final VarDeclaration varDecl) {
-		Element variableElement = createElement(LibraryElementTags.VAR_DECLARATION_ELEMENT);
-		setNameTypeCommentAttribute(variableElement, varDecl, varDecl.getType());
-
+	protected void addVariable(final VarDeclaration varDecl) throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.VAR_DECLARATION_ELEMENT);
+		addNameTypeCommentAttribute(varDecl, varDecl.getType());
 		if (varDecl.isArray()) {
-			variableElement.setAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE,
+			getWriter().writeAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE,
 					Integer.toString(varDecl.getArraySize()));
 		}
-		if (varDecl.getValue() != null && varDecl.getValue().getValue() != null) {
-			variableElement.setAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl.getValue().getValue());
+		if (null != varDecl.getValue() && null != varDecl.getValue().getValue()) {
+			getWriter().writeAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl.getValue().getValue());
 		}
-		parentElement.appendChild(variableElement);
 	}
 
 	/**
 	 * Adds the an event list (i.e., input or output) to the dom. If the given event
 	 * list is empty no element will be created.
-	 * 
-	 * @param parentElement the parent element to insert the event list
-	 * @param eventList     the list of events to create the entry for
-	 * @param elementName   the name of the xml element holding the event list
+	 *
+	 * @param eventList   the list of events to create the entry for
+	 * @param elementName the name of the xml element holding the event list
+	 * @throws XMLStreamException
 	 */
-	private void addEventList(final Element parentElement, final List<Event> eventList, final String elementName) {
+	private void addEventList(final List<Event> eventList, final String elementName) throws XMLStreamException {
 		if (!eventList.isEmpty()) {
-			Element eventListElement = createElement(elementName);
-			eventList.forEach(event -> addEvent(eventListElement, event));
-			parentElement.appendChild(eventListElement);
+			addStartElement(elementName);
+			for (Event event : eventList) {
+				addEvent(event);
+			}
+			addEndElement();
 		}
 	}
 
@@ -256,19 +244,17 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 
 	/**
 	 * Adds the event.
-	 * 
-	 * @param parentElement the parent element
-	 * @param event         the event
+	 *
+	 * @param event the event
+	 * @throws XMLStreamException
 	 */
-	private void addEvent(final Element parentElement, final Event event) {
-		Element eventElem = createElement(getEventElementName());
-
-		setNameAttribute(eventElem, event.getName());
-		eventElem.setAttribute(LibraryElementTags.TYPE_ATTRIBUTE, "Event"); //$NON-NLS-1$
-		setCommentAttribute(eventElem, event);
-
-		addWith(eventElem, event);
-		parentElement.appendChild(eventElem);
+	private void addEvent(final Event event) throws XMLStreamException {
+		addStartElement(getEventElementName());
+		addNameAttribute(event.getName());
+		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, "Event"); //$NON-NLS-1$
+		addCommentAttribute(event);
+		addWith(event);
+		addEndElement();
 	}
 
 	@SuppressWarnings("static-method")
@@ -278,140 +264,102 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 
 	/**
 	 * Adds the with.
-	 * 
-	 * @param parentElement the parent element
-	 * @param event         the event
+	 *
+	 * @param event the event
+	 * @throws XMLStreamException
 	 */
-	private void addWith(final Element parentElement, final Event event) {
+	private void addWith(final Event event) throws XMLStreamException {
 		for (With with : event.getWith()) {
-			Element withElement = createElement(LibraryElementTags.WITH_ELEMENT);
-
+			addEmptyStartElement(LibraryElementTags.WITH_ELEMENT);
 			VarDeclaration varDecl = with.getVariables();
-
-			if (varDecl.getName() != null) {
-				withElement.setAttribute(LibraryElementTags.VAR_ATTRIBUTE, varDecl.getName());
-			} else {
-				withElement.setAttribute(LibraryElementTags.VAR_ATTRIBUTE, ""); //$NON-NLS-1$
-			}
-			parentElement.appendChild(withElement);
+			getWriter().writeAttribute(LibraryElementTags.VAR_ATTRIBUTE,
+					(null != varDecl.getName()) ? varDecl.getName() : ""); //$NON-NLS-1$
 		}
 	}
 
 	/**
 	 * Adds the service.
-	 * 
-	 * @param rootEle the root ele
-	 * @param fb      the fb
+	 *
+	 * @param fb the fb
+	 * @throws XMLStreamException
 	 */
-	private void addService(final Element rootEle, final FBType sfb) {
+	private void addService(final FBType sfb) throws XMLStreamException {
 
-		if (null != sfb.getService() && sfb.getService().getRightInterface() != null
-				&& sfb.getService().getLeftInterface() != null) {
+		if ((null != sfb.getService()) && (null != sfb.getService().getRightInterface())
+				&& (null != sfb.getService().getLeftInterface())) {
+			addStartElement(LibraryElementTags.SERVICE_ELEMENT);
 
-			Element serviceElement = createElement(LibraryElementTags.SERVICE_ELEMENT);
-			serviceElement.setAttribute(LibraryElementTags.RIGHT_INTERFACE_ATTRIBUTE,
+			getWriter().writeAttribute(LibraryElementTags.RIGHT_INTERFACE_ATTRIBUTE,
 					sfb.getService().getRightInterface().getName());
-			serviceElement.setAttribute(LibraryElementTags.LEFT_INTERFACE_ATTRIBUTE,
+			getWriter().writeAttribute(LibraryElementTags.LEFT_INTERFACE_ATTRIBUTE,
 					sfb.getService().getLeftInterface().getName());
+			addCommentAttribute(sfb);
 
-			setCommentAttribute(serviceElement, sfb);
+			addServiceSequences(sfb.getService().getServiceSequence());
 
-			addServiceSequences(serviceElement, sfb.getService().getServiceSequence());
-
-			rootEle.appendChild(serviceElement);
+			addEndElement();
 		}
 	}
 
 	/**
 	 * Adds the service sequences.
-	 * 
-	 * @param serviceElement the service element
-	 * @param sequences      the sequences
+	 *
+	 * @param sequences the sequences
+	 * @throws XMLStreamException
 	 */
-	private void addServiceSequences(final Element serviceElement, final List<ServiceSequence> sequences) {
+	private void addServiceSequences(final List<ServiceSequence> sequences) throws XMLStreamException {
 		for (ServiceSequence seq : sequences) {
-			Element seqElement = createElement(LibraryElementTags.SERVICE_SEQUENCE_ELEMENT);
+			addStartElement(LibraryElementTags.SERVICE_SEQUENCE_ELEMENT);
 
-			setNameAttribute(seqElement, seq.getName());
-			setCommentAttribute(seqElement, seq);
-			addServiceTransactions(seqElement, seq.getServiceTransaction());
-			serviceElement.appendChild(seqElement);
+			addNameAttribute(seq.getName());
+			addCommentAttribute(seq);
+			addServiceTransactions(seq.getServiceTransaction());
+			addEndElement();
 		}
 	}
 
 	/**
 	 * Adds the service transactions.
-	 * 
-	 * @param seqElement   the seq element
+	 *
 	 * @param transactions the transactions
+	 * @throws XMLStreamException
 	 */
-	private void addServiceTransactions(final Element seqElement, final List<ServiceTransaction> transactions) {
-		for (Iterator<ServiceTransaction> iter = transactions.iterator(); iter.hasNext();) {
-			Element serviceTransaction = createElement(LibraryElementTags.SERVICE_TRANSACTION_ELEMENT);
-			ServiceTransaction transaction = iter.next();
+	private void addServiceTransactions(final List<ServiceTransaction> transactions) throws XMLStreamException {
+		for (ServiceTransaction transaction : transactions) {
+			addStartElement(LibraryElementTags.SERVICE_TRANSACTION_ELEMENT);
 
 			if (transaction.getInputPrimitive() != null) {
-				addInputPrimitive(serviceTransaction, transaction);
+				addPrimitive(transaction.getInputPrimitive(), LibraryElementTags.INPUT_PRIMITIVE_ELEMENT);
 			}
 			if (!transaction.getOutputPrimitive().isEmpty()) {
-				addOutputPrimitives(serviceTransaction, transaction);
+				addOutputPrimitives(transaction);
 			}
-			seqElement.appendChild(serviceTransaction);
-
+			addEndElement();
 		}
 	}
 
-	/**
-	 * Adds the input primitive.
-	 * 
-	 * @param serviceTransaction the service transaction
-	 * @param transaction        the transaction
-	 */
-	private void addInputPrimitive(final Element serviceTransaction, final ServiceTransaction transaction) {
-		Element inputPrimitive = createElement(LibraryElementTags.INPUT_PRIMITIVE_ELEMENT);
-		if (transaction.getInputPrimitive().getInterface() != null
-				&& transaction.getInputPrimitive().getInterface().getName() != null) {
-			inputPrimitive.setAttribute(LibraryElementTags.INTERFACE_ATTRIBUTE,
-					transaction.getInputPrimitive().getInterface().getName());
-		} else {
-			inputPrimitive.setAttribute(LibraryElementTags.INTERFACE_ATTRIBUTE, ""); //$NON-NLS-1$
+	private void addPrimitive(final Primitive prim, final String primNodeName) throws XMLStreamException {
+		addEmptyStartElement(primNodeName);
+		getWriter().writeAttribute(LibraryElementTags.INTERFACE_ATTRIBUTE,
+				((null != prim.getInterface()) && (null != prim.getInterface().getName()))
+						? prim.getInterface().getName()
+						: ""); //$NON-NLS-1$
+		getWriter().writeAttribute(LibraryElementTags.EVENT_ELEMENT, (null != prim.getEvent()) ? prim.getEvent() : ""); //$NON-NLS-1$
+		if ((null != prim.getParameters()) && (!prim.getParameters().equals(" "))) { //$NON-NLS-1$
+			getWriter().writeAttribute(LibraryElementTags.PARAMETERS_ATTRIBUTE, prim.getParameters());
 		}
-		if (transaction.getInputPrimitive().getEvent() != null) {
-			inputPrimitive.setAttribute(LibraryElementTags.EVENT_ELEMENT, transaction.getInputPrimitive().getEvent());
-		} else {
-			inputPrimitive.setAttribute(LibraryElementTags.EVENT_ELEMENT, ""); //$NON-NLS-1$
-		}
-		if (transaction.getInputPrimitive().getParameters() != null
-				&& !transaction.getInputPrimitive().getParameters().equals(" ")) { //$NON-NLS-1$
-			inputPrimitive.setAttribute(LibraryElementTags.PARAMETERS_ATTRIBUTE,
-					transaction.getInputPrimitive().getParameters());
-		}
-		serviceTransaction.appendChild(inputPrimitive);
 
 	}
 
 	/**
 	 * Adds the output primitives.
-	 * 
-	 * @param serviceTransaction the service transaction
-	 * @param transaction        the transaction
+	 *
+	 * @param transaction the transaction
+	 * @throws XMLStreamException
 	 */
-	private void addOutputPrimitives(final Element serviceTransaction, final ServiceTransaction transaction) {
-		for (Iterator<OutputPrimitive> iter = transaction.getOutputPrimitive().iterator(); iter.hasNext();) {
-			Element outputPrimitive = createElement(LibraryElementTags.OUTPUT_PRIMITIVE_ELEMENT);
-			OutputPrimitive primitive = iter.next();
-			outputPrimitive.setAttribute(LibraryElementTags.INTERFACE_ATTRIBUTE, primitive.getInterface().getName());
-
-			if (primitive.getEvent() != null) {
-				outputPrimitive.setAttribute(LibraryElementTags.EVENT_ELEMENT, primitive.getEvent());
-			} else {
-				outputPrimitive.setAttribute(LibraryElementTags.EVENT_ELEMENT, ""); //$NON-NLS-1$
-			}
-
-			if (primitive.getParameters() != null && !primitive.getParameters().equals(" ")) { //$NON-NLS-1$
-				outputPrimitive.setAttribute(LibraryElementTags.PARAMETERS_ATTRIBUTE, primitive.getParameters());
-			}
-			serviceTransaction.appendChild(outputPrimitive);
+	private void addOutputPrimitives(final ServiceTransaction transaction) throws XMLStreamException {
+		for (OutputPrimitive primitive : transaction.getOutputPrimitive()) {
+			addPrimitive(primitive, LibraryElementTags.OUTPUT_PRIMITIVE_ELEMENT);
 		}
 	}
 
