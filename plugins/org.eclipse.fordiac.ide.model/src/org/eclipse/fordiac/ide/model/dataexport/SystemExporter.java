@@ -1,7 +1,7 @@
 /********************************************************************************
  * Copyright (c)  2008 - 2014, 2016, 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 - 2019 Johannes Keppler University, Linz
- * 
+ * 				  2018 - 2020 Johannes Keppler University, Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -12,23 +12,25 @@
  *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
  *      - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Refactored class hierarchy of xml exporters
- *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export    
+ *               - fixed coordinate system resolution conversion in in- and export
+ *               - changed exporting the Saxx cursor api
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.List;
+
+import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -37,93 +39,96 @@ import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.w3c.dom.Element;
 
 public class SystemExporter extends CommonElementExporter {
 	private final AutomationSystem system;
-	private final Element systemRootElement;
 
 	public SystemExporter(final AutomationSystem system) {
 		super();
 		this.system = system;
-		systemRootElement = createRootElement(system, LibraryElementTags.SYSTEM);
 	}
 
 	public void saveSystem(final IFile targetFile) {
-		// write the dom to the file
-		if (null != getDom()) {
-			addIdentification(systemRootElement, system);
-			addVersionInfo(systemRootElement, system);
+		long startTime = System.currentTimeMillis();
+		if (null != getWriter()) {
+			try {
+				createNamedElementEntry(system, LibraryElementTags.SYSTEM);
+				addIdentification(system);
+				addVersionInfo(system);
+				addApplications();
 
-			addApplication();
+				SystemConfiguration systemConfiguration = system.getSystemConfiguration();
+				if (null != systemConfiguration) {
+					addDevices(systemConfiguration.getDevices());
+					addMapping();
+					addSegment(systemConfiguration.getSegments());
+					addLink(systemConfiguration.getLinks());
+				}
 
-			SystemConfiguration systemConfiguration = system.getSystemConfiguration();
-			if (null != systemConfiguration) {
-				systemConfiguration.getDevices().forEach(device -> addDevice(device));
-				addMapping();
-				addSegment(systemConfiguration.getSegments());
-				addLink(systemConfiguration.getLinks());
+				addEndElement();
+			} catch (XMLStreamException e) {
+				Activator.getDefault().logError(e.getMessage(), e);
 			}
 			writeToFile(targetFile);
 		}
+		long endTime = System.currentTimeMillis();
+		System.out.println("Overall Saving time for System (" + system.getName() + ": " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	private void addApplication() {
+	private void addApplications() throws XMLStreamException {
 		for (Application app : system.getApplication()) {
-			Element appElement = createElement(LibraryElementTags.APPLICATION_ELEMENT);
-			setNameAndCommentAttribute(appElement, app);
-			addAttributes(appElement, app.getAttributes(), app);
-			appElement.appendChild(new FBNetworkExporter(getDom()).createFBNetworkElement(app.getFBNetwork()));
-			systemRootElement.appendChild(appElement);
+			addStartElement(LibraryElementTags.APPLICATION_ELEMENT);
+			addNameAndCommentAttribute(app);
+			addAttributes(app.getAttributes());
+			new FBNetworkExporter(this).createFBNetworkElement(app.getFBNetwork());
+			addEndElement();
 		}
 	}
 
-	private void addLink(List<Link> linksList) {
-		for (Link link : linksList) {
-			Element linkElement = createElement(LibraryElementTags.LINK_ELEMENT);
-			linkElement.setAttribute(LibraryElementTags.SEGMENT_NAME_ELEMENT, link.getSegment().getName());
-			linkElement.setAttribute(LibraryElementTags.SEGMENT_COMM_RESOURCE, link.getDevice().getName());
-			linkElement.setAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, link.getComment());
-			systemRootElement.appendChild(linkElement);
+	private void addLink(EList<Link> linkList) throws XMLStreamException {
+		for (Link link : linkList) {
+			addStartElement(LibraryElementTags.LINK_ELEMENT);
+			getWriter().writeAttribute(LibraryElementTags.SEGMENT_NAME_ELEMENT, link.getSegment().getName());
+			getWriter().writeAttribute(LibraryElementTags.SEGMENT_COMM_RESOURCE, link.getDevice().getName());
+			getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, link.getComment());
+			addEndElement();
 		}
 	}
 
-	private void addSegment(List<Segment> segmentsList) {
-		for (Segment segment : segmentsList) {
-			Element segmentElement = createElement(LibraryElementTags.SEGMENT_ELEMENT);
-			setNameTypeCommentAttribute(segmentElement, segment, segment.getType());
-
-			CommonElementExporter.setXYAttributes(segmentElement, segment.getX(), segment.getY());
-			segmentElement.setAttribute(LibraryElementTags.DX1_ATTRIBUTE,
+	private void addSegment(EList<Segment> segementList) throws XMLStreamException {
+		for (Segment segment : segementList) {
+			addStartElement(LibraryElementTags.SEGMENT_ELEMENT);
+			addNameTypeCommentAttribute(segment, segment.getType());
+			addXYAttributes(segment.getX(), segment.getY());
+			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE,
 					CoordinateConverter.INSTANCE.convertTo1499XML(segment.getWidth()));
-			addColorAttributeElement(segmentElement, segment);
-			addAttributes(segmentElement, segment.getAttributes(), segment);
-			systemRootElement.appendChild(segmentElement);
+			addColorAttributeElement(segment);
+			addAttributes(segment.getAttributes());
+			addEndElement();
 		}
 	}
 
-	private void addMapping() {
+	private void addMapping() throws XMLStreamException {
 		for (Mapping mappingEntry : system.getMapping()) {
 			String fromString = getFullHierarchicalName(mappingEntry.getFrom());
 			String toString = getFullHierarchicalName(mappingEntry.getTo());
 
 			if ((null != fromString) && (null != toString)) {
-				Element mappingElement = createElement(LibraryElementTags.MAPPING_ELEMENT);
-				mappingElement.setAttribute(LibraryElementTags.MAPPING_FROM_ATTRIBUTE, fromString);
-				mappingElement.setAttribute(LibraryElementTags.MAPPING_TO_ATTRIBUTE, toString);
-				systemRootElement.appendChild(mappingElement);
+				addEmptyStartElement(LibraryElementTags.MAPPING_ELEMENT);
+				getWriter().writeAttribute(LibraryElementTags.MAPPING_FROM_ATTRIBUTE, fromString);
+				getWriter().writeAttribute(LibraryElementTags.MAPPING_TO_ATTRIBUTE, toString);
 			}
 		}
 	}
 
 	/**
-	 * Got trhough the containment of the FB and generate a name for all containers
+	 * Got through the containment of the FB and generate a name for all containers
 	 * the FB is contained in up to the application or the device (e.g.,
 	 * app1.subapp2.fbname, dev1.res3.fb3name).
-	 * 
+	 *
 	 * @param fbNetworkElement the FBNetworkElement for which the name should be
-	 *                         gnerated
-	 * @return dot seperated full name
+	 *                         generated
+	 * @return dot separated full name
 	 */
 	private static String getFullHierarchicalName(FBNetworkElement fbNetworkElement) {
 		Deque<String> names = new ArrayDeque<>();
@@ -157,61 +162,55 @@ public class SystemExporter extends CommonElementExporter {
 		return null;
 	}
 
-	private void addDevice(Device device) {
-		Element deviceElement = createElement(LibraryElementTags.DEVICE_ELEMENT);
-		setNameTypeCommentAttribute(deviceElement, device, device.getType());
-		exportXandY(device, deviceElement);
-		addParamsConfig(deviceElement, device.getVarDeclarations());
-		addDeviceAttributes(deviceElement, device.getAttributes(), device);
-		addResources(deviceElement, device.getResource());
-		systemRootElement.appendChild(deviceElement);
-	}
-
-	private void addDeviceAttributes(Element deviceElement, EList<Attribute> attributes, Device device) {
-		addDeviceProfile(deviceElement, device);
-		addColorAttributeElement(deviceElement, device);
-		addAttributes(deviceElement, attributes, device);
-	}
-
-	private void addAttributes(Element element, EList<Attribute> attributes, ConfigurableObject configurableObject) {
-		for (Attribute attribute : attributes) {
-			Element domAttribute = createAttributeElement(attribute.getName(), attribute.getType().getName(),
-					attribute.getValue(), attribute.getComment());
-			element.appendChild(domAttribute);
+	private void addDevices(EList<Device> deviceList) throws XMLStreamException {
+		for (Device device : deviceList) {
+			addStartElement(LibraryElementTags.DEVICE_ELEMENT);
+			addNameTypeCommentAttribute(device, device.getType());
+			addXYAttributes(device);
+			addParamsConfig(device.getVarDeclarations());
+			addDeviceAttributes(device);
+			addResources(device.getResource());
+			addEndElement();
 		}
 	}
 
-	private void addDeviceProfile(Element deviceElement, Device device) {
+	private void addDeviceAttributes(Device device) throws XMLStreamException {
+		addDeviceProfile(device);
+		addColorAttributeElement(device);
+		addAttributes(device.getAttributes());
+	}
+
+	private void addAttributes(EList<Attribute> attributes) throws XMLStreamException {
+		for (Attribute attribute : attributes) {
+			addAttributeElement(attribute.getName(), attribute.getType().getName(), attribute.getValue(),
+					attribute.getComment());
+		}
+	}
+
+	private void addDeviceProfile(Device device) throws XMLStreamException {
 		String profileName = device.getProfile();
 		if (null != profileName && !"".equals(profileName)) { //$NON-NLS-1$
-			Element profileAttribute = createAttributeElement(LibraryElementTags.DEVICE_PROFILE, "STRING", profileName, //$NON-NLS-1$
+			addAttributeElement(LibraryElementTags.DEVICE_PROFILE, "STRING", profileName, //$NON-NLS-1$
 					"device profile"); //$NON-NLS-1$
-			deviceElement.appendChild(profileAttribute);
-		}
-
-	}
-
-	private void addResources(Element deviceElement, List<Resource> resourcesList) {
-		for (Resource resource : resourcesList) {
-			if (!resource.isDeviceTypeResource()) {
-				addResource(deviceElement, resource);
-			}
 		}
 	}
 
 	/**
 	 * Adds the resource.
-	 * 
-	 * @param parent       the parent
-	 * @param resourceView the resource view
+	 *
+	 * @param resourceList the list of resource to add to the MXL file
 	 */
-	private void addResource(final Element parent, Resource resource) {
-		Element resourceElement = getDom().createElement(LibraryElementTags.RESOURCE_ELEMENT);
-		setNameTypeCommentAttribute(resourceElement, resource, resource.getType());
-		setXYAttributes(resourceElement, 0, 0);
-		addParamsConfig(resourceElement, resource.getVarDeclarations());
-		resourceElement.appendChild(new FBNetworkExporter(getDom()).createFBNetworkElement(resource.getFBNetwork()));
-		parent.appendChild(resourceElement);
+	private void addResources(EList<Resource> resourceList) throws XMLStreamException {
+		for (Resource resource : resourceList) {
+			if (!resource.isDeviceTypeResource()) {
+				addStartElement(LibraryElementTags.RESOURCE_ELEMENT);
+				addNameTypeCommentAttribute(resource, resource.getType());
+				addXYAttributes(0, 0);
+				addParamsConfig(resource.getVarDeclarations());
+				new FBNetworkExporter(this).createFBNetworkElement(resource.getFBNetwork());
+				addEndElement();
+			}
+		}
 	}
 
 }

@@ -1,7 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2014, 2106 - 2017  fortiss GmbH
- * 				 2018 Johannes Keppler University
- * 
+ * 				 2018, 2020 Johannes Keppler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,17 +9,17 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *  Alois Zoitl
- *    - initial API and implementation and/or initial documentation
- *  Alois Zoitl - Refactored class hierarchy of xml exporters  
+ *  Alois Zoitl - initial API and implementation and/or initial documentation
+ *              - Refactored class hierarchy of xml exporters
+ *              - changed exporting the Saxx cursor api
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
+
+import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 class SubApplicationTypeExporter extends AbstractTypeExporter {
 
@@ -31,8 +31,8 @@ class SubApplicationTypeExporter extends AbstractTypeExporter {
 	 * constructor to allow to use this exporter also for exporting the interface
 	 * element of untyped subapps in fbnetworks
 	 */
-	SubApplicationTypeExporter(Document dom) {
-		super(dom);
+	SubApplicationTypeExporter(CommonElementExporter parent) {
+		super(parent);
 	}
 
 	@Override
@@ -46,8 +46,8 @@ class SubApplicationTypeExporter extends AbstractTypeExporter {
 	}
 
 	@Override
-	protected void createTypeSpecificXMLEntries(Element rootElement) {
-		rootElement.appendChild(new FBNetworkExporter(getDom()).createFBNetworkElement(getType().getFBNetwork()));
+	protected void createTypeSpecificXMLEntries() throws XMLStreamException {
+		new FBNetworkExporter(this).createFBNetworkElement(getType().getFBNetwork());
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor Gmbh, TU Wien ACIN, fortiss GmbH
- * 				 2018 - 2019 Johannes Kepler University, Linz
- * 
+ * 				 2018 - 2020 Johannes Kepler University, Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,35 +11,26 @@
  * Contributors:
  *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - Refactored class hierarchy of xml exporters  
- *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export
+ *   Alois Zoitl - Refactored class hierarchy of xml exporters
+ *   			 - fixed coordinate system resolution conversion in in- and export
+ *               - changed exporting the Saxx cursor api
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import java.io.ByteArrayInputStream;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Iterator;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
@@ -51,108 +42,122 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 abstract class CommonElementExporter {
 
-	private final Document dom;
+	public static final String LINE_END = "\n"; //$NON-NLS-1$
+	public static final String TAB = "\t"; //$NON-NLS-1$
+
+	private final XMLStreamWriter writer;
+	private ByteArrayOutputStream outputStream;
+
+	private int tabCount = 0;
 
 	protected CommonElementExporter() {
-		dom = createDomElement();
+		writer = createEventWriter();
 	}
 
-	protected CommonElementExporter(Document dom) {
-		this.dom = dom;
+	/**
+	 * Constructor for chaing several exporters together (e.g., for the
+	 * FBNetworkExporter)
+	 *
+	 * @param parent the calling exporter
+	 */
+	protected CommonElementExporter(CommonElementExporter parent) {
+		writer = parent.writer;
+		tabCount = parent.tabCount;
 	}
 
-	protected Document getDom() {
-		return dom;
+	protected XMLStreamWriter getWriter() {
+		return writer;
 	}
 
-	protected Element createElement(String name) {
-		return getDom().createElement(name);
+	protected void addStartElement(String name) throws XMLStreamException {
+		addTabs();
+		writer.writeStartElement(name);
+		tabCount++;
 	}
 
-	private static Document createDomElement() {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db;
+	protected void addEmptyStartElement(String name) throws XMLStreamException {
+		addTabs();
+		writer.writeEmptyElement(name);
+	}
 
+	private void addTabs() throws XMLStreamException {
+		writer.writeCharacters(LINE_END);
+		for (int i = 0; i < tabCount; i++) {
+			writer.writeCharacters(TAB);
+		}
+	}
+
+	protected void addEndElement() throws XMLStreamException {
+		tabCount--;
+		addTabs();
+		writer.writeEndElement();
+	}
+
+	private XMLStreamWriter createEventWriter() {
+		XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+
+		outputStream = new ByteArrayOutputStream();
 		try {
-			db = dbf.newDocumentBuilder();
-			return db.newDocument();
-		} catch (ParserConfigurationException e) {
+			XMLStreamWriter newWriter = outputFactory.createXMLStreamWriter(outputStream,
+					StandardCharsets.UTF_8.name());
+			newWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0");
+			return newWriter;
+		} catch (XMLStreamException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 			return null;
 		}
 	}
 
-	protected void addColorAttributeElement(final Element parent, final ColorizableElement colElement) {
+	protected void addColorAttributeElement(final ColorizableElement colElement) throws XMLStreamException {
 		String colorValue = colElement.getColor().getRed() + "," + colElement.getColor().getGreen() + "," //$NON-NLS-1$ //$NON-NLS-2$
 				+ colElement.getColor().getBlue();
-		Element colorAttribute = createAttributeElement(LibraryElementTags.COLOR, "STRING", colorValue, "color"); //$NON-NLS-1$ //$NON-NLS-2$
-		parent.appendChild(colorAttribute);
+		addAttributeElement(LibraryElementTags.COLOR, "STRING", colorValue, "color"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	protected Element createAttributeElement(String name, String type, String value, String comment) {
-		Element attributeElement = createElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
-		attributeElement.setAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
-		attributeElement.setAttribute(LibraryElementTags.TYPE_ATTRIBUTE, type);
-		attributeElement.setAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
-		attributeElement.setAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
-		return attributeElement;
+	protected void addAttributeElement(String name, String type, String value, String comment)
+			throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
+		getWriter().writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
+		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, type);
+		getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
+		getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
 	}
 
-	protected static Transformer createXMLTransformer()
-			throws TransformerFactoryConfigurationError, TransformerConfigurationException {
-		TransformerFactory tFactory = TransformerFactory.newInstance();
-		tFactory.setAttribute("indent-number", Integer.valueOf(2)); //$NON-NLS-1$
-		Transformer transformer = tFactory.newTransformer();
-		transformer.setOutputProperty(javax.xml.transform.OutputKeys.DOCTYPE_SYSTEM,
-				"http://www.holobloc.com/xml/LibraryElement.dtd"); //$NON-NLS-1$
-		transformer.setOutputProperty(javax.xml.transform.OutputKeys.ENCODING, "UTF-8"); //$NON-NLS-1$
-		transformer.setOutputProperty(javax.xml.transform.OutputKeys.VERSION, "1.0"); //$NON-NLS-1$
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2"); //$NON-NLS-1$ //$NON-NLS-2$
-		transformer.setOutputProperty(javax.xml.transform.OutputKeys.INDENT, "yes"); //$NON-NLS-1$
-		transformer.setOutputProperty(javax.xml.transform.OutputKeys.STANDALONE, "no"); //$NON-NLS-1$
-		transformer.setOutputProperty(javax.xml.transform.OutputKeys.METHOD, "xml"); //$NON-NLS-1$
-		return transformer;
-	}
-
-	protected Element createRootElement(final INamedElement namedElement, String rootElemName) {
-		Element rootElement = createElement(rootElemName);
-		setNameAndCommentAttribute(rootElement, namedElement);
-		dom.appendChild(rootElement);
-		return rootElement;
+	protected void createNamedElementEntry(final INamedElement namedElement, final String elemName)
+			throws XMLStreamException {
+		addStartElement(elemName);
+		addNameAndCommentAttribute(namedElement);
 	}
 
 	protected void writeToFile(IFile iFile) {
+		long startTime = System.currentTimeMillis();
 		try {
-			StringWriter stringWriter = new StringWriter();
-			Result result = new StreamResult(stringWriter);
-			Transformer transformer = createXMLTransformer();
-			Source source = new DOMSource(getDom()); // Document to be transformed transformed
-			transformer.transform(source, result);
+			writer.writeEndDocument();
+			writer.close();
+			outputStream.flush();
+			outputStream.close();
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 			if (iFile.exists()) {
-				iFile.setContents(new ByteArrayInputStream(stringWriter.toString().getBytes("UTF-8")), //$NON-NLS-1$
-						IResource.KEEP_HISTORY | IResource.FORCE, null);
+				iFile.setContents(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
 			} else {
 				checkAndCreateFolderHierarchy(iFile);
-				iFile.create(new ByteArrayInputStream(stringWriter.toString().getBytes("UTF-8")), //$NON-NLS-1$
-						IResource.KEEP_HISTORY | IResource.FORCE, null);
+				iFile.create(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
 			}
-
-			iFile.getParent().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-
-		} catch (CoreException | UnsupportedEncodingException | TransformerException e) {
+		} catch (CoreException | IOException | XMLStreamException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		}
+		long endTime = System.currentTimeMillis();
+		System.out.println("Saving time for System: " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$
+
 	}
 
 	/**
 	 * Check if the folders in the file's path exist and if not create them
 	 * accordingly
-	 * 
+	 *
 	 * @param file for which the path should be checked
 	 * @throws CoreException
 	 */
@@ -168,137 +173,119 @@ abstract class CommonElementExporter {
 		}
 	}
 
-	/*
-	 * <!ELEMENT Identification EMPTY>
-	 * 
-	 * <!ATTLIST Identification Standard CDATA #IMPLIED Classification CDATA
-	 * #IMPLIED ApplicationDomain CDATA #IMPLIED Function CDATA #IMPLIED Type CDATA
-	 * #IMPLIED Description CDATA #IMPLIED >
-	 */
 	/**
 	 * Adds the identification.
-	 * 
-	 * @param dom            the dom
-	 * @param parentElement  the parent element
+	 *
 	 * @param libraryelement the libraryelement
+	 * @throws XMLStreamException
 	 */
-	public void addIdentification(final Element parentElement, final LibraryElement libraryelement) {
-		if (libraryelement.getIdentification() != null) {
-			Element identification = createElement(LibraryElementTags.IDENTIFICATION_ELEMENT);
+	protected void addIdentification(final LibraryElement libraryelement) throws XMLStreamException {
+		if (null != libraryelement.getIdentification()) {
+			addStartElement(LibraryElementTags.IDENTIFICATION_ELEMENT);
 			Identification ident = libraryelement.getIdentification();
-			if (ident.getStandard() != null && !ident.getStandard().equals("")) { //$NON-NLS-1$
-				identification.setAttribute(LibraryElementTags.STANDARD_ATTRIBUTE, ident.getStandard());
+			if (null != ident.getStandard() && !ident.getStandard().equals("")) { //$NON-NLS-1$
+				writer.writeAttribute(LibraryElementTags.STANDARD_ATTRIBUTE, ident.getStandard());
 			}
-			if (ident.getClassification() != null && !ident.getClassification().equals("")) { //$NON-NLS-1$
-				identification.setAttribute(LibraryElementTags.CLASSIFICATION_ATTRIBUTE, ident.getClassification());
+			if (null != ident.getClassification() && !ident.getClassification().equals("")) { //$NON-NLS-1$
+				writer.writeAttribute(LibraryElementTags.CLASSIFICATION_ATTRIBUTE, ident.getClassification());
 			}
-			if (ident.getApplicationDomain() != null && !ident.getApplicationDomain().equals("")) { //$NON-NLS-1$
-				identification.setAttribute(LibraryElementTags.APPLICATION_DOMAIN_ATTRIBUTE,
-						ident.getApplicationDomain());
+			if (null != ident.getApplicationDomain() && !ident.getApplicationDomain().equals("")) { //$NON-NLS-1$
+				writer.writeAttribute(LibraryElementTags.APPLICATION_DOMAIN_ATTRIBUTE, ident.getApplicationDomain());
 			}
-			if (ident.getFunction() != null && !ident.getFunction().equals("")) { //$NON-NLS-1$
-				identification.setAttribute(LibraryElementTags.FUNCTION_ELEMENT, ident.getFunction());
+			if (null != ident.getFunction() && !ident.getFunction().equals("")) { //$NON-NLS-1$
+				writer.writeAttribute(LibraryElementTags.FUNCTION_ELEMENT, ident.getFunction());
 			}
-			if (ident.getType() != null && !ident.getType().equals("")) { //$NON-NLS-1$
-				identification.setAttribute(LibraryElementTags.TYPE_ATTRIBUTE, ident.getType());
+			if (null != ident.getType() && !ident.getType().equals("")) { //$NON-NLS-1$
+				writer.writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, ident.getType());
 			}
-			if (ident.getDescription() != null && !ident.getDescription().equals("")) { //$NON-NLS-1$
-				identification.setAttribute(LibraryElementTags.DESCRIPTION_ELEMENT, ident.getDescription());
+			if (null != ident.getDescription() && !ident.getDescription().equals("")) { //$NON-NLS-1$
+				writer.writeAttribute(LibraryElementTags.DESCRIPTION_ELEMENT, ident.getDescription());
 			}
-
-			parentElement.appendChild(identification);
+			addEndElement();
 		}
 	}
 
-	/*
-	 * <!ELEMENT VersionInfo EMPTY>
-	 * 
-	 * <!ATTLIST VersionInfo Organization CDATA #REQUIRED Version CDATA #REQUIRED
-	 * Author CDATA #REQUIRED Date CDATA #REQUIRED Remarks CDATA #IMPLIED >
-	 */
 	/**
 	 * Adds the version info.
-	 * 
-	 * @param dom            the dom
-	 * @param rootEle        the root ele
+	 *
 	 * @param libraryelement the libraryelement
+	 * @throws XMLStreamException
 	 */
-	public void addVersionInfo(final Element rootEle, final LibraryElement libraryelement) {
+	public void addVersionInfo(final LibraryElement libraryelement) throws XMLStreamException {
 		if (!libraryelement.getVersionInfo().isEmpty()) {
-			for (Iterator<VersionInfo> iter = libraryelement.getVersionInfo().iterator(); iter.hasNext();) {
-				VersionInfo info = iter.next();
-				Element versionInfo = createElement(LibraryElementTags.VERSION_INFO_ELEMENT);
-				if (info.getOrganization() != null && !info.getOrganization().equals("")) { //$NON-NLS-1$
-					versionInfo.setAttribute(LibraryElementTags.ORGANIZATION_ATTRIBUTE, info.getOrganization());
+			for (VersionInfo info : libraryelement.getVersionInfo()) {
+				addStartElement(LibraryElementTags.VERSION_INFO_ELEMENT);
+
+				if (null != info.getOrganization() && !info.getOrganization().equals("")) { //$NON-NLS-1$
+					writer.writeAttribute(LibraryElementTags.ORGANIZATION_ATTRIBUTE, info.getOrganization());
 				}
-				if (info.getVersion() != null && !info.getVersion().equals("")) { //$NON-NLS-1$
-					versionInfo.setAttribute(LibraryElementTags.VERSION_ATTRIBUTE, info.getVersion());
+				if (null != info.getVersion() && !info.getVersion().equals("")) { //$NON-NLS-1$
+					writer.writeAttribute(LibraryElementTags.VERSION_ATTRIBUTE, info.getVersion());
 				}
-				if (info.getAuthor() != null && !info.getAuthor().equals("")) { //$NON-NLS-1$
-					versionInfo.setAttribute(LibraryElementTags.AUTHOR_ATTRIBUTE, info.getAuthor());
+				if (null != info.getAuthor() && !info.getAuthor().equals("")) { //$NON-NLS-1$
+					writer.writeAttribute(LibraryElementTags.AUTHOR_ATTRIBUTE, info.getAuthor());
 				}
-				if (info.getDate() != null && !info.getDate().equals("")) { //$NON-NLS-1$
-					versionInfo.setAttribute(LibraryElementTags.DATE_ATTRIBUTE, info.getDate());
+				if (null != info.getDate() && !info.getDate().equals("")) { //$NON-NLS-1$
+					writer.writeAttribute(LibraryElementTags.DATE_ATTRIBUTE, info.getDate());
 
 				}
-				if (info.getRemarks() != null && !info.getRemarks().equals("")) { //$NON-NLS-1$
-					versionInfo.setAttribute(LibraryElementTags.REMARKS_ATTRIBUTE, info.getRemarks());
+				if (null != info.getRemarks() && !info.getRemarks().equals("")) { //$NON-NLS-1$
+					writer.writeAttribute(LibraryElementTags.REMARKS_ATTRIBUTE, info.getRemarks());
 				}
 
-				rootEle.appendChild(versionInfo);
+				addEndElement();
 			}
 
 		}
 	}
 
-	protected static void setCommentAttribute(Element element, INamedElement namedElement) {
-		if (namedElement.getComment() != null) {
-			element.setAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, namedElement.getComment());
+	protected void addCommentAttribute(INamedElement namedElement) throws XMLStreamException {
+		if (null != namedElement.getComment()) {
+			writer.writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, namedElement.getComment());
 		}
 	}
 
-	static void setNameAndCommentAttribute(Element element, INamedElement namedElement) {
-		setNameAttribute(element, namedElement.getName());
-		setCommentAttribute(element, namedElement);
+	protected void addNameAndCommentAttribute(INamedElement namedElement) throws XMLStreamException {
+		addNameAttribute(namedElement.getName());
+		addCommentAttribute(namedElement);
 	}
 
-	static void setNameTypeCommentAttribute(Element element, INamedElement namedElement, INamedElement type) {
-		setNameAttribute(element, namedElement.getName());
-		setTypeAttribute(element, type);
-		setCommentAttribute(element, namedElement);
+	protected void addNameTypeCommentAttribute(INamedElement namedElement, INamedElement type)
+			throws XMLStreamException {
+		addNameAttribute(namedElement.getName());
+		addTypeAttribute(type);
+		addCommentAttribute(namedElement);
 	}
 
-	static void setTypeAttribute(Element element, INamedElement type) {
-		setTypeAttribute(element, ((null != type) && (null != type.getName())) ? type.getName() : ""); //$NON-NLS-1$
+	protected void addTypeAttribute(INamedElement type) throws XMLStreamException {
+		addTypeAttribute(((null != type) && (null != type.getName())) ? type.getName() : ""); //$NON-NLS-1$
 	}
 
-	protected static void setTypeAttribute(Element element, String type) {
-		element.setAttribute(LibraryElementTags.TYPE_ATTRIBUTE, (null != type) ? type : ""); //$NON-NLS-1$
+	protected void addTypeAttribute(String type) throws XMLStreamException {
+		writer.writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, (null != type) ? type : ""); //$NON-NLS-1$
 	}
 
-	static void setNameAttribute(Element element, String name) {
-		element.setAttribute(LibraryElementTags.NAME_ATTRIBUTE, (null != name) ? name : ""); //$NON-NLS-1$
+	protected void addNameAttribute(String name) throws XMLStreamException {
+		writer.writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, (null != name) ? name : ""); //$NON-NLS-1$
 	}
 
-	void addParamsConfig(Element fbElement, EList<VarDeclaration> inputVars) {
-
+	protected void addParamsConfig(EList<VarDeclaration> inputVars) throws XMLStreamException {
 		for (VarDeclaration var : inputVars) {
-			if (var.getValue() != null && var.getValue().getValue() != null && !var.getValue().getValue().equals("")) { //$NON-NLS-1$
-				Element parameterElement = createElement(LibraryElementTags.PARAMETER_ELEMENT);
-				setNameAttribute(parameterElement, var.getName());
-				parameterElement.setAttribute(LibraryElementTags.VALUE_ATTRIBUTE, var.getValue().getValue());
-				fbElement.appendChild(parameterElement);
+			if (null != var.getValue() && null != var.getValue().getValue() && !var.getValue().getValue().equals("")) { //$NON-NLS-1$
+				addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
+				addNameAttribute(var.getName());
+				writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, var.getValue().getValue());
 			}
 		}
 	}
 
-	static void exportXandY(PositionableElement fb, Element fbElement) {
-		setXYAttributes(fbElement, fb.getX(), fb.getY());
+	protected void addXYAttributes(PositionableElement fb) throws XMLStreamException {
+		addXYAttributes(fb.getX(), fb.getY());
 	}
 
-	static void setXYAttributes(Element element, int x, int y) {
-		element.setAttribute(LibraryElementTags.X_ATTRIBUTE, CoordinateConverter.INSTANCE.convertTo1499XML(x));
-		element.setAttribute(LibraryElementTags.Y_ATTRIBUTE, CoordinateConverter.INSTANCE.convertTo1499XML(y));
+	protected void addXYAttributes(int x, int y) throws XMLStreamException {
+		writer.writeAttribute(LibraryElementTags.X_ATTRIBUTE, CoordinateConverter.INSTANCE.convertTo1499XML(x));
+		writer.writeAttribute(LibraryElementTags.Y_ATTRIBUTE, CoordinateConverter.INSTANCE.convertTo1499XML(y));
 	}
 
 }

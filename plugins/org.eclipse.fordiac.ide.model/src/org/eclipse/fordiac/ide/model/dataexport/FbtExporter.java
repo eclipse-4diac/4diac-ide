@@ -1,7 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 - 2019 Johannes Keppler University, Linz
- * 
+ * 				 2018 - 2020 Johannes Keppler University, Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,12 +11,15 @@
  * Contributors:
  *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl, Matthias Plasch
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - Refactored class hierarchy of xml exporters  
- *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export 
+ *   Alois Zoitl - Refactored class hierarchy of xml exporters
+ *               - fixed coordinate system resolution conversion in in- and export
+ *               - changed exporting the Saxx cursor api
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import java.util.List;
+
+import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -30,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.w3c.dom.Element;
 
 /**
  * The Class FbtExporter.
@@ -39,7 +41,7 @@ class FbtExporter extends AbstractTypeExporter {
 
 	/**
 	 * Instantiates a new fbt exporter.
-	 * 
+	 *
 	 * @param entry
 	 */
 	FbtExporter(FBTypePaletteEntry entry) {
@@ -52,219 +54,173 @@ class FbtExporter extends AbstractTypeExporter {
 	}
 
 	@Override
-	protected void createTypeSpecificXMLEntries(Element rootElement) {
+	protected void createTypeSpecificXMLEntries() throws XMLStreamException {
 		if (getType() instanceof CompositeFBType) {
-			FBNetworkExporter nwExporter = new FBNetworkExporter(getDom());
-			rootElement.appendChild(nwExporter.createFBNetworkElement(((CompositeFBType) getType()).getFBNetwork()));
+			new FBNetworkExporter(this).createFBNetworkElement(((CompositeFBType) getType()).getFBNetwork());
 		} else if (getType() instanceof BasicFBType) {
-			addBasicFB(rootElement, (BasicFBType) getType());
+			addBasicFB((BasicFBType) getType());
 		} else if (getType() instanceof SimpleFBType) {
-			addSimpleFB(rootElement, (SimpleFBType) getType());
+			addSimpleFB((SimpleFBType) getType());
 		}
 	}
 
-	/*
-	 * <!ELEMENT BasicFB (InternalVars?,ECC?,Algorithm)>
-	 */
 	/**
 	 * Adds the basic fb.
-	 * 
-	 * @param rootEle the root ele
-	 * @param type    the type
+	 *
+	 * @param type the type
+	 * @throws XMLStreamException
 	 */
-	private void addBasicFB(final Element rootEle, final BasicFBType type) {
-		Element basicElement = createElement(LibraryElementTags.BASIC_F_B_ELEMENT);
-		addVarList(basicElement, type.getInternalVars(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
-		addECC(basicElement, type.getECC());
-		type.getAlgorithm().forEach(alg -> addAlgorithm(basicElement, alg));
-		rootEle.appendChild(basicElement);
+	private void addBasicFB(final BasicFBType type) throws XMLStreamException {
+		addStartElement(LibraryElementTags.BASIC_F_B_ELEMENT);
+		addVarList(type.getInternalVars(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
+		addECC(type.getECC());
+		for (Algorithm alg : type.getAlgorithm()) {
+			addAlgorithm(alg);
+		}
+		addEndElement();
 	}
 
 	/**
 	 * Adds the other algorithm.
-	 * 
-	 * @param algorithmElement the algorithm element
-	 * @param algorithm        the algorithm
+	 *
+	 * @param algorithm the algorithm
+	 * @throws XMLStreamException
 	 */
-	private void addOtherAlgorithm(final Element algorithmElement, final OtherAlgorithm algorithm) {
-		Element st = createElement(LibraryElementTags.OTHER_ELEMENT);
-		if (algorithm.getLanguage() != null) {
-			st.setAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE, algorithm.getLanguage());
-		} else {
-			st.setAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE, ""); //$NON-NLS-1$
-		}
-		if (algorithm.getText() != null) {
-			st.setAttribute(LibraryElementTags.TEXT_ATTRIBUTE, algorithm.getText());
-		} else {
-			st.setAttribute(LibraryElementTags.TEXT_ATTRIBUTE, ""); //$NON-NLS-1$
-		}
-		algorithmElement.appendChild(st);
+	private void addOtherAlgorithm(final OtherAlgorithm algorithm) throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.OTHER_ELEMENT);
+		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,
+				(null != algorithm.getLanguage()) ? algorithm.getLanguage() : ""); //$NON-NLS-1$
+		getWriter().writeAttribute(LibraryElementTags.TEXT_ATTRIBUTE,
+				(null != algorithm.getText()) ? algorithm.getText() : ""); //$NON-NLS-1$
 	}
 
 	/**
 	 * Adds the st algorithm.
-	 * 
-	 * @param dom              the dom
-	 * @param algorithmElement the algorithm element
-	 * @param algorithm        the algorithm
+	 *
+	 * @param algorithm the algorithm
+	 * @throws XMLStreamException
 	 */
-	private void addSTAlgorithm(final Element algorithmElement, final STAlgorithm algorithm) {
-		Element st = createElement(LibraryElementTags.ST_ELEMENT);
-		if (algorithm.getText() != null) {
-			st.setAttribute(LibraryElementTags.TEXT_ATTRIBUTE, algorithm.getText());
-		} else {
-			st.setAttribute(LibraryElementTags.TEXT_ATTRIBUTE, ""); //$NON-NLS-1$
-		}
-		algorithmElement.appendChild(st);
+	private void addSTAlgorithm(final STAlgorithm algorithm) throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.ST_ELEMENT);
+		getWriter().writeAttribute(LibraryElementTags.TEXT_ATTRIBUTE,
+				(null != algorithm.getText()) ? algorithm.getText() : ""); //$NON-NLS-1$
 	}
 
-	/*
-	 * <!ELEMENT ECC (ECState+,ECTransition+) >
-	 */
 	/**
 	 * Adds the ecc.
-	 * 
-	 * @param basicElement the basic element
-	 * @param ecc          the ecc
+	 *
+	 * @param ecc the ecc
+	 * @throws XMLStreamException
 	 */
-	private void addECC(final Element basicElement, final ECC ecc) {
-		Element eccElement = createElement(LibraryElementTags.ECC_ELEMENT);
+	private void addECC(final ECC ecc) throws XMLStreamException {
+		addStartElement(LibraryElementTags.ECC_ELEMENT);
 		if (ecc != null) {
-			addECStates(eccElement, ecc.getECState(), ecc.getStart());
-			ecc.getECTransition().forEach(transition -> eccElement.appendChild(createTransitionEntry(transition)));
+			addECStates(ecc.getECState(), ecc.getStart());
+			for (ECTransition transition : ecc.getECTransition()) {
+				createTransitionEntry(transition);
+			}
 		}
-		basicElement.appendChild(eccElement);
+		addEndElement();
 	}
-
-	/*
-	 * 
-	 * <!ELEMENT ECTransition EMPTY>
-	 * 
-	 * <!ATTLIST ECTransition Source CDATA #REQUIRED Destination CDATA #REQUIRED
-	 * Condition CDATA #REQUIRED Comment CDATA #IMPLIED x CDATA #IMPLIED y CDATA
-	 * #IMPLIED >
-	 */
 
 	/**
-	 * Create a transition entry for the dom
-	 * 
+	 * Create a transition entry
+	 *
 	 * @param transition the transition
+	 * @throws XMLStreamException
 	 */
-	private Element createTransitionEntry(final ECTransition transition) {
-		Element transElement = createElement(LibraryElementTags.ECTRANSITION_ELEMENT);
-		transElement.setAttribute(LibraryElementTags.SOURCE_ATTRIBUTE, transition.getSource().getName());
-		transElement.setAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE, transition.getDestination().getName());
-		transElement.setAttribute(LibraryElementTags.CONDITION_ATTRIBUTE, transition.getConditionText());
-		transElement.setAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, transition.getComment());
-
-		CommonElementExporter.exportXandY(transition, transElement);
-
-		return transElement;
+	private void createTransitionEntry(final ECTransition transition) throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.ECTRANSITION_ELEMENT);
+		getWriter().writeAttribute(LibraryElementTags.SOURCE_ATTRIBUTE, transition.getSource().getName());
+		getWriter().writeAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE, transition.getDestination().getName());
+		getWriter().writeAttribute(LibraryElementTags.CONDITION_ATTRIBUTE, transition.getConditionText());
+		getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, transition.getComment());
+		addXYAttributes(transition);
 	}
 
-	/*
-	 * <!ELEMENT ECState (ECAction)>
-	 * 
-	 * <!ATTLIST ECState Name CDATA #REQUIRED Comment CDATA #IMPLIED x CDATA
-	 * #IMPLIED y CDATA #IMPLIED >
-	 */
 	/**
 	 * Adds the ec states.
-	 * 
-	 * @param eccElement the ecc element
+	 *
 	 * @param states     the states
 	 * @param startState the start state
+	 * @throws XMLStreamException
 	 */
-	private void addECStates(final Element eccElement, final List<ECState> states, final ECState startState) {
-		eccElement.appendChild(createECState(startState));
-		states.forEach(state -> {
+	private void addECStates(final List<ECState> states, final ECState startState) throws XMLStreamException {
+		createECState(startState);
+		for (ECState state : states) {
 			if (!state.equals(startState)) {
-				eccElement.appendChild(createECState(state));
+				createECState(state);
 			}
-		});
-
+		}
 	}
 
 	/**
 	 * Creates the ec state.
-	 * 
-	 * @param dom   the dom
+	 *
 	 * @param state the state
-	 * 
-	 * @return the element
+	 * @throws XMLStreamException
 	 */
-	private Element createECState(final ECState state) {
-		Element stateElement = createElement(LibraryElementTags.ECSTATE_ELEMENT);
+	private void createECState(final ECState state) throws XMLStreamException {
+		addStartElement(LibraryElementTags.ECSTATE_ELEMENT);
 
-		setNameAttribute(stateElement, state.getName());
-		setCommentAttribute(stateElement, state);
+		addNameAttribute(state.getName());
+		addCommentAttribute(state);
+		addXYAttributes(state);
 
-		CommonElementExporter.exportXandY(state, stateElement);
+		addECActions(state.getECAction());
 
-		addECActions(stateElement, state.getECAction());
-
-		return stateElement;
+		addEndElement();
 	}
 
-	/*
-	 * <!ELEMENT ECAction EMPTY>
-	 * 
-	 * <!ATTLIST ECAction Algorithm CDATA #IMPLIED Output CDATA #IMPLIED >
-	 */
 	/**
 	 * Adds the ec actions.
-	 * 
-	 * @param dom          the dom
-	 * @param stateElement the state element
-	 * @param actions      the actions
+	 *
+	 * @param actions the actions
+	 * @throws XMLStreamException
 	 */
-	private void addECActions(final Element stateElement, final List<ECAction> actions) {
+	private void addECActions(final List<ECAction> actions) throws XMLStreamException {
 		for (ECAction action : actions) {
-			Element actionElement = createElement(LibraryElementTags.ECACTION_ELEMENT);
+			addEmptyStartElement(LibraryElementTags.ECACTION_ELEMENT);
 			if (action.getAlgorithm() != null) {
-				actionElement.setAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm().getName());
+				getWriter().writeAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm().getName());
 			}
 			if (action.getOutput() != null) {
-				actionElement.setAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE, action.getOutput().getName());
+				getWriter().writeAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE, action.getOutput().getName());
 			}
-			stateElement.appendChild(actionElement);
 		}
 	}
 
 	/**
 	 * Adds the simple fb.
-	 * 
-	 * @param dom     the dom
-	 * @param rootEle the root ele
-	 * @param type    the type
+	 *
+	 * @param type the type
+	 * @throws XMLStreamException
 	 */
-	private void addSimpleFB(final Element rootEle, final SimpleFBType type) {
-		Element simpleElement = createElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
-		addVarList(simpleElement, type.getInternalVars(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
-		addAlgorithm(simpleElement, type.getAlgorithm());
-		rootEle.appendChild(simpleElement);
+	private void addSimpleFB(final SimpleFBType type) throws XMLStreamException {
+		addStartElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
+		addVarList(type.getInternalVars(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
+		addAlgorithm(type.getAlgorithm());
+		addEndElement();
 	}
 
 	/**
 	 * Adds the algorithm.
-	 * 
-	 * @param dom          the dom
-	 * @param basicElement the basic element
-	 * @param algorithms   the algorithms
+	 *
+	 * @param algorithms the algorithms
+	 * @throws XMLStreamException
 	 */
-	private void addAlgorithm(final Element basicElement, final Algorithm algorithm) {
-		Element algorithmElement = createElement(LibraryElementTags.ALGORITHM_ELEMENT);
+	private void addAlgorithm(final Algorithm algorithm) throws XMLStreamException {
+		addStartElement(LibraryElementTags.ALGORITHM_ELEMENT);
 
-		setNameAttribute(algorithmElement, algorithm.getName());
-		setCommentAttribute(algorithmElement, algorithm);
+		addNameAttribute(algorithm.getName());
+		addCommentAttribute(algorithm);
 
 		if (algorithm instanceof STAlgorithm) {
-			addSTAlgorithm(algorithmElement, (STAlgorithm) algorithm);
+			addSTAlgorithm((STAlgorithm) algorithm);
 		} else if (algorithm instanceof OtherAlgorithm) {
-			addOtherAlgorithm(algorithmElement, (OtherAlgorithm) algorithm);
+			addOtherAlgorithm((OtherAlgorithm) algorithm);
 		}
-
-		basicElement.appendChild(algorithmElement);
+		addEndElement();
 	}
 
 }
