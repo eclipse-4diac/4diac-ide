@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2015, 2017 fortiss GmbH
- * 
+ *               2020 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,8 +9,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Martin Jobst, Alois Zoitl, Monika Wenger 
+ *   Martin Jobst, Alois Zoitl, Monika Wenger
  *       - initial API and implementation and/or initial documentation
+ *   Ernst Blecha - add multibit partial access
  *******************************************************************************/
 grammar org.eclipse.fordiac.ide.model.structuredtext.StructuredText
 	hidden(WS, ML_COMMENT, SL_COMMENT)
@@ -58,17 +60,17 @@ Assign_Stmt returns AssignmentStatement:
 Subprog_Ctrl_Stmt returns Statement:
 	Func_Call |
 	//Invocation |
-	{SuperStatement} 'SUPER' '(' ')' | 
-	{ReturnStatement} 'RETURN' 
+	{SuperStatement} 'SUPER' '(' ')' |
+	{ReturnStatement} 'RETURN'
 ;
 
 Selection_Stmt returns Statement:
 	IF_Stmt | Case_Stmt
 ;
-	
+
 IF_Stmt returns IfStatement:
-	'IF' expression=Expression 'THEN' 
-		statments=Stmt_List 
+	'IF' expression=Expression 'THEN'
+		statments=Stmt_List
 		(elseif += ELSIF_Clause)*
 		(else=ELSE_Clause)?
 	'END_IF'
@@ -80,7 +82,7 @@ ELSIF_Clause returns ElseIfClause:
 ;
 
 ELSE_Clause returns ElseClause:
-	'ELSE' 
+	'ELSE'
 		statements=Stmt_List
 ;
 
@@ -120,7 +122,7 @@ Repeat_Stmt returns RepeatStatement:
 	'REPEAT'
 		statements=Stmt_List
 	'UNTIL' expression=Expression
-	'END_REPEAT' 
+	'END_REPEAT'
 ;
 
 
@@ -133,7 +135,7 @@ enum Or_Operator returns BinaryOperator: OR;
 Or_Expression returns Expression:
 	Xor_Expr ({BinaryExpression.left=current} operator=Or_Operator right=Xor_Expr)*
 ;
-	
+
 enum Xor_Operator returns BinaryOperator: XOR;
 Xor_Expr returns Expression:
 	And_Expr ({BinaryExpression.left=current} operator=Xor_Operator right=And_Expr)*
@@ -147,7 +149,7 @@ And_Expr returns Expression:
 enum Compare_Operator returns BinaryOperator: EQ='=' | NE='<>';
 Compare_Expr returns Expression:
 	Equ_Expr ({BinaryExpression.left=current} operator=Compare_Operator right=Equ_Expr)*
-;	
+;
 
 enum Equ_Operator returns BinaryOperator: LT='<' | LE='<=' | GT='>' | GE='>=';
 Equ_Expr returns Expression:
@@ -158,25 +160,25 @@ enum Add_Operator returns BinaryOperator: ADD='+' | SUB='-';
 Add_Expr returns Expression:
 	Term ({BinaryExpression.left=current} operator=Add_Operator right=Term)*
 ;
-		
+
 enum Term_Operator returns BinaryOperator: MUL='*' | DIV='/' | MOD;
 Term returns Expression:
 	Power_Expr ({BinaryExpression.left=current} operator=Term_Operator right=Power_Expr)*
 ;
-	
+
 enum Power_Operator returns BinaryOperator: POWER='**';
 Power_Expr returns Expression:
 	Unary_Expr ({BinaryExpression.left=current} operator=Power_Operator right=Unary_Expr)*
-;	
+;
 
 enum Unary_Operator returns UnaryOperator: MINUS='-' | PLUS='+' | NOT;
 Unary_Expr returns Expression:
-	{UnaryExpression} operator=Unary_Operator expression=Primary_Expr | 
+	{UnaryExpression} operator=Unary_Operator expression=Primary_Expr |
 	Primary_Expr |
 	Constant // handle Constant here to avoid ambiguity with '+' and '-' operators
 ;
-	
-Primary_Expr returns Expression: 
+
+Primary_Expr returns Expression:
 	Variable | Func_Call | /*Ref_Value |*/ '(' Expression ')'
 ;
 
@@ -198,7 +200,7 @@ Param_Assign_Out returns OutArgument:
 ;
 
 Variable returns Variable:
-	Variable_Subscript
+	Variable_Subscript ( part = Multibit_Part_Access )?
 ;
 
 Variable_Subscript returns Variable:
@@ -207,6 +209,14 @@ Variable_Subscript returns Variable:
 
 Variable_Adapter returns Variable:
 	{AdapterVariable} adapter=[libraryElement::AdapterDeclaration|Adapter_Name] '.' var=[libraryElement::VarDeclaration|Variable_Name]
+;
+
+Multibit_Part_Access returns PartialAccess:
+	(dwordaccess?='.%D' (index = Partial_Value)) |
+	(wordaccess?='.%W' (index = Partial_Value)) |
+	(byteaccess?='.%B' (index = Partial_Value)) |
+	(bitaccess?='.%X' (index = Partial_Value)) |
+	(bitaccess?='.' (index = Partial_Value))
 ;
 
 Adapter_Name:
@@ -228,7 +238,7 @@ Constant:
 	Numeric_Literal | Char_Literal | Time_Literal | Bool_Literal
 ;
 
-Numeric_Literal returns NumericLiteral: 
+Numeric_Literal returns NumericLiteral:
 	Int_Literal | Real_Literal
 ;
 
@@ -239,6 +249,10 @@ Int_Literal returns IntLiteral:
 
 Signed_Int returns ecore::ELong:
 	('+'|'-')? UNSIGNED_INT
+;
+
+Partial_Value returns ecore::EInt:
+	UNSIGNED_INT
 ;
 
 Array_Size returns ecore::EInt:
@@ -287,15 +301,15 @@ enum Duration_Unit:
 	DAYS='d' | HOURS='h' | MINUTES='m' | SECONDS='s' | MILLIS='ms' | MICROS='us' | NANOS='ns'
 ;
 
-Fix_Point: 
+Fix_Point:
 	UNSIGNED_INT ('.' UNSIGNED_INT)?
 ;
 
-Time_Of_Day returns DateLiteral: 
+Time_Of_Day returns DateLiteral:
 	type=Tod_Type_Name '#'
 	value=Daytime
 ;
-	
+
 Daytime returns ecore::EDate:
 	Day_Hour ':' Day_Minute ':' Day_Second
 ;
@@ -317,14 +331,14 @@ Year: UNSIGNED_INT;
 Month: UNSIGNED_INT;
 Day: UNSIGNED_INT;
 
-Date_And_Time returns DateLiteral: 
+Date_And_Time returns DateLiteral:
 	type=DT_Type_Name '#'
 	value=Date_And_Time_Value
 ;
-	
+
 Date_And_Time_Value returns ecore::EDate:
 	Date_Literal '-' Daytime
-;	
+;
 
 
 /************************************************************************
@@ -334,13 +348,14 @@ Type_Name:
 	ID
 	| 'DINT' | 'INT' | 'SINT' | 'LINT' //Sign_Int_Type_Name
 	| 'UINT' | 'USINT' | 'UDINT' | 'ULINT' //Unsign_Int_Type_Name
-	| 'REAL' | 'LREAL' 
-	| 'STRING' | 'WSTRING' | 'CHAR' | 'WCHAR' 
-	| 'TIME' | 'LTIME' 
+	| 'REAL' | 'LREAL'
+	| 'STRING' | 'WSTRING' | 'CHAR' | 'WCHAR'
+	| 'TIME' | 'LTIME'
 	| 'TIME_OF_DAY' | 'LTIME_OF_DAY' | 'TOD' | 'LTOD' // also allow 'LTIME_OF_DAY'
-	| 'DATE' | 'LDATE' 
-	| 'DATE_AND_TIME' | 'LDATE_AND_TIME' 
-	| 'BOOL' 
+	| 'DATE' | 'LDATE'
+	| 'DATE_AND_TIME' | 'LDATE_AND_TIME'
+	| 'BOOL'
+	| 'LWORD' | 'DWORD' | 'WORD' | 'BYTE'
 ;
 
 
@@ -348,7 +363,7 @@ enum Int_Type_Name returns Type:
 	DINT | INT | SINT | LINT //Sign_Int_Type_Name
 	| UINT | USINT | UDINT | ULINT //Unsign_Int_Type_Name
 ;
-	 
+
 enum Real_Type_Name returns Type:
 	REAL | LREAL
 ;
@@ -435,12 +450,12 @@ terminal fragment COMMON_CHAR_VALUE:
 terminal ML_COMMENT:
 	('/*' -> '*/') | '(*' -> '*)';
 
-terminal SL_COMMENT: 
+terminal SL_COMMENT:
 	'//' !('\n'|'\r')* ('\r'? '\n')?;
 
 terminal WS:
 	(' '|'\t'|'\r'|'\n')+;
 
-terminal ANY_OTHER: 
+terminal ANY_OTHER:
 	.;
 

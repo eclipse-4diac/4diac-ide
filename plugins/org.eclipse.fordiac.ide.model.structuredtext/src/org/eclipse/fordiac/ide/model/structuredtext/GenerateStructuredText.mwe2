@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2015, 2017 fortiss GmbH
- * 
+ *               2020 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,8 +9,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Martin Jobst, Monika Wenger 
+ *   Martin Jobst, Monika Wenger
  *       - initial API and implementation and/or initial documentation
+ *   Ernst Blecha - add multibit partial access
  *******************************************************************************/
 module org.eclipse.fordiac.ide.model.structuredtext.GenerateStructuredText
 
@@ -42,7 +44,7 @@ Workflow {
 			name = "org.eclipse.fordiac.ide.model.structuredtext.StructuredText"
 			fileExtensions = "st"
 	        referencedResource = "platform:/resource/org.eclipse.fordiac.ide.model/model/fordiac.genmodel"
-	     
+
 	        fragment = grammarAccess.GrammarAccessFragment2 {}
 	        fragment = ecore.EMFGeneratorFragment2 {}
 	        fragment = resourceFactory.ResourceFactoryFragment2 {}
@@ -66,6 +68,7 @@ Workflow {
 	        fragment = ui.refactoring.RefactorElementNameFragment2 {}
 	        fragment = ui.templates.CodetemplatesGeneratorFragment2 {}
 	        fragment = ui.compare.CompareFragment2 {}
+	        fragment = validation.ValidatorFragment2 {}
 	    }
 	}
 }

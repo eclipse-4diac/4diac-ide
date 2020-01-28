@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2019 fortiss GmbH
+ *               2020 Johannes Kepler University Linz
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Ernst Blecha - add multibit partial access
+ *******************************************************************************/
+
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
 import java.util.List
@@ -35,6 +50,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.WhileStatement
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.util.LazyStringInputStream
@@ -251,7 +267,22 @@ class STAlgorithmFilter {
 	def protected dispatch CharSequence generateExpression(
 		ArrayVariable expr) '''«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»(«index.generateExpression») + 1«ENDFOR»'''
 
-	def protected dispatch CharSequence generateExpression(AdapterVariable expr) '''«expr.adapter.name»().«expr.^var.name»()'''
+	def protected dispatch CharSequence generateExpression(AdapterVariable expr) {
+		'''«expr.adapter.name»().«expr.^var.name»()«IF null !== expr.part»«generateBitaccess(expr.part)»«ENDIF»'''
+	}
 
-	def protected dispatch CharSequence generateExpression(PrimaryVariable expr) '''«expr.^var.name»()'''
+	def protected dispatch CharSequence generateExpression(PrimaryVariable expr) {
+		'''«expr.^var.name»()«IF null !== expr.part»«generateBitaccess(expr.part)»«ENDIF»'''
+	}
+
+	def protected CharSequence generateBitaccess(PartialAccess part) '''
+		«IF part.bitaccess
+			».X<«Long.toString(part.index)»>()«
+		 ELSEIF part.byteaccess
+		 	».B<«Long.toString(part.index)»>()«
+		 ELSEIF part.wordaccess
+		 	».W<«Long.toString(part.index)»>()«
+		 ELSEIF part.dwordaccess
+		 	».D<«Long.toString(part.index)»>()«
+		 ENDIF»'''
 }
