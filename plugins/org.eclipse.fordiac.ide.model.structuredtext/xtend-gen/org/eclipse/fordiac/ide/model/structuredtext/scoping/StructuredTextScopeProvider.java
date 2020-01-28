@@ -34,41 +34,39 @@ import org.eclipse.xtext.util.SimpleAttributeResolver;
 /**
  * This class contains custom scoping description.
  * 
- * see : http://www.eclipse.org/Xtext/documentation.html#scoping on how and when
- * to use it
+ * see : http://www.eclipse.org/Xtext/documentation.html#scoping
+ * on how and when to use it
  */
 @SuppressWarnings("all")
 public class StructuredTextScopeProvider extends AbstractDeclarativeScopeProvider {
-	public SimpleScope scope_DataType(final EObject context, final EReference ref) {
-		SimpleScope _xblockexpression = null;
-		{
-			final Collection<DataType> candidates = DataTypeLibrary.getInstance().getDataTypes();
-			Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates,
-					QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
-			_xblockexpression = new SimpleScope(_scopedElementsFor, true);
-		}
-		return _xblockexpression;
-	}
-
-	public IScope scope_AdapterVariable_var(final AdapterVariable context, final EReference ref) {
-		SimpleScope _xblockexpression = null;
-		{
-			AdapterDeclaration _adapter = context.getAdapter();
-			AdapterType _type = null;
-			if (_adapter != null) {
-				_type = _adapter.getType();
-			}
-			final AdapterType type = ((AdapterType) _type);
-			if ((type == null)) {
-				return IScope.NULLSCOPE;
-			}
-			final ArrayList<VarDeclaration> candidates = new ArrayList<VarDeclaration>();
-			candidates.addAll(type.getInterfaceList().getInputVars());
-			candidates.addAll(type.getInterfaceList().getOutputVars());
-			Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates,
-					QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
-			_xblockexpression = new SimpleScope(_scopedElementsFor, true);
-		}
-		return _xblockexpression;
-	}
+  public SimpleScope scope_DataType(final EObject context, final EReference ref) {
+    SimpleScope _xblockexpression = null;
+    {
+      final Collection<DataType> candidates = DataTypeLibrary.getInstance().getDataTypes();
+      Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
+      _xblockexpression = new SimpleScope(_scopedElementsFor, true);
+    }
+    return _xblockexpression;
+  }
+  
+  public IScope scope_AdapterVariable_var(final AdapterVariable context, final EReference ref) {
+    SimpleScope _xblockexpression = null;
+    {
+      AdapterDeclaration _adapter = context.getAdapter();
+      AdapterType _type = null;
+      if (_adapter!=null) {
+        _type=_adapter.getType();
+      }
+      final AdapterType type = ((AdapterType) _type);
+      if ((type == null)) {
+        return IScope.NULLSCOPE;
+      }
+      final ArrayList<VarDeclaration> candidates = new ArrayList<VarDeclaration>();
+      candidates.addAll(type.getInterfaceList().getInputVars());
+      candidates.addAll(type.getInterfaceList().getOutputVars());
+      Iterable<IEObjectDescription> _scopedElementsFor = Scopes.<EObject>scopedElementsFor(candidates, QualifiedName.<EObject>wrapper(SimpleAttributeResolver.NAME_RESOLVER));
+      _xblockexpression = new SimpleScope(_scopedElementsFor, true);
+    }
+    return _xblockexpression;
+  }
 }

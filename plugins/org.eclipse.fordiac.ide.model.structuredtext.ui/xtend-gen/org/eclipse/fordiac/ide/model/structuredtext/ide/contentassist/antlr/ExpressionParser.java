@@ -20,19 +20,19 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @SuppressWarnings("all")
 public class ExpressionParser extends StructuredTextParser {
-	@Override
-	public Collection<FollowElement> getFollowElements(final AbstractInternalContentAssistParser parser) {
-		try {
-			InternalStructuredTextParser typedParser = ((InternalStructuredTextParser) parser);
-			typedParser.entryRuleExpression();
-			return typedParser.getFollowElements();
-		} catch (final Throwable _t) {
-			if (_t instanceof RecognitionException) {
-				final RecognitionException ex = (RecognitionException) _t;
-				throw new RuntimeException(ex);
-			} else {
-				throw Exceptions.sneakyThrow(_t);
-			}
-		}
-	}
+  @Override
+  public Collection<FollowElement> getFollowElements(final AbstractInternalContentAssistParser parser) {
+    try {
+      InternalStructuredTextParser typedParser = ((InternalStructuredTextParser) parser);
+      typedParser.entryRuleExpression();
+      return typedParser.getFollowElements();
+    } catch (final Throwable _t) {
+      if (_t instanceof RecognitionException) {
+        final RecognitionException ex = (RecognitionException)_t;
+        throw new RuntimeException(ex);
+      } else {
+        throw Exceptions.sneakyThrow(_t);
+      }
+    }
+  }
 }

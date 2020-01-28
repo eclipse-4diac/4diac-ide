@@ -32,48 +32,47 @@ import org.eclipse.xtext.ui.shared.Access;
  */
 @SuppressWarnings("all")
 public class StructuredTextUiModule extends AbstractStructuredTextUiModule {
-	public StructuredTextUiModule(final AbstractUIPlugin plugin) {
-		super(plugin);
-	}
-
-	public Class<? extends XtextResource> bindXtextResource() {
-		return StructuredTextResource.class;
-	}
-
-	public Class<? extends IContainer.Manager> bindIContainer$Manager() {
-		return SimpleResourceDescriptionsBasedContainerManager.class;
-	}
-
-	public void configureIResourceDescriptions(final Binder binder) {
-		binder.<IResourceDescriptions>bind(IResourceDescriptions.class).to(ResourceSetBasedResourceDescriptions.class);
-	}
-
-	@Override
-	public Provider<? extends IAllContainersState> provideIAllContainersState() {
-		return Access.getWorkspaceProjectsState();
-	}
-
-	public Class<? extends IValueConverterService> bindIValueConverterService() {
-		return StructuredTextValueConverterService.class;
-	}
-
-	@Override
-	public Class<? extends IResourceForEditorInputFactory> bindIResourceForEditorInputFactory() {
-		return ResourceForIEditorInputFactory.class;
-	}
-
-	@Override
-	public Class<? extends IResourceSetProvider> bindIResourceSetProvider() {
-		return SimpleResourceSetProvider.class;
-	}
-
-	@Override
-	public Class<? extends AbstractEditStrategyProvider> bindAbstractEditStrategyProvider() {
-		final boolean autoInsert = ExtendedStructuredTextActivator.getInstance().getPreferenceStore()
-				.getBoolean(PreferenceInitializer.AUTO_INSERT);
-		if ((autoInsert && (autoInsert == true))) {
-			return DefaultAutoEditStrategyProvider.class;
-		}
-		return EmptyAutoEditStrategyProvider.class;
-	}
+  public StructuredTextUiModule(final AbstractUIPlugin plugin) {
+    super(plugin);
+  }
+  
+  public Class<? extends XtextResource> bindXtextResource() {
+    return StructuredTextResource.class;
+  }
+  
+  public Class<? extends IContainer.Manager> bindIContainer$Manager() {
+    return SimpleResourceDescriptionsBasedContainerManager.class;
+  }
+  
+  public void configureIResourceDescriptions(final Binder binder) {
+    binder.<IResourceDescriptions>bind(IResourceDescriptions.class).to(ResourceSetBasedResourceDescriptions.class);
+  }
+  
+  @Override
+  public Provider<? extends IAllContainersState> provideIAllContainersState() {
+    return Access.getWorkspaceProjectsState();
+  }
+  
+  public Class<? extends IValueConverterService> bindIValueConverterService() {
+    return StructuredTextValueConverterService.class;
+  }
+  
+  @Override
+  public Class<? extends IResourceForEditorInputFactory> bindIResourceForEditorInputFactory() {
+    return ResourceForIEditorInputFactory.class;
+  }
+  
+  @Override
+  public Class<? extends IResourceSetProvider> bindIResourceSetProvider() {
+    return SimpleResourceSetProvider.class;
+  }
+  
+  @Override
+  public Class<? extends AbstractEditStrategyProvider> bindAbstractEditStrategyProvider() {
+    final boolean autoInsert = ExtendedStructuredTextActivator.getInstance().getPreferenceStore().getBoolean(PreferenceInitializer.AUTO_INSERT);
+    if ((autoInsert && (autoInsert == true))) {
+      return DefaultAutoEditStrategyProvider.class;
+    }
+    return EmptyAutoEditStrategyProvider.class;
+  }
 }

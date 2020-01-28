@@ -21,259 +21,256 @@ import org.eclipse.xtext.xbase.lib.Pure;
 
 @SuppressWarnings("all")
 public class BasicFBHeaderTemplate extends ForteFBTemplate {
-	@Accessors(AccessorType.PROTECTED_GETTER)
-	private BasicFBType type;
-
-	public BasicFBHeaderTemplate(final BasicFBType type, final String name, final Path prefix) {
-		super(name, prefix);
-		this.type = type;
-	}
-
-	@Override
-	public CharSequence generate() {
-		StringConcatenation _builder = new StringConcatenation();
-		CharSequence _generateHeader = this.generateHeader();
-		_builder.append(_generateHeader);
-		_builder.newLineIfNotEmpty();
-		_builder.newLine();
-		CharSequence _generateIncludeGuardStart = this.generateIncludeGuardStart();
-		_builder.append(_generateIncludeGuardStart);
-		_builder.newLineIfNotEmpty();
-		_builder.newLine();
-		CharSequence _generateHeaderIncludes = this.generateHeaderIncludes();
-		_builder.append(_generateHeaderIncludes);
-		_builder.newLineIfNotEmpty();
-		_builder.newLine();
-		_builder.append("class ");
-		CharSequence _fBClassName = this.getFBClassName();
-		_builder.append(_fBClassName);
-		_builder.append(": public CBasicFB {");
-		_builder.newLineIfNotEmpty();
-		_builder.append("  ");
-		CharSequence _generateFBDeclaration = this.generateFBDeclaration();
-		_builder.append(_generateFBDeclaration, "  ");
-		_builder.newLineIfNotEmpty();
-		_builder.newLine();
-		_builder.append("private:");
-		_builder.newLine();
-		_builder.append("  ");
-		CharSequence _generateFBInterfaceDeclaration = this.generateFBInterfaceDeclaration();
-		_builder.append(_generateFBInterfaceDeclaration, "  ");
-		_builder.newLineIfNotEmpty();
-		_builder.newLine();
-		_builder.append("  ");
-		CharSequence _generateFBInterfaceSpecDeclaration = this.generateFBInterfaceSpecDeclaration();
-		_builder.append(_generateFBInterfaceSpecDeclaration, "  ");
-		_builder.newLineIfNotEmpty();
-		_builder.newLine();
-		_builder.append("  ");
-		CharSequence _generateAccessors = this.generateAccessors(this.type.getInterfaceList().getInputVars(), "getDI");
-		_builder.append(_generateAccessors, "  ");
-		_builder.newLineIfNotEmpty();
-		_builder.append("  ");
-		CharSequence _generateAccessors_1 = this.generateAccessors(this.type.getInterfaceList().getOutputVars(),
-				"getDO");
-		_builder.append(_generateAccessors_1, "  ");
-		_builder.newLineIfNotEmpty();
-		_builder.append("  ");
-		CharSequence _generateAccessors_2 = this.generateAccessors(this.type.getInternalVars(), "getVarInternal");
-		_builder.append(_generateAccessors_2, "  ");
-		_builder.newLineIfNotEmpty();
-		_builder.append("  ");
-		EList<AdapterDeclaration> _sockets = this.type.getInterfaceList().getSockets();
-		EList<AdapterDeclaration> _plugs = this.type.getInterfaceList().getPlugs();
-		CharSequence _generateAccessors_3 = this.generateAccessors(
-				IterableExtensions.<AdapterDeclaration>toList(Iterables.<AdapterDeclaration>concat(_sockets, _plugs)));
-		_builder.append(_generateAccessors_3, "  ");
-		_builder.newLineIfNotEmpty();
-		_builder.newLine();
-		_builder.append("  ");
-		CharSequence _generateAlgorithms = this.generateAlgorithms();
-		_builder.append(_generateAlgorithms, "  ");
-		_builder.newLineIfNotEmpty();
-		_builder.newLine();
-		_builder.append("  ");
-		CharSequence _generateStates = this.generateStates();
-		_builder.append(_generateStates, "  ");
-		_builder.newLineIfNotEmpty();
-		_builder.newLine();
-		_builder.append("  ");
-		_builder.append("virtual void executeEvent(int pa_nEIID);");
-		_builder.newLine();
-		_builder.newLine();
-		_builder.append("  ");
-		_builder.append("FORTE_BASIC_FB_DATA_ARRAY(");
-		int _size = this.type.getInterfaceList().getEventOutputs().size();
-		_builder.append(_size, "  ");
-		_builder.append(", ");
-		int _size_1 = this.type.getInterfaceList().getInputVars().size();
-		_builder.append(_size_1, "  ");
-		_builder.append(", ");
-		int _size_2 = this.type.getInterfaceList().getOutputVars().size();
-		_builder.append(_size_2, "  ");
-		_builder.append(", ");
-		int _size_3 = this.type.getInternalVars().size();
-		_builder.append(_size_3, "  ");
-		_builder.append(", ");
-		int _size_4 = this.type.getInterfaceList().getSockets().size();
-		int _size_5 = this.type.getInterfaceList().getPlugs().size();
-		int _plus = (_size_4 + _size_5);
-		_builder.append(_plus, "  ");
-		_builder.append(");");
-		_builder.newLineIfNotEmpty();
-		_builder.newLine();
-		_builder.append("public:");
-		_builder.newLine();
-		_builder.append("  ");
-		CharSequence _fBClassName_1 = this.getFBClassName();
-		_builder.append(_fBClassName_1, "  ");
-		_builder.append("(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : ");
-		_builder.newLineIfNotEmpty();
-		_builder.append("       ");
-		_builder.append("CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
-		{
-			boolean _isEmpty = this.type.getInternalVars().isEmpty();
-			boolean _not = (!_isEmpty);
-			if (_not) {
-				_builder.append("&scm_stInternalVars");
-			} else {
-				_builder.append("nullptr");
-			}
-		}
-		_builder.append(", m_anFBConnData, m_anFBVarsData) {");
-		_builder.newLineIfNotEmpty();
-		_builder.append("  ");
-		_builder.append("};");
-		_builder.newLine();
-		_builder.newLine();
-		_builder.append("  ");
-		_builder.append("virtual ~");
-		CharSequence _fBClassName_2 = this.getFBClassName();
-		_builder.append(_fBClassName_2, "  ");
-		_builder.append("() = default;");
-		_builder.newLineIfNotEmpty();
-		_builder.append("};");
-		_builder.newLine();
-		_builder.newLine();
-		CharSequence _generateIncludeGuardEnd = this.generateIncludeGuardEnd();
-		_builder.append(_generateIncludeGuardEnd);
-		_builder.newLineIfNotEmpty();
-		_builder.newLine();
-		return _builder;
-	}
-
-	@Override
-	protected CharSequence generateHeaderIncludes() {
-		StringConcatenation _builder = new StringConcatenation();
-		_builder.append("#include \"basicfb.h\"");
-		_builder.newLine();
-		EList<VarDeclaration> _inputVars = this.type.getInterfaceList().getInputVars();
-		EList<VarDeclaration> _outputVars = this.type.getInterfaceList().getOutputVars();
-		Iterable<VarDeclaration> _plus = Iterables.<VarDeclaration>concat(_inputVars, _outputVars);
-		EList<VarDeclaration> _internalVars = this.type.getInternalVars();
-		CharSequence _generateTypeIncludes = this
-				.generateTypeIncludes(Iterables.<VarDeclaration>concat(_plus, _internalVars));
-		_builder.append(_generateTypeIncludes);
-		_builder.newLineIfNotEmpty();
-		EList<AdapterDeclaration> _sockets = this.type.getInterfaceList().getSockets();
-		EList<AdapterDeclaration> _plugs = this.type.getInterfaceList().getPlugs();
-		CharSequence _generateAdapterIncludes = this
-				.generateAdapterIncludes(Iterables.<AdapterDeclaration>concat(_sockets, _plugs));
-		_builder.append(_generateAdapterIncludes);
-		_builder.newLineIfNotEmpty();
-		_builder.newLine();
-		CompilerInfo _compilerInfo = this.type.getCompilerInfo();
-		String _header = null;
-		if (_compilerInfo != null) {
-			_header = _compilerInfo.getHeader();
-		}
-		_builder.append(_header);
-		_builder.newLineIfNotEmpty();
-		return _builder;
-	}
-
-	protected CharSequence generateAlgorithms() {
-		StringConcatenation _builder = new StringConcatenation();
-		{
-			EList<Algorithm> _algorithm = this.type.getAlgorithm();
-			for (final Algorithm alg : _algorithm) {
-				CharSequence _generateAlgorithm = this.generateAlgorithm(alg);
-				_builder.append(_generateAlgorithm);
-				_builder.newLineIfNotEmpty();
-			}
-		}
-		return _builder;
-	}
-
-	protected CharSequence _generateAlgorithm(final Algorithm alg) {
-		List<String> _errors = this.getErrors();
-		StringConcatenation _builder = new StringConcatenation();
-		_builder.append("Cannot export algorithm ");
-		Class<? extends Algorithm> _class = alg.getClass();
-		_builder.append(_class);
-		_errors.add(_builder.toString());
-		return "";
-	}
-
-	protected CharSequence _generateAlgorithm(final STAlgorithm alg) {
-		StringConcatenation _builder = new StringConcatenation();
-		_builder.append("void alg_");
-		String _name = alg.getName();
-		_builder.append(_name);
-		_builder.append("(void);");
-		_builder.newLineIfNotEmpty();
-		return _builder;
-	}
-
-	protected CharSequence generateStates() {
-		StringConcatenation _builder = new StringConcatenation();
-		{
-			EList<ECState> _eCState = this.type.getECC().getECState();
-			for (final ECState state : _eCState) {
-				_builder.append("static const TForteInt16 scm_nState");
-				String _name = state.getName();
-				_builder.append(_name);
-				_builder.append(" = ");
-				int _indexOf = this.type.getECC().getECState().indexOf(state);
-				_builder.append(_indexOf);
-				_builder.append(";");
-				_builder.newLineIfNotEmpty();
-			}
-		}
-		_builder.newLine();
-		{
-			EList<ECState> _eCState_1 = this.type.getECC().getECState();
-			for (final ECState state_1 : _eCState_1) {
-				CharSequence _generateState = this.generateState(state_1);
-				_builder.append(_generateState);
-				_builder.newLineIfNotEmpty();
-			}
-		}
-		return _builder;
-	}
-
-	protected CharSequence generateState(final ECState state) {
-		StringConcatenation _builder = new StringConcatenation();
-		_builder.append("void enterState");
-		String _name = state.getName();
-		_builder.append(_name);
-		_builder.append("(void);");
-		_builder.newLineIfNotEmpty();
-		return _builder;
-	}
-
-	protected CharSequence generateAlgorithm(final Algorithm alg) {
-		if (alg instanceof STAlgorithm) {
-			return _generateAlgorithm((STAlgorithm) alg);
-		} else if (alg != null) {
-			return _generateAlgorithm(alg);
-		} else {
-			throw new IllegalArgumentException("Unhandled parameter types: " + Arrays.<Object>asList(alg).toString());
-		}
-	}
-
-	@Pure
-	protected BasicFBType getType() {
-		return this.type;
-	}
+  @Accessors(AccessorType.PROTECTED_GETTER)
+  private BasicFBType type;
+  
+  public BasicFBHeaderTemplate(final BasicFBType type, final String name, final Path prefix) {
+    super(name, prefix);
+    this.type = type;
+  }
+  
+  @Override
+  public CharSequence generate() {
+    StringConcatenation _builder = new StringConcatenation();
+    CharSequence _generateHeader = this.generateHeader();
+    _builder.append(_generateHeader);
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    CharSequence _generateIncludeGuardStart = this.generateIncludeGuardStart();
+    _builder.append(_generateIncludeGuardStart);
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    CharSequence _generateHeaderIncludes = this.generateHeaderIncludes();
+    _builder.append(_generateHeaderIncludes);
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("class ");
+    CharSequence _fBClassName = this.getFBClassName();
+    _builder.append(_fBClassName);
+    _builder.append(": public CBasicFB {");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    CharSequence _generateFBDeclaration = this.generateFBDeclaration();
+    _builder.append(_generateFBDeclaration, "  ");
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("private:");
+    _builder.newLine();
+    _builder.append("  ");
+    CharSequence _generateFBInterfaceDeclaration = this.generateFBInterfaceDeclaration();
+    _builder.append(_generateFBInterfaceDeclaration, "  ");
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("  ");
+    CharSequence _generateFBInterfaceSpecDeclaration = this.generateFBInterfaceSpecDeclaration();
+    _builder.append(_generateFBInterfaceSpecDeclaration, "  ");
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("  ");
+    CharSequence _generateAccessors = this.generateAccessors(this.type.getInterfaceList().getInputVars(), "getDI");
+    _builder.append(_generateAccessors, "  ");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    CharSequence _generateAccessors_1 = this.generateAccessors(this.type.getInterfaceList().getOutputVars(), "getDO");
+    _builder.append(_generateAccessors_1, "  ");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    CharSequence _generateAccessors_2 = this.generateAccessors(this.type.getInternalVars(), "getVarInternal");
+    _builder.append(_generateAccessors_2, "  ");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    EList<AdapterDeclaration> _sockets = this.type.getInterfaceList().getSockets();
+    EList<AdapterDeclaration> _plugs = this.type.getInterfaceList().getPlugs();
+    CharSequence _generateAccessors_3 = this.generateAccessors(IterableExtensions.<AdapterDeclaration>toList(Iterables.<AdapterDeclaration>concat(_sockets, _plugs)));
+    _builder.append(_generateAccessors_3, "  ");
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("  ");
+    CharSequence _generateAlgorithms = this.generateAlgorithms();
+    _builder.append(_generateAlgorithms, "  ");
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("  ");
+    CharSequence _generateStates = this.generateStates();
+    _builder.append(_generateStates, "  ");
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("virtual void executeEvent(int pa_nEIID);");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("FORTE_BASIC_FB_DATA_ARRAY(");
+    int _size = this.type.getInterfaceList().getEventOutputs().size();
+    _builder.append(_size, "  ");
+    _builder.append(", ");
+    int _size_1 = this.type.getInterfaceList().getInputVars().size();
+    _builder.append(_size_1, "  ");
+    _builder.append(", ");
+    int _size_2 = this.type.getInterfaceList().getOutputVars().size();
+    _builder.append(_size_2, "  ");
+    _builder.append(", ");
+    int _size_3 = this.type.getInternalVars().size();
+    _builder.append(_size_3, "  ");
+    _builder.append(", ");
+    int _size_4 = this.type.getInterfaceList().getSockets().size();
+    int _size_5 = this.type.getInterfaceList().getPlugs().size();
+    int _plus = (_size_4 + _size_5);
+    _builder.append(_plus, "  ");
+    _builder.append(");");
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("public:");
+    _builder.newLine();
+    _builder.append("  ");
+    CharSequence _fBClassName_1 = this.getFBClassName();
+    _builder.append(_fBClassName_1, "  ");
+    _builder.append("(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : ");
+    _builder.newLineIfNotEmpty();
+    _builder.append("       ");
+    _builder.append("CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
+    {
+      boolean _isEmpty = this.type.getInternalVars().isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        _builder.append("&scm_stInternalVars");
+      } else {
+        _builder.append("nullptr");
+      }
+    }
+    _builder.append(", m_anFBConnData, m_anFBVarsData) {");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    _builder.append("};");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("virtual ~");
+    CharSequence _fBClassName_2 = this.getFBClassName();
+    _builder.append(_fBClassName_2, "  ");
+    _builder.append("() = default;");
+    _builder.newLineIfNotEmpty();
+    _builder.append("};");
+    _builder.newLine();
+    _builder.newLine();
+    CharSequence _generateIncludeGuardEnd = this.generateIncludeGuardEnd();
+    _builder.append(_generateIncludeGuardEnd);
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    return _builder;
+  }
+  
+  @Override
+  protected CharSequence generateHeaderIncludes() {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("#include \"basicfb.h\"");
+    _builder.newLine();
+    EList<VarDeclaration> _inputVars = this.type.getInterfaceList().getInputVars();
+    EList<VarDeclaration> _outputVars = this.type.getInterfaceList().getOutputVars();
+    Iterable<VarDeclaration> _plus = Iterables.<VarDeclaration>concat(_inputVars, _outputVars);
+    EList<VarDeclaration> _internalVars = this.type.getInternalVars();
+    CharSequence _generateTypeIncludes = this.generateTypeIncludes(Iterables.<VarDeclaration>concat(_plus, _internalVars));
+    _builder.append(_generateTypeIncludes);
+    _builder.newLineIfNotEmpty();
+    EList<AdapterDeclaration> _sockets = this.type.getInterfaceList().getSockets();
+    EList<AdapterDeclaration> _plugs = this.type.getInterfaceList().getPlugs();
+    CharSequence _generateAdapterIncludes = this.generateAdapterIncludes(Iterables.<AdapterDeclaration>concat(_sockets, _plugs));
+    _builder.append(_generateAdapterIncludes);
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    CompilerInfo _compilerInfo = this.type.getCompilerInfo();
+    String _header = null;
+    if (_compilerInfo!=null) {
+      _header=_compilerInfo.getHeader();
+    }
+    _builder.append(_header);
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  protected CharSequence generateAlgorithms() {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      EList<Algorithm> _algorithm = this.type.getAlgorithm();
+      for(final Algorithm alg : _algorithm) {
+        CharSequence _generateAlgorithm = this.generateAlgorithm(alg);
+        _builder.append(_generateAlgorithm);
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    return _builder;
+  }
+  
+  protected CharSequence _generateAlgorithm(final Algorithm alg) {
+    List<String> _errors = this.getErrors();
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("Cannot export algorithm ");
+    Class<? extends Algorithm> _class = alg.getClass();
+    _builder.append(_class);
+    _errors.add(_builder.toString());
+    return "";
+  }
+  
+  protected CharSequence _generateAlgorithm(final STAlgorithm alg) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("void alg_");
+    String _name = alg.getName();
+    _builder.append(_name);
+    _builder.append("(void);");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  protected CharSequence generateStates() {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      EList<ECState> _eCState = this.type.getECC().getECState();
+      for(final ECState state : _eCState) {
+        _builder.append("static const TForteInt16 scm_nState");
+        String _name = state.getName();
+        _builder.append(_name);
+        _builder.append(" = ");
+        int _indexOf = this.type.getECC().getECState().indexOf(state);
+        _builder.append(_indexOf);
+        _builder.append(";");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    _builder.newLine();
+    {
+      EList<ECState> _eCState_1 = this.type.getECC().getECState();
+      for(final ECState state_1 : _eCState_1) {
+        CharSequence _generateState = this.generateState(state_1);
+        _builder.append(_generateState);
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    return _builder;
+  }
+  
+  protected CharSequence generateState(final ECState state) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("void enterState");
+    String _name = state.getName();
+    _builder.append(_name);
+    _builder.append("(void);");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  protected CharSequence generateAlgorithm(final Algorithm alg) {
+    if (alg instanceof STAlgorithm) {
+      return _generateAlgorithm((STAlgorithm)alg);
+    } else if (alg != null) {
+      return _generateAlgorithm(alg);
+    } else {
+      throw new IllegalArgumentException("Unhandled parameter types: " +
+        Arrays.<Object>asList(alg).toString());
+    }
+  }
+  
+  @Pure
+  protected BasicFBType getType() {
+    return this.type;
+  }
 }
