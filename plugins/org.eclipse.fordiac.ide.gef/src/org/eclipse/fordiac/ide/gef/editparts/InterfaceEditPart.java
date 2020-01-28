@@ -42,8 +42,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.util.Activator;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -153,8 +153,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	@SuppressWarnings("unchecked")
 	public void setInOutConnectionsWidth(int width) {
 		boolean hide = isEvent()
-				? Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON)
-				: Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON);
+				? UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON)
+				: UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON);
 
 		getSourceConnections().forEach(cep -> checkConnection(width, hide, (ConnectionEditPart) cep));
 		getTargetConnections().forEach(cep -> checkConnection(width, hide, (ConnectionEditPart) cep));

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
- * 				 2018 - 2019 Johannes Kepler University Linz
+ * 				 2018 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *   Filip Pröstl-Andren
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added separate colors for different data types
+ *               - fixed hide event and data connection issues
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -131,6 +132,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 		if (getModel() instanceof EventConnection) {
 			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
+			connection.setVisible(
+					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON));
 		}
 
 		if (getModel() instanceof AdapterConnection) {
@@ -142,6 +145,9 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 		if (getModel() instanceof DataConnection) {
 			connection.setForegroundColor(PreferenceGetter.getDataColor(getModel().getSource().getTypeName()));
+			connection.setVisible(
+					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_DATA_CON));
+
 		}
 		connection.setToolTip(new ConnectionTooltipFigure(getModel()));
 		return connection;

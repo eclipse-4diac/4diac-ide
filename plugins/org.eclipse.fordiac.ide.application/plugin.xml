@@ -347,6 +347,26 @@
             id="org.eclipse.fordiac.ide.application.commands.followConnection"
             name="Follow Connection">
       </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.HideDataConnections"
+            id="org.eclipse.fordiac.ide.application.commands.hideDataConnections"
+            name="Hide Data Connections">
+           <state
+                 class="org.eclipse.ui.handlers.RegistryToggleState"
+                 id="org.eclipse.ui.commands.toggleState">
+           </state>
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.HideEventConnections"
+            id="org.eclipse.fordiac.ide.application.commands.hideEventConnections"
+            name="Hide Event Connections">
+           <state
+                 class="org.eclipse.ui.handlers.RegistryToggleState"
+                 id="org.eclipse.ui.commands.toggleState">
+           </state>
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -453,6 +473,20 @@
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
                id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar">
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.hideEventConnections"
+                  icon="fordiacimage://ICON_HIDE_EVENT"
+                  id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
+                  tooltip="Hide Event Connections"
+                  style="toggle">
+            </command>
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.hideDataConnections"
+                  icon="fordiacimage://ICON_HIDE_DATA"
+                  id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
+                  tooltip="Hide Data Connections"
+                  style="toggle">
+            </command>
             <command
                   commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
                   icon="fordiacimage://ICON_FB"

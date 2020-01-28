@@ -36,6 +36,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		PreferenceConverter.setDefault(store, PreferenceConstants.P_REMAINING_DATA_CONNECTOR_COLOR, new RGB(0, 0, 255));
 
 		PreferenceConverter.setDefault(store, PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR, new RGB(0, 174, 0));
+
+		store.setDefault(PreferenceConstants.P_HIDE_EVENT_CON, false);
+		store.setDefault(PreferenceConstants.P_HIDE_DATA_CON, false);
+
 		store.setDefault(PreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE, "HOLOBLOC"); //$NON-NLS-1$
 
 	}
