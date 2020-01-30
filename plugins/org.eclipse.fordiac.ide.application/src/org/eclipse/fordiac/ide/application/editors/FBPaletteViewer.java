@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
@@ -99,8 +98,8 @@ public class FBPaletteViewer extends PaletteViewer {
 
 		INavigatorFilterService filterService = commonViewer.getNavigatorContentService().getFilterService();
 		ViewerFilter[] visibleFilters = filterService.getVisibleFilters(true);
-		for (int i = 0; i < visibleFilters.length; i++) {
-			commonViewer.addFilter(visibleFilters[i]);
+		for (ViewerFilter visibleFilter : visibleFilters) {
+			commonViewer.addFilter(visibleFilter);
 		}
 
 		commonViewer.setSorter(new CommonViewerSorter());
@@ -136,13 +135,15 @@ public class FBPaletteViewer extends PaletteViewer {
 	}
 
 	private void setSearchFilter(String string) {
-		if (null == patternFilter) {
-			patternFilter = new TypeListPatternFilter();
-			commonViewer.addFilter(patternFilter);
+		if (string.length() != 1) { // min. 2 search letters for performance
+			if (null == patternFilter) {
+				patternFilter = new TypeListPatternFilter();
+				commonViewer.addFilter(patternFilter);
+			}
+			patternFilter.setPattern(string);
+			commonViewer.refresh(false);
+			handleTreeExpansion(string);
 		}
-		patternFilter.setPattern(string);
-		commonViewer.refresh(false);
-		handleTreeExpansion(string);
 	}
 
 	private void handleTreeExpansion(String string) {
@@ -163,23 +164,20 @@ public class FBPaletteViewer extends PaletteViewer {
 	}
 
 	private void setupResourceChangeListener(final IProject project) {
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
-			@Override
-			public void resourceChanged(IResourceChangeEvent event) {
-				if (event.getType() != IResourceChangeEvent.POST_CHANGE) {
-					return;
-				}
-				IResourceDelta rootDelta = event.getDelta();
-				IResourceDelta docDelta = rootDelta.findMember(project.getFullPath());
-				if (docDelta == null) {
-					return;
-				}
-				Display.getDefault().asyncExec(() -> {
-					if (null != commonViewer && !commonViewer.getControl().isDisposed()) {
-						commonViewer.refresh();
-					}
-				});
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(event -> {
+			if (event.getType() != IResourceChangeEvent.POST_CHANGE) {
+				return;
 			}
+			IResourceDelta rootDelta = event.getDelta();
+			IResourceDelta docDelta = rootDelta.findMember(project.getFullPath());
+			if (docDelta == null) {
+				return;
+			}
+			Display.getDefault().asyncExec(() -> {
+				if ((null != commonViewer) && !commonViewer.getControl().isDisposed()) {
+					commonViewer.refresh();
+				}
+			});
 		});
 	}
 
