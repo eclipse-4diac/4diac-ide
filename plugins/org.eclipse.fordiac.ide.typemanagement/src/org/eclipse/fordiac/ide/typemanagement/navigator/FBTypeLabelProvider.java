@@ -1,10 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH
-<<<<<<< HEAD
  * 				 2019 Johannes Kepler University Linz
-=======
- * 				 2019 Johannes Kepler University
->>>>>>> 1.11.x
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,12 +10,9 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
-<<<<<<< HEAD
  *   			 - cleaned up issues reported by sonarlint
-=======
  *   			 - made the getImageForFile public so it can be used by the
  *                 palette, some code cleanup
->>>>>>> 1.11.x
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
