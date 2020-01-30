@@ -60,7 +60,7 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
-		ContextMenuProvider cmp = new UIFBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager,
+		ContextMenuProvider cmp = new FBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager,
 				getSystem().getPalette()) {
 			@Override
 			protected IAction getMapAction(IEditorPart activeEditor, Resource res) {

@@ -103,7 +103,7 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	private void showFBInsertPopUpMenu() {
 		EditPartViewer viewer = getEditPart().getViewer();
 		MenuManager mgr = new MenuManager();
-		((UIFBNetworkContextMenuProvider) viewer.getContextMenu()).buildFBInsertMenu(mgr, getLocator().getRefPoint());
+		((FBNetworkContextMenuProvider) viewer.getContextMenu()).buildFBInsertMenu(mgr, getLocator().getRefPoint());
 		Menu menu = mgr.createContextMenu(viewer.getControl());
 		menu.setVisible(true);
 		// put the menu on top of the editor

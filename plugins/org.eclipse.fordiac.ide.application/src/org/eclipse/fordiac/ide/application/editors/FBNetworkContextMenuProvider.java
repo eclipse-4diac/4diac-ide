@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
-import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -70,26 +70,24 @@ import org.eclipse.ui.actions.ActionFactory;
 /**
  * This class builds the context menu for the FBNetwork Editor.
  */
-public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvider {
+public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 
 	private Palette palette;
 	private DiagramEditorWithFlyoutPalette editor;
 	private Point pt;
-	private ZoomManager zoomManager;
 
 	/**
-	 * Instantiates a new uIFB network context menu provider.
+	 * Instantiates a new FB network context menu provider.
 	 *
 	 * @param viewer      the viewer
 	 * @param registry    the registry
 	 * @param zoomManager the zoom manager
 	 */
-	public UIFBNetworkContextMenuProvider(final DiagramEditorWithFlyoutPalette editor, final ActionRegistry registry,
+	public FBNetworkContextMenuProvider(final DiagramEditorWithFlyoutPalette editor, final ActionRegistry registry,
 			final ZoomManager zoomManager, Palette palette) {
 		super(editor.getViewer(), zoomManager, registry);
 		this.palette = palette;
 		this.editor = editor;
-		this.zoomManager = zoomManager;
 
 		getViewer().getControl().addMenuDetectListener(e -> {
 			pt = getViewer().getControl().toControl(e.x, e.y);
@@ -100,7 +98,7 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		FigureCanvas viewerControl = (FigureCanvas) editor.getViewer().getControl();
 		org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
 		return new org.eclipse.draw2d.geometry.Point(pt.x + location.x, pt.y + location.y)
-				.scale(1.0 / zoomManager.getZoom());
+				.scale(1.0 / getZoomManager().getZoom());
 	}
 
 	/*
@@ -117,12 +115,12 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 			if (!st.isMoved()) { // pan executed
 				EditPart currentPart = getViewer().findObjectAt(st.getLocation());
 				EditPart selected = st.getTargetEditPart();
-				if ((selected != null) && (selected.getSelected() == EditPart.SELECTED_NONE)
+				if ((null != selected) && (selected.getSelected() == EditPart.SELECTED_NONE)
 						&& (selected instanceof AbstractViewEditPart)) {
 					getViewer().select(currentPart);
 				}
 
-				if (selected == null) {
+				if (null == selected) {
 					getViewer().select(currentPart);
 				}
 
@@ -131,24 +129,6 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 
 		super.buildContextMenu(menu);
 		IAction action;
-
-		action = getRegistry().getAction(ActionFactory.SELECT_ALL.getId());
-		menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-
-		action = getRegistry().getAction(ActionFactory.DELETE.getId());
-		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
-
-		action = getRegistry().getAction(ActionFactory.COPY.getId());
-		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
-
-		action = getRegistry().getAction(ActionFactory.CUT.getId());
-		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
-
-		action = getRegistry().getAction(ActionFactory.PASTE.getId());
-		if (action instanceof PasteEditPartsAction) {
-			((PasteEditPartsAction) action).setPastRefPosition(getPoint());
-		}
-		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
 		action = getRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
 		if ((action != null) && action.isEnabled()) {
@@ -167,7 +147,21 @@ public class UIFBNetworkContextMenuProvider extends ZoomUndoRedoContextMenuProvi
 		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 
 		createFBMenus(menu);
+		// group_rest instead of group_copy for sorting
+		action = getRegistry().getAction(ActionFactory.DELETE.getId());
+		menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 
+		action = getRegistry().getAction(ActionFactory.CUT.getId());
+		menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
+
+		action = getRegistry().getAction(ActionFactory.COPY.getId());
+		menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
+
+		action = getRegistry().getAction(ActionFactory.PASTE.getId());
+		if (action instanceof PasteEditPartsAction) {
+			((PasteEditPartsAction) action).setPastRefPosition(getPoint());
+		}
+		menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 	}
 
 	@SuppressWarnings("rawtypes")

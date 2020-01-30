@@ -18,20 +18,17 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
-import org.eclipse.gef.ui.actions.ZoomInAction;
-import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.ui.actions.ActionFactory;
 
 /**
  * The Class ZoomUndoRedoContextMenuProvider.
  *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
-public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
+public class FordiacContextMenuProvider extends ContextMenuProvider {
 
 	private final ZoomManager zoomManager;
 	private final ActionRegistry registry;
@@ -43,7 +40,7 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 	 * @param zoomManager the zoom manager
 	 * @param registry    the registry
 	 */
-	public ZoomUndoRedoContextMenuProvider(final EditPartViewer viewer, final ZoomManager zoomManager,
+	public FordiacContextMenuProvider(final EditPartViewer viewer, final ZoomManager zoomManager,
 			final ActionRegistry registry) {
 		super(viewer);
 		this.zoomManager = zoomManager;
@@ -52,6 +49,10 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 
 	public ActionRegistry getRegistry() {
 		return registry;
+	}
+
+	protected ZoomManager getZoomManager() {
+		return zoomManager;
 	}
 
 	/*
@@ -63,20 +64,10 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 	@Override
 	public void buildContextMenu(final IMenuManager menu) {
 		GEFActionConstants.addStandardActionGroups(menu);
-
-		menu.appendToGroup(GEFActionConstants.GROUP_VIEW, new GraphZoomInAction(zoomManager));
-		menu.appendToGroup(GEFActionConstants.GROUP_VIEW, new GraphZoomOutAction(zoomManager));
-
-		IAction action;
-		action = registry.getAction(ActionFactory.UNDO.getId());
-
-		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
-		action = registry.getAction(ActionFactory.REDO.getId());
-		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
-
 		// Alignment Actions
 		MenuManager submenu = new MenuManager("&Align");
 
+		IAction action;
 		action = registry.getAction(GEFActionConstants.ALIGN_LEFT);
 		if ((action != null) && action.isEnabled()) {
 			submenu.add(action);
@@ -113,31 +104,8 @@ public class ZoomUndoRedoContextMenuProvider extends ContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_REST, submenu);
 		}
 
-		action = registry.getAction(ActionFactory.PRINT.getId());
 		if ((action != null) && action.isEnabled()) {
 			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
-		}
-	}
-
-	private static final class GraphZoomInAction extends ZoomInAction {
-		public GraphZoomInAction(final ZoomManager zoomManager) {
-			super(zoomManager);
-		}
-
-		@Override
-		public boolean isEnabled() {
-			return zoomManager.canZoomIn();
-		}
-	}
-
-	private static final class GraphZoomOutAction extends ZoomOutAction {
-		public GraphZoomOutAction(final ZoomManager zoomManager) {
-			super(zoomManager);
-		}
-
-		@Override
-		public boolean isEnabled() {
-			return zoomManager.canZoomOut();
 		}
 	}
 }

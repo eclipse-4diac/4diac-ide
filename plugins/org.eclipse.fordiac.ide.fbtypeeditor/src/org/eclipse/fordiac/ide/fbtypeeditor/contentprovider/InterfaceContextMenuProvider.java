@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.actions.CreateOutputEventAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.actions.CreateOutputVariableAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.actions.CreatePlugAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.actions.CreateSocketAction;
-import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
@@ -45,7 +45,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.EditorPart;
 
-public class InterfaceContextMenuProvider extends ZoomUndoRedoContextMenuProvider {
+public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 
 	private static final String CREATE_PLUG = "Create Plug";
 	private static final String CREATE_SOCKET = "Create Socket";
@@ -58,8 +58,14 @@ public class InterfaceContextMenuProvider extends ZoomUndoRedoContextMenuProvide
 	public void buildContextMenu(IMenuManager menu) {
 		super.buildContextMenu(menu);
 
-		IAction action = getRegistry().getAction(ActionFactory.DELETE.getId());
-		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
+		// rename action
+		IAction action = getRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
+		if ((action != null) && action.isEnabled()) {
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+		}
+
+		action = getRegistry().getAction(ActionFactory.DELETE.getId());
+		menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
 		buildInterfaceEditEntries(menu, getRegistry());
 	}

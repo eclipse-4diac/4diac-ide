@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.resourceediting.editors;
 
-import org.eclipse.fordiac.ide.application.editors.UIFBNetworkContextMenuProvider;
+import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -22,7 +22,7 @@ import org.eclipse.jface.action.IMenuManager;
 /**
  * The Class ResourceDiagramEditorContextMenuProvider.
  */
-public class ResourceDiagramEditorContextMenuProvider extends UIFBNetworkContextMenuProvider {
+public class ResourceDiagramEditorContextMenuProvider extends FBNetworkContextMenuProvider {
 
 	public ResourceDiagramEditorContextMenuProvider(final ResourceDiagramEditor editor, final ActionRegistry registry,
 			final ZoomManager zoomManager, Palette palette) {

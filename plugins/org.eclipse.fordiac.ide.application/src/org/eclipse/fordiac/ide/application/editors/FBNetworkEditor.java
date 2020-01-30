@@ -145,7 +145,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 				public void showFBInsertMenu(MouseEvent me, EditPartViewer viewer) {
 					MenuManager mgr = new MenuManager();
-					((UIFBNetworkContextMenuProvider) viewer.getContextMenu()).buildFBInsertMenu(mgr,
+					((FBNetworkContextMenuProvider) viewer.getContextMenu()).buildFBInsertMenu(mgr,
 							new Point(me.x, me.y));
 					mgr.createContextMenu(viewer.getControl()).setVisible(true);
 				}
@@ -254,7 +254,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
-		return new UIFBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager, getPalette());
+		return new FBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager, getPalette());
 	}
 
 	protected Palette getPalette() {
