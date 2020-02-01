@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.UIFBNetworkContextMenuProvider;
+import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -45,7 +45,7 @@ public class NewSubApplication extends AbstractHandler {
 		Point pos = null;
 		if (selection.size() == 1) {
 			// new empty subapp at mouse cursor location
-			pos = ((UIFBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getPoint();
+			pos = ((FBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getPoint();
 		} else {
 			org.eclipse.swt.graphics.Point swtPos1 = FBNetworkHelper.getTopLeftCornerOfFBNetwork(selection.toList());
 			pos = new Point(swtPos1.x, swtPos1.y);

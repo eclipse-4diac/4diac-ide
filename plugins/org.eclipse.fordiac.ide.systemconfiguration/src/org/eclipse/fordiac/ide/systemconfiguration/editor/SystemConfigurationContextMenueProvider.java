@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
-import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -22,7 +22,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.actions.ActionFactory;
 
-public class SystemConfigurationContextMenueProvider extends ZoomUndoRedoContextMenuProvider {
+public class SystemConfigurationContextMenueProvider extends FordiacContextMenuProvider {
 
 	public SystemConfigurationContextMenueProvider(EditPartViewer viewer, ZoomManager zoomManager,
 			ActionRegistry registry) {

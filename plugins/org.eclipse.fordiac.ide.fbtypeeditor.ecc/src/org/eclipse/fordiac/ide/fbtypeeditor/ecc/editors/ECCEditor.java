@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
-import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -115,7 +115,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer, ZoomManager zoomManager) {
-		return new ZoomUndoRedoContextMenuProvider(viewer, zoomManager, getActionRegistry()) {
+		return new FordiacContextMenuProvider(viewer, zoomManager, getActionRegistry()) {
 			@Override
 			public void buildContextMenu(IMenuManager menu) {
 				super.buildContextMenu(menu);

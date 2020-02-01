@@ -19,7 +19,7 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.UIFBNetworkContextMenuProvider;
+import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
@@ -68,6 +68,6 @@ public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 	}
 
 	private static Point getPositionInViewer(FBNetworkEditor editor) {
-		return ((UIFBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getPoint();
+		return ((FBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getPoint();
 	}
 }

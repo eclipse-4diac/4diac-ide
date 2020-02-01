@@ -589,16 +589,6 @@
                 </with>
             </visibleWhen>
          </command>
-         <command commandId="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor"> 
-         	<visibleWhen checkEnabled="false">
-	             <reference definitionId="org.eclipse.fordiac.ide.application.FocusOnActivation" />     
-	         </visibleWhen>         
-         </command>
-         <command commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn" mnemonic="S">
-	         <visibleWhen checkEnabled="false">
-	             <reference definitionId="org.eclipse.fordiac.ide.application.FocusOnActivation" />     
-	         </visibleWhen>         
-         </command>
       </menuContribution>
    </extension>
    <extension

@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimi
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPartFactory;
-import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
@@ -82,7 +82,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(new ServiceSequenceEditPartFactory(this));
 		// configure the context menu provider
-		ContextMenuProvider cmProvider = new ZoomUndoRedoContextMenuProvider(viewer, root.getZoomManager(),
+		ContextMenuProvider cmProvider = new FordiacContextMenuProvider(viewer, root.getZoomManager(),
 				getActionRegistry()) {
 			@Override
 			public void buildContextMenu(IMenuManager menu) {

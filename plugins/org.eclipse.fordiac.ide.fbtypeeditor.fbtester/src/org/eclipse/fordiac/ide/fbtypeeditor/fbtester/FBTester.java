@@ -47,7 +47,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestDataLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
-import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -428,7 +428,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditpartFactory());
 		// configure the context menu provider
-		ContextMenuProvider cmProvider = new ZoomUndoRedoContextMenuProvider(viewer, root.getZoomManager(),
+		ContextMenuProvider cmProvider = new FordiacContextMenuProvider(viewer, root.getZoomManager(),
 				getActionRegistry()) {
 			@Override
 			public void buildContextMenu(IMenuManager menu) {

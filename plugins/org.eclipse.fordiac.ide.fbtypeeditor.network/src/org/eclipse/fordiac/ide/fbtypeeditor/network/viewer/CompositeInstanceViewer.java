@@ -23,7 +23,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.viewer.composite.CompositeInstanceViewerInput;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
-import org.eclipse.fordiac.ide.gef.ZoomUndoRedoContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -55,7 +55,7 @@ public class CompositeInstanceViewer extends DiagramEditor {
 
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer, ZoomManager zoomManager) {
-		return new ZoomUndoRedoContextMenuProvider(getGraphicalViewer(), zoomManager, getActionRegistry());
+		return new FordiacContextMenuProvider(getGraphicalViewer(), zoomManager, getActionRegistry());
 	}
 
 	@Override
