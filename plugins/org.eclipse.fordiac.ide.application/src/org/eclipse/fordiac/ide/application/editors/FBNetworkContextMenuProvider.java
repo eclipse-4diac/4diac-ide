@@ -176,10 +176,12 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 				break;
 			}
 		}
-		MenuManager submenu = new MenuManager(text);
-		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
-		fillMenuForPaletteGroup(submenu, palette.getRootGroup().getSubGroups());
-		addFBMenuEntries(palette.getRootGroup(), submenu);
+		if (useChangeFBType) {
+			MenuManager submenu = new MenuManager(text);
+			menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
+			fillMenuForPaletteGroup(submenu, palette.getRootGroup().getSubGroups());
+			addFBMenuEntries(palette.getRootGroup(), submenu);
+		}
 	}
 
 	public void buildFBInsertMenu(final IMenuManager menu, Point point) {

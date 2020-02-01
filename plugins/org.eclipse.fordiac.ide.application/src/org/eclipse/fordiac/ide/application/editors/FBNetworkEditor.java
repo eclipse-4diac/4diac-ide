@@ -69,7 +69,6 @@ import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -137,17 +136,16 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 				@Override
 				public void mouseUp(MouseEvent me, EditPartViewer viewer) {
 					if (0 != (me.stateMask & SWT.MOD1)) {
-						showFBInsertMenu(me, viewer);
+						EditPart editPart = getCurrentViewer().findObjectAt(getLocation());
+						if (null != editPart) {
+							SelectionRequest request = new SelectionRequest();
+							request.setLocation(getLocation());
+							request.setType(RequestConstants.REQ_OPEN);
+							editPart.performRequest(request);
+						}
 					} else {
 						super.mouseUp(me, viewer);
 					}
-				}
-
-				public void showFBInsertMenu(MouseEvent me, EditPartViewer viewer) {
-					MenuManager mgr = new MenuManager();
-					((FBNetworkContextMenuProvider) viewer.getContextMenu()).buildFBInsertMenu(mgr,
-							new Point(me.x, me.y));
-					mgr.createContextMenu(viewer.getControl()).setVisible(true);
 				}
 			};
 
