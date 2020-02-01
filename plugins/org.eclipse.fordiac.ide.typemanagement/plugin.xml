@@ -46,7 +46,7 @@
             class="org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard"
             icon="fordiacimage://ICON_FB"
             id="org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard"
-            name="New Type">
+            name="Type...">
       </wizard>
    </extension>
    <extension
@@ -490,7 +490,7 @@
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencePage"
             id="org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencePage"
-            name="Type Managament Preferences">
+            name="Type Management Preferences">
       </page>
    </extension>
    <extension

@@ -26,22 +26,23 @@
     </OutputVars>
   </InterfaceList>
   <FBNetwork>
-    <FB Comment="" Name="CTR" Type="E_CTU" x="500.0" y="200.0"/>
-    <FB Comment="" Name="GATE" Type="E_SWITCH" x="1200.0" y="200.0"/>
-    <FB Comment="" Name="DLY" Type="E_DELAY" x="1900.0" y="200.0"/>
-    <DataConnections>
-      <Connection Comment="" Destination="CTR.PV" Source="N" dx1="0.0" dx2="0.0" dy="0.0"/>
-      <Connection Comment="" Destination="CV" Source="CTR.CV" dx1="1790.0" dx2="0.0" dy="0.0"/>
-      <Connection Comment="" Destination="DLY.DT" Source="DT" dx1="1490.0" dx2="0.0" dy="0.0"/>
-      <Connection Comment="" Destination="GATE.G" Source="CTR.Q" dx1="0.0" dx2="0.0" dy="0.0"/>
-    </DataConnections>
+    <FB Comment="" Name="CTR" Type="E_CTU" x="800.0" y="266.6666666666667"/>
+    <FB Comment="" Name="GATE" Type="E_SWITCH" x="1500.0" y="266.6666666666667"/>
+    <FB Comment="" Name="DLY" Type="E_DELAY" x="2400.0" y="266.6666666666667"/>
     <EventConnections>
-      <Connection Comment="" Destination="GATE.EI" Source="CTR.CUO" dx1="0.0" dx2="0.0" dy="0.0"/>
-      <Connection Comment="" Destination="GATE.EI" Source="CTR.RO" dx1="0.0" dx2="0.0" dy="0.0"/>
-      <Connection Comment="" Destination="CTR.R" Source="START" dx1="465.0" dx2="0.0" dy="0.0"/>
-      <Connection Comment="" Destination="DLY.START" Source="GATE.EO0" dx1="185.0" dx2="0.0" dy="0.0"/>
-      <Connection Comment="" Destination="DLY.STOP" Source="STOP" dx1="1940.0" dx2="0.0" dy="0.0"/>
-      <Connection Comment="" Destination="EO" Source="DLY.EO" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="GATE.EI" Source="CTR.CUO"/>
+      <Connection Comment="" Destination="GATE.EI" Source="CTR.RO" dx1="153.33333333333334"/>
+      <Connection Comment="" Destination="CTR.R" Source="START" dx1="360.0"/>
+      <Connection Comment="" Destination="DLY.START" Source="GATE.EO0"/>
+      <Connection Comment="" Destination="DLY.STOP" Source="STOP" dx1="1826.6666666666667"/>
+      <Connection Comment="" Destination="EO" Source="DLY.EO" dx1="1500.0"/>
+      <Connection Comment="" Destination="CTR.CU" Source="DLY.EO" dx1="80.0" dx2="80.0" dy="-386.6666666666667"/>
     </EventConnections>
+    <DataConnections>
+      <Connection Comment="" Destination="CTR.PV" Source="N" dx1="100.0"/>
+      <Connection Comment="" Destination="CV" Source="CTR.CV" dx1="2246.666666666667"/>
+      <Connection Comment="" Destination="DLY.DT" Source="DT" dx1="1966.6666666666667"/>
+      <Connection Comment="" Destination="GATE.G" Source="CTR.Q"/>
+    </DataConnections>
   </FBNetwork>
 </FBType>
