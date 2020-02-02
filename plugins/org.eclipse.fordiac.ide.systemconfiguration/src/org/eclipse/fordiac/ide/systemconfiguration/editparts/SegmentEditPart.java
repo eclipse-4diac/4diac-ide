@@ -227,14 +227,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 				graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
 				graphics.setBackgroundPattern(null);
 				pattern.dispose();
-				Color darker = ColorHelper.darker(getBackgroundColor());
-				pattern = new Pattern(display, topLeft.x, topLeft.y + boundingRect.height / 2, topLeft.x, bottomRight.y,
-						darker, getBackgroundColor());
-				graphics.setBackgroundPattern(pattern);
-				graphics.fillOval(getBounds().right() - (getBounds().height() * 2 / 3), getBounds().getTop().y,
-						(getBounds().height() * 2 / 3), getBounds().height());
-				graphics.setBackgroundPattern(null);
-				pattern.dispose();
+
 				pattern = new Pattern(display, topLeft.x, topLeft.y + getBounds().height / 2, topLeft.x, bottomRight.y,
 						first, getBackgroundColor());
 				graphics.setBackgroundPattern(pattern);
@@ -244,17 +237,9 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 				graphics.clipRect(clipRect);
 				graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
 				graphics.setBackgroundPattern(null);
+				graphics.clipRect(getBounds().getCopy());
 				pattern.dispose();
 				first.dispose();
-				graphics.clipRect(getBounds().getCopy());
-				pattern = new Pattern(display, topLeft.x, topLeft.y + boundingRect.height / 2, topLeft.x, bottomRight.y,
-						getBackgroundColor(), darker);
-				graphics.setBackgroundPattern(pattern);
-				graphics.fillOval(getBounds().right() - (getBounds().height() * 2 / 3), getBounds().getTop().y,
-						(getBounds().height() * 2 / 3), getBounds().height());
-				graphics.setBackgroundPattern(null);
-				pattern.dispose();
-				darker.dispose();
 			}
 
 			@Override
@@ -347,7 +332,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			revalidate();
 		}
 
-		public void setInstanceAndTypeLabelFonts() {
+		private void setInstanceAndTypeLabelFonts() {
 			instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(PreferenceConstants.DIAGRAM_FONT));
 			typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
 		}
