@@ -230,11 +230,16 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 */
 	protected void setModel(final IEditorInput input) {
 		setEditDomain(new DefaultEditDomain(this));
-		getEditDomain().setDefaultTool(new AdvancedPanningSelectionTool());
+		getEditDomain().setDefaultTool(createDefaultTool());
 		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
 		// use one "System - Wide" command stack to avoid incositensies due to
 		// undo redo
 		getEditDomain().setCommandStack(SystemManager.INSTANCE.getCommandStack(getSystem()));
+	}
+
+	@SuppressWarnings("static-method")
+	protected AdvancedPanningSelectionTool createDefaultTool() {
+		return new AdvancedPanningSelectionTool();
 	}
 
 	/**

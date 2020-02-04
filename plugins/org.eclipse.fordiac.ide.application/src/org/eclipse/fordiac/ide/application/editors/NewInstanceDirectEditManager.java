@@ -27,6 +27,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Text;
 
 public class NewInstanceDirectEditManager extends TextDirectEditManager {
 
@@ -66,6 +67,7 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	}
 
 	private final Palette palette;
+	private String initialValue;
 
 	public NewInstanceDirectEditManager(GraphicalEditPart source, Palette palette) {
 		super(source, NewInstanceCellEditor.class, new NewInstanceCellEditorLocator());
@@ -73,10 +75,27 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	}
 
 	@Override
+	public void show() {
+		initialValue = null;
+		super.show();
+	}
+
+	public void show(String initialValue) {
+		this.initialValue = initialValue;
+		super.show();
+		Text text = getCellEditor().getText();
+		text.setSelection(initialValue.length());
+		setDirty(true);
+	}
+
+	@Override
 	protected void initCellEditor() {
 		getCellEditor().getMenuButton().addListener(SWT.Selection, event -> showFBInsertPopUpMenu());
 		getCellEditor().setPalette(palette);
 		super.initCellEditor();
+		if (null != initialValue) {
+			getCellEditor().setValue(initialValue);
+		}
 	}
 
 	@Override

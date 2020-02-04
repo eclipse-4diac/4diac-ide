@@ -91,6 +91,10 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		return container;
 	}
 
+	public Text getText() {
+		return text;
+	}
+
 	@Override
 	protected void focusLost() {
 		if (!insideButton && !insidePopUp && !insideTableView) {

@@ -145,9 +145,8 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 						PreferenceConstants.DIAGRAM_FONT));
 
 		JFaceResources.getFontRegistry().addListener(fontChangeListener);
-		viewer.getControl().addDisposeListener(e -> {
-			JFaceResources.getFontRegistry().removeListener(fontChangeListener);
-		});
+		viewer.getControl()
+				.addDisposeListener(e -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
 
 		rulerComp.setGraphicalViewer(getGraphicalViewer());
 	}
@@ -277,11 +276,16 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	protected void setModel(final IEditorInput input) {
 
 		setEditDomain(new DefaultEditDomain(this));
-		getEditDomain().setDefaultTool(new AdvancedPanningSelectionTool());
+		getEditDomain().setDefaultTool(createDefaultTool());
 		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
 		// use one "System - Wide" command stack to avoid incositensies due to
 		// undo redo
 		getEditDomain().setCommandStack(SystemManager.INSTANCE.getCommandStack(getSystem()));
+	}
+
+	@SuppressWarnings("static-method")
+	protected AdvancedPanningSelectionTool createDefaultTool() {
+		return new AdvancedPanningSelectionTool();
 	}
 
 	/**
