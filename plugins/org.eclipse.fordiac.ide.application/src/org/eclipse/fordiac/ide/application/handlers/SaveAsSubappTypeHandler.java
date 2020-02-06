@@ -20,11 +20,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.commands.CommandUtil;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.wizards.SaveAsSubappWizard;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
@@ -99,19 +96,6 @@ public class SaveAsSubappTypeHandler extends AbstractHandler {
 		WizardDialog dialog = new WizardDialog(editor.getSite().getShell(), wizard);
 		dialog.create();
 		dialog.open();
-
-		if (null != wizard.getEntry()) {
-			// the subapp type was created
-			changeSourceSubapp(subApp, wizard.getEntry(), editor);
-		}
-	}
-
-	private static void changeSourceSubapp(SubApp subApp, PaletteEntry entry, FBNetworkEditor editor) {
-		if (MessageDialog.openQuestion(editor.getSite().getShell(), Messages.SaveAsSubappHandler_ReplaceDialogTitle,
-				Messages.SaveAsSubappHandler_ReplaceDialogText)) {
-			CommandUtil.closeOpenedSubApp(subApp.getSubAppNetwork());
-			editor.getCommandStack().execute(new UpdateFBTypeCommand(subApp, entry));
-		}
 	}
 
 	private static boolean checkContainedSubApps(SubApp subApp) {

@@ -101,8 +101,6 @@ public class Messages extends NLS {
 
 	public static String SaveAsSubApplicationTypeAction_UntypedSubappErrorDescription;
 
-	public static String SaveAsSubappHandler_ReplaceDialogTitle;
-
 	public static String SaveAsSubappHandler_ReplaceDialogText;
 
 	public static String SaveAsSubApplicationTypeAction_WizardTitle;
