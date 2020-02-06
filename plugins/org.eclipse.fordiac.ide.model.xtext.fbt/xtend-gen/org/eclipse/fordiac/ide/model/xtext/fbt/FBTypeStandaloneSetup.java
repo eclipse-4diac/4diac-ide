@@ -16,12 +16,11 @@ package org.eclipse.fordiac.ide.model.xtext.fbt;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetupGenerated;
 
 /**
- * Initialization support for running Xtext languages without Equinox extension
- * registry.
+ * Initialization support for running Xtext languages without Equinox extension registry.
  */
 @SuppressWarnings("all")
 public class FBTypeStandaloneSetup extends FBTypeStandaloneSetupGenerated {
-	public static void doSetup() {
-		new FBTypeStandaloneSetup().createInjectorAndDoEMFRegistration();
-	}
+  public static void doSetup() {
+    new FBTypeStandaloneSetup().createInjectorAndDoEMFRegistration();
+  }
 }

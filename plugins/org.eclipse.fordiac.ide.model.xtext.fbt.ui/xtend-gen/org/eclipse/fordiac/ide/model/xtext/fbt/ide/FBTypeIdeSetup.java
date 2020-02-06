@@ -15,10 +15,10 @@ import org.eclipse.xtext.util.Modules2;
  */
 @SuppressWarnings("all")
 public class FBTypeIdeSetup extends FBTypeStandaloneSetup {
-	@Override
-	public Injector createInjector() {
-		FBTypeRuntimeModule _fBTypeRuntimeModule = new FBTypeRuntimeModule();
-		FBTypeIdeModule _fBTypeIdeModule = new FBTypeIdeModule();
-		return Guice.createInjector(Modules2.mixin(_fBTypeRuntimeModule, _fBTypeIdeModule));
-	}
+  @Override
+  public Injector createInjector() {
+    FBTypeRuntimeModule _fBTypeRuntimeModule = new FBTypeRuntimeModule();
+    FBTypeIdeModule _fBTypeIdeModule = new FBTypeIdeModule();
+    return Guice.createInjector(Modules2.mixin(_fBTypeRuntimeModule, _fBTypeIdeModule));
+  }
 }
