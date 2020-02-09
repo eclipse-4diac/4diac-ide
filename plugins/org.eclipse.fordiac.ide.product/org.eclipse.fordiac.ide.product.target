@@ -8,6 +8,7 @@
         	<unit id="org.eclipse.gef.sdk.feature.group" version="3.11.0.201606061308"/>
         	<unit id="org.eclipse.xtext.sdk.feature.group" version="2.20.0.v20191202-1256"/>
         	<unit id="org.eclipse.equinox.executable.feature.group" version="3.8.600.v20191014-2025"/>
+        	<unit id="org.eclipse.egit.feature.group" version="5.6.0.201912101111-r"/>
     	</location>
     	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
         	<repository location="http://download.eclipse.org/eclipse/updates/4.14"/>

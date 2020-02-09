@@ -278,6 +278,10 @@
       <feature id="org.eclipse.xtext.runtime"/>
       <feature id="org.eclipse.xtext.xbase"/>
       <feature id="org.eclipse.jdt"/>
+      <feature id="org.eclipse.egit" installMode="root"/>
+      <feature id="org.eclipse.jgit" installMode="root"/>
+      <feature id="org.eclipse.jgit.http.apache" installMode="root"/>
+      <feature id="org.eclipse.jgit.ssh.apache" installMode="root"/>
    </features>
 
    <configurations>
