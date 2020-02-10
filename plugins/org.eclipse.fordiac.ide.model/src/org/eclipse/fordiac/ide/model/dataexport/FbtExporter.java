@@ -134,7 +134,9 @@ class FbtExporter extends AbstractTypeExporter {
 		getWriter().writeAttribute(LibraryElementTags.SOURCE_ATTRIBUTE, transition.getSource().getName());
 		getWriter().writeAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE, transition.getDestination().getName());
 		getWriter().writeAttribute(LibraryElementTags.CONDITION_ATTRIBUTE, transition.getConditionText());
-		getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, transition.getComment());
+		if (null != transition.getComment()) {
+			getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, transition.getComment());
+		}
 		addXYAttributes(transition);
 	}
 
