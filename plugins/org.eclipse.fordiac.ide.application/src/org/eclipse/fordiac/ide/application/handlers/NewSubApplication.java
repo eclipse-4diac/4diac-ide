@@ -23,6 +23,8 @@ import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -43,7 +45,7 @@ public class NewSubApplication extends AbstractHandler {
 
 	public static Point getInsertPos(FBNetworkEditor editor, StructuredSelection selection) {
 		Point pos = null;
-		if (selection.size() == 1) {
+		if (createNewEmptySubapp(selection)) {
 			// new empty subapp at mouse cursor location
 			pos = ((FBNetworkContextMenuProvider) editor.getViewer().getContextMenu()).getPoint();
 		} else {
@@ -53,4 +55,8 @@ public class NewSubApplication extends AbstractHandler {
 		return pos;
 	}
 
+	private static boolean createNewEmptySubapp(StructuredSelection selection) {
+		return (selection.size() == 1)
+				&& !(((EditPart) selection.getFirstElement()).getModel() instanceof FBNetworkElement);
+	}
 }
