@@ -41,14 +41,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl#getFb
- * <em>Fb</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl#getInterfaceElement
- * <em>Interface Element</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl#getResource
- * <em>Resource</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl#getHierarchy
- * <em>Hierarchy</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl#getFb <em>Fb</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl#getInterfaceElement <em>Interface Element</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl#getResource <em>Resource</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.PortElementImpl#getHierarchy <em>Hierarchy</em>}</li>
  * </ul>
  *
  * @generated
@@ -57,7 +53,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	/**
 	 * The cached value of the '{@link #getFb() <em>Fb</em>}' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getFb()
 	 * @generated
 	 * @ordered
@@ -65,9 +61,8 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	protected FB fb;
 
 	/**
-	 * The cached value of the '{@link #getInterfaceElement() <em>Interface
-	 * Element</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getInterfaceElement() <em>Interface Element</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getInterfaceElement()
 	 * @generated
 	 * @ordered
@@ -77,7 +72,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	/**
 	 * The cached value of the '{@link #getResource() <em>Resource</em>}' reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #getResource()
 	 * @generated
 	 * @ordered
@@ -85,9 +79,8 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	protected Resource resource;
 
 	/**
-	 * The cached value of the '{@link #getHierarchy() <em>Hierarchy</em>}'
-	 * attribute list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getHierarchy() <em>Hierarchy</em>}' attribute list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getHierarchy()
 	 * @generated
 	 * @ordered
@@ -96,7 +89,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected PortElementImpl() {
@@ -105,7 +97,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -115,18 +106,16 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public FB getFb() {
 		if (fb != null && fb.eIsProxy()) {
-			InternalEObject oldFb = (InternalEObject) fb;
-			fb = (FB) eResolveProxy(oldFb);
+			InternalEObject oldFb = (InternalEObject)fb;
+			fb = (FB)eResolveProxy(oldFb);
 			if (fb != oldFb) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringBasePackage.PORT_ELEMENT__FB,
-							oldFb, fb));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringBasePackage.PORT_ELEMENT__FB, oldFb, fb));
 			}
 		}
 		return fb;
@@ -134,7 +123,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public FB basicGetFb() {
@@ -143,7 +131,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -156,19 +143,16 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public IInterfaceElement getInterfaceElement() {
 		if (interfaceElement != null && interfaceElement.eIsProxy()) {
-			InternalEObject oldInterfaceElement = (InternalEObject) interfaceElement;
-			interfaceElement = (IInterfaceElement) eResolveProxy(oldInterfaceElement);
+			InternalEObject oldInterfaceElement = (InternalEObject)interfaceElement;
+			interfaceElement = (IInterfaceElement)eResolveProxy(oldInterfaceElement);
 			if (interfaceElement != oldInterfaceElement) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT, oldInterfaceElement,
-							interfaceElement));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT, oldInterfaceElement, interfaceElement));
 			}
 		}
 		return interfaceElement;
@@ -176,7 +160,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public IInterfaceElement basicGetInterfaceElement() {
@@ -185,7 +168,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -193,24 +175,21 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 		IInterfaceElement oldInterfaceElement = interfaceElement;
 		interfaceElement = newInterfaceElement;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT,
-					oldInterfaceElement, interfaceElement));
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT, oldInterfaceElement, interfaceElement));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Resource getResource() {
 		if (resource != null && resource.eIsProxy()) {
-			InternalEObject oldResource = (InternalEObject) resource;
-			resource = (Resource) eResolveProxy(oldResource);
+			InternalEObject oldResource = (InternalEObject)resource;
+			resource = (Resource)eResolveProxy(oldResource);
 			if (resource != oldResource) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							MonitoringBasePackage.PORT_ELEMENT__RESOURCE, oldResource, resource));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringBasePackage.PORT_ELEMENT__RESOURCE, oldResource, resource));
 			}
 		}
 		return resource;
@@ -218,7 +197,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Resource basicGetResource() {
@@ -227,7 +205,6 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -235,171 +212,165 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 		Resource oldResource = resource;
 		resource = newResource;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.PORT_ELEMENT__RESOURCE,
-					oldResource, resource));
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.PORT_ELEMENT__RESOURCE, oldResource, resource));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<String> getHierarchy() {
 		if (hierarchy == null) {
-			hierarchy = new EDataTypeEList<>(String.class, this, MonitoringBasePackage.PORT_ELEMENT__HIERARCHY);
+			hierarchy = new EDataTypeEList<String>(String.class, this, MonitoringBasePackage.PORT_ELEMENT__HIERARCHY);
 		}
 		return hierarchy;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getPortString() {
-		String hierarchy = ""; //$NON-NLS-1$
-		for (String element : getHierarchy()) {
-			hierarchy += element;
-			hierarchy += "."; //$NON-NLS-1$
-		}
-
-		String adapter = ""; //$NON-NLS-1$
-		if (interfaceElement.eContainer().eContainer() instanceof AdapterFB) {
-			adapter += ((PortElementImpl) eContainer()).interfaceElement.getName();
-			adapter += "."; //$NON-NLS-1$
-		}
-
-		return getResource().getDevice().getName() + "." + resource.getName() + "." + hierarchy + fb.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				+ adapter + interfaceElement.getName();
+				StringBuilder portString = new StringBuilder(getResource().getDevice().getName());
+		
+				portString.append("."); //$NON-NLS-1$
+				portString.append(resource.getName());
+				portString.append("."); //$NON-NLS-1$
+		
+				for (String element : getHierarchy()) {
+					portString.append(element);
+					portString.append("."); //$NON-NLS-1$
+				}
+		
+				portString.append(fb.getName());
+				portString.append("."); //$NON-NLS-1$
+		
+				if (interfaceElement.eContainer().eContainer() instanceof AdapterFB) {
+					portString.append(((PortElementImpl) eContainer()).interfaceElement.getName());
+					portString.append("."); //$NON-NLS-1$
+				}
+				portString.append(interfaceElement.getName());
+		
+				return portString.toString();
+		
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Device getDevice() {
-		return getResource().getDevice();
+				return getResource().getDevice();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public AutomationSystem getSystem() {
-		return getResource().getAutomationSystem();
+				return getResource().getAutomationSystem();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case MonitoringBasePackage.PORT_ELEMENT__FB:
-			if (resolve)
-				return getFb();
-			return basicGetFb();
-		case MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT:
-			if (resolve)
-				return getInterfaceElement();
-			return basicGetInterfaceElement();
-		case MonitoringBasePackage.PORT_ELEMENT__RESOURCE:
-			if (resolve)
-				return getResource();
-			return basicGetResource();
-		case MonitoringBasePackage.PORT_ELEMENT__HIERARCHY:
-			return getHierarchy();
+			case MonitoringBasePackage.PORT_ELEMENT__FB:
+				if (resolve) return getFb();
+				return basicGetFb();
+			case MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT:
+				if (resolve) return getInterfaceElement();
+				return basicGetInterfaceElement();
+			case MonitoringBasePackage.PORT_ELEMENT__RESOURCE:
+				if (resolve) return getResource();
+				return basicGetResource();
+			case MonitoringBasePackage.PORT_ELEMENT__HIERARCHY:
+				return getHierarchy();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case MonitoringBasePackage.PORT_ELEMENT__FB:
-			setFb((FB) newValue);
-			return;
-		case MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT:
-			setInterfaceElement((IInterfaceElement) newValue);
-			return;
-		case MonitoringBasePackage.PORT_ELEMENT__RESOURCE:
-			setResource((Resource) newValue);
-			return;
-		case MonitoringBasePackage.PORT_ELEMENT__HIERARCHY:
-			getHierarchy().clear();
-			getHierarchy().addAll((Collection<? extends String>) newValue);
-			return;
+			case MonitoringBasePackage.PORT_ELEMENT__FB:
+				setFb((FB)newValue);
+				return;
+			case MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT:
+				setInterfaceElement((IInterfaceElement)newValue);
+				return;
+			case MonitoringBasePackage.PORT_ELEMENT__RESOURCE:
+				setResource((Resource)newValue);
+				return;
+			case MonitoringBasePackage.PORT_ELEMENT__HIERARCHY:
+				getHierarchy().clear();
+				getHierarchy().addAll((Collection<? extends String>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case MonitoringBasePackage.PORT_ELEMENT__FB:
-			setFb((FB) null);
-			return;
-		case MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT:
-			setInterfaceElement((IInterfaceElement) null);
-			return;
-		case MonitoringBasePackage.PORT_ELEMENT__RESOURCE:
-			setResource((Resource) null);
-			return;
-		case MonitoringBasePackage.PORT_ELEMENT__HIERARCHY:
-			getHierarchy().clear();
-			return;
+			case MonitoringBasePackage.PORT_ELEMENT__FB:
+				setFb((FB)null);
+				return;
+			case MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT:
+				setInterfaceElement((IInterfaceElement)null);
+				return;
+			case MonitoringBasePackage.PORT_ELEMENT__RESOURCE:
+				setResource((Resource)null);
+				return;
+			case MonitoringBasePackage.PORT_ELEMENT__HIERARCHY:
+				getHierarchy().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case MonitoringBasePackage.PORT_ELEMENT__FB:
-			return fb != null;
-		case MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT:
-			return interfaceElement != null;
-		case MonitoringBasePackage.PORT_ELEMENT__RESOURCE:
-			return resource != null;
-		case MonitoringBasePackage.PORT_ELEMENT__HIERARCHY:
-			return hierarchy != null && !hierarchy.isEmpty();
+			case MonitoringBasePackage.PORT_ELEMENT__FB:
+				return fb != null;
+			case MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT:
+				return interfaceElement != null;
+			case MonitoringBasePackage.PORT_ELEMENT__RESOURCE:
+				return resource != null;
+			case MonitoringBasePackage.PORT_ELEMENT__HIERARCHY:
+				return hierarchy != null && !hierarchy.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (hierarchy: "); //$NON-NLS-1$

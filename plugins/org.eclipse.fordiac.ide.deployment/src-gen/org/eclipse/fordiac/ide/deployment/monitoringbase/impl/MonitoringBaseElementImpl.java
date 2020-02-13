@@ -33,10 +33,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl#getPort
- * <em>Port</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl#isOffline
- * <em>Offline</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl#getPort <em>Port</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.impl.MonitoringBaseElementImpl#isOffline <em>Offline</em>}</li>
  * </ul>
  *
  * @generated
@@ -45,7 +43,7 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getPort()
 	 * @generated
 	 * @ordered
@@ -55,7 +53,6 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	/**
 	 * The default value of the '{@link #isOffline() <em>Offline</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #isOffline()
 	 * @generated
 	 * @ordered
@@ -65,7 +62,6 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	/**
 	 * The cached value of the '{@link #isOffline() <em>Offline</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @see #isOffline()
 	 * @generated
 	 * @ordered
@@ -74,7 +70,6 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected MonitoringBaseElementImpl() {
@@ -83,7 +78,6 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -93,18 +87,16 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public PortElement getPort() {
 		if (port != null && port.eIsProxy()) {
-			InternalEObject oldPort = (InternalEObject) port;
-			port = (PortElement) eResolveProxy(oldPort);
+			InternalEObject oldPort = (InternalEObject)port;
+			port = (PortElement)eResolveProxy(oldPort);
 			if (port != oldPort) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT, oldPort, port));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT, oldPort, port));
 			}
 		}
 		return port;
@@ -112,7 +104,6 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public PortElement basicGetPort() {
@@ -121,7 +112,6 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -129,13 +119,11 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 		PortElement oldPort = port;
 		port = newPort;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT,
-					oldPort, port));
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT, oldPort, port));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -145,7 +133,6 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -153,35 +140,37 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 		boolean oldOffline = offline;
 		offline = newOffline;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE, oldOffline, offline));
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE, oldOffline, offline));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getPortString() {
-		String hierarchy = ""; //$NON-NLS-1$
-		for (String element : getPort().getHierarchy()) {
-			hierarchy += element;
-			hierarchy += "."; //$NON-NLS-1$
-		}
-
-		String adapter = ""; //$NON-NLS-1$
-		if (getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {
-			adapter += ((PortElementImpl) getPort().eContainer()).getInterfaceElement().getName();
-			adapter += "."; //$NON-NLS-1$
-		}
-
-		return hierarchy + getPort().getFb().getName() + "." + adapter + getPort().getInterfaceElement().getName(); //$NON-NLS-1$
+				StringBuilder portString = new StringBuilder();
+		
+				for (String element : getPort().getHierarchy()) {
+					portString.append(element);
+					portString.append("."); //$NON-NLS-1$
+				}
+		
+				portString.append(getPort().getFb().getName());
+				portString.append("."); //$NON-NLS-1$
+		
+				if (getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {
+					portString.append(((PortElementImpl) getPort().eContainer()).getInterfaceElement().getName());
+					portString.append("."); //$NON-NLS-1$
+				}
+				portString.append(getPort().getInterfaceElement().getName());
+		
+				return portString.toString();
+		
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -191,7 +180,6 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -201,105 +189,85 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getQualifiedString() {
-		String hierarchy = ""; //$NON-NLS-1$
-		for (String element : getPort().getHierarchy()) {
-			hierarchy += element;
-			hierarchy += "."; //$NON-NLS-1$
-		}
-
-		String adapter = ""; //$NON-NLS-1$
-		if (getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {
-			adapter += ((PortElementImpl) getPort().eContainer()).getInterfaceElement().getName();
-			adapter += "."; //$NON-NLS-1$
-		}
-
-		return hierarchy + getPort().getFb().getName() + "." + adapter + getPort().getInterfaceElement().getName(); //$NON-NLS-1$
+				return getPortString();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
-			if (resolve)
-				return getPort();
-			return basicGetPort();
-		case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
-			return isOffline();
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
+				if (resolve) return getPort();
+				return basicGetPort();
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
+				return isOffline();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
-			setPort((PortElement) newValue);
-			return;
-		case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
-			setOffline((Boolean) newValue);
-			return;
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
+				setPort((PortElement)newValue);
+				return;
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
+				setOffline((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
-			setPort((PortElement) null);
-			return;
-		case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
-			setOffline(OFFLINE_EDEFAULT);
-			return;
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
+				setPort((PortElement)null);
+				return;
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
+				setOffline(OFFLINE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
-			return port != null;
-		case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
-			return offline != OFFLINE_EDEFAULT;
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
+				return port != null;
+			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
+				return offline != OFFLINE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (offline: "); //$NON-NLS-1$

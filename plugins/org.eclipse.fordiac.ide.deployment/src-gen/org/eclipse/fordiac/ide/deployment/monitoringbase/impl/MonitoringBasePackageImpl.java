@@ -35,41 +35,37 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!--
  * end-user-doc -->
- * 
  * @generated
  */
 public class MonitoringBasePackageImpl extends EPackageImpl implements MonitoringBasePackage {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass monitoringBaseElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass portElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass iEditPartCreatorEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
-	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the
-	 * package package URI value.
-	 * <p>
-	 * Note: the correct way to create the package is via the static factory method
-	 * {@link #init init()}, which also performs initialization of the package, or
-	 * returns the registered package, if one already exists. <!-- begin-user-doc
+	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
+	 * package URI value.
+	 * <p>Note: the correct way to create the package is via the static
+	 * factory method {@link #init init()}, which also performs
+	 * initialization of the package, or returns the registered package,
+	 * if one already exists.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#eNS_URI
 	 * @see #init()
@@ -81,7 +77,6 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private static boolean isInited = false;
@@ -102,14 +97,11 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * @generated
 	 */
 	public static MonitoringBasePackage init() {
-		if (isInited)
-			return (MonitoringBasePackage) EPackage.Registry.INSTANCE.getEPackage(MonitoringBasePackage.eNS_URI);
+		if (isInited) return (MonitoringBasePackage)EPackage.Registry.INSTANCE.getEPackage(MonitoringBasePackage.eNS_URI);
 
 		// Obtain or create and register package
 		Object registeredMonitoringBasePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		MonitoringBasePackageImpl theMonitoringBasePackage = registeredMonitoringBasePackage instanceof MonitoringBasePackageImpl
-				? (MonitoringBasePackageImpl) registeredMonitoringBasePackage
-				: new MonitoringBasePackageImpl();
+		MonitoringBasePackageImpl theMonitoringBasePackage = registeredMonitoringBasePackage instanceof MonitoringBasePackageImpl ? (MonitoringBasePackageImpl)registeredMonitoringBasePackage : new MonitoringBasePackageImpl();
 
 		isInited = true;
 
@@ -136,7 +128,6 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -146,27 +137,24 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EReference getMonitoringBaseElement_Port() {
-		return (EReference) monitoringBaseElementEClass.getEStructuralFeatures().get(0);
+		return (EReference)monitoringBaseElementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getMonitoringBaseElement_Offline() {
-		return (EAttribute) monitoringBaseElementEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)monitoringBaseElementEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -176,47 +164,42 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EReference getPortElement_Fb() {
-		return (EReference) portElementEClass.getEStructuralFeatures().get(0);
+		return (EReference)portElementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EReference getPortElement_InterfaceElement() {
-		return (EReference) portElementEClass.getEStructuralFeatures().get(1);
+		return (EReference)portElementEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EReference getPortElement_Resource() {
-		return (EReference) portElementEClass.getEStructuralFeatures().get(2);
+		return (EReference)portElementEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getPortElement_Hierarchy() {
-		return (EAttribute) portElementEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)portElementEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -226,31 +209,28 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public MonitoringBaseFactory getMonitoringBaseFactory() {
-		return (MonitoringBaseFactory) getEFactoryInstance();
+		return (MonitoringBaseFactory)getEFactoryInstance();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isCreated = false;
 
 	/**
-	 * Creates the meta-model objects for the package. This method is guarded to
-	 * have no affect on any invocation but its first. <!-- begin-user-doc --> <!--
+	 * Creates the meta-model objects for the package.  This method is
+	 * guarded to have no affect on any invocation but its first.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (isCreated)
-			return;
+		if (isCreated) return;
 		isCreated = true;
 
 		// Create classes and their features
@@ -269,7 +249,6 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isInitialized = false;
@@ -282,8 +261,7 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (isInitialized)
-			return;
+		if (isInitialized) return;
 		isInitialized = true;
 
 		// Initialize package
@@ -292,10 +270,8 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
-				.getEPackage(XMLTypePackage.eNS_URI);
-		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage) EPackage.Registry.INSTANCE
-				.getEPackage(LibraryElementPackage.eNS_URI);
+		XMLTypePackage theXMLTypePackage = (XMLTypePackage)EPackage.Registry.INSTANCE.getEPackage(XMLTypePackage.eNS_URI);
+		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -305,52 +281,31 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 		monitoringBaseElementEClass.getESuperTypes().add(this.getIEditPartCreator());
 
 		// Initialize classes and features; add operations and parameters
-		initEClass(monitoringBaseElementEClass, MonitoringBaseElement.class, "MonitoringBaseElement", IS_ABSTRACT, //$NON-NLS-1$
-				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMonitoringBaseElement_Port(), this.getPortElement(), null, "port", null, 0, 1, //$NON-NLS-1$
-				MonitoringBaseElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMonitoringBaseElement_Offline(), theXMLTypePackage.getBoolean(), "offline", "true", 0, 1, //$NON-NLS-1$ //$NON-NLS-2$
-				MonitoringBaseElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(monitoringBaseElementEClass, MonitoringBaseElement.class, "MonitoringBaseElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getMonitoringBaseElement_Port(), this.getPortElement(), null, "port", null, 0, 1, MonitoringBaseElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getMonitoringBaseElement_Offline(), theXMLTypePackage.getBoolean(), "offline", "true", 0, 1, MonitoringBaseElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
-		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getPortString", 0, 1, IS_UNIQUE, //$NON-NLS-1$
-				IS_ORDERED);
+		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getPortString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getResourceString", 0, 1, IS_UNIQUE, //$NON-NLS-1$
-				IS_ORDERED);
+		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getResourceString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getFBString", 0, 1, IS_UNIQUE, //$NON-NLS-1$
-				IS_ORDERED);
+		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getFBString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getQualifiedString", 0, 1, IS_UNIQUE, //$NON-NLS-1$
-				IS_ORDERED);
+		addEOperation(monitoringBaseElementEClass, theXMLTypePackage.getString(), "getQualifiedString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(portElementEClass, PortElement.class, "PortElement", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getPortElement_Fb(), theLibraryElementPackage.getFB(), null, "fb", null, 0, 1, PortElement.class, //$NON-NLS-1$
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPortElement_InterfaceElement(), theLibraryElementPackage.getIInterfaceElement(), null,
-				"interfaceElement", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
-				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPortElement_Resource(), theLibraryElementPackage.getResource(), null, "resource", null, 0, 1, //$NON-NLS-1$
-				PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPortElement_Hierarchy(), theXMLTypePackage.getString(), "hierarchy", null, 0, -1, //$NON-NLS-1$
-				PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE,
-				!IS_DERIVED, IS_ORDERED);
+		initEClass(portElementEClass, PortElement.class, "PortElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getPortElement_Fb(), theLibraryElementPackage.getFB(), null, "fb", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPortElement_InterfaceElement(), theLibraryElementPackage.getIInterfaceElement(), null, "interfaceElement", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPortElement_Resource(), theLibraryElementPackage.getResource(), null, "resource", null, 0, 1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getPortElement_Hierarchy(), theXMLTypePackage.getString(), "hierarchy", null, 0, -1, PortElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(portElementEClass, theXMLTypePackage.getString(), "getPortString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(portElementEClass, theLibraryElementPackage.getDevice(), "getDevice", 0, 1, IS_UNIQUE, //$NON-NLS-1$
-				IS_ORDERED);
+		addEOperation(portElementEClass, theLibraryElementPackage.getDevice(), "getDevice", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(portElementEClass, theLibraryElementPackage.getAutomationSystem(), "getSystem", 0, 1, IS_UNIQUE, //$NON-NLS-1$
-				IS_ORDERED);
+		addEOperation(portElementEClass, theLibraryElementPackage.getAutomationSystem(), "getSystem", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(iEditPartCreatorEClass, IEditPartCreator.class, "IEditPartCreator", IS_ABSTRACT, IS_INTERFACE, //$NON-NLS-1$
-				!IS_GENERATED_INSTANCE_CLASS);
+		initEClass(iEditPartCreatorEClass, IEditPartCreator.class, "IEditPartCreator", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

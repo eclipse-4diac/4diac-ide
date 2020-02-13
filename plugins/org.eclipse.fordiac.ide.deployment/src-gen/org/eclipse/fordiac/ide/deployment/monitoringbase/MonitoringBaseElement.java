@@ -27,15 +27,12 @@ import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#getPort
- * <em>Port</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#isOffline
- * <em>Offline</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#getPort <em>Port</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#isOffline <em>Offline</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getMonitoringBaseElement()
- * @model abstract="true"
- *        superTypes="org.eclipse.fordiac.ide.deployment.monitoringbase.IEditPartCreator"
+ * @model abstract="true" superTypes="org.eclipse.fordiac.ide.deployment.monitoringbase.IEditPartCreator"
  * @generated
  */
 public interface MonitoringBaseElement extends EObject, IEditPartCreator {
@@ -57,10 +54,8 @@ public interface MonitoringBaseElement extends EObject, IEditPartCreator {
 	PortElement getPort();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#getPort
-	 * <em>Port</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#getPort <em>Port</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Port</em>' reference.
 	 * @see #getPort()
 	 * @generated
@@ -68,14 +63,14 @@ public interface MonitoringBaseElement extends EObject, IEditPartCreator {
 	void setPort(PortElement value);
 
 	/**
-	 * Returns the value of the '<em><b>Offline</b></em>' attribute. The default
-	 * value is <code>"true"</code>. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Offline</b></em>' attribute.
+	 * The default value is <code>"true"</code>.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Offline</em>' attribute isn't clear, there really
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Offline</em>' attribute.
 	 * @see #setOffline(boolean)
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getMonitoringBaseElement_Offline()
@@ -85,10 +80,8 @@ public interface MonitoringBaseElement extends EObject, IEditPartCreator {
 	boolean isOffline();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#isOffline
-	 * <em>Offline</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement#isOffline <em>Offline</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Offline</em>' attribute.
 	 * @see #isOffline()
 	 * @generated
@@ -97,56 +90,28 @@ public interface MonitoringBaseElement extends EObject, IEditPartCreator {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='String
-	 *        hierarchy = \"\"; \n\t\tfor (String element :
-	 *        getPort().getHierarchy()) {\n\t\t\thierarchy += element;
-	 *        \n\t\t\thierarchy += \".\"; \n\t\t}\n\t\t\n\t\tString adapter =
-	 *        \"\";\n\t\tif
-	 *        (getPort().getInterfaceElement().eContainer().eContainer() instanceof
-	 *        AdapterFB) {\n\t\t\tadapter +=
-	 *        ((PortElementImpl)getPort().eContainer()).getInterfaceElement().getName();\n\t\t\tadapter
-	 *        += \".\";\n\t\t}\n\t\t\n\t\treturn hierarchy +
-	 *        getPort().getFb().getName() + \".\" +\n\t\t\t\tadapter +
-	 *        getPort().getInterfaceElement().getName();'"
 	 * @generated
 	 */
 	String getPortString();
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return
-	 *        getPort().getResource().getName();'"
 	 * @generated
 	 */
 	String getResourceString();
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='return
-	 *        getPort().getFb().getName();'"
 	 * @generated
 	 */
 	String getFBString();
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='String
-	 *        hierarchy = \"\"; \nfor (String element : getPort().getHierarchy())
-	 *        {\n\thierarchy += element; \n\thierarchy += \".\"; \n}\n\nString
-	 *        adapter = \"\";\nif
-	 *        (getPort().getInterfaceElement().eContainer().eContainer() instanceof
-	 *        AdapterFB) {\n\tadapter +=
-	 *        ((PortElementImpl)getPort().eContainer()).getInterfaceElement().getName();\n\tadapter
-	 *        += \".\";\n}\n\nreturn hierarchy + getPort().getFb().getName() + \".\"
-	 *        +\n\t\tadapter + getPort().getInterfaceElement().getName();'"
 	 * @generated
 	 */
 	String getQualifiedString();

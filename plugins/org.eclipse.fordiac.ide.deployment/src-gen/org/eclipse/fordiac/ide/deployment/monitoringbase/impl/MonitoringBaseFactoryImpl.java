@@ -28,24 +28,23 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
  * end-user-doc -->
- * 
  * @generated
  */
 public class MonitoringBaseFactoryImpl extends EFactoryImpl implements MonitoringBaseFactory {
 	/**
-	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * Creates the default factory implementation.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public static MonitoringBaseFactory init() {
 		try {
-			MonitoringBaseFactory theMonitoringBaseFactory = (MonitoringBaseFactory) EPackage.Registry.INSTANCE
-					.getEFactory(MonitoringBasePackage.eNS_URI);
+			MonitoringBaseFactory theMonitoringBaseFactory = (MonitoringBaseFactory)EPackage.Registry.INSTANCE.getEFactory(MonitoringBasePackage.eNS_URI);
 			if (theMonitoringBaseFactory != null) {
 				return theMonitoringBaseFactory;
 			}
-		} catch (Exception exception) {
+		}
+		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new MonitoringBaseFactoryImpl();
@@ -63,22 +62,19 @@ public class MonitoringBaseFactoryImpl extends EFactoryImpl implements Monitorin
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-		case MonitoringBasePackage.PORT_ELEMENT:
-			return createPortElement();
-		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+			case MonitoringBasePackage.PORT_ELEMENT: return createPortElement();
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -89,17 +85,15 @@ public class MonitoringBaseFactoryImpl extends EFactoryImpl implements Monitorin
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public MonitoringBasePackage getMonitoringBasePackage() {
-		return (MonitoringBasePackage) getEPackage();
+		return (MonitoringBasePackage)getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @deprecated
 	 * @generated
 	 */
