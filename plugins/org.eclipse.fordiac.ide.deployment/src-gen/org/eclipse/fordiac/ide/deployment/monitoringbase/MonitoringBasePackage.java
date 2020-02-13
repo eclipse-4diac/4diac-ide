@@ -42,21 +42,21 @@ public interface MonitoringBasePackage extends EPackage {
 	 * 
 	 * @generated
 	 */
-	String eNAME = "monitoringbase";
+	String eNAME = "monitoringbase"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace URI. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
-	String eNS_URI = "org.eclipse.fordiac.depolyment.monitoringbase";
+	String eNS_URI = "org.eclipse.fordiac.depolyment.monitoringbase"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace name. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
-	String eNS_PREFIX = "monitoringbase";
+	String eNS_PREFIX = "monitoringbase"; //$NON-NLS-1$
 
 	/**
 	 * The singleton instance of the package. <!-- begin-user-doc --> <!--

@@ -48,7 +48,7 @@ import org.eclipse.ui.PlatformUI;
 public enum DeploymentCoordinator {
 	INSTANCE;
 
-	private static final String OUTPUT_VIEW_ID = "org.eclipse.fordiac.ide.deployment.ui.views.Output";
+	private static final String OUTPUT_VIEW_ID = "org.eclipse.fordiac.ide.deployment.ui.views.Output"; //$NON-NLS-1$
 
 	private final Map<Device, List<VarDeclaration>> deployedDeviceProperties = new HashMap<>();
 
@@ -156,7 +156,7 @@ public enum DeploymentCoordinator {
 		try {
 			new ProgressMonitorDialog(shell).run(true, true, download);
 		} catch (InvocationTargetException ex) {
-			MessageDialog.openError(shell, "Error", ex.getMessage());
+			MessageDialog.openError(shell, Messages.DeploymentCoordinator_DepoymentError, ex.getMessage());
 		} catch (InterruptedException ex) {
 			MessageDialog.openInformation(shell, Messages.DeploymentCoordinator_LABEL_DownloadAborted, ex.getMessage());
 		}

@@ -164,19 +164,19 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 */
 	@Override
 	public String getPortString() {
-		String hierarchy = "";
+		String hierarchy = ""; //$NON-NLS-1$
 		for (String element : getPort().getHierarchy()) {
 			hierarchy += element;
-			hierarchy += ".";
+			hierarchy += "."; //$NON-NLS-1$
 		}
 
-		String adapter = "";
+		String adapter = ""; //$NON-NLS-1$
 		if (getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {
 			adapter += ((PortElementImpl) getPort().eContainer()).getInterfaceElement().getName();
-			adapter += ".";
+			adapter += "."; //$NON-NLS-1$
 		}
 
-		return hierarchy + getPort().getFb().getName() + "." + adapter + getPort().getInterfaceElement().getName();
+		return hierarchy + getPort().getFb().getName() + "." + adapter + getPort().getInterfaceElement().getName(); //$NON-NLS-1$
 	}
 
 	/**
@@ -206,19 +206,19 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 */
 	@Override
 	public String getQualifiedString() {
-		String hierarchy = "";
+		String hierarchy = ""; //$NON-NLS-1$
 		for (String element : getPort().getHierarchy()) {
 			hierarchy += element;
-			hierarchy += ".";
+			hierarchy += "."; //$NON-NLS-1$
 		}
 
-		String adapter = "";
+		String adapter = ""; //$NON-NLS-1$
 		if (getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {
 			adapter += ((PortElementImpl) getPort().eContainer()).getInterfaceElement().getName();
-			adapter += ".";
+			adapter += "."; //$NON-NLS-1$
 		}
 
-		return hierarchy + getPort().getFb().getName() + "." + adapter + getPort().getInterfaceElement().getName();
+		return hierarchy + getPort().getFb().getName() + "." + adapter + getPort().getInterfaceElement().getName(); //$NON-NLS-1$
 	}
 
 	/**

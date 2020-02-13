@@ -259,19 +259,19 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 */
 	@Override
 	public String getPortString() {
-		String hierarchy = "";
+		String hierarchy = ""; //$NON-NLS-1$
 		for (String element : getHierarchy()) {
 			hierarchy += element;
-			hierarchy += ".";
+			hierarchy += "."; //$NON-NLS-1$
 		}
 
-		String adapter = "";
+		String adapter = ""; //$NON-NLS-1$
 		if (interfaceElement.eContainer().eContainer() instanceof AdapterFB) {
 			adapter += ((PortElementImpl) eContainer()).interfaceElement.getName();
-			adapter += ".";
+			adapter += "."; //$NON-NLS-1$
 		}
 
-		return getResource().getDevice().getName() + "." + resource.getName() + "." + hierarchy + fb.getName() + "."
+		return getResource().getDevice().getName() + "." + resource.getName() + "." + hierarchy + fb.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ adapter + interfaceElement.getName();
 	}
 

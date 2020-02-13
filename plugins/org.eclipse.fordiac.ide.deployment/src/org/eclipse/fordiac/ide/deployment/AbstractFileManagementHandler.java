@@ -43,7 +43,7 @@ public abstract class AbstractFileManagementHandler implements IDeviceManagement
 
 	@Override
 	public String sendREQ(String destination, String request) throws IOException {
-		if (request.contains("Action=\"QUERY\"")) { // return an empty list always
+		if (request.contains("Action=\"QUERY\"")) { // return an empty list always //$NON-NLS-1$
 			return "<Response ID=\"0\"/>"; //$NON-NLS-1$
 		} else {
 			stringBuffer.append(destination + ";" + request + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -75,8 +75,8 @@ public abstract class AbstractFileManagementHandler implements IDeviceManagement
 				returnValue = true;
 			} catch (IOException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
-				IDeviceManagementCommunicationHandler.showErrorMessage(
-						"Couldn't write file " + fileName + "\nException: \n" + e.getMessage(), shell);
+				IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
+						Messages.AbstractFileManagementHandler_CouldNotWriteFile, fileName, e.getMessage()), shell);
 			}
 		}
 
@@ -89,20 +89,22 @@ public abstract class AbstractFileManagementHandler implements IDeviceManagement
 		if (bootFile.exists()) {
 			if (!overwriteWithouAsking) {
 				MessageBox msgBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.ICON_QUESTION);
-				String msg = MessageFormat.format("File Exists, overwrite {0}?", bootFile.getAbsolutePath());
+				String msg = MessageFormat.format(Messages.AbstractFileManagementHandler_FileExists,
+						bootFile.getAbsolutePath());
 				msgBox.setMessage(msg);
 				res = msgBox.open();
 			}
 		} else {
 			try {
 				if (!bootFile.createNewFile()) {
-					IDeviceManagementCommunicationHandler.showErrorMessage("Couldn't create file", shell);
+					IDeviceManagementCommunicationHandler
+							.showErrorMessage(Messages.AbstractFileManagementHandler_CouldnotCreateFile, shell);
 					res = SWT.NO;
 				}
 			} catch (IOException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
-				IDeviceManagementCommunicationHandler.showErrorMessage("Couldn't create file: " + e.getMessage(),
-						shell);
+				IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
+						Messages.AbstractFileManagementHandler_CouldnotCreateFileWithError, e.getMessage()), shell);
 			}
 		}
 

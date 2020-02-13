@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.deployment.Activator;
+import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 
 public abstract class AbstractMonitoringManager {
@@ -78,10 +79,11 @@ public abstract class AbstractMonitoringManager {
 					return (AbstractMonitoringManager) object;
 				}
 			} catch (CoreException corex) {
-				Activator.getDefault().logError("error in creating monitoring manager", corex);
+				Activator.getDefault().logError(Messages.AbstractMonitoringManager_ErrorInCreatingMonitoringManager,
+						corex);
 			}
 		}
-		Activator.getDefault().logError("No monitoring manager provided");
+		Activator.getDefault().logError(Messages.AbstractMonitoringManager_NoMonitoringManagerProvided);
 		return dummyMonitoringManager;
 	}
 
