@@ -40,14 +40,21 @@
   <eClassifiers xsi:type="ecore:EClass" name="FBTypePaletteEntry" eSuperTypes="#//PaletteEntry">
     <eOperations name="getFBType" lowerBound="1" eType="ecore:EClass lib.ecore#//FBType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof FBType)){&#xA;   return (FBType) type;&#xA;}&#xA;return null;"/>
+        <details key="body" value="LibraryElement type = getType();&#xA;if(type instanceof FBType){&#xA;   return (FBType) type;&#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="setType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if((null != type) &amp;&amp; (type instanceof FBType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no FBType as type entry for FBTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}"/>
+        <details key="body" value="if(type instanceof FBType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no FBType as type entry for FBTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}"/>
       </eAnnotations>
       <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(file, palette);"/>
+      </eAnnotations>
+      <eParameters name="palette" eType="#//Palette"/>
+      <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PaletteEntry" abstract="true">
@@ -61,6 +68,15 @@
         <details key="body" value="return getFile().getProjectRelativePath().toOSString();"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="loadType" eType="ecore:EClass lib.ecore#//LibraryElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="LibraryElement retval = null;&#xA;try {&#xA;&#x9;retval = getTypeImporter(getGroup().getPallete(), getFile()).importType();&#xA;} catch (XMLStreamException | CoreException | TypeImportException e) {&#xA;&#x9;org.eclipse.fordiac.ide.model.Activator.getDefault().logError(&quot;Error loading type: &quot; + getFile().getName(), //$NON-NLS-1$&#xA;&#x9;&#x9;&#x9;e);&#xA;}&#xA;&#xA;if (null == retval) {&#xA;&#x9;org.eclipse.fordiac.ide.model.Activator.getDefault().logError(&quot;Error loading type: &quot; + getFile().getName()); //$NON-NLS-1$&#xA;}&#xA;return retval;&#xA;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//XMLStreamException #//CoreException">
+      <eParameters name="palette" eType="#//Palette"/>
+      <eParameters name="file" eType="#//IFile"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" eType="#//IFile"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastModificationTimestamp"
@@ -72,53 +88,81 @@
   <eClassifiers xsi:type="ecore:EClass" name="DeviceTypePaletteEntry" eSuperTypes="#//PaletteEntry">
     <eOperations name="getDeviceType" lowerBound="1" eType="ecore:EClass lib.ecore#//DeviceType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof DeviceType)){&#xA;   return (DeviceType) type;&#xA;}&#xA;return null;"/>
+        <details key="body" value="LibraryElement type = getType();&#xA;if(type instanceof DeviceType){&#xA;   return (DeviceType) type;&#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="setType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if((null != type) &amp;&amp; (type instanceof DeviceType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no DeviceType as type entry for DeviceTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}"/>
+        <details key="body" value="if(type instanceof DeviceType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no DeviceType as type entry for DeviceTypePaletteEntry&quot;);  //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}"/>
       </eAnnotations>
       <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(file, palette);"/>
+      </eAnnotations>
+      <eParameters name="palette" eType="#//Palette"/>
+      <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ResourceTypeEntry" eSuperTypes="#//PaletteEntry">
     <eOperations name="getResourceType" lowerBound="1" eType="ecore:EClass lib.ecore#//ResourceType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof ResourceType)){&#xA;   return (ResourceType) type;&#xA;}&#xA;return null;"/>
+        <details key="body" value="LibraryElement type = getType();&#xA;if(type instanceof ResourceType){&#xA;   return (ResourceType) type;&#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="setType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if((null != type) &amp;&amp; (type instanceof ResourceType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no ResourceType as type entry for ResourceTypeEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}"/>
+        <details key="body" value="if(type instanceof ResourceType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no ResourceType as type entry for ResourceTypeEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}"/>
       </eAnnotations>
       <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(file, palette);"/>
+      </eAnnotations>
+      <eParameters name="palette" eType="#//Palette"/>
+      <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SegmentTypePaletteEntry" eSuperTypes="#//PaletteEntry">
     <eOperations name="getSegmentType" lowerBound="1" eType="ecore:EClass lib.ecore#//SegmentType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof SegmentType)){&#xA;   return (SegmentType) type;&#xA;}&#xA;return null;"/>
+        <details key="body" value="LibraryElement type = getType();&#xA;if(type instanceof SegmentType){&#xA;   return (SegmentType) type;&#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="setType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if((null != type) &amp;&amp; (type instanceof SegmentType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no SegmentType as type entry for SegmentTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}"/>
+        <details key="body" value="if(type instanceof SegmentType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no SegmentType as type entry for SegmentTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}"/>
       </eAnnotations>
       <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter(file);"/>
+      </eAnnotations>
+      <eParameters name="palette" eType="#//Palette"/>
+      <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterTypePaletteEntry" eSuperTypes="#//PaletteEntry">
     <eOperations name="getType" eType="ecore:EClass lib.ecore#//AdapterType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="LibraryElement type = super.getType();&#xA;if((null !=type) &amp;&amp; (type instanceof AdapterType)){&#xA;   return (AdapterType) type;&#xA;}&#xA;return null;"/>
+        <details key="body" value="LibraryElement type = super.getType();&#xA;if(type instanceof AdapterType){&#xA;   return (AdapterType) type;&#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="setType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if((null != type) &amp;&amp; (type instanceof AdapterType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;% org.eclipse.core.runtime.Status %> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no AdapterType as type entry for AdapterTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}"/>
+        <details key="body" value="if(type instanceof AdapterType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;% org.eclipse.core.runtime.Status %> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no AdapterType as type entry for AdapterTypePaletteEntry&quot;);  //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}"/>
       </eAnnotations>
       <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter(file);"/>
+      </eAnnotations>
+      <eParameters name="palette" eType="#//Palette"/>
+      <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
@@ -126,14 +170,24 @@
   <eClassifiers xsi:type="ecore:EClass" name="SubApplicationTypePaletteEntry" eSuperTypes="#//PaletteEntry">
     <eOperations name="getSubApplicationType" lowerBound="1" eType="ecore:EClass lib.ecore#//SubAppType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof SubAppType)){&#xA;   return (SubAppType) type;&#xA;}&#xA;return null;"/>
+        <details key="body" value="LibraryElement type = getType();&#xA;if(type instanceof SubAppType){&#xA;   return (SubAppType) type;&#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="setType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if((null != type) &amp;&amp; (type instanceof SubAppType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}"/>
+        <details key="body" value="if(type instanceof SubAppType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}"/>
       </eAnnotations>
       <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
     </eOperations>
+    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(file, palette);"/>
+      </eAnnotations>
+      <eParameters name="palette" eType="#//Palette"/>
+      <eParameters name="file" eType="#//IFile"/>
+    </eOperations>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="TypeImporter" instanceClassName="org.eclipse.fordiac.ide.model.dataimport.TypeImporter"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="XMLStreamException" instanceClassName="javax.xml.stream.XMLStreamException"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="CoreException" instanceClassName="org.eclipse.core.runtime.CoreException"/>
 </ecore:EPackage>

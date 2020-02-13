@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.stream.XMLStreamException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -43,6 +45,7 @@ import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
+import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -256,10 +259,10 @@ public enum SystemManager {
 		IFile systemFile = project.getFile(project.getName() + SYSTEM_FILE_ENDING);
 		if (systemFile.exists()) {
 			AutomationSystem system = createAutomationSystem(project);
-			SystemImporter sysImporter = new SystemImporter();
 			try (InputStream stream = systemFile.getContents()) {
-				sysImporter.importSystem(stream, system);
-			} catch (CoreException | IOException e) {
+				SystemImporter sysImporter = new SystemImporter(stream, system);
+				sysImporter.importSystem();
+			} catch (CoreException | IOException | XMLStreamException | TypeImportException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 			return system;

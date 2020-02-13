@@ -1,7 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -25,6 +25,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.stream.XMLStreamException;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -42,6 +46,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -51,7 +56,6 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
-import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -67,6 +71,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public final class TypeLibrary implements TypeLibraryTags {
 
@@ -124,7 +131,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	/**
 	 * find the corresponding palette group for the give IContainer If the group is
 	 * not found it will be added
-	 * 
+	 *
 	 * @param rootGroup
 	 * @param groupDst
 	 * @return
@@ -144,7 +151,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	/**
 	 * Find the corresponding palette entry for the given IFile
-	 * 
+	 *
 	 * @param rootGroup     the rooot group in which the type should be searched for
 	 *                      (e.g., FB types group)
 	 * @param entryTypeFile the IFile representing the type
@@ -169,7 +176,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	/**
 	 * Gets the single instance of FBTypeLibrary.
-	 * 
+	 *
 	 * @return single instance of FBTypeLibrary
 	 */
 	public static TypeLibrary getInstance() {
@@ -196,7 +203,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	/**
 	 * Gets the palette.
-	 * 
+	 *
 	 * @return the palette
 	 */
 	public Palette getPalette() {
@@ -216,7 +223,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	/**
 	 * Load palette.
-	 * 
+	 *
 	 * @return the palette
 	 */
 	public Palette loadPalette() {
@@ -256,7 +263,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param palette
 	 * @param group
 	 * @param file
@@ -276,7 +283,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private static void setPaletteCreators() {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -300,7 +307,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	private static IPaletteEntryCreator[] getPaletteCreators() {
@@ -311,7 +318,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param entry
 	 * @param file
 	 * @param parent
@@ -409,7 +416,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	/**
 	 * Returns the tool library project.
-	 * 
+	 *
 	 * @return the tool library project of the 4diac-ide instance
 	 */
 	public static IProject getToolLibProject() {
@@ -475,12 +482,16 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	/**
 	 * Load type.
-	 * 
+	 *
 	 * @param entry the entry
 	 */
 	public static void loadAdapterType(final AdapterTypePaletteEntry entry) {
 		if (entry.getType() == null && ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(entry.getFile().getFileExtension())) {
-			entry.setType(ADPImporter.importAdapterType(entry.getFile()));
+			try {
+				entry.setType(new ADPImporter(entry.getFile()).importType());
+			} catch (XMLStreamException | TypeImportException | CoreException e) {
+				Activator.getDefault().logError("Could not load Adapter: " + entry.getLabel(), e);
+			}
 		}
 	}
 
@@ -568,7 +579,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	public static void loadReferencedFBTypes(File srcFile, Palette palette, PaletteGroup group,
 			String relativeDestionationPath, Set<String> selectedFiles, Shell shell) throws TypeImportException {
-		List<String> referencedFBTypes = FBTImporter.getReferencedFBTypes(srcFile);
+		List<String> referencedFBTypes = getReferencedFBTypes(srcFile);
 
 		for (String typeName : referencedFBTypes) {
 			if (!checkForReferencedTypeInPalette(palette, typeName, shell)) {
@@ -755,4 +766,48 @@ public final class TypeLibrary implements TypeLibraryTags {
 			}
 		}
 	}
+
+	/**
+	 * This method returns a list with all the types that are referenced by the
+	 * imported FBTypes.
+	 *
+	 * @param file - the file that is being checked if it has references
+	 *
+	 * @return references - a list containing all the references
+	 */
+	public static List<String> getReferencedFBTypes(final File file) {
+		List<String> references = new ArrayList<>();
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
+
+		dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", //$NON-NLS-1$
+				Boolean.FALSE);
+		try {
+			db = dbf.newDocumentBuilder();
+			Document document = db.parse(file);
+			// parse document for "FBNetwork" tag
+			Node rootNode = document.getDocumentElement();
+			NodeList childNodes = rootNode.getChildNodes();
+			for (int i = 0; i < childNodes.getLength(); i++) {
+				Node n = childNodes.item(i);
+				if (n.getNodeName().equals(LibraryElementTags.FBNETWORK_ELEMENT)) {
+					// add nodes to NodeList
+					for (int j = 0; j < n.getChildNodes().getLength(); j++) {
+						Node node = n.getChildNodes().item(j);
+						if (node.getNodeName().equals(LibraryElementTags.FB_ELEMENT)) {
+							String fbType = ""; //$NON-NLS-1$
+							fbType = node.getAttributes().getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE)
+									.getNodeValue();
+							references.add(fbType);
+						}
+
+					}
+				}
+			}
+		} catch (Exception e) {
+			Activator.getDefault().logError(e.getMessage(), e);
+		}
+		return references;
+	}
+
 }

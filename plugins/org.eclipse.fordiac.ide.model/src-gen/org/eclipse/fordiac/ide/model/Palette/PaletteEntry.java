@@ -13,8 +13,11 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette;
 
+import javax.xml.stream.XMLStreamException;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
@@ -174,5 +177,24 @@ public interface PaletteEntry extends EObject {
 	 * @generated
 	 */
 	String getProjectRelativeTypePath();
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model
+	 * @generated
+	 */
+	LibraryElement loadType();
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
+	 *        exceptions="org.eclipse.fordiac.ide.model.Palette.XMLStreamException
+	 *        org.eclipse.fordiac.ide.model.Palette.CoreException"
+	 *        fileDataType="org.eclipse.fordiac.ide.model.Palette.IFile"
+	 * @generated
+	 */
+	TypeImporter getTypeImporter(Palette palette, IFile file) throws XMLStreamException, CoreException;
 
 } // PaletteEntry

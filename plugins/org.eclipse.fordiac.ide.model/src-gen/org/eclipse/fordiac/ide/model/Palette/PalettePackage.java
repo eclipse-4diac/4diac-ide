@@ -577,6 +577,36 @@ public interface PalettePackage extends EPackage {
 	int IPROJECT = 10;
 
 	/**
+	 * The meta object id for the '<em>Type Importer</em>' data type. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see org.eclipse.fordiac.ide.model.dataimport.TypeImporter
+	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getTypeImporter()
+	 * @generated
+	 */
+	int TYPE_IMPORTER = 11;
+
+	/**
+	 * The meta object id for the '<em>XML Stream Exception</em>' data type. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see javax.xml.stream.XMLStreamException
+	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getXMLStreamException()
+	 * @generated
+	 */
+	int XML_STREAM_EXCEPTION = 12;
+
+	/**
+	 * The meta object id for the '<em>Core Exception</em>' data type. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see org.eclipse.core.runtime.CoreException
+	 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getCoreException()
+	 * @generated
+	 */
+	int CORE_EXCEPTION = 13;
+
+	/**
 	 * Returns the meta object for class
 	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette <em>Palette</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -829,6 +859,42 @@ public interface PalettePackage extends EPackage {
 	EDataType getIProject();
 
 	/**
+	 * Returns the meta object for data type
+	 * '{@link org.eclipse.fordiac.ide.model.dataimport.TypeImporter <em>Type
+	 * Importer</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for data type '<em>Type Importer</em>'.
+	 * @see org.eclipse.fordiac.ide.model.dataimport.TypeImporter
+	 * @model instanceClass="org.eclipse.fordiac.ide.model.dataimport.TypeImporter"
+	 * @generated
+	 */
+	EDataType getTypeImporter();
+
+	/**
+	 * Returns the meta object for data type
+	 * '{@link javax.xml.stream.XMLStreamException <em>XML Stream Exception</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for data type '<em>XML Stream Exception</em>'.
+	 * @see javax.xml.stream.XMLStreamException
+	 * @model instanceClass="javax.xml.stream.XMLStreamException"
+	 * @generated
+	 */
+	EDataType getXMLStreamException();
+
+	/**
+	 * Returns the meta object for data type
+	 * '{@link org.eclipse.core.runtime.CoreException <em>Core Exception</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for data type '<em>Core Exception</em>'.
+	 * @see org.eclipse.core.runtime.CoreException
+	 * @model instanceClass="org.eclipse.core.runtime.CoreException"
+	 * @generated
+	 */
+	EDataType getCoreException();
+
+	/**
 	 * Returns the factory that creates the instances of the model. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -1054,6 +1120,36 @@ public interface PalettePackage extends EPackage {
 		 * @generated
 		 */
 		EDataType IPROJECT = eINSTANCE.getIProject();
+
+		/**
+		 * The meta object literal for the '<em>Type Importer</em>' data type. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
+		 * 
+		 * @see org.eclipse.fordiac.ide.model.dataimport.TypeImporter
+		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getTypeImporter()
+		 * @generated
+		 */
+		EDataType TYPE_IMPORTER = eINSTANCE.getTypeImporter();
+
+		/**
+		 * The meta object literal for the '<em>XML Stream Exception</em>' data type.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
+		 * @see javax.xml.stream.XMLStreamException
+		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getXMLStreamException()
+		 * @generated
+		 */
+		EDataType XML_STREAM_EXCEPTION = eINSTANCE.getXMLStreamException();
+
+		/**
+		 * The meta object literal for the '<em>Core Exception</em>' data type. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
+		 * 
+		 * @see org.eclipse.core.runtime.CoreException
+		 * @see org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl#getCoreException()
+		 * @generated
+		 */
+		EDataType CORE_EXCEPTION = eINSTANCE.getCoreException();
 
 	}
 

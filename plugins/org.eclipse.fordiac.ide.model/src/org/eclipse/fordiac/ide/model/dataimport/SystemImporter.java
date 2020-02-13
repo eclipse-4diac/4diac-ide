@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2016 - 2017 fortiss GmbH, 
- * 				 2018 - 2019 Johannes Kepler University, Linz
+ * Copyright (c) 2016 - 2017 fortiss GmbH
+ * 				 2018 - 2020 Johannes Kepler University, Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,25 +9,26 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Waldemar Eisenmenger, Alois Zoitl, Monika Wenger 
+ *   Waldemar Eisenmenger, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export  
- *******************************************************************************/
+ *   Alois Zoitl - fixed coordinate system resolution conversion in in- and export
+ *   			 - Changed XML parsing to Staxx cursor interface for improved
+ *  			   parsing performance
+*******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
@@ -39,7 +41,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -62,118 +63,115 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-public class SystemImporter {
-	private Palette palette = null;
-	private AutomationSystem system;
+public class SystemImporter extends CommonElementImporter {
+	private final AutomationSystem system;
+
+	private Palette getPalette() {
+		return system.getPalette();
+	}
+
+	/**
+	 * create a new system file importer for a system input stream and an automation
+	 * system to populate
+	 *
+	 * @param systemStream input stream providing an IEC 61499 compliant system XML
+	 * @param system       AutomationSystem with an initialized Palette
+	 */
+	public SystemImporter(final InputStream systemStream, AutomationSystem system) throws XMLStreamException {
+		super(systemStream);
+		this.system = system;
+	}
 
 	/**
 	 * This method populates the AutomationSystem with all elements from the system
 	 * file.
-	 * 
-	 * @param systemFile IEC 61499 compliant system file
-	 * @param system     AutomationSystem with an initialized Palette
+	 *
+	 * @throws XMLStreamException
+	 * @throws TypeImportException
+	 *
 	 */
-	public void importSystem(final InputStream systemStream, AutomationSystem system) {
-		this.palette = system.getPalette();
-		this.system = system;
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setNamespaceAware(false);
-		DocumentBuilder db;
-
-		try {
-			dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", Boolean.FALSE); //$NON-NLS-1$
-			db = dbf.newDocumentBuilder();
-			Document document = db.parse(systemStream);
-			Element rootNode = document.getDocumentElement();
-
-			parseAutomationSystem(rootNode);
-
-		} catch (Exception e) {
-			Activator.getDefault().logError("System import error", e);
-		}
+	public void importSystem() throws XMLStreamException, TypeImportException {
+		proceedToStartElementNamed(LibraryElementTags.SYSTEM);
+		readNameCommentAttributes(system);
+		parseSystemContent();
 	}
 
-	private void parseAutomationSystem(final Element rootNode) throws TypeImportException {
-		if (rootNode.getNodeName().equals(LibraryElementTags.SYSTEM)) {
-			NamedNodeMap map = rootNode.getAttributes();
-			CommonElementImporter.readNameCommentAttributes(system, map);
-			SystemConfiguration sysConf = system.getSystemConfiguration();
-			NodeList childNodes = rootNode.getChildNodes();
-			for (int i = 0; i < childNodes.getLength(); i++) {
-				Node n = childNodes.item(i);
-				if (n.getNodeName().equals(LibraryElementTags.VERSION_INFO_ELEMENT)) {
-					CommonElementImporter.parseVersionInfo(system, n);
-				}
-				if (n.getNodeName().equals(LibraryElementTags.APPLICATION_ELEMENT)) {
-					system.getApplication().add(parseApplication(n));
-				}
-				if (n.getNodeName().equals(LibraryElementTags.DEVICE_ELEMENT)) {
-					sysConf.getDevices().add(parseDevice(n));
-				}
-				if (n.getNodeName().equals(LibraryElementTags.MAPPING_ELEMENT)) {
-					parseMapping(n);
-				}
-				if (n.getNodeName().equals(LibraryElementTags.SEGMENT_ELEMENT)) {
-					sysConf.getSegments().add(parseSegment(n));
-				}
-				if (n.getNodeName().equals(LibraryElementTags.LINK_ELEMENT)) {
-					parseLink(n, sysConf);
-				}
+	private void parseSystemContent() throws XMLStreamException, TypeImportException {
+		SystemConfiguration sysConf = system.getSystemConfiguration();
+
+		processChildren(LibraryElementTags.SYSTEM, name -> {
+			switch (name) {
+			case LibraryElementTags.VERSION_INFO_ELEMENT:
+				parseVersionInfo(system);
+				break;
+			case LibraryElementTags.IDENTIFICATION_ELEMENT:
+				parseIdentification(system);
+				break;
+			case LibraryElementTags.APPLICATION_ELEMENT:
+				system.getApplication().add(parseApplication());
+				break;
+			case LibraryElementTags.DEVICE_ELEMENT:
+				sysConf.getDevices().add(parseDevice());
+				break;
+			case LibraryElementTags.MAPPING_ELEMENT:
+				parseMapping();
+				break;
+			case LibraryElementTags.SEGMENT_ELEMENT:
+				sysConf.getSegments().add(parseSegment());
+				break;
+			case LibraryElementTags.LINK_ELEMENT:
+				parseLink(sysConf);
+				break;
+			default:
+				return false;
 			}
-		}
+			return true;
+		});
 	}
 
-	private Segment parseSegment(Node n) throws TypeImportException {
+	private Segment parseSegment() throws TypeImportException, XMLStreamException {
 		Segment segment = LibraryElementFactory.eINSTANCE.createSegment();
 
-		NamedNodeMap mapSegment = n.getAttributes();
-		CommonElementImporter.readNameCommentAttributes(segment, mapSegment);
+		readNameCommentAttributes(segment);
 
-		Node dx1 = mapSegment.getNamedItem(LibraryElementTags.DX1_ATTRIBUTE);
-		if (dx1 != null) {
-			segment.setWidth(CoordinateConverter.INSTANCE.convertFrom1499XML(dx1.getNodeValue()));
+		getXandY(segment);
+		String dx1 = getAttributeValue(LibraryElementTags.DX1_ATTRIBUTE);
+		if (null != dx1) {
+			segment.setWidth(CoordinateConverter.INSTANCE.convertFrom1499XML(dx1));
 		}
-		CommonElementImporter.getXandY(mapSegment, segment);
-		Node type = mapSegment.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (type != null) {
-			PaletteEntry entry = palette.getTypeEntry(type.getNodeValue());
+
+		String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		if (null != type) {
+			PaletteEntry entry = getPalette().getTypeEntry(type);
 			if (entry instanceof SegmentTypePaletteEntry) {
 				segment.setPaletteEntry(entry);
 			}
 		}
 
-		parseSegmentNodeChildren(segment, n.getChildNodes());
-
+		parseSegmentNodeChildren(segment);
 		return segment;
 	}
 
-	private static void parseSegmentNodeChildren(Segment segment, NodeList childNodes) {
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node node = childNodes.item(i);
-			if (node.getNodeName().equals(LibraryElementTags.ATTRIBUTE_ELEMENT)) {
-				NamedNodeMap attributeMap = node.getAttributes();
-				if (isColorAttributeNode(attributeMap)) {
-					parseColor(segment, attributeMap);
+	private void parseSegmentNodeChildren(Segment segment) throws XMLStreamException, TypeImportException {
+		processChildren(LibraryElementTags.SEGMENT_ELEMENT, name -> {
+			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
+				if (isColorAttributeNode()) {
+					parseColor(segment);
 				} else {
-					CommonElementImporter.parseGenericAttributeNode(segment, attributeMap);
+					parseGenericAttributeNode(segment);
 				}
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
 			}
-		}
+			return false;
+		});
 	}
 
-	private static void parseLink(Node linkNode, SystemConfiguration sysConf) {
-		NamedNodeMap attributeMap = linkNode.getAttributes();
-		String commResource = CommonElementImporter.getAttributeValue(attributeMap,
-				LibraryElementTags.SEGMENT_COMM_RESOURCE);
-		String comment = CommonElementImporter.getAttributeValue(attributeMap, LibraryElementTags.COMMENT_ATTRIBUTE);
-		String segmentName = CommonElementImporter.getAttributeValue(attributeMap,
-				LibraryElementTags.SEGMENT_NAME_ELEMENT);
+	private void parseLink(SystemConfiguration sysConf) throws XMLStreamException {
+		String commResource = getAttributeValue(LibraryElementTags.SEGMENT_COMM_RESOURCE);
+		String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+		String segmentName = getAttributeValue(LibraryElementTags.SEGMENT_NAME_ELEMENT);
 
 		Segment segment = sysConf.getSegmentNamed(segmentName);
 		Device device = sysConf.getDeviceNamed(commResource);
@@ -187,42 +185,42 @@ public class SystemImporter {
 		}
 		// TODO implement some mechnism for the case that we can not find the device or
 		// the segement
+		proceedToEndElementNamed(LibraryElementTags.LINK_ELEMENT);
 	}
 
-	private Device parseDevice(Node node) throws TypeImportException {
+	private Device parseDevice() throws TypeImportException, XMLStreamException {
 		Device device = LibraryElementFactory.eINSTANCE.createDevice();
-		parseCommon(node, device);
-		parseDeviceNodeChildren(device, node.getChildNodes());
+		parseCommon(device);
+		parseDeviceNodeChildren(device);
 		return device;
 	}
 
-	private void parseCommon(Node node, IVarElement element) throws TypeImportException {
-		NamedNodeMap mapElement = node.getAttributes();
-		CommonElementImporter.readNameCommentAttributes(((INamedElement) element), mapElement);
-		Node type = mapElement.getNamedItem(LibraryElementTags.TYPE_ATTRIBUTE);
+	private void parseCommon(IVarElement element) throws TypeImportException {
+		readNameCommentAttributes(((INamedElement) element));
+
+		String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (type != null) {
-			PaletteEntry entry = palette.getTypeEntry(type.getNodeValue());
+			PaletteEntry entry = getPalette().getTypeEntry(type);
 			if (null != entry) {
 				((TypedConfigureableObject) element).setPaletteEntry(entry);
 				createParamters(element);
 			}
 		}
 		if (element instanceof PositionableElement) {
-			CommonElementImporter.getXandY(mapElement, ((PositionableElement) element));
+			getXandY(((PositionableElement) element));
 		}
 	}
 
-	private void parseMapping(Node n) {
-		NamedNodeMap attributes = n.getAttributes();
-		String fromValue = CommonElementImporter.getAttributeValue(attributes,
-				LibraryElementTags.MAPPING_FROM_ATTRIBUTE);
-		String toValue = CommonElementImporter.getAttributeValue(attributes, LibraryElementTags.MAPPING_TO_ATTRIBUTE);
+	private void parseMapping() throws XMLStreamException {
+		String fromValue = getAttributeValue(LibraryElementTags.MAPPING_FROM_ATTRIBUTE);
+		String toValue = getAttributeValue(LibraryElementTags.MAPPING_TO_ATTRIBUTE);
 		FBNetworkElement fromElement = findMappingTargetFromName(fromValue);
 		FBNetworkElement toElement = findMappingTargetFromName(toValue);
 		if (null != fromElement && null != toElement) {
 			system.getMapping().add(createMappingEntry(toElement, fromElement));
 		}
 		// TODO perform some notificatin to the user that the mapping has an issue
+		proceedToEndElementNamed(LibraryElementTags.MAPPING_ELEMENT);
 	}
 
 	private static Mapping createMappingEntry(FBNetworkElement toElement, FBNetworkElement fromElement) {
@@ -237,7 +235,7 @@ public class SystemImporter {
 	private FBNetworkElement findMappingTargetFromName(String targetName) {
 		FBNetworkElement element = null;
 		if (null != targetName) {
-			ArrayDeque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); ////$NON-NLS-1$
+			Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); ////$NON-NLS-1$
 			if (parts.size() >= 2) {
 				FBNetwork nw = null;
 				// first find out if the mapping points to a device/resoruce or application and
@@ -263,7 +261,7 @@ public class SystemImporter {
 		return element;
 	}
 
-	private FBNetworkElement findMappingTargetInFBNetwork(FBNetwork nw, ArrayDeque<String> parts) {
+	private static FBNetworkElement findMappingTargetInFBNetwork(FBNetwork nw, Deque<String> parts) {
 		if (null != nw) {
 			FBNetworkElement element = nw.getElementNamed(parts.pollFirst());
 			if (null != element) {
@@ -279,70 +277,60 @@ public class SystemImporter {
 		return null;
 	}
 
-	private void parseDeviceNodeChildren(Device device, NodeList childNodes) throws TypeImportException {
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node n = childNodes.item(i);
-			switch (n.getNodeName()) {
+	private void parseDeviceNodeChildren(Device device) throws TypeImportException, XMLStreamException {
+
+		processChildren(LibraryElementTags.DEVICE_ELEMENT, name -> {
+			switch (name) {
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
-				parseDeviceAttribute(device, n);
+				parseDeviceAttribute(device);
 				break;
 			case LibraryElementTags.PARAMETER_ELEMENT:
-				try {
-					VarDeclaration parameter = ImportUtils.parseParameter(n);
-					if (null != parameter) {
-						VarDeclaration devParam = getDeviceParamter(device, parameter.getName());
-						if (null != devParam) {
-							devParam.setValue(parameter.getValue());
-						} else {
-							parameter.setIsInput(true);
-							device.getVarDeclarations().add(parameter);
-						}
+				VarDeclaration parameter = parseParameter();
+				if (null != parameter) {
+					VarDeclaration devParam = getParamter(device.getVarDeclarations(), parameter.getName());
+					if (null != devParam) {
+						devParam.setValue(parameter.getValue());
+					} else {
+						parameter.setIsInput(true);
+						device.getVarDeclarations().add(parameter);
 					}
-				} catch (TypeImportException e) {
-					Activator.getDefault().logError(e.getMessage(), e);
 				}
 				break;
 			case LibraryElementTags.RESOURCE_ELEMENT:
-				device.getResource().add(parseResource(n));
+				device.getResource().add(parseResource());
 				break;
 			default:
-				break;
+				return false;
 			}
-		}
+			return true;
+		});
 	}
 
-	private static void parseDeviceAttribute(Device device, Node node) {
-		NamedNodeMap attributeMap = node.getAttributes();
-		if (isColorAttributeNode(attributeMap)) {
-			parseColor(device, attributeMap);
-		} else if (CommonElementImporter.isProfileAttribute(attributeMap)) {
-			parseProfile(device, attributeMap);
+	private void parseDeviceAttribute(Device device) throws XMLStreamException {
+		if (isColorAttributeNode()) {
+			parseColor(device);
+		} else if (isProfileAttribute()) {
+			parseProfile(device);
 		} else {
-			CommonElementImporter.parseGenericAttributeNode(device, attributeMap);
+			parseGenericAttributeNode(device);
 		}
+		proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
 	}
 
-	private static boolean isColorAttributeNode(NamedNodeMap attributeMap) {
-		Node name = attributeMap.getNamedItem(LibraryElementTags.NAME_ATTRIBUTE);
-		return (null != name) && LibraryElementTags.COLOR.equals(name.getNodeValue());
+	private boolean isColorAttributeNode() {
+		String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		return (null != name) && LibraryElementTags.COLOR.equals(name);
 	}
 
-	static void parseColor(ColorizableElement colElement, NamedNodeMap attributeMap) {
+	private void parseColor(ColorizableElement colElement) {
 		Color color = LibraryElementFactory.eINSTANCE.createColor();
-		Node value = attributeMap.getNamedItem(LibraryElementTags.VALUE_ATTRIBUTE);
+		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (value != null) {
-			String[] colors = value.getNodeValue().split(","); //$NON-NLS-1$
+			String[] colors = value.split(","); //$NON-NLS-1$
 			color.setRed(Integer.valueOf(colors[0]));
 			color.setGreen(Integer.valueOf(colors[1]));
 			color.setBlue(Integer.valueOf(colors[2]));
 			colElement.setColor(color);
-		}
-	}
-
-	private static void parseProfile(Device device, NamedNodeMap attributeMap) {
-		Node value = attributeMap.getNamedItem(LibraryElementTags.VALUE_ATTRIBUTE);
-		if (null != value) {
-			device.setProfile(value.getNodeValue());
 		}
 	}
 
@@ -394,8 +382,8 @@ public class SystemImporter {
 		return null;
 	}
 
-	private static VarDeclaration getDeviceParamter(Device device, String name) {
-		for (VarDeclaration varDecl : device.getVarDeclarations()) {
+	private static VarDeclaration getParamter(EList<VarDeclaration> paramList, String name) {
+		for (VarDeclaration varDecl : paramList) {
 			if (varDecl.getName().equals(name)) {
 				return varDecl;
 			}
@@ -403,36 +391,67 @@ public class SystemImporter {
 		return null;
 	}
 
-	private Resource parseResource(Node n) throws TypeImportException {
+	private Resource parseResource() throws TypeImportException, XMLStreamException {
 		// TODO model refactoring - try to merge this code with the dev importer code
 		Resource resource = LibraryElementFactory.eINSTANCE.createResource();
 		resource.setDeviceTypeResource(false); // TODO model refactoring - check if a resource of given name is already
 												// in the list then it would be a device type resource
-		parseCommon(n, resource);
+		parseCommon(resource);
 		FBNetwork fbNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		createResourceTypeNetwork(((ResourceTypeEntry) resource.getPaletteEntry()).getResourceType(), fbNetwork);
-		resource.setFBNetwork(new ResDevFBNetworkImporter(palette, fbNetwork, resource.getVarDeclarations())
-				.parseFBNetwork(CommonElementImporter.findChildNodeNamed(n, LibraryElementTags.FBNETWORK_ELEMENT)));
+
+		processChildren(LibraryElementTags.RESOURCE_ELEMENT, name -> {
+			switch (name) {
+			case LibraryElementTags.FBNETWORK_ELEMENT:
+				resource.setFBNetwork(
+						new ResDevFBNetworkImporter(getPalette(), fbNetwork, resource.getVarDeclarations(), getReader())
+								.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT));
+				break;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(resource);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				break;
+			case LibraryElementTags.PARAMETER_ELEMENT:
+				VarDeclaration parameter = parseParameter();
+				if (null != parameter) {
+					VarDeclaration devParam = getParamter(resource.getVarDeclarations(), parameter.getName());
+					if (null != devParam) {
+						devParam.setValue(parameter.getValue());
+					} else {
+						parameter.setIsInput(true);
+						resource.getVarDeclarations().add(parameter);
+					}
+				}
+				break;
+			default:
+				return false;
+			}
+			return true;
+		});
 		return resource;
 	}
 
-	private Application parseApplication(Node node) throws TypeImportException {
+	private Application parseApplication() throws TypeImportException, XMLStreamException {
 		Application application = LibraryElementFactory.eINSTANCE.createApplication();
-		NamedNodeMap mapApplicationElement = node.getAttributes();
-		CommonElementImporter.readNameCommentAttributes(application, mapApplicationElement);
-		parseAttributes(application, node.getChildNodes());
-		application.setFBNetwork(new SubAppNetworkImporter(palette).parseFBNetwork(
-				CommonElementImporter.findChildNodeNamed(node, LibraryElementTags.SUBAPPNETWORK_ELEMENT)));
-		return application;
-	}
+		readNameCommentAttributes(application);
 
-	public static void parseAttributes(ConfigurableObject configurableObject, NodeList node) {
-		for (int i = 0; i < node.getLength(); i++) {
-			Node n = node.item(i);
-			if (n.getNodeName() == LibraryElementTags.ATTRIBUTE_ELEMENT) {
-				CommonElementImporter.parseGenericAttributeNode(configurableObject, n.getAttributes());
+		processChildren(LibraryElementTags.APPLICATION_ELEMENT, name -> {
+			switch (name) {
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(application);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				break;
+			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
+				application.setFBNetwork(new SubAppNetworkImporter(getPalette(), getReader())
+						.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT));
+				break;
+			default:
+				return false;
 			}
-		}
+			return true;
+		});
+
+		return application;
 	}
 
 	public static void createResourceTypeNetwork(final ResourceType type, final FBNetwork resourceFBNetwork) {

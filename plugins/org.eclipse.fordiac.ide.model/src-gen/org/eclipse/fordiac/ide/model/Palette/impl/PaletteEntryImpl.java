@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,17 +13,23 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette.impl;
 
+import javax.xml.stream.XMLStreamException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
+import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
+import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -50,7 +56,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	/**
 	 * The default value of the '{@link #getLabel() <em>Label</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getLabel()
 	 * @generated
 	 * @ordered
@@ -60,7 +66,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	/**
 	 * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getLabel()
 	 * @generated
 	 * @ordered
@@ -70,7 +76,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	/**
 	 * The default value of the '{@link #getFile() <em>File</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getFile()
 	 * @generated
 	 * @ordered
@@ -80,7 +86,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	/**
 	 * The cached value of the '{@link #getFile() <em>File</em>}' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getFile()
 	 * @generated
 	 * @ordered
@@ -112,7 +118,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	/**
 	 * The cached value of the '{@link #getType() <em>Type</em>}' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -212,7 +218,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated not
 	 */
 	@Override
@@ -298,6 +304,40 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	@Override
 	public String getProjectRelativeTypePath() {
 		return getFile().getProjectRelativePath().toOSString();
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public LibraryElement loadType() {
+		LibraryElement retval = null;
+		try {
+			retval = getTypeImporter(getGroup().getPallete(), getFile()).importType();
+		} catch (XMLStreamException | CoreException | TypeImportException e) {
+			org.eclipse.fordiac.ide.model.Activator.getDefault().logError("Error loading type: " + getFile().getName(), //$NON-NLS-1$
+					e);
+		}
+
+		if (null == retval) {
+			org.eclipse.fordiac.ide.model.Activator.getDefault().logError("Error loading type: " + getFile().getName()); //$NON-NLS-1$
+		}
+		return retval;
+
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public TypeImporter getTypeImporter(Palette palette, IFile file) throws XMLStreamException, CoreException {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -440,5 +480,4 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		return result.toString();
 	}
 
-	protected abstract LibraryElement loadType();
 } // PaletteEntryImpl

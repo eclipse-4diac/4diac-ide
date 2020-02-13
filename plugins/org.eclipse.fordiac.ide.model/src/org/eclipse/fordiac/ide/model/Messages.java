@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2010  Profactor GmbH, TU Wien ACIN
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -148,9 +148,6 @@ public class Messages extends NLS {
 	/** The Sub app t importer_ error. */
 	public static String SubAppTImporter_ERROR;
 
-	/** The Sub app t importer_ erro r_ sub app name. */
-	public static String SubAppTImporter_ERROR_SubAppName;
-
 	/** The Sub app t importer_ erro r_ sub app type. */
 	public static String SubAppTImporter_ERROR_SubAppType;
 
@@ -176,16 +173,15 @@ public class Messages extends NLS {
 	public static String IdentifierVerifyer_ERROR_UnkownExpressionError;
 
 	/** The Import utils_ erro r_ arraysize_ number format. */
-	public static String ImportUtils_ERROR_Arraysize_NumberFormat;
+	public static String Import_ERROR_ArraySize_NumberFormat;
 
-	/** The Import utils_ erro r_ input event name not defined. */
-	public static String ImportUtils_ERROR_InputEventNameNotDefined;
+	public static String Import_ERROR_NameNotDefined;
 
 	/** The Import utils_ erro r_ input variable name not defined. */
 	public static String ImportUtils_ERROR_InputVariableNameNotDefined;
 
 	/** The Import utils_ erro r_ input variable type not defined. */
-	public static String ImportUtils_ERROR_InputVariableTypeNotDefined;
+	public static String Import_ERROR_InputVariableTypeNotDefined;
 
 	/** The Import utils_ erro r_ parameter not set. */
 	public static String ImportUtils_ERROR_ParameterNotSet;

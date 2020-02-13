@@ -11,6 +11,9 @@
       ecorePackage="palette.ecore#/">
     <genDataTypes ecoreDataType="palette.ecore#//IFile"/>
     <genDataTypes ecoreDataType="palette.ecore#//IProject"/>
+    <genDataTypes ecoreDataType="palette.ecore#//TypeImporter"/>
+    <genDataTypes ecoreDataType="palette.ecore#//XMLStreamException"/>
+    <genDataTypes ecoreDataType="palette.ecore#//CoreException"/>
     <genClasses ecoreClass="palette.ecore#//Palette">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference palette.ecore#//Palette/rootGroup"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute palette.ecore#//Palette/project"/>
@@ -33,9 +36,14 @@
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//FBTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/getFBType"
-          body="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof FBType)){&#xA;   return (FBType) type;&#xA;}&#xA;return null;"/>
-      <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/setType" body="if((null != type) &amp;&amp; (type instanceof FBType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no FBType as type entry for FBTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}">
+          body="LibraryElement type = getType();&#xA;if(type instanceof FBType){&#xA;   return (FBType) type;&#xA;}&#xA;return null;"/>
+      <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/setType" body="if(type instanceof FBType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no FBType as type entry for FBTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//FBTypePaletteEntry/setType/type"/>
+      </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//FBTypePaletteEntry/getTypeImporter"
+          body="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(file, palette);">
+        <genParameters ecoreParameter="palette.ecore#//FBTypePaletteEntry/getTypeImporter/palette"/>
+        <genParameters ecoreParameter="palette.ecore#//FBTypePaletteEntry/getTypeImporter/file"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//PaletteEntry">
@@ -46,44 +54,74 @@
       <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getGroup" body="if(null != eContainer()){&#xA;  return (PaletteGroup)eContainer();&#xA;}&#xA;return null;"/>
       <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getProjectRelativeTypePath"
           body="return getFile().getProjectRelativePath().toOSString();"/>
+      <genOperations ecoreOperation="palette.ecore#//PaletteEntry/loadType" body="LibraryElement retval = null;&#xA;try {&#xA;&#x9;retval = getTypeImporter(getGroup().getPallete(), getFile()).importType();&#xA;} catch (XMLStreamException | CoreException | TypeImportException e) {&#xA;&#x9;org.eclipse.fordiac.ide.model.Activator.getDefault().logError(&quot;Error loading type: &quot; + getFile().getName(), //$NON-NLS-1$&#xA;&#x9;&#x9;&#x9;e);&#xA;}&#xA;&#xA;if (null == retval) {&#xA;&#x9;org.eclipse.fordiac.ide.model.Activator.getDefault().logError(&quot;Error loading type: &quot; + getFile().getName()); //$NON-NLS-1$&#xA;}&#xA;return retval;&#xA;"/>
+      <genOperations ecoreOperation="palette.ecore#//PaletteEntry/getTypeImporter">
+        <genParameters ecoreParameter="palette.ecore#//PaletteEntry/getTypeImporter/palette"/>
+        <genParameters ecoreParameter="palette.ecore#//PaletteEntry/getTypeImporter/file"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//DeviceTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//DeviceTypePaletteEntry/getDeviceType"
-          body="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof DeviceType)){&#xA;   return (DeviceType) type;&#xA;}&#xA;return null;"/>
+          body="LibraryElement type = getType();&#xA;if(type instanceof DeviceType){&#xA;   return (DeviceType) type;&#xA;}&#xA;return null;"/>
       <genOperations ecoreOperation="palette.ecore#//DeviceTypePaletteEntry/setType"
-          body="if((null != type) &amp;&amp; (type instanceof DeviceType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no DeviceType as type entry for DeviceTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}">
+          body="if(type instanceof DeviceType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no DeviceType as type entry for DeviceTypePaletteEntry&quot;);  //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//DeviceTypePaletteEntry/setType/type"/>
+      </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//DeviceTypePaletteEntry/getTypeImporter"
+          body="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(file, palette);">
+        <genParameters ecoreParameter="palette.ecore#//DeviceTypePaletteEntry/getTypeImporter/palette"/>
+        <genParameters ecoreParameter="palette.ecore#//DeviceTypePaletteEntry/getTypeImporter/file"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//ResourceTypeEntry">
       <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/getResourceType"
-          body="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof ResourceType)){&#xA;   return (ResourceType) type;&#xA;}&#xA;return null;"/>
-      <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/setType" body="if((null != type) &amp;&amp; (type instanceof ResourceType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no ResourceType as type entry for ResourceTypeEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}">
+          body="LibraryElement type = getType();&#xA;if(type instanceof ResourceType){&#xA;   return (ResourceType) type;&#xA;}&#xA;return null;"/>
+      <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/setType" body="if(type instanceof ResourceType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no ResourceType as type entry for ResourceTypeEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//ResourceTypeEntry/setType/type"/>
+      </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//ResourceTypeEntry/getTypeImporter"
+          body="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(file, palette);">
+        <genParameters ecoreParameter="palette.ecore#//ResourceTypeEntry/getTypeImporter/palette"/>
+        <genParameters ecoreParameter="palette.ecore#//ResourceTypeEntry/getTypeImporter/file"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//SegmentTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//SegmentTypePaletteEntry/getSegmentType"
-          body="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof SegmentType)){&#xA;   return (SegmentType) type;&#xA;}&#xA;return null;"/>
+          body="LibraryElement type = getType();&#xA;if(type instanceof SegmentType){&#xA;   return (SegmentType) type;&#xA;}&#xA;return null;"/>
       <genOperations ecoreOperation="palette.ecore#//SegmentTypePaletteEntry/setType"
-          body="if((null != type) &amp;&amp; (type instanceof SegmentType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no SegmentType as type entry for SegmentTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}">
+          body="if(type instanceof SegmentType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no SegmentType as type entry for SegmentTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//SegmentTypePaletteEntry/setType/type"/>
+      </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//SegmentTypePaletteEntry/getTypeImporter"
+          body="return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter(file);">
+        <genParameters ecoreParameter="palette.ecore#//SegmentTypePaletteEntry/getTypeImporter/palette"/>
+        <genParameters ecoreParameter="palette.ecore#//SegmentTypePaletteEntry/getTypeImporter/file"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//AdapterTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//AdapterTypePaletteEntry/getType"
-          body="LibraryElement type = super.getType();&#xA;if((null !=type) &amp;&amp; (type instanceof AdapterType)){&#xA;   return (AdapterType) type;&#xA;}&#xA;return null;"/>
+          body="LibraryElement type = super.getType();&#xA;if(type instanceof AdapterType){&#xA;   return (AdapterType) type;&#xA;}&#xA;return null;"/>
       <genOperations ecoreOperation="palette.ecore#//AdapterTypePaletteEntry/setType"
-          body="if((null != type) &amp;&amp; (type instanceof AdapterType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;% org.eclipse.core.runtime.Status %> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no AdapterType as type entry for AdapterTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}">
+          body="if(type instanceof AdapterType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;% org.eclipse.core.runtime.Status %> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no AdapterType as type entry for AdapterTypePaletteEntry&quot;);  //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//AdapterTypePaletteEntry/setType/type"/>
+      </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//AdapterTypePaletteEntry/getTypeImporter"
+          body="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter(file);">
+        <genParameters ecoreParameter="palette.ecore#//AdapterTypePaletteEntry/getTypeImporter/palette"/>
+        <genParameters ecoreParameter="palette.ecore#//AdapterTypePaletteEntry/getTypeImporter/file"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="palette.ecore#//SubApplicationTypePaletteEntry">
       <genOperations ecoreOperation="palette.ecore#//SubApplicationTypePaletteEntry/getSubApplicationType"
-          body="LibraryElement type = getType();&#xA;if((null !=type) &amp;&amp; (type instanceof SubAppType)){&#xA;   return (SubAppType) type;&#xA;}&#xA;return null;"/>
+          body="LibraryElement type = getType();&#xA;if(type instanceof SubAppType){&#xA;   return (SubAppType) type;&#xA;}&#xA;return null;"/>
       <genOperations ecoreOperation="palette.ecore#//SubApplicationTypePaletteEntry/setType"
-          body="if((null != type) &amp;&amp; (type instanceof SubAppType)){&#xD;&#xA;&#x9;super.setType(type);&#xD;&#xA;}else{&#xD;&#xA;&#x9;super.setType(null);&#xD;&#xA;&#x9;if(null != type){&#xD;&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry&quot;);&#xD;&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xD;&#xA;&#x9;}&#xD;&#xA;}">
+          body="if(type instanceof SubAppType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="palette.ecore#//SubApplicationTypePaletteEntry/setType/type"/>
+      </genOperations>
+      <genOperations ecoreOperation="palette.ecore#//SubApplicationTypePaletteEntry/getTypeImporter"
+          body="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(file, palette);">
+        <genParameters ecoreParameter="palette.ecore#//SubApplicationTypePaletteEntry/getTypeImporter/palette"/>
+        <genParameters ecoreParameter="palette.ecore#//SubApplicationTypePaletteEntry/getTypeImporter/file"/>
       </genOperations>
     </genClasses>
   </genPackages>

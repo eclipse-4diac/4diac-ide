@@ -40,9 +40,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.I4DIACElementImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 
@@ -78,7 +80,12 @@ public final class NameRepository {
 	}
 
 	public static void checkNameIdentifier(INamedElement element) {
-		element.getAnnotations().clear();
+		// check if an annotation list is present, as getAnnotations will create one
+		// this saves quite some memory
+		if (((I4DIACElementImpl) element).eIsSet(LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS)) {
+			// we have annotations set clear them
+			element.getAnnotations().clear();
+		}
 		if (!IdentifierVerifyer.isValidIdentifier(element.getName())) {
 			Annotation ano = element.createAnnotation(
 					MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, element.getName()));

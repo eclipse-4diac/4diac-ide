@@ -13,14 +13,17 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette.impl;
 
+import javax.xml.stream.XMLStreamException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
@@ -109,6 +112,12 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 			return createIFileFromString(eDataType, initialValue);
 		case PalettePackage.IPROJECT:
 			return createIProjectFromString(eDataType, initialValue);
+		case PalettePackage.TYPE_IMPORTER:
+			return createTypeImporterFromString(eDataType, initialValue);
+		case PalettePackage.XML_STREAM_EXCEPTION:
+			return createXMLStreamExceptionFromString(eDataType, initialValue);
+		case PalettePackage.CORE_EXCEPTION:
+			return createCoreExceptionFromString(eDataType, initialValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -126,6 +135,12 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 			return convertIFileToString(eDataType, instanceValue);
 		case PalettePackage.IPROJECT:
 			return convertIProjectToString(eDataType, instanceValue);
+		case PalettePackage.TYPE_IMPORTER:
+			return convertTypeImporterToString(eDataType, instanceValue);
+		case PalettePackage.XML_STREAM_EXCEPTION:
+			return convertXMLStreamExceptionToString(eDataType, instanceValue);
+		case PalettePackage.CORE_EXCEPTION:
+			return convertCoreExceptionToString(eDataType, instanceValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -252,6 +267,60 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * @generated
 	 */
 	public String convertIProjectToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public TypeImporter createTypeImporterFromString(EDataType eDataType, String initialValue) {
+		return (TypeImporter) super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public String convertTypeImporterToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public XMLStreamException createXMLStreamExceptionFromString(EDataType eDataType, String initialValue) {
+		return (XMLStreamException) super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public String convertXMLStreamExceptionToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public CoreException createCoreExceptionFromString(EDataType eDataType, String initialValue) {
+		return (CoreException) super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public String convertCoreExceptionToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

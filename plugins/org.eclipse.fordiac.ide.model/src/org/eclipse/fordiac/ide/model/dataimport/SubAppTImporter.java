@@ -1,6 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008, 2009, 2013 - 2017  Profactor GmbH, fortiss GmbH
- * 
+ * 				 2020 Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,37 +11,43 @@
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
+ *  Alois Zoitl - Changed XML parsing to Staxx cursor interface for improved
+ *  			  parsing performance
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import java.text.ParseException;
-import java.util.Map;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.dataimport.exceptions.ReferencedTypeNotFoundException;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Managing class for importing SubApplication files.
- * 
+ *
  * @author Martijn Rooker (martijn.rooker@profactor.at)
  */
 public class SubAppTImporter extends FBTImporter {
 
+	public SubAppTImporter(IFile fbtFile, Palette palette) throws XMLStreamException, CoreException {
+		super(fbtFile, palette);
+	}
+
+	public SubAppTImporter(XMLStreamReader reader, Palette palette) {
+		super(reader, palette);
+	}
+
 	/**
 	 * This allows that the typeimporter can also be utilized to parse untyped
 	 * subapp interfaces
-	 * 
+	 *
 	 * @param palette
 	 */
 	@Override
@@ -48,30 +55,17 @@ public class SubAppTImporter extends FBTImporter {
 		super.setPalette(palette);
 	}
 
-	/**
-	 * Import sub app type.
-	 * 
-	 * @param subapptFile the subappt file
-	 * @param palette     the palette
-	 * 
-	 * @return the sub app type
-	 * 
-	 * @throws TypeImportException             the FBT import exception
-	 * @throws ReferencedTypeNotFoundException the referenced type not found
-	 *                                         exception
-	 */
-	public SubAppType importSubAppType(final IFile subapptFile, final Palette palette)
-			throws ReferencedTypeNotFoundException {
-		FBType newType = importType(subapptFile, palette);
-		if (newType instanceof SubAppType) {
-			return (SubAppType) newType;
-		}
-		return null;
+	@Override
+	public LibraryElement importType() throws XMLStreamException, TypeImportException {
+		LibraryElement newType = super.importType();
+		return (newType instanceof SubAppType) ? newType : null;
 	}
 
 	@Override
 	protected FBType createType() {
-		return LibraryElementFactory.eINSTANCE.createSubAppType();
+		SubAppType newType = LibraryElementFactory.eINSTANCE.createSubAppType();
+		newType.setService(LibraryElementFactory.eINSTANCE.createService());
+		return newType;
 	}
 
 	@Override
@@ -80,41 +74,39 @@ public class SubAppTImporter extends FBTImporter {
 	}
 
 	@Override
-	protected FBType parseType(Node rootNode)
-			throws TypeImportException, ReferencedTypeNotFoundException, ParseException {
-		if (rootNode.getNodeName().equals(LibraryElementTags.SUBAPPTYPE_ELEMENT)) {
-			CommonElementImporter.readNameCommentAttributes(getType(), rootNode.getAttributes());
+	protected String getStartElementName() {
+		return LibraryElementTags.SUBAPPTYPE_ELEMENT;
+	}
 
-			NodeList childNodes = rootNode.getChildNodes();
-			for (int i = 0; i < childNodes.getLength(); i++) {
-				Node n = childNodes.item(i);
-				if (n.getNodeName().equals(IDENTIFICATION_ELEMENT)) {
-					getType().setIdentification(CommonElementImporter.parseIdentification(getType(), n));
-				}
-				if (n.getNodeName().equals(VERSION_INFO_ELEMENT)) {
-					getType().getVersionInfo().add(CommonElementImporter.parseVersionInfo(getType(), n));
-				}
-				if (n.getNodeName().equals(COMPILER_INFO_ELEMENT)) {
-					getType().setCompilerInfo(CompilableElementImporter.parseCompilerInfo(getType(), n));
-				}
-				if (n.getNodeName().equals(SUBAPPINTERFACE_LIST_ELEMENT)) {
-					getType().setInterfaceList(parseInterfaceList(n));
-				}
-
-				if (n.getNodeName().equals(SERVICE_ELEMENT)) {
-					parseService(getType(), n);
-				}
-
-				if (n.getNodeName().equals(LibraryElementTags.SUBAPPNETWORK_ELEMENT)) {
-					getType().setFBNetwork(
-							new SubAppNetworkImporter(getPalette(), getType().getInterfaceList()).parseFBNetwork(n));
-				}
-
+	@Override
+	protected IChildHandler getTypeChildrenHandler() {
+		return name -> {
+			switch (name) {
+			case LibraryElementTags.IDENTIFICATION_ELEMENT:
+				parseIdentification(getType());
+				break;
+			case LibraryElementTags.VERSION_INFO_ELEMENT:
+				parseVersionInfo(getType());
+				break;
+			case LibraryElementTags.COMPILER_INFO_ELEMENT:
+				parseCompilerInfo(getType());
+				break;
+			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT:
+				getType().setInterfaceList(parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
+				break;
+			case LibraryElementTags.SERVICE_ELEMENT:
+				parseService(getType());
+				break;
+			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
+				getType()
+						.setFBNetwork(new SubAppNetworkImporter(getPalette(), getType().getInterfaceList(), getReader())
+								.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT));
+				break;
+			default:
+				return false;
 			}
-
-			return getType();
-		}
-		throw new ParseException(Messages.SubAppTImporter_ERROR, 0);
+			return true;
+		};
 	}
 
 	@Override
@@ -133,8 +125,7 @@ public class SubAppTImporter extends FBTImporter {
 	}
 
 	@Override
-	public void parseWithConstructs(NodeList childNodes, Map<String, Event> eventInputs,
-			Map<String, Event> eventOutputs, Map<String, VarDeclaration> variables) {
+	protected void processWiths() {
 		// supapps may not have a with construct. Therefore we are doing nothing here
 	}
 

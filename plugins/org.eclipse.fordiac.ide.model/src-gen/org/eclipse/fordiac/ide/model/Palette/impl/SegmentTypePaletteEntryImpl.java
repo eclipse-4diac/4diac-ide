@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,13 +13,18 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette.impl;
 
+import javax.xml.stream.XMLStreamException;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.Activator;
+import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
+import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 
@@ -57,7 +62,7 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 	@Override
 	public SegmentType getSegmentType() {
 		LibraryElement type = getType();
-		if ((null != type) && (type instanceof SegmentType)) {
+		if (type instanceof SegmentType) {
 			return (SegmentType) type;
 		}
 		return null;
@@ -70,20 +75,27 @@ public class SegmentTypePaletteEntryImpl extends PaletteEntryImpl implements Seg
 	 */
 	@Override
 	public void setType(final LibraryElement type) {
-		if ((null != type) && (type instanceof SegmentType)) {
+		if (type instanceof SegmentType) {
 			super.setType(type);
 		} else {
 			super.setType(null);
 			if (null != type) {
 				Status exception = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-						"tried to set no SegmentType as type entry for SegmentTypePaletteEntry");
+						"tried to set no SegmentType as type entry for SegmentTypePaletteEntry"); //$NON-NLS-1$
 				Activator.getDefault().getLog().log(exception);
 			}
 		}
 	}
 
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
 	@Override
-	protected LibraryElement loadType() {
-		return SEGImporter.importSEGType(getFile());
+	public TypeImporter getTypeImporter(final Palette palette, final IFile file)
+			throws CoreException, XMLStreamException {
+		return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter(file);
 	}
+
 } // SegmentTypePaletteEntryImpl

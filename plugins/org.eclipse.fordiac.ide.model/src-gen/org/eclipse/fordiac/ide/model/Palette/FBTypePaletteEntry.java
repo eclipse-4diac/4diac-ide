@@ -13,6 +13,10 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette;
 
+import javax.xml.stream.XMLStreamException;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
@@ -43,5 +47,17 @@ public interface FBTypePaletteEntry extends PaletteEntry {
 	 */
 	@Override
 	void setType(LibraryElement type);
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
+	 *        exceptions="org.eclipse.fordiac.ide.model.Palette.CoreException
+	 *        org.eclipse.fordiac.ide.model.Palette.XMLStreamException"
+	 *        fileDataType="org.eclipse.fordiac.ide.model.Palette.IFile"
+	 * @generated
+	 */
+	@Override
+	TypeImporter getTypeImporter(Palette palette, IFile file) throws CoreException, XMLStreamException;
 
 } // FBTypePaletteEntry

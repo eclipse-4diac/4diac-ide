@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -72,7 +72,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The cached value of the '{@link #getRootGroup() <em>Root Group</em>}'
 	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getRootGroup()
 	 * @generated
 	 * @ordered
@@ -82,7 +82,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The default value of the '{@link #getProject() <em>Project</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getProject()
 	 * @generated
 	 * @ordered
@@ -92,7 +92,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The cached value of the '{@link #getProject() <em>Project</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getProject()
 	 * @generated
 	 * @ordered
@@ -102,7 +102,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The cached value of the '{@link #getAutomationSystem() <em>Automation
 	 * System</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getAutomationSystem()
 	 * @generated
 	 * @ordered
@@ -111,7 +111,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected PaletteImpl() {
@@ -120,7 +120,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -130,7 +130,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public PaletteGroup getRootGroupGen() {
@@ -157,7 +157,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated not
 	 */
 	@Override
@@ -176,7 +176,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public PaletteGroup basicGetRootGroup() {
@@ -185,7 +185,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public NotificationChain basicSetRootGroup(PaletteGroup newRootGroup, NotificationChain msgs) {
@@ -204,7 +204,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -227,7 +227,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -237,7 +237,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -251,7 +251,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -270,7 +270,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public AutomationSystem basicGetAutomationSystem() {
@@ -279,7 +279,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public NotificationChain basicSetAutomationSystem(AutomationSystem newAutomationSystem, NotificationChain msgs) {
@@ -298,7 +298,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -321,7 +321,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -337,7 +337,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -347,7 +347,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -357,7 +357,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -367,7 +367,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -384,7 +384,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -400,7 +400,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -422,7 +422,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -443,7 +443,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -464,7 +464,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -482,7 +482,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -499,7 +499,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * This method creates a new PaletteEntry.
-	 * 
+	 *
 	 * @param file - the eclipse resource file representation
 	 * @return the newly created PaletteEntry
 	 */
@@ -545,7 +545,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return entry;
 	}
 
-	private void configurePaletteEntry(PaletteEntry entry, IFile file, PaletteGroup parent) {
+	private static void configurePaletteEntry(PaletteEntry entry, IFile file, PaletteGroup parent) {
 		entry.setType(null);
 		entry.setLabel(TypeLibrary.getTypeNameFromFile(file));
 		entry.setFile(file);
@@ -554,7 +554,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * This method creates a new PaletteGroup
-	 * 
+	 *
 	 * @param parent    - the parent paletteGroup of the newly to be created
 	 *                  paletteGroup
 	 * @param groupName - the name of the new paletteGroup
@@ -600,7 +600,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * This method returns the group that is indicated in the path name. If the
 	 * group does not exist, it is created.
-	 * 
+	 *
 	 * @param path      - a list of strings, containing the entire path to the group
 	 * @param createDir - create the directory if the group has to be created
 	 * @return group - the group that is indicated in the path name
@@ -637,12 +637,12 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * This method searches for a specific subgroup in a list of groups.
-	 * 
+	 *
 	 * @param group - a List of PaletteGroups
 	 * @param name  - the name of the group being searched for
 	 * @return pGroup if the group is found, otherwise null
 	 */
-	private PaletteGroup checkSubGroups(final List<PaletteGroup> group, final String name) {
+	private static PaletteGroup checkSubGroups(final List<PaletteGroup> group, final String name) {
 		for (Iterator<PaletteGroup> iterator = group.iterator(); iterator.hasNext();) {
 			PaletteGroup pGroup = iterator.next();
 			if (pGroup.getLabel().equalsIgnoreCase(name)) {
@@ -652,7 +652,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 		return null;
 	}
 
-	private boolean removeSubGroups(final PaletteGroup pGroup, final List<PaletteGroup> deleteAbleGroups) {
+	private static boolean removeSubGroups(final PaletteGroup pGroup, final List<PaletteGroup> deleteAbleGroups) {
 		for (Iterator<PaletteGroup> iterator = pGroup.getSubGroups().iterator(); iterator.hasNext();) {
 			PaletteGroup group = iterator.next();
 			removeSubGroups(group, deleteAbleGroups);
@@ -675,7 +675,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	@Override
 	public List<PaletteGroup> getAllGroups(final PaletteGroup group) {
-		List<PaletteGroup> temp = new ArrayList<PaletteGroup>();
+		List<PaletteGroup> temp = new ArrayList<>();
 		temp.addAll(group.getSubGroups());
 		for (Iterator<PaletteGroup> iterator = group.getSubGroups().iterator(); iterator.hasNext();) {
 			temp.addAll(getAllGroups(iterator.next()));
@@ -685,7 +685,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	@Override
 	public List<PaletteGroup> getAllParentGroups(final PaletteGroup group) {
-		List<PaletteGroup> temp = new ArrayList<PaletteGroup>();
+		List<PaletteGroup> temp = new ArrayList<>();
 		PaletteGroup parent = group.getParentGroup();
 		while (parent != null) {
 			temp.add(parent);
@@ -696,7 +696,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * This method searches for all instances of a FBType in the Palette
-	 * 
+	 *
 	 * @param typeName - the name of the FBType searched for
 	 * @return types - a list containing all occurences of FBType in the Palette
 	 */
@@ -707,7 +707,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * This method searches for all entries of a typeName in the Palette
-	 * 
+	 *
 	 * @param typeName - the name of the FBType searched for
 	 * @return types - a list containing all occurrences of PaletteEntries in the
 	 *         Palette
@@ -730,7 +730,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 			}
 		}
 
-		List<String> groupPath = new ArrayList<String>();
+		List<String> groupPath = new ArrayList<>();
 		int i = 0;
 		if (path[0].length() == 0) {
 			i = 1;
@@ -769,14 +769,14 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * This method searches for all instances of a FBType in a specific PaletteGroup
-	 * 
+	 *
 	 * @param group - the PaletteGroup being searched for the FBType
 	 * @param name  - the name of the FBType being searched for
 	 * @return types - a list containing all occurrences of the FBType in the
 	 *         PaletteGroup
 	 */
-	private List<FBType> checkGroupsForFBType(final PaletteGroup group, final String name) {
-		List<FBType> types = new ArrayList<FBType>();
+	private static List<FBType> checkGroupsForFBType(final PaletteGroup group, final String name) {
+		List<FBType> types = new ArrayList<>();
 
 		for (PaletteEntry entry : group.getEntries()) {
 			if ((entry instanceof FBTypePaletteEntry) && (name.equals(entry.getLabel()))) {
@@ -792,14 +792,14 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * This method searches for all instances of a FBType/PaletteEntry in a specific
 	 * PaletteGroup
-	 * 
+	 *
 	 * @param group - the PaletteGroup being searched for the FBType/PaletteEntry
 	 * @param name  - the name of the FBType being searched for
 	 * @return types - a list containing all occurences of the FBType/PaletteEntry
 	 *         in the PaletteGroup
 	 */
-	private List<PaletteEntry> checkGroupsForFBTypeEntries(final PaletteGroup group, final String name) {
-		List<PaletteEntry> types = new ArrayList<PaletteEntry>();
+	private static List<PaletteEntry> checkGroupsForFBTypeEntries(final PaletteGroup group, final String name) {
+		List<PaletteEntry> types = new ArrayList<>();
 		for (PaletteEntry entry : group.getEntries()) {
 			if (entry.getLabel().equals(name)) {
 				types.add(entry);
