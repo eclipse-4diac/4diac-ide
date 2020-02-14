@@ -13,10 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.ui.wizard;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.export.ui.Activator;
+import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
@@ -34,12 +37,14 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 	private final List<String> errors;
 
 	private StyledText text;
-	private String newLine = "";
+	private String newLine = ""; //$NON-NLS-1$
 
 	public ExportStatusMessageDialog(Shell parentShell, final List<String> warnings, final List<String> errors) {
-		super(parentShell, "4diac IDE Type Export Errors",
-				"During Type export the following issues have been identified:",
-				new Status(IStatus.INFO, "pluginid", errors.size() + " errors and " + warnings.size() + " warnings!"),
+		super(parentShell, Messages.ExportStatusMessageDialog_4diacIDETypeExportErrors,
+				Messages.ExportStatusMessageDialog_DuringTypeExportTheFollowingIssuesHaveBeenIdentified,
+				new Status(IStatus.INFO, Activator.PLUGIN_ID,
+						MessageFormat.format(Messages.ExportStatusMessageDialog_ExportStatusMessageDialog,
+								errors.size(), warnings.size())),
 				IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR);
 
 		this.warnings = warnings;
@@ -86,7 +91,7 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 		StyleRange style1 = new StyleRange();
 
 		if (!warnings.isEmpty()) {
-			String warning = "Warnings \n";
+			String warning = Messages.ExportStatusMessageDialog_WarningsNotEmpty;
 			text.append(warning);
 			style1.start = count;
 			style1.length = warning.length();
@@ -100,7 +105,7 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 		}
 
 		if (!errors.isEmpty()) {
-			String error = "Errors \n";
+			String error = Messages.ExportStatusMessageDialog_ErrorsNotEmpty;
 			text.append(error);
 			style1 = new StyleRange();
 			style1.start = count;

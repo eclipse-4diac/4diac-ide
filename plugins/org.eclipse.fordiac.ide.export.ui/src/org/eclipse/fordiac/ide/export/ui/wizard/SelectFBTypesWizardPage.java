@@ -22,6 +22,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -41,6 +42,10 @@ import org.eclipse.ui.dialogs.WizardExportResourcesPage;
  * The Class SelectFBTypesWizardPage.
  */
 public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
+
+	private static final String NAME = "name"; //$NON-NLS-1$
+
+	private static final String SORT_INDEX = "sortIndex"; //$NON-NLS-1$
 
 	/** The dcc. */
 	private Combo destinationNameField;
@@ -75,12 +80,12 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 			public int compare(IConfigurationElement o1, IConfigurationElement o2) {
 				int sortIndex1 = 0;
 				try {
-					sortIndex1 = Integer.parseInt(o1.getAttribute("sortIndex"));
+					sortIndex1 = Integer.parseInt(o1.getAttribute(SORT_INDEX));
 				} catch (NumberFormatException e) {
 				}
 				int sortIndex2 = 0;
 				try {
-					sortIndex2 = Integer.parseInt(o2.getAttribute("sortIndex"));
+					sortIndex2 = Integer.parseInt(o2.getAttribute(SORT_INDEX));
 				} catch (NumberFormatException e) {
 				}
 				return sortIndex1 - sortIndex2;
@@ -96,7 +101,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
 
 		Label label = new Label(composite, SWT.NONE);
-		label.setText("Exporter:");
+		label.setText(Messages.SelectFBTypesWizardPage_Exporter);
 
 		filters = new Combo(composite, SWT.NONE);
 		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
@@ -104,7 +109,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		filters.setLayoutData(data);
 
 		for (IConfigurationElement exportFilter : exportFilters) {
-			filters.add(exportFilter.getAttribute("name"));
+			filters.add(exportFilter.getAttribute(NAME));
 		}
 
 		filters.addListener(SWT.Selection, event -> updatePageCompletion());
@@ -124,7 +129,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 		if (getDirectory() == null || getDirectory().equals("") //$NON-NLS-1$
 				|| !new File(getDirectory()).isDirectory()) {
-			setErrorMessage("Destination directory needs to be choosen!");
+			setErrorMessage(Messages.SelectFBTypesWizardPage_DestinationDirectoryNeedsToBeChosen);
 			return false;
 		}
 		return super.validateDestinationGroup();
@@ -133,7 +138,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	@Override
 	protected boolean validateOptionsGroup() {
 		if (filters.getSelectionIndex() == -1) {
-			setErrorMessage("Exportfilter needs to be selected!");
+			setErrorMessage(Messages.SelectFBTypesWizardPage_ExportfilterNeedsToBeSelected);
 			return false;
 		}
 		return super.validateOptionsGroup();
@@ -142,7 +147,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	@Override
 	protected boolean validateSourceGroup() {
 		if (getSelectedResources().isEmpty()) {
-			setErrorMessage("No type selected!");
+			setErrorMessage(Messages.SelectFBTypesWizardPage_NoTypeSelected);
 			return false;
 		}
 		return super.validateSourceGroup();
@@ -214,7 +219,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 			String currentFilterSelectionName = getDialogSettings().get(STORE_CURRENT_FILTER_SELECTION_ID);
 			if (currentFilterSelectionName != null) {
 				for (IConfigurationElement filter : exportFilters) {
-					if (filter.getAttribute("name").equals(currentFilterSelectionName)) {
+					if (filter.getAttribute(NAME).equals(currentFilterSelectionName)) {
 						filters.select(exportFilters.indexOf(filter));
 						break;
 					}
@@ -237,7 +242,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 			settings.put(STORE_DIRECTORY_NAMES_ID, directoryNames);
 
 			// Saves current export filter for next session.
-			getDialogSettings().put(STORE_CURRENT_FILTER_SELECTION_ID, getSelectedExportFilter().getAttribute("name"));
+			getDialogSettings().put(STORE_CURRENT_FILTER_SELECTION_ID, getSelectedExportFilter().getAttribute(NAME));
 		}
 	}
 
@@ -255,7 +260,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		destinationSelectionGroup.setFont(font);
 
 		Label destinationLabel = new Label(destinationSelectionGroup, SWT.NONE);
-		destinationLabel.setText("Export Destination:");
+		destinationLabel.setText(Messages.SelectFBTypesWizardPage_ExportDestination);
 		destinationLabel.setFont(font);
 
 		// destination name entry field
@@ -269,11 +274,11 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 		// destination browse button
 		Button destinationBrowseButton = new Button(destinationSelectionGroup, SWT.PUSH);
-		destinationBrowseButton.setText("B&rowse...");
+		destinationBrowseButton.setText(Messages.SelectFBTypesWizardPage_Browse);
 		destinationBrowseButton.addListener(SWT.Selection, event -> {
 			DirectoryDialog dialog = new DirectoryDialog(getContainer().getShell(), SWT.SAVE | SWT.SHEET);
-			dialog.setMessage("Select a directory to export to.");
-			dialog.setText("Export to Directory");
+			dialog.setMessage(Messages.SelectFBTypesWizardPage_SelectADirectoryToExportTo);
+			dialog.setText(Messages.SelectFBTypesWizardPage_ExportToDirectory);
 			dialog.setFilterPath(getDirectory());
 			String selectedDirectoryName = dialog.open();
 
@@ -296,7 +301,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		addAvailableExportFilter(optionsGroup);
 
 		overwrite = new Button(optionsGroup, SWT.CHECK);
-		overwrite.setText("Overwrite without warning");
+		overwrite.setText(Messages.SelectFBTypesWizardPage_OverwriteWithoutWarning);
 		GridData twoColumns = new GridData();
 		twoColumns.grabExcessHorizontalSpace = true;
 		twoColumns.grabExcessVerticalSpace = false;

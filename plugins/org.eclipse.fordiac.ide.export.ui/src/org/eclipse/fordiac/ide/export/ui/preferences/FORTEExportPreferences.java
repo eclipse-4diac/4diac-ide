@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
+import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.fordiac.ide.export.utils.CompareEditorOpenerUtil;
 import org.eclipse.fordiac.ide.export.utils.PreferenceConstants;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -51,7 +52,7 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 
 		// Create a Group to hold the compare editor fields
 		Group compare = new Group(getFieldEditorParent(), SWT.NONE);
-		compare.setText("Compare Editor for Merging");
+		compare.setText(Messages.FORTEExportPreferences_CompareEditorForMerging);
 		GridLayout routerLayout = new GridLayout(2, false);
 
 		Map<String, ICompareEditorOpener> compareEditorOpeners = CompareEditorOpenerUtil.getCompareEditorOpeners();
@@ -66,7 +67,7 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 		}
 
 		ComboFieldEditor compareEditor = new ComboFieldEditor(PreferenceConstants.P_COMPARE_EDITOR,
-				"Default CompareEditor Opener", nameArray, compare);
+				Messages.FORTEExportPreferences_DefaultCompareEditorOpener, nameArray, compare);
 		addField(compareEditor);
 
 		GridData comparedata = new GridData(GridData.FILL_HORIZONTAL);

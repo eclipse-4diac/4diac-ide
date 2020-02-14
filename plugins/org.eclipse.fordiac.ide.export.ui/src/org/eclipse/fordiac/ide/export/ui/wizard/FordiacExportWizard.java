@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.export.ui.wizard;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -94,7 +95,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		final IExportFilter filter;
 		try {
 			conf = page.getSelectedExportFilter();
-			filter = (IExportFilter) conf.createExecutableExtension("class");
+			filter = (IExportFilter) conf.createExecutableExtension(Messages.FordiacExportWizard_Class);
 		} catch (CoreException e) {
 			MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
 			msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
@@ -113,8 +114,8 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 				String outputDirectory = page.getDirectory();
 				SystemManager systemManager = SystemManager.INSTANCE;
 
-				monitor.beginTask("Exporting selected types using exporter: " + conf.getAttribute("name"),
-						resources.size());
+				monitor.beginTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingSelectedTypesUsingExporter,
+						conf.getAttribute("name")), resources.size()); //$NON-NLS-1$
 
 				for (Object object : resources) {
 					if (object instanceof IFile) {
@@ -124,7 +125,8 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 						PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, file);
 						LibraryElement type = entry.getType();
 
-						monitor.subTask("Exporting type: " + entry.getLabel());
+						monitor.subTask(
+								MessageFormat.format(Messages.FordiacExportWizard_ExportingType, entry.getLabel()));
 
 						try {
 							if (null != type) {
