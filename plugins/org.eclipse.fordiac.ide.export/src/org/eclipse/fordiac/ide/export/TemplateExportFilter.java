@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2019 fortiss GmbH
+ * 				 2020 Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl
+ *     - externalized all translatable strings 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export;
 
@@ -49,15 +52,17 @@ public abstract class TemplateExportFilter extends ExportFilter {
 					final Path templatePath = destinationPath.resolve(template.getPath());
 					Files.write(templatePath, data);
 				} catch (final Exception t) {
-					Activator.getDefault().getLog().log(
-							new Status(IStatus.ERROR, Activator.PLUGIN_ID, 1, "Error during template generation", t));
-					this.getErrors().add(t.getMessage() != null ? t.getMessage() : "Error during template generation");
+					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, 1,
+							Messages.TemplateExportFilter_ErrorDuringTemplateGeneration, t));
+					this.getErrors().add(t.getMessage() != null ? t.getMessage()
+							: Messages.TemplateExportFilter_ErrorDuringTemplateGeneration);
 				}
 			}
 		} catch (final Exception t) {
-			Activator.getDefault().getLog()
-					.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, 1, "Error during template generation", t));
-			this.getErrors().add(t.getMessage() != null ? t.getMessage() : "Error during template generation");
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, 1,
+					Messages.TemplateExportFilter_ErrorDuringTemplateGeneration, t));
+			this.getErrors().add(t.getMessage() != null ? t.getMessage()
+					: Messages.TemplateExportFilter_ErrorDuringTemplateGeneration);
 		}
 	}
 
