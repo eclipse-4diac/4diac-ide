@@ -112,7 +112,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	@Override
 	public void deactivate() {
-		if (null != popupShell && !popupShell.isDisposed()) {
+		if ((null != popupShell) && !popupShell.isDisposed()) {
 			popupShell.setVisible(false);
 		}
 		super.deactivate();
@@ -184,7 +184,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 				event.doit = false;
 				break;
 			case SWT.CR:
-				if (popupShell.isVisible() && tableViewer.getTable().getSelectionIndex() != -1) {
+				if (popupShell.isVisible() && (tableViewer.getTable().getSelectionIndex() != -1)) {
 					textControl.setText(
 							((PaletteEntry) tableViewer.getStructuredSelection().getFirstElement()).getLabel());
 				} else {
@@ -199,14 +199,14 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	private void updateSelectionList(String searchString) {
 		blockTableSelection = true;
-		if (searchString.length() == 0) {
-			tableViewer.setInput(null);
-		} else {
+		if (searchString.length() >= 2) {
 			List<PaletteEntry> entries = paletteFilter.findFBAndSubappTypes(searchString);
 			tableViewer.setInput(entries);
 			if (!entries.isEmpty()) {
 				selectItemAtIndex(0);
 			}
+		} else {
+			tableViewer.setInput(null);
 		}
 		blockTableSelection = false;
 	}
