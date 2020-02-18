@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2016 Profactor GmbH, fortiss GmbH
+ * 				 2020			  Andrea Zoitl
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,10 +11,13 @@
  * Contributors:
  *   Martijn Rooker, Gerhard Ebenhofer, Thomas Strasser, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl
+ *     - externalized all translatable strings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbrtlauncher.preferences;
 
 import org.eclipse.fordiac.ide.fbrtlauncher.Activator;
+import org.eclipse.fordiac.ide.fbrtlauncher.Messages;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -39,7 +43,7 @@ public class FBRTPreferencePage extends FieldEditorPreferencePage implements IWo
 	public FBRTPreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("FBRT Preferences Page");
+		setDescription(Messages.FBRTPreferencePage_FBRTPreferencePage);
 	}
 
 	/**
@@ -49,8 +53,10 @@ public class FBRTPreferencePage extends FieldEditorPreferencePage implements IWo
 	 */
 	@Override
 	public void createFieldEditors() {
-		addField(new FileFieldEditor(PreferenceConstants.P_PATH, "&FBRT location (fbrt.jar):", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_LIB, "&FBRT library:", getFieldEditorParent()));
+		addField(new FileFieldEditor(PreferenceConstants.P_PATH, Messages.FBRTPreferencePage_FBRTLocation,
+				getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_LIB, Messages.FBRTPreferencePage_FBRTLibrary,
+				getFieldEditorParent()));
 	}
 
 	/*
