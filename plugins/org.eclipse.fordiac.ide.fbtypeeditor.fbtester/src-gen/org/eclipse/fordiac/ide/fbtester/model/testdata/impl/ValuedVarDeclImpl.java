@@ -234,7 +234,7 @@ public class ValuedVarDeclImpl extends EObjectImpl implements ValuedVarDecl {
 			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (value: ");
+		result.append(" (value: "); //$NON-NLS-1$
 		result.append(value);
 		result.append(')');
 		return result.toString();

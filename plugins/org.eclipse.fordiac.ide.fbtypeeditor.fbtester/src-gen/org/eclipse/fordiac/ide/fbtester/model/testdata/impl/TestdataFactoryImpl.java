@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtester.model.testdata.impl;
 
+import java.text.MessageFormat;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -22,6 +24,7 @@ import org.eclipse.fordiac.ide.fbtester.model.testdata.TestData;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.TestdataFactory;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.TestdataPackage;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.ValuedVarDecl;
+import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Messages;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
@@ -39,7 +42,7 @@ public class TestdataFactoryImpl extends EFactoryImpl implements TestdataFactory
 	public static TestdataFactory init() {
 		try {
 			TestdataFactory theTestdataFactory = (TestdataFactory) EPackage.Registry.INSTANCE
-					.getEFactory("at.ffg4iac.fbtester.model.testdata");
+					.getEFactory("at.ffg4iac.fbtester.model.testdata"); //$NON-NLS-1$
 			if (theTestdataFactory != null) {
 				return theTestdataFactory;
 			}
@@ -72,7 +75,8 @@ public class TestdataFactoryImpl extends EFactoryImpl implements TestdataFactory
 		case TestdataPackage.VALUED_VAR_DECL:
 			return createValuedVarDecl();
 		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException(
+					MessageFormat.format(Messages.TestdataFactoryImpl_TheClassIsNotAValidClassifier, eClass.getName()));
 		}
 	}
 

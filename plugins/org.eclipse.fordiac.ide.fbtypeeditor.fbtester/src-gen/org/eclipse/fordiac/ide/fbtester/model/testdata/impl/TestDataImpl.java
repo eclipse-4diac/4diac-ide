@@ -69,7 +69,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String TEST_NAME_EDEFAULT = "testName";
+	protected static final String TEST_NAME_EDEFAULT = "testName"; //$NON-NLS-1$
 
 	/**
 	 * The cached value of the '{@link #getTestName() <em>Test Name</em>}'
@@ -544,11 +544,11 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 		}
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (testName: ");
+		result.append(" (testName: "); //$NON-NLS-1$
 		result.append(testName);
-		result.append(", testIntstance: ");
+		result.append(", testIntstance: "); //$NON-NLS-1$
 		result.append(testIntstance);
-		result.append(", line: ");
+		result.append(", line: "); //$NON-NLS-1$
 		result.append(line);
 		result.append(')');
 		return result.toString();
@@ -556,7 +556,7 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	private void parseData(String line) {
 		System.out.println(line);
-		String[] lineArray = line.split(";(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
+		String[] lineArray = line.split(";(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))"); //$NON-NLS-1$
 		System.out.println(lineArray.length);
 		if (lineArray.length > 1) {
 			setTestName(lineArray[0]);
@@ -655,12 +655,12 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	@Override
 	public String getOutputEvents() {
-		String events = "";
+		String events = ""; //$NON-NLS-1$
 		for (int i = 0; i < getEventOutputs().size(); i++) {
 			Event e = getEventOutputs().get(i);
 			events += e.getName();
 			if (i + 1 < getEventOutputs().size()) {
-				events += ", ";
+				events += ", "; //$NON-NLS-1$
 			}
 		}
 		return events;
@@ -668,35 +668,35 @@ public class TestDataImpl extends EObjectImpl implements TestData {
 
 	@Override
 	public String _getLine() {
-		String dataLine = getTestName() + ";";
+		String dataLine = getTestName() + ";"; //$NON-NLS-1$
 		dataLine += type.getName();
-		dataLine += ";";
+		dataLine += ";"; //$NON-NLS-1$
 		Event event = null;
 		if (type.getInterfaceList().getEventInputs().size() > 0) {
 			event = type.getInterfaceList().getEventInputs().get(0);
 		}
 
-		dataLine += event.getWith().size() + ";"; // nr of inputs are the number
+		dataLine += event.getWith().size() + ";"; // nr of inputs are the number //$NON-NLS-1$
 		// of connected withs
 
 		for (With with : event.getWith()) {
 			VarDeclaration var = with.getVariables();
-			dataLine += var.getName() + ";" + getValueFor(var.getName()) + ";";
+			dataLine += var.getName() + ";" + getValueFor(var.getName()) + ";"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		dataLine += event.getName() + ";";
+		dataLine += event.getName() + ";"; //$NON-NLS-1$
 
 		if (type.getInterfaceList().getEventOutputs().size() > 0) {
-			dataLine += "1;";
+			dataLine += "1;"; //$NON-NLS-1$
 			dataLine += type.getInterfaceList().getEventOutputs().get(0).getName();
-			dataLine += ";";
+			dataLine += ";"; //$NON-NLS-1$
 		} else {
-			dataLine += "0;";
+			dataLine += "0;"; //$NON-NLS-1$
 		}
 		if (type.getInterfaceList().getOutputVars().size() > 0) {
 			dataLine += type.getInterfaceList().getOutputVars().size();
-			dataLine += ";";
+			dataLine += ";"; //$NON-NLS-1$
 			for (VarDeclaration var : type.getInterfaceList().getOutputVars()) {
-				dataLine += var.getName() + ";" + getResultFor(var.getName()) + ";";
+				dataLine += var.getName() + ";" + getResultFor(var.getName()) + ";"; //$NON-NLS-1$//$NON-NLS-2$
 			}
 		}
 

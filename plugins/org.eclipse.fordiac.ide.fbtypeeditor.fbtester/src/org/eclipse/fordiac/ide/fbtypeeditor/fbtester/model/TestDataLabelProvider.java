@@ -87,7 +87,7 @@ public class TestDataLabelProvider extends LabelProvider
 
 		if (element instanceof TestData) {
 			String result = getLabel((TestData) element, columnIndex);
-			return result != null ? result : "";
+			return result != null ? result : ""; //$NON-NLS-1$
 		}
 		return element.toString();
 	}

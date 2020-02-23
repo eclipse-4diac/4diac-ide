@@ -39,21 +39,21 @@ public interface TestdataPackage extends EPackage {
 	 * 
 	 * @generated
 	 */
-	String eNAME = "testdata";
+	String eNAME = "testdata"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace URI. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
-	String eNS_URI = "at.ffg4iac.fbtester.model.testdata";
+	String eNS_URI = "at.ffg4iac.fbtester.model.testdata"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace name. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
-	String eNS_PREFIX = "testdata";
+	String eNS_PREFIX = "testdata"; //$NON-NLS-1$
 
 	/**
 	 * The singleton instance of the package. <!-- begin-user-doc --> <!--

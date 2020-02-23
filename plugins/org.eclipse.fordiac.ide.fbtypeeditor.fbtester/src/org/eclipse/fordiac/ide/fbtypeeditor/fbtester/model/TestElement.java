@@ -58,7 +58,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 
 	public String getCurrentValue() {
 		if (currentInt == 0) {
-			return "0";
+			return "0"; //$NON-NLS-1$
 		}
 		return historyValues.get((currentInt % nrOfHistory) - 1);
 	}
@@ -120,7 +120,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	 * @return the resource string
 	 */
 	public String getResourceString() {
-		return getFBString() + "_RES";
+		return getFBString() + "_RES"; //$NON-NLS-1$
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class TestElement extends PositionableElementImpl implements IEditPartCre
 	 * @return the fB string
 	 */
 	public String getFBString() {
-		return "_" + getFb().getType().getName();
+		return "_" + getFb().getType().getName(); //$NON-NLS-1$
 	}
 
 	/**

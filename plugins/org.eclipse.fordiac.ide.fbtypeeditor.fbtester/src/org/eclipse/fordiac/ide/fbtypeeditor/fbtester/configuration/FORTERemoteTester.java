@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.fbtester.model.testdata.ValuedVarDecl;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.IFBTestConfiguration;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.IFBTestConfiguratonCreator;
+import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.TestingManager;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.configuration.internal.Utils;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
@@ -94,10 +95,10 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 	public void setRunning(boolean running) {
 		this.running = running;
 		if (running) {
-			run.setText("Stop Testing FB");
+			run.setText(Messages.FORTERemoteTester_StopTestingFB);
 			run.setImage(FordiacImage.ICON_STOP.getImage());
 		} else {
-			run.setText("Start Testing FB");
+			run.setText(Messages.FORTERemoteTester_StartTestingFB);
 			run.setImage(FordiacImage.ICON_START.getImage());
 		}
 	}
@@ -109,14 +110,14 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 		main.setLayout(gl);
 
 		Label ipLabel = new Label(main, SWT.NONE);
-		ipLabel.setText("IP-Address:");
+		ipLabel.setText(Messages.FORTERemoteTester_IPAddress);
 		ipText = new Text(main, SWT.BORDER);
-		ipText.setText("127.0.0.1");
+		ipText.setText("127.0.0.1"); //$NON-NLS-1$
 
 		Label runTimeLabel = new Label(main, SWT.NONE);
-		runTimeLabel.setText("Runtime port:");
+		runTimeLabel.setText(Messages.FORTERemoteTester_RuntimePort);
 		runTimePortText = new Text(main, SWT.BORDER);
-		runTimePortText.setText("61499");
+		runTimePortText.setText("61499"); //$NON-NLS-1$
 
 		run = new Button(main, SWT.TOGGLE);
 		run.setEnabled(true);
@@ -131,7 +132,8 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 					String response = Utils.deployNetwork(type, ipText.getText(), runtimePort);
 					if (response != null) {
 						MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-						msb.setMessage("FB can not be tested because of the following error: \n" + response);
+						msb.setMessage(MessageFormat.format(
+								Messages.FORTERemoteTester_FBCanNotBeTestedBecauseOfTheFollowingError, response));
 						msb.open();
 						setRunning(false);
 						run.setSelection(false);
@@ -151,14 +153,15 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 					} catch (IOException e1) {
 						Activator.getDefault().logError(e1.getMessage(), e1);
 					} catch (InterruptedException ex) {
-						System.out.println("Thread Interrupted");
+						System.out.println(Messages.FORTERemoteTester_ThreadInterrupted);
 					}
 				} else {
 					setRunning(false);
 					String response = Utils.cleanNetwork(type, ipText.getText(), runtimePort, socket);
 					if (response != null) {
 						MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-						msb.setMessage("FB can not be cleaned because of the following error: \n" + response);
+						msb.setMessage(MessageFormat.format(
+								Messages.FORTERemoteTester_FBCanNotBeCleanedBecauseOfTheFollowingError, response));
 						msb.open();
 					}
 					try {
@@ -225,7 +228,8 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 					Activator.getDefault().logError(e1.getMessage(), e1);
 				}
 			} else {
-				System.out.println("element: " + element.getFBString() + " skipped");
+				System.out.println(
+						MessageFormat.format(Messages.FORTERemoteTester_ElementSkipped, element.getFBString()));
 			}
 		}
 	}
@@ -334,7 +338,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 
 				} else if (type.equals(SendType.forceValue)) {
 					String forceResp = parseResponse(inputStream);
-					System.out.println("force response: " + forceResp);
+					System.out.println(MessageFormat.format(Messages.FORTERemoteTester_ForceResponse, forceResp));
 					// normally nothing to do - as no response expected
 				}
 			}

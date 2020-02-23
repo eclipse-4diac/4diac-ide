@@ -318,37 +318,37 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 		// Add supertypes to classes
 
 		// Initialize classes and features; add operations and parameters
-		initEClass(testDataEClass, TestData.class, "TestData", !IS_ABSTRACT, !IS_INTERFACE,
+		initEClass(testDataEClass, TestData.class, "TestData", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getTestData_TestName(), ecorePackage.getEString(), "testName", "testName", 0, 1, TestData.class,
+		initEAttribute(getTestData_TestName(), ecorePackage.getEString(), "testName", "testName", 0, 1, TestData.class, //$NON-NLS-1$ //$NON-NLS-2$
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTestData_Event(), theLibraryElementPackage.getEvent(), null, "event", null, 0, 1,
+		initEReference(getTestData_Event(), theLibraryElementPackage.getEvent(), null, "event", null, 0, 1, //$NON-NLS-1$
 				TestData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTestData_TestIntstance(), ecorePackage.getEString(), "testIntstance", null, 0, 1,
+		initEAttribute(getTestData_TestIntstance(), ecorePackage.getEString(), "testIntstance", null, 0, 1, //$NON-NLS-1$
 				TestData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
-		initEReference(getTestData_EventOutputs(), theLibraryElementPackage.getEvent(), null, "eventOutputs", null, 0,
+		initEReference(getTestData_EventOutputs(), theLibraryElementPackage.getEvent(), null, "eventOutputs", null, 0, //$NON-NLS-1$
 				-1, TestData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTestData_Values(), this.getValuedVarDecl(), null, "values", null, 0, -1, TestData.class,
+		initEReference(getTestData_Values(), this.getValuedVarDecl(), null, "values", null, 0, -1, TestData.class, //$NON-NLS-1$
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTestData_Results(), this.getValuedVarDecl(), null, "results", null, 0, -1, TestData.class,
+		initEReference(getTestData_Results(), this.getValuedVarDecl(), null, "results", null, 0, -1, TestData.class, //$NON-NLS-1$
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTestData_Line(), ecorePackage.getEString(), "line", null, 0, 1, TestData.class, !IS_TRANSIENT,
+		initEAttribute(getTestData_Line(), ecorePackage.getEString(), "line", null, 0, 1, TestData.class, !IS_TRANSIENT, //$NON-NLS-1$
 				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTestData_Type(), theLibraryElementPackage.getFBType(), null, "type", null, 0, 1,
+		initEReference(getTestData_Type(), theLibraryElementPackage.getFBType(), null, "type", null, 0, 1, //$NON-NLS-1$
 				TestData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(valuedVarDeclEClass, ValuedVarDecl.class, "ValuedVarDecl", !IS_ABSTRACT, !IS_INTERFACE,
+		initEClass(valuedVarDeclEClass, ValuedVarDecl.class, "ValuedVarDecl", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getValuedVarDecl_VarDeclaration(), theLibraryElementPackage.getVarDeclaration(), null,
-				"varDeclaration", null, 0, 1, ValuedVarDecl.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				"varDeclaration", null, 0, 1, ValuedVarDecl.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getValuedVarDecl_Value(), ecorePackage.getEString(), "value", null, 0, 1, ValuedVarDecl.class,
+		initEAttribute(getValuedVarDecl_Value(), ecorePackage.getEString(), "value", null, 0, 1, ValuedVarDecl.class, //$NON-NLS-1$
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
