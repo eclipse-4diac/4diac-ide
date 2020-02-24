@@ -23,6 +23,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeActionOrderCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeOutputCommand;
@@ -157,7 +158,7 @@ public class ActionEditingComposite {
 			CommandExecutor commandExecutor) {
 		this.actionWidgetFactory = actionWidgetFactory;
 		this.commandExecutor = commandExecutor;
-		actionGroup = actionWidgetFactory.createGroup(parent, "Actions");
+		actionGroup = actionWidgetFactory.createGroup(parent, Messages.ActionEditingComposite_Actions);
 		commandStack = null;
 		type = null;
 		createGroupLayout();
@@ -183,8 +184,8 @@ public class ActionEditingComposite {
 	}
 
 	private void configureActionTableLayout(final Table table) {
-		new TableColumn(table, SWT.LEFT).setText("Algorithm");
-		new TableColumn(table, SWT.LEFT).setText("Event");
+		new TableColumn(table, SWT.LEFT).setText(Messages.ActionEditingComposite_ConfigureActionTableLayout_Algorithm);
+		new TableColumn(table, SWT.LEFT).setText(Messages.ActionEditingComposite_ConfigureActionTableLayout_Event);
 
 		TableLayout tabLayout = new TableLayout();
 		tabLayout.addColumnData(new ColumnWeightData(1, 50));

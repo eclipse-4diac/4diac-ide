@@ -16,6 +16,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -25,7 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
 public class CreateAlgorithmCommand extends AbstractCreationCommand {
-	private static final String DEFAULT_ALGORITHM_NAME = "ALG1"; // $NON-NLS-1$
+	private static final String DEFAULT_ALGORITHM_NAME = "ALG1"; //$NON-NLS-1$
 
 	private final BasicFBType fbType;
 	private STAlgorithm newAlgorithm;
@@ -59,7 +60,7 @@ public class CreateAlgorithmCommand extends AbstractCreationCommand {
 			oldAlgorithm = action.getAlgorithm();
 		}
 		newAlgorithm = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-		newAlgorithm.setComment("new algorithm");
+		newAlgorithm.setComment(Messages.CreateAlgorithmCommand_NewAlgorithm);
 		newAlgorithm.setText(""); // especially the xtext editor requires at least an empty //$NON-NLS-1$
 									// algorithm text
 		redo();

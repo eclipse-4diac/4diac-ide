@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
  */
 public class CreateInternalVariableCommand extends AbstractCreationCommand {
 
-	private static final String DEFAULT_VAR_NAME = "INTERNALVAR1"; // $NON-NLS-1$
+	private static final String DEFAULT_VAR_NAME = "INTERNALVAR1"; //$NON-NLS-1$
 
 	/** The data type. */
 	private final DataType dataType;

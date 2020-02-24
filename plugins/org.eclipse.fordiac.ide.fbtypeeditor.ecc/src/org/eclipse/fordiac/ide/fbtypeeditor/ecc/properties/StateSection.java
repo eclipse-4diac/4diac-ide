@@ -21,6 +21,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets.ActionEditingComposite;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets.TransitionEditingComposite;
@@ -74,7 +75,7 @@ public class StateSection extends AbstractECSection {
 		Composite nameComposite = getWidgetFactory().createComposite(parent);
 		nameComposite.setLayout(new GridLayout(2, false));
 		nameComposite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(nameComposite, "Name:");
+		getWidgetFactory().createCLabel(nameComposite, Messages.StateSection_Name);
 		stateNameText = createGroupText(nameComposite, true);
 		stateNameText.addVerifyListener(new IdentifierVerifyListener());
 		stateNameText.addListener(SWT.Modify, e -> {
@@ -88,7 +89,7 @@ public class StateSection extends AbstractECSection {
 		Composite commentComposite = getWidgetFactory().createComposite(parent);
 		commentComposite.setLayout(new GridLayout(2, false));
 		commentComposite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(commentComposite, "Comment:");
+		getWidgetFactory().createCLabel(commentComposite, Messages.StateSection_Comment);
 		stateCommentText = createGroupText(commentComposite, true);
 		stateCommentText.addListener(SWT.Modify, e -> {
 			removeContentAdapter();

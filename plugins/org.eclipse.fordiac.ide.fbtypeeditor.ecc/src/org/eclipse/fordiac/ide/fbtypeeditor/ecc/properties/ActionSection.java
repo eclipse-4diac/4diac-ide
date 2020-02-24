@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeOutputCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
@@ -109,7 +110,7 @@ public class ActionSection extends AbstractECSection {
 		layout.fill = true;
 		actionComposite.setLayout(layout);
 
-		getWidgetFactory().createCLabel(actionComposite, "Algorithm: ");
+		getWidgetFactory().createCLabel(actionComposite, Messages.ActionSection_Algorithm);
 		algorithmCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), actionComposite);
 		algorithmCombo.addListener(SWT.Selection, event -> {
 			removeContentAdapter();
@@ -120,7 +121,7 @@ public class ActionSection extends AbstractECSection {
 			addContentAdapter();
 		});
 
-		getWidgetFactory().createCLabel(actionComposite, "Output Event: ");
+		getWidgetFactory().createCLabel(actionComposite, Messages.ActionSection_OutputEvent);
 		outputEventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), actionComposite);
 		outputEventCombo.addListener(SWT.Selection, event -> {
 			removeContentAdapter();
@@ -134,7 +135,7 @@ public class ActionSection extends AbstractECSection {
 	}
 
 	private void createAlgorithmView(Composite parent) {
-		Group algorithmComposite = getWidgetFactory().createGroup(parent, "All Algorithms");
+		Group algorithmComposite = getWidgetFactory().createGroup(parent, Messages.ActionSection_AllAlgorithms);
 		algorithmComposite.setLayout(new GridLayout(1, false));
 		algorithmComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		algorithmList = new AlgorithmList(algorithmComposite, getWidgetFactory());

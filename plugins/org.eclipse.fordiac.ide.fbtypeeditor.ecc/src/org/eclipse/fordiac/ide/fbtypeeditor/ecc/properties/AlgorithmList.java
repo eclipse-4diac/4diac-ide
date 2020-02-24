@@ -19,6 +19,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTypeCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteAlgorithmCommand;
@@ -174,11 +175,11 @@ public class AlgorithmList implements CommandExecutor {
 	private static void configureTableLayout(TableViewer tableViewer) {
 		Table table = tableViewer.getTable();
 		TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText("Name");
+		column1.setText(Messages.AlgorithmList_ConfigureTableLayout_Name);
 		TableColumn column2 = new TableColumn(table, SWT.CENTER);
-		column2.setText("Language");
+		column2.setText(Messages.AlgorithmList_ConfigureTableLayout_Language);
 		TableColumn column3 = new TableColumn(table, SWT.LEFT);
-		column3.setText("Comment");
+		column3.setText(Messages.AlgorithmList_ConfigureTableLayout_Comment);
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(2, 50));
 		layout.addColumnData(new ColumnWeightData(1, 20));

@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
 import java.util.Arrays;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteInternalVariableCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.InternalVarsLabelProvider;
@@ -124,15 +125,15 @@ public class InternalVarsSection extends ECCSection {
 
 	private static void configureTableLayout(final Table table) {
 		TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText("Name");
+		column1.setText(Messages.InternalVarsSection_ConfigureTableLayout_Name);
 		TableColumn column2 = new TableColumn(table, SWT.LEFT);
-		column2.setText("Type");
+		column2.setText(Messages.InternalVarsSection_ConfigureTableLayout_Type);
 		TableColumn column3 = new TableColumn(table, SWT.LEFT);
-		column3.setText("Array Size");
+		column3.setText(Messages.InternalVarsSection_ConfigureTableLayout_ArraySize);
 		TableColumn column4 = new TableColumn(table, SWT.LEFT);
-		column4.setText("Initial Value");
+		column4.setText(Messages.InternalVarsSection_ConfigureTableLayout_InitialValue);
 		TableColumn column5 = new TableColumn(table, SWT.LEFT);
-		column5.setText("Comment");
+		column5.setText(Messages.InternalVarsSection_ConfigureTableLayout_Comment);
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(2, 30));
 		layout.addColumnData(new ColumnWeightData(2, 30));

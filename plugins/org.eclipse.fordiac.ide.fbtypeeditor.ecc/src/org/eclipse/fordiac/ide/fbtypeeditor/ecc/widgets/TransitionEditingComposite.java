@@ -23,6 +23,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeECTransitionCommentCommand;
@@ -199,7 +200,8 @@ public class TransitionEditingComposite {
 	public TransitionEditingComposite(Composite parent, TabbedPropertySheetWidgetFactory transitionWidgetFactory,
 			CommandExecutor commandExecutor) {
 		this.transitionWidgetFactory = transitionWidgetFactory;
-		this.transitionGroup = transitionWidgetFactory.createGroup(parent, "Transitions from selected state");
+		this.transitionGroup = transitionWidgetFactory.createGroup(parent,
+				Messages.TransitionEditingComposite_TransitionsFromSelectedState);
 		this.commandExecutor = commandExecutor;
 		type = null;
 		commandStack = null;
@@ -226,10 +228,14 @@ public class TransitionEditingComposite {
 
 	private void configureTransitionTableLayout(final Table table) {
 		new TableColumn(table, SWT.LEFT); // creates a table column without headline for the order numbering
-		new TableColumn(table, SWT.LEFT).setText("Destination");
-		new TableColumn(table, SWT.LEFT).setText("Event");
-		new TableColumn(table, SWT.LEFT).setText("Condition");
-		new TableColumn(table, SWT.LEFT).setText("Comment");
+		new TableColumn(table, SWT.LEFT)
+				.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Destination);
+		new TableColumn(table, SWT.LEFT)
+				.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Event);
+		new TableColumn(table, SWT.LEFT)
+				.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Condition);
+		new TableColumn(table, SWT.LEFT)
+				.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Comment);
 
 		TableLayout tabLayout = new TableLayout();
 		tabLayout.addColumnData(new ColumnWeightData(1, 50));
