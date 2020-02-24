@@ -103,9 +103,5 @@ public class FordiacContextMenuProvider extends ContextMenuProvider {
 		if (!submenu.isEmpty()) {
 			menu.appendToGroup(GEFActionConstants.GROUP_REST, submenu);
 		}
-
-		if ((action != null) && action.isEnabled()) {
-			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
-		}
 	}
 }
