@@ -478,8 +478,22 @@
             <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
-                 </menuContribution>
-             <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup">
+      </menuContribution>            
+      <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup"> 
+            <menu
+                  id="org.eclipse.4diac.ide.mapto.menu"
+                  label="Map To ...">
+               <dynamic
+                     class="org.eclipse.fordiac.ide.application.handlers.MapToContributionItem"
+                     id="org.eclipse.fordiac.ide.application.commands.mapTo">
+               </dynamic>
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="org.eclipse.fordiac.ide.application.FBNSelection">
+                  </reference>
+               </visibleWhen>
+            </menu>
             <command
                   commandId="org.eclipse.fordiac.ide.application.unmap"
                   label="Unmap">
@@ -752,5 +766,20 @@
 	        	</or>
 		    </with>
 	   </definition>
-   </extension>
+	   <definition
+          id="org.eclipse.fordiac.ide.application.FBNSelection">
+           <with
+                 variable="selection">
+              <iterate>
+                 <or>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+                    </instanceof>
+                    <instanceof
+                          value="org.eclipse.gef.editparts.AbstractConnectionEditPart">
+                    </instanceof></or>
+              </iterate>
+           </with>
+        </definition>
+   </extension>   
 </plugin>
