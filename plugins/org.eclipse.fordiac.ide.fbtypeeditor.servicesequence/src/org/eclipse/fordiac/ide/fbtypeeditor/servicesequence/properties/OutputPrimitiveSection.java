@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeOutputPrimitiveResultCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.gef.commands.CommandStack;
@@ -41,7 +42,7 @@ public class OutputPrimitiveSection extends PrimitiveSection {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Test Result:");
+		getWidgetFactory().createCLabel(composite, Messages.OutputPrimitiveSection_TestResult);
 		testResultText = createGroupText(composite, true);
 		testResultText.addModifyListener(new ModifyListener() {
 			@Override

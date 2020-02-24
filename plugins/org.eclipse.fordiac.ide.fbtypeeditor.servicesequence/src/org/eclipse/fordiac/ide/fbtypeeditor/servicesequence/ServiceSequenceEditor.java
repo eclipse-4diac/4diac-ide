@@ -69,7 +69,7 @@ public class ServiceSequenceEditor extends GraphicalEditorWithFlyoutPalette impl
 		}
 		setSite(site);
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
-		setPartName("Service");
+		setPartName(Messages.ServiceSequenceEditor_Service);
 		setTitleImage(FordiacImage.ICON_SERVICE_SEQUENCE.getImage());
 		super.init(site, input);
 	}

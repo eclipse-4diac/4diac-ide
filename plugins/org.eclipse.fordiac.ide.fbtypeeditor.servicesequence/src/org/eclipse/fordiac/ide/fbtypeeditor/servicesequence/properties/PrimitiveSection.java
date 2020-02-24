@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveInterfaceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveParameterCommand;
@@ -71,7 +72,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Event: ");
+		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreateEventSection_Event);
 		eventText = createGroupText(composite, true);
 		eventText.addModifyListener(new ModifyListener() {
 			@Override
@@ -88,11 +89,11 @@ public class PrimitiveSection extends AbstractServiceSection {
 		qiGroup = getWidgetFactory().createGroup(parent, "QI"); //$NON-NLS-1$
 		qiGroup.setLayout(new RowLayout(SWT.VERTICAL));
 		qiGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		buttonNone = getWidgetFactory().createButton(qiGroup, "none", SWT.RADIO);
+		buttonNone = getWidgetFactory().createButton(qiGroup, Messages.PrimitiveSection_None, SWT.RADIO);
 		buttonNone.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				changeEventText("none");
+				changeEventText(Messages.PrimitiveSection_None);
 				refresh();
 			}
 		});
@@ -139,7 +140,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Interface: ");
+		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Interface);
 		serviceInterfaceCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
 		serviceInterfaceCombo.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		serviceInterfaceCombo.addListener(SWT.Selection, event -> {
@@ -148,7 +149,7 @@ public class PrimitiveSection extends AbstractServiceSection {
 							getType(), serviceInterfaceCombo.getText()));
 			refresh();
 		});
-		getWidgetFactory().createCLabel(composite, "Parameters:");
+		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Parameters);
 		parametersText = createGroupText(composite, true);
 		parametersText.addModifyListener(new ModifyListener() {
 			@Override

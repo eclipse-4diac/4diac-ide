@@ -31,9 +31,9 @@ public class CreateServiceSequenceCommand extends Command {
 
 	public CreateServiceSequenceCommand(FBType fbType) {
 		this.fbType = fbType;
-		name = "Service Sequence";
-		leftInterfaceName = "left interface";
-		rightInterfaceName = "right interface";
+		name = "Service Sequence"; //$NON-NLS-1$
+		leftInterfaceName = "left interface"; //$NON-NLS-1$
+		rightInterfaceName = "right interface"; //$NON-NLS-1$
 	}
 
 	@Override

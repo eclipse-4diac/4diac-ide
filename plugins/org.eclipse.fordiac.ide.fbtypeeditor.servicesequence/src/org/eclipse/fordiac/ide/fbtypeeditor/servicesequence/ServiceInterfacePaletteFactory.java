@@ -22,11 +22,11 @@ import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 public final class ServiceInterfacePaletteFactory {
-	private static final String SERVICE_TRANSACTION = "ServiceTransaction";
-	public static final String RIGHT_OUTPUT_PRIMITIVE = "RightOutputPrimitive";
-	public static final String RIGHT_INPUT_PRIMITIVE = "RightInputPrimitive";
-	public static final String LEFT_OUTPUT_PRIMITIVE = "LeftOutputPrimitive";
-	public static final String LEFT_INPUT_PRIMITIVE = "LeftInputPrimitive";
+	private static final String SERVICE_TRANSACTION = "ServiceTransaction"; //$NON-NLS-1$
+	public static final String RIGHT_OUTPUT_PRIMITIVE = "RightOutputPrimitive"; //$NON-NLS-1$
+	public static final String RIGHT_INPUT_PRIMITIVE = "RightInputPrimitive"; //$NON-NLS-1$
+	public static final String LEFT_OUTPUT_PRIMITIVE = "LeftOutputPrimitive"; //$NON-NLS-1$
+	public static final String LEFT_INPUT_PRIMITIVE = "LeftInputPrimitive"; //$NON-NLS-1$
 	private static final String PALETTE_DOCK_LOCATION = "ServiceInterfacePaletteFactory.Location"; //$NON-NLS-1$
 	private static final String PALETTE_SIZE = "ServiceInterfacePaletteFactory.Size"; //$NON-NLS-1$
 	private static final String PALETTE_STATE = "ServiceInterfacePaletteFactory.State"; //$NON-NLS-1$
@@ -73,30 +73,40 @@ public final class ServiceInterfacePaletteFactory {
 	}
 
 	private static void fillPalette(final PaletteRoot palette) {
-		PaletteDrawer drawer = new PaletteDrawer("Left Interface");
+		PaletteDrawer drawer = new PaletteDrawer(Messages.ServiceInterfacePaletteFactory_LeftInterface);
 		ImageDescriptor desc = FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImageDescriptor();
-		CombinedTemplateCreationEntry entry = new CombinedTemplateCreationEntry("Input Primitive", "Input Primitive",
+		CombinedTemplateCreationEntry entry = new CombinedTemplateCreationEntry(
+				Messages.ServiceInterfacePaletteFactory_InputPrimitive,
+				Messages.ServiceInterfacePaletteFactory_InputPrimitive_Desc,
 				new TemplateCreationFactory(LEFT_INPUT_PRIMITIVE), desc, desc);
 		drawer.add(entry);
 		desc = FordiacImage.ICON_LEFT_OUTPUT_PRIMITIVE.getImageDescriptor();
-		CombinedTemplateCreationEntry entry2 = new CombinedTemplateCreationEntry("Output Primitive", "Output Primitive",
+		CombinedTemplateCreationEntry entry2 = new CombinedTemplateCreationEntry(
+				Messages.ServiceInterfacePaletteFactory_OutputPrimitive,
+				Messages.ServiceInterfacePaletteFactory_OutputPrimitive_Desc,
 				new TemplateCreationFactory(LEFT_OUTPUT_PRIMITIVE), desc, desc);
 		drawer.add(entry2);
 		palette.add(drawer);
-		drawer = new PaletteDrawer("Right Interface");
+		drawer = new PaletteDrawer(Messages.ServiceInterfacePaletteFactory_RightInterface);
 		desc = FordiacImage.ICON_RIGHT_INPUT_PRIMITIVE.getImageDescriptor();
-		CombinedTemplateCreationEntry entry3 = new CombinedTemplateCreationEntry("Input Primitive", "Input Primitive",
+		CombinedTemplateCreationEntry entry3 = new CombinedTemplateCreationEntry(
+				Messages.ServiceInterfacePaletteFactory_InputPrimitive,
+				Messages.ServiceInterfacePaletteFactory_InputPrimitive_Desc,
 				new TemplateCreationFactory(RIGHT_INPUT_PRIMITIVE), desc, desc);
 		drawer.add(entry3);
 		desc = FordiacImage.ICON_RIGHT_OUTPUT_PRIMITIVE.getImageDescriptor();
-		CombinedTemplateCreationEntry entry4 = new CombinedTemplateCreationEntry("Output Primitive", "Output Primitive",
+		CombinedTemplateCreationEntry entry4 = new CombinedTemplateCreationEntry(
+				Messages.ServiceInterfacePaletteFactory_OutputPrimitive,
+				Messages.ServiceInterfacePaletteFactory_OutputPrimitive_Desc,
 				new TemplateCreationFactory(RIGHT_OUTPUT_PRIMITIVE), desc, desc);
 		drawer.add(entry4);
 		palette.add(drawer);
-		drawer = new PaletteDrawer("Service Transaction");
+		drawer = new PaletteDrawer(Messages.ServiceInterfacePaletteFactory_ServiceTransaction);
 		desc = FordiacImage.ICON_TRANSACTION.getImageDescriptor();
-		CombinedTemplateCreationEntry entry5 = new CombinedTemplateCreationEntry("Service Transaction",
-				"Service Transaction", new TemplateCreationFactory(SERVICE_TRANSACTION), desc, desc);
+		CombinedTemplateCreationEntry entry5 = new CombinedTemplateCreationEntry(
+				Messages.ServiceInterfacePaletteFactory_ServiceTransaction,
+				Messages.ServiceInterfacePaletteFactory_ServiceTransaction_Desc,
+				new TemplateCreationFactory(SERVICE_TRANSACTION), desc, desc);
 		drawer.add(entry5);
 		palette.add(drawer);
 	}
