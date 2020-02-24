@@ -35,8 +35,6 @@ import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
-import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
@@ -48,7 +46,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
@@ -108,24 +105,6 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 	 */
 	@Override
 	public void buildContextMenu(final IMenuManager menu) {
-		if (getViewer().getEditDomain().getActiveTool() instanceof AdvancedPanningSelectionTool) {
-			AdvancedPanningSelectionTool st = (AdvancedPanningSelectionTool) getViewer().getEditDomain()
-					.getActiveTool();
-			if (!st.isMoved()) { // pan executed
-				EditPart currentPart = getViewer().findObjectAt(st.getLocation());
-				EditPart selected = st.getTargetEditPart();
-				if ((null != selected) && (selected.getSelected() == EditPart.SELECTED_NONE)
-						&& (selected instanceof AbstractViewEditPart)) {
-					getViewer().select(currentPart);
-				}
-
-				if (null == selected) {
-					getViewer().select(currentPart);
-				}
-
-			}
-		}
-
 		super.buildContextMenu(menu);
 		IAction action;
 

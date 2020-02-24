@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2012 Profactor GbmH, fortiss GmbH
+ *                    2019 - 2020 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,7 +11,9 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
+ * 	 Bianca Wiesmayr, Alois Zoitl
+ *     - improve scrolling
+ * *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.tools;
 
 import org.eclipse.draw2d.Cursors;
@@ -28,24 +31,18 @@ import org.eclipse.swt.graphics.Cursor;
  */
 public class AdvancedPanningSelectionTool extends SelectionTool {
 
-	private boolean isSpaceBarDown = false;
+	private static final int MOUSE_LEFT = 1;
+	private static final int MOUSE_MIDDLE = 2;
+	private static final int MOUSE_RIGHT = 3;
+
+	private boolean isSpaceBarDown;
 	private Point viewLocation;
-	private boolean moved = false;
 
 	/**
 	 * The state to indicate that the space bar has been pressed but no drag has
 	 * been initiated.
 	 */
 	protected static final int PAN = SelectionTool.MAX_STATE << 1;
-
-	/**
-	 * Checks if is moved.
-	 *
-	 * @return true, if is moved
-	 */
-	public boolean isMoved() {
-		return moved;
-	}
 
 	/**
 	 * The state to indicate that a pan is in progress.
@@ -63,28 +60,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 */
 
 	protected boolean acceptSpaceBar(KeyEvent e) {
-		return (e.character == ' ' && (e.stateMask & SWT.MODIFIER_MASK) == 0);
-	}
-
-	/**
-	 * @see org.eclipse.gef.tools.AbstractTool#getDebugName()
-	 */
-	@Override
-	protected String getDebugName() {
-		return "Panning Tool";
-	}
-
-	/**
-	 * @see org.eclipse.gef.tools.AbstractTool#getDebugNameForState(int)
-	 */
-	@Override
-	protected String getDebugNameForState(int state) {
-		if (state == PAN) {
-			return "Pan Initial";
-		} else if (state == PAN_IN_PROGRESS) {
-			return "Pan In Progress";
-		}
-		return super.getDebugNameForState(state);
+		return ((e.character == ' ') && ((e.stateMask & SWT.MODIFIER_MASK) == 0));
 	}
 
 	/**
@@ -106,10 +82,12 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 */
 	@Override
 	protected boolean handleButtonDown(int which) {
-		if ((which == 3 && getCurrentViewer().getControl() instanceof FigureCanvas)
-				&& (stateTransition(STATE_INITIAL, PAN)) && (stateTransition(PAN, PAN_IN_PROGRESS))) {
-			refreshCursor();
+		if (getCurrentViewer().getControl() instanceof FigureCanvas) {
 			viewLocation = ((FigureCanvas) getCurrentViewer().getControl()).getViewport().getViewLocation();
+		}
+		switch (which) {
+		case MOUSE_RIGHT:
+			refreshCursor();
 			updateTargetRequest();
 			((SelectionRequest) getTargetRequest()).setLastButtonPressed(which);
 			updateTargetUnderMouse();
@@ -119,21 +97,20 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 				lockTargetEditPart(editpart);
 			}
 			return true;
-		}
-		if (which == 1 && getCurrentViewer().getControl() instanceof FigureCanvas
-				&& stateTransition(PAN, PAN_IN_PROGRESS)) {
-			viewLocation = ((FigureCanvas) getCurrentViewer().getControl()).getViewport().getViewLocation();
-			return true;
-		}
-
-		if ((2 == which) && (getCurrentViewer().getControl() instanceof FigureCanvas)) {
+		case MOUSE_LEFT:
+			if (stateTransition(PAN, PAN_IN_PROGRESS)) {
+				return true;
+			}
+			break;
+		case MOUSE_MIDDLE:
 			isSpaceBarDown = true;
 			if (stateTransition(STATE_INITIAL, PAN)) {
 				stateTransition(PAN, PAN_IN_PROGRESS);
 				refreshCursor();
-				viewLocation = ((FigureCanvas) getCurrentViewer().getControl()).getViewport().getViewLocation();
 			}
 			return true;
+		default:
+			break;
 		}
 		return super.handleButtonDown(which);
 	}
@@ -143,29 +120,16 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 */
 	@Override
 	protected boolean handleButtonUp(int which) {
-		if (which == 3 && stateTransition(PAN_IN_PROGRESS, STATE_INITIAL)) {
-			refreshCursor();
-			Point currentLocation = ((FigureCanvas) getCurrentViewer().getControl()).getViewport().getViewLocation();
-
-			if (currentLocation.equals(viewLocation)) {
-				moved = false;
-			} else {
-				moved = true;
-			}
-			((SelectionRequest) getTargetRequest()).setLastButtonPressed(0);
-			setDragTracker(null);
-			setState(STATE_INITIAL);
-			unlockTargetEditPart();
+		if ((MOUSE_LEFT == which) && isSpaceBarDown && stateTransition(PAN_IN_PROGRESS, PAN)) {
 			return true;
 		}
-		if (which == 1 && isSpaceBarDown && stateTransition(PAN_IN_PROGRESS, PAN)) {
-			return true;
-		} else if (which == 1 && stateTransition(PAN_IN_PROGRESS, STATE_INITIAL)) {
+
+		if ((MOUSE_LEFT == which) && stateTransition(PAN_IN_PROGRESS, STATE_INITIAL)) {
 			refreshCursor();
 			return true;
 		}
 
-		if (2 == which) {
+		if (MOUSE_MIDDLE == which) {
 			if (stateTransition(PAN_IN_PROGRESS, STATE_INITIAL)) {
 				isSpaceBarDown = false;
 				refreshCursor();
@@ -181,7 +145,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 */
 	@Override
 	protected boolean handleDrag() {
-		if (isInState(PAN_IN_PROGRESS) && getCurrentViewer().getControl() instanceof FigureCanvas) {
+		if (isInState(PAN_IN_PROGRESS) && (getCurrentViewer().getControl() instanceof FigureCanvas)) {
 			FigureCanvas canvas = (FigureCanvas) getCurrentViewer().getControl();
 			canvas.scrollTo(viewLocation.x - getDragMoveDelta().width, viewLocation.y - getDragMoveDelta().height);
 			return true;
@@ -218,7 +182,8 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 			refreshCursor();
 			isSpaceBarDown = false;
 			return true;
-		} else if (isInState(PAN_IN_PROGRESS)) {
+		}
+		if (isInState(PAN_IN_PROGRESS)) {
 			isSpaceBarDown = false;
 		}
 		return super.handleKeyDown(e);
