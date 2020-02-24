@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,10 +9,15 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *               - keep connection draging within canvas bounds
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.tools;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
+import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
+import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.swt.SWT;
@@ -31,7 +36,12 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 	public void mouseDrag(MouseEvent me, EditPartViewer viewer) {
 		super.mouseDrag(me, viewer);
 		if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
-			((AdvancedScrollingGraphicalViewer) viewer).checkScrollPositionDuringDrag(me);
+			((AdvancedScrollingGraphicalViewer) viewer)
+					.checkScrollPositionDuringDragBounded(me,
+							new Point(
+									MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE
+											+ ConnectionPreferenceValues.HANDLE_SIZE,
+									ConnectionPreferenceValues.HANDLE_SIZE));
 		}
 	}
 

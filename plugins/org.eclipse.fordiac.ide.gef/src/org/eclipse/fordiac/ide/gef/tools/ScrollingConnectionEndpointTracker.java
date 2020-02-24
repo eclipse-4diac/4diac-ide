@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,7 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *               - added the option to duplicate the connection when pressing
  *                 the ctrl key during dragging
+ *               - keep connection draging within canvas bounds
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.tools;
 
@@ -19,6 +20,9 @@ import java.util.Map;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
+import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
+import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
@@ -72,7 +76,12 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	public void mouseDrag(MouseEvent me, EditPartViewer viewer) {
 		if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
 			Point oldViewPort = ((AdvancedScrollingGraphicalViewer) viewer).getViewLocation();
-			((AdvancedScrollingGraphicalViewer) viewer).checkScrollPositionDuringDrag(me);
+			((AdvancedScrollingGraphicalViewer) viewer)
+					.checkScrollPositionDuringDragBounded(me,
+							new Point(
+									MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE
+											+ ConnectionPreferenceValues.HANDLE_SIZE,
+									ConnectionPreferenceValues.HANDLE_SIZE));
 			Dimension delta = oldViewPort.getDifference(((AdvancedScrollingGraphicalViewer) viewer).getViewLocation());
 			// Compensate the moved scrolling in the start position for correct dropping of
 			// moved parts

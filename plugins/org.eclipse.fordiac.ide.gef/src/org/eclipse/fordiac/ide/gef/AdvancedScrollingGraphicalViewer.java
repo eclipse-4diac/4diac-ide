@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009, 2017 Profactor GbmH, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,9 +14,11 @@
  *   Alois Zoitl - added method to handle mouse drags outside of the viewport
  *                 Bug #553136.
  *   Bianca Wiesmayr - support keyboard navigation
+ *   Alois Zoitl - keep connection draging within canvas bounds
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
+import org.eclipse.draw2d.RangeModel;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
@@ -46,7 +48,7 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 	}
 
 	/**
-	 * checks if during dragging of an element (e.g., connection creation, moving of
+	 * Checks if during dragging of an element (e.g., connection creation, moving of
 	 * an element) the mouse is outside of the viewer and tries to move the
 	 * scrollbar in that direction
 	 *
@@ -57,6 +59,37 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 			Point newLocation = getNewScrollPosition(me);
 			getFigureCanvas().scrollSmoothTo(newLocation.x, newLocation.y);
 		}
+	}
+
+	/**
+	 * Checks if during dragging of an element (e.g., connection creation, moving of
+	 * an element) the mouse is outside of the viewer and tries to move the
+	 * scrollbar in that direction
+	 *
+	 * This bounded version will ensure that the mouse position is within the
+	 * canvas.
+	 *
+	 * @param me     mouse event of the drag movement
+	 * @param border the border to be considered around the etch of the canvas, is,
+	 *               for example, needed for connection dragging to consider the
+	 *               size of the drag handle
+	 */
+	public void checkScrollPositionDuringDragBounded(MouseEvent me, Point border) {
+		checkScrollPositionDuringDrag(me);
+		me.x = boundCoordinate(me.x, border.x, getFigureCanvas().getViewport().getHorizontalRangeModel());
+		me.y = boundCoordinate(me.y, border.y, getFigureCanvas().getViewport().getVerticalRangeModel());
+	}
+
+	private static int boundCoordinate(int mousePos, int border, RangeModel rangeModel) {
+		int retVal = mousePos;
+		int min = rangeModel.getMinimum() - rangeModel.getValue();
+		int max = rangeModel.getMaximum() - rangeModel.getMinimum() - rangeModel.getValue();
+		if (retVal < min) {
+			retVal = min + border;
+		} else if (retVal > max) {
+			retVal = max - border;
+		}
+		return retVal;
 	}
 
 	private Point getNewScrollPosition(MouseEvent me) {
