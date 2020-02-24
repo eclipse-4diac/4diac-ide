@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
- * 				 2019 Johannes Kepler University
+ *               2019 - 2020 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +16,7 @@
  *               - fixed issue in submenu generation when fb types are in the
  *                 root folder
  *               - reworked fb insert action to not reuse commands
+ *   Bianca Wiesmayr - clean-up and reorganize
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
@@ -89,9 +90,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		this.palette = palette;
 		this.editor = editor;
 
-		getViewer().getControl().addMenuDetectListener(e -> {
-			pt = getViewer().getControl().toControl(e.x, e.y);
-		});
+		editor.getViewer().getControl().addMenuDetectListener(e -> pt = getViewer().getControl().toControl(e.x, e.y));
 	}
 
 	public org.eclipse.draw2d.geometry.Point getPoint() {
@@ -147,21 +146,21 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 
 		createFBMenus(menu);
-		// group_rest instead of group_copy for sorting
-		action = getRegistry().getAction(ActionFactory.DELETE.getId());
-		menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 
 		action = getRegistry().getAction(ActionFactory.CUT.getId());
-		menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
+		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
 		action = getRegistry().getAction(ActionFactory.COPY.getId());
-		menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
+		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
 		action = getRegistry().getAction(ActionFactory.PASTE.getId());
 		if (action instanceof PasteEditPartsAction) {
 			((PasteEditPartsAction) action).setPastRefPosition(getPoint());
 		}
-		menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
+		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
+
+		action = getRegistry().getAction(ActionFactory.DELETE.getId());
+		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -210,10 +209,8 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 
 			if ((entry instanceof FBTypePaletteEntry) || (entry instanceof SubApplicationTypePaletteEntry)) {
 				Action action = getActionForPaletteEntry(entry);
-				if (null != action) {
-					setActionIcon(action, entry);
-					submenu.add(action);
-				}
+				setActionIcon(action, entry);
+				submenu.add(action);
 			}
 		}
 	}

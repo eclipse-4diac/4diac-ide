@@ -563,20 +563,6 @@
                </reference>
             </visibleWhen>
          </command>
-         <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType">
-            <visibleWhen checkEnabled="true">
-               <reference
-                     definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
-               </reference>
-            </visibleWhen>
-         </command>
-         <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp">
-            <visibleWhen checkEnabled="true">
-               <reference
-                     definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
-               </reference>
-            </visibleWhen>
-         </command>
          <command
                commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" >
             <visibleWhen checkEnabled="true">
@@ -595,6 +581,9 @@
                 </with>
             </visibleWhen>
          </command>
+         </menuContribution>
+         <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?endof=org.fordiac.ide.group.navigate">
          <command
                commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
                icon="platform:/plugin/org.eclipse.jdt.ui/icons/full/etool16/move_up.png">
@@ -620,6 +609,23 @@
                       </or>
                    </iterate>
                 </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?endof=group.add">
+               <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType">
+            <visibleWhen checkEnabled="true">
+               <reference
+                     definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp">
+            <visibleWhen checkEnabled="true">
+               <reference
+                     definitionId="org.eclipse.fordiac.ide.application.SubAppSelection">
+               </reference>
             </visibleWhen>
          </command>
       </menuContribution>

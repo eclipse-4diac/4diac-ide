@@ -22,6 +22,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.ui.IWorkbenchActionConstants;
 
 /**
  * The Class ZoomUndoRedoContextMenuProvider.
@@ -29,6 +30,8 @@ import org.eclipse.jface.action.Separator;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class FordiacContextMenuProvider extends ContextMenuProvider {
+
+	public static final String GROUP_NAVIGATE = "org.fordiac.ide.group.navigate";
 
 	private final ZoomManager zoomManager;
 	private final ActionRegistry registry;
@@ -63,45 +66,61 @@ public class FordiacContextMenuProvider extends ContextMenuProvider {
 	 */
 	@Override
 	public void buildContextMenu(final IMenuManager menu) {
-		GEFActionConstants.addStandardActionGroups(menu);
-		// Alignment Actions
+		addActionGroups(menu);
+		MenuManager alignSubMenu = createAlignSubmenu();
+		if (!alignSubMenu.isEmpty()) {
+			menu.appendToGroup(IWorkbenchActionConstants.GROUP_REORGANIZE, alignSubMenu);
+		}
+	}
+
+	private MenuManager createAlignSubmenu() {
 		MenuManager submenu = new MenuManager("&Align");
 
 		IAction action;
 		action = registry.getAction(GEFActionConstants.ALIGN_LEFT);
-		if ((action != null) && action.isEnabled()) {
+		if ((null != action) && action.isEnabled()) {
 			submenu.add(action);
 		}
 
 		action = registry.getAction(GEFActionConstants.ALIGN_CENTER);
-		if ((action != null) && action.isEnabled()) {
+		if ((null != action) && action.isEnabled()) {
 			submenu.add(action);
 		}
 
 		action = registry.getAction(GEFActionConstants.ALIGN_RIGHT);
-		if ((action != null) && action.isEnabled()) {
+		if ((null != action) && action.isEnabled()) {
 			submenu.add(action);
 		}
 
 		submenu.add(new Separator());
 
 		action = registry.getAction(GEFActionConstants.ALIGN_TOP);
-		if ((action != null) && action.isEnabled()) {
+		if ((null != action) && action.isEnabled()) {
 			submenu.add(action);
 		}
 
 		action = registry.getAction(GEFActionConstants.ALIGN_MIDDLE);
-		if ((action != null) && action.isEnabled()) {
+		if ((null != action) && action.isEnabled()) {
 			submenu.add(action);
 		}
 
 		action = registry.getAction(GEFActionConstants.ALIGN_BOTTOM);
-		if ((action != null) && action.isEnabled()) {
+		if ((null != action) && action.isEnabled()) {
 			submenu.add(action);
 		}
+		return submenu;
+	}
 
-		if (!submenu.isEmpty()) {
-			menu.appendToGroup(GEFActionConstants.GROUP_REST, submenu);
-		}
+	private static void addActionGroups(final IMenuManager menu) {
+		menu.add(new Separator(GEFActionConstants.GROUP_EDIT));
+		menu.add(new Separator(GROUP_NAVIGATE));
+		menu.add(new Separator(GEFActionConstants.GROUP_COPY));
+		menu.add(new Separator(GEFActionConstants.GROUP_VIEW));
+		menu.add(new Separator(GEFActionConstants.GROUP_FIND));
+		menu.add(new Separator(IWorkbenchActionConstants.GROUP_ADD));
+		menu.add(new Separator(GEFActionConstants.GROUP_SAVE));
+		menu.add(new Separator(GEFActionConstants.GROUP_REST));
+		menu.add(new Separator(IWorkbenchActionConstants.GROUP_REORGANIZE));
+		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 }
