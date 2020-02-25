@@ -285,16 +285,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 			public void mouseUp(MouseEvent me, EditPartViewer viewer) {
 				if (LEFT_MOUSE == me.button) {
 					lastLeftClick = getLocation();
-					if ((!isInState(STATE_DRAG_IN_PROGRESS)) && (0 != (me.stateMask & SWT.MOD1))) {
-						EditPart editPart = getCurrentViewer().findObjectAt(getLocation());
-						if (null != editPart) {
-							SelectionRequest request = new SelectionRequest();
-							request.setLocation(getLocation());
-							request.setType(RequestConstants.REQ_OPEN);
-							editPart.performRequest(request);
-							return;
-						}
-					}
 				}
 				super.mouseUp(me, viewer);
 			}
