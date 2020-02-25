@@ -427,6 +427,15 @@
             class="org.eclipse.fordiac.ide.application.handlers.UnmapHandler"
             commandId="org.eclipse.fordiac.ide.application.unmap">
       </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.application.handlers.UnmapAllHandler"
+            commandId="org.eclipse.fordiac.ide.application.unmapAll">
+         <activeWhen>
+            <reference
+                  definitionId="org.eclipse.fordiac.ide.application.UnmapAllActivation">
+            </reference>
+         </activeWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -497,6 +506,10 @@
             <command
                   commandId="org.eclipse.fordiac.ide.application.unmap"
                   label="Unmap">
+            </command>
+            <command
+                  commandId="org.eclipse.fordiac.ide.application.unmapAll"
+                  label="Unmap All">
             </command>
       </menuContribution>
       <menuContribution
@@ -787,5 +800,14 @@
               </iterate>
            </with>
         </definition>
+    <definition
+          id="org.eclipse.fordiac.ide.application.UnmapAllActivation">
+       <with
+             variable="activeEditorId">
+          <equals
+                value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
+          </equals>
+       </with>
+    </definition>
    </extension>   
 </plugin>

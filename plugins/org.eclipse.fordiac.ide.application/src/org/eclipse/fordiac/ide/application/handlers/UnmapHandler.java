@@ -7,11 +7,12 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Muddasir Shakil - initial API and implementation and/or initial documentation
+ *   Alois Zoitl, Muddasir Shakil - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -19,11 +20,9 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -55,24 +54,33 @@ public class UnmapHandler extends AbstractHandler {
 
 	@Override
 	public void setEnabled(Object evaluationContext) {
-		selectedNetworkElements.clear();
+		setBaseEnabled(!getMappedFBList(getSelectedElements(evaluationContext)).isEmpty());
+	}
+
+	protected List<?> getSelectedElements(Object evaluationContext){
 		ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		setBaseEnabled(checkSelection(selection));
+		if (selection instanceof StructuredSelection) {
+			return ((StructuredSelection) selection).toList();
+		}
+		return Collections.emptyList();
 	}
 
-	private boolean checkSelection(ISelection selection) {
-		if (selection instanceof StructuredSelection) {
-			for (Object selected : ((StructuredSelection) selection).toList()) {
-				if ((selected instanceof FBEditPart) || (selected instanceof SubAppForFBNetworkEditPart)) {
-					checkMapping(((AbstractFBNElementEditPart) selected).getModel());
-				}
+	private List<FBNetworkElement> getMappedFBList(List<?> fbNetwork){
+		selectedNetworkElements.clear();
+		for (Object element : fbNetwork) {
+			if(element instanceof EditPart) {
+				element = ((EditPart)element).getModel();
+			}
+
+			if ((element instanceof FBNetworkElement)) {
+				checkMapping((FBNetworkElement) element);
 			}
 		}
-		return (!selectedNetworkElements.isEmpty());
+		return selectedNetworkElements;
 	}
 
-	protected void checkMapping(FBNetworkElement model) {
+	private void checkMapping(FBNetworkElement model) {
 		if (model.isMapped()) {
 			selectedNetworkElements.add(model);
 		}
