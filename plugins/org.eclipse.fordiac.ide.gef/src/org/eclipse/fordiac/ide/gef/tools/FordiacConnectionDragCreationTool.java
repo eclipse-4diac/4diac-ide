@@ -34,7 +34,6 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 
 	@Override
 	public void mouseDrag(MouseEvent me, EditPartViewer viewer) {
-		super.mouseDrag(me, viewer);
 		if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
 			((AdvancedScrollingGraphicalViewer) viewer)
 					.checkScrollPositionDuringDragBounded(me,
@@ -43,6 +42,7 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 											+ ConnectionPreferenceValues.HANDLE_SIZE,
 									ConnectionPreferenceValues.HANDLE_SIZE));
 		}
+		super.mouseDrag(me, viewer);
 	}
 
 }
