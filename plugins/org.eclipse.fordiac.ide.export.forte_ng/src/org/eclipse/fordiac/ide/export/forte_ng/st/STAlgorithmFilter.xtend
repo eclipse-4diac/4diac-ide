@@ -58,6 +58,10 @@ import org.eclipse.xtext.util.LazyStringInputStream
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.LocatedVariable
+
+import org.eclipse.xtext.validation.CheckMode
+import org.eclipse.xtext.util.CancelIndicator
 
 class STAlgorithmFilter {
 
@@ -76,8 +80,10 @@ class STAlgorithmFilter {
 		val resource = resourceSet.createResource(SYNTHETIC_ST_URI) as XtextResource
 		resource.load(new LazyStringInputStream(alg.text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
 		val parseResult = resource.parseResult
-		if(parseResult.hasSyntaxErrors) {
-			errors.addAll(parseResult.syntaxErrors.map[it.syntaxErrorMessage.message])
+		val validator = resource.resourceServiceProvider.resourceValidator
+		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
+		if (!issues.empty) {
+			errors.addAll(issues.map[alg.name + ", Line " + Long.toString(it.lineNumber) + ": " + it.message])
 			return null
 		}
 		val stalg = parseResult.rootASTElement as StructuredTextAlgorithm
@@ -95,8 +101,10 @@ class STAlgorithmFilter {
 		val parser = resource.parser as StructuredTextParser
 		resource.load(new LazyStringInputStream(expression), #{StructuredTextResource.OPTION_PARSER_RULE -> parser.grammarAccess.expressionRule})
 		val parseResult = resource.parseResult
-		if(parseResult.hasSyntaxErrors) {
-			errors.addAll(parseResult.syntaxErrors.map[it.syntaxErrorMessage.message])
+		val validator = resource.resourceServiceProvider.resourceValidator
+		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
+		if (!issues.empty) {
+			errors.addAll(issues.map["Line " + Long.toString(it.lineNumber) + ": " + it.message])
 			return null
 		}
 		val expr = parseResult.rootASTElement as Expression
@@ -108,9 +116,59 @@ class STAlgorithmFilter {
 		«alg.statements.generateStatementList»
 	'''
 
+	def private int BitSize(String str) {
+		switch (str) {
+			case str.equals("LWORD"): 64
+			case str.equals("DWORD"): 32
+			case str.equals("WORD"):  16
+			case str.equals("BYTE"):   8
+			case str.equals("BOOL"):   1
+			default:                   0
+		}
+	}
+
+	def protected CharSequence generateArrayDecl(LocatedVariable variable) {
+		val l = variable.location
+		switch (l) {
+			PrimaryVariable: '''
+				«IF variable.type.name.BitSize > 0 && l.^var.type.name.BitSize > 0»
+					«IF l.^var.type.name.BitSize > variable.type.name.BitSize»
+						ARRAY_AT<CIEC_«variable.type.name», CIEC_«l.^var.type.name», 0, «variable.arraySize-1»> «variable.name»(«l.^var.name»);
+					«ELSE»
+						#error Accessing CIEC_«l.^var.type.name» via CIEC_«variable.type.name» would result in undefined behaviour
+					«ENDIF»
+				«ELSE»
+				    #error Piecewise access is supported only for types with defined bit-representation (e.g. not CIEC_«l.^var.type.name» via CIEC_«variable.type.name») 
+				«ENDIF»
+			'''
+			default: '''#error unhandled located array'''
+		}
+	}
+
+	def protected CharSequence generateArrayDecl(LocalVariable variable) '''
+		CIEC_«variable.type.name» «variable.name»[«variable.arraySize»]«variable.generateLocalVariableInitializer»;
+	'''
+
+	def protected CharSequence generateVariableDecl(LocatedVariable variable) {
+		val l = variable.location
+		switch (l) {
+			PrimaryVariable: '''// replacing all instances of «variable.extractTypeInformation»:«variable.name» with «variable.generateVarAccess»''' //names will just be replaced during export
+			default: '''#error located variable of unhandled type'''
+		}
+	}
+
+	def protected CharSequence generateVariableDecl(LocalVariable variable) '''
+		CIEC_«variable.type.name» «variable.name»«variable.generateLocalVariableInitializer»;
+	'''
+
 	def protected CharSequence generateLocalVariables(List<VarDeclaration> variables) '''
 		«FOR variable : variables»
-			CIEC_«variable.type.name» «variable.name»«variable.generateLocalVariableInitializer»;
+			«switch (variable) {
+				LocalVariable case !variable.array             : variable.generateVariableDecl
+				LocalVariable case  variable.array             : variable.generateArrayDecl
+				LocatedVariable case null !== variable.location && !variable.array : variable.generateVariableDecl
+				LocatedVariable case null !== variable.location &&  variable.array : variable.generateArrayDecl
+			}»
 		«ENDFOR»
 	'''
 
@@ -265,24 +323,75 @@ class STAlgorithmFilter {
 	def protected dispatch CharSequence generateExpression(StringLiteral expr) '''"«expr.value.convertToJavaString»"'''
 
 	def protected dispatch CharSequence generateExpression(
-		ArrayVariable expr) '''«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»(«index.generateExpression») + 1«ENDFOR»'''
+		ArrayVariable expr) '''«expr.array.generateExpression»«FOR index : expr.index BEFORE '[' SEPARATOR '][' AFTER ']'»«index.generateExpression»«ENDFOR»'''
 
 	def protected dispatch CharSequence generateExpression(AdapterVariable expr) {
-		'''«expr.adapter.name»().«expr.^var.name»()«IF null !== expr.part»«generateBitaccess(expr.part)»«ENDIF»'''
+		'''«expr.adapter.name»().«expr.^var.name»()«expr.generateBitaccess»'''
 	}
 
-	def protected dispatch CharSequence generateExpression(PrimaryVariable expr) {
-		'''«expr.^var.name»()«IF null !== expr.part»«generateBitaccess(expr.part)»«ENDIF»'''
+	def protected dispatch CharSequence generateExpression(PrimaryVariable expr)  '''«expr.^var.generateVarAccess»«expr.generateBitaccess»'''
+
+	def protected dispatch CharSequence generateVarAccess(LocalVariable variable) '''«variable.name»'''
+
+	def protected dispatch CharSequence generateVarAccess(VarDeclaration variable) '''«variable.name»()'''
+
+	def protected dispatch CharSequence generateVarAccess(LocatedVariable variable)
+		'''«IF variable.array
+				»«variable.name»«
+			ELSE
+				»«variable.location.generateExpression»«generateBitaccess(variable.location.extractTypeInformation,variable.extractTypeInformation,0)»«
+			ENDIF»'''
+
+	def protected CharSequence generateBitaccess(AdapterVariable variable) {
+		if (null !== variable.part) {
+			generateBitaccess(variable.^var.type.name, variable.extractTypeInformation, variable.part.index)
+		}
 	}
 
-	def protected CharSequence generateBitaccess(PartialAccess part) '''
-		«IF part.bitaccess
-			».X<«Long.toString(part.index)»>()«
-		 ELSEIF part.byteaccess
-		 	».B<«Long.toString(part.index)»>()«
-		 ELSEIF part.wordaccess
-		 	».W<«Long.toString(part.index)»>()«
-		 ELSEIF part.dwordaccess
-		 	».D<«Long.toString(part.index)»>()«
-		 ENDIF»'''
+	def protected CharSequence generateBitaccess(PrimaryVariable variable) {
+		if (null !== variable.part) {
+			generateBitaccess(variable.^var.type.name, variable.extractTypeInformation, variable.part.index)
+		}
+	}
+
+	def protected CharSequence generateBitaccess(String DataType, String AccessorType, int Index) {
+		if (BitSize(AccessorType) > 0 && BitSize(DataType) > BitSize(AccessorType)) {
+			'''.partial<CIEC_«AccessorType»,«Long.toString(Index)»>()'''
+		} else if (BitSize(DataType) == BitSize(AccessorType)) {
+			''''''
+		} else {
+			''''''//This should never happen - we cannot access more bits than are available in the source type
+		}
+	}
+
+	def private dispatch String extractTypeInformation(PartialAccess part, String DataType) {
+		if (null !== part) {
+			if (part.bitaccess)        "BOOL"
+			else if (part.byteaccess)  "BYTE"
+			else if (part.wordaccess)  "WORD"
+			else if (part.dwordaccess) "DWORD"
+			else                       ""
+		} else                         DataType
+	}
+
+	def private dispatch String extractTypeInformation(PrimaryVariable variable, String DataType) {
+		if (null !== variable.part) {
+			extractTypeInformation(variable.part, DataType)
+		} else {
+			DataType
+		}
+	}
+
+	def protected dispatch String extractTypeInformation(PrimaryVariable variable) {
+		variable.extractTypeInformation(variable.^var.extractTypeInformation)
+	}
+
+	def protected dispatch String extractTypeInformation(LocalVariable variable) {
+		variable.type.name
+	}
+
+	def protected dispatch String extractTypeInformation(VarDeclaration variable) {
+		variable.type.name
+	}
+
 }
