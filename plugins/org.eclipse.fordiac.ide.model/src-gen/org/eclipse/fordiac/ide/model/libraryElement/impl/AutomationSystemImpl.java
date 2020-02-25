@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -49,8 +49,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
  * <em>Palette</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getSystemConfiguration
  * <em>System Configuration</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getProject
- * <em>Project</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getSystemFile
+ * <em>System File</em>}</li>
  * </ul>
  *
  * @generated
@@ -98,24 +98,24 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	protected SystemConfiguration systemConfiguration;
 
 	/**
-	 * The default value of the '{@link #getProject() <em>Project</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The default value of the '{@link #getSystemFile() <em>System File</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @see #getProject()
+	 * @see #getSystemFile()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final IProject PROJECT_EDEFAULT = null;
+	protected static final IFile SYSTEM_FILE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getProject() <em>Project</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getSystemFile() <em>System File</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @see #getProject()
+	 * @see #getSystemFile()
 	 * @generated
 	 * @ordered
 	 */
-	protected IProject project = PROJECT_EDEFAULT;
+	protected IFile systemFile = SYSTEM_FILE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -330,8 +330,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @generated
 	 */
 	@Override
-	public IProject getProject() {
-		return project;
+	public IFile getSystemFile() {
+		return systemFile;
 	}
 
 	/**
@@ -340,12 +340,12 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @generated
 	 */
 	@Override
-	public void setProject(IProject newProject) {
-		IProject oldProject = project;
-		project = newProject;
+	public void setSystemFile(IFile newSystemFile) {
+		IFile oldSystemFile = systemFile;
+		systemFile = newSystemFile;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__PROJECT,
-					oldProject, project));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE,
+					oldSystemFile, systemFile));
 	}
 
 	/**
@@ -425,8 +425,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			if (resolve)
 				return getSystemConfiguration();
 			return basicGetSystemConfiguration();
-		case LibraryElementPackage.AUTOMATION_SYSTEM__PROJECT:
-			return getProject();
+		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
+			return getSystemFile();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -454,8 +454,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 			setSystemConfiguration((SystemConfiguration) newValue);
 			return;
-		case LibraryElementPackage.AUTOMATION_SYSTEM__PROJECT:
-			setProject((IProject) newValue);
+		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
+			setSystemFile((IFile) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -481,8 +481,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 			setSystemConfiguration((SystemConfiguration) null);
 			return;
-		case LibraryElementPackage.AUTOMATION_SYSTEM__PROJECT:
-			setProject(PROJECT_EDEFAULT);
+		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
+			setSystemFile(SYSTEM_FILE_EDEFAULT);
 			return;
 		}
 		super.eUnset(featureID);
@@ -504,8 +504,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			return palette != null;
 		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 			return systemConfiguration != null;
-		case LibraryElementPackage.AUTOMATION_SYSTEM__PROJECT:
-			return PROJECT_EDEFAULT == null ? project != null : !PROJECT_EDEFAULT.equals(project);
+		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
+			return SYSTEM_FILE_EDEFAULT == null ? systemFile != null : !SYSTEM_FILE_EDEFAULT.equals(systemFile);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -521,8 +521,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (project: "); //$NON-NLS-1$
-		result.append(project);
+		result.append(" (systemFile: "); //$NON-NLS-1$
+		result.append(systemFile);
 		result.append(')');
 		return result.toString();
 	}

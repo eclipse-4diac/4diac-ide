@@ -394,7 +394,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				result = result.replaceFirst("</Response>", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				if (!result.contains("Reason=\"UNSUPPORTED_TYPE\"") && !result.contains("Reason=\"UNSUPPORTED_CMD\"")) { //$NON-NLS-1$ //$NON-NLS-2$
 					AutomationSystem system = res.getDevice().getAutomationSystem();
-					Path path = Paths.get(system.getProject().getLocation() + File.separator + "generated" //$NON-NLS-1$
+					Path path = Paths.get(system.getSystemFile().getLocation() + File.separator + "generated" //$NON-NLS-1$
 							+ File.separator + typeName + "." + extension); //$NON-NLS-1$
 					File file = new File(path.toString());
 					file.getParentFile().mkdirs();

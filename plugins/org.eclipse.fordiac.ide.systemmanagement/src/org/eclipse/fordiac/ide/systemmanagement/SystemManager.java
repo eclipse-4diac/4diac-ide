@@ -37,7 +37,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
@@ -54,7 +53,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * The Class SystemManager.
@@ -71,7 +69,9 @@ public enum SystemManager {
 	static final String SYSTEM_FILE_ENDING = ".sys"; //$NON-NLS-1$
 
 	/** The model systems. */
-	private List<AutomationSystem> systems = new ArrayList<>();
+	private Map<IProject, Map<IFile, AutomationSystem>> allSystemsInWS = new HashMap<>();
+
+	private Map<IProject, Palette> pallets = new HashMap<>();
 
 	private Map<AutomationSystem, Runnable> runningJobs = new HashMap<>();
 
@@ -120,27 +120,12 @@ public enum SystemManager {
 	 * Instantiates a new system manager.
 	 */
 	private SystemManager() {
+		DataTypeLibrary.getInstance(); // get the datatype library setup
 		TypeLibrary.getInstance(); // this will correctly setup the tool library
 									// and initialize important stuff. should be
 									// done before loading any systems and
 									// adding the resource change listener
-		loadSystems();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
-	}
-
-	/**
-	 * Add a system to be managed by the system manager. Additionally, it
-	 * initializes the palette of the system.
-	 *
-	 * @param system the system to be added
-	 */
-	public void addSystem(final AutomationSystem system) {
-		systems.add(system);
-		// keep system list sorted so that it is alphabethical shown in all lists
-		Collections.sort(systems, NamedElementComparator.INSTANCE);
-		notifyListeners();
-		Runnable job = createUniqueFBNamesValidity(system);
-		runningJobs.put(system, job);
 	}
 
 	/**
@@ -149,71 +134,16 @@ public enum SystemManager {
 	 * @param system to be added
 	 */
 	public void removeSystem(final AutomationSystem system) {
-		if (systems.remove(system)) {
-			// TODO cleanup other hash tables the system may be in
-			notifyListeners();
-		}
-	}
+//		if (systems.remove(system)) {
+		// TODO cleanup other hash tables the system may be in
+		notifyListeners();
+//	}
 
-	/**
-	 * Gets the systems.
-	 *
-	 * @return the systems
-	 */
-	public List<AutomationSystem> getSystems() {
-		return systems;
-	}
-
-	/**
-	 * Load systems.
-	 */
-	public void loadSystems() {
-		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		List<AutomationSystem> oldSystems = new ArrayList<>(systems);
-		systems.clear();
-		for (IProject project : projects) {
-			loadProject(project);
-		}
-		// remove all existing models to get the models that no longer exist
-		removeOrphanedSystems(oldSystems);
-
-	}
-
-	private void removeOrphanedSystems(List<AutomationSystem> oldSystems) {
-		for (AutomationSystem automationSystem : oldSystems) {
-			if (null == getSystemForName(automationSystem.getName())) {
-				removeSystem(automationSystem);
-			}
-		}
-	}
-
-	public AutomationSystem loadProject(IProject project) {
-		long time1;
-		long time2;
-		AutomationSystem system = null;
-		if (project.isOpen() && isDistributedSystem(project)) {
-			time1 = System.currentTimeMillis();
-			system = loadSystem(project);
-			time2 = System.currentTimeMillis();
-			System.out.println("Loading time for System (" + project.getName() + "): " + (time2 - time1) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			if (system != null) {
-				// TODO do we need to check if the system is already in the list?
-				addSystem(system);
-				// load the applications
-				Runnable runnable = runningJobs.get(system);
-				if (runnable != null) {
-					Display.getDefault().asyncExec(runnable);
-				}
-			}
-		}
-		return system;
 	}
 
 	private static void initializePalette(AutomationSystem system) {
-		DataTypeLibrary.getInstance();
 		// load palette of the system and initialize the types
-		Palette palette = TypeLibrary.loadPalette(system.getProject());
-		palette.setProject(system.getProject());
+		Palette palette = TypeLibrary.getInstance().getPalette(system.getSystemFile().getProject());
 		system.setPalette(palette);
 	}
 
@@ -241,21 +171,20 @@ public enum SystemManager {
 	 * Load system.
 	 *
 	 *
-	 * @param project the project
+	 * systemFile xml file for the system
 	 *
 	 * @return the automation system
 	 */
-	private AutomationSystem loadSystem(final IProject project) {
+	private AutomationSystem loadSystem(final IFile systemFile) {
 		// TODO model refactoring - check if the marker deletion is a good idea here
 		try {
-			project.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+			systemFile.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 		} catch (CoreException e1) {
 			Activator.getDefault().logError(e1.getMessage(), e1);
 		}
 
-		IFile systemFile = project.getFile(project.getName() + SYSTEM_FILE_ENDING);
 		if (systemFile.exists()) {
-			AutomationSystem system = createAutomationSystem(project);
+			AutomationSystem system = createAutomationSystem(systemFile);
 			SystemImporter sysImporter = new SystemImporter(system);
 			try {
 				sysImporter.importSystem(systemFile.getContents());
@@ -267,10 +196,10 @@ public enum SystemManager {
 		return null;
 	}
 
-	public AutomationSystem createAutomationSystem(IProject project) {
+	public AutomationSystem createAutomationSystem(IFile systemFile) {
 		AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
-		system.setName(project.getName());
-		system.setProject(project);
+		system.setName(systemFile.getName());
+		system.setSystemFile(systemFile);
 
 		// create PhysicalConfiguration
 		SystemConfiguration sysConf = LibraryElementFactory.eINSTANCE.createSystemConfiguration();
@@ -294,7 +223,7 @@ public enum SystemManager {
 				Object object = element.createExecutableExtension("Interface"); //$NON-NLS-1$
 				if (object instanceof ITagProvider) {
 					ITagProvider tagProvider = (ITagProvider) object;
-					if (tagProvider.loadTagConfiguration(system.getProject().getLocation())) {
+					if (tagProvider.loadTagConfiguration(system.getSystemFile().getProject().getLocation())) {
 						providers.add(tagProvider);
 					}
 				}
@@ -306,7 +235,7 @@ public enum SystemManager {
 	}
 
 	public void saveTagProvider(AutomationSystem system, ITagProvider tagProvider) {
-		IProject project = system.getProject();
+		IProject project = system.getSystemFile().getProject();
 		IPath projectPath = project.getLocation();
 		tagProvider.saveTagConfiguration(projectPath);
 	}
@@ -369,9 +298,8 @@ public enum SystemManager {
 	 * @param all    the all
 	 */
 	public void saveSystem(final org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem system) {
-		IProject project = system.getProject();
 		SystemExporter systemExporter = new SystemExporter(system);
-		systemExporter.saveSystem(project.getFile(system.getName() + SYSTEM_FILE_ENDING));
+		systemExporter.saveSystem(system.getSystemFile());
 	}
 
 	/**
@@ -382,12 +310,39 @@ public enum SystemManager {
 	 * @return the system for name
 	 */
 	public AutomationSystem getSystemForName(final String string) {
-		for (AutomationSystem system : systems) {
-			if (system.getName().equals(string)) {
-				return system;
-			}
-		}
+//		for (AutomationSystem system : systems) {
+//			if (system.getName().equals(string)) {
+//				return system;
+//			}
+//		}
 		return null;
+	}
+
+	public List<AutomationSystem> getSystems() {
+		return Collections.emptyList();
+	}
+
+	public AutomationSystem getSystem(IFile systemFile) {
+		Map<IFile, AutomationSystem> projectSystems = getProjectSystems(systemFile.getProject());
+		AutomationSystem system = projectSystems.get(systemFile);
+		if (null == system) {
+			long startTime = System.currentTimeMillis();
+			system = loadSystem(systemFile);
+			long endTime = System.currentTimeMillis();
+			System.out.println(
+					"Loading time for System (" + systemFile.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			projectSystems.put(systemFile, system);
+		}
+		return system;
+	}
+
+	Map<IFile, AutomationSystem> getProjectSystems(IProject project) {
+		Map<IFile, AutomationSystem> projectSystems = allSystemsInWS.get(project);
+		if (null == projectSystems) {
+			projectSystems = new HashMap<>();
+			allSystemsInWS.put(project, projectSystems);
+		}
+		return projectSystems;
 	}
 
 	/**
@@ -459,14 +414,6 @@ public enum SystemManager {
 		return provider;
 	}
 
-	public Palette getPalette(IProject project) {
-		AutomationSystem srcSystem = getSystemForName(project.getName());
-		if (srcSystem != null) {
-			return srcSystem.getPalette();
-		}
-		return TypeLibrary.getInstance().getPalette();
-	}
-
 	public AutomationSystem createLocalProject(String projectName) {
 		NullProgressMonitor monitor = new NullProgressMonitor();
 		try {
@@ -483,15 +430,15 @@ public enum SystemManager {
 
 			SystemPaletteManagement.copyToolTypeLibToProject(project);
 
-			AutomationSystem system = createAutomationSystem(project);
-			INSTANCE.addSystem(system);
+//			AutomationSystem system = createAutomationSystem(project);
+//			INSTANCE.addSystem(system);
 
-			AutomationSystem sys2 = INSTANCE.getSystemForName(system.getName());
-			if ((sys2 != null) && !sys2.equals(system)) {
-				system = sys2;
-			}
-
-			return system;
+//			AutomationSystem sys2 = INSTANCE.getSystemForName(system.getName());
+//			if ((sys2 != null) && !sys2.equals(system)) {
+//				system = sys2;
+//			}
+//
+//			return system;
 		} catch (CoreException x) {
 			Activator.getDefault().logError(x.getMessage(), x);
 		} finally {

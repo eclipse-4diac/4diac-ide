@@ -34,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
@@ -66,7 +65,7 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 	private static RefactoringStatus verifyAffectedChildren(IResourceDelta[] affectedChildren) {
 		for (IResourceDelta resourceDelta : affectedChildren) {
 			if (resourceDelta.getResource() instanceof IFile) {
-				Palette palette = SystemManager.INSTANCE.getPalette(resourceDelta.getResource().getProject());
+				Palette palette = TypeLibrary.getInstance().getPalette(resourceDelta.getResource().getProject());
 
 				String typeNameToDelete = TypeLibrary.getTypeNameFromFile((IFile) resourceDelta.getResource());
 				List<String> typeNames = checkTypeContainment(palette, typeNameToDelete);

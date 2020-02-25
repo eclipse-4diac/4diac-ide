@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015 - 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -63,7 +63,8 @@ public class TypeLibRootContentProvider implements ITreeContentProvider, IResour
 			retVal[0] = getTypeLibRootElement((AutomationSystem) parentElement);
 			return retVal;
 		} else if (parentElement instanceof TypeLibRootElement) {
-			return workbenchContentProvider.getChildren(((TypeLibRootElement) parentElement).getSystem().getProject());
+			return workbenchContentProvider
+					.getChildren(((TypeLibRootElement) parentElement).getSystem().getSystemFile().getProject());
 		}
 		return null;
 	}
@@ -82,7 +83,8 @@ public class TypeLibRootContentProvider implements ITreeContentProvider, IResour
 	@Override
 	public boolean hasChildren(Object element) {
 		if (element instanceof TypeLibRootElement) {
-			return workbenchContentProvider.hasChildren(((TypeLibRootElement) element).getSystem().getProject());
+			return workbenchContentProvider
+					.hasChildren(((TypeLibRootElement) element).getSystem().getSystemFile().getProject());
 		}
 		return false;
 	}

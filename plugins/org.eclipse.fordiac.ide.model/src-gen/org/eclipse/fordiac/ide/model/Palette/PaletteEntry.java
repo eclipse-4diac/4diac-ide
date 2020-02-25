@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.model.Palette;
 
 import javax.xml.stream.XMLStreamException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;

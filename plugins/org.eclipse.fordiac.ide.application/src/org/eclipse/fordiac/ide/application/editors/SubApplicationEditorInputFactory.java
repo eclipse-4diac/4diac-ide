@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2016, 2017 fortiss GmbH
  * 				 2018 Johnnes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,7 +10,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
- *   Alois Zoitl - reworked sub app name storage to contain the full hierarchical 
+ *   Alois Zoitl - reworked sub app name storage to contain the full hierarchical
  *   			   name
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.util.AbstractUntypedEditorInputFactory;
 import org.eclipse.ui.IMemento;
 
@@ -45,11 +44,10 @@ public class SubApplicationEditorInputFactory extends AbstractUntypedEditorInput
 
 	@Override
 	public IAdaptable createElement(IMemento memento) {
-		String systemName = loadAutomationSystemName(memento);
 		String applicationName = memento.getString(TAG_APPLICATION);
 		String subApplicationName = memento.getString(TAG_SUB_APPLICATION);
-		if ((null != systemName) && (null != applicationName)) {
-			AutomationSystem system = SystemManager.INSTANCE.getSystemForName(systemName);
+		if (null != applicationName) {
+			AutomationSystem system = loadAutomationSystemName(memento);
 			if (null != system) {
 				Application application = system.getApplicationNamed(applicationName);
 				SubApp subApp = findSubApp(application, subApplicationName);
@@ -63,7 +61,7 @@ public class SubApplicationEditorInputFactory extends AbstractUntypedEditorInput
 
 	/**
 	 * Returns the element factory id for this class.
-	 * 
+	 *
 	 * @return the element factory id
 	 */
 	public static String getFactoryId() {

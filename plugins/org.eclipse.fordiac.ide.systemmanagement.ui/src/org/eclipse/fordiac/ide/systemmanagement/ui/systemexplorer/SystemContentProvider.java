@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2015, 2016 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,16 +16,14 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
@@ -48,14 +46,27 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		// this content provider is only requried on the lowest level of the tree
-		if ((null == parentElement) || (parentElement instanceof IWorkspaceRoot)) {
-			return getProjects();
-		}
 		if (parentElement instanceof IResource) {
-			return workbenchContentProvider.getChildren(parentElement);
+			Object[] children = workbenchContentProvider.getChildren(parentElement);
+			List<Object> newChildren = new ArrayList<>(children.length);
+			for (int i = 0; i < children.length; i++) {
+				Object child = children[i];
+				if ((child instanceof IFile) && ("sys".equalsIgnoreCase(((IFile) child).getFileExtension()))) {
+					child = SystemManager.INSTANCE.getSystem((IFile) child);
+				}
+				newChildren.add(child);
+			}
+			return newChildren.toArray();
 		}
 		return super.getChildren(parentElement);
+	}
+
+	@Override
+	public Object getParent(Object object) {
+		if (object instanceof AutomationSystem) {
+			return ((AutomationSystem) object).getSystemFile().getParent();
+		}
+		return super.getParent(object);
 	}
 
 	@Override
@@ -67,41 +78,16 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	}
 
 	private static List<AdapterFactory> createFactoryList() {
-		ArrayList<AdapterFactory> factories = new ArrayList<AdapterFactory>();
+		ArrayList<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new SystemElementItemProviderAdapterFactory());
 		factories.add(new DataItemProviderAdapterFactory());
 		return factories;
 	}
 
-	private static Object[] getProjects() {
-		IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-
-		IProject[] projects = myWorkspaceRoot.getProjects();
-
-		ArrayList<Object> list = new ArrayList<>();
-
-		for (IProject project : projects) {
-			if (!project.getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)) {
-				AutomationSystem system = SystemManager.INSTANCE.getSystemForName(project.getName());
-				if (null != system) {
-					list.add(system);
-				} else {
-					list.add(project);
-				}
-			}
-		}
-		return (list.isEmpty()) ? null : list.toArray();
-	}
-
 	@Override
 	public void distributedSystemWorkspaceChanged() {
 		if (null != viewer && null != viewer.getControl() && null != viewer.getControl().getDisplay()) {
-			viewer.getControl().getDisplay().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					viewer.refresh();
-				}
-			});
+			viewer.getControl().getDisplay().asyncExec(() -> viewer.refresh());
 		}
 	}
 

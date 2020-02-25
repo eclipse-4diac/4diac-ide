@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor Gmbh, TU Wien ACIN, fortiss GmbH
  *               2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -52,7 +52,7 @@ public class DeleteSystem extends AbstractHandler {
 		if (selection instanceof IStructuredSelection) {
 			for (Object element : ((StructuredSelection) selection).toList()) {
 				if (element instanceof AutomationSystem) {
-					projectSelection.add(((AutomationSystem) element).getProject());
+					projectSelection.add(((AutomationSystem) element).getSystemFile().getProject());
 				} else if (element instanceof IProject) {
 					projectSelection.add((IProject) element);
 				}

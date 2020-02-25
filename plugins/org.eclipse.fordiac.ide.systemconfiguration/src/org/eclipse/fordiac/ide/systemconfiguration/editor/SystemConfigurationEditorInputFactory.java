@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2016 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.util.AbstractUntypedEditorInputFactory;
 import org.eclipse.ui.IMemento;
 
@@ -29,19 +28,16 @@ public class SystemConfigurationEditorInputFactory extends AbstractUntypedEditor
 
 	@Override
 	public IAdaptable createElement(IMemento memento) {
-		String systemName = loadAutomationSystemName(memento);
-		if (null != systemName) {
-			AutomationSystem system = SystemManager.INSTANCE.getSystemForName(systemName);
-			if (null != system) {
-				return new SystemConfigurationEditorInput(system.getSystemConfiguration());
-			}
+		AutomationSystem system = loadAutomationSystemName(memento);
+		if (null != system) {
+			return new SystemConfigurationEditorInput(system.getSystemConfiguration());
 		}
 		return null;
 	}
 
 	/**
 	 * Returns the element factory id for this class.
-	 * 
+	 *
 	 * @return the element factory id
 	 */
 	public static String getFactoryId() {

@@ -206,7 +206,8 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(getSystem().getProject(), getEditDomain(), getPalletNavigatorID());
+		return new FBTypePaletteViewerProvider(getSystem().getSystemFile().getProject(), getEditDomain(),
+				getPalletNavigatorID());
 	}
 
 	/**

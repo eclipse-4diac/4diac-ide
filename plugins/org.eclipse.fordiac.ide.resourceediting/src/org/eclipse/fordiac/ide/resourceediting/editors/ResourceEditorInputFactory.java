@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2015 - 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.resourceediting.editors;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.util.AbstractUntypedEditorInputFactory;
 import org.eclipse.ui.IMemento;
 
@@ -40,12 +39,11 @@ public class ResourceEditorInputFactory extends AbstractUntypedEditorInputFactor
 
 	@Override
 	public IAdaptable createElement(IMemento memento) {
-		String systemName = loadAutomationSystemName(memento);
 		String deviceName = memento.getString(TAG_DEVICE);
 		String resourceName = memento.getString(TAG_RESORUCE);
 
-		if ((null != systemName) && (null != deviceName) && (null != resourceName)) {
-			AutomationSystem system = SystemManager.INSTANCE.getSystemForName(systemName);
+		if ((null != deviceName) && (null != resourceName)) {
+			AutomationSystem system = loadAutomationSystemName(memento);
 			if (null != system) {
 				org.eclipse.fordiac.ide.model.libraryElement.Device device = system.getDeviceNamed(deviceName);
 				if (null != device) {
@@ -61,7 +59,7 @@ public class ResourceEditorInputFactory extends AbstractUntypedEditorInputFactor
 
 	/**
 	 * Returns the element factory id for this class.
-	 * 
+	 *
 	 * @return the element factory id
 	 */
 	public static String getFactoryId() {

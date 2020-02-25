@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
@@ -119,10 +118,10 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 	}
 
 	private boolean finishFBTypeCreation(IFile targetTypeFile) {
-		entry = FBTypeUtils.getPaletteEntryForFile(targetTypeFile);
+		Palette palette = TypeLibrary.getInstance().getPalette(targetTypeFile.getProject());
+		entry = TypeLibrary.getPaletteEntryForFile(targetTypeFile, palette);
 		if (null == entry) {
 			// refresh the palette and retry to fetch the entry
-			Palette palette = SystemManager.INSTANCE.getPalette(targetTypeFile.getProject());
 			TypeLibrary.refreshPalette(palette);
 			entry = FBTypeUtils.getPaletteEntryForFile(targetTypeFile);
 		}

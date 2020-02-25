@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2008, 2010 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.model.Palette;
 
 import javax.xml.stream.XMLStreamException;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -32,7 +33,7 @@ public interface FBTypePaletteEntry extends PaletteEntry {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
@@ -40,7 +41,7 @@ public interface FBTypePaletteEntry extends PaletteEntry {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @model
 	 * @generated
 	 */
@@ -49,7 +50,7 @@ public interface FBTypePaletteEntry extends PaletteEntry {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @model dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
 	 * @generated
 	 */

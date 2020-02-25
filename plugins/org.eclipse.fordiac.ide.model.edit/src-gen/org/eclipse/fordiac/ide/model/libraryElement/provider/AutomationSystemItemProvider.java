@@ -80,7 +80,7 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addPalettePropertyDescriptor(object);
-			addProjectPropertyDescriptor(object);
+			addSystemFilePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -101,18 +101,18 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Project feature. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	 * This adds a property descriptor for the System File feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
-	protected void addProjectPropertyDescriptor(Object object) {
+	protected void addSystemFilePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_AutomationSystem_project_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_AutomationSystem_project_feature", //$NON-NLS-1$ //$NON-NLS-2$
+						getResourceLocator(), getString("_UI_AutomationSystem_systemFile_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_AutomationSystem_systemFile_feature", //$NON-NLS-1$ //$NON-NLS-2$
 								"_UI_AutomationSystem_type"), //$NON-NLS-1$
-						LibraryElementPackage.Literals.AUTOMATION_SYSTEM__PROJECT, true, false, false,
+						LibraryElementPackage.Literals.AUTOMATION_SYSTEM__SYSTEM_FILE, true, false, false,
 						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
@@ -185,7 +185,7 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 
 		switch (notification.getFeatureID(AutomationSystem.class)) {
 		case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
-		case LibraryElementPackage.AUTOMATION_SYSTEM__PROJECT:
+		case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:

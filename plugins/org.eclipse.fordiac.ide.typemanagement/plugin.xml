@@ -474,26 +474,6 @@
       </dragAssistant>
    </extension>
    <extension
-         point="org.eclipse.ui.navigator.navigatorContent">
-      <navigatorContent
-            activeByDefault="true"
-            contentProvider="org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootContentProvider"
-            id="org.eclipse.fordiac.ide.typemanagement.typelib.systemexplorer"
-            labelProvider="org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootContentLabelProvider"
-            name="Type Library Content">
-            <possibleChildren>
-            	<or>
-	              <instanceof value="org.eclipse.core.resources.IResource" />
-	              <instanceof value="org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootElement" />
-	            </or>
-	        </possibleChildren> 
-            <triggerPoints>
-               <instanceof 
-	                     value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem"/>
-             </triggerPoints>             
-      </navigatorContent>
-      </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"

@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -34,14 +34,14 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
  * This is the item provider adapter for a
  * {@link org.eclipse.fordiac.ide.model.libraryElement.ECState} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
- * 
+ *
  * @generated
  */
 public class ECStateItemProvider extends I4DIACElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public ECStateItemProvider(AdapterFactory adapterFactory) {
@@ -51,7 +51,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 	/**
 	 * This returns the property descriptors for the adapted class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -72,7 +72,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 	/**
 	 * This adds a property descriptor for the Name feature. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
@@ -88,7 +88,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 	/**
 	 * This adds a property descriptor for the Comment feature. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected void addCommentPropertyDescriptor(Object object) {
@@ -104,7 +104,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 	/**
 	 * This adds a property descriptor for the X feature. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected void addXPropertyDescriptor(Object object) {
@@ -120,7 +120,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 	/**
 	 * This adds a property descriptor for the Y feature. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected void addYPropertyDescriptor(Object object) {
@@ -136,7 +136,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 	/**
 	 * This adds a property descriptor for the Out Transitions feature. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected void addOutTransitionsPropertyDescriptor(Object object) {
@@ -151,7 +151,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 	/**
 	 * This adds a property descriptor for the In Transitions feature. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected void addInTransitionsPropertyDescriptor(Object object) {
@@ -169,7 +169,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated not
 	 */
 	@Override
@@ -184,7 +184,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -198,7 +198,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 
 	/**
 	 * This returns ECState.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated NOT
 	 */
 	@Override
@@ -209,7 +209,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 	/**
 	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated NOT
 	 */
 	@Override
@@ -222,7 +222,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 	 * This handles model notifications by calling {@link #updateChildren} to update
 	 * any cached children and by creating a viewer notification, which it passes to
 	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -247,7 +247,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
 	 * the children that can be created under this object. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override

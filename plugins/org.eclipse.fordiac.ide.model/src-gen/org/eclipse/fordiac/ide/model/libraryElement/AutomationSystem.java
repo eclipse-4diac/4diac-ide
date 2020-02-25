@@ -13,7 +13,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 
@@ -33,8 +33,8 @@ import org.eclipse.fordiac.ide.model.Palette.Palette;
  * <em>Palette</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration
  * <em>System Configuration</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getProject
- * <em>Project</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemFile
+ * <em>System File</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAutomationSystem()
@@ -140,33 +140,29 @@ public interface AutomationSystem extends LibraryElement {
 	void setSystemConfiguration(SystemConfiguration value);
 
 	/**
-	 * Returns the value of the '<em><b>Project</b></em>' attribute. <!--
-	 * begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Project</em>' attribute isn't clear, there really
-	 * should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
+	 * Returns the value of the '<em><b>System File</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @return the value of the '<em>Project</em>' attribute.
-	 * @see #setProject(IProject)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAutomationSystem_Project()
-	 * @model dataType="org.eclipse.fordiac.ide.model.libraryElement.IProject"
+	 * @return the value of the '<em>System File</em>' attribute.
+	 * @see #setSystemFile(IFile)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAutomationSystem_SystemFile()
+	 * @model dataType="org.eclipse.fordiac.ide.model.libraryElement.IFile"
 	 *        transient="true"
 	 * @generated
 	 */
-	IProject getProject();
+	IFile getSystemFile();
 
 	/**
 	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getProject
-	 * <em>Project</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemFile
+	 * <em>System File</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 * 
-	 * @param value the new value of the '<em>Project</em>' attribute.
-	 * @see #getProject()
+	 * @param value the new value of the '<em>System File</em>' attribute.
+	 * @see #getSystemFile()
 	 * @generated
 	 */
-	void setProject(IProject value);
+	void setSystemFile(IFile value);
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->

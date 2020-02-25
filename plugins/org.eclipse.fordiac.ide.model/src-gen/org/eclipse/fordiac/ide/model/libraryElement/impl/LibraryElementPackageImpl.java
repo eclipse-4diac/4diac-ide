@@ -13,6 +13,9 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import static org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage.RESOURCE;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -625,6 +628,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EDataType iProjectEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	private EDataType iFileEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -2036,7 +2046,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EAttribute getAutomationSystem_Project() {
+	public EAttribute getAutomationSystem_SystemFile() {
 		return (EAttribute) automationSystemEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -2956,6 +2966,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EDataType getIFile() {
+		return iFileEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public LibraryElementFactory getLibraryElementFactory() {
 		return (LibraryElementFactory) getEFactoryInstance();
 	}
@@ -3152,7 +3172,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(automationSystemEClass, AUTOMATION_SYSTEM__MAPPING);
 		createEReference(automationSystemEClass, AUTOMATION_SYSTEM__PALETTE);
 		createEReference(automationSystemEClass, AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION);
-		createEAttribute(automationSystemEClass, AUTOMATION_SYSTEM__PROJECT);
+		createEAttribute(automationSystemEClass, AUTOMATION_SYSTEM__SYSTEM_FILE);
 
 		varDeclarationEClass = createEClass(VAR_DECLARATION);
 		createEAttribute(varDeclarationEClass, VAR_DECLARATION__ARRAY_SIZE);
@@ -3279,6 +3299,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		// Create data types
 		iProjectEDataType = createEDataType(IPROJECT);
+		iFileEDataType = createEDataType(IFILE);
 	}
 
 	/**
@@ -3899,8 +3920,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getAutomationSystem_SystemConfiguration(), this.getSystemConfiguration(), null,
 				"systemConfiguration", null, 1, 1, AutomationSystem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getAutomationSystem_Project(), this.getIProject(), "project", null, 0, 1, AutomationSystem.class, //$NON-NLS-1$
-				IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAutomationSystem_SystemFile(), this.getIFile(), "systemFile", null, 0, 1, //$NON-NLS-1$
+				AutomationSystem.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
 
 		op = addEOperation(automationSystemEClass, this.getDevice(), "getDeviceNamed", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, ecorePackage.getEString(), "name", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
@@ -4227,6 +4249,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		// Initialize data types
 		initEDataType(iProjectEDataType, IProject.class, "IProject", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEDataType(iFileEDataType, IFile.class, "IFile", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

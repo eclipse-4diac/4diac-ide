@@ -4406,13 +4406,13 @@ public interface LibraryElementPackage extends EPackage {
 	int AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Project</b></em>' attribute. <!--
+	 * The feature id for the '<em><b>System File</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 * @ordered
 	 */
-	int AUTOMATION_SYSTEM__PROJECT = LIBRARY_ELEMENT_FEATURE_COUNT + 4;
+	int AUTOMATION_SYSTEM__SYSTEM_FILE = LIBRARY_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Automation System</em>' class.
@@ -5753,6 +5753,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	int IPROJECT = 73;
+
+	/**
+	 * The meta object id for the '<em>IFile</em>' data type. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
+	 * @see org.eclipse.core.resources.IFile
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
+	 * @generated
+	 */
+	int IFILE = 74;
 
 	/**
 	 * Returns the meta object for class
@@ -7337,15 +7347,15 @@ public interface LibraryElementPackage extends EPackage {
 
 	/**
 	 * Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getProject
-	 * <em>Project</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemFile
+	 * <em>System File</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @return the meta object for the attribute '<em>Project</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getProject()
+	 * @return the meta object for the attribute '<em>System File</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemFile()
 	 * @see #getAutomationSystem()
 	 * @generated
 	 */
-	EAttribute getAutomationSystem_Project();
+	EAttribute getAutomationSystem_SystemFile();
 
 	/**
 	 * Returns the meta object for class
@@ -8419,6 +8429,18 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EDataType getIProject();
+
+	/**
+	 * Returns the meta object for data type
+	 * '{@link org.eclipse.core.resources.IFile <em>IFile</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for data type '<em>IFile</em>'.
+	 * @see org.eclipse.core.resources.IFile
+	 * @model instanceClass="org.eclipse.core.resources.IFile"
+	 * @generated
+	 */
+	EDataType getIFile();
 
 	/**
 	 * Returns the factory that creates the instances of the model. <!--
@@ -9631,12 +9653,12 @@ public interface LibraryElementPackage extends EPackage {
 		EReference AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION = eINSTANCE.getAutomationSystem_SystemConfiguration();
 
 		/**
-		 * The meta object literal for the '<em><b>Project</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>System File</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * 
 		 * @generated
 		 */
-		EAttribute AUTOMATION_SYSTEM__PROJECT = eINSTANCE.getAutomationSystem_Project();
+		EAttribute AUTOMATION_SYSTEM__SYSTEM_FILE = eINSTANCE.getAutomationSystem_SystemFile();
 
 		/**
 		 * The meta object literal for the
@@ -10497,6 +10519,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EDataType IPROJECT = eINSTANCE.getIProject();
+
+		/**
+		 * The meta object literal for the '<em>IFile</em>' data type. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
+		 * 
+		 * @see org.eclipse.core.resources.IFile
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
+		 * @generated
+		 */
+		EDataType IFILE = eINSTANCE.getIFile();
 
 	}
 

@@ -89,7 +89,7 @@ public class SaveAsSubappWizard extends Wizard {
 
 	@Override
 	public void addPages() {
-		IProject project = getSystem().getProject();
+		IProject project = getSystem().getSystemFile().getProject();
 		StructuredSelection selection = new StructuredSelection(project); // select the current project
 		newFilePage = new SaveAsSubappWizardPage(Messages.SaveAsSubApplicationTypeAction_WizardPageName, selection);
 		newFilePage.setFileName(subApp.getName());

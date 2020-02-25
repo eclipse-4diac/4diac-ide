@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2010 - 2016  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.commands.NewAppCommand;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
-import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 import org.eclipse.fordiac.ide.util.OpenListenerManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -56,7 +55,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.wizard.Wizard#addPages()
 	 */
 	@Override
@@ -70,7 +69,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
 	 */
 	@Override
@@ -96,7 +95,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 
 	/**
 	 * Creates a new project in the workspace.
-	 * 
+	 *
 	 * @param monitor the monitor
 	 */
 	private void createProject(final IProgressMonitor monitor) {
@@ -123,14 +122,14 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 
 			// create the system, after the palette is configured,
 			// otherwise the palette is not correctly initialzed
-			AutomationSystem system = SystemManager.INSTANCE.createAutomationSystem(project);
+//			AutomationSystem system = SystemManager.INSTANCE.createAutomationSystem(project);
+//
+//			TypeManagementPreferencesHelper.setupVersionInfo(system);
+//			SystemManager.INSTANCE.addSystem(system);
 
-			TypeManagementPreferencesHelper.setupVersionInfo(system);
-			SystemManager.INSTANCE.addSystem(system);
-
-			createInitialApplication(monitor, system);
-
-			SystemManager.INSTANCE.saveSystem(system);
+//			createInitialApplication(monitor, system);
+//
+//			SystemManager.INSTANCE.saveSystem(system);
 		} catch (CoreException e) {
 			Activator.getDefault().logError(e.getMessage(), e);
 		} finally {
@@ -151,7 +150,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
 	 * org.eclipse.jface.viewers.IStructuredSelection)
 	 */

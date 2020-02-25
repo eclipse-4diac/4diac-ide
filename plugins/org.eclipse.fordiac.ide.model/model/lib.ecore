@@ -824,7 +824,7 @@
         eType="ecore:EClass palette.ecore#//Palette" eOpposite="palette.ecore#//Palette/automationSystem"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="systemConfiguration" lowerBound="1"
         eType="#//SystemConfiguration" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" eType="#//IProject"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="systemFile" eType="#//IFile"
         transient="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VarDeclaration" eSuperTypes="#//IInterfaceElement">
@@ -1199,4 +1199,5 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
 </ecore:EPackage>

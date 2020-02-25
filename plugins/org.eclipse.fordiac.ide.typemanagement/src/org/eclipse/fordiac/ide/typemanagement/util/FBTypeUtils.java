@@ -16,10 +16,8 @@ package org.eclipse.fordiac.ide.typemanagement.util;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
 public final class FBTypeUtils {
 
@@ -29,10 +27,7 @@ public final class FBTypeUtils {
 			if (element.getProject().getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)) {
 				palette = TypeLibrary.getInstance().getPalette();
 			} else {
-				AutomationSystem system = SystemManager.INSTANCE.getSystemForName(element.getProject().getName());
-				if (null != system) {
-					palette = system.getPalette();
-				}
+				palette = TypeLibrary.getInstance().getPalette(element.getProject());
 			}
 		}
 		return palette;

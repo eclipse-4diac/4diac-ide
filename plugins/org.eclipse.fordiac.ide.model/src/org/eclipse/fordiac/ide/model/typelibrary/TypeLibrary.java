@@ -17,6 +17,9 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -51,6 +54,8 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	/** The instance. */
 	private static TypeLibrary instance;
+
+	private Map<IProject, Palette> paletteList = new HashMap<>();
 
 	public static String getTypeNameFromFile(IFile element) {
 		return getTypeNameFromFileName(element.getName());
@@ -162,6 +167,15 @@ public final class TypeLibrary implements TypeLibraryTags {
 		IFolder toolLibFolder = getToolLibFolder();
 
 		palette = loadPalette(toolLibFolder);
+		return palette;
+	}
+
+	public Palette getPalette(IProject project) {
+		Palette palette = paletteList.get(project);
+		if (null == palette) {
+			palette = loadPalette(project);
+			paletteList.put(project, palette);
+		}
 		return palette;
 	}
 
@@ -318,7 +332,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 		if (system == null) {
 			libPath = TypeLibrary.getToolLibFolder();
 		} else {
-			libPath = system.getProject();
+			libPath = system.getSystemFile().getProject();
 		}
 		return libPath;
 	}

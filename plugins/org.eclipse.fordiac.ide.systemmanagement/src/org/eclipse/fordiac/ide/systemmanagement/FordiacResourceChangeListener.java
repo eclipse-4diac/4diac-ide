@@ -153,8 +153,8 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	protected void handleFileDelete(IResourceDelta delta) {
-		Palette palette = systemManager.getPalette(delta.getResource().getProject());
+	protected static void handleFileDelete(IResourceDelta delta) {
+		Palette palette = TypeLibrary.getInstance().getPalette(delta.getResource().getProject());
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
 
 		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file, palette);
@@ -165,7 +165,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	protected void handleFileCopy(IResourceDelta delta) {
-		Palette dstPalette = systemManager.getPalette(delta.getResource().getProject());
+		Palette dstPalette = TypeLibrary.getInstance().getPalette(delta.getResource().getProject());
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
 
 		if (!TypeLibrary.paletteContainsType(dstPalette, file)) {
@@ -205,7 +205,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 								file.move(path, true, null);
 								// TODO model refactoring - should we remove the old system first?
 								// a basic load should be sufficient to update the system configuration
-								systemManager.loadProject(project);
+								// systemManager.loadProject(project);
 							} catch (Exception e) {
 								Activator.getDefault().logError(e.getMessage(), e);
 							}
@@ -244,9 +244,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private void handleFileRename(IResourceDelta delta, IFile src) {
+	private static void handleFileRename(IResourceDelta delta, IFile src) {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
-		Palette dstPalette = systemManager.getPalette(file.getProject());
+		Palette dstPalette = TypeLibrary.getInstance().getPalette(file.getProject());
 		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src, dstPalette);
 		updatePaletteEntry(file, entry);
 	}
@@ -285,11 +285,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				@Override
 				public IStatus runInWorkspace(IProgressMonitor monitor) {
 					// do the actual work in here
-					AutomationSystem system = systemManager.loadProject(project);
-					if ((null != system) && (!system.getName().equals(projectName))) {
-						// we have been copied set the system name and correctly save it
-						renameSystem(system, project);
-					}
+//					AutomationSystem system = systemManager.loadProject(project);
+//					if ((null != system) && (!system.getName().equals(projectName))) {
+//						// we have been copied set the system name and correctly save it
+//						renameSystem(system, project);
+//					}
 					systemManager.notifyListeners();
 					// loading of the system has finished we can remove it from the list
 					systemImportWatingList.remove(projectName);
@@ -321,7 +321,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		IFile oldSystemFile = project.getFile(system.getName() + SystemManager.SYSTEM_FILE_ENDING);
 		String newProjectName = project.getName();
 		system.setName(newProjectName);
-		system.setProject(project); // update to the new project
 
 		WorkspaceJob job = new WorkspaceJob("Save system configuration: " + newProjectName) {
 			@Override
