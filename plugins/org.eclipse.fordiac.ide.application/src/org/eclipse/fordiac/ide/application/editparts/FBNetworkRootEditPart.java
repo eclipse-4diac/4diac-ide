@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -143,12 +144,18 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	@Override
 	public Command getCommand(Request request) {
 		if (request instanceof DirectEditRequest) {
-			return getDirectEditCommand((DirectEditRequest) request);
+			AbstractCreateFBNetworkElementCommand cmd = getDirectEditCommand((DirectEditRequest) request);
+			if (null != cmd) {
+				getViewer().getEditDomain().getCommandStack().execute(cmd);
+				EditPart part = (EditPart) getViewer().getEditPartRegistry().get(cmd.getElement());
+				getViewer().select(part);
+			}
+			return null;
 		}
 		return super.getCommand(request);
 	}
 
-	private Command getDirectEditCommand(DirectEditRequest request) {
+	private AbstractCreateFBNetworkElementCommand getDirectEditCommand(DirectEditRequest request) {
 		Object value = request.getCellEditor().getValue();
 		Point refPoint = getInsertPos();
 		if (value instanceof FBTypePaletteEntry) {

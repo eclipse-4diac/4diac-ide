@@ -89,7 +89,7 @@ public class PasteCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return null != templates && null != dstFBNetwork;
+		return (null != templates) && (null != dstFBNetwork);
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class PasteCommand extends Command {
 			gatherCopyData();
 			copyFBs();
 			copyConnections();
-			(new ElementSelector()).selectViewObjects(copiedElements.values());
+			ElementSelector.selectViewObjects(copiedElements.values());
 		}
 	}
 
@@ -106,14 +106,14 @@ public class PasteCommand extends Command {
 	public void undo() {
 		connCreateCmds.undo();
 		dstFBNetwork.getNetworkElements().removeAll(copiedElements.values());
-		(new ElementSelector()).selectViewObjects(templates);
+		ElementSelector.selectViewObjects(templates);
 	}
 
 	@Override
 	public void redo() {
 		dstFBNetwork.getNetworkElements().addAll(copiedElements.values());
 		connCreateCmds.redo();
-		(new ElementSelector()).selectViewObjects(copiedElements.values());
+		ElementSelector.selectViewObjects(copiedElements.values());
 	}
 
 	private void gatherCopyData() {
@@ -184,7 +184,7 @@ public class PasteCommand extends Command {
 			FBNetworkElement copiedSrc = copiedElements.get(connRef.getSourceElement());
 			FBNetworkElement copiedDest = copiedElements.get(connRef.getDestinationElement());
 
-			if (null != copiedSrc || null != copiedDest) {
+			if ((null != copiedSrc) || (null != copiedDest)) {
 				// Only copy if one end of the connection is copied as well otherwise we will
 				// get a duplicate connection
 				AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(connRef.getSource());
