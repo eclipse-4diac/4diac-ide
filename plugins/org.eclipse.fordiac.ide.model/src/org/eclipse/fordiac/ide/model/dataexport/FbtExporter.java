@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 
 /**
  * The Class FbtExporter.
@@ -90,8 +91,13 @@ class FbtExporter extends AbstractTypeExporter {
 		addEmptyStartElement(LibraryElementTags.OTHER_ELEMENT);
 		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,
 				(null != algorithm.getLanguage()) ? algorithm.getLanguage() : ""); //$NON-NLS-1$
-		getWriter().writeAttribute(LibraryElementTags.TEXT_ATTRIBUTE,
-				(null != algorithm.getText()) ? algorithm.getText() : ""); //$NON-NLS-1$
+
+		writeTextAlgorithmText(algorithm);
+	}
+
+	private void writeTextAlgorithmText(final TextAlgorithm algorithm) throws XMLStreamException {
+		writeAttributeRaw(LibraryElementTags.TEXT_ATTRIBUTE,
+				(null != algorithm.getText()) ? fullyEscapeValue(algorithm.getText()) : ""); //$NON-NLS-1$
 	}
 
 	/**
@@ -102,8 +108,7 @@ class FbtExporter extends AbstractTypeExporter {
 	 */
 	private void addSTAlgorithm(final STAlgorithm algorithm) throws XMLStreamException {
 		addEmptyStartElement(LibraryElementTags.ST_ELEMENT);
-		getWriter().writeAttribute(LibraryElementTags.TEXT_ATTRIBUTE,
-				(null != algorithm.getText()) ? algorithm.getText() : ""); //$NON-NLS-1$
+		writeTextAlgorithmText(algorithm);
 	}
 
 	/**
