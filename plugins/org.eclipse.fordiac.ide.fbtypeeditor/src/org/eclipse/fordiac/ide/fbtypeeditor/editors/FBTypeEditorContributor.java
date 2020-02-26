@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012, 2016, 2017 TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -37,8 +37,8 @@ import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 public class FBTypeEditorContributor extends MultiPageEditorActionBarContributor {
 
 	private ActionRegistry registry = new ActionRegistry();
-	private List<RetargetAction> retargetActions = new ArrayList<RetargetAction>();
-	private List<String> globalActionKeys = new ArrayList<String>();
+	private List<RetargetAction> retargetActions = new ArrayList<>();
+	private List<String> globalActionKeys = new ArrayList<>();
 
 	public FBTypeEditorContributor() {
 		super();
@@ -46,25 +46,25 @@ public class FBTypeEditorContributor extends MultiPageEditorActionBarContributor
 
 	@Override
 	public void setActiveEditor(IEditorPart editor) {
-		ActionRegistry registry = editor.getAdapter(ActionRegistry.class);
-		if (null != registry) {
-			IActionBars bars = getActionBars();
-			for (String id : globalActionKeys) {
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-			}
-		}
+		setGlobalActionHandler(editor.getAdapter(ActionRegistry.class));
 		super.setActiveEditor(editor);
+
 	}
 
 	@Override
 	public void setActivePage(IEditorPart activeEditor) {
 		if (null != activeEditor) {
-			ActionRegistry registry = activeEditor.getAdapter(ActionRegistry.class);
-			if (null != registry) {
-				IActionBars bars = getActionBars();
-				for (String id : globalActionKeys) {
-					bars.setGlobalActionHandler(id, registry.getAction(id));
-				}
+			setGlobalActionHandler(activeEditor.getAdapter(ActionRegistry.class));
+		}
+	}
+
+	private void setGlobalActionHandler(ActionRegistry editorRegistry) {
+		IActionBars bars = getActionBars();
+		for (String id : globalActionKeys) {
+			if (null != editorRegistry) {
+				bars.setGlobalActionHandler(id, editorRegistry.getAction(id));
+			} else {
+				bars.setGlobalActionHandler(id, null);
 			}
 		}
 	}
