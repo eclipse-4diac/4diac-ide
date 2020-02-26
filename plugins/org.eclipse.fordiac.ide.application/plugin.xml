@@ -496,11 +496,18 @@
                      class="org.eclipse.fordiac.ide.application.handlers.MapToContributionItem"
                      id="org.eclipse.fordiac.ide.application.commands.mapTo">
                </dynamic>
-               <visibleWhen
-                     checkEnabled="false">
+               <visibleWhen>
+                    <and>
+                        <with
+                           variable="activeEditorId">
+                        <equals
+                              value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
+                        </equals>
+                     </with>
                   <reference
                         definitionId="org.eclipse.fordiac.ide.application.FBNSelection">
                   </reference>
+                     </and>
                </visibleWhen>
             </menu>
             <command
@@ -595,6 +602,41 @@
             </visibleWhen>
          </command>
          </menuContribution>
+         <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.rest">
+            <menu
+               id="org.eclipse.4diac.ide.mapto.menu"
+               label="Map To ...">
+            <dynamic
+                  class="org.eclipse.fordiac.ide.application.handlers.MapToContributionItem"
+                  id="org.eclipse.fordiac.ide.application.commands.mapTo">
+               <visibleWhen
+                     checkEnabled="false">
+                     <and>
+                        <with
+                           variable="activeEditorId">
+                        <equals
+                              value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
+                        </equals>
+                     </with>
+                  <reference
+                        definitionId="org.eclipse.fordiac.ide.application.FBNSelection">
+                  </reference>
+                     </and>
+               </visibleWhen>
+            </dynamic>
+         </menu>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.unmap"
+               label="Unmap"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.fordiac.ide.application.unmapAll"
+               label="Unmap All"
+               style="push">
+         </command>
+             </menuContribution>
          <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.fordiac.ide.group.navigate">
          <command
@@ -804,9 +846,14 @@
           id="org.eclipse.fordiac.ide.application.UnmapAllActivation">
        <with
              variable="activeEditorId">
+         <or>
           <equals
                 value="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor">
           </equals>
+          <equals
+                value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
+          </equals>
+         </or>
        </with>
     </definition>
    </extension>   
