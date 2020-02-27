@@ -28,8 +28,6 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkElementInsertAction;
 import org.eclipse.fordiac.ide.application.actions.MapAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
-import org.eclipse.fordiac.ide.application.actions.UnmapAction;
-import org.eclipse.fordiac.ide.application.actions.UnmapAllAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
@@ -42,7 +40,6 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -55,9 +52,8 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.events.MenuDetectEvent;
+import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
@@ -88,6 +84,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		this.editor = editor;
 
 		editor.getViewer().getControl().addMenuDetectListener(e -> pt = getViewer().getControl().toControl(e.x, e.y));
+
 	}
 
 	public org.eclipse.draw2d.geometry.Point getPoint() {
@@ -112,8 +109,6 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		if ((action != null) && action.isEnabled()) {
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 		}
-
-		createMappingMenuEntries(menu);
 
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, new Separator());
 
@@ -250,86 +245,6 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		return action;
 	}
 
-	protected void createMappingMenuEntries(final IMenuManager menu) {
-		IAction action;
-		menu.appendToGroup(GEFActionConstants.GROUP_REST, new Separator());
-
-		IMenuManager mappingMenuEntry = createHWMappingMenu();
-		if (null != mappingMenuEntry) {
-			menu.appendToGroup(GEFActionConstants.GROUP_REST, mappingMenuEntry);
-		}
-
-		action = getRegistry().getAction(UnmapAction.ID);
-		if (action != null) {
-			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
-		}
-
-		action = getRegistry().getAction(UnmapAllAction.ID);
-		if (action != null) {
-			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
-		}
-	}
-
-	protected IMenuManager createHWMappingMenu() {
-		MenuManager submenu = new MenuManager(Messages.UIFBNetworkContextMenuProvider_LABEL_HardwareMapping);
-		GEFActionConstants.addStandardActionGroups(submenu);
-
-		IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActiveEditor();
-		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
-
-		if (isFBorSubAppSelected(selection) && (activeEditor instanceof FBNetworkEditor)) {
-			FBNetworkEditor fbEditor = (FBNetworkEditor) activeEditor;
-			List<Device> devices = fbEditor.getSystem().getSystemConfiguration().getDevices();
-
-			for (Device device : devices) {
-				MenuManager devMenu = createDeviceMenuEntry(device);
-
-				for (Resource res : device.getResource()) {
-					IAction action = createResourceMappingEntry(fbEditor, res);
-					if (null != action) {
-						devMenu.appendToGroup(GEFActionConstants.GROUP_REST, action);
-					}
-				}
-				submenu.appendToGroup(GEFActionConstants.GROUP_REST, devMenu);
-			}
-		}
-		return submenu;
-	}
-
-	private static MenuManager createDeviceMenuEntry(Device device) {
-		MenuManager devMenu = new MenuManager(device.getName() == null ? "Device" : device.getName()); //$NON-NLS-1$
-		devMenu.setImageDescriptor(FordiacImage.ICON_DEVICE.getImageDescriptor());
-		GEFActionConstants.addStandardActionGroups(devMenu);
-		return devMenu;
-	}
-
-	@SuppressWarnings("unchecked")
-	private IAction createResourceMappingEntry(FBNetworkEditor fbEditor, Resource res) {
-		if (!res.isDeviceTypeResource()) {
-			IAction action = getMapAction(fbEditor, res);
-			if (action != null) {
-				fbEditor.getSelActions().add(action.getId());
-				if (action.isEnabled()) {
-					action.setChecked(checkIsCurrentlyMappedTo(res));
-					return action;
-				}
-			}
-		}
-		return null;
-	}
-
-	private static boolean isFBorSubAppSelected(ISelection selection) {
-		if (selection instanceof StructuredSelection) {
-			for (Object element : ((IStructuredSelection) selection).toArray()) {
-				if ((element instanceof FBEditPart) || (element instanceof SubAppForFBNetworkEditPart)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	@SuppressWarnings("static-method") // currently needed to be overrideable by SubAppNetworkEditor
 	protected IAction getMapAction(IEditorPart activeEditor, Resource res) {
 		if (res != null) {
@@ -340,28 +255,4 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		}
 		return null;
 	}
-
-	/**
-	 * Check is currently mapped to.
-	 *
-	 * @param res the res
-	 *
-	 * @return true, if successful
-	 */
-	private boolean checkIsCurrentlyMappedTo(final Resource res) {
-		// multiple fbs/subapps selected -> selection is not uniquely mapped to a single
-		// resource
-		if (getViewer().getSelectedEditParts().size() != 1) {
-			return false;
-		} else {
-			if (getViewer().getSelectedEditParts().get(0) instanceof FBEditPart) {
-				FBEditPart fbep = (FBEditPart) getViewer().getSelectedEditParts().get(0);
-				if (fbep.getModel().isMapped()) {
-					return res == fbep.getModel().getResource();
-				}
-			}
-		}
-		return false;
-	}
-
 }
