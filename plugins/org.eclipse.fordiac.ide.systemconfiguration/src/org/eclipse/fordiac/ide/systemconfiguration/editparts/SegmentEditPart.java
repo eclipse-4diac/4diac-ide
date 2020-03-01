@@ -221,15 +221,16 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 				Point topLeft = boundingRect.getTopLeft();
 				Point bottomRight = boundingRect.getBottomRight();
 				Color first = ColorHelper.lighter(getBackgroundColor());
-				Pattern pattern = new Pattern(display, topLeft.x, topLeft.y + boundingRect.height / 2, topLeft.x,
-						bottomRight.y, getBackgroundColor(), first);
+
+				Pattern pattern = new Pattern(display, topLeft.x, topLeft.y, topLeft.x,
+						topLeft.y + (float) (boundingRect.height / 2.0 + 0.5), getBackgroundColor(), first);
 				graphics.setBackgroundPattern(pattern);
 				graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
 				graphics.setBackgroundPattern(null);
 				pattern.dispose();
 
-				pattern = new Pattern(display, topLeft.x, topLeft.y + getBounds().height / 2, topLeft.x, bottomRight.y,
-						first, getBackgroundColor());
+				pattern = new Pattern(display, topLeft.x, topLeft.y + (float) (boundingRect.height / 2.0 - 1.5),
+						topLeft.x, bottomRight.y, first, getBackgroundColor());
 				graphics.setBackgroundPattern(pattern);
 				Rectangle clipRect = getBounds().getCopy();
 				clipRect.setHeight(clipRect.height / 2);
@@ -237,7 +238,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 				graphics.clipRect(clipRect);
 				graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
 				graphics.setBackgroundPattern(null);
-				graphics.clipRect(getBounds().getCopy());
+
 				pattern.dispose();
 				first.dispose();
 			}
