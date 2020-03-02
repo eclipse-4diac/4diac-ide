@@ -72,7 +72,6 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			}
 			return true;
 		});
-		checkDataConnections();
 		return getFbNetwork();
 	}
 

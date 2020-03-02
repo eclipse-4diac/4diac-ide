@@ -17,9 +17,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
@@ -35,10 +33,7 @@ import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -109,7 +104,6 @@ class FBNetworkImporter extends CommonElementImporter {
 			}
 			return true;
 		});
-		checkDataConnections();
 		return fbNetwork;
 	}
 
@@ -252,30 +246,6 @@ class FBNetworkImporter extends CommonElementImporter {
 		if (null != dyElement) {
 			connection.setDy(parseConnectionValue(dyElement));
 		}
-	}
-
-	/**
-	 * In old 4diac project adapter connections are part of the data connections
-	 * this functions checks this and moves these to the adapter connection list.
-	 */
-	protected void checkDataConnections() {
-		List<DataConnection> toDelete = new ArrayList<>();
-		for (DataConnection con : fbNetwork.getDataConnections()) {
-			if (con.getSource() instanceof AdapterDeclaration) {
-				toDelete.add(con);
-				AdapterConnection adpCon = LibraryElementFactory.eINSTANCE.createAdapterConnection();
-				adpCon.setSource(con.getSource());
-				adpCon.setDestination(con.getDestination());
-				adpCon.setComment(con.getComment());
-				adpCon.setDx1(con.getDx1());
-				adpCon.setDx2(con.getDx2());
-				adpCon.setDy(con.getDy());
-				fbNetwork.getAdapterConnections().add(adpCon);
-				con.setSource(null);
-				con.setDestination(null);
-			}
-		}
-		fbNetwork.getDataConnections().removeAll(toDelete);
 	}
 
 	private IInterfaceElement getConnectionEndPoint(String path) {
