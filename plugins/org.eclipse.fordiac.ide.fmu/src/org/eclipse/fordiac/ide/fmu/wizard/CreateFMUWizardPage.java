@@ -13,10 +13,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fmu.wizard;
 
+import org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTree;
 import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferencePage;
 import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.ui.DirectoryChooserControl;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -28,12 +34,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-
-import org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTree;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.ui.DirectoryChooserControl;
 
 public class CreateFMUWizardPage extends WizardPage {
 
@@ -133,7 +133,7 @@ public class CreateFMUWizardPage extends WizardPage {
 		stretch.grabExcessHorizontalSpace = true;
 		stretch.horizontalAlignment = SWT.FILL;
 
-		dcc = new DirectoryChooserControl(composite, SWT.NONE, "Destination: ");
+		dcc = new DirectoryChooserControl(composite, SWT.NONE, FordiacMessages.Destination + ":"); //$NON-NLS-1$
 		dcc.addDirectoryChangedListener(newDirectory -> {
 			saveDir(newDirectory);
 			setPageComplete(validatePage());
@@ -151,7 +151,7 @@ public class CreateFMUWizardPage extends WizardPage {
 	private void createSelectionLibrariesGroup(final Composite composite) {
 
 		Group librariesGroup = new Group(composite, SWT.NONE);
-		librariesGroup.setText("Include the following libraries in exported FMU");
+		librariesGroup.setText(Messages.CreateFMUWizardPage_IncludeTheFollowingLibrariesInExportedFMU);
 
 		GridLayout gridLayout = new GridLayout(1, false);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -166,7 +166,7 @@ public class CreateFMUWizardPage extends WizardPage {
 		Button[] buttons = { win32Field, win64Field, linux32Field, linux64Field, storeSelectedLibaries };
 		String[] preferences = { PreferenceConstants.P_FMU_WIN32, PreferenceConstants.P_FMU_WIN64,
 				PreferenceConstants.P_FMU_LIN32, PreferenceConstants.P_FMU_LIN64,
-				"Save selected libraries for future FMU exports" };
+				Messages.CreateFMUWizardPage_SaveSelectedLibrariesForFutureFMUExports };
 
 		for (int i = 0; i < buttons.length; i++) {
 			buttons[i].setText(preferences[i]);
@@ -214,17 +214,17 @@ public class CreateFMUWizardPage extends WizardPage {
 	 */
 	private boolean validatePage() {
 		if ("".equals(dcc.getDirectory())) { //$NON-NLS-1$
-			setErrorMessage("Destination not selected!");
+			setErrorMessage(Messages.CreateFMUWizardPage_DestinationNotSelecte);
 			return false;
 		}
 
 		if (0 == systemTree.getCheckedElements().length) {
-			setErrorMessage("Nothing selected for FMU generation!");
+			setErrorMessage(Messages.CreateFMUWizardPage_NothingselectedForFMUGeneration);
 			return false;
 		}
 
 		if (!isSomeLibrarySelected()) {
-			setErrorMessage("No libraries selected to include");
+			setErrorMessage(Messages.CreateFMUWizardPage_NoLibrariesSelectedToInclude);
 			return false;
 		}
 

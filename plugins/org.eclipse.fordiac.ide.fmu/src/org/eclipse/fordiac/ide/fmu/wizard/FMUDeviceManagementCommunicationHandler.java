@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.eclipse.fordiac.ide.deployment.AbstractFileManagementHandler;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.fmu.Activator;
+import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -77,7 +79,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			this.mIsInput = false;
 			this.mVarType = variableType.INTEGER;
 			this.mScope = variableScope.INTERNAL;
-			this.mInitialValue = "";
+			this.mInitialValue = ""; //$NON-NLS-1$
 		}
 
 		public FMUInputOutput(String name, boolean input, variableScope variable, variableType varType,
@@ -113,7 +115,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		}
 
 		private void setBooleanInitValue() {
-			if (this.mInitialValue == null || this.mInitialValue.equals("0") || this.mInitialValue.equals("")) {
+			if (this.mInitialValue == null || this.mInitialValue.equals("0") || this.mInitialValue.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
 				this.mInitialValue = "false"; //$NON-NLS-1$
 			} else {
 				this.mInitialValue = "true"; //$NON-NLS-1$
@@ -224,8 +226,11 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			Shell shell, IProgressMonitor monitor) {
 		if (null != directory) {
 			if (!librariesToAdd.isEmpty()) {
-				monitor.beginTask("Generating FMUs for device " + device.getName(), TOTAL_MONITOR);
-				String outputName = device.getAutomationSystem().getName() + "_" + device.getName();
+				monitor.beginTask(
+						MessageFormat.format(Messages.FMUDeviceManagementCommunicationHandler_GeneratingFMUsForDevice,
+								device.getName()),
+						TOTAL_MONITOR);
+				String outputName = device.getAutomationSystem().getName() + "_" + device.getName(); //$NON-NLS-1$
 				FMUDeviceManagementCommunicationHandler fmuFileHandler = new FMUDeviceManagementCommunicationHandler(
 						device);
 				DeploymentCoordinator.INSTANCE.performDeployment(resources.toArray(), fmuFileHandler, null); // will
@@ -244,10 +249,12 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 				}
 
 			} else {
-				IDeviceManagementCommunicationHandler.showErrorMessage("No selected libraries were found.\n", shell);
+				IDeviceManagementCommunicationHandler.showErrorMessage(
+						Messages.FMUDeviceManagementCommunicationHandler_NoSelectedLibrariesWereFound, shell);
 			}
 		} else {
-			IDeviceManagementCommunicationHandler.showErrorMessage("The directory is invalid\n", shell);
+			IDeviceManagementCommunicationHandler
+					.showErrorMessage(Messages.FMUDeviceManagementCommunicationHandler_TheDirectoryIsInvalid, shell);
 		}
 	}
 
@@ -269,7 +276,9 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 						break;
 					} catch (IOException e) {
 						MessageBox msgBox = new MessageBox(shell, SWT.RETRY | SWT.ICON_ERROR | SWT.CANCEL);
-						msgBox.setMessage(e.getLocalizedMessage() + "\nDo you want to retry?");
+						msgBox.setMessage(
+								MessageFormat.format(Messages.FMUDeviceManagementCommunicationHandler_DoYouWantToRetry,
+										e.getLocalizedMessage()));
 						res = msgBox.open();
 					}
 				} while (SWT.RETRY == res);
@@ -282,15 +291,17 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	private static File createZipFile(String directoryPath, String outputName, Shell shell) {
 		File direc = new File(directoryPath);
 		if (!direc.exists() && !direc.mkdir()) {
-			IDeviceManagementCommunicationHandler.showErrorMessage(
-					"Output folder " + directoryPath + " doesn't exist and couldn't be created\n", shell);
+			IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
+					Messages.FMUDeviceManagementCommunicationHandler_OutputFolderDoesNotExistAndCouldNotBeCreated,
+					directoryPath), shell);
 		} else {
-			File destZipFile = new File(directoryPath + File.separatorChar + outputName + ".fmu");
+			File destZipFile = new File(directoryPath + File.separatorChar + outputName + ".fmu"); //$NON-NLS-1$
 
 			int res = SWT.YES;
 			if (destZipFile.exists()) {
 				MessageBox msgBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.ICON_QUESTION);
-				msgBox.setMessage("Output fmu " + outputName + " file exists, overwrite it?");
+				msgBox.setMessage(MessageFormat.format(
+						Messages.FMUDeviceManagementCommunicationHandler_OutputFMUFileExistsOverwriteIt, outputName));
 				res = msgBox.open();
 			}
 			if (SWT.YES == res) {
@@ -311,15 +322,18 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 				if (createTempFoldersAndFiles(tempFolder, outputName, librariesToAdd, shell)) {
 					return tempFolder;
 				} else {
-					IDeviceManagementCommunicationHandler.showErrorMessage(
-							"Couldn't create the components inside the temporary folder " + tempFolder, shell);
+					IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
+							Messages.FMUDeviceManagementCommunicationHandler_CouldNotCreateTheComponentsInsideTheTemporaryFolder,
+							tempFolder), shell);
 				}
 			} else {
-				IDeviceManagementCommunicationHandler.showErrorMessage("Binary directory " + binariesDirectory.toPath()
-						+ " does not exist. Check the FMU Page in the preferences", shell);
+				IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
+						Messages.FMUDeviceManagementCommunicationHandler_BinaryDirectoryDoesNotExist,
+						binariesDirectory.toPath()), shell);
 			}
 		} catch (IOException e) {
-			IDeviceManagementCommunicationHandler.showErrorMessage("Couldn't create the temporary folder", shell);
+			IDeviceManagementCommunicationHandler.showErrorMessage(
+					Messages.FMUDeviceManagementCommunicationHandler_CouldNotCreateTheTemporaryFolder, shell);
 		}
 		return null;
 	}
@@ -327,7 +341,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	private static boolean writeAllFiles(FMUDeviceManagementCommunicationHandler fmuFileHandler, String tempFolder,
 			String outputName, Shell shell) {
 		return (fmuFileHandler.writeToBootFile(
-				new File(tempFolder + File.separatorChar + RESOURCES_FOLDER_NAME + File.separatorChar + "forte.fboot")
+				new File(tempFolder + File.separatorChar + RESOURCES_FOLDER_NAME + File.separatorChar + "forte.fboot") //$NON-NLS-1$
 						.getAbsolutePath(),
 				true, shell)
 				&& writeToAnyFile(new File(tempFolder + File.separatorChar + "modelDescription.xml").getAbsolutePath(), //$NON-NLS-1$
@@ -404,8 +418,9 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 
 		for (File folder : folders) {
 			if (!folder.mkdir()) {
-				IDeviceManagementCommunicationHandler.showErrorMessage(
-						"Couldn't create " + folder.getAbsolutePath() + " in the temporary folder", shell);
+				IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
+						Messages.FMUDeviceManagementCommunicationHandler_CouldNotCreateFolderInTheTemporaryFolder,
+						folder.getAbsolutePath()), shell);
 				return false;
 			}
 		}
@@ -426,17 +441,21 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 					Files.copy(sourceFile.toPath(), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 					return true;
 				} catch (IOException e) {
-					IDeviceManagementCommunicationHandler
-							.showErrorMessage("Internal error when copying the file" + sourceFile.getAbsolutePath()
-									+ " into " + tempFile.getAbsolutePath() + "\n" + e.getMessage(), shell);
+					IDeviceManagementCommunicationHandler.showErrorMessage(
+							MessageFormat.format(Messages.FMUDeviceManagementCommunicationHandler_InternalCopyingError,
+									sourceFile.getAbsolutePath(), tempFile.getAbsolutePath(), e.getMessage()),
+							shell);
 				}
 			} else {
-				IDeviceManagementCommunicationHandler
-						.showErrorMessage("Library " + sourceFile.getAbsolutePath() + "couldn't be found", shell);
+				IDeviceManagementCommunicationHandler.showErrorMessage(
+						MessageFormat.format(Messages.FMUDeviceManagementCommunicationHandler_LibraryCouldNotBeFound,
+								sourceFile.getAbsolutePath()),
+						shell);
 			}
 
 		} else {
-			IDeviceManagementCommunicationHandler.showErrorMessage("Unable to create " + outputFolder, shell);
+			IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
+					Messages.FMUDeviceManagementCommunicationHandler_UnableToCreateFolder, outputFolder), shell);
 		}
 
 		return false;
@@ -501,7 +520,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			}
 			return super.sendREQ(destination, request);
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	private void handlePubSubVars(FBNetwork fbNetwork, String fbName, String previousNames, EList<VarDeclaration> var,
@@ -536,7 +555,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			handlePubSubVars(fbNetwork, fbName, previousNames, commFB.getInterface().getOutputVars(), false);
 		} else {
 			inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName, info.isInput(),
-					FMUInputOutput.variableScope.IO, info.getVarType(), ""));
+					FMUInputOutput.variableScope.IO, info.getVarType(), "")); //$NON-NLS-1$
 		}
 	}
 
@@ -624,7 +643,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 				continue;
 			}
 			inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + var.getName(), false, //$NON-NLS-1$
-					FMUInputOutput.variableScope.INTERNAL, varType, (null != var.getValue()) ? var.getValue().getValue() : null));
+					FMUInputOutput.variableScope.INTERNAL, varType,
+					(null != var.getValue()) ? var.getValue().getValue() : null));
 		}
 		// store ECC
 		inputsAndOutputs
@@ -742,7 +762,9 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		StringBuilder modelDescription = new StringBuilder();
 		modelDescription.append(
 				"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<fmiModelDescription\n  fmiVersion=\"2.0\"\n  modelName=\"" //$NON-NLS-1$
-						+ outputName + "\"\n  guid=\"" + outputName + "\">\n\n<CoSimulation\n  modelIdentifier=\"" + outputName + "\"\n  canHandleVariableCommunicationStepSize=\"true\"/>\n\n<LogCategories>\n  <Category name=\"logAll\"/>\n  <Category name=\"logError\"/>\n  <Category name=\"logCalls\"/>\n</LogCategories>");
+						+ outputName + "\"\n  guid=\"" + outputName + "\">\n\n<CoSimulation\n  modelIdentifier=\"" //$NON-NLS-1$ //$NON-NLS-2$
+						+ outputName
+						+ "\"\n  canHandleVariableCommunicationStepSize=\"true\"/>\n\n<LogCategories>\n  <Category name=\"logAll\"/>\n  <Category name=\"logError\"/>\n  <Category name=\"logCalls\"/>\n</LogCategories>"); //$NON-NLS-1$
 
 		modelDescription.append("\n\n<ModelVariables>\n"); //$NON-NLS-1$
 
@@ -789,7 +811,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 				+ "valueReference=\"" + outputIndex + "\" " //$NON-NLS-1$ //$NON-NLS-2$
 				+ "description=\"\" " //$NON-NLS-1$
 				+ "causality=\"" + causality //$NON-NLS-1$
-				+ "\" variability=\"" + variability + "\""
+				+ "\" variability=\"" + variability + "\"" //$NON-NLS-1$ //$NON-NLS-2$
 				+ (!element.getInput() || (element.getScope() == FMUInputOutput.variableScope.PARAM)
 						? " initial=\"exact\">" //$NON-NLS-1$
 						: ">") //$NON-NLS-1$

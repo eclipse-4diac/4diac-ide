@@ -8,6 +8,7 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -39,10 +40,10 @@ public class MapToContributionItem extends ContributionItem {
 	@Override
 	public void fill(Menu menu, int index) {
 		if (getParent() instanceof MenuManager) {
-			((IMenuManager)getParent()).addMenuListener(mapToListener);
-			((IMenuManager)getParent()).setRemoveAllWhenShown(true);
+			((IMenuManager) getParent()).addMenuListener(mapToListener);
+			((IMenuManager) getParent()).setRemoveAllWhenShown(true);
 		}
-		createDeviceMenu(((IMenuManager)getParent()));
+		createDeviceMenu(((IMenuManager) getParent()));
 
 	}
 
@@ -74,12 +75,12 @@ public class MapToContributionItem extends ContributionItem {
 		return false;
 	}
 
-	private void createDeviceMenuEntry(IMenuManager maptoMenu,Device device) {
+	private void createDeviceMenuEntry(IMenuManager maptoMenu, Device device) {
 		MenuManager deviceMenu = new MenuManager();
-		deviceMenu.setMenuText(device.getName() == null ? "Device" : device.getName());
+		deviceMenu.setMenuText(device.getName() == null ? FordiacMessages.Device : device.getName());
 		deviceMenu.setImageDescriptor(FordiacImage.ICON_DEVICE.getImageDescriptor());
 		maptoMenu.add(deviceMenu);
-		deviceMenu.fill(((MenuManager)maptoMenu).getMenu(), -1);
+		deviceMenu.fill(((MenuManager) maptoMenu).getMenu(), -1);
 		deviceMenu.setRemoveAllWhenShown(true);
 		createResourceMenu(deviceMenu, device);
 	}
@@ -89,10 +90,11 @@ public class MapToContributionItem extends ContributionItem {
 			@Override
 			public void menuAboutToShow(IMenuManager manager) {
 				List<Resource> resources = device.getResource();
-				IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-				for (Resource resource : resources ) {
+				IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						.getActiveEditor();
+				for (Resource resource : resources) {
 					IAction action = new MapAction(activeEditor, resource);
-					action.setText(resource.getName() == null ? "Resource" : resource.getName());
+					action.setText(resource.getName() == null ? FordiacMessages.Resource : resource.getName());
 					action.setImageDescriptor(FordiacImage.ICON_RESOURCE.getImageDescriptor());
 					parentMenuManager.add(action);
 				}
@@ -102,4 +104,3 @@ public class MapToContributionItem extends ContributionItem {
 	}
 
 }
-

@@ -18,14 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.fmu.Activator;
-import org.eclipse.jface.preference.*;
+import org.eclipse.fordiac.ide.fmu.Messages;
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 /**
  * This class represents a preference page that is contributed to the
@@ -52,7 +55,7 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 	public FMUPreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("FMU Preferences Page");
+		setDescription(Messages.FMUPreferencePage_FMUPreferencesPage);
 	}
 
 	/**
@@ -62,10 +65,11 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 	 */
 	public void createFieldEditors() {
 
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_PATH, "&Binaries Location:", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_PATH, Messages.FMUPreferencePage_BinariesLocation,
+				getFieldEditorParent()));
 
 		librariesGroup = new Group(getFieldEditorParent(), SWT.NONE);
-		librariesGroup.setText("Include the following libraries in exported FMU");
+		librariesGroup.setText(Messages.FMUPreferencePage_IncludeTheFollowingLibrariesInExportedFMU);
 
 		GridLayout gridLayout = new GridLayout(2, false);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -120,8 +124,7 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
-		setDescription(
-				"Inside the selected path the files named win32Forte.dll, win64Forte.dll, linux32Forte.so and linux64Forte.are searched for");
+		setDescription(Messages.FMUPreferencePage_InsideTheSelectedPathTheFilesSearchedFor);
 	}
 
 	private void updateEnabledLibraries(Boolean validPath, String pathString) {
