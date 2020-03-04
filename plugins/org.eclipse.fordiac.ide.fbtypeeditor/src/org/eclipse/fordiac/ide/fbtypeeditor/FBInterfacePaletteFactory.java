@@ -45,7 +45,7 @@ public final class FBInterfacePaletteFactory {
 	}
 
 	private static void fillPalette(Palette systemPalette, final PaletteRoot palette) {
-		PaletteDrawer drawer = new PaletteDrawer("EventTypes");
+		PaletteDrawer drawer = new PaletteDrawer(Messages.FBInterfacePaletteFactory_EventTypes);
 
 		for (DataType type : EventTypeLibrary.getInstance().getEventTypes()) {
 			ImageDescriptor desc = FordiacImage.ICON_DATA_TYPE.getImageDescriptor();
@@ -55,7 +55,7 @@ public final class FBInterfacePaletteFactory {
 		}
 		palette.add(drawer);
 
-		drawer = new PaletteDrawer("DataTypes");
+		drawer = new PaletteDrawer(Messages.FBInterfacePaletteFactory_DataTypes);
 
 		for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
 			ImageDescriptor desc = FordiacImage.ICON_DATA_TYPE.getImageDescriptor();
@@ -87,7 +87,7 @@ public final class FBInterfacePaletteFactory {
 			final String parentGroup, final PaletteRoot palette) {
 
 		String newParent = ""; //$NON-NLS-1$
-		if (!group.getLabel().equals("Root Group")) {
+		if (!group.getLabel().equals(Messages.FBInterfacePaletteFactory_RootGroup)) {
 			newParent += parentGroup.equals("") ? parentGroup + "." + group.getLabel() //$NON-NLS-1$ //$NON-NLS-2$
 					: group.getLabel();
 		}

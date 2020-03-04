@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -58,7 +59,7 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	}
 
 	private void createEventSection(Composite parent) {
-		eventComposite = getWidgetFactory().createGroup(parent, "With");
+		eventComposite = getWidgetFactory().createGroup(parent, FordiacMessages.With);
 		eventComposite.setLayout(new GridLayout(1, false));
 		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		withEventsViewer = TableWidgetFactory.createPropertyTableViewer(eventComposite, SWT.CHECK);
@@ -86,11 +87,11 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 
 	private void configureTableLayout(Table tableWith) {
 		TableColumn column1 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
-		column1.setText("Variable");
+		column1.setText(FordiacMessages.Variable);
 		TableColumn column2 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
-		column2.setText("DataType");
+		column2.setText(FordiacMessages.DataType);
 		TableColumn column3 = new TableColumn(withEventsViewer.getTable(), SWT.LEFT);
-		column3.setText("Comment");
+		column3.setText(FordiacMessages.Comment);
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 100));
 		layout.addColumnData(new ColumnWeightData(20, 70));
@@ -128,7 +129,7 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	@Override
 	public void setTypeDropdown() {
 		typeCombo.removeAll();
-		typeCombo.add("Event");
+		typeCombo.add(FordiacMessages.Event);
 		typeCombo.select(0);
 	}
 

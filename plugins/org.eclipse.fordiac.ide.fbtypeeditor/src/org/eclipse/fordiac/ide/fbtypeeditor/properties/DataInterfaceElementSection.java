@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -66,14 +67,14 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	}
 
 	private void createDataSection(Composite parent) {
-		getWidgetFactory().createCLabel(parent, "Array Size:");
+		getWidgetFactory().createCLabel(parent, FordiacMessages.ArraySize + ":"); //$NON-NLS-1$
 		arraySizeText = createGroupText(parent, true);
 		arraySizeText.addModifyListener(e -> {
 			removeContentAdapter();
 			executeCommand(new ChangeArraySizeCommand((VarDeclaration) type, arraySizeText.getText()));
 			addContentAdapter();
 		});
-		getWidgetFactory().createCLabel(parent, "Initial Value:");
+		getWidgetFactory().createCLabel(parent, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		initValueText = createGroupText(parent, true);
 		initValueText.addModifyListener(e -> {
 			removeContentAdapter();
@@ -83,7 +84,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	}
 
 	private void createEventSection(Composite parent) {
-		eventComposite = getWidgetFactory().createGroup(parent, "With");
+		eventComposite = getWidgetFactory().createGroup(parent, FordiacMessages.With);
 		eventComposite.setLayout(new GridLayout(1, false));
 		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		withEventsViewer = TableWidgetFactory.createPropertyTableViewer(eventComposite, SWT.CHECK);
@@ -111,11 +112,11 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 
 	private static void configureTableLayout(Table tableWith) {
 		TableColumn column1 = new TableColumn(tableWith, SWT.LEFT);
-		column1.setText("Event");
+		column1.setText(FordiacMessages.Event);
 		TableColumn column2 = new TableColumn(tableWith, SWT.LEFT);
-		column2.setText("DataType");
+		column2.setText(FordiacMessages.DataType);
 		TableColumn column3 = new TableColumn(tableWith, SWT.LEFT);
-		column3.setText("Comment");
+		column3.setText(FordiacMessages.Comment);
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(20, 100));
 		layout.addColumnData(new ColumnWeightData(20, 70));

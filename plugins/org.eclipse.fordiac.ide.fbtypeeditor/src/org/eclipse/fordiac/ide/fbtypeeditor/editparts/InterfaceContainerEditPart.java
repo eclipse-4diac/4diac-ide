@@ -121,7 +121,8 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 	protected void removeChildVisual(EditPart childEditPart) {
 		super.removeChildVisual(childEditPart);
 		if (getContentPane().getChildren().size() == 0) {
-			Dimension dim = TextUtilities.INSTANCE.getTextExtents("INT", getContentPane().getFont());
+			Dimension dim = TextUtilities.INSTANCE.getTextExtents("INT", //$NON-NLS-1$
+					getContentPane().getFont());
 			dim.height = (int) (dim.height * 0.66);
 			getContentPane().setPreferredSize(dim);
 		}

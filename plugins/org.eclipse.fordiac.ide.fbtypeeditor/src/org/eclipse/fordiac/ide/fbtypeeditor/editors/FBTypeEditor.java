@@ -16,6 +16,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.Activator;
+import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
@@ -127,10 +129,8 @@ public class FBTypeEditor extends FormEditor
 			for (FBNetworkElement fb : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
 				if (null == fb.getPaletteEntry()) {
 					MessageDialog.openInformation(getSite().getShell(),
-							"Composite contains Function Block without type",
-							"The composite Function Block you are about to save contains the function block "
-									+ fb.getName()
-									+ " which has no type. Saving is not possible as it may break any connections. Please correct this first!");
+							Messages.FBTypeEditor_CompositeContainsFunctionBlockWithoutType,
+							MessageFormat.format(Messages.FBTypeEditor_CheckTypeSaveAble, fb.getName()));
 					return false;
 				}
 			}
@@ -159,7 +159,7 @@ public class FBTypeEditor extends FormEditor
 			IFile fbTypeFile = ((FileEditorInput) editorInput).getFile();
 			if (!fbTypeFile.exists()) {
 				throw new PartInitException(
-						new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Type file does not exist!"));
+						new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.FBTypeEditor_TypeFileDoesnotExist));
 			}
 
 			fbPalette = FBTypeUtils.getPalletteForFBTypeFile(fbTypeFile);

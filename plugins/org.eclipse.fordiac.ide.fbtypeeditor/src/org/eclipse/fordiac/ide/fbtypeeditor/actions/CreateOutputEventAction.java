@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.actions;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
@@ -26,7 +27,7 @@ public class CreateOutputEventAction extends WorkbenchPartAction {
 	public CreateOutputEventAction(IWorkbenchPart part, FBType fbType) {
 		super(part);
 		setId(ID);
-		setText("Create Output Event");
+		setText(Messages.CreateOutputEventAction_CreateOutputEvent);
 
 		this.fbType = fbType;
 	}

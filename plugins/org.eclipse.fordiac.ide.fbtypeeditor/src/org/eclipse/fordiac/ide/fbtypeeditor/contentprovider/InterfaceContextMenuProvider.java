@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.contentprovider;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.actions.CreateFromNewAdapterAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.actions.CreateInputEventAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.actions.CreateInputVariableAction;
@@ -47,8 +48,8 @@ import org.eclipse.ui.part.EditorPart;
 
 public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 
-	private static final String CREATE_PLUG = "Create Plug";
-	private static final String CREATE_SOCKET = "Create Socket";
+	private static final String CREATE_PLUG = Messages.InterfaceContextMenuProvider_CreatePlug;
+	private static final String CREATE_SOCKET = Messages.InterfaceContextMenuProvider_CreateSocket;
 
 	public InterfaceContextMenuProvider(EditPartViewer viewer, ZoomManager zoomManager, ActionRegistry registry) {
 		super(viewer, zoomManager, registry);
@@ -82,7 +83,7 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 		action = registry.getAction(CreateOutputEventAction.ID);
 		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, action);
 
-		MenuManager submenu = new MenuManager("Create Data Input");
+		MenuManager submenu = new MenuManager(Messages.InterfaceContextMenuProvider_CreateDataInput);
 		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
 
 		for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
@@ -94,7 +95,7 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 			submenu.add(action);
 		}
 
-		submenu = new MenuManager("Create Data Output");
+		submenu = new MenuManager(Messages.InterfaceContextMenuProvider_CreateDataOutput);
 		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
 
 		for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
