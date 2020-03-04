@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
@@ -75,7 +76,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 			}
 		}
 		super.init(site, input);
-		setPartName("Interface");
+		setPartName(FordiacMessages.Interface);
 		setTitleImage(FordiacImage.ICON_INTERFACE_EDITOR.getImage());
 	}
 

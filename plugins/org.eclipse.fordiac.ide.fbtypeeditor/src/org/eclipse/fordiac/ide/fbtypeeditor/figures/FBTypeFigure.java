@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.figures;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.figures.FBShape;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -47,6 +48,6 @@ public class FBTypeFigure extends FBShape {
 		if (!type.getVersionInfo().isEmpty()) {
 			versionInfo = type.getVersionInfo().get(type.getVersionInfo().size() - 1);
 		}
-		versionInfoLabel.setText(versionInfo != null ? versionInfo.getVersion() : "N/D");
+		versionInfoLabel.setText(versionInfo != null ? versionInfo.getVersion() : Messages.FBTypeFigure_ND);
 	}
 }

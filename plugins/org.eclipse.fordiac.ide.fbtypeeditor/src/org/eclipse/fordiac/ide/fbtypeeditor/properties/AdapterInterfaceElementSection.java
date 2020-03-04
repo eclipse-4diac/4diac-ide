@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.CommandStack;
@@ -81,7 +82,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	private void createTypeAndCommentSection(Composite parent) {
 		parent.setLayout(new GridLayout(2, false));
 		parent.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(parent, "Name:");
+		getWidgetFactory().createCLabel(parent, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupText(parent, true);
 		nameText.addVerifyListener(new IdentifierVerifyListener());
 		nameText.addModifyListener(new ModifyListener() {
@@ -92,7 +93,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 				addContentAdapter();
 			}
 		});
-		getWidgetFactory().createCLabel(parent, "Comment:");
+		getWidgetFactory().createCLabel(parent, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createGroupText(parent, true);
 		commentText.addModifyListener(new ModifyListener() {
 			@Override
@@ -102,7 +103,7 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 				addContentAdapter();
 			}
 		});
-		getWidgetFactory().createCLabel(parent, "Type: ");
+		getWidgetFactory().createCLabel(parent, FordiacMessages.Type + ":"); //$NON-NLS-1$
 		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), parent);
 		GridData languageComboGridData = new GridData(SWT.FILL, 0, true, false);
 		typeCombo.setLayoutData(languageComboGridData);

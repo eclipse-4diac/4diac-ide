@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.actions;
 import java.io.File;
 import java.io.FileFilter;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -39,7 +40,7 @@ public abstract class CreateFromNewAdapterAction extends WorkbenchPartAction {
 
 	CreateFromNewAdapterAction(IWorkbenchPart part, FBType fbType) {
 		super(part);
-		setText("New Adapter ...");
+		setText(Messages.CreateFromNewAdapterAction_NewAdapter);
 		this.fbType = fbType;
 	}
 
