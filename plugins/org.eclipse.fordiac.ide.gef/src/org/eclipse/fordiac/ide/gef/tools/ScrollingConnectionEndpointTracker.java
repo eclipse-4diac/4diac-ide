@@ -74,7 +74,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 
 	@Override
 	public void mouseDrag(MouseEvent me, EditPartViewer viewer) {
-		if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
+		if (isActive() && (viewer instanceof AdvancedScrollingGraphicalViewer)) {
 			Point oldViewPort = ((AdvancedScrollingGraphicalViewer) viewer).getViewLocation();
 			((AdvancedScrollingGraphicalViewer) viewer)
 					.checkScrollPositionDuringDragBounded(me,
@@ -118,6 +118,10 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	private void updateTarget(Point p) {
 		ReconnectRequest request = (ReconnectRequest) getTargetRequest();
 		request.setLocation(p);
+		final EditPart target = (getCommandName().equals(RequestConstants.REQ_RECONNECT_SOURCE))
+				? getConnectionEditPart().getSource()
+				: getConnectionEditPart().getTarget();
+		request.setTargetEditPart(target);
 		getConnectionEditPart().showSourceFeedback(request);
 		getConnectionEditPart().showTargetFeedback(request);
 	}
