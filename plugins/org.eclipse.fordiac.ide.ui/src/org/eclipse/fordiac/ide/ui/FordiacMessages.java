@@ -31,10 +31,13 @@ public class FordiacMessages extends NLS {
 	public static String ArraySize;
 	public static String Comment;
 	public static String DataType;
+	public static String Destination;
+	public static String Device;
 	public static String Event;
 	public static String Name;
 	public static String InitialValue;
 	public static String Interface;
+	public static String Resource;
 	public static String Type;
 	public static String Variable;
 	public static String With;

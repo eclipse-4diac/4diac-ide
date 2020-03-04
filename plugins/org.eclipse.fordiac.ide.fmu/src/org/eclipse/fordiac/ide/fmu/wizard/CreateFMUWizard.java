@@ -24,6 +24,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -34,8 +36,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 public class CreateFMUWizard extends Wizard implements IExportWizard {
 
@@ -105,7 +105,7 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 			new ProgressMonitorDialog(getShell()).run(false, false, iop);
 		} catch (Exception e) {
 			MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
-			msg.setMessage("FMU creation error:\n" + e.getMessage());
+			msg.setMessage(Messages.CreateFMUWizard_FMUCreationError + e.getMessage());
 			msg.open();
 			Activator.getDefault().logError(msg.getMessage(), e);
 		}
