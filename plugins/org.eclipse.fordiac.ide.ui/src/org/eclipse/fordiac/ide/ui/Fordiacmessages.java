@@ -20,8 +20,10 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-public class Messages extends NLS {
+public class Fordiacmessages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.ui.messages"; //$NON-NLS-1$
+
+	public static String Algorithm;
 
 	/** The Directory chooser control_ labe l_ browse. */
 	public static String DirectoryChooserControl_LABEL_Browse;
@@ -49,10 +51,10 @@ public class Messages extends NLS {
 
 	static {
 		// initialize resource bundle
-		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+		NLS.initializeMessages(BUNDLE_NAME, Fordiacmessages.class);
 	}
 
-	private Messages() {
+	private Fordiacmessages() {
 		// private empty constructor
 	}
 }

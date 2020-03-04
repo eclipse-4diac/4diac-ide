@@ -15,7 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.preferences;
 
-import org.eclipse.fordiac.ide.ui.Messages;
+import org.eclipse.fordiac.ide.ui.Fordiacmessages;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -33,32 +33,32 @@ public class FordiacPreferencePage extends FieldEditorPreferencePage implements 
 	public void createFieldEditors() {
 
 		addField(new ColorFieldEditor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR,
-				Messages.FordiacPreferencePage_LABEL_DefaultEventConnectorColor, getFieldEditorParent()));
+				Fordiacmessages.FordiacPreferencePage_LABEL_DefaultEventConnectorColor, getFieldEditorParent()));
 
 		createDataColorFields();
 
 		addField(new ColorFieldEditor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR,
-				Messages.FordiacPreferencePage_LABEL_DefaultAdapterConnectorColor, getFieldEditorParent()));
+				Fordiacmessages.FordiacPreferencePage_LABEL_DefaultAdapterConnectorColor, getFieldEditorParent()));
 
 		addField(new ComboFieldEditor(PreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE,
-				Messages.FordiacPreferencePage_LABEL_DefaultComplianceProfile, getSupportedProfiles(),
+				Fordiacmessages.FordiacPreferencePage_LABEL_DefaultComplianceProfile, getSupportedProfiles(),
 				getFieldEditorParent()));
 
 	}
 
 	private void createDataColorFields() {
 		addField(new ColorFieldEditor(PreferenceConstants.P_BOOL_CONNECTOR_COLOR,
-				Messages.FordiacPreferencePage_LABEL_BoolConnectorColor, getFieldEditorParent()));
+				Fordiacmessages.FordiacPreferencePage_LABEL_BoolConnectorColor, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_ANY_BIT_CONNECTOR_COLOR,
-				Messages.FordiacPreferencePage_LABEL_AnyBitConnectorColor, getFieldEditorParent()));
+				Fordiacmessages.FordiacPreferencePage_LABEL_AnyBitConnectorColor, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_ANY_INT_CONNECTOR_COLOR,
-				Messages.FordiacPreferencePage_LABEL_AnyIntConnectorColor, getFieldEditorParent()));
+				Fordiacmessages.FordiacPreferencePage_LABEL_AnyIntConnectorColor, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_ANY_REAL_CONNECTOR_COLOR,
-				Messages.FordiacPreferencePage_LABEL_AnyRealConnectorColor, getFieldEditorParent()));
+				Fordiacmessages.FordiacPreferencePage_LABEL_AnyRealConnectorColor, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_ANY_STRING_CONNECTOR_COLOR,
-				Messages.FordiacPreferencePage_LABEL_AnyStringConnectorColor, getFieldEditorParent()));
+				Fordiacmessages.FordiacPreferencePage_LABEL_AnyStringConnectorColor, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_REMAINING_DATA_CONNECTOR_COLOR,
-				Messages.FordiacPreferencePage_LABEL_DataConnectorColor, getFieldEditorParent()));
+				Fordiacmessages.FordiacPreferencePage_LABEL_DataConnectorColor, getFieldEditorParent()));
 	}
 
 	private String[][] getSupportedProfiles() {
@@ -71,7 +71,7 @@ public class FordiacPreferencePage extends FieldEditorPreferencePage implements 
 	@Override
 	public void init(final IWorkbench workbench) {
 		setPreferenceStore(UIPlugin.getDefault().getPreferenceStore());
-		setDescription(Messages.FordiacPreferencePage_LABEL_PreferencePageDescription);
+		setDescription(Fordiacmessages.FordiacPreferencePage_LABEL_PreferencePageDescription);
 	}
 
 }

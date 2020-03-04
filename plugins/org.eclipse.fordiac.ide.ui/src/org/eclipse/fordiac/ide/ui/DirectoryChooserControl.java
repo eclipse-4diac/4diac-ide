@@ -70,12 +70,12 @@ public class DirectoryChooserControl extends Composite {
 		if (useLabel) {
 			cLabel.setText(this.labelText);
 		} else {
-			cLabel.setText(Messages.DirectoryChooserControl_LABEL_ChooseDirectory);
+			cLabel.setText(Fordiacmessages.DirectoryChooserControl_LABEL_ChooseDirectory);
 		}
 		text = new Text(this, SWT.BORDER);
 		text.setLayoutData(gridData);
 		Button button = new Button(this, SWT.NONE);
-		button.setText(Messages.DirectoryChooserControl_LABEL_Browse);
+		button.setText(Fordiacmessages.DirectoryChooserControl_LABEL_Browse);
 		button.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
 			@Override
 			public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
@@ -83,7 +83,7 @@ public class DirectoryChooserControl extends Composite {
 				String dir = text.getText();
 
 				dialog.setText(labelText);
-				dialog.setMessage(Messages.DirectoryChooserControl_LABEL_SelectdDirectoryDialogMessage);
+				dialog.setMessage(Fordiacmessages.DirectoryChooserControl_LABEL_SelectdDirectoryDialogMessage);
 
 				if (!dir.equals("")) { //$NON-NLS-1$
 					dialog.setFilterPath(dir);
