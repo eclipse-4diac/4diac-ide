@@ -150,10 +150,46 @@ ruleVar_Decl_Init returns [EObject current=null]
 	leaveRule();
 }:
 	(
+		{
+			newCompositeNode(grammarAccess.getVar_Decl_InitAccess().getVar_Decl_LocalParserRuleCall_0());
+		}
+		this_Var_Decl_Local_0=ruleVar_Decl_Local
+		{
+			$current = $this_Var_Decl_Local_0.current;
+			afterParserOrEnumRuleCall();
+		}
+		    |
+		{
+			newCompositeNode(grammarAccess.getVar_Decl_InitAccess().getVar_Decl_LocatedParserRuleCall_1());
+		}
+		this_Var_Decl_Located_1=ruleVar_Decl_Located
+		{
+			$current = $this_Var_Decl_Located_1.current;
+			afterParserOrEnumRuleCall();
+		}
+	)
+;
+
+// Entry rule entryRuleVar_Decl_Local
+entryRuleVar_Decl_Local returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getVar_Decl_LocalRule()); }
+	iv_ruleVar_Decl_Local=ruleVar_Decl_Local
+	{ $current=$iv_ruleVar_Decl_Local.current; }
+	EOF;
+
+// Rule Var_Decl_Local
+ruleVar_Decl_Local returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
 		(
 			{
 				$current = forceCreateModelElement(
-					grammarAccess.getVar_Decl_InitAccess().getLocalVariableAction_0(),
+					grammarAccess.getVar_Decl_LocalAccess().getLocalVariableAction_0(),
 					$current);
 			}
 		)
@@ -161,11 +197,11 @@ ruleVar_Decl_Init returns [EObject current=null]
 			(
 				lv_constant_1_0=CONSTANT
 				{
-					newLeafNode(lv_constant_1_0, grammarAccess.getVar_Decl_InitAccess().getConstantCONSTANTKeyword_1_0());
+					newLeafNode(lv_constant_1_0, grammarAccess.getVar_Decl_LocalAccess().getConstantCONSTANTKeyword_1_0());
 				}
 				{
 					if ($current==null) {
-						$current = createModelElement(grammarAccess.getVar_Decl_InitRule());
+						$current = createModelElement(grammarAccess.getVar_Decl_LocalRule());
 					}
 					setWithLastConsumed($current, "constant", true, "CONSTANT");
 				}
@@ -175,11 +211,11 @@ ruleVar_Decl_Init returns [EObject current=null]
 			(
 				lv_name_2_0=RULE_ID
 				{
-					newLeafNode(lv_name_2_0, grammarAccess.getVar_Decl_InitAccess().getNameIDTerminalRuleCall_2_0());
+					newLeafNode(lv_name_2_0, grammarAccess.getVar_Decl_LocalAccess().getNameIDTerminalRuleCall_2_0());
 				}
 				{
 					if ($current==null) {
-						$current = createModelElement(grammarAccess.getVar_Decl_InitRule());
+						$current = createModelElement(grammarAccess.getVar_Decl_LocalRule());
 					}
 					setWithLastConsumed(
 						$current,
@@ -191,17 +227,17 @@ ruleVar_Decl_Init returns [EObject current=null]
 		)
 		otherlv_3=Colon
 		{
-			newLeafNode(otherlv_3, grammarAccess.getVar_Decl_InitAccess().getColonKeyword_3());
+			newLeafNode(otherlv_3, grammarAccess.getVar_Decl_LocalAccess().getColonKeyword_3());
 		}
 		(
 			(
 				{
 					if ($current==null) {
-						$current = createModelElement(grammarAccess.getVar_Decl_InitRule());
+						$current = createModelElement(grammarAccess.getVar_Decl_LocalRule());
 					}
 				}
 				{
-					newCompositeNode(grammarAccess.getVar_Decl_InitAccess().getTypeDataTypeCrossReference_4_0());
+					newCompositeNode(grammarAccess.getVar_Decl_LocalAccess().getTypeDataTypeCrossReference_4_0());
 				}
 				ruleType_Name
 				{
@@ -214,11 +250,11 @@ ruleVar_Decl_Init returns [EObject current=null]
 				(
 					lv_array_5_0=LeftSquareBracket
 					{
-						newLeafNode(lv_array_5_0, grammarAccess.getVar_Decl_InitAccess().getArrayLeftSquareBracketKeyword_5_0_0());
+						newLeafNode(lv_array_5_0, grammarAccess.getVar_Decl_LocalAccess().getArrayLeftSquareBracketKeyword_5_0_0());
 					}
 					{
 						if ($current==null) {
-							$current = createModelElement(grammarAccess.getVar_Decl_InitRule());
+							$current = createModelElement(grammarAccess.getVar_Decl_LocalRule());
 						}
 						setWithLastConsumed($current, "array", true, "[");
 					}
@@ -227,12 +263,12 @@ ruleVar_Decl_Init returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getVar_Decl_InitAccess().getArraySizeArray_SizeParserRuleCall_5_1_0());
+						newCompositeNode(grammarAccess.getVar_Decl_LocalAccess().getArraySizeArray_SizeParserRuleCall_5_1_0());
 					}
 					lv_arraySize_6_0=ruleArray_Size
 					{
 						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getVar_Decl_InitRule());
+							$current = createModelElementForParent(grammarAccess.getVar_Decl_LocalRule());
 						}
 						set(
 							$current,
@@ -245,23 +281,23 @@ ruleVar_Decl_Init returns [EObject current=null]
 			)
 			otherlv_7=RightSquareBracket
 			{
-				newLeafNode(otherlv_7, grammarAccess.getVar_Decl_InitAccess().getRightSquareBracketKeyword_5_2());
+				newLeafNode(otherlv_7, grammarAccess.getVar_Decl_LocalAccess().getRightSquareBracketKeyword_5_2());
 			}
 		)?
 		(
 			otherlv_8=ColonEqualsSign
 			{
-				newLeafNode(otherlv_8, grammarAccess.getVar_Decl_InitAccess().getColonEqualsSignKeyword_6_0());
+				newLeafNode(otherlv_8, grammarAccess.getVar_Decl_LocalAccess().getColonEqualsSignKeyword_6_0());
 			}
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getVar_Decl_InitAccess().getInitialValueConstantParserRuleCall_6_1_0());
+						newCompositeNode(grammarAccess.getVar_Decl_LocalAccess().getInitialValueConstantParserRuleCall_6_1_0());
 					}
 					lv_initialValue_9_0=ruleConstant
 					{
 						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getVar_Decl_InitRule());
+							$current = createModelElementForParent(grammarAccess.getVar_Decl_LocalRule());
 						}
 						set(
 							$current,
@@ -272,6 +308,134 @@ ruleVar_Decl_Init returns [EObject current=null]
 					}
 				)
 			)
+		)?
+	)
+;
+
+// Entry rule entryRuleVar_Decl_Located
+entryRuleVar_Decl_Located returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getVar_Decl_LocatedRule()); }
+	iv_ruleVar_Decl_Located=ruleVar_Decl_Located
+	{ $current=$iv_ruleVar_Decl_Located.current; }
+	EOF;
+
+// Rule Var_Decl_Located
+ruleVar_Decl_Located returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{
+				$current = forceCreateModelElement(
+					grammarAccess.getVar_Decl_LocatedAccess().getLocatedVariableAction_0(),
+					$current);
+			}
+		)
+		(
+			(
+				lv_name_1_0=RULE_ID
+				{
+					newLeafNode(lv_name_1_0, grammarAccess.getVar_Decl_LocatedAccess().getNameIDTerminalRuleCall_1_0());
+				}
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getVar_Decl_LocatedRule());
+					}
+					setWithLastConsumed(
+						$current,
+						"name",
+						lv_name_1_0,
+						"org.eclipse.fordiac.ide.model.structuredtext.StructuredText.ID");
+				}
+			)
+		)
+		(
+			otherlv_2=AT
+			{
+				newLeafNode(otherlv_2, grammarAccess.getVar_Decl_LocatedAccess().getATKeyword_2_0());
+			}
+			(
+				(
+					{
+						newCompositeNode(grammarAccess.getVar_Decl_LocatedAccess().getLocationVariableParserRuleCall_2_1_0());
+					}
+					lv_location_3_0=ruleVariable
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getVar_Decl_LocatedRule());
+						}
+						set(
+							$current,
+							"location",
+							lv_location_3_0,
+							"org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Variable");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+		)
+		otherlv_4=Colon
+		{
+			newLeafNode(otherlv_4, grammarAccess.getVar_Decl_LocatedAccess().getColonKeyword_3());
+		}
+		(
+			(
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getVar_Decl_LocatedRule());
+					}
+				}
+				{
+					newCompositeNode(grammarAccess.getVar_Decl_LocatedAccess().getTypeDataTypeCrossReference_4_0());
+				}
+				ruleType_Name
+				{
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		(
+			(
+				(
+					lv_array_6_0=LeftSquareBracket
+					{
+						newLeafNode(lv_array_6_0, grammarAccess.getVar_Decl_LocatedAccess().getArrayLeftSquareBracketKeyword_5_0_0());
+					}
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getVar_Decl_LocatedRule());
+						}
+						setWithLastConsumed($current, "array", true, "[");
+					}
+				)
+			)
+			(
+				(
+					{
+						newCompositeNode(grammarAccess.getVar_Decl_LocatedAccess().getArraySizeArray_SizeParserRuleCall_5_1_0());
+					}
+					lv_arraySize_7_0=ruleArray_Size
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getVar_Decl_LocatedRule());
+						}
+						set(
+							$current,
+							"arraySize",
+							lv_arraySize_7_0,
+							"org.eclipse.fordiac.ide.model.structuredtext.StructuredText.Array_Size");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+			otherlv_8=RightSquareBracket
+			{
+				newLeafNode(otherlv_8, grammarAccess.getVar_Decl_LocatedAccess().getRightSquareBracketKeyword_5_2());
+			}
 		)?
 	)
 ;

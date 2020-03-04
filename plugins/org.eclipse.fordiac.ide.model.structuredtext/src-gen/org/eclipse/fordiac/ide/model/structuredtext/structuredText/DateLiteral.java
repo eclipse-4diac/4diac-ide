@@ -6,43 +6,43 @@ package org.eclipse.fordiac.ide.model.structuredtext.structuredText;
 import java.util.Date;
 
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Date Literal</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Date
+ * Literal</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DateLiteral#getValue <em>Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DateLiteral#getValue
+ * <em>Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getDateLiteral()
  * @model
  * @generated
  */
-public interface DateLiteral extends TimeLiteral
-{
-  /**
-   * Returns the value of the '<em><b>Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Value</em>' attribute.
-   * @see #setValue(Date)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getDateLiteral_Value()
-   * @model
-   * @generated
-   */
-  Date getValue();
+public interface DateLiteral extends TimeLiteral {
+	/**
+	 * Returns the value of the '<em><b>Value</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the value of the '<em>Value</em>' attribute.
+	 * @see #setValue(Date)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getDateLiteral_Value()
+	 * @model
+	 * @generated
+	 */
+	Date getValue();
 
-  /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DateLiteral#getValue <em>Value</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Value</em>' attribute.
-   * @see #getValue()
-   * @generated
-   */
-  void setValue(Date value);
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.DateLiteral#getValue
+	 * <em>Value</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value the new value of the '<em>Value</em>' attribute.
+	 * @see #getValue()
+	 * @generated
+	 */
+	void setValue(Date value);
 
 } // DateLiteral

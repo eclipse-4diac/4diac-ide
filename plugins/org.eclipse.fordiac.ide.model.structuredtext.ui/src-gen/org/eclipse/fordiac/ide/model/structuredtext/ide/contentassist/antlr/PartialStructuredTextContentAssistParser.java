@@ -11,7 +11,8 @@ import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.AbstractInterna
 import org.eclipse.xtext.ide.editor.partialEditing.IPartialEditingContentAssistParser;
 import org.eclipse.xtext.util.PolymorphicDispatcher;
 
-public class PartialStructuredTextContentAssistParser extends StructuredTextParser implements IPartialEditingContentAssistParser {
+public class PartialStructuredTextContentAssistParser extends StructuredTextParser
+		implements IPartialEditingContentAssistParser {
 
 	private AbstractRule rule;
 
@@ -25,8 +26,8 @@ public class PartialStructuredTextContentAssistParser extends StructuredTextPars
 		if (rule == null || rule.eIsProxy())
 			return Collections.emptyList();
 		String methodName = "entryRule" + rule.getName();
-		PolymorphicDispatcher<Collection<FollowElement>> dispatcher = 
-			new PolymorphicDispatcher<Collection<FollowElement>>(methodName, 0, 0, Collections.singletonList(parser));
+		PolymorphicDispatcher<Collection<FollowElement>> dispatcher = new PolymorphicDispatcher<Collection<FollowElement>>(
+				methodName, 0, 0, Collections.singletonList(parser));
 		dispatcher.invoke();
 		return parser.getFollowElements();
 	}

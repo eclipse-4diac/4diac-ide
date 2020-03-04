@@ -125,7 +125,7 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     _builder.append("  ");
     CharSequence _fBClassName_1 = this.getFBClassName();
     _builder.append(_fBClassName_1, "  ");
-    _builder.append("(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) : ");
+    _builder.append("(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :");
     _builder.newLineIfNotEmpty();
     _builder.append("       ");
     _builder.append("CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, ");
@@ -185,6 +185,9 @@ public class BasicFBHeaderTemplate extends ForteFBTemplate {
     }
     _builder.append(_header);
     _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("#include \"forte_array_at.h\"");
+    _builder.newLine();
     return _builder;
   }
   

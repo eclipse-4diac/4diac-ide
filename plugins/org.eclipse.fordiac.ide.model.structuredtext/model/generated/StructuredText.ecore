@@ -9,6 +9,17 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" eType="#//StatementList"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LocalVariable" eSuperTypes="platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="array" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialValue" eType="#//Constant"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LocatedVariable" eSuperTypes="platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" eType="#//Variable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="array" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StatementList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
         eType="#//Statement" containment="true"/>
@@ -207,12 +218,6 @@
     <eLiterals name="WORD" value="32" literal="WORD"/>
     <eLiterals name="DWORD" value="33" literal="DWORD"/>
     <eLiterals name="LWORD" value="34" literal="LWORD"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LocalVariable" eSuperTypes="platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="array" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="initialValue" eType="#//Constant"
-        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SuperStatement" eSuperTypes="#//Statement"/>
   <eClassifiers xsi:type="ecore:EClass" name="ReturnStatement" eSuperTypes="#//Statement"/>

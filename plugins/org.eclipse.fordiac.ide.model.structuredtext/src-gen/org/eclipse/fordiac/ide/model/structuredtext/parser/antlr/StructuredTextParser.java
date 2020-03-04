@@ -18,14 +18,13 @@ public class StructuredTextParser extends AbstractAntlrParser {
 	protected void setInitialHiddenTokens(XtextTokenStream tokenStream) {
 		tokenStream.setInitialHiddenTokens("RULE_WS", "RULE_ML_COMMENT", "RULE_SL_COMMENT");
 	}
-	
 
 	@Override
 	protected InternalStructuredTextParser createParser(XtextTokenStream stream) {
 		return new InternalStructuredTextParser(stream, getGrammarAccess());
 	}
 
-	@Override 
+	@Override
 	protected String getDefaultRuleName() {
 		return "StructuredTextAlgorithm";
 	}

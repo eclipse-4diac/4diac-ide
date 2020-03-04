@@ -11,33 +11,29 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Statement;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Statement</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Statement</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
-public class StatementImpl extends MinimalEObjectImpl.Container implements Statement
-{
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  protected StatementImpl()
-  {
-    super();
-  }
+public class StatementImpl extends MinimalEObjectImpl.Container implements Statement {
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected StatementImpl() {
+		super();
+	}
 
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  protected EClass eStaticClass()
-  {
-    return StructuredTextPackage.Literals.STATEMENT;
-  }
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	protected EClass eStaticClass() {
+		return StructuredTextPackage.Literals.STATEMENT;
+	}
 
-} //StatementImpl
+} // StatementImpl

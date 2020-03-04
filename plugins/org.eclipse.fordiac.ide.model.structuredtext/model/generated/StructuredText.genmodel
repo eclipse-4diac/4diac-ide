@@ -78,6 +78,15 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference StructuredText.ecore#//StructuredTextAlgorithm/localVariables"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference StructuredText.ecore#//StructuredTextAlgorithm/statements"/>
     </genClasses>
+    <genClasses ecoreClass="StructuredText.ecore#//LocalVariable">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute StructuredText.ecore#//LocalVariable/constant"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute StructuredText.ecore#//LocalVariable/array"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference StructuredText.ecore#//LocalVariable/initialValue"/>
+    </genClasses>
+    <genClasses ecoreClass="StructuredText.ecore#//LocatedVariable">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference StructuredText.ecore#//LocatedVariable/location"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute StructuredText.ecore#//LocatedVariable/array"/>
+    </genClasses>
     <genClasses ecoreClass="StructuredText.ecore#//StatementList">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference StructuredText.ecore#//StatementList/statements"/>
     </genClasses>
@@ -179,11 +188,6 @@
     </genClasses>
     <genClasses ecoreClass="StructuredText.ecore#//DateLiteral">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute StructuredText.ecore#//DateLiteral/value"/>
-    </genClasses>
-    <genClasses ecoreClass="StructuredText.ecore#//LocalVariable">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute StructuredText.ecore#//LocalVariable/constant"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute StructuredText.ecore#//LocalVariable/array"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference StructuredText.ecore#//LocalVariable/initialValue"/>
     </genClasses>
     <genClasses ecoreClass="StructuredText.ecore#//SuperStatement"/>
     <genClasses ecoreClass="StructuredText.ecore#//ReturnStatement"/>

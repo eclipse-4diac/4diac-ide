@@ -143,6 +143,8 @@ EqualsSignGreaterThanSign : '=''>';
 
 GreaterThanSignEqualsSign : '>''=';
 
+AT : ('A'|'a')('T'|'t');
+
 BY : ('B'|'b')('Y'|'y');
 
 DO : ('D'|'d')('O'|'o');

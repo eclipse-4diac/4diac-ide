@@ -21,37 +21,39 @@ import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 @SuppressWarnings("all")
 public class Signed_IntValueConverter extends AbstractNullSafeConverter<Long> {
-  @Override
-  protected String internalToString(final Long value) {
-    return value.toString();
-  }
-  
-  @Override
-  protected Long internalToValue(final String string, final INode node) throws ValueConverterException {
-    Long _xblockexpression = null;
-    {
-      boolean _isNullOrEmpty = StringExtensions.isNullOrEmpty(string);
-      if (_isNullOrEmpty) {
-        throw new ValueConverterException("Couldn\'t convert empty string to a long value.", node, null);
-      }
-      final String value = string.replace("_", "");
-      boolean _isNullOrEmpty_1 = StringExtensions.isNullOrEmpty(value);
-      if (_isNullOrEmpty_1) {
-        throw new ValueConverterException((("Couldn\'t convert input \'" + string) + "\' to a long value."), node, null);
-      }
-      Long _xtrycatchfinallyexpression = null;
-      try {
-        _xtrycatchfinallyexpression = Long.valueOf(value);
-      } catch (final Throwable _t) {
-        if (_t instanceof NumberFormatException) {
-          final NumberFormatException e = (NumberFormatException)_t;
-          throw new ValueConverterException((("Couldn\'t convert \'" + string) + "\' to a long value."), node, e);
-        } else {
-          throw Exceptions.sneakyThrow(_t);
-        }
-      }
-      _xblockexpression = _xtrycatchfinallyexpression;
-    }
-    return _xblockexpression;
-  }
+	@Override
+	protected String internalToString(final Long value) {
+		return value.toString();
+	}
+
+	@Override
+	protected Long internalToValue(final String string, final INode node) throws ValueConverterException {
+		Long _xblockexpression = null;
+		{
+			boolean _isNullOrEmpty = StringExtensions.isNullOrEmpty(string);
+			if (_isNullOrEmpty) {
+				throw new ValueConverterException("Couldn\'t convert empty string to a long value.", node, null);
+			}
+			final String value = string.replace("_", "");
+			boolean _isNullOrEmpty_1 = StringExtensions.isNullOrEmpty(value);
+			if (_isNullOrEmpty_1) {
+				throw new ValueConverterException((("Couldn\'t convert input \'" + string) + "\' to a long value."),
+						node, null);
+			}
+			Long _xtrycatchfinallyexpression = null;
+			try {
+				_xtrycatchfinallyexpression = Long.valueOf(value);
+			} catch (final Throwable _t) {
+				if (_t instanceof NumberFormatException) {
+					final NumberFormatException e = (NumberFormatException) _t;
+					throw new ValueConverterException((("Couldn\'t convert \'" + string) + "\' to a long value."), node,
+							e);
+				} else {
+					throw Exceptions.sneakyThrow(_t);
+				}
+			}
+			_xblockexpression = _xtrycatchfinallyexpression;
+		}
+		return _xblockexpression;
+	}
 }

@@ -3,17 +3,14 @@
  */
 package org.eclipse.fordiac.ide.model.structuredtext.structuredText;
 
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Super Statement</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>Super
+ * Statement</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getSuperStatement()
  * @model
  * @generated
  */
-public interface SuperStatement extends Statement
-{
+public interface SuperStatement extends Statement {
 } // SuperStatement

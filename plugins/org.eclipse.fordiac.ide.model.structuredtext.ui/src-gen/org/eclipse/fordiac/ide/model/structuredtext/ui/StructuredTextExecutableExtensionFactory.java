@@ -11,7 +11,7 @@ import org.osgi.framework.Bundle;
 
 /**
  * This class was generated. Customizations should only happen in a newly
- * introduced subclass. 
+ * introduced subclass.
  */
 public class StructuredTextExecutableExtensionFactory extends AbstractGuiceAwareExecutableExtensionFactory {
 
@@ -19,11 +19,14 @@ public class StructuredTextExecutableExtensionFactory extends AbstractGuiceAware
 	protected Bundle getBundle() {
 		return Platform.getBundle(StructuredtextActivator.PLUGIN_ID);
 	}
-	
+
 	@Override
 	protected Injector getInjector() {
 		StructuredtextActivator activator = StructuredtextActivator.getInstance();
-		return activator != null ? activator.getInjector(StructuredtextActivator.ORG_ECLIPSE_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_STRUCTUREDTEXT) : null;
+		return activator != null
+				? activator.getInjector(
+						StructuredtextActivator.ORG_ECLIPSE_FORDIAC_IDE_MODEL_STRUCTUREDTEXT_STRUCTUREDTEXT)
+				: null;
 	}
 
 }

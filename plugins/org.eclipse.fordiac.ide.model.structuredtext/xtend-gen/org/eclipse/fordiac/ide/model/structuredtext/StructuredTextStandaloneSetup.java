@@ -6,12 +6,12 @@ package org.eclipse.fordiac.ide.model.structuredtext;
 import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetupGenerated;
 
 /**
- * Initialization support for running Xtext languages
- * without equinox extension registry
+ * Initialization support for running Xtext languages without equinox extension
+ * registry
  */
 @SuppressWarnings("all")
 public class StructuredTextStandaloneSetup extends StructuredTextStandaloneSetupGenerated {
-  public static void doSetup() {
-    new StructuredTextStandaloneSetup().createInjectorAndDoEMFRegistration();
-  }
+	public static void doSetup() {
+		new StructuredTextStandaloneSetup().createInjectorAndDoEMFRegistration();
+	}
 }

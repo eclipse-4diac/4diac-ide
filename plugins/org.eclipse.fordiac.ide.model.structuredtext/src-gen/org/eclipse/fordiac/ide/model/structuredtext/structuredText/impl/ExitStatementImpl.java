@@ -9,33 +9,29 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.ExitStatement
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Exit Statement</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Exit
+ * Statement</b></em>'. <!-- end-user-doc -->
  *
  * @generated
  */
-public class ExitStatementImpl extends StatementImpl implements ExitStatement
-{
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  protected ExitStatementImpl()
-  {
-    super();
-  }
+public class ExitStatementImpl extends StatementImpl implements ExitStatement {
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected ExitStatementImpl() {
+		super();
+	}
 
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  protected EClass eStaticClass()
-  {
-    return StructuredTextPackage.Literals.EXIT_STATEMENT;
-  }
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	protected EClass eStaticClass() {
+		return StructuredTextPackage.Literals.EXIT_STATEMENT;
+	}
 
-} //ExitStatementImpl
+} // ExitStatementImpl

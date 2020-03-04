@@ -38,41 +38,43 @@ import org.eclipse.xtext.serializer.impl.Serializer;
  */
 @SuppressWarnings("all")
 public class StructuredTextRuntimeModule extends AbstractStructuredTextRuntimeModule {
-  @Override
-  public Class<? extends XtextResource> bindXtextResource() {
-    return StructuredTextResource.class;
-  }
-  
-  @Override
-  public Class<? extends ISerializer> bindISerializer() {
-    return Serializer.class;
-  }
-  
-  @Override
-  public Class<? extends IContainer.Manager> bindIContainer$Manager() {
-    return SimpleResourceDescriptionsBasedContainerManager.class;
-  }
-  
-  @Override
-  public Class<? extends IValueConverterService> bindIValueConverterService() {
-    return StructuredTextValueConverterService.class;
-  }
-  
-  @Override
-  public Class<? extends IScopeProvider> bindIScopeProvider() {
-    return StructuredTextScopeProvider.class;
-  }
-  
-  @Override
-  public Class<? extends IGlobalScopeProvider> bindIGlobalScopeProvider() {
-    return DefaultGlobalScopeProvider.class;
-  }
-  
-  public void configureIScopeProviderDelegate(final Binder binder) {
-    binder.<IScopeProvider>bind(IScopeProvider.class).annotatedWith(Names.named(AbstractDeclarativeScopeProvider.NAMED_DELEGATE)).to(SimpleLocalScopeProvider.class);
-  }
-  
-  public void configureIgnoreCaseLinking(final Binder binder) {
-    binder.bindConstant().annotatedWith(IgnoreCaseLinking.class).to(true);
-  }
+	@Override
+	public Class<? extends XtextResource> bindXtextResource() {
+		return StructuredTextResource.class;
+	}
+
+	@Override
+	public Class<? extends ISerializer> bindISerializer() {
+		return Serializer.class;
+	}
+
+	@Override
+	public Class<? extends IContainer.Manager> bindIContainer$Manager() {
+		return SimpleResourceDescriptionsBasedContainerManager.class;
+	}
+
+	@Override
+	public Class<? extends IValueConverterService> bindIValueConverterService() {
+		return StructuredTextValueConverterService.class;
+	}
+
+	@Override
+	public Class<? extends IScopeProvider> bindIScopeProvider() {
+		return StructuredTextScopeProvider.class;
+	}
+
+	@Override
+	public Class<? extends IGlobalScopeProvider> bindIGlobalScopeProvider() {
+		return DefaultGlobalScopeProvider.class;
+	}
+
+	public void configureIScopeProviderDelegate(final Binder binder) {
+		binder.<IScopeProvider>bind(IScopeProvider.class)
+				.annotatedWith(Names.named(AbstractDeclarativeScopeProvider.NAMED_DELEGATE))
+				.to(SimpleLocalScopeProvider.class);
+	}
+
+	public void configureIgnoreCaseLinking(final Binder binder) {
+		binder.bindConstant().annotatedWith(IgnoreCaseLinking.class).to(true);
+	}
 }
