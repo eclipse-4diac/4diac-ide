@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +16,7 @@
  *   			 - separated FBNetworkElement from instance name for better
  *                 direct editing of instance names
  *               - extracted common FB shape for interface and fbn editors
+ *   Bianca Wiesmayr - edited appearance of FBs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
@@ -45,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
@@ -200,7 +202,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	private void createFBBottom(Figure fbFigureContainer, int cornerDim, Color borderColor,
 			final ZoomManager zoomManager) {
 		bottom = new AdvancedRoundedRectangle(PositionConstants.SOUTH | PositionConstants.EAST | PositionConstants.WEST,
-				zoomManager, this, true, borderColor);
+				zoomManager, this, false, borderColor);
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 		GridLayout bottomLayout = new GridLayout(2, false);
 		bottomLayout.marginHeight = 4;
@@ -237,7 +239,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	private void createFBTop(Figure fbFigureContainer, int cornerDim, Color borderColor,
 			final ZoomManager zoomManager) {
 		top = new AdvancedRoundedRectangle(PositionConstants.NORTH | PositionConstants.EAST | PositionConstants.WEST,
-				zoomManager, this, true, borderColor);
+				zoomManager, this, false, borderColor);
 		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 
 		GridLayout topLayout = new GridLayout(2, false);
@@ -325,7 +327,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 
 	protected void setupTypeNameAndVersion(final FBType type, Figure container, Color borderColor,
 			final ZoomManager zoomManager) {
-		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, zoomManager, this, true,
+		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, zoomManager, this, false,
 				borderColor);
 
 		container.add(middle, BorderLayout.CENTER);
@@ -344,7 +346,22 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		typeLabel.setOpaque(false);
 		middle.add(typeLabel);
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
+	}
 
+	@Override
+	public void setBackgroundColor(Color bg) {
+		// set border color
+		super.setBackgroundColor(bg);
+		if (bg == null) {
+			((AdvancedRoundedRectangle) top).setBorderColor(getLocalForegroundColor());
+			middle.setBorderColor(getLocalForegroundColor());
+			bottom.setBorderColor(getLocalForegroundColor());
+		} else {
+			Color darkerColor = ColorHelper.darker(bg);
+			((AdvancedRoundedRectangle) top).setBorderColor(darkerColor);
+			middle.setBorderColor(darkerColor);
+			bottom.setBorderColor(darkerColor);
+		}
 	}
 
 	private static Color getBorderColor(LibraryElement type) {

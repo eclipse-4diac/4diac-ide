@@ -61,7 +61,7 @@ public class DeviceCreateCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return entry != null && bounds != null && (parent != null);
+		return (entry != null) && (bounds != null) && (parent != null);
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public class DeviceCreateCommand extends Command {
 
 	private void setDeviceProfile() {
 		String profile;
-		if (null != device.getType().getProfile() && !"".equals(device.getType().getProfile())) { //$NON-NLS-1$
+		if ((null != device.getType().getProfile()) && !"".equals(device.getType().getProfile())) { //$NON-NLS-1$
 			profile = device.getType().getProfile();
 		} else {
 			profile = UIPlugin.getDefault().getPreferenceStore()
@@ -142,7 +142,7 @@ public class DeviceCreateCommand extends Command {
 
 	private ResourceTypeEntry getResourceType(String resTypeName) {
 		List<PaletteEntry> typeEntries = device.getPaletteEntry().getGroup().getPallete().getTypeEntries(resTypeName);
-		if (!typeEntries.isEmpty() && typeEntries.get(0) instanceof ResourceTypeEntry) {
+		if (!typeEntries.isEmpty() && (typeEntries.get(0) instanceof ResourceTypeEntry)) {
 			return (ResourceTypeEntry) typeEntries.get(0);
 		}
 		return null;
@@ -155,6 +155,9 @@ public class DeviceCreateCommand extends Command {
 		for (Device dev : parent.getDevices()) {
 			Color devcolor = dev.getColor();
 			existingColors.add(new YUV(new RGB(devcolor.getRed(), devcolor.getGreen(), devcolor.getBlue())));
+		}
+		if (existingColors.isEmpty()) {
+			return ColorHelper.getStartingColor();
 		}
 		do {
 			randomColor = ColorHelper.createRandomColor();

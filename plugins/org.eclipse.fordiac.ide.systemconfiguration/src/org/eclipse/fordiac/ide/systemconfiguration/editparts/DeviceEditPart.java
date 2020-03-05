@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.ChopboxAnchor;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
@@ -66,8 +65,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Pattern;
-import org.eclipse.swt.widgets.Display;
 
 public class DeviceEditPart extends AbstractPositionableElementEditPart implements NodeEditPart {
 	/** necessary that the gradient pattern can be scaled accordingly */
@@ -208,7 +205,6 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			getModel().setColor(fordiacColor);
 		}
 		setColor(figure, fordiacColor);
-
 	}
 
 	private final class DeviceConnectionAnchor extends ChopboxAnchor {
@@ -231,10 +227,15 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	private class DeviceFigure extends Shape implements InteractionStyleFigure, IFontUpdateListener {
+		private static final boolean DEVICE_HAS_OUTER_BORDER = false;
+
 		private final Label instanceNameLabel = new Label();
 		private Label typeLabel;
 		private Figure dataInputs = new Figure();
 		private Figure contentPane;
+		private Color deviceColor;
+		private AdvancedLineBorder upperSeparator;
+		private AdvancedLineBorder lowerSeparator;
 
 		@Override
 		public int getIntersectionStyle(Point location) {
@@ -244,51 +245,48 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			return InteractionStyleFigure.REGION_CONNECTION; // connection
 		}
 
-		private RoundedRectangle bottom = new RoundedRectangle() {
+		private RoundedRectangle deviceRectangle = new RoundedRectangle() {
 			@Override
 			protected void fillShape(Graphics graphics) {
-				Display display = Display.getCurrent();
 				Rectangle boundingRect = getBounds().getCopy();
 				boundingRect.scale(zoomManager.getZoom());
-				Point topLeft = boundingRect.getTopLeft();
-				Point bottomRight = boundingRect.getBottomRight();
-				Color first = ColorHelper.lighter(getBackgroundColor());
-				Pattern pattern = new Pattern(display, topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, first,
-						getBackgroundColor());
-				graphics.setBackgroundPattern(pattern);
 				graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
-				graphics.setBackgroundPattern(null);
-				pattern.dispose();
-				first.dispose();
+			}
+
+			@Override
+			protected void outlineShape(Graphics graphics) {
+				Color color = graphics.getForegroundColor();
+				graphics.setForegroundColor(deviceColor);
+				super.outlineShape(graphics);
+				graphics.setForegroundColor(color);
 			}
 		};
 
 		public DeviceFigure() {
-			setBackgroundColor(ColorConstants.white);
-			this.setFillXOR(true);
-
 			setLayoutManager(new ToolbarLayout());
-
 			createInstanceNameLabel(this);
 
 			IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
 			int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
-			bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
+			deviceRectangle.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 			ToolbarLayout bottomLayout = new ToolbarLayout();
 			bottomLayout.setStretchMinorAxis(true);
-			bottom.setLayoutManager(bottomLayout);
-			bottom.setOutline(false);
-			add(bottom);
+			deviceRectangle.setLayoutManager(bottomLayout);
+			deviceRectangle.setOutline(DEVICE_HAS_OUTER_BORDER);
+			add(deviceRectangle);
 
-			createDeviceInfoSection(bottom);
+			createDeviceInfoSection(deviceRectangle);
 
 			ToolbarLayout bottomInputsLayout = new ToolbarLayout(false);
 			bottomInputsLayout.setStretchMinorAxis(true);
+
 			dataInputs.setLayoutManager(bottomInputsLayout);
 			dataInputs.setOpaque(false);
-			dataInputs.setBorder(new AdvancedLineBorder(PositionConstants.SOUTH));
-			bottom.add(dataInputs);
-			createContentPane(bottom);
+			lowerSeparator = new AdvancedLineBorder(PositionConstants.SOUTH);
+			dataInputs.setBorder(lowerSeparator);
+			deviceRectangle.add(dataInputs);
+
+			createContentPane(deviceRectangle);
 			setInstanceAndTypeLabelFonts();
 		}
 
@@ -296,6 +294,14 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			instanceNameLabel.setText(getINamedElement().getName());
 			instanceNameLabel.setTextAlignment(PositionConstants.CENTER);
 			parent.add(instanceNameLabel);
+		}
+
+		@Override
+		public void setBackgroundColor(Color bg) {
+			deviceColor = ColorHelper.darker(bg);
+			upperSeparator.setColor(deviceColor);
+			lowerSeparator.setColor(deviceColor);
+			super.setBackgroundColor(bg);
 		}
 
 		private void createDeviceInfoSection(Figure parent) {
@@ -312,8 +318,8 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			typeLabel.setBorder(new MarginBorder(0, 0, 10, 0));
 
 			parent.add(deviceInfo);
-
-			deviceInfo.setBorder(new AdvancedLineBorder(PositionConstants.SOUTH));
+			upperSeparator = new AdvancedLineBorder(PositionConstants.SOUTH);
+			deviceInfo.setBorder(upperSeparator);
 		}
 
 		private void createContentPane(RoundedRectangle container) {
@@ -327,7 +333,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		}
 
 		public Figure getConnectionReferenceFigure() {
-			return bottom;
+			return deviceRectangle;
 		}
 
 		@Override
