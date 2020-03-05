@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteCompilerCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -170,18 +171,18 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	}
 
 	private void createCompilerInfoGroup(Composite parent) {
-		Group compilerInfoGroup = getWidgetFactory().createGroup(parent, "Compiler Info");
+		Group compilerInfoGroup = getWidgetFactory().createGroup(parent, FordiacMessages.CompilerInfo);
 		compilerInfoGroup.setLayout(new GridLayout(1, false));
 		compilerInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
 		Composite composite = getWidgetFactory().createComposite(compilerInfoGroup, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false));
-		getWidgetFactory().createCLabel(composite, "Header:");
+		getWidgetFactory().createCLabel(composite, FordiacMessages.Header + ":"); //$NON-NLS-1$
 		headerText = createGroupText(composite, true);
 		headerText.addModifyListener(
 				e -> executeCommand(new ChangeCompilerInfoHeaderCommand((FBType) type, headerText.getText())));
-		getWidgetFactory().createCLabel(composite, "Classdef:");
+		getWidgetFactory().createCLabel(composite, FordiacMessages.Classdef + ":"); //$NON-NLS-1$
 		classdefText = createGroupText(composite, true);
 		classdefText.addModifyListener(
 				e -> executeCommand(new ChangeCompilerInfoClassdefCommand((FBType) type, classdefText.getText())));
@@ -211,13 +212,13 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 
 	private static void configureTableLayout(final Table table) {
 		TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText("Language");
+		column1.setText(FordiacMessages.Language);
 		TableColumn column2 = new TableColumn(table, SWT.LEFT);
-		column2.setText("Vendor");
+		column2.setText(FordiacMessages.Vendor);
 		TableColumn column3 = new TableColumn(table, SWT.LEFT);
-		column3.setText("Product");
+		column3.setText(FordiacMessages.Product);
 		TableColumn column4 = new TableColumn(table, SWT.LEFT);
-		column4.setText("Version");
+		column4.setText(FordiacMessages.Version);
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnWeightData(25, 80));
 		layout.addColumnData(new ColumnWeightData(25, 100));

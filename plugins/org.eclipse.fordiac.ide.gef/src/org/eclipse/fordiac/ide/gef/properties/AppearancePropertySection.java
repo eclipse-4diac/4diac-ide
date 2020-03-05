@@ -140,7 +140,7 @@ public class AppearancePropertySection extends AbstractPropertySection {
 					// new one, and set into the label
 					Command cmd;
 					if (selectedViews.size() > 0) {
-						cmd = new CompoundCommand("Change Background Color");
+						cmd = new CompoundCommand(Messages.AppearancePropertySection_ChangeBackgroundColor);
 						for (ColorizableElement colorizableElement : selectedViews) {
 							ChangeBackgroundcolorCommand tmp = new ChangeBackgroundcolorCommand(colorizableElement,
 									rgb);

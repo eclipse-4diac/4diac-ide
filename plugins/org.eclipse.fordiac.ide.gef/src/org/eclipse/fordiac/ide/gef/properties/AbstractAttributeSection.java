@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.AttributeChangeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AttributeCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.AttributeDeleteCommand;
@@ -86,7 +87,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
 		attributeNew = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
-		attributeNew.setToolTipText("create attribute");
+		attributeNew.setToolTipText(Messages.AbstractAttributeSection_CreateAttribute);
 		attributeNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		attributeNew.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -98,7 +99,7 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 			}
 		});
 		attributeDelete = getWidgetFactory().createButton(composite, "", SWT.PUSH); //$NON-NLS-1$
-		attributeDelete.setToolTipText("delete selected attribute");
+		attributeDelete.setToolTipText(Messages.AbstractAttributeSection_DeleteSelectedAttribute);
 		attributeDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
 		attributeDelete.addSelectionListener(new SelectionAdapter() {
 			@Override

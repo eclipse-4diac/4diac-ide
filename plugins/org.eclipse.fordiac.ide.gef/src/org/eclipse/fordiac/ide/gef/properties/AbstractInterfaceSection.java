@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -94,14 +95,14 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 		Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(4, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Instance Name:");
+		getWidgetFactory().createCLabel(composite, FordiacMessages.InstanceName + ":"); //$NON-NLS-1$
 		nameText = createGroupText(composite, true);
 		nameText.addModifyListener(event -> {
 			removeContentAdapter();
 			executeCommand(getRenameCommand(nameText.getText()));
 			addContentAdapter();
 		});
-		getWidgetFactory().createCLabel(composite, "Instance Comment:");
+		getWidgetFactory().createCLabel(composite, FordiacMessages.InstanceComment + ":"); //$NON-NLS-1$
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(event -> {
 			removeContentAdapter();
@@ -111,7 +112,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 	}
 
 	private void createInputInfoGroup(Composite parent) {
-		Group inputGroup = getWidgetFactory().createGroup(parent, "Inputs");
+		Group inputGroup = getWidgetFactory().createGroup(parent, FordiacMessages.Inputs);
 		inputGroup.setLayout(new GridLayout(1, false));
 		inputGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 

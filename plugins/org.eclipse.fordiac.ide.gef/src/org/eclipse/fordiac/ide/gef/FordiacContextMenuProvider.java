@@ -31,7 +31,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
  */
 public class FordiacContextMenuProvider extends ContextMenuProvider {
 
-	public static final String GROUP_NAVIGATE = "org.fordiac.ide.group.navigate";
+	public static final String GROUP_NAVIGATE = "org.fordiac.ide.group.navigate"; //$NON-NLS-1$
 
 	private final ZoomManager zoomManager;
 	private final ActionRegistry registry;
@@ -74,7 +74,7 @@ public class FordiacContextMenuProvider extends ContextMenuProvider {
 	}
 
 	private MenuManager createAlignSubmenu() {
-		MenuManager submenu = new MenuManager("&Align");
+		MenuManager submenu = new MenuManager(Messages.FordiacContextMenuProvider_Align);
 
 		IAction action;
 		action = registry.getAction(GEFActionConstants.ALIGN_LEFT);

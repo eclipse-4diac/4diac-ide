@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 /**
  * The Class ToolTipFigure.
@@ -46,7 +47,7 @@ public class ToolTipFigure extends Figure {
 		String nameLine = element.getName();
 
 		if ((element instanceof VarDeclaration) && (((VarDeclaration) element).getType() != null)) {
-			nameLine += " - " + ((VarDeclaration) element).getType().getName();
+			nameLine += " - " + ((VarDeclaration) element).getType().getName(); //$NON-NLS-1$
 		}
 
 		add(new Label(nameLine));
@@ -73,18 +74,18 @@ public class ToolTipFigure extends Figure {
 		List<With> withs = element.getWith();
 		if (!withs.isEmpty()) {
 			boolean first = true;
-			StringBuilder withText = new StringBuilder("With: [");
+			StringBuilder withText = new StringBuilder(FordiacMessages.With + ": ["); //$NON-NLS-1$
 			for (With with : withs) {
 				if (first) {
 					first = false;
 				} else {
-					withText.append(", ");
+					withText.append(", "); //$NON-NLS-1$
 				}
 				if (with != null && with.getVariables() != null) {
 					withText.append(with.getVariables().getName());
 				}
 			}
-			withText.append("]");
+			withText.append("]"); //$NON-NLS-1$
 			line.add(new Label(withText.toString()));
 		}
 
@@ -93,7 +94,7 @@ public class ToolTipFigure extends Figure {
 	private void addVarDefaultValue(VarDeclaration var) {
 		VarDeclaration typeVar = getTypevariable(var);
 		if (null != typeVar && null != typeVar.getValue()) {
-			String initvalue = "Inital value: ";
+			String initvalue = FordiacMessages.InitialValue + ": "; //$NON-NLS-1$
 			if (null != typeVar.getValue().getValue() && !typeVar.getValue().getValue().isEmpty()) {
 				initvalue += var.getValue().getValue();
 			}

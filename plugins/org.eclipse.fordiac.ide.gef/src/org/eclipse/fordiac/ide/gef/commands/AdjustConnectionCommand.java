@@ -20,6 +20,7 @@ import java.text.MessageFormat;
 import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.Activator;
+import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.gef.commands.Command;
 
@@ -64,8 +65,8 @@ public class AdjustConnectionCommand extends Command {
 			modelConnection.setDx2((int) Math.floor(newDx2 / zoom));
 			break;
 		default:
-			Activator.getDefault().logError(MessageFormat
-					.format("Wrong connection segment index ({0}) provided to AdjustConnectionCommand!", index));
+			Activator.getDefault().logError(
+					MessageFormat.format(Messages.AdjustConnectionCommand_WrongConnectionSegmentIndex, index));
 			break;
 		}
 		connection.revalidate();

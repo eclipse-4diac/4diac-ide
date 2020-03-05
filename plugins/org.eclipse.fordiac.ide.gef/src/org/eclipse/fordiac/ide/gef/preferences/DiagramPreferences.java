@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.gef.Activator;
+import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.router.IConnectionRouterFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
@@ -68,7 +69,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	public DiagramPreferences() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("General Diagram Preferences");
+		setDescription(Messages.DiagramPreferences_GeneralDiagramPreferences);
 	}
 
 	/*
@@ -82,7 +83,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to hold the ruler fields
 		Group group = new Group(getFieldEditorParent(), SWT.NONE);
-		group.setText("Ruler and Grid");
+		group.setText(Messages.DiagramPreferences_FieldEditors_RulerAndGrid);
 
 		GridLayout gridLayout = new GridLayout(2, false);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -90,16 +91,20 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		gridData.horizontalSpan = 2;
 
 		// Add the fields to the group
-		BooleanFieldEditor showRulers = new BooleanFieldEditor(SHOW_RULERS, "Show Ruler", group);
+		BooleanFieldEditor showRulers = new BooleanFieldEditor(SHOW_RULERS,
+				Messages.DiagramPreferences_FieldEditors_ShowRuler, group);
 		addField(showRulers);
 
-		BooleanFieldEditor showGrid = new BooleanFieldEditor(SHOW_GRID, "Show Grid", group);
+		BooleanFieldEditor showGrid = new BooleanFieldEditor(SHOW_GRID,
+				Messages.DiagramPreferences_FieldEditors_ShowGrid, group);
 		addField(showGrid);
 
-		BooleanFieldEditor snapToGrid = new BooleanFieldEditor(SNAP_TO_GRID, "Snap to Grid", group);
+		BooleanFieldEditor snapToGrid = new BooleanFieldEditor(SNAP_TO_GRID,
+				Messages.DiagramPreferences_FieldEditors_SnapToGrid, group);
 		addField(snapToGrid);
 
-		IntegerFieldEditor gridSpacing = new IntegerFieldEditor(GRID_SPACING, "Grid spacing in pixels", group);
+		IntegerFieldEditor gridSpacing = new IntegerFieldEditor(GRID_SPACING,
+				Messages.DiagramPreferences_FieldEditors_GridSpacingInPixels, group);
 		gridSpacing.setTextLimit(10);
 		addField(gridSpacing);
 
@@ -108,7 +113,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to hold the connection router fields
 		Group router = new Group(getFieldEditorParent(), SWT.NONE);
-		router.setText("Connection Router");
+		router.setText(Messages.DiagramPreferences_ConnectionRouter);
 		GridLayout routerLayout = new GridLayout(2, false);
 
 		Map<String, IConnectionRouterFactory> connectionRouter = new HashMap<>();
@@ -139,7 +144,8 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 			i++;
 		}
 
-		ComboFieldEditor routerEditor = new ComboFieldEditor(CONNECTION_ROUTER, "Default Router", nameArray, router);
+		ComboFieldEditor routerEditor = new ComboFieldEditor(CONNECTION_ROUTER,
+				Messages.DiagramPreferences_DefaultRouter, nameArray, router);
 		addField(routerEditor);
 
 		GridData routerData = new GridData(GridData.FILL_HORIZONTAL);
@@ -151,10 +157,11 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to hold the connection router fields
 		Group color = new Group(getFieldEditorParent(), SWT.NONE);
-		color.setText("Colors");
+		color.setText(Messages.DiagramPreferences_Colors);
 		GridLayout colorLayout = new GridLayout(2, false);
 
-		ColorFieldEditor selectionBorderColor = new ColorFieldEditor(SELECTION_COLOR, "Selection Color", color);
+		ColorFieldEditor selectionBorderColor = new ColorFieldEditor(SELECTION_COLOR,
+				Messages.DiagramPreferences_SelectionColor, color);
 
 		addField(selectionBorderColor);
 		color.setLayout(colorLayout);
@@ -162,10 +169,11 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to specify the arc of the figure edges
 		Group arc = new Group(getFieldEditorParent(), SWT.NONE);
-		arc.setText("FB");
+		arc.setText(Messages.DiagramPreferences_FB);
 		GridLayout arcLayout = new GridLayout(2, false);
 
-		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(CORNER_DIM, "Corner Dimension", arc);
+		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(CORNER_DIM,
+				Messages.DiagramPreferences_CornerDimension, arc);
 		integerFieldEditor.setValidRange(0, 15);
 		addField(integerFieldEditor);
 
@@ -176,8 +184,8 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	}
 
 	private void createMaxValueSizeField(Composite parent) {
-		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(MAX_VALUE_LABEL_SIZE, "Maximum Value Label Size",
-				parent);
+		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(MAX_VALUE_LABEL_SIZE,
+				Messages.DiagramPreferences_MaximumValueLabelSize, parent);
 		integerFieldEditor.setValidRange(0, 120);
 		addField(integerFieldEditor);
 	}

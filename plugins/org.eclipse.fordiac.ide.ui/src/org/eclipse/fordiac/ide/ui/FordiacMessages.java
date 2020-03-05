@@ -28,18 +28,41 @@ public class FordiacMessages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.ui.messages"; //$NON-NLS-1$
 
 	public static String Algorithm;
+	public static String ApplicationDomain;
 	public static String ArraySize;
+	public static String Author;
+	public static String Classdef;
+	public static String Classification;
 	public static String Comment;
+	public static String CompilerInfo;
+	public static String Date;
 	public static String DataType;
+	public static String Description;
 	public static String Destination;
 	public static String Device;
 	public static String Event;
-	public static String Name;
+	public static String Function;
+	public static String Header;
+	public static String Identification;
 	public static String InitialValue;
+	public static String Inputs;
+	public static String InstanceComment;
+	public static String InstanceName;
 	public static String Interface;
+	public static String Language;
+	public static String Name;
+	public static String Organization;
+	public static String Product;
+	public static String Remarks;
 	public static String Resource;
+	public static String Standard;
 	public static String Type;
+	public static String TypeName;
+	public static String Value;
 	public static String Variable;
+	public static String Vendor;
+	public static String Version;
+	public static String VersionInfo;
 	public static String With;
 
 	public static String DirectoryChooserControl_LABEL_Browse;

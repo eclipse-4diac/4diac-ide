@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
@@ -286,7 +287,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 					result = ((IInterfaceElement) element).getName();
 					break;
 				case 1:
-					result = element instanceof Event ? "Event" : ((IInterfaceElement) element).getTypeName();
+					result = element instanceof Event ? FordiacMessages.Event
+							: ((IInterfaceElement) element).getTypeName();
 					break;
 				case 2:
 					result = ((IInterfaceElement) element).getComment() != null
