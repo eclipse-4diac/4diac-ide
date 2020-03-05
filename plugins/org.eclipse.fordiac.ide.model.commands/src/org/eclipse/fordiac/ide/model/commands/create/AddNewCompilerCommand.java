@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
 /**
@@ -51,8 +52,8 @@ public class AddNewCompilerCommand extends AbstractCreationCommand {
 		compiler = LibraryElementFactory.eINSTANCE.createCompiler();
 		compiler.setLanguage(Language.OTHER);
 		compiler.setVersion("1.0"); //$NON-NLS-1$
-		compiler.setVendor("Unknown");
-		compiler.setProduct("Unknown");
+		compiler.setVendor(FordiacMessages.Unknown);
+		compiler.setProduct(FordiacMessages.Unknown);
 
 		redo();
 	}

@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 /**
  * The Class LinkConstraints.
@@ -116,8 +117,8 @@ public final class LinkConstraints {
 			if (!typeCheck(source, target)) {
 				Abstract4DIACUIPlugin.statusLineErrorMessage(
 						MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
-								(null != source.getType()) ? source.getType().getName() : "N/A",
-								(null != target.getType()) ? target.getType().getName() : "N/A"));
+								(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
+								(null != target.getType()) ? target.getType().getName() : FordiacMessages.NA));
 				return false;
 			}
 
@@ -150,8 +151,8 @@ public final class LinkConstraints {
 				}
 			}
 
-			Abstract4DIACUIPlugin.statusLineErrorMessage(
-					MessageFormat.format("{0} is not connected to an Event by a With-Construct", varDecl.getName()));
+			Abstract4DIACUIPlugin.statusLineErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct, varDecl.getName()));
 			return false;
 		}
 		Abstract4DIACUIPlugin.statusLineErrorMessage(null);
@@ -384,8 +385,8 @@ public final class LinkConstraints {
 			if (!adapaterTypeCompatibilityCheck(source, target)) {
 				Abstract4DIACUIPlugin.statusLineErrorMessage(
 						MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
-								(null != source.getType()) ? source.getType().getName() : "N/D",
-								(null != target.getType()) ? target.getType().getName() : "N/D"));
+								(null != source.getType()) ? source.getType().getName() : FordiacMessages.ND,
+								(null != target.getType()) ? target.getType().getName() : FordiacMessages.ND));
 				return false;
 			}
 
@@ -561,7 +562,7 @@ public final class LinkConstraints {
 	}
 
 	private LinkConstraints() {
-		throw new UnsupportedOperationException("Class Linconstraints should not be created!");
+		throw new UnsupportedOperationException(Messages.LinkConstraints_ClassLinconstraintsShouldNotBeCreated);
 	}
 
 }

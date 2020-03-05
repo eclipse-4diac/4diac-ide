@@ -53,7 +53,6 @@ public class Messages extends NLS {
 	public static String DiagramPreferences_FieldEditors_SnapToGrid;
 	public static String DiagramPreferences_SelectionColor;
 	public static String FBFigure_TYPE_NOT_SET;
-	public static String FBFigure_NOT_DEFINED_Text;
 	public static String FordiacContextMenuProvider_Align;
 	public static String PropertyUtil_LABEL_Description_Complianceprofile;
 	public static String PropertyUtil_LABEL_Instancecomment;

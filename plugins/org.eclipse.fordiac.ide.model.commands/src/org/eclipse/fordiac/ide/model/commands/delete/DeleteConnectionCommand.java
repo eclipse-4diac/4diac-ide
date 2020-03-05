@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
+import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -30,7 +31,7 @@ public class DeleteConnectionCommand extends Command {
 	private DeleteConnectionCommand deleteMapped = null;
 
 	public DeleteConnectionCommand(final Connection connection) {
-		super("Delete Connection");
+		super(Messages.DeleteConnectionCommand_DeleteConnection);
 		this.connection = connection;
 		if (this.connection.eContainer() instanceof FBNetwork) {
 			connectionParent = (FBNetwork) this.connection.eContainer();

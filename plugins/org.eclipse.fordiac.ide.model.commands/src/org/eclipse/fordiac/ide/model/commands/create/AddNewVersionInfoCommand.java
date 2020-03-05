@@ -22,6 +22,7 @@ import java.util.Date;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
 /**
@@ -58,8 +59,8 @@ public class AddNewVersionInfoCommand extends AbstractCreationCommand {
 	public void execute() {
 		info = LibraryElementFactory.eINSTANCE.createVersionInfo();
 		info.setDate(format.format(new Date(System.currentTimeMillis())));
-		info.setAuthor("Unknown");
-		info.setOrganization("Unknown");
+		info.setAuthor(FordiacMessages.Unknown);
+		info.setOrganization(FordiacMessages.Unknown);
 		info.setVersion("1.0"); //$NON-NLS-1$
 		info.setRemarks(""); //$NON-NLS-1$
 		redo();

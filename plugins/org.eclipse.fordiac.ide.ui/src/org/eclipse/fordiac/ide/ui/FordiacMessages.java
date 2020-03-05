@@ -50,6 +50,8 @@ public class FordiacMessages extends NLS {
 	public static String InstanceName;
 	public static String Interface;
 	public static String Language;
+	public static String NA;
+	public static String ND;
 	public static String Name;
 	public static String Organization;
 	public static String Product;
@@ -58,6 +60,8 @@ public class FordiacMessages extends NLS {
 	public static String Standard;
 	public static String Type;
 	public static String TypeName;
+	public static String Unmap;
+	public static String Unknown;
 	public static String Value;
 	public static String Variable;
 	public static String Vendor;

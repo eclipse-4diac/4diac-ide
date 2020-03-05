@@ -27,7 +27,6 @@ public class Messages extends NLS {
 	public static String FBTypeEditor_CheckTypeSaveAble;
 	public static String FBTypeEditor_CompositeContainsFunctionBlockWithoutType;
 	public static String FBTypeEditor_TypeFileDoesnotExist;
-	public static String FBTypeFigure_ND;
 	public static String InterfaceContextMenuProvider_CreateDataInput;
 	public static String InterfaceContextMenuProvider_CreateDataOutput;
 	public static String InterfaceContextMenuProvider_CreatePlug;

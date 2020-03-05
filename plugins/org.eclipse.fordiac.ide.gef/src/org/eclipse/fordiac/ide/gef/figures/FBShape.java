@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -338,7 +339,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 
 		String typeName = (null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET;
 
-		typeLabel = new UnderlineAlphaLabel(null != typeName ? typeName : Messages.FBFigure_NOT_DEFINED_Text);
+		typeLabel = new UnderlineAlphaLabel(null != typeName ? typeName : FordiacMessages.ND);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
 		typeLabel.setOpaque(false);
 		middle.add(typeLabel);

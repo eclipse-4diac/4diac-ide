@@ -36,7 +36,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 	private CompoundCommand cmds = new CompoundCommand();
 
 	public DeleteFBNetworkElementCommand(final FBNetworkElement element) {
-		super("Delete FB or Subapplication");
+		super(Messages.DeleteFBNetworkElementCommand_DeleteFBOrSubapplication);
 		this.element = element;
 	}
 
