@@ -20,6 +20,8 @@ package org.eclipse.fordiac.ide.model.dataexport;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -342,6 +344,42 @@ abstract class CommonElementExporter {
 		addNameAttribute(namedElement.getName());
 		addTypeAttribute(type);
 		addCommentAttribute(namedElement);
+	}
+
+	/**
+	 * Writhe an XML attribute directly to the output stream
+	 *
+	 * @param attributeName  the name of the attribute
+	 * @param attributeValue the value of the attribute
+	 * @throws XMLStreamException
+	 */
+	protected void writeAttributeRaw(String attributeName, String attributeValue) throws XMLStreamException {
+		try (Writer osWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
+			osWriter.write(" "); //$NON-NLS-1$
+			osWriter.write(attributeName);
+			osWriter.write("=\""); //$NON-NLS-1$
+			osWriter.write(attributeValue);
+			osWriter.write("\" "); //$NON-NLS-1$
+		} catch (IOException e) {
+			throw new XMLStreamException("Could not write raw attribute", e);
+		}
+	}
+
+	/**
+	 * Take the given string and escape all &, <, >, ", newlines, and tabs with the
+	 * according XML escaped characters.
+	 *
+	 * @param value the string to escape
+	 * @return the escaped string
+	 */
+	protected static String fullyEscapeValue(String value) {
+		String escapedValue = value.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("\n", "&#10;"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("\t", "&#9;"); //$NON-NLS-1$ //$NON-NLS-2$
+		return escapedValue;
 	}
 
 	protected void addTypeAttribute(INamedElement type) throws XMLStreamException {
