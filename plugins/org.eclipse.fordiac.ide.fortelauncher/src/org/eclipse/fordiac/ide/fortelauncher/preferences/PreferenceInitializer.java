@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fortelauncher.preferences;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.fordiac.ide.fortelauncher.Activator;
+import org.eclipse.fordiac.ide.fortelauncher.Messages;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
@@ -39,7 +40,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		} else if (isLinux) {
 			store.setDefault(PreferenceConstants.P_PATH, "/Training/FORTE/forte"); //$NON-NLS-1$
 		} else {
-			store.setDefault(PreferenceConstants.P_PATH, "Set path to the FORTE ...");
+			store.setDefault(PreferenceConstants.P_PATH, Messages.PreferenceInitializer_SetPathToTheFORTE);
 		}
 	}
 

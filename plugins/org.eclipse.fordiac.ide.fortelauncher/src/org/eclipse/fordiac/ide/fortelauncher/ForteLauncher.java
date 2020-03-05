@@ -63,7 +63,7 @@ public class ForteLauncher implements IRuntimeLauncher {
 		} catch (NumberFormatException num) {
 			throw new LaunchRuntimeException(Messages.ForteLauncher_ERROR_WrongPort);
 		} catch (Exception ex) {
-			Activator.getDefault().logError("Could not launch FORTE", ex);
+			Activator.getDefault().logError(Messages.ForteLauncher_ERROR_CouldNotLaunchFORTE, ex);
 		}
 	}
 
