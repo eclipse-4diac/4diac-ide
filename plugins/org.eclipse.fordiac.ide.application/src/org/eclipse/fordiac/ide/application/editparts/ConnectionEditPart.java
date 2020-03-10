@@ -43,7 +43,6 @@ import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 
 public class ConnectionEditPart extends AbstractConnectionEditPart {
@@ -59,30 +58,27 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		return (Connection) super.getModel();
 	}
 
-	private final IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
-		@Override
-		public void propertyChange(PropertyChangeEvent event) {
-			if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
-					&& getModel() instanceof EventConnection) {
-				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
-			}
-			if (event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)
-					&& getModel() instanceof AdapterConnection) {
-				getFigure()
-						.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
-			}
-			if (PreferenceConstants.isDataConnectorProperty(event.getProperty())
-					&& getModel() instanceof DataConnection) {
-				getFigure().setForegroundColor(PreferenceGetter.getDataColor(getModel().getSource().getTypeName()));
-			}
-			if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON)
-					&& getModel() instanceof DataConnection) {
-				getFigure().setVisible(!((Boolean) event.getNewValue()));
-			}
-			if (event.getProperty().equals(PreferenceConstants.P_HIDE_EVENT_CON)
-					&& getModel() instanceof EventConnection) {
-				getFigure().setVisible(!((Boolean) event.getNewValue()));
-			}
+	private final IPropertyChangeListener propertyChangeListener = event -> {
+		if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
+				&& (getModel() instanceof EventConnection)) {
+			getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
+		}
+		if (event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)
+				&& (getModel() instanceof AdapterConnection)) {
+			getFigure()
+					.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
+		}
+		if (PreferenceConstants.isDataConnectorProperty(event.getProperty())
+				&& (getModel() instanceof DataConnection)) {
+			getFigure().setForegroundColor(PreferenceGetter.getDataColor(getModel().getSource().getTypeName()));
+		}
+		if (event.getProperty().equals(PreferenceConstants.P_HIDE_DATA_CON)
+				&& (getModel() instanceof DataConnection)) {
+			getFigure().setVisible(!((Boolean) event.getNewValue()));
+		}
+		if (event.getProperty().equals(PreferenceConstants.P_HIDE_EVENT_CON)
+				&& (getModel() instanceof EventConnection)) {
+			getFigure().setVisible(!((Boolean) event.getNewValue()));
 		}
 	};
 
@@ -111,8 +107,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 		String status = getModel().getAttributeValue(HIDEN_CON);
 		if (connection instanceof HideableConnection) {
-			((HideableConnection) connection).setHidden(status != null && status.equalsIgnoreCase(HIDDEN));
-			if (getModel() != null && getModel().getSourceElement() != null) {
+			((HideableConnection) connection).setHidden((status != null) && status.equalsIgnoreCase(HIDDEN));
+			if ((getModel() != null) && (getModel().getSourceElement() != null)) {
 				((HideableConnection) connection)
 						.setLabel(getModel().getSourceElement().getName() + "." + getModel().getSource().getName()); //$NON-NLS-1$
 			}
@@ -123,12 +119,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		arrow.setTemplate(PolygonDecoration.TRIANGLE_TIP);
 		arrow.setScale(7, 4);
 		connection.setTargetDecoration(arrow);
-
-		PolygonDecoration arrow1 = new PolygonDecoration();
-		arrow1.setTemplate(PolygonDecoration.INVERTED_TRIANGLE_TIP);
-		arrow1.setScale(7, 4);
-		arrow1.setLocation(new org.eclipse.draw2d.geometry.Point(10, 10));
-		connection.setSourceDecoration(arrow1);
 
 		if (getModel() instanceof EventConnection) {
 			connection.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR));
