@@ -13,6 +13,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette.util;
 
+import java.util.Map;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -22,7 +23,6 @@ import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
@@ -89,13 +89,34 @@ public class PaletteAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
-		public Adapter casePaletteGroup(PaletteGroup object) {
-			return createPaletteGroupAdapter();
+		public Adapter caseStringToAdapterTypePaletteEntryMap(Map.Entry<String, AdapterTypePaletteEntry> object) {
+			return createStringToAdapterTypePaletteEntryMapAdapter();
 		}
 
 		@Override
-		public Adapter caseFBTypePaletteEntry(FBTypePaletteEntry object) {
-			return createFBTypePaletteEntryAdapter();
+		public Adapter caseStringToFDeviceTypePaletteEntryMap(Map.Entry<String, DeviceTypePaletteEntry> object) {
+			return createStringToFDeviceTypePaletteEntryMapAdapter();
+		}
+
+		@Override
+		public Adapter caseStringToFBTypePaletteEntryMap(Map.Entry<String, FBTypePaletteEntry> object) {
+			return createStringToFBTypePaletteEntryMapAdapter();
+		}
+
+		@Override
+		public Adapter caseStringToResourceTypeEntryMap(Map.Entry<String, ResourceTypeEntry> object) {
+			return createStringToResourceTypeEntryMapAdapter();
+		}
+
+		@Override
+		public Adapter caseStringToSegmentTypePaletteEntryMap(Map.Entry<String, SegmentTypePaletteEntry> object) {
+			return createStringToSegmentTypePaletteEntryMapAdapter();
+		}
+
+		@Override
+		public Adapter caseStringToSubApplicationTypePaletteEntryMap(
+				Map.Entry<String, SubApplicationTypePaletteEntry> object) {
+			return createStringToSubApplicationTypePaletteEntryMapAdapter();
 		}
 
 		@Override
@@ -104,8 +125,18 @@ public class PaletteAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
+		public Adapter caseAdapterTypePaletteEntry(AdapterTypePaletteEntry object) {
+			return createAdapterTypePaletteEntryAdapter();
+		}
+
+		@Override
 		public Adapter caseDeviceTypePaletteEntry(DeviceTypePaletteEntry object) {
 			return createDeviceTypePaletteEntryAdapter();
+		}
+
+		@Override
+		public Adapter caseFBTypePaletteEntry(FBTypePaletteEntry object) {
+			return createFBTypePaletteEntryAdapter();
 		}
 
 		@Override
@@ -116,11 +147,6 @@ public class PaletteAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseSegmentTypePaletteEntry(SegmentTypePaletteEntry object) {
 			return createSegmentTypePaletteEntryAdapter();
-		}
-
-		@Override
-		public Adapter caseAdapterTypePaletteEntry(AdapterTypePaletteEntry object) {
-			return createAdapterTypePaletteEntryAdapter();
 		}
 
 		@Override
@@ -163,17 +189,92 @@ public class PaletteAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.Palette.PaletteGroup <em>Group</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns null so that we
-	 * can easily ignore cases; it's useful to ignore a case when inheritance will
-	 * catch all the cases anyway. <!-- end-user-doc -->
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry
+	 * <em>String To FB Type Palette Entry Map</em>}'. <!-- begin-user-doc --> This
+	 * default implementation returns null so that we can easily ignore cases; it's
+	 * useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * 
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.Palette.PaletteGroup
+	 * @see java.util.Map.Entry
 	 * @generated
 	 */
-	public Adapter createPaletteGroupAdapter() {
+	public Adapter createStringToFBTypePaletteEntryMapAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry
+	 * <em>String To FDevice Type Palette Entry Map</em>}'. <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases
+	 * anyway. <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createStringToFDeviceTypePaletteEntryMapAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry
+	 * <em>String To Resource Type Entry Map</em>}'. <!-- begin-user-doc --> This
+	 * default implementation returns null so that we can easily ignore cases; it's
+	 * useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createStringToResourceTypeEntryMapAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry
+	 * <em>String To Segment Type Palette Entry Map</em>}'. <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases
+	 * anyway. <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createStringToSegmentTypePaletteEntryMapAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry
+	 * <em>String To Sub Application Type Palette Entry Map</em>}'. <!--
+	 * begin-user-doc --> This default implementation returns null so that we can
+	 * easily ignore cases; it's useful to ignore a case when inheritance will catch
+	 * all the cases anyway. <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createStringToSubApplicationTypePaletteEntryMapAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry
+	 * <em>String To Adapter Type Palette Entry Map</em>}'. <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases
+	 * anyway. <!-- end-user-doc -->
+	 * 
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createStringToAdapterTypePaletteEntryMapAdapter() {
 		return null;
 	}
 

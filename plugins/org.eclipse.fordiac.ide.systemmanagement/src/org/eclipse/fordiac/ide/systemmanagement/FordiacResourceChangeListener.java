@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2017 TU Wien ACIN, Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,16 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -38,7 +34,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -96,14 +91,12 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 						case IResource.FILE:
 							handleFileDelete(delta);
 							break;
-						case IResource.FOLDER:
-							handleFolderDelete(delta);
-							// folder delete does not require a check if its
-							// children
-							return false;
 						case IResource.PROJECT:
 							handleProjectRemove(delta);
 							return false;
+						default:
+							// we don't need to do anything in the other cases
+							break;
 						}
 						break;
 					case IResourceDelta.ADDED:
@@ -111,18 +104,15 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 							switch (delta.getResource().getType()) {
 							case IResource.FILE:
 								handleFileMove(delta);
-								break;
-							case IResource.FOLDER:
-								handleFolderMove(delta);
-								// if a folder has been moved we need to update
-								// the IFile of the children
-								return true;
+								return false;
 							case IResource.PROJECT:
 								handleProjectRename(delta);
-								// we need to update the file names in the pallette as well
-								return true;
+								break;
+							default:
+								break;
 							}
-							return false;
+							return true;
+
 						}
 
 						final String projectName = delta.getResource().getProject().getName();
@@ -137,10 +127,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 								handleFileCopy(delta);
 								break;
 							case IResource.FOLDER:
-								handleFolderCopy(delta);
 								// if a folder has been moved we need to update
 								// the IFile of the children
 								return true;
+							default:
+								break;
 							}
 							return false;
 						} else {
@@ -162,56 +153,14 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	protected void handleFolderDelete(IResourceDelta delta) {
-		Palette palette = systemManager.getPalette(delta.getResource().getProject());
-		IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder(delta.getResource().getFullPath());
-
-		PaletteGroup group = TypeLibrary.getPaletteGroup(palette, folder);
-		if (null != group) {
-			removeGroup(group);
-		}
-	}
-
-	private static void removeGroup(PaletteGroup group) {
-		// first remove the children
-		List<PaletteGroup> subGroups = new ArrayList<PaletteGroup>(group.getSubGroups());
-		for (PaletteGroup runner : subGroups) {
-			removeGroup(runner);
-		}
-		List<PaletteEntry> containedEntries = new ArrayList<PaletteEntry>(group.getEntries());
-		for (PaletteEntry entry : containedEntries) {
-			group.getEntries().remove(entry);
-		}
-
-		if ((null != group.getParentGroup()) && (null != group.getParentGroup().getSubGroups())) {
-			group.getParentGroup().getSubGroups().remove(group);
-		}
-	}
-
 	protected void handleFileDelete(IResourceDelta delta) {
 		Palette palette = systemManager.getPalette(delta.getResource().getProject());
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
 
-		PaletteGroup group = TypeLibrary.getPaletteGroup(palette, file.getParent());
-
-		if (null != group) {
-			PaletteEntry entry = group.getEntry(TypeLibrary.getTypeNameFromFile(file));
-			if (null != entry) {
-				closeAllFBTypeEditor(entry);
-				group.getEntries().remove(entry);
-			}
-		}
-	}
-
-	protected void handleFolderCopy(IResourceDelta delta) {
-		Palette dstPalette = systemManager.getPalette(delta.getResource().getProject());
-		IFolder file = ResourcesPlugin.getWorkspace().getRoot().getFolder(delta.getResource().getFullPath());
-
-		PaletteGroup parent = TypeLibrary.getPaletteGroupWithAdd(dstPalette, file.getParent());
-		if (null != parent) {
-			if (null == parent.getGroup(file.getName())) {
-				dstPalette.createGroup(parent, file.getName());
-			}
+		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file, palette);
+		if (null != entry) {
+			closeAllFBTypeEditor(entry);
+			palette.removePaletteEntry(entry);
 		}
 	}
 
@@ -219,13 +168,10 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		Palette dstPalette = systemManager.getPalette(delta.getResource().getProject());
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
 
-		PaletteGroup dstGroup = TypeLibrary.getPaletteGroupWithAdd(dstPalette, delta.getResource().getParent());
-		if (null != dstGroup) {
-			if (null == dstGroup.getEntry(TypeLibrary.getTypeNameFromFile(file))) {
-				PaletteEntry entry = TypeLibrary.createPaleteEntry(dstPalette, dstGroup, file);
-				if (null != entry) {
-					updatePaletteEntry(file, entry);
-				}
+		if (!TypeLibrary.paletteContainsType(dstPalette, file)) {
+			PaletteEntry entry = TypeLibrary.createPaleteEntry(dstPalette, file);
+			if (null != entry) {
+				updatePaletteEntry(file, entry);
 			}
 		}
 	}
@@ -275,53 +221,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	protected void handleFolderMove(IResourceDelta delta) {
-		IContainer src = ResourcesPlugin.getWorkspace().getRoot().getFolder(delta.getMovedFromPath());
-		Palette srcPalette = systemManager.getPalette(src.getProject());
-
-		if (src.getParent().equals(delta.getResource().getParent())) {
-			// rename folder
-			PaletteGroup group = TypeLibrary.getPaletteGroup(srcPalette, src);
-			if (null != group) {
-				group.setLabel(delta.getResource().getName());
-			}
-		} else {
-			Palette dstPalette = systemManager.getPalette(delta.getResource().getProject());
-
-			movePaletteGroup(src, delta.getResource().getParent(), srcPalette, dstPalette);
-		}
-
-	}
-
-	/**
-	 * Handle folder move for palette groups
-	 * 
-	 * @param srcGroupFolder      the folder to be moved
-	 * @param dstGroupFolder      the destination of the src folder (i.e., the new
-	 *                            parent)
-	 * @param srcPalette
-	 * @param srcRootPaletteGroup
-	 * @param dstPalette
-	 * @param dstRootPaletteGroup
-	 */
-	private static void movePaletteGroup(IContainer srcGroupFolder, IContainer dstGroupFolder, Palette srcPalette,
-			Palette dstPalette) {
-		PaletteGroup dstGroup = TypeLibrary.getPaletteGroup(dstPalette, dstGroupFolder);
-		PaletteGroup srcGroup = TypeLibrary.getPaletteGroupWithAdd(srcPalette, srcGroupFolder);
-		if ((null != dstGroup) && (null != srcGroup)) {
-			srcGroup.getParentGroup().getSubGroups().remove(srcGroup);
-			dstGroup.getSubGroups().add(srcGroup);
-		}
-	}
-
 	private void handleFileMove(IResourceDelta delta) {
 		IFile src = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getMovedFromPath());
-		Palette srcPalette = systemManager.getPalette(src.getProject());
 
 		if (src.getParent().equals(delta.getResource().getParent())) {
 			handleFileRename(delta, src);
-		} else {
-			handleFileMovement(delta, src, srcPalette);
 		}
 
 		final AutomationSystem system = systemManager.getSystemForName(src.getProject().getName());
@@ -340,35 +244,10 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private void handleFileMovement(IResourceDelta delta, IResource src, Palette srcPalette) {
-		Palette dstPalette = systemManager.getPalette(delta.getResource().getProject());
-		PaletteGroup dstGroup = null;
-		PaletteGroup srcGroup = null;
-
-		srcGroup = TypeLibrary.getPaletteGroup(srcPalette, src.getParent());
-		dstGroup = TypeLibrary.getPaletteGroupWithAdd(dstPalette, delta.getResource().getParent());
-
-		PaletteEntry entry = null;
-		if ((null != srcGroup) && (null != dstGroup)) {
-			entry = srcGroup.getEntry(TypeLibrary.getTypeNameFromFileName(src.getName()));
-			if (null != entry) {
-				srcGroup.getEntries().remove(entry);
-				dstGroup.addEntry(entry);
-			}
-		} else if (null == srcGroup) {
-			// parent folder has been moved
-			entry = dstGroup.getEntry(TypeLibrary.getTypeNameFromFileName(delta.getResource().getName()));
-		}
-		if (null != entry) {
-			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
-			entry.setFile(file);
-		}
-	}
-
 	private void handleFileRename(IResourceDelta delta, IFile src) {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
 		Palette dstPalette = systemManager.getPalette(file.getProject());
-		PaletteEntry entry = TypeLibrary.getPaletteEntry(dstPalette, src);
+		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src, dstPalette);
 		updatePaletteEntry(file, entry);
 	}
 
@@ -438,7 +317,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	}
 
-	protected void renameSystem(final AutomationSystem system, final IProject project) {
+	protected static void renameSystem(final AutomationSystem system, final IProject project) {
 		IFile oldSystemFile = project.getFile(system.getName() + SystemManager.SYSTEM_FILE_ENDING);
 		String newProjectName = project.getName();
 		system.setName(newProjectName);

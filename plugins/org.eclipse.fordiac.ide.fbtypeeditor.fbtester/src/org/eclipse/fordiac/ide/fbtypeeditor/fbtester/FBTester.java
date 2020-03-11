@@ -39,7 +39,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.TestData;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.TestdataFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
@@ -155,15 +154,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 		if (input instanceof FBTypeEditorInput) {
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			type = untypedInput.getContent();
-
-			EObject group = untypedInput.getPaletteEntry().getGroup();
-
-			while (null != group.eContainer()) {
-				group = group.eContainer();
-			}
-			if (group instanceof Palette) {
-				palette = (Palette) group;
-			}
+			palette = untypedInput.getPaletteEntry().getPalette();
 		}
 		setSite(site);
 		setEditDomain(new FBTypeEditDomain(this, commandStack));
@@ -510,7 +501,6 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 					Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (obj instanceof IFBTestConfiguratonCreator) {
 						((IFBTestConfiguratonCreator) obj).setType(type);
-						((IFBTestConfiguratonCreator) obj).setGroup(palette.getRootGroup());
 
 						IFBTestConfiguration configuration = ((IFBTestConfiguratonCreator) obj)
 								.createConfigurationPage(parent);

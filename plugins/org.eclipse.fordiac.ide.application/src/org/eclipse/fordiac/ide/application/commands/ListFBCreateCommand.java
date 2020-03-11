@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,18 +8,15 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Michael Hofmann, Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
+ *   Michael Hofmann, Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *   - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
-
-import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.utilities.CreationPopupDialog;
 import org.eclipse.fordiac.ide.application.utilities.ICreationExecutor;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -42,7 +39,7 @@ public class ListFBCreateCommand extends FBCreateCommand {
 
 	/**
 	 * Instantiates a new fB create command.
-	 * 
+	 *
 	 * @param type   the type
 	 * @param parent the parent
 	 * @param bounds the bounds
@@ -98,9 +95,9 @@ public class ListFBCreateCommand extends FBCreateCommand {
 						if (res instanceof TransferDataSelectionOfFb) {
 							TransferDataSelectionOfFb element = ((TransferDataSelectionOfFb) res);
 							// get PaletteEntry for fbTypeName
-							List<PaletteEntry> fbTypes = system.getPalette().getTypeEntries(element.getFbTypeName());
-							if (!fbTypes.isEmpty() && fbTypes.get(0) instanceof FBTypePaletteEntry) {
-								element.setTypePaletteEntry(((FBTypePaletteEntry) fbTypes.get(0)));
+							FBTypePaletteEntry entry = system.getPalette().getFBTypeEntry(element.getFbTypeName());
+							if (null != entry) {
+								element.setTypePaletteEntry(entry);
 								ListFBCreateCommand.this.setPaletteEntry(element.getTypePaletteEntry());
 								ListFBCreateCommand.super.execute();
 

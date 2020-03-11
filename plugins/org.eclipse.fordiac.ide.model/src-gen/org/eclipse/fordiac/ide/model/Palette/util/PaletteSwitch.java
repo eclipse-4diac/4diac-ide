@@ -13,6 +13,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette.util;
 
+import java.util.Map;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -21,7 +22,6 @@ import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
@@ -89,18 +89,50 @@ public class PaletteSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
-		case PalettePackage.PALETTE_GROUP: {
-			PaletteGroup paletteGroup = (PaletteGroup) theEObject;
-			T result = casePaletteGroup(paletteGroup);
+		case PalettePackage.STRING_TO_ADAPTER_TYPE_PALETTE_ENTRY_MAP: {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, AdapterTypePaletteEntry> stringToAdapterTypePaletteEntryMap = (Map.Entry<String, AdapterTypePaletteEntry>) theEObject;
+			T result = caseStringToAdapterTypePaletteEntryMap(stringToAdapterTypePaletteEntryMap);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
 		}
-		case PalettePackage.FB_TYPE_PALETTE_ENTRY: {
-			FBTypePaletteEntry fbTypePaletteEntry = (FBTypePaletteEntry) theEObject;
-			T result = caseFBTypePaletteEntry(fbTypePaletteEntry);
+		case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP: {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, DeviceTypePaletteEntry> stringToFDeviceTypePaletteEntryMap = (Map.Entry<String, DeviceTypePaletteEntry>) theEObject;
+			T result = caseStringToFDeviceTypePaletteEntryMap(stringToFDeviceTypePaletteEntryMap);
 			if (result == null)
-				result = casePaletteEntry(fbTypePaletteEntry);
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP: {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, FBTypePaletteEntry> stringToFBTypePaletteEntryMap = (Map.Entry<String, FBTypePaletteEntry>) theEObject;
+			T result = caseStringToFBTypePaletteEntryMap(stringToFBTypePaletteEntryMap);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.STRING_TO_RESOURCE_TYPE_ENTRY_MAP: {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, ResourceTypeEntry> stringToResourceTypeEntryMap = (Map.Entry<String, ResourceTypeEntry>) theEObject;
+			T result = caseStringToResourceTypeEntryMap(stringToResourceTypeEntryMap);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.STRING_TO_SEGMENT_TYPE_PALETTE_ENTRY_MAP: {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, SegmentTypePaletteEntry> stringToSegmentTypePaletteEntryMap = (Map.Entry<String, SegmentTypePaletteEntry>) theEObject;
+			T result = caseStringToSegmentTypePaletteEntryMap(stringToSegmentTypePaletteEntryMap);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP: {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, SubApplicationTypePaletteEntry> stringToSubApplicationTypePaletteEntryMap = (Map.Entry<String, SubApplicationTypePaletteEntry>) theEObject;
+			T result = caseStringToSubApplicationTypePaletteEntryMap(stringToSubApplicationTypePaletteEntryMap);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -112,11 +144,29 @@ public class PaletteSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case PalettePackage.ADAPTER_TYPE_PALETTE_ENTRY: {
+			AdapterTypePaletteEntry adapterTypePaletteEntry = (AdapterTypePaletteEntry) theEObject;
+			T result = caseAdapterTypePaletteEntry(adapterTypePaletteEntry);
+			if (result == null)
+				result = casePaletteEntry(adapterTypePaletteEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		case PalettePackage.DEVICE_TYPE_PALETTE_ENTRY: {
 			DeviceTypePaletteEntry deviceTypePaletteEntry = (DeviceTypePaletteEntry) theEObject;
 			T result = caseDeviceTypePaletteEntry(deviceTypePaletteEntry);
 			if (result == null)
 				result = casePaletteEntry(deviceTypePaletteEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case PalettePackage.FB_TYPE_PALETTE_ENTRY: {
+			FBTypePaletteEntry fbTypePaletteEntry = (FBTypePaletteEntry) theEObject;
+			T result = caseFBTypePaletteEntry(fbTypePaletteEntry);
+			if (result == null)
+				result = casePaletteEntry(fbTypePaletteEntry);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -135,15 +185,6 @@ public class PaletteSwitch<T> extends Switch<T> {
 			T result = caseSegmentTypePaletteEntry(segmentTypePaletteEntry);
 			if (result == null)
 				result = casePaletteEntry(segmentTypePaletteEntry);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case PalettePackage.ADAPTER_TYPE_PALETTE_ENTRY: {
-			AdapterTypePaletteEntry adapterTypePaletteEntry = (AdapterTypePaletteEntry) theEObject;
-			T result = caseAdapterTypePaletteEntry(adapterTypePaletteEntry);
-			if (result == null)
-				result = casePaletteEntry(adapterTypePaletteEntry);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -178,17 +219,98 @@ public class PaletteSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of
-	 * '<em>Group</em>'. <!-- begin-user-doc --> This implementation returns null;
-	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
+	 * Returns the result of interpreting the object as an instance of '<em>String
+	 * To FB Type Palette Entry Map</em>'. <!-- begin-user-doc --> This
+	 * implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
 	 * 
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of
-	 *         '<em>Group</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>String
+	 *         To FB Type Palette Entry Map</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePaletteGroup(PaletteGroup object) {
+	public T caseStringToFBTypePaletteEntryMap(Map.Entry<String, FBTypePaletteEntry> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>String
+	 * To FDevice Type Palette Entry Map</em>'. <!-- begin-user-doc --> This
+	 * implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>String
+	 *         To FDevice Type Palette Entry Map</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStringToFDeviceTypePaletteEntryMap(Map.Entry<String, DeviceTypePaletteEntry> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>String
+	 * To Resource Type Entry Map</em>'. <!-- begin-user-doc --> This implementation
+	 * returns null; returning a non-null result will terminate the switch. <!--
+	 * end-user-doc -->
+	 * 
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>String
+	 *         To Resource Type Entry Map</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStringToResourceTypeEntryMap(Map.Entry<String, ResourceTypeEntry> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>String
+	 * To Segment Type Palette Entry Map</em>'. <!-- begin-user-doc --> This
+	 * implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>String
+	 *         To Segment Type Palette Entry Map</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStringToSegmentTypePaletteEntryMap(Map.Entry<String, SegmentTypePaletteEntry> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>String
+	 * To Sub Application Type Palette Entry Map</em>'. <!-- begin-user-doc --> This
+	 * implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>String
+	 *         To Sub Application Type Palette Entry Map</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStringToSubApplicationTypePaletteEntryMap(Map.Entry<String, SubApplicationTypePaletteEntry> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>String
+	 * To Adapter Type Palette Entry Map</em>'. <!-- begin-user-doc --> This
+	 * implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 * 
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>String
+	 *         To Adapter Type Palette Entry Map</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStringToAdapterTypePaletteEntryMap(Map.Entry<String, AdapterTypePaletteEntry> object) {
 		return null;
 	}
 

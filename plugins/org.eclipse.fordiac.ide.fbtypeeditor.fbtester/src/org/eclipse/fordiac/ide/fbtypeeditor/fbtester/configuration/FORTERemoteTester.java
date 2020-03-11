@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 							 Johannes Kepler University	   	
- * 
+ * 							 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Ingo Hegny, Alois Zoitl, Monika Wenger
  *    			 - initial implementation
- *   Alois Zoitl - Harmonized deployment and monitoring 
+ *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.fbtester.configuration;
 
@@ -45,7 +45,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.TestingManager;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.configuration.internal.Utils;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -363,7 +362,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 	/**
 	 * "Type" : "FB", "Name" : "FB_ADD_INT", "Resource" : "RES1", "Port" : "IN1",
 	 * "force" : true, "forceValue" : "10"
-	 * 
+	 *
 	 * @param element
 	 */
 	public void setValue(TestElement element) {
@@ -410,11 +409,6 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator {
 	@Override
 	public void setValue(TestElement element, String value) {
 		setValue(element);
-	}
-
-	@Override
-	public void setGroup(PaletteGroup group) {
-
 	}
 
 }

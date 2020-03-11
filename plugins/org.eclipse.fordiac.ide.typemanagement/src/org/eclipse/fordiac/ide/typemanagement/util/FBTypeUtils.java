@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH, Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.typemanagement.util;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -35,6 +36,15 @@ public final class FBTypeUtils {
 			}
 		}
 		return palette;
+	}
+
+	public static PaletteEntry getPaletteEntryForFile(IFile typeFile) {
+		PaletteEntry entry = null;
+		Palette palette = getPalletteForFBTypeFile(typeFile);
+		if (null != palette) {
+			return TypeLibrary.getPaletteEntryForFile(typeFile, palette);
+		}
+		return entry;
 	}
 
 	private FBTypeUtils() {

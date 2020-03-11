@@ -61,7 +61,7 @@ public abstract class FbTypeTemplateTransferDropTargetListener extends TemplateT
 		} else {
 			if (TemplateTransfer.getInstance().getTemplate() instanceof FBTypePaletteEntry) {
 				FBTypePaletteEntry entry = (FBTypePaletteEntry) TemplateTransfer.getInstance().getTemplate();
-				AutomationSystem paletteSystem = entry.getGroup().getPallete().getAutomationSystem();
+				AutomationSystem paletteSystem = entry.getPalette().getAutomationSystem();
 
 				// If project is null it is an entry from the tool palette
 				if ((((null == paletteSystem) && null == system))

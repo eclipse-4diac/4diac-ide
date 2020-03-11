@@ -41,15 +41,6 @@ public interface PaletteFactory extends EFactory {
 	Palette createPalette();
 
 	/**
-	 * Returns a new object of class '<em>Group</em>'. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @return a new object of class '<em>Group</em>'.
-	 * @generated
-	 */
-	PaletteGroup createPaletteGroup();
-
-	/**
 	 * Returns a new object of class '<em>FB Type Palette Entry</em>'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 

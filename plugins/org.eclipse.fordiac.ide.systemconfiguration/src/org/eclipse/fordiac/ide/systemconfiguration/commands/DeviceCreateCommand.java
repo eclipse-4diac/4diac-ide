@@ -21,7 +21,6 @@ import java.util.List;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -141,11 +140,7 @@ public class DeviceCreateCommand extends Command {
 	}
 
 	private ResourceTypeEntry getResourceType(String resTypeName) {
-		List<PaletteEntry> typeEntries = device.getPaletteEntry().getGroup().getPallete().getTypeEntries(resTypeName);
-		if (!typeEntries.isEmpty() && (typeEntries.get(0) instanceof ResourceTypeEntry)) {
-			return (ResourceTypeEntry) typeEntries.get(0);
-		}
-		return null;
+		return device.getPaletteEntry().getPalette().getResourceTypeEntry(resTypeName);
 	}
 
 	private Color createRandomDeviceColor() {

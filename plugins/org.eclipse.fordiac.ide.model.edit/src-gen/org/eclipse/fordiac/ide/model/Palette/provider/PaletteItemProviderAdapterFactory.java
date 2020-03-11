@@ -111,28 +111,142 @@ public class PaletteItemProviderAdapterFactory extends PaletteAdapterFactory
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all
-	 * {@link org.eclipse.fordiac.ide.model.Palette.PaletteGroup} instances. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry}
+	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
-	protected PaletteGroupItemProvider paletteGroupItemProvider;
+	protected StringToAdapterTypePaletteEntryMapItemProvider stringToAdapterTypePaletteEntryMapItemProvider;
 
 	/**
-	 * This creates an adapter for a
-	 * {@link org.eclipse.fordiac.ide.model.Palette.PaletteGroup}. <!--
+	 * This creates an adapter for a {@link java.util.Map.Entry}. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
 	@Override
-	public Adapter createPaletteGroupAdapter() {
-		if (paletteGroupItemProvider == null) {
-			paletteGroupItemProvider = new PaletteGroupItemProvider(this);
+	public Adapter createStringToAdapterTypePaletteEntryMapAdapter() {
+		if (stringToAdapterTypePaletteEntryMapItemProvider == null) {
+			stringToAdapterTypePaletteEntryMapItemProvider = new StringToAdapterTypePaletteEntryMapItemProvider(this);
 		}
 
-		return paletteGroupItemProvider;
+		return stringToAdapterTypePaletteEntryMapItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry}
+	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected StringToFDeviceTypePaletteEntryMapItemProvider stringToFDeviceTypePaletteEntryMapItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link java.util.Map.Entry}. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public Adapter createStringToFDeviceTypePaletteEntryMapAdapter() {
+		if (stringToFDeviceTypePaletteEntryMapItemProvider == null) {
+			stringToFDeviceTypePaletteEntryMapItemProvider = new StringToFDeviceTypePaletteEntryMapItemProvider(this);
+		}
+
+		return stringToFDeviceTypePaletteEntryMapItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry}
+	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected StringToFBTypePaletteEntryMapItemProvider stringToFBTypePaletteEntryMapItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link java.util.Map.Entry}. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public Adapter createStringToFBTypePaletteEntryMapAdapter() {
+		if (stringToFBTypePaletteEntryMapItemProvider == null) {
+			stringToFBTypePaletteEntryMapItemProvider = new StringToFBTypePaletteEntryMapItemProvider(this);
+		}
+
+		return stringToFBTypePaletteEntryMapItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry}
+	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected StringToResourceTypeEntryMapItemProvider stringToResourceTypeEntryMapItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link java.util.Map.Entry}. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public Adapter createStringToResourceTypeEntryMapAdapter() {
+		if (stringToResourceTypeEntryMapItemProvider == null) {
+			stringToResourceTypeEntryMapItemProvider = new StringToResourceTypeEntryMapItemProvider(this);
+		}
+
+		return stringToResourceTypeEntryMapItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry}
+	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected StringToSegmentTypePaletteEntryMapItemProvider stringToSegmentTypePaletteEntryMapItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link java.util.Map.Entry}. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public Adapter createStringToSegmentTypePaletteEntryMapAdapter() {
+		if (stringToSegmentTypePaletteEntryMapItemProvider == null) {
+			stringToSegmentTypePaletteEntryMapItemProvider = new StringToSegmentTypePaletteEntryMapItemProvider(this);
+		}
+
+		return stringToSegmentTypePaletteEntryMapItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry}
+	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected StringToSubApplicationTypePaletteEntryMapItemProvider stringToSubApplicationTypePaletteEntryMapItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link java.util.Map.Entry}. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public Adapter createStringToSubApplicationTypePaletteEntryMapAdapter() {
+		if (stringToSubApplicationTypePaletteEntryMapItemProvider == null) {
+			stringToSubApplicationTypePaletteEntryMapItemProvider = new StringToSubApplicationTypePaletteEntryMapItemProvider(
+					this);
+		}
+
+		return stringToSubApplicationTypePaletteEntryMapItemProvider;
 	}
 
 	/**
@@ -390,18 +504,28 @@ public class PaletteItemProviderAdapterFactory extends PaletteAdapterFactory
 	public void dispose() {
 		if (paletteItemProvider != null)
 			paletteItemProvider.dispose();
-		if (paletteGroupItemProvider != null)
-			paletteGroupItemProvider.dispose();
-		if (fbTypePaletteEntryItemProvider != null)
-			fbTypePaletteEntryItemProvider.dispose();
+		if (stringToAdapterTypePaletteEntryMapItemProvider != null)
+			stringToAdapterTypePaletteEntryMapItemProvider.dispose();
+		if (stringToFDeviceTypePaletteEntryMapItemProvider != null)
+			stringToFDeviceTypePaletteEntryMapItemProvider.dispose();
+		if (stringToFBTypePaletteEntryMapItemProvider != null)
+			stringToFBTypePaletteEntryMapItemProvider.dispose();
+		if (stringToResourceTypeEntryMapItemProvider != null)
+			stringToResourceTypeEntryMapItemProvider.dispose();
+		if (stringToSegmentTypePaletteEntryMapItemProvider != null)
+			stringToSegmentTypePaletteEntryMapItemProvider.dispose();
+		if (stringToSubApplicationTypePaletteEntryMapItemProvider != null)
+			stringToSubApplicationTypePaletteEntryMapItemProvider.dispose();
+		if (adapterTypePaletteEntryItemProvider != null)
+			adapterTypePaletteEntryItemProvider.dispose();
 		if (deviceTypePaletteEntryItemProvider != null)
 			deviceTypePaletteEntryItemProvider.dispose();
+		if (fbTypePaletteEntryItemProvider != null)
+			fbTypePaletteEntryItemProvider.dispose();
 		if (resourceTypeEntryItemProvider != null)
 			resourceTypeEntryItemProvider.dispose();
 		if (segmentTypePaletteEntryItemProvider != null)
 			segmentTypePaletteEntryItemProvider.dispose();
-		if (adapterTypePaletteEntryItemProvider != null)
-			adapterTypePaletteEntryItemProvider.dispose();
 		if (subApplicationTypePaletteEntryItemProvider != null)
 			subApplicationTypePaletteEntryItemProvider.dispose();
 	}

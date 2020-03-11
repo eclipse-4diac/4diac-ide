@@ -27,7 +27,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,7 +47,6 @@ import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
 import org.eclipse.fordiac.ide.model.Annotations;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -190,7 +188,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		return MessageFormat.format(CREATE_FB_TYPE, getNextId(), fbType.getName(), escapedLuaScript);
 	}
 
-	private String escapeXmlCharacters(String luaScript) {
+	private static String escapeXmlCharacters(String luaScript) {
 		luaScript = luaScript.replace("&", "&amp;"); //$NON-NLS-1$//$NON-NLS-2$
 		luaScript = luaScript.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		luaScript = luaScript.replace(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -361,7 +359,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	private void createNotExistingAdapterTypes(Resource res) {
 		for (String entryName : getAdapterTypes()) {
-			if (null == res.getDevice().getAutomationSystem().getPalette().getTypeEntry(entryName)) {
+			if (null == res.getDevice().getAutomationSystem().getPalette().getAdapterTypeEntry(entryName)) {
 				addTypeToTypelib(res, entryName, "adp", QUERY_ADAPTER_TYPE); //$NON-NLS-1$
 			}
 		}
@@ -371,12 +369,11 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		int i = 0;
 		for (org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : (object).getFblist().getFbs()) {
 			if (!"E_RESTART".equals(fbresult.getType())) { //$NON-NLS-1$
-				FBTypePaletteEntry entry = (FBTypePaletteEntry) res.getDevice().getAutomationSystem().getPalette()
-						.getTypeEntry(fbresult.getType());
+				FBTypePaletteEntry entry = res.getDevice().getAutomationSystem().getPalette()
+						.getFBTypeEntry(fbresult.getType());
 				if (null == entry) {
 					addTypeToTypelib(res, fbresult.getType(), "fbt", QUERY_FB_TYPE); //$NON-NLS-1$
-					entry = (FBTypePaletteEntry) res.getDevice().getAutomationSystem().getPalette()
-							.getTypeEntry(fbresult.getType());
+					entry = res.getDevice().getAutomationSystem().getPalette().getFBTypeEntry(fbresult.getType());
 				}
 				FBCreateCommand fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
 				if (fbcmd.canExecute()) {
@@ -417,11 +414,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private static ResourceTypeEntry getResourceType(Device device, String resTypeName) {
-		List<PaletteEntry> typeEntries = device.getPaletteEntry().getGroup().getPallete().getTypeEntries(resTypeName);
-		if (!typeEntries.isEmpty() && (typeEntries.get(0) instanceof ResourceTypeEntry)) {
-			return (ResourceTypeEntry) typeEntries.get(0);
-		}
-		return null;
+		return device.getPaletteEntry().getPalette().getResourceTypeEntry(resTypeName);
 	}
 
 	private void queryFBTypes() {

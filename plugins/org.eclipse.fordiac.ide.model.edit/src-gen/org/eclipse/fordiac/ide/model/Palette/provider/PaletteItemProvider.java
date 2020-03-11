@@ -117,7 +117,12 @@ public class PaletteItemProvider extends ItemProviderAdapter implements IEditing
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PalettePackage.Literals.PALETTE__ROOT_GROUP);
+			childrenFeatures.add(PalettePackage.Literals.PALETTE__ADAPTER_TYPES);
+			childrenFeatures.add(PalettePackage.Literals.PALETTE__DEVICE_TYPES);
+			childrenFeatures.add(PalettePackage.Literals.PALETTE__FB_TYPES);
+			childrenFeatures.add(PalettePackage.Literals.PALETTE__RESOURCE_TYPES);
+			childrenFeatures.add(PalettePackage.Literals.PALETTE__SEGMENT_TYPES);
+			childrenFeatures.add(PalettePackage.Literals.PALETTE__SUB_APP_TYPES);
 		}
 		return childrenFeatures;
 	}
@@ -175,7 +180,12 @@ public class PaletteItemProvider extends ItemProviderAdapter implements IEditing
 		case PalettePackage.PALETTE__PROJECT:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
-		case PalettePackage.PALETTE__ROOT_GROUP:
+		case PalettePackage.PALETTE__ADAPTER_TYPES:
+		case PalettePackage.PALETTE__DEVICE_TYPES:
+		case PalettePackage.PALETTE__FB_TYPES:
+		case PalettePackage.PALETTE__RESOURCE_TYPES:
+		case PalettePackage.PALETTE__SEGMENT_TYPES:
+		case PalettePackage.PALETTE__SUB_APP_TYPES:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -193,8 +203,24 @@ public class PaletteItemProvider extends ItemProviderAdapter implements IEditing
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(PalettePackage.Literals.PALETTE__ROOT_GROUP,
-				PaletteFactory.eINSTANCE.createPaletteGroup()));
+		newChildDescriptors.add(createChildParameter(PalettePackage.Literals.PALETTE__ADAPTER_TYPES,
+				PaletteFactory.eINSTANCE.create(PalettePackage.Literals.STRING_TO_ADAPTER_TYPE_PALETTE_ENTRY_MAP)));
+
+		newChildDescriptors.add(createChildParameter(PalettePackage.Literals.PALETTE__DEVICE_TYPES,
+				PaletteFactory.eINSTANCE.create(PalettePackage.Literals.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP)));
+
+		newChildDescriptors.add(createChildParameter(PalettePackage.Literals.PALETTE__FB_TYPES,
+				PaletteFactory.eINSTANCE.create(PalettePackage.Literals.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP)));
+
+		newChildDescriptors.add(createChildParameter(PalettePackage.Literals.PALETTE__RESOURCE_TYPES,
+				PaletteFactory.eINSTANCE.create(PalettePackage.Literals.STRING_TO_RESOURCE_TYPE_ENTRY_MAP)));
+
+		newChildDescriptors.add(createChildParameter(PalettePackage.Literals.PALETTE__SEGMENT_TYPES,
+				PaletteFactory.eINSTANCE.create(PalettePackage.Literals.STRING_TO_SEGMENT_TYPE_PALETTE_ENTRY_MAP)));
+
+		newChildDescriptors
+				.add(createChildParameter(PalettePackage.Literals.PALETTE__SUB_APP_TYPES, PaletteFactory.eINSTANCE
+						.create(PalettePackage.Literals.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP)));
 	}
 
 	/**

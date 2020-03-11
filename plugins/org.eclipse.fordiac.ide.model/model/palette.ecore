@@ -2,67 +2,104 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="Palette" nsURI="org.eclipse.fordiac.ide.model.Palette" nsPrefix="Palette">
   <eClassifiers xsi:type="ecore:EClass" name="Palette">
-    <eOperations name="getTypeEntry" lowerBound="1" eType="#//PaletteEntry">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="PaletteEntry entry = null;&#xA;//TODO reconsider when namespaces are coming how to retrieve the type&#xA;List&lt;PaletteEntry> entries = getTypeEntries(typeName);&#xA;if (!entries.isEmpty()) {&#xA;&#x9;entry = entries.get(0);&#xA;} &#xA;return entry;"/>
-      </eAnnotations>
-      <eParameters name="typeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
-    <eOperations name="getAdapterTypeEntry" lowerBound="1" eType="#//AdapterTypePaletteEntry">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypeEntry(this, adapterTypeName);"/>
-      </eAnnotations>
-      <eParameters name="adapterTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
-    <eOperations name="getAdapterTypes" upperBound="-1" eType="#//AdapterTypePaletteEntry">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypes(this);"/>
-      </eAnnotations>
-    </eOperations>
     <eOperations name="getAdapterTypesSorted" upperBound="-1" eType="#//AdapterTypePaletteEntry">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.getAdapterTypesSorted(this);"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rootGroup" lowerBound="1"
-        eType="#//PaletteGroup" containment="true"/>
+    <eOperations name="getAdapterTypeEntry" lowerBound="1" eType="#//AdapterTypePaletteEntry">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getAdapterTypes().get(typeName);"/>
+      </eAnnotations>
+      <eParameters name="typeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getDeviceTypeEntry" lowerBound="1" eType="#//DeviceTypePaletteEntry">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getDeviceTypes().get(typeName);"/>
+      </eAnnotations>
+      <eParameters name="typeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getFBTypeEntry" lowerBound="1" eType="#//FBTypePaletteEntry">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getFbTypes().get(typeName);"/>
+      </eAnnotations>
+      <eParameters name="typeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getResourceTypeEntry" lowerBound="1" eType="#//ResourceTypeEntry">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getResourceTypes().get(typeName);"/>
+      </eAnnotations>
+      <eParameters name="typeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getSegmentTypeEntry" lowerBound="1" eType="#//SegmentTypePaletteEntry">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getSegmentTypes().get(typeName);"/>
+      </eAnnotations>
+      <eParameters name="typeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getSubAppTypeEntry" lowerBound="1" eType="#//SubApplicationTypePaletteEntry">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getSubAppTypes().get(typeName);"/>
+      </eAnnotations>
+      <eParameters name="typeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addPaletteEntry">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.addTypeEntry(this, entry);"/>
+      </eAnnotations>
+      <eParameters name="entry" lowerBound="1" eType="#//PaletteEntry"/>
+    </eOperations>
+    <eOperations name="removePaletteEntry">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.removeTypeEntry(this, entry);"/>
+      </eAnnotations>
+      <eParameters name="entry" lowerBound="1" eType="#//PaletteEntry"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" eType="#//IProject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="automationSystem" eType="ecore:EClass lib.ecore#//AutomationSystem"
         eOpposite="lib.ecore#//AutomationSystem/palette"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterTypes" upperBound="-1"
+        eType="#//StringToAdapterTypePaletteEntryMap" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deviceTypes" upperBound="-1"
+        eType="#//StringToFDeviceTypePaletteEntryMap" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fbTypes" upperBound="-1"
+        eType="#//StringToFBTypePaletteEntryMap" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resourceTypes" upperBound="-1"
+        eType="#//StringToResourceTypeEntryMap" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="segmentTypes" upperBound="-1"
+        eType="#//StringToSegmentTypePaletteEntryMap" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subAppTypes" upperBound="-1"
+        eType="#//StringToSubApplicationTypePaletteEntryMap" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PaletteGroup">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
-        eType="#//PaletteEntry" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="subGroups" upperBound="-1"
-        eType="#//PaletteGroup" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StringToAdapterTypePaletteEntryMap"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//AdapterTypePaletteEntry"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FBTypePaletteEntry" eSuperTypes="#//PaletteEntry">
-    <eOperations name="getFBType" lowerBound="1" eType="ecore:EClass lib.ecore#//FBType">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="LibraryElement type = getType();&#xA;if(type instanceof FBType){&#xA;   return (FBType) type;&#xA;}&#xA;return null;"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="setType">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if(type instanceof FBType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no FBType as type entry for FBTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}"/>
-      </eAnnotations>
-      <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
-    </eOperations>
-    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(file, palette);"/>
-      </eAnnotations>
-      <eParameters name="palette" eType="#//Palette"/>
-      <eParameters name="file" eType="#//IFile"/>
-    </eOperations>
+  <eClassifiers xsi:type="ecore:EClass" name="StringToFDeviceTypePaletteEntryMap"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//DeviceTypePaletteEntry"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringToFBTypePaletteEntryMap" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//FBTypePaletteEntry"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringToResourceTypeEntryMap" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//ResourceTypeEntry"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringToSegmentTypePaletteEntryMap"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//SegmentTypePaletteEntry"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringToSubApplicationTypePaletteEntryMap"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//SubApplicationTypePaletteEntry"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PaletteEntry" abstract="true">
-    <eOperations name="getGroup" lowerBound="1" eType="#//PaletteGroup">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if(null != eContainer()){&#xA;  return (PaletteGroup)eContainer();&#xA;}&#xA;return null;"/>
-      </eAnnotations>
-    </eOperations>
     <eOperations name="getProjectRelativeTypePath" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return getFile().getProjectRelativePath().toOSString();"/>
@@ -70,7 +107,7 @@
     </eOperations>
     <eOperations name="loadType" eType="ecore:EClass lib.ecore#//LibraryElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="LibraryElement retval = null;&#xA;try {&#xA;&#x9;retval = getTypeImporter(getGroup().getPallete(), getFile()).importType();&#xA;} catch (XMLStreamException | CoreException | TypeImportException e) {&#xA;&#x9;org.eclipse.fordiac.ide.model.Activator.getDefault().logError(&quot;Error loading type: &quot; + getFile().getName(), //$NON-NLS-1$&#xA;&#x9;&#x9;&#x9;e);&#xA;}&#xA;&#xA;if (null == retval) {&#xA;&#x9;org.eclipse.fordiac.ide.model.Activator.getDefault().logError(&quot;Error loading type: &quot; + getFile().getName()); //$NON-NLS-1$&#xA;}&#xA;return retval;&#xA;"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.loadType(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//XMLStreamException #//CoreException">
@@ -84,6 +121,28 @@
         transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass lib.ecore#//LibraryElement"
         resolveProxies="false" eOpposite="lib.ecore#//LibraryElement/paletteEntry"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="palette" lowerBound="1"
+        eType="#//Palette" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdapterTypePaletteEntry" eSuperTypes="#//PaletteEntry">
+    <eOperations name="getType" eType="ecore:EClass lib.ecore#//AdapterType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="LibraryElement type = super.getType();&#xA;if(type instanceof AdapterType){&#xA;   return (AdapterType) type;&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if(type instanceof AdapterType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;% org.eclipse.core.runtime.Status %> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no AdapterType as type entry for AdapterTypePaletteEntry&quot;);  //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter(file);"/>
+      </eAnnotations>
+      <eParameters name="palette" eType="#//Palette"/>
+      <eParameters name="file" eType="#//IFile"/>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DeviceTypePaletteEntry" eSuperTypes="#//PaletteEntry">
     <eOperations name="getDeviceType" lowerBound="1" eType="ecore:EClass lib.ecore#//DeviceType">
@@ -100,6 +159,26 @@
     <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(file, palette);"/>
+      </eAnnotations>
+      <eParameters name="palette" eType="#//Palette"/>
+      <eParameters name="file" eType="#//IFile"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FBTypePaletteEntry" eSuperTypes="#//PaletteEntry">
+    <eOperations name="getFBType" lowerBound="1" eType="ecore:EClass lib.ecore#//FBType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="LibraryElement type = getType();&#xA;if(type instanceof FBType){&#xA;   return (FBType) type;&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if(type instanceof FBType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;%org.eclipse.core.runtime.Status%> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no FBType as type entry for FBTypePaletteEntry&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
+    </eOperations>
+    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(file, palette);"/>
       </eAnnotations>
       <eParameters name="palette" eType="#//Palette"/>
       <eParameters name="file" eType="#//IFile"/>
@@ -145,28 +224,6 @@
       <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AdapterTypePaletteEntry" eSuperTypes="#//PaletteEntry">
-    <eOperations name="getType" eType="ecore:EClass lib.ecore#//AdapterType">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="LibraryElement type = super.getType();&#xA;if(type instanceof AdapterType){&#xA;   return (AdapterType) type;&#xA;}&#xA;return null;"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="setType">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if(type instanceof AdapterType){&#xA;&#x9;super.setType(type);&#xA;}else{&#xA;&#x9;super.setType(null);&#xA;&#x9;if(null != type){&#xA;&#x9;&#x9;&lt;% org.eclipse.core.runtime.Status %> exception = new Status(&lt;%org.eclipse.core.runtime.IStatus%>.ERROR, Activator.PLUGIN_ID, &quot;tried to set no AdapterType as type entry for AdapterTypePaletteEntry&quot;);  //$NON-NLS-1$&#xA;&#x9;&#x9;Activator.getDefault().getLog().log(exception);&#xA;&#x9;}&#xA;}"/>
-      </eAnnotations>
-      <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
-    </eOperations>
-    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter(file);"/>
-      </eAnnotations>
-      <eParameters name="palette" eType="#//Palette"/>
-      <eParameters name="file" eType="#//IFile"/>
-    </eOperations>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
   <eClassifiers xsi:type="ecore:EClass" name="SubApplicationTypePaletteEntry" eSuperTypes="#//PaletteEntry">
     <eOperations name="getSubApplicationType" lowerBound="1" eType="ecore:EClass lib.ecore#//SubAppType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -187,6 +244,8 @@
       <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TypeImporter" instanceClassName="org.eclipse.fordiac.ide.model.dataimport.TypeImporter"/>
   <eClassifiers xsi:type="ecore:EDataType" name="XMLStreamException" instanceClassName="javax.xml.stream.XMLStreamException"/>
   <eClassifiers xsi:type="ecore:EDataType" name="CoreException" instanceClassName="org.eclipse.core.runtime.CoreException"/>

@@ -217,6 +217,7 @@ public enum SystemManager {
 		DataTypeLibrary.getInstance();
 		// load palette of the system and initialize the types
 		Palette palette = TypeLibrary.loadPalette(system.getProject());
+		palette.setProject(system.getProject());
 		system.setPalette(palette);
 	}
 

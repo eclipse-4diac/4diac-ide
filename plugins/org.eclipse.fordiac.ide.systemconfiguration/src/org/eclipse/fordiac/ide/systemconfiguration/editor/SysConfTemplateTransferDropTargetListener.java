@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2016 Profactor GbmH, fortiss GmbH,  
+ * Copyright (c) 2016 Profactor GbmH, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,7 +9,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl 
+ *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editor;
@@ -54,7 +54,7 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 
 	/**
 	 * Constructs a listener on the specified viewer.
-	 * 
+	 *
 	 * @param viewer the EditPartViewer
 	 */
 	public SysConfTemplateTransferDropTargetListener(final EditPartViewer viewer, AutomationSystem system) {
@@ -73,7 +73,7 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 		} else {
 			if (TemplateTransfer.getInstance().getTemplate() instanceof PaletteEntry) {
 				PaletteEntry entry = (PaletteEntry) TemplateTransfer.getInstance().getTemplate();
-				AutomationSystem paletteSystem = entry.getGroup().getPallete().getAutomationSystem();
+				AutomationSystem paletteSystem = entry.getPalette().getAutomationSystem();
 
 				// If project is null it is an entry from the tool palette
 				if (isSysConfEditorType(TemplateTransfer.getInstance().getTemplate()) && (null != paletteSystem)

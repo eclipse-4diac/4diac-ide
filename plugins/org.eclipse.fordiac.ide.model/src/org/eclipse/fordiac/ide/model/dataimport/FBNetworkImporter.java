@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -112,9 +111,9 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		readNameCommentAttributes(fb);
 
-		PaletteEntry entry = getTypeEntry();
+		FBTypePaletteEntry entry = getTypeEntry();
 
-		if (entry instanceof FBTypePaletteEntry) {
+		if (null != entry) {
 			fb.setPaletteEntry(entry);
 			fb.setInterface(EcoreUtil.copy(fb.getType().getInterfaceList()));
 		} else {
@@ -140,11 +139,10 @@ class FBNetworkImporter extends CommonElementImporter {
 		fbNetworkElementMap.put(fb.getName(), fb);
 	}
 
-	private PaletteEntry getTypeEntry() {
+	private FBTypePaletteEntry getTypeEntry() {
 		String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeFbElement) {
-			// FIXME this can lead to problems if typename exists several times!
-			return palette.getTypeEntry(typeFbElement);
+			return palette.getFBTypeEntry(typeFbElement);
 		}
 		return null;
 	}

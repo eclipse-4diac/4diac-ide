@@ -13,6 +13,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette.impl;
 
+import java.util.Map;
 import javax.xml.stream.XMLStreamException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -29,7 +30,6 @@ import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
@@ -81,18 +81,28 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 		switch (eClass.getClassifierID()) {
 		case PalettePackage.PALETTE:
 			return createPalette();
-		case PalettePackage.PALETTE_GROUP:
-			return createPaletteGroup();
-		case PalettePackage.FB_TYPE_PALETTE_ENTRY:
-			return createFBTypePaletteEntry();
+		case PalettePackage.STRING_TO_ADAPTER_TYPE_PALETTE_ENTRY_MAP:
+			return (EObject) createStringToAdapterTypePaletteEntryMap();
+		case PalettePackage.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP:
+			return (EObject) createStringToFDeviceTypePaletteEntryMap();
+		case PalettePackage.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP:
+			return (EObject) createStringToFBTypePaletteEntryMap();
+		case PalettePackage.STRING_TO_RESOURCE_TYPE_ENTRY_MAP:
+			return (EObject) createStringToResourceTypeEntryMap();
+		case PalettePackage.STRING_TO_SEGMENT_TYPE_PALETTE_ENTRY_MAP:
+			return (EObject) createStringToSegmentTypePaletteEntryMap();
+		case PalettePackage.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP:
+			return (EObject) createStringToSubApplicationTypePaletteEntryMap();
+		case PalettePackage.ADAPTER_TYPE_PALETTE_ENTRY:
+			return createAdapterTypePaletteEntry();
 		case PalettePackage.DEVICE_TYPE_PALETTE_ENTRY:
 			return createDeviceTypePaletteEntry();
+		case PalettePackage.FB_TYPE_PALETTE_ENTRY:
+			return createFBTypePaletteEntry();
 		case PalettePackage.RESOURCE_TYPE_ENTRY:
 			return createResourceTypeEntry();
 		case PalettePackage.SEGMENT_TYPE_PALETTE_ENTRY:
 			return createSegmentTypePaletteEntry();
-		case PalettePackage.ADAPTER_TYPE_PALETTE_ENTRY:
-			return createAdapterTypePaletteEntry();
 		case PalettePackage.SUB_APPLICATION_TYPE_PALETTE_ENTRY:
 			return createSubApplicationTypePaletteEntry();
 		default:
@@ -162,10 +172,59 @@ public class PaletteFactoryImpl extends EFactoryImpl implements PaletteFactory {
 	 * 
 	 * @generated
 	 */
-	@Override
-	public PaletteGroup createPaletteGroup() {
-		PaletteGroupImpl paletteGroup = new PaletteGroupImpl();
-		return paletteGroup;
+	public Map.Entry<String, FBTypePaletteEntry> createStringToFBTypePaletteEntryMap() {
+		StringToFBTypePaletteEntryMapImpl stringToFBTypePaletteEntryMap = new StringToFBTypePaletteEntryMapImpl();
+		return stringToFBTypePaletteEntryMap;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public Map.Entry<String, DeviceTypePaletteEntry> createStringToFDeviceTypePaletteEntryMap() {
+		StringToFDeviceTypePaletteEntryMapImpl stringToFDeviceTypePaletteEntryMap = new StringToFDeviceTypePaletteEntryMapImpl();
+		return stringToFDeviceTypePaletteEntryMap;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public Map.Entry<String, ResourceTypeEntry> createStringToResourceTypeEntryMap() {
+		StringToResourceTypeEntryMapImpl stringToResourceTypeEntryMap = new StringToResourceTypeEntryMapImpl();
+		return stringToResourceTypeEntryMap;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public Map.Entry<String, SegmentTypePaletteEntry> createStringToSegmentTypePaletteEntryMap() {
+		StringToSegmentTypePaletteEntryMapImpl stringToSegmentTypePaletteEntryMap = new StringToSegmentTypePaletteEntryMapImpl();
+		return stringToSegmentTypePaletteEntryMap;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public Map.Entry<String, SubApplicationTypePaletteEntry> createStringToSubApplicationTypePaletteEntryMap() {
+		StringToSubApplicationTypePaletteEntryMapImpl stringToSubApplicationTypePaletteEntryMap = new StringToSubApplicationTypePaletteEntryMapImpl();
+		return stringToSubApplicationTypePaletteEntryMap;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	public Map.Entry<String, AdapterTypePaletteEntry> createStringToAdapterTypePaletteEntryMap() {
+		StringToAdapterTypePaletteEntryMapImpl stringToAdapterTypePaletteEntryMap = new StringToAdapterTypePaletteEntryMapImpl();
+		return stringToAdapterTypePaletteEntryMap;
 	}
 
 	/**

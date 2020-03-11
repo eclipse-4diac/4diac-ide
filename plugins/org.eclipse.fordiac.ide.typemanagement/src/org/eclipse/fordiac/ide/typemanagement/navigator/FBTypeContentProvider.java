@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.typemanagement.navigator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -26,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -55,14 +53,11 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof IFile) {
 			IFile element = (IFile) parentElement;
-			Palette palette = FBTypeUtils.getPalletteForFBTypeFile(element);
-			if (palette != null) {
-				PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, element);
-				if (null != entry) {
-					parentElement = entry.getType();
-					if (parentElement instanceof AdapterType) {
-						parentElement = ((AdapterType) parentElement).getAdapterFBType();
-					}
+			PaletteEntry entry = FBTypeUtils.getPaletteEntryForFile(element);
+			if (null != entry) {
+				parentElement = entry.getType();
+				if (parentElement instanceof AdapterType) {
+					parentElement = ((AdapterType) parentElement).getAdapterFBType();
 				}
 			}
 		}
@@ -84,7 +79,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 			retVal = super.getParent(element);
 			// FIXME check for the correct elements and return the IFile for them
 //			if(retval instanceof FBType){
-//				
+//
 //			}
 
 		}

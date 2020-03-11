@@ -22,8 +22,12 @@ package org.eclipse.fordiac.ide.application.editors;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.FigureCanvas;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkElementInsertAction;
 import org.eclipse.fordiac.ide.application.actions.MapAction;
@@ -33,15 +37,16 @@ import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
+import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -52,8 +57,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.events.MenuDetectEvent;
-import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
@@ -137,6 +140,8 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 	}
 
+	private boolean useChangeFBType;
+
 	@SuppressWarnings("rawtypes")
 	private void createFBMenus(final IMenuManager menu) {
 		useChangeFBType = false;
@@ -152,49 +157,47 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		if (useChangeFBType) {
 			MenuManager submenu = new MenuManager(text);
 			menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
-			fillMenuForPaletteGroup(submenu, palette.getRootGroup().getSubGroups());
-			addFBMenuEntries(palette.getRootGroup(), submenu);
+			fillMenuForFolder(submenu, palette.getProject());
 		}
 	}
 
 	public void buildFBInsertMenu(final IMenuManager menu, Point point) {
 		pt = point;
 		useChangeFBType = false;
-		fillMenuForPaletteGroup(menu, palette.getRootGroup().getSubGroups());
-		addFBMenuEntries(palette.getRootGroup(), menu);
+		fillMenuForFolder(menu, palette.getProject());
 	}
 
-	private boolean useChangeFBType;
-
-	private void fillMenuForPaletteGroup(IMenuManager insertTypeEntry, EList<PaletteGroup> subGroups) {
-		// TODO sort groups alphabetically
-
-		for (PaletteGroup group : subGroups) {
-			MenuManager submenu = createSubMenu(group);
-			addFBMenuEntries(group, submenu);
-			if (!submenu.isEmpty()) {
-				insertTypeEntry.add(submenu);
+	private void fillMenuForFolder(IMenuManager submenu, IContainer container) {
+		try {
+			for (IResource res : container.members()) {
+				if (res instanceof IFolder) {
+					createSubMenu(submenu, (IFolder) res);
+				} else if (res instanceof IFile) {
+					createFBMenuEntry(submenu, (IFile) res);
+				}
 			}
+		} catch (CoreException e) {
+			Activator.getDefault().logError(e.getMessage(), e);
 		}
 	}
 
-	private void addFBMenuEntries(PaletteGroup group, IMenuManager submenu) {
-		for (PaletteEntry entry : group.getEntries()) {
-
-			if ((entry instanceof FBTypePaletteEntry) || (entry instanceof SubApplicationTypePaletteEntry)) {
-				Action action = getActionForPaletteEntry(entry);
-				setActionIcon(action, entry);
-				submenu.add(action);
-			}
+	private void createSubMenu(IMenuManager parent, IFolder res) {
+		MenuManager submenu = new MenuManager(res.getName());
+		fillMenuForFolder(submenu, res);
+		if (!submenu.isEmpty()) {
+			submenu.setImageDescriptor(
+					PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER));
+			parent.add(submenu);
 		}
 	}
 
-	private MenuManager createSubMenu(PaletteGroup group) {
-		MenuManager submenu = new MenuManager(group.getLabel());
-		fillMenuForPaletteGroup(submenu, group.getSubGroups());
-		submenu.setImageDescriptor(
-				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER));
-		return submenu;
+	private void createFBMenuEntry(IMenuManager submenu, IFile typeFile) {
+		PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(typeFile, palette);
+		if ((entry instanceof FBTypePaletteEntry) || (entry instanceof SubApplicationTypePaletteEntry)) {
+			Action action = getActionForPaletteEntry(entry);
+			setActionIcon(action, entry);
+			submenu.add(action);
+		}
 	}
 
 	private Action getActionForPaletteEntry(PaletteEntry entry) {

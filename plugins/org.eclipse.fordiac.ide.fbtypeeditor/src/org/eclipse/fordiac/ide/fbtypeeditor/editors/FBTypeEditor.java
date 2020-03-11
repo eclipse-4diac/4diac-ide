@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
@@ -50,7 +49,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.gef.commands.CommandStack;
@@ -82,7 +80,6 @@ public class FBTypeEditor extends FormEditor
 	private FBType fbType;
 	private FBTypeContentOutline contentOutline = null;
 	private CommandStack commandStack = new CommandStack();
-	private Palette fbPalette = null;
 
 	private final Adapter adapter = new AdapterImpl() {
 
@@ -162,11 +159,7 @@ public class FBTypeEditor extends FormEditor
 						new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.FBTypeEditor_TypeFileDoesnotExist));
 			}
 
-			fbPalette = FBTypeUtils.getPalletteForFBTypeFile(fbTypeFile);
-
-			if (fbPalette != null) {
-				paletteEntry = TypeLibrary.getPaletteEntry(fbPalette, fbTypeFile);
-			}
+			paletteEntry = FBTypeUtils.getPaletteEntryForFile(fbTypeFile);
 		} else if (editorInput instanceof FBTypeEditorInput) {
 			paletteEntry = ((FBTypeEditorInput) editorInput).getPaletteEntry();
 		}

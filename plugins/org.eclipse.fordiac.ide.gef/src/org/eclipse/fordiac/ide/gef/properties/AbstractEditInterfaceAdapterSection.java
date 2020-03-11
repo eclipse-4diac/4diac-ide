@@ -54,9 +54,10 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		if (!adapterList.isEmpty()) {
 			return adapterList.get(adapterList.size() - 1).getType();
 		}
-		return getPalette().getAdapterTypes().get(0).getType();
+		return getPalette().getAdapterTypes().get(0).getValue().getType();
 	}
 
+	@Override
 	protected int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput) {
 		if (null != interfaceElement) {
 			InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();

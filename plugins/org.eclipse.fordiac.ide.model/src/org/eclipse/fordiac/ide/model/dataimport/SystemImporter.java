@@ -33,9 +33,7 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -143,10 +141,7 @@ public class SystemImporter extends CommonElementImporter {
 
 		String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != type) {
-			PaletteEntry entry = getPalette().getTypeEntry(type);
-			if (entry instanceof SegmentTypePaletteEntry) {
-				segment.setPaletteEntry(entry);
-			}
+			segment.setPaletteEntry(getPalette().getSegmentTypeEntry(type));
 		}
 
 		parseSegmentNodeChildren(segment);
@@ -191,6 +186,7 @@ public class SystemImporter extends CommonElementImporter {
 	private Device parseDevice() throws TypeImportException, XMLStreamException {
 		Device device = LibraryElementFactory.eINSTANCE.createDevice();
 		parseCommon(device);
+		parseDeviceType(device);
 		parseDeviceNodeChildren(device);
 		return device;
 	}
@@ -198,16 +194,19 @@ public class SystemImporter extends CommonElementImporter {
 	private void parseCommon(IVarElement element) throws TypeImportException {
 		readNameCommentAttributes(((INamedElement) element));
 
-		String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (type != null) {
-			PaletteEntry entry = getPalette().getTypeEntry(type);
-			if (null != entry) {
-				((TypedConfigureableObject) element).setPaletteEntry(entry);
-				createParamters(element);
-			}
-		}
 		if (element instanceof PositionableElement) {
 			getXandY(((PositionableElement) element));
+		}
+	}
+
+	private void parseDeviceType(Device device) {
+		String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		if (typeName != null) {
+			DeviceTypePaletteEntry entry = getPalette().getDeviceTypeEntry(typeName);
+			if (null != entry) {
+				((TypedConfigureableObject) device).setPaletteEntry(entry);
+				createParamters(device);
+			}
 		}
 	}
 
@@ -397,6 +396,7 @@ public class SystemImporter extends CommonElementImporter {
 		resource.setDeviceTypeResource(false); // TODO model refactoring - check if a resource of given name is already
 												// in the list then it would be a device type resource
 		parseCommon(resource);
+		parseResourceType(resource);
 		FBNetwork fbNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		createResourceTypeNetwork(((ResourceTypeEntry) resource.getPaletteEntry()).getResourceType(), fbNetwork);
 
@@ -429,6 +429,17 @@ public class SystemImporter extends CommonElementImporter {
 			return true;
 		});
 		return resource;
+	}
+
+	private void parseResourceType(Resource resource) {
+		String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		if (typeName != null) {
+			ResourceTypeEntry entry = getPalette().getResourceTypeEntry(typeName);
+			if (null != entry) {
+				resource.setPaletteEntry(entry);
+				createParamters(resource);
+			}
+		}
 	}
 
 	private Application parseApplication() throws TypeImportException, XMLStreamException {

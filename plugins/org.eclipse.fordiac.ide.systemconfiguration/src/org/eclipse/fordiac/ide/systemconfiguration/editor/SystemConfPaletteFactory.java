@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH,  
+ * Copyright (c) 2008, 2012 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,13 +9,12 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl 
+ *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map.Entry;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -39,7 +38,7 @@ import org.eclipse.swt.widgets.Display;
  * This class is used to create a GEF palette for the user interface. The
  * creation is mainly based on the core model of the
  * <code>org.eclipse.fordiac.ide.model</code> plugin.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public final class SystemConfPaletteFactory {
@@ -52,17 +51,15 @@ public final class SystemConfPaletteFactory {
 	/**
 	 * Creates the PaletteRoot for a PaletteViewer with the contents from
 	 * FBTypePalette.
-	 * 
+	 *
 	 * @param system the system
-	 * 
+	 *
 	 * @return PaletteRoot
 	 */
 	public static PaletteRoot createPalette(final AutomationSystem system) {
 		final PaletteRoot palette = new PaletteRoot();
-		fillPalette(palette, system);
+		fillPalette(palette, system.getPalette());
 
-		// update the palette if it changes!
-		// FIXME
 		system.getPalette().eAdapters().add(new EContentAdapter() {
 
 			@Override
@@ -70,7 +67,7 @@ public final class SystemConfPaletteFactory {
 				Display.getDefault().syncExec(() -> {
 					palette.setVisible(false);
 					palette.getChildren().clear();
-					fillPalette(palette, system);
+					fillPalette(palette, system.getPalette());
 					palette.setVisible(true);
 				});
 			}
@@ -81,33 +78,27 @@ public final class SystemConfPaletteFactory {
 	/**
 	 * Fills a given GEF palette according to an palette model from the core model.
 	 * Independent from the palette model an additional group with default tools is
-	 * added. FIXME subgroups!!!!!!!
-	 * 
+	 * added.
+	 *
 	 * @param palette      the empty GEF palette
 	 * @param paletteModel the EMF model
 	 */
-	private static void fillPalette(final PaletteRoot palette,
-			final org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem system) {
-		Palette pal = system.getPalette();
-
-		for (org.eclipse.fordiac.ide.model.Palette.PaletteGroup group : pal.getRootGroup().getSubGroups()) {
-			if (!group.getEntries().isEmpty()) {
-				createDevGroup(palette, group);
-			}
-			if (!group.getEntries().isEmpty()) {
-				createRESGroup(palette, group);
-			}
-			if (!group.getEntries().isEmpty()) {
-				createSEGGroup(palette, group);
-			}
-		}
+	private static void fillPalette(final PaletteRoot palette, final Palette typePalette) {
+		createDevGroup(palette, typePalette);
+		createRESGroup(palette, typePalette);
+		createSEGGroup(palette, typePalette);
 	}
 
-	private static PaletteDrawer createRESGroup(final PaletteRoot palette,
-			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		PaletteDrawer paletteContainer = new PaletteDrawer(group.getLabel());
+	private static PaletteDrawer createDevGroup(final PaletteRoot palette, final Palette typePalette) {
+		PaletteDrawer paletteContainer = new PaletteDrawer("Devices");
 
-		paletteContainer.addAll(createRESEntries(group));
+		for (Entry<String, DeviceTypePaletteEntry> entry : typePalette.getDeviceTypes().entrySet()) {
+			PaletteEntry paletteEntry = createCreationEntry(entry.getValue(),
+					FordiacImage.ICON_DEVICE.getImageDescriptor());
+			if (paletteEntry != null) {
+				paletteContainer.add(paletteEntry);
+			}
+		}
 
 		if (!paletteContainer.getChildren().isEmpty()) {
 			palette.add(paletteContainer);
@@ -116,11 +107,16 @@ public final class SystemConfPaletteFactory {
 		return paletteContainer;
 	}
 
-	private static PaletteDrawer createDevGroup(final PaletteRoot palette,
-			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		PaletteDrawer paletteContainer = new PaletteDrawer(group.getLabel());
+	private static PaletteDrawer createRESGroup(final PaletteRoot palette, final Palette typePalette) {
+		PaletteDrawer paletteContainer = new PaletteDrawer("Resources");
 
-		paletteContainer.addAll(createDEVEntries(group));
+		for (Entry<String, ResourceTypeEntry> entry : typePalette.getResourceTypes().entrySet()) {
+			PaletteEntry paletteEntry = createCreationEntry(entry.getValue(),
+					FordiacImage.ICON_RESOURCE.getImageDescriptor());
+			if (paletteEntry != null) {
+				paletteContainer.add(paletteEntry);
+			}
+		}
 
 		if (!paletteContainer.getChildren().isEmpty()) {
 			palette.add(paletteContainer);
@@ -129,61 +125,26 @@ public final class SystemConfPaletteFactory {
 		return paletteContainer;
 	}
 
-	private static PaletteDrawer createSEGGroup(final PaletteRoot palette,
-			final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		PaletteDrawer paletteContainer = new PaletteDrawer(group.getLabel());
+	private static PaletteDrawer createSEGGroup(final PaletteRoot palette, final Palette typePalette) {
+		PaletteDrawer paletteContainer = new PaletteDrawer("Segments");
 
-		paletteContainer.addAll(createSEGEntries(group));
+		for (Entry<String, SegmentTypePaletteEntry> entry : typePalette.getSegmentTypes().entrySet()) {
+			PaletteEntry paletteEntry = createCreationEntry(entry.getValue(),
+					FordiacImage.ICON_SEGMENT.getImageDescriptor());
+			if (paletteEntry != null) {
+				paletteContainer.add(paletteEntry);
+			}
+		}
 
 		if (!paletteContainer.getChildren().isEmpty()) {
 			palette.add(paletteContainer);
 		}
 		return paletteContainer;
-	}
-
-	private static List<PaletteEntry> createRESEntries(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<PaletteEntry> entries = new ArrayList<>();
-
-		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
-			if (entry instanceof ResourceTypeEntry) {
-				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_RESOURCE.getImageDescriptor());
-				if (paletteEntry != null) {
-					entries.add(paletteEntry);
-				}
-			}
-		}
-		return entries;
-	}
-
-	private static List<PaletteEntry> createDEVEntries(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<PaletteEntry> entries = new ArrayList<>();
-		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
-			if (entry instanceof DeviceTypePaletteEntry) {
-				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_DEVICE.getImageDescriptor());
-				if (paletteEntry != null) {
-					entries.add(paletteEntry);
-				}
-			}
-		}
-		return entries;
-	}
-
-	private static List<PaletteEntry> createSEGEntries(final org.eclipse.fordiac.ide.model.Palette.PaletteGroup group) {
-		List<PaletteEntry> entries = new ArrayList<>();
-		for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
-			if (entry instanceof SegmentTypePaletteEntry) {
-				PaletteEntry paletteEntry = createCreationEntry(entry, FordiacImage.ICON_SEGMENT.getImageDescriptor());
-				if (paletteEntry != null) {
-					entries.add(paletteEntry);
-				}
-			}
-		}
-		return entries;
 	}
 
 	/**
 	 * Creates a new PaletteEntry
-	 * 
+	 *
 	 * @param entry
 	 * @return a new PaletteEntry
 	 */

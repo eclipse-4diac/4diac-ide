@@ -307,7 +307,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection {
 		if (getType() instanceof SubApp) {
 			return ((SubApp) getType()).getFbNetwork().getApplication().getAutomationSystem().getPalette();
 		} else if (getType() instanceof FBType) {
-			return ((FBType) getType()).getPaletteEntry().getGroup().getPallete();
+			return ((FBType) getType()).getPaletteEntry().getPalette();
 		}
 		return null;
 	}

@@ -68,6 +68,7 @@ public class PaletteEntryItemProvider extends ItemProviderAdapter implements IEd
 			addFilePropertyDescriptor(object);
 			addLastModificationTimestampPropertyDescriptor(object);
 			addTypePropertyDescriptor(object);
+			addPalettePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -133,6 +134,21 @@ public class PaletteEntryItemProvider extends ItemProviderAdapter implements IEd
 						getString("_UI_PropertyDescriptor_description", "_UI_PaletteEntry_type_feature", //$NON-NLS-1$ //$NON-NLS-2$
 								"_UI_PaletteEntry_type"), //$NON-NLS-1$
 						PalettePackage.Literals.PALETTE_ENTRY__TYPE, true, false, true, null, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Palette feature. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	protected void addPalettePropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_PaletteEntry_palette_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_PaletteEntry_palette_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_PaletteEntry_type"), //$NON-NLS-1$
+						PalettePackage.Literals.PALETTE_ENTRY__PALETTE, true, false, true, null, null, null));
 	}
 
 	/**

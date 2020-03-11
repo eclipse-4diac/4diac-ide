@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -172,12 +173,11 @@ public class SaveAsSubappWizard extends Wizard {
 	private PaletteEntry getPalletEntry() {
 		Palette palette = getSystem().getPalette();
 		IFile targetTypeFile = getTargetTypeFile();
-		PaletteEntry newEntry = TypeLibrary.getPaletteEntry(palette, targetTypeFile);
-
+		PaletteEntry newEntry = FBTypeUtils.getPaletteEntryForFile(targetTypeFile);
 		if (null == newEntry) {
 			// refresh the palette and retry to fetch the entry
 			TypeLibrary.refreshPalette(palette);
-			newEntry = TypeLibrary.getPaletteEntry(palette, targetTypeFile);
+			newEntry = FBTypeUtils.getPaletteEntryForFile(targetTypeFile);
 		}
 
 		return newEntry;

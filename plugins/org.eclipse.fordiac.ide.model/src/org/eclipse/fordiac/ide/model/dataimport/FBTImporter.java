@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
@@ -386,7 +385,7 @@ public class FBTImporter extends TypeImporter {
 
 	private void addAdapterFB(final FBNetwork fbNetwork, AdapterDeclaration adapter, Palette palette) {
 		AdapterFB aFB = LibraryElementFactory.eINSTANCE.createAdapterFB();
-		aFB.setPaletteEntry(getAdapterPaletEntry(adapter.getTypeName(), palette));
+		aFB.setPaletteEntry(palette.getAdapterTypeEntry(adapter.getTypeName()));
 		aFB.setAdapterDecl(adapter);
 
 		aFB.setName(adapter.getName());
@@ -406,11 +405,6 @@ public class FBTImporter extends TypeImporter {
 			aFB.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		}
 		fbNetwork.getNetworkElements().add(aFB);
-	}
-
-	private static AdapterTypePaletteEntry getAdapterPaletEntry(String name, Palette palette) {
-		PaletteEntry entry = palette.getTypeEntry(name);
-		return (entry instanceof AdapterTypePaletteEntry) ? (AdapterTypePaletteEntry) entry : null;
 	}
 
 	/**
@@ -914,7 +908,7 @@ public class FBTImporter extends TypeImporter {
 		readNameCommentAttributes(a);
 		String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
-			AdapterTypePaletteEntry entry = getAdapterPaletEntry(typeName, palette);
+			AdapterTypePaletteEntry entry = palette.getAdapterTypeEntry(typeName);
 			a.setPaletteEntry(entry);
 			AdapterType dataType = null;
 			if (null != entry) {

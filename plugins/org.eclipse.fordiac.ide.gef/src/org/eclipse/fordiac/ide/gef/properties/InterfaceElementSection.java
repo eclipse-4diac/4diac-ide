@@ -111,7 +111,7 @@ public class InterfaceElementSection extends AbstractSection {
 			EventTypeLibrary.getInstance().getEventTypes().forEach(eType -> typeCombo.add(eType.getName()));
 		} else if (getType() instanceof AdapterDeclaration) {
 			if (null != getType().getFBNetworkElement().getFbNetwork().getApplication()) {
-				getPalette().getAdapterTypes().forEach(adp -> typeCombo.add(adp.getType().getName()));
+				getPalette().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getType().getName()));
 			}
 		} else if (getType() instanceof VarDeclaration) {
 			DataTypeLibrary.getInstance().getDataTypesSorted().forEach(dataType -> typeCombo.add(dataType.getName()));

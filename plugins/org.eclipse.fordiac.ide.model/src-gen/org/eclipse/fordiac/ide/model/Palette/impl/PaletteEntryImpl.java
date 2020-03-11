@@ -26,10 +26,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
-import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -48,6 +46,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * <em>Last Modification Timestamp</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getType
  * <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl#getPalette
+ * <em>Palette</em>}</li>
  * </ul>
  *
  * @generated
@@ -124,6 +124,16 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * @ordered
 	 */
 	protected LibraryElement type;
+
+	/**
+	 * The cached value of the '{@link #getPalette() <em>Palette</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see #getPalette()
+	 * @generated
+	 * @ordered
+	 */
+	protected Palette palette;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -289,11 +299,22 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * @generated
 	 */
 	@Override
-	public PaletteGroup getGroup() {
-		if (null != eContainer()) {
-			return (PaletteGroup) eContainer();
-		}
-		return null;
+	public Palette getPalette() {
+		return palette;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public void setPalette(Palette newPalette) {
+		Palette oldPalette = palette;
+		palette = newPalette;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_ENTRY__PALETTE, oldPalette,
+					palette));
 	}
 
 	/**
@@ -313,19 +334,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 */
 	@Override
 	public LibraryElement loadType() {
-		LibraryElement retval = null;
-		try {
-			retval = getTypeImporter(getGroup().getPallete(), getFile()).importType();
-		} catch (XMLStreamException | CoreException | TypeImportException e) {
-			org.eclipse.fordiac.ide.model.Activator.getDefault().logError("Error loading type: " + getFile().getName(), //$NON-NLS-1$
-					e);
-		}
-
-		if (null == retval) {
-			org.eclipse.fordiac.ide.model.Activator.getDefault().logError("Error loading type: " + getFile().getName()); //$NON-NLS-1$
-		}
-		return retval;
-
+		return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.loadType(this);
 	}
 
 	/**
@@ -387,6 +396,8 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 			return getLastModificationTimestamp();
 		case PalettePackage.PALETTE_ENTRY__TYPE:
 			return getType();
+		case PalettePackage.PALETTE_ENTRY__PALETTE:
+			return getPalette();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -410,6 +421,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 			return;
 		case PalettePackage.PALETTE_ENTRY__TYPE:
 			setType((LibraryElement) newValue);
+			return;
+		case PalettePackage.PALETTE_ENTRY__PALETTE:
+			setPalette((Palette) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -435,6 +449,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 		case PalettePackage.PALETTE_ENTRY__TYPE:
 			setType((LibraryElement) null);
 			return;
+		case PalettePackage.PALETTE_ENTRY__PALETTE:
+			setPalette((Palette) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -455,6 +472,8 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 			return lastModificationTimestamp != LAST_MODIFICATION_TIMESTAMP_EDEFAULT;
 		case PalettePackage.PALETTE_ENTRY__TYPE:
 			return type != null;
+		case PalettePackage.PALETTE_ENTRY__PALETTE:
+			return palette != null;
 		}
 		return super.eIsSet(featureID);
 	}

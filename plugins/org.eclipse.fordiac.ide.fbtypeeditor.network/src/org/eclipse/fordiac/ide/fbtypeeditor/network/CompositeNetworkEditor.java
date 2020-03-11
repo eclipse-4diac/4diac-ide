@@ -123,11 +123,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 			getGraphicalViewer().select(editPart);
 			return true;
 		}
-		if (selectedElement instanceof FBNetwork) {
-			return true;
-		}
-
-		return false;
+		return (selectedElement instanceof FBNetwork);
 	}
 
 	EditPart getEditPartForSelection(Object selectedElement) {
@@ -181,9 +177,9 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	protected void configurePalette(FBTypeEditorInput fbTypeEditorInput) {
-		Palette fbPallette = fbTypeEditorInput.getPaletteEntry().getGroup().getPallete();
-		if (null != fbPallette) {
-			palette = fbPallette;
+		Palette fbPalette = fbTypeEditorInput.getPaletteEntry().getPalette();
+		if (null != fbPalette) {
+			palette = fbPalette;
 		}
 	}
 

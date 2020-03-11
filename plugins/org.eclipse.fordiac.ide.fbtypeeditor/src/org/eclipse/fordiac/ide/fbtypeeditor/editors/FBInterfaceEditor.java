@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBInterfacePaletteFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
@@ -64,13 +63,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 		if (input instanceof FBTypeEditorInput) {
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			fbType = untypedInput.getContent();
-			EObject group = untypedInput.getPaletteEntry().getGroup();
-			while (group.eContainer() != null) {
-				group = group.eContainer();
-			}
-			if (group instanceof Palette) {
-				palette = (Palette) group;
-			}
+			palette = untypedInput.getPaletteEntry().getPalette();
 			if (null == palette) {
 				palette = TypeLibrary.getInstance().getPalette();
 			}

@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.contentprovider;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.actions.CreateFromNewAdapterAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.actions.CreateInputEventAction;
@@ -27,7 +26,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.actions.CreateSocketAction;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -116,7 +114,7 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 
 		if (((EditorPart) part).getEditorInput() instanceof FBTypeEditorInput) {
 			FBTypeEditorInput untypedInput = (FBTypeEditorInput) ((EditorPart) part).getEditorInput();
-			Palette palette = untypedInput.getPaletteEntry().getGroup().getPallete();
+			Palette palette = untypedInput.getPaletteEntry().getPalette();
 			if (null != palette) {
 				MenuManager socketEntry = new MenuManager(CREATE_SOCKET);
 				menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, socketEntry);
@@ -136,50 +134,30 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 				}
 				socketEntry.add(action);
 
-				fillMenuForPalletteGroup(socketEntry, plugEntry, registry, part, fbType,
-						palette.getRootGroup().getSubGroups());
+				fillMenuForPalletteGroup(socketEntry, plugEntry, registry, part, fbType, palette);
 			}
 		}
 	}
 
 	private static void fillMenuForPalletteGroup(MenuManager socketEntry, MenuManager plugEntry,
-			ActionRegistry registry, IWorkbenchPart part, FBType fbType, EList<PaletteGroup> subGroups) {
-		MenuManager socketSubmenu;
-		MenuManager plugSubmenu;
-		Action action;
+			ActionRegistry registry, IWorkbenchPart part, FBType fbType, Palette palette) {
+		IAction action;
 
-		// TODO sort groups alphabetically
-
-		for (PaletteGroup group : subGroups) {
-			socketSubmenu = new MenuManager(group.getLabel());
-			plugSubmenu = new MenuManager(group.getLabel());
-
-			fillMenuForPalletteGroup(socketSubmenu, plugSubmenu, registry, part, fbType, group.getSubGroups());
-
-			for (org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry : group.getEntries()) {
-				if (entry instanceof AdapterTypePaletteEntry) {
-					// add socket entry
-					action = (Action) registry.getAction(CreateSocketAction.getID((AdapterTypePaletteEntry) entry));
-					if (null == action) {
-						action = new CreateSocketAction(part, fbType, (AdapterTypePaletteEntry) entry);
-					}
-					socketSubmenu.add(action);
-
-					// added plug entry
-					action = (Action) registry.getAction(CreatePlugAction.getID((AdapterTypePaletteEntry) entry));
-					if (null == action) {
-						action = new CreatePlugAction(part, fbType, (AdapterTypePaletteEntry) entry);
-					}
-					plugSubmenu.add(action);
-				}
+		for (AdapterTypePaletteEntry entry : palette.getAdapterTypesSorted()) {
+			// add socket entry
+			action = registry.getAction(CreateSocketAction.getID(entry));
+			if (null == action) {
+				action = new CreateSocketAction(part, fbType, entry);
 			}
+			socketEntry.add(action);
 
-			if (!socketSubmenu.isEmpty()) {
-				socketEntry.add(socketSubmenu);
-				plugEntry.add(plugSubmenu);
+			// added plug entry
+			action = registry.getAction(CreatePlugAction.getID(entry));
+			if (null == action) {
+				action = new CreatePlugAction(part, fbType, entry);
 			}
+			plugEntry.add(action);
 		}
-
 	}
 
 	public static void createInterfaceEditingActions(IWorkbenchPart workBenchPart, ActionRegistry registry,

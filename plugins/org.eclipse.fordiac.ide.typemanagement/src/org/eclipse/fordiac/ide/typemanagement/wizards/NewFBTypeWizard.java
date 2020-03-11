@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2010 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,8 +11,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch
  *     - initial API and implementation and/or initial documentation
- *   Jose Cabral - Add preferences 
- *   Alois Zoitl - moved openEditor helper function to EditorUtils  
+ *   Jose Cabral - Add preferences
+ *   Alois Zoitl - moved openEditor helper function to EditorUtils
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -102,12 +103,12 @@ public class NewFBTypeWizard extends Wizard implements INewWizard {
 	}
 
 	private boolean finishTypeCreation(IFile targetTypeFile) {
-		Palette palette = SystemManager.INSTANCE.getPalette(targetTypeFile.getProject());
-		entry = TypeLibrary.getPaletteEntry(palette, targetTypeFile);
+		entry = FBTypeUtils.getPaletteEntryForFile(targetTypeFile);
 		if (null == entry) {
 			// refresh the palette and retry to fetch the entry
+			Palette palette = SystemManager.INSTANCE.getPalette(targetTypeFile.getProject());
 			TypeLibrary.refreshPalette(palette);
-			entry = TypeLibrary.getPaletteEntry(palette, targetTypeFile);
+			entry = FBTypeUtils.getPaletteEntryForFile(targetTypeFile);
 		}
 		LibraryElement type = entry.getType();
 		type.setName(TypeLibrary.getTypeNameFromFile(targetTypeFile));

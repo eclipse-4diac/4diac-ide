@@ -30,7 +30,6 @@ import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -39,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -128,14 +126,7 @@ public final class DEVImporter extends TypeImporter {
 
 		String resType = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != resType) {
-			// FIX - ResTypeLibrary was used by error
-			PaletteEntry entry = null;
-			if (resType.contains("/")) { //$NON-NLS-1$
-				entry = palette.getTypeEntryForPath(resType, TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING_WITH_DOT);
-			} else {
-				entry = palette.getTypeEntry(resType);
-			}
-			res.setPaletteEntry(entry);
+			res.setPaletteEntry(palette.getResourceTypeEntry(resType));
 		} else {
 			throw new TypeImportException(Messages.DEVImporter_ERROR_ResourceTypeHasToBeSet);
 		}

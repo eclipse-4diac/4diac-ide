@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
  * 				 2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - moved openEditor helper function to EditorUtils  
+ *   Alois Zoitl - moved openEditor helper function to EditorUtils
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
@@ -149,7 +149,7 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 			SelectionRequest selRequest = (SelectionRequest) request;
 			if ((selRequest.getLastButtonPressed() == 1) && (selRequest.isControlKeyPressed())) {
 				// open the default editor for the adapter file
-				PaletteEntry entry = systemPalette.getTypeEntry(getAdapter().getType().getName());
+				PaletteEntry entry = systemPalette.getAdapterTypeEntry(getAdapter().getType().getName());
 				if (null != entry) {
 					IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 							.getDefaultEditor(entry.getFile().getName());

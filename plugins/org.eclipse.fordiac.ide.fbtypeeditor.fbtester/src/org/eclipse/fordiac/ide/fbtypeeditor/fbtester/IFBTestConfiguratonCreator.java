@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.fbtester;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.ISetValueListener;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.ITriggerEventListener;
-import org.eclipse.fordiac.ide.model.Palette.PaletteGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.swt.widgets.Composite;
 
@@ -23,7 +22,5 @@ public interface IFBTestConfiguratonCreator extends ISetValueListener, ITriggerE
 	IFBTestConfiguration createConfigurationPage(Composite parent);
 
 	void setType(FBType type);
-
-	void setGroup(PaletteGroup group);
 
 }

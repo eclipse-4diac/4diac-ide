@@ -177,9 +177,6 @@ public class Messages extends NLS {
 
 	public static String Import_ERROR_NameNotDefined;
 
-	/** The Import utils_ erro r_ input variable name not defined. */
-	public static String ImportUtils_ERROR_InputVariableNameNotDefined;
-
 	/** The Import utils_ erro r_ input variable type not defined. */
 	public static String Import_ERROR_InputVariableTypeNotDefined;
 

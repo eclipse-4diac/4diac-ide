@@ -36,6 +36,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * <em>Last Modification Timestamp</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getType
  * <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getPalette
+ * <em>Palette</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPaletteEntry()
@@ -162,12 +164,27 @@ public interface PaletteEntry extends EObject {
 	void setType(LibraryElement value);
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the value of the '<em><b>Palette</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @model kind="operation" required="true"
+	 * @return the value of the '<em>Palette</em>' reference.
+	 * @see #setPalette(Palette)
+	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPaletteEntry_Palette()
+	 * @model resolveProxies="false" required="true"
 	 * @generated
 	 */
-	PaletteGroup getGroup();
+	Palette getPalette();
+
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.model.Palette.PaletteEntry#getPalette
+	 * <em>Palette</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @param value the new value of the '<em>Palette</em>' reference.
+	 * @see #getPalette()
+	 * @generated
+	 */
+	void setPalette(Palette value);
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->

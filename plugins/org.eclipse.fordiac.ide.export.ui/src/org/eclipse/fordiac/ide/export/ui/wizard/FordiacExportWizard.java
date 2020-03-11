@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -69,7 +69,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.wizard.Wizard#addPages()
 	 */
 	@Override
@@ -84,7 +84,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	@Override
@@ -122,7 +122,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 						IFile file = (IFile) object;
 
 						Palette palette = systemManager.getPalette(file.getProject());
-						PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, file);
+						PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file, palette);
 						LibraryElement type = entry.getType();
 
 						monitor.subTask(
@@ -166,7 +166,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
 	 * org.eclipse.jface.viewers.IStructuredSelection)
 	 */

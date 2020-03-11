@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseFactory;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -145,11 +144,10 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 
 	private static void createMonitoredAdpaterFBView(MonitoringAdapterElement adpaterElement) {
 		AdapterFB fb = LibraryElementFactory.eINSTANCE.createAdapterFB();
-		IInterfaceElement interfaceElement = adpaterElement.getPort().getInterfaceElement();
-		Palette palette = interfaceElement.getFBNetworkElement().getFbNetwork().getAutomationSystem().getPalette();
-		List<PaletteEntry> types = palette.getTypeEntries(((AdapterDeclaration) interfaceElement).getType().getName());
-		fb.setPaletteEntry(types.get(0));
-		fb.setAdapterDecl((AdapterDeclaration) interfaceElement);
+		AdapterDeclaration interfaceElement = (AdapterDeclaration) adpaterElement.getPort().getInterfaceElement();
+		PaletteEntry entry = interfaceElement.getPaletteEntry();
+		fb.setPaletteEntry(entry);
+		fb.setAdapterDecl(interfaceElement);
 		fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		createMonitoredAdapterInterface(fb);
 		adpaterElement.setMonitoredAdapterFB(fb);

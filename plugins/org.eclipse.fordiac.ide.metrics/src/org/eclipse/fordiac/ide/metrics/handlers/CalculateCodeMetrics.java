@@ -25,10 +25,8 @@ import org.eclipse.fordiac.ide.metrics.analyzers.CyclomaticComplexity;
 import org.eclipse.fordiac.ide.metrics.analyzers.HalsteadMetric;
 import org.eclipse.fordiac.ide.metrics.analyzers.MetricData;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.util.FBTypeUtils;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -142,12 +140,9 @@ public class CalculateCodeMetrics extends AbstractHandler {
 	}
 
 	private static INamedElement checkSelectedFile(IFile file) {
-		Palette palette = FBTypeUtils.getPalletteForFBTypeFile(file);
-		if (palette != null) {
-			PaletteEntry entry = TypeLibrary.getPaletteEntry(palette, file);
-			if (entry instanceof FBTypePaletteEntry) {
-				return ((FBTypePaletteEntry) entry).getFBType();
-			}
+		PaletteEntry entry = FBTypeUtils.getPaletteEntryForFile(file);
+		if (entry instanceof FBTypePaletteEntry) {
+			return ((FBTypePaletteEntry) entry).getFBType();
 		}
 		return null;
 	}
