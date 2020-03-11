@@ -41,7 +41,7 @@
       <li><a href="../../html/4diacIDE/createOwnTypes.html">Create Your own Function Block Types</a></li>
       <li><a href="../../html/4diacIDE/otherUseful.html">Other Basic Features</a></li>
       <li><a href="../../html/4diacIDE/advancedFeatures.html">Advanced Features</a></li>
-      <li><a href="../../html/4ddiacIDE/dynamicTypeLoader.html>Depolying new FBs with the Dynamic Type Loader</a></li>
+      <li><a href="../../html/4diacIDE/dynamicTypeLoader.html">Deploying new FBs with the Dynamic Type Loader</a></li>
     </ol>
 
   <p>This guide extends the blinking application of <a href="../../html/4diacIDE/use4diacLocally.html" target="_blank">Step 1</a>. 
@@ -128,10 +128,10 @@
 <!--*********************-->
      <h3 id="BackgroundCommunicationFBs">Background of the Communication FBs</h3>
      
-     <p>Here‘s what the last steps mean. The PUBLISH_X FB is used to send messages over the network which are received by an according SUBSCRIBE_X FB. 
+     <p>Here is what the last steps mean. The PUBLISH_X FB is used to send messages over the network which are received by an according SUBSCRIBE_X FB. 
 	 Every time a REQ is triggered, a message is sent according to the ID input. 
 	 With the value of the ID input you can specify what specific network protocol you would like to use (e.g., MQTT, OPC UA). 
-	 If you don’t specify a dedicated protocol the default as defined in the <a href="https://www.holobloc.com/doc/ita/">"IEC 61499 Compliance Profile for Feasibility Demonstrations"</a> is used. 
+	 If you do not specify a dedicated protocol the default as defined in the <a href="https://www.holobloc.com/doc/ita/">"IEC 61499 Compliance Profile for Feasibility Demonstrations"</a> is used. 
      The number X in PUBLISH_X is the number of data elements that you want to send in the message. 
 	 Since we are only sending one value we used PUBLISH_1.</p> 
 
@@ -151,7 +151,7 @@
       <li>Set the Port to 61499 (the same as defined before, remember localhost:61499 in the System Configuration Editor?).</li>
       <li>Launch Local 4diac&nbsp;FORTE.</li>
       <li>You should see the location of your 4diac&nbsp;FORTE and the Terminate button enabled in the Console.</li>
-      <li>Set the Port to 61500 (the same define before, remember localhost:61500 in the System Configuration?)</li>
+      <li>Set the Port to 61500 (the same as defined before, remember localhost:61500 in the System Configuration?)</li>
       <li>Launch Local 4diac&nbsp;FORTE</li>
       <li>You should see the the location of your 4diac&nbsp;FORTE and the Terminate button enabled in the Console.</li>
       <li>Select the elements to deploy. 
