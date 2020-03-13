@@ -119,10 +119,10 @@ public class ECActionItemProvider extends ItemProviderAdapter implements IEditin
 	@Override
 	public String getText(Object object) {
 		ECAction action = (ECAction) object;
-		String label = " ";
+		String label = " "; //$NON-NLS-1$
 		if (null != action.getAlgorithm()) {
 			if (action.getAlgorithm().getName() != null && action.getAlgorithm().getName().length() != 0) {
-				label += action.getAlgorithm().getName() + "/";
+				label += action.getAlgorithm().getName() + "/"; //$NON-NLS-1$
 			}
 		}
 
@@ -132,7 +132,7 @@ public class ECActionItemProvider extends ItemProviderAdapter implements IEditin
 			}
 		}
 
-		return getString("_UI_ECAction_type") + label;
+		return getString("_UI_ECAction_type") + label; //$NON-NLS-1$
 	}
 
 	/**

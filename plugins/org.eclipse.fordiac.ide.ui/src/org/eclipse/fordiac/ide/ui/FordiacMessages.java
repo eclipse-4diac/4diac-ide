@@ -28,6 +28,7 @@ public class FordiacMessages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.ui.messages"; //$NON-NLS-1$
 
 	public static String Algorithm;
+	public static String Algorithms;
 	public static String ApplicationDomain;
 	public static String ArraySize;
 	public static String Author;
@@ -56,6 +57,7 @@ public class FordiacMessages extends NLS {
 	public static String NewType;
 	public static String Organization;
 	public static String Product;
+	public static String Properties;
 	public static String Remarks;
 	public static String Resource;
 	public static String SelectType;

@@ -82,11 +82,11 @@ public class InputPrimitiveItemProvider extends PrimitiveItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((InputPrimitive) object).getEvent();
-		String retVal = ((label == null) || (label.length() == 0)) ? getString("_UI_InputPrimitive_type") : label;
+		String retVal = ((label == null) || (label.length() == 0)) ? getString("_UI_InputPrimitive_type") : label; //$NON-NLS-1$
 
 		String parameters = ((InputPrimitive) object).getParameters();
 		if ((parameters != null) && (parameters.length() != 0)) {
-			retVal += " (" + parameters + ")";
+			retVal += " (" + parameters + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		return retVal;

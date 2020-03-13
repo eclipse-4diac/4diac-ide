@@ -180,7 +180,7 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((Segment) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_Segment_type") : label;
+		return label == null || label.length() == 0 ? getString("_UI_Segment_type") : label; //$NON-NLS-1$
 	}
 
 	/**

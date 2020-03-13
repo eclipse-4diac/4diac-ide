@@ -88,7 +88,7 @@ public class FBItemProvider extends FBNetworkElementItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((FB) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_FB_type") : label;
+		return label == null || label.length() == 0 ? getString("_UI_FB_type") : label; //$NON-NLS-1$
 	}
 
 	/**

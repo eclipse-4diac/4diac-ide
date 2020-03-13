@@ -54,7 +54,7 @@ public class TransientInterfaceListItemProvider extends ItemProviderAdapter impl
 
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/InterfaceList"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/InterfaceList")); //$NON-NLS-1$
 	}
 
 	@Override

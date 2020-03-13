@@ -125,7 +125,7 @@ public class ServiceTransactionItemProvider extends ItemProviderAdapter implemen
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_ServiceTransaction_type");
+		return getString("_UI_ServiceTransaction_type"); //$NON-NLS-1$
 	}
 
 	/**

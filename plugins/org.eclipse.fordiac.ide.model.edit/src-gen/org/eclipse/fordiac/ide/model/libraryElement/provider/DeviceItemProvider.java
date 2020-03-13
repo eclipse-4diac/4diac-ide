@@ -181,7 +181,7 @@ public class DeviceItemProvider extends TypedConfigureableObjectItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((Device) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_Device_type") : label;
+		return label == null || label.length() == 0 ? getString("_UI_Device_type") : label; //$NON-NLS-1$
 	}
 
 	/**

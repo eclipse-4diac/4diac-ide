@@ -127,7 +127,7 @@ public class SubAppItemProvider extends FBNetworkElementItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((SubApp) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_SubApp_type") : label;
+		return label == null || label.length() == 0 ? getString("_UI_SubApp_type") : label; //$NON-NLS-1$
 	}
 
 	/**

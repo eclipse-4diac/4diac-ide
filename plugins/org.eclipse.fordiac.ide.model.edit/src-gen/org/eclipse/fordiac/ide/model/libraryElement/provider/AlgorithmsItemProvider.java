@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 public class AlgorithmsItemProvider extends TransientBasicFBTypeListItemProvider {
@@ -41,7 +42,7 @@ public class AlgorithmsItemProvider extends TransientBasicFBTypeListItemProvider
 
 	@Override
 	public String getText(Object object) {
-		return "Algorithms";
+		return FordiacMessages.Algorithms;
 	}
 
 	@Override

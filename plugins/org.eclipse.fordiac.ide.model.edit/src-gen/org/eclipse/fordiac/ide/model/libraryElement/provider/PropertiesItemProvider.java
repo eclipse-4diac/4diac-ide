@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 public class PropertiesItemProvider extends TransientLibraryElementItemProvider {
@@ -45,7 +46,7 @@ public class PropertiesItemProvider extends TransientLibraryElementItemProvider 
 
 	@Override
 	public String getText(Object object) {
-		return "Properties";
+		return FordiacMessages.Properties;
 	}
 
 	@Override

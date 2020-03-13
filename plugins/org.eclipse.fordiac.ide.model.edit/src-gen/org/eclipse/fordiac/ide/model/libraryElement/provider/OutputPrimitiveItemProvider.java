@@ -104,11 +104,11 @@ public class OutputPrimitiveItemProvider extends PrimitiveItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((OutputPrimitive) object).getEvent();
-		String retVal = ((label == null) || (label.length() == 0)) ? getString("_UI_OutputPrimitive_type") : label;
+		String retVal = ((label == null) || (label.length() == 0)) ? getString("_UI_OutputPrimitive_type") : label; //$NON-NLS-1$
 
 		String parameters = ((OutputPrimitive) object).getParameters();
 		if ((parameters != null) && (parameters.length() != 0)) {
-			retVal += " (" + parameters + ")";
+			retVal += " (" + parameters + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		return retVal;

@@ -169,7 +169,7 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((AutomationSystem) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_AutomationSystem_type") : label;
+		return label == null || label.length() == 0 ? getString("_UI_AutomationSystem_type") : label; //$NON-NLS-1$
 	}
 
 	/**

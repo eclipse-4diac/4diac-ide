@@ -161,11 +161,11 @@ public class ServiceItemProvider extends I4DIACElementItemProvider {
 	public String getText(Object object) {
 		Service service = ((Service) object);
 
-		String label = getString("_UI_Service_type") + ": ";
+		String label = getString("_UI_Service_type") + ": "; //$NON-NLS-1$ //$NON-NLS-2$
 
 		if (null != service) {
 			if (null != service.getLeftInterface()) {
-				label += service.getLeftInterface().getName() + " / ";
+				label += service.getLeftInterface().getName() + " / "; //$NON-NLS-1$
 			}
 			if (null != service.getRightInterface()) {
 				label += service.getRightInterface().getName();

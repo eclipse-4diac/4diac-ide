@@ -113,7 +113,7 @@ public class AdapterDeclarationItemProvider extends VarDeclarationItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((AdapterDeclaration) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_AdapterDeclaration_type") : label;
+		return label == null || label.length() == 0 ? getString("_UI_AdapterDeclaration_type") : label; //$NON-NLS-1$
 	}
 
 	/**

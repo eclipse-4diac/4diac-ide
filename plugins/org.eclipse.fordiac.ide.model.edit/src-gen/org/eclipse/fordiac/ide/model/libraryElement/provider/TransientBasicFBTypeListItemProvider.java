@@ -54,7 +54,7 @@ public class TransientBasicFBTypeListItemProvider extends ItemProviderAdapter im
 
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBType"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBType")); //$NON-NLS-1$
 	}
 
 	@Override

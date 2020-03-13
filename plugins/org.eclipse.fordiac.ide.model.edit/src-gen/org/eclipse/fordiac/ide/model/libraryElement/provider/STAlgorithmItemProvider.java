@@ -75,8 +75,8 @@ public class STAlgorithmItemProvider extends TextAlgorithmItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((STAlgorithm) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_STAlgorithm_type")
-				: label + " " + getString("_UI_STAlgorithm_type");
+		return label == null || label.length() == 0 ? getString("_UI_STAlgorithm_type") //$NON-NLS-1$
+				: label + " " + getString("_UI_STAlgorithm_type"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

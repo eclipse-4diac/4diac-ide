@@ -54,7 +54,7 @@ public class TransientLibraryElementItemProvider extends ItemProviderAdapter imp
 
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/LibraryElement"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/LibraryElement")); //$NON-NLS-1$
 	}
 
 	@Override

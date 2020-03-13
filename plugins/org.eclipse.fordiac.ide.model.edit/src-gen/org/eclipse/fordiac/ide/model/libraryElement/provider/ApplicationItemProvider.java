@@ -127,7 +127,7 @@ public class ApplicationItemProvider extends ConfigurableObjectItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((Application) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_Application_type") : label;
+		return label == null || label.length() == 0 ? getString("_UI_Application_type") : label; //$NON-NLS-1$
 	}
 
 	/**

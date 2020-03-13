@@ -107,8 +107,8 @@ public class WithItemProvider extends ItemProviderAdapter implements IEditingDom
 		if (null != var) {
 			varName = var.getName();
 		}
-		return varName == null || varName.length() == 0 ? getString("_UI_With_type")
-				: getString("_UI_With_type") + " " + varName;
+		return varName == null || varName.length() == 0 ? getString("_UI_With_type") //$NON-NLS-1$
+				: getString("_UI_With_type") + " " + varName; //$NON-NLS-1$ //$NON-NLS-2$
 
 	}
 

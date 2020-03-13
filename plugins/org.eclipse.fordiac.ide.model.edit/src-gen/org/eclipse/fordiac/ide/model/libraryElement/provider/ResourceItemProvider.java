@@ -130,7 +130,7 @@ public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((Resource) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_Resource_type") : label;
+		return label == null || label.length() == 0 ? getString("_UI_Resource_type") : label; //$NON-NLS-1$
 	}
 
 	/**

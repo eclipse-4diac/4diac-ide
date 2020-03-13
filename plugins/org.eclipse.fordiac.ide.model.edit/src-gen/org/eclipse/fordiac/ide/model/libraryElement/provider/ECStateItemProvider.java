@@ -215,8 +215,7 @@ public class ECStateItemProvider extends I4DIACElementItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((ECState) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_ECState_type") : //$NON-NLS-1$
-				label; // $NON-NLS-1$ //$NON-NLS-2$
+		return label == null || label.length() == 0 ? getString("_UI_ECState_type") : label; //$NON-NLS-1$
 	}
 
 	/**
