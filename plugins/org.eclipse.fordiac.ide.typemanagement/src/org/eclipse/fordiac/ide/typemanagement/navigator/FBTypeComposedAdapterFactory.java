@@ -20,6 +20,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
 
 final class FBTypeComposedAdapterFactory {
 
@@ -41,6 +42,6 @@ final class FBTypeComposedAdapterFactory {
 
 	private FBTypeComposedAdapterFactory() {
 		throw new UnsupportedOperationException(
-				"Utility class FBTypecomposedAdapterFactory should not be insantiated!");
+				Messages.FBTypeComposedAdapterFactory_FBTypecomposedAdapterFactoryShouldNotBeInsantiated);
 	}
 }

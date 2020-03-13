@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 
 	@Override
 	public String getName() {
-		return "Delete IEC 61499 Type";
+		return Messages.DeleteFBTypeParticipant_Name;
 	}
 
 	@Override
@@ -73,8 +74,9 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 				checkTypeContainment(palette.getRootGroup(), typeNameToDelete);
 
 				if (!typeNames.isEmpty()) {
-					return RefactoringStatus.createWarningStatus(
-							"FB type " + typeNameToDelete + " is used in the following types: " + typeNames.toString());
+					return RefactoringStatus.createWarningStatus(MessageFormat.format(
+							Messages.DeleteFBTypeParticipant_TypeInUseWarning, typeNameToDelete, typeNames.toString()));
+
 				}
 			} else {
 				return verifyAffectedChildren(resourceDelta.getAffectedChildren());

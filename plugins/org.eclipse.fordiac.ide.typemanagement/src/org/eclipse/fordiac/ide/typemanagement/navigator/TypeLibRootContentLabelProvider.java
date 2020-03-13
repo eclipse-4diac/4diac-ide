@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -52,7 +53,7 @@ public class TypeLibRootContentLabelProvider implements ILabelProvider {
 	@Override
 	public String getText(Object element) {
 		if (element instanceof TypeLibRootElement) {
-			return "Type Library";
+			return FordiacMessages.TypeLibrary;
 		}
 		return null;
 	}

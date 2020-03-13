@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
 import java.io.File;
+import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -29,7 +30,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -47,13 +50,13 @@ public class NewFBTypeWizard extends Wizard implements INewWizard {
 	private PaletteEntry entry;
 
 	public NewFBTypeWizard() {
-		setWindowTitle("New Type");
+		setWindowTitle(FordiacMessages.NewType);
 	}
 
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 		this.selection = selection;
-		setWindowTitle("New Type");
+		setWindowTitle(FordiacMessages.NewType);
 	}
 
 	@Override
@@ -94,7 +97,7 @@ public class NewFBTypeWizard extends Wizard implements INewWizard {
 
 	private static void templateNotAvailable(String templatePath) {
 		MessageBox mbx = new MessageBox(Display.getDefault().getActiveShell());
-		mbx.setMessage("Template not available! (" + templatePath + ")");
+		mbx.setMessage(MessageFormat.format(Messages.NewFBTypeWizard_TemplateNotAvailable, templatePath));
 		mbx.open();
 	}
 

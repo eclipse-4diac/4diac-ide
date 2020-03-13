@@ -53,12 +53,15 @@ public class FordiacMessages extends NLS {
 	public static String NA;
 	public static String ND;
 	public static String Name;
+	public static String NewType;
 	public static String Organization;
 	public static String Product;
 	public static String Remarks;
 	public static String Resource;
+	public static String SelectType;
 	public static String Standard;
 	public static String Type;
+	public static String TypeLibrary;
 	public static String TypeName;
 	public static String Unmap;
 	public static String Unknown;

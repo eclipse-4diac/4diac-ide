@@ -27,6 +27,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.Activator;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -90,14 +92,14 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 					break;
 				}
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 
 	public NewFBTypeWizardPage(IStructuredSelection selection) {
-		super("New type page", selection);
-		this.setTitle("Create new Type");
-		this.setDescription("Create a new type from a template type");
+		super(Messages.NewFBTypeWizardPage_NewTypePage, selection);
+		this.setTitle(Messages.NewFBTypeWizardPage_CreateNewType);
+		this.setDescription(Messages.NewFBTypeWizardPage_CreateNewTypeFromTemplateType);
 		this.setAllowExistingResources(true); // needed for correct duplicate type check
 		loadTypeTemplates();
 	}
@@ -115,11 +117,11 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	@Override
 	protected boolean validatePage() {
 		if ((null == templateList) || (0 == templateList.length)) {
-			setErrorMessage("No type templates found! Please check the templates directory!");
+			setErrorMessage(Messages.NewFBTypeWizardPage_NoTypeTemplatesFoundCheckTemplatesDirectory);
 			return false;
 		}
 		if (super.getFileName().isEmpty()) {
-			setErrorMessage("Empty Typename is not valid!");
+			setErrorMessage(Messages.NewFBTypeWizardPage_EmptyTypenameIsNotValid);
 			return false;
 		}
 
@@ -131,7 +133,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		}
 
 		if (null == getTemplate()) {
-			setErrorMessage("No type selected!");
+			setErrorMessage(Messages.NewFBTypeWizardPage_NoTypeSelected);
 			return false;
 		}
 
@@ -149,7 +151,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	@Override
 	protected String getNewFileLabel() {
-		return "Type name:";
+		return FordiacMessages.TypeName + ":"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -176,7 +178,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	private void createTemplateTypeSelection(Composite parent) {
 		Label fbTypeTypeLabel = new Label(parent, SWT.NONE);
-		fbTypeTypeLabel.setText("Select type: ");
+		fbTypeTypeLabel.setText(FordiacMessages.SelectType + ":"); //$NON-NLS-1$
 		fbTypeTypeLabel.setFont(parent.getFont());
 
 		templateTableViewer = TableWidgetFactory.createPropertyTableViewer(parent, SWT.SINGLE);
@@ -196,10 +198,10 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	private static void configureTypeTableLayout(Table table) {
 		TableColumn tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Name");
+		tc.setText(FordiacMessages.Name);
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Description");
+		tc.setText(FordiacMessages.Description);
 
 		TableLayout tabLayout = new TableLayout();
 		tabLayout.addColumnData(new ColumnWeightData(1, 30));
@@ -245,7 +247,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			description = scanner.findWithinHorizon(COMMENT_PATTERN, 0);
 			description = description.substring(9, description.length() - 1);
 		} catch (FileNotFoundException e) {
-			Activator.getDefault().logError("Could not find template files", e);
+			Activator.getDefault().logError(Messages.NewFBTypeWizardPage_CouldNotFindTemplateFiles, e);
 		}
 		return new TemplateInfo(f, name, description);
 	}
@@ -273,7 +275,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	private Button createOpenTypeGroup(Composite parent) {
 		openTypeCheckbox = new Button(parent, SWT.CHECK);
-		openTypeCheckbox.setText("Open type for editing when done");
+		openTypeCheckbox.setText(Messages.NewFBTypeWizardPage_OpenTypeForEditingWhenDone);
 		openTypeCheckbox.setSelection(true);
 		setPageComplete(validatePage());
 		openTypeCheckbox.addListener(SWT.Selection, ev -> openType = openTypeCheckbox.getSelection());
