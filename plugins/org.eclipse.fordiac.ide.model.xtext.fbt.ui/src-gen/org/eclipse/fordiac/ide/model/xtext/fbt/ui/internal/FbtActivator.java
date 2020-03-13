@@ -3,12 +3,9 @@
  */
 package org.eclipse.fordiac.ide.model.xtext.fbt.ui.internal;
 
-import com.google.common.collect.Maps;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
 import java.util.Collections;
 import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeRuntimeModule;
 import org.eclipse.fordiac.ide.model.xtext.fbt.ui.FBTypeUiModule;
@@ -17,13 +14,18 @@ import org.eclipse.xtext.ui.shared.SharedStateModule;
 import org.eclipse.xtext.util.Modules2;
 import org.osgi.framework.BundleContext;
 
+import com.google.common.collect.Maps;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+
 /**
  * This class was generated. Customizations should only happen in a newly
  * introduced subclass.
  */
 public class FbtActivator extends AbstractUIPlugin {
 
-	public static final String ORG_ECLIPSE_FORDIAC_IDE_MODEL_XTEXT_FBT_FBTYPE = "org.eclipse.fordiac.ide.model.xtext.fbt.FBType";
+	public static final String ORG_ECLIPSE_FORDIAC_IDE_MODEL_XTEXT_FBT_FBTYPE = "org.eclipse.fordiac.ide.model.xtext.fbt.FBType"; //$NON-NLS-1$
 
 	private static final Logger logger = Logger.getLogger(FbtActivator.class);
 
@@ -67,9 +69,9 @@ public class FbtActivator extends AbstractUIPlugin {
 			Module mergedModule = Modules2.mixin(runtimeModule, sharedStateModule, uiModule);
 			return Guice.createInjector(mergedModule);
 		} catch (Exception e) {
-			logger.error("Failed to create injector for " + language);
+			logger.error("Failed to create injector for " + language); //$NON-NLS-1$
 			logger.error(e.getMessage(), e);
-			throw new RuntimeException("Failed to create injector for " + language, e);
+			throw new RuntimeException("Failed to create injector for " + language, e); //$NON-NLS-1$
 		}
 	}
 
