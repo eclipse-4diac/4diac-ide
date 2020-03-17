@@ -24,8 +24,6 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -50,21 +48,37 @@ import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
  */
 class CommonElementImporter {
 
-	private final XMLStreamReader reader;
+	private XMLStreamReader reader;
 
-	protected CommonElementImporter(final IFile file) throws XMLStreamException, CoreException {
-		this(file.getContents());
+	protected class ImporterStreams implements AutoCloseable {
+		private final InputStream inputStream;
+		private final XMLStreamReader reader;
+
+		public ImporterStreams(final InputStream inputStream, final XMLStreamReader reader) {
+			this.inputStream = inputStream;
+			this.reader = reader;
+		}
+
+		@Override
+		public void close() throws Exception {
+			reader.close();
+			inputStream.close();
+		}
 	}
 
-	protected CommonElementImporter(final InputStream systemStream) throws XMLStreamException {
-		XMLInputFactory factory = XMLInputFactory.newInstance();
-		factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-		factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
-		reader = factory.createXMLStreamReader(systemStream);
+	protected CommonElementImporter() {
 	}
 
 	protected CommonElementImporter(XMLStreamReader reader) {
 		this.reader = reader;
+	}
+
+	protected ImporterStreams createInputStreams(InputStream fileInputStream) throws XMLStreamException {
+		XMLInputFactory factory = XMLInputFactory.newInstance();
+		factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+		factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+		reader = factory.createXMLStreamReader(fileInputStream);
+		return new ImporterStreams(fileInputStream, reader);
 	}
 
 	public XMLStreamReader getReader() {

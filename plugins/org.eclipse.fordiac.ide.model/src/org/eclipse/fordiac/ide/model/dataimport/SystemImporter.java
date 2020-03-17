@@ -73,11 +73,10 @@ public class SystemImporter extends CommonElementImporter {
 	 * create a new system file importer for a system input stream and an automation
 	 * system to populate
 	 *
-	 * @param systemStream input stream providing an IEC 61499 compliant system XML
-	 * @param system       AutomationSystem with an initialized Palette
+	 * @param system AutomationSystem with an initialized Palette
 	 */
-	public SystemImporter(final InputStream systemStream, AutomationSystem system) throws XMLStreamException {
-		super(systemStream);
+	public SystemImporter(AutomationSystem system) {
+		super();
 		this.system = system;
 	}
 
@@ -85,14 +84,21 @@ public class SystemImporter extends CommonElementImporter {
 	 * This method populates the AutomationSystem with all elements from the system
 	 * file.
 	 *
-	 * @throws XMLStreamException
+	 * @param systemStream input stream providing an IEC 61499 compliant system XML
 	 * @throws TypeImportException
 	 *
 	 */
-	public void importSystem() throws XMLStreamException, TypeImportException {
-		proceedToStartElementNamed(LibraryElementTags.SYSTEM);
-		readNameCommentAttributes(system);
-		parseSystemContent();
+	public void importSystem(final InputStream systemStream) throws TypeImportException {
+		try (ImporterStreams streams = createInputStreams(systemStream)) {
+			proceedToStartElementNamed(LibraryElementTags.SYSTEM);
+			readNameCommentAttributes(system);
+			parseSystemContent();
+		} catch (TypeImportException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new TypeImportException(e.getMessage()); // TODO add exception to typeImportException
+		}
+
 	}
 
 	private void parseSystemContent() throws XMLStreamException, TypeImportException {

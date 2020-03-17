@@ -16,11 +16,9 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
@@ -36,8 +34,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
  */
 public class SubAppTImporter extends FBTImporter {
 
-	public SubAppTImporter(IFile fbtFile, Palette palette) throws XMLStreamException, CoreException {
-		super(fbtFile, palette);
+	public SubAppTImporter(Palette palette) {
+		super(palette);
 	}
 
 	public SubAppTImporter(XMLStreamReader reader, Palette palette) {
@@ -56,8 +54,8 @@ public class SubAppTImporter extends FBTImporter {
 	}
 
 	@Override
-	public LibraryElement importType() throws XMLStreamException, TypeImportException {
-		LibraryElement newType = super.importType();
+	public LibraryElement importType(IFile typeFile) throws TypeImportException {
+		LibraryElement newType = super.importType(typeFile);
 		return (newType instanceof SubAppType) ? newType : null;
 	}
 

@@ -24,8 +24,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -50,8 +48,8 @@ public final class DEVImporter extends TypeImporter {
 
 	private final Palette palette;
 
-	public DEVImporter(final IFile devFile, final Palette palette) throws XMLStreamException, CoreException {
-		super(devFile);
+	public DEVImporter(final Palette palette) {
+		super();
 		this.palette = palette;
 	}
 

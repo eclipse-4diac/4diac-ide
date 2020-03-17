@@ -13,10 +13,6 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette.impl;
 
-import javax.xml.stream.XMLStreamException;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EClass;
@@ -93,9 +89,8 @@ public class ResourceTypeEntryImpl extends PaletteEntryImpl implements ResourceT
 	 * @generated
 	 */
 	@Override
-	public TypeImporter getTypeImporter(final Palette palette, final IFile file)
-			throws CoreException, XMLStreamException {
-		return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(file, palette);
+	public TypeImporter getTypeImporter(final Palette palette) {
+		return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(palette);
 	}
 
 } // ResourceTypeEntryImpl

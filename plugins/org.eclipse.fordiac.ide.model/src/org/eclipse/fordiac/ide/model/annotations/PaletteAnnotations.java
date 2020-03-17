@@ -15,9 +15,6 @@ package org.eclipse.fordiac.ide.model.annotations;
 import java.text.Collator;
 import java.util.stream.Collectors;
 
-import javax.xml.stream.XMLStreamException;
-
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
@@ -31,6 +28,7 @@ import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.impl.PaletteEntryImpl;
+import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
@@ -79,16 +77,16 @@ public final class PaletteAnnotations {
 			palette.getSubAppTypes().remove(entry.getLabel());
 		} else {
 			Activator.getDefault()
-					.logError("Unknown pallet entry to be removed from palette: " + entry.getClass().getName());
+					.logError("Unknown palette entry to be removed from palette: " + entry.getClass().getName());
 		}
 	}
 
 	public static LibraryElement loadType(PaletteEntryImpl paletteEntryImpl) {
 		LibraryElement retval = null;
 		try {
-			retval = paletteEntryImpl.getTypeImporter(paletteEntryImpl.getPalette(), paletteEntryImpl.getFile())
-					.importType();
-		} catch (XMLStreamException | CoreException | TypeImportException e) {
+			TypeImporter importer = paletteEntryImpl.getTypeImporter(paletteEntryImpl.getPalette());
+			retval = importer.importType(paletteEntryImpl.getFile());
+		} catch (TypeImportException e) {
 			Activator.getDefault().logError("Error loading type: " + paletteEntryImpl.getFile().getName(), //$NON-NLS-1$
 					e);
 		}

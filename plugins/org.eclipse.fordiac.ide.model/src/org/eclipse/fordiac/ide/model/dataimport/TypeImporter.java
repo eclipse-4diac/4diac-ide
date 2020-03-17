@@ -25,7 +25,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -39,8 +38,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 public abstract class TypeImporter extends CommonElementImporter {
 	private LibraryElement type;
 
-	protected TypeImporter(IFile file) throws XMLStreamException, CoreException {
-		super(file);
+	protected TypeImporter() {
+		super();
 	}
 
 	protected TypeImporter(XMLStreamReader reader) {
@@ -55,11 +54,17 @@ public abstract class TypeImporter extends CommonElementImporter {
 		this.type = type;
 	}
 
-	public LibraryElement importType() throws XMLStreamException, TypeImportException {
-		type = createType();
-		proceedToStartElementNamed(getStartElementName());
-		readNameCommentAttributes(type);
-		processChildren(getStartElementName(), getTypeChildrenHandler());
+	public LibraryElement importType(IFile typeFile) throws TypeImportException {
+		try (ImporterStreams streams = createInputStreams(typeFile.getContents())) {
+			type = createType();
+			proceedToStartElementNamed(getStartElementName());
+			readNameCommentAttributes(type);
+			processChildren(getStartElementName(), getTypeChildrenHandler());
+		} catch (TypeImportException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new TypeImportException(e.getMessage(), e);
+		}
 		return type;
 	}
 

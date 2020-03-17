@@ -207,11 +207,8 @@ public interface PaletteEntry extends EObject {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @model dataType="org.eclipse.fordiac.ide.model.Palette.TypeImporter"
-	 *        exceptions="org.eclipse.fordiac.ide.model.Palette.XMLStreamException
-	 *        org.eclipse.fordiac.ide.model.Palette.CoreException"
-	 *        fileDataType="org.eclipse.fordiac.ide.model.Palette.IFile"
 	 * @generated
 	 */
-	TypeImporter getTypeImporter(Palette palette, IFile file) throws XMLStreamException, CoreException;
+	TypeImporter getTypeImporter(Palette palette) throws XMLStreamException, CoreException;
 
 } // PaletteEntry

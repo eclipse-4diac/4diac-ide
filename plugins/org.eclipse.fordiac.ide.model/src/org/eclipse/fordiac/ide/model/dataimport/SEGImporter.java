@@ -16,10 +16,6 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import javax.xml.stream.XMLStreamException;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -32,10 +28,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  */
 
 public final class SEGImporter extends TypeImporter {
-
-	public SEGImporter(final IFile iFile) throws XMLStreamException, CoreException {
-		super(iFile);
-	}
 
 	@Override
 	protected SegmentType getType() {

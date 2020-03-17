@@ -15,10 +15,7 @@ package org.eclipse.fordiac.ide.systemimport;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-
-import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
@@ -86,11 +83,11 @@ public class SystemImport extends Wizard implements IImportWizard {
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				AutomationSystem system = SystemManager.INSTANCE.createLocalProject(page.getProjectName());
-				try (InputStream stream = new FileInputStream(page.getSelectedSystemFile());) {
-					SystemImporter sysImporter = new SystemImporter(stream, system);
-					sysImporter.importSystem();
+				SystemImporter sysImporter = new SystemImporter(system);
+				try {
+					sysImporter.importSystem(new FileInputStream(page.getSelectedSystemFile()));
 					SystemManager.INSTANCE.saveSystem(system);
-				} catch (IOException | XMLStreamException | TypeImportException e) {
+				} catch (IOException | TypeImportException e) {
 					Activator.getDefault().logError(e.getMessage(), e);
 				}
 			}

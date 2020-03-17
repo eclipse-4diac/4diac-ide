@@ -71,7 +71,7 @@ public interface Palette extends EObject {
 	 * Sets the value of the
 	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getProject
 	 * <em>Project</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @param value the new value of the '<em>Project</em>' attribute.
 	 * @see #getProject()
 	 * @generated
@@ -88,7 +88,7 @@ public interface Palette extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
+	 * 
 	 * @return the value of the '<em>Automation System</em>' reference.
 	 * @see #setAutomationSystem(AutomationSystem)
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_AutomationSystem()
@@ -103,7 +103,7 @@ public interface Palette extends EObject {
 	 * '{@link org.eclipse.fordiac.ide.model.Palette.Palette#getAutomationSystem
 	 * <em>Automation System</em>}' reference. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @param value the new value of the '<em>Automation System</em>' reference.
 	 * @see #getAutomationSystem()
 	 * @generated
@@ -171,7 +171,7 @@ public interface Palette extends EObject {
 	 * type {@link java.lang.String}, and the value is of type
 	 * {@link org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry},
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @return the value of the '<em>Sub App Types</em>' map.
 	 * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getPalette_SubAppTypes()
 	 * @model mapType="org.eclipse.fordiac.ide.model.Palette.StringToSubApplicationTypePaletteEntryMap&lt;org.eclipse.emf.ecore.EString,
@@ -196,7 +196,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model kind="operation"
 	 * @generated
 	 */
@@ -204,7 +204,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -212,7 +212,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -220,7 +220,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -228,7 +228,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -236,7 +236,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -244,7 +244,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model required="true" typeNameRequired="true"
 	 * @generated
 	 */
@@ -252,7 +252,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model entryRequired="true"
 	 * @generated
 	 */
@@ -260,7 +260,7 @@ public interface Palette extends EObject {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @model entryRequired="true"
 	 * @generated
 	 */

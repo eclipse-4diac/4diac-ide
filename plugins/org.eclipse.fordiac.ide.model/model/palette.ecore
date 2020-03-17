@@ -110,9 +110,8 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.PaletteAnnotations.loadType(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//XMLStreamException #//CoreException">
+    <eOperations name="getTypeImporter" eType="#//TypeImporter">
       <eParameters name="palette" eType="#//Palette"/>
-      <eParameters name="file" eType="#//IFile"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" eType="#//IFile"/>
@@ -136,12 +135,11 @@
       </eAnnotations>
       <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
     </eOperations>
-    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+    <eOperations name="getTypeImporter" eType="#//TypeImporter">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter(file);"/>
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter();"/>
       </eAnnotations>
       <eParameters name="palette" eType="#//Palette"/>
-      <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DeviceTypePaletteEntry" eSuperTypes="#//PaletteEntry">
@@ -156,12 +154,11 @@
       </eAnnotations>
       <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
     </eOperations>
-    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+    <eOperations name="getTypeImporter" eType="#//TypeImporter">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(file, palette);"/>
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(palette);"/>
       </eAnnotations>
       <eParameters name="palette" eType="#//Palette"/>
-      <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FBTypePaletteEntry" eSuperTypes="#//PaletteEntry">
@@ -176,12 +173,11 @@
       </eAnnotations>
       <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
     </eOperations>
-    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+    <eOperations name="getTypeImporter" eType="#//TypeImporter">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(file, palette);"/>
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(palette);"/>
       </eAnnotations>
       <eParameters name="palette" eType="#//Palette"/>
-      <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ResourceTypeEntry" eSuperTypes="#//PaletteEntry">
@@ -196,12 +192,11 @@
       </eAnnotations>
       <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
     </eOperations>
-    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+    <eOperations name="getTypeImporter" eType="#//TypeImporter">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(file, palette);"/>
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(palette);"/>
       </eAnnotations>
       <eParameters name="palette" eType="#//Palette"/>
-      <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SegmentTypePaletteEntry" eSuperTypes="#//PaletteEntry">
@@ -216,12 +211,11 @@
       </eAnnotations>
       <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
     </eOperations>
-    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+    <eOperations name="getTypeImporter" eType="#//TypeImporter">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter(file);"/>
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter();"/>
       </eAnnotations>
       <eParameters name="palette" eType="#//Palette"/>
-      <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SubApplicationTypePaletteEntry" eSuperTypes="#//PaletteEntry">
@@ -236,12 +230,11 @@
       </eAnnotations>
       <eParameters name="type" eType="ecore:EClass lib.ecore#//LibraryElement"/>
     </eOperations>
-    <eOperations name="getTypeImporter" eType="#//TypeImporter" eExceptions="#//CoreException #//XMLStreamException">
+    <eOperations name="getTypeImporter" eType="#//TypeImporter">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(file, palette);"/>
+        <details key="body" value="return new org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter(palette);"/>
       </eAnnotations>
       <eParameters name="palette" eType="#//Palette"/>
-      <eParameters name="file" eType="#//IFile"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>

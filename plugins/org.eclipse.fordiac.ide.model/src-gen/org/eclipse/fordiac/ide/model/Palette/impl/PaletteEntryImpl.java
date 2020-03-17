@@ -13,11 +13,8 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.Palette.impl;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
@@ -343,7 +340,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * @generated
 	 */
 	@Override
-	public TypeImporter getTypeImporter(Palette palette, IFile file) throws XMLStreamException, CoreException {
+	public TypeImporter getTypeImporter(Palette palette) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();

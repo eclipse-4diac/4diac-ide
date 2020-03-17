@@ -16,10 +16,6 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import javax.xml.stream.XMLStreamException;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -36,8 +32,7 @@ public final class RESImporter extends TypeImporter {
 
 	private final Palette palette;
 
-	public RESImporter(final IFile resFile, final Palette palette) throws XMLStreamException, CoreException {
-		super(resFile);
+	public RESImporter(final Palette palette) {
 		this.palette = palette;
 	}
 

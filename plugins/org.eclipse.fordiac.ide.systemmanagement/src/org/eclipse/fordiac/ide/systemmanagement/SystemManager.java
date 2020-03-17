@@ -17,15 +17,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -260,10 +256,10 @@ public enum SystemManager {
 		IFile systemFile = project.getFile(project.getName() + SYSTEM_FILE_ENDING);
 		if (systemFile.exists()) {
 			AutomationSystem system = createAutomationSystem(project);
-			try (InputStream stream = systemFile.getContents()) {
-				SystemImporter sysImporter = new SystemImporter(stream, system);
-				sysImporter.importSystem();
-			} catch (CoreException | IOException | XMLStreamException | TypeImportException e) {
+			SystemImporter sysImporter = new SystemImporter(system);
+			try {
+				sysImporter.importSystem(systemFile.getContents());
+			} catch (CoreException | TypeImportException e) {
 				Activator.getDefault().logError(e.getMessage(), e);
 			}
 			return system;

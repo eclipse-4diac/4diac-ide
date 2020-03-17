@@ -68,7 +68,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The default value of the '{@link #getProject() <em>Project</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getProject()
 	 * @generated
 	 * @ordered
@@ -78,7 +78,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The cached value of the '{@link #getProject() <em>Project</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getProject()
 	 * @generated
 	 * @ordered
@@ -88,7 +88,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The cached value of the '{@link #getAutomationSystem() <em>Automation
 	 * System</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getAutomationSystem()
 	 * @generated
 	 * @ordered
@@ -98,7 +98,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The cached value of the '{@link #getAdapterTypes() <em>Adapter Types</em>}'
 	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getAdapterTypes()
 	 * @generated
 	 * @ordered
@@ -108,7 +108,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The cached value of the '{@link #getDeviceTypes() <em>Device Types</em>}'
 	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getDeviceTypes()
 	 * @generated
 	 * @ordered
@@ -128,7 +128,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The cached value of the '{@link #getResourceTypes() <em>Resource Types</em>}'
 	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getResourceTypes()
 	 * @generated
 	 * @ordered
@@ -138,7 +138,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The cached value of the '{@link #getSegmentTypes() <em>Segment Types</em>}'
 	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getSegmentTypes()
 	 * @generated
 	 * @ordered
@@ -148,7 +148,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 	/**
 	 * The cached value of the '{@link #getSubAppTypes() <em>Sub App Types</em>}'
 	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getSubAppTypes()
 	 * @generated
 	 * @ordered
@@ -157,7 +157,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	protected PaletteImpl() {
@@ -166,7 +166,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -176,7 +176,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -186,7 +186,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -200,7 +200,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -219,7 +219,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	public AutomationSystem basicGetAutomationSystem() {
@@ -228,7 +228,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetAutomationSystem(AutomationSystem newAutomationSystem, NotificationChain msgs) {
@@ -247,7 +247,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -270,13 +270,14 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EMap<String, FBTypePaletteEntry> getFbTypes() {
 		if (fbTypes == null) {
-			fbTypes = new EcoreEMap<>(PalettePackage.Literals.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP,
+			fbTypes = new EcoreEMap<String, FBTypePaletteEntry>(
+					PalettePackage.Literals.STRING_TO_FB_TYPE_PALETTE_ENTRY_MAP,
 					StringToFBTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__FB_TYPES);
 		}
 		return fbTypes;
@@ -284,27 +285,29 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EMap<String, ResourceTypeEntry> getResourceTypes() {
 		if (resourceTypes == null) {
-			resourceTypes = new EcoreEMap<>(PalettePackage.Literals.STRING_TO_RESOURCE_TYPE_ENTRY_MAP,
-					StringToResourceTypeEntryMapImpl.class, this, PalettePackage.PALETTE__RESOURCE_TYPES);
+			resourceTypes = new EcoreEMap<String, ResourceTypeEntry>(
+					PalettePackage.Literals.STRING_TO_RESOURCE_TYPE_ENTRY_MAP, StringToResourceTypeEntryMapImpl.class,
+					this, PalettePackage.PALETTE__RESOURCE_TYPES);
 		}
 		return resourceTypes;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EMap<String, DeviceTypePaletteEntry> getDeviceTypes() {
 		if (deviceTypes == null) {
-			deviceTypes = new EcoreEMap<>(PalettePackage.Literals.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP,
+			deviceTypes = new EcoreEMap<String, DeviceTypePaletteEntry>(
+					PalettePackage.Literals.STRING_TO_FDEVICE_TYPE_PALETTE_ENTRY_MAP,
 					StringToFDeviceTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__DEVICE_TYPES);
 		}
 		return deviceTypes;
@@ -312,13 +315,14 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EMap<String, SegmentTypePaletteEntry> getSegmentTypes() {
 		if (segmentTypes == null) {
-			segmentTypes = new EcoreEMap<>(PalettePackage.Literals.STRING_TO_SEGMENT_TYPE_PALETTE_ENTRY_MAP,
+			segmentTypes = new EcoreEMap<String, SegmentTypePaletteEntry>(
+					PalettePackage.Literals.STRING_TO_SEGMENT_TYPE_PALETTE_ENTRY_MAP,
 					StringToSegmentTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__SEGMENT_TYPES);
 		}
 		return segmentTypes;
@@ -326,13 +330,14 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EMap<String, SubApplicationTypePaletteEntry> getSubAppTypes() {
 		if (subAppTypes == null) {
-			subAppTypes = new EcoreEMap<>(PalettePackage.Literals.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP,
+			subAppTypes = new EcoreEMap<String, SubApplicationTypePaletteEntry>(
+					PalettePackage.Literals.STRING_TO_SUB_APPLICATION_TYPE_PALETTE_ENTRY_MAP,
 					StringToSubApplicationTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__SUB_APP_TYPES);
 		}
 		return subAppTypes;
@@ -340,13 +345,14 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EMap<String, AdapterTypePaletteEntry> getAdapterTypes() {
 		if (adapterTypes == null) {
-			adapterTypes = new EcoreEMap<>(PalettePackage.Literals.STRING_TO_ADAPTER_TYPE_PALETTE_ENTRY_MAP,
+			adapterTypes = new EcoreEMap<String, AdapterTypePaletteEntry>(
+					PalettePackage.Literals.STRING_TO_ADAPTER_TYPE_PALETTE_ENTRY_MAP,
 					StringToAdapterTypePaletteEntryMapImpl.class, this, PalettePackage.PALETTE__ADAPTER_TYPES);
 		}
 		return adapterTypes;
@@ -354,7 +360,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -364,7 +370,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -374,7 +380,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -384,7 +390,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -394,7 +400,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -404,7 +410,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -414,7 +420,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -424,7 +430,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -434,7 +440,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -444,7 +450,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -461,7 +467,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -487,7 +493,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -535,7 +541,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -571,7 +577,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -607,7 +613,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -635,7 +641,7 @@ public class PaletteImpl extends EObjectImpl implements Palette {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override

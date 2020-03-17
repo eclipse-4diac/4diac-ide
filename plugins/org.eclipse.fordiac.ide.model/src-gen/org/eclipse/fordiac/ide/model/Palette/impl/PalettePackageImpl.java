@@ -980,9 +980,6 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 
 		op = addEOperation(paletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getIFile(), "file", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEException(op, this.getXMLStreamException());
-		addEException(op, this.getCoreException());
 
 		initEClass(adapterTypePaletteEntryEClass, AdapterTypePaletteEntry.class, "AdapterTypePaletteEntry", //$NON-NLS-1$
 				!IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -996,9 +993,6 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(adapterTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
 		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getIFile(), "file", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEException(op, this.getCoreException());
-		addEException(op, this.getXMLStreamException());
 
 		initEClass(deviceTypePaletteEntryEClass, DeviceTypePaletteEntry.class, "DeviceTypePaletteEntry", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1012,9 +1006,6 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(deviceTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
 		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getIFile(), "file", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEException(op, this.getCoreException());
-		addEException(op, this.getXMLStreamException());
 
 		initEClass(fbTypePaletteEntryEClass, FBTypePaletteEntry.class, "FBTypePaletteEntry", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1028,9 +1019,6 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(fbTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
 		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getIFile(), "file", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEException(op, this.getCoreException());
-		addEException(op, this.getXMLStreamException());
 
 		initEClass(resourceTypeEntryEClass, ResourceTypeEntry.class, "ResourceTypeEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -1044,9 +1032,6 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(resourceTypeEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
 		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getIFile(), "file", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEException(op, this.getCoreException());
-		addEException(op, this.getXMLStreamException());
 
 		initEClass(segmentTypePaletteEntryEClass, SegmentTypePaletteEntry.class, "SegmentTypePaletteEntry", //$NON-NLS-1$
 				!IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1060,9 +1045,6 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(segmentTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
 		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getIFile(), "file", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEException(op, this.getCoreException());
-		addEException(op, this.getXMLStreamException());
 
 		initEClass(subApplicationTypePaletteEntryEClass, SubApplicationTypePaletteEntry.class,
 				"SubApplicationTypePaletteEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -1076,9 +1058,6 @@ public class PalettePackageImpl extends EPackageImpl implements PalettePackage {
 		op = addEOperation(subApplicationTypePaletteEntryEClass, this.getTypeImporter(), "getTypeImporter", 0, 1, //$NON-NLS-1$
 				IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getPalette(), "palette", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getIFile(), "file", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEException(op, this.getCoreException());
-		addEException(op, this.getXMLStreamException());
 
 		// Initialize data types
 		initEDataType(iFileEDataType, IFile.class, "IFile", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

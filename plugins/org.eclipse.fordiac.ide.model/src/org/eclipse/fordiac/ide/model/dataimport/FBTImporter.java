@@ -28,7 +28,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -113,8 +112,7 @@ public class FBTImporter extends TypeImporter {
 		this.palette = palette;
 	}
 
-	public FBTImporter(final IFile fbtFile, final Palette palette) throws XMLStreamException, CoreException {
-		super(fbtFile);
+	public FBTImporter(final Palette palette) {
 		this.palette = palette;
 	}
 
@@ -175,8 +173,8 @@ public class FBTImporter extends TypeImporter {
 	}
 
 	@Override
-	public LibraryElement importType() throws XMLStreamException, TypeImportException {
-		LibraryElement newType = super.importType();
+	public LibraryElement importType(IFile typeFile) throws TypeImportException {
+		LibraryElement newType = super.importType(typeFile);
 
 		if ((newType instanceof BasicFBType) || (newType instanceof CompositeFBType)
 				|| (newType instanceof ServiceInterfaceFBType) || (newType instanceof SimpleFBType)
