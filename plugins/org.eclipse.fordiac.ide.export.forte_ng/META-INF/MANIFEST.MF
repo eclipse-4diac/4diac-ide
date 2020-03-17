@@ -18,4 +18,5 @@ Require-Bundle: com.google.guava,
  org.eclipse.fordiac.ide.export,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.structuredtext,
- org.eclipse.fordiac.ide.ui
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.fordiac.ide.model.xtext.fbt
