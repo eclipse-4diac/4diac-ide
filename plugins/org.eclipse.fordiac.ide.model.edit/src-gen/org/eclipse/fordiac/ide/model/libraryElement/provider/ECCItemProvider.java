@@ -31,7 +31,7 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin;
+import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -186,7 +186,7 @@ public class ECCItemProvider extends ItemProviderAdapter implements IEditingDoma
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return fordiacEditPlugin.INSTANCE;
+		return FordiacEditPlugin.INSTANCE;
 	}
 
 }

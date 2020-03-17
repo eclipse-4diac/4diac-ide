@@ -30,7 +30,7 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin;
+import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
@@ -179,7 +179,7 @@ public class ServiceTransactionItemProvider extends ItemProviderAdapter implemen
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return fordiacEditPlugin.INSTANCE;
+		return FordiacEditPlugin.INSTANCE;
 	}
 
 	@Override

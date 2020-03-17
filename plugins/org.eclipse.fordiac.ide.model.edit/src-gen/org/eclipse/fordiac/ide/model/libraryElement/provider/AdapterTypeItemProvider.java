@@ -23,8 +23,8 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.data.provider.DataTypeItemProvider;
+import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -133,7 +133,7 @@ public class AdapterTypeItemProvider extends DataTypeItemProvider {
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return fordiacEditPlugin.INSTANCE;
+		return FordiacEditPlugin.INSTANCE;
 	}
 
 }

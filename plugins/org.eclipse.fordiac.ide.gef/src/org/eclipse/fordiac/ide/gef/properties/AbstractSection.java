@@ -24,7 +24,6 @@ import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.model.Palette.provider.PaletteItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -154,7 +153,6 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		if (null == adapterFactory) {
 			adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 			adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-			adapterFactory.addAdapterFactory(new PaletteItemProviderAdapterFactory());
 			adapterFactory.addAdapterFactory(new LibraryElementItemProviderAdapterFactory());
 			adapterFactory.addAdapterFactory(new DataItemProviderAdapterFactory());
 			adapterFactory.addAdapterFactory(new EcoreItemProviderAdapterFactory());

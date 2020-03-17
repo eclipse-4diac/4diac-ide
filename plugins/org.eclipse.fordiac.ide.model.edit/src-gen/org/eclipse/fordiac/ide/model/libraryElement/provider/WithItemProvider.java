@@ -29,7 +29,7 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
-import org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin;
+import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -145,7 +145,7 @@ public class WithItemProvider extends ItemProviderAdapter implements IEditingDom
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return fordiacEditPlugin.INSTANCE;
+		return FordiacEditPlugin.INSTANCE;
 	}
 
 }

@@ -31,7 +31,6 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 
@@ -165,7 +164,7 @@ public class SubrangeItemProvider extends ItemProviderAdapter implements IEditin
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return fordiacEditPlugin.INSTANCE;
+		return FordiacEditPlugin.INSTANCE;
 	}
 
 }

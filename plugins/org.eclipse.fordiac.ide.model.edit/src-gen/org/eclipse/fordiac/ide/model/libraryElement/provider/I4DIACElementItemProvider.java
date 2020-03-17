@@ -28,7 +28,7 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
-import org.eclipse.fordiac.ide.model.Palette.provider.fordiacEditPlugin;
+import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 
 /**
  * This is the item provider adapter for a
@@ -108,7 +108,7 @@ public class I4DIACElementItemProvider extends ItemProviderAdapter implements IE
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return fordiacEditPlugin.INSTANCE;
+		return FordiacEditPlugin.INSTANCE;
 	}
 
 }
