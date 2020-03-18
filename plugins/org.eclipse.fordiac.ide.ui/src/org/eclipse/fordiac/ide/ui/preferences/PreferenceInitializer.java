@@ -12,6 +12,8 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added separate colors for different data types
+ *   Virendra Ashiwal, Bianca Wiesmayer
+ *   	- Changed Adapter color(P_ADAPTER_CONNECTOR_COLOR) to static Green RGB(80,200,120)
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.preferences;
 
@@ -35,7 +37,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		PreferenceConverter.setDefault(store, PreferenceConstants.P_ANY_STRING_CONNECTOR_COLOR, new RGB(189, 134, 99));
 		PreferenceConverter.setDefault(store, PreferenceConstants.P_REMAINING_DATA_CONNECTOR_COLOR, new RGB(0, 0, 255));
 
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR, new RGB(0, 174, 0));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR, new RGB(80, 200, 120));
 
 		store.setDefault(PreferenceConstants.P_HIDE_EVENT_CON, false);
 		store.setDefault(PreferenceConstants.P_HIDE_DATA_CON, false);
