@@ -34,7 +34,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(DiagramPreferences.GRID_SPACING, 20);
 		store.setDefault(DiagramPreferences.CONNECTION_ROUTER, "Adjustable Router (no Jumplinks)"); //$NON-NLS-1$
 		PreferenceConverter.setDefault(store, DiagramPreferences.SELECTION_COLOR, ColorConstants.gray.getRGB());
-		store.setDefault(DiagramPreferences.CORNER_DIM, 14);
 		store.setDefault(DiagramPreferences.MAX_VALUE_LABEL_SIZE, 25); // big enough to fully show an ip address and
 																		// port
 	}

@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.systemconfiguration.policies;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
@@ -36,7 +35,6 @@ import org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy;
 import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * The Class DeviceViewLayoutEditPolicy.
@@ -44,12 +42,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
-		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
-		if (cornerDim > 1) {
-			cornerDim = cornerDim / 2;
-		}
-		return new ModifiedNonResizeableEditPolicy(cornerDim, new Insets(1));
+
+		return new ModifiedNonResizeableEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1));
 	}
 
 	/*

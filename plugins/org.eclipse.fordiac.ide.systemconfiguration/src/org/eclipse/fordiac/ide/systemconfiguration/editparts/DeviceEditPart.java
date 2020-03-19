@@ -37,7 +37,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
@@ -61,7 +60,6 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Color;
@@ -266,9 +264,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			setLayoutManager(new ToolbarLayout());
 			createInstanceNameLabel(this);
 
-			IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-			int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
-			deviceRectangle.setCornerDimensions(new Dimension(cornerDim, cornerDim));
+			deviceRectangle.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 			ToolbarLayout bottomLayout = new ToolbarLayout();
 			bottomLayout.setStretchMinorAxis(true);
 			deviceRectangle.setLayoutManager(bottomLayout);
