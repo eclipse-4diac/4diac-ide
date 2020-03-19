@@ -20,45 +20,43 @@ import org.eclipse.xtext.xbase.lib.Exceptions;
 
 @SuppressWarnings("all")
 public class D_BYTE_CHAR_STRValueConverter extends StringValueConverter {
-	@Override
-	public char getQuote() {
-		return '\"';
-	}
-
-	@Override
-	public char parseHexLiteral(final Reader reader) {
-		try {
-			char _xblockexpression = (char) 0;
-			{
-				final char[] cbuf = new char[4];
-				int _read = reader.read(cbuf);
-				boolean _notEquals = (_read != 4);
-				if (_notEquals) {
-					throw new ValueConverterException("Couldn\'t convert value due to invalid escape sequence", null,
-							null);
-				}
-				char _xtrycatchfinallyexpression = (char) 0;
-				try {
-					int _parseUnsignedInt = Integer.parseUnsignedInt(String.valueOf(cbuf), 16);
-					_xtrycatchfinallyexpression = ((char) _parseUnsignedInt);
-				} catch (final Throwable _t) {
-					if (_t instanceof NumberFormatException) {
-						throw new ValueConverterException("Couldn\'t convert value due to invalid escape sequence",
-								null, null);
-					} else {
-						throw Exceptions.sneakyThrow(_t);
-					}
-				}
-				_xblockexpression = _xtrycatchfinallyexpression;
-			}
-			return _xblockexpression;
-		} catch (Throwable _e) {
-			throw Exceptions.sneakyThrow(_e);
-		}
-	}
-
-	@Override
-	public CharSequence toHexLiteral(final char c) {
-		return Integer.toUnsignedString(c, 16);
-	}
+  @Override
+  public char getQuote() {
+    return '\"';
+  }
+  
+  @Override
+  public char parseHexLiteral(final Reader reader) {
+    try {
+      char _xblockexpression = (char) 0;
+      {
+        final char[] cbuf = new char[4];
+        int _read = reader.read(cbuf);
+        boolean _notEquals = (_read != 4);
+        if (_notEquals) {
+          throw new ValueConverterException("Couldn\'t convert value due to invalid escape sequence", null, null);
+        }
+        char _xtrycatchfinallyexpression = (char) 0;
+        try {
+          int _parseUnsignedInt = Integer.parseUnsignedInt(String.valueOf(cbuf), 16);
+          _xtrycatchfinallyexpression = ((char) _parseUnsignedInt);
+        } catch (final Throwable _t) {
+          if (_t instanceof NumberFormatException) {
+            throw new ValueConverterException("Couldn\'t convert value due to invalid escape sequence", null, null);
+          } else {
+            throw Exceptions.sneakyThrow(_t);
+          }
+        }
+        _xblockexpression = _xtrycatchfinallyexpression;
+      }
+      return _xblockexpression;
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
+    }
+  }
+  
+  @Override
+  public CharSequence toHexLiteral(final char c) {
+    return Integer.toUnsignedString(c, 16);
+  }
 }

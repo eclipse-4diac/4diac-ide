@@ -21,39 +21,37 @@ import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 @SuppressWarnings("all")
 public class Array_SizeValueConverter extends AbstractNullSafeConverter<Integer> {
-	@Override
-	protected String internalToString(final Integer value) {
-		return value.toString();
-	}
-
-	@Override
-	protected Integer internalToValue(final String string, final INode node) throws ValueConverterException {
-		Integer _xblockexpression = null;
-		{
-			boolean _isNullOrEmpty = StringExtensions.isNullOrEmpty(string);
-			if (_isNullOrEmpty) {
-				throw new ValueConverterException("Couldn\'t convert empty string to an int value.", node, null);
-			}
-			final String value = string.replace("_", "");
-			boolean _isNullOrEmpty_1 = StringExtensions.isNullOrEmpty(value);
-			if (_isNullOrEmpty_1) {
-				throw new ValueConverterException((("Couldn\'t convert input \'" + string) + "\' to an int value."),
-						node, null);
-			}
-			Integer _xtrycatchfinallyexpression = null;
-			try {
-				_xtrycatchfinallyexpression = Integer.valueOf(value);
-			} catch (final Throwable _t) {
-				if (_t instanceof NumberFormatException) {
-					final NumberFormatException e = (NumberFormatException) _t;
-					throw new ValueConverterException((("Couldn\'t convert \'" + string) + "\' to an int value."), node,
-							e);
-				} else {
-					throw Exceptions.sneakyThrow(_t);
-				}
-			}
-			_xblockexpression = _xtrycatchfinallyexpression;
-		}
-		return _xblockexpression;
-	}
+  @Override
+  protected String internalToString(final Integer value) {
+    return value.toString();
+  }
+  
+  @Override
+  protected Integer internalToValue(final String string, final INode node) throws ValueConverterException {
+    Integer _xblockexpression = null;
+    {
+      boolean _isNullOrEmpty = StringExtensions.isNullOrEmpty(string);
+      if (_isNullOrEmpty) {
+        throw new ValueConverterException("Couldn\'t convert empty string to an int value.", node, null);
+      }
+      final String value = string.replace("_", "");
+      boolean _isNullOrEmpty_1 = StringExtensions.isNullOrEmpty(value);
+      if (_isNullOrEmpty_1) {
+        throw new ValueConverterException((("Couldn\'t convert input \'" + string) + "\' to an int value."), node, null);
+      }
+      Integer _xtrycatchfinallyexpression = null;
+      try {
+        _xtrycatchfinallyexpression = Integer.valueOf(value);
+      } catch (final Throwable _t) {
+        if (_t instanceof NumberFormatException) {
+          final NumberFormatException e = (NumberFormatException)_t;
+          throw new ValueConverterException((("Couldn\'t convert \'" + string) + "\' to an int value."), node, e);
+        } else {
+          throw Exceptions.sneakyThrow(_t);
+        }
+      }
+      _xblockexpression = _xtrycatchfinallyexpression;
+    }
+    return _xblockexpression;
+  }
 }

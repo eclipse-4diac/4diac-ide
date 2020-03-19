@@ -24,28 +24,28 @@ import org.eclipse.xtext.resource.XtextResource;
 
 @SuppressWarnings("all")
 public class StructuredTextResource extends LazyLinkingResource {
-	public static final String OPTION_PARSER_RULE = "PARSER_RULE";
-
-	@Override
-	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
-		this.setEncodingFromOptions(options);
-		ParserRule _xifexpression = null;
-		if ((options != null)) {
-			Object _get = options.get(StructuredTextResource.OPTION_PARSER_RULE);
-			_xifexpression = ((ParserRule) _get);
-		} else {
-			_xifexpression = null;
-		}
-		ParserRule rule = _xifexpression;
-		IParseResult result = null;
-		if ((rule != null)) {
-			result = this.getParser().parse(rule, this.createReader(inputStream));
-		} else {
-			result = this.getParser().parse(this.createReader(inputStream));
-		}
-		this.updateInternalState(this.getParseResult(), result);
-		if (((options != null) && Boolean.TRUE.equals(options.get(XtextResource.OPTION_RESOLVE_ALL)))) {
-			EcoreUtil.resolveAll(this);
-		}
-	}
+  public static final String OPTION_PARSER_RULE = "PARSER_RULE";
+  
+  @Override
+  protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
+    this.setEncodingFromOptions(options);
+    ParserRule _xifexpression = null;
+    if ((options != null)) {
+      Object _get = options.get(StructuredTextResource.OPTION_PARSER_RULE);
+      _xifexpression = ((ParserRule) _get);
+    } else {
+      _xifexpression = null;
+    }
+    ParserRule rule = _xifexpression;
+    IParseResult result = null;
+    if ((rule != null)) {
+      result = this.getParser().parse(rule, this.createReader(inputStream));
+    } else {
+      result = this.getParser().parse(this.createReader(inputStream));
+    }
+    this.updateInternalState(this.getParseResult(), result);
+    if (((options != null) && Boolean.TRUE.equals(options.get(XtextResource.OPTION_RESOLVE_ALL)))) {
+      EcoreUtil.resolveAll(this);
+    }
+  }
 }

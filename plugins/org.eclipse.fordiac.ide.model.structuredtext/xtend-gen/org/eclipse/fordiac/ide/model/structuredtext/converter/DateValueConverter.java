@@ -25,40 +25,39 @@ import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 @SuppressWarnings("all")
 public class DateValueConverter extends AbstractNullSafeConverter<Date> {
-	@Extension
-	private final DateFormat format;
-
-	public DateValueConverter(final DateFormat format) {
-		this.format = format;
-	}
-
-	@Override
-	protected String internalToString(final Date value) {
-		return this.format.format(value);
-	}
-
-	@Override
-	protected Date internalToValue(final String string, final INode node) throws ValueConverterException {
-		Date _xblockexpression = null;
-		{
-			boolean _isNullOrEmpty = StringExtensions.isNullOrEmpty(string);
-			if (_isNullOrEmpty) {
-				throw new ValueConverterException("Couldn\'t convert empty string to a date value.", node, null);
-			}
-			Date _xtrycatchfinallyexpression = null;
-			try {
-				_xtrycatchfinallyexpression = this.format.parse(string);
-			} catch (final Throwable _t) {
-				if (_t instanceof ParseException) {
-					final ParseException e = (ParseException) _t;
-					throw new ValueConverterException((("Couldn\'t convert \'" + string) + "\' to a date value."), node,
-							e);
-				} else {
-					throw Exceptions.sneakyThrow(_t);
-				}
-			}
-			_xblockexpression = _xtrycatchfinallyexpression;
-		}
-		return _xblockexpression;
-	}
+  @Extension
+  private final DateFormat format;
+  
+  public DateValueConverter(final DateFormat format) {
+    this.format = format;
+  }
+  
+  @Override
+  protected String internalToString(final Date value) {
+    return this.format.format(value);
+  }
+  
+  @Override
+  protected Date internalToValue(final String string, final INode node) throws ValueConverterException {
+    Date _xblockexpression = null;
+    {
+      boolean _isNullOrEmpty = StringExtensions.isNullOrEmpty(string);
+      if (_isNullOrEmpty) {
+        throw new ValueConverterException("Couldn\'t convert empty string to a date value.", node, null);
+      }
+      Date _xtrycatchfinallyexpression = null;
+      try {
+        _xtrycatchfinallyexpression = this.format.parse(string);
+      } catch (final Throwable _t) {
+        if (_t instanceof ParseException) {
+          final ParseException e = (ParseException)_t;
+          throw new ValueConverterException((("Couldn\'t convert \'" + string) + "\' to a date value."), node, e);
+        } else {
+          throw Exceptions.sneakyThrow(_t);
+        }
+      }
+      _xblockexpression = _xtrycatchfinallyexpression;
+    }
+    return _xblockexpression;
+  }
 }

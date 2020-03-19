@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.model.structuredtext.converter.DateValueConverter
 
 @SuppressWarnings("all")
 public class Date_LiteralValueConverter extends DateValueConverter {
-	public Date_LiteralValueConverter() {
-		super(new SimpleDateFormat("yyyy-MM-dd"));
-	}
+  public Date_LiteralValueConverter() {
+    super(new SimpleDateFormat("yyyy-MM-dd"));
+  }
 }
