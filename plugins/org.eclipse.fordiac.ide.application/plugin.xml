@@ -337,6 +337,13 @@
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
+            defaultHandler="org.eclipse.fordiac.ide.application.handlers.UpdateFBTypeHandler"
+            description="Update selected function block type to the filesystem state"
+            id="org.eclipse.fordiac.ide.application.commands.updateFBType"
+            name="Update Type">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
             defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoParentHandler"
             id="org.eclipse.fordiac.ide.application.commands.gotoparent"
             name="Go To Parent">
@@ -398,6 +405,25 @@
 			</activeWhen>
 
       </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.application.handlers.UpdateFBTypeHandler"
+            commandId="org.eclipse.fordiac.ide.application.commands.updateFBType">
+            <activeWhen>
+			    <with variable="selection">
+	               <iterate ifEmpty="false">
+	                  <or>
+	                    <instanceof
+	                          value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
+	                    </instanceof>
+	                    <instanceof
+	                          value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+	                    </instanceof>
+	                  </or>
+	               </iterate>
+         		</with>  
+			</activeWhen>
+
+      </handler>      
       <handler
             class="org.eclipse.fordiac.ide.application.handlers.ClearFocusOn"
             commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn">
@@ -487,6 +513,7 @@
             <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
+            <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
       </menuContribution>            
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup"> 
             <menu
