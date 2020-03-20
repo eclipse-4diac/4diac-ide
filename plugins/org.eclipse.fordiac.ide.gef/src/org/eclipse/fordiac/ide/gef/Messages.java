@@ -45,6 +45,7 @@ public class Messages extends NLS {
 	public static String DiagramPreferences_DefaultRouter;
 	public static String DiagramPreferences_FB;
 	public static String DiagramPreferences_GeneralDiagramPreferences;
+	public static String DiagramPreferences_LabelSize; 
 	public static String DiagramPreferences_MaximumValueLabelSize;
 	public static String DiagramPreferences_FieldEditors_GridSpacingInPixels;
 	public static String DiagramPreferences_FieldEditors_RulerAndGrid;

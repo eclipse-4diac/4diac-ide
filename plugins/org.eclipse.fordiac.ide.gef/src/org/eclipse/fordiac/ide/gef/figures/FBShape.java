@@ -34,7 +34,6 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
@@ -48,7 +47,6 @@ import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -189,14 +187,12 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	private void createFBFigureShape(final FBType fbType, final ZoomManager zoomManager) {
-		IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-		int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
 		Color borderColor = getBorderColor(fbType);
 
 		Figure fbFigureContainer = createFigureContainer();
-		createFBTop(fbFigureContainer, cornerDim, borderColor, zoomManager);
+		createFBTop(fbFigureContainer, DiagramPreferences.CORNER_DIM, borderColor, zoomManager);
 		configureFBMiddle(fbType, fbFigureContainer, borderColor, zoomManager);
-		createFBBottom(fbFigureContainer, cornerDim, borderColor, zoomManager);
+		createFBBottom(fbFigureContainer, DiagramPreferences.CORNER_DIM, borderColor, zoomManager);
 	}
 
 	private void createFBBottom(Figure fbFigureContainer, int cornerDim, Color borderColor,

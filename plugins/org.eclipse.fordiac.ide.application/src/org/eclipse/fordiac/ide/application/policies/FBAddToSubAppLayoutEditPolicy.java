@@ -23,7 +23,6 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
@@ -31,7 +30,6 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * This policy creates an AddFBToSubAppCommand when user moves selected FBs over
@@ -64,13 +62,9 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 	@Override
 	protected void showLayoutTargetFeedback(Request request) {
 		if (REQ_ADD.equals(request.getType()) && null == moveHandle) {
-			IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-			int cornerDim = pf.getInt(DiagramPreferences.CORNER_DIM);
-			if (cornerDim > 1) {
-				cornerDim = cornerDim / 2;
-			}
+
 			moveHandle = new ModifiedMoveHandle((GraphicalEditPart) getTargetEditPart(request), new Insets(1),
-					cornerDim);
+					DiagramPreferences.CORNER_DIM_HALF);
 			addFeedback(moveHandle);
 		}
 	}
