@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FORTE Export for FORTE V1.0.x New Generation (Incubation)
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export.forte_ng;singleton:=true
-Bundle-Version: 1.11.3.qualifier
+Bundle-Version: 1.12.0.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.export.forte_ng
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
