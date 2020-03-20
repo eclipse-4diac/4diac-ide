@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*******************************************************************************
- * Copyright (c) 2010 Profactor GmbH, 2018 TU Wien/ACIN
+ * Copyright (c) 2018 TU Wien/ACIN
  *
  * All rights reserved.
  *
@@ -29,38 +29,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * Contributors:
- *   Gerhard Ebenhofer
- *     - initial API and implementation and/or initial documentation
- *
  *   Peter Gsellmann
- *     - Change from BasicFB to SimpleFB tag
+ *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
  -->
 <!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
-<FBType Name="Simple" Comment="Template for a Simple Function Block Type" >
+<FBType Name="Simple" Comment="Simple FB with one algorithm" >
   <Identification Standard="61499-1" />
   <VersionInfo Organization="TU Wien/ACIN" Version="0.0" Author="Peter Gsellmann" Date="2018-10-15" />
   <InterfaceList>
     <EventInputs>
       <Event Name="REQ" Comment="Normal Execution Request" >
-        <With Var="IN" />
       </Event>
     </EventInputs>
     <EventOutputs>
       <Event Name="CNF" Comment="Execution Confirmation" >
-        <With Var="OUT" />
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Name="IN" Type="BOOL" Comment="Input" />
     </InputVars>
     <OutputVars>
-      <VarDeclaration Name="OUT" Type="BOOL" Comment="Output" />
     </OutputVars>
   </InterfaceList>
   <SimpleFB>
-  <Algorithm Name="REQ" Comment="Normally executed algorithm" >
-    <ST Text="OUT := IN;&#10;" />
+  <Algorithm Name="REQ" Comment="" >
+    <ST Text="" />
   </Algorithm>
   </SimpleFB>
 </FBType>

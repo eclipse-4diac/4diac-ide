@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- 
 /*******************************************************************************
- * Copyright (c) 2010, 2016 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2016 fortiss GmbH
  * 
  * All rights reserved.
  * 
@@ -29,67 +29,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl
+ *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
  -->
 <!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
-<FBType Comment="Template for a simple Basic Function Block Type" Name="Basic">
+<FBType Comment="Basic FB with empty ECC" Name="Basic">
   <Identification Standard="61499-2"/>
-  <VersionInfo Author="4DIAC-IDE" Date="2016-05-26" Organization="4DIAC-Consortium" Version="0.0"/>
   <VersionInfo Author="AZ" Date="2016-05-26" Organization="fortiss GmbH" Version="1.0"/>
   <InterfaceList>
-    <EventInputs>
-      <Event Comment="Initialization Request" Name="INIT" Type="Event">
-        <With Var="QI"/>
-      </Event>
-      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
-        <With Var="QI"/>
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
-        <With Var="QO"/>
-      </Event>
-      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
-        <With Var="QO"/>
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Comment="Input event qualifier" Name="QI" Type="BOOL"/>
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Comment="Output event qualifier" Name="QO" Type="BOOL"/>
-    </OutputVars>
+    <EventInputs/>
+    <EventOutputs/>
+    <InputVars/>
+    <OutputVars/>
   </InterfaceList>
   <BasicFB>
     <ECC>
-      <ECState Comment="Initial State" Name="START" x="475.0" y="1125.0"/>
-      <ECState Comment="Initialization" Name="Init" x="1235.0" y="665.0">
-        <ECAction Algorithm="initialize" Output="INITO"/>
-      </ECState>
-      <ECState Comment="Normal execution" Name="NormalOp" x="2850.0" y="1140.0">
-        <ECAction Algorithm="normalOperation" Output="CNF"/>
-      </ECState>
-      <ECState Name="Initialized" x="1900.0" y="1140.0"/>
-      <ECState Name="DeInit" x="1140.0" y="1520.0">
-        <ECAction Algorithm="deInitialize" Output="INITO"/>
-      </ECState>
-      <ECTransition Comment="" Condition="INIT[TRUE = QI]" Destination="Init" Source="START" x="840.0" y="920.0"/>
-      <ECTransition Comment="" Condition="1" Destination="Initialized" Source="Init" x="1660.0" y="975.0"/>
-      <ECTransition Comment="" Condition="REQ" Destination="NormalOp" Source="Initialized" x="2615.0" y="1000.0"/>
-      <ECTransition Comment="" Condition="1" Destination="Initialized" Source="NormalOp" x="2575.0" y="1430.0"/>
-      <ECTransition Comment="" Condition="1" Destination="START" Source="DeInit" x="940.0" y="1445.0"/>
-      <ECTransition Comment="" Condition="INIT[FALSE = QI]" Destination="DeInit" Source="Initialized" x="1690.0" y="1340.0"/>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
     </ECC>
-    <Algorithm Comment="Initialization algorithm" Name="initialize">
-      <ST Text="&#10;QO := QI;"/>
-    </Algorithm>
-    <Algorithm Comment="Normally executed algorithm" Name="deInitialize">
-      <ST Text="&#10;QO := FALSE;"/>
-    </Algorithm>
-    <Algorithm Comment="new algorithm" Name="normalOperation">
-      <ST Text="QO := QI;&#10;&#10;IF TRUE  = QI THEN&#10;  (*  only perform normal operation of QI is true*)&#10;&#10;END_IF;&#10;"/>
-    </Algorithm>
   </BasicFB>
 </FBType>
