@@ -32,8 +32,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -50,12 +48,10 @@ import org.eclipse.swt.widgets.Text;
 
 public class NewInstanceCellEditor extends TextCellEditor {
 
+	private Composite container;
 	private Button menuButton;
 	private Shell popupShell;
 	private TableViewer tableViewer;
-	private boolean insideButton = false;
-	private boolean insidePopUp = false;
-	private boolean insideTableView = false;
 	private PaletteFilter paletteFilter;
 	private boolean blockTableSelection = false;
 
@@ -81,7 +77,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	@Override
 	protected Control createControl(Composite parent) {
-		Composite container = createContainer(parent);
+		container = createContainer(parent);
 		Text textControl = (Text) super.createControl(container);
 		configureTextControl(textControl);
 		createTypeMenuButton(container);
@@ -97,7 +93,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	@Override
 	protected void focusLost() {
-		if (!insideButton && !insidePopUp && !insideTableView) {
+
+		if (!insideAnyEditorArea()) {
 			// when we loose focus we want to fire cancel so that have entered text is not
 			// applied
 			fireCancelEditor();
@@ -133,8 +130,15 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		return super.doGetValue();
 	}
 
+	private boolean insideAnyEditorArea() {
+		Point cursorLocation = popupShell.getDisplay().getCursorLocation();
+		Point containerRelativeCursor = container.getParent().toControl(cursorLocation);
+		return container.getBounds().contains(containerRelativeCursor)
+				|| popupShell.getBounds().contains(cursorLocation);
+	}
+
 	private Composite createContainer(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE) {
+		Composite newContainer = new Composite(parent, SWT.NONE) {
 			@Override
 			public void setBounds(int x, int y, int width, int height) {
 				super.setBounds(x, y, width, height);
@@ -146,8 +150,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 				}
 			}
 		};
-		container.setBackground(parent.getBackground());
-		container.setForeground(parent.getForeground());
+		newContainer.setBackground(parent.getBackground());
+		newContainer.setForeground(parent.getForeground());
 
 		// set layout with minimal space to keep the cell editor compact
 		GridLayout contLayout = new GridLayout(2, false);
@@ -158,8 +162,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		contLayout.marginHeight = 0;
 		contLayout.verticalSpacing = 0;
 		contLayout.horizontalSpacing = 0;
-		container.setLayout(contLayout);
-		return container;
+		newContainer.setLayout(contLayout);
+		return newContainer;
 	}
 
 	private void configureTextControl(final Text textControl) {
@@ -223,18 +227,6 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		popupShell = new Shell(container.getShell(), SWT.ON_TOP | SWT.NO_FOCUS | SWT.NO_TRIM);
 		popupShell.setLayout(new FillLayout());
 
-		popupShell.addMouseTrackListener(new MouseTrackAdapter() {
-			@Override
-			public void mouseEnter(MouseEvent e) {
-				insidePopUp = true;
-			}
-
-			@Override
-			public void mouseExit(MouseEvent e) {
-				insidePopUp = false;
-			}
-		});
-
 		tableViewer = new TableViewer(popupShell, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new StyledCellLabelProvider() {
@@ -287,18 +279,6 @@ public class NewInstanceCellEditor extends TextCellEditor {
 			}
 		});
 
-		tableViewer.getControl().addMouseTrackListener(new MouseTrackAdapter() {
-			@Override
-			public void mouseEnter(MouseEvent e) {
-				insideTableView = true;
-			}
-
-			@Override
-			public void mouseExit(MouseEvent e) {
-				insideTableView = false;
-			}
-		});
-
 		tableViewer.addSelectionChangedListener(event -> {
 			if (!blockTableSelection) {
 				fireApplyEditorValue();
@@ -309,17 +289,6 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	private void createTypeMenuButton(Composite container) {
 		menuButton = new Button(container, SWT.FLAT);
 		menuButton.setImage(FordiacImage.ICON_TYPE_NAVIGATOR.getImage());
-		menuButton.addMouseTrackListener(new MouseTrackAdapter() {
-			@Override
-			public void mouseEnter(MouseEvent e) {
-				insideButton = true;
-			}
-
-			@Override
-			public void mouseExit(MouseEvent e) {
-				insideButton = false;
-			}
-		});
 	}
 
 }
