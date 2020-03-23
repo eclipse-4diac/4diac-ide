@@ -634,6 +634,9 @@
       <genEnumLiterals ecoreEnumLiteral="data.ecore#//BaseType1/UDINT"/>
       <genEnumLiterals ecoreEnumLiteral="data.ecore#//BaseType1/ANY"/>
     </genEnums>
+    <genClasses ecoreClass="data.ecore#//AnyDerivedType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//AnyDerivedType/compilerInfo"/>
+    </genClasses>
     <genClasses ecoreClass="data.ecore#//ArrayType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//ArrayType/subranges"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//ArrayType/initialValues"/>

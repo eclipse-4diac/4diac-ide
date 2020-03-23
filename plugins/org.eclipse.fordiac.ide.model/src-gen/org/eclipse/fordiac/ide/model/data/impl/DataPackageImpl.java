@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl;
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
@@ -47,6 +48,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageIm
  * @generated
  */
 public class DataPackageImpl extends EPackageImpl implements DataPackage {
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	private EClass anyDerivedTypeEClass = null;
+
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -220,6 +228,26 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(DataPackage.eNS_URI, theDataPackage);
 		return theDataPackage;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public EClass getAnyDerivedType() {
+		return anyDerivedTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public EReference getAnyDerivedType_CompilerInfo() {
+		return (EReference) anyDerivedTypeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -492,6 +520,9 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		isCreated = true;
 
 		// Create classes and their features
+		anyDerivedTypeEClass = createEClass(ANY_DERIVED_TYPE);
+		createEReference(anyDerivedTypeEClass, ANY_DERIVED_TYPE__COMPILER_INFO);
+
 		arrayTypeEClass = createEClass(ARRAY_TYPE);
 		createEReference(arrayTypeEClass, ARRAY_TYPE__SUBRANGES);
 		createEAttribute(arrayTypeEClass, ARRAY_TYPE__INITIAL_VALUES);
@@ -556,21 +587,22 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
-				.getEPackage(XMLTypePackage.eNS_URI);
 		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage) EPackage.Registry.INSTANCE
 				.getEPackage(LibraryElementPackage.eNS_URI);
+		XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
+				.getEPackage(XMLTypePackage.eNS_URI);
 
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		arrayTypeEClass.getESuperTypes().add(this.getDataType());
+		anyDerivedTypeEClass.getESuperTypes().add(this.getDataType());
+		arrayTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
 		dataTypeEClass.getESuperTypes().add(theLibraryElementPackage.getLibraryElement());
 		directlyDerivedTypeEClass.getESuperTypes().add(this.getDerivedType());
 		enumeratedTypeEClass.getESuperTypes().add(this.getValueType());
-		structuredTypeEClass.getESuperTypes().add(this.getDataType());
+		structuredTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
 		subrangeTypeEClass.getESuperTypes().add(this.getDerivedType());
 		valueTypeEClass.getESuperTypes().add(this.getDataType());
 		elementaryTypeEClass.getESuperTypes().add(this.getValueType());
@@ -578,6 +610,12 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		eventTypeEClass.getESuperTypes().add(this.getDataType());
 
 		// Initialize classes and features; add operations and parameters
+		initEClass(anyDerivedTypeEClass, AnyDerivedType.class, "AnyDerivedType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+				IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAnyDerivedType_CompilerInfo(), theLibraryElementPackage.getCompilerInfo(), null,
+				"compilerInfo", null, 1, 1, AnyDerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
+				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(arrayTypeEClass, ArrayType.class, "ArrayType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getArrayType_Subranges(), this.getSubrange(), null, "subranges", null, 1, -1, ArrayType.class, //$NON-NLS-1$

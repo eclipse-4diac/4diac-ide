@@ -32,7 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * @model
  * @generated
  */
-public interface StructuredType extends DataType {
+public interface StructuredType extends AnyDerivedType {
 	/**
 	 * Returns the value of the '<em><b>Var Declaration</b></em>' containment
 	 * reference list. The list contents are of type
