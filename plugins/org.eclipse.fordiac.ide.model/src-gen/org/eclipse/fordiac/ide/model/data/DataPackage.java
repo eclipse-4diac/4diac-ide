@@ -74,7 +74,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDataType()
 	 * @generated
 	 */
-	int DATA_TYPE = 1;
+	int DATA_TYPE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
@@ -141,14 +141,14 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl <em>Array
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDerivedTypeImpl <em>Any
+	 * Derived Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @see org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getArrayType()
+	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyDerivedTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyDerivedType()
 	 * @generated
 	 */
-	int ARRAY_TYPE = 0;
+	int ANY_DERIVED_TYPE = 0;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
@@ -157,7 +157,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_TYPE__ANNOTATIONS = DATA_TYPE__ANNOTATIONS;
+	int ANY_DERIVED_TYPE__ANNOTATIONS = DATA_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
@@ -166,7 +166,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_TYPE__NAME = DATA_TYPE__NAME;
+	int ANY_DERIVED_TYPE__NAME = DATA_TYPE__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
@@ -175,7 +175,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_TYPE__COMMENT = DATA_TYPE__COMMENT;
+	int ANY_DERIVED_TYPE__COMMENT = DATA_TYPE__COMMENT;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
@@ -184,7 +184,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_TYPE__VERSION_INFO = DATA_TYPE__VERSION_INFO;
+	int ANY_DERIVED_TYPE__VERSION_INFO = DATA_TYPE__VERSION_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment
@@ -193,7 +193,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
+	int ANY_DERIVED_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
 
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
@@ -202,7 +202,99 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_TYPE__PALETTE_ENTRY = DATA_TYPE__PALETTE_ENTRY;
+	int ANY_DERIVED_TYPE__PALETTE_ENTRY = DATA_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_DERIVED_TYPE__COMPILER_INFO = DATA_TYPE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Any Derived Type</em>' class.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_DERIVED_TYPE_FEATURE_COUNT = DATA_TYPE_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl <em>Array
+	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @see org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getArrayType()
+	 * @generated
+	 */
+	int ARRAY_TYPE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int ARRAY_TYPE__ANNOTATIONS = ANY_DERIVED_TYPE__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int ARRAY_TYPE__NAME = ANY_DERIVED_TYPE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int ARRAY_TYPE__COMMENT = ANY_DERIVED_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int ARRAY_TYPE__VERSION_INFO = ANY_DERIVED_TYPE__VERSION_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int ARRAY_TYPE__IDENTIFICATION = ANY_DERIVED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int ARRAY_TYPE__PALETTE_ENTRY = ANY_DERIVED_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int ARRAY_TYPE__COMPILER_INFO = ANY_DERIVED_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Subranges</b></em>' containment reference
@@ -211,7 +303,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_TYPE__SUBRANGES = DATA_TYPE_FEATURE_COUNT + 0;
+	int ARRAY_TYPE__SUBRANGES = ANY_DERIVED_TYPE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Initial Values</b></em>' attribute. <!--
@@ -220,7 +312,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_TYPE__INITIAL_VALUES = DATA_TYPE_FEATURE_COUNT + 1;
+	int ARRAY_TYPE__INITIAL_VALUES = ANY_DERIVED_TYPE_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Base Type</b></em>' reference. <!--
@@ -229,7 +321,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_TYPE__BASE_TYPE = DATA_TYPE_FEATURE_COUNT + 2;
+	int ARRAY_TYPE__BASE_TYPE = ANY_DERIVED_TYPE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Array Type</em>' class. <!--
@@ -238,7 +330,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_TYPE_FEATURE_COUNT = DATA_TYPE_FEATURE_COUNT + 3;
+	int ARRAY_TYPE_FEATURE_COUNT = ANY_DERIVED_TYPE_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the
@@ -249,7 +341,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getValueType()
 	 * @generated
 	 */
-	int VALUE_TYPE = 8;
+	int VALUE_TYPE = 9;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
@@ -323,7 +415,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDerivedType()
 	 * @generated
 	 */
-	int DERIVED_TYPE = 10;
+	int DERIVED_TYPE = 11;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
@@ -407,7 +499,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDirectlyDerivedType()
 	 * @generated
 	 */
-	int DIRECTLY_DERIVED_TYPE = 2;
+	int DIRECTLY_DERIVED_TYPE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
@@ -491,7 +583,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getEnumeratedType()
 	 * @generated
 	 */
-	int ENUMERATED_TYPE = 3;
+	int ENUMERATED_TYPE = 4;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
@@ -575,7 +667,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getEnumeratedValue()
 	 * @generated
 	 */
-	int ENUMERATED_VALUE = 4;
+	int ENUMERATED_VALUE = 5;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
@@ -614,7 +706,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getStructuredType()
 	 * @generated
 	 */
-	int STRUCTURED_TYPE = 5;
+	int STRUCTURED_TYPE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
@@ -623,7 +715,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRUCTURED_TYPE__ANNOTATIONS = DATA_TYPE__ANNOTATIONS;
+	int STRUCTURED_TYPE__ANNOTATIONS = ANY_DERIVED_TYPE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
@@ -632,7 +724,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRUCTURED_TYPE__NAME = DATA_TYPE__NAME;
+	int STRUCTURED_TYPE__NAME = ANY_DERIVED_TYPE__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute. <!--
@@ -641,7 +733,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRUCTURED_TYPE__COMMENT = DATA_TYPE__COMMENT;
+	int STRUCTURED_TYPE__COMMENT = ANY_DERIVED_TYPE__COMMENT;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference
@@ -650,7 +742,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRUCTURED_TYPE__VERSION_INFO = DATA_TYPE__VERSION_INFO;
+	int STRUCTURED_TYPE__VERSION_INFO = ANY_DERIVED_TYPE__VERSION_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment
@@ -659,7 +751,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRUCTURED_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
+	int STRUCTURED_TYPE__IDENTIFICATION = ANY_DERIVED_TYPE__IDENTIFICATION;
 
 	/**
 	 * The feature id for the '<em><b>Palette Entry</b></em>' reference. <!--
@@ -668,7 +760,16 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRUCTURED_TYPE__PALETTE_ENTRY = DATA_TYPE__PALETTE_ENTRY;
+	int STRUCTURED_TYPE__PALETTE_ENTRY = ANY_DERIVED_TYPE__PALETTE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 * @ordered
+	 */
+	int STRUCTURED_TYPE__COMPILER_INFO = ANY_DERIVED_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Var Declaration</b></em>' containment
@@ -677,7 +778,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRUCTURED_TYPE__VAR_DECLARATION = DATA_TYPE_FEATURE_COUNT + 0;
+	int STRUCTURED_TYPE__VAR_DECLARATION = ANY_DERIVED_TYPE_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Structured Type</em>' class.
@@ -686,7 +787,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRUCTURED_TYPE_FEATURE_COUNT = DATA_TYPE_FEATURE_COUNT + 1;
+	int STRUCTURED_TYPE_FEATURE_COUNT = ANY_DERIVED_TYPE_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the
@@ -697,7 +798,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getSubrange()
 	 * @generated
 	 */
-	int SUBRANGE = 6;
+	int SUBRANGE = 7;
 
 	/**
 	 * The feature id for the '<em><b>Lower Limit</b></em>' attribute. <!--
@@ -735,7 +836,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getSubrangeType()
 	 * @generated
 	 */
-	int SUBRANGE_TYPE = 7;
+	int SUBRANGE_TYPE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
@@ -828,7 +929,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getElementaryType()
 	 * @generated
 	 */
-	int ELEMENTARY_TYPE = 9;
+	int ELEMENTARY_TYPE = 10;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
@@ -902,7 +1003,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getEventType()
 	 * @generated
 	 */
-	int EVENT_TYPE = 11;
+	int EVENT_TYPE = 12;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' reference list. <!--
@@ -976,7 +1077,31 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getBaseType1()
 	 * @generated
 	 */
-	int BASE_TYPE1 = 12;
+	int BASE_TYPE1 = 13;
+
+	/**
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.model.data.AnyDerivedType <em>Any Derived
+	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for class '<em>Any Derived Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.data.AnyDerivedType
+	 * @generated
+	 */
+	EClass getAnyDerivedType();
+
+	/**
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.model.data.AnyDerivedType#getCompilerInfo
+	 * <em>Compiler Info</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return the meta object for the containment reference '<em>Compiler
+	 *         Info</em>'.
+	 * @see org.eclipse.fordiac.ide.model.data.AnyDerivedType#getCompilerInfo()
+	 * @see #getAnyDerivedType()
+	 * @generated
+	 */
+	EReference getAnyDerivedType_CompilerInfo();
 
 	/**
 	 * Returns the meta object for class
@@ -1278,6 +1403,25 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 */
 	interface Literals {
+		/**
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDerivedTypeImpl <em>Any
+		 * Derived Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
+		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyDerivedTypeImpl
+		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyDerivedType()
+		 * @generated
+		 */
+		EClass ANY_DERIVED_TYPE = eINSTANCE.getAnyDerivedType();
+
+		/**
+		 * The meta object literal for the '<em><b>Compiler Info</b></em>' containment
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
+		 * @generated
+		 */
+		EReference ANY_DERIVED_TYPE__COMPILER_INFO = eINSTANCE.getAnyDerivedType_CompilerInfo();
+
 		/**
 		 * The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl <em>Array

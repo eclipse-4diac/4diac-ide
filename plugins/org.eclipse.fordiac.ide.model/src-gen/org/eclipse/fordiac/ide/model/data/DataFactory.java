@@ -32,6 +32,15 @@ public interface DataFactory extends EFactory {
 	DataFactory eINSTANCE = org.eclipse.fordiac.ide.model.data.impl.DataFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Any Derived Type</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @return a new object of class '<em>Any Derived Type</em>'.
+	 * @generated
+	 */
+	AnyDerivedType createAnyDerivedType();
+
+	/**
 	 * Returns a new object of class '<em>Array Type</em>'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * 

@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  * @generated
  */
-public class StructuredTypeImpl extends DataTypeImpl implements StructuredType {
+public class StructuredTypeImpl extends AnyDerivedTypeImpl implements StructuredType {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 

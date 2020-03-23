@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.fordiac.ide.model.data.*;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
@@ -77,6 +78,8 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+		case DataPackage.ANY_DERIVED_TYPE:
+			return createAnyDerivedType();
 		case DataPackage.ARRAY_TYPE:
 			return createArrayType();
 		case DataPackage.DIRECTLY_DERIVED_TYPE:
@@ -132,6 +135,17 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
+	public AnyDerivedType createAnyDerivedType() {
+		AnyDerivedTypeImpl anyDerivedType = new AnyDerivedTypeImpl();
+		return anyDerivedType;
 	}
 
 	/**

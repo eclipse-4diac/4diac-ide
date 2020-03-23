@@ -45,7 +45,7 @@ import org.eclipse.fordiac.ide.model.data.Subrange;
  *
  * @generated
  */
-public class ArrayTypeImpl extends DataTypeImpl implements ArrayType {
+public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	/**
 	 * The cached value of the '{@link #getSubranges() <em>Subranges</em>}'
 	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
