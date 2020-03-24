@@ -13,7 +13,7 @@
  *   Bianca Wiesmayr
  *     - extracted code from DeleteInternalVariableCommand
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.commands.delete;
+package org.eclipse.fordiac.ide.model.commands.internal;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;

@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.commands.internal.DeleteVariableCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 

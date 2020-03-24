@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Annotation;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -86,7 +87,7 @@ public final class NameRepository {
 			element.getAnnotations().clear();
 		}
 		if (!IdentifierVerifyer.isValidIdentifier(element.getName())) {
-			Annotation ano = element.createAnnotation(
+			final Annotation ano = element.createAnnotation(
 					MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, element.getName()));
 			ano.setServity(2); // 2 means error!
 		}
@@ -171,19 +172,23 @@ public final class NameRepository {
 		} else if (refElement instanceof ECState) {
 			elementsList = ((ECC) ((ECState) refElement).eContainer()).getECState();
 		} else if (refElement instanceof IInterfaceElement) {
-			EList<INamedElement> elements = new BasicEList<>();
-			InterfaceList interfaceList = null;
-			if (((IInterfaceElement) refElement).eContainer() instanceof InterfaceList) {
-				interfaceList = (InterfaceList) ((IInterfaceElement) refElement).eContainer();
+			if (((IInterfaceElement) refElement).eContainer() instanceof StructuredType) {
+				elementsList = ((StructuredType) ((IInterfaceElement) refElement).eContainer()).getMemberVariables();
 			} else {
-				// this is an internal variable
-				interfaceList = ((BasicFBType) ((IInterfaceElement) refElement).eContainer()).getInterfaceList();
+				final EList<INamedElement> elements = new BasicEList<>();
+				InterfaceList interfaceList = null;
+				if (((IInterfaceElement) refElement).eContainer() instanceof InterfaceList) {
+					interfaceList = (InterfaceList) ((IInterfaceElement) refElement).eContainer();
+				} else {
+					// this is an internal variable
+					interfaceList = ((BasicFBType) ((IInterfaceElement) refElement).eContainer()).getInterfaceList();
+				}
+				elements.addAll(interfaceList.getAllInterfaceElements());
+				if (interfaceList.eContainer() instanceof BasicFBType) {
+					elements.addAll(((BasicFBType) interfaceList.eContainer()).getInternalVars());
+				}
+				elementsList = elements;
 			}
-			elements.addAll(interfaceList.getAllInterfaceElements());
-			if (interfaceList.eContainer() instanceof BasicFBType) {
-				elements.addAll(((BasicFBType) interfaceList.eContainer()).getInternalVars());
-			}
-			elementsList = elements;
 		} else {
 			throw new IllegalArgumentException(
 					"Refenrence list for given class not available: " + refElement.getClass().toString()); //$NON-NLS-1$
@@ -209,9 +214,9 @@ public final class NameRepository {
 		String temp = nameProposal;
 		while (existingNameList.contains(temp)) {
 			if (END_IN_NUMBER_PATTERN.matcher(temp).matches()) {
-				Matcher matchNumber = GET_LAST_NUMBER_PATTERN.matcher(temp);
+				final Matcher matchNumber = GET_LAST_NUMBER_PATTERN.matcher(temp);
 				matchNumber.find();
-				int number = Integer.parseInt(temp.substring(matchNumber.start(), matchNumber.end())) + 1;
+				final int number = Integer.parseInt(temp.substring(matchNumber.start(), matchNumber.end())) + 1;
 				temp = temp.substring(0, matchNumber.start()) + number; // $NON-NLS-1$
 			} else {
 				temp = nameProposal + "_" + 1; //$NON-NLS-1$
@@ -224,7 +229,7 @@ public final class NameRepository {
 		if (RESERVED_KEYWORDS.contains(name.toUpperCase())) {
 			return name + "1"; //$NON-NLS-1$
 		}
-		for (DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
+		for (final DataType dataType : DataTypeLibrary.getInstance().getDataTypesSorted()) {
 			if (dataType.getName().equalsIgnoreCase(name)) {
 				return name + "1"; //$NON-NLS-1$
 			}

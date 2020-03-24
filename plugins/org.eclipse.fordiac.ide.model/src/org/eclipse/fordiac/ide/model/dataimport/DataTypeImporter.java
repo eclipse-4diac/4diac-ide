@@ -103,7 +103,7 @@ public class DataTypeImporter extends TypeImporter {
 	 * @return - A StructuredType that is converted
 	 */
 	private static StructuredType convertToStructuredType(final AnyDerivedType type) {
-		StructuredType structuredType = DataFactory.eINSTANCE.createStructuredType();
+		final StructuredType structuredType = DataFactory.eINSTANCE.createStructuredType();
 		copyGeneralTypeInformation(structuredType, type);
 		return structuredType;
 	}

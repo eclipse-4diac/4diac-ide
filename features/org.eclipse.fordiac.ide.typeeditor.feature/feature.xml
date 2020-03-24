@@ -267,4 +267,11 @@ United States, other countries, or both.\n
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="org.eclipse.fordiac.ide.datatypeeditor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

@@ -11,10 +11,10 @@
  *   Bianca Wiesmayr
  *       - initial implementation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.commands.internal;
+package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteVariableCommand;
+import org.eclipse.fordiac.ide.model.commands.internal.DeleteVariableCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 

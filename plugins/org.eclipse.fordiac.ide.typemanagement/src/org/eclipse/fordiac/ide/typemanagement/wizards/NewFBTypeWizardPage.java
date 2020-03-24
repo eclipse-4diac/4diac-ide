@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 - 2019 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2010 - 2020 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - reworked type selection to a type list with description
  *   Bianca Wiesmayr - extracted TableViewer creation
+ *   Daniel Lindhuber - added Data Type
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
@@ -229,6 +230,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	protected FileFilter createTemplatesFileFilter() {
 		return pathname -> pathname.getName().toUpperCase().endsWith(".FBT") //$NON-NLS-1$
 				|| pathname.getName().toUpperCase().endsWith(".ADP") //$NON-NLS-1$
+				|| pathname.getName().toUpperCase().endsWith(".DTP") //$NON-NLS-1$
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
 	}
 

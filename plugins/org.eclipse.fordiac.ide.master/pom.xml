@@ -12,6 +12,7 @@
 		<module>../org.eclipse.fordiac.ide.deployment</module>
 		<module>../org.eclipse.fordiac.ide.deployment.iec61499</module>
 		<module>../org.eclipse.fordiac.ide.deployment.ui</module>
+		<module>../org.eclipse.fordiac.ide.datatypeeditor</module>
 		<module>../org.eclipse.fordiac.ide.export</module>
 		<module>../org.eclipse.fordiac.ide.export.compare</module>
 		<module>../org.eclipse.fordiac.ide.export.forte_1.0.x</module>
