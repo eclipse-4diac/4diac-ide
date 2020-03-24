@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl;
 public abstract class DataTypeImpl extends LibraryElementImpl implements DataType {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected DataTypeImpl() {
@@ -36,7 +35,6 @@ public abstract class DataTypeImpl extends LibraryElementImpl implements DataTyp
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

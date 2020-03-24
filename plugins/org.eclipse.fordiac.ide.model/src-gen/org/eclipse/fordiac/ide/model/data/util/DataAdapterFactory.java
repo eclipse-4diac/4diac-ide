@@ -39,22 +39,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
  * <!-- begin-user-doc --> The <b>Adapter Factory</b> for the model. It provides
  * an adapter <code>createXXX</code> method for each class of the model. <!--
  * end-user-doc -->
- * 
  * @see org.eclipse.fordiac.ide.model.data.DataPackage
  * @generated
  */
 public class DataAdapterFactory extends AdapterFactoryImpl {
 	/**
-	 * The cached model package. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached model package.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected static DataPackage modelPackage;
 
 	/**
-	 * Creates an instance of the adapter factory. <!-- begin-user-doc --> <!--
+	 * Creates an instance of the adapter factory.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public DataAdapterFactory() {
@@ -78,7 +77,7 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 			return true;
 		}
 		if (object instanceof EObject) {
-			return ((EObject) object).eClass().getEPackage() == modelPackage;
+			return ((EObject)object).eClass().getEPackage() == modelPackage;
 		}
 		return false;
 	}
@@ -90,112 +89,94 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	protected DataSwitch<Adapter> modelSwitch = new DataSwitch<Adapter>() {
-		@Override
-		public Adapter caseAnyDerivedType(AnyDerivedType object) {
-			return createAnyDerivedTypeAdapter();
-		}
-
-		@Override
-		public Adapter caseArrayType(ArrayType object) {
-			return createArrayTypeAdapter();
-		}
-
-		@Override
-		public Adapter caseDataType(DataType object) {
-			return createDataTypeAdapter();
-		}
-
-		@Override
-		public Adapter caseDirectlyDerivedType(DirectlyDerivedType object) {
-			return createDirectlyDerivedTypeAdapter();
-		}
-
-		@Override
-		public Adapter caseEnumeratedType(EnumeratedType object) {
-			return createEnumeratedTypeAdapter();
-		}
-
-		@Override
-		public Adapter caseEnumeratedValue(EnumeratedValue object) {
-			return createEnumeratedValueAdapter();
-		}
-
-		@Override
-		public Adapter caseStructuredType(StructuredType object) {
-			return createStructuredTypeAdapter();
-		}
-
-		@Override
-		public Adapter caseSubrange(Subrange object) {
-			return createSubrangeAdapter();
-		}
-
-		@Override
-		public Adapter caseSubrangeType(SubrangeType object) {
-			return createSubrangeTypeAdapter();
-		}
-
-		@Override
-		public Adapter caseValueType(ValueType object) {
-			return createValueTypeAdapter();
-		}
-
-		@Override
-		public Adapter caseElementaryType(ElementaryType object) {
-			return createElementaryTypeAdapter();
-		}
-
-		@Override
-		public Adapter caseDerivedType(DerivedType object) {
-			return createDerivedTypeAdapter();
-		}
-
-		@Override
-		public Adapter caseEventType(EventType object) {
-			return createEventTypeAdapter();
-		}
-
-		@Override
-		public Adapter caseI4DIACElement(I4DIACElement object) {
-			return createI4DIACElementAdapter();
-		}
-
-		@Override
-		public Adapter caseINamedElement(INamedElement object) {
-			return createINamedElementAdapter();
-		}
-
-		@Override
-		public Adapter caseLibraryElement(LibraryElement object) {
-			return createLibraryElementAdapter();
-		}
-
-		@Override
-		public Adapter defaultCase(EObject object) {
-			return createEObjectAdapter();
-		}
-	};
+			@Override
+			public Adapter caseAnyDerivedType(AnyDerivedType object) {
+				return createAnyDerivedTypeAdapter();
+			}
+			@Override
+			public Adapter caseArrayType(ArrayType object) {
+				return createArrayTypeAdapter();
+			}
+			@Override
+			public Adapter caseDataType(DataType object) {
+				return createDataTypeAdapter();
+			}
+			@Override
+			public Adapter caseDirectlyDerivedType(DirectlyDerivedType object) {
+				return createDirectlyDerivedTypeAdapter();
+			}
+			@Override
+			public Adapter caseEnumeratedType(EnumeratedType object) {
+				return createEnumeratedTypeAdapter();
+			}
+			@Override
+			public Adapter caseEnumeratedValue(EnumeratedValue object) {
+				return createEnumeratedValueAdapter();
+			}
+			@Override
+			public Adapter caseStructuredType(StructuredType object) {
+				return createStructuredTypeAdapter();
+			}
+			@Override
+			public Adapter caseSubrange(Subrange object) {
+				return createSubrangeAdapter();
+			}
+			@Override
+			public Adapter caseSubrangeType(SubrangeType object) {
+				return createSubrangeTypeAdapter();
+			}
+			@Override
+			public Adapter caseValueType(ValueType object) {
+				return createValueTypeAdapter();
+			}
+			@Override
+			public Adapter caseElementaryType(ElementaryType object) {
+				return createElementaryTypeAdapter();
+			}
+			@Override
+			public Adapter caseDerivedType(DerivedType object) {
+				return createDerivedTypeAdapter();
+			}
+			@Override
+			public Adapter caseEventType(EventType object) {
+				return createEventTypeAdapter();
+			}
+			@Override
+			public Adapter caseI4DIACElement(I4DIACElement object) {
+				return createI4DIACElementAdapter();
+			}
+			@Override
+			public Adapter caseINamedElement(INamedElement object) {
+				return createINamedElementAdapter();
+			}
+			@Override
+			public Adapter caseLibraryElement(LibraryElement object) {
+				return createLibraryElementAdapter();
+			}
+			@Override
+			public Adapter defaultCase(EObject object) {
+				return createEObjectAdapter();
+			}
+		};
 
 	/**
-	 * Creates an adapter for the <code>target</code>. <!-- begin-user-doc --> <!--
+	 * Creates an adapter for the <code>target</code>.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @param target the object to adapt.
 	 * @return the adapter for the <code>target</code>.
 	 * @generated
 	 */
 	@Override
 	public Adapter createAdapter(Notifier target) {
-		return modelSwitch.doSwitch((EObject) target);
+		return modelSwitch.doSwitch((EObject)target);
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.data.AnyDerivedType <em>Any Derived
-	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.AnyDerivedType <em>Any Derived Type</em>}'.
+	 * <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyDerivedType
 	 * @generated
@@ -205,12 +186,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.data.ArrayType <em>Array Type</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.ArrayType <em>Array Type</em>}'.
 	 * <!-- begin-user-doc --> This default implementation returns null so that we
 	 * can easily ignore cases; it's useful to ignore a case when inheritance will
 	 * catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.data.ArrayType
 	 * @generated
@@ -235,12 +214,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType <em>Directly
-	 * Derived Type</em>}'. <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType <em>Directly Derived Type</em>}'.
+	 * <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.data.DirectlyDerivedType
 	 * @generated
@@ -250,12 +227,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.data.EnumeratedType <em>Enumerated
-	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.EnumeratedType <em>Enumerated Type</em>}'.
+	 * <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedType
 	 * @generated
@@ -265,12 +240,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue <em>Enumerated
-	 * Value</em>}'. <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue <em>Enumerated Value</em>}'.
+	 * <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedValue
 	 * @generated
@@ -280,12 +253,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.data.StructuredType <em>Structured
-	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.StructuredType <em>Structured Type</em>}'.
+	 * <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.data.StructuredType
 	 * @generated
@@ -310,12 +281,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.data.SubrangeType <em>Subrange
-	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.SubrangeType <em>Subrange Type</em>}'.
+	 * <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.data.SubrangeType
 	 * @generated
@@ -325,12 +294,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.data.ValueType <em>Value Type</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.ValueType <em>Value Type</em>}'.
 	 * <!-- begin-user-doc --> This default implementation returns null so that we
 	 * can easily ignore cases; it's useful to ignore a case when inheritance will
 	 * catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.data.ValueType
 	 * @generated
@@ -340,12 +307,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.data.ElementaryType <em>Elementary
-	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.ElementaryType <em>Elementary Type</em>}'.
+	 * <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.data.ElementaryType
 	 * @generated
@@ -355,12 +320,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.data.DerivedType <em>Derived
-	 * Type</em>}'. <!-- begin-user-doc --> This default implementation returns null
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.DerivedType <em>Derived Type</em>}'.
+	 * <!-- begin-user-doc --> This default implementation returns null
 	 * so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.data.DerivedType
 	 * @generated
@@ -370,12 +333,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.data.EventType <em>Event Type</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.EventType <em>Event Type</em>}'.
 	 * <!-- begin-user-doc --> This default implementation returns null so that we
 	 * can easily ignore cases; it's useful to ignore a case when inheritance will
 	 * catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.data.EventType
 	 * @generated
@@ -385,12 +346,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement <em>I4DIAC
-	 * Element</em>}'. <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement <em>I4DIAC Element</em>}'.
+	 * <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.I4DIACElement
 	 * @generated
@@ -400,12 +359,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed
-	 * Element</em>}'. <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}'.
+	 * <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 	 * @generated
@@ -415,13 +372,11 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
-	 * <em>Library Element</em>}'. <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement <em>Library Element</em>}'.
+	 * <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 	 * @generated
@@ -431,9 +386,9 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for the default case. <!-- begin-user-doc --> This
+	 * Creates a new adapter for the default case.
+	 * <!-- begin-user-doc --> This
 	 * default implementation returns null. <!-- end-user-doc -->
-	 * 
 	 * @return the new adapter.
 	 * @generated
 	 */

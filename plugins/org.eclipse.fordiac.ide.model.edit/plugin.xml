@@ -18,7 +18,6 @@
 -->
 
 <plugin>
-
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <factory
             uri="org.eclipse.fordiac.ide.model"

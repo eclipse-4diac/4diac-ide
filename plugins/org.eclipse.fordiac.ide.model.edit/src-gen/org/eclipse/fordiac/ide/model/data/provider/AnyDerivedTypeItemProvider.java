@@ -1,11 +1,11 @@
 /**
  * *******************************************************************************
- *  Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
  * 
  * Contributors:
@@ -15,40 +15,44 @@
  */
 package org.eclipse.fordiac.ide.model.data.provider;
 
+
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.fordiac.ide.model.data.DataFactory;
+
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
-import org.eclipse.fordiac.ide.model.data.EnumeratedType;
+
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 /**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.data.EnumeratedType} object. <!--
- * begin-user-doc --> <!-- end-user-doc -->
- * 
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyDerivedType} object.
+ * <!-- begin-user-doc -->
+ * <!-- end-user-doc -->
  * @generated
  */
-public class EnumeratedTypeItemProvider extends ValueTypeItemProvider {
+public class AnyDerivedTypeItemProvider extends DataTypeItemProvider {
 	/**
-	 * This constructs an instance from a factory and a notifier. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This constructs an instance from a factory and a notifier.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EnumeratedTypeItemProvider(AdapterFactory adapterFactory) {
+	public AnyDerivedTypeItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
 	/**
-	 * This returns the property descriptors for the adapted class. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This returns the property descriptors for the adapted class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -64,20 +68,22 @@ public class EnumeratedTypeItemProvider extends ValueTypeItemProvider {
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(DataPackage.Literals.ENUMERATED_TYPE__ENUMERATED_VALUE);
+			childrenFeatures.add(DataPackage.Literals.ANY_DERIVED_TYPE__COMPILER_INFO);
 		}
 		return childrenFeatures;
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -89,14 +95,14 @@ public class EnumeratedTypeItemProvider extends ValueTypeItemProvider {
 	}
 
 	/**
-	 * This returns EnumeratedType.gif. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 * 
+	 * This returns AnyDerivedType.gif.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/EnumeratedType")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/AnyDerivedType")); //$NON-NLS-1$
 	}
 
 	/**
@@ -107,24 +113,26 @@ public class EnumeratedTypeItemProvider extends ValueTypeItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((EnumeratedType)object).getName();
+		String label = ((AnyDerivedType)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_EnumeratedType_type") : //$NON-NLS-1$
-			getString("_UI_EnumeratedType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_AnyDerivedType_type") : //$NON-NLS-1$
+			getString("_UI_AnyDerivedType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
 	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(EnumeratedType.class)) {
-			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
+		switch (notification.getFeatureID(AnyDerivedType.class)) {
+			case DataPackage.ANY_DERIVED_TYPE__COMPILER_INFO:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:
@@ -146,8 +154,8 @@ public class EnumeratedTypeItemProvider extends ValueTypeItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(DataPackage.Literals.ENUMERATED_TYPE__ENUMERATED_VALUE,
-				 DataFactory.eINSTANCE.createEnumeratedValue()));
+				(DataPackage.Literals.ANY_DERIVED_TYPE__COMPILER_INFO,
+				 LibraryElementFactory.eINSTANCE.createCompilerInfo()));
 	}
 
 }

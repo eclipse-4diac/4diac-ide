@@ -23,15 +23,12 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit
- * <em>Lower Limit</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit
- * <em>Upper Limit</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit <em>Lower Limit</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit <em>Upper Limit</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getSubrange()
- * @model annotation="http://www.obeo.fr/dsl/dnc/archetype
- *        archetype='Description'"
+ * @model annotation="http://www.obeo.fr/dsl/dnc/archetype archetype='Description'"
  * @generated
  */
 public interface Subrange extends EObject {
@@ -54,10 +51,8 @@ public interface Subrange extends EObject {
 	int getLowerLimit();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit <em>Lower
-	 * Limit</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit <em>Lower Limit</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Lower Limit</em>' attribute.
 	 * @see #getLowerLimit()
 	 * @generated
@@ -83,10 +78,8 @@ public interface Subrange extends EObject {
 	int getUpperLimit();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit <em>Upper
-	 * Limit</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit <em>Upper Limit</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Upper Limit</em>' attribute.
 	 * @see #getUpperLimit()
 	 * @generated

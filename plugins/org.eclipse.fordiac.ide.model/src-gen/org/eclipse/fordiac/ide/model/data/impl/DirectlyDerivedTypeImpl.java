@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 public class DirectlyDerivedTypeImpl extends DerivedTypeImpl implements DirectlyDerivedType {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected DirectlyDerivedTypeImpl() {
@@ -35,7 +34,6 @@ public class DirectlyDerivedTypeImpl extends DerivedTypeImpl implements Directly
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

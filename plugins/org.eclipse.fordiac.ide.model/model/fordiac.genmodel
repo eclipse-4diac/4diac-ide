@@ -652,7 +652,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//EnumeratedValue/name"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//StructuredType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//StructuredType/varDeclaration"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//StructuredType/memberVariables"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//Subrange">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//Subrange/lowerLimit"/>

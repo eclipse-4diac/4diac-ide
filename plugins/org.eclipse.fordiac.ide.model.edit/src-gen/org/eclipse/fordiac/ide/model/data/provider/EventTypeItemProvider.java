@@ -57,8 +57,8 @@ public class EventTypeItemProvider extends DataTypeItemProvider {
 	}
 
 	/**
-	 * This returns EventType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This returns EventType.gif.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -67,23 +67,23 @@ public class EventTypeItemProvider extends DataTypeItemProvider {
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((EventType) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_EventType_type") : //$NON-NLS-1$
-				getString("_UI_EventType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((EventType)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_EventType_type") : //$NON-NLS-1$
+			getString("_UI_EventType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -93,10 +93,10 @@ public class EventTypeItemProvider extends DataTypeItemProvider {
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

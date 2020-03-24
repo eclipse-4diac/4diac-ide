@@ -32,18 +32,16 @@ import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl#getEnumeratedValue
- * <em>Enumerated Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl#getEnumeratedValue <em>Enumerated Value</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType {
 	/**
-	 * The cached value of the '{@link #getEnumeratedValue() <em>Enumerated
-	 * Value</em>}' containment reference list. <!-- begin-user-doc --> <!--
+	 * The cached value of the '{@link #getEnumeratedValue() <em>Enumerated Value</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @see #getEnumeratedValue()
 	 * @generated
 	 * @ordered
@@ -52,7 +50,6 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected EnumeratedTypeImpl() {
@@ -61,7 +58,6 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -71,90 +67,90 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EList<EnumeratedValue> getEnumeratedValue() {
 		if (enumeratedValue == null) {
-			enumeratedValue = new EObjectContainmentEList<EnumeratedValue>(EnumeratedValue.class, this,
-					DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE);
+			enumeratedValue = new EObjectContainmentEList<EnumeratedValue>(EnumeratedValue.class, this, DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE);
 		}
 		return enumeratedValue;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
-			return ((InternalEList<?>) getEnumeratedValue()).basicRemove(otherEnd, msgs);
+			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
+				return ((InternalEList<?>)getEnumeratedValue()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
-			return getEnumeratedValue();
+			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
+				return getEnumeratedValue();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
-			getEnumeratedValue().clear();
-			getEnumeratedValue().addAll((Collection<? extends EnumeratedValue>) newValue);
-			return;
+			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
+				getEnumeratedValue().clear();
+				getEnumeratedValue().addAll((Collection<? extends EnumeratedValue>)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
-			getEnumeratedValue().clear();
-			return;
+			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
+				getEnumeratedValue().clear();
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
-			return enumeratedValue != null && !enumeratedValue.isEmpty();
+			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
+				return enumeratedValue != null && !enumeratedValue.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // EnumeratedTypeImpl

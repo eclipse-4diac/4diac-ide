@@ -73,7 +73,7 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StructuredType" eSuperTypes="#//AnyDerivedType">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclaration" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="memberVariables" upperBound="-1"
         eType="ecore:EClass lib.ecore#//VarDeclaration" volatile="true" transient="true"
         derived="true" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">

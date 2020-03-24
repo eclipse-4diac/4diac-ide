@@ -44,118 +44,103 @@ import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageIm
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!--
  * end-user-doc -->
- * 
  * @generated
  */
 public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass anyDerivedTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass arrayTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass dataTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass directlyDerivedTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass enumeratedTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass enumeratedValueEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass structuredTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass subrangeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass subrangeTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass valueTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass elementaryTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass derivedTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass eventTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EEnum baseType1EEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
-	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the
-	 * package package URI value.
-	 * <p>
-	 * Note: the correct way to create the package is via the static factory method
-	 * {@link #init init()}, which also performs initialization of the package, or
-	 * returns the registered package, if one already exists. <!-- begin-user-doc
+	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
+	 * package URI value.
+	 * <p>Note: the correct way to create the package is via the static
+	 * factory method {@link #init init()}, which also performs
+	 * initialization of the package, or returns the registered package,
+	 * if one already exists.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#eNS_URI
 	 * @see #init()
@@ -167,35 +152,28 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private static boolean isInited = false;
 
 	/**
-	 * Creates, registers, and initializes the <b>Package</b> for this model, and
-	 * for any others upon which it depends.
+	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 *
-	 * <p>
-	 * This method is used to initialize {@link DataPackage#eINSTANCE} when that
-	 * field is accessed. Clients should not invoke it directly. Instead, they
-	 * should simply access that field to obtain the package. <!-- begin-user-doc
+	 * <p>This method is used to initialize {@link DataPackage#eINSTANCE} when that field is accessed.
+	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
 	public static DataPackage init() {
-		if (isInited)
-			return (DataPackage) EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
+		if (isInited) return (DataPackage)EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
 
 		// Obtain or create and register package
 		Object registeredDataPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		DataPackageImpl theDataPackage = registeredDataPackage instanceof DataPackageImpl
-				? (DataPackageImpl) registeredDataPackage
-				: new DataPackageImpl();
+		DataPackageImpl theDataPackage = registeredDataPackage instanceof DataPackageImpl ? (DataPackageImpl)registeredDataPackage : new DataPackageImpl();
 
 		isInited = true;
 
@@ -204,13 +182,9 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(PalettePackage.eNS_URI);
-		PalettePackageImpl thePalettePackage = (PalettePackageImpl) (registeredPackage instanceof PalettePackageImpl
-				? registeredPackage
-				: PalettePackage.eINSTANCE);
+		PalettePackageImpl thePalettePackage = (PalettePackageImpl)(registeredPackage instanceof PalettePackageImpl ? registeredPackage : PalettePackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
-		LibraryElementPackageImpl theLibraryElementPackage = (LibraryElementPackageImpl) (registeredPackage instanceof LibraryElementPackageImpl
-				? registeredPackage
-				: LibraryElementPackage.eINSTANCE);
+		LibraryElementPackageImpl theLibraryElementPackage = (LibraryElementPackageImpl)(registeredPackage instanceof LibraryElementPackageImpl ? registeredPackage : LibraryElementPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theDataPackage.createPackageContents();
@@ -232,7 +206,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -242,17 +215,15 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EReference getAnyDerivedType_CompilerInfo() {
-		return (EReference) anyDerivedTypeEClass.getEStructuralFeatures().get(0);
+		return (EReference)anyDerivedTypeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -262,37 +233,33 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EReference getArrayType_Subranges() {
-		return (EReference) arrayTypeEClass.getEStructuralFeatures().get(0);
+		return (EReference)arrayTypeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getArrayType_InitialValues() {
-		return (EAttribute) arrayTypeEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)arrayTypeEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EReference getArrayType_BaseType() {
-		return (EReference) arrayTypeEClass.getEStructuralFeatures().get(2);
+		return (EReference)arrayTypeEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -302,7 +269,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -312,7 +278,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -322,17 +287,15 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EReference getEnumeratedType_EnumeratedValue() {
-		return (EReference) enumeratedTypeEClass.getEStructuralFeatures().get(0);
+		return (EReference)enumeratedTypeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -342,27 +305,24 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getEnumeratedValue_Comment() {
-		return (EAttribute) enumeratedValueEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)enumeratedValueEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getEnumeratedValue_Name() {
-		return (EAttribute) enumeratedValueEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)enumeratedValueEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -371,18 +331,17 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public EReference getStructuredType_VarDeclaration() {
-		return (EReference) structuredTypeEClass.getEStructuralFeatures().get(0);
+	public EReference getStructuredType_MemberVariables() {
+		return (EReference)structuredTypeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -392,27 +351,24 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getSubrange_LowerLimit() {
-		return (EAttribute) subrangeEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)subrangeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EAttribute getSubrange_UpperLimit() {
-		return (EAttribute) subrangeEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)subrangeEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -422,17 +378,15 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EReference getSubrangeType_Subrange() {
-		return (EReference) subrangeTypeEClass.getEStructuralFeatures().get(0);
+		return (EReference)subrangeTypeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -442,7 +396,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -452,7 +405,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -462,17 +414,15 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EReference getDerivedType_BaseType() {
-		return (EReference) derivedTypeEClass.getEStructuralFeatures().get(0);
+		return (EReference)derivedTypeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -482,7 +432,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -492,31 +441,28 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public DataFactory getDataFactory() {
-		return (DataFactory) getEFactoryInstance();
+		return (DataFactory)getEFactoryInstance();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isCreated = false;
 
 	/**
-	 * Creates the meta-model objects for the package. This method is guarded to
-	 * have no affect on any invocation but its first. <!-- begin-user-doc --> <!--
+	 * Creates the meta-model objects for the package.  This method is
+	 * guarded to have no affect on any invocation but its first.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (isCreated)
-			return;
+		if (isCreated) return;
 		isCreated = true;
 
 		// Create classes and their features
@@ -540,7 +486,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		createEAttribute(enumeratedValueEClass, ENUMERATED_VALUE__NAME);
 
 		structuredTypeEClass = createEClass(STRUCTURED_TYPE);
-		createEReference(structuredTypeEClass, STRUCTURED_TYPE__VAR_DECLARATION);
+		createEReference(structuredTypeEClass, STRUCTURED_TYPE__MEMBER_VARIABLES);
 
 		subrangeEClass = createEClass(SUBRANGE);
 		createEAttribute(subrangeEClass, SUBRANGE__LOWER_LIMIT);
@@ -564,7 +510,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isInitialized = false;
@@ -577,8 +522,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (isInitialized)
-			return;
+		if (isInitialized) return;
 		isInitialized = true;
 
 		// Initialize package
@@ -587,10 +531,8 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage) EPackage.Registry.INSTANCE
-				.getEPackage(LibraryElementPackage.eNS_URI);
-		XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
-				.getEPackage(XMLTypePackage.eNS_URI);
+		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
+		XMLTypePackage theXMLTypePackage = (XMLTypePackage)EPackage.Registry.INSTANCE.getEPackage(XMLTypePackage.eNS_URI);
 
 		// Create type parameters
 
@@ -610,77 +552,43 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		eventTypeEClass.getESuperTypes().add(this.getDataType());
 
 		// Initialize classes and features; add operations and parameters
-		initEClass(anyDerivedTypeEClass, AnyDerivedType.class, "AnyDerivedType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAnyDerivedType_CompilerInfo(), theLibraryElementPackage.getCompilerInfo(), null,
-				"compilerInfo", null, 1, 1, AnyDerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
-				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(anyDerivedTypeEClass, AnyDerivedType.class, "AnyDerivedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getAnyDerivedType_CompilerInfo(), theLibraryElementPackage.getCompilerInfo(), null, "compilerInfo", null, 1, 1, AnyDerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(arrayTypeEClass, ArrayType.class, "ArrayType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getArrayType_Subranges(), this.getSubrange(), null, "subranges", null, 1, -1, ArrayType.class, //$NON-NLS-1$
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getArrayType_InitialValues(), theXMLTypePackage.getString(), "initialValues", null, 0, 1, //$NON-NLS-1$
-				ArrayType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-				!IS_DERIVED, IS_ORDERED);
-		initEReference(getArrayType_BaseType(), this.getDataType(), null, "baseType", null, 0, 1, ArrayType.class, //$NON-NLS-1$
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(arrayTypeEClass, ArrayType.class, "ArrayType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getArrayType_Subranges(), this.getSubrange(), null, "subranges", null, 1, -1, ArrayType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getArrayType_InitialValues(), theXMLTypePackage.getString(), "initialValues", null, 0, 1, ArrayType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getArrayType_BaseType(), this.getDataType(), null, "baseType", null, 0, 1, ArrayType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(dataTypeEClass, DataType.class, "DataType", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		initEClass(directlyDerivedTypeEClass, DirectlyDerivedType.class, "DirectlyDerivedType", !IS_ABSTRACT, //$NON-NLS-1$
-				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(directlyDerivedTypeEClass, DirectlyDerivedType.class, "DirectlyDerivedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		initEClass(enumeratedTypeEClass, EnumeratedType.class, "EnumeratedType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getEnumeratedType_EnumeratedValue(), this.getEnumeratedValue(), null, "enumeratedValue", null, 1, //$NON-NLS-1$
-				-1, EnumeratedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(enumeratedTypeEClass, EnumeratedType.class, "EnumeratedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getEnumeratedType_EnumeratedValue(), this.getEnumeratedValue(), null, "enumeratedValue", null, 1, -1, EnumeratedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(enumeratedValueEClass, EnumeratedValue.class, "EnumeratedValue", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getEnumeratedValue_Comment(), theXMLTypePackage.getString(), "comment", null, 0, 1, //$NON-NLS-1$
-				EnumeratedValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-				!IS_DERIVED, IS_ORDERED);
-		initEAttribute(getEnumeratedValue_Name(), theXMLTypePackage.getString(), "name", null, 1, 1, //$NON-NLS-1$
-				EnumeratedValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-				!IS_DERIVED, IS_ORDERED);
+		initEClass(enumeratedValueEClass, EnumeratedValue.class, "EnumeratedValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getEnumeratedValue_Comment(), theXMLTypePackage.getString(), "comment", null, 0, 1, EnumeratedValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getEnumeratedValue_Name(), theXMLTypePackage.getString(), "name", null, 1, 1, EnumeratedValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(structuredTypeEClass, StructuredType.class, "StructuredType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getStructuredType_VarDeclaration(), theLibraryElementPackage.getVarDeclaration(), null,
-				"varDeclaration", null, 0, -1, StructuredType.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
-				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEClass(structuredTypeEClass, StructuredType.class, "StructuredType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getStructuredType_MemberVariables(), theLibraryElementPackage.getVarDeclaration(), null, "memberVariables", null, 0, -1, StructuredType.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(subrangeEClass, Subrange.class, "Subrange", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSubrange_LowerLimit(), theXMLTypePackage.getInt(), "lowerLimit", null, 1, 1, Subrange.class, //$NON-NLS-1$
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSubrange_UpperLimit(), theXMLTypePackage.getInt(), "upperLimit", null, 1, 1, Subrange.class, //$NON-NLS-1$
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(subrangeEClass, Subrange.class, "Subrange", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getSubrange_LowerLimit(), theXMLTypePackage.getInt(), "lowerLimit", null, 1, 1, Subrange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSubrange_UpperLimit(), theXMLTypePackage.getInt(), "upperLimit", null, 1, 1, Subrange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(subrangeTypeEClass, SubrangeType.class, "SubrangeType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getSubrangeType_Subrange(), this.getSubrange(), null, "subrange", null, 1, 1, SubrangeType.class, //$NON-NLS-1$
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(subrangeTypeEClass, SubrangeType.class, "SubrangeType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSubrangeType_Subrange(), this.getSubrange(), null, "subrange", null, 1, 1, SubrangeType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(valueTypeEClass, ValueType.class, "ValueType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
+		initEClass(valueTypeEClass, ValueType.class, "ValueType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		initEClass(elementaryTypeEClass, ElementaryType.class, "ElementaryType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
+		initEClass(elementaryTypeEClass, ElementaryType.class, "ElementaryType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		initEClass(derivedTypeEClass, DerivedType.class, "DerivedType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDerivedType_BaseType(), this.getElementaryType(), null, "baseType", null, 1, 1, //$NON-NLS-1$
-				DerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(derivedTypeEClass, DerivedType.class, "DerivedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getDerivedType_BaseType(), this.getElementaryType(), null, "baseType", null, 1, 1, DerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(eventTypeEClass, EventType.class, "EventType", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
+		initEClass(eventTypeEClass, EventType.class, "EventType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(baseType1EEnum, BaseType1.class, "BaseType1"); //$NON-NLS-1$
@@ -726,49 +634,88 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 */
 	protected void createExtendedMetaDataAnnotations() {
 		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
-		addAnnotation(getArrayType_Subranges(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
-				"name", "Subrange", //$NON-NLS-1$ //$NON-NLS-2$
-				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
-		});
-		addAnnotation(getArrayType_InitialValues(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
-				"name", "InitialValues" //$NON-NLS-1$ //$NON-NLS-2$
-		});
-		addAnnotation(getEnumeratedType_EnumeratedValue(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
-				"name", "EnumeratedValue", //$NON-NLS-1$ //$NON-NLS-2$
-				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
-		});
-		addAnnotation(getEnumeratedValue_Comment(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
-				"name", "Comment" //$NON-NLS-1$ //$NON-NLS-2$
-		});
-		addAnnotation(getEnumeratedValue_Name(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
-				"name", "Name" //$NON-NLS-1$ //$NON-NLS-2$
-		});
-		addAnnotation(getStructuredType_VarDeclaration(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
-				"name", "VarDeclaration", //$NON-NLS-1$ //$NON-NLS-2$
-				"namespace", "http://www.fordiac.org/61499/lib" //$NON-NLS-1$ //$NON-NLS-2$
-		});
-		addAnnotation(getSubrange_LowerLimit(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
-				"name", "LowerLimit" //$NON-NLS-1$ //$NON-NLS-2$
-		});
-		addAnnotation(getSubrange_UpperLimit(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
-				"name", "UpperLimit" //$NON-NLS-1$ //$NON-NLS-2$
-		});
-		addAnnotation(getSubrangeType_Subrange(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
-				"name", "Subrange", //$NON-NLS-1$ //$NON-NLS-2$
-				"namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
-		});
+		addAnnotation
+		  (getArrayType_Subranges(),
+		   source,
+		   new String[] {
+			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "Subrange", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getArrayType_InitialValues(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "InitialValues" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getEnumeratedType_EnumeratedValue(),
+		   source,
+		   new String[] {
+			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "EnumeratedValue", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getEnumeratedValue_Comment(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "Comment" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getEnumeratedValue_Name(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "Name" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getStructuredType_MemberVariables(),
+		   source,
+		   new String[] {
+			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "VarDeclaration", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "http://www.fordiac.org/61499/lib" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getSubrange_LowerLimit(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "LowerLimit" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getSubrange_UpperLimit(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "UpperLimit" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getSubrangeType_Subrange(),
+		   source,
+		   new String[] {
+			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "Subrange", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
 	}
 
 	/**
 	 * Initializes the annotations for <b>http://www.obeo.fr/dsl/dnc/archetype</b>.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected void createArchetypeAnnotations() {
 		String source = "http://www.obeo.fr/dsl/dnc/archetype"; //$NON-NLS-1$
-		addAnnotation(subrangeEClass, source, new String[] { "archetype", "Description" //$NON-NLS-1$ //$NON-NLS-2$
-		});
+		addAnnotation
+		  (subrangeEClass,
+		   source,
+		   new String[] {
+			   "archetype", "Description" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
 	}
 
 } // DataPackageImpl

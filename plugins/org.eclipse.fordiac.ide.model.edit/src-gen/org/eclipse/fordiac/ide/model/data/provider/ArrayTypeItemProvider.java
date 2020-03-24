@@ -36,7 +36,7 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
  * 
  * @generated
  */
-public class ArrayTypeItemProvider extends DataTypeItemProvider {
+public class ArrayTypeItemProvider extends AnyDerivedTypeItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -71,13 +71,19 @@ public class ArrayTypeItemProvider extends DataTypeItemProvider {
 	 * @generated
 	 */
 	protected void addInitialValuesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_ArrayType_initialValues_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_ArrayType_initialValues_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ArrayType_type"), //$NON-NLS-1$
-						DataPackage.Literals.ARRAY_TYPE__INITIAL_VALUES, true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ArrayType_initialValues_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ArrayType_initialValues_feature", "_UI_ArrayType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 DataPackage.Literals.ARRAY_TYPE__INITIAL_VALUES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -87,21 +93,26 @@ public class ArrayTypeItemProvider extends DataTypeItemProvider {
 	 * @generated
 	 */
 	protected void addBaseTypePropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_ArrayType_baseType_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_ArrayType_baseType_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ArrayType_type"), //$NON-NLS-1$
-						DataPackage.Literals.ARRAY_TYPE__BASE_TYPE, true, false, true, null, null, null));
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ArrayType_baseType_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ArrayType_baseType_feature", "_UI_ArrayType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 DataPackage.Literals.ARRAY_TYPE__BASE_TYPE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an
-	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
-	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -115,21 +126,19 @@ public class ArrayTypeItemProvider extends DataTypeItemProvider {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to
-		// use for
+		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
 	/**
-	 * This returns ArrayType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This returns ArrayType.gif.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -138,23 +147,23 @@ public class ArrayTypeItemProvider extends DataTypeItemProvider {
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ArrayType) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_ArrayType_type") : //$NON-NLS-1$
-				getString("_UI_ArrayType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		String label = ((ArrayType)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_ArrayType_type") : //$NON-NLS-1$
+			getString("_UI_ArrayType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -162,29 +171,33 @@ public class ArrayTypeItemProvider extends DataTypeItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(ArrayType.class)) {
-		case DataPackage.ARRAY_TYPE__INITIAL_VALUES:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-			return;
-		case DataPackage.ARRAY_TYPE__SUBRANGES:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-			return;
-		}
-		super.notifyChanged(notification);
+			case DataPackage.ARRAY_TYPE__INITIAL_VALUES:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case DataPackage.ARRAY_TYPE__SUBRANGES:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(DataPackage.Literals.ARRAY_TYPE__SUBRANGES,
-				DataFactory.eINSTANCE.createSubrange()));
+		newChildDescriptors.add
+			(createChildParameter
+				(DataPackage.Literals.ARRAY_TYPE__SUBRANGES,
+				 DataFactory.eINSTANCE.createSubrange()));
 	}
 
 }

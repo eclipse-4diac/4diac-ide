@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.data.ValueType;
 public class ValueTypeImpl extends DataTypeImpl implements ValueType {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected ValueTypeImpl() {
@@ -35,7 +34,6 @@ public class ValueTypeImpl extends DataTypeImpl implements ValueType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override

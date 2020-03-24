@@ -28,17 +28,15 @@ import org.eclipse.fordiac.ide.model.data.ElementaryType;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.DerivedTypeImpl#getBaseType
- * <em>Base Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.DerivedTypeImpl#getBaseType <em>Base Type</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	/**
-	 * The cached value of the '{@link #getBaseType() <em>Base Type</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getBaseType() <em>Base Type</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getBaseType()
 	 * @generated
 	 * @ordered
@@ -47,7 +45,6 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected DerivedTypeImpl() {
@@ -56,7 +53,6 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -66,18 +62,16 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public ElementaryType getBaseType() {
 		if (baseType != null && baseType.eIsProxy()) {
-			InternalEObject oldBaseType = (InternalEObject) baseType;
-			baseType = (ElementaryType) eResolveProxy(oldBaseType);
+			InternalEObject oldBaseType = (InternalEObject)baseType;
+			baseType = (ElementaryType)eResolveProxy(oldBaseType);
 			if (baseType != oldBaseType) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DataPackage.DERIVED_TYPE__BASE_TYPE,
-							oldBaseType, baseType));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DataPackage.DERIVED_TYPE__BASE_TYPE, oldBaseType, baseType));
 			}
 		}
 		return baseType;
@@ -85,7 +79,6 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public ElementaryType basicGetBaseType() {
@@ -94,7 +87,6 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -102,68 +94,68 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 		ElementaryType oldBaseType = baseType;
 		baseType = newBaseType;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.DERIVED_TYPE__BASE_TYPE, oldBaseType,
-					baseType));
+			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.DERIVED_TYPE__BASE_TYPE, oldBaseType, baseType));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case DataPackage.DERIVED_TYPE__BASE_TYPE:
-			if (resolve)
-				return getBaseType();
-			return basicGetBaseType();
+			case DataPackage.DERIVED_TYPE__BASE_TYPE:
+				if (resolve) return getBaseType();
+				return basicGetBaseType();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case DataPackage.DERIVED_TYPE__BASE_TYPE:
-			setBaseType((ElementaryType) newValue);
-			return;
+			case DataPackage.DERIVED_TYPE__BASE_TYPE:
+				setBaseType((ElementaryType)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case DataPackage.DERIVED_TYPE__BASE_TYPE:
-			setBaseType((ElementaryType) null);
-			return;
+			case DataPackage.DERIVED_TYPE__BASE_TYPE:
+				setBaseType((ElementaryType)null);
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case DataPackage.DERIVED_TYPE__BASE_TYPE:
-			return baseType != null;
+			case DataPackage.DERIVED_TYPE__BASE_TYPE:
+				return baseType != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // DerivedTypeImpl

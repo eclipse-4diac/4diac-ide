@@ -31,8 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl#getVarDeclaration
- * <em>Var Declaration</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl#getMemberVariables <em>Member Variables</em>}</li>
  * </ul>
  *
  * @generated
@@ -40,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public class StructuredTypeImpl extends AnyDerivedTypeImpl implements StructuredType {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected StructuredTypeImpl() {
@@ -49,7 +47,6 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -58,94 +55,93 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public EList<VarDeclaration> getVarDeclaration() {
-		// TODO: implement this method to return the 'Var Declaration' containment
-		// reference list
+	public EList<VarDeclaration> getMemberVariables() {
+		// TODO: implement this method to return the 'Member Variables' containment reference list
 		// Ensure that you remove @generated or mark it @generated NOT
-		// The list is expected to implement org.eclipse.emf.ecore.util.InternalEList
-		// and org.eclipse.emf.ecore.EStructuralFeature.Setting
-		// so it's likely that an appropriate subclass of
-		// org.eclipse.emf.ecore.util.EcoreEList should be used.
+		// The list is expected to implement org.eclipse.emf.ecore.util.InternalEList and org.eclipse.emf.ecore.EStructuralFeature.Setting
+		// so it's likely that an appropriate subclass of org.eclipse.emf.ecore.util.EcoreEList should be used.
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-			return ((InternalEList<?>) getVarDeclaration()).basicRemove(otherEnd, msgs);
+			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+				return ((InternalEList<?>)getMemberVariables()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-			return getVarDeclaration();
+			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+				return getMemberVariables();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-			getVarDeclaration().clear();
-			getVarDeclaration().addAll((Collection<? extends VarDeclaration>) newValue);
-			return;
+			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+				getMemberVariables().clear();
+				getMemberVariables().addAll((Collection<? extends VarDeclaration>)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-			getVarDeclaration().clear();
-			return;
+			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+				getMemberVariables().clear();
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case DataPackage.STRUCTURED_TYPE__VAR_DECLARATION:
-			return !getVarDeclaration().isEmpty();
+			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
+				return !getMemberVariables().isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // StructuredTypeImpl

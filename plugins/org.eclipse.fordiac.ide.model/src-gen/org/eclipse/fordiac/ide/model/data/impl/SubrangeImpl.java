@@ -27,19 +27,16 @@ import org.eclipse.fordiac.ide.model.data.Subrange;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl#getLowerLimit
- * <em>Lower Limit</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl#getUpperLimit
- * <em>Upper Limit</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl#getLowerLimit <em>Lower Limit</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl#getUpperLimit <em>Upper Limit</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class SubrangeImpl extends EObjectImpl implements Subrange {
 	/**
-	 * The default value of the '{@link #getLowerLimit() <em>Lower Limit</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getLowerLimit() <em>Lower Limit</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getLowerLimit()
 	 * @generated
 	 * @ordered
@@ -47,9 +44,8 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	protected static final int LOWER_LIMIT_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getLowerLimit() <em>Lower Limit</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getLowerLimit() <em>Lower Limit</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getLowerLimit()
 	 * @generated
 	 * @ordered
@@ -57,9 +53,8 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	protected int lowerLimit = LOWER_LIMIT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getUpperLimit() <em>Upper Limit</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getUpperLimit() <em>Upper Limit</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getUpperLimit()
 	 * @generated
 	 * @ordered
@@ -67,9 +62,8 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	protected static final int UPPER_LIMIT_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getUpperLimit() <em>Upper Limit</em>}'
-	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getUpperLimit() <em>Upper Limit</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getUpperLimit()
 	 * @generated
 	 * @ordered
@@ -78,7 +72,6 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected SubrangeImpl() {
@@ -87,7 +80,6 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -97,7 +89,6 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -107,7 +98,6 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -115,13 +105,11 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 		int oldLowerLimit = lowerLimit;
 		lowerLimit = newLowerLimit;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.SUBRANGE__LOWER_LIMIT, oldLowerLimit,
-					lowerLimit));
+			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.SUBRANGE__LOWER_LIMIT, oldLowerLimit, lowerLimit));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -131,7 +119,6 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -139,87 +126,86 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 		int oldUpperLimit = upperLimit;
 		upperLimit = newUpperLimit;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.SUBRANGE__UPPER_LIMIT, oldUpperLimit,
-					upperLimit));
+			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.SUBRANGE__UPPER_LIMIT, oldUpperLimit, upperLimit));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case DataPackage.SUBRANGE__LOWER_LIMIT:
-			return getLowerLimit();
-		case DataPackage.SUBRANGE__UPPER_LIMIT:
-			return getUpperLimit();
+			case DataPackage.SUBRANGE__LOWER_LIMIT:
+				return getLowerLimit();
+			case DataPackage.SUBRANGE__UPPER_LIMIT:
+				return getUpperLimit();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case DataPackage.SUBRANGE__LOWER_LIMIT:
-			setLowerLimit((Integer) newValue);
-			return;
-		case DataPackage.SUBRANGE__UPPER_LIMIT:
-			setUpperLimit((Integer) newValue);
-			return;
+			case DataPackage.SUBRANGE__LOWER_LIMIT:
+				setLowerLimit((Integer)newValue);
+				return;
+			case DataPackage.SUBRANGE__UPPER_LIMIT:
+				setUpperLimit((Integer)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case DataPackage.SUBRANGE__LOWER_LIMIT:
-			setLowerLimit(LOWER_LIMIT_EDEFAULT);
-			return;
-		case DataPackage.SUBRANGE__UPPER_LIMIT:
-			setUpperLimit(UPPER_LIMIT_EDEFAULT);
-			return;
+			case DataPackage.SUBRANGE__LOWER_LIMIT:
+				setLowerLimit(LOWER_LIMIT_EDEFAULT);
+				return;
+			case DataPackage.SUBRANGE__UPPER_LIMIT:
+				setUpperLimit(UPPER_LIMIT_EDEFAULT);
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case DataPackage.SUBRANGE__LOWER_LIMIT:
-			return lowerLimit != LOWER_LIMIT_EDEFAULT;
-		case DataPackage.SUBRANGE__UPPER_LIMIT:
-			return upperLimit != UPPER_LIMIT_EDEFAULT;
+			case DataPackage.SUBRANGE__LOWER_LIMIT:
+				return lowerLimit != LOWER_LIMIT_EDEFAULT;
+			case DataPackage.SUBRANGE__UPPER_LIMIT:
+				return upperLimit != UPPER_LIMIT_EDEFAULT;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (lowerLimit: "); //$NON-NLS-1$

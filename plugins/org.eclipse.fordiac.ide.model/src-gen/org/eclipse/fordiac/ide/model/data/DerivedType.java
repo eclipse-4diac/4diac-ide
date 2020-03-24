@@ -21,8 +21,7 @@ package org.eclipse.fordiac.ide.model.data;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType
- * <em>Base Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType <em>Base Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDerivedType()
@@ -48,10 +47,8 @@ public interface DerivedType extends ValueType {
 	ElementaryType getBaseType();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType <em>Base
-	 * Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType <em>Base Type</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Base Type</em>' reference.
 	 * @see #getBaseType()
 	 * @generated

@@ -23,8 +23,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValue
- * <em>Enumerated Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValue <em>Enumerated Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedType()
