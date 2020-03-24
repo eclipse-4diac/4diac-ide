@@ -380,6 +380,12 @@
             id="org.eclipse.fordiac.ide.application.commands.insertFB"
             name="Insert FB">
       </command>
+       <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            description="Update all FB types"
+            id="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"
+            name="Update All Types">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -462,6 +468,21 @@
             </reference>
          </activeWhen>
       </handler>
+         <handler
+            class="org.eclipse.fordiac.ide.application.handlers.UpdateAllFBTypesHandler"
+            commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes">
+         <activeWhen>
+         	<or> 
+         	 <with
+                  variable="activeEditor">
+                   <adapt
+                        type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+              	  </adapt>                 
+            </with>
+           </or>
+                  
+         </activeWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -514,6 +535,9 @@
             <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
             <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
+             <command
+                  commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes">
+            </command>
       </menuContribution>            
       <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup"> 
             <menu
