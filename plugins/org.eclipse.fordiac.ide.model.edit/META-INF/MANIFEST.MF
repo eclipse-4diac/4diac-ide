@@ -9,7 +9,7 @@ Bundle-Activator: org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin$
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package:  org.eclipse.fordiac.ide.model.data.provider,
+Export-Package: org.eclipse.fordiac.ide.model.data.provider,
  org.eclipse.fordiac.ide.model.libraryElement.provider
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model;visibility:=reexport,

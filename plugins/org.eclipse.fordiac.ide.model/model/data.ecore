@@ -73,9 +73,9 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StructuredType" eSuperTypes="#//AnyDerivedType">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="memberVariables" upperBound="-1"
-        eType="ecore:EClass lib.ecore#//VarDeclaration" volatile="true" transient="true"
-        derived="true" containment="true" resolveProxies="false">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="memberVariables" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass lib.ecore#//VarDeclaration" containment="true"
+        resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="VarDeclaration"/>

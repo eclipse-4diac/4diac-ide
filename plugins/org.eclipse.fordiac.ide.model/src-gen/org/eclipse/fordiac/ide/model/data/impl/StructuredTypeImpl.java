@@ -19,6 +19,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -37,6 +38,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * @generated
  */
 public class StructuredTypeImpl extends AnyDerivedTypeImpl implements StructuredType {
+	/**
+	 * The cached value of the '{@link #getMemberVariables() <em>Member Variables</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMemberVariables()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VarDeclaration> memberVariables;
+
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
@@ -61,11 +72,10 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	 */
 	@Override
 	public EList<VarDeclaration> getMemberVariables() {
-		// TODO: implement this method to return the 'Member Variables' containment reference list
-		// Ensure that you remove @generated or mark it @generated NOT
-		// The list is expected to implement org.eclipse.emf.ecore.util.InternalEList and org.eclipse.emf.ecore.EStructuralFeature.Setting
-		// so it's likely that an appropriate subclass of org.eclipse.emf.ecore.util.EcoreEList should be used.
-		throw new UnsupportedOperationException();
+		if (memberVariables == null) {
+			memberVariables = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES);
+		}
+		return memberVariables;
 	}
 
 	/**
@@ -138,7 +148,7 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
-				return !getMemberVariables().isEmpty();
+				return memberVariables != null && !memberVariables.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}

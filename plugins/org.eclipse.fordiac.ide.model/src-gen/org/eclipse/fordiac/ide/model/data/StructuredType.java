@@ -39,7 +39,7 @@ public interface StructuredType extends AnyDerivedType {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Member Variables</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getStructuredType_MemberVariables()
-	 * @model containment="true" transient="true" volatile="true" derived="true"
+	 * @model containment="true" required="true"
 	 *        extendedMetaData="kind='element' name='VarDeclaration' namespace='http://www.fordiac.org/61499/lib'"
 	 * @generated
 	 */
