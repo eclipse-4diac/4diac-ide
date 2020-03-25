@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -39,7 +40,8 @@ class ResDevFBNetworkImporter extends SubAppNetworkImporter {
 	}
 
 	@Override
-	protected IInterfaceElement getContainingInterfaceElement(String interfaceElement) {
+	protected IInterfaceElement getContainingInterfaceElement(String interfaceElement, EClass conType,
+			boolean isInput) {
 		for (VarDeclaration var : varInputs) {
 			if (var.getName().equals(interfaceElement)) {
 				return var;
