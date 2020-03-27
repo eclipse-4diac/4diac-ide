@@ -65,6 +65,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
@@ -531,25 +532,20 @@ public class FBTImporter extends TypeImporter {
 	/**
 	 * Parses the other alg.
 	 *
-	 * @param other the other
+	 * @param alg the other
 	 *
 	 * @throws TypeImportException the FBT import exception
 	 * @throws XMLStreamException
 	 */
-	private void parseOtherAlg(final OtherAlgorithm other) throws TypeImportException, XMLStreamException {
+	private void parseOtherAlg(final OtherAlgorithm alg) throws TypeImportException, XMLStreamException {
 		String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
 		if (null != language) {
-			other.setLanguage(language);
+			alg.setLanguage(language);
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_OTHER_ALG_MISSING_LANG_EXCEPTION);
 		}
 
-		String text = getAttributeValue(LibraryElementTags.TEXT_ATTRIBUTE);
-		if (null != text) {
-			other.setText(text);
-		} else {
-			throw new TypeImportException(Messages.FBTImporter_OTHER_ALG_MISSING_TEXT_EXCEPTION);
-		}
+		parseAlgorithmText(alg);
 		proceedToEndElementNamed(LibraryElementTags.OTHER_ELEMENT);
 	}
 
@@ -562,13 +558,22 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException
 	 */
 	private void parseST(final STAlgorithm st) throws TypeImportException, XMLStreamException {
+		parseAlgorithmText(st);
+		proceedToEndElementNamed(LibraryElementTags.ST_ELEMENT);
+	}
+
+	private void parseAlgorithmText(final TextAlgorithm alg) throws TypeImportException, XMLStreamException {
 		String text = getAttributeValue(LibraryElementTags.TEXT_ATTRIBUTE);
 		if (null != text) {
-			st.setText(text);
+			alg.setText(text);
 		} else {
-			throw new TypeImportException(Messages.FBTImporter_ST_TEXTNOTSET_EXCEPTION);
+			StringBuilder algText = new StringBuilder();
+			// the parser my split the content of several parts therefore this while loop
+			while ((getReader().hasNext()) && (XMLStreamConstants.CHARACTERS == getReader().next())) {
+				algText.append(getReader().getText());
+			}
+			alg.setText(algText.toString());
 		}
-		proceedToEndElementNamed(LibraryElementTags.ST_ELEMENT);
 	}
 
 	/**

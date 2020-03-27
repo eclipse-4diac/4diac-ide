@@ -97,13 +97,13 @@ class CommonElementImporter {
 	}
 
 	protected void proceedToEndElementNamed(String elementName) throws XMLStreamException {
-		while (reader.hasNext()) {
-			int event = reader.next();
-			if ((XMLStreamConstants.END_ELEMENT == event) && (reader.getLocalName().equals(elementName))) {
+		do {
+			if ((XMLStreamConstants.END_ELEMENT == reader.getEventType())
+					&& (reader.getLocalName().equals(elementName))) {
 				// we found it
 				return;
 			}
-		}
+		} while (reader.hasNext() && (0 != reader.next()));
 		throw new XMLStreamException("Could not find end element named: " + elementName); //$NON-NLS-1$
 	}
 
