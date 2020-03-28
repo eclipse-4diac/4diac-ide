@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.export;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -75,8 +76,6 @@ public abstract class TemplateExportFilter extends ExportFilter {
 				}
 			}
 
-			ICompareEditorOpener opener = CompareEditorOpenerUtil.getOpener();
-
 			// Prepare the button labels
 			final String MERGE_LABEL_STRING = "Merge";
 			final String[] buttonLabels = new String[] { //
@@ -99,10 +98,9 @@ public abstract class TemplateExportFilter extends ExportFilter {
 
 			if (!forceOverwrite && filesExisted) {
 				// create a message dialog to ask about merging if forceOverwrite is not set
-				String msg = "Overwrite " + type.getName() + ".cpp" + " and " + type.getName() + ".h. "
-						+ ((opener != null)
-								? "\nMerge will create a backup of the original File and open an editor to merge the files manually!"
-								: ""); //$NON-NLS-1$
+				String msg = MessageFormat.format(
+						"Overwrite {0} and {1}?\nMerge will create a backup of the original file and open an editor to merge the files manually!",
+						type.getName() + ".cpp", type.getName() + ".h"); //$NON-NLS-1$ //$NON-NLS-2$
 
 				MessageDialog msgDiag = new MessageDialog(Display.getDefault().getActiveShell(), "File Exists", null,
 						msg, MessageDialog.QUESTION_WITH_CANCEL, buttonLabels, 0);
@@ -120,7 +118,11 @@ public abstract class TemplateExportFilter extends ExportFilter {
 
 				// check differences of the files using the compare editor
 				boolean diffs = false;
-				if (!overwrite && (null != opener)) {
+				if (!overwrite) {
+					ICompareEditorOpener opener = CompareEditorOpenerUtil.getOpener();
+					if (null == opener) {
+						throw new ExportException("Unable to create merge editor. Files have been written to disk.");
+					}
 					for (StoredFiles sf : writtenFiles) {
 						if ((null != sf.getNewFile()) && (null != sf.getOldFile())) {
 							opener.setName(sf.getNewFile().getName());
