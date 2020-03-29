@@ -18,6 +18,8 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
@@ -42,8 +44,20 @@ public final class FBNetworkHelper {
 	public static FBNetwork copyFBNetWork(FBNetwork srcNetwork, InterfaceList destInterface) {
 		FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		dstNetwork.getNetworkElements().addAll(EcoreUtil.copyAll(srcNetwork.getNetworkElements()));
+		checkForAdapterFBs(dstNetwork, destInterface);
 		createConnections(srcNetwork, dstNetwork, destInterface);
 		return dstNetwork;
+	}
+
+	private static void checkForAdapterFBs(FBNetwork dstNetwork, InterfaceList destInterface) {
+		for (FBNetworkElement elem : dstNetwork.getNetworkElements()) {
+			if (elem instanceof AdapterFB) {
+				AdapterDeclaration adapter = destInterface.getAdapter(elem.getName());
+				if (null != adapter) {
+					((AdapterFB) elem).setAdapterDecl(adapter);
+				}
+			}
+		}
 	}
 
 	private static void createConnections(FBNetwork srcNetwork, FBNetwork dstNetwork, InterfaceList destInterface) {
