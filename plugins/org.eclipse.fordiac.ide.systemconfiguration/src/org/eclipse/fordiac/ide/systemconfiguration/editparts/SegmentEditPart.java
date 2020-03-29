@@ -56,7 +56,6 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.requests.CreateRequest;
@@ -65,13 +64,11 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPart {
 	/** necessary that the gradient pattern can be scaled accordingly */
-	private ZoomManager zoomManager;
 	private DiagramFontChangeListener fontChangeListener;
 
-	public SegmentEditPart(ZoomManager zoomManager) {
+	public SegmentEditPart() {
 		super();
 		setConnectable(true);
-		this.zoomManager = zoomManager;
 	}
 
 	@Override

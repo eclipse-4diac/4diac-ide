@@ -113,8 +113,8 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
-				|| (request.getType() == RequestConstants.REQ_OPEN)) {
+		if (((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
+				|| (request.getType() == RequestConstants.REQ_OPEN)) && (request instanceof SelectionRequest)) {
 			performDirectEdit((SelectionRequest) request);
 		} else {
 			super.performRequest(request);

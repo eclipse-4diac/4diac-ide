@@ -235,7 +235,7 @@ class CommonElementImporter {
 				positionableElement.setY(CoordinateConverter.INSTANCE.convertFrom1499XML(y));
 			}
 		} catch (NumberFormatException nfe) {
-			throw new TypeImportException(Messages.FBTImporter_POSITION_EXCEPTION);
+			throw new TypeImportException(Messages.FBTImporter_POSITION_EXCEPTION, nfe);
 		}
 	}
 

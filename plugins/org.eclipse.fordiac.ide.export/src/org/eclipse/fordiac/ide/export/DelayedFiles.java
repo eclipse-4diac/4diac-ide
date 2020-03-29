@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.util.Utils;
 
@@ -36,7 +37,7 @@ public class DelayedFiles {
 	 *
 	 * encapsulates path and data of a file in memory (before writing)
 	 */
-	private final class FileObject {
+	private static final class FileObject {
 		private final Path path;
 		private final byte[] bytes;
 
@@ -61,7 +62,7 @@ public class DelayedFiles {
 	 * returned after all files were written
 	 */
 
-	public final class StoredFiles {
+	public static final class StoredFiles {
 		private final File oldFile;
 		private final File newFile;
 
@@ -79,7 +80,7 @@ public class DelayedFiles {
 		}
 	}
 
-	private ArrayList<FileObject> storage;
+	private List<FileObject> storage;
 
 	/**
 	 * constructor for class DelayedFiles
@@ -88,8 +89,7 @@ public class DelayedFiles {
 	 * usecase a .cpp and a .h file will be written
 	 */
 	public DelayedFiles() {
-		storage = new ArrayList<>();
-		storage.ensureCapacity(2);
+		storage = new ArrayList<>(2);
 	}
 
 	/**

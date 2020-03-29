@@ -44,7 +44,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.I4DIACElementImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 
@@ -82,7 +81,7 @@ public final class NameRepository {
 	public static void checkNameIdentifier(INamedElement element) {
 		// check if an annotation list is present, as getAnnotations will create one
 		// this saves quite some memory
-		if (((I4DIACElementImpl) element).eIsSet(LibraryElementPackage.I4DIAC_ELEMENT__ANNOTATIONS)) {
+		if (element.eIsSet(LibraryElementPackage.eINSTANCE.getI4DIACElement_Annotations())) {
 			// we have annotations set clear them
 			element.getAnnotations().clear();
 		}

@@ -82,11 +82,11 @@ public final class ColorHelper {
 				hsl[1] = (delta / (2.0 - (max + min)));
 			}
 
-			if (r == max) {
+			if (Math.abs(max - r) <= Double.MIN_VALUE) { // how to check equality for doubles
 				hsl[0] = (g - b) / delta;
-			} else if (g == max) {
+			} else if (Math.abs(max - g) <= Double.MIN_VALUE) {
 				hsl[0] = 2.0 + ((b - r) / delta);
-			} else if (b == max) {
+			} else if (Math.abs(max - b) <= Double.MIN_VALUE) {
 				hsl[0] = 4.0 + ((r - g) / delta);
 			}
 			hsl[0] *= 60.0;
