@@ -13,12 +13,14 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
  *     - command now returns newly created elements, improve insertion
+ *     - extracted reusable code from CreateInternalVariablesCommand to reuse command
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
+package org.eclipse.fordiac.ide.model.commands.internal;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -26,37 +28,54 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.providers.AbstractCreationCommand;
 
 /**
- * The Class CreateInternalVariableCommand.
+ * abstract command to add a variable to a list of a LibraryElement
+ *
  */
-public class CreateInternalVariableCommand extends AbstractCreationCommand {
+public abstract class CreateVariableCommand extends AbstractCreationCommand {
+	/** The type that the variable is added to */
+	private LibraryElement type;
 
-	private static final String DEFAULT_VAR_NAME = "INTERNALVAR1"; //$NON-NLS-1$
-
-	/** The data type. */
-	private final DataType dataType;
-
-	/** The fb type. */
-	private final BasicFBType fbType;
-
+	/** The new variable declaration */
 	private VarDeclaration varDecl;
+	private DataType dataType;
 	private String name;
 	private int index;
 
 	/**
-	 * Instantiates a new creates the input variable command.
+	 * Instantiates a new create variable command.
 	 *
 	 * @param dataType the data type
-	 * @param fbType   the fb type
+	 * @param type     the library element the new variable is added to
 	 */
-	public CreateInternalVariableCommand(final BasicFBType fbType) {
-		this(fbType, fbType.getInternalVars().size() - 1, null, null);
+	protected CreateVariableCommand(final LibraryElement type) {
+		this(type, 0, null, null);
 	}
 
-	public CreateInternalVariableCommand(final BasicFBType fbType, int index, String name, DataType dataType) {
+	protected CreateVariableCommand(final LibraryElement type, int index, String name, DataType dataType) {
 		this.dataType = (null != dataType) ? dataType : DataTypeLibrary.getInstance().getType("BOOL"); //$NON-NLS-1$
-		this.fbType = fbType;
-		this.name = (null != name) ? name : DEFAULT_VAR_NAME;
+		this.name = (null != name) ? name : getDefaultVarName();
 		this.index = index;
+		this.type = type;
+	}
+
+	/**
+	 * subclasses most provide the list, to which the newly created variable shall
+	 * be added
+	 *
+	 * @return EList<VarDeclaration> the list containing variable declarations
+	 */
+	protected abstract EList<VarDeclaration> getVariableList();
+
+	/**
+	 * subclasses must provide a default name for newly created variable
+	 *
+	 * @return String name
+	 */
+	protected abstract String getDefaultVarName();
+
+	protected int getLastIndex() {
+		EList<VarDeclaration> list = getVariableList();
+		return (list != null) ? (list.size() - 1) : 0;
 	}
 
 	/*
@@ -69,7 +88,7 @@ public class CreateInternalVariableCommand extends AbstractCreationCommand {
 		varDecl = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDecl.setType(dataType);
 		varDecl.setTypeName(dataType.getName());
-		varDecl.setComment("Internal Variable"); //$NON-NLS-1$
+		varDecl.setComment("New Variable"); //$NON-NLS-1$
 		varDecl.setArraySize(0);
 		Value value = LibraryElementFactory.eINSTANCE.createValue();
 		value.setValue(""); //$NON-NLS-1$
@@ -85,11 +104,15 @@ public class CreateInternalVariableCommand extends AbstractCreationCommand {
 	 */
 	@Override
 	public void undo() {
-		fbType.getInternalVars().remove(varDecl);
+		getVariableList().remove(varDecl);
 	}
 
-	public VarDeclaration getVarDecl() {
+	public VarDeclaration getVarDeclaration() {
 		return varDecl;
+	}
+
+	protected LibraryElement getType() {
+		return type;
 	}
 
 	/*
@@ -99,11 +122,11 @@ public class CreateInternalVariableCommand extends AbstractCreationCommand {
 	 */
 	@Override
 	public void redo() {
-		fbType.getInternalVars().add(index, varDecl);
+		getVariableList().add(index, varDecl);
 	}
 
 	@Override
 	public Object getCreatedElement() {
-		return varDecl;
+		return getVarDeclaration();
 	}
 }
