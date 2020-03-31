@@ -74,7 +74,7 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		return new ResourceDiagramEditPartFactory(this, getZoomManger());
+		return new ResourceDiagramEditPartFactory(this);
 	}
 
 	@Override

@@ -89,7 +89,7 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 	 * @param model the model
 	 */
 	public FBNetworkElementFigure(final FBNetworkElement model, final AbstractFBNElementEditPart editPart) {
-		super(model.getType(), (null != editPart) ? editPart.getZoomManager() : null);
+		super(model.getType());
 		this.model = model;
 		refreshToolTips();
 		if (null != editPart) {

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -27,16 +27,10 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 
 	private Palette systemPalette;
-	private ZoomManager zoomManager;
 
 	public FBInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette, ZoomManager zoomManager) {
 		super(editor);
 		this.systemPalette = systemPalette;
-		this.zoomManager = zoomManager;
-	}
-
-	public ZoomManager getZoomManager() {
-		return zoomManager;
 	}
 
 	@Override
@@ -45,7 +39,7 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 			return new FBTypeRootEditPart();
 		}
 		if (modelElement instanceof FBType && context instanceof FBTypeRootEditPart) {
-			return new FBTypeEditPart(zoomManager);
+			return new FBTypeEditPart();
 		}
 		if (modelElement instanceof EventInputContainer || modelElement instanceof EventOutputContainer
 				|| modelElement instanceof VariableInputContainer || modelElement instanceof VariableOutputContainer

@@ -83,7 +83,7 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		return new UntypedSubAppEditPartFactory(this, getZoomManger());
+		return new UntypedSubAppEditPartFactory(this);
 	}
 
 	private SubApp getSubApp() {

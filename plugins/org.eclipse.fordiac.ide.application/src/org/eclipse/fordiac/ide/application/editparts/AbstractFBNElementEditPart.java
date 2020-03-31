@@ -52,7 +52,6 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -66,16 +65,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	private DiagramFontChangeListener fontChangeListener;
 
-	/** necessary that the gradient pattern can be scaled accordingly */
-	private final ZoomManager zoomManager;
-
-	public ZoomManager getZoomManager() {
-		return zoomManager;
-	}
-
-	public AbstractFBNElementEditPart(final ZoomManager zoomManager) {
+	public AbstractFBNElementEditPart() {
 		super();
-		this.zoomManager = zoomManager;
 	}
 
 	@Override

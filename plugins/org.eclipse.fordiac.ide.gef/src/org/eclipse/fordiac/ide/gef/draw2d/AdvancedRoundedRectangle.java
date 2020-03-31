@@ -20,20 +20,13 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.util.ColorHelper;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Pattern;
-import org.eclipse.swt.widgets.Display;
 
 public class AdvancedRoundedRectangle extends RoundedRectangle {
 
 	private int side = PositionConstants.NONE;
-	private ZoomManager zoomManager;
 	private Figure parent;
-	private boolean useGradient = false;
 	private Color color;
 
 	public AdvancedRoundedRectangle(int side) {
@@ -41,13 +34,10 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 		this.side = side;
 	}
 
-	public AdvancedRoundedRectangle(int side, ZoomManager zoomManager, Figure parent, boolean useGradient,
-			Color color) {
+	public AdvancedRoundedRectangle(int side, Figure parent, Color color) {
 		super();
 		this.side = side;
-		this.zoomManager = zoomManager;
 		this.parent = parent;
-		this.useGradient = useGradient;
 		this.color = color;
 	}
 
@@ -57,47 +47,6 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 
 	public void setBorderColor(Color color) {
 		this.color = color;
-	}
-
-	@Override
-	protected void fillShape(Graphics graphics) {
-		if (useGradient) {
-			setPattern(graphics, true);
-		} else {
-			super.fillShape(graphics);
-		}
-	}
-
-	private void setPattern(Graphics graphics, boolean background) {
-		Display display = Display.getCurrent();
-
-		Rectangle boundingRect;
-		if (null != parent) {
-			boundingRect = parent.getBounds().getCopy();
-		} else {
-			boundingRect = getBounds().getCopy();
-		}
-
-		if (null != zoomManager) {
-			boundingRect.scale(zoomManager.getZoom());
-		}
-		Point topLeft = boundingRect.getTopLeft();
-		Point bottomRight = boundingRect.getBottomRight();
-
-		Color first = ColorHelper.lighter(getBackgroundColor());
-
-		Pattern pattern = new Pattern(display, topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, first,
-				getBackgroundColor());
-		if (background) {
-			graphics.setBackgroundPattern(pattern);
-		} else {
-			graphics.setForegroundPattern(pattern);
-		}
-
-		graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
-		graphics.setBackgroundPattern(null);
-		pattern.dispose();
-		first.dispose();
 	}
 
 	@Override

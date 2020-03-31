@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 -2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -19,7 +19,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 /**
@@ -27,8 +26,8 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
  */
 public class CompositeNetworkEditPartFactory extends ElementEditPartFactory {
 
-	public CompositeNetworkEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {
-		super(editor, zoomManager);
+	public CompositeNetworkEditPartFactory(GraphicalEditor editor) {
+		super(editor);
 	}
 
 	@Override
@@ -43,7 +42,7 @@ public class CompositeNetworkEditPartFactory extends ElementEditPartFactory {
 			}
 		}
 		if (modelElement instanceof AdapterFB) {
-			return new AdapterFBEditPart(getZoomManager());
+			return new AdapterFBEditPart();
 		}
 		return super.getPartForElement(context, modelElement);
 	}

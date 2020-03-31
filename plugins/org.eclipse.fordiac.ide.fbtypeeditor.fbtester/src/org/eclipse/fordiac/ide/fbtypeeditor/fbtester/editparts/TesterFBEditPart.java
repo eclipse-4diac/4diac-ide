@@ -22,7 +22,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Point;
@@ -35,8 +34,8 @@ public class TesterFBEditPart extends org.eclipse.fordiac.ide.application.editpa
 	/** The control listener. */
 	private ControlListener controlListener;
 
-	public TesterFBEditPart(ZoomManager zoomManager) {
-		super(zoomManager);
+	public TesterFBEditPart() {
+		super();
 	}
 
 	@Override

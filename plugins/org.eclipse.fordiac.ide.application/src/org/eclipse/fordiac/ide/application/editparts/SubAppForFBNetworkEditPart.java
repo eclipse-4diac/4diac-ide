@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.editparts.ZoomManager;
 
 public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 
@@ -55,8 +54,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		}
 	};
 
-	public SubAppForFBNetworkEditPart(final ZoomManager zoomManager) {
-		super(zoomManager);
+	public SubAppForFBNetworkEditPart() {
+		super();
 	}
 
 	@Override

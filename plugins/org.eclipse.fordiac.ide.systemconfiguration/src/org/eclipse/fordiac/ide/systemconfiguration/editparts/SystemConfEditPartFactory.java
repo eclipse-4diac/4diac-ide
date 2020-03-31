@@ -23,20 +23,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class SystemConfEditPartFactory extends Abstract4diacEditPartFactory {
 
-	/**
-	 * Editparts that have gradient fill require a zoom manger to correctly scale
-	 * the pattern when zoomed
-	 */
-	private ZoomManager zoomManager;
-
-	public SystemConfEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {
+	public SystemConfEditPartFactory(GraphicalEditor editor) {
 		super(editor);
-		this.zoomManager = zoomManager;
 	}
 
 	@Override
@@ -48,7 +40,7 @@ public class SystemConfEditPartFactory extends Abstract4diacEditPartFactory {
 			return new LinkEditPart();
 		}
 		if (modelElement instanceof Device) {
-			return new DeviceEditPart(zoomManager);
+			return new DeviceEditPart();
 		}
 		if (modelElement instanceof VarDeclaration) {
 			return new DeviceInterfaceEditPart();

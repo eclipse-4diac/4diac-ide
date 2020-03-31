@@ -23,15 +23,14 @@ import org.eclipse.fordiac.ide.gef.figures.FBShape;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.gef.editparts.ZoomManager;
 
 public class FBTypeFigure extends FBShape {
 
 	private Label versionInfoLabel;
 	private FBType type;
 
-	public FBTypeFigure(final FBType type, ZoomManager zoomManager) {
-		super(type, zoomManager);
+	public FBTypeFigure(final FBType type) {
+		super(type);
 		this.type = type;
 
 		versionInfoLabel = new Label();

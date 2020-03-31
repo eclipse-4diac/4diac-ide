@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.events.ControlEvent;
@@ -47,7 +46,6 @@ import org.eclipse.swt.widgets.Display;
 public class FBTypeEditPart extends AbstractDirectEditableEditPart {
 
 	private ControlListener controlListener;
-	private ZoomManager zoomManager;
 	private EventInputContainer eic;
 	private EventOutputContainer eoc;
 	private VariableInputContainer vic;
@@ -102,14 +100,13 @@ public class FBTypeEditPart extends AbstractDirectEditableEditPart {
 		return (FBType) super.getModel();
 	}
 
-	FBTypeEditPart(ZoomManager zoomManager) {
+	FBTypeEditPart() {
 		super();
-		this.zoomManager = zoomManager;
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		return new FBTypeFigure(getModel(), zoomManager);
+		return new FBTypeFigure(getModel());
 	}
 
 	@Override

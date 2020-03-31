@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2012 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -19,18 +19,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 /**
  * A factory for creating new EditParts.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 
-	public ResourceDiagramEditPartFactory(final GraphicalEditor editor, ZoomManager zoomManager) {
-		super(editor, zoomManager);
+	public ResourceDiagramEditPartFactory(final GraphicalEditor editor) {
+		super(editor);
 	}
 
 	@Override
@@ -40,7 +39,7 @@ public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 			return new FBNetworkContainerEditPart();
 		}
 		if (modelElement instanceof FB) {
-			return new ResFBEditPart(getZoomManager());
+			return new ResFBEditPart();
 		}
 		if (modelElement instanceof IInterfaceElement) {
 			IInterfaceElement element = (IInterfaceElement) modelElement;

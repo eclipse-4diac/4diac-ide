@@ -77,7 +77,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
-		return new CompositeNetworkEditPartFactory(this, getZoomManger());
+		return new CompositeNetworkEditPartFactory(this);
 	}
 
 	@Override

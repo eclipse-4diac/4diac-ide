@@ -16,14 +16,13 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
 
 public class AdapterFBEditPart extends FBEditPart {
 
-	public AdapterFBEditPart(ZoomManager zoomManager) {
-		super(zoomManager);
+	public AdapterFBEditPart() {
+		super();
 	}
 
 	@Override

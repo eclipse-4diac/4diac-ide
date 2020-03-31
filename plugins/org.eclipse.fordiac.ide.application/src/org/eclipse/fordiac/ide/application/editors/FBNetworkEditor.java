@@ -102,7 +102,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		return new ElementEditPartFactory(this, getZoomManger());
+		return new ElementEditPartFactory(this);
 	}
 
 	@Override

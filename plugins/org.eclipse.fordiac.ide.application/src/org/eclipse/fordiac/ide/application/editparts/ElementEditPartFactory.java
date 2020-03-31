@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 /**
@@ -33,15 +32,8 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
  */
 public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 
-	private final ZoomManager zoomManager;
-
-	public ElementEditPartFactory(GraphicalEditor editor, ZoomManager zoomManager) {
+	public ElementEditPartFactory(GraphicalEditor editor) {
 		super(editor);
-		this.zoomManager = zoomManager;
-	}
-
-	protected ZoomManager getZoomManager() {
-		return zoomManager;
 	}
 
 	/**
@@ -60,13 +52,13 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 				part = new FBNetworkEditPart();
 			}
 		} else if (modelElement instanceof FB) {
-			part = new FBEditPart(zoomManager);
+			part = new FBEditPart();
 		} else if (modelElement instanceof InstanceName) {
 			part = new InstanceNameEditPart();
 		} else if (modelElement instanceof Connection) {
 			part = new ConnectionEditPart();
 		} else if (modelElement instanceof SubApp) {
-			part = new SubAppForFBNetworkEditPart(zoomManager);
+			part = new SubAppForFBNetworkEditPart();
 		} else if (modelElement instanceof IInterfaceElement) {
 			IInterfaceElement element = (IInterfaceElement) modelElement;
 			if (element.getFBNetworkElement() instanceof SubApp && null == element.getFBNetworkElement().getType()) {

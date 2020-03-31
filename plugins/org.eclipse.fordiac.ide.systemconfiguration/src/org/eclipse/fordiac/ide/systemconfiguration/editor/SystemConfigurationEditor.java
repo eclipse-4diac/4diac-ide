@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2012 - 2018 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
- * 								Johannes Kepler University	
- * 
+ * 								Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,7 +9,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editor;
@@ -38,7 +38,7 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		return new SystemConfEditPartFactory(this, getZoomManger());
+		return new SystemConfEditPartFactory(this);
 	}
 
 	@Override

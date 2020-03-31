@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2016 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -28,7 +28,7 @@ public class SubAppNetworkEditor extends CompositeNetworkEditor {
 
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
-		return new SubAppTypeNetworkEditPartFactory(this, getZoomManger());
+		return new SubAppTypeNetworkEditPartFactory(this);
 	}
 
 	@Override

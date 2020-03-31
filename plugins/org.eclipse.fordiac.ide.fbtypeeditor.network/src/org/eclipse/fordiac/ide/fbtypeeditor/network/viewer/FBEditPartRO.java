@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,12 +16,11 @@ import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNElementSelectionPolicy;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.editparts.ZoomManager;
 
 public class FBEditPartRO extends FBEditPart {
 
-	FBEditPartRO(ZoomManager zoomManager) {
-		super(zoomManager);
+	FBEditPartRO() {
+		super();
 	}
 
 	@Override
