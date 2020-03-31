@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019 - 2020 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - extracted TransitionFigure code and changed to cubic spline
  *   Alois Zoitl - reworked transition and handle widths
+ *   Bianca Wiesmayr, Ernst Blecha - added tooltip
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -57,6 +58,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		@Override
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
+			refreshTransitionTooltip();
 			refresh();
 		}
 	};
@@ -72,6 +74,10 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 				getConnectionFigure().setTransitionOrder(""); //$NON-NLS-1$
 			}
 		}
+	}
+
+	private void refreshTransitionTooltip() {
+		getFigure().getToolTip().setECTransition(this.getModel());
 	}
 
 	/** The adapter. */
@@ -93,7 +99,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 				}
 
 				if (notification.getNotifier() instanceof VarDeclaration) {
-					checkConditionExpresion(notification);
+					checkConditionExpression(notification);
 				}
 			}
 		}
@@ -111,7 +117,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 		}
 
-		private void checkConditionExpresion(Notification notification) {
+		private void checkConditionExpression(Notification notification) {
 			if (notification.getNewValue() instanceof String) {
 				Object feature = notification.getFeature();
 				if ((LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature))
@@ -159,7 +165,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 			@Override
 			public Command getCommand(Request request) {
-				if (RequestConstants.REQ_MOVE.equals(request.getType()) && request instanceof ChangeBoundsRequest) {
+				if (RequestConstants.REQ_MOVE.equals(request.getType()) && (request instanceof ChangeBoundsRequest)) {
 					return getTransitionMoveCommand((ChangeBoundsRequest) request);
 				}
 				return null;
@@ -206,6 +212,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		getConnectionFigure().setConditionText(getModel().getConditionText());
 		getConnectionFigure().updateBendPoints(getModel());
 		updateOrderLabel();
+		refreshTransitionTooltip();
 	}
 
 	@Override
@@ -259,4 +266,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		};
 	}
 
+	@Override
+	public ECTransitionFigure getFigure() {
+		return (ECTransitionFigure) super.getFigure();
+	}
 }
