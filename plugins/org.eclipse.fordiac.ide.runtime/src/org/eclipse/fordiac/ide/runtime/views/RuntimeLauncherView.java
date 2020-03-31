@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *               2019 Johannes Kepler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,14 +9,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Martijn Rooker, Thomas Strasser, Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz 
+ *   Martijn Rooker, Thomas Strasser, Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
  *     - add currently configured runtime path plus link to settings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.runtime.views;
 
-import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;

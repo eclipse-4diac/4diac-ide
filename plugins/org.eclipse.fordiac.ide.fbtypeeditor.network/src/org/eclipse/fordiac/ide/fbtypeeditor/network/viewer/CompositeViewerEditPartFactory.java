@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -46,12 +46,12 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 
 	/**
 	 * Maps an object to an EditPart.
-	 * 
+	 *
 	 * @param context      the context
 	 * @param modelElement the model element
-	 * 
+	 *
 	 * @return the part for element
-	 * 
+	 *
 	 * @throws RuntimeException if no match was found (programming error)
 	 */
 	@Override
@@ -74,9 +74,6 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 				return new InterfaceEditPartForFBNetworkRO();
 			}
 		}
-		if (modelElement instanceof FB) {
-			return new FBEditPartRO(getZoomManager());
-		}
 		if (modelElement instanceof AdapterFB) {
 			return new AdapterFBEditPart(getZoomManager()) {
 				@Override
@@ -91,6 +88,9 @@ class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFactory {
 					// don't do anything here to avoid direct edit
 				}
 			};
+		}
+		if (modelElement instanceof FB) {
+			return new FBEditPartRO(getZoomManager());
 		}
 		if (modelElement instanceof Connection) {
 			return new ConnectionEditPartRO();

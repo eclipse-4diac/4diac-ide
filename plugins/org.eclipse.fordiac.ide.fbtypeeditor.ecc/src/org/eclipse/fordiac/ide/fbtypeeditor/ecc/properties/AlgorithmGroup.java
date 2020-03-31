@@ -10,7 +10,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Peter Gsellmann - extraction to AlgorithmEditingComposite
- *   Martin Melik-Merkumians - moved AlgorithmGroup specific methods from base 
+ *   Martin Melik-Merkumians - moved AlgorithmGroup specific methods from base
  *   						   class to this class
  *   Alois Zoitl - moved more code into AlgorithmEditingComposite
  *******************************************************************************/
@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTypeComm
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets.AlgorithmEditingComposite;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -37,8 +38,13 @@ class AlgorithmGroup extends AlgorithmEditingComposite {
 
 	@Override
 	public void createControls(final Composite parent, final FormToolkit toolkit) {
-		algorithmGroup = ((TabbedPropertySheetWidgetFactory) toolkit).createGroup(parent,
-				MessageFormat.format(Messages.ECAlgorithmGroup_Title, "")); //$NON-NLS-1$
+		if (toolkit instanceof TabbedPropertySheetWidgetFactory) {
+			algorithmGroup = ((TabbedPropertySheetWidgetFactory) toolkit).createGroup(parent,
+					MessageFormat.format(Messages.ECAlgorithmGroup_Title, "")); //$NON-NLS-1$
+		} else {
+			algorithmGroup = new Group(parent, SWT.SHADOW_NONE);
+			algorithmGroup.setText(MessageFormat.format(Messages.ECAlgorithmGroup_Title, "")); //$NON-NLS-1$
+		}
 		GridData algorithmGroupLayoutData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		algorithmGroupLayoutData.horizontalSpan = 2;
 		algorithmGroup.setLayoutData(algorithmGroupLayoutData);

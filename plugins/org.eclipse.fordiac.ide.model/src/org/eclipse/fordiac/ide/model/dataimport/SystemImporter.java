@@ -96,7 +96,7 @@ public class SystemImporter extends CommonElementImporter {
 		} catch (TypeImportException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new TypeImportException(e.getMessage()); // TODO add exception to typeImportException
+			throw new TypeImportException(e.getMessage(), e);
 		}
 
 	}

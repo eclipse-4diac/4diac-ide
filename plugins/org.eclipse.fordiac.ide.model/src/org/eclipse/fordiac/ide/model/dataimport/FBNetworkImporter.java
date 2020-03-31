@@ -198,9 +198,8 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		String destinationElement = getAttributeValue(LibraryElementTags.DESTINATION_ATTRIBUTE);
 		if (null != destinationElement) {
-			IInterfaceElement destination = getConnectionEndPoint(destinationElement);
+			IInterfaceElement destination = getConnectionEndPoint(destinationElement, conType, true);
 			if (null != destination) {
-				// TODO check if IInterfaceElement is of correct type
 				connection.setDestination(destination);
 			} else {
 				// TODO model refactoring - this connection is missing an endpoint. add error
@@ -212,9 +211,8 @@ class FBNetworkImporter extends CommonElementImporter {
 		}
 		String sourceElement = getAttributeValue(LibraryElementTags.SOURCE_ATTRIBUTE);
 		if (null != sourceElement) {
-			IInterfaceElement source = getConnectionEndPoint(sourceElement);
+			IInterfaceElement source = getConnectionEndPoint(sourceElement, conType, false);
 			if (null != source) {
-				// TODO check if IInterfaceElement is of correct type
 				connection.setSource(source);
 			} else {
 				Activator.getDefault().logError("Connection source not found: " + sourceElement);
@@ -246,26 +244,18 @@ class FBNetworkImporter extends CommonElementImporter {
 		}
 	}
 
-	private IInterfaceElement getConnectionEndPoint(String path) {
+	private IInterfaceElement getConnectionEndPoint(String path, EClass conType, boolean isInput) {
 		String[] split = path.split("\\."); //$NON-NLS-1$
-		String fbName = ""; //$NON-NLS-1$
-		String interfaceElement = ""; //$NON-NLS-1$
-		if (split.length == 1) {
-			interfaceElement = path;
-		}
-		if (split.length == 2) {
-			fbName = split[0];
-			interfaceElement = split[1];
-		}
-		if (!fbName.equals("") && !interfaceElement.equals("")) {//$NON-NLS-1$ //$NON-NLS-2$
-			FBNetworkElement element = findFBNetworkElement(fbName);
-			if (null != element) {
-				return element.getInterfaceElement(interfaceElement);
-			}
-		} else if (fbName.equals("")) { //$NON-NLS-1$
-			return getContainingInterfaceElement(interfaceElement);
-		}
 
+		if (1 == split.length) {
+			return getContainingInterfaceElement(path, conType, isInput);
+		}
+		if (2 == split.length) {
+			FBNetworkElement element = findFBNetworkElement(split[0]);
+			if (null != element) {
+				return getInterfaceElement(element.getInterface(), split[1], conType, isInput);
+			}
+		}
 		return null;
 	}
 
@@ -273,8 +263,48 @@ class FBNetworkImporter extends CommonElementImporter {
 	 * Check if the element that contains the fbnetwork has an interface element
 	 * with the given name. this is needed for subapps, cfbs, devices and resources
 	 */
-	protected IInterfaceElement getContainingInterfaceElement(String interfaceElement) {
-		return interfaceList.getInterfaceElement(interfaceElement);
+	protected IInterfaceElement getContainingInterfaceElement(String interfaceElement, EClass conType,
+			boolean isInput) {
+		return getInterfaceElement(interfaceList, interfaceElement, conType, !isInput); // for connections to the
+																						// interface inputs are the
+																						// outputs of the FB
+	}
+
+	private static IInterfaceElement getInterfaceElement(InterfaceList il, String interfaceElement, EClass conType,
+			boolean isInput) {
+		EList<? extends IInterfaceElement> ieList = getInterfaceElementList(il, conType, isInput);
+		for (IInterfaceElement ie : ieList) {
+			if (ie.getName().equals(interfaceElement)) {
+				return ie;
+			}
+		}
+		return null;
+	}
+
+	private static EList<? extends IInterfaceElement> getInterfaceElementList(InterfaceList il, EClass conType,
+			boolean isInput) {
+		if (isInput) {
+			if (LibraryElementPackage.eINSTANCE.getEventConnection() == conType) {
+				return il.getEventInputs();
+			}
+			if (LibraryElementPackage.eINSTANCE.getDataConnection() ==  conType) {
+				return il.getInputVars();
+			}
+			if (LibraryElementPackage.eINSTANCE.getAdapterConnection().equals(conType)) {
+				return il.getSockets();
+			}
+		} else {
+			if (LibraryElementPackage.eINSTANCE.getEventConnection() == conType) {
+				return il.getEventOutputs();
+			}
+			if (LibraryElementPackage.eINSTANCE.getDataConnection() == conType) {
+				return il.getOutputVars();
+			}
+			if (LibraryElementPackage.eINSTANCE.getAdapterConnection().equals(conType)) {
+				return il.getPlugs();
+			}
+		}
+		return null;
 	}
 
 	protected FBNetworkElement findFBNetworkElement(String fbName) {

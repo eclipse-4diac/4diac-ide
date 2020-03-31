@@ -103,7 +103,7 @@ public abstract class TypeImporter extends CommonElementImporter {
 			try {
 				v.setArraySize(Integer.parseInt(arraySize));
 			} catch (NumberFormatException nfe) {
-				throw new TypeImportException(Messages.Import_ERROR_ArraySize_NumberFormat);
+				throw new TypeImportException(Messages.Import_ERROR_ArraySize_NumberFormat, nfe);
 			}
 		} else {
 			v.setArraySize(-1);

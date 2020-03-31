@@ -11,13 +11,16 @@
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.export;
+package org.eclipse.fordiac.ide.export.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.util.Utils;
 
@@ -36,21 +39,21 @@ public class DelayedFiles {
 	 *
 	 * encapsulates path and data of a file in memory (before writing)
 	 */
-	private final class FileObject {
+	private static final class FileObject {
 		private final Path path;
-		private final byte[] bytes;
+		private final Iterable<? extends CharSequence> data;
 
-		public FileObject(Path path, byte[] bytes) {
+		public FileObject(Path path, CharSequence data) {
 			this.path = path;
-			this.bytes = bytes;
+			this.data = Collections.singleton(data);
 		}
 
 		public Path getPath() {
 			return path;
 		}
 
-		public byte[] getBytes() {
-			return bytes;
+		public Iterable<CharSequence> getData() {
+			return (Iterable<CharSequence>) data;
 		}
 	}
 
@@ -61,7 +64,7 @@ public class DelayedFiles {
 	 * returned after all files were written
 	 */
 
-	public final class StoredFiles {
+	public static final class StoredFiles {
 		private final File oldFile;
 		private final File newFile;
 
@@ -79,7 +82,7 @@ public class DelayedFiles {
 		}
 	}
 
-	private ArrayList<FileObject> storage;
+	private List<FileObject> storage;
 
 	/**
 	 * constructor for class DelayedFiles
@@ -88,8 +91,7 @@ public class DelayedFiles {
 	 * usecase a .cpp and a .h file will be written
 	 */
 	public DelayedFiles() {
-		storage = new ArrayList<>();
-		storage.ensureCapacity(2);
+		storage = new ArrayList<>(2);
 	}
 
 	/**
@@ -100,8 +102,8 @@ public class DelayedFiles {
 	 *
 	 * @return path to be written to to be compatible with java.nio.file.Files
 	 */
-	public Path write(Path path, CharSequence bytes) {
-		storage.add(new FileObject(path, bytes.toString().getBytes()));
+	public Path write(Path path, CharSequence data) {
+		storage.add(new FileObject(path, data));
 		return path;
 	}
 
@@ -118,8 +120,7 @@ public class DelayedFiles {
 	 *         old-File-Object will be null
 	 */
 	public Iterable<StoredFiles> write(boolean forceOverwrite) throws IOException {
-		ArrayList<StoredFiles> ret = new ArrayList<>();
-		ret.ensureCapacity(2);
+		ArrayList<StoredFiles> ret = new ArrayList<>(storage.size());
 
 		for (FileObject fo : storage) {
 			File o = null;
@@ -127,7 +128,7 @@ public class DelayedFiles {
 			if (!forceOverwrite && f.exists()) {
 				o = Utils.createBakFile(f);
 			}
-			Files.write(fo.getPath(), fo.getBytes());
+			Files.write(fo.getPath(), fo.getData(), StandardCharsets.UTF_8);
 			ret.add(new StoredFiles(o, f));
 		}
 

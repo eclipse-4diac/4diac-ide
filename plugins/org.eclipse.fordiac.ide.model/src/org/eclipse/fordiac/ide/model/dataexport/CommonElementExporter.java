@@ -186,6 +186,11 @@ abstract class CommonElementExporter {
 		writer.writeEndElement();
 	}
 
+	protected void addInlineEndElement() throws XMLStreamException {
+		tabCount--;
+		writer.writeEndElement();
+	}
+
 	private XMLStreamWriter createEventWriter() {
 		XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
 

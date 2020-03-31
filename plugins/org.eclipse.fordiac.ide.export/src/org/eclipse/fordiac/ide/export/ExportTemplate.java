@@ -76,11 +76,10 @@ public abstract class ExportTemplate implements IExportTemplate {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
+		if (!(obj instanceof ExportTemplate)) {
 			return false;
 		}
-		final ExportTemplate other = (ExportTemplate) obj;
-		return Objects.equals(path, other.path);
+		return Objects.equals(path, ((ExportTemplate) obj).path);
 	}
 
 	@Override
