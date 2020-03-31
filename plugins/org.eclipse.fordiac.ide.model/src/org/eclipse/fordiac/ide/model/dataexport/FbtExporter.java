@@ -18,6 +18,8 @@
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -39,6 +41,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
  * The Class FbtExporter.
  */
 class FbtExporter extends AbstractTypeExporter {
+
+	private static final Pattern CDATA_END_PATTERN = Pattern.compile("\\]\\]>"); //$NON-NLS-1$
 
 	/**
 	 * Instantiates a new fbt exporter.
@@ -88,16 +92,36 @@ class FbtExporter extends AbstractTypeExporter {
 	 * @throws XMLStreamException
 	 */
 	private void addOtherAlgorithm(final OtherAlgorithm algorithm) throws XMLStreamException {
-		addEmptyStartElement(LibraryElementTags.OTHER_ELEMENT);
+		addStartElement(LibraryElementTags.OTHER_ELEMENT);
 		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,
 				(null != algorithm.getLanguage()) ? algorithm.getLanguage() : ""); //$NON-NLS-1$
 
 		writeTextAlgorithmText(algorithm);
+		addInlineEndElement();
 	}
 
 	private void writeTextAlgorithmText(final TextAlgorithm algorithm) throws XMLStreamException {
-		writeAttributeRaw(LibraryElementTags.TEXT_ATTRIBUTE,
-				(null != algorithm.getText()) ? fullyEscapeValue(algorithm.getText()) : ""); //$NON-NLS-1$
+		if (null != algorithm.getText()) {
+			Matcher endPatternMatcher = CDATA_END_PATTERN.matcher(algorithm.getText());
+			int currentPosition = 0;
+			if (endPatternMatcher.find()) { // Check if we have at least one CData end pattern in the string
+				do {
+					getWriter().writeCData(algorithm.getText().substring(currentPosition, endPatternMatcher.start()));
+					getWriter().writeCharacters("]]>"); //$NON-NLS-1$
+					currentPosition = endPatternMatcher.end();
+				} while (endPatternMatcher.find());
+
+				if (currentPosition < algorithm.getText().length()) {
+					// there is some text after the last CData end pattern
+					getWriter().writeCData(algorithm.getText().substring(currentPosition));
+				}
+			} else {
+				// no CData end pattern write the algorithm text as whole
+				getWriter().writeCData(algorithm.getText());
+			}
+		} else {
+			getWriter().writeCharacters(""); //$NON-NLS-1$
+		}
 	}
 
 	/**
@@ -107,8 +131,9 @@ class FbtExporter extends AbstractTypeExporter {
 	 * @throws XMLStreamException
 	 */
 	private void addSTAlgorithm(final STAlgorithm algorithm) throws XMLStreamException {
-		addEmptyStartElement(LibraryElementTags.ST_ELEMENT);
+		addStartElement(LibraryElementTags.ST_ELEMENT);
 		writeTextAlgorithmText(algorithm);
+		addInlineEndElement();
 	}
 
 	/**
