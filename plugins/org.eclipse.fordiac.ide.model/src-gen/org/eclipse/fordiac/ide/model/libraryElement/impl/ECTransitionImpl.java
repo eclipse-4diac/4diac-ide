@@ -57,12 +57,12 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String COMMENT_EDEFAULT = null;
+	protected static final String COMMENT_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -77,7 +77,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String CONDITION_EXPRESSION_EDEFAULT = null;
+	protected static final String CONDITION_EXPRESSION_EDEFAULT = "1";
 
 	/**
 	 * The cached value of the '{@link #getConditionExpression() <em>Condition
@@ -157,9 +157,10 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	public void setComment(String newComment) {
 		String oldComment = comment;
 		comment = newComment;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_TRANSITION__COMMENT,
 					oldComment, comment));
+		}
 	}
 
 	/**
@@ -181,10 +182,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	public void setConditionExpression(String newConditionExpression) {
 		String oldConditionExpression = conditionExpression;
 		conditionExpression = newConditionExpression;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					LibraryElementPackage.EC_TRANSITION__CONDITION_EXPRESSION, oldConditionExpression,
 					conditionExpression));
+		}
 	}
 
 	/**
@@ -194,13 +196,14 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 */
 	@Override
 	public ECState getDestination() {
-		if (destination != null && destination.eIsProxy()) {
+		if ((destination != null) && destination.eIsProxy()) {
 			InternalEObject oldDestination = (InternalEObject) destination;
 			destination = (ECState) eResolveProxy(oldDestination);
 			if (destination != oldDestination) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							LibraryElementPackage.EC_TRANSITION__DESTINATION, oldDestination, destination));
+				}
 			}
 		}
 		return destination;
@@ -226,10 +229,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 					LibraryElementPackage.EC_TRANSITION__DESTINATION, oldDestination, newDestination);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -243,18 +247,22 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	public void setDestination(ECState newDestination) {
 		if (newDestination != destination) {
 			NotificationChain msgs = null;
-			if (destination != null)
+			if (destination != null) {
 				msgs = ((InternalEObject) destination).eInverseRemove(this,
 						LibraryElementPackage.EC_STATE__IN_TRANSITIONS, ECState.class, msgs);
-			if (newDestination != null)
+			}
+			if (newDestination != null) {
 				msgs = ((InternalEObject) newDestination).eInverseAdd(this,
 						LibraryElementPackage.EC_STATE__IN_TRANSITIONS, ECState.class, msgs);
+			}
 			msgs = basicSetDestination(newDestination, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_TRANSITION__DESTINATION,
 					newDestination, newDestination));
+		}
 	}
 
 	/**
@@ -264,13 +272,14 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 */
 	@Override
 	public Event getConditionEvent() {
-		if (conditionEvent != null && conditionEvent.eIsProxy()) {
+		if ((conditionEvent != null) && conditionEvent.eIsProxy()) {
 			InternalEObject oldConditionEvent = (InternalEObject) conditionEvent;
 			conditionEvent = (Event) eResolveProxy(oldConditionEvent);
 			if (conditionEvent != oldConditionEvent) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							LibraryElementPackage.EC_TRANSITION__CONDITION_EVENT, oldConditionEvent, conditionEvent));
+				}
 			}
 		}
 		return conditionEvent;
@@ -294,9 +303,10 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	public void setConditionEvent(Event newConditionEvent) {
 		Event oldConditionEvent = conditionEvent;
 		conditionEvent = newConditionEvent;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_TRANSITION__CONDITION_EVENT,
 					oldConditionEvent, conditionEvent));
+		}
 	}
 
 	/**
@@ -316,8 +326,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 */
 	@Override
 	public ECC getECC() {
-		if (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC)
+		if (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC) {
 			return null;
+		}
 		return (ECC) eContainer();
 	}
 
@@ -327,8 +338,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * @generated
 	 */
 	public ECC basicGetECC() {
-		if (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC)
+		if (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC) {
 			return null;
+		}
 		return (ECC) eInternalContainer();
 	}
 
@@ -349,22 +361,28 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 */
 	@Override
 	public void setECC(ECC newECC) {
-		if (newECC != eInternalContainer()
-				|| (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC && newECC != null)) {
+		if ((newECC != eInternalContainer())
+				|| ((eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC) && (newECC != null))) {
 			if (EcoreUtil.isAncestor(this, newECC))
+			 {
 				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
+			}
 			NotificationChain msgs = null;
-			if (eInternalContainer() != null)
+			if (eInternalContainer() != null) {
 				msgs = eBasicRemoveFromContainer(msgs);
-			if (newECC != null)
+			}
+			if (newECC != null) {
 				msgs = ((InternalEObject) newECC).eInverseAdd(this, LibraryElementPackage.ECC__EC_TRANSITION, ECC.class,
 						msgs);
+			}
 			msgs = basicSetECC(newECC, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_TRANSITION__ECC, newECC,
 					newECC));
+		}
 	}
 
 	/**
@@ -376,21 +394,25 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case LibraryElementPackage.EC_TRANSITION__SOURCE:
-			if (source != null)
+			if (source != null) {
 				msgs = ((InternalEObject) source).eInverseRemove(this, LibraryElementPackage.EC_STATE__OUT_TRANSITIONS,
 						ECState.class, msgs);
+			}
 			return basicSetSource((ECState) otherEnd, msgs);
 		case LibraryElementPackage.EC_TRANSITION__DESTINATION:
-			if (destination != null)
+			if (destination != null) {
 				msgs = ((InternalEObject) destination).eInverseRemove(this,
 						LibraryElementPackage.EC_STATE__IN_TRANSITIONS, ECState.class, msgs);
+			}
 			return basicSetDestination((ECState) otherEnd, msgs);
 		case LibraryElementPackage.EC_TRANSITION__ECC:
-			if (eInternalContainer() != null)
+			if (eInternalContainer() != null) {
 				msgs = eBasicRemoveFromContainer(msgs);
+			}
 			return basicSetECC((ECC) otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -407,8 +429,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 			return basicSetDestination(null, msgs);
 		case LibraryElementPackage.EC_TRANSITION__ECC:
 			return basicSetECC(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -421,8 +444,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		switch (eContainerFeatureID()) {
 		case LibraryElementPackage.EC_TRANSITION__ECC:
 			return eInternalContainer().eInverseRemove(this, LibraryElementPackage.ECC__EC_TRANSITION, ECC.class, msgs);
+		default:
+			return super.eBasicRemoveFromContainerFeature(msgs);
 		}
-		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -432,13 +456,14 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 */
 	@Override
 	public ECState getSource() {
-		if (source != null && source.eIsProxy()) {
+		if ((source != null) && source.eIsProxy()) {
 			InternalEObject oldSource = (InternalEObject) source;
 			source = (ECState) eResolveProxy(oldSource);
 			if (source != oldSource) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							LibraryElementPackage.EC_TRANSITION__SOURCE, oldSource, source));
+				}
 			}
 		}
 		return source;
@@ -464,10 +489,11 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 					LibraryElementPackage.EC_TRANSITION__SOURCE, oldSource, newSource);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -481,18 +507,22 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	public void setSource(ECState newSource) {
 		if (newSource != source) {
 			NotificationChain msgs = null;
-			if (source != null)
+			if (source != null) {
 				msgs = ((InternalEObject) source).eInverseRemove(this, LibraryElementPackage.EC_STATE__OUT_TRANSITIONS,
 						ECState.class, msgs);
-			if (newSource != null)
+			}
+			if (newSource != null) {
 				msgs = ((InternalEObject) newSource).eInverseAdd(this, LibraryElementPackage.EC_STATE__OUT_TRANSITIONS,
 						ECState.class, msgs);
+			}
 			msgs = basicSetSource(newSource, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EC_TRANSITION__SOURCE,
 					newSource, newSource));
+		}
 	}
 
 	/**
@@ -508,23 +538,28 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		case LibraryElementPackage.EC_TRANSITION__CONDITION_EXPRESSION:
 			return getConditionExpression();
 		case LibraryElementPackage.EC_TRANSITION__SOURCE:
-			if (resolve)
+			if (resolve) {
 				return getSource();
+			}
 			return basicGetSource();
 		case LibraryElementPackage.EC_TRANSITION__DESTINATION:
-			if (resolve)
+			if (resolve) {
 				return getDestination();
+			}
 			return basicGetDestination();
 		case LibraryElementPackage.EC_TRANSITION__CONDITION_EVENT:
-			if (resolve)
+			if (resolve) {
 				return getConditionEvent();
+			}
 			return basicGetConditionEvent();
 		case LibraryElementPackage.EC_TRANSITION__ECC:
-			if (resolve)
+			if (resolve) {
 				return getECC();
+			}
 			return basicGetECC();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -553,8 +588,10 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		case LibraryElementPackage.EC_TRANSITION__ECC:
 			setECC((ECC) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -583,8 +620,10 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 		case LibraryElementPackage.EC_TRANSITION__ECC:
 			setECC((ECC) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -599,7 +638,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 		case LibraryElementPackage.EC_TRANSITION__CONDITION_EXPRESSION:
 			return CONDITION_EXPRESSION_EDEFAULT == null ? conditionExpression != null
-					: !CONDITION_EXPRESSION_EDEFAULT.equals(conditionExpression);
+			: !CONDITION_EXPRESSION_EDEFAULT.equals(conditionExpression);
 		case LibraryElementPackage.EC_TRANSITION__SOURCE:
 			return source != null;
 		case LibraryElementPackage.EC_TRANSITION__DESTINATION:
@@ -608,8 +647,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 			return conditionEvent != null;
 		case LibraryElementPackage.EC_TRANSITION__ECC:
 			return basicGetECC() != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**
@@ -619,8 +659,9 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (comment: "); //$NON-NLS-1$
