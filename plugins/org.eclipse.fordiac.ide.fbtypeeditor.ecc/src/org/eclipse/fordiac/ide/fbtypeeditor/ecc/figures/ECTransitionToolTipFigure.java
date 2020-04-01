@@ -39,10 +39,10 @@ public class ECTransitionToolTipFigure extends FlowPage {
 	}
 
 	private void updateLabels() {
-		if (transition.getComment().isEmpty()) {
-			tooltipContent.setText("[not set]");
-		} else {
+		if ((null != transition.getComment()) && !transition.getComment().isEmpty()) {
 			tooltipContent.setText(transition.getComment());
+		} else {
+			tooltipContent.setText("[not set]");
 		}
 		revalidate();
 		repaint();
