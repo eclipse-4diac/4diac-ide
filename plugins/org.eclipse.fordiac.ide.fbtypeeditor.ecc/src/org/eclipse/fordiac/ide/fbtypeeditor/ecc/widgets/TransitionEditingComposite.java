@@ -74,7 +74,7 @@ public class TransitionEditingComposite {
 			if (element instanceof ECTransition) {
 				switch (columnIndex) {
 				case TRANSITION_COLUMN_PRIORITY:
-					return Integer.toString(type.getOutTransitions().indexOf(element) + 1);
+					return Integer.toString(((ECTransition) element).getPriority());
 
 				case TRANSITION_COLUMN_DESTINATION:
 					if (null != ((ECTransition) element).getDestination()) {

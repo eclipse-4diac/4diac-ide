@@ -269,6 +269,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ECTransition/conditionEvent"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//ECTransition/eCC"/>
       <genOperations ecoreOperation="lib.ecore#//ECTransition/getConditionText" body="return org.eclipse.fordiac.ide.model.Annotations.getConditionText(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//ECTransition/getPriority" body="return getSource().getOutTransitions().indexOf(this) + 1;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Event">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>
