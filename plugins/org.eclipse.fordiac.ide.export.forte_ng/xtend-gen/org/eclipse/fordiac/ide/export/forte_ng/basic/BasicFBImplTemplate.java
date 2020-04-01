@@ -277,7 +277,7 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
                   } else {
                     _builder.append("      ");
                     _builder.append("  ");
-                    _builder.append("if(1) {");
+                    _builder.append("if(1)");
                     _builder.newLine();
                   }
                 }
@@ -295,8 +295,14 @@ public class BasicFBImplTemplate extends ForteFBTemplate {
         }
         _builder.append("      ");
         _builder.append("  ");
-        _builder.append("else");
-        _builder.newLine();
+        {
+          boolean _isEmpty = state.getOutTransitions().isEmpty();
+          boolean _not_1 = (!_isEmpty);
+          if (_not_1) {
+            _builder.append("else");
+          }
+        }
+        _builder.newLineIfNotEmpty();
         _builder.append("      ");
         _builder.append("    ");
         _builder.append("bTransitionCleared  = false; //no transition cleared");

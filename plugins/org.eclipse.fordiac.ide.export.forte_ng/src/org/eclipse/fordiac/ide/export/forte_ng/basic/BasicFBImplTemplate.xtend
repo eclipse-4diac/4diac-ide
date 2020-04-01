@@ -103,11 +103,11 @@ class BasicFBImplTemplate extends ForteFBTemplate {
 		      	  	«ELSEIF !transition.conditionExpression.nullOrEmpty»
 		      	  		if(«transition.conditionExpression.generate(type, errors)»)
 		      	  	«ELSE»
-		      	  		if(1) {
+		      	  		if(1)
 		      	  	«ENDIF»
 		      	  	  enterState«transition.destination.name»();
 		      	  «ENDFOR»
-		      	  else
+		      	  «IF !state.outTransitions.empty»else«ENDIF»
 		      	    bTransitionCleared  = false; //no transition cleared
 		      	  break;
 		      «ENDFOR»
