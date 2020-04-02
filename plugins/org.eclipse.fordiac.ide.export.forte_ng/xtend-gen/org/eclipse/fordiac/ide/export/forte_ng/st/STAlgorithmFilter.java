@@ -589,31 +589,59 @@ public class STAlgorithmFilter {
   
   protected CharSequence _generateStatement(final ForStatement stmt) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("for ");
-    CharSequence _generateExpression = this.generateExpression(stmt.getVariable());
-    _builder.append(_generateExpression);
-    _builder.append(" = ");
-    CharSequence _generateExpression_1 = this.generateExpression(stmt.getFrom());
-    _builder.append(_generateExpression_1);
-    _builder.append(", ");
-    CharSequence _generateExpression_2 = this.generateExpression(stmt.getTo());
-    _builder.append(_generateExpression_2);
+    _builder.append("// as it is done in lua: https://www.lua.org/manual/5.1/manual.html#2.4.5");
+    _builder.newLine();
+    _builder.append("auto by = ");
     {
       Expression _by = stmt.getBy();
       boolean _tripleNotEquals = (_by != null);
       if (_tripleNotEquals) {
-        _builder.append(", ");
-        CharSequence _generateExpression_3 = this.generateExpression(stmt.getBy());
-        _builder.append(_generateExpression_3);
+        CharSequence _generateExpression = this.generateExpression(stmt.getBy());
+        _builder.append(_generateExpression);
+      } else {
+        _builder.append("1");
       }
     }
-    _builder.append(" do");
+    _builder.append(";");
     _builder.newLineIfNotEmpty();
-    _builder.append("  ");
+    _builder.append("auto to = ");
+    CharSequence _generateExpression_1 = this.generateExpression(stmt.getTo());
+    _builder.append(_generateExpression_1);
+    _builder.append(";");
+    _builder.newLineIfNotEmpty();
+    _builder.append("for(");
+    CharSequence _generateExpression_2 = this.generateExpression(stmt.getVariable());
+    _builder.append(_generateExpression_2);
+    _builder.append(" = ");
+    CharSequence _generateExpression_3 = this.generateExpression(stmt.getFrom());
+    _builder.append(_generateExpression_3);
+    _builder.append(";");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("(by >  0 && ");
+    CharSequence _generateExpression_4 = this.generateExpression(stmt.getVariable());
+    _builder.append(_generateExpression_4, "    ");
+    _builder.append(" <= to) ||");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    _builder.append("(by <= 0 && ");
+    CharSequence _generateExpression_5 = this.generateExpression(stmt.getVariable());
+    _builder.append(_generateExpression_5, "    ");
+    _builder.append(" >= to);");
+    _builder.newLineIfNotEmpty();
+    _builder.append("    ");
+    CharSequence _generateExpression_6 = this.generateExpression(stmt.getVariable());
+    _builder.append(_generateExpression_6, "    ");
+    _builder.append(" = ");
+    CharSequence _generateExpression_7 = this.generateExpression(stmt.getVariable());
+    _builder.append(_generateExpression_7, "    ");
+    _builder.append(" + by){");
+    _builder.newLineIfNotEmpty();
+    _builder.append("\t");
     CharSequence _generateStatementList = this.generateStatementList(stmt.getStatements());
-    _builder.append(_generateStatementList, "  ");
+    _builder.append(_generateStatementList, "\t");
     _builder.newLineIfNotEmpty();
-    _builder.append("end");
+    _builder.append("}");
     _builder.newLine();
     return _builder;
   }
