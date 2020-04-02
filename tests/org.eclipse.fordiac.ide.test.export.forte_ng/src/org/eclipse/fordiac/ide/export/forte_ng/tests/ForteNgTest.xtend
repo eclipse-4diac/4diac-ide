@@ -1,11 +1,11 @@
 package org.eclipse.fordiac.ide.export.forte_ng.tests
 
 import org.junit.Test
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull
+import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertEquals
 
-abstract class ForteNgXtend extends ForteNgTestBase implements DatatypeConstants {
+class ForteNgTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
 
 	@Test
 	def emptyExpression() {
@@ -35,7 +35,7 @@ abstract class ForteNgXtend extends ForteNgTestBase implements DatatypeConstants
 
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''«VARIABLE_NAME»() = 1;
+		assertEquals('''«EXPORTED_VARIABLE_NAME»() = 1;
 		'''.toString(), generatedCode.toString()) //$NON-NLS-1$
 	}
 
@@ -47,7 +47,7 @@ abstract class ForteNgXtend extends ForteNgTestBase implements DatatypeConstants
 
 		assertNoErrors(errors) // Expression can not be an assignment
 		assertNotNull(generatedCode)
-		assertEquals('''SQRT(«VARIABLE_NAME»())'''.toString(), generatedCode.toString()) //$NON-NLS-1$
+		assertEquals('''«addExportPrefix("SQRT")»(«EXPORTED_VARIABLE_NAME»())'''.toString(), generatedCode.toString()) //$NON-NLS-1$
 	}
 
 	@Test
@@ -59,7 +59,7 @@ abstract class ForteNgXtend extends ForteNgTestBase implements DatatypeConstants
 
 		assertNoErrors(errors); // Expression can not be an assignment
 		assertNotNull(generatedCode);
-		assertEquals('''EXPT(«VARIABLE_NAME»(), «VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
+		assertEquals('''«addExportPrefix("EXPT")»(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
 				generatedCode.toString())
 	}
 

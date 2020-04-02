@@ -14,13 +14,13 @@
 package org.eclipse.fordiac.ide.export.forte_ng.tests
 
 import org.junit.Test
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull
+import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertEquals
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implements DatatypeConstants {
+class ForteNgCaseStatementTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
 
 	@Test
 	def void validCaseStatement() {
@@ -38,18 +38,18 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implements Data
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
-		switch («VARIABLE_NAME»()) {
+		switch («EXPORTED_VARIABLE_NAME»()) {
 			case 0:
-				«VARIABLE_NAME»() = («VARIABLE_NAME»() + 1);
+				«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() + 1);
 				break;
 			case 1:
-				«VARIABLE_NAME»() = («VARIABLE_NAME»() + 1);
+				«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() + 1);
 				break;
 			case 2:
-				«VARIABLE_NAME»() = («VARIABLE_NAME»() + 1);
+				«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() + 1);
 				break;
 			case 255:
-				«VARIABLE_NAME»() = 0;
+				«EXPORTED_VARIABLE_NAME»() = 0;
 				break;
 		}
 		'''.toString(), generatedCode.toString())
@@ -69,12 +69,12 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implements Data
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
-		switch («VARIABLE_NAME»()) {
+		switch («EXPORTED_VARIABLE_NAME»()) {
 			case 0: case 1: case 2:
-				«VARIABLE_NAME»() = («VARIABLE_NAME»() + 1);
+				«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() + 1);
 				break;
 			case 255:
-				«VARIABLE_NAME»() = 0;
+				«EXPORTED_VARIABLE_NAME»() = 0;
 				break;
 		}
 		'''.toString(), generatedCode.toString())
@@ -96,15 +96,15 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implements Data
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
-		switch («VARIABLE_NAME»()) {
+		switch («EXPORTED_VARIABLE_NAME»()) {
 			case 0:
-				«VARIABLE_NAME»() = («VARIABLE_NAME»() + 1);
+				«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() + 1);
 				break;
 			case 255:
-				«VARIABLE_NAME»() = 0;
+				«EXPORTED_VARIABLE_NAME»() = 0;
 				break;
 			default:
-				«VARIABLE_NAME»() = 255;
+				«EXPORTED_VARIABLE_NAME»() = 255;
 				break;
 		}
 		'''.toString(), generatedCode.toString())
@@ -131,20 +131,20 @@ abstract class ForteNgCaseStatementXtend extends ForteNgTestBase implements Data
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
-		switch («VARIABLE_NAME»()) {
+		switch («EXPORTED_VARIABLE_NAME»()) {
 			case 0:
-				if((«VARIABLE_NAME»() < 20)) {
-					«VARIABLE_NAME»() = («VARIABLE_NAME»() + 1);
+				if((«EXPORTED_VARIABLE_NAME»() < 20)) {
+					«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() + 1);
 				}
 				else {
-					«VARIABLE_NAME»() = («VARIABLE_NAME»() - 1);
+					«EXPORTED_VARIABLE_NAME»() = («EXPORTED_VARIABLE_NAME»() - 1);
 				}
 				break;
 			case 255:
-				«VARIABLE_NAME»() = 0;
+				«EXPORTED_VARIABLE_NAME»() = 0;
 				break;
 			default:
-				«VARIABLE_NAME»() = 255;
+				«EXPORTED_VARIABLE_NAME»() = 255;
 				break;
 		}
 		'''.toString(), generatedCode.toString())

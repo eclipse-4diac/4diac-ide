@@ -13,11 +13,12 @@
 package org.eclipse.fordiac.ide.export.forte_ng.tests;
 
 import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBase;
+import org.eclipse.fordiac.ide.export.forte_ng.tests.ForteNgTestBasicFBTypeBase;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.junit.Assert;
 
 @SuppressWarnings("all")
-public abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
+public abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBasicFBTypeBase {
   protected static final boolean VALID_ACCESS = true;
   
   protected static final boolean INVALID_ACCESS = (!ForteNgArrayAtAccessXtend.VALID_ACCESS);
@@ -55,7 +56,7 @@ public abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
     _builder.append(value);
     _builder.append(";");
     this.getFunctionBlock().getAlgorithm().add(this.createSTAlgorithm(ForteNgTestBase.ALGORITHM_NAME, _builder.toString()));
-    CharSequence generatedCode = this.generateAlgorithm(this.getFunctionBlock(), ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
+    CharSequence generatedCode = this.generateAlgorithm(this.functionBlock, ForteNgTestBase.ALGORITHM_NAME, this.getErrors());
     if ((isValid == ForteNgArrayAtAccessXtend.VALID_ACCESS)) {
       ForteNgTestBase.assertNoErrors(this.getErrors());
       Assert.assertNotNull(generatedCode);
@@ -63,7 +64,7 @@ public abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
       _builder_1.append("CIEC_");
       _builder_1.append(sourceType);
       _builder_1.append(" ");
-      _builder_1.append(ForteNgTestBase.VARIABLE_NAME);
+      _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE_NAME);
       _builder_1.append(";");
       _builder_1.newLineIfNotEmpty();
       _builder_1.append("ARRAY_AT<CIEC_");
@@ -75,12 +76,12 @@ public abstract class ForteNgArrayAtAccessXtend extends ForteNgTestBase {
       _builder_1.append(", ");
       _builder_1.append(arrayStop);
       _builder_1.append("> ");
-      _builder_1.append(ForteNgTestBase.VARIABLE2_NAME);
+      _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE2_NAME);
       _builder_1.append("(");
-      _builder_1.append(ForteNgTestBase.VARIABLE_NAME);
+      _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE_NAME);
       _builder_1.append(");");
       _builder_1.newLineIfNotEmpty();
-      _builder_1.append(ForteNgTestBase.VARIABLE2_NAME);
+      _builder_1.append(ForteNgTestBase.EXPORTED_VARIABLE2_NAME);
       _builder_1.append(".partial<CIEC_");
       _builder_1.append(accessType);
       _builder_1.append(",");

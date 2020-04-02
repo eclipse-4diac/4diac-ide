@@ -20,12 +20,20 @@ import static org.junit.Assert.assertTrue;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import org.eclipse.fordiac.ide.export.ExportException;
+import org.eclipse.fordiac.ide.export.IExportTemplate;
+import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate;
+import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter;
 import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -38,15 +46,24 @@ import org.junit.BeforeClass;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-public class ForteNgTestBase {
+public abstract class ForteNgTestBase<T extends FBType> {
 
 	static final String ALGORITHM_NAME = "algorithm"; //$NON-NLS-1$
+
+	static final String EXPORTED_ALGORITHM_NAME = "alg_" + ALGORITHM_NAME;
+
 	static final String VARIABLE_NAME = "variable"; //$NON-NLS-1$
 	static final String VARIABLE2_NAME = "variable2"; //$NON-NLS-1$
 
+	static final String EXPORTED_VARIABLE_NAME = addExportPrefix(VARIABLE_NAME);
+	static final String EXPORTED_VARIABLE2_NAME = addExportPrefix(VARIABLE2_NAME);
+
+	static final String FUNCTIONBLOCK_NAME = "functionblock"; //$NON-NLS-1$
+	static final String EXPORTED_FUNCTIONBLOCK_NAME = "FORTE_" + FUNCTIONBLOCK_NAME;
+
 	private static final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private final STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
-	private BasicFBType functionBlock;
+	protected T functionBlock;
 	private List<String> errors;
 
 	/**
@@ -58,8 +75,9 @@ public class ForteNgTestBase {
 	 *
 	 * @return the generated code or null on error
 	 */
-	public CharSequence generateAlgorithm(BasicFBType fb, String algorithmName, List<String> errorList) {
-		return stAlgorithmFilter.generate(castAlgorithm(fb.getAlgorithmNamed(algorithmName)), errorList);
+	public CharSequence generateAlgorithm(FBType fb, String algorithmName, List<String> errorList) {
+		return stAlgorithmFilter.generate(castAlgorithm(((BasicFBType) fb).getAlgorithmNamed(algorithmName)),
+				errorList);
 	}
 
 	/**
@@ -71,8 +89,74 @@ public class ForteNgTestBase {
 	 *
 	 * @return the generated code or null on error
 	 */
-	public CharSequence generateExpression(BasicFBType fb, String expression, List<String> errorList) {
-		return stAlgorithmFilter.generate(expression, fb, errorList);
+	public CharSequence generateExpression(FBType fb, String expression, List<String> errorList) {
+		return stAlgorithmFilter.generate(expression, ((BasicFBType) fb), errorList);
+	}
+
+	class FileObject {
+		private final String name;
+		private final CharSequence data;
+		private final List<String> errors;
+		private final List<String> warnings;
+		private final List<String> infos;
+
+		FileObject(String name, CharSequence data, List<String> errors, List<String> warnings, List<String> infos) {
+			this.name = name;
+			this.data = data;
+			this.errors = errors;
+			this.warnings = warnings;
+			this.infos = infos;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public CharSequence getData() {
+			return data;
+		}
+
+		public List<String> getErrors() {
+			return errors;
+		}
+
+		public List<String> getWarnings() {
+			return warnings;
+		}
+
+		public List<String> getInfos() {
+			return infos;
+		}
+	}
+
+	/**
+	 * generate code from a functionblock
+	 *
+	 * @param fb reference to the function block
+	 *
+	 * @return the generated code or null on error
+	 */
+	public List<ForteNgTestBase<T>.FileObject> generateFunctionBlock(CompilableType fb) {
+
+		final Set<? extends IExportTemplate> templates = (new ForteNgExportFilter() {
+			Set<? extends IExportTemplate> getTemplateSet(LibraryElement type) {
+				return getTemplates(type);
+			}
+		}).getTemplateSet(functionBlock);
+
+		List<FileObject> result = new ArrayList<>(2);
+
+		for (final IExportTemplate template : templates) {
+			try {
+				result.add(new FileObject(template.getName(), template.generate(), template.getErrors(),
+						template.getWarnings(), template.getInfos()));
+			} catch (ExportException e) {
+				result.add(new FileObject(template.getName(), e.getMessage(), template.getErrors(),
+						template.getWarnings(), template.getInfos()));
+			}
+		}
+
+		return result;
 	}
 
 	/**
@@ -80,7 +164,7 @@ public class ForteNgTestBase {
 	 *
 	 * @return function block object
 	 */
-	public BasicFBType getFunctionBlock() {
+	public T getFunctionBlock() {
 		return functionBlock;
 	}
 
@@ -110,20 +194,19 @@ public class ForteNgTestBase {
 	 */
 	public void clearEnvironment() {
 		// prepare a function block object including an interface list
-		functionBlock = LibraryElementFactory.eINSTANCE.createBasicFBType();
-		functionBlock.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-
-		setupTypeLib();
+		setupFunctionBlock();
 
 		// clear the errors-list
 		errors = new ArrayList<>();
 	}
 
-	private void setupTypeLib() {
+	abstract void setupFunctionBlock();
+
+	protected FBTypePaletteEntry preparePaletteWithTypeLib() {
 		FBTypePaletteEntry pallEntry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
 		TypeLibrary typelib = TypeLibrary.getTypeLibrary(null);
 		pallEntry.setPalette(typelib.getBlockTypeLib());
-		functionBlock.setPaletteEntry(pallEntry);
+		return pallEntry;
 	}
 
 	/**
@@ -204,6 +287,16 @@ public class ForteNgTestBase {
 			}
 			assertTrue(MessageFormat.format("Missing error message: {0}", message), contained); //$NON-NLS-1$
 		}
+	}
+
+	/**
+	 * add export prefix to name
+	 *
+	 * @param name name to add the prefix to
+	 * @return name with prefix added
+	 */
+	protected static String addExportPrefix(String name) {
+		return ForteFBTemplate.getExportPrefix() + name;
 	}
 
 }

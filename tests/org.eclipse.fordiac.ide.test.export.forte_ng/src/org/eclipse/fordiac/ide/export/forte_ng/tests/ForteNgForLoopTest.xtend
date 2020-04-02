@@ -14,12 +14,12 @@
 package org.eclipse.fordiac.ide.export.forte_ng.tests
 
 import org.junit.Test
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertEquals
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-abstract class ForteNgForLoopXtend extends ForteNgTestBase implements DatatypeConstants {
+class ForteNgForLoopTest extends ForteNgTestBasicFBTypeBase implements DatatypeConstants {
 
 	@Test
 	def void validForLoop() {
@@ -39,11 +39,11 @@ abstract class ForteNgForLoopXtend extends ForteNgTestBase implements DatatypeCo
 		// as it is done in lua: https://www.lua.org/manual/5.1/manual.html#2.4.5
 		auto by = 1;
 		auto to = 5;
-		for(«VARIABLE_NAME»() = 1;
-		    (by >  0 && «VARIABLE_NAME»() <= to) ||
-		    (by <= 0 && «VARIABLE_NAME»() >= to);
-		    «VARIABLE_NAME»() = «VARIABLE_NAME»() + by){
-			«VARIABLE2_NAME»() = 0;
+		for(«EXPORTED_VARIABLE_NAME»() = 1;
+		    (by >  0 && «EXPORTED_VARIABLE_NAME»() <= to) ||
+		    (by <= 0 && «EXPORTED_VARIABLE_NAME»() >= to);
+		    «EXPORTED_VARIABLE_NAME»() = «EXPORTED_VARIABLE_NAME»() + by){
+			«EXPORTED_VARIABLE2_NAME»() = 0;
 		}
 		'''.toString(), generatedCode.toString())
 	}
@@ -66,11 +66,11 @@ abstract class ForteNgForLoopXtend extends ForteNgTestBase implements DatatypeCo
 		// as it is done in lua: https://www.lua.org/manual/5.1/manual.html#2.4.5
 		auto by = 2;
 		auto to = 5;
-		for(«VARIABLE_NAME»() = 1;
-		    (by >  0 && «VARIABLE_NAME»() <= to) ||
-		    (by <= 0 && «VARIABLE_NAME»() >= to);
-		    «VARIABLE_NAME»() = «VARIABLE_NAME»() + by){
-			«VARIABLE2_NAME»() = 0;
+		for(«EXPORTED_VARIABLE_NAME»() = 1;
+		    (by >  0 && «EXPORTED_VARIABLE_NAME»() <= to) ||
+		    (by <= 0 && «EXPORTED_VARIABLE_NAME»() >= to);
+		    «EXPORTED_VARIABLE_NAME»() = «EXPORTED_VARIABLE_NAME»() + by){
+			«EXPORTED_VARIABLE2_NAME»() = 0;
 		}
 		'''.toString(), generatedCode.toString())
 	}

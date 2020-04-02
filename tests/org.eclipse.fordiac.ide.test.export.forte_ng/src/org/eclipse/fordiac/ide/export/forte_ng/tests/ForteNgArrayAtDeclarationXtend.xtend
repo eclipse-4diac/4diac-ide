@@ -13,13 +13,13 @@
 
 package org.eclipse.fordiac.ide.export.forte_ng.tests
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull
+import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertEquals
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-abstract class ForteNgArrayAtDeclarationXtend extends ForteNgTestBase {
+abstract class ForteNgArrayAtDeclarationXtend extends ForteNgTestBasicFBTypeBase {
 
 	protected static final boolean VALID_DECLARATION = true
 	protected static final boolean INVALID_DECLARATION = !VALID_DECLARATION
@@ -37,8 +37,8 @@ abstract class ForteNgArrayAtDeclarationXtend extends ForteNgTestBase {
 			assertNoErrors(errors);
 			assertNotNull(generatedCode);
 			assertEquals('''
-			CIEC_«sourceType» «VARIABLE_NAME»;
-			ARRAY_AT<CIEC_«accessType», CIEC_«sourceType», «arrayStart», «arrayStop»> «VARIABLE2_NAME»(«VARIABLE_NAME»);
+			CIEC_«sourceType» «EXPORTED_VARIABLE_NAME»;
+			ARRAY_AT<CIEC_«accessType», CIEC_«sourceType», «arrayStart», «arrayStop»> «EXPORTED_VARIABLE2_NAME»(«EXPORTED_VARIABLE_NAME»);
 			'''.toString(), generatedCode.toString())
 		} else {
 			assertErrors(errors);
