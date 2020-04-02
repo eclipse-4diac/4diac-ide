@@ -315,6 +315,16 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 * @generated
 	 */
 	@Override
+	public int getPriority() {
+		return getSource().getOutTransitions().indexOf(this) + 1;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated
+	 */
+	@Override
 	public ECC getECC() {
 		if (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC)
 			return null;

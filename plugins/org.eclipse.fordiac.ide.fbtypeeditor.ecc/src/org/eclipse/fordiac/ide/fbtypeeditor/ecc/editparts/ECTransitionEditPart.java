@@ -66,9 +66,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	private void updateOrderLabel() {
 		ECTransition transition = getModel();
 		if (null != transition.getSource()) {
-			if (1 < transition.getSource().getOutTransitions().size()) {
-				int i = 1 + transition.getSource().getOutTransitions().indexOf(transition);
-				getConnectionFigure().setTransitionOrder(Integer.toString(i));
+			if (transition.getSource().getOutTransitions().size() > 1) {
+				getConnectionFigure().setTransitionOrder(Integer.toString(transition.getPriority()));
 			} else {
 				// if we are the only transition we don't need to enumerate it
 				getConnectionFigure().setTransitionOrder(""); //$NON-NLS-1$

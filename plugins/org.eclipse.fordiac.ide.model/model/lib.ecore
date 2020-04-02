@@ -306,6 +306,11 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getConditionText(this);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getPriority" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getSource().getOutTransitions().indexOf(this) + 1;"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>

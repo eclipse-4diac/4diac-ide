@@ -170,6 +170,14 @@ public interface ECTransition extends PositionableElement {
 	String getConditionText();
 
 	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getPriority();
+
+	/**
 	 * Returns the value of the '<em><b>ECC</b></em>' container reference. It is
 	 * bidirectional and its opposite is
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECTransition
