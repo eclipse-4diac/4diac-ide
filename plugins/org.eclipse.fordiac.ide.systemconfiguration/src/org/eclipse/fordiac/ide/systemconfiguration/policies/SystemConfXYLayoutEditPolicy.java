@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012, 2014, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,  
+ * Copyright (c) 2008, 2012, 2014, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -25,11 +25,11 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.DeviceCreateCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.SegmentCreateCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.SegmentSetConstraintCommand;
-import org.eclipse.fordiac.ide.systemconfiguration.editparts.SegmentEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -44,7 +44,7 @@ import org.eclipse.gef.requests.CreateRequest;
 public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
-		if (child instanceof SegmentEditPart) {
+		if (child.getModel() instanceof Segment) {
 			return new ResizableEditPolicy() {
 				@SuppressWarnings({ "unchecked", "rawtypes" })
 				@Override
@@ -70,9 +70,8 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			final Object constraint) {
 		if (constraint instanceof Rectangle) {
 			Rectangle rec = new Rectangle((Rectangle) constraint);
-			if (child instanceof SegmentEditPart) {
-				SegmentEditPart seg = (SegmentEditPart) child;
-				return new SegmentSetConstraintCommand(seg.getModel(), rec, request);
+			if (child.getModel() instanceof Segment) {
+				return new SegmentSetConstraintCommand((Segment) child.getModel(), rec, request);
 			}
 			// return a command that can move a "PositionableElement"
 			if (child instanceof AbstractViewEditPart && child.getModel() instanceof PositionableElement) {

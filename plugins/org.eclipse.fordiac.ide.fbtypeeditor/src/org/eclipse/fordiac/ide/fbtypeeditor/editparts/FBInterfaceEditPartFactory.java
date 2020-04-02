@@ -21,14 +21,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 
 	private Palette systemPalette;
 
-	public FBInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette, ZoomManager zoomManager) {
+	public FBInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette) {
 		super(editor);
 		this.systemPalette = systemPalette;
 	}

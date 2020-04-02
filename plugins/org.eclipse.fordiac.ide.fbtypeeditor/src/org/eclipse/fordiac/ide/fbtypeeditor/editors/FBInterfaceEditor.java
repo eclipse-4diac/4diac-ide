@@ -88,7 +88,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	protected EditPartFactory getEditPartFactory() {
-		return new FBInterfaceEditPartFactory(this, palette, getZoomManger());
+		return new FBInterfaceEditPartFactory(this, palette);
 	}
 
 	@Override

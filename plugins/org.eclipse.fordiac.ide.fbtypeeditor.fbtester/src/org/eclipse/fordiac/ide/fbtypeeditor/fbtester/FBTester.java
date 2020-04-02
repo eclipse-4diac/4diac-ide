@@ -440,7 +440,7 @@ public class FBTester extends GraphicalEditor implements IFBTEditorPart {
 	}
 
 	protected FBInterfaceEditPartFactory getEditpartFactory() {
-		return new FBInterfaceEditPartFactory(this, palette, getZoomManger());
+		return new FBInterfaceEditPartFactory(this, palette);
 	}
 
 	protected KeyHandler getCommonKeyHandler() {

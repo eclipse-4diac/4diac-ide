@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -71,7 +71,7 @@ public class ResourceContainerLayoutEditPolicy extends FlowLayoutEditPolicy {
 
 	private ResourceMoveCommand getMoveCommand(EditPart child, EditPart after) {
 		ResourceMoveCommand cmd = null;
-		if (child instanceof ResourceEditPart && getHost() instanceof ResourceContainerEditPart) {
+		if (child.getModel() instanceof Resource && getHost() instanceof ResourceContainerEditPart) {
 			int index = -1;
 			Device targetDevice = ((ResourceContainerEditPart) getHost()).getModel().getDevice();
 			if (after == null) {

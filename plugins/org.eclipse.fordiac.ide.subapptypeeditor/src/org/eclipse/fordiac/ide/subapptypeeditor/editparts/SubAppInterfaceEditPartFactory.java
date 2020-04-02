@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2106, 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,13 +18,12 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class SubAppInterfaceEditPartFactory extends FBInterfaceEditPartFactory {
 
-	public SubAppInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette, ZoomManager zoomManager) {
-		super(editor, systemPalette, zoomManager);
+	public SubAppInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette) {
+		super(editor, systemPalette);
 	}
 
 	@Override

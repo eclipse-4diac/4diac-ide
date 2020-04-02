@@ -196,7 +196,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 
 	private void createFBBottom(Figure fbFigureContainer, int cornerDim, Color borderColor) {
 		bottom = new AdvancedRoundedRectangle(PositionConstants.SOUTH | PositionConstants.EAST | PositionConstants.WEST,
-				this, borderColor);
+				borderColor);
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 		GridLayout bottomLayout = new GridLayout(2, false);
 		bottomLayout.marginHeight = 4;
@@ -231,7 +231,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 
 	private void createFBTop(Figure fbFigureContainer, int cornerDim, Color borderColor) {
 		top = new AdvancedRoundedRectangle(PositionConstants.NORTH | PositionConstants.EAST | PositionConstants.WEST,
-				this, borderColor);
+				borderColor);
 		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
 
 		GridLayout topLayout = new GridLayout(2, false);
@@ -318,7 +318,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	protected void setupTypeNameAndVersion(final FBType type, Figure container, Color borderColor) {
-		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, this, borderColor);
+		middle = new AdvancedRoundedRectangle(PositionConstants.EAST | PositionConstants.WEST, borderColor);
 
 		container.add(middle, BorderLayout.CENTER);
 		middle.setCornerDimensions(new Dimension());

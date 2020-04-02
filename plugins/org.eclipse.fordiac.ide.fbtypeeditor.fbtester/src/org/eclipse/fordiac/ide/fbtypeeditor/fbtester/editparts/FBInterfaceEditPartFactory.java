@@ -28,14 +28,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class FBInterfaceEditPartFactory
 		extends org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory {
 
-	public FBInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette, ZoomManager zoomManager) {
-		super(editor, systemPalette, zoomManager);
+	public FBInterfaceEditPartFactory(GraphicalEditor editor, Palette systemPalette) {
+		super(editor, systemPalette);
 	}
 
 	@Override

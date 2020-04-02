@@ -16,7 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.draw2d;
 
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
@@ -26,19 +25,17 @@ import org.eclipse.swt.graphics.Color;
 public class AdvancedRoundedRectangle extends RoundedRectangle {
 
 	private int side = PositionConstants.NONE;
-	private Figure parent;
-	private Color color;
+	private Color borderColor;
 
 	public AdvancedRoundedRectangle(int side) {
 		super();
 		this.side = side;
 	}
 
-	public AdvancedRoundedRectangle(int side, Figure parent, Color color) {
+	public AdvancedRoundedRectangle(int side, Color borderColor) {
 		super();
 		this.side = side;
-		this.parent = parent;
-		this.color = color;
+		this.borderColor = borderColor;
 	}
 
 	public void setSide(int side) {
@@ -46,13 +43,13 @@ public class AdvancedRoundedRectangle extends RoundedRectangle {
 	}
 
 	public void setBorderColor(Color color) {
-		this.color = color;
+		this.borderColor = color;
 	}
 
 	@Override
 	protected void outlineShape(Graphics graphics) {
-		if (null != color) {
-			graphics.setForegroundColor(color);
+		if (null != borderColor) {
+			graphics.setForegroundColor(borderColor);
 		}
 		float lineInset = Math.max(1.0F, getLineWidthFloat()) / 2.0F;
 		int inset1 = (int) Math.floor(lineInset);
