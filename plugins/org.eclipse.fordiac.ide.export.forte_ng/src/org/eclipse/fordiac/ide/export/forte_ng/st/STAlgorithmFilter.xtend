@@ -200,35 +200,35 @@ class STAlgorithmFilter {
 
 	def protected dispatch CharSequence generateStatement(IfStatement stmt) '''
 		if(«stmt.expression.generateExpression») {
-		  «stmt.statments.generateStatementList»
+			«stmt.statments.generateStatementList»
 		}
 		«FOR elseif : stmt.elseif»
 			else if(«elseif.expression.generateExpression») {
-			  «elseif.statements.generateStatementList»
+				«elseif.statements.generateStatementList»
 			}
 		«ENDFOR»
 		«IF stmt.^else !== null»
 			else {
-			  «stmt.^else.statements.generateStatementList»
+				«stmt.^else.statements.generateStatementList»
 			}
 		«ENDIF»
 	'''
 
 	def protected dispatch CharSequence generateStatement(CaseStatement stmt) '''
-		local function case(val)
-		  «FOR clause : stmt.^case BEFORE 'if ' SEPARATOR '\nelseif '»«clause.generateCaseClause»«ENDFOR»
-		  «IF stmt.^else !== null»
-		  	else
-		  	  «stmt.^else.statements.generateStatementList»
-		  «ENDIF»
-		  end
-		end
-		case(«stmt.expression.generateExpression»)
+	switch («stmt.expression.generateExpression») {
+		«FOR clause : stmt.^case»«clause.generateCaseClause»«ENDFOR»
+		«IF stmt.^else !== null»
+		default:
+			«stmt.^else.statements.generateStatementList»
+			break;
+		«ENDIF»
+	}
 	'''
 
 	def protected CharSequence generateCaseClause(CaseClause clause) '''
-		«FOR value : clause.^case SEPARATOR ' or '»val == «value.generateExpression»«ENDFOR» then
-		  «clause.statements.generateStatementList»
+		case «FOR value : clause.^case SEPARATOR ' case '»«value.generateExpression»:«ENDFOR»
+			«clause.statements.generateStatementList»
+			break;
 	'''
 
 	def protected dispatch CharSequence generateStatement(ExitStatement stmt) '''break;'''

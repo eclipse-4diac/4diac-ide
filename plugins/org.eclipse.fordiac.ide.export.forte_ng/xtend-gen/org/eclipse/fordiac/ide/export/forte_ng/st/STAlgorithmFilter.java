@@ -464,9 +464,9 @@ public class STAlgorithmFilter {
     _builder.append(_generateExpression);
     _builder.append(") {");
     _builder.newLineIfNotEmpty();
-    _builder.append("  ");
+    _builder.append("\t");
     CharSequence _generateStatementList = this.generateStatementList(stmt.getStatments());
-    _builder.append(_generateStatementList, "  ");
+    _builder.append(_generateStatementList, "\t");
     _builder.newLineIfNotEmpty();
     _builder.append("}");
     _builder.newLine();
@@ -478,9 +478,9 @@ public class STAlgorithmFilter {
         _builder.append(_generateExpression_1);
         _builder.append(") {");
         _builder.newLineIfNotEmpty();
-        _builder.append("  ");
+        _builder.append("\t");
         CharSequence _generateStatementList_1 = this.generateStatementList(elseif.getStatements());
-        _builder.append(_generateStatementList_1, "  ");
+        _builder.append(_generateStatementList_1, "\t");
         _builder.newLineIfNotEmpty();
         _builder.append("}");
         _builder.newLine();
@@ -492,9 +492,9 @@ public class STAlgorithmFilter {
       if (_tripleNotEquals) {
         _builder.append("else {");
         _builder.newLine();
-        _builder.append("  ");
+        _builder.append("\t");
         CharSequence _generateStatementList_2 = this.generateStatementList(stmt.getElse().getStatements());
-        _builder.append(_generateStatementList_2, "  ");
+        _builder.append(_generateStatementList_2, "\t");
         _builder.newLineIfNotEmpty();
         _builder.append("}");
         _builder.newLine();
@@ -505,21 +505,17 @@ public class STAlgorithmFilter {
   
   protected CharSequence _generateStatement(final CaseStatement stmt) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("local function case(val)");
-    _builder.newLine();
-    _builder.append("  ");
+    _builder.append("switch (");
+    CharSequence _generateExpression = this.generateExpression(stmt.getExpression());
+    _builder.append(_generateExpression);
+    _builder.append(") {");
+    _builder.newLineIfNotEmpty();
+    _builder.append("\t");
     {
       EList<CaseClause> _case = stmt.getCase();
-      boolean _hasElements = false;
       for(final CaseClause clause : _case) {
-        if (!_hasElements) {
-          _hasElements = true;
-          _builder.append("if ", "  ");
-        } else {
-          _builder.appendImmediate("\nelseif ", "  ");
-        }
         CharSequence _generateCaseClause = this.generateCaseClause(clause);
-        _builder.append(_generateCaseClause, "  ");
+        _builder.append(_generateCaseClause, "\t");
       }
     }
     _builder.newLineIfNotEmpty();
@@ -527,31 +523,28 @@ public class STAlgorithmFilter {
       ElseClause _else = stmt.getElse();
       boolean _tripleNotEquals = (_else != null);
       if (_tripleNotEquals) {
-        _builder.append("  ");
-        _builder.append("else");
+        _builder.append("\t");
+        _builder.append("default:");
         _builder.newLine();
-        _builder.append("  ");
-        _builder.append("  ");
+        _builder.append("\t");
+        _builder.append("\t");
         CharSequence _generateStatementList = this.generateStatementList(stmt.getElse().getStatements());
-        _builder.append(_generateStatementList, "    ");
+        _builder.append(_generateStatementList, "\t\t");
         _builder.newLineIfNotEmpty();
+        _builder.append("\t");
+        _builder.append("\t");
+        _builder.append("break;");
+        _builder.newLine();
       }
     }
-    _builder.append("  ");
-    _builder.append("end");
+    _builder.append("}");
     _builder.newLine();
-    _builder.append("end");
-    _builder.newLine();
-    _builder.append("case(");
-    CharSequence _generateExpression = this.generateExpression(stmt.getExpression());
-    _builder.append(_generateExpression);
-    _builder.append(")");
-    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
   protected CharSequence generateCaseClause(final CaseClause clause) {
     StringConcatenation _builder = new StringConcatenation();
+    _builder.append("case ");
     {
       EList<Constant> _case = clause.getCase();
       boolean _hasElements = false;
@@ -559,19 +552,21 @@ public class STAlgorithmFilter {
         if (!_hasElements) {
           _hasElements = true;
         } else {
-          _builder.appendImmediate(" or ", "");
+          _builder.appendImmediate(" case ", "");
         }
-        _builder.append("val == ");
         CharSequence _generateExpression = this.generateExpression(value);
         _builder.append(_generateExpression);
+        _builder.append(":");
       }
     }
-    _builder.append(" then");
     _builder.newLineIfNotEmpty();
-    _builder.append("  ");
+    _builder.append("\t");
     CharSequence _generateStatementList = this.generateStatementList(clause.getStatements());
-    _builder.append(_generateStatementList, "  ");
+    _builder.append(_generateStatementList, "\t");
     _builder.newLineIfNotEmpty();
+    _builder.append("\t");
+    _builder.append("break;");
+    _builder.newLine();
     return _builder;
   }
   
