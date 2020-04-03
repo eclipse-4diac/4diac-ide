@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2013 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 2020        Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Ingo Hegny, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Virendra Ashiwal, Bianca Wiesmayr
+ *     - added tooltip functionality at state
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -37,6 +40,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECStateCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECStateToolTipFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateSelectionPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionNodeEditPolicy;
@@ -71,6 +75,9 @@ import org.eclipse.swt.SWT;
 public class ECStateEditPart extends AbstractDirectEditableEditPart implements NodeEditPart {
 	private List<Object> stateChildren;
 
+	// the tooltip will be shown by hovering over state
+	private ECStateToolTipFigure stateToolTip;
+
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -80,10 +87,12 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 				if (!((LibraryElementPackage.eINSTANCE.getECAction_Algorithm().equals(feature))
 						|| (LibraryElementPackage.eINSTANCE.getECAction_Output().equals(feature))
 						|| (LibraryElementPackage.eINSTANCE.getECState().equals(feature)))) {
+					refreshStateTooltip();
 					refresh();
 				}
 			}
 		}
+
 	};
 
 	/** The ecc adapter. */
@@ -97,6 +106,11 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	public ECStateEditPart() {
 		setConnectable(true);
+	}
+
+	private void refreshStateTooltip() {
+		getFigure().getToolTip().setECState(this.getModel());
+
 	}
 
 	@Override
@@ -213,6 +227,15 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 			gl.marginWidth = 0;
 			gl.marginHeight = 0;
 			actionContainer.setLayoutManager(gl);
+
+			ECStateToolTipFigure stateTooltip = new ECStateToolTipFigure();
+			stateTooltip.setVisible(true);
+			setToolTip(stateTooltip);
+		}
+
+		@Override
+		public ECStateToolTipFigure getToolTip() {
+			return (ECStateToolTipFigure) super.getToolTip();
 		}
 
 		/**
@@ -264,7 +287,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	@Override
 	public IFigure getContentPane() {
-		return ((ECStateFigure) getFigure()).getContentPane();
+		return getFigure().getContentPane();
 	}
 
 	public List<Object> getCurrentChildren() {
@@ -330,7 +353,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	protected void refreshVisuals() {
 		Rectangle rect = new Rectangle(getModel().getX(), getModel().getY(), -1, -1);
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rect);
-		((ECStateFigure) getFigure()).setHasAction(!getModel().getECAction().isEmpty());
+		getFigure().setHasAction(!getModel().getECAction().isEmpty());
 		super.refreshVisuals();
 	}
 
@@ -347,32 +370,32 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		if (connection.getTarget() != null && connection.getTarget().equals(connection.getSource())) {
-			return new FixedAnchor(((ECStateFigure) getFigure()).getNameLabel(), false);
+			return new FixedAnchor(getFigure().getNameLabel(), false);
 		}
-		return new ChopboxAnchor(((ECStateFigure) getFigure()).getNameLabel());
+		return new ChopboxAnchor(getFigure().getNameLabel());
 	}
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
-		return new ChopboxAnchor(((ECStateFigure) getFigure()).getNameLabel());
+		return new ChopboxAnchor(getFigure().getNameLabel());
 	}
 
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
 		if (connection.getSource() != null && connection.getSource().equals(connection.getTarget())) {
-			return new FixedAnchor(((ECStateFigure) getFigure()).getNameLabel(), true);
+			return new FixedAnchor(getFigure().getNameLabel(), true);
 		}
-		return new ChopboxAnchor(((ECStateFigure) getFigure()).getNameLabel());
+		return new ChopboxAnchor(getFigure().getNameLabel());
 	}
 
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
-		return new ChopboxAnchor(((ECStateFigure) getFigure()).getNameLabel());
+		return new ChopboxAnchor(getFigure().getNameLabel());
 	}
 
 	@Override
 	public Label getNameLabel() {
-		return ((ECStateFigure) getFigure()).getNameLabel();
+		return getFigure().getNameLabel();
 	}
 
 	@Override
@@ -387,7 +410,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		}
 		if (event.getProperty().equals(PreferenceConstants.P_ECC_STATE_BORDER_COLOR)) {
 			getNameLabel().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
-			((ECStateFigure) getFigure()).getLine()
+			getFigure().getLine()
 					.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_BORDER_COLOR));
 		}
 	};
@@ -408,5 +431,10 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	@Override
 	protected DirectEditManager createDirectEditManager() {
 		return new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
+	}
+
+	@Override
+	public ECStateFigure getFigure() {
+		return (ECStateFigure) super.getFigure();
 	}
 }
