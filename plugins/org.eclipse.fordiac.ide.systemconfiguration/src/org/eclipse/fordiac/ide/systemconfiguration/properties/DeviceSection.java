@@ -34,8 +34,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class DeviceSection extends AbstractInterfaceSection {
-	protected static String[] profileNames;
-	protected CCombo profile;
+	private static String[] profileNames;
+	private CCombo profile;
 
 	@Override
 	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {

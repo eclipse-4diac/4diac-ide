@@ -21,8 +21,6 @@ import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
  * Managing class for importing *.dtp files
@@ -45,8 +43,7 @@ public class DataTypeImporter extends TypeImporter {
 
 	@Override
 	protected AnyDerivedType createType() {
-		VarDeclaration newType = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		return (AnyDerivedType) newType;
+		return DataFactory.eINSTANCE.createAnyDerivedType();
 	}
 
 	@Override

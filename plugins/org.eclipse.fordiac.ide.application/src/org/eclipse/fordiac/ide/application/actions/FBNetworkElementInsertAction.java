@@ -18,8 +18,8 @@
 package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
+import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
@@ -32,8 +32,8 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 
-	final PaletteEntry paletteEntry;
-	final FBNetwork fbNetwork;
+	private final PaletteEntry paletteEntry;
+	private final FBNetwork fbNetwork;
 
 	public FBNetworkElementInsertAction(IWorkbenchPart part, PaletteEntry paletteEntry, FBNetwork fbNetwork) {
 		super(part);

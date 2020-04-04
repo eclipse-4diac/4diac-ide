@@ -49,7 +49,7 @@ public class ECTransitionFigure extends PolylineConnection {
 
 	private static final double TRANSITION_CONTROL_POINT_VECTOR_LENGTH = 0.3;
 
-	private class TransitionOrderDecorator extends Ellipse implements RotatableDecoration {
+	private static class TransitionOrderDecorator extends Ellipse implements RotatableDecoration {
 
 		private static final int TRANSITON_ORDER_LABEL_FONT_SIZE = 7;
 		private static final String TRANSITION_ORDER_LABEL_FONT = "TransitionOrderLabelFont"; //$NON-NLS-1$

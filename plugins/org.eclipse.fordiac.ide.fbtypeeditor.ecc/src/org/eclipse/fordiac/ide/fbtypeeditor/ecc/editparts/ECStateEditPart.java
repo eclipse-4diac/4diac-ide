@@ -75,9 +75,6 @@ import org.eclipse.swt.SWT;
 public class ECStateEditPart extends AbstractDirectEditableEditPart implements NodeEditPart {
 	private List<Object> stateChildren;
 
-	// the tooltip will be shown by hovering over state
-	private ECStateToolTipFigure stateToolTip;
-
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {

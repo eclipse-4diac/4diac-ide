@@ -50,7 +50,7 @@ class CommonElementImporter {
 
 	private XMLStreamReader reader;
 
-	protected class ImporterStreams implements AutoCloseable {
+	protected static class ImporterStreams implements AutoCloseable {
 		private final InputStream inputStream;
 		private final XMLStreamReader reader;
 

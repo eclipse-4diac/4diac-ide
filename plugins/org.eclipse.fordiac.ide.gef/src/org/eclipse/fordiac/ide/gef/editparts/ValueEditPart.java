@@ -54,7 +54,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	private EditPart context;
 	private InterfaceEditPart parentPart;
 
-	static int maxWidth = -1;
+	private static int maxWidth = -1;
 
 	private static int getMaxWidth() {
 		if (-1 == maxWidth) {

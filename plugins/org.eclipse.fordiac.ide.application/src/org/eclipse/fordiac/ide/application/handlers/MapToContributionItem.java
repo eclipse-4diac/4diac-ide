@@ -23,15 +23,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 public class MapToContributionItem extends ContributionItem {
-	public IMenuListener mapToListener = new IMenuListener() {
-		@Override
-		public void menuAboutToShow(IMenuManager manager) {
-			createDeviceMenu(manager);
-		}
-	};
 
-	public MapToContributionItem() {
-	}
+	private IMenuListener mapToListener = this::createDeviceMenu;
 
 	public MapToContributionItem(String id) {
 		super(id);

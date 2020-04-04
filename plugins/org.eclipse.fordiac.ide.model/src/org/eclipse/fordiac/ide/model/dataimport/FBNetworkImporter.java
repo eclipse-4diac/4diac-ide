@@ -287,7 +287,7 @@ class FBNetworkImporter extends CommonElementImporter {
 			if (LibraryElementPackage.eINSTANCE.getEventConnection() == conType) {
 				return il.getEventInputs();
 			}
-			if (LibraryElementPackage.eINSTANCE.getDataConnection() ==  conType) {
+			if (LibraryElementPackage.eINSTANCE.getDataConnection() == conType) {
 				return il.getInputVars();
 			}
 			if (LibraryElementPackage.eINSTANCE.getAdapterConnection().equals(conType)) {

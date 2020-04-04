@@ -41,10 +41,23 @@ import org.eclipse.swt.widgets.Display;
 
 public abstract class TemplateExportFilter extends ExportFilter {
 
+	// Prepare the button labels
+	private static final String MERGE_LABEL_STRING = "Merge";
+	private static final String[] BUTTON_LABELS = new String[] { //
+			JFaceResources.getString(IDialogLabelKeys.YES_LABEL_KEY), //
+			MERGE_LABEL_STRING, //
+			JFaceResources.getString(IDialogLabelKeys.CANCEL_LABEL_KEY)//
+	};
+
+	// extract the button ids from the label-array (avoid magic numbers)
+	private static final int BUTTON_OVERWRITE = Arrays.asList(BUTTON_LABELS)
+			.indexOf(JFaceResources.getString(IDialogLabelKeys.YES_LABEL_KEY));
+	private static final int BUTTON_MERGE = Arrays.asList(BUTTON_LABELS).indexOf(MERGE_LABEL_STRING);
+
 	public TemplateExportFilter() {
 	}
 
-	private List<String> reformat(LibraryElement type, List<String> messages) {
+	private static List<String> reformat(LibraryElement type, List<String> messages) {
 		return messages.stream().map(v -> (null != type) ? (type.getName() + ": " + v) : v) //$NON-NLS-1$
 				.collect(Collectors.toList());
 	}
@@ -77,19 +90,6 @@ public abstract class TemplateExportFilter extends ExportFilter {
 				}
 			}
 
-			// Prepare the button labels
-			final String MERGE_LABEL_STRING = "Merge";
-			final String[] buttonLabels = new String[] { //
-					JFaceResources.getString(IDialogLabelKeys.YES_LABEL_KEY), //
-					MERGE_LABEL_STRING, //
-					JFaceResources.getString(IDialogLabelKeys.CANCEL_LABEL_KEY)//
-			};
-
-			// extract the button ids from the label-array (avoid magic numbers)
-			final int BUTTON_OVERWRITE = Arrays.asList(buttonLabels)
-					.indexOf(JFaceResources.getString(IDialogLabelKeys.YES_LABEL_KEY));
-			final int BUTTON_MERGE = Arrays.asList(buttonLabels).indexOf(MERGE_LABEL_STRING);
-
 			// set a default value for the result of the MessageDialog that does not
 			// conflict with the current state
 			int res = BUTTON_OVERWRITE;
@@ -104,7 +104,7 @@ public abstract class TemplateExportFilter extends ExportFilter {
 						type.getName() + ".cpp", type.getName() + ".h"); //$NON-NLS-1$ //$NON-NLS-2$
 
 				MessageDialog msgDiag = new MessageDialog(Display.getDefault().getActiveShell(), "File Exists", null,
-						msg, MessageDialog.QUESTION_WITH_CANCEL, buttonLabels, 0);
+						msg, MessageDialog.QUESTION_WITH_CANCEL, BUTTON_LABELS, 0);
 
 				res = msgDiag.open();
 			}

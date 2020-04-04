@@ -62,7 +62,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class TransitionEditingComposite {
-	private class TransitionListLabelProvider extends LabelProvider implements ITableLabelProvider {
+	private static class TransitionListLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
