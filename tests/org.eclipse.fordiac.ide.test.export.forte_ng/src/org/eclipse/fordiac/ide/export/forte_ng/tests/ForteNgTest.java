@@ -15,86 +15,20 @@
 package org.eclipse.fordiac.ide.export.forte_ng.tests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetup;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
-public class ForteNgTest {
-	// DataTypeLibrary to be used for testing
-	private static final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
-	private STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
-	private BasicFBType functionBlock;
-	private List<String> errors;
-
-	@BeforeClass
-	public static void doSetup() {
-		// initialize the Equinox extension registry substitute
-		FBTypeStandaloneSetup.doSetup();
-		StructuredTextStandaloneSetup.doSetup();
-	}
-
-	@Before
-	public void clearEnvironment() {
-		// prepare a function block object including an interface list
-		functionBlock = LibraryElementFactory.eINSTANCE.createBasicFBType();
-		functionBlock.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-
-		// clear the errors-list
-		errors = new ArrayList<>();
-	}
-
-	private VarDeclaration createVarDeclaration(String variableName, String dataType) {
-		// create a VarDeclaration with given name and data-type
-		VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		variable.setName(variableName);
-		variable.setType(dataTypeLib.getType(dataType));
-		return variable;
-	}
-
-	private STAlgorithm createSTAlgorithm(String algorithmName, String algorithmText) {
-		// create a STAlgorithm with given name and content
-		STAlgorithm stAlg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-		stAlg.setName(algorithmName);
-		stAlg.setText(algorithmText);
-		return stAlg;
-	}
-
-	private STAlgorithm castAlgorithm(Algorithm algorithm) {
-		// cast a given algorithm, but check first if all needed interfaces are
-		// available
-		if (algorithm instanceof STAlgorithm) {
-			return (STAlgorithm) algorithm;
-		} else {
-			fail("Programming error in JUnit test: incompatible algorithm (Only STAlgorithm is allowed here).");
-			return null;
-		}
-	}
+public class ForteNgTest extends ForteNgTestBase {
 
 	@Test
 	public void emptyExpression() {
 		CharSequence generatedCode = stAlgorithmFilter.generate("", functionBlock, errors);
 
-		assertFalse("Error message expected: Expression can not be empty.", errors.isEmpty());
+		assertErrors(errors); // Expression can not be empty
 		assertNull(generatedCode);
 	}
 
@@ -104,7 +38,7 @@ public class ForteNgTest {
 
 		CharSequence generatedCode = stAlgorithmFilter.generate("B := 1", functionBlock, errors);
 
-		assertFalse("Error message expected: Expression can not be an assignment.", errors.isEmpty());
+		assertErrors(errors); // Expression can not be an assignment
 		assertNull(generatedCode);
 	}
 
@@ -116,7 +50,7 @@ public class ForteNgTest {
 		CharSequence generatedCode = stAlgorithmFilter
 				.generate(castAlgorithm(functionBlock.getAlgorithmNamed("algorithm")), errors);
 
-		assertTrue("No error messages expected.", errors.isEmpty());
+		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals("B() = 1;\n", generatedCode.toString());
 	}
