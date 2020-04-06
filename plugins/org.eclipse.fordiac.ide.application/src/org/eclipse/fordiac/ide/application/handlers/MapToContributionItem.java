@@ -26,6 +26,10 @@ public class MapToContributionItem extends ContributionItem {
 
 	private IMenuListener mapToListener = this::createDeviceMenu;
 
+	public MapToContributionItem() {
+		super();
+	}
+
 	public MapToContributionItem(String id) {
 		super(id);
 	}
