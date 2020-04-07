@@ -34,7 +34,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -267,7 +267,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					// TODO report on error
 					(!newTypeName.equals(type.getName()))) {
 						type.setName(newTypeName);
-						AbstractTypeExporter.saveType(entry);
+						AbstractBlockTypeExporter.saveType(entry);
 					}
 					return Status.OK_STATUS;
 				}

@@ -24,7 +24,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -114,7 +114,7 @@ public class NewFBTypeWizard extends Wizard implements INewWizard {
 		type.setName(TypeLibrary.getTypeNameFromFile(targetTypeFile));
 		TypeManagementPreferencesHelper.setupIdentification(type);
 		TypeManagementPreferencesHelper.setupVersionInfo(type);
-		AbstractTypeExporter.saveType(entry);
+		AbstractBlockTypeExporter.saveType(entry);
 		entry.setType(type);
 		if (page1.getOpenType()) {
 			openTypeEditor(entry);

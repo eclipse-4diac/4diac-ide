@@ -102,7 +102,7 @@ abstract class CommonElementExporter {
 
 		private static final int SINGLE_DATA_BUFFER_CAPACITY = 500 * 1024 * 1024; //
 		private final List<ByteBuffer> dataBuffers = new ArrayList<>(5); // give it an initial capacity of 5 to reduce
-																			// reallocation
+		// reallocation
 		private ByteBuffer currentDataBuffer;
 
 		public ByteBufferOutputStream() {
@@ -148,7 +148,7 @@ abstract class CommonElementExporter {
 	}
 
 	/**
-	 * Constructor for chaing several exporters together (e.g., for the
+	 * Constructor for chaining several exporters together (e.g., for the
 	 * FBNetworkExporter)
 	 *
 	 * @param parent the calling exporter
@@ -277,22 +277,22 @@ abstract class CommonElementExporter {
 		if (null != libraryelement.getIdentification()) {
 			addStartElement(LibraryElementTags.IDENTIFICATION_ELEMENT);
 			Identification ident = libraryelement.getIdentification();
-			if (null != ident.getStandard() && !ident.getStandard().equals("")) { //$NON-NLS-1$
+			if ((null != ident.getStandard()) && !ident.getStandard().equals("")) { //$NON-NLS-1$
 				writer.writeAttribute(LibraryElementTags.STANDARD_ATTRIBUTE, ident.getStandard());
 			}
-			if (null != ident.getClassification() && !ident.getClassification().equals("")) { //$NON-NLS-1$
+			if ((null != ident.getClassification()) && !ident.getClassification().equals("")) { //$NON-NLS-1$
 				writer.writeAttribute(LibraryElementTags.CLASSIFICATION_ATTRIBUTE, ident.getClassification());
 			}
-			if (null != ident.getApplicationDomain() && !ident.getApplicationDomain().equals("")) { //$NON-NLS-1$
+			if ((null != ident.getApplicationDomain()) && !ident.getApplicationDomain().equals("")) { //$NON-NLS-1$
 				writer.writeAttribute(LibraryElementTags.APPLICATION_DOMAIN_ATTRIBUTE, ident.getApplicationDomain());
 			}
-			if (null != ident.getFunction() && !ident.getFunction().equals("")) { //$NON-NLS-1$
+			if ((null != ident.getFunction()) && !ident.getFunction().equals("")) { //$NON-NLS-1$
 				writer.writeAttribute(LibraryElementTags.FUNCTION_ELEMENT, ident.getFunction());
 			}
-			if (null != ident.getType() && !ident.getType().equals("")) { //$NON-NLS-1$
+			if ((null != ident.getType()) && !ident.getType().equals("")) { //$NON-NLS-1$
 				writer.writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, ident.getType());
 			}
-			if (null != ident.getDescription() && !ident.getDescription().equals("")) { //$NON-NLS-1$
+			if ((null != ident.getDescription()) && !ident.getDescription().equals("")) { //$NON-NLS-1$
 				writer.writeAttribute(LibraryElementTags.DESCRIPTION_ELEMENT, ident.getDescription());
 			}
 			addEndElement();
@@ -310,20 +310,20 @@ abstract class CommonElementExporter {
 			for (VersionInfo info : libraryelement.getVersionInfo()) {
 				addStartElement(LibraryElementTags.VERSION_INFO_ELEMENT);
 
-				if (null != info.getOrganization() && !info.getOrganization().equals("")) { //$NON-NLS-1$
+				if ((null != info.getOrganization()) && !info.getOrganization().equals("")) { //$NON-NLS-1$
 					writer.writeAttribute(LibraryElementTags.ORGANIZATION_ATTRIBUTE, info.getOrganization());
 				}
-				if (null != info.getVersion() && !info.getVersion().equals("")) { //$NON-NLS-1$
+				if ((null != info.getVersion()) && !info.getVersion().equals("")) { //$NON-NLS-1$
 					writer.writeAttribute(LibraryElementTags.VERSION_ATTRIBUTE, info.getVersion());
 				}
-				if (null != info.getAuthor() && !info.getAuthor().equals("")) { //$NON-NLS-1$
+				if ((null != info.getAuthor()) && !info.getAuthor().equals("")) { //$NON-NLS-1$
 					writer.writeAttribute(LibraryElementTags.AUTHOR_ATTRIBUTE, info.getAuthor());
 				}
-				if (null != info.getDate() && !info.getDate().equals("")) { //$NON-NLS-1$
+				if ((null != info.getDate()) && !info.getDate().equals("")) { //$NON-NLS-1$
 					writer.writeAttribute(LibraryElementTags.DATE_ATTRIBUTE, info.getDate());
 
 				}
-				if (null != info.getRemarks() && !info.getRemarks().equals("")) { //$NON-NLS-1$
+				if ((null != info.getRemarks()) && !info.getRemarks().equals("")) { //$NON-NLS-1$
 					writer.writeAttribute(LibraryElementTags.REMARKS_ATTRIBUTE, info.getRemarks());
 				}
 
@@ -401,7 +401,7 @@ abstract class CommonElementExporter {
 
 	protected void addParamsConfig(EList<VarDeclaration> inputVars) throws XMLStreamException {
 		for (VarDeclaration var : inputVars) {
-			if (null != var.getValue() && null != var.getValue().getValue() && !var.getValue().getValue().equals("")) { //$NON-NLS-1$
+			if ((null != var.getValue()) && (null != var.getValue().getValue()) && !var.getValue().getValue().equals("")) { //$NON-NLS-1$
 				addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
 				addNameAttribute(var.getName());
 				writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, var.getValue().getValue());

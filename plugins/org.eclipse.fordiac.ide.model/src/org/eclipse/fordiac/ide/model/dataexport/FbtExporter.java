@@ -40,7 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 /**
  * The Class FbtExporter.
  */
-class FbtExporter extends AbstractTypeExporter {
+class FbtExporter extends AbstractBlockTypeExporter {
 
 	private static final Pattern CDATA_END_PATTERN = Pattern.compile("\\]\\]>"); //$NON-NLS-1$
 
@@ -59,7 +59,7 @@ class FbtExporter extends AbstractTypeExporter {
 	}
 
 	@Override
-	protected void createTypeSpecificXMLEntries() throws XMLStreamException {
+	protected void createBlockTypeSpecificXMLEntries() throws XMLStreamException {
 		if (getType() instanceof CompositeFBType) {
 			new FBNetworkExporter(this).createFBNetworkElement(((CompositeFBType) getType()).getFBNetwork());
 		} else if (getType() instanceof BasicFBType) {

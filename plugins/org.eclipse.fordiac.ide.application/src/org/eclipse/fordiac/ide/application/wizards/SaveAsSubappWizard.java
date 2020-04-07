@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractBlockTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ImportUtils;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -120,7 +120,7 @@ public class SaveAsSubappWizard extends Wizard {
 				TypeManagementPreferencesHelper.setupIdentification(type);
 				TypeManagementPreferencesHelper.setupVersionInfo(type);
 				performTypeSetup((SubAppType) type);
-				AbstractTypeExporter.saveType(entry);
+				AbstractBlockTypeExporter.saveType(entry);
 				entry.setType(type);
 
 				if (newFilePage.getOpenType()) {

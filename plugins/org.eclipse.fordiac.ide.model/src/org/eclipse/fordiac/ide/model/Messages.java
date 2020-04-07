@@ -45,6 +45,10 @@ public class Messages extends NLS {
 	/** The Compilable element importer_ erro r_ version not set. */
 	public static String CompilableElementImporter_ERROR_VersionNotSet;
 
+	public static String DataTypeExporter_UNSUPPORTED_DATA_TYPE;
+
+	public static String DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE;
+
 	/** The device importer_ erro r_ resource name has to be set. */
 	public static String DEVImporter_ERROR_ResourceNameHasToBeSet;
 

@@ -12,15 +12,20 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.text.MessageFormat;
+
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
  * Managing class for importing *.dtp files
@@ -39,6 +44,16 @@ public class DataTypeImporter extends TypeImporter {
 
 	protected DataTypeImporter(final XMLStreamReader reader) {
 		super(reader);
+	}
+
+	@Override
+	public LibraryElement importType(IFile typeFile) throws TypeImportException {
+		LibraryElement type = super.importType(typeFile);
+		if (!(type instanceof StructuredType)) {
+			throw new TypeImportException(
+					MessageFormat.format(Messages.DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE, typeFile.getName()));
+		}
+		return type;
 	}
 
 	@Override
@@ -68,7 +83,7 @@ public class DataTypeImporter extends TypeImporter {
 				setType(convertToStructuredType(getType()));
 				parseStructuredType((StructuredType) getType());
 				break;
-			// TODO support other AnyDerivedTypes such as ArrayType
+				// TODO support other AnyDerivedTypes such as ArrayType
 			default:
 				return false;
 			}
