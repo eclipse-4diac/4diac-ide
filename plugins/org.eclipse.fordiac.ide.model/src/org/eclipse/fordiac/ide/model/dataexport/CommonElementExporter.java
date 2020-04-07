@@ -293,7 +293,7 @@ abstract class CommonElementExporter {
 				writer.writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, ident.getType());
 			}
 			if (null != ident.getDescription() && !ident.getDescription().equals("")) { //$NON-NLS-1$
-				writer.writeAttribute(LibraryElementTags.DESCRIPTION_ELEMENT, ident.getDescription());
+				writeAttributeRaw(LibraryElementTags.DESCRIPTION_ELEMENT, fullyEscapeValue(ident.getDescription()));
 			}
 			addEndElement();
 		}
@@ -371,7 +371,7 @@ abstract class CommonElementExporter {
 	}
 
 	/**
-	 * Take the given string and escape all &, <, >, ", newlines, and tabs with the
+	 * Take the given string and escape all &, <, >, ", ', newlines, and tabs with the
 	 * according XML escaped characters.
 	 *
 	 * @param value the string to escape
@@ -382,6 +382,7 @@ abstract class CommonElementExporter {
 		escapedValue = escapedValue.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("\'", "&apos;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("\n", "&#10;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("\t", "&#9;"); //$NON-NLS-1$ //$NON-NLS-2$
 		return escapedValue;
