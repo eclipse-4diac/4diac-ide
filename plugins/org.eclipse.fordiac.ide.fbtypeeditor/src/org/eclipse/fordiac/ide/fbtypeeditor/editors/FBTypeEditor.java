@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2018 TU Wien/ACIN
+ * 				 2020 Johannes Kepler University, Linz
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,13 +14,15 @@
  *
  *   Peter Gsellmann
  *     - incorporating simple fb
+ *
+ *   Daniel Lindhuber, Bianca Wiesmayr
+ *     - cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -108,10 +111,7 @@ public class FBTypeEditor extends FormEditor
 		if (null != paletteEntry) {
 			if (checkTypeSaveAble()) {
 				// allow each editor to save back changes before saving to file
-				for (Iterator<IFBTEditorPart> iterator = editors.iterator(); iterator.hasNext();) {
-					IFBTEditorPart editorPart = iterator.next();
-					editorPart.doSave(monitor);
-				}
+				editors.forEach(editorPart -> editorPart.doSave(monitor));
 
 				getCommandStack().markSaveLocation();
 				AbstractTypeExporter.saveType(paletteEntry);
@@ -197,7 +197,7 @@ public class FBTypeEditor extends FormEditor
 
 	@Override
 	public void dispose() {
-		if (fbType != null && fbType.eAdapters().contains(adapter)) {
+		if ((fbType != null) && fbType.eAdapters().contains(adapter)) {
 			fbType.eAdapters().remove(adapter);
 		}
 
@@ -234,11 +234,9 @@ public class FBTypeEditor extends FormEditor
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs"); //$NON-NLS-1$
 		IExtension[] extensions = point.getExtensions();
-		for (int i = 0; i < extensions.length; i++) {
-			IExtension extension = extensions[i];
+		for (IExtension extension : extensions) {
 			IConfigurationElement[] elements = extension.getConfigurationElements();
-			for (int j = 0; j < elements.length; j++) {
-				IConfigurationElement element = elements[j];
+			for (IConfigurationElement element : elements) {
 				try {
 					Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (obj instanceof IFBTEditorPart) {
@@ -258,8 +256,7 @@ public class FBTypeEditor extends FormEditor
 		editors = new ArrayList<>();
 		FBTypeEditorInput editorInput = getFBTypeEditorInput();
 
-		for (Iterator<IFBTEditorPart> iterator = sortedEditorsMap.values().iterator(); iterator.hasNext();) {
-			IFBTEditorPart fbtEditorPart = iterator.next();
+		for (IFBTEditorPart fbtEditorPart : sortedEditorsMap.values()) {
 			editors.add(fbtEditorPart);
 			try {
 				// setCommonCommandStack needs to be called before the editor is added as page
@@ -285,10 +282,10 @@ public class FBTypeEditor extends FormEditor
 		return ((editorType.equals("ForAllTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllFBTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllNonAdapterFBTypes") && !(fbType instanceof AdapterFBType)) || //$NON-NLS-1$
-				(fbType instanceof BasicFBType && editorType.equals("basic")) || //$NON-NLS-1$
-				(fbType instanceof SimpleFBType && editorType.equals("simple")) || //$NON-NLS-1$
-				(fbType instanceof ServiceInterfaceFBType && editorType.equals("serviceInterface")) || //$NON-NLS-1$
-				(fbType instanceof CompositeFBType && editorType.equals("composite")) //$NON-NLS-1$
+				((fbType instanceof BasicFBType) && editorType.equals("basic")) || //$NON-NLS-1$
+				((fbType instanceof SimpleFBType) && editorType.equals("simple")) || //$NON-NLS-1$
+				((fbType instanceof ServiceInterfaceFBType) && editorType.equals("serviceInterface")) || //$NON-NLS-1$
+				((fbType instanceof CompositeFBType) && editorType.equals("composite")) //$NON-NLS-1$
 		);
 	}
 
@@ -310,42 +307,31 @@ public class FBTypeEditor extends FormEditor
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Object getAdapter(Class required) {
-		if (IContentOutlinePage.class.equals(required)) {
-			if (contentOutline == null) {
+	public <T> T getAdapter(Class<T> adapter) {
+		if (adapter == IContentOutlinePage.class) {
+			if (null == contentOutline) {
 				contentOutline = new FBTypeContentOutline(fbType, this);
 			}
-			return contentOutline;
+			return adapter.cast(contentOutline);
 		}
-		if (required == CommandStack.class) {
-			return getCommandStack();
+		if (adapter == CommandStack.class) {
+			return adapter.cast(getCommandStack());
 		}
-		if (required == IPropertySheetPage.class) {
-			return new TabbedPropertySheetPage(this);
+		if (adapter == IPropertySheetPage.class) {
+			return adapter.cast(new TabbedPropertySheetPage(this));
 		}
-		if (required == CommandStack.class) {
-			return getCommandStack();
-		}
-		return super.getAdapter(required);
+		return super.getAdapter(adapter);
 	}
 
 	public void handleContentOutlineSelection(ISelection selection) {
-		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
-			Iterator<?> selectedElements = ((IStructuredSelection) selection).iterator();
-			if (selectedElements.hasNext()) {
-				// Get the first selected element.
-				//
-				Object selectedElement = selectedElements.next();
-
-				selectedElement.getClass();
-				int i = 0;
-				for (Iterator<IFBTEditorPart> iterator = editors.iterator(); iterator.hasNext(); i++) {
-					IFBTEditorPart ifbt = iterator.next();
-					if (ifbt.outlineSelectionChanged(selectedElement)) {
-						setActivePage(i);
-						break;
-					}
+		if ((selection instanceof IStructuredSelection) && !selection.isEmpty()) {
+			Object selectedElement = ((IStructuredSelection) selection).getFirstElement();
+			int i = 0;
+			for (IFBTEditorPart editorPart : editors) {
+				i++;
+				if (editorPart.outlineSelectionChanged(selectedElement)) {
+					setActivePage(i);
+					break;
 				}
 			}
 		}
