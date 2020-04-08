@@ -86,15 +86,6 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		}
 	};
 
-	/** The ecc adapter. */
-	private final Adapter eccAdapter = new AdapterImpl() {
-		@Override
-		public void notifyChanged(Notification notification) {
-			super.notifyChanged(notification);
-			updateBorder();
-		}
-	};
-
 	public ECStateEditPart() {
 		setConnectable(true);
 	}
@@ -104,7 +95,6 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (!isActive()) {
 			super.activate();
 			getModel().eAdapters().add(adapter);
-			getModel().getECC().eAdapters().add(eccAdapter);
 			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		}
 	}
@@ -114,10 +104,6 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (isActive()) {
 			super.deactivate();
 			getModel().eAdapters().remove(adapter);
-
-			if (getModel().getECC() != null) {
-				getModel().getECC().eAdapters().remove(eccAdapter);
-			}
 			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		}
 	}
@@ -252,10 +238,6 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 			}
 			return InteractionStyleFigure.REGION_DRAG; // move/drag
 		}
-	}
-
-	private void updateBorder() {
-		getNameLabel().setBorder(new StateBorder(isInitialState()));
 	}
 
 	private boolean isInitialState() {
