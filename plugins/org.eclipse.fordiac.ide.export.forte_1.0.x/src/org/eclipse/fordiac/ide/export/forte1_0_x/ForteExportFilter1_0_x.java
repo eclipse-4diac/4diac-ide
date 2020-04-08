@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -48,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -841,9 +843,10 @@ public class ForteExportFilter1_0_x extends CPPExportFilter implements IExportFi
 		pwH.println("  void alg_" + algName + "(void);"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		pwCPP.println("void FORTE_" + name + "::alg_" + algName + "(void){"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		Algorithm alg = ((BasicFBType) libraryType).getAlgorithmNamed(algName);
 
-		if (type.equals("ST")) { //$NON-NLS-1$
-			structuredTextEmitter.exportStructuredTextAlgorithm(src, pwCPP);
+		if (alg instanceof STAlgorithm) {
+			structuredTextEmitter.exportStructuredTextAlgorithm(((STAlgorithm) alg).getText(), pwCPP);
 		} else {
 			pwCPP.println("#pragma GCC warning \"Algorithm of type: '" + type //$NON-NLS-1$
 					+ "' may lead to unexpected results\"!"); //$NON-NLS-1$
