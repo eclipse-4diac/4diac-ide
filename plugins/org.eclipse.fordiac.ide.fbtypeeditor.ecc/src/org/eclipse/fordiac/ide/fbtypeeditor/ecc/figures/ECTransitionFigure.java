@@ -38,6 +38,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.geometry.Vector;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
@@ -103,6 +104,7 @@ public class ECTransitionFigure extends PolylineConnection {
 
 	}
 
+	private SetableAlphaLabel conditionBackground;
 	private Label condition;
 	private final TransitionOrderDecorator transitionOrderDecorator;
 
@@ -127,6 +129,7 @@ public class ECTransitionFigure extends PolylineConnection {
 
 	public void setConditionText(String conditionText) {
 		condition.setText(conditionText);
+		conditionBackground.setText(conditionText);
 	}
 
 	public void updateBendPoints(ECTransition ecTransition) {
@@ -147,10 +150,22 @@ public class ECTransitionFigure extends PolylineConnection {
 		return rectDec;
 	}
 
+	private static int VERTICAL_MARGIN = 2;
+	private static int HORIZONTAL_MARGIN = 4;
+
 	private void createConditionLabel(String conditionText) {
 		condition = new Label(conditionText);
-		condition.setBorder(new MarginBorder(3, 6, 3, 6));
-		condition.setOpaque(true);
+		condition.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
+		condition.setOpaque(false);
+
+		conditionBackground = new SetableAlphaLabel();
+		conditionBackground.setText(conditionText); // needed for correct size
+		conditionBackground
+				.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
+		conditionBackground.setAlpha(190);
+		conditionBackground.setOpaque(true);
+
+		add(conditionBackground, new ConnectionLocator(this, ConnectionLocator.MIDDLE));
 		add(condition, new ConnectionLocator(this, ConnectionLocator.MIDDLE));
 	}
 

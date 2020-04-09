@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2019 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2011 - 2020 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
  * 								Johannes Kepler University Linz (JKU)
  *
  * This program and the accompanying materials are made available under the
@@ -12,7 +12,7 @@
  *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
- *     -  consistent dropdown menu edit
+ *     -  consistent dropdown menu edit, redesign ECC
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.common.notify.Adapter;
@@ -36,8 +36,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
-import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.gef.figures.GradientLabel;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -55,10 +53,13 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.*;
 
 public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart {
+	private static final Insets OUTPUT_EVENT_INSETS = new Insets(MARGIN_VERTICAL, MARGIN_HORIZONTAL, MARGIN_VERTICAL,
+			MARGIN_HORIZONTAL);
+
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(Notification notification) {
@@ -80,7 +81,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 					executeCommand(new ChangeOutputCommand(getAction(), null));
 				}
 			} else if (notification.getEventType() == Notification.SET) {
-				if (null != getAction().getOutput() && notification.getNewValue() instanceof String) {
+				if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)) {
 					if (getAction().getOutput().getName().equals(notification.getNewValue())) {
 						refreshEventLabel();
 					} else if ((getAction().getOutput() instanceof AdapterEvent)
@@ -93,15 +94,12 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		}
 	};
 
-	private final IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
-		@Override
-		public void propertyChange(PropertyChangeEvent event) {
-			if (event.getProperty().equals(PreferenceConstants.P_ECC_EVENT_COLOR)) {
-				getFigure().setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_COLOR));
-			}
-			if (event.getProperty().equals(PreferenceConstants.P_ECC_EVENT_BORDER_COLOR)) {
-				getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_BORDER_COLOR));
-			}
+	private final IPropertyChangeListener propertyChangeListener = event -> {
+		if (event.getProperty().equals(PreferenceConstants.P_ECC_EVENT_COLOR)) {
+			getFigure().setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_COLOR));
+		}
+		if (event.getProperty().equals(PreferenceConstants.P_ECC_EVENT_TEXT_COLOR)) {
+			getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_TEXT_COLOR));
 		}
 	};
 
@@ -148,7 +146,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 						List<Event> events = ECCContentAndLabelProvider
 								.getOutputEvents(ECCContentAndLabelProvider.getFBType(getAction()));
 						Event ev = null;
-						if (0 <= selected && selected < events.size()) {
+						if ((0 <= selected) && (selected < events.size())) {
 							ev = events.get(selected);
 						}
 						return new ChangeOutputCommand(getAction(), ev);
@@ -214,17 +212,12 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 
 	@Override
 	protected IFigure createFigure() {
-		Label eventLabel = new GradientLabel(((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager());
+		Label eventLabel = new Label();
 		eventLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_COLOR));
-		eventLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_BORDER_COLOR));
+		eventLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_TEXT_COLOR));
 		eventLabel.setOpaque(true);
 		eventLabel.setText(getAction().getOutput() != null ? getAction().getOutput().getName() : ""); //$NON-NLS-1$
-		eventLabel.setBorder(new LineBorder() {
-			@Override
-			public Insets getInsets(final IFigure figure) {
-				return new Insets(3, 6, 3, 6);
-			}
-		});
+		eventLabel.setBorder(new MarginBorder(OUTPUT_EVENT_INSETS));
 		eventLabel.setTextAlignment(PositionConstants.LEFT);
 		eventLabel.setLabelAlignment(PositionConstants.LEFT);
 		return eventLabel;

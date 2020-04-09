@@ -46,11 +46,11 @@ public class Messages extends NLS {
 	public static String ECCPaletteFactory_TOOLTIP_State;
 	public static String ECCPaletteFactory_TOOLTIP_STAlgorithm;
 	public static String ECStateSetPositionCommand_LABEL_Move;
-	public static String FordiacECCPreferencePage_LABEL_ECCAlgorithmBorderColor;
+	public static String FordiacECCPreferencePage_LABEL_ECCAlgorithmTextColor;
 	public static String FordiacECCPreferencePage_LABEL_ECCAlgorithmColor;
-	public static String FordiacECCPreferencePage_LABEL_ECCEventBorderColor;
+	public static String FordiacECCPreferencePage_LABEL_ECCEventTextColor;
 	public static String FordiacECCPreferencePage_LABEL_ECCEventColor;
-	public static String FordiacECCPreferencePage_LABEL_ECCStateBorderColor;
+	public static String FordiacECCPreferencePage_LABEL_ECCStateTextColor;
 	public static String FordiacECCPreferencePage_LABEL_ECCStateColor;
 	public static String FordiacECCPreferencePage_LABEL_ECCTransitionColor;
 	public static String FordiacECCPreferencePage_LABEL_PreferencePageDescription;

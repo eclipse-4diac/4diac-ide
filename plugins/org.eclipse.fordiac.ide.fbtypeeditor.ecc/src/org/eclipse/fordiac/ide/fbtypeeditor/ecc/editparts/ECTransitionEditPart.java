@@ -23,11 +23,14 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.MoveBendpointCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECTransitionFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEditPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
@@ -49,6 +52,7 @@ import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
@@ -60,6 +64,13 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			super.notifyChanged(notification);
 			refreshTransitionTooltip();
 			refresh();
+		}
+	};
+
+	/** The property change listener. */
+	private final IPropertyChangeListener propertyChangeListener = event -> {
+		if (event.getProperty().equals(PreferenceConstants.P_ECC_TRANSITION_COLOR)) {
+			getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_TRANSITION_COLOR));
 		}
 	};
 
@@ -230,6 +241,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 			// Adapt to the fbtype so that we get informed on interface changes
 			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().add(interfaceAdapter);
+
+			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		}
 	}
 
@@ -240,6 +253,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			getModel().eAdapters().remove(adapter);
 			getModel().getECC().eAdapters().remove(adapter);
 			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().remove(interfaceAdapter);
+
+			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		}
 	}
 
