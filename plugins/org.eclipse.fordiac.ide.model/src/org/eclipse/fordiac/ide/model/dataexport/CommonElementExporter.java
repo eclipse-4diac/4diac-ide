@@ -293,7 +293,7 @@ abstract class CommonElementExporter {
 				writer.writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, ident.getType());
 			}
 			if ((null != ident.getDescription()) && !ident.getDescription().equals("")) { //$NON-NLS-1$
-				writer.writeAttribute(LibraryElementTags.DESCRIPTION_ELEMENT, ident.getDescription());
+				writeAttributeRaw(LibraryElementTags.DESCRIPTION_ELEMENT, fullyEscapeValue(ident.getDescription()));
 			}
 			addEndElement();
 		}
@@ -371,8 +371,8 @@ abstract class CommonElementExporter {
 	}
 
 	/**
-	 * Take the given string and escape all &, <, >, ", newlines, and tabs with the
-	 * according XML escaped characters.
+	 * Take the given string and escape all &, <, >, ", ', newlines, and tabs with
+	 * the according XML escaped characters.
 	 *
 	 * @param value the string to escape
 	 * @return the escaped string
@@ -382,6 +382,7 @@ abstract class CommonElementExporter {
 		escapedValue = escapedValue.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("\'", "&apos;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("\n", "&#10;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("\t", "&#9;"); //$NON-NLS-1$ //$NON-NLS-2$
 		return escapedValue;
@@ -401,7 +402,8 @@ abstract class CommonElementExporter {
 
 	protected void addParamsConfig(EList<VarDeclaration> inputVars) throws XMLStreamException {
 		for (VarDeclaration var : inputVars) {
-			if ((null != var.getValue()) && (null != var.getValue().getValue()) && !var.getValue().getValue().equals("")) { //$NON-NLS-1$
+			if ((null != var.getValue()) && (null != var.getValue().getValue())
+					&& !var.getValue().getValue().equals("")) { //$NON-NLS-1$
 				addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
 				addNameAttribute(var.getName());
 				writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, var.getValue().getValue());

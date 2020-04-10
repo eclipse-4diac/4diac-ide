@@ -71,7 +71,7 @@ public interface ECTransition extends PositionableElement {
 
 	/**
 	 * Returns the value of the '<em><b>Condition Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+	 * The default value is <code>"1"</code>. <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Condition Expression</em>' attribute isn't clear,
 	 * there really should be more of a description here...
@@ -81,8 +81,8 @@ public interface ECTransition extends PositionableElement {
 	 * @return the value of the '<em>Condition Expression</em>' attribute.
 	 * @see #setConditionExpression(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition_ConditionExpression()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
-	 *        extendedMetaData="kind='attribute' name='Condition'"
+	 * @model default="1" dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        required="true" extendedMetaData="kind='attribute' name='Condition'"
 	 * @generated
 	 */
 	String getConditionExpression();
