@@ -83,6 +83,26 @@
   	<extensionContent id="fordiac-older-releases" style="css/style.css" name="Prior Versions" path="whatsnew/@">   			 
 		<group style-id="content-group" id="orgfordiacide-introLink-group"
 		           label="Previous Releases">
+		           
+	        <link label="1.11.3" style-id="content-link" url="http://www.eclipse.org/4diac/en_news.php#en_news_20191223" id="orgfordiacide-webLink">   
+	            <text>
+	            The third maintenance release for 4diac 1.11 provides 18 usability and bug fixes for 4diac IDE identified and fixed during the 4days of 4diac summit.
+	            </text>
+	        </link>
+	        <link label="1.11.2" style-id="content-link" url="http://www.eclipse.org/4diac/en_news.php#en_news_20191115" id="orgfordiacide-webLink">   
+	            <text>
+	            The second maintenance release for 4diac 1.11 provides 9 usability and bug fixes for 4diac IDE identified and fixed during the 4days of 4diac summit.
+	            </text>
+	        </link>        		           
+	        <link label="1.11.1" style-id="content-link" url="http://www.eclipse.org/4diac/en_news.php#en_news_20191111" id="orgfordiacide-webLink" >   
+	            <text>
+	            The first maintenance release for 4diac 1.11 provides 13 usability and bug fixes for 4diac IDE.
+	            </text>
+	        </link>
+           <link label="1.11.0" url="http://www.eclipse.org/4diac/en_news.php#en_news_20191007" id="orgfordiacide-webLink" style-id="content-link">
+                <text> With 4diac 1.11.0 we focused on usability improvements and support for the Arrowhead framework.  
+                </text>                 
+            </link> 
             <link label="1.10.3" url="https://www.eclipse.org/4diac/en_news.php#en_news_20190821" id="orgfordiacide-webLink" style-id="content-link">
                 <text>The third maintenance release for 4diac 1.10 provides 11 bug fixes for 4diac IDE, and 6 for  4diac FORTE.
                 </text>                
